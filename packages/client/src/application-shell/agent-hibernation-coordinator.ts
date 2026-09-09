@@ -1,5 +1,5 @@
-import type { RuntimeTerminalSummary } from '@yiru/runtime-protocol/workbench/runtime-types'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import type { TerminalSummary } from '@yiru/protocol'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 import { useAppStore } from '~renderer/store/state'
 import type { AppState } from '~renderer/store/types'
@@ -90,7 +90,7 @@ function getRuntimeLivenessTargetWorktrees(state: AppState): Map<string, string>
   return targets
 }
 
-function getTypedRuntimePtyId(terminal: RuntimeTerminalSummary): string | null {
+function getTypedRuntimePtyId(terminal: TerminalSummary): string | null {
   if (terminal.ptyId) {
     return terminal.ptyId
   }
@@ -107,9 +107,12 @@ async function collectRuntimePtyLiveness(state: AppState): Promise<RuntimePtyLiv
   await Promise.all(
     [...targets].map(async ([worktreeId, runtimeEnvironmentId]) => {
       try {
-        const result = await callRuntimeOrpc(
-          { kind: 'environment', environmentId: runtimeEnvironmentId },
-          (client) => client.terminal.list,
+        const result = await (
+          await openRuntimeTerminalClient({
+            kind: 'environment',
+            environmentId: runtimeEnvironmentId
+          })
+        ).list(
           {
             worktree: toRuntimeWorktreeSelector(worktreeId),
             limit: 10_000,

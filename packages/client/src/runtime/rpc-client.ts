@@ -1,6 +1,6 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
-import type { RuntimeClientTarget } from './orpc-client'
+import type { RuntimeClientTarget } from './runtime-target'
 
 export {
   assertRuntimeEnvironmentCapability,
@@ -10,12 +10,8 @@ export {
   markRuntimeEnvironmentCompatible,
   runtimeEnvironmentSupportsCapability
 } from './environment-compatibility'
-export {
-  isRuntimeScopeForbiddenError,
-  RuntimeRpcCallError,
-  unwrapRuntimeRpcResult
-} from './rpc-response'
-export type { RuntimeClientTarget } from './orpc-client'
+export { isRuntimeScopeForbiddenError } from './scope-error'
+export type { RuntimeClientTarget } from './runtime-target'
 
 export function getActiveRuntimeTarget(
   settings: Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null | undefined

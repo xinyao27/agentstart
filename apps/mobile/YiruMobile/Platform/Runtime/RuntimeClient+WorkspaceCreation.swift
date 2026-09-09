@@ -1,39 +1,20 @@
 import Foundation
 
+nonisolated private let repoHooksProtobufCapability = "repo.hooks.protobuf.v1"
+
 extension RuntimeClient: WorkspaceCreationRepository {
     func workspaceCreationOptions(for hostID: String) async throws -> WorkspaceCreationOptions {
-        async let detectedResult: [String]? = try? await callRuntime(
-            hostID: hostID,
-            path: MobileRuntimeWireContract.preflightDetectAgentsPath,
-            input: RuntimeEmptyObjectInput(),
-            output: [String].self
+        async let detectedResult: [String]? = try? await protocolPreflightDetectAgents(
+            hostID: hostID
         )
-        async let settingsResult: MobileWorkspaceRuntimeSettingsEnvelopeWire? =
-            try? await callRuntime(
-                hostID: hostID,
-                path: MobileRuntimeWireContract.settingsGetPath,
-                input: RuntimeVoidInput(),
-                output: MobileWorkspaceRuntimeSettingsEnvelopeWire.self
-            )
-        async let uiResult: MobileWorkspaceUIResultWire? = try? await callRuntime(
-            hostID: hostID,
-            path: MobileWorkspaceCreationWireContract.uiGetPath,
-            input: RuntimeVoidInput(),
-            output: MobileWorkspaceUIResultWire.self
+        async let settingsResult: RuntimeClientSettings? = try? await protocolClientSettings(
+            for: hostID
         )
-        async let preflightResult: MobileWorkspacePreflightWire? = try? await callRuntime(
-            hostID: hostID,
-            path: MobileWorkspaceCreationWireContract.preflightPath,
-            input: RuntimeEmptyObjectInput(),
-            output: MobileWorkspacePreflightWire.self
-        )
+        async let uiFields: [String: RuntimeUiValue]? = try? await protocolUiGet(hostID: hostID)
         let repos = await fetchWorkspaceRepos(for: hostID)
         let detected = await detectedResult ?? []
-        let settings = await settingsResult?.settings
-        let trustedHooks =
-            await uiResult?.ui.trustedYiruHooks?.mapValues(
-                WorkspaceTrustedHookRepo.init(wire:)
-            ) ?? [:]
+        let settings = await settingsResult
+        let trustedHooks = workspaceTrustedHooks(await uiFields)
         let agents = workspaceCreationAgents(
             detectedIDs: detected,
             disabledIDs: settings?.disabledTuiAgents ?? [],
@@ -46,20 +27,14 @@ extension RuntimeClient: WorkspaceCreationRepository {
                 available: agents,
                 preferredID: settings?.defaultTuiAgent
             ),
-            trustedHooks: trustedHooks,
-            isGitLabAvailable: (await preflightResult)?.glab?.installed == true
+            trustedHooks: trustedHooks
         )
     }
 
     func workspaceTerminalAgents(for hostID: String, repoID: String?) async throws
         -> [WorkspaceCreationAgent]
     {
-        async let settingsResult: MobileWorkspaceRuntimeSettingsEnvelopeWire = callRuntime(
-            hostID: hostID,
-            path: MobileRuntimeWireContract.settingsGetPath,
-            input: RuntimeVoidInput(),
-            output: MobileWorkspaceRuntimeSettingsEnvelopeWire.self
-        )
+        async let settingsResult: RuntimeClientSettings = protocolClientSettings(for: hostID)
         let connectionID: String?
         if let repoID {
             let repos = await fetchWorkspaceRepos(for: hostID)
@@ -72,21 +47,14 @@ extension RuntimeClient: WorkspaceCreationRepository {
         }
         let detected: [String]
         if let connectionID, !connectionID.isEmpty {
-            detected = try await callRuntime(
+            detected = try await protocolPreflightDetectRemoteAgents(
                 hostID: hostID,
-                path: MobileRuntimeWireContract.preflightDetectRemoteAgentsPath,
-                input: MobileWorkspaceDetectRemoteAgentsRequestWire(connectionId: connectionID),
-                output: [String].self
+                connectionID: connectionID
             )
         } else {
-            detected = try await callRuntime(
-                hostID: hostID,
-                path: MobileRuntimeWireContract.preflightDetectAgentsPath,
-                input: RuntimeEmptyObjectInput(),
-                output: [String].self
-            )
+            detected = try await protocolPreflightDetectAgents(hostID: hostID)
         }
-        let settings = try await settingsResult.settings
+        let settings = try await settingsResult
         let available = workspaceCreationAgents(
             detectedIDs: detected,
             disabledIDs: settings.disabledTuiAgents,
@@ -107,12 +75,17 @@ extension RuntimeClient: WorkspaceCreationRepository {
     func workspaceSetupDetails(for hostID: String, repoID: String) async throws
         -> WorkspaceSetupDetails
     {
-        let wire: MobileRepoHooksResultWire = try await callRuntime(
-            hostID: hostID,
-            path: MobileWorkspaceCreationWireContract.hooksPath,
-            input: MobileRepoSelectorRequestWire(repo: "id:\(repoID)"),
-            output: MobileRepoHooksResultWire.self
-        )
-        return WorkspaceSetupDetails(wire: wire)
+        guard
+            try await supportsCapability(
+                hostID: hostID,
+                capability: repoHooksProtobufCapability
+            )
+        else {
+            throw WorkspaceCreationError.rejected(
+                String(localized: "Update Yiru on this host before inspecting setup commands.")
+            )
+        }
+        let response = try await protocolRepoHooks(hostID: hostID, projectID: repoID)
+        return try WorkspaceSetupDetails(protocolValue: response)
     }
 }

@@ -1,26 +1,16 @@
-import {
-  getAgentsSteps,
-  type AgentsStepId
-} from '@yiru/runtime-protocol/workbench/agents-orchestration-steps'
-import type { FeatureWallTourDepthSummary } from '@yiru/runtime-protocol/workbench/feature-wall-tour-depth'
-import {
-  DEFAULT_FEATURE_WALL_WORKFLOW_ID,
-  FEATURE_WALL_WORKFLOWS,
-  type FeatureWallWorkflow,
-  type FeatureWallWorkflowId
-} from '@yiru/runtime-protocol/workbench/feature-wall-workflows'
-import { getReviewSteps, type ReviewStepId } from '@yiru/runtime-protocol/workbench/review-steps'
-import type { FeatureWallOpenSourceTelemetry } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import {
-  getWorkbenchSteps,
-  type WorkbenchStepId
-} from '@yiru/runtime-protocol/workbench/workbench-steps'
+import type { FeatureWallOpenSourceTelemetry } from '@yiru/protocol/telemetry/events/foundations'
+import type { FeatureWallTourDepthSummary } from '@yiru/protocol/telemetry/feature-wall/depth'
+import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallWorkflowId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import { useEffect, useId, useRef, useState } from 'react'
 import type { JSX, ReactNode } from 'react'
 import {
   YIRU_CLI_SKILL_NAME,
   ORCHESTRATION_SKILL_NAME
 } from '~renderer/agent/feature-install-commands'
+import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import { getScreenSubmitModifierLabel } from '~renderer/keyboard-input/screen-submit-shortcut'
 import { usePrefersReducedMotion } from '~renderer/react/use-prefers-reduced-motion'
 import { useActiveProjectSkillRuntime } from '~renderer/skills/use-active-project-runtime'
@@ -32,6 +22,14 @@ import { useAppStore } from '~renderer/store/state'
 import { track } from '~renderer/telemetry/client'
 
 import { getFeatureWallActiveStepCopy } from './active-step-copy'
+import { getAgentsSteps } from './content/agents-orchestration-steps'
+import { getReviewSteps } from './content/review-steps'
+import { getWorkbenchSteps } from './content/workbench-steps'
+import {
+  DEFAULT_FEATURE_WALL_WORKFLOW_ID,
+  getFeatureWallWorkflows,
+  type FeatureWallWorkflow
+} from './content/workflows'
 import { FeatureWallContinueButton } from './continue-button'
 import { FeatureWallTourPanel } from './tour-panel'
 import { useFeatureWallCompletion } from './use-feature-wall-completion'
@@ -83,6 +81,7 @@ export function FeatureWallTourSurface({
   leadingFooterContent,
   onTourDepthSummaryChange
 }: FeatureWallTourSurfaceProps): JSX.Element | null {
+  useUiLocale()
   const settings = useAppStore((s) => s.settings)
   const updateSettings = useAppStore((s) => s.updateSettings)
   const activeSkillRuntime = useActiveProjectSkillRuntime()
@@ -97,12 +96,12 @@ export function FeatureWallTourSurface({
   const selectedIndex = (() =>
     Math.max(
       0,
-      FEATURE_WALL_WORKFLOWS.findIndex((w) => w.id === selectedId)
+      getFeatureWallWorkflows().findIndex((w) => w.id === selectedId)
     ))()
-  const selected = FEATURE_WALL_WORKFLOWS[selectedIndex]
-  const agentsSteps = (() => getAgentsSteps())()
-  const workbenchSteps = (() => getWorkbenchSteps())()
-  const reviewSteps = (() => getReviewSteps())()
+  const selected = getFeatureWallWorkflows()[selectedIndex]
+  const agentsSteps = getAgentsSteps()
+  const workbenchSteps = getWorkbenchSteps()
+  const reviewSteps = getReviewSteps()
   const [agentsStepId, setAgentsStepId] = useState<AgentsStepId>(
     () => agentsSteps[0]?.id ?? 'statuses'
   )
@@ -174,7 +173,7 @@ export function FeatureWallTourSurface({
   useEffect(() => {
     if (isOpen) {
       markWorkflowVisited(DEFAULT_FEATURE_WALL_WORKFLOW_ID)
-      trackFeatureWallWorkflowSelection(FEATURE_WALL_WORKFLOWS[0], source)
+      trackFeatureWallWorkflowSelection(getFeatureWallWorkflows()[0], source)
     }
   }, [isOpen, markWorkflowVisited, source])
 
@@ -220,7 +219,7 @@ export function FeatureWallTourSurface({
     onSelectWorkflow: handleSelect
   })
 
-  const isLastWorkflow = selectedIndex >= FEATURE_WALL_WORKFLOWS.length - 1
+  const isLastWorkflow = selectedIndex >= getFeatureWallWorkflows().length - 1
   const agentsStepIndex =
     selected.id === 'agents-orchestration'
       ? agentsSteps.findIndex((step) => step.id === agentsStepId)
@@ -288,7 +287,7 @@ export function FeatureWallTourSurface({
       }
       return
     }
-    const nextWorkflow = FEATURE_WALL_WORKFLOWS[selectedIndex + 1]
+    const nextWorkflow = getFeatureWallWorkflows()[selectedIndex + 1]
     if (nextWorkflow) {
       handleSelect(nextWorkflow)
       railRefs.current[selectedIndex + 1]?.focus()

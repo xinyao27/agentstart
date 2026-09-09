@@ -1,5 +1,5 @@
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
 
 import type { TreeNode } from './types'
 

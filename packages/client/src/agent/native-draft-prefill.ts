@@ -1,5 +1,5 @@
-import { TUI_AGENT_CONFIG } from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 
 // Why: agents with a native draft-prefill flag/env launch with the prompt
 // already in their input box, so the paste helpers intentionally no-op (return

@@ -12,9 +12,7 @@ export type RuntimeStreamFanOut<TEvent> = {
   subscribe: (listener: (event: TEvent) => void) => () => void
 }
 
-// Why: several compatibility callbacks consume slices of one host-wide oRPC
-// stream. Sharing one upstream iterator avoids multiplying server subscription
-// state while keeping the legacy synchronous unsubscribe shape at the adapter.
+// Why: One upstream iterator serves multiple feature callbacks without multiplying server subscriptions.
 export function createRuntimeStreamFanOut<TClient, TEvent>(
   options: RuntimeStreamFanOutOptions<TClient, TEvent>
 ): RuntimeStreamFanOut<TEvent> {

@@ -1,4 +1,4 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 
 // Why: environment overrides are pasteable settings text; reject huge drafts before tokenizing.
 export const AGENT_DEFAULT_ENV_DRAFT_MAX_BYTES = 8 * 1024
@@ -15,7 +15,7 @@ export function stringifyAgentDefaultEnvDraft(env: Record<string, string>): stri
 }
 
 export function parseAgentDefaultEnvDraft(value: string): AgentDefaultEnvDraftParseResult {
-  if (isClipboardTextByteLengthOverLimit(value, AGENT_DEFAULT_ENV_DRAFT_MAX_BYTES)) {
+  if (isUtf8ByteLengthOverLimit(value, AGENT_DEFAULT_ENV_DRAFT_MAX_BYTES)) {
     return { env: {}, tooLarge: true }
   }
 

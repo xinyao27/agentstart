@@ -1,18 +1,15 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/runtime-protocol/workbench/tui-agent/launch-defaults'
-import { isTuiAgentEnabled } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type {
-  GlobalSettings,
-  Repo,
-  SetupDecision,
-  SetupRunPolicy,
-  TuiAgent,
-  WorkspaceCreateTelemetrySource,
-  WorkspaceStatus
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/launch-defaults'
+import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
+import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
+import type { SetupDecision, SetupRunPolicy } from '@yiru/protocol/worktree/hooks'
 import type { Dispatch, SetStateAction } from 'react'
 import { toast } from 'sonner'
 import type { AgentStartedTelemetry } from '~renderer/agent/started-telemetry'
@@ -178,9 +175,6 @@ export async function submitQuickWorkspace(options: SubmitQuickWorkspaceOptions)
         ? { branchNameOverride: resolution.branchNameOverride }
         : {}),
       ...(options.workspaceStatus ? { workspaceStatus: options.workspaceStatus } : {}),
-      ...(resolution.linkedGitLabMR !== undefined
-        ? { linkedGitLabMR: resolution.linkedGitLabMR }
-        : {}),
       ...(backendStartup ? { startup: backendStartup } : {}),
       pendingFirstAgentMessageRename,
       note: trimmedNote,

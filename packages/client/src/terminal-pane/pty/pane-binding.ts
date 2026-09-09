@@ -44,8 +44,7 @@ export function createPaneBinding(options: PaneBindingOptions): PaneBinding {
         dropFacts()
         unregisterFacts = registerTerminalSideEffectFactConsumer({
           ptyId,
-          callbacks: options.callbacks,
-          restoreTitleOnRegister: true
+          callbacks: options.callbacks
         })
       }
     },

@@ -1,11 +1,11 @@
 import {
-  formatCrashReportText,
   isRecoverableRendererErrorReport,
-  isReactErrorBoundaryReport,
-  type CrashReportDiagnosticBundle,
-  type CrashReportRecord
-} from '@yiru/runtime-protocol/workbench/crash-reporting'
-import type { GitHubViewer } from '@yiru/runtime-protocol/workbench/types'
+  isReactErrorBoundaryReport
+} from '@yiru/protocol/crash-reports/classification'
+import type { CrashReportDiagnosticBundle } from '@yiru/protocol/crash-reports/diagnostic-bundle'
+import { formatCrashReportText } from '@yiru/protocol/crash-reports/report-text'
+import type { CrashReportRecord } from '@yiru/protocol/crash-reports/values'
+import type { GitHubViewer } from '@yiru/protocol/hosted-review/review-types'
 import { useDeferredValue, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

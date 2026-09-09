@@ -2,9 +2,9 @@ import {
   ALL_EXECUTION_HOSTS_SCOPE,
   getRepoExecutionHostId,
   type ExecutionHostScope
-} from '@yiru/runtime-protocol/model/workspace'
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 
 type NewWorkspaceDialogRepo = Pick<
   Repo,

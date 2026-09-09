@@ -1,18 +1,24 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { translate } from '~renderer/i18n/i18n'
+import {
+  DANGEROUS_APPROVAL_STATUS_QUERY_KEY,
+  readDangerousApprovalStatus
+} from '~renderer/runtime/dangerous-approval-target'
 import { Button } from '~renderer/ui/button'
 
-import { extensionOrpc } from '../runtime/orpc'
 import { enrollDangerousApproval, removeDangerousApproval } from '../security/passkey'
 
 export function DangerousApprovalSettings(): React.JSX.Element {
   const queryClient = useQueryClient()
-  const statusQuery = extensionOrpc.dangerousApproval.status.queryOptions({ input: {} })
-  const status = useQuery(statusQuery)
+  const status = useQuery({
+    queryKey: DANGEROUS_APPROVAL_STATUS_QUERY_KEY,
+    queryFn: readDangerousApprovalStatus
+  })
   const change = useMutation({
     mutationFn: async (action: 'enroll' | 'remove') =>
       action === 'enroll' ? enrollDangerousApproval() : removeDangerousApproval(),
-    onSuccess: async () => queryClient.invalidateQueries({ queryKey: statusQuery.queryKey })
+    onSuccess: async () =>
+      queryClient.invalidateQueries({ queryKey: DANGEROUS_APPROVAL_STATUS_QUERY_KEY })
   })
   return (
     <section className="border-border mt-5 border p-4">

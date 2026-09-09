@@ -5,7 +5,7 @@ import {
   isKeybindingPotentialTerminalConflict,
   type KeybindingActionId,
   type KeybindingOverrides
-} from '@yiru/runtime-protocol/workbench/keybindings'
+} from '@yiru/protocol/keybindings'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { Keyboard } from '~renderer/icons/hugeicons'

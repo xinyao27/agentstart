@@ -1,16 +1,13 @@
-import type { RuntimeDetectedWorktreeListResult } from '@yiru/runtime-protocol/contract'
+import type { WorktreeDetectedListResult as RuntimeDetectedWorktreeListResult } from '@yiru/protocol'
 import {
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID,
   toRuntimeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type {
-  DetectedWorktreeListResult,
-  Repo,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
+} from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { DetectedWorktreeListResult, Worktree } from '@yiru/protocol/worktree/model'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 
 export type CatalogRepo = {
   repo: Repo

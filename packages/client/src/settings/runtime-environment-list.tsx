@@ -1,4 +1,3 @@
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
 import { translate } from '~renderer/i18n/i18n'
 import {
   Warning as AlertTriangle,
@@ -8,6 +7,7 @@ import {
   ArrowClockwise as RefreshCw
 } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import type { RemoteServerUpdateEntry } from '~renderer/runtime/remote-server-update-model'
 import { cn } from '~renderer/ui/class-names'
 
@@ -24,6 +24,7 @@ import {
   getRuntimeServerDotClass,
   type RuntimeHostDetails
 } from './runtime-environment-status'
+import { RuntimeEnvironmentRepair } from './runtime-environment/repair'
 
 type RuntimeEnvironmentListProps = {
   environments: PublicKnownRuntimeEnvironment[]
@@ -160,7 +161,9 @@ function RuntimeEnvironmentRow(props: RuntimeEnvironmentRowProps): React.JSX.Ele
           <div className="truncate text-sm font-medium">{environment.name}</div>
           <span className={cn('size-2 shrink-0', getRuntimeServerDotClass(connectionState))} />
           <span className="text-muted-foreground text-[11px]">
-            {getRuntimeServerConnectionLabel(connectionState)}
+            {environment.pairingRequired
+              ? translate('runtimeEnvironment.pairingRequired', 'Re-pairing required')
+              : getRuntimeServerConnectionLabel(connectionState)}
           </span>
           {details?.compatibility?.kind === 'blocked' ? (
             <AlertTriangle className="text-destructive size-3.5 shrink-0" />
@@ -169,14 +172,16 @@ function RuntimeEnvironmentRow(props: RuntimeEnvironmentRowProps): React.JSX.Ele
           ) : null}
         </div>
         <p className="text-muted-foreground truncate text-xs">
-          {props.isActive
-            ? translate(
-                'auto.components.settings.RuntimeEnvironmentsPane.activeServerRowHelp',
-                'Active remote daemon for routed projects, terminals, and provider checks.'
-              )
-            : getHostDetailsSummary(details)}
+          {environment.pairingRequired
+            ? environment.endpoints[0]?.endpoint
+            : props.isActive
+              ? translate(
+                  'auto.components.settings.RuntimeEnvironmentsPane.activeServerRowHelp',
+                  'Active remote daemon for routed projects, terminals, and provider checks.'
+                )
+              : getHostDetailsSummary(details)}
         </p>
-        {description ? (
+        {!environment.pairingRequired && description ? (
           <p
             className={cn(
               'mt-0.5 truncate text-xs',
@@ -188,10 +193,16 @@ function RuntimeEnvironmentRow(props: RuntimeEnvironmentRowProps): React.JSX.Ele
             {description}
           </p>
         ) : null}
-        {update ? <RuntimeEnvironmentUpdate entry={update} /> : null}
+        {environment.pairingRequired ? (
+          <RuntimeEnvironmentRepair environmentId={environment.id} />
+        ) : null}
+        {!environment.pairingRequired && update ? (
+          <RuntimeEnvironmentUpdate entry={update} />
+        ) : null}
       </div>
       <div className="flex shrink-0 items-center gap-1">
-        {update?.phase === 'available' || update?.phase === 'failed' ? (
+        {!environment.pairingRequired &&
+        (update?.phase === 'available' || update?.phase === 'failed') ? (
           <Button
             type="button"
             variant="ghost"
@@ -210,7 +221,11 @@ function RuntimeEnvironmentRow(props: RuntimeEnvironmentRowProps): React.JSX.Ele
           onClick={() =>
             isReachable ? props.onDisconnect(environment) : props.onConnect(environment)
           }
-          disabled={actionBusy || (!isReachable && connectionState === 'checking')}
+          disabled={
+            environment.pairingRequired ||
+            actionBusy ||
+            (!isReachable && connectionState === 'checking')
+          }
         >
           {isReachable ? (
             props.disconnectingId === environment.id ? (

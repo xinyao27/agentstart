@@ -1,7 +1,4 @@
-import {
-  isStatsUsageBoundedRange,
-  type StatsUsageBoundedRange
-} from '@yiru/runtime-protocol/stats-usage-range'
+import { isStatsUsageBoundedRange, type StatsUsageBoundedRange } from '@yiru/protocol/stats/range'
 import { useState } from 'react'
 
 const USAGE_RANGE_STORAGE_KEY = 'yiru.home.usage-range.v1'

@@ -1,4 +1,4 @@
-import type { DirEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { DirectoryEntry as DirEntry } from '@yiru/protocol/files/values'
 
 export function shouldIncludeFileExplorerEntry(entry: DirEntry): boolean {
   return entry.name !== '.git' && entry.name !== 'node_modules'

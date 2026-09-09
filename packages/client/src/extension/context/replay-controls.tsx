@@ -3,10 +3,11 @@ import { useEffect, useRef } from 'react'
 import { useWorktreeAgentPhase } from '~renderer/agent-session/presence'
 import { translate } from '~renderer/i18n/i18n'
 import { Circle, FloppyDisk, Play, StopCircle } from '~renderer/icons/hugeicons'
+import { requireArtifactClient } from '~renderer/runtime/artifact-target'
+import { openBrowserReplayTarget } from '~renderer/runtime/browser-replay-target'
 import { Button } from '~renderer/ui/button'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
-import { extensionOrpc } from '../runtime/orpc'
 import { terminalsQuery, worktreesQuery } from '../runtime/queries'
 import { uploadBrowserArtifact } from './artifact-upload'
 
@@ -16,6 +17,16 @@ type ReplayControlsProps = {
   worktreeId: string
 }
 
+const RECORDINGS_QUERY_KEY = ['extension-host', 'browser-replay-recordings'] as const
+
+async function openReplayClientOrThrow() {
+  const client = await openBrowserReplayTarget()
+  if (!client) {
+    throw new Error('browser_replay_protocol_unavailable')
+  }
+  return client
+}
+
 export function ReplayControls({
   pageUrl,
   projectId,
@@ -23,10 +34,11 @@ export function ReplayControls({
 }: ReplayControlsProps): React.JSX.Element {
   const capabilities = getExtensionBrowserCapabilities()
   const queryClient = useQueryClient()
-  const recordingsQuery = extensionOrpc.browserReplay.list.queryOptions({
-    input: { limit: 5, projectId }
+  const recordings = useQuery({
+    queryKey: RECORDINGS_QUERY_KEY,
+    queryFn: async () => (await openReplayClientOrThrow()).list({ limit: 5, projectId }),
+    refetchInterval: 30_000
   })
-  const recordings = useQuery(recordingsQuery)
   const recordingStatus = useQuery({
     queryKey: ['extension-host', 'recording-status', pageUrl],
     queryFn: capabilities.isRecording,
@@ -76,12 +88,12 @@ export function ReplayControls({
             fileName: `browser-replay-${new Date().toISOString().replaceAll(':', '-')}.webm`,
             projectId
           })
-        : null
-      return extensionOrpc.browserReplay.save.call({ ...timeline, projectId, videoArtifactId })
+        : undefined
+      return (await openReplayClientOrThrow()).save({ ...timeline, projectId, videoArtifactId })
     },
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: recordingsQuery.queryKey }),
+        queryClient.invalidateQueries({ queryKey: RECORDINGS_QUERY_KEY }),
         queryClient.invalidateQueries({
           queryKey: ['extension-host', 'recording-status', pageUrl]
         })
@@ -90,9 +102,7 @@ export function ReplayControls({
   })
   const replay = useMutation({
     mutationFn: async (recordingId: string) => {
-      const recording = recordings.data?.recordings.find(
-        (candidate) => candidate.id === recordingId
-      )
+      const recording = recordings.data?.find((candidate) => candidate.id === recordingId)
       if (!recording) {
         throw new Error('recording_missing')
       }
@@ -102,7 +112,9 @@ export function ReplayControls({
       }
       try {
         await capabilities.replay(recording.events)
-        await extensionOrpc.browserReplay.recordResult.call({
+        await (
+          await openReplayClientOrThrow()
+        ).recordResult({
           detail: 'Replay completed without a CDP interaction error.',
           pageUrl,
           projectId,
@@ -111,7 +123,9 @@ export function ReplayControls({
           worktreeId
         })
       } catch (error) {
-        await extensionOrpc.browserReplay.recordResult.call({
+        await (
+          await openReplayClientOrThrow()
+        ).recordResult({
           detail: replayFailureDetail(error),
           pageUrl,
           projectId,
@@ -123,7 +137,7 @@ export function ReplayControls({
       }
     }
   })
-  const latestRecordingId = recordings.data?.recordings[0]?.id ?? null
+  const latestRecordingId = recordings.data?.[0]?.id ?? null
   useEffect(() => {
     const wasActive = previousAgentState.current
     const priorHead = previousHead.current
@@ -146,7 +160,7 @@ export function ReplayControls({
   }, [hasActiveAgent, head, latestRecordingId, replay])
   const download = useMutation({
     mutationFn: async (id: string) => {
-      const ticket = await extensionOrpc.artifact.downloadTicket.call({ id })
+      const ticket = await (await requireArtifactClient()).downloadTicket(id)
       await capabilities.downloadArtifact({ id, ticket: ticket.ticket })
     }
   })
@@ -185,7 +199,7 @@ export function ReplayControls({
             : translate('extension.replay.ready', 'Local preview')}
         </span>
       </div>
-      {(recordings.data?.recordings ?? []).map((recording) => (
+      {(recordings.data ?? []).map((recording) => (
         <div key={recording.id} className="flex items-center">
           <Button
             type="button"

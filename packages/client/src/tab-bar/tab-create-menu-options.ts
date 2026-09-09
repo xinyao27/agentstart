@@ -1,5 +1,5 @@
-import type { BuiltInWindowsTerminalShell } from '@yiru/runtime-protocol/model/platform'
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
+import type { BuiltInWindowsTerminalShell } from '@yiru/protocol/host/windows-terminal-shell'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 import { translate } from '~renderer/i18n/i18n'
 
 import { normalizeMatchQuery, scoreQueryTokens } from './query-token-match'
@@ -37,7 +37,7 @@ export function isTabCreateMenuQueryTooLarge(
   query: string,
   maxBytes = TAB_CREATE_MENU_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 function scoreMenuOption(query: string, option: TabCreateMenuOption): number {
   const normalizedQuery = normalizeMatchQuery(query)

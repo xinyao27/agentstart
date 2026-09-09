@@ -1,8 +1,8 @@
-import type { HostedReviewProvider } from '@yiru/runtime-protocol/model/review'
 import {
   resolveHostedReviewCreationProvider,
   type HostedReviewCreationProvider
-} from '@yiru/runtime-protocol/model/review'
+} from '@yiru/protocol/hosted-review/creation-provider'
+import type { HostedReviewProvider } from '@yiru/protocol/hosted-review/types'
 import { translate } from '~renderer/i18n/i18n'
 
 export type SupportedHostedReviewCopyProvider = HostedReviewCreationProvider
@@ -21,32 +21,8 @@ export function resolveSupportedHostedReviewCopyProvider(
 }
 
 export function localizedHostedReviewCopy(
-  provider: SupportedHostedReviewCopyProvider
+  _provider: SupportedHostedReviewCopyProvider
 ): LocalizedHostedReviewCopy {
-  if (provider === 'gitlab') {
-    return {
-      shortLabel: translate('auto.i18n.hostedReview.copy.c4e8f1a2b9', 'MR'),
-      reviewLabel: translate('auto.i18n.hostedReview.copy.b3d7e0f1a8', 'merge request'),
-      titleLabel: translate('auto.i18n.hostedReview.copy.a2c6d9e0f7', 'Merge Request'),
-      providerName: translate('auto.i18n.hostedReview.copy.91b5c8d7e6', 'GitLab')
-    }
-  }
-  if (provider === 'azure-devops') {
-    return {
-      shortLabel: translate('auto.i18n.hostedReview.copy.f0a4b8c2d1', 'PR'),
-      reviewLabel: translate('auto.i18n.hostedReview.copy.e9f3a7b1c0', 'pull request'),
-      titleLabel: translate('auto.i18n.hostedReview.copy.d8e2f6a0b9', 'Pull Request'),
-      providerName: 'Azure DevOps'
-    }
-  }
-  if (provider === 'gitea') {
-    return {
-      shortLabel: translate('auto.i18n.hostedReview.copy.f0a4b8c2d1', 'PR'),
-      reviewLabel: translate('auto.i18n.hostedReview.copy.e9f3a7b1c0', 'pull request'),
-      titleLabel: translate('auto.i18n.hostedReview.copy.d8e2f6a0b9', 'Pull Request'),
-      providerName: 'Gitea'
-    }
-  }
   return {
     shortLabel: translate('auto.i18n.hostedReview.copy.f0a4b8c2d1', 'PR'),
     reviewLabel: translate('auto.i18n.hostedReview.copy.e9f3a7b1c0', 'pull request'),

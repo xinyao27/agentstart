@@ -3,15 +3,12 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { getRepoIdFromWorktreeId } from '@yiru/runtime-protocol/model/workspace'
-import type {
-  Repo,
-  Worktree,
-  WorkspaceSessionPatch,
-  WorkspaceSessionState
-} from '@yiru/runtime-protocol/workbench/types'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+} from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { WorkspaceSessionPatch, WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 import {
   exchangePersistedWorkspaceSessionTerminalIds,

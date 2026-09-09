@@ -1,4 +1,4 @@
-import type { PRCheckDetail } from '@yiru/runtime-protocol/workbench/types'
+import type { PRCheckDetail } from '@yiru/protocol/hosted-review/review-types'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Sidebar as PanelRight } from '~renderer/icons/hugeicons'

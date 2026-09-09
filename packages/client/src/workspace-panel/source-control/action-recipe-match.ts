@@ -1,15 +1,14 @@
-import { isCustomAgentId } from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import {
-  normalizeRepoSourceControlAiOverrides,
-  normalizeSourceControlAiSettings,
-  resolveSourceControlActionRecipe
-} from '@yiru/runtime-protocol/workbench/source-control/ai'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   DEFAULT_SOURCE_CONTROL_ACTION_COMMAND_TEMPLATES,
   type SourceControlActionId,
   type SourceControlActionRecipe
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { GlobalSettings, Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-actions'
+import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import { normalizeRepoSourceControlAiOverrides } from '@yiru/protocol/source-control/repo-overrides'
+import { resolveSourceControlActionRecipe } from '@yiru/protocol/source-control/resolution'
+import { normalizeSourceControlAiSettings } from '@yiru/protocol/source-control/settings'
 import type { SourceControlAiWriteTarget } from '~renderer/source-control/ai-recipe-save'
 
 type NormalizedSourceControlActionRecipe = {

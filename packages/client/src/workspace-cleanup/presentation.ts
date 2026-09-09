@@ -1,6 +1,7 @@
-import type { HostedReviewInfo, HostedReviewProvider } from '@yiru/runtime-protocol/model/review'
-import type { Repo, Worktree } from '@yiru/runtime-protocol/workbench/types'
-import type { WorkspaceCleanupCandidate } from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
+import type { HostedReviewInfo, HostedReviewProvider } from '@yiru/protocol/hosted-review/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { translate } from '~renderer/i18n/i18n'
 import { getHostedReviewCacheKey } from '~renderer/source-control/hosted-review-state/slice'
 import { getWorktreeMapFromState } from '~renderer/store/selectors'
@@ -109,16 +110,6 @@ function getLinkedReviewFallback(worktree: Worktree | null): {
   if (!worktree) {
     return null
   }
-  if (worktree.linkedGitLabMR != null) {
-    return {
-      label: translate(
-        'components.workspace.cleanup.presentation.gitlabMergeRequestNumber',
-        'MR #{{value0}}',
-        { value0: worktree.linkedGitLabMR }
-      ),
-      provider: 'gitlab'
-    }
-  }
   if (worktree.linkedPR != null) {
     return {
       label: translate(
@@ -132,8 +123,8 @@ function getLinkedReviewFallback(worktree: Worktree | null): {
   return null
 }
 
-function getReviewShortLabel(provider: HostedReviewProvider): string {
-  return provider === 'gitlab' ? 'MR' : 'PR'
+function getReviewShortLabel(_provider: HostedReviewProvider): string {
+  return 'PR'
 }
 
 function getBranchDisplayName(branch: string): string {

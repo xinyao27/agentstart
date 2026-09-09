@@ -1,12 +1,7 @@
-import type { AiVaultSession } from '@yiru/runtime-protocol/model/agent'
-import {
-  LOCAL_EXECUTION_HOST_ID,
-  normalizeExecutionHostId,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+import { LOCAL_EXECUTION_HOST_ID, normalizeExecutionHostId } from '@yiru/protocol/host/identity'
 
 export function canUseLocalAiVaultSessionPathActions(
-  executionHostId: ExecutionHostId | null | undefined
+  executionHostId: string | null | undefined
 ): boolean {
   // Why: local shell open/reveal APIs only validate paths on this computer;
   // SSH session history exposes paths that exist on the remote host instead.
@@ -27,9 +22,12 @@ export function isSyntheticAiVaultSessionPath(filePath: string): boolean {
  * path. Remote/runtime and synthetic identities are withheld until AI Vault has
  * a provider-owned log-resource contract.
  */
-export function canOpenAiVaultSessionLogInYiru(
-  session: Pick<AiVaultSession, 'filePath' | 'executionHostId'>
-): boolean {
+// Why: structural instead of the model `AiVaultSession` so protobuf session
+// records (string execution host ids) flow through the same helpers.
+export function canOpenAiVaultSessionLogInYiru(session: {
+  executionHostId: string | null | undefined
+  filePath: string | null | undefined
+}): boolean {
   const filePath = session.filePath?.trim()
   if (!filePath) {
     return false

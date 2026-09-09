@@ -1,8 +1,8 @@
-import type { ParsedAgentStatusPayload } from '@yiru/runtime-protocol/model/agent'
+import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
 import {
   normalizeCompatibleAgentTitleForOwner,
   resolveCompatibleAgentTypeForOwner
-} from '@yiru/runtime-protocol/workbench/agent/title-owner'
+} from '~renderer/agent/title/owner'
 import { useAppStore } from '~renderer/store/state'
 
 import { resolveAgentStatusTerminalTitle } from '../agent/status-terminal-title'

@@ -3,15 +3,15 @@ import type {
   ResumableTuiAgent,
   SleepingAgentLaunchConfig,
   SleepingAgentSessionRecord
-} from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/session-resume'
 import type {
   AgentStatusEntry,
   AgentStatusOrchestrationContext,
   AgentType,
   MigrationUnsupportedPtyEntry,
   ParsedAgentStatusPayload
-} from '@yiru/runtime-protocol/model/agent'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/status-records'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'

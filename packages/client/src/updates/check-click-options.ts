@@ -1,4 +1,4 @@
-import type { UpdateCheckOptions } from '@yiru/runtime-protocol/workbench/types'
+import type { UpdaterCheckOptions as UpdateCheckOptions } from '@yiru/protocol/updater-values'
 
 import { getShortcutPlatform } from '../keyboard-input/shortcut-platform'
 

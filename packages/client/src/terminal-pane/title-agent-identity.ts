@@ -1,14 +1,11 @@
+import { isGeminiTerminalTitle, isPiTerminalTitle } from '~renderer/agent/title/core'
+import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 import {
   AGY_AGENT_NAME_RE,
   DROID_AGENT_NAME_RE,
   HERMES_AGENT_NAME_RE,
   titleHasAnyLegacyAgentName
-} from '@yiru/runtime-protocol/model/agent'
-import {
-  detectAgentStatusFromTitle,
-  isGeminiTerminalTitle,
-  isPiTerminalTitle
-} from '@yiru/runtime-protocol/workbench/agent/detection'
+} from '~renderer/agent/title/tokens'
 
 const EXTRA_TITLE_AGENT_TOKEN_RE =
   /(?<![\w./\\-])(?:cursor-agent|pi)(?:\.(?:exe|cmd|bat|ps1))?(?![\w./\\-])/i

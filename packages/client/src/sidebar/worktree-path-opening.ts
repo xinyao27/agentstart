@@ -1,16 +1,17 @@
-import { EXTERNAL_EDITOR_REMOTE_SSH_RUNTIME_CAPABILITY } from '@yiru/runtime-protocol/runtime-capability-contract'
-import type {
-  ShellOpenExternalEditorResult,
-  ShellOpenPathFailureReason
-} from '@yiru/runtime-protocol/workbench/shell-open-types'
+import { EXTERNAL_EDITOR_PROTOCOL_CAPABILITY } from '@yiru/protocol'
+import type { ShellPlatformOutcomeValue } from '@yiru/protocol'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { openRemoteSshInExternalEditor } from '~renderer/runtime/external-editor-target'
 import { runtimeEnvironmentSupportsCapability } from '~renderer/runtime/rpc-client'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { getExternalEditorOpenCapability } from '~renderer/sidebar/external-editor-open-capability'
 
 export type RuntimeRemoteSshSupport = 'not-needed' | 'checking' | 'supported' | 'unsupported'
+
+type PathOpenOutcome =
+  | ShellPlatformOutcomeValue
+  | { ok: false; reason: 'remote-editor-unsupported' }
 
 export function getOpenInEntryAvailability(
   entry: { target: 'external-editor' | 'file-manager'; command?: string },
@@ -59,41 +60,16 @@ export function getOpenInEntryAvailability(
 }
 
 function showOpenFailureToast(
-  result: Exclude<ShellOpenExternalEditorResult, { ok: true }>,
+  result: Exclude<PathOpenOutcome, { ok: true }>,
   remote: boolean
 ): void {
-  const reason: ShellOpenPathFailureReason = result.reason
+  const reason = result.reason
   if (reason === 'remote-runtime-unsupported') {
     toast.error(
       translate(
         'auto.components.sidebar.WorktreeOpenInMenu.remoteRuntimeUnsupported',
         'Opening this path in a local app is not available on this host.'
       )
-    )
-    return
-  }
-  if (reason === 'ssh-target-not-found' || reason === 'ssh-target-invalid') {
-    toast.error(
-      translate(
-        'auto.components.sidebar.WorktreeOpenInMenu.sshTargetUnavailable',
-        'SSH host configuration is no longer available.'
-      )
-    )
-    return
-  }
-  if (result.reason === 'ssh-alias-required') {
-    toast.error(
-      translate(
-        'auto.components.sidebar.WorktreeOpenInMenu.sshAliasRequired',
-        'VS Code needs an SSH config alias for this host.'
-      ),
-      {
-        description: translate(
-          'auto.components.sidebar.WorktreeOpenInMenu.sshAliasRequiredDetail',
-          'Add a Host alias for {{host}}:{{port}}, reconnect the workspace, then try again.',
-          { host: result.host, port: result.port }
-        )
-      }
     )
     return
   }
@@ -172,7 +148,7 @@ export async function openWorktreePath(args: {
     try {
       runtimeRemoteSshSupported = await runtimeEnvironmentSupportsCapability(
         runtimeEnvironmentId,
-        EXTERNAL_EDITOR_REMOTE_SSH_RUNTIME_CAPABILITY
+        EXTERNAL_EDITOR_PROTOCOL_CAPABILITY
       )
     } catch {
       runtimeRemoteSshSupported = false
@@ -200,15 +176,14 @@ export async function openWorktreePath(args: {
     }
   }
 
-  let result: ShellOpenExternalEditorResult
+  let result: PathOpenOutcome
   try {
     result =
       args.target === 'file-manager'
         ? await shellClient.shell.openInFileManager(args.worktreePath)
         : runtimeEnvironmentId && connectionId
-          ? await callRuntimeOrpc(
+          ? await openRemoteSshInExternalEditor(
               { kind: 'environment', environmentId: runtimeEnvironmentId },
-              (client) => client.externalEditor.openRemoteSsh,
               { path: args.worktreePath, command: args.command, connectionId }
             )
           : await shellClient.shell.openInExternalEditor({

@@ -1,5 +1,5 @@
-import { TUI_AGENT_CONFIG } from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import type { CreateWorktreeResult } from '@yiru/runtime-protocol/workbench/types'
+import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
+import type { CreateWorktreeResult } from '@yiru/protocol/worktree/create-result'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import { ensureAgentStartupInTerminal } from '~renderer/new-workspace/workspace-creation'
 import { markAgentWorkspaceTrusted } from '~renderer/runtime/agent-trust-client'

@@ -1,5 +1,5 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import { keybindingMatchesAction } from '@yiru/runtime-protocol/workbench/keybindings'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import { keybindingMatchesAction } from '@yiru/protocol/keybindings'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

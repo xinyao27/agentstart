@@ -1,4 +1,4 @@
-import type { PhysicalModifierToken } from '@yiru/runtime-protocol/workbench/keybindings'
+import type { PhysicalModifierToken } from '@yiru/protocol/keybindings'
 
 // Why: max gap between the first release and the second press. Internal — not
 // user-configurable — and tight enough that normal fast typing never triggers.

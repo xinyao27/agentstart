@@ -1,14 +1,11 @@
-import { localCalendarDayKey } from '@yiru/runtime-protocol/model/ui'
-import {
-  type StatsUsageBoundedRange,
-  statsUsageRangeDays
-} from '@yiru/runtime-protocol/stats-usage-range'
+import { type StatsUsageBoundedRange, statsUsageRangeDays } from '@yiru/protocol/stats/range'
 import type {
   DailyProviderUsage,
   ProviderUsageValue,
   UsageProvider
-} from '@yiru/runtime-protocol/workbench/stats/usage-breakdown'
+} from '@yiru/protocol/stats/usage-breakdown'
 import { useEffect, useRef, useState } from 'react'
+import { localCalendarDayKey } from '~renderer/contribution-heatmap/calendar'
 import type { TokenValueMetric } from '~renderer/contribution-heatmap/metric'
 import {
   ditherBackingSize,

@@ -1,53 +1,20 @@
 import Foundation
+import SwiftProtobuf
 
 extension RuntimeClient {
-    func sourceFileMutation(
+    func sourceMutation<Request: SwiftProtobuf.Message, Response: SwiftProtobuf.Message>(
         _ hostID: String,
-        _ worktreeID: String,
-        _ path: String,
-        _ operationPath: String
+        procedure: String,
+        request: Request,
+        response: Response.Type,
+        isOK: (Response) -> Bool
     ) async throws {
-        let result: MobileGitMutationResultWire = try await callRuntime(
+        let result = try await protocolUnary(
             hostID: hostID,
-            path: operationPath,
-            input: MobileGitFileRequestWire(
-                worktree: sourceWorktreeID(worktreeID),
-                filePath: path
-            ),
-            output: MobileGitMutationResultWire.self
+            procedure: procedure,
+            request: request,
+            response: response
         )
-        guard result.ok else { throw SourceControlRepositoryError.rejectedMutation }
-    }
-
-    func sourceBulkMutation(
-        _ hostID: String,
-        _ worktreeID: String,
-        _ paths: [String],
-        _ operationPath: String
-    ) async throws {
-        let result: MobileGitMutationResultWire = try await callRuntime(
-            hostID: hostID,
-            path: operationPath,
-            input: MobileGitBulkRequestWire(
-                worktree: sourceWorktreeID(worktreeID),
-                filePaths: paths
-            ),
-            output: MobileGitMutationResultWire.self
-        )
-        guard result.ok else { throw SourceControlRepositoryError.rejectedMutation }
-    }
-
-    func sourceWorktreeMutation(
-        _ hostID: String,
-        _ worktreeID: String,
-        _ operationPath: String
-    ) async throws {
-        let result: MobileGitMutationResultWire = try await callRuntime(
-            hostID: hostID,
-            path: operationPath,
-            input: sourceWorktreeRequest(worktreeID),
-            output: MobileGitMutationResultWire.self
-        )
-        guard result.ok else { throw SourceControlRepositoryError.rejectedMutation }
+        guard isOK(result) else { throw SourceControlRepositoryError.rejectedMutation }
     }
 }

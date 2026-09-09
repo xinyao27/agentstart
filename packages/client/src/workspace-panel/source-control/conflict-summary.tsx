@@ -1,4 +1,4 @@
-import type { GitConflictOperation } from '@yiru/runtime-protocol/workbench/types'
+import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

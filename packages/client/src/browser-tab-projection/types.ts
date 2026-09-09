@@ -3,9 +3,9 @@ import type {
   BrowserHistoryEntry,
   BrowserLoadError,
   BrowserPage,
-  BrowserWorkspace,
-  WorkspaceSessionState
-} from '@yiru/runtime-protocol/workbench/types'
+  BrowserWorkspace
+} from '@yiru/protocol/workspace/browser-session'
+import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
 import type { WorkspaceSessionHydrationOptions } from '~renderer/workspace/session-hydration-keys'
 
 export type CreateBrowserTabOptions = {

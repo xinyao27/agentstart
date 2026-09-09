@@ -2,13 +2,11 @@ import {
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type {
-  ProjectHostSetup,
-  WorkspaceVisibleTabType,
-  Worktree,
-  WorktreeLineage
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
+import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 import { findRepoForHost } from '../../repo/state/host-identity'
 import type { AppState } from '../../store/types'

@@ -1,4 +1,4 @@
-import type { SkillUpdateStartResult } from '@yiru/runtime-protocol/workbench/skill-freshness'
+import type { SkillUpdateStartResult } from '@yiru/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 type SkillRunRejectionReason = Extract<SkillUpdateStartResult, { started: false }>['reason']
@@ -31,11 +31,6 @@ export function describeSkillRunRejection(reason: SkillRunRejectionReason | unde
       return translate(
         'auto.components.skills.startRejection.invalidScope',
         'That project is no longer available.'
-      )
-    case 'unsafe-command-path':
-      return translate(
-        'auto.components.skills.startRejection.unsafeCommandPath',
-        'Could not run npx safely from this location.'
       )
   }
 }

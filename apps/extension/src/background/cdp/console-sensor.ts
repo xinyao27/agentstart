@@ -1,4 +1,4 @@
-import type { ConsoleSensorEntry } from '@yiru/runtime-protocol/contract'
+import type { WorkspaceConsoleSensorEntry as ConsoleSensorEntry } from '@yiru/protocol'
 
 import { acquireCdp, releaseCdp, sendCdp, subscribeCdp } from './session'
 

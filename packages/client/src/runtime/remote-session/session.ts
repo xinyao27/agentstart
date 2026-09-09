@@ -5,12 +5,12 @@ import {
   getRuntimeSessionMirrorEnvironmentIds
 } from '~renderer/worktree/runtime-owner'
 
-import { callRuntimeOrpc, createRuntimeOrpcClient } from '../orpc-client'
 import {
   beginRemoteRuntimeWakeTerminalRespawn,
   endRemoteRuntimeWakeTerminalRespawn,
   shouldSkipRemoteRuntimeWakeTerminalRespawn
 } from '../remote-runtime-wake-terminal-respawn'
+import { requireSessionTabsClient } from '../session-tabs-target'
 import { toRuntimeWorktreeSelector } from '../worktree-selector'
 import {
   applyFreshRemoteSessionTabsSnapshots,
@@ -69,18 +69,14 @@ export function useRemoteSessionTabsSync(): void {
       ) {
         continue
       }
-      void callRuntimeOrpc(
-        { kind: 'environment', environmentId },
-        (client) => client.session.tabs.listAll,
-        undefined,
-        { timeoutMs: 15_000 }
-      )
+      void requireSessionTabsClient({ kind: 'environment', environmentId })
+        .then((client) => client.listAll({ timeoutMs: 15_000 }))
         .then((result) => {
           if (disposed) {
             return
           }
           applyRemoteSessionTabsStorePatch((state) =>
-            applyFreshRemoteSessionTabsSnapshots(state, result.snapshots, environmentId)
+            applyFreshRemoteSessionTabsSnapshots(state, result, environmentId)
           )
         })
         .catch((error) => {
@@ -189,17 +185,17 @@ export function useRemoteSessionTabsSync(): void {
 
     const controller = new AbortController()
     void (async () => {
-      let connection: Awaited<ReturnType<typeof createRuntimeOrpcClient>> | null = null
+      let cancel: ((reason?: string) => Promise<void>) | null = null
       try {
-        connection = await createRuntimeOrpcClient(
-          { kind: 'environment', environmentId },
-          { signal: controller.signal }
-        )
-        const stream = await connection.client.session.tabs.subscribe(
-          { worktree: toRuntimeWorktreeSelector(activeWorktreeId) },
-          { signal: controller.signal }
-        )
-        for await (const event of stream) {
+        const client = await requireSessionTabsClient({
+          kind: 'environment',
+          environmentId
+        })
+        const stream = await client.subscribe(toRuntimeWorktreeSelector(activeWorktreeId), {
+          signal: controller.signal
+        })
+        cancel = stream.cancel
+        for await (const event of stream.events) {
           if (isDisposed() || controller.signal.aborted) {
             return
           }
@@ -213,7 +209,7 @@ export function useRemoteSessionTabsSync(): void {
           )
         }
       } finally {
-        connection?.close()
+        await cancel?.('remote session tabs subscription closed')
       }
     })()
 

@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 export function getProviderRuntimeContextKey(
   settings: Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null | undefined

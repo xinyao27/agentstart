@@ -4,8 +4,9 @@ const NATIVE_BOOTSTRAP_TIMEOUT_MS = 12_000
 export type NativeBootstrapResult = {
   authToken: string
   endpoint: string
+  expectedRuntimeId: string | null
   protocolVersion: number
-  runtimeId: string
+  rpcProtocol: 'yiru-protobuf-v2'
 }
 
 let nativeBootstrapInFlight: Promise<NativeBootstrapResult> | null = null
@@ -56,7 +57,13 @@ function requestNativeBootstrapOnce(): Promise<NativeBootstrapResult> {
         reject(new Error(classifyNativeBootstrapFailure(message.error.message)))
         return
       }
-      resolve(message.result)
+      resolve({
+        authToken: message.result.authToken,
+        endpoint: message.result.endpoint,
+        expectedRuntimeId: message.result.runtimeId,
+        protocolVersion: message.result.protocolVersion,
+        rpcProtocol: message.result.rpcProtocol
+      })
     })
     port.onDisconnect.addListener(() => {
       clearTimeout(timeout)
@@ -77,7 +84,9 @@ function requestNativeBootstrapOnce(): Promise<NativeBootstrapResult> {
 }
 
 function classifyNativeBootstrapFailure(message: string): string {
-  return /schema_unsupported|protocol|incompatible|invalid_response/i.test(message)
+  return /schema_unsupported|protocol|incompatible|extension_bootstrap_invalid|invalid_response/i.test(
+    message
+  )
     ? 'onboarding:incompatible-version'
     : 'onboarding:daemon-stopped'
 }
@@ -135,6 +144,7 @@ type NativeBootstrapResponse =
         authToken: string
         endpoint: string
         protocolVersion: number
+        rpcProtocol: 'yiru-protobuf-v2'
         runtimeId: string
       }
     }
@@ -157,12 +167,15 @@ function isNativeBootstrapResponse(value: unknown): value is NativeBootstrapResp
     )
   }
   const result = Reflect.get(value, 'result')
+  const rpcProtocol =
+    typeof result === 'object' && result !== null ? Reflect.get(result, 'rpcProtocol') : undefined
   return (
     typeof result === 'object' &&
     result !== null &&
     typeof Reflect.get(result, 'authToken') === 'string' &&
     typeof Reflect.get(result, 'endpoint') === 'string' &&
     typeof Reflect.get(result, 'protocolVersion') === 'number' &&
+    rpcProtocol === 'yiru-protobuf-v2' &&
     typeof Reflect.get(result, 'runtimeId') === 'string'
   )
 }

@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 
 function isMarkdownComment(comment: Pick<DiffComment, 'source'>): boolean {
   return comment.source === 'markdown'

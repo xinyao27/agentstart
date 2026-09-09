@@ -1,4 +1,4 @@
-import type { WarpThemeImportPreviewTheme } from '@yiru/runtime-protocol/workbench/terminal/custom-themes'
+import type { WarpThemeImportPreviewTheme } from '@yiru/protocol/terminal/theme-types'
 import { translate } from '~renderer/i18n/i18n'
 import { FolderOpen, FileArrowUp as FileUp } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'

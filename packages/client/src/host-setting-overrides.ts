@@ -1,5 +1,6 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type { GlobalSettings, HostSettingOverrides } from '@yiru/runtime-protocol/workbench/types'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { HostSettingOverrides } from '@yiru/protocol/settings/workspace-preferences'
 
 // Why: per-host preferences follow `effective = host override ?? client default`.
 // These pure helpers centralize that rule so the UI, registry, and tests share a

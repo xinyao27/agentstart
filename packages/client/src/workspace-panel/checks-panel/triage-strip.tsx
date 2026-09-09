@@ -1,4 +1,4 @@
-import type { PRCheckDetail } from '@yiru/runtime-protocol/workbench/types'
+import type { PRCheckDetail } from '@yiru/protocol/hosted-review/review-types'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -16,7 +16,6 @@ import type { ConflictReview } from './conflict-details'
 export function PRTriageStrip({
   review,
   pr,
-  reviewKind = 'PR',
   checks,
   isResolvingConflictsWithAI,
   onResolveConflictsWithAI,
@@ -29,7 +28,6 @@ export function PRTriageStrip({
 }: {
   review?: ConflictReview
   pr?: ConflictReview
-  reviewKind?: 'PR' | 'MR'
   checks: PRCheckDetail[]
   isResolvingConflictsWithAI: boolean
   onResolveConflictsWithAI: () => void
@@ -49,7 +47,6 @@ export function PRTriageStrip({
   if (resolvedReview?.mergeable === 'CONFLICTING') {
     return (
       <ConflictTriageStrip
-        reviewKind={reviewKind}
         isResolvingConflictsWithAI={isResolvingConflictsWithAI}
         onResolveConflictsWithAI={onResolveConflictsWithAI}
         resolveConflictsDisabled={resolveConflictsDisabled}
@@ -150,13 +147,11 @@ export function PRTriageStrip({
 }
 
 export function ConflictTriageStrip({
-  reviewKind,
   isResolvingConflictsWithAI,
   onResolveConflictsWithAI,
   resolveConflictsDisabled,
   resolveConflictsDisabledReason
 }: {
-  reviewKind: 'PR' | 'MR'
   isResolvingConflictsWithAI: boolean
   onResolveConflictsWithAI: () => void
   resolveConflictsDisabled?: boolean
@@ -172,7 +167,7 @@ export function ConflictTriageStrip({
               'auto.components.right.sidebar.checks.panel.content.60186d8498',
               'Conflicts block this'
             )}{' '}
-            {reviewKind}
+            PR
           </div>
           <div className="text-muted-foreground truncate text-[10px]">
             {translate(

@@ -1,4 +1,4 @@
-name: Release Bun Daemon
+name: Release Daemons
 
 on:
   push:
@@ -8,24 +8,49 @@ on:
   # or GitHub outage without deleting and recreating an immutable release tag.
   workflow_dispatch:
 
-permissions:
-  attestations: write
-  contents: write
-  id-token: write
+permissions: {}
 
 # Why: setup installs the exact pinned pnpm binary; disabling its nested version manager keeps
 # standalone and Node-distributed pnpm identities from rewriting the cross-platform lockfile.
 env:
+  HOMEBREW_RUST_ASSETS: >-
+    yiru-rust-darwin-arm64 yiru-rust-darwin-x64
+    yiru-rust-linux-arm64 yiru-rust-linux-x64
   PNPM_CONFIG_PM_ON_FAIL: ignore
+  RUST_RELEASE_ASSETS: >-
+    yiru-rust-darwin-arm64 yiru-rust-darwin-x64
+    yiru-rust-linux-arm64 yiru-rust-linux-x64
+    yiru-rust-linux-arm64-musl yiru-rust-linux-x64-musl
+    yiru-rust-windows-x64.exe
 
 jobs:
+  validate-ref:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 2
+    steps:
+      - name: Require an immutable release tag
+        env:
+          RELEASE_REF: ${{ github.ref }}
+        run: |
+          if [[ ! "$RELEASE_REF" =~ ^refs/tags/v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Daemon releases must run from a stable vMAJOR.MINOR.PATCH tag." >&2
+            exit 1
+          fi
+
   macos-helper:
     if: github.repository == 'xinyao27/yiru'
+    needs: validate-ref
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
     runs-on: macos-26
     timeout-minutes: 45
     steps:
       - name: Checkout tag
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -54,6 +79,10 @@ jobs:
           MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
         run: |
           set -euo pipefail
+          if [ -z "$MAC_CERTS" ] || [ -z "$MAC_CERTS_PASSWORD" ]; then
+            echo "MAC_CERTS and MAC_CERTS_PASSWORD are required for macOS releases." >&2
+            exit 1
+          fi
           keychain_path="$RUNNER_TEMP/yiru-computer-use.keychain-db"
           keychain_password="$(openssl rand -base64 24)"
           certificate_path="$RUNNER_TEMP/yiru-computer-use.p12"
@@ -79,7 +108,7 @@ jobs:
             exit 1
           fi
           YIRU_COMPUTER_MACOS_SIGN_IDENTITY="$identity" \
-            pnpm exec vp run @yiru/daemon#build:computer-macos -- --universal
+            pnpm exec vp run @yiru/computer-use-macos#build -- --universal
 
       - name: Notarize and package computer-use helper
         env:
@@ -88,9 +117,24 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           set -euo pipefail
-          app="apps/daemon/native/computer-use-macos/.build/release/Yiru Computer Use.app"
-          archive="apps/daemon/dist/yiru-computer-use-macos.zip"
+          if [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ] || [ -z "$APPLE_ID" ] || [ -z "$APPLE_TEAM_ID" ]; then
+            echo "Apple notarization credentials are required for macOS releases." >&2
+            exit 1
+          fi
+          expected_team_id='8H6Q2YA365'
+          expected_bundle_id='com.xinyao27.yiru.computer-use'
+          if [ "$APPLE_TEAM_ID" != "$expected_team_id" ]; then
+            echo "APPLE_TEAM_ID must match the Yiru updater Team ID ${expected_team_id}." >&2
+            exit 1
+          fi
+          app="apps/computer-use-macos/.build/release/Yiru Computer Use.app"
+          archive="apps/computer-use-macos/dist/yiru-computer-use-macos.zip"
           mkdir -p "$(dirname "$archive")"
+          codesign --verify --deep --strict "$app"
+          signature_details="$(codesign -d --verbose=4 "$app" 2>&1)"
+          grep -Fq 'Authority=Developer ID Application:' <<< "$signature_details"
+          grep -Fq "TeamIdentifier=$expected_team_id" <<< "$signature_details"
+          grep -Fq "Identifier=$expected_bundle_id" <<< "$signature_details"
           ditto -c -k --sequesterRsrc --keepParent "$app" "$archive"
           xcrun notarytool submit "$archive" \
             --apple-id "$APPLE_ID" \
@@ -106,23 +150,207 @@ jobs:
       - name: Attest computer-use helper
         uses: actions/attest@v4
         with:
-          subject-path: apps/daemon/dist/yiru-computer-use-macos.zip
+          subject-path: apps/computer-use-macos/dist/yiru-computer-use-macos.zip
 
       - name: Upload computer-use helper
         uses: actions/upload-artifact@v7
         with:
           name: yiru-computer-use-macos
-          path: apps/daemon/dist/yiru-computer-use-macos.zip
+          path: apps/computer-use-macos/dist/yiru-computer-use-macos.zip
+          if-no-files-found: error
+          retention-days: 7
+
+  rust-daemon:
+    if: github.repository == 'xinyao27/yiru'
+    needs: validate-ref
+    name: Daemon ${{ matrix.asset }}
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - asset: yiru-rust-darwin-arm64
+            runner: macos-26
+            target: aarch64-apple-darwin
+          - asset: yiru-rust-darwin-x64
+            runner: macos-26-intel
+            target: x86_64-apple-darwin
+          - asset: yiru-rust-linux-arm64
+            runner: ubuntu-22.04-arm
+            target: aarch64-unknown-linux-gnu
+          - asset: yiru-rust-linux-x64
+            runner: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+          - asset: yiru-rust-linux-arm64-musl
+            runner: ubuntu-22.04-arm
+            target: aarch64-unknown-linux-musl
+            musl: true
+          - asset: yiru-rust-linux-x64-musl
+            runner: ubuntu-22.04
+            target: x86_64-unknown-linux-musl
+            musl: true
+          - asset: yiru-rust-windows-x64.exe
+            runner: windows-2025
+            target: x86_64-pc-windows-msvc
+            executable_suffix: .exe
+
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+
+      - name: Setup pnpm
+        uses: pnpm/setup@v2
+        with:
+          install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+          cache: pnpm
+
+      - name: Setup Rust target
+        shell: bash
+        run: |
+          rustup toolchain install 1.95.0 --profile minimal
+          rustup target add "${{ matrix.target }}" --toolchain 1.95.0
+
+      - name: Install musl toolchain
+        if: matrix.musl == true
+        run: sudo apt-get update && sudo apt-get install --yes musl-tools
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Why: release binaries must use the same Developer ID identity as the helper so macOS
+      # grants and Gatekeeper see one stable Yiru publisher across both executables.
+      - name: Import Developer ID certificate
+        if: runner.os == 'macOS'
+        env:
+          MAC_CERTS: ${{ secrets.MAC_CERTS }}
+          MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "$MAC_CERTS" ] || [ -z "$MAC_CERTS_PASSWORD" ]; then
+            echo "MAC_CERTS and MAC_CERTS_PASSWORD are required for macOS Rust releases." >&2
+            exit 1
+          fi
+          keychain_path="$RUNNER_TEMP/yiru-rust.keychain-db"
+          keychain_password="$(openssl rand -base64 24)"
+          certificate_path="$RUNNER_TEMP/yiru-rust.p12"
+          echo "$MAC_CERTS" | base64 --decode > "$certificate_path"
+          security create-keychain -p "$keychain_password" "$keychain_path"
+          security set-keychain-settings -lut 21600 "$keychain_path"
+          security unlock-keychain -p "$keychain_password" "$keychain_path"
+          security import "$certificate_path" -P "$MAC_CERTS_PASSWORD" \
+            -A -t cert -f pkcs12 -k "$keychain_path"
+          security set-key-partition-list -S apple-tool:,apple: \
+            -k "$keychain_password" "$keychain_path" >/dev/null
+          security list-keychains -d user -s "$keychain_path" login.keychain-db
+          rm -f "$certificate_path"
+
+      - name: Build daemon
+        shell: bash
+        env:
+          CARGO_INCREMENTAL: '0'
+          CC_aarch64_unknown_linux_musl: ${{ matrix.musl && 'musl-gcc' || '' }}
+          CC_x86_64_unknown_linux_musl: ${{ matrix.musl && 'musl-gcc' || '' }}
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER: ${{ matrix.musl && 'musl-gcc' || '' }}
+          CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER: ${{ matrix.musl && 'musl-gcc' || '' }}
+        run: |
+          pnpm exec vp run --filter '@yiru/daemon^...' --fail-if-no-match build
+          cargo build --manifest-path apps/daemon/Cargo.toml --release --locked --target "${{ matrix.target }}"
+          mkdir -p apps/daemon/dist
+          cp "apps/daemon/target/${{ matrix.target }}/release/yiru${{ matrix.executable_suffix }}" \
+            "apps/daemon/dist/${{ matrix.asset }}"
+
+      - name: Sign, notarize, and verify macOS Rust daemon
+        if: runner.os == 'macOS'
+        env:
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          if [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ] || [ -z "$APPLE_ID" ] || [ -z "$APPLE_TEAM_ID" ]; then
+            echo "Apple notarization credentials are required for macOS Rust releases." >&2
+            exit 1
+          fi
+          expected_team_id='8H6Q2YA365'
+          if [ "$APPLE_TEAM_ID" != "$expected_team_id" ]; then
+            echo "APPLE_TEAM_ID must match the Yiru updater Team ID ${expected_team_id}." >&2
+            exit 1
+          fi
+          binary="apps/daemon/dist/${{ matrix.asset }}"
+          archive="$RUNNER_TEMP/${{ matrix.asset }}.zip"
+          notary_result="$RUNNER_TEMP/${{ matrix.asset }}-notary.json"
+          identity="$(security find-identity -v -p codesigning | sed -n 's/.*"\(Developer ID Application:[^"]*\)".*/\1/p' | head -1)"
+          if [ -z "$identity" ]; then
+            echo "Developer ID Application identity is unavailable." >&2
+            exit 1
+          fi
+          codesign --force --options runtime --timestamp --sign "$identity" "$binary"
+          codesign --verify --strict --verbose=2 "$binary"
+          signature_details="$(codesign -d --verbose=4 "$binary" 2>&1)"
+          grep -Fq 'Authority=Developer ID Application:' <<< "$signature_details"
+          grep -Fq "TeamIdentifier=$APPLE_TEAM_ID" <<< "$signature_details"
+          ditto -c -k --sequesterRsrc --keepParent "$binary" "$archive"
+          xcrun notarytool submit "$archive" \
+            --apple-id "$APPLE_ID" \
+            --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+            --team-id "$APPLE_TEAM_ID" \
+            --wait \
+            --output-format json | tee "$notary_result"
+          NOTARY_RESULT="$notary_result" node <<'NODE'
+          const { readFileSync } = require('node:fs')
+          const result = JSON.parse(readFileSync(process.env.NOTARY_RESULT, 'utf8'))
+          if (result.status !== 'Accepted') {
+            throw new Error(`Apple notarization returned ${String(result.status)}`)
+          }
+          NODE
+          rm -f "$archive" "$notary_result"
+
+      - name: Attest daemon
+        uses: actions/attest@v4
+        with:
+          subject-path: apps/daemon/dist/${{ matrix.asset }}
+
+      - name: Upload daemon
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.asset }}
+          path: apps/daemon/dist/${{ matrix.asset }}
           if-no-files-found: error
           retention-days: 7
 
   release:
     if: github.repository == 'xinyao27/yiru'
-    needs: macos-helper
-    runs-on: ubuntu-latest
+    needs:
+      - macos-helper
+      - rust-daemon
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
     steps:
       - name: Checkout tag
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -150,15 +378,17 @@ jobs:
         run: |
           version="${RELEASE_TAG#v}"
           daemon_version="$(node -p "require('./apps/daemon/package.json').version")"
+          rust_cargo_version="$(sed -n 's/^version = "\([^"]*\)"/\1/p' apps/daemon/Cargo.toml | head -1)"
+          computer_use_version="$(node -p "require('./apps/computer-use-macos/package.json').version")"
           cli_version="$(node -p "require('./packages/cli/package.json').version")"
-          if [ "$version" != "$daemon_version" ] || [ "$version" != "$cli_version" ]; then
-            echo "Tag, daemon package, and npm CLI versions must match." >&2
+          if [ "$version" != "$daemon_version" ] || \
+            [ "$version" != "$rust_cargo_version" ] || \
+            [ "$version" != "$computer_use_version" ] || \
+            [ "$version" != "$cli_version" ]; then
+            echo "Tag, daemon package and Cargo manifest, computer-use helper, and npm CLI versions must match." >&2
             exit 1
           fi
           grep -Fq "version \"$version\"" Formula/yiru.rb
-
-      - name: Build release target matrix
-        run: pnpm exec vp run @yiru/daemon#build:release
 
       - name: Download computer-use helper
         uses: actions/download-artifact@v8
@@ -166,27 +396,123 @@ jobs:
           name: yiru-computer-use-macos
           path: apps/daemon/dist
 
-      - name: Create and verify checksums
-        run: |
-          cd apps/daemon/dist
-          shasum -a 256 yiru-bun-* yiru-computer-use-macos.zip > yiru-checksums.txt
-          shasum -a 256 --check yiru-checksums.txt
-          for asset in yiru-bun-darwin-arm64 yiru-bun-darwin-x64 yiru-bun-linux-arm64 yiru-bun-linux-x64; do
-            checksum="$(shasum -a 256 "$asset" | awk '{ print $1 }')"
-            grep -Fq "$checksum" ../../../Formula/yiru.rb
-          done
+      - name: Download daemon target artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: yiru-rust-*
+          path: apps/daemon/dist
+          merge-multiple: true
 
-      - name: Create GitHub release
+      # Why: release checksums must cover the exact bytes attested by the target build jobs, not
+      # merely whatever files happened to match an upload glob in this aggregation job.
+      - name: Verify target build attestations
+        working-directory: apps/daemon/dist
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --generate-notes --title "$GITHUB_REF_NAME"
-          gh release upload "$GITHUB_REF_NAME" apps/daemon/dist/yiru-bun-* apps/daemon/dist/yiru-computer-use-macos.zip apps/daemon/dist/yiru-checksums.txt --clobber
+          set -euo pipefail
+          read -r -a rust_assets <<< "$RUST_RELEASE_ASSETS"
+          assets=(yiru-computer-use-macos.zip "${rust_assets[@]}")
+          for asset in "${assets[@]}"; do
+            test -f "$asset"
+            gh attestation verify "$asset" --repo "$GITHUB_REPOSITORY"
+          done
 
-      - name: Attest daemon binaries
+      - name: Create and verify checksums
+        working-directory: apps/daemon/dist
+        run: |
+          set -euo pipefail
+          read -r -a homebrew_assets <<< "$HOMEBREW_RUST_ASSETS"
+          read -r -a rust_assets <<< "$RUST_RELEASE_ASSETS"
+          if [ "${#rust_assets[@]}" -ne 7 ] || \
+            [ "${#homebrew_assets[@]}" -ne 4 ]; then
+            echo "Release asset sets must contain 7 Rust and 4 Homebrew binaries." >&2
+            exit 1
+          fi
+          assets=(yiru-computer-use-macos.zip "${rust_assets[@]}")
+          if ! printf '%s\n' "${assets[@]}" | awk 'seen[$0]++ { exit 1 }'; then
+            echo "Release asset names must be unique." >&2
+            exit 1
+          fi
+          for homebrew_asset in "${homebrew_assets[@]}"; do
+            is_released=0
+            for rust_set_asset in "${rust_assets[@]}"; do
+              if [ "$homebrew_asset" = "$rust_set_asset" ]; then
+                is_released=1
+                break
+              fi
+            done
+            if [ "$is_released" != 1 ]; then
+              echo "Homebrew asset ${homebrew_asset} is absent from the Rust release set." >&2
+              exit 1
+            fi
+          done
+          for asset in "${assets[@]}"; do
+            test -f "$asset"
+          done
+          shasum -a 256 "${assets[@]}" > yiru-checksums.txt
+          shasum -a 256 --check yiru-checksums.txt
+
+      # Why: the checksum manifest is built from the explicit release asset sets above, so the
+      # attestation cannot silently omit a target that an upload glob happened not to match.
+      - name: Attest release assets
         uses: actions/attest@v4
         with:
-          subject-path: apps/daemon/dist/yiru-bun-*
+          subject-checksums: apps/daemon/dist/yiru-checksums.txt
+
+      - name: Attest release checksum manifest
+        uses: actions/attest@v4
+        with:
+          subject-path: apps/daemon/dist/yiru-checksums.txt
+
+      - name: Create GitHub release
+        working-directory: apps/daemon/dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          read -r -a rust_assets <<< "$RUST_RELEASE_ASSETS"
+          assets=(
+            yiru-computer-use-macos.zip
+            "${rust_assets[@]}"
+            yiru-checksums.txt
+          )
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || \
+            gh release create "$GITHUB_REF_NAME" --generate-notes --title "$GITHUB_REF_NAME"
+          gh release upload "$GITHUB_REF_NAME" "${assets[@]}" --clobber
+
+      # Why: Rust release bytes exist only after this workflow signs and notarizes them, so the
+      # Homebrew checksums are pinned here from the attested artifacts instead of being predicted
+      # during local preparation.
+      - name: Pin Homebrew formula checksums
+        working-directory: apps/daemon/dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const { readFileSync, writeFileSync } = require('node:fs')
+          const { createHash } = require('node:crypto')
+          const formulaPath = '../../../Formula/yiru.rb'
+          let formula = readFileSync(formulaPath, 'utf8')
+          for (const asset of process.env.HOMEBREW_RUST_ASSETS.split(/\s+/).filter(Boolean)) {
+            const checksum = createHash('sha256').update(readFileSync(asset)).digest('hex')
+            const escaped = asset.replaceAll('-', '\\-')
+            const pattern = new RegExp(`(url "[^"]+/${escaped}",[\\s\\S]*?sha256 ")[0-9a-f]{64}(")`)
+            const matches = [...formula.matchAll(new RegExp(pattern.source, 'g'))]
+            if (matches.length !== 1) {
+              throw new Error(
+                `Expected one ${asset} checksum in Formula/yiru.rb, found ${matches.length}`
+              )
+            }
+            formula = formula.replace(pattern, `$1${checksum}$2`)
+          }
+          writeFileSync(formulaPath, formula)
+          NODE
+          gh api --method PUT "repos/${GITHUB_REPOSITORY}/contents/Formula/yiru.rb" \
+            -f message="chore: pin Homebrew checksums for ${GITHUB_REF_NAME}" \
+            -f content="$(base64 -w0 ../../../Formula/yiru.rb)" \
+            -f sha="$(git rev-parse 'HEAD:Formula/yiru.rb')"
 
       - name: Publish npm and bunx installer
         working-directory: packages/cli

@@ -1,4 +1,4 @@
-import type { GitHubWorkItem } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
 
 import { matchesRepoCacheKey, repoCacheKeyPrefixes } from './cache-policy'
 import type { GitHubWorkItemRequestTarget } from './work-items-request'

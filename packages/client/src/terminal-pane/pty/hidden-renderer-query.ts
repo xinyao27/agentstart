@@ -1,11 +1,11 @@
 import type { Terminal } from '@xterm/xterm'
+import type { PtyDataMeta } from '~renderer/runtime/pty-data-meta'
+import { useAppStore } from '~renderer/store/state'
 import {
   mode2031SequenceFor,
   resolveTerminalColorSchemeMode,
   scanMode2031Sequences
-} from '@yiru/runtime-protocol/workbench/terminal/color-scheme-protocol'
-import type { PtyDataMeta } from '~renderer/runtime/pty-data-meta'
-import { useAppStore } from '~renderer/store/state'
+} from '~renderer/terminal-pane/emulator/color-scheme'
 import { parseTerminalOscColorQuery } from '~renderer/terminal/osc-color-reply'
 import {
   HIDDEN_STARTUP_RENDERER_QUERY_PENDING_CHARS,

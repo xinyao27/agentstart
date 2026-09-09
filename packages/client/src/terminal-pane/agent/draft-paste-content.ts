@@ -1,5 +1,5 @@
-import { yieldToEventLoop } from '@yiru/runtime-protocol/model/ui'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { yieldToEventLoop } from '~renderer/event-loop-yield'
 import { sendRuntimePtyInputVerified } from '~renderer/runtime/terminal-inspection'
 import {
   BRACKETED_PASTE_END,

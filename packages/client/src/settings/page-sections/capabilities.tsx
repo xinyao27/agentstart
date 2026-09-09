@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type { WindowsTerminalCapabilities } from '~renderer/terminal/windows/capabilities'
 
 import { translate } from '../../i18n/i18n'
@@ -151,7 +151,7 @@ export function CapabilitySections({
         title={translate('auto.components.settings.Settings.c9ca101a3b', 'Integrations')}
         description={translate(
           'auto.components.settings.Settings.b07041697f',
-          'Connect GitHub, GitLab, and source-hosting services.'
+          'Connect GitHub for pull requests, checks, and review status.'
         )}
         searchEntries={getSearchEntries('integrations')}
         bodyClassName="border-0 bg-transparent p-0"

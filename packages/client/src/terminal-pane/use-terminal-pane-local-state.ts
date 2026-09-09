@@ -1,6 +1,6 @@
 import type { IDisposable } from '@xterm/xterm'
-import type { TerminalKittyKeyboardModeTracker } from '@yiru/runtime-protocol/workbench/terminal/kitty-keyboard-mode-tracker'
 import { useLayoutEffect, useRef, useState } from 'react'
+import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 
 import { useDaemonActions } from '../daemon-actions/use-actions'
 import { isTerminalSessionStateSaveFailure } from '../terminal/session-state-save-failure'

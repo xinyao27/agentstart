@@ -1,4 +1,4 @@
-import type { LocalBaseRefUpdateSuggestion } from '@yiru/runtime-protocol/workbench/types'
+import type { LocalBaseRefUpdateSuggestion } from '@yiru/protocol/worktree/create-result'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import type { AppState } from '~renderer/store/types'

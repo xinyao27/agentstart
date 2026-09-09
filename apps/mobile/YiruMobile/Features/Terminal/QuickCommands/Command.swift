@@ -1,4 +1,5 @@
 import Foundation
+import YiruProtocol
 
 private nonisolated enum TerminalQuickCommandConstants {
     static let displayPreviewLength = 240
@@ -25,12 +26,12 @@ nonisolated struct TerminalQuickCommand: Hashable, Identifiable, Sendable {
     let scope: TerminalQuickCommandScope
     let action: TerminalQuickCommandAction
 
-    init?(wire: MobileQuickCommandWire) {
-        let id = wire.id.trimmingCharacters(in: .whitespacesAndNewlines)
-        let label = wire.label.trimmingCharacters(in: .whitespacesAndNewlines)
+    init?(proto: Yiru_Runtime_V1_SettingsQuickCommand) {
+        let id = proto.id.trimmingCharacters(in: .whitespacesAndNewlines)
+        let label = proto.label.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !id.isEmpty, id.count <= 80, label.count <= 80 else { return nil }
         let scope: TerminalQuickCommandScope
-        if wire.scope?.type == "repo", let repoID = wire.scope?.repoId,
+        if case .repoID(let repoID) = proto.scope.scope,
             !repoID.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         {
             scope = .repository(String(repoID.prefix(200)))
@@ -38,21 +39,21 @@ nonisolated struct TerminalQuickCommand: Hashable, Identifiable, Sendable {
             scope = .global
         }
         let action: TerminalQuickCommandAction
-        switch wire.action {
-        case "agent-prompt":
-            guard let agent = wire.agent, supportsQuickCommandAgent(agent),
-                let prompt = wire.prompt,
-                !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        switch proto.kind {
+        case .agentPrompt(let prompt):
+            let agent = prompt.agent
+            guard supportsQuickCommandAgent(agent),
+                !prompt.prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             else { return nil }
             action = .agent(
-                agentID: agent, prompt: trimTrailingWhitespace(String(prompt.prefix(6_000))))
-        case "terminal-command":
-            guard let command = wire.command else { return nil }
+                agentID: agent,
+                prompt: trimTrailingWhitespace(String(prompt.prompt.prefix(6_000))))
+        case .terminalCommand(let command):
             action = .terminal(
-                command: trimTrailingWhitespace(String(command.prefix(4_000))),
-                appendEnter: wire.appendEnter != false
+                command: trimTrailingWhitespace(String(command.command.prefix(4_000))),
+                appendEnter: command.appendEnter
             )
-        default:
+        case nil:
             return nil
         }
         self.id = id
@@ -99,37 +100,32 @@ nonisolated struct TerminalQuickCommand: Hashable, Identifiable, Sendable {
         }
     }
 
-    var wire: MobileQuickCommandWire {
-        let scopeWire: MobileQuickCommandScopeWire
-        switch scope {
+    var upsert: Yiru_Runtime_V1_SettingsQuickCommandUpsert {
+        var scope = Yiru_Runtime_V1_SettingsQuickCommandScope()
+        switch self.scope {
         case .global:
-            scopeWire = MobileQuickCommandScopeWire(type: "global", repoId: nil)
+            scope.global = true
         case .repository(let repoID):
-            scopeWire = MobileQuickCommandScopeWire(type: "repo", repoId: repoID)
+            scope.repoID = repoID
         }
+        var command = Yiru_Runtime_V1_SettingsQuickCommand()
+        command.id = id
+        command.label = label
+        command.scope = scope
         switch action {
-        case .terminal(let command, let appendEnter):
-            return MobileQuickCommandWire(
-                id: id,
-                label: label,
-                action: "terminal-command",
-                command: command,
-                appendEnter: appendEnter,
-                agent: nil,
-                prompt: nil,
-                scope: scopeWire
-            )
+        case .terminal(let commandText, let appendEnter):
+            var payload = Yiru_Runtime_V1_SettingsTerminalCommand()
+            payload.command = commandText
+            payload.appendEnter = appendEnter
+            command.kind = .terminalCommand(payload)
         case .agent(let agentID, let prompt):
-            return MobileQuickCommandWire(
-                id: id,
-                label: label,
-                action: "agent-prompt",
-                command: nil,
-                appendEnter: nil,
-                agent: agentID,
-                prompt: prompt,
-                scope: scopeWire
-            )
+            var payload = Yiru_Runtime_V1_SettingsAgentPrompt()
+            payload.agent = agentID
+            payload.prompt = prompt
+            command.kind = .agentPrompt(payload)
+        }
+        return Yiru_Runtime_V1_SettingsQuickCommandUpsert.with {
+            $0.command = command
         }
     }
 }

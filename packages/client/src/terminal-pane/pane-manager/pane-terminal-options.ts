@@ -1,6 +1,6 @@
 import type { ITerminalOptions } from '@xterm/xterm'
-import { DEFAULT_TERMINAL_FONT_SIZE } from '@yiru/runtime-protocol/workbench/terminal/fonts'
-import { DESKTOP_TERMINAL_SCROLLBACK_ROWS_DEFAULT } from '@yiru/runtime-protocol/workbench/terminal/scrollback-policy'
+import { DEFAULT_TERMINAL_FONT_SIZE } from '@yiru/protocol/terminal/font-settings'
+import { DESKTOP_TERMINAL_SCROLLBACK_ROWS_DEFAULT } from '@yiru/protocol/terminal/scrollback-policy'
 
 type TerminalCursorStyle = NonNullable<ITerminalOptions['cursorStyle']>
 type TerminalCursorInactiveStyle = NonNullable<ITerminalOptions['cursorInactiveStyle']>
@@ -60,7 +60,7 @@ export function buildDefaultTerminalOptions(): ITerminalOptions {
       // this as a gutter, costing ~1 column per pane — accepted tradeoff so the
       // scrollbar never covers content (evidence in PR #5051). The v1.4.51
       // table corruption #4877 fixed by zeroing this was actually the ZWJ
-      // width bug; it stays fixed by shared/terminal/unicode-provider.ts. Width
+      // width bug; it stays fixed by terminal-pane/emulator/unicode-provider.ts. Width
       // also enables the overview ruler, whose border is hidden in
       // composeActiveTerminalTheme.
       width: 7

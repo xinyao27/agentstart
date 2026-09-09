@@ -1,5 +1,5 @@
 import type { Popover as BasePopover } from '@base-ui/react/popover'
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

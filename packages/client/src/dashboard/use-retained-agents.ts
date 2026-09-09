@@ -1,9 +1,11 @@
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry
-} from '@yiru/runtime-protocol/model/agent'
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { Repo, TerminalTab, Worktree } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/status-records'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { useEffect, useRef } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'

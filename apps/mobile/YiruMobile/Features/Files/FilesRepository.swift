@@ -3,7 +3,7 @@ nonisolated protocol WorkspaceFilesRepository: Sendable {
         for hostID: String,
         worktreeID: String,
         relativePath: String
-    ) async throws -> WorkspaceDirectoryLoad
+    ) async throws -> [WorkspaceDirectoryEntry]
     func reconnectWorkspaceFiles(for hostID: String) async
     // Why: mirrors SourceControlRepository.liveWorktreeDisplayName — the header must show
     // the worktree's current display name, not the WorkspaceSummary snapshot handed to the

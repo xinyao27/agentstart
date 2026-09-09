@@ -1,4 +1,4 @@
-import type { DirEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { DirectoryEntry as DirEntry } from '@yiru/protocol/files/values'
 import { joinPath, normalizeRelativePath } from '~renderer/path'
 import { readRuntimeDirectory } from '~renderer/runtime/file-client'
 

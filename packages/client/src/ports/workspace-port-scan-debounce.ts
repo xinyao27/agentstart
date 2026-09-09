@@ -1,4 +1,4 @@
-import type { WorkspacePortScanResult } from '@yiru/runtime-protocol/workbench/workspace/ports'
+import type { WorkspacePortScanResult } from '@yiru/protocol'
 
 export type KeyedPortScan = { key: string; result: WorkspacePortScanResult }
 

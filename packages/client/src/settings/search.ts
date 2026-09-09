@@ -1,4 +1,4 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 
 export type SettingsSearchEntry = {
   title: string
@@ -57,7 +57,7 @@ export function isSettingsSearchQueryTooLarge(
   query: string,
   maxBytes = SETTINGS_SEARCH_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 export function normalizeSettingsSearchQuery(query: string): string {

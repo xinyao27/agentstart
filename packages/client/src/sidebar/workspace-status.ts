@@ -1,19 +1,19 @@
+import { DEFAULT_WORKSPACE_STATUSES } from '@yiru/protocol/workspace/status/defaults'
 import type {
   WorkspaceStatus,
   WorkspaceStatusDefinition
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/status/model'
 import {
   DEFAULT_WORKSPACE_STATUS_COLOR_ID,
   DEFAULT_WORKSPACE_STATUS_ICON_ID,
   DEFAULT_WORKSPACE_STATUS_ID,
-  DEFAULT_WORKSPACE_STATUSES,
   WORKSPACE_STATUS_COLOR_IDS,
   WORKSPACE_STATUS_ICON_IDS,
   getWorkspaceStatus,
   getWorkspaceStatusFromGroupKey,
   getWorkspaceStatusGroupKey,
   isWorkspaceStatusId
-} from '@yiru/runtime-protocol/workbench/workspace/statuses'
+} from '@yiru/protocol/workspace/status/normalize'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'

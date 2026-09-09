@@ -1,0 +1,107 @@
+[package]
+name = "yiru-daemon"
+version = "0.0.36"
+edition = "2024"
+rust-version = "1.95"
+publish = false
+default-run = "yiru"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[[bin]]
+name = "yiru"
+path = "src/main.rs"
+
+[dependencies]
+async-trait = "0.1.89"
+axum = { version = "0.8.8", default-features = false, features = ["http1", "json", "tokio", "ws"] }
+chrono = { version = "0.4.42", default-features = false, features = ["clock"] }
+chrono-tz = { version = "0.10.4", default-features = false }
+if-addrs = "0.15.0"
+iana-time-zone = "0.1.65"
+icu_collator = "2.3.1"
+icu_locale_core = "2.3.0"
+base64 = "0.22.1"
+bytes = "1.12.1"
+crypto_secretbox = { version = "0.1.1", default-features = false, features = ["alloc", "salsa20"] }
+futures-util = { version = "0.3.31", default-features = false, features = ["sink", "std"] }
+http = "1.5.0"
+http-body-util = "0.1.5"
+hyper = { version = "1.11.1", features = ["http1", "server", "client"] }
+hyper-util = { version = "0.1.20", features = ["tokio"] }
+getrandom = "0.3.4"
+notify = "8"
+png = "0.18.0"
+portable-pty = "0.9.0"
+prost = "0.14.4"
+p256 = { version = "0.13.2", default-features = false, features = ["ecdsa", "pkcs8"] }
+qwertty-term-vt = "0.4.0"
+qrcode = { version = "0.14.1", default-features = false }
+reqwest = { version = "0.13.4", default-features = false, features = [
+  "rustls-no-provider",
+  "json",
+  "socks"
+] }
+ring = "0.17.14"
+rustls = { version = "0.23.43", default-features = false, features = ["ring", "std", "tls12"] }
+rusqlite = { version = "0.40.2", default-features = false, features = ["bundled"] }
+regex = "1.12.3"
+same-file = "1.0.6"
+salsa20 = { version = "0.10.2", default-features = false }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = { version = "1.0.151", features = ["preserve_order"] }
+serde-saphyr = { version = "1.2.0", default-features = false, features = [
+  "deserialize",
+  "serialize"
+] }
+sha2 = "0.10.9"
+sha1 = "0.10.6"
+subtle = "2.6.1"
+sys-locale = "0.3.2"
+thiserror = "2.0.20"
+tokio = { version = "1.53.1", features = [
+  "fs",
+  "macros",
+  "net",
+  "io-util",
+  "process",
+  "rt-multi-thread",
+  "signal",
+  "sync",
+  "time"
+] }
+tokio-util = { version = "0.7.18", features = ["io"] }
+tokio-tungstenite = { version = "0.29.0", default-features = false, features = [
+  "connect",
+  "handshake",
+  "rustls-tls-webpki-roots"
+] }
+url = { version = "2.5.8", default-features = false, features = ["std"] }
+x25519-dalek = { version = "3.0.0", default-features = false }
+yiru-protocol = { path = "../../packages/protocol/rust" }
+
+[target.'cfg(unix)'.dependencies]
+nix = { version = "0.31.3", default-features = false, features = ["process", "signal", "user"] }
+process-wrap = { version = "10.0.0", default-features = false, features = [
+  "process-session",
+  "std"
+] }
+rustix = { version = "1.1.4", features = ["fs"] }
+sysinfo = { version = "0.39.6", default-features = false, features = ["system"] }
+
+[target.'cfg(windows)'.dependencies]
+atomicwrites = "0.4.4"
+sysinfo = { version = "0.39.6", default-features = false, features = ["system"] }
+windows-sys = { version = "0.61.2", features = [
+  "Win32_Storage_FileSystem",
+  "Win32_System_Threading"
+] }
+
+[build-dependencies]
+serde_json = "1.0.151"
+
+[profile.release]
+codegen-units = 1
+lto = "thin"
+strip = "symbols"

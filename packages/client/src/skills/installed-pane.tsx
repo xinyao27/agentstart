@@ -1,4 +1,4 @@
-import type { DiscoveredSkill } from '@yiru/runtime-protocol/workbench/skills'
+import type { DiscoveredSkill } from '@yiru/protocol'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { BookOpen } from '~renderer/icons/hugeicons'

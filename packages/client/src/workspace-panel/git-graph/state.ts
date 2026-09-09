@@ -1,4 +1,4 @@
-import type { GitHistoryItem, GitHistoryResult } from '@yiru/runtime-protocol/workbench/git/history'
+import type { GitHistoryItem, GitHistoryResult } from '@yiru/protocol/git/history-types'
 import type { StateCreator } from 'zustand'
 import { translate } from '~renderer/i18n/i18n'
 import { getRepoOwnerRoutedSettings } from '~renderer/repo/runtime-owner'

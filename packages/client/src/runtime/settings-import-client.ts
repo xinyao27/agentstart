@@ -1,12 +1,13 @@
 import type {
   WarpThemeImportPreview,
   WarpThemeImportSource
-} from '@yiru/runtime-protocol/workbench/terminal/custom-themes'
-import type { GhosttyImportPreview } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/terminal/theme-types'
+import { ghosttyImportPreview, warpImportPreview } from '~renderer/settings/import-preview'
+import type { GhosttyImportPreview } from '~renderer/settings/import-preview'
 import { useAppStore } from '~renderer/store/state'
 
-import { callRuntimeOrpc } from './orpc-client'
 import { getActiveRuntimeTarget } from './rpc-client'
+import { requireSettingsProtocolClient } from './settings-protocol-target'
 
 // Why: fonts/Ghostty/Warp all read the active target's filesystem, not the
 // shell's — a desktop paired to a remote environment should see that host's
@@ -15,34 +16,19 @@ function activeSettingsImportTarget() {
   return getActiveRuntimeTarget(useAppStore.getState().settings)
 }
 
-export function listInstalledFontFamilies(): Promise<string[]> {
-  return callRuntimeOrpc(
-    activeSettingsImportTarget(),
-    (client) => client.settings.listFonts,
-    undefined
-  )
+export async function listInstalledFontFamilies(): Promise<string[]> {
+  const client = await requireSettingsProtocolClient(activeSettingsImportTarget())
+  return client.listFonts()
 }
 
-export function previewGhosttyImportOnActiveHost(): Promise<GhosttyImportPreview> {
-  // Why: the contract widens `diff` to `Record<string, unknown>` because
-  // `Partial<GlobalSettings>` is a desktop-only type the client-safe contract
-  // package cannot import; this caller owns the concrete shape and narrows
-  // the result back to it.
-  return callRuntimeOrpc(
-    activeSettingsImportTarget(),
-    (client) => client.settings.previewGhosttyImport,
-    undefined
-  ) as Promise<GhosttyImportPreview>
+export async function previewGhosttyImportOnActiveHost(): Promise<GhosttyImportPreview> {
+  const client = await requireSettingsProtocolClient(activeSettingsImportTarget())
+  return ghosttyImportPreview(await client.previewGhosttyImport())
 }
 
-export function previewWarpThemeImportOnActiveHost(
+export async function previewWarpThemeImportOnActiveHost(
   source: WarpThemeImportSource
 ): Promise<WarpThemeImportPreview> {
-  // Why: same widening as `previewGhosttyImportOnActiveHost` above, for
-  // `themes[].terminal` (`TerminalColorOverrides`).
-  return callRuntimeOrpc(
-    activeSettingsImportTarget(),
-    (client) => client.settings.previewWarpThemeImport,
-    source
-  ) as Promise<WarpThemeImportPreview>
+  const client = await requireSettingsProtocolClient(activeSettingsImportTarget())
+  return warpImportPreview(await client.previewWarpThemeImport(source.kind))
 }

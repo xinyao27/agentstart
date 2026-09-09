@@ -1,7 +1,4 @@
-import type {
-  WorkspacePort,
-  WorkspacePortScanResult
-} from '@yiru/runtime-protocol/workbench/workspace/ports'
+import type { WorkspacePort, WorkspacePortScanResult } from '@yiru/protocol'
 
 export type WorkspacePortGroup = {
   worktreeId: string

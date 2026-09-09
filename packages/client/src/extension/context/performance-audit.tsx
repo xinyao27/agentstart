@@ -1,10 +1,11 @@
 import { useMutation } from '@tanstack/react-query'
 import { translate } from '~renderer/i18n/i18n'
 import { ClockCounterClockwise, FloppyDisk } from '~renderer/icons/hugeicons'
+import { requireArtifactClient } from '~renderer/runtime/artifact-target'
+import { requireWorkspaceEventsAppendClient } from '~renderer/runtime/workspace-events-target'
 import { Button } from '~renderer/ui/button'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
-import { getExtensionRuntimeClient } from '../runtime/session'
 import { uploadBrowserArtifact } from './artifact-upload'
 
 type PerformanceAuditProps = {
@@ -26,10 +27,10 @@ export function PerformanceAudit(props: PerformanceAuditProps): React.JSX.Elemen
         projectId: props.projectId
       })
       await (
-        await getExtensionRuntimeClient()
-      ).workspaceEvents.appendPerformance({
+        await requireWorkspaceEventsAppendClient({ kind: 'local' })
+      ).appendPerformance({
         artifactId,
-        metrics: capture.metrics,
+        metricCount: Object.keys(capture.metrics).length,
         pageUrl: capture.pageUrl,
         projectId: props.projectId,
         worktreeId: props.worktreeId
@@ -39,7 +40,7 @@ export function PerformanceAudit(props: PerformanceAuditProps): React.JSX.Elemen
   })
   const download = useMutation({
     mutationFn: async (id: string) => {
-      const ticket = await (await getExtensionRuntimeClient()).artifact.downloadTicket({ id })
+      const ticket = await (await requireArtifactClient()).downloadTicket(id)
       await capabilities.downloadArtifact({ id, ticket: ticket.ticket })
     }
   })

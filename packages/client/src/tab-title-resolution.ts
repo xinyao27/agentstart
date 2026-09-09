@@ -1,5 +1,5 @@
-import { isMeaningfulOpenCodeTerminalTitle } from '@yiru/runtime-protocol/model/agent'
-import type { Tab, TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
+import { isMeaningfulOpenCodeTerminalTitle } from '~renderer/agent/title/opencode'
 
 export function resolveTerminalTabTitle(
   tab: Pick<TerminalTab, 'customTitle' | 'quickCommandLabel' | 'generatedTitle' | 'title'>,

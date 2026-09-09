@@ -1,4 +1,4 @@
-import type { GitHubPRRefreshCandidate } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubPRRefreshCandidate } from '@yiru/protocol/hosted-review/pull-request-types'
 import type { StateCreator } from 'zustand'
 import { reportShellVisibleGitHubPRRefreshCandidates } from '~renderer/runtime/github-shell-client'
 import type { AppState } from '~renderer/store/types'

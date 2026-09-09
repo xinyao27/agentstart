@@ -45,8 +45,8 @@ export function WorktreeCardReviewDetailSection({
     return null
   }
 
-  const reviewLabel = getReviewLabel(review)
-  const reviewProvider = getProviderName(review)
+  const reviewLabel = getReviewLabel()
+  const reviewProvider = getProviderName()
   const moreActionsLabel = translate(
     'auto.components.sidebar.WorktreeCardMeta.dbe2d18972',
     'More {{value0}} actions',
@@ -165,7 +165,7 @@ export function WorktreeCardReviewDetailSection({
         </div>
         {(review.state || (review.status && review.status !== 'neutral')) && (
           <div className="flex flex-wrap gap-1">
-            <ReviewStateBadge state={review.state} label={reviewLabel} />
+            <ReviewStateBadge state={review.state} />
             <ReviewChecksBadge status={review.status} />
           </div>
         )}

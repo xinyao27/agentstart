@@ -1,12 +1,10 @@
-import {
-  normalizeAgentStatusPayload,
-  type AgentStatusIpcPayload
-} from '@yiru/runtime-protocol/model/agent'
+import { normalizeAgentStatusPayload } from '@yiru/protocol/agent/status-parse'
+import type { AgentStatusIpcPayload } from '@yiru/protocol/agent/status-records'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import {
   resolveAgentStatusIdentity,
   shouldSuppressInheritedTerminalStatus
-} from '@yiru/runtime-protocol/workbench/agent/status-identity'
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+} from '~renderer/agent/status-state/identity'
 import { useAppStore } from '~renderer/store/state'
 import { track } from '~renderer/telemetry/client'
 import { resolveAgentPaneAuthorityKey } from '~renderer/terminal-pane/agent/pane-authority'

@@ -2,7 +2,7 @@ import type {
   GitConflictKind,
   GitStatusEntry,
   GitUpstreamStatus
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/git/status-types'
 
 import { toOpenConflictMetadata } from './conflict-metadata'
 import type { OpenFile } from './file-model'

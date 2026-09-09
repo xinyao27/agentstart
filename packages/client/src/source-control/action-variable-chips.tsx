@@ -1,14 +1,14 @@
 import {
-  SOURCE_CONTROL_ACTION_VARIABLE_INFO,
   SOURCE_CONTROL_ACTION_VARIABLES,
   type SourceControlActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+} from '@yiru/protocol/source-control/ai-actions'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { BracketsCurly as Braces } from '~renderer/icons/hugeicons'
 
 import { Button } from '../ui/button'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/hover-card'
+import { getSourceControlActionVariableInfo } from './ai/action-copy'
 
 type SourceControlActionVariableChipsProps = {
   actionId: SourceControlActionId
@@ -63,7 +63,7 @@ function SourceControlVariableDetails({
     )
   }
 
-  const info = SOURCE_CONTROL_ACTION_VARIABLE_INFO[variable]
+  const info = getSourceControlActionVariableInfo()[variable]
   return (
     <div className="max-w-80 space-y-2 text-left leading-relaxed">
       <div className="space-y-0.5">

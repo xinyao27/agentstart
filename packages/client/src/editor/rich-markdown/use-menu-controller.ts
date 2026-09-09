@@ -1,4 +1,4 @@
-import type { MarkdownDocument } from '@yiru/runtime-protocol/workbench/types'
+import type { MarkdownDocument } from '@yiru/protocol/files/values'
 import { useLayoutEffect, useRef, useState } from 'react'
 
 import { getMarkdownDocCompletionDocuments } from '../markdown-doc-completions'

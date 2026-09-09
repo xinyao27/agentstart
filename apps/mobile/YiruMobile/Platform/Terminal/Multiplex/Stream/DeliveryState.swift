@@ -22,7 +22,10 @@ actor TerminalMultiplexDeliveryState {
     }
 
     func transition(to state: TerminalSessionAppState, isSubscribed: Bool) async throws {
-        guard state != appState else { return }
+        guard state != appState else {
+            await route.setAppState(state == .foreground ? .foreground : .background)
+            return
+        }
         appState = state
         transitionGeneration += 1
         let generation = transitionGeneration

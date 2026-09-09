@@ -1,17 +1,12 @@
 import { requestBrowserPermissions } from './permission'
 
 const CONTEXT_AWARENESS_PERMISSIONS: chrome.permissions.Permissions = {
-  origins: [
-    'http://127.0.0.1/*',
-    'http://localhost/*',
-    'https://github.com/*',
-    'https://gitlab.com/*'
-  ],
+  origins: ['http://127.0.0.1/*', 'http://localhost/*', 'https://github.com/*'],
   permissions: ['tabs', 'webNavigation']
 }
 
 const REVOCABLE_CONTEXT_AWARENESS_PERMISSIONS: chrome.permissions.Permissions = {
-  origins: ['https://github.com/*', 'https://gitlab.com/*'],
+  origins: ['https://github.com/*'],
   permissions: ['tabs', 'webNavigation']
 }
 

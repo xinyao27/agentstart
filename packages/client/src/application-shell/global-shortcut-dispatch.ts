@@ -3,7 +3,7 @@ import {
   type KeybindingActionId,
   type KeybindingContext,
   type PhysicalModifierToken
-} from '@yiru/runtime-protocol/workbench/keybindings'
+} from '@yiru/protocol/keybindings'
 
 import { getSelectedTextForFileSearch } from '../editor/file-search-selection'
 import { isEditableTarget } from '../keyboard-input/editable-target'

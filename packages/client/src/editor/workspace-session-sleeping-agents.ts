@@ -1,4 +1,4 @@
-import type { WorkspaceSessionState } from '@yiru/runtime-protocol/workbench/types'
+import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
 
 export function buildSleepingAgentSessionData(snapshot: {
   sleepingAgentSessionsByPaneKey?: WorkspaceSessionState['sleepingAgentSessionsByPaneKey']

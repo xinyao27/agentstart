@@ -1,9 +1,6 @@
-import type {
-  GitHubWorkItem,
-  GitLabWorkItem,
-  GitPushTarget,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type { Dispatch, RefObject, SetStateAction } from 'react'
 
 import {
@@ -15,7 +12,6 @@ import type { SmartGitHubPrStartPointSelection } from './resolve-smart-github-su
 import type { LinkedWorkItemSummary } from './workspace-creation'
 
 type ComposerBranchSourceOptions = {
-  applyLinkedGitLabWorkItem: ComposerLinkedSourceActions['applyLinkedGitLabWorkItem']
   applyLinkedWorkItem: ComposerLinkedSourceActions['applyLinkedWorkItem']
   branchAutoNameRef: RefObject<string>
   lastAutoNameRef: RefObject<string>
@@ -30,7 +26,6 @@ type ComposerBranchSourceOptions = {
   setBranchNameOverridePreservesNameEdits: Dispatch<SetStateAction<boolean>>
   setCompareBaseRef: Dispatch<SetStateAction<string | undefined>>
   setForkPushWarning: Dispatch<SetStateAction<string | null>>
-  setLinkedGitLabMR: Dispatch<SetStateAction<number | null>>
   setLinkedPR: Dispatch<SetStateAction<number | null>>
   setLinkedWorkItem: Dispatch<SetStateAction<LinkedWorkItemSummary | null>>
   setName: Dispatch<SetStateAction<string>>
@@ -86,29 +81,6 @@ export function createComposerBranchSourceActions(options: ComposerBranchSourceO
     }
   }
 
-  const handleBaseBranchMrSelect = (
-    nextBaseBranch: string,
-    item: GitLabWorkItem,
-    nextPushTarget?: GitPushTarget,
-    nextCompareBaseRef?: string
-  ): void => {
-    options.setBaseBranch(nextBaseBranch)
-    options.setCompareBaseRef(nextCompareBaseRef)
-    options.setPushTarget(nextPushTarget)
-    options.setBranchNameOverride(undefined)
-    options.branchAutoNameRef.current = ''
-    options.setStartFromResetHint(null)
-    options.applyLinkedGitLabWorkItem(item)
-    if (item.type === 'mr') {
-      const suggestedNote = `MR !${item.number} — ${item.title}`
-      const currentNote = options.noteRef.current
-      if (!currentNote.trim() || currentNote === options.lastAutoNoteRef.current) {
-        options.setNote(suggestedNote)
-        options.lastAutoNoteRef.current = suggestedNote
-      }
-    }
-  }
-
   const handleSmartBranchSelect = (refName: string, localBranchName: string): void => {
     options.startPointSelectionRef.current = null
     const selection = resolveComposerBranchPick({
@@ -150,7 +122,6 @@ export function createComposerBranchSourceActions(options: ComposerBranchSourceO
   const handleClearSmartNameSelection = (): void => {
     options.startPointSelectionRef.current = null
     options.setLinkedPR(null)
-    options.setLinkedGitLabMR(null)
     options.setLinkedWorkItem(null)
     options.setBaseBranch(undefined)
     clearBranchRouting()
@@ -166,7 +137,6 @@ export function createComposerBranchSourceActions(options: ComposerBranchSourceO
 
   return {
     handleBaseBranchChange,
-    handleBaseBranchMrSelect,
     handleBaseBranchPrSelect,
     handleClearSmartNameSelection,
     handleReuseSelectedBranchChange,

@@ -1,4 +1,4 @@
-import type { PRCheckJob, PRCheckStep } from '@yiru/runtime-protocol/workbench/types'
+import type { PRCheckJob, PRCheckStep } from '@yiru/protocol/hosted-review/review-types'
 
 export type StepOutcome = 'success' | 'failure' | 'skipped' | 'pending'
 

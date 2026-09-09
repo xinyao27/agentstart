@@ -1,6 +1,6 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import { LOCAL_EXECUTION_HOST_ID } from '@yiru/runtime-protocol/model/workspace'
-import { isRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import { LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
+import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
 import { getConnectionIdFromState } from '~renderer/runtime/connection-context'
 import { isLocalNativeWindowsConpty } from '~renderer/terminal-pane/pane-manager/windows-pty-compatibility'
 import {

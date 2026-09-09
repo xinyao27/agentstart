@@ -1,5 +1,5 @@
-import type { WorkspaceVisibleTabType } from '@yiru/runtime-protocol/workbench/types'
-import { folderWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'

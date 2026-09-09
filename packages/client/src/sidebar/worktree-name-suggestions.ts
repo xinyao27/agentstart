@@ -1,4 +1,4 @@
-import { MARINE_CREATURES } from '~renderer/constants/marine-creatures'
+import { MARINE_CREATURES } from '~renderer/new-workspace/naming/creatures'
 import { basename } from '~renderer/path'
 
 type WorktreePathLike = {

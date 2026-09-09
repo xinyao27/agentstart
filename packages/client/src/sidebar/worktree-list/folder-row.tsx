@@ -1,11 +1,8 @@
-import { isConfirmedStaleFolderPathStatus } from '@yiru/runtime-protocol/workbench/folder-workspace-path-status'
-import { folderWorkspaceToWorktree } from '@yiru/runtime-protocol/workbench/folder-workspace-worktree'
-import type {
-  Repo,
-  Worktree,
-  WorktreeLineage,
-  WorkspaceLineage
-} from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { folderWorkspaceToWorktree } from '@yiru/protocol/workspace/folder'
+import { isConfirmedStaleFolderPathStatus } from '@yiru/protocol/workspace/folder-path'
+import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type React from 'react'
 import type { AppState } from '~renderer/store/types'
 

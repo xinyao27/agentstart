@@ -1,4 +1,6 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient {
     func mutateHostedReview(
@@ -12,142 +14,237 @@ extension RuntimeClient {
             throw HostedReviewRepositoryError.unsupportedMutation
         }
         let repo = hostedReviewRepoSelector(workspace.repoID)
-        let identity = details?.repoIdentity.map(hostedReviewRepoIdentityWire)
+        let prNumber = UInt64(review.number)
+        let identity = details?.repoIdentity.map(hostedReviewRepoRef)
         switch mutation {
         case .update(let title, let body):
+            var request = Yiru_Runtime_V1_GitHubServiceUpdatePrRequest()
+            request.repo = repo
+            request.prNumber = prNumber
+            if let title {
+                request.title = title
+            }
+            if let body {
+                request.body = body
+            }
+            if let identity {
+                request.prRepo = identity
+            }
             try await requireHostedReviewMutation(
                 hostID: hostID,
-                path: MobileHostedReviewWireContract.updatePath,
-                input: MobileGitHubUpdateRequestWire(
-                    repo: repo,
-                    prNumber: review.number,
-                    updates: MobileGitHubPRUpdatesWire(title: title, body: body),
-                    prRepo: identity
-                )
+                procedure: YiruRuntimeV1GitHubServiceMethods.updatePr,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceUpdatePrResponse.self
             )
         case .merge(let method):
+            var request = Yiru_Runtime_V1_GitHubServiceMergePrRequest()
+            request.repo = repo
+            request.prNumber = prNumber
+            request.method = hostedReviewMergeMethod(method)
+            if let identity {
+                request.prRepo = identity
+            }
             try await requireHostedReviewMutation(
                 hostID: hostID,
-                path: MobileHostedReviewWireContract.mergePath,
-                input: MobileGitHubMergeRequestWire(
-                    repo: repo,
-                    prNumber: review.number,
-                    method: method,
-                    prRepo: identity
-                )
+                procedure: YiruRuntimeV1GitHubServiceMethods.mergePr,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceMergePrResponse.self
             )
         case .setAutoMerge(let enabled, let method):
+            var request = Yiru_Runtime_V1_GitHubServiceSetPrAutoMergeRequest()
+            request.repo = repo
+            request.prNumber = prNumber
+            request.enabled = enabled
+            request.method = hostedReviewMergeMethod(method)
+            if let identity {
+                request.prRepo = identity
+            }
             try await requireHostedReviewMutation(
                 hostID: hostID,
-                path: MobileHostedReviewWireContract.autoMergePath,
-                input: MobileGitHubAutoMergeRequestWire(
-                    repo: repo,
-                    prNumber: review.number,
-                    method: method,
-                    prRepo: identity,
-                    enabled: enabled
-                )
+                procedure: YiruRuntimeV1GitHubServiceMethods.setPrAutoMerge,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceSetPrAutoMergeResponse.self
             )
         case .updateState(let state):
+            var request = Yiru_Runtime_V1_GitHubServiceUpdatePrStateRequest()
+            request.repo = repo
+            request.prNumber = prNumber
+            request.state = state == .closed ? .closed : .open
             try await requireHostedReviewMutation(
                 hostID: hostID,
-                path: MobileHostedReviewWireContract.updateStatePath,
-                input: MobileGitHubStateRequestWire(
-                    repo: repo,
-                    prNumber: review.number,
-                    updates: MobileGitHubStateUpdatesWire(state: state.rawValue)
-                )
+                procedure: YiruRuntimeV1GitHubServiceMethods.updatePrState,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceUpdatePrStateResponse.self
             )
         case .requestReviewer(let login):
+            var request = Yiru_Runtime_V1_GitHubServiceRequestPrReviewersRequest()
+            request.repo = repo
+            request.prNumber = prNumber
+            request.reviewers = [login]
             try await requireHostedReviewMutation(
                 hostID: hostID,
-                path: MobileHostedReviewWireContract.requestReviewersPath,
-                input: MobileGitHubReviewersRequestWire(
-                    repo: repo,
-                    prNumber: review.number,
-                    reviewers: [login]
-                )
+                procedure: YiruRuntimeV1GitHubServiceMethods.requestPrReviewers,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceRequestPrReviewersResponse.self
             )
         case .removeReviewer(let login):
+            var request = Yiru_Runtime_V1_GitHubServiceRemovePrReviewersRequest()
+            request.repo = repo
+            request.prNumber = prNumber
+            request.reviewers = [login]
             try await requireHostedReviewMutation(
                 hostID: hostID,
-                path: MobileHostedReviewWireContract.removeReviewersPath,
-                input: MobileGitHubReviewersRequestWire(
-                    repo: repo,
-                    prNumber: review.number,
-                    reviewers: [login]
-                )
+                procedure: YiruRuntimeV1GitHubServiceMethods.removePrReviewers,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceRemovePrReviewersResponse.self
             )
         case .addComment(let body):
-            let result: MobileGitHubCommentResultWire = try await callRuntime(
+            var request = Yiru_Runtime_V1_GitHubServiceAddPrCommentRequest()
+            request.repo = repo
+            request.number = prNumber
+            request.body = body
+            if let identity {
+                request.prRepo = identity
+            }
+            let response = try await protocolUnary(
                 hostID: hostID,
-                path: MobileHostedReviewWireContract.addCommentPath,
-                input: MobileGitHubCommentRequestWire(
-                    repo: repo,
-                    number: review.number,
-                    body: body,
-                    prRepo: identity
-                ),
-                output: MobileGitHubCommentResultWire.self
+                procedure: YiruRuntimeV1GitHubServiceMethods.addPrComment,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceAddPrCommentResponse.self
             )
-            guard result.ok else { throw HostedReviewRepositoryError.rejected(result.error) }
+            guard response.result.ok else {
+                throw HostedReviewRepositoryError.rejected(
+                    response.result.hasError ? response.result.error : nil
+                )
+            }
         case .reply(let comment, let body):
-            let result: MobileGitHubCommentResultWire = try await callRuntime(
+            var request = Yiru_Runtime_V1_GitHubServiceAddPrReviewCommentReplyRequest()
+            request.repo = repo
+            request.prNumber = prNumber
+            request.commentID = UInt64(comment.id)
+            request.body = body
+            if let threadID = comment.threadID {
+                request.threadID = threadID
+            }
+            if let path = comment.path {
+                request.path = path
+            }
+            if let line = comment.line {
+                request.line = UInt64(line)
+            }
+            if let identity {
+                request.prRepo = identity
+            }
+            let response = try await protocolUnary(
                 hostID: hostID,
-                path: MobileHostedReviewWireContract.replyCommentPath,
-                input: MobileGitHubReplyCommentRequestWire(
-                    repo: repo,
-                    prNumber: review.number,
-                    commentId: comment.id,
-                    body: body,
-                    threadId: comment.threadID,
-                    path: comment.path,
-                    line: comment.line,
-                    prRepo: identity
-                ),
-                output: MobileGitHubCommentResultWire.self
+                procedure: YiruRuntimeV1GitHubServiceMethods.addPrReviewCommentReply,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceAddPrReviewCommentReplyResponse.self
             )
-            guard result.ok else { throw HostedReviewRepositoryError.rejected(result.error) }
+            guard response.result.ok else {
+                throw HostedReviewRepositoryError.rejected(
+                    response.result.hasError ? response.result.error : nil
+                )
+            }
         case .rerunFailedChecks:
-            let result: MobileGitHubRerunResultWire = try await callRuntime(
+            var request = Yiru_Runtime_V1_GitHubServiceRerunPrChecksRequest()
+            request.repo = repo
+            request.prNumber = prNumber
+            if let headSha = details?.headSHA ?? review.headSHA {
+                request.headSha = headSha
+            }
+            request.failedOnly = true
+            if let identity {
+                request.prRepo = identity
+            }
+            let response = try await protocolUnary(
                 hostID: hostID,
-                path: MobileHostedReviewWireContract.rerunChecksPath,
-                input: MobileGitHubRerunChecksRequestWire(
-                    repo: repo,
-                    prNumber: review.number,
-                    headSha: details?.headSHA ?? review.headSHA,
-                    prRepo: identity,
-                    failedOnly: true
-                ),
-                output: MobileGitHubRerunResultWire.self
+                procedure: YiruRuntimeV1GitHubServiceMethods.rerunPrChecks,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceRerunPrChecksResponse.self
             )
-            guard result.ok else { throw HostedReviewRepositoryError.rejected(result.error) }
+            guard response.ok else {
+                throw HostedReviewRepositoryError.rejected(
+                    response.hasError ? response.error : nil
+                )
+            }
         case .resolveThread(let id, let resolve):
-            let accepted: Bool = try await callRuntime(
+            var request = Yiru_Runtime_V1_GitHubServiceResolveReviewThreadRequest()
+            request.repo = repo
+            request.threadID = id
+            request.resolve = resolve
+            let response = try await protocolUnary(
                 hostID: hostID,
-                path: MobileHostedReviewWireContract.resolveThreadPath,
-                input: MobileGitHubResolveThreadRequestWire(
-                    repo: repo,
-                    threadId: id,
-                    resolve: resolve
-                ),
-                output: Bool.self
+                procedure: YiruRuntimeV1GitHubServiceMethods.resolveReviewThread,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceResolveReviewThreadResponse.self
             )
-            guard accepted else { throw HostedReviewRepositoryError.rejected(nil) }
+            guard response.ok else { throw HostedReviewRepositoryError.rejected(nil) }
         }
     }
 
-    private func requireHostedReviewMutation<Input: Encodable & Sendable>(
+    private func requireHostedReviewMutation<
+        Request: SwiftProtobuf.Message,
+        Response: SwiftProtobuf.Message
+    >(
         hostID: String,
-        path: String,
-        input: Input
-    ) async throws {
-        let result: MobileGitHubMutationResultWire = try await callRuntime(
+        procedure: String,
+        request: Request,
+        response: Response.Type
+    ) async throws where Response: HostedReviewMutationResult {
+        let result = try await protocolUnary(
             hostID: hostID,
-            path: path,
-            input: input,
-            output: MobileGitHubMutationResultWire.self
+            procedure: procedure,
+            request: request,
+            response: response
         )
-        guard result.ok else { throw HostedReviewRepositoryError.rejected(result.error) }
+        guard result.mutationOK else {
+            throw HostedReviewRepositoryError.rejected(result.mutationError)
+        }
+    }
+}
+
+nonisolated private protocol HostedReviewMutationResult {
+    var mutationOK: Bool { get }
+    var mutationError: String? { get }
+}
+
+extension Yiru_Runtime_V1_GitHubServiceUpdatePrResponse: HostedReviewMutationResult {
+    nonisolated var mutationOK: Bool { result.ok }
+    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
+}
+
+extension Yiru_Runtime_V1_GitHubServiceMergePrResponse: HostedReviewMutationResult {
+    nonisolated var mutationOK: Bool { result.ok }
+    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
+}
+
+extension Yiru_Runtime_V1_GitHubServiceSetPrAutoMergeResponse: HostedReviewMutationResult {
+    nonisolated var mutationOK: Bool { result.ok }
+    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
+}
+
+extension Yiru_Runtime_V1_GitHubServiceUpdatePrStateResponse: HostedReviewMutationResult {
+    nonisolated var mutationOK: Bool { result.ok }
+    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
+}
+
+extension Yiru_Runtime_V1_GitHubServiceRequestPrReviewersResponse: HostedReviewMutationResult {
+    nonisolated var mutationOK: Bool { result.ok }
+    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
+}
+
+extension Yiru_Runtime_V1_GitHubServiceRemovePrReviewersResponse: HostedReviewMutationResult {
+    nonisolated var mutationOK: Bool { result.ok }
+    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
+}
+
+nonisolated private func hostedReviewMergeMethod(_ method: String)
+    -> Yiru_Runtime_V1_GitHubMergeMethod
+{
+    switch method {
+    case "squash": .squash
+    case "rebase": .rebase
+    default: .merge
     }
 }

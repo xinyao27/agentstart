@@ -1,13 +1,13 @@
-import type {
-  RuntimeMobileSessionSnapshotTab,
-  RuntimeMobileSessionTabGroup,
-  RuntimeMobileSessionTabsSnapshot
-} from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { TabGroup } from '@yiru/runtime-protocol/workbench/types'
+import type { TabGroup } from '@yiru/protocol/workspace/tabs'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import type { AppState } from '~renderer/store/types'
 import { getSystemPrefersDark } from '~renderer/terminal/theme'
 
+import type {
+  RuntimeMobileSessionSnapshotTab,
+  RuntimeMobileSessionTabGroup,
+  RuntimeMobileSessionTabsSnapshot
+} from './remote-session/session-model'
 import { getBrowserTabsByWorktree } from './runtime-mobile-browser-state'
 import { buildMobileBrowserTab } from './runtime-mobile-browser-tab'
 import {
@@ -20,6 +20,7 @@ import {
   getEditorUnifiedTabsForWorktree,
   pruneTabGroupLayout
 } from './runtime-mobile-session-groups'
+import { resolveMobileSessionSnapshotHost } from './runtime-mobile-session-host'
 import { getEditorDraftVersionByFileId, getOpenFileIndexes } from './runtime-mobile-session-indexes'
 import { buildMobileTerminalSurfaceTabs } from './runtime-mobile-terminal-tab'
 import { isWebOnlyMirroredTerminalTab } from './runtime-terminal-visibility'
@@ -52,6 +53,7 @@ export function buildMobileSessionTabSnapshots(
 
   const snapshots: RuntimeMobileSessionTabsSnapshot[] = []
   for (const worktreeId of worktreeIds) {
+    const hostId = resolveMobileSessionSnapshotHost(state, worktreeId)
     const activeGroupId = state.activeGroupIdByWorktree[worktreeId] ?? null
     const terminalTabByIdForWorktree = new Map(
       (state.tabsByWorktree[worktreeId] ?? []).map((tab) => [tab.id, tab])
@@ -213,6 +215,7 @@ export function buildMobileSessionTabSnapshots(
         : groupProjection.tabGroupLayout
     snapshots.push({
       worktree: worktreeId,
+      ...(hostId ? { hostId } : {}),
       publicationEpoch: mobileSessionPublicationEpoch,
       snapshotVersion: ++mobileSessionSnapshotVersion,
       activeGroupId,

@@ -1,12 +1,6 @@
-import {
-  hslToRgb,
-  rgbToCss,
-  rgbToHex,
-  rgbToHsl,
-  type Rgb
-} from '@yiru/runtime-protocol/workbench/theme-gradient/color-space'
-import type { ThemeGradientTheme } from '@yiru/runtime-protocol/workbench/theme-gradient/theme'
+import type { ThemeGradientTheme } from '@yiru/protocol/settings/theme-gradient'
 
+import { hslToRgb, rgbToCss, rgbToHex, rgbToHsl, type Rgb } from './color-space'
 import { primaryThemeGradientColor, themeGradientColors } from './pad-geometry'
 
 export type ThemeGradientStyle = {

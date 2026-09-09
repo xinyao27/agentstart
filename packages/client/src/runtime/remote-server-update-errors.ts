@@ -28,6 +28,11 @@ export function remoteServerUpdateErrorMessage(error: unknown): string {
         'auto.runtime.remoteServerUpdateErrors.updaterTimeout',
         'Timed out waiting for the server updater.'
       )
+    case 'remote_update_updater_stream_closed':
+      return translate(
+        'auto.runtime.remoteServerUpdateErrors.updaterStreamClosed',
+        'The server stopped reporting update progress.'
+      )
     case 'remote_update_requested_version_unavailable':
       return translate(
         'auto.runtime.remoteServerUpdateErrors.requestedVersionUnavailable',
@@ -47,6 +52,11 @@ export function remoteServerUpdateErrorMessage(error: unknown): string {
       return translate(
         'auto.runtime.remoteServerUpdateErrors.reconnectTimeout',
         'The server did not reconnect on the updated version.'
+      )
+    case 'remote_update_install_not_applied':
+      return translate(
+        'auto.runtime.remoteServerUpdateErrors.installNotApplied',
+        'The server stayed on its previous version after the install connection closed.'
       )
     case 'remote_update_runtime_changed':
       return translate(

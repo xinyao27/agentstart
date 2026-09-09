@@ -1,4 +1,4 @@
-import type { WorkspaceStatusDefinition } from '@yiru/runtime-protocol/workbench/types'
+import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 
 import { getWorktreeSidebarDragAutoscroll } from '../worktree-sidebar-drag-autoscroll'

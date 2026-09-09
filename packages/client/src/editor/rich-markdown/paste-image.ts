@@ -1,7 +1,6 @@
 import type { Editor } from '@tiptap/react'
 import { toast } from 'sonner'
 import { saveLocalClipboardImageAsTempFile } from '~renderer/runtime/clipboard-client'
-import { getConnectionId } from '~renderer/runtime/connection-context'
 import { extractRuntimeErrorMessage } from '~renderer/runtime/error-message'
 import { settingsForRuntimeOwner } from '~renderer/runtime/rpc-client'
 import { shellClient } from '~renderer/runtime/shell-client'
@@ -42,7 +41,7 @@ export function handleRichMarkdownImagePaste({
   const insertPos = editor.state.selection.from
   const targetDom = editor.view.dom
 
-  void saveClipboardImageForMarkdownPaste(worktreeId, runtimeEnvironmentId)
+  void saveClipboardImageForMarkdownPaste(runtimeEnvironmentId)
     .then((sourcePath) => {
       if (!sourcePath || !isRichMarkdownImagePasteTargetAvailable(editor, targetDom)) {
         return
@@ -69,16 +68,13 @@ function isRichMarkdownImagePasteTargetAvailable(editor: Editor, targetDom: HTML
 }
 
 async function saveClipboardImageForMarkdownPaste(
-  worktreeId: string | null,
   runtimeEnvironmentId?: string | null
 ): Promise<string | null> {
   const settings = settingsForRuntimeOwner(useAppStore.getState().settings, runtimeEnvironmentId)
   const hasRuntimeOwner = Boolean(settings?.activeRuntimeEnvironmentId?.trim())
   // Why: runtime-owned notes use runtime-side clipboard import; routing this
   // temp save through SSH would put the source file on the wrong machine.
-  const connectionId = hasRuntimeOwner ? undefined : (getConnectionId(worktreeId) ?? undefined)
-
   return hasRuntimeOwner
     ? shellClient.ui.saveClipboardImageAsTempFile()
-    : saveLocalClipboardImageAsTempFile(connectionId)
+    : saveLocalClipboardImageAsTempFile()
 }

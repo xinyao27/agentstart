@@ -1,0 +1,178 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+// Why: every procedure drives or mutates the daemon host's own project
+// surface — native pickers, the default create parent, host-scoped removal
+// and reorder — so the whole service stays local, matching the legacy
+// surface's local-principal restriction.
+service ShellRepoHostService {
+  rpc CloneAbort(ShellRepoHostServiceCloneAbortRequest) returns (ShellRepoHostServiceCloneAbortedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetDefaultCreateProjectParent(ShellRepoHostServiceGetDefaultCreateProjectParentRequest) returns (ShellRepoHostServiceDefaultCreateProjectParentResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PickDirectory(ShellRepoHostServicePickRequest) returns (ShellRepoHostServicePickedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PickFolder(ShellRepoHostServicePickRequest) returns (ShellRepoHostServicePickedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PickFolders(ShellRepoHostServicePickRequest) returns (ShellRepoHostServicePickedListResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RemoveForHost(ShellRepoHostServiceRemoveForHostRequest) returns (ShellRepoHostServiceRemovedForHostResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ReorderForHost(ShellRepoHostServiceReorderForHostRequest) returns (ShellRepoHostServiceReorderedForHostResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message ShellRepoHostServiceCloneAbortRequest {}
+
+message ShellRepoHostServiceCloneAbortedResponse {}
+
+message ShellRepoHostServiceGetDefaultCreateProjectParentRequest {}
+
+message ShellRepoHostServiceDefaultCreateProjectParentResponse {
+  string path = 1;
+}
+
+message ShellRepoHostServicePickRequest {}
+
+// Why: an absent path is the user cancelling the native picker — or the
+// picker being unavailable on this host — which is distinct from an empty
+// selection, so the field stays optional instead of defaulting.
+message ShellRepoHostServicePickedResponse {
+  optional string path = 1;
+}
+
+message ShellRepoHostServicePickedListResponse {
+  repeated string paths = 1;
+}
+
+message ShellRepoHostServiceRemoveForHostRequest {
+  int64 expected_revision = 1;
+  string host_id = 2;
+  string repo_id = 3;
+}
+
+message ShellRepoHostServiceRemovedForHostResponse {
+  bool removed = 1;
+  int64 revision = 2;
+}
+
+message ShellRepoHostServiceReorderForHostRequest {
+  int64 expected_revision = 1;
+  string host_id = 2;
+  repeated string ordered_ids = 3;
+}
+
+enum ShellRepoHostReorderStatus {
+  SHELL_REPO_HOST_REORDER_STATUS_UNSPECIFIED = 0;
+  SHELL_REPO_HOST_REORDER_STATUS_APPLIED = 1;
+  SHELL_REPO_HOST_REORDER_STATUS_REJECTED = 2;
+}
+
+message ShellRepoHostServiceReorderedForHostResponse {
+  optional int64 revision = 1;
+  ShellRepoHostReorderStatus status = 2;
+}
+
+// Why: the legacy surface answers a stale revision with the
+// workspaceRevisionConflict error code plus actual/expected/scope data, so
+// the protobuf surface carries the same trio as a typed status detail
+// (the pattern LayoutRevisionConflict established).
+message ShellRepoHostRevisionConflict {
+  int64 expected_revision = 1;
+  int64 actual_revision = 2;
+  string scope = 3;
+}

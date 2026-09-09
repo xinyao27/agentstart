@@ -15,13 +15,17 @@ nonisolated private struct PendingBrowserScroll: Sendable {
     let deltaY: Double
 }
 
+nonisolated struct WorkspaceBrowserRenderedFrame {
+    let frame: WorkspaceBrowserFrame
+    let image: CGImage
+}
+
 @Observable
 @MainActor
 final class WorkspaceBrowserModel {
     private(set) var phase = WorkspaceBrowserPhase.waiting
-    private(set) var frame: WorkspaceBrowserFrame?
-    private(set) var renderedFrame: CGImage?
-    private(set) var renderedFrameSequence: UInt32?
+    private var frame: WorkspaceBrowserFrame?
+    private(set) var renderedFrame: WorkspaceBrowserRenderedFrame?
     private(set) var dialog: WorkspaceBrowserDialog?
     private(set) var isCommandRunning = false
     private(set) var pointerModifiers: Set<WorkspaceBrowserPointerModifier> = []
@@ -37,6 +41,9 @@ final class WorkspaceBrowserModel {
     @ObservationIgnored private var pendingScroll: PendingBrowserScroll?
     @ObservationIgnored private var scrollTask: Task<Void, Never>?
     @ObservationIgnored private var frameDecodeTask: Task<Void, Never>?
+    @ObservationIgnored private var pendingDecodeFrame: WorkspaceBrowserFrame?
+    @ObservationIgnored private var frameGeneration = UUID()
+    @ObservationIgnored private var activeStreamID = UUID()
     @ObservationIgnored private var streamStartupTimer: Task<Void, Never>?
 
     init(
@@ -58,8 +65,16 @@ final class WorkspaceBrowserModel {
     }
 
     func stream(pageID: String, configuration: WorkspaceBrowserStreamConfiguration) async {
-        defer { cancelStreamStartupTimer() }
-        while !Task.isCancelled {
+        let streamID = UUID()
+        activeStreamID = streamID
+        defer {
+            if activeStreamID == streamID {
+                cancelStreamStartupTimer()
+                resetFramePresentation()
+            }
+        }
+        while !Task.isCancelled, activeStreamID == streamID {
+            resetFramePresentation()
             // Why: mark every new subscription busy, including one that has a cached frame,
             // so a stale remote image cannot look healthy while Desktop has stopped publishing.
             phase = .waiting
@@ -72,13 +87,15 @@ final class WorkspaceBrowserModel {
                     configuration: configuration
                 )
                 for try await event in events {
-                    guard !Task.isCancelled else { return }
+                    guard !Task.isCancelled, activeStreamID == streamID else { return }
                     apply(event)
                 }
             } catch is CancellationError {
+                guard activeStreamID == streamID else { return }
                 cancelStreamStartupTimer()
                 return
             } catch {
+                guard activeStreamID == streamID else { return }
                 cancelStreamStartupTimer()
                 let message = workspaceBrowserErrorMessage(
                     error,
@@ -90,6 +107,7 @@ final class WorkspaceBrowserModel {
                     phase = frame == nil ? .waiting : .ready
                 }
             }
+            guard activeStreamID == streamID else { return }
             cancelStreamStartupTimer()
             do {
                 try await Task.sleep(for: .seconds(2))
@@ -367,31 +385,42 @@ final class WorkspaceBrowserModel {
         phase = .failed(message)
     }
 
-    private func decodeFrame(_ frame: WorkspaceBrowserFrame) {
+    private func resetFramePresentation() {
+        frameGeneration = UUID()
         frameDecodeTask?.cancel()
-        let sequence = frame.sequence
-        let data = frame.image
-        let maxPixelSize = max(
-            Int(frame.metadata.imageWidth ?? 0),
-            Int(frame.metadata.imageHeight ?? 0),
-            2_400
-        )
-        frameDecodeTask = Task { [weak self] in
-            let image = await Task.detached(priority: .userInitiated) {
-                WorkspaceBrowserFrameImageDecoder.decode(
-                    data,
-                    maxPixelSize: maxPixelSize
-                )
-            }.value
-            guard !Task.isCancelled else { return }
-            self?.applyDecodedFrame(sequence: sequence, image: image)
-        }
+        frameDecodeTask = nil
+        pendingDecodeFrame = nil
+        frame = nil
+        renderedFrame = nil
     }
 
-    private func applyDecodedFrame(sequence: UInt32, image: CGImage?) {
-        guard frame?.sequence == sequence else { return }
-        renderedFrame = image
-        renderedFrameSequence = sequence
+    private func decodeFrame(_ frame: WorkspaceBrowserFrame) {
+        pendingDecodeFrame = frame
+        guard frameDecodeTask == nil else { return }
+        let generation = frameGeneration
+        frameDecodeTask = Task { [weak self] in
+            guard let self else { return }
+            while let next = pendingDecodeFrame {
+                pendingDecodeFrame = nil
+                let maxPixelSize = max(
+                    Int(next.metadata.imageWidth ?? 0),
+                    Int(next.metadata.imageHeight ?? 0),
+                    2_400
+                )
+                let image = await Task.detached(priority: .userInitiated) {
+                    WorkspaceBrowserFrameImageDecoder.decode(
+                        next.image,
+                        maxPixelSize: maxPixelSize
+                    )
+                }.value
+                guard !Task.isCancelled, frameGeneration == generation else { return }
+                if let image {
+                    // Why: pixels and pointer coordinates advance together only after decoding completes.
+                    renderedFrame = WorkspaceBrowserRenderedFrame(frame: next, image: image)
+                }
+            }
+            frameDecodeTask = nil
+        }
     }
 
 }

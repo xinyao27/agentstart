@@ -1,5 +1,5 @@
-import type { AgentType } from '@yiru/runtime-protocol/model/agent'
-import { normalizeCompatibleAgentTitleForOwner } from '@yiru/runtime-protocol/workbench/agent/title-owner'
+import type { AgentType } from '@yiru/protocol/agent/status-records'
+import { normalizeCompatibleAgentTitleForOwner } from '~renderer/agent/title/owner'
 
 import {
   resolvePaneRendererPolicy,

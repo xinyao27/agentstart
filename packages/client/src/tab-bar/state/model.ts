@@ -1,4 +1,4 @@
-import type { Tab, TabGroupLayoutNode, TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab, TabGroupLayoutNode, TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { setRemoteSessionTabPropsCommand } from '~renderer/runtime/remote-session/commands'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
 

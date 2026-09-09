@@ -2,11 +2,8 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import {
-  folderWorkspaceKey,
-  parseWorkspaceKey
-} from '@yiru/runtime-protocol/workbench/workspace/scope'
+} from '@yiru/protocol/host/identity'
+import { folderWorkspaceKey, parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import type { WorktreeRuntimeOwnerState } from '~renderer/worktree/runtime-owner'
 import {
   findIndexedFolderWorkspaceOwner,

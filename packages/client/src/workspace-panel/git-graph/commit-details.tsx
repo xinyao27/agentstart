@@ -1,5 +1,6 @@
-import type { GitHistoryItem } from '@yiru/runtime-protocol/workbench/git/history'
-import type { GitBranchChangeEntry, GitFileStatus } from '@yiru/runtime-protocol/workbench/types'
+import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
+import type { GitFileStatus } from '@yiru/protocol/git/status-types'
 import React, { useEffect, useState } from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import { translate } from '~renderer/i18n/i18n'

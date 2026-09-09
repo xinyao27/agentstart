@@ -1,9 +1,10 @@
-import type { StatsSummaryResult } from '@yiru/runtime-protocol/stats'
-import type { StatsSummary } from '@yiru/runtime-protocol/workbench/types'
+import type { StatsSummaryResult } from '@yiru/protocol/stats/values'
+import type { StatsSummary } from '@yiru/protocol/stats/values'
 import type { StateCreator } from 'zustand'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import type { AppState } from '~renderer/store/types'
+
+import { readStatsSummary } from './summary-reader'
 
 export type StatsSlice = {
   statsSummary: StatsSummary | null
@@ -19,11 +20,9 @@ export const createStatsSlice: StateCreator<AppState, [], [], StatsSlice> = (set
 
   fetchStatsSummary: async (refreshUsage = false) => {
     try {
-      const summary = await callRuntimeOrpc(
-        getActiveRuntimeTarget(get().settings),
-        (client) => client.stats.summary,
-        { refreshUsage }
-      )
+      const summary = await readStatsSummary(getActiveRuntimeTarget(get().settings), {
+        refreshUsage
+      })
       // Why: the runtime models "stats unavailable" as an all-optional variant
       // rather than an error, so an empty payload must clear the panel instead
       // of being stored as a summary with undefined fields.

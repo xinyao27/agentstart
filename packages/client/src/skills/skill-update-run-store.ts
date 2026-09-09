@@ -1,9 +1,8 @@
 import type {
-  SkillManageOperation,
+  SkillUpdateOperation as SkillManageOperation,
   SkillManageScope,
-  SkillUpdateRun,
   SkillUpdateStartResult
-} from '@yiru/runtime-protocol/workbench/skill-freshness'
+} from '@yiru/protocol'
 import { useSyncExternalStore } from 'react'
 import { notifyInstalledAgentSkillsChanged } from '~renderer/runtime/installed-agent-skill-discovery-state'
 import {
@@ -15,6 +14,7 @@ import {
   startSkillManageUpdateRun,
   subscribeSkillManageUpdateRun
 } from '~renderer/runtime/skill-manage-client'
+import type { SkillUpdateRun } from '~renderer/skills/freshness-model'
 
 import {
   getSkillFreshnessUpdateDialogRequest,

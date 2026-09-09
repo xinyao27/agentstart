@@ -1,4 +1,4 @@
-import type { BrowserReplayEvent } from '@yiru/runtime-protocol/contract'
+import type { BrowserReplayEvent } from '@yiru/protocol'
 
 import { acquireAgentOverlay, releaseAgentOverlay } from '../agent-overlay'
 import { acquireCdp, releaseCdp, sendCdp, subscribeCdp } from './session'

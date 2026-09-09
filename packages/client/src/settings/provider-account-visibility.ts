@@ -3,7 +3,7 @@ import type {
   ClaudeRateLimitAccountsState,
   CodexManagedAccountRuntimeSelection,
   CodexRateLimitAccountsState
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/settings/managed-accounts'
 
 type ProviderAccount =
   | ClaudeRateLimitAccountsState['accounts'][number]

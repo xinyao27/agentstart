@@ -1,4 +1,4 @@
-import { keybindingMatchesInput } from '@yiru/runtime-protocol/workbench/keybindings'
+import { keybindingMatchesInput } from '@yiru/protocol/keybindings'
 
 import {
   isTerminalImeCandidateDigitKeyEvent,

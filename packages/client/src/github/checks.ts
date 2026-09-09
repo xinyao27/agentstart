@@ -1,8 +1,5 @@
-import type {
-  PRCheckDetail,
-  CheckStatus,
-  GitHubOwnerRepo
-} from '@yiru/runtime-protocol/workbench/types'
+import type { CheckStatus } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { PRCheckDetail, GitHubOwnerRepo } from '@yiru/protocol/hosted-review/review-types'
 import { getGitHubPRCacheKey } from '~renderer/github/cache-key'
 import type { AppState } from '~renderer/store/types'
 

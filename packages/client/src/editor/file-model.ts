@@ -1,13 +1,15 @@
 import type {
   GitBranchChangeEntry,
-  GitBranchCompareSummary,
-  GitCommitCompareSummary,
+  GitBranchCompareSummary
+} from '@yiru/protocol/git/branch-compare-types'
+import type { GitCommitCompareSummary } from '@yiru/protocol/git/compare-values'
+import type {
   GitConflictKind,
   GitConflictResolutionStatus,
   GitConflictStatusSource,
-  GitStatusEntry,
-  GlobalSettings
-} from '@yiru/runtime-protocol/workbench/types'
+  GitStatusEntry
+} from '@yiru/protocol/git/status-types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 import type { OpenCheckRunDetailsState } from './check-run-details-tab'
 

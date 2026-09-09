@@ -1,5 +1,6 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
-import type { PRCheckDetail, PRCheckRunDetails, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { getGitHubPRCacheKey } from '~renderer/github/cache-key'
 import { translate } from '~renderer/i18n/i18n'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
@@ -76,15 +77,7 @@ export function resolveHostedReviewForCheckRunDetailsFix(
   const hostedReview = hostedReviewCacheKey
     ? (store.hostedReviewCache[hostedReviewCacheKey]?.data ?? null)
     : null
-  const gitLabHostedReview = hostedReview?.provider === 'gitlab' ? hostedReview : null
-  const linkedGitLabMR = worktree.linkedGitLabMR ?? null
-  if (gitLabHostedReview) {
-    return gitLabHostedReview
-  }
-  if (linkedGitLabMR !== null) {
-    return null
-  }
-  return pr ? gitHubPRToChecksPanelReview(pr) : null
+  return hostedReview ?? (pr ? gitHubPRToChecksPanelReview(pr) : null)
 }
 
 export function buildCheckRunDetailsFixBasePrompt(args: {
@@ -104,7 +97,6 @@ export function buildCheckRunDetailsFixBasePrompt(args: {
     ? { [getCheckDetailsPromptKey(resolvedCheck, 0)]: args.details }
     : undefined
   return buildFixBrokenChecksPrompt({
-    reviewKind: review.provider === 'gitlab' ? 'MR' : 'PR',
     reviewNumber: review.number,
     reviewTitle: review.title,
     reviewUrl: review.url,
@@ -139,7 +131,7 @@ export function getCheckRunDetailsFixDisabledReason(worktreeId: string | null): 
   if (!resolveHostedReviewForCheckRunDetailsFix(worktreeId)) {
     return translate(
       'auto.components.editor.check.run.details.fix.with.ai.7c3e1b5d42',
-      'Open a PR or MR before launching an AI fix.'
+      'Open a PR before launching an AI fix.'
     )
   }
   return undefined

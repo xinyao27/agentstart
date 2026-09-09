@@ -1,4 +1,4 @@
-import type { GitHistoryItem } from '@yiru/runtime-protocol/workbench/git/history'
+import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import type { WebLinkMouseEvent } from '~renderer/browser/link-gesture'

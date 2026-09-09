@@ -1,7 +1,6 @@
+import type { LargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
 import { translate } from '~renderer/i18n/i18n'
 import { Button } from '~renderer/ui/button'
-
-import type { LargeDiffRenderLimit } from './large-diff-render-limit'
 
 type LargeDiffFallbackProps = {
   filePath: string

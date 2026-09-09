@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useNow } from '~renderer/dashboard/use-now'

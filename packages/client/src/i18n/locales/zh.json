@@ -63,7 +63,6 @@
   "worktreeJumpPalette": {
     "matchLabel": {
       "comment": "评论",
-      "mr": "MR",
       "port": "端口",
       "pr": "PR"
     }
@@ -125,9 +124,6 @@
         "downloadIncomplete": "主机更新未下载完成。",
         "reconnectTimeout": "主机未以更新后的版本重新连接。",
         "runtimeChanged": "更新过程中配对主机发生变化，请重新检查后再重试。"
-      },
-      "orpcCallbackStream": {
-        "streamFailed": "Runtime stream failed."
       }
     },
     "store": {
@@ -258,7 +254,6 @@
           "0baad2d5d2": "Grok",
           "760bc6883d": "Codex",
           "a5fc0cb622": "OpenClaude",
-          "bf53f09bf8": "Claude Agent Teams",
           "0708ed89f1": "Claude",
           "fc80296033": "Devin",
           "da41abbdd4": "Ante",
@@ -360,7 +355,7 @@
         "mobile": {
           "emulator": {
             "tab": {
-              "bf4f2a8a72": "无法启动模拟器。请检查 iOS 或 Android 模拟器设置，然后尝试其他设备。"
+              "bf4f2a8a72": "无法启动模拟器。请检查 iOS 模拟器设置，然后尝试其他设备。"
             }
           }
         }
@@ -513,8 +508,7 @@
         "chooseOrAddProjectBeforeWorkspace": "创建工作区前，请选择或添加项目。",
         "folderWorkspaceCreateFailedTitle": "文件夹工作区创建失败",
         "folderWorkspaceCreateFailedMessage": "无法创建文件夹工作区。请查看上方错误详情，然后重试。",
-        "setupAgentStartupPolicySaveFailed": "保存设置启动行为失败",
-        "5f3d2c8a1b": "解析 MR 基础分支失败"
+        "setupAgentStartupPolicySaveFailed": "保存设置启动行为失败"
       },
       "useIpcEvents": {
         "0e3cf53060": "未找到浏览器选项卡 {{value0}}",
@@ -597,7 +591,7 @@
         "devSearchKeywordError": "error",
         "devSearchKeywordNotification": "notification",
         "projectHostsSummary": "{{value0}} 个主机",
-        "33a5e1d597": "Connect GitHub, GitLab, and source-hosting services."
+        "33a5e1d597": "连接 GitHub，以使用拉取请求、检查和评审状态。"
       },
       "useLargeTextControlPaste": {
         "pasteTooLarge": "粘贴内容过大。"
@@ -621,71 +615,6 @@
         "958d2cc31b": "您使用的功能的匿名计数有助于我们确定要构建的内容的优先级。没有文件内容、提示、终端输出或任何可以识别您身份的内容。随时在“设置”->“隐私和遥测”中进行更改。",
         "9784b4d7bc": "帮助我们决定下一步要构建什么",
         "fcbee32f08": "遥测通知"
-      },
-      "GitLabItemDialog": {
-        "65e784c1f1": "重新打开",
-        "a199eb364b": "关闭",
-        "16b3412570": "合并",
-        "131865e231": "创建工作区",
-        "f2e64d1c20": "在 GitLab 中打开",
-        "84012fa8fb": "评论",
-        "c08e1d5a57": "评论 {{value0}}{{value1}}...",
-        "f11e3e7675": "此 MR 没有运行任何管道。",
-        "808b1ca1ba": "没有更改的文件。",
-        "007423f585": "差异内容不可用。",
-        "a7eb4f4916": "从",
-        "21f8dde18a": "内嵌评论",
-        "7a7204417f": "线",
-        "ceb08a733d": "文件",
-        "85a8170279": "还没有评论。",
-        "14423484db": "没有描述。",
-        "da4174b00f": "编辑",
-        "93f79a3fc1": "保存",
-        "f72fad3b16": "取消",
-        "717b706849": "加载标签",
-        "3c0b6ccca7": "错误、后端",
-        "dde24ade55": "标签",
-        "908d8d2a73": "描述",
-        "89f3f19368": "标题",
-        "7a2117129a": "添加",
-        "05939e977d": "添加评审人",
-        "474b50d988": "没有评审人",
-        "1b19cdc510": "移除评审人 {{value0}}",
-        "cb55b0390f": "管理",
-        "4f9313984d": "评审人",
-        "02cbe2de44": "管道",
-        "be3d291837": "文件",
-        "c996e2962c": "对话",
-        "b3c156dd51": "刷新",
-        "9bfb4a24d7": "由",
-        "30c97083c2": "GitLab 工作项详细信息",
-        "e089f62594": "合并 MR !{{value0}}",
-        "865ea2703e": "已重新打开 MR !{{value0}}",
-        "9b11cd233f": "已关闭 MR !{{value0}}",
-        "60c13320c4": "添加了内嵌评论",
-        "ffdd9a78e1": "MR diff refs 不可用于内嵌注释。",
-        "00d0d25825": "文件、行和注释是必需的。",
-        "ceaf7c30c7": "此 GitLab 用户无法获取评审人 ID。",
-        "f7cb495a12": "重试 {{value0}}",
-        "98718490e4": "MR 职称是必需的。",
-        "d600c2619a": "加载日志",
-        "028bde664e": "隐藏",
-        "2f9b27f838": "工作日志",
-        "032ae1312b": "在 GitLab 中打开作业",
-        "fa3e042203": "重试",
-        "f23ea85341": "已解决",
-        "4186685c78": "重新打开",
-        "cae2712a23": "关闭",
-        "881e522e04": "合并",
-        "6de8ce0cc6": "需要 {{value0}}",
-        "22511537d2": "已批准",
-        "00f3bab87b": "需要 {{value0}}",
-        "11384f99aa": "数字",
-        "40c56b95e2": "{{value0}} 批准{{value1}} 剩余",
-        "3a051b8ade": "工作项目",
-        "32f8bef818": "无日志输出。",
-        "4168eb2c51": "解决",
-        "commentTooLarge": "评论过长，无法安全提交。"
       },
       "Landing": {
         "76a95f7f47": "创建",
@@ -1134,7 +1063,6 @@
             "skippedPendingAncestor": "已跳过，因为嵌套的工作区尚未完成移除。"
           },
           "candidateRow": {
-            "gitLabel": "Git",
             "commitsLabel": "提交",
             "contextLabel": "上下文",
             "flagsLabel": "标记",
@@ -1185,7 +1113,6 @@
                   "changes": "更改",
                   "review": "评审",
                   "views": "更改与评审",
-                  "mergeRequestNumber": "{{value0}} !{{value1}}",
                   "pullRequestNumber": "{{value0}} #{{value1}}"
                 }
               }
@@ -1735,8 +1662,7 @@
             "946724a70a": "主工作区无法删除。",
             "16bc3c998a": "删除工作区 {{value0}}",
             "0f9e50eb07": "其他",
-            "d406915b78": "渲染器",
-            "81cd37af99": "主进程",
+            "74e3c11c6f": "守护进程",
             "fa6d36758d": "终止会话 {{value0}}",
             "b8f4a2c1d0e3": "{{value0}} 个孤立项",
             "c7e3b1a0d9f2": "终止 {{value0}} 个孤立终端",
@@ -1833,16 +1759,10 @@
             "updatedOne": "已更新 1 个主机"
           },
           "SkillUpdateStatusSegment": {
-            "stoppingLabel": "Stopping skill update",
-            "runningLabel": "Updating skills",
             "successLabel": "Skills updated",
             "errorLabel": "Skill update failed",
-            "installRunningLabel": "Installing skill",
-            "installStoppingLabel": "Stopping skill install",
             "installSuccessLabel": "Skill installed",
             "installErrorLabel": "Skill install failed",
-            "removeRunningLabel": "Removing skill",
-            "removeStoppingLabel": "Stopping skill removal",
             "removeSuccessLabel": "Skill removed",
             "removeErrorLabel": "Skill removal failed"
           },
@@ -2029,7 +1949,6 @@
             "title": "Yiru 运行时",
             "host": "主机",
             "runtimeChecking": "检查中",
-            "runtimeCheckingLabel": "正在检查 {{host}} 上的 Yiru 运行时",
             "runtimeCheckingDescription": "正在检查当前执行主机是否就绪。",
             "runtimeReady": "已就绪",
             "runtimeReadyLabel": "{{host}} 上的 Yiru 运行时已就绪",
@@ -2738,11 +2657,10 @@
         },
         "WorktreeCardMetadataStatusBadges": {
           "fe188062a1": "状态：开放",
-          "2931b42b09": "状态：草案 {{value0}}",
+          "2931b42b09": "状态：草稿 PR",
           "e888362def": "状态： 关闭",
           "f394b3e86e": "状态：合并",
-          "af2b07bda5": "州：{{value0}}",
-          "29df45afa2": "MR"
+          "af2b07bda5": "州：{{value0}}"
         },
         "WorktreeCardPorts": {
           "34f733dda2": "转到工作树",
@@ -4021,12 +3939,9 @@
           "b4ef5428a7": "PR",
           "895d3f70b8": "gh",
           "32dca11189": "github",
-          "c4f610d057": "当前 GitLab CLI REST 速率限制标头（如果可用）。",
-          "0de4ae556c": "GitLab API预算",
           "cdd793134e": "API预算",
           "b9c011fbc2": "速率限制",
           "3072428ac7": "光亮的",
-          "8a527d48e3": "GitLab",
           "aa204f185f": "当前 GitHub CLI REST、搜索和 GraphQL 速率限制。",
           "612a440e57": "GitHub API 预算",
           "2cde9044a8": "graphql",
@@ -4067,70 +3982,7 @@
           "3e9e827ca5": "隐藏实验"
         },
         "IntegrationsPane": {
-          "e7b2dd46f9": "测试...",
-          "fe4d378dc4": "已验证",
-          "6432f6522e": "已连接",
-          "077844591a": "添加工作区访问权限",
-          "4831ba1083": "重新检查",
-          "01f6c7582e": "了解更多",
-          "1a62c295c6": "Gitea 凭据已配置，但无法进行身份验证。检查 token、API 基本 URL 和存储库权限；如果环境变量发生更改，则重新启动 Yiru。",
-          "5a1f86225a": "仅当 Yiru 无法从远程获取 API URL 时。",
-          "6193444689": "YIRU_GITEA_API_BASE_URL",
-          "2c0330ec3e": "对于私有存储库，并设置",
-          "e678d89e8c": "YIRU_GITEA_TOKEN",
-          "d9467ab026": "公共仓库通过其 git 远程检测。设置",
-          "4ab9b96925": "Gitea",
-          "953b7bf6f7": "Azure DevOps 凭据已配置，但无法进行身份验证。检查 token、API 基本 URL 和存储库权限；如果环境变量发生更改，则重新启动 Yiru。",
-          "6f317f5132": "仅当 Yiru 无法从 git 远程派生 API 基本 URL 时。",
-          "ae6b7f5f40": "YIRU_AZURE_DEVOPS_API_BASE_URL",
-          "67a9f26a80": "。设置",
-          "8f960935c1": "YIRU_AZURE_DEVOPS_ACCESS_TOKEN",
-          "ce3c58cd63": "，或设置",
-          "5ee6ef6405": "YIRU_AZURE_DEVOPS_TOKEN",
-          "4ee74d1470": "设置",
-          "5efce6953d": "Azure DevOps",
-          "3c3cf05c63": "Bitbucket 凭据已配置，但无法进行身份验证。检查 token 和存储库权限；如果环境变量发生更改，则重新启动 Yiru。",
-          "6e0ff3403e": "YIRU_BITBUCKET_ACCESS_TOKEN",
-          "44cde4aa01": "YIRU_BITBUCKET_API_TOKEN",
-          "a6c2816115": "和",
-          "b8a7efb3f6": "YIRU_BITBUCKET_EMAIL",
-          "8489c0aa49": "Bitbucket",
-          "e74de656ce": "glab 身份验证登录",
-          "05e5245af7": "GitLab CLI 已安装但未经过身份验证。在终端中运行此命令：",
-          "a83cac5726": "安装 GitLab CLI",
-          "ea160a9978": "命令行界面。",
-          "a3326f6f1b": "光亮的",
-          "513abfe47d": "GitLab",
-          "51000487c4": "gh 验证登录",
-          "09285e9fe6": "GitHub CLI 已安装但未经过身份验证。在终端中运行此命令：",
-          "399cf46867": "安装 GitHub CLI",
-          "f36365ed45": "gh",
-          "70c5f74f36": "GitHub",
-          "8e078e480c": "断开 {{value0}}",
-          "95b9a87e7e": "测试",
-          "62b20292de": "错误",
-          "ae38fc62a8": "好的",
-          "98ded79cd7": "{{value0}} 工作区{{value1}} 已连接",
-          "4bdc6fe4f5": "未配置",
-          "4972f3c95d": "配置的",
-          "3614887c40": "检查中",
-          "45bf5e6e4b": "验证失败",
-          "e1bd5364e6": "可选设置",
-          "e7a961e1c5": "已配置",
-          "6bd148dcb5": "通过 Gitea REST API PR并 commit 状态。",
-          "6355fe585e": "已检测的存储库的PR和 commit 状态",
-          "1fac9b4910": "{{value0}} · PR和 commit 状态",
-          "f92fbf11aa": "未配置",
-          "6791d7af95": "通过 Azure DevOps REST API token 获取拉取请求和构建状态。",
-          "e3d5a24979": "已检测的 Azure Repos 的PR和构建状态",
-          "277fc23929": "{{value0}} · PR和构建状态",
-          "295154e54e": "已连接",
-          "0879860c58": "通过 Bitbucket Cloud API token 获取拉取请求和构建状态。",
-          "9707523939": "PR和构建状态",
-          "a565377c38": "未安装",
-          "15cf990798": "未经过验证",
-          "f7eb5f0b24": "未安装",
-          "1683acbac4": "连接 Yiru 可用于 pull request、merge request、检查和评审状态的源代码主机。",
+          "1683acbac4": "连接 GitHub，以使用拉取请求、检查和评审状态。",
           "298c65ecac": "评审提供商"
         },
         "KagiSessionLinkForm": {
@@ -4241,7 +4093,7 @@
           "b5e2d93e01": "检查中...",
           "c6f3ea4f12": "就绪",
           "d704fb5023": "需要设置",
-          "06b06429c6": "正在检查 Android SDK 和 iOS 模拟器支持。",
+          "06b06429c6": "正在检查 iOS 模拟器支持。",
           "6d1483d4a0": "检测到 1 个模拟器设备。",
           "0a452d4d3b": "检测到 {{value0}} 个模拟器设备。",
           "f62a1bb759": "检测到设备后，Yiru 会自动选择一个模拟器设备。",
@@ -4294,8 +4146,7 @@
           "1de96ec8a6": "显示 Yiru 手机端按钮",
           "682293cadf": "在左侧边栏顶部显示 Yiru 手机端按钮。",
           "d4f2b65f30": "在边栏中显示 Yiru 手机端 快捷入口。",
-          "testFlight": "TestFlight",
-          "androidApk": "Android APK"
+          "testFlight": "TestFlight"
         },
         "NotificationsPane": {
           "906b4afebf": "发送测试通知",
@@ -4827,7 +4678,7 @@
           "65358016ea": "放弃",
           "dev": "开发工具",
           "devDescription": "仅用于调试 UI 状态的开发工具。",
-          "b07041697f": "Connect GitHub, GitLab, and source-hosting services."
+          "b07041697f": "连接 GitHub，以使用拉取请求、检查和评审状态。"
         },
         "SettingsFormControls": {
           "42a4d15a30": "没有匹配的字体。",
@@ -5964,9 +5815,6 @@
             "40f9b815fd": "API预算",
             "b7e52124c7": "速率限制",
             "ead733645f": "光亮的",
-            "4808f065b3": "GitLab",
-            "2b4a72885d": "当前 GitLab CLI REST 速率限制标头（如果可用）。",
-            "83ecb3f470": "GitLab API预算",
             "65b69d9f80": "Graqh QL",
             "1139f61512": "当前 GitHub CLI REST、搜索和 GraphQL 速率限制。",
             "ff86e354c4": "GitHub API 预算",
@@ -6014,32 +5862,7 @@
         },
         "integrations": {
           "search": {
-            "a626990bd2": "断开",
-            "3c3d3d8ffa": "连接",
-            "faa0b5a0d9": "API密钥",
             "c450244ad7": "集成",
-            "20540996ef": "凭据",
-            "2ec2bd328c": "API token",
-            "7345b7c3e6": "Atlassian",
-            "8c568d761c": "PR",
-            "33180e8c10": "自托管",
-            "129fc59aa8": "Gitea",
-            "d0d019dc29": "通过 API token环境变量进行 Gitea 身份验证。",
-            "aab86d64e5": "Gitea 集成",
-            "03a7b275be": "ADO",
-            "ed63380247": "天蓝色 repos",
-            "b38b5d27f1": "天蓝色 devops",
-            "7b1f3984bb": "通过token环境变量进行 Azure DevOps Repos 身份验证。",
-            "af6611fa6e": "Azure DevOps 集成",
-            "50d20817f7": "Bitbucket",
-            "c97d58a0f3": "通过 API token环境变量进行 Bitbucket Cloud 身份验证。",
-            "67a2a0e868": "Bitbucket 集成",
-            "371ee914d2": "合并请求",
-            "581844769a": "MR",
-            "b40cbe5de4": "glab",
-            "b939695c69": "GitLab",
-            "6e2ab619c6": "通过 glab CLI 进行 GitLab 身份验证。",
-            "b50b71ef9d": "GitLab 集成",
             "41ccade05c": "gh",
             "b79c21bd42": "GitHub",
             "7166b9090c": "通过 gh CLI 进行 GitHub 身份验证。",
@@ -6713,7 +6536,7 @@
                   "customCommand": "自定义命令",
                   "supportedAgents": "此预设支持的 Agent：{{value0}}。",
                   "unsupportedSavedAgent": "{{value0}} 无法运行此文本生成预设。请在下方选择一个支持的 Agent。",
-                  "resolveComments": "从选中的未解决 PR 或 MR 评论启动 Agent。",
+                  "resolveComments": "从选中的未解决 PR 评论启动 Agent。",
                   "fixPushFailure": "当 pre-push 钩子或 git push 失败时启动 Agent。"
                 }
               }
@@ -6792,12 +6615,7 @@
                 "cards": {
                   "d5b3be8ecd": "重新检查",
                   "8cbc39f862": "了解更多",
-                  "707180d09c": "glab auth login",
-                  "4be0616873": "GitLab CLI 已安装但未通过身份验证。请在终端中运行此命令：",
-                  "54a640af7a": "安装 GitLab CLI",
-                  "faddeb763d": "此运行时暂不支持 GitLab CLI 状态。",
                   "a47f71e357": "CLI。",
-                  "2a6b359e75": "glab",
                   "8d90249d22": "gh auth login",
                   "2e44dda68a": "GitHub CLI 已安装但未通过身份验证。请在终端中运行此命令：",
                   "7755c28af5": "安装 GitHub CLI",
@@ -6805,51 +6623,7 @@
                   "6b2cfb52b4": "gh",
                   "account_scope_prefix": "账户范围",
                   "b4d900e7f1": "Pull requests and checks via the",
-                  "23cb5a0dee": "Install the GitHub CLI to enable pull requests and checks.",
-                  "1f2b347bd3": "Merge requests and pipelines via the",
-                  "b56fd5676a": "Install the GitLab CLI to enable merge requests and pipelines."
-                }
-              }
-            }
-          }
-        },
-        "token": {
-          "source": {
-            "control": {
-              "integration": {
-                "cards": {
-                  "793a06e899": "重新检查",
-                  "1a9475dace": "了解更多",
-                  "19fb419c12": "Gitea 凭据已配置但无法通过身份验证。请检查 token、API 基础 URL 和仓库权限；如果环境变量已更改，请重启 Yiru。",
-                  "60708f23da": "仅当 Yiru 无法从 remote 推导出 API URL 时。",
-                  "709057ad91": "YIRU_GITEA_API_BASE_URL",
-                  "6da9dfa5de": "用于私有仓库，并设置",
-                  "6d5c2a3005": "YIRU_GITEA_TOKEN",
-                  "fcbe0469fd": "公开仓库会从其 git remote 检测。设置",
-                  "0613928cb3": "此运行时暂不支持 Gitea 状态。",
-                  "05863d2599": "通过 Gitea REST API 获取 pull request 和 commit 状态。",
-                  "52f75876be": "已检测仓库的 pull request 和 commit 状态",
-                  "0b5242f8a2": "{{value0}} · 拉取请求和提交状态",
-                  "40f678df73": "Azure DevOps 凭据已配置但无法通过身份验证。请检查 token、API 基础 URL 和仓库权限；如果环境变量已更改，请重启 Yiru。",
-                  "7bd345e3f6": "仅当 Yiru 无法从 git remote 推导出 API 基础 URL 时。",
-                  "186a6689df": "YIRU_AZURE_DEVOPS_API_BASE_URL",
-                  "b8a10b07c1": "。设置",
-                  "fbfd237f5e": "YIRU_AZURE_DEVOPS_ACCESS_TOKEN",
-                  "087feb92f1": "，或设置",
-                  "48842720d2": "YIRU_AZURE_DEVOPS_TOKEN",
-                  "7bbc9c64f0": "设置",
-                  "f3f47dc7de": "此运行时暂不支持 Azure DevOps 状态。",
-                  "0eb50d5593": "通过 Azure DevOps REST API token 获取 pull request 和构建状态。",
-                  "54636c65d4": "已检测 Azure Repos 的 pull request 和构建状态",
-                  "ea204f5e03": "{{value0}} · 拉取请求和构建状态",
-                  "6154b02093": "Bitbucket 凭据已配置但无法通过身份验证。请检查 token 和仓库权限；如果环境变量已更改，请重启 Yiru。",
-                  "e63fe8f627": "YIRU_BITBUCKET_ACCESS_TOKEN",
-                  "19416c874c": "YIRU_BITBUCKET_API_TOKEN",
-                  "fc71a0e7aa": "和",
-                  "63a7f47392": "YIRU_BITBUCKET_EMAIL",
-                  "24ac1c69dc": "此运行时暂不支持 Bitbucket 状态。",
-                  "a924e8dcd1": "通过 Bitbucket Cloud API token 获取 pull request 和构建状态。",
-                  "0fa5629dad": "pull request 和构建状态"
+                  "23cb5a0dee": "Install the GitHub CLI to enable pull requests and checks."
                 }
               }
             }
@@ -7014,19 +6788,9 @@
           "wslDescription": "对于未覆盖运行时的项目，通过 WSL 在 {{value0}} 中检测并启动 Agent。"
         },
         "MobileEmulatorSdkStatus": {
-          "536026130e": "模拟器 SDK",
-          "dde0ec1cd8": "Yiru 用于运行模拟器的工具链。Android 可通过 Android SDK 在任何系统上运行；iOS 模拟器需要 macOS 上的 Xcode。",
-          "027cbf668a": "Android SDK",
-          "f6d080d128": "正在使用配置的路径",
-          "7fe4bd5907": "检测位置",
-          "2784f0b22d": "未找到。请安装 Android Studio，然后创建虚拟设备。",
-          "b94ff260e6": "下载 Android Studio",
-          "18925b082d": "定位 SDK 文件夹",
-          "8c52684db8": "清除",
           "76eb88b88e": "iOS 模拟器 (Xcode)",
           "c6f3ea4f12": "已就绪",
-          "e4f14b50d7": "请安装 Xcode 并添加 iOS 模拟器运行时。",
-          "63fe73a1ea": "无法更新 Android SDK 文件夹。"
+          "e4f14b50d7": "请安装 Xcode 并添加 iOS 模拟器运行时。"
         },
         "AppearanceAdvancedDisclosure": {
           "advanced": "高级"
@@ -7148,8 +6912,7 @@
           "beta": "测试版",
           "availability": "可用于",
           "githubReleases": "GitHub 发布",
-          "testFlight": "TestFlight",
-          "androidApk": "Android APK"
+          "testFlight": "TestFlight"
         },
         "VoiceSpeechModelSection": {
           "parakeetV3Description": "Highest accuracy for 25 European languages. Punctuation, capitalization, and word-level timestamps.",
@@ -7835,27 +7598,6 @@
               }
             }
           },
-          "gitlab": {
-            "mr": {
-              "merge": {
-                "state": {
-                  "04a3015a12": "可以合并",
-                  "53c6d3b7e9": "GitLab 表示该 MR 可以合并，但管道仍在运行",
-                  "65c847ad1e": "检查待处理",
-                  "b41fbc180c": "GitLab 表示这个 MR 可以合并，但一些管道作业失败了",
-                  "49ac4fec10": "检查失败",
-                  "22b7e50621": "GitLab 报告合并冲突",
-                  "96b05e374c": "冲突",
-                  "d63bb6f76e": "此合并请求仍是草稿",
-                  "b2715092c6": "草稿",
-                  "2388413f28": "此合并请求已关闭",
-                  "88d044c42f": "已关闭",
-                  "ee482a2bad": "该合并请求已被合并",
-                  "fae95ae20d": "合并"
-                }
-              }
-            }
-          },
           "index": {
             "70893f017b": "边",
             "7b415c39e9": "顶部",
@@ -8525,7 +8267,6 @@
             "2c69728c2a": "在浏览器中打开链接",
             "6f07a18604": "姓名",
             "2e4c7c95fe": "分支",
-            "2cfc6be192": "GitLab",
             "0a180280bd": "GitHub",
             "b3c60c2b7c": "智能",
             "26824f60dd": "全部",
@@ -8533,18 +8274,14 @@
             "2319d87718": "合并",
             "622864b52a": "开放",
             "fda67f0b61": "当前项目",
-            "9c004911c3": "GitLab",
             "placeholderWorkspaceName": "输入工作区名称",
-            "placeholderSmartWithBranchGitLab": "输入名称、#1234、分支、GitHub 或 GitLab URL",
-            "placeholderSmartGitLab": "输入名称、#1234、GitHub 或 GitLab URL",
             "unavailable": "不可用",
             "searchBranches": "搜索分支",
             "workspaceName": "工作区名称",
             "switchProjectSourceTitle": "Switch project source?",
             "differentProjectSource": ", which is different from the selected project source.",
             "currentProjectSource": "current project source",
-            "searchGitHub": "Search GitHub PRs",
-            "searchGitLab": "Search GitLab MRs"
+            "searchGitHub": "Search GitHub PRs"
           },
           "ProjectCombobox": {
             "search": "搜索项目...",
@@ -8575,7 +8312,6 @@
           "3241f3c26a": "安装二维码",
           "7af266b80d": "安装二维码",
           "aa97420ba4": "复制安装链接",
-          "ac1eb64952": "安卓",
           "711e6f4b47": "iOS系统",
           "e75647ace0": "使用手机扫描二维码或打开安装链接以获取 Yiru 手机端。",
           "0d9b33299e": "获取应用程序。",
@@ -8632,9 +8368,6 @@
               },
               "testflight": {
                 "cta": "打开 TestFlight"
-              },
-              "android": {
-                "cta": "下载 APK"
               }
             }
           }
@@ -8740,26 +8473,6 @@
           "blocked-title": "Windows 可能正在阻止 Yiru Mobile",
           "blocked-description": "现有的入站阻止规则可能会覆盖配对例外。修复将移除此 Yiru 应用的冲突 TCP 规则，然后在专用网络上允许端口 {{port}}。",
           "repair": "修复防火墙访问权限"
-        }
-      },
-      "gitlab": {
-        "gitlab": {
-          "rate": {
-            "limit": {
-              "display": {
-                "ebc0e8ecf1": "正在加载 GitLab API 预算...",
-                "a2d3d1fdde": "GitLab API 预算不可用。",
-                "a2f68645ac": "刷新 GitLab API 预算",
-                "2f9c16d6c3": "Yiru 通过 GitLab CLI 使用 REST。",
-                "14e144f7a7": "GitLab API预算",
-                "3e2c982cfa": "向左，重置于",
-                "ea8ad0bae8": "的",
-                "0a891e8935": "REST API",
-                "953f7c6062": "此 GitLab 主机未返回速率限制标头。",
-                "budget_scope_prefix": "预算范围"
-              }
-            }
-          }
         }
       },
       "feature": {
@@ -9204,11 +8917,6 @@
               "frame": {
                 "stream": {
                   "f1c0179002": "流不生成帧。"
-                }
-              },
-              "video": {
-                "stream": {
-                  "c3fb77cb87": "This build does not support WebCodecs H.264 decoding."
                 }
               }
             },
@@ -9818,7 +9526,7 @@
                   "ai": {
                     "1a8c4e2b90": "启动 AI 操作前请选择工作区。",
                     "4f2d9a8c17": "启动 AI 操作前请选择仓库。",
-                    "7c3e1b5d42": "启动 AI 修复前请打开 PR 或 MR。",
+                    "7c3e1b5d42": "启动 AI 修复前请先打开 PR。",
                     "9b2f6d4a81": "此检查没有失败。",
                     "2ef90c9819": "已为此检查启动 AI Agent。"
                   }
@@ -10063,9 +9771,6 @@
               },
               "publishOrUnpublishWorktree": "Publish / Unpublish Worktree",
               "publishOrUnpublishWorktreeDescription": "Publish or unpublish the current worktree through 远程 daemon."
-            },
-            "action": {
-              "context": {}
             }
           },
           "palette": {
@@ -10281,7 +9986,6 @@
           "emptyCopy": "将工作树附加到此文件夹工作区后，PR 检查会显示在这里。",
           "openChecksTab": "打开 {{value0}} 的检查标签页",
           "openReviewExternally": "在外部打开 {{value0}}",
-          "summary": "已附加 {{value0}} 个 · 有 PR/MR {{value1}} 个 · 需注意 {{value2}} 个 · 等待中 {{value3}} 个 · 通过 {{value4}} 个 · 无 PR {{value5}} 个 · 未知 {{value6}} 个",
           "showDetails": "显示 {{value0}} 的 PR 检查详情",
           "hideDetails": "隐藏 {{value0}} 的 PR 检查详情",
           "reviewChecks": "评审检查",
@@ -10772,10 +10476,8 @@
           "e9f3a7b1c0": "PR",
           "d8e2f6a0b9": "PR",
           "c7d1e5f9a8": "GitHub",
-          "c4e8f1a2b9": "MR",
           "b3d7e0f1a8": "合并请求",
-          "a2c6d9e0f7": "合并请求",
-          "91b5c8d7e6": "GitLab"
+          "a2c6d9e0f7": "合并请求"
         }
       }
     }
@@ -10835,7 +10537,6 @@
           "reviewAlphaCleanup": "评审 Alpha 清理"
         },
         "presentation": {
-          "gitlabMergeRequestNumber": "MR #{{value0}}",
           "githubPullRequestNumber": "PR #{{value0}}"
         }
       }
@@ -11005,6 +10706,94 @@
       "detail": "完整的审查文件不会离开此设备。\n\n诊断 ID：{{value0}}\n诊断记录数：{{value1}}\n大小：{{value2}} KB",
       "send": "发送",
       "cancel": "取消"
+    }
+  },
+  "contextual-tours": {
+    "0ec1d9bac9": "拆分终端窗格",
+    "875e49569a": "使用 {terminal.splitRight} 打开第二个终端窗格，或右键单击窗格查看拆分选项。",
+    "205dfe6b66": "拆分终端",
+    "aa239e1761": "并行开始另一项任务",
+    "2955ac8398": "每个工作树都有独立分支，让并行任务互不干扰。",
+    "4a9db31908": "为 agent 抓取页面上下文",
+    "f54a59e067": "使用抓取工具复制页面元素的上下文并交给 agent。",
+    "26ef6cb9e3": "直接标注设计反馈",
+    "8485743c15": "标注元素，并将这些反馈发送给 agent。",
+    "ab573bd0e9": "保持登录",
+    "cc98d6cf9e": "将现有登录状态导入 Yiru，立即保持登录。",
+    "eca71e5d1a": "选择项目",
+    "d322379476": "Yiru 从基础分支创建独立工作树，隔离每项任务。",
+    "c016688c4f": "命名，或从已有工作开始",
+    "7b83a21ec3": "从关联的拉取请求开始，使用简短的 PR 名称。也可以留空，根据第一条 agent 消息自动命名。",
+    "0e5e66b764": "选择开始工作的 agent",
+    "37285cd763": "选择创建此工作树时要打开的 agent。"
+  },
+  "feature-tips": {
+    "d19ceca501": "提示",
+    "3fe1fc9a33": "通过 Yiru CLI 让 agent 操作 Yiru",
+    "8d67d7764a": "让 agent 协调子工作树，并在工作树之间通信。",
+    "1b0f375850": "安装 CLI 和技能",
+    "c3cab3c204": "使用 <shortcut> 打开一切",
+    "0a8b4458e2": "在同一个地方搜索项目和文件、切换标签页、打开设置或启动 agent。",
+    "5b8027fa0e": "知道了"
+  },
+  "feature-wall": {
+    "7d9ff4f0de": "状态概览",
+    "5e568e3868": "Agent 状态概览",
+    "4ea5c3af47": "了解哪些 agent 正在工作、等待、运行或被阻塞。",
+    "6926cb0e99": "编排",
+    "03d648492d": "让 agent 管理和协调 Yiru 工作区，执行更大的任务。",
+    "0bb18642b7": "用量",
+    "533597e2b3": "查看所有已连接账号的用量和速率限制，及时切换账号。",
+    "70440046a3": "笔记",
+    "880687b1da": "笔记与差异",
+    "69514c32e0": "向 agent 发送明确的审查反馈。",
+    "8de869fd7d": "PR 检查",
+    "45a73aece5": "PR 检查与评论",
+    "4ad3103d38": "在“更改与审查”中查看 PR 状态。",
+    "0a3df4164f": "用 AI 提交工作",
+    "b50a7bd9fb": "让 AI 为你准备提交信息和 PR 草稿。",
+    "093885fbec": "多任务",
+    "709b371089": "同时在两个不同工作树中工作。即使属于同一项目，工作树也相互隔离，适合并行开发两个功能。",
+    "7e1fbc831b": "使用 Yiru 浏览器",
+    "72a691c081": "无需离开 Yiru 即可浏览网页应用。抓取任意元素，一键将其源码和样式发送给 agent。",
+    "5ab087ec11": "开启通知",
+    "2935db9586": "在 agent 完成、需要关注或被阻塞时立即获知。",
+    "9a739e27d2": "选择默认 agent",
+    "70593204ec": "预先选择常用 agent，更快开始新工作。",
+    "c0feda1125": "启用 Yiru CLI",
+    "b56f64241a": "注册 Yiru shell 命令，并安装用于浏览器、电脑操作和编排工作流的 agent 技能。",
+    "f626e0facc": "自动配置工作区",
+    "a6ab426046": "自动运行安装和配置命令，让每个新工作树都为 agent 准备就绪。",
+    "96402c9d0a": "在多个仓库中开始工作",
+    "c88e5adc13": "将常用仓库导入 Yiru，无需寻找文件夹即可开始 agent 工作。",
+    "a1f52cdcb3": "终端",
+    "e4457b5784": "同时查看 agent、测试和开发日志。",
+    "c7e9fb2ea6": "编辑器",
+    "70930331cf": "使用 Notion 风格的 Markdown 编辑器，无需离开 Yiru 即可记录笔记。",
+    "54a2cf5e63": "浏览器",
+    "9bf3317c89": "在 Yiru 浏览器中运行应用，将选中的界面元素发送给 agent，并让 agent 操作网页。",
+    "205b4561ed": "工作区",
+    "45cdd75dbe": "Yiru 将每项任务放入独立工作区，让 agent 并行运行。",
+    "64acf7e2a7": "Agent",
+    "28c64edcfe": "同时运行多个 agent，在独立工作区中跟踪它们的进度。",
+    "93ef7c6368": "工作台",
+    "7e39fdc7c6": "将终端配置带入 Yiru，再拆分窗格，让服务、测试、日志和 agent 并排运行。",
+    "33157d99ae": "代码审查",
+    "3dfbfca0bb": "审查更改，留下明确的反馈，再发送给 agent。"
+  },
+  "sourceControl": {
+    "merge": {
+      "squash": "压缩并合并",
+      "create": "创建合并提交",
+      "rebase": "变基并合并"
+    }
+  },
+  "newWorkspace": {
+    "forkPushRestricted": "此 PR 未开启“允许维护者编辑”；GitHub 可能拒绝向 fork 推送。",
+    "sourceHint": {
+      "smart": "开始输入以创建名称或查找来源。",
+      "github": "开始输入以搜索 GitHub 拉取请求。",
+      "branches": "没有匹配的分支。"
     }
   }
 }

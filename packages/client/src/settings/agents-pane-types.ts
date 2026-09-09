@@ -1,5 +1,6 @@
-import type { AgentPermissionMode } from '@yiru/runtime-protocol/workbench/tui-agent/permissions'
-import type { GlobalSettings, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { AgentPermissionMode } from '@yiru/protocol/agent/launch/permissions'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 import type { AgentSessionSourceHomeControl } from './codex-session-source-home-control'
 

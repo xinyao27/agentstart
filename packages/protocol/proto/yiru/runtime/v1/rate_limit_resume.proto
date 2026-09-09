@@ -1,0 +1,272 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service RateLimitResumeService {
+  rpc InspectCodex(RateLimitResumeServiceInspectCodexRequest) returns (RateLimitResumeServiceInspectCodexResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc List(RateLimitResumeServiceListRequest) returns (RateLimitResumeServiceListResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Schedule(RateLimitResumeServiceScheduleRequest) returns (RateLimitResumeServiceScheduleResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Cancel(RateLimitResumeServiceCancelRequest) returns (RateLimitResumeServiceCancelResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RunNow(RateLimitResumeServiceRunNowRequest) returns (RateLimitResumeServiceRunNowResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc MarkFired(RateLimitResumeServiceMarkFiredRequest) returns (RateLimitResumeServiceMarkFiredResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc MarkFailed(RateLimitResumeServiceMarkFailedRequest) returns (RateLimitResumeServiceMarkFailedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc MarkStale(RateLimitResumeServiceMarkStaleRequest) returns (RateLimitResumeServiceMarkStaleResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RendererReady(RateLimitResumeServiceRendererReadyRequest) returns (RateLimitResumeServiceRendererReadyResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+enum RateLimitResumeProvider {
+  RATE_LIMIT_RESUME_PROVIDER_UNSPECIFIED = 0;
+  RATE_LIMIT_RESUME_PROVIDER_CLAUDE = 1;
+  RATE_LIMIT_RESUME_PROVIDER_CODEX = 2;
+  RATE_LIMIT_RESUME_PROVIDER_CURSOR = 3;
+  RATE_LIMIT_RESUME_PROVIDER_GEMINI = 4;
+  RATE_LIMIT_RESUME_PROVIDER_OPEN_CODE_GO = 5;
+  RATE_LIMIT_RESUME_PROVIDER_KIMI = 6;
+  RATE_LIMIT_RESUME_PROVIDER_ANTIGRAVITY = 7;
+  RATE_LIMIT_RESUME_PROVIDER_MINIMAX = 8;
+  RATE_LIMIT_RESUME_PROVIDER_GROK = 9;
+}
+
+enum RateLimitResumeWindow {
+  RATE_LIMIT_RESUME_WINDOW_UNSPECIFIED = 0;
+  RATE_LIMIT_RESUME_WINDOW_SESSION = 1;
+  RATE_LIMIT_RESUME_WINDOW_WEEKLY = 2;
+}
+
+enum RateLimitResumeStatus {
+  RATE_LIMIT_RESUME_STATUS_UNSPECIFIED = 0;
+  RATE_LIMIT_RESUME_STATUS_SCHEDULED = 1;
+  RATE_LIMIT_RESUME_STATUS_FIRED = 2;
+  RATE_LIMIT_RESUME_STATUS_CANCELLED = 3;
+  RATE_LIMIT_RESUME_STATUS_STALE = 4;
+  RATE_LIMIT_RESUME_STATUS_FAILED = 5;
+}
+
+message RateLimitHit {
+  string agent = 1;
+  string pty_id = 2;
+  string tab_id = 3;
+  string pane_key = 4;
+  string worktree_id = 5;
+  string prompt = 6;
+  RateLimitResumeProvider provider = 7;
+  double detected_at = 8;
+  optional double resets_at = 9;
+  optional string reset_description = 10;
+  RateLimitResumeWindow window = 11;
+}
+
+message RateLimitResumeSchedule {
+  string agent = 1;
+  string pty_id = 2;
+  string tab_id = 3;
+  string pane_key = 4;
+  string worktree_id = 5;
+  string prompt = 6;
+  RateLimitResumeProvider provider = 7;
+  double detected_at = 8;
+  optional double resets_at = 9;
+  optional string reset_description = 10;
+  RateLimitResumeWindow window = 11;
+  string id = 12;
+  double resume_at = 13;
+  RateLimitResumeStatus status = 14;
+  double created_at = 15;
+  optional double fired_at = 16;
+  optional string failure_reason = 17;
+}
+
+message RateLimitResumeServiceInspectCodexRequest {
+  string pty_id = 1;
+  string tab_id = 2;
+  string pane_key = 3;
+  string worktree_id = 4;
+  string session_id = 5;
+  string transcript_path = 6;
+  string turn_id = 7;
+  string prompt = 8;
+}
+
+message RateLimitResumeServiceInspectCodexResponse {
+  RateLimitHit hit = 1;
+}
+
+message RateLimitResumeServiceListRequest {}
+
+message RateLimitResumeServiceListResponse {
+  repeated RateLimitResumeSchedule schedules = 1;
+}
+
+message RateLimitResumeServiceScheduleRequest {
+  string agent = 1;
+  string pty_id = 2;
+  string tab_id = 3;
+  string pane_key = 4;
+  string worktree_id = 5;
+  string prompt = 6;
+  RateLimitResumeProvider provider = 7;
+  double detected_at = 8;
+  optional double resets_at = 9;
+  optional string reset_description = 10;
+  RateLimitResumeWindow window = 11;
+}
+
+message RateLimitResumeServiceScheduleResponse {
+  RateLimitResumeSchedule schedule = 1;
+}
+
+message RateLimitResumeServiceCancelRequest {
+  string id = 1;
+}
+
+message RateLimitResumeServiceCancelResponse {
+  RateLimitResumeSchedule schedule = 1;
+}
+
+message RateLimitResumeServiceRunNowRequest {
+  string id = 1;
+}
+
+message RateLimitResumeServiceRunNowResponse {
+  RateLimitResumeSchedule schedule = 1;
+}
+
+message RateLimitResumeServiceMarkFiredRequest {
+  string id = 1;
+}
+
+message RateLimitResumeServiceMarkFiredResponse {
+  RateLimitResumeSchedule schedule = 1;
+}
+
+message RateLimitResumeServiceMarkFailedRequest {
+  string id = 1;
+  string reason = 2;
+}
+
+message RateLimitResumeServiceMarkFailedResponse {
+  RateLimitResumeSchedule schedule = 1;
+}
+
+message RateLimitResumeServiceMarkStaleRequest {
+  string id = 1;
+}
+
+message RateLimitResumeServiceMarkStaleResponse {
+  RateLimitResumeSchedule schedule = 1;
+}
+
+message RateLimitResumeServiceRendererReadyRequest {
+  string connection_id = 1;
+}
+
+message RateLimitResumeServiceRendererReadyResponse {}

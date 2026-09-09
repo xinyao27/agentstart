@@ -1,9 +1,6 @@
-import type {
-  HookCommandSourcePolicy,
-  Repo,
-  RepoHookSettings,
-  SetupRunPolicy
-} from '@yiru/runtime-protocol/workbench/types'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { HookCommandSourcePolicy, SetupRunPolicy } from '@yiru/protocol/worktree/hooks'
 import { translate } from '~renderer/i18n/i18n'
 
 import { DEFAULT_REPO_HOOK_SETTINGS } from '../constants'

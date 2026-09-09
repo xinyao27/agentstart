@@ -1,5 +1,5 @@
 import type { StateCreator } from 'zustand'
-import { isClaudeAgent } from '~renderer/agent/status'
+import { isClaudeAgent } from '~renderer/agent/title/provider'
 import { classifyTitleActivity } from '~renderer/terminal-pane/agent/evidence'
 import { recordTerminalInputActivity } from '~renderer/terminal-pane/input-activity-coalescing'
 

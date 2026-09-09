@@ -1,10 +1,6 @@
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
-import {
-  isTerminalLeafId,
-  makePaneKey,
-  parsePaneKey
-} from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalLayoutSnapshot } from '@yiru/runtime-protocol/workbench/types'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import { isTerminalLeafId, makePaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
 import { useEffect } from 'react'
 import type { RetainedAgentEntry } from '~renderer/agent/status-state/slice'
 import { useAppStore } from '~renderer/store/state'

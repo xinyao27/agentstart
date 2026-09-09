@@ -1,12 +1,12 @@
-import { isWslUncPath } from '@yiru/runtime-protocol/model/platform'
-import { slugifyForWorkspaceName } from '@yiru/runtime-protocol/model/workspace'
-import type { ProjectExecutionRuntimeResolution } from '@yiru/runtime-protocol/workbench/project-execution-runtime'
-import { makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import { TUI_AGENT_CONFIG } from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
+import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
+import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { translate } from '~renderer/i18n/i18n'
+import { slugifyForWorkspaceName } from '~renderer/new-workspace/naming/name'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'
 import { markAgentWorkspaceTrusted } from '~renderer/runtime/agent-trust-client'
 import { shellClient } from '~renderer/runtime/shell-client'
@@ -269,7 +269,7 @@ export async function startAgentSessionFork(fork: PreparedAgentSessionFork): Pro
     worktreePath: created.worktree.path,
     projectRuntime: sourceProjectRuntime
   })
-  const result = launchAgentInNewTab({
+  const result = await launchAgentInNewTab({
     agent: fork.agent,
     worktreeId: forkWorktreeId,
     prompt: fork.prompt,

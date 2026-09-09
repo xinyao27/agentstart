@@ -1,7 +1,7 @@
-import type { SkillFreshnessInventory } from '@yiru/runtime-protocol/workbench/skill-freshness'
 import { useEffect, useSyncExternalStore } from 'react'
 import { INSTALLED_AGENT_SKILLS_CHANGED_EVENT } from '~renderer/runtime/installed-agent-skill-discovery-state'
 import { getSkillFreshnessInventory } from '~renderer/runtime/skill-manage-client'
+import type { SkillFreshnessInventory } from '~renderer/skills/freshness-model'
 
 // Why: window focus fires on every alt-tab, and each scan re-reads and re-hashes
 // every installed package; a just-completed scan stays authoritative briefly.

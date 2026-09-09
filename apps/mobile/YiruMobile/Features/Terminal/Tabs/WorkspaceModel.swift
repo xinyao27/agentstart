@@ -10,6 +10,7 @@ nonisolated enum TerminalWorkspacePhase: Sendable {
 nonisolated enum TerminalWorkspaceOperation: Equatable, Sendable {
     case closing(String)
     case creating
+    case resuming
 }
 
 @Observable

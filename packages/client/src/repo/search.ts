@@ -1,5 +1,5 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 
 // Display-name matches must always outrank path-only matches. This offset is
 // added to every path-match score so that even a path hit at index 0 scores
@@ -18,7 +18,7 @@ export function isRepoSearchQueryTooLarge(
   query: string,
   maxBytes = REPO_SEARCH_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 function matchScore(repo: Repo, query: string): number | null {

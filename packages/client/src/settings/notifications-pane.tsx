@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { BellRinging as BellRing, Robot as Bot, Siren } from '~renderer/icons/hugeicons'

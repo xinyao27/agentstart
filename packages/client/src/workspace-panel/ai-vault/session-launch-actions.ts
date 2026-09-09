@@ -1,6 +1,6 @@
-import type { AiVaultAgent, AiVaultSession } from '@yiru/runtime-protocol/model/agent'
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -13,6 +13,7 @@ import {
   getAiVaultResumeWorkspaceTargetStatus
 } from '~renderer/workspace-panel/ai-vault/resume-target'
 import { launchAiVaultSessionInNewTab } from '~renderer/workspace-panel/ai-vault/session-launch'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 import {
   activateAndRevealFolderWorkspace,
   activateAndRevealWorktree
@@ -25,11 +26,11 @@ import {
   type AiVaultResumeStartup
 } from './resume-command'
 import { prepareAiVaultSessionContinuation } from './session-continuation'
-import { agentLabel } from './session-filters'
 import {
   isKnownAiVaultResumeWorkspaceTarget,
   type AiVaultSessionResumeTargetState
 } from './session-resume'
+import { agentLabel } from './session/filter'
 
 export function useAiVaultSessionLaunchActions({
   activeWorktree,

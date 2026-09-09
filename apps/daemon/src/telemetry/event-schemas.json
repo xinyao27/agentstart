@@ -1,0 +1,1692 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "app_opened": {
+      "type": "object",
+      "properties": {
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "additionalProperties": false
+    },
+    "app_starred_yiru": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["star_nag", "agent_value_moment", "onboarding_completed", "settings", "landing"]
+        },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["source"],
+      "additionalProperties": false
+    },
+    "star_nag_outcome": {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "type": "string",
+          "enum": [
+            "shown",
+            "star_clicked",
+            "direct_star_succeeded",
+            "direct_star_failed",
+            "opened_repo",
+            "later",
+            "dismissed",
+            "disabled",
+            "star_attempted",
+            "star_succeeded",
+            "star_failed",
+            "opened_web",
+            "already_starred_suppressed"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "threshold",
+            "force_show",
+            "agent_value_moment",
+            "onboarding_completed",
+            "update_flow",
+            "settings",
+            "legacy_threshold"
+          ]
+        },
+        "mode": { "type": "string", "enum": ["gh", "web"] },
+        "threshold": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "agents_since_baseline": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "agents_since_baseline_bucket": {
+          "type": "string",
+          "enum": ["0-34", "35-69", "70-139", "140-279", "280+"]
+        },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "next_threshold": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 },
+        "cooldown_days": { "type": "integer", "exclusiveMinimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": [
+        "outcome",
+        "source",
+        "mode",
+        "threshold",
+        "agents_since_baseline",
+        "agents_since_baseline_bucket"
+      ],
+      "additionalProperties": false
+    },
+    "feature_interaction_usage_bucket_reached": {
+      "type": "object",
+      "properties": {
+        "feature_id": {
+          "type": "string",
+          "enum": [
+            "workspace-agent-sessions",
+            "cmd-j",
+            "cmd-j-workspace-open",
+            "cmd-j-browser-page-open",
+            "cmd-j-settings-open",
+            "cmd-j-quick-action",
+            "cmd-j-create-workspace",
+            "browser",
+            "browser-tab-created",
+            "browser-annotations",
+            "browser-annotations-sent-to-agent",
+            "browser-grab",
+            "markdown-file-created",
+            "workspace-creation",
+            "agent-browser-setup",
+            "agent-browser-use",
+            "agent-orchestration-setup",
+            "agent-orchestration",
+            "mobile-emulator-agent-setup",
+            "ai-commit-generation",
+            "ai-pr-generation",
+            "claude-account-switching",
+            "computer-use-setup",
+            "computer-use",
+            "codex-account-switching",
+            "cookie-import",
+            "mobile-pairing",
+            "notifications",
+            "ports",
+            "quick-commands",
+            "resource-manager",
+            "review-notes",
+            "terminal-pane-split",
+            "terminal-panes",
+            "terminal-tabs",
+            "tab-splits",
+            "usage-tracking",
+            "workspace-cleanup"
+          ]
+        },
+        "feature_category": {
+          "type": "string",
+          "enum": [
+            "workspace",
+            "agent",
+            "browser",
+            "launcher",
+            "notes",
+            "review",
+            "setup",
+            "settings",
+            "terminal",
+            "collaboration",
+            "resource_management",
+            "source_control"
+          ]
+        },
+        "count_bucket": {
+          "type": "string",
+          "enum": [
+            "count_1",
+            "count_2",
+            "count_3_4",
+            "count_5_9",
+            "count_10_19",
+            "count_20_49",
+            "count_50_99",
+            "count_100_199",
+            "count_200_499",
+            "count_500_999",
+            "count_1000_plus"
+          ]
+        },
+        "bucket_source": { "type": "string", "enum": ["crossed_now", "observed_existing"] },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["feature_id", "feature_category", "count_bucket", "bucket_source"],
+      "additionalProperties": false
+    },
+    "repo_added": {
+      "type": "object",
+      "properties": {
+        "method": { "type": "string", "enum": ["folder_picker", "clone_url", "drag_drop"] },
+        "is_git_repo": { "type": "boolean" },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["method"],
+      "additionalProperties": false
+    },
+    "workspace_created": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "command_palette",
+            "sidebar",
+            "shortcut",
+            "drag_drop",
+            "onboarding",
+            "terminal_context_menu",
+            "unknown"
+          ]
+        },
+        "from_existing_branch": { "type": "boolean" },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["source", "from_existing_branch"],
+      "additionalProperties": false
+    },
+    "agent_started": {
+      "type": "object",
+      "properties": {
+        "agent_kind": {
+          "type": "string",
+          "enum": [
+            "claude-code",
+            "openclaude",
+            "codex",
+            "autohand",
+            "opencode",
+            "mimo-code",
+            "pi",
+            "omp",
+            "gemini",
+            "antigravity",
+            "aider",
+            "goose",
+            "amp",
+            "kilo",
+            "kiro",
+            "crush",
+            "aug",
+            "cline",
+            "codebuff",
+            "command-code",
+            "continue",
+            "cursor",
+            "droid",
+            "kimi",
+            "mistral-vibe",
+            "qwen-code",
+            "rovo",
+            "hermes",
+            "openclaw",
+            "copilot",
+            "grok",
+            "devin",
+            "ante",
+            "trae",
+            "other"
+          ]
+        },
+        "launch_source": {
+          "type": "string",
+          "enum": [
+            "command_palette",
+            "sidebar",
+            "quick_command",
+            "tab_bar_quick_launch",
+            "task_page",
+            "new_workspace_composer",
+            "workspace_jump_palette",
+            "shortcut",
+            "onboarding",
+            "diff_notes_send",
+            "notes_send",
+            "conflict_resolution",
+            "source_control_recovery",
+            "terminal_context_menu",
+            "unknown"
+          ]
+        },
+        "request_kind": { "type": "string", "enum": ["new", "resume", "followup"] },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["agent_kind", "launch_source", "request_kind"],
+      "additionalProperties": false
+    },
+    "agent_prompt_sent": {
+      "type": "object",
+      "properties": {
+        "agent_kind": {
+          "type": "string",
+          "enum": [
+            "claude-code",
+            "openclaude",
+            "codex",
+            "autohand",
+            "opencode",
+            "mimo-code",
+            "pi",
+            "omp",
+            "gemini",
+            "antigravity",
+            "aider",
+            "goose",
+            "amp",
+            "kilo",
+            "kiro",
+            "crush",
+            "aug",
+            "cline",
+            "codebuff",
+            "command-code",
+            "continue",
+            "cursor",
+            "droid",
+            "kimi",
+            "mistral-vibe",
+            "qwen-code",
+            "rovo",
+            "hermes",
+            "openclaw",
+            "copilot",
+            "grok",
+            "devin",
+            "ante",
+            "trae",
+            "other"
+          ]
+        },
+        "launch_source": {
+          "type": "string",
+          "enum": [
+            "command_palette",
+            "sidebar",
+            "quick_command",
+            "tab_bar_quick_launch",
+            "task_page",
+            "new_workspace_composer",
+            "workspace_jump_palette",
+            "shortcut",
+            "onboarding",
+            "diff_notes_send",
+            "notes_send",
+            "conflict_resolution",
+            "source_control_recovery",
+            "terminal_context_menu",
+            "unknown"
+          ]
+        },
+        "request_kind": { "type": "string", "enum": ["new", "resume", "followup"] },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["agent_kind", "launch_source", "request_kind"],
+      "additionalProperties": false
+    },
+    "agent_error": {
+      "type": "object",
+      "properties": {
+        "error_class": {
+          "type": "string",
+          "enum": ["binary_not_found", "paste_readiness_timeout", "unknown"]
+        },
+        "agent_kind": {
+          "type": "string",
+          "enum": [
+            "claude-code",
+            "openclaude",
+            "codex",
+            "autohand",
+            "opencode",
+            "mimo-code",
+            "pi",
+            "omp",
+            "gemini",
+            "antigravity",
+            "aider",
+            "goose",
+            "amp",
+            "kilo",
+            "kiro",
+            "crush",
+            "aug",
+            "cline",
+            "codebuff",
+            "command-code",
+            "continue",
+            "cursor",
+            "droid",
+            "kimi",
+            "mistral-vibe",
+            "qwen-code",
+            "rovo",
+            "hermes",
+            "openclaw",
+            "copilot",
+            "grok",
+            "devin",
+            "ante",
+            "trae",
+            "other"
+          ]
+        },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["error_class", "agent_kind"],
+      "additionalProperties": false
+    },
+    "daemon_start_failed": {
+      "type": "object",
+      "properties": {
+        "error_class": {
+          "type": "string",
+          "enum": ["binary_not_found", "paste_readiness_timeout", "unknown"]
+        }
+      },
+      "required": ["error_class"],
+      "additionalProperties": false
+    },
+    "settings_changed": {
+      "type": "object",
+      "properties": {
+        "setting_key": {
+          "type": "string",
+          "enum": [
+            "editorAutoSave",
+            "experimentalMobile",
+            "experimentalTerminalAttention",
+            "experimentalAgentHibernation",
+            "geminiCliOAuthEnabled"
+          ]
+        },
+        "value_kind": { "type": "string", "enum": ["bool", "enum"] }
+      },
+      "required": ["setting_key", "value_kind"],
+      "additionalProperties": false
+    },
+    "telemetry_opted_in": {
+      "type": "object",
+      "properties": { "via": { "type": "string", "enum": ["first_launch_banner", "settings"] } },
+      "required": ["via"],
+      "additionalProperties": false
+    },
+    "telemetry_opted_out": {
+      "type": "object",
+      "properties": { "via": { "type": "string", "enum": ["first_launch_banner", "settings"] } },
+      "required": ["via"],
+      "additionalProperties": false
+    },
+    "yiru_cli_feature_tip_shown": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string", "enum": ["app_open", "manual"] },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["source"],
+      "additionalProperties": false
+    },
+    "yiru_cli_feature_tip_setup_clicked": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string", "enum": ["app_open", "manual"] },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["source"],
+      "additionalProperties": false
+    },
+    "yiru_cli_feature_tip_setup_result": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string", "enum": ["app_open", "manual"] },
+        "result": {
+          "type": "string",
+          "enum": ["installed", "needs_attention", "dev_preview", "failed"]
+        },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["source", "result"],
+      "additionalProperties": false
+    },
+    "command_palette_feature_tip_shown": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string", "enum": ["app_open", "manual"] },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["source"],
+      "additionalProperties": false
+    },
+    "command_palette_feature_tip_acknowledged": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string", "enum": ["app_open", "manual"] },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["source"],
+      "additionalProperties": false
+    },
+    "feature_wall_opened": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string", "enum": ["help_menu", "popup", "onboarding", "unknown"] }
+      },
+      "required": ["source"],
+      "additionalProperties": false
+    },
+    "feature_wall_closed": {
+      "type": "object",
+      "properties": {
+        "dwell_ms": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "source": { "type": "string", "enum": ["help_menu", "popup", "onboarding", "unknown"] },
+        "exit_action": { "type": "string", "enum": ["done", "dismissed", "onboarding_continue"] },
+        "furthest_step": {
+          "type": "string",
+          "enum": [
+            "workspaces",
+            "agents_statuses",
+            "agents_usage",
+            "agents_orchestration",
+            "workbench_terminal",
+            "workbench_editor",
+            "workbench_browser",
+            "review_notes",
+            "review_pr_view",
+            "review_ship"
+          ]
+        },
+        "last_group_id": {
+          "type": "string",
+          "enum": ["workspaces", "agents-orchestration", "workbench", "review"]
+        },
+        "visited_workflow_count": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "visited_substep_count": { "type": "integer", "minimum": 0, "maximum": 9 },
+        "completed_workflow_count": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "completed_substep_count": { "type": "integer", "minimum": 0, "maximum": 9 }
+      },
+      "required": ["dwell_ms"],
+      "additionalProperties": false
+    },
+    "feature_wall_tile_focused": {
+      "type": "object",
+      "properties": {
+        "tile_id": { "type": "string", "enum": ["tile-01", "tile-02", "tile-04", "tile-08"] }
+      },
+      "required": ["tile_id"],
+      "additionalProperties": false
+    },
+    "feature_wall_group_selected": {
+      "type": "object",
+      "properties": {
+        "group_id": {
+          "type": "string",
+          "enum": ["workspaces", "agents-orchestration", "workbench", "review"]
+        },
+        "source": { "type": "string", "enum": ["help_menu", "popup", "onboarding", "unknown"] }
+      },
+      "required": ["group_id", "source"],
+      "additionalProperties": false
+    },
+    "feature_wall_feature_selected": {
+      "type": "object",
+      "properties": {
+        "group_id": {
+          "type": "string",
+          "enum": ["workspaces", "agents-orchestration", "workbench", "review"]
+        },
+        "tile_id": { "type": "string", "enum": ["tile-01", "tile-02", "tile-04", "tile-08"] },
+        "source": { "type": "string", "enum": ["help_menu", "popup", "onboarding", "unknown"] }
+      },
+      "required": ["group_id", "tile_id", "source"],
+      "additionalProperties": false
+    },
+    "add_repo_setup_step_action": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": ["open_primary", "create_worktree", "configure", "skip", "open_existing", "back"]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "local_folder_picker",
+            "runtime_server_path",
+            "ssh_remote_path",
+            "clone_url",
+            "create_project"
+          ]
+        },
+        "existing_workspace_count": { "type": "integer", "minimum": 1, "maximum": 50 },
+        "existing_linked_workspace_count": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["action"],
+      "additionalProperties": false
+    },
+    "add_repo_existing_workspaces_detected": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "local_folder_picker",
+            "runtime_server_path",
+            "ssh_remote_path",
+            "clone_url",
+            "create_project"
+          ]
+        },
+        "existing_workspace_count": { "type": "integer", "minimum": 1, "maximum": 50 },
+        "existing_linked_workspace_count": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "main_workspace_count": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "branch_named_workspace_count": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "detached_workspace_count": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "custom_named_workspace_count": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "sparse_workspace_count": { "type": "integer", "minimum": 0, "maximum": 50 },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": [
+        "source",
+        "existing_workspace_count",
+        "existing_linked_workspace_count",
+        "main_workspace_count",
+        "branch_named_workspace_count",
+        "detached_workspace_count",
+        "custom_named_workspace_count",
+        "sparse_workspace_count"
+      ],
+      "additionalProperties": false
+    },
+    "add_repo_default_checkout_handoff": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "local_folder_picker",
+            "runtime_server_path",
+            "ssh_remote_path",
+            "clone_url",
+            "create_project",
+            "onboarding_open_folder",
+            "onboarding_clone_url",
+            "project_added_compat"
+          ]
+        },
+        "result": { "type": "string", "enum": ["opened_default_checkout", "revealed_project"] },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "loaded_default_checkout",
+            "detected_default_checkout",
+            "no_authoritative_detection",
+            "no_default_checkout",
+            "show_detected_default_failed",
+            "show_detected_linked_failed",
+            "authoritative_refresh_failed",
+            "linked_external_refresh_failed",
+            "refreshed_default_missing"
+          ]
+        },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["source", "result", "reason"],
+      "additionalProperties": false
+    },
+    "workspace_create_failed": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": [
+            "command_palette",
+            "sidebar",
+            "shortcut",
+            "drag_drop",
+            "onboarding",
+            "terminal_context_menu",
+            "unknown"
+          ]
+        },
+        "error_class": {
+          "type": "string",
+          "enum": [
+            "git_failed",
+            "path_collision",
+            "permission_denied",
+            "base_ref_missing",
+            "unknown"
+          ]
+        },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["source", "error_class"],
+      "additionalProperties": false
+    },
+    "setup_script_prompt_shown": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["import_available", "configure_needed"] },
+        "provider": {
+          "type": "string",
+          "enum": ["superset", "conductor", "codex", "cmux", "package-manager"]
+        },
+        "file_count_bucket": { "type": "string", "enum": ["0", "1", "2-3", "4+"] },
+        "unsupported_field_count_bucket": { "type": "string", "enum": ["0", "1", "2-3", "4+"] },
+        "has_shared_hooks": { "type": "boolean" },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": [
+        "mode",
+        "file_count_bucket",
+        "unsupported_field_count_bucket",
+        "has_shared_hooks"
+      ],
+      "additionalProperties": false
+    },
+    "setup_script_prompt_action": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["import_available", "configure_needed"] },
+        "provider": {
+          "type": "string",
+          "enum": ["superset", "conductor", "codex", "cmux", "package-manager"]
+        },
+        "file_count_bucket": { "type": "string", "enum": ["0", "1", "2-3", "4+"] },
+        "unsupported_field_count_bucket": { "type": "string", "enum": ["0", "1", "2-3", "4+"] },
+        "has_shared_hooks": { "type": "boolean" },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "action": {
+          "type": "string",
+          "enum": [
+            "import_completed",
+            "import_failed",
+            "configure_clicked",
+            "dismissed",
+            "save_detected_setup_clicked",
+            "save_detected_setup_completed",
+            "save_detected_setup_failed"
+          ]
+        },
+        "edited_before_save": { "type": "boolean" }
+      },
+      "required": [
+        "mode",
+        "file_count_bucket",
+        "unsupported_field_count_bucket",
+        "has_shared_hooks",
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "agent_hook_install_failed": {
+      "type": "object",
+      "properties": {
+        "agent": {
+          "type": "string",
+          "enum": [
+            "claude",
+            "openclaude",
+            "codex",
+            "gemini",
+            "antigravity",
+            "amp",
+            "cursor",
+            "droid",
+            "command-code",
+            "grok",
+            "copilot",
+            "hermes",
+            "devin",
+            "kimi"
+          ]
+        },
+        "error_message": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["agent", "error_message"],
+      "additionalProperties": false
+    },
+    "agent_hook_unattributed": {
+      "type": "object",
+      "properties": {
+        "reason": { "type": "string", "enum": ["empty_pane_key", "unknown_tab_id"] }
+      },
+      "required": ["reason"],
+      "additionalProperties": false
+    },
+    "add_repo_nested_scan_result": {
+      "type": "object",
+      "properties": {
+        "attempt_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "surface": { "type": "string", "enum": ["onboarding", "sidebar"] },
+        "runtime_kind": { "type": "string", "enum": ["local", "runtime", "ssh"] },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "result": {
+          "type": "string",
+          "enum": ["review_shown", "git_repo", "no_nested_repos", "scan_failed"]
+        },
+        "selected_path_kind": { "type": "string", "enum": ["git_repo", "non_git_folder"] },
+        "found_count": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "found_count_bucket": { "type": "string", "enum": ["0", "1", "2-3", "4-7", "8-15", "16+"] },
+        "truncated": { "type": "boolean" },
+        "timed_out": { "type": "boolean" }
+      },
+      "required": [
+        "attempt_id",
+        "surface",
+        "runtime_kind",
+        "result",
+        "found_count",
+        "found_count_bucket",
+        "truncated",
+        "timed_out"
+      ],
+      "additionalProperties": false
+    },
+    "add_repo_nested_import_action": {
+      "type": "object",
+      "properties": {
+        "attempt_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "surface": { "type": "string", "enum": ["onboarding", "sidebar"] },
+        "runtime_kind": { "type": "string", "enum": ["local", "runtime", "ssh"] },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "action": {
+          "type": "string",
+          "enum": ["import_group", "import_separate", "open_as_folder", "back"]
+        },
+        "found_count": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "found_count_bucket": { "type": "string", "enum": ["0", "1", "2-3", "4-7", "8-15", "16+"] },
+        "selected_count": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "selected_count_bucket": {
+          "type": "string",
+          "enum": ["0", "1", "2-3", "4-7", "8-15", "16+"]
+        },
+        "all_selected": { "type": "boolean" }
+      },
+      "required": [
+        "attempt_id",
+        "surface",
+        "runtime_kind",
+        "action",
+        "found_count",
+        "found_count_bucket",
+        "selected_count",
+        "selected_count_bucket",
+        "all_selected"
+      ],
+      "additionalProperties": false
+    },
+    "add_repo_nested_import_result": {
+      "type": "object",
+      "properties": {
+        "attempt_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "surface": { "type": "string", "enum": ["onboarding", "sidebar"] },
+        "runtime_kind": { "type": "string", "enum": ["local", "runtime", "ssh"] },
+        "nth_repo_added": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "mode": { "type": "string", "enum": ["group", "separate"] },
+        "outcome": { "type": "string", "enum": ["success", "partial_failure", "failed"] },
+        "found_count": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "found_count_bucket": { "type": "string", "enum": ["0", "1", "2-3", "4-7", "8-15", "16+"] },
+        "selected_count": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "selected_count_bucket": {
+          "type": "string",
+          "enum": ["0", "1", "2-3", "4-7", "8-15", "16+"]
+        },
+        "imported_count": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "imported_count_bucket": {
+          "type": "string",
+          "enum": ["0", "1", "2-3", "4-7", "8-15", "16+"]
+        },
+        "already_known_count": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "already_known_count_bucket": {
+          "type": "string",
+          "enum": ["0", "1", "2-3", "4-7", "8-15", "16+"]
+        },
+        "failed_count": { "type": "integer", "minimum": 0, "maximum": 500 },
+        "failed_count_bucket": {
+          "type": "string",
+          "enum": ["0", "1", "2-3", "4-7", "8-15", "16+"]
+        },
+        "all_selected": { "type": "boolean" }
+      },
+      "required": [
+        "attempt_id",
+        "surface",
+        "runtime_kind",
+        "mode",
+        "outcome",
+        "found_count",
+        "found_count_bucket",
+        "selected_count",
+        "selected_count_bucket",
+        "imported_count",
+        "imported_count_bucket",
+        "already_known_count",
+        "already_known_count_bucket",
+        "failed_count",
+        "failed_count_bucket",
+        "all_selected"
+      ],
+      "additionalProperties": false
+    },
+    "onboarding_started": {
+      "type": "object",
+      "properties": {
+        "resumed_from_step": { "type": "integer", "minimum": 1, "maximum": 7 },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "additionalProperties": false
+    },
+    "onboarding_step_viewed": {
+      "type": "object",
+      "properties": {
+        "step": { "type": "integer", "minimum": 1, "maximum": 7 },
+        "value_kind": {
+          "type": "string",
+          "enum": [
+            "agent",
+            "theme",
+            "notifications",
+            "agent_setup",
+            "integrations",
+            "windows_terminal",
+            "tour",
+            "repo"
+          ]
+        },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["step", "value_kind"],
+      "additionalProperties": false
+    },
+    "onboarding_step_completed": {
+      "type": "object",
+      "properties": {
+        "step": { "type": "integer", "minimum": 1, "maximum": 7 },
+        "value_kind": {
+          "type": "string",
+          "enum": [
+            "agent",
+            "theme",
+            "notifications",
+            "agent_setup",
+            "integrations",
+            "windows_terminal",
+            "tour",
+            "repo"
+          ]
+        },
+        "duration_ms": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "advanced_via": { "type": "string", "enum": ["button", "keyboard"] },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["step", "value_kind"],
+      "additionalProperties": false
+    },
+    "onboarding_step_skipped": {
+      "type": "object",
+      "properties": {
+        "step": { "type": "integer", "minimum": 1, "maximum": 7 },
+        "value_kind": {
+          "type": "string",
+          "enum": [
+            "agent",
+            "theme",
+            "notifications",
+            "agent_setup",
+            "integrations",
+            "windows_terminal",
+            "tour",
+            "repo"
+          ]
+        },
+        "duration_ms": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "advanced_via": { "type": "string", "enum": ["button", "keyboard"] },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["step", "value_kind"],
+      "additionalProperties": false
+    },
+    "onboarding_tour_outcome": {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "type": "string",
+          "enum": ["skipped_intro", "started_partial", "completed_inline"]
+        },
+        "intro_duration_ms": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "tour_dwell_ms": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "furthest_step": {
+          "type": "string",
+          "enum": [
+            "workspaces",
+            "agents_statuses",
+            "agents_usage",
+            "agents_orchestration",
+            "workbench_terminal",
+            "workbench_editor",
+            "workbench_browser",
+            "review_notes",
+            "review_pr_view",
+            "review_ship"
+          ]
+        },
+        "visited_workflow_count": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "visited_substep_count": { "type": "integer", "minimum": 0, "maximum": 9 },
+        "completed_workflow_count": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "completed_substep_count": { "type": "integer", "minimum": 0, "maximum": 9 },
+        "advanced_via": { "type": "string", "enum": ["button", "keyboard"] },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["outcome"],
+      "additionalProperties": false
+    },
+    "onboarding_step4_path_clicked": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string", "enum": ["open_folder", "clone_url", "add_project_modal"] },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["path"],
+      "additionalProperties": false
+    },
+    "onboarding_step4_path_failed": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string", "enum": ["open_folder", "clone_url", "add_project_modal"] },
+        "reason": {
+          "type": "string",
+          "enum": ["invalid_path", "clone_failed", "cancelled", "unknown"]
+        },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["path", "reason"],
+      "additionalProperties": false
+    },
+    "onboarding_windows_terminal_snapshot": {
+      "type": "object",
+      "properties": {
+        "default_shell": {
+          "type": "string",
+          "enum": ["powershell", "command_prompt", "git_bash", "wsl", "other"]
+        },
+        "right_click_behavior": { "type": "string", "enum": ["paste", "menu"] },
+        "exit_action": { "type": "string", "enum": ["continue", "skip_to_project_setup"] },
+        "duration_ms": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "advanced_via": { "type": "string", "enum": ["button", "keyboard"] },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["default_shell", "right_click_behavior", "exit_action"],
+      "additionalProperties": false
+    },
+    "onboarding_completed": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string", "enum": ["open_folder", "clone_url", "add_project_modal"] },
+        "total_duration_ms": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["path", "total_duration_ms"],
+      "additionalProperties": false
+    },
+    "onboarding_dismissed": {
+      "type": "object",
+      "properties": {
+        "last_step": { "type": "integer", "minimum": 1, "maximum": 7 },
+        "duration_ms": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "advanced_via": { "type": "string", "enum": ["button", "keyboard"] },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["last_step"],
+      "additionalProperties": false
+    },
+    "onboarding_agent_picked": {
+      "type": "object",
+      "properties": {
+        "agent_kind": {
+          "type": "string",
+          "enum": [
+            "claude-code",
+            "openclaude",
+            "codex",
+            "autohand",
+            "opencode",
+            "mimo-code",
+            "pi",
+            "omp",
+            "gemini",
+            "antigravity",
+            "aider",
+            "goose",
+            "amp",
+            "kilo",
+            "kiro",
+            "crush",
+            "aug",
+            "cline",
+            "codebuff",
+            "command-code",
+            "continue",
+            "cursor",
+            "droid",
+            "kimi",
+            "mistral-vibe",
+            "qwen-code",
+            "rovo",
+            "hermes",
+            "openclaw",
+            "copilot",
+            "grok",
+            "devin",
+            "ante",
+            "trae",
+            "other"
+          ]
+        },
+        "on_path": { "type": "boolean" },
+        "detected_count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "detection_state": { "type": "string", "enum": ["complete", "pending"] },
+        "from_collapsed_section": { "type": "boolean" },
+        "path_source": { "type": "string", "enum": ["shell_hydrate", "sync_seed_only"] },
+        "path_failure_reason": {
+          "type": "string",
+          "enum": ["none", "no_shell", "timeout", "spawn_error", "empty_path"]
+        },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": [
+        "agent_kind",
+        "on_path",
+        "detected_count",
+        "detection_state",
+        "from_collapsed_section"
+      ],
+      "additionalProperties": false
+    },
+    "activation_checklist_item_completed": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "type": "string",
+          "enum": [
+            "addedRepo",
+            "addedFolder",
+            "choseAgent",
+            "ranFirstAgent",
+            "ranSecondAgentOnSameTask",
+            "triedCmdJ",
+            "shapedSidebar",
+            "reviewedDiff",
+            "openedPr",
+            "openedFile",
+            "ranAgentOnFile"
+          ]
+        },
+        "time_since_completed_ms": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["item", "time_since_completed_ms"],
+      "additionalProperties": false
+    },
+    "onboarding_ghostty_discovered": {
+      "type": "object",
+      "properties": {
+        "state": { "type": "string", "enum": ["found", "absent", "imported"] },
+        "field_group_count_bucket": { "type": "string", "enum": ["0", "1-3", "4-7", "8+"] },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["state", "field_group_count_bucket"],
+      "additionalProperties": false
+    },
+    "onboarding_ghostty_import_clicked": {
+      "type": "object",
+      "properties": {
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "additionalProperties": false
+    },
+    "onboarding_ghostty_import_failed": {
+      "type": "object",
+      "properties": {
+        "reason": { "type": "string", "enum": ["no_config", "empty_diff", "unknown"] },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["reason"],
+      "additionalProperties": false
+    },
+    "onboarding_feature_setup_toggled": {
+      "type": "object",
+      "properties": {
+        "feature": { "type": "string", "enum": ["browser_use", "computer_use", "orchestration"] },
+        "selected": { "type": "boolean" },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["feature", "selected"],
+      "additionalProperties": false
+    },
+    "onboarding_feature_setup_run": {
+      "type": "object",
+      "properties": {
+        "browser_use": { "type": "boolean" },
+        "computer_use": { "type": "boolean" },
+        "orchestration": { "type": "boolean" },
+        "selected_count": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "cli_touched": { "type": "boolean" },
+        "skill_commands_copied": { "type": "boolean" },
+        "skill_install_command_prepared": { "type": "boolean" },
+        "computer_use_permissions_opened": { "type": "boolean" },
+        "warning_count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": [
+        "browser_use",
+        "computer_use",
+        "orchestration",
+        "selected_count",
+        "cli_touched",
+        "skill_commands_copied",
+        "skill_install_command_prepared",
+        "computer_use_permissions_opened",
+        "warning_count"
+      ],
+      "additionalProperties": false
+    },
+    "onboarding_feature_setup_terminal_opened": {
+      "type": "object",
+      "properties": {
+        "browser_use": { "type": "boolean" },
+        "computer_use": { "type": "boolean" },
+        "orchestration": { "type": "boolean" },
+        "selected_count": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["browser_use", "computer_use", "orchestration", "selected_count"],
+      "additionalProperties": false
+    },
+    "onboarding_feature_setup_terminal_interacted": {
+      "type": "object",
+      "properties": {
+        "browser_use": { "type": "boolean" },
+        "computer_use": { "type": "boolean" },
+        "orchestration": { "type": "boolean" },
+        "selected_count": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "method": { "type": "string", "enum": ["keyboard", "pointer"] },
+        "cohort": { "type": "string", "enum": ["fresh_install", "upgrade_backfill"] }
+      },
+      "required": ["browser_use", "computer_use", "orchestration", "selected_count", "method"],
+      "additionalProperties": false
+    },
+    "smart_sort_class_distribution": {
+      "type": "object",
+      "properties": {
+        "class_1": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "class_2": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "class_3": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "class_4": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "total_worktrees": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      },
+      "required": ["class_1", "class_2", "class_3", "class_4", "total_worktrees"],
+      "additionalProperties": false
+    },
+    "smart_sort_class_1_promotion": {
+      "type": "object",
+      "properties": {
+        "cause": { "type": "string", "enum": ["blocked", "waiting", "title-heuristic"] }
+      },
+      "required": ["cause"],
+      "additionalProperties": false
+    },
+    "smart_to_recent_switch": {
+      "type": "object",
+      "properties": { "_v": { "type": "number", "const": 1 } },
+      "additionalProperties": false
+    },
+    "contextual_tour_shown": {
+      "type": "object",
+      "properties": {
+        "tour_id": {
+          "type": "string",
+          "enum": ["workspace-agent-sessions", "browser", "workspace-creation"]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "workspace_agent_sessions_visible",
+            "browser_visible",
+            "workspace_creation_visible",
+            "workspace_creation_modal",
+            "setup_guide_parallel_work",
+            "unknown"
+          ]
+        },
+        "was_feature_previously_interacted": { "type": "boolean" }
+      },
+      "required": ["tour_id", "source", "was_feature_previously_interacted"],
+      "additionalProperties": false
+    },
+    "contextual_tour_outcome": {
+      "type": "object",
+      "properties": {
+        "tour_id": {
+          "type": "string",
+          "enum": ["workspace-agent-sessions", "browser", "workspace-creation"]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "workspace_agent_sessions_visible",
+            "browser_visible",
+            "workspace_creation_visible",
+            "workspace_creation_modal",
+            "setup_guide_parallel_work",
+            "unknown"
+          ]
+        },
+        "outcome": { "type": "string", "enum": ["completed", "skipped", "cancelled"] },
+        "steps_seen": { "type": "integer", "minimum": 0, "maximum": 8 },
+        "total_steps": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "furthest_step_index": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "defined_step_count": { "type": "integer", "minimum": 1, "maximum": 8 }
+      },
+      "required": ["tour_id", "source", "outcome", "steps_seen", "total_steps"],
+      "additionalProperties": false
+    },
+    "setup_guide_opened": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["sidebar", "contextual_tour", "settings", "feature_wall", "help_menu", "unknown"]
+        },
+        "initial_completed_count": { "type": "integer", "minimum": 0, "maximum": 8 },
+        "total_steps": { "type": "number", "const": 8 },
+        "first_incomplete_step_id": {
+          "type": "string",
+          "enum": [
+            "two-worktrees",
+            "browser",
+            "notifications",
+            "default-agent",
+            "agent-capabilities",
+            "setup-script",
+            "add-two-repos",
+            "none"
+          ]
+        }
+      },
+      "required": ["source", "initial_completed_count", "total_steps", "first_incomplete_step_id"],
+      "additionalProperties": false
+    },
+    "setup_guide_closed": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["sidebar", "contextual_tour", "settings", "feature_wall", "help_menu", "unknown"]
+        },
+        "outcome": { "type": "string", "enum": ["completed", "dismissed", "interrupted"] },
+        "initial_completed_count": { "type": "integer", "minimum": 0, "maximum": 8 },
+        "final_completed_count": { "type": "integer", "minimum": 0, "maximum": 8 },
+        "total_steps": { "type": "number", "const": 8 },
+        "active_step_id": {
+          "type": "string",
+          "enum": [
+            "two-worktrees",
+            "browser",
+            "notifications",
+            "default-agent",
+            "agent-capabilities",
+            "setup-script",
+            "add-two-repos",
+            "none"
+          ]
+        }
+      },
+      "required": [
+        "source",
+        "outcome",
+        "initial_completed_count",
+        "final_completed_count",
+        "total_steps",
+        "active_step_id"
+      ],
+      "additionalProperties": false
+    },
+    "setup_guide_step_completed": {
+      "type": "object",
+      "properties": {
+        "step_id": {
+          "type": "string",
+          "enum": [
+            "two-worktrees",
+            "browser",
+            "notifications",
+            "default-agent",
+            "agent-capabilities",
+            "setup-script",
+            "add-two-repos"
+          ]
+        },
+        "section_id": { "type": "string", "enum": ["parallel-work", "setup"] },
+        "completed_count": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "total_steps": { "type": "number", "const": 8 },
+        "setup_guide_visible": { "type": "boolean" }
+      },
+      "required": [
+        "step_id",
+        "section_id",
+        "completed_count",
+        "total_steps",
+        "setup_guide_visible"
+      ],
+      "additionalProperties": false
+    },
+    "terminal_pane_split": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["contextual_tour", "keyboard", "context_menu", "command", "unknown"]
+        },
+        "direction": { "type": "string", "enum": ["vertical", "horizontal"] }
+      },
+      "required": ["source", "direction"],
+      "additionalProperties": false
+    },
+    "editor_external_change_conflict_shown": {
+      "type": "object",
+      "properties": {
+        "surface": { "type": "string", "enum": ["edit", "unstaged-diff"] },
+        "transport": { "type": "string", "enum": ["local", "ssh", "runtime"] },
+        "origin": { "type": "string", "enum": ["live", "restore"] }
+      },
+      "required": ["surface", "transport", "origin"],
+      "additionalProperties": false
+    },
+    "editor_external_change_conflict_action": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": ["reload", "keep", "compare", "undo_reload", "save_overwrite"]
+        },
+        "surface": { "type": "string", "enum": ["edit", "unstaged-diff"] },
+        "transport": { "type": "string", "enum": ["local", "ssh", "runtime"] }
+      },
+      "required": ["action", "surface", "transport"],
+      "additionalProperties": false
+    },
+    "support_report_submitted": {
+      "type": "object",
+      "properties": {
+        "report_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+        },
+        "report_type": { "type": "string", "enum": ["feedback", "crash", "diagnostics"] },
+        "report_text": { "type": "string", "minLength": 1, "maxLength": 8000 },
+        "submit_anonymously": { "type": "boolean" },
+        "github_login": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "github_email": { "type": "string", "minLength": 1, "maxLength": 254 },
+        "app_version": { "type": "string", "maxLength": 64 },
+        "platform": { "type": "string", "maxLength": 64 },
+        "arch": { "type": "string", "maxLength": 64 },
+        "os_release": { "type": "string", "maxLength": 64 },
+        "yiru_channel": { "type": "string", "enum": ["stable", "rc"] },
+        "diagnostic_bundle_id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{16,64}$" },
+        "diagnostic_excerpt": { "type": "string", "minLength": 1, "maxLength": 16000 },
+        "diagnostic_bytes": { "type": "integer", "minimum": 0, "maximum": 4194304 },
+        "diagnostic_span_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "diagnostic_excerpt_truncated": { "type": "boolean" }
+      },
+      "required": [
+        "report_id",
+        "report_type",
+        "submit_anonymously",
+        "app_version",
+        "platform",
+        "arch",
+        "os_release",
+        "yiru_channel"
+      ],
+      "additionalProperties": false
+    },
+    "direct_ssh_reconnect_operation": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["reconnect", "prepare_only"] },
+        "reason": {
+          "type": "string",
+          "enum": ["reconnect", "initial_hydration", "workspace_snapshot", "wake_refresh"]
+        },
+        "outcome": {
+          "type": "string",
+          "enum": ["complete", "degraded", "canceled", "stale", "stopped", "stabilizing"]
+        },
+        "terminal_retried_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "terminal_stale_binding_cleared_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "terminal_correction_succeeded_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "catalog_complete_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "catalog_degraded_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "catalog_stale_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "repo_complete_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "repo_non_authoritative_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "repo_retrying_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "repo_timed_out_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "repo_cancel_budget_exhausted_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "repo_canceled_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "repo_stale_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "repo_rejected_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "lineage_complete_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "lineage_degraded_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "lineage_canceled_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "lineage_stale_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "lineage_not_started_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "git_worktree_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "folder_workspace_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "ambiguous_owner_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "contradictory_owner_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "total_duration_ms": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "terminal_finalization_duration_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 86400000
+        },
+        "catalog_duration_ms": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "queue_wait_sample_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "queue_wait_duration_ms_p50": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "queue_wait_duration_ms_p95": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "queue_wait_duration_ms_p99": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "queue_wait_duration_ms_max": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "provider_execution_sample_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "provider_execution_duration_ms_p50": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 86400000
+        },
+        "provider_execution_duration_ms_p95": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 86400000
+        },
+        "provider_execution_duration_ms_p99": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 86400000
+        },
+        "provider_execution_duration_ms_max": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 86400000
+        },
+        "timeout_retry_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "locally_settled_waiter_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "cancel_debt_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "replacement_admission_delayed_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "overlapping_join_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "coordinator_owned_direct_ssh_detected_worktree_concurrency_peak": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "estimated_late_work_allowance_count": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "authority_rotation_count": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "damped_preparation_count": { "type": "integer", "minimum": 0, "maximum": 1000000 }
+      },
+      "required": [
+        "mode",
+        "reason",
+        "outcome",
+        "terminal_retried_count",
+        "terminal_stale_binding_cleared_count",
+        "terminal_correction_succeeded_count",
+        "catalog_complete_count",
+        "catalog_degraded_count",
+        "catalog_stale_count",
+        "repo_complete_count",
+        "repo_non_authoritative_count",
+        "repo_retrying_count",
+        "repo_timed_out_count",
+        "repo_cancel_budget_exhausted_count",
+        "repo_canceled_count",
+        "repo_stale_count",
+        "repo_rejected_count",
+        "lineage_complete_count",
+        "lineage_degraded_count",
+        "lineage_canceled_count",
+        "lineage_stale_count",
+        "lineage_not_started_count",
+        "git_worktree_count",
+        "folder_workspace_count",
+        "ambiguous_owner_count",
+        "contradictory_owner_count",
+        "total_duration_ms",
+        "terminal_finalization_duration_ms",
+        "catalog_duration_ms",
+        "queue_wait_sample_count",
+        "queue_wait_duration_ms_p50",
+        "queue_wait_duration_ms_p95",
+        "queue_wait_duration_ms_p99",
+        "queue_wait_duration_ms_max",
+        "provider_execution_sample_count",
+        "provider_execution_duration_ms_p50",
+        "provider_execution_duration_ms_p95",
+        "provider_execution_duration_ms_p99",
+        "provider_execution_duration_ms_max",
+        "timeout_retry_count",
+        "locally_settled_waiter_count",
+        "cancel_debt_count",
+        "replacement_admission_delayed_count",
+        "overlapping_join_count",
+        "coordinator_owned_direct_ssh_detected_worktree_concurrency_peak",
+        "estimated_late_work_allowance_count",
+        "authority_rotation_count",
+        "damped_preparation_count"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "app_opened",
+    "app_starred_yiru",
+    "star_nag_outcome",
+    "feature_interaction_usage_bucket_reached",
+    "repo_added",
+    "workspace_created",
+    "agent_started",
+    "agent_prompt_sent",
+    "agent_error",
+    "daemon_start_failed",
+    "settings_changed",
+    "telemetry_opted_in",
+    "telemetry_opted_out",
+    "yiru_cli_feature_tip_shown",
+    "yiru_cli_feature_tip_setup_clicked",
+    "yiru_cli_feature_tip_setup_result",
+    "command_palette_feature_tip_shown",
+    "command_palette_feature_tip_acknowledged",
+    "feature_wall_opened",
+    "feature_wall_closed",
+    "feature_wall_tile_focused",
+    "feature_wall_group_selected",
+    "feature_wall_feature_selected",
+    "add_repo_setup_step_action",
+    "add_repo_existing_workspaces_detected",
+    "add_repo_default_checkout_handoff",
+    "workspace_create_failed",
+    "setup_script_prompt_shown",
+    "setup_script_prompt_action",
+    "agent_hook_install_failed",
+    "agent_hook_unattributed",
+    "add_repo_nested_scan_result",
+    "add_repo_nested_import_action",
+    "add_repo_nested_import_result",
+    "onboarding_started",
+    "onboarding_step_viewed",
+    "onboarding_step_completed",
+    "onboarding_step_skipped",
+    "onboarding_tour_outcome",
+    "onboarding_step4_path_clicked",
+    "onboarding_step4_path_failed",
+    "onboarding_windows_terminal_snapshot",
+    "onboarding_completed",
+    "onboarding_dismissed",
+    "onboarding_agent_picked",
+    "activation_checklist_item_completed",
+    "onboarding_ghostty_discovered",
+    "onboarding_ghostty_import_clicked",
+    "onboarding_ghostty_import_failed",
+    "onboarding_feature_setup_toggled",
+    "onboarding_feature_setup_run",
+    "onboarding_feature_setup_terminal_opened",
+    "onboarding_feature_setup_terminal_interacted",
+    "smart_sort_class_distribution",
+    "smart_sort_class_1_promotion",
+    "smart_to_recent_switch",
+    "contextual_tour_shown",
+    "contextual_tour_outcome",
+    "setup_guide_opened",
+    "setup_guide_closed",
+    "setup_guide_step_completed",
+    "terminal_pane_split",
+    "editor_external_change_conflict_shown",
+    "editor_external_change_conflict_action",
+    "support_report_submitted",
+    "direct_ssh_reconnect_operation"
+  ],
+  "additionalProperties": false
+}

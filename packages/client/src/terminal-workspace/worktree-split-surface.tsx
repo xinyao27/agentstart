@@ -1,4 +1,4 @@
-import type { TabGroupLayoutNode } from '@yiru/runtime-protocol/workbench/types'
+import type { TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
 import React from 'react'
 
 import EmulatorPaneOverlayLayer from '../emulator-pane/overlay-layer'

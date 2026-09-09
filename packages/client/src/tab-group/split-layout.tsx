@@ -1,5 +1,5 @@
 import { DndContext, DragOverlay } from '@dnd-kit/core'
-import type { TabGroupLayoutNode } from '@yiru/runtime-protocol/workbench/types'
+import type { TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
 import { useEffect, useRef, useState } from 'react'
 import { useAppStore } from '~renderer/store/state'
 import { cn } from '~renderer/ui/class-names'

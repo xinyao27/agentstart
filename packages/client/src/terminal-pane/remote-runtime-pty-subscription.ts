@@ -1,4 +1,4 @@
-import { encodeRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
+import { encodeRuntimePtyId } from '@yiru/protocol/terminal-identity'
 import { isRemoteTerminalSurfaceTabId } from '~renderer/runtime/remote-terminal-surface-id'
 import { getRuntimeTerminalMultiplexer } from '~renderer/runtime/terminal-multiplex/registry'
 import { publishRendererTerminalSideEffects } from '~renderer/runtime/terminal-side-effect-client'
@@ -103,13 +103,14 @@ export class RemoteRuntimePtySubscription {
             }
           })
         },
-        onSideEffectBatch: (batch) => {
+        onSideEffectBatch: (batch, meta) => {
           if (!isCurrent() || !subscribedPtyId) {
             return
           }
           publishRendererTerminalSideEffects({
             ptyId: subscribedPtyId,
-            seq: this.state.nextSideEffectSequence(),
+            seq: meta.seq,
+            epoch: meta.epoch,
             facts: batch.facts,
             replay: batch.replay
           })

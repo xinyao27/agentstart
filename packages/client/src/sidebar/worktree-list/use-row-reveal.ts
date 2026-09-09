@@ -1,5 +1,6 @@
 import type { LegendListRef } from '@legendapp/list/react'
-import type { ProjectGroup, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import type { PendingSidebarRowReveal } from '~renderer/application-shell/state/slice'

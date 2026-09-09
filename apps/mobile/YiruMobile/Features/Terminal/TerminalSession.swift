@@ -53,7 +53,6 @@ nonisolated protocol TerminalSessionRuntime: Sendable {
         viewport: TerminalGridSize?
     ) async throws
         -> any TerminalSession
-    func focusTerminal(hostID: String, terminalID: String) async throws
     func inferAgentInterrupt(
         hostID: String,
         baseline: TerminalAgentInterruptBaseline

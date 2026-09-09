@@ -1,4 +1,4 @@
-import { brandEphemeralSetupTerminalWorktreeId } from '@yiru/runtime-protocol/workbench/ephemeral-setup-terminal-worktree-id'
+import { brandEphemeralSetupTerminalWorktreeId } from '@yiru/protocol/terminal/setup-identity'
 import type { KeyboardEvent } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import {

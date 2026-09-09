@@ -1,7 +1,4 @@
-import {
-  isWindowsAbsolutePathLike,
-  relativePathInsideRoot
-} from '@yiru/runtime-protocol/model/platform'
+import { isWindowsAbsolutePathLike, relativePathInsideRoot } from '@yiru/protocol/host/path'
 import type { StateCreator } from 'zustand'
 import { getExplicitRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
 

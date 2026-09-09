@@ -1,20 +1,15 @@
-import {
-  normalizeExecutionHostId,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { getDefaultRepoHookSettings } from '@yiru/runtime-protocol/workbench/constants'
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type {
-  RepoHookSettings,
-  SetupAgentStartupPolicy
-} from '@yiru/runtime-protocol/workbench/types'
-import { isWorkItemLookupText } from '~renderer/sidebar/work-item-lookup-text'
-
+import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
+import { normalizeExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { SetupAgentStartupPolicy } from '@yiru/protocol/worktree/hooks'
+import { getDefaultRepoHookSettings } from '@yiru/protocol/worktree/hooks'
 import {
   getLinkedWorkItemSuggestedName,
-  getLinkedWorkItemWorkspaceName,
-  type LinkedWorkItemSummary
-} from './workspace-creation'
+  getLinkedWorkItemWorkspaceName
+} from '~renderer/new-workspace/naming/name'
+import { isWorkItemLookupText } from '~renderer/sidebar/work-item-lookup-text'
+
+import type { LinkedWorkItemSummary } from './workspace-creation'
 
 export type InitialWorkspaceRunSeedInput = {
   draftProjectId?: string | null

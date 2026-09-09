@@ -1,8 +1,8 @@
+import { renderSourceControlActionCommandTemplate } from '@yiru/protocol/source-control/action-recipes'
 import {
   DEFAULT_SOURCE_CONTROL_ACTION_COMMAND_TEMPLATES,
-  renderSourceControlActionCommandTemplate,
   type SourceControlLaunchActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+} from '@yiru/protocol/source-control/ai-actions'
 
 export function buildSourceControlRecoveryAgentCommandInput({
   actionId,

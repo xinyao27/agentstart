@@ -1,8 +1,9 @@
+import { translate } from '~renderer/i18n/i18n'
 import {
   isLockedWorktreeRemovalError,
+  isUnregisteredWorktreeDirectoryError,
   type WorktreeForceDeleteReason
-} from '@yiru/runtime-protocol/workbench/workspace/worktree-removal'
-import { translate } from '~renderer/i18n/i18n'
+} from '~renderer/worktree/removal-policy'
 export type DeleteWorktreeToastCopy = {
   title: string
   description?: string
@@ -36,35 +37,21 @@ export function getDeleteWorktreeToastCopy(
     }
   }
 
+  if (isUnregisteredWorktreeDirectoryError(error)) {
+    return {
+      title: translate(
+        'workspace.remove.unregistered.title',
+        'Workspace directory needs attention'
+      ),
+      description: translate(
+        'workspace.remove.unregistered.description',
+        'Git no longer tracks this workspace. Its directory and files have been kept. Restore its Git registration or move the directory to a safe location, then retry removal.'
+      ),
+      isDestructive: false
+    }
+  }
+
   if (forceDeleteReason) {
-    if (forceDeleteReason === 'orphan-directory') {
-      return {
-        title: translate(
-          'auto.components.sidebar.delete.worktree.toast.1d0fa5c0a5',
-          'Failed to delete workspace {{value0}}',
-          { value0: worktreeName }
-        ),
-        description: translate(
-          'auto.components.sidebar.delete.worktree.toast.0899ebdb28',
-          'Git already forgot this workspace, but its directory is still on disk. Use Force Delete to remove the orphaned directory.'
-        ),
-        isDestructive: false
-      }
-    }
-    if (forceDeleteReason === 'missing-registration') {
-      return {
-        title: translate(
-          'auto.components.sidebar.delete.worktree.toast.1d0fa5c0a5',
-          'Failed to delete workspace {{value0}}',
-          { value0: worktreeName }
-        ),
-        description: translate(
-          'auto.components.sidebar.delete.worktree.toast.905fc8efac',
-          'Git already removed this workspace. Use Force Delete to clear it from Yiru.'
-        ),
-        isDestructive: false
-      }
-    }
     return {
       title: translate(
         'auto.components.sidebar.delete.worktree.toast.1d0fa5c0a5',

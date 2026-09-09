@@ -1,0 +1,21 @@
+mod command_trace;
+mod compare;
+mod diff;
+mod generation;
+mod history;
+mod line_stats;
+mod operations;
+mod remote;
+mod runner;
+mod scope;
+mod staging;
+mod status;
+mod upstream;
+mod urls;
+mod working_status;
+mod write;
+
+pub(crate) use command_trace::GitCommandTrace;
+pub(crate) use generation::{GenerationOverrides, GenerationParams, PullRequestGenerationInput};
+pub(crate) use remote::GitPushTarget;
+pub(crate) use scope::{GitAuthority, GitAuthorityError};

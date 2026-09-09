@@ -1,12 +1,9 @@
-import {
-  FEATURE_WALL_SETUP_STEP_IDS,
-  getFirstIncompleteFeatureWallSetupStepId,
-  getFeatureWallSetupSteps
-} from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
-import type { FeatureWallSetupStepId } from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
+import { FEATURE_WALL_SETUP_STEP_IDS } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import type { JSX } from 'react'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
+import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import { EyeSlash as EyeOff } from '~renderer/icons/hugeicons'
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
@@ -19,18 +16,23 @@ import {
 } from '~renderer/ui/dialog'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
+import {
+  getFirstIncompleteFeatureWallSetupStepId,
+  getFeatureWallSetupSteps
+} from '../feature-wall/content/setup-steps'
 import { FeatureWallSetupChecklist } from '../feature-wall/setup-checklist'
 import { SetupGuideProgressRing } from './progress-ring'
 import { useSetupGuideProgress } from './use-setup-guide-progress'
 import { useSetupGuideOpenCloseTelemetry } from './use-setup-guide-telemetry'
 
 export default function SetupGuideModal(): JSX.Element | null {
+  useUiLocale()
   const activeModal = useAppStore((s) => s.activeModal)
   const modalData = useAppStore((s) => s.modalData)
   const closeModal = useAppStore((s) => s.closeModal)
   const setSetupGuideSidebarDismissed = useAppStore((s) => s.setSetupGuideSidebarDismissed)
   const isOpen = activeModal === 'setup-guide'
-  const setupSteps = (() => getFeatureWallSetupSteps())()
+  const setupSteps = getFeatureWallSetupSteps()
   const [orchestrationSkillInstalled, setOrchestrationSkillInstalled] = useState(false)
   const [browserUseSkillInstalled, setBrowserUseSkillInstalled] = useState(false)
   const progress = useSetupGuideProgress(

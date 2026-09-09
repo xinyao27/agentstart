@@ -1,4 +1,4 @@
-import type { GitHubPRRefreshAlias, PRInfo } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubPRRefreshAlias, PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
 import type { AppState } from '~renderer/store/types'
 
 import { getPRChecksCacheTtl, prChecksCacheSuffix, runtimeScopedRepoCacheKey } from './cache-policy'

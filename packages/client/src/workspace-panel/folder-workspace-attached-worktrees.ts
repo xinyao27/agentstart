@@ -1,13 +1,7 @@
-import type {
-  FolderWorkspace,
-  Worktree,
-  WorktreeLineage,
-  WorkspaceLineage
-} from '@yiru/runtime-protocol/workbench/types'
-import {
-  folderWorkspaceKey,
-  parseWorkspaceKey
-} from '@yiru/runtime-protocol/workbench/workspace/scope'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import { folderWorkspaceKey, parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 export type AttachedWorktreeResolution = {
   folderWorkspace: FolderWorkspace | null

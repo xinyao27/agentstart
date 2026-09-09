@@ -1,8 +1,8 @@
 import type {
   SearchFileResult,
   SearchMatch,
-  SearchResult
-} from '@yiru/runtime-protocol/workbench/types'
+  FileSearchResult as SearchResult
+} from '@yiru/protocol/files/values'
 import type React from 'react'
 import { useDeferredValue, useEffect, useRef } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'

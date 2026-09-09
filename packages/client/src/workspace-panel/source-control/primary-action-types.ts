@@ -1,9 +1,10 @@
+import type { GitUpstreamStatus } from '@yiru/protocol/git/status-types'
+import type { PRState } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { HostedReviewCreationEligibility } from '@yiru/protocol/hosted-review/types'
 import type {
-  HostedReviewCreationEligibility,
   SourceControlPrimaryActionKind,
   SourceControlRemoteOpKind
-} from '@yiru/runtime-protocol/model/review'
-import type { GitUpstreamStatus, PRState } from '@yiru/runtime-protocol/workbench/types'
+} from '~renderer/source-control/workflow/types'
 
 // Why: the primary button collapses to one-label-per-action. Compound
 // kinds ('commit_push', 'commit_sync', 'commit_publish') live in

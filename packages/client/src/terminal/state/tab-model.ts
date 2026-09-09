@@ -1,8 +1,10 @@
-import { parseExecutionHostId, type ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import { splitWorktreeIdForFilesystem } from '@yiru/runtime-protocol/model/workspace'
-import { DEFAULT_REPO_BADGE_COLOR } from '@yiru/runtime-protocol/workbench/constants'
-import type { Repo, Tab, TerminalTab, Worktree } from '@yiru/runtime-protocol/workbench/types'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { parseExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import { DEFAULT_REPO_BADGE_COLOR } from '@yiru/protocol/project/appearance'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
+import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 export function getNextTerminalOrdinal(tabs: TerminalTab[]): number {
   const usedOrdinals = new Set<number>()
@@ -113,7 +115,6 @@ export function buildRuntimeSessionPlaceholders({
       displayName: getPathDisplayName(parsed.worktreePath, parsed.repoId),
       comment: '',
       linkedPR: null,
-      linkedGitLabMR: null,
       isArchived: false,
       isUnread: false,
       isPinned: false,

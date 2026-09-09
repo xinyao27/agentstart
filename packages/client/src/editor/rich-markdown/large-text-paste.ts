@@ -1,6 +1,6 @@
 import type { Editor } from '@tiptap/react'
-import { yieldToEventLoop } from '@yiru/runtime-protocol/model/ui'
 import { toast } from 'sonner'
+import { yieldToEventLoop } from '~renderer/event-loop-yield'
 import { translate } from '~renderer/i18n/i18n'
 import {
   measureTextControlPasteByteLength,

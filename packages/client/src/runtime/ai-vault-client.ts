@@ -1,18 +1,72 @@
-import type { AiVaultListSessionsInput } from '@yiru/runtime-protocol/ai-vault'
+import { AI_VAULT_PROTOCOL_CAPABILITY, AiVaultClient } from '@yiru/protocol'
+import type { AiVaultSessionRecord } from '@yiru/protocol'
+import { limitAiVaultScopePaths } from '~renderer/workspace-panel/ai-vault/scope-paths'
 import type {
   AiVaultListResult,
-  AiVaultSubagentListArgs,
-  AiVaultSubagentListResult
-} from '@yiru/runtime-protocol/model/agent'
+  AiVaultScanIssue,
+  AiVaultSession
+} from '~renderer/workspace-panel/ai-vault/session/record'
+import type { AiVaultSubagentListArgs } from '~renderer/workspace-panel/ai-vault/session/record'
 
-import { callShellOrpc } from './orpc-client'
+import {
+  openConfiguredBrowserHostProtocol,
+  readConfiguredBrowserHostStatus
+} from './browser-host-runtime'
 
-export function listAiVaultSessions(input: AiVaultListSessionsInput): Promise<AiVaultListResult> {
-  return callShellOrpc((client) => client.shell.aiVault.listSessions, input)
+export type AiVaultListInput = {
+  compact?: boolean
+  executionHostId?: string
+  executionHostScope?: string
+  force?: boolean
+  limit?: number
+  scopePaths?: readonly string[]
 }
 
-export function listAiVaultSubagentSessions(
-  input: AiVaultSubagentListArgs
+export async function listAiVaultSessions(input: AiVaultListInput): Promise<AiVaultListResult> {
+  const client = await requireAiVaultClient()
+  const result = await client.listSessions({
+    compact: input.compact,
+    executionHostId: input.executionHostId,
+    executionHostScope: input.executionHostScope,
+    force: input.force,
+    limit: input.limit,
+    scopePaths: limitAiVaultScopePaths(input.scopePaths)
+  })
+  // Why: the protobuf record types keep open fields (plain agent names and
+  // execution-host strings) where the shell's vault model carries narrow
+  // unions; the daemon only ever emits values inside those unions, so the
+  // decoded records reattach the model types at this one boundary.
+  return {
+    issues: result.issues as AiVaultScanIssue[],
+    scannedAt: result.scannedAt,
+    sessions: result.sessions as unknown as AiVaultSession[]
+  }
+}
+
+export type AiVaultSubagentListResult = {
+  sessions: AiVaultSessionRecord[]
+}
+
+export type AiVaultSubagentListInput = AiVaultSubagentListArgs
+
+export async function listAiVaultSubagentSessions(
+  input: AiVaultSubagentListInput
 ): Promise<AiVaultSubagentListResult> {
-  return callShellOrpc((client) => client.shell.aiVault.listSubagentSessions, input)
+  const client = await requireAiVaultClient()
+  const result = await client.listSubagentSessions({
+    agent: input.agent,
+    executionHostId: input.executionHostId,
+    parentFilePath: input.parentFilePath
+  })
+  return { sessions: result.sessions }
+}
+
+// Why: the aiVault namespace is protobuf-only, so a missing capability means
+// the connected daemon predates the cutover — an error, not a legacy retry.
+async function requireAiVaultClient(): Promise<AiVaultClient> {
+  const status = await readConfiguredBrowserHostStatus()
+  if (!status.capabilities?.includes(AI_VAULT_PROTOCOL_CAPABILITY)) {
+    throw new Error('aiVault.protobuf.v1 capability is not available on this runtime host')
+  }
+  return new AiVaultClient(await openConfiguredBrowserHostProtocol())
 }

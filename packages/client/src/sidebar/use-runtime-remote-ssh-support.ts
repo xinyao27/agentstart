@@ -1,4 +1,4 @@
-import { EXTERNAL_EDITOR_REMOTE_SSH_RUNTIME_CAPABILITY } from '@yiru/runtime-protocol/runtime-capability-contract'
+import { EXTERNAL_EDITOR_PROTOCOL_CAPABILITY } from '@yiru/protocol'
 import { useEffect, useState } from 'react'
 import { runtimeEnvironmentSupportsCapability } from '~renderer/runtime/rpc-client'
 
@@ -27,7 +27,7 @@ export function useRuntimeRemoteSshSupport(
     let active = true
     void runtimeEnvironmentSupportsCapability(
       trimmedEnvironmentId,
-      EXTERNAL_EDITOR_REMOTE_SSH_RUNTIME_CAPABILITY
+      EXTERNAL_EDITOR_PROTOCOL_CAPABILITY
     )
       .then((supported) => {
         if (active) {

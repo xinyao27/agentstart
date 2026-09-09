@@ -1,6 +1,6 @@
-import type { TerminalManagementSession } from '@yiru/runtime-protocol/contract'
 import { translate } from '~renderer/i18n/i18n'
 import { LoadingIndicator } from '~renderer/loading/indicator'
+import type { RuntimeDaemonSession } from '~renderer/runtime/daemon-sessions-client'
 
 import { Button } from '../ui/button'
 import {
@@ -13,7 +13,7 @@ import {
 } from '../ui/dialog'
 
 type ManageSessionKillDialogProps = {
-  session: TerminalManagementSession | null
+  session: RuntimeDaemonSession | null
   isBusy: boolean
   onCancel: () => void
   onConfirm: () => void

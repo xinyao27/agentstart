@@ -1,9 +1,6 @@
-import type {
-  WorkspaceSessionPatch,
-  WorkspaceSessionState
-} from '@yiru/runtime-protocol/workbench/types'
-import { normalizeBrowserHistoryEntries } from '@yiru/runtime-protocol/workbench/workspace/session-browser-history'
-import { pruneLocalTerminalScrollbackBuffers } from '@yiru/runtime-protocol/workbench/workspace/session-terminal-buffers'
+import type { WorkspaceSessionPatch, WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import { normalizeBrowserHistoryEntries } from '~renderer/browser/session/history'
+import { pruneLocalTerminalScrollbackBuffers } from '~renderer/terminal-workspace/scrollback-buffers'
 
 import {
   buildActiveConnectionIdsAtShutdown,

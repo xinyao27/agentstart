@@ -1,13 +1,11 @@
 import type {
   AgentStatusEntry,
   MigrationUnsupportedPtyEntry
-} from '@yiru/runtime-protocol/model/agent'
-import type {
-  Worktree,
-  Repo,
-  TerminalLayoutSnapshot,
-  TerminalTab
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/status-records'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { basename } from '~renderer/path'
 import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
 

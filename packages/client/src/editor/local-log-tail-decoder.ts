@@ -1,4 +1,4 @@
-import type { LocalLogTailReadResult } from '@yiru/runtime-protocol/workbench/local-log-tail-types'
+import type { LogTailReadResult as LocalLogTailReadResult } from '@yiru/protocol/files/watch-values'
 
 export const LOCAL_LOG_TAIL_MAX_BYTES = 50 * 1024 * 1024
 

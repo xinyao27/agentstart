@@ -1,13 +1,10 @@
-import type { CliInstallStatus } from '@yiru/runtime-protocol/workbench/cli-install-types'
-import type { FeatureInteractionState } from '@yiru/runtime-protocol/workbench/feature-interactions'
-import type { FeatureTipId } from '@yiru/runtime-protocol/workbench/feature-tips'
-import {
-  getCompletedFeatureTipIds,
-  getOrderedUnseenFeatureTips
-} from '@yiru/runtime-protocol/workbench/feature-tips'
-import type { OnboardingState } from '@yiru/runtime-protocol/workbench/types'
+import type { CliInstallStatus } from '@yiru/protocol/cli-values'
+import type { FeatureTipId } from '@yiru/protocol/settings/feature-tips'
+import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import type { FeatureInteractionState } from '@yiru/protocol/telemetry/interactions/state'
 
 import { shouldShowOnboarding } from '../onboarding/should-show-onboarding'
+import { getCompletedFeatureTipIds, getOrderedUnseenFeatureTips } from './catalog'
 
 export type FeatureTipsAppOpenDecision =
   | { kind: 'open'; tipId: FeatureTipId }

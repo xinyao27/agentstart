@@ -1,11 +1,8 @@
-import {
-  runtimePtyEnvironmentId,
-  runtimePtyHandle
-} from '@yiru/runtime-protocol/terminal-identity/id'
-import { mapWithConcurrency } from '@yiru/runtime-protocol/workbench/map-with-concurrency'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { runtimePtyEnvironmentId, runtimePtyHandle } from '@yiru/protocol/terminal-identity'
+import { mapWithConcurrency } from '~renderer/map-with-concurrency'
 import { shellClient } from '~renderer/runtime/shell-client'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 
 type TerminalFitRestoreSettings = Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | undefined
 
@@ -30,12 +27,9 @@ export async function restoreTerminalFitToDesktop(
     runtimePtyEnvironmentId(ptyId) ?? settings?.activeRuntimeEnvironmentId ?? null
   const result =
     remoteHandle && environmentId
-      ? await callRuntimeOrpc(
-          { kind: 'environment', environmentId },
-          (client) => client.terminal.restoreFit,
-          { terminal: remoteHandle },
-          { timeoutMs: 15_000 }
-        ).catch(restoreFailedResult)
+      ? await openRuntimeTerminalClient({ kind: 'environment', environmentId })
+          .then((client) => client.restoreFit(remoteHandle, { timeoutMs: 15_000 }))
+          .catch(restoreFailedResult)
       : await shellClient.runtime.restoreTerminalFit(ptyId).catch(restoreFailedResult)
 
   return result.restored

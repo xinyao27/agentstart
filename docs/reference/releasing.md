@@ -1,9 +1,10 @@
 # Releasing Yiru
 
 Yiru releases are prepared locally and published by GitHub Actions. Local preparation owns version
-alignment and deterministic Homebrew checksums; CI owns signing, notarization, registry uploads,
-Chrome Web Store submission, TestFlight, and the optional APNs gateway. Release credentials stay
-in GitHub and are never written into the repository.
+alignment; CI owns signing, notarization, registry uploads, Chrome Web Store submission, TestFlight,
+the optional APNs gateway, and pinning the Homebrew formula's checksums from the signed Rust
+artifacts (the Rust release bytes only exist after CI signs and notarizes them, so they cannot be
+checksummed locally). Release credentials stay in GitHub and are never written into the repository.
 
 ## One-time setup
 
@@ -42,7 +43,8 @@ are configured. Otherwise the workflow validates the Worker without deploying it
 
 ## Prepare a release
 
-Start from a clean `main` that exactly matches `origin/main`, with Node.js 24 and Bun 1.4.0:
+Start from a clean `main` that exactly matches `origin/main`, with Rust 1.95, Node.js 24, and
+Bun 1.4.0 installed (`prepare` compiles the daemon locally):
 
 ```bash
 pnpm install --frozen-lockfile
@@ -50,9 +52,14 @@ pnpm release -- prepare 0.0.37
 ```
 
 The command updates the workspace, daemon, extension, and npm CLI versions; builds the daemon
-target matrix; writes the four Homebrew checksums; packages the Chrome extension; and runs
-`pnpm check`. It deliberately does not commit or push. Review the generated release changes, commit
-them, and push `main` using the commands printed at the end.
+target matrix; packages the Chrome extension; and runs `pnpm check`. It deliberately does not
+commit or push. Review the generated release changes, commit them, and push `main` using the
+commands printed at the end.
+
+The daemon release workflow builds the seven `yiru-rust-*` binaries on runners matching their
+operating system and CPU, checksums, attests, and attaches them to the GitHub release, and then
+pins the four Homebrew formula checksums by committing `Formula/yiru.rb` to `main` via the
+contents API. npm, Homebrew, and the curl installer all select `yiru-rust-*`.
 
 ## Publish
 

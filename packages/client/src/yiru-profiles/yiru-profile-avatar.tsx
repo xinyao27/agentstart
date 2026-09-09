@@ -1,5 +1,5 @@
-import type { YiruProfileSummary } from '@yiru/runtime-protocol/workbench/yiru-profiles'
 import { cn } from '~renderer/ui/class-names'
+import type { YiruProfileSummary } from '~renderer/yiru-profiles/profile-model'
 
 export function YiruProfileAvatar({
   profile,

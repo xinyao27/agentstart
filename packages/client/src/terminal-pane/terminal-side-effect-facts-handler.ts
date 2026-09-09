@@ -1,28 +1,14 @@
-import type { TerminalGitHubPRLink } from '@yiru/runtime-protocol/workbench/terminal/github-pr-link-detector'
+import type { TerminalGitHubPRLink } from '~renderer/runtime/terminal-side-effect-client'
 import type {
   TerminalSideEffectBatch,
   TerminalSideEffectFact
-} from '@yiru/runtime-protocol/workbench/terminal/side-effect-facts'
-/**
- * Renderer consumer registry for the `pty:sideEffect` channel.
- *
- * Why: with main as the side-effect parser for local-daemon/SSH PTYs
- * (docs/reference/terminal-side-effect-authority.md), the renderer no longer
- * derives title/bell/agent facts from bytes for those PTYs. This module is
- * the single channel subscriber; mounted panes and parked-tab watchers
- * register exactly one fact consumer per PTY (their existing policy
- * callbacks), so every fact has exactly one policy consumer regardless of
- * whether the tab is mounted, hidden, or parked. Facts for PTYs without a
- * registered consumer are dropped — mirroring today's eager-buffer behavior
- * where pre-mount output produces no attention side effects.
- */
-import {
-  getRendererTerminalSideEffectSnapshot,
-  subscribeRendererTerminalSideEffects
 } from '~renderer/runtime/terminal-side-effect-client'
+// Why: foreground panes and parked watchers share the Rust terminal fact stream;
+// exactly one consumer per PTY prevents duplicate attention effects.
+import { subscribeRendererTerminalSideEffects } from '~renderer/runtime/terminal-side-effect-client'
 
 export type TerminalSideEffectFactConsumerCallbacks = {
-  /** `meta.staleWorkingTitleClear` marks facts derived from main's 3s
+  /** `meta.staleWorkingTitleClear` marks facts derived from the daemon's 3s
    *  stale-title timer — policy must clear title/cache state without
    *  scheduling task-complete notifications or unread attention. */
   onTitleChange?: (
@@ -42,9 +28,7 @@ export type TerminalSideEffectFactConsumerCallbacks = {
    *  done is settle-checked by the pane policy before completing the turn. */
   onCommandCodeWorking?: (prompt: string) => void
   onCommandCodeDone?: (prompt: string) => void
-  /** DECSET 2031 subscribe observed by main's tracker. Registered only by
-   *  multiplex-gated consumers (their bytes never arrive); the theme
-   *  reply is sent renderer-side — query authority stays with the view. */
+  // Why: parked consumers receive facts without output bytes; the browser owns the theme reply.
   onMode2031Subscribe?: () => void
 }
 
@@ -52,13 +36,14 @@ type ConsumerEntry = {
   callbacks: TerminalSideEffectFactConsumerCallbacks
   /** Output sequence of the last live title fact applied. Replay snapshots at
    *  or before this point are stale and must not regress the title state. */
-  lastLiveTitleSeq: number | null
+  lastLiveTitleSeq: bigint | null
+  epoch: bigint | null
 }
 
 const consumersByPtyId = new Map<string, ConsumerEntry>()
 let channelUnsubscribe: (() => void) | null = null
 
-function applyLiveFact(entry: ConsumerEntry, fact: TerminalSideEffectFact, seq: number): void {
+function applyLiveFact(entry: ConsumerEntry, fact: TerminalSideEffectFact, seq: bigint): void {
   switch (fact.kind) {
     case 'title':
       entry.lastLiveTitleSeq = seq
@@ -101,10 +86,12 @@ function applyLiveFact(entry: ConsumerEntry, fact: TerminalSideEffectFact, seq: 
 }
 
 function applyBatchToConsumer(entry: ConsumerEntry, batch: TerminalSideEffectBatch): void {
+  if (entry.epoch !== batch.epoch) {
+    entry.epoch = batch.epoch
+    entry.lastLiveTitleSeq = null
+  }
   if (batch.replay) {
-    // Why: the no-attention-replay rule — (re)attach snapshots restore title
-    // state only; historical bells/completions must never fire again. A replay
-    // older (by output sequence) than the last live title fact is stale.
+    // Why: snapshots restore title only; old bells and completion facts must not replay.
     if (entry.lastLiveTitleSeq !== null && batch.seq <= entry.lastLiveTitleSeq) {
       return
     }
@@ -138,11 +125,6 @@ function ensureSideEffectChannelSubscription(): void {
 export type TerminalSideEffectFactConsumerOptions = {
   ptyId: string
   callbacks: TerminalSideEffectFactConsumerCallbacks
-  /** Pull main's title-only replay snapshot on registration. Pane transports
-   *  use this in place of deriving titles from eager-buffer byte replay.
-   *  Ordinary parked watchers already have a current pane title; cold-started
-   *  watchers request it because no pane populated their slot. */
-  restoreTitleOnRegister?: boolean
 }
 
 /**
@@ -156,21 +138,10 @@ export function registerTerminalSideEffectFactConsumer(
   ensureSideEffectChannelSubscription()
   const entry: ConsumerEntry = {
     callbacks: options.callbacks,
-    lastLiveTitleSeq: null
+    lastLiveTitleSeq: null,
+    epoch: null
   }
   consumersByPtyId.set(options.ptyId, entry)
-
-  if (options.restoreTitleOnRegister) {
-    void getRendererTerminalSideEffectSnapshot(options.ptyId)
-      .then((batch) => {
-        // Why: apply only while this registration is still the live
-        // consumer; a slow snapshot must not fire into a replaced one.
-        if (batch && consumersByPtyId.get(options.ptyId) === entry) {
-          applyBatchToConsumer(entry, { ...batch, replay: true })
-        }
-      })
-      .catch(() => {})
-  }
 
   return () => {
     if (consumersByPtyId.get(options.ptyId) === entry) {

@@ -1,11 +1,8 @@
-import {
-  getExecutionHostLabel,
-  getRepoExecutionHostId,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import { getRepoExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { useState } from 'react'
 import { buildExecutionHostRegistry } from '~renderer/execution-host-registry'
+import { getExecutionHostLabel } from '~renderer/execution-host/labels'
 import { getHostDisplayLabelOverrides } from '~renderer/host-setting-overrides'
 import { translate } from '~renderer/i18n/i18n'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'

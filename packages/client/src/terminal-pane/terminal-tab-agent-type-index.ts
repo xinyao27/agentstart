@@ -1,4 +1,4 @@
-import type { AgentStatusEntry, AgentType } from '@yiru/runtime-protocol/model/agent'
+import type { AgentStatusEntry, AgentType } from '@yiru/protocol/agent/status-records'
 
 export type TerminalTabAgentTypeState = Record<string, AgentStatusEntry>
 export type TerminalTabAgentTypesByLeaf = Readonly<Record<string, AgentType>>

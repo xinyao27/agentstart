@@ -1,9 +1,8 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
-import {
-  LOCAL_EXECUTION_HOST_ID,
-  normalizeExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { PRInfo, Repo, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import { LOCAL_EXECUTION_HOST_ID, normalizeExecutionHostId } from '@yiru/protocol/host/identity'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { getGitHubPRCacheKey, getLegacyGitHubPRCacheKey } from '~renderer/github/cache-key'
 import type { AppState } from '~renderer/store/types'
 
@@ -24,9 +23,6 @@ export function canUseParentPrChecksGitHubPRCacheEntry(
   const prFetchedAt = prEntry.fetchedAt
   const hasLinkedGitHubPR = worktree.linkedPR !== null
   if (hasLinkedGitHubPR && pr.number !== worktree.linkedPR) {
-    return false
-  }
-  if (!hasLinkedGitHubPR && hasNonGitHubLinkedReview(worktree)) {
     return false
   }
   const mergedPrMatchesCurrentHead = isCachedMergedBranchPRCurrentForWorktree(pr, worktree)
@@ -78,14 +74,5 @@ export function getParentPrChecksGitHubPRCacheEntry({
     prCache[currentKey] ??
     (legacyRepoKey ? prCache[legacyRepoKey] : undefined) ??
     (legacyPathKey ? prCache[legacyPathKey] : undefined)
-  )
-}
-
-function hasNonGitHubLinkedReview(worktree: Worktree): boolean {
-  return (
-    worktree.linkedGitLabMR != null ||
-    worktree.linkedBitbucketPR != null ||
-    worktree.linkedAzureDevOpsPR != null ||
-    worktree.linkedGiteaPR != null
   )
 }

@@ -1,7 +1,7 @@
 import {
   assertClipboardTextWriteWithinLimitWithYield,
   assertClipboardTextWithinLimitWithYield
-} from '@yiru/runtime-protocol/model/ui'
+} from '~renderer/clipboard/text'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { ShellUiApi } from './shell-ui-client'

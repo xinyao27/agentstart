@@ -1,11 +1,15 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 actor TerminalBulkConnection {
     typealias IsControlGenerationCurrent = @Sendable () async -> Bool
 
     private let connection: AuthenticatedRuntimeConnection
     private let isControlGenerationCurrent: IsControlGenerationCurrent
-    private let requestID = UUID().uuidString.lowercased()
+    private let protocolAdapter: RuntimeProtocolAdapter
+    private var duplex: RuntimeProtocolDuplex?
+    private var streamTask: Task<Void, Never>?
     private var wire: TerminalMultiplexWire?
     private var receiveTask: Task<Void, Never>?
     private var routeContinuations:
@@ -17,6 +21,9 @@ actor TerminalBulkConnection {
     private var hasPublishedReady = false
     private var readyWaiters: [CheckedContinuation<Void, Error>] = []
     private var backgroundedAt: Date?
+    private var routeAppStates: [UInt32: TerminalMultiplexAppState] = [:]
+    private var appState = TerminalMultiplexAppState.foreground
+    private var appStateGeneration: UInt64 = 0
     private var isClosed = false
 
     private init(
@@ -24,6 +31,10 @@ actor TerminalBulkConnection {
         isControlGenerationCurrent: @escaping IsControlGenerationCurrent
     ) {
         self.connection = connection
+        self.protocolAdapter = RuntimeProtocolAdapter(
+            sendBinary: { data in try await connection.sendBinary(data) },
+            closeConnection: { await connection.close() }
+        )
         self.isControlGenerationCurrent = isControlGenerationCurrent
     }
 
@@ -35,10 +46,8 @@ actor TerminalBulkConnection {
         guard ticket.expiresAt > Int64(Date().timeIntervalSince1970 * 1_000) else {
             throw TerminalBulkConnectionError.expiredTicket
         }
-        // Why: Desktop recognizes terminal bulk sockets by their legacy handshake;
-        // a v2 control handshake here would replace the logical RPC connection.
-        let connection = try await AuthenticatedRuntimeConnection.connectTerminalBulk(
-            endpoint: ticket.bulkEndpoint,
+        let connection = try await AuthenticatedRuntimeConnection.connect(
+            endpoint: credential.profile.endpoint,
             desktopPublicKeyBase64: credential.profile.publicKeyBase64,
             deviceToken: credential.deviceToken
         )
@@ -46,9 +55,24 @@ actor TerminalBulkConnection {
             connection: connection,
             isControlGenerationCurrent: isControlGenerationCurrent
         )
-        try await bulk.start(ticket: ticket)
-        try await bulk.waitUntilReady()
-        return bulk
+        do {
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    try await bulk.start(ticket: ticket)
+                    try await bulk.waitUntilReady()
+                }
+                group.addTask {
+                    try await Task.sleep(for: .seconds(10))
+                    throw RuntimeTransportError.deadlineExceeded
+                }
+                defer { group.cancelAll() }
+                _ = try await group.next()
+            }
+            return bulk
+        } catch {
+            await bulk.fail(error)
+            throw error
+        }
     }
 
     func openRoute() throws -> TerminalBulkRoute {
@@ -63,6 +87,7 @@ actor TerminalBulkConnection {
         nextRouteID += 1
         let pair = AsyncThrowingStream.makeStream(of: TerminalBulkRouteEvent.self)
         routeContinuations[routeID] = pair.continuation
+        routeAppStates[routeID] = .background
         if hasPublishedReady {
             pair.continuation.yield(.accepted)
         }
@@ -75,8 +100,11 @@ actor TerminalBulkConnection {
 
     func closeRoute(_ routeID: UInt32) async {
         routeContinuations.removeValue(forKey: routeID)?.finish()
+        routeAppStates.removeValue(forKey: routeID)
         if routeContinuations.isEmpty {
             await close()
+        } else {
+            await synchronizeAppState()
         }
     }
 
@@ -104,7 +132,21 @@ actor TerminalBulkConnection {
         }
     }
 
-    func setAppState(_ state: TerminalMultiplexAppState) async {
+    func setAppState(_ state: TerminalMultiplexAppState, routeID: UInt32) async {
+        guard routeContinuations[routeID] != nil else { return }
+        routeAppStates[routeID] = state
+        await synchronizeAppState()
+    }
+
+    private func synchronizeAppState() async {
+        // Why: tabs share one wire; parking one must not suspend another visible terminal.
+        let state: TerminalMultiplexAppState =
+            routeAppStates.values.contains(.foreground)
+            ? .foreground : .background
+        guard state != appState else { return }
+        appState = state
+        appStateGeneration += 1
+        let generation = appStateGeneration
         guard let wire, !isClosed else { return }
         if state == .background {
             backgroundedAt = Date()
@@ -113,9 +155,11 @@ actor TerminalBulkConnection {
         }
         let backgroundSeconds = backgroundedAt.map { Date().timeIntervalSince($0) } ?? 0
         backgroundedAt = nil
-        guard backgroundSeconds <= 5, await wire.isFresh(), await connection.isOpen(),
-            await isControlGenerationCurrent()
-        else {
+        let isFresh = await wire.isFresh()
+        let isConnected = await connection.isOpen()
+        let isCurrentControl = await isControlGenerationCurrent()
+        guard generation == appStateGeneration, !isClosed else { return }
+        guard backgroundSeconds <= 5, isFresh, isConnected, isCurrentControl else {
             await fail(TerminalBulkConnectionError.staleAfterBackground)
             return
         }
@@ -127,9 +171,21 @@ actor TerminalBulkConnection {
         isClosed = true
         receiveTask?.cancel()
         receiveTask = nil
-        await wire?.close()
-        await connection.close()
+        streamTask?.cancel()
+        streamTask = nil
+        let closingDuplex = duplex
+        duplex = nil
+        let closingWire = wire
+        wire = nil
+        let waiters = readyWaiters
+        readyWaiters.removeAll()
+        waiters.forEach { $0.resume(throwing: CancellationError()) }
         finishRoutes()
+        // Why: readiness and route cancellation must finish even if network cleanup stalls.
+        try? await closingDuplex?.source.cancel(reason: "Terminal bulk closed")
+        await closingWire?.close()
+        await protocolAdapter.close()
+        await connection.close()
     }
 
     private func start(ticket: MobileTerminalOpenMultiplexWire) async throws {
@@ -150,7 +206,20 @@ actor TerminalBulkConnection {
             await self?.receiveLoop()
         }
         do {
-            try await sendInvocation(bulkTicket: ticket.bulkTicket)
+            guard connection.capabilities.contains(authenticatedRuntimeProtobufCapability) else {
+                throw RuntimeTransportError.unsupportedVersion
+            }
+            try await protocolAdapter.open(peerVersion: mobileRuntimeProtocolPeerVersion())
+            try await requireCurrentControlGeneration()
+            var request = Yiru_Runtime_V1_TerminalServiceMultiplexRequest()
+            request.content = .bulkTicket(ticket.bulkTicket)
+            let stream = try await protocolAdapter.duplex(
+                RuntimeUnaryCall(
+                    procedure: "/yiru.runtime.v1.TerminalService/Multiplex",
+                    payload: try request.serializedData()
+                ))
+            duplex = stream
+            streamTask = Task { [weak self] in await self?.receiveStream(stream.source) }
         } catch {
             await fail(error)
             throw error
@@ -158,42 +227,27 @@ actor TerminalBulkConnection {
     }
 
     private func waitUntilReady() async throws {
-        if hasPublishedReady { return }
         guard !isClosed else { throw TerminalBulkConnectionError.invalidPeerMessage }
-        try await withCheckedThrowingContinuation {
-            (continuation: CheckedContinuation<Void, Error>) in
-            readyWaiters.append(continuation)
+        if hasPublishedReady { return }
+        try await withTaskCancellationHandler {
+            try Task.checkCancellation()
+            try await withCheckedThrowingContinuation {
+                (continuation: CheckedContinuation<Void, Error>) in
+                readyWaiters.append(continuation)
+            }
+        } onCancel: {
+            Task { await self.close() }
         }
-    }
-
-    private func sendInvocation(bulkTicket: String) async throws {
-        try await requireCurrentControlGeneration()
-        let input = TerminalMultiplexInvocationInput(bulkTicket: bulkTicket)
-        let request = TerminalMultiplexInvocation(
-            i: requestID,
-            p: TerminalMultiplexInvocationPayload(
-                b: TerminalMultiplexInvocationBody(json: input),
-                h: [
-                    MobileRuntimeWireContract.requestIdHeader: requestID,
-                    MobileRuntimeWireContract.binarySideChannelHeader: "1",
-                ]
-            )
-        )
-        let data = try JSONEncoder().encode(request)
-        guard let text = String(data: data, encoding: .utf8) else {
-            throw TerminalBulkConnectionError.invalidPeerMessage
-        }
-        try await connection.sendText(MobileRuntimeWireContract.textPrefix + text)
     }
 
     private func receiveLoop() async {
         do {
             while !Task.isCancelled && !isClosed {
                 switch try await connection.receive() {
-                case .text(let text):
-                    try receiveText(text)
+                case .text:
+                    throw TerminalBulkConnectionError.invalidPeerMessage
                 case .binary(let data):
-                    try await receiveBinary(data)
+                    try await protocolAdapter.receive(data)
                 }
             }
         } catch is CancellationError {
@@ -203,59 +257,40 @@ actor TerminalBulkConnection {
         }
     }
 
-    private func receiveText(_ text: String) throws {
-        guard text.hasPrefix(MobileRuntimeWireContract.textPrefix) else {
-            throw TerminalBulkConnectionError.invalidPeerMessage
-        }
-        let data = Data(text.dropFirst(MobileRuntimeWireContract.textPrefix.count).utf8)
-        guard let message = try? JSONDecoder().decode(TerminalMultiplexPeerMessage.self, from: data)
-        else {
-            throw TerminalBulkConnectionError.invalidPeerMessage
-        }
-        guard message.i == requestID else {
-            throw TerminalBulkConnectionError.invalidPeerMessage
-        }
-        switch message.t {
-        case nil, 2:
-            let status = message.p.s ?? 200
-            guard status >= 200 && status < 400 else {
-                throw TerminalBulkConnectionError.server(status: status)
+    private func receiveStream(_ source: RuntimeStream) async {
+        do {
+            for try await payload in source.events {
+                try await requireCurrentControlGeneration()
+                let response = try Yiru_Runtime_V1_TerminalServiceMultiplexEvent(
+                    serializedBytes: payload)
+                switch response.content {
+                case .ready:
+                    guard !hasIteratorReady else {
+                        throw TerminalBulkConnectionError.invalidPeerMessage
+                    }
+                    hasIteratorReady = true
+                    publishReadyIfNeeded()
+                case .frame(let bytes):
+                    guard let wire else { throw TerminalBulkConnectionError.invalidPeerMessage }
+                    try await wire.handle(bytes)
+                case nil:
+                    throw TerminalBulkConnectionError.invalidPeerMessage
+                }
             }
-        case 3:
-            if message.p.e == .error || message.p.e == .done {
-                throw TerminalBulkConnectionError.iteratorEnded
-            }
-            guard message.p.e == .message else {
-                throw TerminalBulkConnectionError.invalidPeerMessage
-            }
-            guard message.p.d?.json.type == .ready else {
-                throw TerminalBulkConnectionError.invalidPeerMessage
-            }
-            hasIteratorReady = true
-            publishReadyIfNeeded()
-        default:
-            throw TerminalBulkConnectionError.invalidPeerMessage
+            if !isClosed { await fail(TerminalBulkConnectionError.iteratorEnded) }
+        } catch is CancellationError {
+            return
+        } catch {
+            await fail(error)
         }
-    }
-
-    private func receiveBinary(_ data: Data) async throws {
-        guard await isControlGenerationCurrent() else {
-            throw TerminalBulkConnectionError.staleControlGeneration
-        }
-        let sideChannel = try RuntimeOrpcSideChannelCodec.decode(data)
-        guard sideChannel.requestID == requestID, let wire else {
-            throw TerminalBulkConnectionError.invalidPeerMessage
-        }
-        try await wire.handle(sideChannel.payload)
     }
 
     private func sendInner(_ bytes: Data) async throws {
         try await requireCurrentControlGeneration()
-        let sideChannel = try RuntimeOrpcSideChannelCodec.encode(
-            requestID: requestID,
-            payload: bytes
-        )
-        try await connection.sendBinary(sideChannel)
+        guard let duplex else { throw TerminalBulkConnectionError.invalidPeerMessage }
+        var request = Yiru_Runtime_V1_TerminalServiceMultiplexRequest()
+        request.content = .frame(bytes)
+        try await duplex.send(request.serializedData())
     }
 
     private func requireCurrentControlGeneration() async throws {
@@ -282,7 +317,7 @@ actor TerminalBulkConnection {
     }
 
     private func publishReadyIfNeeded() {
-        guard hasAcceptedEpoch, hasIteratorReady, !hasPublishedReady else { return }
+        guard !isClosed, hasAcceptedEpoch, hasIteratorReady, !hasPublishedReady else { return }
         hasPublishedReady = true
         routeContinuations.values.forEach { $0.yield(.accepted) }
         let waiters = readyWaiters
@@ -295,18 +330,27 @@ actor TerminalBulkConnection {
         isClosed = true
         receiveTask?.cancel()
         receiveTask = nil
-        await wire?.close()
-        let details = terminalBulkCloseDetails(error)
-        await connection.close(code: details.code, reason: details.reason)
+        streamTask?.cancel()
+        streamTask = nil
+        let closingDuplex = duplex
+        duplex = nil
+        let closingWire = wire
+        wire = nil
         let waiters = readyWaiters
         readyWaiters.removeAll()
         waiters.forEach { $0.resume(throwing: error) }
         finishRoutes(throwing: error)
+        try? await closingDuplex?.source.cancel(reason: "Terminal bulk failed")
+        await closingWire?.close()
+        let details = terminalBulkCloseDetails(error)
+        await connection.close(code: details.code, reason: details.reason)
+        await protocolAdapter.close()
     }
 
     private func finishRoutes(throwing error: Error? = nil) {
         let continuations = routeContinuations.values
         routeContinuations.removeAll()
+        routeAppStates.removeAll()
         for continuation in continuations {
             if let error {
                 continuation.finish(throwing: error)

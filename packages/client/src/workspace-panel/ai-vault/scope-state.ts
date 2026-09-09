@@ -1,4 +1,4 @@
-import type { AiVaultScope } from '@yiru/runtime-protocol/model/agent'
+import type { AiVaultScope } from '~renderer/workspace-panel/ai-vault/session/providers'
 
 export const DEFAULT_AI_VAULT_SCOPE: AiVaultScope = 'workspace'
 

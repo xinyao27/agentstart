@@ -1,4 +1,4 @@
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
 
 import type { ProjectHeaderDragSession } from './project-header-drag-contract'
 import {

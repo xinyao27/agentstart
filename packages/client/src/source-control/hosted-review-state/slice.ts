@@ -1,20 +1,17 @@
+import { getRepoExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
 import type {
   CreateHostedReviewInput,
   CreateHostedReviewResult,
   HostedReviewCreationEligibility,
   HostedReviewCreationEligibilityArgs,
   HostedReviewInfo
-} from '@yiru/runtime-protocol/model/review'
-import {
-  getRepoExecutionHostId,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+} from '@yiru/protocol/hosted-review/types'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
-import { getGitHubPRCacheKey, getLegacyGitHubPRCacheKey } from '../../github/cache-key'
 import type { AppState } from '../../store/types'
 import {
   finishHostedReviewRequest,
@@ -74,10 +71,6 @@ type RefreshHostedReviewCardArgs = {
   branch: string
   linkedGitHubPR?: number | null
   fallbackGitHubPR?: number | null
-  linkedGitLabMR?: number | null
-  linkedBitbucketPR?: number | null
-  linkedAzureDevOpsPR?: number | null
-  linkedGiteaPR?: number | null
 }
 
 export function refreshHostedReviewCard(
@@ -89,11 +82,7 @@ export function refreshHostedReviewCard(
     force: true,
     repoId: args.repoId,
     linkedGitHubPR: args.linkedGitHubPR ?? null,
-    ...(fallbackGitHubPR !== null ? { fallbackGitHubPR } : {}),
-    linkedGitLabMR: args.linkedGitLabMR ?? null,
-    linkedBitbucketPR: args.linkedBitbucketPR ?? null,
-    linkedAzureDevOpsPR: args.linkedAzureDevOpsPR ?? null,
-    linkedGiteaPR: args.linkedGiteaPR ?? null
+    ...(fallbackGitHubPR !== null ? { fallbackGitHubPR } : {})
   })
 }
 
@@ -114,15 +103,17 @@ export const createHostedReviewSlice: StateCreator<AppState, [], [], HostedRevie
     const target = getActiveRuntimeTarget(ownerSettings)
     const { repoPath: _repoPath, worktreePath, ...runtimeArgs } = args
     void _repoPath
-    return callRuntimeOrpc(
-      target,
-      (client) => client.hostedReview.getCreationEligibility,
+    const client = await openGitHubTarget()
+    if (!client) {
+      throw new Error('GitHub protocol capability is unavailable')
+    }
+    return client.getHostedReviewCreationEligibility(
       {
         repo: repo?.id ?? args.repoPath,
         ...(worktreePath ? { worktree: `path:${worktreePath}` } : {}),
         ...runtimeArgs
       },
-      { timeoutMs: 30_000 }
+      { timeoutMs: 30_000, ...runtimeCallDestination(target) }
     )
   },
 
@@ -138,15 +129,17 @@ export const createHostedReviewSlice: StateCreator<AppState, [], [], HostedRevie
     const { repoId: _inputRepoId, ...hostedReviewInput } = input
     void _inputRepoId
     const { worktreePath, ...runtimeInput } = hostedReviewInput
-    return callRuntimeOrpc(
-      target,
-      (client) => client.hostedReview.create,
+    const client = await openGitHubTarget()
+    if (!client) {
+      throw new Error('GitHub protocol capability is unavailable')
+    }
+    return client.createHostedReview(
       {
         repo: repo?.id ?? repoPath,
         ...(worktreePath ? { worktree: `path:${worktreePath}` } : {}),
         ...runtimeInput
       },
-      { timeoutMs: 60_000 }
+      { timeoutMs: 60_000, ...runtimeCallDestination(target) }
     )
   },
 
@@ -206,22 +199,47 @@ export const createHostedReviewSlice: StateCreator<AppState, [], [], HostedRevie
             ...(options?.repoId !== undefined ? { repoId: options.repoId } : {}),
             currentHeadOid: options?.currentHeadOid ?? null,
             linkedGitHubPR: options?.linkedGitHubPR ?? null,
-            ...(fallbackGitHubPR !== null ? { fallbackGitHubPR } : {}),
-            linkedGitLabMR: options?.linkedGitLabMR ?? null,
-            linkedBitbucketPR: options?.linkedBitbucketPR ?? null,
-            linkedAzureDevOpsPR: options?.linkedAzureDevOpsPR ?? null,
-            linkedGiteaPR: options?.linkedGiteaPR ?? null
+            ...(fallbackGitHubPR !== null ? { fallbackGitHubPR } : {})
           }
-          const review = await callRuntimeOrpc(
-            target,
-            (client) => client.hostedReview.forBranch,
-            { repo: repo?.id ?? options?.repoId ?? repoPath, repoPath, ...args },
+          const client = await openGitHubTarget()
+          if (!client) {
+            throw new Error('GitHub protocol capability is unavailable')
+          }
+          const pr = await client.getHostedReviewForBranch(
+            repo?.id ?? options?.repoId ?? repoPath,
+            branch,
+            {
+              linkedPRNumber: args.linkedGitHubPR,
+              fallbackPRNumber: fallbackGitHubPR,
+              currentHeadOid: args.currentHeadOid
+            },
             // Why: remote dev boxes can be slower at `git`/`gh` lookups than
             // local desktop repos, especially on Windows filesystem paths. The
             // main-process queue caps concurrency, so a longer timeout no
             // longer risks a background socket stampede.
-            { timeoutMs: 30_000 }
+            { timeoutMs: 30_000, ...runtimeCallDestination(target) }
           )
+          const review: HostedReviewInfo | null = pr
+            ? {
+                provider: 'github',
+                number: pr.number,
+                title: pr.title,
+                state: pr.state,
+                url: pr.url,
+                status: pr.checksStatus,
+                updatedAt: pr.updatedAt,
+                mergeable: pr.mergeable,
+                reviewDecision: pr.reviewDecision,
+                autoMergeEnabled: pr.autoMergeEnabled,
+                autoMergeAllowed: pr.autoMergeAllowed,
+                mergeQueueRequired: pr.mergeQueueRequired,
+                mergeStateStatus: pr.mergeStateStatus,
+                headSha: pr.headSha,
+                confirmedContainedHeadOid: pr.confirmedContainedHeadOid,
+                baseRefName: pr.baseRefName,
+                conflictSummary: pr.conflictSummary
+              }
+            : null
           if (isCurrentHostedReviewRequest(cacheKey, generation)) {
             set((state) => {
               if (
@@ -234,33 +252,7 @@ export const createHostedReviewSlice: StateCreator<AppState, [], [], HostedRevie
               ) {
                 return {}
               }
-              const prCacheKeys = [
-                getGitHubPRCacheKey(
-                  repoPath,
-                  repoId,
-                  branch,
-                  ownerSettings,
-                  repo?.executionHostId,
-                  repo !== undefined
-                ),
-                getLegacyGitHubPRCacheKey(repoPath, repoId, branch),
-                getLegacyGitHubPRCacheKey(repoPath, undefined, branch)
-              ]
-              const currentPRCache = state.prCache ?? {}
-              const prCache =
-                review &&
-                review.provider !== 'github' &&
-                prCacheKeys.some((key) => currentPRCache[key])
-                  ? (() => {
-                      const next = { ...currentPRCache }
-                      for (const key of prCacheKeys) {
-                        delete next[key]
-                      }
-                      return next
-                    })()
-                  : currentPRCache
               return {
-                ...(prCache === currentPRCache ? {} : { prCache }),
                 hostedReviewCache: withHostedReviewCacheEntry(state.hostedReviewCache, cacheKey, {
                   data: review,
                   fetchedAt: Date.now(),

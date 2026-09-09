@@ -8,13 +8,16 @@ Thanks for contributing to Yiru.
 - Yiru targets macOS, Linux, and Windows. Every change must stay compatible with all three platforms unless the code is explicitly guarded by a runtime platform check.
 - For keyboard shortcuts, use runtime platform checks in extension pages and Chrome's `mac` command override in the manifest.
 - For shortcut labels, show `⌘` and `⇧` on macOS, and `Ctrl+` and `Shift+` on Linux and Windows.
-- For file paths, use Node or Bun-compatible path utilities such as `path.join`.
+- For file paths, use `Path`/`PathBuf` joins in the Rust daemon and `path.join` in Node-side tooling. Never concatenate separators by hand.
 - The daemon can run locally, inside WSL, or on a remote host. Keep process, file, credential, shell, and network facts scoped to that daemon host.
 - Yiru supports many CLI agents, integrations, and git providers. Keep generic behavior provider-neutral; guard integration-specific logic behind explicit checks.
 - Keep changes well-engineered and performant: follow existing architecture, avoid unnecessary work in hot paths, clean up owned resources, and use concrete module names.
 - For UI work, follow [`docs/style-guide.md`](../docs/style-guide.md), use the tokens and primitives it specifies, and verify polished behavior across Chrome surfaces and light/dark mode.
 
 ## Local Setup
+
+The daemon is a Rust crate and the clients are TypeScript and Swift, so a full checkout needs
+Rust 1.95, Node.js 24, pnpm 12.1.0, and Bun 1.4 for the build scripts.
 
 ```bash
 pnpm install
@@ -76,6 +79,6 @@ Version bumps, tags, and releases are maintainer-managed. Do not include release
 ### Cutting a release (maintainers)
 
 Update the daemon, npm CLI, Homebrew Formula, extension package, and workspace versions together,
-then push a matching `v<version>` tag. `.github/workflows/daemon-release.yml` compiles the Bun target
-matrix, verifies checksums and installer metadata, uploads and attests the binaries, and publishes
-`@yiru/cli` when `NPM_TOKEN` is configured.
+then push a matching `v<version>` tag. `.github/workflows/daemon-release.yml` compiles the Rust
+daemon for every supported platform, verifies checksums and installer metadata, uploads and attests
+the binaries, and publishes `@yiru/cli` when `NPM_TOKEN` is configured.

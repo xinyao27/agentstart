@@ -1,5 +1,5 @@
-import { filterEnabledTuiAgents } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { filterEnabledTuiAgents } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import React from 'react'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 import AgentCombobox from '~renderer/agent/combobox'

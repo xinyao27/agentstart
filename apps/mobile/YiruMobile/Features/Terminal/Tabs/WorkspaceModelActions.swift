@@ -8,9 +8,7 @@ extension TerminalWorkspaceModel {
         activeTabID = tab.id
         pendingActiveTabID = tab.id
         retainIfNeeded(tab)
-        // Why: rendering the ready terminal starts its multiplex subscription. Persist the
-        // selection only after that subscriber exists so Desktop cannot retire the hidden PTY
-        // in the gap between tab activation and stream setup.
+        // Why: establish the PTY viewer before persisting selection so input has a live target.
         if tab.terminalTarget != nil { return }
         await activateSelection(tab)
     }
@@ -45,8 +43,7 @@ extension TerminalWorkspaceModel {
                 for: hostID,
                 worktreeID: worktreeID,
                 tabID: tab.id,
-                leafID: tab.leafID,
-                terminalID: tab.terminalTarget?.id
+                leafID: tab.leafID
             )
             guard activationGeneration == requestGeneration else { return }
             apply(snapshot)
@@ -68,17 +65,31 @@ extension TerminalWorkspaceModel {
             let pendingActiveTabID,
             activeTabID == pendingActiveTabID,
             let tab = tabs.first(where: { $0.id == pendingActiveTabID }),
-            tab.terminalTarget == nil
+            tab.terminalTarget == nil,
+            !tab.isSleepingTerminal
         else { return }
-        // Why: a renderer can retire an offscreen handle between list hydration and the phone's
-        // stream setup. Re-activating the still-selected pending leaf asks the runtime to
-        // materialize it, rather than leaving an endless loader.
+        // Why: activation materializes a pending leaf whose PTY is not yet available.
         await activateSelection(tab, reportsFailure: false)
     }
 
     func cancelActivation() {
         activationGeneration += 1
         activatingTabID = nil
+    }
+
+    func resumeWorkspace() async {
+        guard isConnected, operation == nil else { return }
+        operation = .resuming
+        mutationError = nil
+        defer { operation = nil }
+        do {
+            try await repository.activateWorkspace(hostID: hostID, workspaceID: worktreeID)
+            apply(try await repository.workspaceTabs(for: hostID, worktreeID: worktreeID))
+        } catch is CancellationError {
+            return
+        } catch {
+            mutationError = "Yiru could not resume this workspace. Try again."
+        }
     }
 
     func createTerminal(agentID: String? = nil) async {

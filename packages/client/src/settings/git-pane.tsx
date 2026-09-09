@@ -1,10 +1,8 @@
-import { getBranchPrefixIssue } from '@yiru/runtime-protocol/workbench/branch-prefix'
-import type { SourceControlAiSettingsPatch } from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import { DEFAULT_SOURCE_CONTROL_GROUP_ORDER } from '@yiru/runtime-protocol/workbench/source-control/group-order'
-import type {
-  GlobalSettings,
-  SourceControlGroupOrder
-} from '@yiru/runtime-protocol/workbench/types'
+import { getBranchPrefixIssue } from '@yiru/protocol/git/branch-prefix'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { SourceControlAiSettingsPatch } from '@yiru/protocol/source-control/ai-types'
+import { DEFAULT_SOURCE_CONTROL_GROUP_ORDER } from '@yiru/protocol/source-control/group-order'
+import type { SourceControlGroupOrder } from '@yiru/protocol/source-control/group-order'
 import { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'

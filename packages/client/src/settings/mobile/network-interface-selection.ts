@@ -1,4 +1,4 @@
-import { isTailnetIPv4Address } from '@yiru/runtime-protocol/workbench/tailnet-address'
+import { isTailnetIPv4Address } from '~renderer/mobile/network-address'
 
 export type MobileNetworkInterface = {
   name: string

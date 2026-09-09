@@ -1,7 +1,7 @@
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry
-} from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/status-records'
 import { inspectRuntimeTerminalProcess } from '~renderer/runtime/terminal-inspection'
 import type { AppState } from '~renderer/store/types'
 import {

@@ -1,12 +1,17 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { GitHubWorkItem, GitHubWorkItemDetails } from '@yiru/runtime-protocol/workbench/types'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 
-import {
-  getGitHubRuntimeRepoId,
-  getGitHubSourceRuntimeHost,
-  getGitHubSourceRuntimeTarget
-} from './source-runtime-context'
+import { getGitHubRuntimeRepoId, getGitHubSourceRuntimeTarget } from './source-runtime-context'
+
+async function requireGitHubClient() {
+  const client = await openGitHubTarget()
+  if (!client) {
+    throw new Error('GitHub protocol capability is unavailable')
+  }
+  return client
+}
 
 type GitHubWorkItemLookupArgs = {
   repoPath: string
@@ -22,14 +27,6 @@ type GitHubWorkItemByOwnerRepoLookupArgs = GitHubWorkItemLookupArgs & {
   type: 'pr'
 }
 
-type GitHubWorkItemDetailsLookupArgs = {
-  repoPath: string
-  repoId: string
-  sourceContext?: ProjectSourceContext | null
-  number: number
-  type: 'pr'
-}
-
 function runtimeRepoId(args: Pick<GitHubWorkItemLookupArgs, 'repoId' | 'sourceContext'>): string {
   return getGitHubRuntimeRepoId(args.sourceContext, args.repoId)
 }
@@ -38,12 +35,11 @@ export async function lookupGitHubWorkItemForSource(
   args: GitHubWorkItemLookupArgs
 ): Promise<GitHubWorkItem | null> {
   const target = getGitHubSourceRuntimeTarget(args.sourceContext)
-  const item = await callRuntimeOrpc(
-    target,
-    (client) => client.github.workItem,
-    { repo: runtimeRepoId(args), number: args.number, type: args.type },
-    { timeoutMs: 30_000 }
-  )
+  const client = await requireGitHubClient()
+  const item = await client.getWorkItem(runtimeRepoId(args), args.number, {
+    timeoutMs: 30_000,
+    ...runtimeCallDestination(target)
+  })
   return item ? ({ ...item, repoId: args.repoId } as GitHubWorkItem) : null
 }
 
@@ -51,36 +47,12 @@ export async function lookupGitHubWorkItemByOwnerRepoForSource(
   args: GitHubWorkItemByOwnerRepoLookupArgs
 ): Promise<GitHubWorkItem | null> {
   const target = getGitHubSourceRuntimeTarget(args.sourceContext)
-  const item = await callRuntimeOrpc(
-    target,
-    (client) => client.github.workItemByOwnerRepo,
-    {
-      repo: runtimeRepoId(args),
-      owner: args.owner,
-      ownerRepo: args.repo,
-      number: args.number,
-      type: args.type
-    },
-    { timeoutMs: 30_000 }
+  const client = await requireGitHubClient()
+  const item = await client.getWorkItemByOwnerRepo(
+    runtimeRepoId(args),
+    args.number,
+    { owner: args.owner, repo: args.repo },
+    { timeoutMs: 30_000, ...runtimeCallDestination(target) }
   )
   return item ? ({ ...item, repoId: args.repoId } as GitHubWorkItem) : null
-}
-
-export function lookupGitHubWorkItemDetailsForSource(
-  args: GitHubWorkItemDetailsLookupArgs
-): Promise<GitHubWorkItemDetails | null> {
-  const sourceContext = args.sourceContext
-  const runtimeHost = getGitHubSourceRuntimeHost(sourceContext)
-  return callRuntimeOrpc(
-    runtimeHost
-      ? { kind: 'environment', environmentId: runtimeHost.environmentId }
-      : { kind: 'local' },
-    (client) => client.github.workItemDetails,
-    {
-      repo: getGitHubRuntimeRepoId(sourceContext, args.repoId),
-      number: args.number,
-      type: args.type
-    },
-    { timeoutMs: 30_000 }
-  )
 }

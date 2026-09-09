@@ -1,4 +1,4 @@
-import type { OnboardingState } from '@yiru/runtime-protocol/workbench/types'
+import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
 import { Suspense } from 'react'
 
 import { CrashReportDialog } from '../crash-report/dialog'

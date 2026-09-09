@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 export const SETTING_LABELS: Partial<Record<keyof GlobalSettings, string>> = {
   editorFontFamily: 'Editor Font Family',

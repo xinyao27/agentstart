@@ -1,7 +1,7 @@
-import type { GhosttyImportPreview } from '@yiru/runtime-protocol/workbench/types'
 import ghosttyIcon from '~renderer/assets/brand/ghostty.svg'
 import { translate } from '~renderer/i18n/i18n'
 import { Check } from '~renderer/icons/hugeicons'
+import type { GhosttyImportPreview } from '~renderer/settings/import-preview'
 import { Button } from '~renderer/ui/button'
 
 import type { DiscoveryState } from './theme-step'

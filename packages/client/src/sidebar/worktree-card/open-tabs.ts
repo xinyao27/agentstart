@@ -1,4 +1,4 @@
-import type { Tab, TabGroup, TabGroupLayoutNode } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab, TabGroup, TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
 
 export type SidebarOpenTab = {
   tab: Tab

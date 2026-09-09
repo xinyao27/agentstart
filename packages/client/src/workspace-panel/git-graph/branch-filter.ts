@@ -1,4 +1,4 @@
-import type { GitHistoryItem } from '@yiru/runtime-protocol/workbench/git/history'
+import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
 
 export type GitGraphBranchOption = {
   refId: string

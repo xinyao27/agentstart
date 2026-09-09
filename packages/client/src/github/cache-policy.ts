@@ -1,17 +1,14 @@
-import {
-  LOCAL_EXECUTION_HOST_ID,
-  normalizeExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import {
-  getProjectSourceCacheScope,
-  type ProjectSourceContext
-} from '@yiru/runtime-protocol/workbench/project-source-context'
+import { LOCAL_EXECUTION_HOST_ID, normalizeExecutionHostId } from '@yiru/protocol/host/identity'
 import type {
   GitHubCommentResult,
   GitHubOwnerRepo,
   PRCheckDetail,
   PRComment
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/hosted-review/review-types'
+import {
+  getProjectSourceCacheScope,
+  type ProjectSourceContext
+} from '@yiru/protocol/project/source-context'
 import type { AppState } from '~renderer/store/types'
 
 import { getGitHubPRCacheKey, getGitHubRepoCacheKey } from './cache-key'

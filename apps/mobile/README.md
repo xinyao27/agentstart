@@ -1,6 +1,6 @@
 # Yiru for iOS
 
-Yiru 唯一的移动端客户端，原生 iOS 26，不承担 Android 或 Web 兼容。
+Yiru 唯一的移动端客户端，基于原生 iOS 26。
 
 技术基线：
 
@@ -9,7 +9,7 @@ Yiru 唯一的移动端客户端，原生 iOS 26，不承担 Android 或 Web 兼
 - Swift 6 language mode，Swift 6.3 编译器，完整 strict concurrency
 - SwiftUI、Observation、NavigationStack 与系统 Liquid Glass
 - 固定版本 SwiftTerm 1.18.0，通过 Yiru 自有 `TerminalSurface` adapter 嵌入
-- 从 TypeScript source of truth 生成 Terminal 控制面与 multiplex frame 常量
+- Terminal 控制面与 multiplex frame 常量由 `packages/protocol/proto` 的 Protobuf schema 生成
 - URLSession WebSocket、CryptoKit 与固定版本 Swift-sodium 组成的 E2EE v2 transport
 - XcodeGen 生成工程，`.xcodeproj` 不入库
 

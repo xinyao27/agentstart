@@ -1,5 +1,5 @@
-import { shouldPreserveTerminalScrollbackBuffers } from '@yiru/runtime-protocol/workbench/workspace/session-terminal-buffers'
 import { useEffect } from 'react'
+import { shouldPreserveTerminalScrollbackBuffers } from '~renderer/terminal-workspace/scrollback-buffers'
 
 import { shutdownBufferCaptures } from '../runtime/terminal-shutdown-buffer-captures'
 import { useAppStore } from '../store/state'

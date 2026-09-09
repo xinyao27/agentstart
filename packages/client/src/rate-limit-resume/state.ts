@@ -1,8 +1,5 @@
-import type {
-  RateLimitHit,
-  RateLimitResumeSchedule
-} from '@yiru/runtime-protocol/workbench/rate-limit-resume/types'
-import { isFinalRateLimitResumeStatus } from '@yiru/runtime-protocol/workbench/rate-limit-resume/types'
+import type { RateLimitHit, RateLimitResumeSchedule } from '@yiru/protocol/rate-limit-resume-values'
+import { isFinalRateLimitResumeStatus } from '@yiru/protocol/rate-limit-resume/policy'
 import type { StateCreator } from 'zustand'
 import { listRateLimitResumes } from '~renderer/runtime/rate-limit-resume-client'
 

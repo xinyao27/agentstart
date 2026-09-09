@@ -5,24 +5,32 @@ import {
   parseExecutionHostId,
   toRuntimeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type {
-  DetectedWorktreeListResult,
-  FolderWorkspace,
-  Project,
-  ProjectGroup,
-  ProjectHostSetup,
-  Repo,
-  Worktree,
-  WorktreeLineage,
-  WorkspaceLineage
-} from '@yiru/runtime-protocol/workbench/types'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
-import { getRuntimeTargetOrpc, targetKey } from '~renderer/runtime/query-target'
+} from '@yiru/protocol/host/identity'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
+import type { DetectedWorktreeListResult, Worktree } from '@yiru/protocol/worktree/model'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
+import { projectCatalogProjectsQuery } from '~renderer/runtime/project-target'
+import { targetKey } from '~renderer/runtime/query-target'
+import {
+  RUNTIME_ENVIRONMENTS_QUERY_KEY,
+  runtimeEnvironmentsClient
+} from '~renderer/runtime/runtime-environments-client'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
+import {
+  worktreeDetectedListQuery,
+  worktreeLineageListQuery
+} from '~renderer/runtime/worktree-catalog-query'
 
 import { useReferencedCatalogValue, useStructurallySharedCatalog } from './assembly'
+import { projectCatalogFolderWorkspaceQuery } from './folder-workspace-query'
+import { projectCatalogProjectGroupQuery } from './project-group-query'
+import { projectCatalogProjectHostSetupQuery } from './project-host-setup-query'
 import { collectProjectProjection } from './project-projection'
+import { projectCatalogRepoQuery } from './repo-query'
 import { collectProjectCatalogWorktrees } from './worktree-assembly'
 
 const LOCAL_TARGET = { kind: 'local' } as const satisfies RuntimeClientTarget
@@ -48,43 +56,50 @@ export type ProjectCatalog = {
 }
 
 export function useProjectCatalogQuery(): ProjectCatalog {
-  const localOrpc = getRuntimeTargetOrpc(LOCAL_TARGET)
-  const environments = useQuery(
-    localOrpc.shell.runtimeEnvironments.list.queryOptions({ staleTime: 30_000 })
-  )
+  const environments = useQuery({
+    queryKey: RUNTIME_ENVIRONMENTS_QUERY_KEY,
+    queryFn: () => runtimeEnvironmentsClient.list(),
+    staleTime: 30_000
+  })
   const targets = useReferencedCatalogValue([environments.data], () => [
     LOCAL_TARGET,
     ...(environments.data ?? []).map((environment) => environmentTarget(environment))
   ])
   const repoQueries = useQueries({
-    queries: targets.map((target) =>
-      getRuntimeTargetOrpc(target).repo.list.queryOptions({ staleTime: 10_000 })
-    )
+    queries: targets.map((target) => ({
+      ...projectCatalogRepoQuery(target),
+      staleTime: 10_000
+    }))
   })
   const projectGroupQueries = useQueries({
-    queries: targets.map((target) =>
-      getRuntimeTargetOrpc(target).projectGroup.list.queryOptions({ staleTime: 10_000 })
-    )
+    queries: targets.map((target) => ({
+      ...projectCatalogProjectGroupQuery(target),
+      staleTime: 10_000
+    }))
   })
   const folderWorkspaceQueries = useQueries({
-    queries: targets.map((target) =>
-      getRuntimeTargetOrpc(target).folderWorkspace.list.queryOptions({ staleTime: 10_000 })
-    )
+    queries: targets.map((target) => ({
+      ...projectCatalogFolderWorkspaceQuery(target),
+      staleTime: 10_000
+    }))
   })
   const projectQueries = useQueries({
-    queries: targets.map((target) =>
-      getRuntimeTargetOrpc(target).project.list.queryOptions({ staleTime: 10_000 })
-    )
+    queries: targets.map((target) => ({
+      ...projectCatalogProjectsQuery(target),
+      staleTime: 10_000
+    }))
   })
   const projectHostSetupQueries = useQueries({
-    queries: targets.map((target) =>
-      getRuntimeTargetOrpc(target).projectHostSetup.list.queryOptions({ staleTime: 10_000 })
-    )
+    queries: targets.map((target) => ({
+      ...projectCatalogProjectHostSetupQuery(target),
+      staleTime: 10_000
+    }))
   })
   const lineageQueries = useQueries({
-    queries: targets.map((target) =>
-      getRuntimeTargetOrpc(target).worktree.lineageList.queryOptions({ staleTime: 2_000 })
-    )
+    queries: targets.map((target) => ({
+      ...worktreeLineageListQuery(target),
+      staleTime: 2_000
+    }))
   })
   const catalogRepos = useReferencedCatalogValue(
     [targets, ...repoQueries.map((query) => query.data)],
@@ -97,12 +112,10 @@ export function useProjectCatalogQuery(): ProjectCatalog {
       )
   )
   const worktreeQueries = useQueries({
-    queries: catalogRepos.map(({ repo, target }) =>
-      getRuntimeTargetOrpc(target).worktree.detectedList.queryOptions({
-        input: { repo: repo.id },
-        staleTime: 2_000
-      })
-    )
+    queries: catalogRepos.map(({ repo, target }) => ({
+      ...worktreeDetectedListQuery(target, repo.id),
+      staleTime: 2_000
+    }))
   })
   const worktreeCatalog = useReferencedCatalogValue(
     [catalogRepos, ...worktreeQueries.map((query) => query.data)],

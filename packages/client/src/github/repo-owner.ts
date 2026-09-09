@@ -4,13 +4,13 @@ import {
   getSettingsFocusedExecutionHostId,
   normalizeExecutionHostId,
   parseExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+} from '@yiru/protocol/host/identity'
 import type {
   GitHubPRRefreshAlias,
   GitHubPRRefreshCandidate,
-  GitHubPRRefreshReason,
-  Repo
-} from '@yiru/runtime-protocol/workbench/types'
+  GitHubPRRefreshReason
+} from '@yiru/protocol/hosted-review/pull-request-types'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { enqueueShellGitHubPRRefresh } from '~renderer/runtime/github-shell-client'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import type { AppState } from '~renderer/store/types'

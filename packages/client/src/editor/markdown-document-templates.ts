@@ -1,4 +1,5 @@
-import type { DirEntry, GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { DirectoryEntry as DirEntry } from '@yiru/protocol/files/values'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { basename, joinPath, normalizeRelativePath } from '~renderer/path'
 import type { RuntimeFileOperationArgs } from '~renderer/runtime/file-client'
 import {

@@ -2,7 +2,7 @@ import {
   keybindingMatchesAction,
   type KeybindingContext,
   type KeybindingInput
-} from '@yiru/runtime-protocol/workbench/keybindings'
+} from '@yiru/protocol/keybindings'
 import { useEffect } from 'react'
 import { getShortcutPlatform } from '~renderer/keyboard-input/shortcut-platform'
 import {

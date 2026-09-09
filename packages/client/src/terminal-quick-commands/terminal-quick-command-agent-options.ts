@@ -1,5 +1,5 @@
-import { supportsTerminalAgentQuickCommand } from '@yiru/runtime-protocol/workbench/terminal/quick-commands'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { supportsTerminalAgentQuickCommand } from '@yiru/protocol/terminal/quick-commands'
 import type { AgentCatalogEntry } from '~renderer/agent/catalog'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 

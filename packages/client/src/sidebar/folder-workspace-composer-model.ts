@@ -1,27 +1,23 @@
-import { isPathInsideOrEqual } from '@yiru/runtime-protocol/model/platform'
 import {
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID,
   normalizeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+} from '@yiru/protocol/host/identity'
+import { isPathInsideOrEqual } from '@yiru/protocol/host/path'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import { getProjectGroupSubtreeIds } from '@yiru/protocol/project/group-tree'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import { translate } from '~renderer/i18n/i18n'
 import {
   buildGitHubWorkspaceSource,
-  buildGitLabWorkspaceSource,
   buildWorkspaceSourceSelection,
   getWorkspaceSourceName,
   getWorkspaceSourceProvider
-} from '@yiru/runtime-protocol/model/workspace'
-import { getProjectGroupSubtreeIds } from '@yiru/runtime-protocol/workbench/project-groups'
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type {
-  FolderWorkspace,
-  GitHubWorkItem,
-  GitLabWorkItem,
-  ProjectGroup,
-  Repo
-} from '@yiru/runtime-protocol/workbench/types'
-import { translate } from '~renderer/i18n/i18n'
+} from '~renderer/new-workspace/naming/source'
 import type { SmartWorkspaceNameSelection } from '~renderer/new-workspace/smart-workspace-name-field'
 import type { LinkedWorkItemSummary } from '~renderer/new-workspace/workspace-creation'
 
@@ -84,10 +80,6 @@ export function getLinkedItemDisplayName(item: LinkedWorkItemSummary): string | 
 
 export function toGitHubLinkedWorkItem(item: GitHubWorkItem): LinkedWorkItemSummary {
   return buildGitHubWorkspaceSource(item)
-}
-
-export function toGitLabLinkedWorkItem(item: GitLabWorkItem): LinkedWorkItemSummary {
-  return buildGitLabWorkspaceSource(item)
 }
 
 export function getFolderWorkspacePrimaryActionLabel(): string {

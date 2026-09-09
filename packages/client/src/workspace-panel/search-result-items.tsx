@@ -1,5 +1,5 @@
-import { normalizeSearchFileMatchCount } from '@yiru/runtime-protocol/workbench/search-match-count'
-import type { SearchFileResult, SearchMatch } from '@yiru/runtime-protocol/workbench/types'
+import { normalizeSearchFileMatchCount } from '@yiru/protocol/file-match-count'
+import type { SearchFileResult, SearchMatch } from '@yiru/protocol/files/values'
 import React from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import { translate } from '~renderer/i18n/i18n'

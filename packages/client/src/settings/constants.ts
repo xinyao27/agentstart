@@ -1,8 +1,6 @@
-import {
-  DEFAULT_APP_FONT_FAMILY,
-  getDefaultRepoHookSettings
-} from '@yiru/runtime-protocol/workbench/constants'
-import { DESKTOP_TERMINAL_SCROLLBACK_ROW_PRESETS } from '@yiru/runtime-protocol/workbench/terminal/scrollback-policy'
+import { DEFAULT_APP_FONT_FAMILY } from '@yiru/protocol/settings/interface-font'
+import { DESKTOP_TERMINAL_SCROLLBACK_ROW_PRESETS } from '@yiru/protocol/terminal/scrollback-policy'
+import { getDefaultRepoHookSettings } from '@yiru/protocol/worktree/hooks'
 
 export const DEFAULT_REPO_HOOK_SETTINGS = getDefaultRepoHookSettings()
 export const MAX_THEME_RESULTS = 80

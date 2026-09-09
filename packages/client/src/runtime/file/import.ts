@@ -1,6 +1,7 @@
+import type { FilesClient } from '@yiru/protocol'
 import { basename, joinPath, normalizeRelativePath } from '~renderer/path'
 
-import { callRuntimeOrpc, type RuntimeClientTarget } from '../orpc-client'
+import { requireFilesTarget } from '../files-target'
 import { getActiveRuntimeTarget } from '../rpc-client'
 import { getRuntimeFileArgs, type RuntimeFileOperationArgs } from './context'
 import { runtimePathExists } from './read'
@@ -48,7 +49,7 @@ export async function importExternalPathsToRuntime(
   destinationDir: string,
   _options?: { ensureDestinationDir?: boolean }
 ): Promise<{ results: RuntimeImportResult[] }> {
-  const target = getActiveRuntimeTarget(context.settings)
+  const client = await requireFilesTarget(getActiveRuntimeTarget(context.settings))
   if (!context.worktreePath) {
     throw new Error('Import destination requires an owning runtime worktree')
   }
@@ -80,11 +81,12 @@ export async function importExternalPathsToRuntime(
       for (const entry of source.entries) {
         const entryRelativePath = joinRuntimeRelativePath(destRelativePath, entry.relativePath)
         if (entry.kind === 'directory') {
-          await callRuntimeOrpc(
-            target,
-            (client) => client.files.createDirNoClobber,
-            { worktree: destinationArgs.worktreeSelector, relativePath: entryRelativePath },
-            { timeoutMs: 15_000 }
+          await client.createDirectoryNoClobber(
+            destinationArgs.worktreeSelector,
+            entryRelativePath,
+            {
+              timeoutMs: 15_000
+            }
           )
           if (source.kind === 'directory' && entry.relativePath === '') {
             createdDirectoryImportRoot = entryRelativePath
@@ -92,7 +94,7 @@ export async function importExternalPathsToRuntime(
           continue
         }
         await uploadRuntimeFileWithoutClobber(
-          target,
+          client,
           destinationArgs.worktreeSelector,
           entryRelativePath,
           entry.contentBase64
@@ -110,16 +112,16 @@ export async function importExternalPathsToRuntime(
       if (createdDirectoryImportRoot) {
         // Why: match local imports by removing the no-clobber root when a
         // nested runtime upload fails halfway through.
-        await callRuntimeOrpc(
-          target,
-          (client) => client.files.delete,
-          {
-            worktree: destinationArgs.worktreeSelector,
-            relativePath: createdDirectoryImportRoot,
-            recursive: true
-          },
-          { timeoutMs: 15_000 }
-        ).catch(() => {})
+        await client
+          .delete(
+            {
+              worktree: destinationArgs.worktreeSelector,
+              relativePath: createdDirectoryImportRoot,
+              recursive: true
+            },
+            { timeoutMs: 15_000 }
+          )
+          .catch(() => {})
       }
       results.push({
         sourcePath: source.sourcePath,
@@ -132,49 +134,43 @@ export async function importExternalPathsToRuntime(
 }
 
 async function uploadRuntimeFileWithoutClobber(
-  target: RuntimeClientTarget,
+  client: FilesClient,
   worktreeSelector: string,
   relativePath: string,
   contentBase64: string
 ): Promise<void> {
   const tempRelativePath = makeRuntimeUploadTempPath(relativePath)
   try {
-    await writeRuntimeBase64File(target, worktreeSelector, tempRelativePath, contentBase64)
-    await callRuntimeOrpc(
-      target,
-      (client) => client.files.commitUpload,
+    await writeRuntimeBase64File(client, worktreeSelector, tempRelativePath, contentBase64)
+    await client.commitUpload(
       { worktree: worktreeSelector, tempRelativePath, finalRelativePath: relativePath },
       { timeoutMs: 30_000 }
     )
   } finally {
-    await callRuntimeOrpc(
-      target,
-      (client) => client.files.delete,
-      { worktree: worktreeSelector, relativePath: tempRelativePath, recursive: false },
-      { timeoutMs: 15_000 }
-    ).catch(() => {})
+    await client
+      .delete(
+        { worktree: worktreeSelector, relativePath: tempRelativePath, recursive: false },
+        { timeoutMs: 15_000 }
+      )
+      .catch(() => {})
   }
 }
 
 async function writeRuntimeBase64File(
-  target: RuntimeClientTarget,
+  client: FilesClient,
   worktreeSelector: string,
   relativePath: string,
   contentBase64: string
 ): Promise<void> {
   if (contentBase64.length <= RUNTIME_UPLOAD_BASE64_CHUNK_CHARS) {
-    await callRuntimeOrpc(
-      target,
-      (client) => client.files.writeBase64,
+    await client.writeBase64(
       { worktree: worktreeSelector, relativePath, contentBase64 },
       { timeoutMs: 30_000 }
     )
     return
   }
   for (let offset = 0; offset < contentBase64.length; offset += RUNTIME_UPLOAD_BASE64_CHUNK_CHARS) {
-    await callRuntimeOrpc(
-      target,
-      (client) => client.files.writeBase64Chunk,
+    await client.writeBase64Chunk(
       {
         worktree: worktreeSelector,
         relativePath,
@@ -194,6 +190,7 @@ async function ensureRuntimeDirectory(
   if (!destinationArgs) {
     return
   }
+  const client = await requireFilesTarget(destinationArgs.target)
   const parts = normalizeRelativePath(destinationArgs.relativePath)
     .split('/')
     .filter((part) => part.length > 0)
@@ -203,12 +200,7 @@ async function ensureRuntimeDirectory(
     if (await runtimePathExists(context, joinPath(context.worktreePath ?? '', current))) {
       continue
     }
-    await callRuntimeOrpc(
-      destinationArgs.target,
-      (client) => client.files.createDir,
-      { worktree: destinationArgs.worktreeSelector, relativePath: current },
-      { timeoutMs: 15_000 }
-    )
+    await client.createDirectory(destinationArgs.worktreeSelector, current, { timeoutMs: 15_000 })
   }
 }
 

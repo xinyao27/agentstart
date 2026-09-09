@@ -1,7 +1,5 @@
-import type {
-  GitBranchCompareSummary,
-  SourceControlViewMode
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitBranchCompareSummary } from '@yiru/protocol/git/branch-compare-types'
+import type { SourceControlViewMode } from '@yiru/protocol/settings/workspace-preferences'
 import React, { useEffect, useRef } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { GitBranch, MagnifyingGlass as Search, X } from '~renderer/icons/hugeicons'

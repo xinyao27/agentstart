@@ -1,9 +1,9 @@
-import { isBehindOnlyUpstream } from '@yiru/runtime-protocol/model/review'
+import type { GitStatusEntry, GitUpstreamStatus } from '@yiru/protocol/git/status-types'
 import {
   normalizeHostedReviewBaseRef,
   normalizeHostedReviewHeadRef
-} from '@yiru/runtime-protocol/workbench/hosted-review-refs'
-import type { GitStatusEntry, GitUpstreamStatus } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/hosted-review/refs'
+import { isBehindOnlyUpstream } from '~renderer/source-control/workflow/operation'
 
 import { summarizeCommitFailure } from '../commit-failure-summary'
 import { getStageAllPaths } from '../discard-all-sequence'

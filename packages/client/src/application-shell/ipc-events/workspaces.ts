@@ -13,11 +13,6 @@ export function subscribeWorkspaceEvents(queryClient: QueryClient): () => void {
         useAppStore.getState().updateWorktreeBaseStatus(event)
       }
     }),
-    workspaceHostClient.worktrees.onRemoteBranchConflict((event) => {
-      if (!isRuntimeEnvironmentActive()) {
-        useAppStore.getState().updateWorktreeRemoteBranchConflict(event)
-      }
-    }),
     workspaceHostClient.worktrees.onCreateProgress?.((data) => {
       if (data.operationId) {
         useAppStore.getState().updatePendingWorktreeCreation(data.operationId, {

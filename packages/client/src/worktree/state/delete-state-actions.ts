@@ -1,8 +1,10 @@
 import type { StateCreator } from 'zustand'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
-import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
+import {
+  forceDeleteRuntimeWorktreeBranch,
+  getRuntimeWorktreeBranchRenameFailureOutput
+} from '~renderer/runtime/worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 
 import type { AppState } from '../../store/types'
@@ -72,18 +74,11 @@ export function createWorktreeDeleteStateActions(
     forceDeletePreservedBranch: async (worktreeId, branchName, expectedHead) => {
       try {
         const target = getActiveRuntimeTarget(settingsForWorktreeOwner(get(), worktreeId))
-        const result = await (target.kind === 'local'
-          ? workspaceHostClient.worktrees.forceDeletePreservedBranch({
-              worktreeId,
-              branchName,
-              expectedHead
-            })
-          : callRuntimeOrpc(
-              target,
-              (client) => client.worktree.forceDeleteBranch,
-              { worktree: toRuntimeWorktreeSelector(worktreeId), branchName, expectedHead },
-              { timeoutMs: 15_000 }
-            ))
+        const result = await forceDeleteRuntimeWorktreeBranch(target, {
+          worktree: toRuntimeWorktreeSelector(worktreeId),
+          branchName,
+          expectedHead
+        })
         publishRendererCommandResult({
           type: 'worktree-branch-delete',
           outcome: 'succeeded',
@@ -103,12 +98,9 @@ export function createWorktreeDeleteStateActions(
     },
     getWorktreeBranchRenameFailureOutput: async (worktreeId) => {
       const target = getActiveRuntimeTarget(settingsForWorktreeOwner(get(), worktreeId))
-      return callRuntimeOrpc(
-        target,
-        (client) => client.worktree.branchRenameFailureOutput,
-        { worktree: toRuntimeWorktreeSelector(worktreeId) },
-        { timeoutMs: 15_000 }
-      )
+      return getRuntimeWorktreeBranchRenameFailureOutput(target, {
+        worktree: toRuntimeWorktreeSelector(worktreeId)
+      })
     },
     clearWorktreeDeleteState: (worktreeId) => {
       set((s) => {

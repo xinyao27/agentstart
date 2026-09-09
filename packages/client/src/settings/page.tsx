@@ -1,4 +1,5 @@
-import type { ProjectHostSetup, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { applyDocumentTheme } from '~renderer/editor/document-theme'
 import { translate } from '~renderer/i18n/i18n'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'

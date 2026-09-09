@@ -1,4 +1,7 @@
-import type { PRConflictSummary, PRMergeableState } from '@yiru/runtime-protocol/workbench/types'
+import type {
+  PRConflictSummary,
+  PRMergeableState
+} from '@yiru/protocol/hosted-review/pull-request-types'
 import React, { useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, Copy, Files } from '~renderer/icons/hugeicons'

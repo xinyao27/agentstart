@@ -1,10 +1,9 @@
-import type { RuntimeMobileSessionTabsResult } from '@yiru/runtime-protocol/workbench/runtime-types'
-
 import {
   clearAllRemoteRuntimeWakeTerminalRespawn,
   clearRemoteRuntimeWakeTerminalRespawnForWorktree
 } from '../remote-runtime-wake-terminal-respawn'
 import { clearRemoteSessionReorderIntentsForWorktree } from './reorder-intent'
+import type { RuntimeMobileSessionTabsResult } from './session-model'
 
 export const WEB_SESSION_GROUP_PREFIX = 'remote-session-tabs:'
 

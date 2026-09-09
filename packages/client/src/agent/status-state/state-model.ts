@@ -1,8 +1,8 @@
-import type { SleepingAgentLaunchConfig } from '@yiru/runtime-protocol/model/agent'
+import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
 import type {
   AgentStatusOrchestrationContext,
   MigrationUnsupportedPtyEntry
-} from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/status-records'
 
 import type { AppState } from '../../store/types'
 import { registryEntryMatchesStatus } from './launch-model'

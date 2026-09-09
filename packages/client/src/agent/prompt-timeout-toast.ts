@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { track, tuiAgentToAgentKind } from '~renderer/telemetry/client'

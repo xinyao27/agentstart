@@ -1,9 +1,10 @@
-import { hslToRgb, type Rgb } from '@yiru/runtime-protocol/workbench/theme-gradient/color-space'
 import type {
   ThemeGradientDot,
   ThemeGradientHarmony,
   ThemeGradientTheme
-} from '@yiru/runtime-protocol/workbench/theme-gradient/theme'
+} from '@yiru/protocol/settings/theme-gradient'
+
+import { hslToRgb, type Rgb } from './color-space'
 
 export const THEME_GRADIENT_HARMONY_ANGLES: Record<ThemeGradientHarmony, readonly number[]> = {
   floating: [],

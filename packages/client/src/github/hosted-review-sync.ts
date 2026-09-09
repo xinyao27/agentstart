@@ -1,5 +1,5 @@
-import { hostedReviewInfoFromGitHubPRInfo } from '@yiru/runtime-protocol/workbench/hosted-review-github'
-import type { PRInfo } from '@yiru/runtime-protocol/workbench/types'
+import { hostedReviewInfoFromGitHubPRInfo } from '@yiru/protocol/hosted-review/github-mapping'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
 import {
   getHostedReviewCacheKey,
   linkedReviewHintKey
@@ -16,7 +16,7 @@ function shouldClearHostedReviewForNoGitHubPR(
   entry: AppState['hostedReviewCache'][string] | undefined
 ): boolean {
   // Why: a GitHub-only miss should not create or refresh provider-neutral
-  // branch misses that suppress discovery for GitLab/other hosted reviews.
+  // branch misses that suppress preserved non-GitHub review records.
   if (!entry) {
     return false
   }

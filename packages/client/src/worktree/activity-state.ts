@@ -1,8 +1,8 @@
 import {
   isFreshNonDoneAgentStatus,
   type AgentStatusEntry
-} from '@yiru/runtime-protocol/model/agent'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/status-records'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
 
 import { resolveAgentStatusWorktreeId } from '../sidebar/agent-status-worktree-attribution'

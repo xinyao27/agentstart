@@ -1,14 +1,14 @@
 import type {
-  ShellServicesNotificationsDismissOutput,
-  ShellServicesNotificationsDisplayInput,
-  ShellServicesNotificationsDisplayOutput
-} from '@yiru/runtime-protocol/contract'
+  NotificationDismissResult,
+  NotificationDisplayInput,
+  NotificationDisplayResult
+} from '@yiru/client/notifications'
 
 const WORKBENCH_NOTIFICATION_PREFIX = 'yiru-workbench:'
 
 export async function displayWorkbenchNotification(
-  input: ShellServicesNotificationsDisplayInput
-): Promise<ShellServicesNotificationsDisplayOutput> {
+  input: NotificationDisplayInput
+): Promise<NotificationDisplayResult> {
   if (!(await chrome.permissions.contains({ permissions: ['notifications'] }))) {
     return { delivered: false, reason: 'blocked-by-system' }
   }
@@ -29,7 +29,7 @@ export async function displayWorkbenchNotification(
 
 export async function dismissWorkbenchNotifications(
   notificationIds: string[]
-): Promise<ShellServicesNotificationsDismissOutput> {
+): Promise<NotificationDismissResult> {
   const dismissed = await Promise.all(
     notificationIds.map((id) => chrome.notifications.clear(`${WORKBENCH_NOTIFICATION_PREFIX}${id}`))
   )

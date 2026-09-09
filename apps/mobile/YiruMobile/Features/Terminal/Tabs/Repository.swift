@@ -1,6 +1,7 @@
 import Foundation
 
 nonisolated protocol TerminalWorkspaceRepository: Sendable {
+    func activateWorkspace(hostID: String, workspaceID: String) async throws
     func workspaceTabs(for hostID: String, worktreeID: String) async throws
         -> TerminalWorkspaceSnapshot
     func workspaceTabUpdates(for hostID: String, worktreeID: String) async throws
@@ -12,8 +13,7 @@ nonisolated protocol TerminalWorkspaceRepository: Sendable {
         for hostID: String,
         worktreeID: String,
         tabID: String,
-        leafID: String?,
-        terminalID: String?
+        leafID: String?
     ) async throws -> TerminalWorkspaceSnapshot
     func createWorkspaceTerminal(
         for hostID: String,

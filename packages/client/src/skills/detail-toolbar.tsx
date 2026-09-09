@@ -1,8 +1,4 @@
-import type {
-  SkillDirectoryEntry,
-  SkillDirectoryListing,
-  SkillPlacement
-} from '@yiru/runtime-protocol/workbench/skills'
+import type { SkillDirectoryEntry, SkillDirectoryListing, SkillPlacement } from '@yiru/protocol'
 import { createElement, useState } from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import { translate } from '~renderer/i18n/i18n'

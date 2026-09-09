@@ -1,5 +1,5 @@
-import { isPositiveHostedReviewNumber } from '@yiru/runtime-protocol/model/review'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { isPositiveHostedReviewNumber } from '@yiru/protocol/hosted-review/types'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { updateProjectCatalogWorktree } from '~renderer/project-catalog/worktree-cache'
@@ -83,15 +83,7 @@ export function createWorktreeMetaActions(
         return
       }
       const shouldRefreshHostedReview =
-        (normalizedUpdates.linkedPR === null && worktreeForUpdate?.linkedPR !== null) ||
-        (normalizedUpdates.linkedGitLabMR === null &&
-          (worktreeForUpdate?.linkedGitLabMR ?? null) !== null) ||
-        (normalizedUpdates.linkedBitbucketPR === null &&
-          (worktreeForUpdate?.linkedBitbucketPR ?? null) !== null) ||
-        (normalizedUpdates.linkedAzureDevOpsPR === null &&
-          (worktreeForUpdate?.linkedAzureDevOpsPR ?? null) !== null) ||
-        (normalizedUpdates.linkedGiteaPR === null &&
-          (worktreeForUpdate?.linkedGiteaPR ?? null) !== null)
+        normalizedUpdates.linkedPR === null && worktreeForUpdate?.linkedPR !== null
       const reviewRepo = shouldRefreshHostedReview
         ? catalogState.repos.find((repo) => repo.id === worktreeForUpdate?.repoId)
         : undefined
@@ -212,26 +204,6 @@ export function createWorktreeMetaActions(
               targetEnriched,
               worktreeForUpdate,
               'linkedPR'
-            ),
-            linkedGitLabMR: getHostedReviewLinkForMetaRefresh(
-              targetEnriched,
-              worktreeForUpdate,
-              'linkedGitLabMR'
-            ),
-            linkedBitbucketPR: getHostedReviewLinkForMetaRefresh(
-              targetEnriched,
-              worktreeForUpdate,
-              'linkedBitbucketPR'
-            ),
-            linkedAzureDevOpsPR: getHostedReviewLinkForMetaRefresh(
-              targetEnriched,
-              worktreeForUpdate,
-              'linkedAzureDevOpsPR'
-            ),
-            linkedGiteaPR: getHostedReviewLinkForMetaRefresh(
-              targetEnriched,
-              worktreeForUpdate,
-              'linkedGiteaPR'
             ),
             force: true
           })

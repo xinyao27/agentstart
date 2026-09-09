@@ -1,5 +1,5 @@
-import { getProjectSourceCacheScope } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { GitHubWorkItem } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import { getProjectSourceCacheScope } from '@yiru/protocol/project/source-context'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 import {

@@ -1,4 +1,4 @@
-import { runtimePtyEnvironmentId } from '@yiru/runtime-protocol/terminal-identity/id'
+import { runtimePtyEnvironmentId } from '@yiru/protocol/terminal-identity'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import { getWorktreeMapFromState } from '~renderer/store/selectors'

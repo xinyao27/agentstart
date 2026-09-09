@@ -11,12 +11,9 @@ nonisolated struct WorkspaceCreationDraft: Sendable {
     let displayName: String?
     let compareBaseRef: String?
     let pushTarget: WorkspacePushTarget?
-    let startupDraft: String?
     let linkedPullRequest: Int?
-    let linkedMergeRequest: Int?
     let setupDecision: WorkspaceSetupDecision
     let agentID: String?
-    let startupCommand: String?
 }
 
 nonisolated struct WorkspaceCreationOptions: Sendable {
@@ -24,7 +21,6 @@ nonisolated struct WorkspaceCreationOptions: Sendable {
     let agents: [WorkspaceCreationAgent]
     let preferredAgentID: String
     let trustedHooks: WorkspaceTrustedHooks
-    let isGitLabAvailable: Bool
 }
 
 nonisolated struct WorkspaceCreationAgent: Identifiable, Hashable, Sendable {

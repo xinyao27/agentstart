@@ -10,8 +10,8 @@
  * dispose watchers without importing this store-coupled module.
  * See docs/reference/terminal-hidden-view-parking.md.
  */
-import { isTerminalLeafId } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import { isTerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { discardPreHandlerPtyState } from '~renderer/runtime/pty-pre-handler-buffer'
 import { sendRuntimePtyInput } from '~renderer/runtime/terminal-inspection'
 import {
@@ -137,11 +137,7 @@ export function canWatcherCoverParkedTerminalTab(
   )
 }
 
-function startParkedTabWatchers(
-  worktreeId: string,
-  tab: ParkableTerminalTabModel,
-  restoreTitleOnRegister: boolean
-): void {
+function startParkedTabWatchers(worktreeId: string, tab: ParkableTerminalTabModel): void {
   const state = useAppStore.getState()
   const panes = resolveParkedTerminalPaneCandidates(tab, state)
   const restorePolicy = parkRestorePolicyFromState(state)
@@ -173,7 +169,6 @@ function startParkedTabWatchers(
       // title so an agent already working at park time still notifies when
       // it finishes while parked.
       ...(initialTitle !== undefined ? { initialTitle } : {}),
-      ...(restoreTitleOnRegister ? { restoreTitleOnRegister: true } : {}),
       // Why: no pane transport exists while parked; write straight to the
       // PTY, the same channel background agent launches use.
       sendInput: (data) => sendRuntimePtyInput(state.settings, ptyId, data)
@@ -345,7 +340,6 @@ export function syncParkedTerminalTabWatchers(args: {
   tabs: readonly ParkableTerminalTabModel[]
   parkedTabIds: ReadonlySet<string>
   /** Parked-equivalent tabs whose pane has not restored the current title. */
-  restoreTitleOnStartTabIds?: ReadonlySet<string>
 }): void {
   const liveTabIds = new Set(args.tabs.map((tab) => tab.id))
   for (const [tabId, entry] of parkedWatchersByTabId) {
@@ -376,11 +370,7 @@ export function syncParkedTerminalTabWatchers(args: {
       disposeParkedTabWatchers(tab.id)
     }
     if (!parkedWatchersByTabId.has(tab.id)) {
-      startParkedTabWatchers(
-        args.worktreeId,
-        tab,
-        args.restoreTitleOnStartTabIds?.has(tab.id) === true
-      )
+      startParkedTabWatchers(args.worktreeId, tab)
     }
   }
 }

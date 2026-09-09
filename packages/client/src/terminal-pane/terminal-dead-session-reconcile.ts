@@ -4,7 +4,7 @@
 // this routes such panes through the same exit teardown an observed exit runs.
 // See design-docs/terminal-dead-pane-on-bg-exit.md.
 
-import { isRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
+import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
 
 /**
  * A pane binding that exposes its bound transport identity plus a reconcile

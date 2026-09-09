@@ -1,9 +1,10 @@
-import type { ProjectGroup, Repo } from '@yiru/runtime-protocol/workbench/types'
-import { folderWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import {
   effectiveExternalWorktreeVisibility,
   isLegacyRepoForExternalWorktreeVisibility
-} from '@yiru/runtime-protocol/workbench/workspace/worktree-ownership'
+} from '@yiru/protocol/worktree/external/ownership'
 import type React from 'react'
 
 import { isRepoHeaderActionTarget } from '../project-header-drag'

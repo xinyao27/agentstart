@@ -1,6 +1,6 @@
-import type { AgentProviderSessionMetadata } from '@yiru/runtime-protocol/model/agent'
-import { getSyntheticAgentTitleProfile } from '@yiru/runtime-protocol/workbench/synthetic-agent-title'
-import { resolveTuiAgentPermissionMode } from '@yiru/runtime-protocol/workbench/tui-agent/permissions'
+import { resolveTuiAgentPermissionMode } from '@yiru/protocol/agent/launch/permissions'
+import type { AgentProviderSessionMetadata } from '@yiru/protocol/agent/session-resume'
+import { getSyntheticAgentTitleProfile } from '~renderer/agent/title/synthetic'
 import { useAppStore } from '~renderer/store/state'
 
 import type { AgentCompletionStatusSnapshot } from './agent/completion-coordinator-types'

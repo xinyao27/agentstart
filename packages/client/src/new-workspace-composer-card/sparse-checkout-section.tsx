@@ -1,4 +1,4 @@
-import type { SparsePreset } from '@yiru/runtime-protocol/workbench/types'
+import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import SparseCheckoutPresetSelect from '~renderer/sparse/checkout-preset-select'

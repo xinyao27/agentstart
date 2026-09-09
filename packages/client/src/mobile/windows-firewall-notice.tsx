@@ -1,4 +1,4 @@
-import type { WindowsMobileFirewallStatus } from '@yiru/runtime-protocol/workbench/windows-mobile-firewall'
+import type { WindowsMobileFirewallStatus } from '@yiru/protocol'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

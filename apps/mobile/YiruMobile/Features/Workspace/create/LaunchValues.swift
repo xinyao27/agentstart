@@ -1,0 +1,45 @@
+import Foundation
+
+nonisolated enum MobileWorkspaceCreateAgentWire: String, Codable, Equatable, Sendable, CaseIterable
+{
+    case claude = "claude"
+    case openclaude = "openclaude"
+    case codex = "codex"
+    case autohand = "autohand"
+    case opencode = "opencode"
+    case mimoCode = "mimo-code"
+    case pi = "pi"
+    case omp = "omp"
+    case gemini = "gemini"
+    case antigravity = "antigravity"
+    case aider = "aider"
+    case goose = "goose"
+    case amp = "amp"
+    case kilo = "kilo"
+    case kiro = "kiro"
+    case crush = "crush"
+    case aug = "aug"
+    case cline = "cline"
+    case codebuff = "codebuff"
+    case commandCode = "command-code"
+    case `continue` = "continue"
+    case cursor = "cursor"
+    case droid = "droid"
+    case kimi = "kimi"
+    case mistralVibe = "mistral-vibe"
+    case qwenCode = "qwen-code"
+    case rovo = "rovo"
+    case hermes = "hermes"
+    case openclaw = "openclaw"
+    case copilot = "copilot"
+    case grok = "grok"
+    case devin = "devin"
+    case ante = "ante"
+    case trae = "trae"
+}
+
+nonisolated enum MobileWorkspaceSetupDecisionWire: String, Codable, Equatable, Sendable {
+    case run = "run"
+    case skip = "skip"
+    case inherit = "inherit"
+}

@@ -1,5 +1,5 @@
-import { ONBOARDING_FINAL_STEP } from '@yiru/runtime-protocol/workbench/constants'
-import type { OnboardingState } from '@yiru/runtime-protocol/workbench/types'
+import { ONBOARDING_FINAL_STEP } from '@yiru/protocol/settings/onboarding'
+import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { applyDocumentTheme } from '~renderer/editor/document-theme'

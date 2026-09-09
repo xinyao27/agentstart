@@ -1,5 +1,6 @@
-import { getTerminalQuickCommandScope } from '@yiru/runtime-protocol/workbench/terminal/quick-commands'
-import type { GlobalSettings, TerminalQuickCommand } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { getTerminalQuickCommandScope } from '@yiru/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Plus } from '~renderer/icons/hugeicons'

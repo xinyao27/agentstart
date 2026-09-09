@@ -2,7 +2,7 @@ import {
   agentProviderSessionsEqual,
   getAgentResumeArgv,
   type SleepingAgentSessionRecord
-} from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/session-resume'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'

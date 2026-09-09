@@ -1,16 +1,14 @@
-import type { ExecutionHostScope } from '@yiru/runtime-protocol/model/workspace'
-import type {
-  GitPushTarget,
-  Project,
-  ProjectGroup,
-  ProjectHostSetup,
-  Repo,
-  SparsePreset
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { ExecutionHostScope } from '@yiru/protocol/host/identity'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
 import type { Dispatch, RefObject, SetStateAction } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { getProjectGroupIdFromNewWorkspaceOptionId } from '~renderer/new-workspace-composer-card/new-workspace-project-options'
 import type { ProjectHostSetupOption } from '~renderer/new-workspace-composer-card/project-host-setup-options'
+import { getWorkspaceSourceProvider as getLinkedWorkItemProvider } from '~renderer/new-workspace/naming/source'
 import { getFolderSourceRepos } from '~renderer/sidebar/folder-workspace-composer-model'
 
 import {
@@ -18,7 +16,7 @@ import {
   type WorkspaceCreationTargetResolution
 } from './project-host-workspace-target'
 import type { SmartGitHubPrStartPointSelection } from './resolve-smart-github-submit'
-import { getLinkedWorkItemProvider, type LinkedWorkItemSummary } from './workspace-creation'
+import type { LinkedWorkItemSummary } from './workspace-creation'
 
 type ComposerTargetActionsOptions = {
   baseBranch: string | undefined
@@ -39,7 +37,6 @@ type ComposerTargetActionsOptions = {
   setBranchNameOverridePreservesNameEdits: Dispatch<SetStateAction<boolean>>
   setCompareBaseRef: Dispatch<SetStateAction<string | undefined>>
   setForkPushWarning: Dispatch<SetStateAction<string | null>>
-  setLinkedGitLabMR: Dispatch<SetStateAction<number | null>>
   setLinkedPR: Dispatch<SetStateAction<number | null>>
   setLinkedWorkItem: Dispatch<SetStateAction<LinkedWorkItemSummary | null>>
   setProjectError: Dispatch<SetStateAction<string | null>>
@@ -60,7 +57,6 @@ export function createComposerTargetActions(options: ComposerTargetActionsOption
   const clearRepoScopedSource = (): void => {
     options.startPointSelectionRef.current = null
     options.setLinkedPR(null)
-    options.setLinkedGitLabMR(null)
     options.setLinkedWorkItem(null)
     options.setBaseBranch(undefined)
     options.setCompareBaseRef(undefined)
@@ -85,10 +81,6 @@ export function createComposerTargetActions(options: ComposerTargetActionsOption
     if (!changeOptions.preserveStartFrom) {
       if (options.linkedWorkItem?.type === 'pr' && options.baseBranch) {
         hint = translate('auto.newWorkspace.target.wasPr', 'was PR #{number}', {
-          number: options.linkedWorkItem.number
-        })
-      } else if (options.linkedWorkItem?.type === 'mr' && options.baseBranch) {
-        hint = translate('auto.newWorkspace.target.wasMr', 'was MR !{number}', {
           number: options.linkedWorkItem.number
         })
       } else if (options.baseBranch) {
@@ -117,10 +109,9 @@ export function createComposerTargetActions(options: ComposerTargetActionsOption
     options.startPointSelectionRef.current = null
     options.setLinkedWorkItem((current) => {
       const provider = current ? getLinkedWorkItemProvider(current) : null
-      return provider === 'github' || provider === 'gitlab' ? null : current
+      return provider === 'github' ? null : current
     })
     options.setLinkedPR(null)
-    options.setLinkedGitLabMR(null)
   }
 
   const handleProjectHostSetupChange = (setupId: string): void => {

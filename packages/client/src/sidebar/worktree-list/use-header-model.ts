@@ -1,5 +1,7 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type { ProjectGroup, ProjectOrderBy, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectOrderBy } from '@yiru/protocol/settings/ui-state'
 import { useEffect, type RefObject } from 'react'
 import { useAppStore } from '~renderer/store/state'
 

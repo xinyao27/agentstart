@@ -1,20 +1,19 @@
-import type { WorktreeCreateProgressPhase } from '@yiru/runtime-protocol/contract'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
 import type {
   ProjectSourceContext,
   WorkspaceRunContext
-} from '@yiru/runtime-protocol/workbench/project-source-context'
-import type {
-  CreateSparseCheckoutRequest,
-  GitPushTarget,
-  SetupDecision,
-  TuiAgent,
-  WorkspaceCreateTelemetrySource,
-  WorkspaceStatus,
-  WorktreeStartupLaunch
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/project/source-context'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
+import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
+import type { SetupDecision } from '@yiru/protocol/worktree/hooks'
+import type { CreateSparseCheckoutRequest } from '@yiru/protocol/worktree/sparse'
 import type { AgentStartedTelemetry } from '~renderer/agent/started-telemetry'
 import type { AgentStartupPlan } from '~renderer/agent/tui-startup'
 import { translate } from '~renderer/i18n/i18n'
+import type { WorktreeStartupLaunch } from '~renderer/worktree/create-model'
+
+import type { WorktreeCreateProgressPhase } from './progress'
 
 /** Two-phase status reported by the main process while a worktree is created.
  *  `preparing` covers renderer-side preflight before `createWorktree` starts;
@@ -55,10 +54,6 @@ export type WorktreeCreationRequest = {
   agent: TuiAgent | null
   branchNameOverride?: string
   workspaceStatus?: WorkspaceStatus
-  linkedGitLabMR?: number
-  linkedBitbucketPR?: number | null
-  linkedAzureDevOpsPR?: number | null
-  linkedGiteaPR?: number | null
   /** Backend-spawn startup payload (`createWorktree` arg). Present only when the
    *  agent launch is self-contained; otherwise the renderer drives startup via
    *  `startupPlan`. */

@@ -1,5 +1,5 @@
-import type { GitHistoryItem } from '@yiru/runtime-protocol/workbench/git/history'
-import type { GitBranchChangeEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'

@@ -1,9 +1,9 @@
-import { FIRST_PANE_ID } from '@yiru/runtime-protocol/workbench/pane-key'
-import { isTerminalLeafId } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { isTerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/session'
+import { FIRST_PANE_ID } from '~renderer/terminal-pane/pane-manager/first-pane-id'
 
 export type RuntimePaneTitleLeafResolution = {
   title: string | null

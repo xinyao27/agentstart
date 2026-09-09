@@ -1,4 +1,4 @@
-import { yieldToEventLoop } from '@yiru/runtime-protocol/model/ui'
+import { yieldToEventLoop } from '~renderer/event-loop-yield'
 
 export type PastePayloadMetadata = {
   byteLength: number

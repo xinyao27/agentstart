@@ -3,20 +3,20 @@ import {
   type AgentType,
   type AgentStatusEntry,
   type AgentStatusOrchestrationContext
-} from '@yiru/runtime-protocol/model/agent'
-import { resolveCompatibleAgentTypeForOwner } from '@yiru/runtime-protocol/workbench/agent/title-owner'
+} from '@yiru/protocol/agent/status-records'
 import {
   makePaneKey,
   parseLegacyNumericPaneKey,
   parsePaneKey
-} from '@yiru/runtime-protocol/workbench/stable-pane-id'
+} from '@yiru/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
-  TerminalPaneLayoutNode,
-  TerminalTab
-} from '@yiru/runtime-protocol/workbench/types'
+  TerminalPaneLayoutNode
+} from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
 import type { RetainedAgentEntry } from '~renderer/agent/status-state/slice'
+import { resolveCompatibleAgentTypeForOwner } from '~renderer/agent/title/owner'
 import type { DashboardAgentRow } from '~renderer/dashboard/use-dashboard-data'
 import { resolveAgentTypeFromTerminalTitle } from '~renderer/sidebar/terminal-title-agent-type'
 import { resolveRuntimePaneTitleLeafId } from '~renderer/terminal-pane/title-leaf-id'

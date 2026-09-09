@@ -1,6 +1,8 @@
-import type { RuntimeClientEvent } from '@yiru/runtime-protocol/workbench/runtime-client-events'
+import type { ClientEventsSubscriptionEventValue } from '@yiru/protocol'
+import type { RuntimeClientEvent } from '~renderer/runtime/client-event-model'
 
-import { createRuntimeOrpcClient } from './orpc-client'
+import { requireClientEventsClient } from './client-events-target'
+import type { RuntimeClientTarget } from './runtime-target'
 
 export type RuntimeClientEventSubscription = {
   unsubscribe: () => void
@@ -11,56 +13,37 @@ export async function subscribeRuntimeClientEvents(
   onEvent: (event: RuntimeClientEvent) => void,
   onError: (error: unknown) => void = console.warn
 ): Promise<RuntimeClientEventSubscription> {
-  return subscribeRuntimeClientEventsViaOrpc(environmentId, onEvent, onError)
-}
-
-async function subscribeRuntimeClientEventsViaOrpc(
-  environmentId: string,
-  onEvent: (event: RuntimeClientEvent) => void,
-  onError: (error: unknown) => void
-): Promise<RuntimeClientEventSubscription> {
   const controller = new AbortController()
-  const connection = await createRuntimeOrpcClient(
-    { kind: 'environment', environmentId },
-    { signal: controller.signal }
-  )
-  try {
-    const stream = await connection.client.runtime.clientEvents.subscribe(undefined, {
-      signal: controller.signal
-    })
-    void (async () => {
-      try {
-        for await (const message of stream) {
-          if (controller.signal.aborted) {
-            return
-          }
-          if (message.type === 'ready' || message.type === 'end') {
-            continue
-          }
-          if (isRuntimeClientEvent(message)) {
-            onEvent(message)
-          }
+  const target = { kind: 'environment', environmentId } as const satisfies RuntimeClientTarget
+  const client = await requireClientEventsClient(target)
+  const stream = await client.subscribe({ signal: controller.signal })
+  void (async () => {
+    try {
+      for await (const message of stream.events) {
+        if (controller.signal.aborted) {
+          return
         }
-      } catch (error) {
-        if (!controller.signal.aborted) {
-          onError(error)
+        if (message.type === 'ready' || message.type === 'end') {
+          continue
         }
-      } finally {
-        connection.close()
+        onEvent(toRuntimeClientEvent(message))
       }
-    })()
-    return { unsubscribe: () => controller.abort() }
-  } catch (error) {
-    connection.close()
-    throw error
-  }
+    } catch (error) {
+      if (!controller.signal.aborted) {
+        onError(error)
+      }
+    } finally {
+      await stream.cancel()
+    }
+  })()
+  return { unsubscribe: () => controller.abort() }
 }
 
-function isRuntimeClientEvent(message: RuntimeClientEvent): message is RuntimeClientEvent {
-  return (
-    message.type === 'reposChanged' ||
-    message.type === 'worktreesChanged' ||
-    message.type === 'activateWorktree' ||
-    message.type === 'worktreeHeadIdentitiesChanged'
-  )
+// Why: the worktree's setup/startup/default-tabs payloads are the worktree's
+// own open JSON documents, so the workbench launch types reattach here at the
+// single adapter boundary every consumer subscribes through.
+function toRuntimeClientEvent(
+  message: Exclude<ClientEventsSubscriptionEventValue, { type: 'ready' | 'end' }>
+): RuntimeClientEvent {
+  return message as RuntimeClientEvent
 }

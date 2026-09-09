@@ -1,27 +1,7 @@
-import type { AgentType } from '@yiru/runtime-protocol/model/agent'
-import { tuiAgentToAgentKind } from '@yiru/runtime-protocol/workbench/agent/kind'
-import type { AgentKind } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
-
-// Re-export from shared module so existing renderer imports continue to work.
-// Why: the main process now needs the same agent detection logic for stat
-// tracking. Moving to shared avoids duplicating the detection code.
-export {
-  type AgentStatus,
-  detectAgentStatusFromTitle,
-  clearWorkingIndicators,
-  createAgentStatusTracker,
-  normalizeTerminalTitle,
-  isGeminiTerminalTitle,
-  isClaudeAgent,
-  isClaudeManagementTitle,
-  getAgentLabel
-} from '@yiru/runtime-protocol/workbench/agent/detection'
-
-// Re-exported from shared so mobile shows the same agent labels (one source of
-// truth). This module keeps the renderer-specific presentation adapter beside
-// the agent feature that consumes it.
-export { formatAgentTypeLabel } from '@yiru/runtime-protocol/model/agent'
+import type { AgentType } from '@yiru/protocol/agent/status-records'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { tuiAgentToAgentKind } from '@yiru/protocol/telemetry/agent-kind'
+import type { AgentKind } from '@yiru/protocol/telemetry/events/foundations'
 
 // Why: AgentIcon expects a TuiAgent, but AgentType is a broader union
 // (WellKnownAgentType | (string & {})) that includes 'unknown' and arbitrary
@@ -38,7 +18,6 @@ export { formatAgentTypeLabel } from '@yiru/runtime-protocol/model/agent'
 // would silently accept a subset of the union.
 const ICONABLE_AGENT_TYPES: Record<TuiAgent, true> = {
   claude: true,
-  'claude-agent-teams': true,
   openclaude: true,
   codex: true,
   autohand: true,

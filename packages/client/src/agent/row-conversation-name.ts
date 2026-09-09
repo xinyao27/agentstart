@@ -1,12 +1,10 @@
-import {
-  formatAgentTypeLabel,
-  isClaudeManagementTitle,
-  isMeaningfulOpenCodeTerminalTitle,
-  stripLeadingAgentTitleDecorationOrEmpty,
-  type AgentType
-} from '@yiru/runtime-protocol/model/agent'
-import { SYNTHETIC_AGENT_TITLE_PROFILES } from '@yiru/runtime-protocol/workbench/synthetic-agent-title'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { AgentType } from '@yiru/protocol/agent/status-records'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import { isClaudeManagementTitle } from '~renderer/agent/title/core'
+import { stripLeadingAgentTitleDecorationOrEmpty } from '~renderer/agent/title/decoration'
+import { isMeaningfulOpenCodeTerminalTitle } from '~renderer/agent/title/opencode'
+import { SYNTHETIC_AGENT_TITLE_PROFILES } from '~renderer/agent/title/synthetic'
+import { formatAgentTypeLabel } from '~renderer/agent/title/type-label'
 
 export type ConversationNameTab = Pick<
   TerminalTab,

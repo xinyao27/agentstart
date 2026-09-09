@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service StatusService {
+  rpc GetStatus(GetStatusRequest) returns (GetStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message GetStatusRequest {}
+
+message GetStatusResponse {
+  string runtime_id = 1;
+  repeated string capabilities = 5;
+  string host_platform = 6;
+  // Compatibility version of the daemon capability API exposed to product clients.
+  uint32 runtime_api_version = 7;
+  uint32 min_compatible_runtime_client_version = 8;
+
+  uint64 renderer_graph_epoch = 9;
+  RuntimeGraphStatus graph_status = 10;
+  optional int64 authoritative_window_id = 11;
+  uint32 live_tab_count = 12;
+  uint32 live_leaf_count = 13;
+  string app_version = 14;
+  RemoteUpdateSupport remote_update_support = 15;
+  optional RemoteControlDiagnostics remote_control = 16;
+  optional string terminal_windows_shell = 17;
+  RuntimeDeviceScope device_scope = 18;
+
+  reserved 2, 3, 4;
+  reserved "daemon_version", "protocol_version", "min_compatible_protocol_version";
+}
+
+enum RuntimeGraphStatus {
+  RUNTIME_GRAPH_STATUS_UNSPECIFIED = 0;
+  RUNTIME_GRAPH_STATUS_READY = 1;
+  RUNTIME_GRAPH_STATUS_RELOADING = 2;
+  RUNTIME_GRAPH_STATUS_UNAVAILABLE = 3;
+}
+
+enum RuntimeDeviceScope {
+  RUNTIME_DEVICE_SCOPE_UNSPECIFIED = 0;
+  RUNTIME_DEVICE_SCOPE_MOBILE = 1;
+  RUNTIME_DEVICE_SCOPE_RUNTIME = 2;
+}
+
+message RemoteUpdateSupport {
+  RemoteUpdateInstallMode install_mode = 1;
+  bool automatic = 2;
+  RemoteUpdateReason reason = 3;
+}
+
+enum RemoteUpdateInstallMode {
+  REMOTE_UPDATE_INSTALL_MODE_UNSPECIFIED = 0;
+  REMOTE_UPDATE_INSTALL_MODE_INTERACTIVE = 1;
+  REMOTE_UPDATE_INSTALL_MODE_SUPERVISED_HEADLESS_SERVE = 2;
+  REMOTE_UPDATE_INSTALL_MODE_UNSUPPORTED_HEADLESS_SERVE = 3;
+}
+
+enum RemoteUpdateReason {
+  REMOTE_UPDATE_REASON_UNSPECIFIED = 0;
+  REMOTE_UPDATE_REASON_AVAILABLE = 1;
+  REMOTE_UPDATE_REASON_MANUAL_SERVICE_UPDATE_REQUIRED = 2;
+  REMOTE_UPDATE_REASON_UNPACKAGED_BUILD = 3;
+  REMOTE_UPDATE_REASON_UPDATER_UNAVAILABLE = 4;
+}
+
+message RemoteControlDiagnostics {
+  RemoteControlState state = 1;
+  uint32 pending_request_count = 2;
+  uint32 subscription_count = 3;
+  uint32 reconnect_attempt = 4;
+  optional int64 last_connected_at_unix_ms = 5;
+  optional RemoteControlClose last_close = 6;
+  optional string last_error = 7;
+}
+
+enum RemoteControlState {
+  REMOTE_CONTROL_STATE_UNSPECIFIED = 0;
+  REMOTE_CONTROL_STATE_CLOSED = 1;
+  REMOTE_CONTROL_STATE_AWAITING_READY = 2;
+  REMOTE_CONTROL_STATE_AWAITING_AUTHENTICATED = 3;
+  REMOTE_CONTROL_STATE_READY = 4;
+  REMOTE_CONTROL_STATE_RECONNECTING = 5;
+}
+
+message RemoteControlClose {
+  uint32 code = 1;
+  string reason = 2;
+}

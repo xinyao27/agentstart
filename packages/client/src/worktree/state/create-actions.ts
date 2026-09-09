@@ -1,22 +1,22 @@
-import {
-  CLIENT_WORKTREE_CREATE_MAX_ATTEMPTS,
-  getClientWorktreeCreateCandidate,
-  isRetryableWorktreeCreateConflict
-} from '@yiru/runtime-protocol/model/review'
-import {
-  folderWorkspaceKey,
-  parseWorkspaceKey
-} from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { folderWorkspaceKey, parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 import { readWorktreeMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterWorktreeMutation } from '~renderer/project-catalog/mutation-refresh'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
+import {
+  createRuntimeWorktree,
+  prefetchRuntimeWorktreeCreateBase
+} from '~renderer/runtime/worktree-lifecycle-target'
 
 import type { AppState } from '../../store/types'
+import {
+  CLIENT_WORKTREE_CREATE_MAX_ATTEMPTS,
+  getClientWorktreeCreateCandidate,
+  isRetryableWorktreeCreateConflict
+} from '../create-retry-policy'
 import { publishLocalBaseRefRefreshResult } from './refresh-model'
 import { settingsForRepoOwner } from './runtime-owner'
 import type { WorktreeSlice } from './types'
@@ -31,19 +31,10 @@ export function createWorktreeCreateActions(
         const target = getActiveRuntimeTarget(
           settingsForRepoOwner(readProjectCatalogRuntimeState(), repoId)
         )
-        if (target.kind === 'local') {
-          await workspaceHostClient.worktrees.prefetchCreateBase({
-            repoId,
-            ...(baseBranch ? { baseBranch } : {})
-          })
-          return
-        }
-        await callRuntimeOrpc(
-          target,
-          (client) => client.worktree.prefetchCreateBase,
-          { repo: repoId, ...(baseBranch ? { baseBranch } : {}) },
-          { timeoutMs: 30_000 }
-        )
+        await prefetchRuntimeWorktreeCreateBase(target, {
+          repo: repoId,
+          ...(baseBranch ? { baseBranch } : {})
+        })
       } catch {
         // Why: prefetch is only a latency hedge. The create path awaits the same
         // backend refresh and owns user-visible error reporting.
@@ -62,13 +53,9 @@ export function createWorktreeCreateActions(
       createdWithAgent,
       branchNameOverride,
       workspaceStatus,
-      linkedGitLabMR,
       startup,
       pendingFirstAgentMessageRename,
       creationId,
-      linkedBitbucketPR,
-      linkedAzureDevOpsPR,
-      linkedGiteaPR,
       compareBaseRef
     ) => {
       try {
@@ -114,62 +101,49 @@ export function createWorktreeCreateActions(
               ...(manualOrder !== undefined ? { manualOrder } : {}),
               ...(parentWorkspace ? { parentWorkspace } : {}),
               ...(workspaceStatus !== undefined ? { workspaceStatus } : {}),
-              ...(linkedGitLabMR !== undefined ? { linkedGitLabMR } : {}),
-              ...(linkedBitbucketPR !== undefined ? { linkedBitbucketPR } : {}),
-              ...(linkedAzureDevOpsPR !== undefined ? { linkedAzureDevOpsPR } : {}),
-              ...(linkedGiteaPR !== undefined ? { linkedGiteaPR } : {}),
               ...(startup ? { startup } : {}),
               ...(creationId ? { creationId } : {})
             }
             const result =
               target.kind === 'local'
                 ? await workspaceHostClient.worktrees.create(createArgs)
-                : await callRuntimeOrpc(
-                    target,
-                    (client) => client.worktree.create,
-                    {
-                      expectedRevision,
-                      repo: repoId,
-                      operationId: creationId,
-                      name: candidateName,
-                      baseBranch,
-                      ...(compareBaseRef ? { compareBaseRef } : {}),
-                      ...(candidateBranchNameOverride
-                        ? { branchNameOverride: candidateBranchNameOverride }
-                        : {}),
-                      setupDecision,
-                      sparseCheckout,
-                      ...(displayName ? { displayName } : {}),
-                      ...(telemetrySource ? { telemetrySource } : {}),
-                      ...(linkedPR !== undefined ? { linkedPR } : {}),
-                      ...(pushTarget ? { pushTarget } : {}),
-                      ...(createdWithAgent ? { createdWithAgent } : {}),
-                      ...(pendingFirstAgentMessageRename === true && createdWithAgent
-                        ? { pendingFirstAgentMessageRename: true }
-                        : {}),
-                      ...(manualOrder !== undefined ? { manualOrder } : {}),
-                      ...(parentWorkspace ? { parentWorkspace } : {}),
-                      ...(workspaceStatus !== undefined ? { workspaceStatus } : {}),
-                      ...(linkedGitLabMR !== undefined ? { linkedGitLabMR } : {}),
-                      ...(linkedBitbucketPR !== undefined ? { linkedBitbucketPR } : {}),
-                      ...(linkedAzureDevOpsPR !== undefined ? { linkedAzureDevOpsPR } : {}),
-                      ...(linkedGiteaPR !== undefined ? { linkedGiteaPR } : {}),
-                      ...(startup
-                        ? {
-                            startupCommand: startup.command,
-                            ...(startup.env ? { startupEnv: startup.env } : {}),
-                            ...(startup.launchConfig
-                              ? { startupLaunchConfig: startup.launchConfig }
-                              : {}),
-                            ...(startup.startupCommandDelivery
-                              ? { startupCommandDelivery: startup.startupCommandDelivery }
-                              : {}),
-                            activate: true
-                          }
-                        : {})
-                    },
-                    { timeoutMs: 10 * 60_000 }
-                  )
+                : await createRuntimeWorktree(target, {
+                    expectedRevision,
+                    repo: repoId,
+                    operationId: creationId,
+                    name: candidateName,
+                    baseBranch,
+                    ...(compareBaseRef ? { compareBaseRef } : {}),
+                    ...(candidateBranchNameOverride
+                      ? { branchNameOverride: candidateBranchNameOverride }
+                      : {}),
+                    setupDecision,
+                    sparseCheckout,
+                    ...(displayName ? { displayName } : {}),
+                    ...(telemetrySource ? { telemetrySource } : {}),
+                    ...(linkedPR !== undefined ? { linkedPR } : {}),
+                    ...(pushTarget ? { pushTarget } : {}),
+                    ...(createdWithAgent ? { createdWithAgent } : {}),
+                    ...(pendingFirstAgentMessageRename === true && createdWithAgent
+                      ? { pendingFirstAgentMessageRename: true }
+                      : {}),
+                    ...(manualOrder !== undefined ? { manualOrder } : {}),
+                    ...(parentWorkspace ? { parentWorkspace } : {}),
+                    ...(workspaceStatus !== undefined ? { workspaceStatus } : {}),
+                    ...(startup
+                      ? {
+                          startupCommand: startup.command,
+                          ...(startup.env ? { startupEnv: startup.env } : {}),
+                          ...(startup.launchConfig
+                            ? { startupLaunchConfig: startup.launchConfig }
+                            : {}),
+                          ...(startup.startupCommandDelivery
+                            ? { startupCommandDelivery: startup.startupCommandDelivery }
+                            : {}),
+                          activate: true
+                        }
+                      : {})
+                  })
             await refreshAfterWorktreeMutation(target, repoId, result.revision)
             set((s) => {
               return {

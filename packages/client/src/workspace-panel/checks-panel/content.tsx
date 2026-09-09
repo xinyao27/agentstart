@@ -1,4 +1,4 @@
-import type { PRInfo } from '@yiru/runtime-protocol/workbench/types'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
 import { GitPullRequest } from '~renderer/icons/hugeicons'
 
 export { CHECK_COLOR, CHECK_ICON } from '../check-status-presentation'

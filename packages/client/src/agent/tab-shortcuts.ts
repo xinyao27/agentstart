@@ -1,14 +1,11 @@
+import { ALL_TUI_AGENTS } from '@yiru/protocol/agent/display-names'
+import { normalizeDisabledTuiAgents, pickTuiAgent } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import {
   agentTabActionId,
   type AgentTabActionId,
   type KeybindingOverrides
-} from '@yiru/runtime-protocol/workbench/keybindings'
-import { ALL_TUI_AGENTS } from '@yiru/runtime-protocol/workbench/tui-agent/display-names'
-import {
-  normalizeDisabledTuiAgents,
-  pickTuiAgent
-} from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/keybindings'
 
 export type BoundAgentTabAction = {
   agent: TuiAgent

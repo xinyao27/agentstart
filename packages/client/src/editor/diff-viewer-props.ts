@@ -1,4 +1,4 @@
-import type { LargeDiffRenderLimit } from './large-diff-render-limit'
+import type { LargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
 
 export type DiffViewerProps = {
   /** Why: modelKey may include split scope, while pending-save flushes use the open-file id. */

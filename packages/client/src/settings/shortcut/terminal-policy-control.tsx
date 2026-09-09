@@ -1,4 +1,4 @@
-import type { TerminalShortcutPolicy } from '@yiru/runtime-protocol/workbench/keybindings'
+import type { TerminalShortcutPolicy } from '@yiru/protocol/keybindings'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~renderer/ui/select'

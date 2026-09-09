@@ -1,4 +1,3 @@
-import type { NotificationDeliveryProbeResult } from '@yiru/runtime-protocol/workbench/types'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -7,6 +6,7 @@ import {
   Gear as Settings,
   Warning as TriangleAlert
 } from '~renderer/icons/hugeicons'
+import type { NotificationDeliveryProbeResult } from '~renderer/notifications/permission-model'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { Button } from '~renderer/ui/button'
 

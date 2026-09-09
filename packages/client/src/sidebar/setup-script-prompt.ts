@@ -1,9 +1,10 @@
-import { getDefaultRepoHookSettings } from '@yiru/runtime-protocol/workbench/constants'
-import { resolveHookCommandSourcePolicy } from '@yiru/runtime-protocol/workbench/hook-command-source-policy'
-import type { SetupScriptImportCandidate } from '@yiru/runtime-protocol/workbench/setup/script-imports'
-import type { Repo, RepoHookSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { resolveHookCommandSourcePolicy } from '@yiru/protocol/setup/command-source-policy'
+import { getDefaultRepoHookSettings } from '@yiru/protocol/worktree/hooks'
 import type { HookCheckResult } from '~renderer/runtime/hooks-client'
 import { isRuntimeScopeForbiddenError } from '~renderer/runtime/rpc-client'
+import type { SetupScriptImportCandidate } from '~renderer/setup/import-candidate'
 
 const SETUP_SCRIPT_PROMPT_DISMISSAL_PREFIX = 'generation-v1:'
 

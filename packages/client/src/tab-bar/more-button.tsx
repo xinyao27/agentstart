@@ -1,4 +1,4 @@
-import { getRepoIdFromWorktreeId } from '@yiru/runtime-protocol/model/workspace'
+import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { DotsThree as MoreHorizontal, X } from '~renderer/icons/hugeicons'

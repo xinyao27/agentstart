@@ -1,8 +1,5 @@
-import {
-  agentPhaseFromStatus,
-  type AgentPhase,
-  type AgentStatusEntry
-} from '@yiru/runtime-protocol/model/agent'
+import { agentPhaseFromStatus, type AgentPhase } from '@yiru/protocol/agent/phase'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
 import { useAppStore } from '~renderer/store/state'
 
 const PHASE_PRIORITY: readonly AgentPhase[] = [

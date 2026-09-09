@@ -1,7 +1,8 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/runtime-protocol/workbench/types'
+import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 import type { AppState } from '~renderer/store/types'
 
 import {
@@ -122,17 +123,19 @@ export function createGitHubCheckActions(
             options?.sourceContext
           )
           const ghRequest = githubRuntimeRequest(requestContext)
-          const checks = await callRuntimeOrpc(
-            ghRequest.target,
-            (client) => client.github.prChecks,
+          const client = await openGitHubTarget()
+          if (!client) {
+            throw new Error('GitHub protocol capability is unavailable')
+          }
+          const checks = await client.getPrChecks(
             {
               repo: ghRequest.repo,
               prNumber,
               headSha,
-              prRepo: prRepo ?? null,
+              prRepo: prRepo ?? undefined,
               noCache: Boolean(options?.force || options?.noCache)
             },
-            { timeoutMs: 30_000 }
+            { timeoutMs: 30_000, ...runtimeCallDestination(ghRequest.target) }
           )
           set((s) => {
             const nextState: Partial<AppState> = {
@@ -201,18 +204,20 @@ export function createGitHubCheckActions(
         options?.sourceContext
       )
       const ghRequest = githubRuntimeRequest(requestContext)
-      return await callRuntimeOrpc(
-        ghRequest.target,
-        (client) => client.github.prCheckDetails,
+      const client = await openGitHubTarget()
+      if (!client) {
+        throw new Error('GitHub protocol capability is unavailable')
+      }
+      return await client.getPrCheckDetails(
         {
           repo: ghRequest.repo,
           checkRunId: args.checkRunId,
           workflowRunId: args.workflowRunId,
           checkName: args.checkName,
           url: args.url,
-          prRepo: args.prRepo ?? null
+          prRepo: args.prRepo ?? undefined
         },
-        { timeoutMs: 30_000 }
+        { timeoutMs: 30_000, ...runtimeCallDestination(ghRequest.target) }
       )
     }
   }

@@ -1,5 +1,4 @@
-import { activateYiruTerminalUnicodeProvider } from '@yiru/runtime-protocol/workbench/terminal/unicode-provider'
-
+import { activateYiruTerminalUnicodeProvider } from '../emulator/unicode-provider'
 import { attachDomRendererFocusClassSync } from './pane-dom-focus-class-sync'
 import {
   attachPaneFitResizeObserver,

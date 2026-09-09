@@ -1,5 +1,5 @@
-import { DEFAULT_APP_FONT_FAMILY } from '@yiru/runtime-protocol/workbench/constants'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { DEFAULT_APP_FONT_FAMILY } from '@yiru/protocol/settings/interface-font'
 import { useEffect, useRef, useState } from 'react'
 import { listInstalledFontFamilies } from '~renderer/runtime/settings-import-client'
 

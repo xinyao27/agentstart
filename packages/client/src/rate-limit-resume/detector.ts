@@ -1,5 +1,5 @@
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
-import type { RateLimitHit } from '@yiru/runtime-protocol/workbench/rate-limit-resume/types'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import type { RateLimitHit } from '@yiru/protocol/rate-limit-resume-values'
 // Uses output only as a wake-up signal, then asks the runtime to inspect the
 // exact Codex turn's structured rollout completion.
 //

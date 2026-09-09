@@ -1,7 +1,8 @@
+import type { EmulatorAttachResultValue } from '@yiru/protocol'
 import { toast } from 'sonner'
 import type { EmulatorStreamInfo } from '~renderer/emulator-pane/types'
 import { translate } from '~renderer/i18n/i18n'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireEmulatorClient } from '~renderer/runtime/emulator-target'
 import { useAppStore } from '~renderer/store/state'
 
 import { ensureSimulatorTab, getSimulatorTabForWorktree } from '../tab-group/ensure-simulator-tab'
@@ -23,11 +24,6 @@ type OpenMobileEmulatorTabOptions = {
   placement?: 'activeGroup' | 'rightSplit'
 }
 
-type EmulatorAttachResult = {
-  attached?: boolean
-  info?: EmulatorStreamInfo
-}
-
 function dispatchPrelaunchedSession(worktreeId: string, info: EmulatorStreamInfo): void {
   if (typeof window === 'undefined') {
     return
@@ -47,7 +43,7 @@ function getLaunchErrorMessage(error: unknown): string {
   }
   return translate(
     'auto.lib.open.mobile.emulator.tab.bf4f2a8a72',
-    'Could not start the emulator. Check iOS or Android emulator setup and try another device.'
+    'Could not start the emulator. Check iOS Simulator setup and try another device.'
   )
 }
 
@@ -96,10 +92,9 @@ export async function openMobileEmulatorTab(
     try {
       // Why: the pane is visible but inert while serve-sim settles; the actual
       // stream is handed to it only after attach returns ready info.
-      const result = (await callRuntimeOrpc({ kind: 'local' }, (client) => client.emulator.attach, {
-        worktree: worktreeId,
-        focus: false
-      })) satisfies EmulatorAttachResult
+      const result: EmulatorAttachResultValue = await (
+        await requireEmulatorClient()
+      ).attach({ worktree: worktreeId })
       if (!result.attached || !result.info) {
         throw new Error('Could not start the emulator.')
       }

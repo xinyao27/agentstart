@@ -1,4 +1,5 @@
 import Foundation
+import YiruProtocol
 
 nonisolated struct WorkspaceSourceRef: Identifiable, Hashable, Sendable {
     let refName: String
@@ -24,30 +25,14 @@ nonisolated enum WorkspaceSourceSelection: Hashable, Sendable {
 nonisolated enum WorkspaceSourceMode: String, CaseIterable, Identifiable, Sendable {
     case smart
     case github
-    case gitlab
     case branch
     case text
 
     var id: String { rawValue }
 }
 
-nonisolated enum WorkspaceHostedSourceProvider: String, Sendable {
-    case github
-    case gitlab
-}
-
-nonisolated enum WorkspaceGitLabMRState: String, CaseIterable, Identifiable, Sendable {
-    case opened
-    case merged
-    case closed
-    case all
-
-    var id: String { rawValue }
-}
-
 nonisolated struct WorkspaceHostedSource: Identifiable, Hashable, Sendable {
     let id: String
-    let provider: WorkspaceHostedSourceProvider
     let number: Int
     let title: String
     let state: String
@@ -56,17 +41,53 @@ nonisolated struct WorkspaceHostedSource: Identifiable, Hashable, Sendable {
     let baseRefName: String?
     let isCrossRepository: Bool?
 
-    init(wire: MobileWorkspaceSourceItemWire, provider: WorkspaceHostedSourceProvider) {
-        id = "\(provider.rawValue):\(wire.id)"
-        self.provider = provider
-        number = wire.number
-        title = wire.title
-        state = wire.state
-        url = wire.url
-        branchName = wire.branchName
-        baseRefName = wire.baseRefName
-        isCrossRepository = wire.isCrossRepository
+    init(
+        id: String,
+        number: Int,
+        title: String,
+        state: String,
+        url: String,
+        branchName: String?,
+        baseRefName: String?,
+        isCrossRepository: Bool?
+    ) {
+        self.id = id
+        self.number = number
+        self.title = title
+        self.state = state
+        self.url = url
+        self.branchName = branchName
+        self.baseRefName = baseRefName
+        self.isCrossRepository = isCrossRepository
     }
+
+    init(item: Yiru_Runtime_V1_GitHubWorkItem) {
+        self.init(
+            id: "github:\(item.id)",
+            number: Int(item.number),
+            title: item.title,
+            state: hostedSourceState(item.state),
+            url: item.url,
+            branchName: nonEmpty(item.branchName),
+            baseRefName: nonEmpty(item.baseRefName),
+            isCrossRepository: item.hasIsCrossRepository ? item.isCrossRepository : nil
+        )
+    }
+}
+
+// Why: the Rust authority collapses unknown PR states to open (rpc/github/service/mapping.rs),
+// so the projection mirrors that default instead of inventing a separate fallback.
+nonisolated private func hostedSourceState(_ state: Yiru_Runtime_V1_GitHubPrState) -> String {
+    switch state {
+    case .closed: "closed"
+    case .merged: "merged"
+    case .draft: "draft"
+    case .open, .unspecified, .UNRECOGNIZED: "open"
+    }
+}
+
+nonisolated private func nonEmpty(_ value: String) -> String? {
+    value.isEmpty ? nil : value
 }
 
 nonisolated struct WorkspaceHostedBase: Hashable, Sendable {
@@ -82,20 +103,11 @@ nonisolated struct WorkspacePushTarget: Hashable, Sendable {
     let remoteURL: String?
     let wasRemoteCreated: Bool?
 
-    init(wire: MobileGitPushTargetWire) {
-        remoteName = wire.remoteName
-        branchName = wire.branchName
-        remoteURL = wire.remoteUrl
-        wasRemoteCreated = wire.remoteCreated
-    }
-
-    var wire: MobileGitPushTargetWire {
-        MobileGitPushTargetWire(
-            remoteName: remoteName,
-            branchName: branchName,
-            remoteUrl: remoteURL,
-            remoteCreated: wasRemoteCreated
-        )
+    init(pushTarget: Yiru_Runtime_V1_WorktreePushTarget) {
+        remoteName = pushTarget.remoteName
+        branchName = pushTarget.branchName
+        remoteURL = pushTarget.hasRemoteURL ? pushTarget.remoteURL : nil
+        wasRemoteCreated = pushTarget.hasRemoteCreated ? pushTarget.remoteCreated : nil
     }
 }
 

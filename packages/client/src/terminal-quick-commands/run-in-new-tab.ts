@@ -2,8 +2,8 @@ import {
   flattenTerminalQuickCommand,
   isTerminalAgentQuickCommand,
   supportsTerminalAgentQuickCommand
-} from '@yiru/runtime-protocol/workbench/terminal/quick-commands'
-import type { TerminalQuickCommand } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { useAppStore } from '~renderer/store/state'
 import { reconcileTabOrder } from '~renderer/tab-bar/reconcile-order'
@@ -44,17 +44,17 @@ function resolveQuickCommandGroupId(
  * `appendEnter: false` is honored. Agent-prompt quick commands use the
  * agent's normal prompt launch command instead of post-launch TUI paste.
  */
-export function runQuickCommandInNewTab({
+export async function runQuickCommandInNewTab({
   command,
   worktreeId,
   groupId
-}: RunQuickCommandInNewTabArgs): { tabId: string } | null {
+}: RunQuickCommandInNewTabArgs): Promise<{ tabId: string } | null> {
   const targetGroupId = groupId ?? undefined
   if (isTerminalAgentQuickCommand(command)) {
     if (!command.prompt.trim() || !supportsTerminalAgentQuickCommand(command.agent)) {
       return null
     }
-    const result = launchAgentInNewTab({
+    const result = await launchAgentInNewTab({
       agent: command.agent,
       prompt: command.prompt,
       worktreeId,

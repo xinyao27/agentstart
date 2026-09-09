@@ -1,4 +1,4 @@
-import { folderWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 import { addAdditionalValidWorkspaceKeys } from '~renderer/workspace/session-hydration-keys'
 

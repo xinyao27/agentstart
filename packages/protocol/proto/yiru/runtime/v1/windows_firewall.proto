@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service WindowsFirewallService {
+  rpc GetStatus(WindowsFirewallServiceGetStatusRequest) returns (WindowsFirewallServiceGetStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Repair(WindowsFirewallServiceRepairRequest) returns (WindowsFirewallServiceRepairResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc OpenNetworkSettings(WindowsFirewallServiceOpenNetworkSettingsRequest) returns (WindowsFirewallServiceOpenNetworkSettingsResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message WindowsFirewallServiceGetStatusRequest {
+  optional string address = 1;
+}
+
+message WindowsFirewallServiceGetStatusResponse {
+  WindowsMobileFirewallStatus status = 1;
+}
+
+message WindowsMobileFirewallStatus {
+  bool supported = 1;
+  optional WindowsMobileFirewallDetails details = 2;
+}
+
+message WindowsMobileFirewallDetails {
+  uint32 port = 1;
+  bool rule_allowed = 2;
+  bool blocking_rule_detected = 3;
+  bool private_firewall_enabled = 4;
+  WindowsNetworkCategory network_category = 5;
+  bool inspection_available = 6;
+}
+
+enum WindowsNetworkCategory {
+  WINDOWS_NETWORK_CATEGORY_UNSPECIFIED = 0;
+  WINDOWS_NETWORK_CATEGORY_PRIVATE = 1;
+  WINDOWS_NETWORK_CATEGORY_PUBLIC = 2;
+  WINDOWS_NETWORK_CATEGORY_DOMAIN = 3;
+  WINDOWS_NETWORK_CATEGORY_UNKNOWN = 4;
+}
+
+message WindowsFirewallServiceRepairRequest {}
+
+message WindowsFirewallServiceRepairResponse {
+  bool ok = 1;
+  optional WindowsFirewallRepairFailureReason reason = 2;
+}
+
+enum WindowsFirewallRepairFailureReason {
+  WINDOWS_FIREWALL_REPAIR_FAILURE_REASON_UNSPECIFIED = 0;
+  WINDOWS_FIREWALL_REPAIR_FAILURE_REASON_CANCELLED = 1;
+  WINDOWS_FIREWALL_REPAIR_FAILURE_REASON_FAILED = 2;
+  WINDOWS_FIREWALL_REPAIR_FAILURE_REASON_UNSUPPORTED = 3;
+}
+
+message WindowsFirewallServiceOpenNetworkSettingsRequest {}
+
+message WindowsFirewallServiceOpenNetworkSettingsResponse {
+  bool opened = 1;
+}

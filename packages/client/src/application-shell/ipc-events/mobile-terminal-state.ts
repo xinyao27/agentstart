@@ -1,4 +1,4 @@
-import type { RuntimeTerminalDriverState } from '@yiru/runtime-protocol/workbench/runtime-types'
+import type { TerminalDriverState } from '@yiru/protocol'
 import { subscribeRuntimeDriverEvents } from '~renderer/runtime/runtime-driver-events-client'
 import { shellClient } from '~renderer/runtime/shell-client'
 import {
@@ -23,7 +23,7 @@ type PendingEvent =
         rows: number
       }
     }
-  | { kind: 'driver'; event: { ptyId: string; driver: RuntimeTerminalDriverState } }
+  | { kind: 'driver'; event: { ptyId: string; driver: TerminalDriverState } }
 
 export function subscribeMobileTerminalState(): () => void {
   let isHydrated = isRuntimeEnvironmentActive()
@@ -101,8 +101,6 @@ export function subscribeMobileTerminalState(): () => void {
           } else {
             enqueue({ kind: 'driver', event })
           }
-          break
-        case 'browserDriverChanged':
           break
       }
     }

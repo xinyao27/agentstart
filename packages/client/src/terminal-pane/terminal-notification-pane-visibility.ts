@@ -1,5 +1,5 @@
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalLayoutSnapshot } from '@yiru/runtime-protocol/workbench/types'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
 
 type NotificationPaneVisibilityState = {
   activeWorktreeId: string | null

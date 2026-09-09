@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -84,6 +84,7 @@ export function NotificationStep({
     }
     const result = await shellClient.notifications.playSound({
       force: true,
+      soundId: customSoundId,
       volume: getCustomSoundVolume()
     })
     if (!result.played) {

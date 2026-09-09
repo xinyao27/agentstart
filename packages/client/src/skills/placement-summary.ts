@@ -1,5 +1,6 @@
-import { skillPlacements, type DiscoveredSkill } from '@yiru/runtime-protocol/workbench/skills'
+import type { DiscoveredSkill } from '@yiru/protocol'
 import { translate } from '~renderer/i18n/i18n'
+import { skillPlacements } from '~renderer/skills/installation'
 
 import { shortRootLabel } from './placement-labels'
 

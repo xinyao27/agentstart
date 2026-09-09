@@ -1,60 +1,38 @@
-import type {
-  RuntimeMobileListDevicesResult,
-  RuntimeMobileListNetworkInterfacesResult,
-  RuntimeMobilePairingQRResult,
-  RuntimeMobileRevokeDeviceResult
-} from '@yiru/runtime-protocol/contract'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import { MobilePairingClient } from '@yiru/protocol'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
-import { callRuntimeOrpc } from './orpc-client'
-import type { RuntimeClientTarget } from './rpc-client'
+import { openRuntimeProtocolTarget } from './protocol-target'
 
 type RuntimeSettings = Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null | undefined
 
-// Why: pairing mints a device credential on the daemon accepting the phone's connection.
-// Keep it pinned to the Chrome extension's local daemon when the selected work host changes.
-function pairingTarget(_settings?: RuntimeSettings): RuntimeClientTarget {
-  return { kind: 'local' }
+async function pairingClient(_settings?: RuntimeSettings): Promise<MobilePairingClient> {
+  // Why: pairing mints a device credential on the daemon accepting the phone's connection,
+  // so changing the selected work host must never redirect this authority.
+  return new MobilePairingClient(await openRuntimeProtocolTarget({ kind: 'local' }))
 }
 
-export async function listMobileNetworkInterfaces(
-  settings?: RuntimeSettings
-): Promise<RuntimeMobileListNetworkInterfacesResult> {
-  return callRuntimeOrpc(
-    pairingTarget(settings),
-    (client) => client.mobile.hostPairing.listNetworkInterfaces,
-    {}
-  )
+export async function listMobileNetworkInterfaces(settings?: RuntimeSettings) {
+  const client = await pairingClient(settings)
+  return { interfaces: [...(await client.listNetworkInterfaces())] }
 }
 
 export async function getMobilePairingQR(
   args: { address?: string; rotate?: boolean },
   settings?: RuntimeSettings
-): Promise<RuntimeMobilePairingQRResult> {
-  return callRuntimeOrpc(
-    pairingTarget(settings),
-    (client) => client.mobile.hostPairing.getPairingQR,
-    args
-  )
+) {
+  const client = await pairingClient(settings)
+  return client.getPairingQr(args)
 }
 
-export async function listPairedMobileDevices(
-  settings?: RuntimeSettings
-): Promise<RuntimeMobileListDevicesResult> {
-  return callRuntimeOrpc(
-    pairingTarget(settings),
-    (client) => client.mobile.hostPairing.listDevices,
-    {}
-  )
+export async function listPairedMobileDevices(settings?: RuntimeSettings) {
+  const client = await pairingClient(settings)
+  return { devices: [...(await client.listDevices())] }
 }
 
 export async function revokePairedMobileDevice(
   args: { deviceId: string },
   settings?: RuntimeSettings
-): Promise<RuntimeMobileRevokeDeviceResult> {
-  return callRuntimeOrpc(
-    pairingTarget(settings),
-    (client) => client.mobile.hostPairing.revokeDevice,
-    args
-  )
+) {
+  const client = await pairingClient(settings)
+  return { revoked: await client.revokeDevice(args.deviceId) }
 }

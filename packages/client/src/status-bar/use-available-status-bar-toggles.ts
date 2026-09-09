@@ -1,4 +1,4 @@
-import type { StatusBarItem } from '@yiru/runtime-protocol/workbench/types'
+import type { StatusBarItem } from '@yiru/protocol/settings/ui-state'
 import { useAppStore } from '~renderer/store/state'
 
 import { isStatusBarItemAvailable } from './agent-gating'

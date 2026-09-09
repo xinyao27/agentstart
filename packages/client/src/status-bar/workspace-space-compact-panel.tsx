@@ -5,14 +5,13 @@ import {
   ArrowClockwise as RefreshCw,
   X
 } from '~renderer/icons/hugeicons'
-import { LoadingIndicator } from '~renderer/loading/indicator'
 import { useAppStore } from '~renderer/store/state'
 
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import {
   formatBytes,
-  getWorkspaceSpaceProgressLabel,
+  getWorkspaceSpaceScanningLabel,
   getWorkspaceSpaceScanTimeLabel
 } from './workspace-space-format'
 
@@ -22,12 +21,11 @@ export function WorkspaceSpaceCompactPanel({
   onOpenFullPage: () => void
 }): React.JSX.Element {
   const analysis = useAppStore((state) => state.workspaceSpaceAnalysis)
-  const progress = useAppStore((state) => state.workspaceSpaceScanProgress)
   const scanError = useAppStore((state) => state.workspaceSpaceScanError)
   const isScanning = useAppStore((state) => state.workspaceSpaceScanning)
   const refreshWorkspaceSpace = useAppStore((state) => state.refreshWorkspaceSpace)
   const cancelWorkspaceSpaceScan = useAppStore((state) => state.cancelWorkspaceSpaceScan)
-  const progressLabel = getWorkspaceSpaceProgressLabel(progress)
+  const progressLabel = getWorkspaceSpaceScanningLabel()
 
   const scan = (): void => {
     void refreshWorkspaceSpace().catch(() => {
@@ -65,7 +63,7 @@ export function WorkspaceSpaceCompactPanel({
                   ? translate(
                       'auto.components.status.bar.WorkspaceSpaceCompactPanel.3d8d47ce77',
                       '{{value0}} · last result kept',
-                      { value0: progressLabel ?? 'Scanning workspace sizes' }
+                      { value0: progressLabel }
                     )
                   : analysis.unavailableWorktreeCount > 0
                     ? translate(
@@ -85,11 +83,7 @@ export function WorkspaceSpaceCompactPanel({
                         }
                       )
                 : isScanning
-                  ? (progressLabel ??
-                    translate(
-                      'auto.components.status.bar.WorkspaceSpaceCompactPanel.39786e3b73',
-                      'Scanning workspace sizes.'
-                    ))
+                  ? progressLabel
                   : translate(
                       'auto.components.status.bar.WorkspaceSpaceCompactPanel.0583c806ac',
                       'Workspace disk usage is not scanned.'
@@ -103,28 +97,14 @@ export function WorkspaceSpaceCompactPanel({
             variant="outline"
             size="xs"
             onClick={isScanning ? cancelScan : scan}
-            disabled={progress?.state === 'cancelling'}
             className="w-24"
           >
-            {isScanning ? (
-              progress?.state === 'cancelling' ? (
-                <LoadingIndicator className="size-3" />
-              ) : (
-                <X className="size-3" />
-              )
-            ) : (
-              <RefreshCw className="size-3" />
-            )}
+            {isScanning ? <X className="size-3" /> : <RefreshCw className="size-3" />}
             {isScanning
-              ? progress?.state === 'cancelling'
-                ? translate(
-                    'auto.components.status.bar.WorkspaceSpaceCompactPanel.5691353a21',
-                    'Stopping'
-                  )
-                : translate(
-                    'auto.components.status.bar.WorkspaceSpaceCompactPanel.2af2174d6d',
-                    'Cancel'
-                  )
+              ? translate(
+                  'auto.components.status.bar.WorkspaceSpaceCompactPanel.2af2174d6d',
+                  'Cancel'
+                )
               : analysis
                 ? translate(
                     'auto.components.status.bar.WorkspaceSpaceCompactPanel.f5e1a84d79',

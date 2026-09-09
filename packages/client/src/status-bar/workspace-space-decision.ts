@@ -1,11 +1,13 @@
+import type { WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree } from '@yiru/protocol'
 import type {
   AgentStatusEntry,
   MigrationUnsupportedPtyEntry
-} from '@yiru/runtime-protocol/model/agent'
-import type { Repo, TerminalTab, Worktree } from '@yiru/runtime-protocol/workbench/types'
-import type { WorkspaceSpaceWorktree } from '@yiru/runtime-protocol/workbench/workspace/space-types'
-import type { WorktreeForceDeleteReason } from '@yiru/runtime-protocol/workbench/workspace/worktree-removal'
+} from '@yiru/protocol/agent/status-records'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { getHostedReviewCacheKey } from '~renderer/source-control/hosted-review-state/slice'
+import type { WorktreeForceDeleteReason } from '~renderer/worktree/removal-policy'
 
 import { branchDisplayName } from '../sidebar/worktree-card/presentation'
 import { getWorkspaceSpaceBranchLabel } from './workspace-space-format'

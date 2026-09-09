@@ -140,8 +140,8 @@ export function WorkspaceCleanupFilterToolbar({
             value={filters.review}
             options={[
               ['all', 'Any review'],
-              ['no-review', 'No PR/MR'],
-              ['has-review', 'Has PR/MR'],
+              ['no-review', 'No PR'],
+              ['has-review', 'Has PR'],
               ['open-review', 'Open'],
               ['closed-review', 'Closed']
             ]}

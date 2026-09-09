@@ -5,11 +5,10 @@ import {
 } from '~renderer/emulator-pane/simulator-launch-coordination'
 import { shutdownManagedSimulatorIfNoPane } from '~renderer/emulator-pane/simulator-pane-shutdown-scheduler'
 import { useEventCallback } from '~renderer/react/use-event-callback'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireEmulatorClient } from '~renderer/runtime/emulator-target'
 import { useAppStore } from '~renderer/store/state'
 
 import { resolveEmulatorAttachTarget } from './emulator-attach-target'
-import { toSimulatorDeviceRows, type RawEmulatorDevice } from './emulator-device-row-mapping'
 import { markSimulatorDeviceBooted, markSimulatorDeviceShutdown } from './emulator-device-state'
 import { buildPrelaunchedEmulatorSessionState } from './emulator-prelaunched-session'
 import { emulatorPaneErrorMessage } from './error-message'
@@ -71,13 +70,8 @@ export function useEmulatorPaneSession({
 
   const refreshDevices = async (bootedTarget?: string | null) => {
     try {
-      // Unified list so Android devices/AVDs appear alongside iOS simulators.
-      const raw = (await callRuntimeOrpc(
-        { kind: 'local' },
-        (client) => client.emulator.listDevices,
-        {}
-      )) as RawEmulatorDevice[]
-      const list = toSimulatorDeviceRows(raw)
+      const client = await requireEmulatorClient()
+      const list = await client.listSimulators()
       const next = markSimulatorDeviceBooted(list, bootedTarget)
       if (!mountedRef.current) {
         return next
@@ -181,9 +175,7 @@ export function useEmulatorPaneSession({
         selectedUdid
       })
       if (!target) {
-        throw new Error(
-          'No emulator devices found. Add an iOS Simulator in Xcode, or an Android Virtual Device in Android Studio.'
-        )
+        throw new Error('No iOS Simulator devices found. Add one in Xcode Settings > Platforms.')
       }
       requestedTarget = target
       setSelectedUdid(target)
@@ -195,24 +187,25 @@ export function useEmulatorPaneSession({
         liveTargetRef.current = null
         resetVisualOrientation()
       }
-      const res = (await callRuntimeOrpc({ kind: 'local' }, (client) => client.emulator.attach, {
+      const res = await (
+        await requireEmulatorClient()
+      ).attach({
         device: target,
-        worktree: worktreeId,
-        focus: false
-      })) as { attached?: boolean; info?: EmulatorPaneSession['info'] }
+        worktree: worktreeId
+      })
       if (!mountedRef.current) {
         // Why: attach can finish after the tab closes, after the earlier
         // unmount shutdown already no-op'd because the session was not registered yet.
         await shutdownManagedSimulatorIfNoPane(worktreeId, tabId)
         return
       }
-      const attached = !!res?.attached
-      const bootedTarget = res?.info?.deviceUdid || res?.info?.device || target
+      const attached = res.attached
+      const bootedTarget = res.info?.deviceUdid || target
       const nextList = attached ? markSimulatorDeviceBooted(list, bootedTarget) : list
       if (attached) {
         setDevices(nextList)
       }
-      applySession(res?.info, attached, nextList)
+      applySession(res.info, attached, nextList)
       if (attached) {
         void refreshDevices(bootedTarget)
       }
@@ -225,7 +218,7 @@ export function useEmulatorPaneSession({
       suppressAutoAttachRef.current = true
       const msg = emulatorPaneErrorMessage(
         e,
-        'Could not start the emulator. Make sure Xcode (iOS) or Android Studio (Android) is set up, then try another device.'
+        'Could not start the emulator. Make sure Xcode and an iOS Simulator runtime are set up, then try another device.'
       )
       setError(msg)
       if (tabId) {

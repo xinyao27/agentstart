@@ -1,5 +1,5 @@
-import type { AgentPhase } from '@yiru/runtime-protocol/model/agent'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { AgentPhase } from '@yiru/protocol/agent/phase'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { translate } from '~renderer/i18n/i18n'
 import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
 

@@ -1,5 +1,5 @@
-import { hasFeatureInteraction } from '@yiru/runtime-protocol/workbench/feature-interactions'
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import { hasFeatureInteraction } from '@yiru/protocol/telemetry/interactions/state'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import {
   COMPUTER_USE_SKILL_NAME,
@@ -8,9 +8,8 @@ import {
 } from '~renderer/agent/feature-install-commands'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useEventCallback } from '~renderer/react/use-event-callback'
+import { openComputerTarget } from '~renderer/runtime/computer-target'
 import { checkRuntimeHooks } from '~renderer/runtime/hooks-client'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
-import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { hasEffectiveSetupCommand } from '~renderer/setup-guide/setup-script-status'
 import { useActiveProjectSkillRuntime } from '~renderer/skills/use-active-project-runtime'
 import {
@@ -146,11 +145,9 @@ export function useSetupGuideProgress(
 
   const readComputerUsePermissions = useEventCallback(
     async (isStale: () => boolean): Promise<void> => {
-      const status = await callRuntimeOrpc(
-        getActiveRuntimeTarget(useAppStore.getState().settings),
-        (client) => client.computer.permissionsStatus,
-        {}
-      ).catch(() => null)
+      const status = await openComputerTarget()
+        .then((client) => (client ? client.permissionsStatus() : null))
+        .catch(() => null)
       if (isStale()) {
         return
       }

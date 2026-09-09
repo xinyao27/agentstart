@@ -1,6 +1,7 @@
 import type { StateCreator } from 'zustand'
-import { agentKindForAgentType, formatAgentTypeLabel } from '~renderer/agent/status'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { agentKindForAgentType } from '~renderer/agent/status'
+import { formatAgentTypeLabel } from '~renderer/agent/title/type-label'
+import { requireNotificationsTarget } from '~renderer/runtime/notifications-target'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import {
@@ -238,10 +239,8 @@ export function createUIAgentSendActions(
       })
       const notificationIds = [...notificationIdsToDismiss]
       if (notificationIds.length > 0) {
-        void callRuntimeOrpc(
-          getActiveRuntimeTarget(get().settings),
-          (client) => client.notifications.dismiss,
-          { notificationIds }
+        void requireNotificationsTarget(getActiveRuntimeTarget(get().settings)).then((client) =>
+          client.dismiss(notificationIds)
         )
       }
     },

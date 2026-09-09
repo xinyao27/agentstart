@@ -54,11 +54,7 @@ export function useSourceControlFileModel(scope: SourceControlHostedReviewStateC
     filterQuery,
     isBranchVisible,
     isFolder,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
     linkedGitHubPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     remoteActionError,
     selectedScopeId,
     sourceControlGroupOrder,
@@ -83,10 +79,6 @@ export function useSourceControlFileModel(scope: SourceControlHostedReviewStateC
       repoId: activeRepo.id,
       linkedGitHubPR,
       fallbackGitHubPR: fallbackGitHubPRNumber,
-      linkedGitLabMR,
-      linkedBitbucketPR,
-      linkedAzureDevOpsPR,
-      linkedGiteaPR,
       staleWhileRevalidate: true
     })
     // Why: the GitHub-specific cache powers grouping/check panels; keep that
@@ -101,11 +93,7 @@ export function useSourceControlFileModel(scope: SourceControlHostedReviewStateC
     isBranchVisible,
     isFolder,
     linkedGitHubPR,
-    fallbackGitHubPRNumber,
-    linkedGitLabMR,
-    linkedBitbucketPR,
-    linkedAzureDevOpsPR,
-    linkedGiteaPR
+    fallbackGitHubPRNumber
   ])
   const grouped = (() => {
     const groups: SourceControlEntryGroups = { staged: [], unstaged: [], untracked: [] }

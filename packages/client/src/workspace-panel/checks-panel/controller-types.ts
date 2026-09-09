@@ -1,5 +1,5 @@
-import type { HostedReviewCreationEligibility } from '@yiru/runtime-protocol/model/review'
-import type { SourceControlLaunchActionId } from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+import type { HostedReviewCreationEligibility } from '@yiru/protocol/hosted-review/types'
+import type { SourceControlLaunchActionId } from '@yiru/protocol/source-control/ai-actions'
 import type { PRCommentGroup } from '~renderer/source-control/pr-comment-groups'
 
 import type { ChecksPanelReview } from './review'

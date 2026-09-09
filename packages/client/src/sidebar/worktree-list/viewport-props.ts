@@ -1,15 +1,14 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectOrderBy } from '@yiru/protocol/settings/ui-state'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
 import type {
-  FolderWorkspace,
-  ProjectGroup,
-  ProjectOrderBy,
-  Repo,
-  Worktree,
-  WorktreeLineage,
-  WorkspaceLineage,
   WorkspaceStatus,
   WorkspaceStatusDefinition
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/status/model'
+import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type React from 'react'
 import type {
   PendingSidebarRowReveal,

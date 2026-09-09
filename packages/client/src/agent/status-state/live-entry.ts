@@ -2,20 +2,17 @@ import {
   agentProviderSessionsEqual,
   getAgentResumeArgv,
   isResumableTuiAgent
-} from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/session-resume'
+import { agentSubagentsEqual } from '@yiru/protocol/agent/status-parse'
 import {
   AGENT_STATE_HISTORY_MAX,
-  agentSubagentsEqual,
   type AgentStateHistoryEntry,
   type AgentStatusEntry
-} from '@yiru/runtime-protocol/model/agent'
-import {
-  resolveAgentStatusIdentity,
-  shouldSuppressInheritedTerminalStatus
-} from '@yiru/runtime-protocol/workbench/agent/status-identity'
-import { isCommandCodeNewTurnWhileWorking } from '@yiru/runtime-protocol/workbench/command-code-turn-boundary'
+} from '@yiru/protocol/agent/status-records'
 
 import type { AppState } from '../../store/types'
+import { isCommandCodeNewTurnWhileWorking } from './command-code-turn'
+import { resolveAgentStatusIdentity, shouldSuppressInheritedTerminalStatus } from './identity'
 import { registryEntryMatchesStatus } from './launch-model'
 import { getTabIdFromPaneKey, findAgentPaneWorktreeId } from './retention-model'
 import type { AgentStatusSlice } from './slice'

@@ -1,15 +1,8 @@
-import { formatResetCountdown, formatResetDuration } from '@yiru/runtime-protocol/model/ui'
-import type {
-  ProviderRateLimits,
-  RateLimitWindow
-} from '@yiru/runtime-protocol/workbench/rate-limit-types'
-import {
-  clampUsedPercent,
-  getDisplayedUsagePercentage,
-  type UsagePercentageDisplay
-} from '@yiru/runtime-protocol/workbench/usage-percentage-display'
+import type { ProviderRateLimits, RateLimitWindow } from '@yiru/protocol/account-rate-types'
+import type { UsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
+import { formatResetCountdown, formatResetDuration } from '~renderer/status-bar/reset-time'
 import { cn } from '~renderer/ui/class-names'
 
 import { ClaudeIcon, GeminiIcon, MiniMaxIcon, OpenAIIcon, OpenCodeGoIcon } from './icons'
@@ -18,6 +11,7 @@ import {
   getProviderUsageErrorMessage,
   getProviderUsageStatusLabel
 } from './usage-error-copy'
+import { clampUsedPercent, getDisplayedUsagePercentage } from './usage-percentage'
 import { formatUsagePercentageLabel } from './usage-percentage-label'
 import { getUsageUrgency } from './usage-roster-formatting'
 
@@ -47,8 +41,6 @@ export function formatTimeAgo(ts: number): string {
   return `${hours}h ago`
 }
 
-// Re-export so existing tooltip consumers/tests keep their import path; the
-// implementation is shared with mobile through runtime-protocol.
 export { formatResetCountdown }
 
 export function formatResetCreditExpiry(
@@ -58,8 +50,9 @@ export function formatResetCreditExpiry(
   if (!expiresAt) {
     return null
   }
-  const duration = formatResetDuration(expiresAt - Date.now())
-  if (duration === 'now') {
+  const remainingMs = expiresAt - Date.now()
+  const duration = formatResetDuration(remainingMs)
+  if (remainingMs <= 0) {
     return count > 1
       ? translate('auto.components.status.bar.tooltip.7ec6e030a0', 'Next expires now')
       : translate('auto.components.status.bar.tooltip.d1e442a9e5', 'Expires now')

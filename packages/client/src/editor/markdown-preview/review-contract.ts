@@ -1,4 +1,5 @@
-import type { DiffComment, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type { MutableRefObject, RefObject } from 'react'
 
 import type { MarkdownReviewNote } from '../markdown-review-notes'

@@ -1,6 +1,6 @@
 # Yiru UI Component Library
 
-This catalog defines what belongs in Yiru's reusable UI layer and where higher-level UI should live. [`docs/style-guide.md`](../../../../../docs/style-guide.md) is the binding browser visual contract.
+This catalog defines what belongs in Yiru's reusable UI layer and where higher-level UI should live. [`docs/style-guide.md`](../../../../docs/style-guide.md) is the binding browser visual contract.
 
 **First principle (from the style guide):** screens must reuse these primitives before writing native controls or hand-rolled class recipes. If a primitive is close but missing a size or variant, extend the primitive here — do not copy its styles into call sites.
 
@@ -26,7 +26,7 @@ The supported general-purpose vocabulary is the default shadcn set. Use those ro
 - `text-green-700 dark:text-green-300`, not a success token.
 - `border-border` plus an opaque surface, not an elevation variable.
 
-Custom variables are reserved for stable product-domain semantics such as git decorations and embedded editor surfaces. CSS-only variables stay outside `@theme inline`. This budget used to be kept on the default shadcn vocabulary in CI by `scripts/check-design-token-budget.mjs`, and feature-TSX drift that reintroduces native form/action tags, dead `rounded-*`, black/white alpha washes, or private style-module imports used to fail `scripts/check-ui-style-drift.mjs`; both scripts have been deleted, so promoting an exception or reintroducing drift is no longer caught by CI — treat both rules as review-enforced conventions instead — see `docs/style-guide.md`.
+Custom variables are reserved for stable product-domain semantics such as git decorations and embedded editor surfaces. CSS-only variables stay outside `@theme inline`. Nothing in CI catches a promoted exception, a reintroduced native form/action tag, a dead `rounded-*`, a black/white alpha wash, or a private style-module import from feature code: both rules are review-enforced. See `docs/style-guide.md`.
 
 ## Primitive catalog
 

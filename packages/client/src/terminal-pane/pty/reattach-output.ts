@@ -1,5 +1,5 @@
-import type { TerminalKittyKeyboardModeTracker } from '@yiru/runtime-protocol/workbench/terminal/kitty-keyboard-mode-tracker'
 import type { PtyDataMeta } from '~renderer/runtime/pty-data-meta'
+import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 
 import {
   buildPostReplayLiveAgentReattachReset,

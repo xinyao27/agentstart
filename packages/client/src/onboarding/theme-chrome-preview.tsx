@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { cn } from '~renderer/ui/class-names'
 
 export function ChromePreview({ variant }: { variant: GlobalSettings['theme'] }) {

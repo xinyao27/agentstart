@@ -1,7 +1,7 @@
 import type {
   AgentStatusEntry,
   MigrationUnsupportedPtyEntry
-} from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/status-records'
 
 const cachedMigrationUnsupportedEntries = new WeakMap<
   MigrationUnsupportedPtyEntry,

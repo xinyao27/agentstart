@@ -1,5 +1,5 @@
-import type { SetupScriptImportCandidate } from '@yiru/runtime-protocol/workbench/setup/script-imports'
-import type { EventProps } from '@yiru/runtime-protocol/workbench/telemetry-events'
+import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
+import type { SetupScriptImportCandidate } from '~renderer/setup/import-candidate'
 
 type SetupScriptPromptTelemetry = Omit<EventProps<'setup_script_prompt_shown'>, 'nth_repo_added'>
 type SetupScriptPromptActionTelemetry = Omit<

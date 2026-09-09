@@ -1,17 +1,15 @@
-import * as executionHost from '@yiru/runtime-protocol/model/workspace'
-import type { LocalhostWorktreeLabelRoute } from '@yiru/runtime-protocol/workbench/localhost-worktree-labels'
 import type {
   WorkspacePort,
   WorkspacePortKillResult,
   WorkspacePortScanResult
-} from '@yiru/runtime-protocol/workbench/workspace/ports'
-import {
-  callRuntimeOrpc,
-  isRuntimeOrpcErrorCode,
-  type RuntimeClientTarget
-} from '~renderer/runtime/orpc-client'
+} from '@yiru/protocol'
+import * as executionHost from '@yiru/protocol/host/identity'
+import { translate } from '~renderer/i18n/i18n'
+import type { LocalhostWorktreeLabelRoute } from '~renderer/ports/loopback-url'
+import { createRemoteRuntimeSessionBrowserTab } from '~renderer/runtime/remote-runtime-session-create'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 import { shellClient } from '~renderer/runtime/shell-client'
-import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
+import { killWorkspacePort, scanWorkspacePorts } from '~renderer/runtime/workspace-ports-target'
 import type { useAppStore } from '~renderer/store/state'
 import { activateAndRevealWorktree } from '~renderer/worktree/activation'
 
@@ -100,51 +98,23 @@ export async function openWorkspacePortInBrowser(args: {
   }
   activateAndRevealWorktree(worktreeId)
   if (args.runtimeTarget.kind === 'environment') {
-    try {
-      const remotePage = await callRuntimeOrpc(
-        args.runtimeTarget,
-        (client) => client.browser.tabCreate,
-        { worktree: toRuntimeWorktreeSelector(worktreeId), url },
-        { timeoutMs: 30_000 }
-      )
-      const tab = args.createBrowserTab(worktreeId, url, {
-        activate: true,
-        browserRuntimeEnvironmentId: args.runtimeTarget.environmentId,
-        pageId: remotePage.browserPageId
-      })
-      if (!tab.activePageId) {
-        return { ok: false, reason: 'Failed to create a browser page.' }
-      }
-      args.setRemoteBrowserPageHandle(tab.activePageId, {
-        environmentId: args.runtimeTarget.environmentId,
-        remotePageId: remotePage.browserPageId
-      })
-      return { ok: true }
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      return { ok: false, reason: message || 'Failed to open remote browser.' }
-    }
+    const created = await createRemoteRuntimeSessionBrowserTab({
+      environmentId: args.runtimeTarget.environmentId,
+      worktreeId,
+      url
+    })
+    return created
+      ? { ok: true }
+      : {
+          ok: false,
+          reason: translate(
+            'ports.remoteBrowserCreateFailed',
+            'Failed to create remote browser tab.'
+          )
+        }
   }
   args.createBrowserTab(worktreeId, url, { activate: true })
   return { ok: true }
-}
-
-export async function refreshWorkspacePortScanState(args: {
-  runtimeTarget: RuntimeClientTarget
-  setWorkspacePortScan: WorkspacePortScanSetter
-  setWorkspacePortScanRefreshing: WorkspacePortScanRefreshingSetter
-}): Promise<WorkspacePortScanResult> {
-  args.setWorkspacePortScanRefreshing(true)
-  try {
-    const scan = await scanWorkspacePortsForTarget(args.runtimeTarget)
-    args.setWorkspacePortScan({
-      key: workspacePortScanKeyForTarget(args.runtimeTarget),
-      result: scan
-    })
-    return scan
-  } finally {
-    args.setWorkspacePortScanRefreshing(false)
-  }
 }
 
 export async function refreshWorkspacePortScanAfterStop(args: {
@@ -257,22 +227,7 @@ async function runWorkspacePortScanForTarget(
   target: RuntimeClientTarget,
   repoId?: string
 ): Promise<WorkspacePortScanResult> {
-  const params = repoId ? { repoId } : {}
-  try {
-    return await callRuntimeOrpc(target, (client) => client.workspacePorts.scan, params, {
-      timeoutMs: 15_000
-    })
-  } catch (error) {
-    if (isRuntimeOrpcErrorCode(error, 'method_not_found')) {
-      return {
-        platform: 'unknown',
-        scannedAt: Date.now(),
-        ports: [],
-        unavailableReason: 'The connected runtime does not support workspace port management yet.'
-      }
-    }
-    throw error
-  }
+  return scanWorkspacePorts(target, repoId)
 }
 
 export async function scanWorkspacePortsForTarget(
@@ -301,17 +256,5 @@ export async function killWorkspacePortForTarget(
   target: RuntimeClientTarget,
   args: { repoId: string; pid: number; port: number }
 ): Promise<WorkspacePortKillResult> {
-  try {
-    return await callRuntimeOrpc(target, (client) => client.workspacePorts.kill, args, {
-      timeoutMs: 15_000
-    })
-  } catch (error) {
-    if (isRuntimeOrpcErrorCode(error, 'method_not_found')) {
-      return {
-        ok: false,
-        reason: 'The connected runtime does not support workspace port management yet.'
-      }
-    }
-    throw error
-  }
+  return killWorkspacePort(target, args)
 }

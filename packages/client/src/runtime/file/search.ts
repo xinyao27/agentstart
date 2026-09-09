@@ -1,41 +1,36 @@
 import type {
   MarkdownDocument,
-  SearchOptions,
-  SearchResult
-} from '@yiru/runtime-protocol/workbench/types'
+  FileSearchResult as SearchResult
+} from '@yiru/protocol/files/values'
+import type { FileSearchInput } from '@yiru/protocol/files/values'
 
 import {
   createEmptyRuntimeFileSearchResult,
   getRuntimeFileSearchRejectedField
 } from '../file-search-bounds'
-import { callRuntimeOrpc } from '../orpc-client'
+import { requireFilesTarget } from '../files-target'
 import { getActiveRuntimeTarget } from '../rpc-client'
 import { getRuntimeFileWorktreeSelector, type RuntimeFileOperationArgs } from './context'
 
 export async function searchRuntimeFiles(
   context: RuntimeFileOperationArgs,
-  options: SearchOptions
+  options: Omit<FileSearchInput, 'worktree'> & { rootPath: string }
 ): Promise<SearchResult> {
   if (getRuntimeFileSearchRejectedField(options)) {
     return createEmptyRuntimeFileSearchResult()
   }
   const worktree = requireWorktree(context, 'File search')
   const { rootPath: _rootPath, ...runtimeOptions } = options
-  return callRuntimeOrpc(
-    getActiveRuntimeTarget(context.settings),
-    (client) => client.files.search,
-    { worktree, ...runtimeOptions },
-    { timeoutMs: 15_000 }
-  )
+  const client = await requireFilesTarget(getActiveRuntimeTarget(context.settings))
+  return client.search({ worktree, ...runtimeOptions }, { timeoutMs: 15_000 })
 }
 
 export async function listRuntimeFiles(
   context: RuntimeFileOperationArgs,
   args: { rootPath: string; excludePaths?: string[]; requestToken?: string }
 ): Promise<string[]> {
-  return callRuntimeOrpc(
-    getActiveRuntimeTarget(context.settings),
-    (client) => client.files.listAll,
+  const client = await requireFilesTarget(getActiveRuntimeTarget(context.settings))
+  return client.listAll(
     { worktree: requireWorktree(context, 'File listing'), excludePaths: args.excludePaths },
     { timeoutMs: 15_000 }
   )
@@ -53,12 +48,10 @@ export async function listRuntimeMarkdownDocuments(
   context: RuntimeFileOperationArgs,
   _rootPath: string
 ): Promise<MarkdownDocument[]> {
-  return callRuntimeOrpc(
-    getActiveRuntimeTarget(context.settings),
-    (client) => client.files.listMarkdownDocuments,
-    { worktree: requireWorktree(context, 'Markdown listing') },
-    { timeoutMs: 15_000 }
-  )
+  const client = await requireFilesTarget(getActiveRuntimeTarget(context.settings))
+  return client.listMarkdownDocuments(requireWorktree(context, 'Markdown listing'), {
+    timeoutMs: 15_000
+  })
 }
 
 function requireWorktree(context: RuntimeFileOperationArgs, operation: string): string {

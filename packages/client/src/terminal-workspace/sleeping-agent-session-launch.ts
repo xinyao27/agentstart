@@ -1,11 +1,11 @@
-import type { SleepingAgentSessionRecord } from '@yiru/runtime-protocol/model/agent'
-import { isWslUncPath } from '@yiru/runtime-protocol/model/platform'
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/runtime-protocol/workbench/tui-agent/launch-defaults'
+} from '@yiru/protocol/agent/launch-defaults'
+import { buildAgentResumeStartupPlan } from '@yiru/protocol/agent/resume-startup'
+import type { SleepingAgentSessionRecord } from '@yiru/protocol/agent/session-resume'
+import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
 import { toast } from 'sonner'
-import { buildAgentResumeStartupPlan } from '~renderer/agent/tui-startup'
 import { translate } from '~renderer/i18n/i18n'
 import { CLIENT_PLATFORM } from '~renderer/new-workspace/workspace-creation'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'

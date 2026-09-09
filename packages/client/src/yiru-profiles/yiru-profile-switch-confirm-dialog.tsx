@@ -1,4 +1,3 @@
-import type { YiruProfileSummary } from '@yiru/runtime-protocol/workbench/yiru-profiles'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
@@ -11,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle
 } from '~renderer/ui/dialog'
+import type { YiruProfileSummary } from '~renderer/yiru-profiles/profile-model'
 
 import type { YiruProfileSwitchLiveWorkSummary } from './yiru-profile-switch-liveness'
 

@@ -1,4 +1,4 @@
-import type { SkillFreshnessInstallation } from '@yiru/runtime-protocol/workbench/skill-freshness'
+import type { SkillFreshnessInstallation } from '@yiru/protocol'
 
 export type SkillGroupStatus = 'update-available' | 'cannot-update'
 

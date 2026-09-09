@@ -1,13 +1,13 @@
-import type { RuntimeMobileSessionTabMove } from '@yiru/runtime-protocol/workbench/runtime-types'
-
 import { useAppStore } from '../store/state'
-import { callRuntimeOrpc } from './orpc-client'
 import { resolveRemoteRuntimeSessionEnvironmentId } from './remote-runtime-session-environment'
 import { recordRemoteSessionCloseIntent } from './remote-session/close-intent'
 import { closeRemoteSessionTabCommand } from './remote-session/commands'
 import { recordRemoteSessionReorderIntent } from './remote-session/reorder-intent'
+import type { RuntimeMobileSessionTabMove } from './remote-session/session-model'
 import { requestRemoteSessionTabsRefresh } from './remote-session/tabs-refresh-requests'
 import { isRemoteTerminalSurfaceTabId, toHostSessionTabId } from './remote-terminal-surface-id'
+import { requireSessionTabsClient } from './session-tabs-target'
+import { activateRuntimeWorktree } from './worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from './worktree-selector'
 
 type RemoteRuntimeSessionTabArgs = {
@@ -26,14 +26,13 @@ export async function activateRemoteRuntimeSessionWorktree(args: {
     return false
   }
   try {
-    await callRuntimeOrpc(
+    await activateRuntimeWorktree(
       { kind: 'environment', environmentId },
-      (client) => client.worktree.activate,
       {
         worktree: toRuntimeWorktreeSelector(args.worktreeId),
         notifyClients: args.notifyDesktop !== false
       },
-      { timeoutMs: 15_000 }
+      15_000
     )
     return true
   } catch (error) {
@@ -94,22 +93,19 @@ export async function moveRemoteRuntimeSessionTab(
       return false
     }
     const targetHostIndex = resolveTargetHostIndex(args, state, resolveHostBackedTabId)
-    const base = {
-      worktree: toRuntimeWorktreeSelector(args.worktreeId),
-      tabId: movedHostTabId,
-      targetGroupId: args.targetGroupId
-    }
-    const move =
-      args.kind === 'reorder'
-        ? { ...base, kind: 'reorder' as const, tabOrder: reorderedHostTabOrder ?? [] }
-        : args.kind === 'split'
-          ? { ...base, kind: 'split' as const, splitDirection: args.splitDirection }
-          : { ...base, kind: 'move-to-group' as const, index: targetHostIndex }
-    await callRuntimeOrpc(
-      { kind: 'environment', environmentId },
-      (client) => client.session.tabs.move,
-      move,
-      { timeoutMs: 15_000 }
+    await requireSessionTabsClient({ kind: 'environment', environmentId }).then((client) =>
+      client.move(
+        {
+          worktree: toRuntimeWorktreeSelector(args.worktreeId),
+          tabId: movedHostTabId,
+          targetGroupId: args.targetGroupId,
+          kind: args.kind,
+          ...(args.kind === 'reorder' ? { tabOrder: reorderedHostTabOrder ?? [] } : {}),
+          ...(args.kind === 'move-to-group' ? { index: targetHostIndex } : {}),
+          ...(args.kind === 'split' ? { splitDirection: args.splitDirection } : {})
+        },
+        { timeoutMs: 15_000 }
+      )
     )
     return true
   } catch (error) {
@@ -153,11 +149,11 @@ async function callRemoteRuntimeSessionTabMethod(
       await requestRemoteSessionTabsRefresh({ environmentId, worktreeId: args.worktreeId })
       return true
     }
-    await callRuntimeOrpc(
-      { kind: 'environment', environmentId },
-      (client) => client.session.tabs.activate,
-      { worktree: toRuntimeWorktreeSelector(args.worktreeId), tabId: hostTabId },
-      { timeoutMs: 15_000 }
+    await requireSessionTabsClient({ kind: 'environment', environmentId }).then((client) =>
+      client.activate(
+        { worktree: toRuntimeWorktreeSelector(args.worktreeId), tabId: hostTabId },
+        { timeoutMs: 15_000 }
+      )
     )
     return true
   } catch (error) {

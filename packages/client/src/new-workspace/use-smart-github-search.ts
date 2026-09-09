@@ -1,5 +1,5 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { GitHubWorkItem } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
 import { useEffect, useState, type RefObject } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import {
@@ -36,7 +36,6 @@ const RESULT_LIMIT = 12
 export type SmartWorkspaceSearchTarget = {
   repo: SmartWorkspaceRepo
   githubSourceContext: ProjectSourceContext | null
-  gitlabSourceContext: ProjectSourceContext | null
 }
 
 export type CrossRepoPrompt = {

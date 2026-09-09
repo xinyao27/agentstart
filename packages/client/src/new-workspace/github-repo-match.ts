@@ -1,5 +1,6 @@
 import type { RepoSlug } from '~renderer/github/links'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { useAppStore } from '~renderer/store/state'
 
@@ -20,11 +21,12 @@ export async function getRepoSlugCached(
     return cache.get(repo.id) ?? null
   }
   try {
-    const slug = await callRuntimeOrpc(
-      getActiveRuntimeTarget(useAppStore.getState().settings),
-      (client) => client.github.repoSlug,
-      { repo: repo.id }
-    )
+    const client = await openGitHubTarget()
+    if (!client) {
+      throw new Error('GitHub protocol capability is unavailable')
+    }
+    const target = getActiveRuntimeTarget(useAppStore.getState().settings)
+    const slug = await client.getRepoSlug(repo.id, runtimeCallDestination(target))
     cache.set(repo.id, slug)
     return slug
   } catch {

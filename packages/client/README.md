@@ -18,8 +18,9 @@ deliberately has no JavaScript distribution build:
 | `@yiru/client/styles` | Global tokens and workbench chrome stylesheet |
 | `@yiru/client/vite` | Client root, aliases, React/Tailwind plugins, workers, and feature defines |
 
-Consumers use only these exports; they never import `@yiru/client/src/*`. The package owns its
-typecheck, lint, localization catalogs, and UI policy gates. A client implementation change should not
+Consumers use only these exports; they never import `@yiru/client/src/*`. The package owns its own
+`fmt`, `lint`, and `typecheck` tasks; its localization catalogs in `src/i18n/locales/` are authored,
+not generated, and its UI policy is review-enforced. A client implementation change should not
 require an extension-host edit unless it also changes a host-facing runtime or shell contract.
 
 ## Host setup

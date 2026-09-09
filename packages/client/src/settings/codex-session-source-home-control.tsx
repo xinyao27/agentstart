@@ -1,5 +1,5 @@
-import { normalizeGlobalWindowsRuntimeDefault } from '@yiru/runtime-protocol/workbench/project-execution-runtime'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import { normalizeGlobalWindowsRuntimeDefault } from '@yiru/protocol/project/runtime-preference'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Info } from '~renderer/icons/hugeicons'

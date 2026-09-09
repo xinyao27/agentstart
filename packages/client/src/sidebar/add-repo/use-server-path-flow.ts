@@ -1,11 +1,12 @@
+import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import type { AddRepoExistingWorkspaceSource } from '@yiru/protocol/telemetry/events/foundations'
 import {
   buildNestedRepoScanTelemetry,
   createNestedRepoTelemetryAttemptId,
   type NestedRepoTelemetryRuntimeKind
-} from '@yiru/runtime-protocol/workbench/nested-repo-telemetry'
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { AddRepoExistingWorkspaceSource } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import type { NestedRepoScanResult, Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/telemetry/nested-repo'
 import type { Dispatch, SetStateAction } from 'react'
 import { useRef, useState } from 'react'
 import { projectCatalogTargetForRepo } from '~renderer/project-catalog/query'

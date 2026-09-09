@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { ONBOARDING_FINAL_STEP } from '@yiru/runtime-protocol/workbench/constants'
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { ONBOARDING_FINAL_STEP } from '@yiru/protocol/settings/onboarding'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -12,7 +12,7 @@ import {
   refreshProjectCatalogTargetRepos,
   refreshProjectCatalogWorktrees
 } from '~renderer/project-catalog/refresh'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireRepoProtocolClient } from '~renderer/runtime/repo-catalog-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
 import { useAppStore } from '~renderer/store/state'
@@ -170,12 +170,9 @@ export function useOnboardingProjectActions({
     try {
       const result =
         target.kind === 'environment'
-          ? await callRuntimeOrpc(
-              target,
-              (client) => client.repo.clone,
-              { expectedRevision, url, destination },
-              { timeoutMs: 10 * 60_000 }
-            )
+          ? await (
+              await requireRepoProtocolClient(target)
+            ).clone({ expectedRevision, url, destination }, { timeoutMs: 10 * 60_000 })
           : await workspaceHostClient.repos.clone({ expectedRevision, url, destination })
       await refreshAfterProjectCatalogMutation(target, result.revision)
       await completeProject(result.repo.id, true, 'clone_url')

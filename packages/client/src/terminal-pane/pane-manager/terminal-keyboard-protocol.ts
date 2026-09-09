@@ -1,6 +1,6 @@
 import type { ITerminalOptions } from '@xterm/xterm'
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
 
 import {
   isLocalNativeWindowsConpty,

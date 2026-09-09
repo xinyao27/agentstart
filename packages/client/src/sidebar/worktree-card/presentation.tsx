@@ -1,8 +1,6 @@
-import type {
-  CheckStatus,
-  GitConflictOperation,
-  TerminalTab
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
+import type { CheckStatus } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import React from 'react'
 import { GitPullRequest } from '~renderer/icons/hugeicons'
 

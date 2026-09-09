@@ -1,4 +1,4 @@
-import type { ActiveRightSidebarTab } from '@yiru/runtime-protocol/workbench/types'
+import type { ActiveRightSidebarTab } from '@yiru/protocol/settings/ui-state'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { ButtonGroup } from '~renderer/ui/button-group'

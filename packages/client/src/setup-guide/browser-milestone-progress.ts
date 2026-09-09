@@ -1,10 +1,8 @@
-import {
-  FEATURE_WALL_SETUP_STEPS,
-  type FeatureWallSetupStepId
-} from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
+import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import { useEffect } from 'react'
 import { useAppStore } from '~renderer/store/state'
 
+import { getFeatureWallSetupSteps } from '../feature-wall/content/setup-steps'
 import type { FeatureWallSetupProgress } from '../feature-wall/setup-progress'
 
 export function useSetupGuideBrowserMilestoneProgress(
@@ -54,7 +52,7 @@ export function shouldMarkBrowserMilestoneLegacyComplete(input: {
   // included the now-removed split-terminal milestone.
   return (
     input.historicalSplitTerminalDone &&
-    FEATURE_WALL_SETUP_STEPS.every((step) => step.id === 'browser' || input.stepDone[step.id])
+    getFeatureWallSetupSteps().every((step) => step.id === 'browser' || input.stepDone[step.id])
   )
 }
 
@@ -66,14 +64,14 @@ export function getSetupGuideBrowserMilestoneAwareProgress(
     return progress
   }
   const stepDone = Object.fromEntries(
-    FEATURE_WALL_SETUP_STEPS.map((step) => [step.id, true])
+    getFeatureWallSetupSteps().map((step) => [step.id, true])
   ) as Record<FeatureWallSetupStepId, boolean>
   // Why: profiles that finished or dismissed the pre-browser checklist keep
   // that prior checklist contract after the browser milestone is introduced.
   return {
     ...progress,
     stepDone,
-    coreDoneCount: FEATURE_WALL_SETUP_STEPS.length,
-    coreTotal: FEATURE_WALL_SETUP_STEPS.length
+    coreDoneCount: getFeatureWallSetupSteps().length,
+    coreTotal: getFeatureWallSetupSteps().length
   }
 }

@@ -1,4 +1,4 @@
-import type { WorktreeMeta } from '@yiru/runtime-protocol/workbench/types'
+import type { WorktreeMeta } from '@yiru/protocol/worktree/model'
 import { parseGitHubPullRequestLink, parseGitHubPullRequestNumber } from '~renderer/github/links'
 
 export type WorktreeMetaSavedPayload = {

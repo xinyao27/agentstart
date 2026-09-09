@@ -1,15 +1,15 @@
 // Why: split from the combined primary+dropdown module because the primary and dropdown are independent derivations with different priority ladders; together they exceed the max-lines budget and tangle unrelated concerns.
 
 import {
-  resolveSourceControlCommitAreaPrimaryActionDecision,
-  type SourceControlPrimaryActionDecision,
-  type SourceControlPrimaryActionDecisionInputs
-} from '@yiru/runtime-protocol/model/review'
-import {
   localizedHostedReviewCopy,
   resolveSupportedHostedReviewCopyProvider
 } from '~renderer/i18n/hosted-review-localized-copy'
 import { translate } from '~renderer/i18n/i18n'
+import { resolveSourceControlCommitAreaPrimaryActionDecision } from '~renderer/source-control/workflow/primary-action'
+import type {
+  SourceControlPrimaryActionDecision,
+  SourceControlPrimaryActionDecisionInputs
+} from '~renderer/source-control/workflow/types'
 
 import {
   describeForcePushWithLease,

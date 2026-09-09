@@ -3,7 +3,7 @@ import {
   resolveTitleActivityLabel
 } from '~renderer/terminal-pane/agent/evidence'
 
-import type { AgentStatus } from './status'
+import type { AgentStatus } from './title/core'
 
 const EXPLICIT_IDLE_SEND_TITLE_RE = /(^|\s)(ready|idle|done)(\s|$|[.!?])/i
 const CLAUDE_IDLE_PREFIX = '\u2733'

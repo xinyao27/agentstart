@@ -1,14 +1,11 @@
-import { parseExecutionHostId, type ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
 import {
   buildProjectSourceContextFromRepo,
   type ProjectSourceContext
-} from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { GitHubWorkItem, GitLabWorkItem } from '@yiru/runtime-protocol/workbench/types'
-import React, { useEffect, useRef, useState } from 'react'
-import { useShallow } from 'zustand/react/shallow'
+} from '@yiru/protocol/project/source-context'
+import React, { useRef, useState } from 'react'
 import type { RepoSlug } from '~renderer/github/links'
 import { lookupGitHubWorkItemByOwnerRepoForSource } from '~renderer/github/work-item-source-lookup'
-import { getLocalPreflightContext, localPreflightContextKey } from '~renderer/preflight/context'
 import { useAppStore } from '~renderer/store/state'
 
 import { CrossRepoPromptDialog } from './cross-repo-prompt-dialog'
@@ -18,7 +15,6 @@ import { SmartWorkspaceNameView } from './smart-workspace-name-view'
 import { buildSmartWorkspaceSourceRows, type SmartNameMode } from './smart-workspace-source-results'
 import { useSmartBranchSearch } from './use-smart-branch-search'
 import { type CrossRepoPrompt, useSmartGithubSearch } from './use-smart-github-search'
-import { useSmartGitlabSearch } from './use-smart-gitlab-search'
 import { useSmartWorkspaceInput } from './use-smart-workspace-input'
 
 type RepoOption = SmartWorkspaceRepo
@@ -31,9 +27,6 @@ type SmartWorkspaceNameFieldProps = {
   value: string
   onValueChange: (value: string) => void
   onGitHubItemSelect: (item: GitHubWorkItem) => void
-  /** Optional so callers that pre-date GitLab support don't need to wire
-   *  it. When omitted, GitLab paste-URL detection is silently skipped. */
-  onGitLabItemSelect?: (item: GitLabWorkItem) => void
   onBranchSelect: (refName: string, localBranchName: string) => void
   selectedSource: SmartWorkspaceNameSelection | null
   onClearSelectedSource: () => void
@@ -55,22 +48,6 @@ export type { SmartWorkspaceNameSelection } from './smart-workspace-name-rows'
 
 const RESULT_LIMIT = 12
 
-export function canUseGitLabSmartSource({
-  localGitlabAvailable,
-  repoBackedSourcesDisabled,
-  sourceHostId
-}: {
-  localGitlabAvailable: boolean
-  repoBackedSourcesDisabled: boolean
-  sourceHostId: ExecutionHostId | null | undefined
-}): boolean {
-  if (repoBackedSourcesDisabled) {
-    return false
-  }
-  const parsedHost = parseExecutionHostId(sourceHostId)
-  return parsedHost?.kind === 'runtime' || localGitlabAvailable
-}
-
 export default function SmartWorkspaceNameField({
   repos,
   repoId,
@@ -78,7 +55,6 @@ export default function SmartWorkspaceNameField({
   value,
   onValueChange,
   onGitHubItemSelect,
-  onGitLabItemSelect,
   onBranchSelect,
   selectedSource,
   onClearSelectedSource,
@@ -95,23 +71,7 @@ export default function SmartWorkspaceNameField({
   crossRepoSwitchTarget = 'project',
   onActiveSourceModeChange
 }: SmartWorkspaceNameFieldProps): React.JSX.Element {
-  const {
-    addRepo,
-    preflightStatus,
-    preflightStatusChecked,
-    preflightStatusContextKey,
-    expectedPreflightContextKey,
-    refreshPreflightStatus
-  } = useAppStore(
-    useShallow((s) => ({
-      addRepo: s.addRepo,
-      preflightStatus: s.preflightStatus,
-      preflightStatusChecked: s.preflightStatusChecked,
-      preflightStatusContextKey: s.preflightStatusContextKey,
-      expectedPreflightContextKey: localPreflightContextKey(getLocalPreflightContext(s)),
-      refreshPreflightStatus: s.refreshPreflightStatus
-    }))
-  )
+  const addRepo = useAppStore((state) => state.addRepo)
   const selectedRepo = (() => repos.find((repo) => repo.id === repoId) ?? null)()
   const githubSourceContext = (() => {
     if (githubSourceContextOverride?.provider === 'github') {
@@ -125,14 +85,6 @@ export default function SmartWorkspaceNameField({
         })
       : null
   })()
-  const gitlabSourceContext = (() =>
-    selectedRepo
-      ? buildProjectSourceContextFromRepo({
-          provider: 'gitlab',
-          projectId: selectedRepo.id,
-          repo: selectedRepo
-        })
-      : null)()
   const repoBackedSearchTargets = (() =>
     (repoBackedSearchRepos.length > 0
       ? repoBackedSearchRepos
@@ -148,32 +100,14 @@ export default function SmartWorkspaceNameField({
               provider: 'github',
               projectId: repo.id,
               repo
-            }),
-      gitlabSourceContext:
-        repo.id === selectedRepo?.id && gitlabSourceContext?.provider === 'gitlab'
-          ? gitlabSourceContext
-          : buildProjectSourceContextFromRepo({
-              provider: 'gitlab',
-              projectId: repo.id,
-              repo
             })
     })))()
   const repoSlugCacheRef = useRef<Map<string, RepoSlug | null>>(new Map())
   const [handledCrossRepoUrl, setHandledCrossRepoUrl] = useState<string | null>(null)
   const [crossRepoPromptState, setCrossRepoPromptState] = useState<CrossRepoPrompt | null>(null)
-  const preflightStatusCurrent = preflightStatusContextKey === expectedPreflightContextKey
-  const localGitlabAvailable = preflightStatusCurrent && preflightStatus?.glab?.installed === true
-  const gitlabSourceAvailable = repoBackedSearchTargets.some((target) =>
-    canUseGitLabSmartSource({
-      localGitlabAvailable,
-      repoBackedSourcesDisabled,
-      sourceHostId: target.gitlabSourceContext?.hostId
-    })
-  )
   const input = useSmartWorkspaceInput({
     branchesEnabled,
     disabled,
-    gitlabSourceAvailable,
     inputRef,
     onActiveSourceModeChange,
     repoBackedSourcesDisabled,
@@ -191,12 +125,9 @@ export default function SmartWorkspaceNameField({
     localInputRef,
     markPopoverEngaged: markSourcePopoverUserEngaged,
     mode,
-    mrStateFilter,
-    mrStateFilters,
     setCommandValue,
     setInputNode,
     setMode,
-    setMrStateFilter,
     setOpen,
     setSelectedSourceNode,
     tabsListRef,
@@ -210,15 +141,6 @@ export default function SmartWorkspaceNameField({
       ? crossRepoPromptState
       : null
   const isSourcePopoverOpen = input.isPopoverOpen && !crossRepoPrompt
-
-  useEffect(() => {
-    if (disabled || textOnly) {
-      return
-    }
-    if (!preflightStatusChecked || !preflightStatusCurrent) {
-      void refreshPreflightStatus()
-    }
-  }, [disabled, preflightStatusChecked, preflightStatusCurrent, refreshPreflightStatus, textOnly])
 
   const githubSearch = useSmartGithubSearch({
     crossRepoSwitchTarget,
@@ -236,17 +158,6 @@ export default function SmartWorkspaceNameField({
     setCrossRepoPrompt: setCrossRepoPromptState,
     textOnly
   })
-  const gitlabSearch = useSmartGitlabSearch({
-    debouncedQuery,
-    disabled,
-    hasGitlabHandler: onGitLabItemSelect != null,
-    isAvailable: gitlabSourceAvailable,
-    mode,
-    mrStateFilter,
-    repoBackedSearchTargets,
-    repoBackedSourcesDisabled,
-    textOnly
-  })
   const branchSearch = useSmartBranchSearch({
     branchesEnabled,
     debouncedQuery,
@@ -262,13 +173,11 @@ export default function SmartWorkspaceNameField({
     buildSmartWorkspaceSourceRows({
       branches: branchSearch.items,
       githubItems: githubSearch.items,
-      gitlabAvailable: gitlabSourceAvailable,
-      gitlabItems: gitlabSearch.items,
       mode,
       resultLimit: RESULT_LIMIT,
       value
     }))()
-  const loading = githubSearch.isLoading || gitlabSearch.isLoading || branchSearch.isLoading
+  const loading = githubSearch.isLoading || branchSearch.isLoading
 
   const acceptGitHubLink = async (targetRepo: RepoOption): Promise<void> => {
     if (!crossRepoPrompt) {
@@ -343,13 +252,10 @@ export default function SmartWorkspaceNameField({
         localInputRef={localInputRef}
         markSourcePopoverUserEngaged={markSourcePopoverUserEngaged}
         mode={mode}
-        mrStateFilter={mrStateFilter}
-        mrStateFilters={mrStateFilters}
         onActiveSourceModeChange={onActiveSourceModeChange}
         onBranchSelect={onBranchSelect}
         onClearSelectedSource={onClearSelectedSource}
         onGitHubItemSelect={onGitHubItemSelect}
-        onGitLabItemSelect={onGitLabItemSelect}
         onPlainEnter={onPlainEnter}
         onValueChange={onValueChange}
         repoBackedSourcesDisabled={repoBackedSourcesDisabled}
@@ -358,7 +264,6 @@ export default function SmartWorkspaceNameField({
         setCommandValue={setCommandValue}
         setInputNode={setInputNode}
         setMode={setMode}
-        setMrStateFilter={setMrStateFilter}
         setOpen={setOpen}
         setSelectedSourceNode={setSelectedSourceNode}
         tabsListRef={tabsListRef}

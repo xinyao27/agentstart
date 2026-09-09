@@ -163,7 +163,7 @@ export function buildNavigationCoreSections({
       title: translate('auto.hooks.useSettingsNavigationMetadata.2b043783ef', 'Integrations'),
       description: translate(
         'auto.hooks.useSettingsNavigationMetadata.33a5e1d597',
-        'Connect GitHub, GitLab, and source-hosting services.'
+        'Connect GitHub for pull requests, checks, and review status.'
       ),
       icon: Blocks,
       searchEntries: getIntegrationsPaneSearchEntries(),

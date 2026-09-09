@@ -1,37 +1,51 @@
+import type { NotificationSettings } from '@yiru/protocol/settings/notifications'
 import type {
-  ShellServicesNotificationsDismissOutput,
-  ShellServicesNotificationsDisplayInput,
-  ShellServicesNotificationsDisplayOutput
-} from '@yiru/runtime-protocol/contract'
+  NotificationDismissResult,
+  NotificationDisplayInput,
+  NotificationDisplayResult
+} from '~renderer/extension/notification-request'
 import type {
   NotificationDeliveryProbeResult,
-  NotificationPermissionStatusResult,
-  NotificationSoundDataResult,
-  NotificationSoundResult
-} from '@yiru/runtime-protocol/workbench/types'
+  NotificationPermissionStatusResult
+} from '~renderer/notifications/permission-model'
+import { getBuiltInNotificationSoundUrl } from '~renderer/notifications/sound-assets'
 
-import { callShellOrpc } from './orpc-client'
+import { readConfiguredBrowserHostNotificationSound } from './browser-host-runtime'
+
+type NotificationSoundFailureReason =
+  | 'missing-path'
+  | 'invalid-path'
+  | 'unsupported-type'
+  | 'too-large'
+  | 'read-failed'
+  | 'playback-failed'
+  | 'deduped'
+
+type NotificationSoundResult = {
+  played: boolean
+  reason?: NotificationSoundFailureReason
+}
+
+type CachedSound =
+  | { kind: 'built-in'; sourceUrl: string; audio: HTMLAudioElement }
+  | { kind: 'custom'; assetId: string; blobUrl: string; audio: HTMLAudioElement }
 
 export type ShellNotificationsApi = {
-  displayNative: (
-    args: ShellServicesNotificationsDisplayInput
-  ) => Promise<ShellServicesNotificationsDisplayOutput>
-  dismissNative: (notificationIds: string[]) => Promise<ShellServicesNotificationsDismissOutput>
+  displayNative: (args: NotificationDisplayInput) => Promise<NotificationDisplayResult>
+  dismissNative: (notificationIds: string[]) => Promise<NotificationDismissResult>
   openSystemSettings: () => Promise<void>
   getPermissionStatus: () => Promise<NotificationPermissionStatusResult>
   probeDelivery: (args?: { force?: boolean }) => Promise<NotificationDeliveryProbeResult>
-  playSound: (options?: { force?: boolean; volume?: number }) => Promise<NotificationSoundResult>
+  playSound: (options: {
+    soundId: NotificationSettings['customSoundId']
+    force?: boolean
+    volume?: number
+  }) => Promise<NotificationSoundResult>
 }
 
-let cachedSound: { path: string; blobUrl: string; audio: HTMLAudioElement } | null = null
+let cachedSound: CachedSound | null = null
 let isSoundPlaying = false
 let cleanupPlayback: (() => void) | null = null
-
-function restoreShellDocument<T>(value: unknown): T {
-  // Why: runtime-protocol cannot import desktop-only shared document types;
-  // main validates them before this adapter restores their concrete type.
-  return value as T
-}
 
 function clearPlaybackState(): void {
   cleanupPlayback?.()
@@ -46,40 +60,29 @@ function disposeCachedSound(): void {
   clearPlaybackState()
   cachedSound.audio.pause()
   cachedSound.audio.src = ''
-  URL.revokeObjectURL(cachedSound.blobUrl)
+  if (cachedSound.kind === 'custom') {
+    URL.revokeObjectURL(cachedSound.blobUrl)
+  }
   cachedSound = null
 }
 
-async function playSound(options?: {
+async function playSound(options: {
+  soundId: NotificationSettings['customSoundId']
   force?: boolean
   volume?: number
 }): Promise<NotificationSoundResult> {
   try {
-    if (!options?.force && isSoundPlaying) {
+    if (!options.force && isSoundPlaying) {
       return { played: false, reason: 'deduped' }
     }
-    const sound = restoreShellDocument<NotificationSoundDataResult>(
-      await callShellOrpc((client) => client.shell.notifications.playSound, options)
-    )
-    if (!sound.ok) {
-      disposeCachedSound()
-      return { played: false, reason: sound.reason }
+    const entry = await resolveSound(options.soundId)
+    if (!entry.ok) {
+      return { played: false, reason: entry.reason }
     }
 
-    let entry = cachedSound
-    if (!entry || entry.path !== sound.path) {
-      const arrayBuffer = new ArrayBuffer(sound.data.byteLength)
-      new Uint8Array(arrayBuffer).set(sound.data)
-      const blob = new Blob([arrayBuffer], { type: sound.mimeType })
-      disposeCachedSound()
-      const blobUrl = URL.createObjectURL(blob)
-      entry = { path: sound.path, blobUrl, audio: new Audio(blobUrl) }
-      cachedSound = entry
-    }
-
-    const audio = entry.audio
+    const audio = entry.sound.audio
     audio.currentTime = 0
-    if (typeof options?.volume === 'number' && Number.isFinite(options.volume)) {
+    if (typeof options.volume === 'number' && Number.isFinite(options.volume)) {
       audio.volume = Math.min(1, Math.max(0, options.volume / 100))
     }
     isSoundPlaying = true
@@ -111,26 +114,49 @@ async function playSound(options?: {
   }
 }
 
-export const daemonShellNotificationsApi: ShellNotificationsApi = {
-  displayNative: async (input) =>
-    restoreShellDocument<ShellServicesNotificationsDisplayOutput>(
-      await callShellOrpc((client) => client.shell.notifications.displayNative, input)
-    ),
-  dismissNative: async (notificationIds) =>
-    restoreShellDocument<ShellServicesNotificationsDismissOutput>(
-      await callShellOrpc((client) => client.shell.notifications.dismissNative, {
-        notificationIds
-      })
-    ),
-  openSystemSettings: () =>
-    callShellOrpc((client) => client.shell.notifications.openSystemSettings, undefined),
-  getPermissionStatus: async () =>
-    restoreShellDocument<NotificationPermissionStatusResult>(
-      await callShellOrpc((client) => client.shell.notifications.getPermissionStatus, undefined)
-    ),
-  probeDelivery: async (input) =>
-    restoreShellDocument<NotificationDeliveryProbeResult>(
-      await callShellOrpc((client) => client.shell.notifications.probeDelivery, input)
-    ),
+async function resolveSound(
+  soundId: NotificationSettings['customSoundId']
+): Promise<
+  { ok: true; sound: CachedSound } | { ok: false; reason: NotificationSoundFailureReason }
+> {
+  const builtInUrl = getBuiltInNotificationSoundUrl(soundId)
+  if (builtInUrl) {
+    if (cachedSound?.kind !== 'built-in' || cachedSound.sourceUrl !== builtInUrl) {
+      disposeCachedSound()
+      cachedSound = { kind: 'built-in', sourceUrl: builtInUrl, audio: new Audio(builtInUrl) }
+    }
+    return { ok: true, sound: cachedSound }
+  }
+  if (soundId !== 'custom') {
+    disposeCachedSound()
+    return { ok: false, reason: 'missing-path' }
+  }
+  const cachedAssetId = cachedSound?.kind === 'custom' ? cachedSound.assetId : undefined
+  const result = await readConfiguredBrowserHostNotificationSound(cachedAssetId)
+  if (result.state === 'unavailable') {
+    disposeCachedSound()
+    return { ok: false, reason: result.reason }
+  }
+  if (result.state === 'not-modified') {
+    if (cachedSound?.kind !== 'custom') {
+      return { ok: false, reason: 'read-failed' }
+    }
+    return { ok: true, sound: cachedSound }
+  }
+  const arrayBuffer = new ArrayBuffer(result.data.byteLength)
+  new Uint8Array(arrayBuffer).set(result.data)
+  const blob = new Blob([arrayBuffer], { type: result.mimeType })
+  disposeCachedSound()
+  const blobUrl = URL.createObjectURL(blob)
+  cachedSound = {
+    kind: 'custom',
+    assetId: result.assetId,
+    blobUrl,
+    audio: new Audio(blobUrl)
+  }
+  return { ok: true, sound: cachedSound }
+}
+
+export const daemonShellNotificationsApi: Pick<ShellNotificationsApi, 'playSound'> = {
   playSound
 }

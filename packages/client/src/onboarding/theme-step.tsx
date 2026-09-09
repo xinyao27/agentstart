@@ -1,14 +1,12 @@
-import type {
-  DiscoveryStatusEmitted,
-  GhosttyImportPreview,
-  GlobalSettings
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { DiscoveryStatusEmitted } from '@yiru/protocol/telemetry/events/onboarding-product'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, Monitor, Moon, GearSix as Settings2, Sun } from '~renderer/icons/hugeicons'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { previewGhosttyImportOnActiveHost } from '~renderer/runtime/settings-import-client'
+import type { GhosttyImportPreview } from '~renderer/settings/import-preview'
 import { track } from '~renderer/telemetry/client'
 import { Button } from '~renderer/ui/button'
 
@@ -33,10 +31,7 @@ export function applyOnboardingThemeSelection(
   void updateSettings({ theme: id })
 }
 
-// The two UI-only states (`'idle'`, `'detecting'`) never fire telemetry. The
-// remaining states are exactly `DiscoveryStatusEmitted`, which is the
-// schema-side enum the compile-time guard in
-// `runtime-protocol/workbench/telemetry-events` locks against.
+// Why: UI-only idle and detecting states must not become discovery telemetry events.
 export type DiscoveryState =
   | { status: 'idle' }
   | { status: 'detecting' }

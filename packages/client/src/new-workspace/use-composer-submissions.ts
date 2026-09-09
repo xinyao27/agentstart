@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { useShallow } from 'zustand/react/shallow'
 import { getWorkspaceSeedName } from '~renderer/new-workspace/workspace-creation'
 import { useAppStore } from '~renderer/store/state'
@@ -50,7 +50,6 @@ export function useComposerSubmissions({
       effectiveLinkedPR: github.effectiveLinkedPR,
       fallbackWorkspaceName: form.fallbackCreatureName,
       lastAutoName: source.lastAutoNameRef.current,
-      linkedGitLabMR: source.linkedGitLabMR,
       linkedWorkItem: source.linkedWorkItem,
       name: source.name,
       pushTarget: source.pushTarget,
@@ -168,7 +167,6 @@ export function useComposerSubmissions({
     attachments.setAttachmentPaths([])
     source.setLinkedWorkItem(null)
     source.setLinkedPR(null)
-    source.setLinkedGitLabMR(null)
     source.setBranchNameOverride(undefined)
     source.setBranchNameOverridePreservesNameEdits(false)
     source.setCompareBaseRef(undefined)

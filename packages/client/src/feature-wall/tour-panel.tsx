@@ -1,24 +1,19 @@
-import type {
-  AgentsStep,
-  AgentsStepId
-} from '@yiru/runtime-protocol/workbench/agents-orchestration-steps'
-import type {
-  FeatureWallWorkflow,
-  FeatureWallWorkflowId
-} from '@yiru/runtime-protocol/workbench/feature-wall-workflows'
-import type { ReviewStep, ReviewStepId } from '@yiru/runtime-protocol/workbench/review-steps'
-import type { FeatureWallOpenSourceTelemetry } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
-import type {
-  WorkbenchStep,
-  WorkbenchStepId
-} from '@yiru/runtime-protocol/workbench/workbench-steps'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { FeatureWallOpenSourceTelemetry } from '@yiru/protocol/telemetry/events/foundations'
+import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallWorkflowId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import type { JSX, KeyboardEvent, MutableRefObject, ReactNode } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import type { InstalledAgentSkillState } from '~renderer/skills/use-installed-agents'
 import { cn } from '~renderer/ui/class-names'
 
 import { FeatureWallBody } from './body'
+import type { AgentsStep } from './content/agents-orchestration-steps'
+import type { ReviewStep } from './content/review-steps'
+import type { WorkbenchStep } from './content/workbench-steps'
+import type { FeatureWallWorkflow } from './content/workflows'
 import { FeatureWallRail } from './rail'
 import type { FeatureWallCompletionState } from './use-feature-wall-completion'
 

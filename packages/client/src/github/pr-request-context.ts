@@ -2,7 +2,7 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   getRepoExecutionHostId,
   normalizeExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+} from '@yiru/protocol/host/identity'
 import { getHostedReviewCacheKey } from '~renderer/source-control/hosted-review-state/cache-identity'
 import type { AppState } from '~renderer/store/types'
 

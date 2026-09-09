@@ -1,10 +1,7 @@
-import {
-  getRepoExecutionHostId,
-  parseExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { ORPHAN_WORKTREE_ID } from '@yiru/runtime-protocol/workbench/constants'
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import { isWorkspaceOldForCleanup } from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
+import { ORPHAN_WORKTREE_ID } from '@yiru/protocol/terminal/session-identity'
+import { isWorkspaceOldForCleanup } from '@yiru/protocol/workspace/cleanup-policy'
 import React, { useEffect, useState } from 'react'
 import { useNow } from '~renderer/dashboard/use-now'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'

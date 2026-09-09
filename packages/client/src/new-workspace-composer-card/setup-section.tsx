@@ -1,4 +1,4 @@
-import type { SetupAgentStartupPolicy } from '@yiru/runtime-protocol/workbench/types'
+import type { SetupAgentStartupPolicy } from '@yiru/protocol/worktree/hooks'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import type { SetupConfig } from '~renderer/new-workspace/workspace-creation'

@@ -1,5 +1,6 @@
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { GitConflictOperation, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 import { useEffect } from 'react'
 import {
   installWindowVisibilityInterval,

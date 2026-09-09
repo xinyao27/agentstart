@@ -1,6 +1,6 @@
-import type { LaunchSource } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import { filterEnabledTuiAgents } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { filterEnabledTuiAgents } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
 import React from 'react'
 import { toast } from 'sonner'
 import { getAgentCatalog } from '~renderer/agent/catalog'
@@ -105,10 +105,10 @@ function QuickLaunchAgentMenuItemsInner({
     openSettingsPage()
   }
 
-  const runLaunch = (agent: TuiAgent) => {
+  const runLaunch = async (agent: TuiAgent) => {
     const entry = getCatalogEntry(agent)
     const label = entry?.label ?? agent
-    const result = launchAgentInNewTab({
+    const result = await launchAgentInNewTab({
       agent,
       worktreeId,
       groupId,

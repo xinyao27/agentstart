@@ -1,4 +1,6 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient: HostedReviewRepository {
     func launchHostedReviewTriage(
@@ -17,17 +19,12 @@ extension RuntimeClient: HostedReviewRepository {
                 ?? snapshot.tabs.last(where: { $0.terminalTarget != nil }),
             let terminal = tab.terminalTarget
         else { throw SourceReviewRepositoryError.missingTerminal }
-        let result: MobileReviewTerminalSendResultWire = try await callRuntime(
+        let response = try await protocolTerminalSend(
             hostID: hostID,
-            path: MobileReviewWireContract.terminalSendPath,
-            input: MobileReviewTerminalSendRequestWire(
-                terminal: terminal.id,
-                text: prompt,
-                enter: true
-            ),
-            output: MobileReviewTerminalSendResultWire.self
+            terminal: terminal.id,
+            text: prompt
         )
-        guard result.send.accepted else { throw SourceReviewRepositoryError.terminalRejected }
+        guard response.send.accepted else { throw SourceReviewRepositoryError.terminalRejected }
     }
 
     func hostedReview(
@@ -37,21 +34,24 @@ extension RuntimeClient: HostedReviewRepository {
         linkedProvider: HostedReviewProvider?,
         linkedNumber: Int?
     ) async throws -> HostedReview? {
-        let wire: MobileHostedReviewInfoWire? = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHubServiceGetHostedReviewForBranchRequest()
+        request.repo = hostedReviewRepoSelector(workspace.repoID)
+        request.branch = status.branchLabel
+        var lookup = Yiru_Runtime_V1_GitHubPrBranchLookup()
+        if linkedProvider == .github, let linkedNumber {
+            lookup.linkedPrNumber = UInt64(linkedNumber)
+        } else if let linkedPullRequest = workspace.linkedPullRequest?.number {
+            lookup.linkedPrNumber = UInt64(linkedPullRequest)
+        }
+        if let head = status.head { lookup.currentHeadOid = head }
+        request.lookup = lookup
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileHostedReviewWireContract.forBranchPath,
-            input: MobileHostedReviewForBranchRequestWire(
-                repo: hostedReviewRepoSelector(workspace.repoID),
-                branch: status.branchLabel,
-                currentHeadOid: status.head,
-                linkedGitHubPR: linkedProvider == .github
-                    ? linkedNumber : workspace.linkedPullRequest?.number,
-                linkedGitLabMR: linkedProvider == .gitlab
-                    ? linkedNumber : workspace.linkedGitLabMergeRequest
-            ),
-            output: MobileHostedReviewInfoWire?.self
+            procedure: YiruRuntimeV1GitHubServiceMethods.getHostedReviewForBranch,
+            request: request,
+            response: Yiru_Runtime_V1_GitHubServiceGetHostedReviewForBranchResponse.self
         )
-        return wire.map { mapHostedReview($0) }
+        return response.hasReview ? hostedReviewSummary(response.review) : nil
     }
 
     func hostedReviewEligibility(
@@ -60,34 +60,32 @@ extension RuntimeClient: HostedReviewRepository {
         status: SourceStatusSnapshot
     ) async throws -> HostedReviewEligibility {
         let upstream = status.upstream
-        let wire: MobileHostedReviewEligibilityWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHubServiceGetHostedReviewCreationEligibilityRequest()
+        request.repo = hostedReviewRepoSelector(workspace.repoID)
+        request.worktree = hostedReviewWorktreeSelector(workspace.id)
+        request.branch = status.branchLabel
+        request.hasUncommittedChanges_p = !status.entries.isEmpty
+        if let hasUpstream = upstream?.hasUpstream { request.hasUpstream_p = hasUpstream }
+        if let ahead = upstream?.ahead { request.ahead = UInt64(ahead) }
+        if let behind = upstream?.behind { request.behind = UInt64(behind) }
+        if let linkedPullRequest = workspace.linkedPullRequest?.number {
+            request.linkedGithubPr = UInt64(linkedPullRequest)
+        }
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileHostedReviewWireContract.eligibilityPath,
-            input: MobileHostedReviewEligibilityRequestWire(
-                repo: hostedReviewRepoSelector(workspace.repoID),
-                worktree: hostedReviewWorktreeSelector(workspace.id),
-                branch: status.branchLabel,
-                base: nil,
-                hasUncommittedChanges: !status.entries.isEmpty,
-                hasUpstream: upstream?.hasUpstream,
-                ahead: upstream?.ahead,
-                behind: upstream?.behind,
-                linkedGitHubPR: workspace.linkedPullRequest?.number,
-                linkedGitLabMR: workspace.linkedGitLabMergeRequest
-            ),
-            output: MobileHostedReviewEligibilityWire.self
+            procedure: YiruRuntimeV1GitHubServiceMethods.getHostedReviewCreationEligibility,
+            request: request,
+            response: Yiru_Runtime_V1_GitHubServiceGetHostedReviewCreationEligibilityResponse.self
         )
         return HostedReviewEligibility(
-            provider: hostedReviewProvider(wire.provider),
-            canCreate: wire.canCreate,
-            blockedReason: wire.blockedReason.flatMap {
-                HostedReviewBlockedReason(rawValue: $0.rawValue)
-            },
-            existingReviewURL: wire.review.flatMap { URL(string: $0.url) },
-            defaultBaseRef: wire.defaultBaseRef,
-            head: wire.head,
-            suggestedTitle: wire.title,
-            suggestedBody: wire.body
+            provider: hostedReviewProvider(response.provider),
+            canCreate: response.canCreate,
+            blockedReason: hostedReviewBlockedReason(response.blockedReason),
+            existingReviewURL: response.hasReview ? URL(string: response.review.url) : nil,
+            defaultBaseRef: response.hasDefaultBaseRef ? response.defaultBaseRef : nil,
+            head: response.hasHead ? response.head : nil,
+            suggestedTitle: nil,
+            suggestedBody: nil
         )
     }
 
@@ -96,38 +94,40 @@ extension RuntimeClient: HostedReviewRepository {
         workspace: WorkspaceSummary,
         draft: HostedReviewDraft
     ) async throws -> HostedReviewCreation {
-        let result: MobileHostedReviewCreateResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHubServiceCreateHostedReviewRequest()
+        request.repo = hostedReviewRepoSelector(workspace.repoID)
+        request.worktree = hostedReviewWorktreeSelector(workspace.id)
+        request.provider = hostedReviewProviderValue(draft.provider)
+        request.base = draft.base
+        if let head = draft.head { request.head = head }
+        request.title = draft.title
+        if !draft.body.isEmpty { request.body = draft.body }
+        request.draft = draft.isDraft
+        request.useTemplate = draft.useTemplate
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileHostedReviewWireContract.createPath,
-            input: MobileHostedReviewCreateRequestWire(
-                repo: hostedReviewRepoSelector(workspace.repoID),
-                worktree: hostedReviewWorktreeSelector(workspace.id),
-                provider: hostedReviewProviderWire(draft.provider),
-                base: draft.base,
-                head: draft.head,
-                title: draft.title,
-                body: draft.body.isEmpty ? nil : draft.body,
-                draft: draft.isDraft,
-                useTemplate: draft.useTemplate
-            ),
-            output: MobileHostedReviewCreateResultWire.self
+            procedure: YiruRuntimeV1GitHubServiceMethods.createHostedReview,
+            request: request,
+            response: Yiru_Runtime_V1_GitHubServiceCreateHostedReviewResponse.self
         )
-        if result.ok, let number = result.number {
+        if response.ok, response.hasNumber {
             return HostedReviewCreation(
-                number: number,
-                url: result.url.flatMap(URL.init(string:)),
+                number: Int(response.number),
+                url: response.hasURL ? URL(string: response.url) : nil,
                 isExisting: false
             )
         }
-        if let existing = result.existingReview {
+        if response.hasExistingReview {
             return HostedReviewCreation(
-                number: existing.number,
-                url: URL(string: existing.url),
+                number: Int(response.existingReview.number),
+                url: URL(string: response.existingReview.url),
                 isExisting: true
             )
         }
-        if result.ok { throw HostedReviewRepositoryError.invalidCreationResult }
-        throw HostedReviewRepositoryError.rejected(result.error)
+        if response.ok { throw HostedReviewRepositoryError.invalidCreationResult }
+        throw HostedReviewRepositoryError.rejected(
+            response.hasError ? response.error : nil
+        )
     }
 
     func setHostedReviewLink(
@@ -139,18 +139,20 @@ extension RuntimeClient: HostedReviewRepository {
     ) async throws {
         guard provider != .unsupported else { return }
         let revision = try await workspaceMutationRevision(hostID: hostID, workspaceID: workspaceID)
-        let _: MobileWorkspacePinResultWire = try await callRuntime(
+        try await protocolSetWorktree(
             hostID: hostID,
-            path: MobileRuntimeWireContract.worktreeSetPath,
-            input: HostedReviewLinkRequest(
-                worktree: hostedReviewWorktreeSelector(workspaceID),
-                expectedRevision: revision,
-                provider: provider,
-                number: number,
-                baseRef: baseRef
-            ),
-            output: MobileWorkspacePinResultWire.self
-        )
+            workspaceID: workspaceID,
+            revision: revision
+        ) { patch in
+            var linked = Yiru_Runtime_V1_WorktreeNullableInt64()
+            if let number {
+                linked.number = Int64(number)
+            } else {
+                linked.null = true
+            }
+            patch.linkedPr = linked
+            if let baseRef { patch.baseRef = baseRef }
+        }
     }
 
     func hostedReviewDetails(
@@ -159,26 +161,21 @@ extension RuntimeClient: HostedReviewRepository {
         review: HostedReview
     ) async throws -> HostedReviewDetails? {
         guard review.provider == .github else { return nil }
-        let wire: MobileGitHubWorkItemDetailsWire? = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHubServiceGetWorkItemDetailsRequest()
+        request.repo = hostedReviewRepoSelector(workspace.repoID)
+        request.number = UInt64(review.number)
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileHostedReviewWireContract.detailsPath,
-            input: MobileGitHubReviewRequestWire(
-                repo: hostedReviewRepoSelector(workspace.repoID),
-                number: review.number,
-                type: "pr"
-            ),
-            output: MobileGitHubWorkItemDetailsWire?.self
+            procedure: YiruRuntimeV1GitHubServiceMethods.getWorkItemDetails,
+            request: request,
+            response: Yiru_Runtime_V1_GitHubServiceGetWorkItemDetailsResponse.self
         )
-        let settings: MobileWorkspaceRuntimeSettingsEnvelopeWire? = try? await callRuntime(
-            hostID: hostID,
-            path: MobileRuntimeWireContract.settingsGetPath,
-            input: Optional<String>.none,
-            output: MobileWorkspaceRuntimeSettingsEnvelopeWire.self
-        )
+        let settings: RuntimeClientSettings? = try? await protocolClientSettings(for: hostID)
         let botAuthors = hostedReviewBotAuthorSet(
-            settings?.settings.prBotAuthorOverrides ?? []
+            settings?.prBotAuthorOverrides ?? []
         )
-        return wire.map { mapHostedReviewDetails($0, botAuthors: botAuthors) }
+        guard response.hasDetails else { return nil }
+        return mapHostedReviewDetails(response.details, botAuthors: botAuthors)
     }
 
     func hostedReviewChecks(
@@ -188,32 +185,42 @@ extension RuntimeClient: HostedReviewRepository {
         details: HostedReviewDetails?
     ) async throws -> [HostedReviewCheck] {
         guard review.provider == .github else { return [] }
-        let wires: [MobileGitHubCheckWire] = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHubServiceGetPrChecksRequest()
+        request.repo = hostedReviewRepoSelector(workspace.repoID)
+        request.prNumber = UInt64(review.number)
+        if let headSha = details?.headSHA ?? review.headSHA {
+            request.headSha = headSha
+        }
+        if let identity = details?.repoIdentity {
+            request.prRepo = hostedReviewRepoRef(identity)
+        }
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileHostedReviewWireContract.checksPath,
-            input: MobileGitHubChecksRequestWire(
-                repo: hostedReviewRepoSelector(workspace.repoID),
-                prNumber: review.number,
-                headSha: details?.headSHA ?? review.headSHA,
-                prRepo: details?.repoIdentity.map(hostedReviewRepoIdentityWire)
-            ),
-            output: [MobileGitHubCheckWire].self
+            procedure: YiruRuntimeV1GitHubServiceMethods.getPrChecks,
+            request: request,
+            response: Yiru_Runtime_V1_GitHubServiceGetPrChecksResponse.self
         )
-        return wires.map(hostedReviewCheck)
+        return response.checks.map(hostedReviewCheck)
     }
 
     func hostedReviewAssignableUsers(
         for hostID: String,
         workspace: WorkspaceSummary
     ) async throws -> [HostedReviewUser] {
-        let wires: [MobileGitHubAssignableUserWire] = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHubServiceListAssignableUsersRequest()
+        request.repo = hostedReviewRepoSelector(workspace.repoID)
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileHostedReviewWireContract.assignableUsersPath,
-            input: MobileGitHubRepoRequestWire(repo: hostedReviewRepoSelector(workspace.repoID)),
-            output: [MobileGitHubAssignableUserWire].self
+            procedure: YiruRuntimeV1GitHubServiceMethods.listAssignableUsers,
+            request: request,
+            response: Yiru_Runtime_V1_GitHubServiceListAssignableUsersResponse.self
         )
-        return wires.map {
-            HostedReviewUser(login: $0.login, name: $0.name, avatarURL: URL(string: $0.avatarUrl))
+        return response.users.map {
+            HostedReviewUser(
+                login: $0.login,
+                name: $0.hasName ? $0.name : nil,
+                avatarURL: URL(string: $0.avatarURL)
+            )
         }
     }
 
@@ -225,56 +232,28 @@ extension RuntimeClient: HostedReviewRepository {
         check: HostedReviewCheck
     ) async throws -> HostedReviewCheckRunDetails? {
         guard review.provider == .github else { return nil }
-        let wire: MobileGitHubCheckRunDetailsWire? = try await callRuntime(
-            hostID: hostID,
-            path: MobileHostedReviewWireContract.checkDetailsPath,
-            input: MobileGitHubCheckDetailsRequestWire(
-                repo: hostedReviewRepoSelector(workspace.repoID),
-                checkRunId: check.checkRunID,
-                workflowRunId: check.workflowRunID,
-                checkName: check.name,
-                url: check.url?.absoluteString,
-                prRepo: details?.repoIdentity.map(hostedReviewRepoIdentityWire)
-            ),
-            output: MobileGitHubCheckRunDetailsWire?.self
-        )
-        return wire.map(hostedReviewCheckRunDetails)
-    }
-
-}
-
-nonisolated private struct MobileGitHubRepoRequestWire: Encodable, Sendable { let repo: String }
-
-nonisolated private struct HostedReviewLinkRequest: Encodable, Sendable {
-    let worktree: String
-    let expectedRevision: Int
-    let provider: HostedReviewProvider
-    let number: Int?
-    let baseRef: String?
-
-    enum CodingKeys: String, CodingKey {
-        case worktree
-        case expectedRevision
-        case linkedPR
-        case linkedGitLabMR
-        case linkedBitbucketPR
-        case linkedAzureDevOpsPR
-        case linkedGiteaPR
-        case baseRef
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var values = encoder.container(keyedBy: CodingKeys.self)
-        try values.encode(worktree, forKey: .worktree)
-        try values.encode(expectedRevision, forKey: .expectedRevision)
-        try values.encodeIfPresent(baseRef, forKey: .baseRef)
-        switch provider {
-        case .github: try values.encode(number, forKey: .linkedPR)
-        case .gitlab: try values.encode(number, forKey: .linkedGitLabMR)
-        case .bitbucket: try values.encode(number, forKey: .linkedBitbucketPR)
-        case .azureDevOps: try values.encode(number, forKey: .linkedAzureDevOpsPR)
-        case .gitea: try values.encode(number, forKey: .linkedGiteaPR)
-        case .unsupported: break
+        var request = Yiru_Runtime_V1_GitHubServiceGetPrCheckDetailsRequest()
+        request.repo = hostedReviewRepoSelector(workspace.repoID)
+        if let checkRunID = check.checkRunID {
+            request.checkRunID = UInt64(checkRunID)
         }
+        if let workflowRunID = check.workflowRunID {
+            request.workflowRunID = UInt64(workflowRunID)
+        }
+        request.checkName = check.name
+        if let url = check.url?.absoluteString {
+            request.url = url
+        }
+        if let identity = details?.repoIdentity {
+            request.prRepo = hostedReviewRepoRef(identity)
+        }
+        let response = try await protocolUnary(
+            hostID: hostID,
+            procedure: YiruRuntimeV1GitHubServiceMethods.getPrCheckDetails,
+            request: request,
+            response: Yiru_Runtime_V1_GitHubServiceGetPrCheckDetailsResponse.self
+        )
+        guard response.hasDetails else { return nil }
+        return hostedReviewCheckRunDetails(response.details)
     }
 }

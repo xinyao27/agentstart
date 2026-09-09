@@ -1,8 +1,8 @@
-import { isRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import type { StateCreator } from 'zustand'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { closeRuntimeTerminal } from '~renderer/runtime/terminal-inspection'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { shutdownBufferCaptures } from '~renderer/runtime/terminal-shutdown-buffer-captures'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 
@@ -137,13 +137,15 @@ export function createTerminalHibernateActions(
           postStopFailure?: string
         }
         try {
-          stopResult = await callRuntimeOrpc(
-            { kind: 'environment', environmentId: runtimeEnvironmentId },
-            (client) => client.terminal.stopExact,
+          stopResult = await (
+            await openRuntimeTerminalClient({
+              kind: 'environment',
+              environmentId: runtimeEnvironmentId
+            })
+          ).stopExact(
             {
               worktree: toRuntimeWorktreeSelector(worktreeId),
               expectedPtyIds: expectedRuntimePtyIds,
-              keepHistory: true,
               targetOnly: true
             },
             { timeoutMs: 15_000 }

@@ -3,7 +3,7 @@ import { ArrowRight } from '~renderer/icons/hugeicons'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 
-import { AndroidLogo, IosBrandIcon } from './brand-icons'
+import { IosBrandIcon } from './brand-icons'
 import { mobilePageStyles } from './page-tailwind'
 
 export function HeroIntro({ onStart }: { onStart: () => void }): React.JSX.Element {
@@ -39,10 +39,6 @@ export function HeroIntro({ onStart }: { onStart: () => void }): React.JSX.Eleme
         <span className={mobilePageStyles.platformBadge}>
           <IosBrandIcon />
           {translate('auto.components.mobile.MobileHero.711e6f4b47', 'iOS')}
-        </span>
-        <span className={mobilePageStyles.platformBadge}>
-          <AndroidLogo />
-          {translate('auto.components.mobile.MobileHero.ac1eb64952', 'Android')}
         </span>
       </div>
       <div className={mobilePageStyles.ctaRow}>

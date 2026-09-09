@@ -1,11 +1,12 @@
-import { isTuiAgentEnabled } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { useEffect, useState } from 'react'
 import {
   detectAgentSessionContinuationAgents,
   launchAgentSessionContinuation
 } from '~renderer/agent-session-continuation/launch-agent-session-continuation'
-import { getAgentCatalog, getAgentLabel } from '~renderer/agent/catalog'
+import { getAgentLabel } from '~renderer/agent/catalog'
+import { getAgentCatalog } from '~renderer/agent/catalog'
 import AgentCombobox from '~renderer/agent/combobox'
 import { translate } from '~renderer/i18n/i18n'
 import { ChatCentered as MessageSquarePlus } from '~renderer/icons/hugeicons'

@@ -1,8 +1,9 @@
-import { getLinkedWorkItemWorkspaceName } from '@yiru/runtime-protocol/model/workspace'
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import { getProjectSourceCacheScope } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { GitHubWorkItem, GitPushTarget } from '@yiru/runtime-protocol/workbench/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import { getProjectSourceCacheScope } from '@yiru/protocol/project/source-context'
 import { parseGitHubPullRequestLink } from '~renderer/github/links'
+import { getLinkedWorkItemWorkspaceName } from '~renderer/new-workspace/naming/name'
 import type { LinkedWorkItemSummary } from '~renderer/new-workspace/workspace-creation'
 
 export type SmartGitHubSubmitIntent =

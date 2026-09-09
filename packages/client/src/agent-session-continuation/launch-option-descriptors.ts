@@ -1,12 +1,12 @@
 import type {
   AgentSessionOptionCatalog,
   CatalogOption
-} from '@yiru/runtime-protocol/workbench/agent/session-option-catalog'
+} from '@yiru/protocol/agent/session-options/catalog-types'
 import type {
   SessionOptionDescriptor,
   SessionOptionSelectChoice,
   SessionOptionValue
-} from '@yiru/runtime-protocol/workbench/agent/session-options'
+} from '@yiru/protocol/agent/session-options/types'
 import { translate } from '~renderer/i18n/i18n'
 
 function optionIsSettable(

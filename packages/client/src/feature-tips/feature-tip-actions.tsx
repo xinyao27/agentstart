@@ -1,8 +1,9 @@
-import type { FeatureTip, FeatureTipAction } from '@yiru/runtime-protocol/workbench/feature-tips'
 import type { JSX } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { Button } from '~renderer/ui/button'
+
+import type { FeatureTip, FeatureTipAction } from './catalog'
 
 function getPrimaryBusyLabel(action: FeatureTipAction): string {
   if (action === 'setup-cli') {

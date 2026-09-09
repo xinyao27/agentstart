@@ -1,7 +1,4 @@
-import {
-  getRepoExecutionHostId,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+import { getRepoExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
 
 type RepoDisplayLabelItem = {
   path: string

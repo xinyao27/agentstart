@@ -33,7 +33,10 @@ export type RemoteRuntimeMultiplexedTerminalCallbacks = {
     rows: number
   }) => void
   onDriverChanged?: (driver: RemoteRuntimeTerminalDriver) => void
-  onSideEffectBatch?: (batch: TerminalMultiplexSideEffectBatch) => void
+  onSideEffectBatch?: (
+    batch: TerminalMultiplexSideEffectBatch,
+    meta: { seq: bigint; epoch: bigint }
+  ) => void
   onMetadata?: (metadata: Record<string, unknown>) => void
   onClearBuffer?: () => void
   onTransportClose?: () => void
@@ -65,4 +68,4 @@ export type RemoteRuntimeMultiplexedTerminal = {
 
 export const REMOTE_TERMINAL_SNAPSHOT_TOO_LARGE =
   'Remote terminal snapshot exceeded the 2 MiB replay limit; live output will continue.'
-import type { TerminalMultiplexSideEffectBatch } from '@yiru/runtime-protocol/terminal-multiplex/side-effects'
+import type { TerminalMultiplexSideEffectBatch } from '@yiru/protocol/terminal-multiplex/side-effects'

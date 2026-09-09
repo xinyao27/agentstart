@@ -1,10 +1,10 @@
-import type { AgentsStepId } from '@yiru/runtime-protocol/workbench/agents-orchestration-steps'
+import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import {
   FEATURE_WALL_WORKFLOW_IDS,
   type FeatureWallWorkflowId
-} from '@yiru/runtime-protocol/workbench/feature-wall-workflows'
-import type { ReviewStepId } from '@yiru/runtime-protocol/workbench/review-steps'
-import type { WorkbenchStepId } from '@yiru/runtime-protocol/workbench/workbench-steps'
+} from '@yiru/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 
 const PERSISTED_WORKFLOW_IDS = new Set<FeatureWallWorkflowId>(FEATURE_WALL_WORKFLOW_IDS)
 const VISITED_WORKFLOWS_STORAGE_KEY = 'yiru.featureWall.visitedWorkflows.v1'

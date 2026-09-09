@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 
 import type { RemoteOpKind } from './primary-action'
 

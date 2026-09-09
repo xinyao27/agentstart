@@ -1,21 +1,18 @@
-import type { RuntimeStatsSupplementalUsage } from '@yiru/runtime-protocol/mobile-runtime-types'
-import type { ContributionPoint } from '@yiru/runtime-protocol/model/ui'
-import {
-  dayIsInStatsUsageRange,
-  type StatsUsageBoundedRange
-} from '@yiru/runtime-protocol/stats-usage-range'
+import { dayIsInStatsUsageRange, type StatsUsageBoundedRange } from '@yiru/protocol/stats/range'
 import {
   buildDailyProviderUsage,
   buildProjectUsage,
   type DailyProviderUsage,
   type ProjectUsageValue
-} from '@yiru/runtime-protocol/workbench/stats/usage-breakdown'
+} from '@yiru/protocol/stats/usage-breakdown'
 import {
   buildUsageValueSnapshot,
   type UsageValueModel,
   type UsageValueSupplementalInput
-} from '@yiru/runtime-protocol/workbench/stats/usage-value'
+} from '@yiru/protocol/stats/usage-value'
+import type { RuntimeStatsSupplementalUsage } from '@yiru/protocol/stats/values'
 import { useEffect } from 'react'
+import type { ContributionPoint } from '~renderer/contribution-heatmap/calendar'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useAppStore } from '~renderer/store/state'
 
@@ -137,9 +134,10 @@ function mapSupplementalUsage(
   usage: RuntimeStatsSupplementalUsage,
   range: StatsUsageBoundedRange
 ): UsageValueSupplementalInput {
+  const now = new Date()
   return {
     daily: usage.dailyTokens
-      .filter((point) => dayIsInStatsUsageRange(point.day, range))
+      .filter((point) => dayIsInStatsUsageRange(point.day, range, now))
       .map((point) => ({
         day: point.day,
         tokens: point.tokens,

@@ -1,5 +1,5 @@
-import type { SourceControlAiSettingsPatch } from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { SourceControlAiSettingsPatch } from '@yiru/protocol/source-control/ai-types'
 import type { ComponentProps } from 'react'
 import type { WindowsTerminalCapabilities } from '~renderer/terminal/windows/capabilities'
 

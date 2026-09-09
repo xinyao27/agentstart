@@ -1,5 +1,5 @@
-import { folderWorkspaceToWorktree } from '@yiru/runtime-protocol/workbench/folder-workspace-worktree'
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import { folderWorkspaceToWorktree } from '@yiru/protocol/workspace/folder'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 import type { HostSectionRow } from './host-section-rows'
 import {

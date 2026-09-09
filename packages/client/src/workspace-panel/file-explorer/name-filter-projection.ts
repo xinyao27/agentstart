@@ -1,4 +1,4 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 import { joinPath, normalizeRelativePath } from '~renderer/path'
 
 import { splitPathSegments } from '../path-tree'
@@ -49,7 +49,7 @@ export function isFileExplorerNameFilterQueryTooLarge(
   maxBytes = FILE_EXPLORER_NAME_FILTER_QUERY_MAX_BYTES
 ): boolean {
   const value = query ?? ''
-  return isClipboardTextByteLengthOverLimit(value, maxBytes)
+  return isUtf8ByteLengthOverLimit(value, maxBytes)
 }
 
 export function getFileExplorerNameFilterTokens(query: string | undefined): string[] {

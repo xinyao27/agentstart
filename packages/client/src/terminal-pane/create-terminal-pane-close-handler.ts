@@ -1,6 +1,6 @@
 import type { IDisposable } from '@xterm/xterm'
-import { makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalKittyKeyboardModeTracker } from '@yiru/runtime-protocol/workbench/terminal/kitty-keyboard-mode-tracker'
+import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 
 import { scheduleRuntimeGraphSync } from '../runtime/sync-runtime-graph'
 import { useAppStore } from '../store/state'

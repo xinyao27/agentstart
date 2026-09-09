@@ -1,4 +1,4 @@
-import type { RightSidebarExplorerView } from '@yiru/runtime-protocol/workbench/types'
+import type { RightSidebarExplorerView } from '@yiru/protocol/settings/ui-state'
 import React from 'react'
 
 import { FileExplorerViewSwitch } from './view-switch'

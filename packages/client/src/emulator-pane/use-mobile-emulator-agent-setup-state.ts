@@ -1,4 +1,4 @@
-import type { CliInstallStatus } from '@yiru/runtime-protocol/workbench/cli-install-types'
+import type { CliInstallStatus } from '@yiru/protocol/cli-values'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { YIRU_CLI_SKILL_NAME } from '~renderer/agent/feature-install-commands'

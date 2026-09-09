@@ -1,13 +1,9 @@
-import type { RuntimeTerminalPresentation } from '@yiru/runtime-protocol/workbench/runtime-types'
+import type { TerminalCreateInput } from '@yiru/protocol'
 
-// Why: shared by terminal-create-shell-request.ts's `create` and
-// terminal-reveal-shell-request.ts's `reveal` — both derive the same
-// focused/background presentation from a `presentation`/`activate` pair, a
-// duplicate of the removed use-ipc-events.ts local of the same name.
 export function resolveTerminalPresentation(data: {
-  presentation?: RuntimeTerminalPresentation
+  presentation?: TerminalCreateInput['presentation']
   activate?: boolean
-}): RuntimeTerminalPresentation | undefined {
+}): TerminalCreateInput['presentation'] | undefined {
   if (data.presentation) {
     return data.presentation
   }

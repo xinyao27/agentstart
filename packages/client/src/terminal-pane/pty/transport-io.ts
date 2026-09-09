@@ -1,6 +1,6 @@
-import { resolveTerminalColorSchemeMode } from '@yiru/runtime-protocol/workbench/terminal/color-scheme-protocol'
-import { mode2031SequenceFor } from '@yiru/runtime-protocol/workbench/terminal/color-scheme-protocol'
 import { useAppStore } from '~renderer/store/state'
+import { resolveTerminalColorSchemeMode } from '~renderer/terminal-pane/emulator/color-scheme'
+import { mode2031SequenceFor } from '~renderer/terminal-pane/emulator/color-scheme'
 import { isPtyLocked } from '~renderer/terminal-pane/pane-manager/mobile-driver-state'
 import { getFitOverrideForPty } from '~renderer/terminal-pane/pane-manager/mobile-fit-overrides'
 import type { ManagedPane } from '~renderer/terminal-pane/pane-manager/pane-manager'

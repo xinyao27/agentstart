@@ -1,4 +1,5 @@
-import type { Repo, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { projectCatalogRepoKey } from '~renderer/project-catalog/query'
 

@@ -1,5 +1,5 @@
-import type { NestedRepoTelemetryRuntimeKind } from '@yiru/runtime-protocol/workbench/nested-repo-telemetry'
-import type { NestedRepoScanResult } from '@yiru/runtime-protocol/workbench/types'
+import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import type { NestedRepoTelemetryRuntimeKind } from '@yiru/protocol/telemetry/nested-repo'
 import type { Dispatch, SetStateAction } from 'react'
 import { useRef, useState } from 'react'
 

@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 

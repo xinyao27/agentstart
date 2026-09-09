@@ -1,15 +1,20 @@
 import Foundation
+import YiruProtocol
 
 nonisolated enum WorkspaceSetupRunPolicy: String, Sendable {
     case ask
     case runByDefault
     case skipByDefault
 
-    init(wire: MobileWorkspaceSetupRunPolicyWire) {
-        switch wire {
+    init(protocolValue: Yiru_Runtime_V1_RepoSetupRunPolicy) throws {
+        switch protocolValue {
         case .ask: self = .ask
         case .runByDefault: self = .runByDefault
         case .skipByDefault: self = .skipByDefault
+        case .unspecified:
+            throw RuntimeResponseValidationError("repo_hooks.setup_run_policy")
+        case .UNRECOGNIZED:
+            self = .ask
         }
     }
 }
@@ -46,17 +51,40 @@ nonisolated struct WorkspaceSetupDetails: Hashable, Sendable {
         trust: nil
     )
 
-    init(wire: MobileRepoHooksResultWire) {
-        let command = wire.hooks?.scripts.setup?.trimmingCharacters(in: .whitespacesAndNewlines)
+    var decisionContent: String? {
+        command ?? trust?.scriptContent
+    }
+
+    init(protocolValue: Yiru_Runtime_V1_RepoServiceGetHooksResponse) throws {
+        let command =
+            protocolValue.hasSetupCommand
+            ? protocolValue.setupCommand.trimmingCharacters(in: .whitespacesAndNewlines) : nil
         self.command = command?.isEmpty == false ? command : nil
-        source = wire.source
-        runPolicy = WorkspaceSetupRunPolicy(wire: wire.setupRunPolicy)
-        trust = wire.setupTrust.map {
-            WorkspaceSetupTrust(contentHash: $0.contentHash, scriptContent: $0.scriptContent)
+        switch protocolValue.source {
+        case .unspecified: source = nil
+        case .yiruYaml: source = "yiru.yaml"
+        case .legacy: source = "legacy"
+        case .UNRECOGNIZED: source = nil
+        }
+        runPolicy = try WorkspaceSetupRunPolicy(protocolValue: protocolValue.setupRunPolicy)
+        if protocolValue.hasSetupTrust {
+            let contentHash = protocolValue.setupTrust.contentHash.trimmingCharacters(
+                in: .whitespacesAndNewlines
+            )
+            let scriptContent = protocolValue.setupTrust.scriptContent
+            guard
+                !contentHash.isEmpty,
+                !scriptContent.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            else {
+                throw RuntimeResponseValidationError("repo_hooks.setup_trust")
+            }
+            trust = WorkspaceSetupTrust(contentHash: contentHash, scriptContent: scriptContent)
+        } else {
+            trust = nil
         }
     }
 
-    private init(
+    init(
         command: String?,
         source: String?,
         runPolicy: WorkspaceSetupRunPolicy,
@@ -72,6 +100,24 @@ nonisolated struct WorkspaceSetupDetails: Hashable, Sendable {
 nonisolated struct WorkspaceTrustedHookEntry: Hashable, Sendable {
     let contentHash: String
     let approvedAt: Double
+
+    init(contentHash: String, approvedAt: Double) {
+        self.contentHash = contentHash
+        self.approvedAt = approvedAt
+    }
+
+    init(uiValue value: RuntimeUiValue?) {
+        let object = value?.objectValue
+        contentHash = object?["contentHash"]?.stringValue ?? ""
+        approvedAt = object?["approvedAt"]?.numberValue ?? 0
+    }
+
+    var uiValue: RuntimeUiValue {
+        .object([
+            "contentHash": .string(contentHash),
+            "approvedAt": .number(approvedAt),
+        ])
+    }
 }
 
 nonisolated struct WorkspaceTrustedHookRepo: Hashable, Sendable {
@@ -79,14 +125,11 @@ nonisolated struct WorkspaceTrustedHookRepo: Hashable, Sendable {
     let setup: WorkspaceTrustedHookEntry?
     let archive: WorkspaceTrustedHookEntry?
 
-    init(wire: MobileTrustedYiruHookRepoWire) {
-        allApprovedAt = wire.all?.approvedAt
-        setup = wire.setup.map {
-            WorkspaceTrustedHookEntry(contentHash: $0.contentHash, approvedAt: $0.approvedAt)
-        }
-        archive = wire.archive.map {
-            WorkspaceTrustedHookEntry(contentHash: $0.contentHash, approvedAt: $0.approvedAt)
-        }
+    init(uiValue value: RuntimeUiValue?) {
+        let object = value?.objectValue
+        allApprovedAt = object?["all"]?.objectValue?["approvedAt"]?.numberValue
+        setup = WorkspaceTrustedHookEntry(uiValue: object?["setup"])
+        archive = WorkspaceTrustedHookEntry(uiValue: object?["archive"])
     }
 
     init(
@@ -99,26 +142,31 @@ nonisolated struct WorkspaceTrustedHookRepo: Hashable, Sendable {
         self.archive = archive
     }
 
-    var wire: MobileTrustedYiruHookRepoWire {
-        MobileTrustedYiruHookRepoWire(
-            all: allApprovedAt.map(MobileTrustedYiruHookApprovalWire.init(approvedAt:)),
-            setup: setup.map {
-                MobileTrustedYiruHookEntryWire(
-                    contentHash: $0.contentHash,
-                    approvedAt: $0.approvedAt
-                )
-            },
-            archive: archive.map {
-                MobileTrustedYiruHookEntryWire(
-                    contentHash: $0.contentHash,
-                    approvedAt: $0.approvedAt
-                )
-            }
-        )
+    var uiValue: RuntimeUiValue {
+        var object: [String: RuntimeUiValue] = [:]
+        if let allApprovedAt {
+            object["all"] = .object(["approvedAt": .number(allApprovedAt)])
+        }
+        if let setup {
+            object["setup"] = setup.uiValue
+        }
+        if let archive {
+            object["archive"] = archive.uiValue
+        }
+        return .object(object)
     }
 }
 
 typealias WorkspaceTrustedHooks = [String: WorkspaceTrustedHookRepo]
+
+// Why: the UI document keeps trustedYiruHooks as an open JSON object, so the
+// native projection decodes the keys it knows and re-encodes them on write.
+nonisolated func workspaceTrustedHooks(
+    _ fields: [String: RuntimeUiValue]?
+) -> WorkspaceTrustedHooks {
+    guard let repos = fields?["trustedYiruHooks"]?.objectValue else { return [:] }
+    return repos.mapValues(WorkspaceTrustedHookRepo.init(uiValue:))
+}
 
 nonisolated struct WorkspaceSetupTrustPrompt: Identifiable, Hashable, Sendable {
     let repoID: String

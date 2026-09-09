@@ -1,4 +1,4 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 import type { TerminalThemeOption } from '~renderer/terminal/theme'
 
 export const SETTINGS_FORM_OPTION_QUERY_MAX_BYTES = 2 * 1024
@@ -13,7 +13,7 @@ export function isSettingsFormOptionQueryTooLarge(
   query: string,
   maxBytes = SETTINGS_FORM_OPTION_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 function normalizeSettingsFormOptionQuery(query: string): string | null {

@@ -1,4 +1,4 @@
-import type { Tab } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab } from '@yiru/protocol/workspace/tabs'
 import { TOGGLE_TERMINAL_PANE_EXPAND_EVENT } from '~renderer/constants/terminal'
 import { useProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { browserWorkspaceHasRemoteOwner } from '~renderer/runtime/remote-browser-tab-ownership'

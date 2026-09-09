@@ -1,4 +1,5 @@
-import type { GitBranchChangeEntry, GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 
 import type { SourceControlDisplaySection, SourceControlDisplaySectionId } from './section-order'
 import type { RenderableSubmoduleListItem } from './submodule-expansion'

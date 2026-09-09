@@ -1,14 +1,13 @@
-import { CUSTOM_AGENT_ID } from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import {
-  normalizeRepoSourceControlAiOverrides,
-  normalizeSourceControlAiSettings
-} from '@yiru/runtime-protocol/workbench/source-control/ai'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { Repo } from '@yiru/protocol/project/repository'
 import {
   SOURCE_CONTROL_ACTION_IDS,
   type SourceControlActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { RepoSourceControlAiOverrides } from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import type { Repo, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-actions'
+import type { RepoSourceControlAiOverrides } from '@yiru/protocol/source-control/ai-types'
+import { CUSTOM_AGENT_ID } from '@yiru/protocol/source-control/custom-agent'
+import { normalizeRepoSourceControlAiOverrides } from '@yiru/protocol/source-control/repo-overrides'
+import { normalizeSourceControlAiSettings } from '@yiru/protocol/source-control/settings'
 import { useState } from 'react'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'

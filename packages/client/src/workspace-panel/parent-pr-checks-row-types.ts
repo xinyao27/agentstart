@@ -1,11 +1,8 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
-import type {
-  CheckStatus,
-  PRCheckDetail,
-  PRInfo,
-  Repo,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
+import type { CheckStatus, PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { PRCheckDetail } from '@yiru/protocol/hosted-review/review-types'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { translate } from '~renderer/i18n/i18n'
 import type { AppState } from '~renderer/store/state'
 

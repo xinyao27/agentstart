@@ -1,4 +1,5 @@
-import type { GitPushTarget } from '@yiru/runtime-protocol/workbench/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import { getLinkedWorkItemWorkspaceName } from '~renderer/new-workspace/naming/name'
 import type { SmartWorkspaceNameSelection } from '~renderer/new-workspace/smart-workspace-name-field'
 import type { SmartNameMode } from '~renderer/new-workspace/smart-workspace-source-results'
 
@@ -9,7 +10,7 @@ import {
   resolveSmartGitHubCreateNames
 } from './composer-initial-state'
 import type { PendingSmartGitHubSubmitResolution } from './resolve-smart-github-submit'
-import { getLinkedWorkItemWorkspaceName, type LinkedWorkItemSummary } from './workspace-creation'
+import type { LinkedWorkItemSummary } from './workspace-creation'
 
 type ResolveComposerCreateOptions = {
   baseBranch: string | undefined
@@ -20,7 +21,6 @@ type ResolveComposerCreateOptions = {
   effectiveLinkedPR: number | null
   fallbackWorkspaceName: string
   lastAutoName: string
-  linkedGitLabMR: number | null
   linkedWorkItem: LinkedWorkItemSummary | null
   name: string
   pushTarget: GitPushTarget | undefined
@@ -35,7 +35,6 @@ export type ComposerCreateResolution = {
   branchNameOverride: string | undefined
   compareBaseRef: string | undefined
   displayName: string | undefined
-  linkedGitLabMR: number | undefined
   linkedPR: number | undefined
   linkedWorkItem: LinkedWorkItemSummary | null
   pushTarget: GitPushTarget | undefined
@@ -75,8 +74,7 @@ export function resolveComposerCreate(
   const baseBranch =
     smart.kind === 'pr-start-point'
       ? smart.baseBranch
-      : smart.kind === 'metadata-only' &&
-          (options.effectiveLinkedPR !== null || options.linkedGitLabMR !== null)
+      : smart.kind === 'metadata-only' && options.effectiveLinkedPR !== null
         ? undefined
         : options.baseBranch
   const compareBaseRef =
@@ -126,7 +124,6 @@ export function resolveComposerCreate(
     branchNameOverride,
     compareBaseRef,
     displayName: names.displayName,
-    linkedGitLabMR: smart.kind === 'none' ? (options.linkedGitLabMR ?? undefined) : undefined,
     linkedPR: linkedPR ?? undefined,
     linkedWorkItem,
     pushTarget,

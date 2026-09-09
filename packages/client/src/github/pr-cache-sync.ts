@@ -1,4 +1,4 @@
-import type { PRInfo } from '@yiru/runtime-protocol/workbench/types'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
 import { getHostedReviewCacheKey } from '~renderer/source-control/hosted-review-state/cache-identity'
 import type { AppState } from '~renderer/store/types'
 

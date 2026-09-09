@@ -28,11 +28,6 @@ export const getMobileOverviewSearchEntry = createLocalizedCatalog((): SettingsS
       'auto.components.settings.mobile.settings.search.7e801801ac',
       'remote'
     ),
-    ...translateSearchKeyword(
-      'auto.components.settings.mobile.settings.search.a7eececc1d',
-      'android'
-    ),
-    ...translateSearchKeyword('auto.components.settings.mobile.settings.search.6bfa001752', 'apk'),
     ...translateSearchKeyword('auto.components.settings.mobile.settings.search.8d4ba0ef09', 'beta'),
     ...translateSearchKeyword('auto.components.settings.mobile.settings.search.b730ff7049', 'app')
   ]

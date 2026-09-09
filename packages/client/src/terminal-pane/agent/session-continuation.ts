@@ -1,5 +1,5 @@
-import type { LaunchSource } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
 
 import { buildBoundedSessionTranscript } from './session-fork-context'
 

@@ -1,16 +1,12 @@
 import {
   getSettingsFocusedExecutionHostId,
   normalizeExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 export type LinkedReviewHints = {
   linkedGitHubPR?: number | null
   fallbackGitHubPR?: number | null
-  linkedGitLabMR?: number | null
-  linkedBitbucketPR?: number | null
-  linkedAzureDevOpsPR?: number | null
-  linkedGiteaPR?: number | null
 }
 
 export function getHostedReviewCacheKey(
@@ -45,15 +41,6 @@ function getHostedReviewCacheHostScope(
 // Why: a branch-keyed lookup can describe a different PR than the persisted
 // linked review number. Track that distinction without changing the cache key.
 export function linkedReviewHintKey(options?: LinkedReviewHints): string {
-  const hints = [
-    ['github', options?.linkedGitHubPR ?? options?.fallbackGitHubPR ?? null],
-    ['gitlab', options?.linkedGitLabMR ?? null],
-    ['bitbucket', options?.linkedBitbucketPR ?? null],
-    ['azure-devops', options?.linkedAzureDevOpsPR ?? null],
-    ['gitea', options?.linkedGiteaPR ?? null]
-  ] as const
-  return hints
-    .filter(([, number]) => number !== null)
-    .map(([provider, number]) => `${provider}:${number}`)
-    .join('|')
+  const number = options?.linkedGitHubPR ?? options?.fallbackGitHubPR ?? null
+  return number === null ? '' : `github:${number}`
 }

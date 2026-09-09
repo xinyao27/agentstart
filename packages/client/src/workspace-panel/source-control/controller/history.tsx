@@ -1,4 +1,5 @@
-import type { DiffComment, GitBranchChangeEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import { useEffect } from 'react'
 import { getDiffCommentSource } from '~renderer/editor/diff-comment-compat'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'

@@ -1,5 +1,9 @@
-import type { WorkspaceSessionPatch } from '@yiru/runtime-protocol/workbench/types'
+import type { WorkspaceSessionPatch } from '@yiru/protocol/workspace/session'
 import { isDecorativeAgentTitleFrameChange } from '~renderer/agent/decorative-title-signature'
+import {
+  isApplyingSessionProjection,
+  registerSessionWriteFlush
+} from '~renderer/runtime/session-document/projection-scope'
 
 import { SESSION_RELEVANT_FIELDS, shouldPersistWorkspaceSession } from '../editor/workspace-session'
 import type { AppState } from '../store/state'
@@ -170,6 +174,31 @@ export function createSessionWriteSubscriber({
   let prev: Record<string, unknown> | null = null
   const pendingChangedFields = new Set<SessionRelevantField>()
 
+  const flush = (): void => {
+    if (timer !== null) {
+      clearTimeout(timer)
+      timer = null
+    }
+    const fresh = store.getState()
+    if (
+      !shouldPersistWorkspaceSession(fresh) ||
+      (shouldSchedulePersist && !shouldSchedulePersist())
+    ) {
+      pendingChangedFields.clear()
+      return
+    }
+    if (pendingChangedFields.size === 0) {
+      return
+    }
+    const changed = new Set(pendingChangedFields)
+    pendingChangedFields.clear()
+    const patch = buildWorkspaceSessionPatch(fresh, changed)
+    if (Object.keys(patch).length > 0) {
+      persist({ patch })
+    }
+  }
+  const unregisterFlush = registerSessionWriteFlush(flush)
+
   const unsub = store.subscribe((state) => {
     if (!shouldPersistWorkspaceSession(state)) {
       return
@@ -192,6 +221,9 @@ export function createSessionWriteSubscriber({
       next[key] = state[key]
     }
     prev = next
+    if (isApplyingSessionProjection()) {
+      return
+    }
     for (const field of changedFields) {
       pendingChangedFields.add(field)
     }
@@ -206,36 +238,11 @@ export function createSessionWriteSubscriber({
     if (timer !== null) {
       clearTimeout(timer)
     }
-    timer = setTimeout(() => {
-      timer = null
-      // Why: rebuild from the freshest store state rather than the snapshot
-      // captured when this timer was scheduled. Today this is equivalent
-      // because buildWorkspaceSessionPayload reads only SESSION_RELEVANT_FIELDS
-      // (the same fields gating the timer reset), so the captured `state` is
-      // already current for those fields. Calling getState() guards against a
-      // future refactor that adds a non-relevant field read to the payload
-      // builder — without this, such a change would silently start emitting
-      // stale values for that field.
-      const fresh = store.getState()
-      if (!shouldPersistWorkspaceSession(fresh)) {
-        pendingChangedFields.clear()
-        return
-      }
-      if (shouldSchedulePersist && !shouldSchedulePersist()) {
-        pendingChangedFields.clear()
-        return
-      }
-      const changed = new Set(pendingChangedFields)
-      pendingChangedFields.clear()
-      const patch = buildWorkspaceSessionPatch(fresh, changed)
-      if (Object.keys(patch).length === 0) {
-        return
-      }
-      persist({ patch })
-    }, 150)
+    timer = setTimeout(flush, 150)
   })
 
   return () => {
+    unregisterFlush()
     unsub()
     if (timer !== null) {
       clearTimeout(timer)

@@ -1,5 +1,6 @@
-import type { WorkspaceVisibleTabType, WorktreeMeta } from '@yiru/runtime-protocol/workbench/types'
-import { worktreeWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { worktreeWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
+import type { WorktreeMeta } from '@yiru/protocol/worktree/model'
 import type { StateCreator } from 'zustand'
 import {
   markInputQuietSchedulerInput,

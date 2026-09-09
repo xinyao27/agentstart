@@ -99,7 +99,6 @@
   "worktreeJumpPalette": {
     "matchLabel": {
       "comment": "Comment",
-      "mr": "MR",
       "port": "Port",
       "pr": "PR"
     }
@@ -161,9 +160,6 @@
         "downloadIncomplete": "The host update did not finish downloading.",
         "reconnectTimeout": "The host did not reconnect on the updated version.",
         "runtimeChanged": "The paired host changed while updating. Check again before retrying."
-      },
-      "orpcCallbackStream": {
-        "streamFailed": "Runtime stream failed."
       }
     },
     "store": {
@@ -294,7 +290,6 @@
           "0baad2d5d2": "Grok",
           "760bc6883d": "Codex",
           "a5fc0cb622": "OpenClaude",
-          "bf53f09bf8": "Claude Agent Teams",
           "0708ed89f1": "Claude",
           "fc80296033": "Devin",
           "da41abbdd4": "Ante",
@@ -396,7 +391,7 @@
         "mobile": {
           "emulator": {
             "tab": {
-              "bf4f2a8a72": "Could not start the emulator. Check iOS or Android emulator setup and try another device."
+              "bf4f2a8a72": "Could not start the emulator. Check iOS Simulator setup and try another device."
             }
           }
         }
@@ -549,8 +544,7 @@
         "chooseOrAddProjectBeforeWorkspace": "Choose or add a project before creating a workspace.",
         "folderWorkspaceCreateFailedTitle": "Folder workspace creation failed",
         "folderWorkspaceCreateFailedMessage": "The folder workspace could not be created. Check the error details above, then try again.",
-        "setupAgentStartupPolicySaveFailed": "Failed to save setup startup behavior.",
-        "5f3d2c8a1b": "Failed to resolve MR base."
+        "setupAgentStartupPolicySaveFailed": "Failed to save setup startup behavior."
       },
       "useIpcEvents": {
         "0e3cf53060": "Browser tab {{value0}} not found",
@@ -633,7 +627,7 @@
         "devSearchKeywordError": "error",
         "devSearchKeywordNotification": "notification",
         "projectHostsSummary": "{{value0}} hosts",
-        "33a5e1d597": "Connect GitHub, GitLab, and source-hosting services."
+        "33a5e1d597": "Connect GitHub for pull requests, checks, and review status."
       },
       "useLargeTextControlPaste": {
         "pasteTooLarge": "Paste is too large."
@@ -657,71 +651,6 @@
         "958d2cc31b": "Anonymous counts of which features you use help us prioritize what to build. No file contents, prompts, terminal output, or anything that identifies you. Change anytime in Settings -> Privacy & Telemetry.",
         "9784b4d7bc": "Help us decide what to build next",
         "fcbee32f08": "Telemetry notice"
-      },
-      "GitLabItemDialog": {
-        "65e784c1f1": "Reopen",
-        "a199eb364b": "Close",
-        "16b3412570": "Merge",
-        "131865e231": "Create workspace",
-        "f2e64d1c20": "Open in GitLab",
-        "84012fa8fb": "Comment",
-        "c08e1d5a57": "Comment on {{value0}}{{value1}}…",
-        "f11e3e7675": "No pipeline runs for this MR.",
-        "808b1ca1ba": "No changed files.",
-        "007423f585": "Diff content unavailable.",
-        "a7eb4f4916": "from",
-        "21f8dde18a": "Inline comment",
-        "7a7204417f": "Line",
-        "ceb08a733d": "File",
-        "85a8170279": "No comments yet.",
-        "14423484db": "No description.",
-        "da4174b00f": "Edit",
-        "93f79a3fc1": "Save",
-        "f72fad3b16": "Cancel",
-        "717b706849": "Loading labels",
-        "3c0b6ccca7": "bug, backend",
-        "dde24ade55": "Labels",
-        "908d8d2a73": "Description",
-        "89f3f19368": "Title",
-        "7a2117129a": "Add",
-        "05939e977d": "Add reviewer",
-        "474b50d988": "No reviewers.",
-        "1b19cdc510": "Remove reviewer {{value0}}",
-        "cb55b0390f": "Manage",
-        "4f9313984d": "Reviewers",
-        "02cbe2de44": "Pipeline",
-        "be3d291837": "Files",
-        "c996e2962c": "Conversation",
-        "b3c156dd51": "Refresh",
-        "9bfb4a24d7": "by",
-        "30c97083c2": "GitLab work item detail",
-        "e089f62594": "Merged MR !{{value0}}",
-        "865ea2703e": "Reopened MR !{{value0}}",
-        "9b11cd233f": "Closed MR !{{value0}}",
-        "60c13320c4": "Inline comment added",
-        "ffdd9a78e1": "MR diff refs are unavailable for inline comments.",
-        "00d0d25825": "File, line, and comment are required.",
-        "ceaf7c30c7": "Reviewer id is unavailable for this GitLab user.",
-        "f7cb495a12": "Retried {{value0}}",
-        "98718490e4": "MR title is required.",
-        "d600c2619a": "Loading log",
-        "028bde664e": "Hide",
-        "2f9b27f838": "Job log",
-        "032ae1312b": "Open job in GitLab",
-        "fa3e042203": "Retry",
-        "f23ea85341": "resolved",
-        "4186685c78": "reopen",
-        "cae2712a23": "close",
-        "881e522e04": "merge",
-        "6de8ce0cc6": "{{value0}} required",
-        "22511537d2": "Approved",
-        "00f3bab87b": " of {{value0}} required",
-        "11384f99aa": "number",
-        "40c56b95e2": "{{value0}} approval{{value1}} remaining",
-        "3a051b8ade": "Work item",
-        "32f8bef818": "No log output.",
-        "4168eb2c51": "Resolve",
-        "commentTooLarge": "Comment is too large to submit safely."
       },
       "Landing": {
         "76a95f7f47": "Create",
@@ -1170,7 +1099,6 @@
             "skippedPendingAncestor": "Skipped because a nested workspace has not finished removing."
           },
           "candidateRow": {
-            "gitLabel": "Git",
             "commitsLabel": "Commits",
             "contextLabel": "Context",
             "flagsLabel": "Flags",
@@ -1221,7 +1149,6 @@
                   "changes": "Changes",
                   "review": "Review",
                   "views": "Changes and review",
-                  "mergeRequestNumber": "{{value0}} !{{value1}}",
                   "pullRequestNumber": "{{value0}} #{{value1}}"
                 }
               }
@@ -1771,8 +1698,7 @@
             "946724a70a": "The main workspace cannot be deleted.",
             "16bc3c998a": "Delete workspace {{value0}}",
             "0f9e50eb07": "Other",
-            "d406915b78": "Renderer",
-            "81cd37af99": "Main",
+            "74e3c11c6f": "Daemon",
             "fa6d36758d": "Kill session {{value0}}",
             "b8f4a2c1d0e3": "{{value0}} orphans",
             "c7e3b1a0d9f2": "Kill {{value0}} orphan terminal",
@@ -1869,16 +1795,10 @@
             "updatedOne": "1 host updated"
           },
           "SkillUpdateStatusSegment": {
-            "stoppingLabel": "Stopping skill update",
-            "runningLabel": "Updating skills",
             "successLabel": "Skills updated",
             "errorLabel": "Skill update failed",
-            "installRunningLabel": "Installing skill",
-            "installStoppingLabel": "Stopping skill install",
             "installSuccessLabel": "Skill installed",
             "installErrorLabel": "Skill install failed",
-            "removeRunningLabel": "Removing skill",
-            "removeStoppingLabel": "Stopping skill removal",
             "removeSuccessLabel": "Skill removed",
             "removeErrorLabel": "Skill removal failed"
           },
@@ -2065,7 +1985,6 @@
             "title": "Yiru Runtime",
             "host": "Host",
             "runtimeChecking": "Checking",
-            "runtimeCheckingLabel": "Checking Yiru Runtime on {{host}}",
             "runtimeCheckingDescription": "Checking whether the current execution host is ready.",
             "runtimeReady": "Ready",
             "runtimeReadyLabel": "Yiru Runtime ready on {{host}}",
@@ -2809,11 +2728,10 @@
         },
         "WorktreeCardMetadataStatusBadges": {
           "fe188062a1": "State: Open",
-          "2931b42b09": "State: Draft {{value0}}",
+          "2931b42b09": "State: Draft PR",
           "e888362def": "State: Closed",
           "f394b3e86e": "State: Merged",
-          "af2b07bda5": "State: {{value0}}",
-          "29df45afa2": "MR"
+          "af2b07bda5": "State: {{value0}}"
         },
         "WorktreeCardPorts": {
           "34f733dda2": "Go to Worktree",
@@ -3801,7 +3719,6 @@
           "6c84ba6de3": "template",
           "ebed4d2a29": "draft",
           "02bab6542c": "pr",
-          "fdee745b87": "merge request",
           "b388463881": "pull request",
           "19e10a12bb": "hosted review",
           "b8b6fd55b4": "{prompt}",
@@ -4109,12 +4026,8 @@
           "b4ef5428a7": "pr",
           "895d3f70b8": "gh",
           "32dca11189": "github",
-          "c4f610d057": "Current GitLab CLI REST rate-limit headers when available.",
-          "0de4ae556c": "GitLab API Budget",
           "cdd793134e": "api budget",
           "b9c011fbc2": "rate limit",
-          "3072428ac7": "glab",
-          "8a527d48e3": "gitlab",
           "aa204f185f": "Current GitHub CLI REST, Search, and GraphQL rate limits.",
           "612a440e57": "GitHub API Budget",
           "2cde9044a8": "graphql",
@@ -4155,70 +4068,7 @@
           "3e9e827ca5": "Hidden experimental"
         },
         "IntegrationsPane": {
-          "e7b2dd46f9": "Testing…",
-          "fe4d378dc4": "Verified",
-          "6432f6522e": "Connected",
-          "077844591a": "Add workspace access",
-          "4831ba1083": "Re-check",
-          "01f6c7582e": "Learn more",
-          "1a62c295c6": "Gitea credentials are configured but could not authenticate. Check the token, API base URL, and repository permissions, then restart Yiru if environment variables changed.",
-          "5a1f86225a": "only when Yiru cannot derive the API URL from the remote.",
-          "6193444689": "YIRU_GITEA_API_BASE_URL",
-          "2c0330ec3e": "for private repositories, and set",
-          "e678d89e8c": "YIRU_GITEA_TOKEN",
-          "d9467ab026": "Public repositories are detected from their git remote. Set",
-          "4ab9b96925": "Gitea",
-          "953b7bf6f7": "Azure DevOps credentials are configured but could not authenticate. Check the token, API base URL, and repository permissions, then restart Yiru if environment variables changed.",
-          "6f317f5132": "only when Yiru cannot derive the API base URL from the git remote.",
-          "ae6b7f5f40": "YIRU_AZURE_DEVOPS_API_BASE_URL",
-          "67a9f26a80": ". Set",
-          "8f960935c1": "YIRU_AZURE_DEVOPS_ACCESS_TOKEN",
-          "ce3c58cd63": ", or set",
-          "5ee6ef6405": "YIRU_AZURE_DEVOPS_TOKEN",
-          "4ee74d1470": "Set",
-          "5efce6953d": "Azure DevOps",
-          "3c3cf05c63": "Bitbucket credentials are configured but could not authenticate. Check the token and repository permissions, then restart Yiru if environment variables changed.",
-          "6e0ff3403e": "YIRU_BITBUCKET_ACCESS_TOKEN",
-          "44cde4aa01": "YIRU_BITBUCKET_API_TOKEN",
-          "a6c2816115": "and",
-          "b8a7efb3f6": "YIRU_BITBUCKET_EMAIL",
-          "8489c0aa49": "Bitbucket",
-          "e74de656ce": "glab auth login",
-          "05e5245af7": "The GitLab CLI is installed but not authenticated. Run this command in a terminal:",
-          "a83cac5726": "Install GitLab CLI",
-          "ea160a9978": "CLI.",
-          "a3326f6f1b": "glab",
-          "513abfe47d": "GitLab",
-          "51000487c4": "gh auth login",
-          "09285e9fe6": "The GitHub CLI is installed but not authenticated. Run this command in a terminal:",
-          "399cf46867": "Install GitHub CLI",
-          "f36365ed45": "gh",
-          "70c5f74f36": "GitHub",
-          "8e078e480c": "Disconnect {{value0}}",
-          "95b9a87e7e": "Test",
-          "62b20292de": "error",
-          "ae38fc62a8": "ok",
-          "98ded79cd7": "{{value0}} workspace{{value1}} connected",
-          "4bdc6fe4f5": "not-configured",
-          "4972f3c95d": "configured",
-          "3614887c40": "checking",
-          "45bf5e6e4b": "Auth failed",
-          "e1bd5364e6": "Optional setup",
-          "e7a961e1c5": "Configured",
-          "6bd148dcb5": "Pull requests and commit statuses via the Gitea REST API.",
-          "6355fe585e": "Pull requests and commit statuses for detected repositories",
-          "1fac9b4910": "{{value0}} · Pull requests and commit statuses",
-          "f92fbf11aa": "Not configured",
-          "6791d7af95": "Pull requests and build statuses via Azure DevOps REST API tokens.",
-          "e3d5a24979": "Pull requests and build statuses for detected Azure Repos",
-          "277fc23929": "{{value0}} · Pull requests and build statuses",
-          "295154e54e": "connected",
-          "0879860c58": "Pull requests and build statuses via Bitbucket Cloud API tokens.",
-          "9707523939": "Pull requests and build statuses",
-          "a565377c38": "not-installed",
-          "15cf990798": "Not authenticated",
-          "f7eb5f0b24": "Not installed",
-          "1683acbac4": "Connect the source hosts Yiru can use for pull requests, merge requests, checks, and review status.",
+          "1683acbac4": "Connect GitHub for pull requests, checks, and review status.",
           "298c65ecac": "Review providers"
         },
         "KagiSessionLinkForm": {
@@ -4329,7 +4179,7 @@
           "b5e2d93e01": "Checking...",
           "c6f3ea4f12": "Ready",
           "d704fb5023": "Needs setup",
-          "06b06429c6": "Checking Android SDK and iOS Simulator support.",
+          "06b06429c6": "Checking iOS Simulator support.",
           "6d1483d4a0": "1 emulator device detected.",
           "0a452d4d3b": "{{value0}} emulator devices detected.",
           "f62a1bb759": "Yiru will auto-select an emulator device after devices are detected.",
@@ -4382,8 +4232,7 @@
           "1de96ec8a6": "Show Yiru Mobile Button",
           "682293cadf": "Show the Yiru Mobile button at the top of the left sidebar.",
           "d4f2b65f30": "Show the Yiru Mobile shortcut in the sidebar.",
-          "testFlight": "TestFlight",
-          "androidApk": "Android APK"
+          "testFlight": "TestFlight"
         },
         "NotificationsPane": {
           "906b4afebf": "Send Test Notification",
@@ -4915,7 +4764,7 @@
           "65358016ea": "Discard",
           "dev": "Dev Tools",
           "devDescription": "Dev-only tools for exercising UI states.",
-          "b07041697f": "Connect GitHub, GitLab, and source-hosting services."
+          "b07041697f": "Connect GitHub for pull requests, checks, and review status."
         },
         "SettingsFormControls": {
           "42a4d15a30": "No matching fonts.",
@@ -6051,10 +5900,6 @@
             "bc7d9f69ce": "Yiru Attribution",
             "40f9b815fd": "api budget",
             "b7e52124c7": "rate limit",
-            "ead733645f": "glab",
-            "4808f065b3": "gitlab",
-            "2b4a72885d": "Current GitLab CLI REST rate-limit headers when available.",
-            "83ecb3f470": "GitLab API Budget",
             "65b69d9f80": "graphql",
             "1139f61512": "Current GitHub CLI REST, Search, and GraphQL rate limits.",
             "ff86e354c4": "GitHub API Budget",
@@ -6102,32 +5947,7 @@
         },
         "integrations": {
           "search": {
-            "a626990bd2": "disconnect",
-            "3c3d3d8ffa": "connect",
-            "faa0b5a0d9": "api key",
             "c450244ad7": "integration",
-            "20540996ef": "credentials",
-            "2ec2bd328c": "api token",
-            "7345b7c3e6": "atlassian",
-            "8c568d761c": "pull request",
-            "33180e8c10": "self-hosted",
-            "129fc59aa8": "gitea",
-            "d0d019dc29": "Gitea authentication via API token environment variables.",
-            "aab86d64e5": "Gitea Integration",
-            "03a7b275be": "ado",
-            "ed63380247": "azure repos",
-            "b38b5d27f1": "azure devops",
-            "7b1f3984bb": "Azure DevOps Repos authentication via token environment variables.",
-            "af6611fa6e": "Azure DevOps Integration",
-            "50d20817f7": "bitbucket",
-            "c97d58a0f3": "Bitbucket Cloud authentication via API token environment variables.",
-            "67a2a0e868": "Bitbucket Integration",
-            "371ee914d2": "merge request",
-            "581844769a": "mr",
-            "b40cbe5de4": "glab",
-            "b939695c69": "gitlab",
-            "6e2ab619c6": "GitLab authentication via the glab CLI.",
-            "b50b71ef9d": "GitLab Integration",
             "41ccade05c": "gh",
             "b79c21bd42": "github",
             "7166b9090c": "GitHub authentication via the gh CLI.",
@@ -6221,8 +6041,6 @@
             "search": {
               "b730ff7049": "experimental",
               "8d4ba0ef09": "beta",
-              "6bfa001752": "apk",
-              "a7eececc1d": "android",
               "7e801801ac": "remote",
               "0b7e585cb9": "scan",
               "59b1d75fd1": "code",
@@ -6801,7 +6619,7 @@
                   "customCommand": "Custom command",
                   "supportedAgents": "Supported agents for this recipe: {{value0}}.",
                   "unsupportedSavedAgent": "{{value0}} cannot run this text-generation recipe. Pick one of the supported agents below.",
-                  "resolveComments": "Start an agent from selected unresolved PR or MR comments.",
+                  "resolveComments": "Start an agent from selected unresolved PR comments.",
                   "fixPushFailure": "Start an agent when a pre-push hook or git push fails."
                 }
               }
@@ -6836,12 +6654,7 @@
                 "cards": {
                   "d5b3be8ecd": "Re-check",
                   "8cbc39f862": "Learn more",
-                  "707180d09c": "glab auth login",
-                  "4be0616873": "The GitLab CLI is installed but not authenticated. Run this command in a terminal:",
-                  "54a640af7a": "Install GitLab CLI",
-                  "faddeb763d": "GitLab CLI status is not available in this runtime yet.",
                   "a47f71e357": "CLI.",
-                  "2a6b359e75": "glab",
                   "8d90249d22": "gh auth login",
                   "2e44dda68a": "The GitHub CLI is installed but not authenticated. Run this command in a terminal:",
                   "7755c28af5": "Install GitHub CLI",
@@ -6849,51 +6662,7 @@
                   "6b2cfb52b4": "gh",
                   "account_scope_prefix": "Account scope",
                   "b4d900e7f1": "Pull requests and checks via the",
-                  "23cb5a0dee": "Install the GitHub CLI to enable pull requests and checks.",
-                  "1f2b347bd3": "Merge requests and pipelines via the",
-                  "b56fd5676a": "Install the GitLab CLI to enable merge requests and pipelines."
-                }
-              }
-            }
-          }
-        },
-        "token": {
-          "source": {
-            "control": {
-              "integration": {
-                "cards": {
-                  "793a06e899": "Re-check",
-                  "1a9475dace": "Learn more",
-                  "19fb419c12": "Gitea credentials are configured but could not authenticate. Check the token, API base URL, and repository permissions, then restart Yiru if environment variables changed.",
-                  "60708f23da": "only when Yiru cannot derive the API URL from the remote.",
-                  "709057ad91": "YIRU_GITEA_API_BASE_URL",
-                  "6da9dfa5de": "for private repositories, and set",
-                  "6d5c2a3005": "YIRU_GITEA_TOKEN",
-                  "fcbe0469fd": "Public repositories are detected from their git remote. Set",
-                  "0613928cb3": "Gitea status is not available in this runtime yet.",
-                  "05863d2599": "Pull requests and commit statuses via the Gitea REST API.",
-                  "52f75876be": "Pull requests and commit statuses for detected repositories",
-                  "0b5242f8a2": "{{value0}} · Pull requests and commit statuses",
-                  "40f678df73": "Azure DevOps credentials are configured but could not authenticate. Check the token, API base URL, and repository permissions, then restart Yiru if environment variables changed.",
-                  "7bd345e3f6": "only when Yiru cannot derive the API base URL from the git remote.",
-                  "186a6689df": "YIRU_AZURE_DEVOPS_API_BASE_URL",
-                  "b8a10b07c1": ". Set",
-                  "fbfd237f5e": "YIRU_AZURE_DEVOPS_ACCESS_TOKEN",
-                  "087feb92f1": ", or set",
-                  "48842720d2": "YIRU_AZURE_DEVOPS_TOKEN",
-                  "7bbc9c64f0": "Set",
-                  "f3f47dc7de": "Azure DevOps status is not available in this runtime yet.",
-                  "0eb50d5593": "Pull requests and build statuses via Azure DevOps REST API tokens.",
-                  "54636c65d4": "Pull requests and build statuses for detected Azure Repos",
-                  "ea204f5e03": "{{value0}} · Pull requests and build statuses",
-                  "6154b02093": "Bitbucket credentials are configured but could not authenticate. Check the token and repository permissions, then restart Yiru if environment variables changed.",
-                  "e63fe8f627": "YIRU_BITBUCKET_ACCESS_TOKEN",
-                  "19416c874c": "YIRU_BITBUCKET_API_TOKEN",
-                  "fc71a0e7aa": "and",
-                  "63a7f47392": "YIRU_BITBUCKET_EMAIL",
-                  "24ac1c69dc": "Bitbucket status is not available in this runtime yet.",
-                  "a924e8dcd1": "Pull requests and build statuses via Bitbucket Cloud API tokens.",
-                  "0fa5629dad": "Pull requests and build statuses"
+                  "23cb5a0dee": "Install the GitHub CLI to enable pull requests and checks."
                 }
               }
             }
@@ -7050,19 +6819,9 @@
           "wslDescription": "Detect and launch agents in {{value0}} via WSL for projects that do not override their runtime."
         },
         "MobileEmulatorSdkStatus": {
-          "536026130e": "Emulator SDKs",
-          "dde0ec1cd8": "Toolchains Yiru uses to run emulators. Android works on any OS via the Android SDK; iOS Simulators need Xcode on macOS.",
-          "027cbf668a": "Android SDK",
-          "f6d080d128": "Using configured path",
-          "7fe4bd5907": "Detected at",
-          "2784f0b22d": "Not found. Install Android Studio, then create a Virtual Device.",
-          "b94ff260e6": "Download Android Studio",
-          "18925b082d": "Locate SDK folder",
-          "8c52684db8": "Clear",
           "76eb88b88e": "iOS Simulator (Xcode)",
           "c6f3ea4f12": "Ready",
-          "e4f14b50d7": "Install Xcode and add an iOS Simulator runtime.",
-          "63fe73a1ea": "Could not update Android SDK folder."
+          "e4f14b50d7": "Install Xcode and add an iOS Simulator runtime."
         },
         "AppearanceAdvancedDisclosure": {
           "advanced": "Advanced"
@@ -7184,8 +6943,7 @@
           "beta": "Beta",
           "availability": "Available on",
           "githubReleases": "GitHub Releases",
-          "testFlight": "TestFlight",
-          "androidApk": "Android APK"
+          "testFlight": "TestFlight"
         },
         "VoiceSpeechModelSection": {
           "parakeetV3Description": "Highest accuracy for 25 European languages. Punctuation, capitalization, and word-level timestamps.",
@@ -7871,27 +7629,6 @@
               }
             }
           },
-          "gitlab": {
-            "mr": {
-              "merge": {
-                "state": {
-                  "04a3015a12": "Able to merge",
-                  "53c6d3b7e9": "GitLab says this MR can merge, but the pipeline is still running",
-                  "65c847ad1e": "Checks pending",
-                  "b41fbc180c": "GitLab says this MR can merge, but some pipeline jobs failed",
-                  "49ac4fec10": "Checks failed",
-                  "22b7e50621": "GitLab reports merge conflicts",
-                  "96b05e374c": "Conflicts",
-                  "d63bb6f76e": "This merge request is still a draft",
-                  "b2715092c6": "Draft",
-                  "2388413f28": "This merge request is closed",
-                  "88d044c42f": "Closed",
-                  "ee482a2bad": "This merge request is already merged",
-                  "fae95ae20d": "Merged"
-                }
-              }
-            }
-          },
           "index": {
             "70893f017b": "Side",
             "7b415c39e9": "Top",
@@ -8561,7 +8298,6 @@
             "2c69728c2a": "Open link in browser",
             "6f07a18604": "Name",
             "2e4c7c95fe": "Branch",
-            "2cfc6be192": "GitLab",
             "0a180280bd": "GitHub",
             "b3c60c2b7c": "Smart",
             "26824f60dd": "All",
@@ -8569,18 +8305,14 @@
             "2319d87718": "Merged",
             "622864b52a": "Open",
             "fda67f0b61": "current project",
-            "9c004911c3": "gitlab",
             "placeholderWorkspaceName": "Type a workspace name",
-            "placeholderSmartWithBranchGitLab": "Type a name, #1234, branch, GitHub or GitLab URL",
-            "placeholderSmartGitLab": "Type a name, #1234, GitHub or GitLab URL",
             "unavailable": "Unavailable",
             "searchBranches": "Search branches",
             "workspaceName": "Workspace name",
             "switchProjectSourceTitle": "Switch project source?",
             "differentProjectSource": ", which is different from the selected project source.",
             "currentProjectSource": "current project source",
-            "searchGitHub": "Search GitHub PRs",
-            "searchGitLab": "Search GitLab MRs"
+            "searchGitHub": "Search GitHub PRs"
           },
           "ProjectCombobox": {
             "search": "Search projects...",
@@ -8611,7 +8343,6 @@
           "3241f3c26a": "Install QR",
           "7af266b80d": "Install QR code",
           "aa97420ba4": "Copy install link",
-          "ac1eb64952": "Android",
           "711e6f4b47": "iOS",
           "e75647ace0": "Scan the QR with your phone or open the install link to grab Yiru Mobile.",
           "0d9b33299e": "Get the app.",
@@ -8668,9 +8399,6 @@
               },
               "testflight": {
                 "cta": "Open TestFlight"
-              },
-              "android": {
-                "cta": "Download APK"
               }
             }
           }
@@ -8776,26 +8504,6 @@
           "blocked-title": "Windows may be blocking Yiru Mobile",
           "blocked-description": "An existing inbound Block rule can override the pairing exception. Repair removes conflicting TCP rules for this Yiru app, then allows port {{port}} on Private networks.",
           "repair": "Repair firewall access"
-        }
-      },
-      "gitlab": {
-        "gitlab": {
-          "rate": {
-            "limit": {
-              "display": {
-                "ebc0e8ecf1": "Loading GitLab API budget...",
-                "a2d3d1fdde": "GitLab API budget is unavailable.",
-                "a2f68645ac": "Refresh GitLab API budget",
-                "2f9c16d6c3": "Yiru uses REST through the GitLab CLI.",
-                "14e144f7a7": "GitLab API Budget",
-                "3e2c982cfa": "left, resets in",
-                "ea8ad0bae8": "of",
-                "0a891e8935": "REST API",
-                "953f7c6062": "This GitLab host did not return rate-limit headers.",
-                "budget_scope_prefix": "Budget scope"
-              }
-            }
-          }
         }
       },
       "feature": {
@@ -9240,11 +8948,6 @@
               "frame": {
                 "stream": {
                   "f1c0179002": "Stream is not producing frames."
-                }
-              },
-              "video": {
-                "stream": {
-                  "c3fb77cb87": "This build does not support WebCodecs H.264 decoding."
                 }
               }
             },
@@ -9861,7 +9564,7 @@
                   "ai": {
                     "1a8c4e2b90": "Select a workspace before launching an AI action.",
                     "4f2d9a8c17": "Select a repository before launching an AI action.",
-                    "7c3e1b5d42": "Open a PR or MR before launching an AI fix.",
+                    "7c3e1b5d42": "Open a PR before launching an AI fix.",
                     "9b2f6d4a81": "This check is not failing.",
                     "2ef90c9819": "Started an AI agent for this check."
                   }
@@ -10099,9 +9802,6 @@
               },
               "publishOrUnpublishWorktree": "Publish / Unpublish Worktree",
               "publishOrUnpublishWorktreeDescription": "Publish or unpublish the current worktree through remote daemon access."
-            },
-            "action": {
-              "context": {}
             }
           },
           "palette": {
@@ -10317,7 +10017,6 @@
           "emptyCopy": "PR checks will appear here after worktrees are attached to this folder workspace.",
           "openChecksTab": "Open {{value0}} Checks tab",
           "openReviewExternally": "Open {{value0}} externally",
-          "summary": "{{value0}} attached · {{value1}} with PR/MR · {{value2}} attention · {{value3}} pending · {{value4}} passing · {{value5}} no PR · {{value6}} unknown",
           "showDetails": "Show {{value0}} PR check details",
           "hideDetails": "Hide {{value0}} PR check details",
           "reviewChecks": "Review checks",
@@ -10807,11 +10506,7 @@
           "f0a4b8c2d1": "PR",
           "e9f3a7b1c0": "pull request",
           "d8e2f6a0b9": "Pull Request",
-          "c7d1e5f9a8": "GitHub",
-          "c4e8f1a2b9": "MR",
-          "b3d7e0f1a8": "merge request",
-          "a2c6d9e0f7": "Merge Request",
-          "91b5c8d7e6": "GitLab"
+          "c7d1e5f9a8": "GitHub"
         }
       }
     }
@@ -10871,7 +10566,6 @@
           "reviewAlphaCleanup": "Review alpha cleanup"
         },
         "presentation": {
-          "gitlabMergeRequestNumber": "MR #{{value0}}",
           "githubPullRequestNumber": "PR #{{value0}}"
         }
       }

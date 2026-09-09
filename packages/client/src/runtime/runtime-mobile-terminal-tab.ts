@@ -1,8 +1,6 @@
-import type { RuntimeMobileTerminalTheme } from '@yiru/runtime-protocol/mobile-runtime-types'
-import { isClaudeManagementTitle } from '@yiru/runtime-protocol/workbench/agent/detection'
-import type { RuntimeMobileSessionSnapshotTab } from '@yiru/runtime-protocol/workbench/runtime-types'
-import { isTerminalLeafId, makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalLayoutSnapshot } from '@yiru/runtime-protocol/workbench/types'
+import { isTerminalLeafId, makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import { isClaudeManagementTitle } from '~renderer/agent/title/core'
 import type { AppState } from '~renderer/store/types'
 import {
   collectLeafIdsInOrder,
@@ -12,6 +10,8 @@ import {
 import { sanitizeTerminalLayoutPaneTitles } from '~renderer/terminal-pane/title-sanitization'
 import { resolveEffectiveTerminalAppearance } from '~renderer/terminal/theme'
 
+import type { RuntimeMobileTerminalTheme } from './remote-session/session-model'
+import type { RuntimeMobileSessionSnapshotTab } from './remote-session/session-model'
 import { resolveTerminalLayoutRoot } from './remote-terminal-layout-resolution'
 import { getRegisteredRuntimeTerminalTab } from './runtime-terminal-registry'
 import { resolveRuntimeTerminalTitle } from './runtime-terminal-title'

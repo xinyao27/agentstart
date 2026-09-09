@@ -1,6 +1,7 @@
-import type { AgentStatusEntry, AgentType } from '@yiru/runtime-protocol/model/agent'
-import { resolveCompatibleAgentTypeForOwner } from '@yiru/runtime-protocol/workbench/agent/title-owner'
-import { detectAgentStatusFromTitle, isClaudeAgent } from '~renderer/agent/status'
+import type { AgentStatusEntry, AgentType } from '@yiru/protocol/agent/status-records'
+import { resolveCompatibleAgentTypeForOwner } from '~renderer/agent/title/owner'
+import { isClaudeAgent } from '~renderer/agent/title/provider'
+import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 import { useAppStore } from '~renderer/store/state'
 
 import type { AgentCompletionStatusSnapshot } from '../agent/completion-coordinator-types'

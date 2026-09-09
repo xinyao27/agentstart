@@ -1,18 +1,20 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import type { RitualSchedule } from '@yiru/runtime-protocol/contract'
+import type { RitualSchedule } from '@yiru/protocol'
 import { useActionState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
+import { ritualScheduleQuery, saveRitualSchedule } from '~renderer/runtime/ritual-target'
 import { Button } from '~renderer/ui/button'
 import { Input } from '~renderer/ui/input'
 
-import { extensionOrpc } from '../runtime/orpc'
 import { confirmDangerousOperation } from '../security/passkey'
 
 type ScheduleState = { kind: 'idle' | 'saved' | 'error' }
 
+const LOCAL_DAEMON_TARGET = { kind: 'local' } as const
+
 export function RitualScheduleSettings(): React.JSX.Element {
   const queryClient = useQueryClient()
-  const scheduleQuery = extensionOrpc.ritual.getSchedule.queryOptions({ input: {} })
+  const scheduleQuery = ritualScheduleQuery(LOCAL_DAEMON_TARGET)
   const schedule = useQuery(scheduleQuery)
   const [state, saveAction, isSaving] = useActionState<ScheduleState, FormData>(
     async (_current, formData) => {
@@ -22,7 +24,7 @@ export function RitualScheduleSettings(): React.JSX.Element {
         if (next.archiveOnEndDay) {
           await confirmDangerousOperation('ritual.enable-archive')
         }
-        const result = await extensionOrpc.ritual.setSchedule.call(next)
+        const result = await saveRitualSchedule(LOCAL_DAEMON_TARGET, next)
         queryClient.setQueryData(scheduleQuery.queryKey, result)
         return { kind: 'saved' }
       } catch {

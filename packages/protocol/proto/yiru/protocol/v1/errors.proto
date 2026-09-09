@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package yiru.protocol.v1;
+
+// Holds an application-specific protobuf error message without JSON or base64 conversion.
+message ErrorDetail {
+  string type_name = 1;
+  bytes value = 2;
+}
+
+// Why: every generated language must use the same canonical status names and wire values.
+enum StatusCode {
+  STATUS_CODE_OK_UNSPECIFIED = 0;
+  STATUS_CODE_CANCELLED = 1;
+  STATUS_CODE_UNKNOWN = 2;
+  STATUS_CODE_INVALID_ARGUMENT = 3;
+  STATUS_CODE_DEADLINE_EXCEEDED = 4;
+  STATUS_CODE_NOT_FOUND = 5;
+  STATUS_CODE_ALREADY_EXISTS = 6;
+  STATUS_CODE_PERMISSION_DENIED = 7;
+  STATUS_CODE_RESOURCE_EXHAUSTED = 8;
+  STATUS_CODE_FAILED_PRECONDITION = 9;
+  STATUS_CODE_ABORTED = 10;
+  STATUS_CODE_OUT_OF_RANGE = 11;
+  STATUS_CODE_UNIMPLEMENTED = 12;
+  STATUS_CODE_INTERNAL = 13;
+  STATUS_CODE_UNAVAILABLE = 14;
+  STATUS_CODE_DATA_LOSS = 15;
+  STATUS_CODE_UNAUTHENTICATED = 16;
+}
+
+message Status {
+  StatusCode code = 1;
+  string message = 2;
+  repeated ErrorDetail details = 3;
+}

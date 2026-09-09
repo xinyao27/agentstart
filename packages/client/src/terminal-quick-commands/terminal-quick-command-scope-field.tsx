@@ -1,8 +1,8 @@
+import type { Repo } from '@yiru/protocol/project/repository'
 import type {
-  Repo,
   TerminalQuickCommand,
   TerminalQuickCommandScope
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/terminal/quick-commands'
 import type { Dispatch, SetStateAction } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import RepoBadgeLabel from '~renderer/repo/badge-label'

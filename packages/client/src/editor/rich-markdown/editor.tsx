@@ -1,5 +1,6 @@
 import { useEditorState, type Editor } from '@tiptap/react'
-import type { DiffComment, MarkdownDocument } from '@yiru/runtime-protocol/workbench/types'
+import type { MarkdownDocument } from '@yiru/protocol/files/values'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { selectWorktreeDiffComments } from '~renderer/diff-comments/worktree-selector'
 

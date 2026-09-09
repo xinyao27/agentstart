@@ -122,16 +122,14 @@ final class NotificationCoordinator: NSObject, UNUserNotificationCenterDelegate 
         var readyCount = 0
 
         while !Task.isCancelled {
-            var subscriptionID: String?
             do {
                 let stream = try await runtime.notificationUpdates(for: hostID)
                 notificationStream: for try await event in stream {
                     guard !Task.isCancelled else { break }
                     switch event {
-                    case .ready(let nextSubscriptionID):
-                        subscriptionID = nextSubscriptionID
-                        try await synchronizeRemoteRegistration(hostID: hostID)
+                    case .ready:
                         readyCount += 1
+                        try await synchronizeRemoteRegistration(hostID: hostID)
                         let watermark = lastSequence(hostID: hostID)
                         if readyCount > 1 || watermark > 0 {
                             let missed = try await runtime.missedNotifications(
@@ -151,7 +149,10 @@ final class NotificationCoordinator: NSObject, UNUserNotificationCenterDelegate 
                         // that will never publish another event.
                         break notificationStream
                     default:
-                        if let seenKey = event.seenKey { seenReplay.insert(seenKey) }
+                        if let seenKey = event.seenKey {
+                            if seenReplay.contains(seenKey) { continue }
+                            seenReplay.insert(seenKey)
+                        }
                         await deliver(event, hostID: hostID)
                     }
                 }
@@ -161,12 +162,6 @@ final class NotificationCoordinator: NSObject, UNUserNotificationCenterDelegate 
                 // RuntimeHostSession owns connection diagnostics and reconnection state.
             }
 
-            if let subscriptionID {
-                try? await runtime.unsubscribeNotifications(
-                    for: hostID,
-                    subscriptionID: subscriptionID
-                )
-            }
             guard !Task.isCancelled else { break }
             try? await Task.sleep(for: .seconds(2))
         }

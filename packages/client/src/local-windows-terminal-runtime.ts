@@ -1,5 +1,5 @@
-import type { ProjectExecutionRuntimeResolution } from '@yiru/runtime-protocol/workbench/project-execution-runtime'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 type LocalWindowsTerminalRuntimeSettings =
   | Partial<Pick<GlobalSettings, 'terminalWindowsShell' | 'terminalWindowsWslDistro'>>

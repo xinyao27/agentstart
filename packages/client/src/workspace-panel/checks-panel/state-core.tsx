@@ -1,8 +1,8 @@
+import type { PRCheckDetail, PRComment } from '@yiru/protocol/hosted-review/review-types'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { PRCheckDetail, PRComment } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-actions'
 import { useEffect, useRef, useState } from 'react'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'
 import { useProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
@@ -190,10 +190,6 @@ export function useChecksPanelStateCore(isVisible: boolean) {
     worktreePath: activeWorktreePath,
     branch,
     linkedGitHubPR: activeWorktree?.linkedPR ?? null,
-    linkedGitLabMR: activeWorktree?.linkedGitLabMR ?? null,
-    linkedBitbucketPR: activeWorktree?.linkedBitbucketPR ?? null,
-    linkedAzureDevOpsPR: activeWorktree?.linkedAzureDevOpsPR ?? null,
-    linkedGiteaPR: activeWorktree?.linkedGiteaPR ?? null,
     runtimeEnvironmentId,
     repoConnectionId,
     pushTarget: activeWorktreePushTarget

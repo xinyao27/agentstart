@@ -1,4 +1,4 @@
-import { isRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
+import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
 
 import { useEventCallback } from '../react/use-event-callback'
 import {

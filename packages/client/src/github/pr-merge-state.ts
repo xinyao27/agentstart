@@ -1,10 +1,10 @@
 import type {
   CheckStatus,
-  GitHubPRCheckSummary,
   PRMergeableState,
   PRReviewDecision,
   PRState
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/hosted-review/pull-request-types'
+import type { GitHubPRCheckSummary } from '@yiru/protocol/hosted-review/review-types'
 import { canEnableGitHubPRAutoMerge } from '~renderer/github-pr-auto-merge-availability'
 import { translate } from '~renderer/i18n/i18n'
 

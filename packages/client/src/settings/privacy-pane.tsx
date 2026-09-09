@@ -1,5 +1,5 @@
-import type { TelemetryConsentState } from '@yiru/runtime-protocol/workbench/telemetry-consent-types'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { TelemetryConsentState } from '@yiru/protocol/telemetry/consent'
 import { useEffect, useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { BrowserContextPrivacySetting } from '~renderer/extension/context/privacy-setting'

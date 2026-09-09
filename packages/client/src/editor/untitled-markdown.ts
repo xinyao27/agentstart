@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { joinPath } from '~renderer/path'
 import {

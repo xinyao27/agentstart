@@ -1,4 +1,4 @@
-import { normalizeRuntimePathSeparators } from '@yiru/runtime-protocol/model/platform'
+import { normalizeRuntimePathSeparators } from '@yiru/protocol/host/path'
 
 export const UNKNOWN_EXTERNAL_WORKTREE_PARENT_PATH = 'Unknown location'
 

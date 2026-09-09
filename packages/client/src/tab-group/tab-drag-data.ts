@@ -4,7 +4,8 @@ import {
   type CollisionDetection,
   type UniqueIdentifier
 } from '@dnd-kit/core'
-import type { TabGroup, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TabGroup } from '@yiru/protocol/workspace/tabs'
 import type { TabSplitDirection } from '~renderer/tab-bar/split-direction'
 
 export type TabDropZone = 'center' | TabSplitDirection

@@ -1,4 +1,4 @@
-import type { WorkspaceStatus } from '@yiru/runtime-protocol/workbench/types'
+import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
 import type React from 'react'
 import { cn } from '~renderer/ui/class-names'
 

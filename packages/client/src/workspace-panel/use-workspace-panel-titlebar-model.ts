@@ -1,4 +1,4 @@
-import type { WorkspaceTitlebarActionId } from '@yiru/runtime-protocol/workbench/workspace/panel-titlebar-pinned'
+import type { WorkspaceTitlebarActionId } from '@yiru/protocol/settings/ui-state'
 import type { ActiveRightSidebarTab } from '~renderer/editor/state'
 import type { ShortcutKeyComboDetails } from '~renderer/keyboard-input/use-shortcut-label'
 

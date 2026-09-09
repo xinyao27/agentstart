@@ -1,4 +1,4 @@
-import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '@yiru/runtime-protocol/workbench/constants'
+import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '@yiru/protocol/settings/workspace-preferences'
 import { translate } from '~renderer/i18n/i18n'
 import { SlidersHorizontal } from '~renderer/icons/hugeicons'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'

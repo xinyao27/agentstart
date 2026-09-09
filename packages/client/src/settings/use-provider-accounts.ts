@@ -1,8 +1,8 @@
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type {
   ClaudeRateLimitAccountsState,
-  CodexRateLimitAccountsState,
-  GlobalSettings
-} from '@yiru/runtime-protocol/workbench/types'
+  CodexRateLimitAccountsState
+} from '@yiru/protocol/settings/managed-accounts'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { markLiveCodexSessionsForRestart } from '~renderer/agent-session/codex-restart'

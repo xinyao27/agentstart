@@ -3,16 +3,11 @@ import { useEventCallback } from '~renderer/react/use-event-callback'
 
 import { shouldHydratePullRequestGenerationResult } from '../pull-request-generation-state'
 import { useCreatePullRequestDialogFields } from '../use-create-pull-request-dialog-fields'
-import {
-  checksPanelAsyncResultKey,
-  checksPanelHostedReviewAsyncResultKey,
-  shouldCommitChecksPanelAsyncResult
-} from './async-result-key'
+import { checksPanelAsyncResultKey, shouldCommitChecksPanelAsyncResult } from './async-result-key'
 import type { useChecksPanelGenerationActionsState } from './generation-actions'
 
 export function useChecksPanelGenerationFields(context: useChecksPanelGenerationActionsState) {
   const {
-    activeGitLabReview,
     activePullRequestGenerationKey,
     activePullRequestGenerationRecord,
     activePullRequestGenerationSeedRestoreKey,
@@ -23,7 +18,6 @@ export function useChecksPanelGenerationFields(context: useChecksPanelGeneration
     handleCancelGeneratePullRequestFieldsForActive,
     handleGeneratePullRequestFieldsForActive,
     handlePullRequestGenerationSeedRestored,
-    hostedReviewCacheKey,
     hostedReviewCreation,
     isCreatingPr,
     ownerSettings,
@@ -138,15 +132,7 @@ export function useChecksPanelGenerationFields(context: useChecksPanelGeneration
   }
   const stateRequestKey =
     repo && branch
-      ? activeGitLabReview
-        ? checksPanelHostedReviewAsyncResultKey(
-            hostedReviewCacheKey,
-            branch,
-            activeGitLabReview.provider,
-            activeGitLabReview.number,
-            activeGitLabReview.headSha
-          )
-        : checksPanelAsyncResultKey(prCacheKey, branch, prNumber, pr?.prRepo, pr?.headSha)
+      ? checksPanelAsyncResultKey(prCacheKey, branch, prNumber, pr?.prRepo, pr?.headSha)
       : ''
   const isCurrentAsyncResult = useEventCallback((requestKey: string) =>
     shouldCommitChecksPanelAsyncResult(stateRequestKey, requestKey)

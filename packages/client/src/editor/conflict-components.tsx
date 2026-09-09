@@ -1,4 +1,4 @@
-import type { GitConflictKind, GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitConflictKind, GitStatusEntry } from '@yiru/protocol/git/status-types'
 import React from 'react'
 import type { ConflictReviewEntry, OpenFile } from '~renderer/editor/state'
 import { translate } from '~renderer/i18n/i18n'

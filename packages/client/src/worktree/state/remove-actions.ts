@@ -1,21 +1,20 @@
-import {
-  classifyWorktreeForceDeleteReason,
-  getLockedWorktreeRemovalReason,
-  isLockedWorktreeRemovalError
-} from '@yiru/runtime-protocol/workbench/workspace/worktree-removal'
 import type { StateCreator } from 'zustand'
 import { readWorktreeMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterWorktreeMutation } from '~renderer/project-catalog/mutation-refresh'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { disposeRemovedWorktreeParkedTerminalWatchers } from '~renderer/runtime/terminal-parked-watcher-registry'
-import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
+import { removeRuntimeWorktree } from '~renderer/runtime/worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 import { ensureHooksConfirmed } from '~renderer/sidebar/yiru-hook-confirmation'
 import { clearSessionCommitDraftForWorktree } from '~renderer/workspace-panel/source-control/commit-draft-session'
 import { forgetHugeRepoWarningDismissalsForWorktrees } from '~renderer/workspace-panel/source-control/huge-repo-warning-dismissals'
+import {
+  classifyWorktreeForceDeleteReason,
+  getLockedWorktreeRemovalReason,
+  isLockedWorktreeRemovalError
+} from '~renderer/worktree/removal-policy'
 
 import type { AppState } from '../../store/types'
 import { resolveWorktreeRemovalHost } from './lineage-model'
@@ -82,25 +81,12 @@ export function createWorktreeRemoveActions(
         )
         const repoId = getRepoIdFromWorktreeId(worktreeId)
         const expectedRevision = readWorktreeMutationRevision(target, repoId)
-        const removalResult = await (target.kind === 'local'
-          ? workspaceHostClient.worktrees.remove({
-              expectedRevision,
-              worktreeId,
-              hostId,
-              force,
-              skipArchive
-            })
-          : callRuntimeOrpc(
-              target,
-              (client) => client.worktree.rm,
-              {
-                expectedRevision,
-                worktree: toRuntimeWorktreeSelector(worktreeId),
-                force,
-                runHooks: !skipArchive
-              },
-              { timeoutMs: 60_000 }
-            ))
+        const removalResult = await removeRuntimeWorktree(target, {
+          expectedRevision,
+          worktree: toRuntimeWorktreeSelector(worktreeId),
+          force,
+          runHooks: !skipArchive
+        })
         await refreshAfterWorktreeMutation(target, repoId, removalResult.revision)
 
         // Why: invalidate stale probes as soon as deletion is authoritative, so

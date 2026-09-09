@@ -1,10 +1,7 @@
-import { AI_VAULT_AGENTS, type AiVaultAgent } from '@yiru/runtime-protocol/model/agent'
-import type { SleepingAgentLaunchConfig } from '@yiru/runtime-protocol/model/agent'
-import { measureClipboardTextByteLength } from '@yiru/runtime-protocol/model/ui'
-import {
-  normalizeExecutionHostId,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
+import { AI_VAULT_AGENTS, type AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+import { normalizeExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import { measureUtf8ByteLength } from '@yiru/protocol/text/utf8-length'
 
 export const AI_VAULT_SESSION_DRAG_TYPE = 'application/x-yiru-ai-vault-session'
 export const AI_VAULT_SESSION_DRAG_START_EVENT = 'yiru-ai-vault-session-drag-start'
@@ -162,7 +159,7 @@ export function readAiVaultSessionDragData(
 function isAiVaultSessionDragPayloadTooLarge(raw: string): boolean {
   return (
     raw.length > AI_VAULT_SESSION_DRAG_PAYLOAD_MAX_BYTES ||
-    measureClipboardTextByteLength(raw, {
+    measureUtf8ByteLength(raw, {
       stopAfterBytes: AI_VAULT_SESSION_DRAG_PAYLOAD_MAX_BYTES
     }).exceededLimit
   )

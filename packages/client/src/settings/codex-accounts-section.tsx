@@ -1,8 +1,8 @@
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type {
   CodexRateLimitAccountsState,
-  CodexSystemDefaultIdentity,
-  GlobalSettings
-} from '@yiru/runtime-protocol/workbench/types'
+  CodexSystemDefaultIdentity
+} from '@yiru/protocol/settings/managed-accounts'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle, Plus } from '~renderer/icons/hugeicons'

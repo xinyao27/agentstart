@@ -1,5 +1,5 @@
-import { isValidHostTerminalTabId } from '@yiru/runtime-protocol/workbench/terminal/tab-id'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import { isValidHostTerminalTabId } from '@yiru/protocol/terminal/tab-identity'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'

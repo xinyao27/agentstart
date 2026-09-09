@@ -1,16 +1,13 @@
-import type { ProviderRateLimits } from '@yiru/runtime-protocol/workbench/rate-limit-types'
-import type { StatusBarUsageMode } from '@yiru/runtime-protocol/workbench/status-bar-usage-mode'
-import {
-  clampUsedPercent,
-  getDisplayedUsagePercentage,
-  type UsagePercentageDisplay
-} from '@yiru/runtime-protocol/workbench/usage-percentage-display'
+import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
+import type { StatusBarUsageMode } from '@yiru/protocol/settings/usage-display'
+import type { UsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle } from '~renderer/icons/hugeicons'
 import { Progress } from '~renderer/ui/progress'
 
 import { getProviderUsageStatusLabel, ProviderIcon } from './tooltip'
+import { clampUsedPercent, getDisplayedUsagePercentage } from './usage-percentage'
 import { formatUsagePercentageLabel } from './usage-percentage-label'
 import { getUsageUrgency, usageTextColorClass } from './usage-roster-formatting'
 import {

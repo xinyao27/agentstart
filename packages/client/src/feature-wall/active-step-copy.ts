@@ -1,7 +1,6 @@
-import type { AgentsStep } from '@yiru/runtime-protocol/workbench/agents-orchestration-steps'
-import type { ReviewStep } from '@yiru/runtime-protocol/workbench/review-steps'
-import type { WorkbenchStep } from '@yiru/runtime-protocol/workbench/workbench-steps'
-
+import type { AgentsStep } from './content/agents-orchestration-steps'
+import type { ReviewStep } from './content/review-steps'
+import type { WorkbenchStep } from './content/workbench-steps'
 import type { FeatureWallActiveStepCopy } from './tour-panel'
 
 export function getFeatureWallActiveStepCopy(

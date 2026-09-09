@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 /**
  * Per-tab hidden-view parking for TerminalPaneOverlayLayer.
  *
@@ -243,10 +243,9 @@ export function useTerminalTabColdParking(args: {
     syncParkedTerminalTabWatchers({
       worktreeId,
       tabs: terminalTabs,
-      parkedTabIds: parkedTerminalTabIds,
+      parkedTabIds: parkedTerminalTabIds
       // Why: activation-deferred tabs have no prior pane-owned title slot;
       // pull main's title-only snapshot when their watcher starts.
-      restoreTitleOnStartTabIds: activationDeferredMountTabIds ?? undefined
     })
   }, [activationDeferredMountTabIds, parkedTerminalTabIds, terminalTabs, worktreeId])
 

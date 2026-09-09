@@ -1,6 +1,7 @@
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { OnboardingState, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
 import { useEffect, useState } from 'react'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 
 import { onOnboardingReopened } from '../onboarding/show-onboarding-event'
 import { useEventCallback } from '../react/use-event-callback'

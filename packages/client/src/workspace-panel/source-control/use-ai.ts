@@ -1,22 +1,22 @@
-import { getCommitMessageModelDiscoveryHostKeyForScope } from '@yiru/runtime-protocol/workbench/commit-message/host-key'
-import {
-  DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS,
-  resolveSourceControlActionRecipe,
-  resolveSourceControlAiEnabled,
-  resolveSourceControlAiForOperation,
-  resolveSourceControlAiPrCreationDefaults,
-  type ResolvedSourceControlAiGenerationParams
-} from '@yiru/runtime-protocol/workbench/source-control/ai'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId,
   SourceControlTextActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+} from '@yiru/protocol/source-control/ai-actions'
+import { getCommitMessageModelDiscoveryHostKeyForScope } from '@yiru/protocol/source-control/discovery-host'
+import {
+  resolveSourceControlActionRecipe,
+  resolveSourceControlAiEnabled,
+  resolveSourceControlAiPrCreationDefaults,
+  type ResolvedSourceControlAiGenerationParams
+} from '@yiru/protocol/source-control/resolution'
+import { DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS } from '@yiru/protocol/source-control/settings'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { getRuntimeGitScope } from '~renderer/runtime/git-client'
 import type { SourceControlAiWriteTarget } from '~renderer/source-control/ai-recipe-save'
+import { resolveSourceControlAiForOperation } from '~renderer/source-control/ai/resolution'
 import { useAppStore } from '~renderer/store/state'
 
 import type { SourceControlAiControllerParams } from './ai-controller-types'

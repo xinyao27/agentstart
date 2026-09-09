@@ -1,5 +1,5 @@
-import { isPathInsideOrEqual } from '@yiru/runtime-protocol/model/platform'
-import { clampMarkdownTocPanelWidth } from '@yiru/runtime-protocol/workbench/markdown-toc-panel-width'
+import { isPathInsideOrEqual } from '@yiru/protocol/host/path'
+import { clampMarkdownTocPanelWidth } from '@yiru/protocol/settings/markdown-toc'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 

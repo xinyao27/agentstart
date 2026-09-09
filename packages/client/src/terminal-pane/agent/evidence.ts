@@ -3,14 +3,12 @@ import {
   type AgentStatusEntry,
   type AgentStatusState,
   type AgentType
-} from '@yiru/runtime-protocol/model/agent'
-import { resolveExplicitTerminalTitleAgentType } from '@yiru/runtime-protocol/model/agent'
-import type { AgentStatus } from '@yiru/runtime-protocol/workbench/agent/detection'
-import {
-  detectAgentStatusFromTitle,
-  getAgentLabel
-} from '@yiru/runtime-protocol/workbench/agent/detection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/status-records'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { AgentStatus } from '~renderer/agent/title/core'
+import { getAgentTitleLabel } from '~renderer/agent/title/identity'
+import { resolveExplicitTerminalTitleAgentType } from '~renderer/agent/title/provider'
+import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 
 // Why: explicit agent status entries (from hook-based reports) can go stale if
 // the agent process exits without sending a final update. This helper lets
@@ -43,7 +41,7 @@ export function classifyTitleActivity(title: string): AgentStatus | null {
  * that matches the product rule, never both out of habit.
  */
 export function resolveTitleActivityLabel(title: string): string | null {
-  return getAgentLabel(title)
+  return getAgentTitleLabel(title)
 }
 
 /** See resolveTitleActivityLabel — the strict facet for identity decisions. */

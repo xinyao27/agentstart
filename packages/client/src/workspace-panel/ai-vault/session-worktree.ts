@@ -1,18 +1,19 @@
-import type { AiVaultSession } from '@yiru/runtime-protocol/model/agent'
-import {
-  createNormalizedPathInsideOrEqualMatcher,
-  isRuntimePathAbsolute,
-  normalizeRuntimePathForComparison
-} from '@yiru/runtime-protocol/model/platform'
-import { parseWslUncPath } from '@yiru/runtime-protocol/model/platform'
 import {
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID,
   normalizeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { splitWorktreeIdForFilesystem } from '@yiru/runtime-protocol/model/workspace'
-import type { Repo, Worktree } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import {
+  createNormalizedPathInsideOrEqualMatcher,
+  isRuntimePathAbsolute,
+  normalizeRuntimePathForComparison
+} from '@yiru/protocol/host/path'
+import { parseWslUncPath } from '@yiru/protocol/host/wsl-paths'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
+import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
 import { aiVaultWorktreeCompactPath } from './session-worktree-affordances'
 

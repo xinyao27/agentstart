@@ -2,7 +2,7 @@ import type {
   CursorRateLimitRefreshContext,
   RateLimitRuntimeTarget,
   RateLimitState
-} from '@yiru/runtime-protocol/workbench/rate-limit-types'
+} from '@yiru/protocol/account-rate-types'
 import type { StateCreator } from 'zustand'
 import {
   consumeCodexRateLimitResetCredit,

@@ -1,10 +1,7 @@
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
-import {
-  isTerminalLeafId,
-  makePaneKey,
-  parsePaneKey
-} from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalLayoutSnapshot, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { isTerminalLeafId, makePaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
 import { agentTypeToIconAgent } from '~renderer/agent/status'
 
 /**

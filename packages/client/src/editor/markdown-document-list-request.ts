@@ -1,4 +1,4 @@
-import type { MarkdownDocument } from '@yiru/runtime-protocol/workbench/types'
+import type { MarkdownDocument } from '@yiru/protocol/files/values'
 import {
   listRuntimeMarkdownDocuments,
   type RuntimeFileOperationArgs

@@ -1,8 +1,8 @@
+import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
 import {
   getCommandTokenPathBasename,
   getFirstCommandToken
-} from '@yiru/runtime-protocol/workbench/command-token-scanner'
-import { TUI_AGENT_CONFIG } from '@yiru/runtime-protocol/workbench/tui-agent/config'
+} from '@yiru/protocol/agent/process/command-token-scanner'
 
 /**
  * Pi-compatible agent kinds. Both Pi and OMP (omp.sh) consume the same

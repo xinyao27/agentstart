@@ -1,4 +1,4 @@
-import type { TerminalColorOverrides } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalColorOverrides } from '@yiru/protocol/terminal/theme-types'
 import { translate } from '~renderer/i18n/i18n'
 
 export const COLOR_OVERRIDE_GROUPS: {

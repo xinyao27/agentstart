@@ -1,8 +1,8 @@
 import type {
-  WorkspaceSpaceScanProgress,
-  WorkspaceSpaceScanStatus,
-  WorkspaceSpaceWorktree
-} from '@yiru/runtime-protocol/workbench/workspace/space-types'
+  WorkspaceSpaceScanStatusName as WorkspaceSpaceScanStatus,
+  WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree
+} from '@yiru/protocol'
+import { translate } from '~renderer/i18n/i18n'
 
 const BYTE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'] as const
 const relativeTimeFormatter = new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' })
@@ -60,43 +60,31 @@ export function getWorkspaceSpaceScanDateTimeLabel(scannedAt: number): string {
   return fullDateTimeFormatter.format(new Date(scannedAt))
 }
 
-export function getWorkspaceSpaceProgressLabel(
-  progress: WorkspaceSpaceScanProgress | null
-): string | null {
-  if (!progress) {
-    return null
-  }
-  if (progress.state === 'cancelling') {
-    return 'Cancelling scan'
-  }
-
-  const current =
-    progress.currentWorktreeDisplayName ?? progress.currentRepoDisplayName ?? 'workspaces'
-  if (progress.totalWorktreeCount > 0) {
-    return `Scanning ${progress.scannedWorktreeCount} of ${progress.totalWorktreeCount} · ${current}`
-  }
-  if (progress.totalRepoCount > 0) {
-    return `Scanning ${progress.scannedRepoCount} of ${progress.totalRepoCount} repos · ${current}`
-  }
-  return 'Scanning workspace sizes'
+export function getWorkspaceSpaceScanningLabel(): string {
+  return translate('workspaceSpace.scanning', 'Scanning workspace sizes')
 }
 
 export function getWorkspaceSpaceStatusLabel(status: WorkspaceSpaceScanStatus): string {
   switch (status) {
     case 'ok':
-      return 'Scanned'
+      return translate('workspaceSpace.status.scanned', 'Scanned')
     case 'missing':
-      return 'Missing'
+      return translate('workspaceSpace.status.missing', 'Missing')
     case 'permission-denied':
-      return 'No access'
+      return translate('workspaceSpace.status.noaccess', 'No access')
     case 'unavailable':
-      return 'Unavailable'
+      return translate('workspaceSpace.status.unavailable', 'Unavailable')
     case 'error':
-      return 'Failed'
+      return translate('workspaceSpace.status.failed', 'Failed')
   }
 }
 
 export function getWorkspaceSpaceBranchLabel(worktree: WorkspaceSpaceWorktree): string {
   const branch = worktree.branch.replace(/^refs\/heads\//, '').trim()
-  return branch || (worktree.isMainWorktree ? 'main worktree' : 'detached')
+  return (
+    branch ||
+    (worktree.isMainWorktree
+      ? translate('workspaceSpace.mainWorktree', 'main worktree')
+      : translate('workspaceSpace.detached', 'detached'))
+  )
 }

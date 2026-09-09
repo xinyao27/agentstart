@@ -1,10 +1,6 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
-import {
-  skillPlacements,
-  type DiscoveredSkill,
-  type SkillProvider,
-  type SkillSourceKind
-} from '@yiru/runtime-protocol/workbench/skills'
+import type { DiscoveredSkill, SkillProvider, SkillSourceKind } from '@yiru/protocol'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { skillPlacements } from '~renderer/skills/installation'
 
 export type SkillsFilterState = {
   query: string
@@ -18,7 +14,7 @@ export function isSkillsFilterQueryTooLarge(
   query: string,
   maxBytes = SKILLS_FILTER_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 function normalize(value: string): string {

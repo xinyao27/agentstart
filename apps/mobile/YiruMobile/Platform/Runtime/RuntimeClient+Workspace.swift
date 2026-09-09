@@ -1,34 +1,18 @@
 import Foundation
-
-nonisolated struct MobileWorkspaceListUIStateWire: Decodable, Sendable {
-    let sortBy: String?
-    let hideSleepingWorkspaces: Bool?
-    let hideDefaultBranchWorkspace: Bool?
-    let filterRepoIds: [String]?
-    let collapsedGroups: [String]?
-}
-
-nonisolated struct MobileWorkspaceListUIResultWire: Decodable, Sendable {
-    let ui: MobileWorkspaceListUIStateWire
-}
-
-nonisolated struct MobileWorkspaceListUISetRequestWire: Encodable, Sendable {
-    let collapsedGroups: [String]
-}
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient: WorkspaceRepository {
     func workspaceHostCompatibility(for hostID: String) async -> WorkspaceHostCompatibility? {
         let status: MobileRuntimeStatusWire
         do {
-            status = try await runtimeStatus(for: hostID, timeout: .seconds(4))
+            status = try await preferredRuntimeStatus(for: hostID, timeout: .seconds(10))
+        } catch RuntimeTransportError.unsupportedVersion {
+            return .desktopTooOld(
+                requiredVersion: MobileTerminalWireContract.minimumCompatibleRuntimeServerVersion
+            )
         } catch {
-            guard
-                let fallback = try? await legacyRuntimeStatus(
-                    for: hostID,
-                    timeout: .seconds(5)
-                )
-            else { return nil }
-            status = fallback
+            return nil
         }
 
         let desktopVersion = status.runtimeProtocolVersion ?? status.protocolVersion ?? 0
@@ -45,68 +29,40 @@ extension RuntimeClient: WorkspaceRepository {
         return .compatible
     }
 
+    private func preferredRuntimeStatus(for hostID: String, timeout: Duration) async throws
+        -> MobileRuntimeStatusWire
+    {
+        try await withThrowingTaskGroup(of: MobileRuntimeStatusWire.self) { group in
+            group.addTask {
+                try await self.protocolStatus(hostID: hostID)
+            }
+            group.addTask {
+                try await Task.sleep(for: timeout)
+                throw WorkspaceRepositoryError.timeout
+            }
+            guard let status = try await group.next() else { throw CancellationError() }
+            group.cancelAll()
+            return status
+        }
+    }
+
     func workspaceListViewSettings(for hostID: String) async throws -> WorkspaceListViewSettings {
-        let result: MobileWorkspaceListUIResultWire = try await callRuntime(
-            hostID: hostID,
-            path: MobileWorkspaceCreationWireContract.uiGetPath,
-            input: RuntimeVoidInput(),
-            output: MobileWorkspaceListUIResultWire.self
-        )
+        let document = try await protocolUiGet(hostID: hostID)
         return WorkspaceListViewSettings(
-            sortMode: result.ui.sortBy.flatMap(WorkspaceListSortMode.init(rawValue:)) ?? .recent,
-            hideSleeping: result.ui.hideSleepingWorkspaces ?? false,
-            hideDefaultBranch: result.ui.hideDefaultBranchWorkspace ?? false,
-            filterRepoIDs: Set(result.ui.filterRepoIds ?? []),
-            collapsedGroups: Set(result.ui.collapsedGroups ?? [])
+            sortMode: document["sortBy"]?.stringValue.flatMap(WorkspaceListSortMode.init(rawValue:))
+                ?? .recent,
+            hideSleeping: document["hideSleepingWorkspaces"]?.boolValue ?? false,
+            hideDefaultBranch: document["hideDefaultBranchWorkspace"]?.boolValue ?? false,
+            filterRepoIDs: Set(document["filterRepoIds"]?.stringList ?? []),
+            collapsedGroups: Set(document["collapsedGroups"]?.stringList ?? [])
         )
     }
 
     func setWorkspaceCollapsedGroups(hostID: String, groups: Set<String>) async throws {
-        let _: MobileWorkspaceListUIResultWire = try await callRuntime(
+        _ = try await protocolUiSet(
             hostID: hostID,
-            path: MobileWorkspaceCreationWireContract.uiSetPath,
-            input: MobileWorkspaceListUISetRequestWire(collapsedGroups: groups.sorted()),
-            output: MobileWorkspaceListUIResultWire.self
+            fields: ["collapsedGroups": .list(groups.sorted().map(RuntimeUiValue.string))]
         )
-    }
-
-    private func runtimeStatus(for hostID: String, timeout: Duration) async throws
-        -> MobileRuntimeStatusWire
-    {
-        try await withThrowingTaskGroup(of: MobileRuntimeStatusWire.self) { group in
-            group.addTask {
-                try await self.callRuntime(
-                    hostID: hostID,
-                    path: MobileTerminalWireContract.statusPath,
-                    input: RuntimeVoidInput(),
-                    output: MobileRuntimeStatusWire.self
-                )
-            }
-            group.addTask {
-                try await Task.sleep(for: timeout)
-                throw WorkspaceRepositoryError.timeout
-            }
-            guard let status = try await group.next() else { throw CancellationError() }
-            group.cancelAll()
-            return status
-        }
-    }
-
-    private func legacyRuntimeStatus(for hostID: String, timeout: Duration) async throws
-        -> MobileRuntimeStatusWire
-    {
-        try await withThrowingTaskGroup(of: MobileRuntimeStatusWire.self) { group in
-            group.addTask {
-                try await self.probeRuntimeStatusForProtocolCompatibility(hostID: hostID)
-            }
-            group.addTask {
-                try await Task.sleep(for: timeout)
-                throw WorkspaceRepositoryError.timeout
-            }
-            guard let status = try await group.next() else { throw CancellationError() }
-            group.cancelAll()
-            return status
-        }
     }
 
     func workspaces(for hostID: String) async throws -> WorkspaceSnapshot {
@@ -134,24 +90,14 @@ extension RuntimeClient: WorkspaceRepository {
                 // Why: a cold connection can spend a visible frame establishing the snapshots
                 // stream, so hydrate from listAll first and let the stream stay the
                 // authoritative source for subsequent updates.
-                if let initial: MobileSessionTabsListAllWire = try? await self.callRuntime(
-                    hostID: hostID,
-                    path: MobileSessionTabsWireContract.listAllPath,
-                    input: RuntimeVoidInput(),
-                    output: MobileSessionTabsListAllWire.self
-                ) {
-                    for snapshot in initial.snapshots {
+                if let initial = try? await self.sessionTabsAllSnapshots(hostID: hostID) {
+                    for snapshot in initial {
                         tabsByWorkspace[snapshot.worktree] = mapOpenTabs(snapshot.tabs)
                     }
                     continuation.yield(tabsByWorkspace)
                 }
 
-                let source = try await self.subscribeRuntime(
-                    hostID: hostID,
-                    path: MobileSessionTabsWireContract.subscribeAllPath,
-                    input: RuntimeVoidInput(),
-                    output: MobileSessionTabsAllEventWire.self
-                )
+                let source = try await self.sessionTabsAllEventUpdates(hostID: hostID)
                 for try await event in source {
                     switch event {
                     case .snapshots(let snapshots):
@@ -180,16 +126,16 @@ extension RuntimeClient: WorkspaceRepository {
     }
 
     func activateWorkspace(hostID: String, workspaceID: String) async throws {
-        let result: MobileWorkspaceActivateResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_WorktreeServiceActivateRequest()
+        request.worktree = worktreeSelector(workspaceID)
+        request.notifyClients = false
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileRuntimeWireContract.worktreeActivatePath,
-            input: MobileWorkspaceActivateRequestWire(
-                worktree: worktreeSelector(workspaceID),
-                notifyClients: false
-            ),
-            output: MobileWorkspaceActivateResultWire.self
+            procedure: YiruRuntimeV1WorktreeServiceMethods.activate,
+            request: request,
+            response: Yiru_Runtime_V1_WorktreeServiceActivateResponse.self
         )
-        guard result.activated else { throw WorkspaceRepositoryError.rejectedMutation }
+        guard response.activated else { throw WorkspaceRepositoryError.rejectedMutation }
     }
 
     func selectWorkspaceTab(
@@ -201,90 +147,120 @@ extension RuntimeClient: WorkspaceRepository {
             for: hostID,
             worktreeID: workspaceID,
             tabID: tab.id,
-            leafID: tab.kind == .terminal ? tab.leafID : nil,
-            terminalID: tab.terminalID
+            leafID: tab.kind == .terminal ? tab.leafID : nil
         )
     }
 
     func sleepWorkspace(hostID: String, workspaceID: String) async throws {
-        let result: MobileWorkspaceSleepResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_WorktreeServiceSleepRequest()
+        request.worktree = worktreeSelector(workspaceID)
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileRuntimeWireContract.worktreeSleepPath,
-            input: MobileWorkspaceSelectorRequestWire(worktree: worktreeSelector(workspaceID)),
-            output: MobileWorkspaceSleepResultWire.self
+            procedure: YiruRuntimeV1WorktreeServiceMethods.sleep,
+            request: request,
+            response: Yiru_Runtime_V1_WorktreeServiceSleepResponse.self
         )
-        guard result.worktreeId == workspaceID else {
+        guard response.worktreeID == workspaceID else {
             throw WorkspaceRepositoryError.rejectedMutation
         }
     }
 
     func setWorkspacePinned(hostID: String, workspaceID: String, isPinned: Bool) async throws {
         let revision = try await workspaceMutationRevision(hostID: hostID, workspaceID: workspaceID)
-        let _: MobileWorkspacePinResultWire = try await callRuntime(
+        try await protocolSetWorktree(
             hostID: hostID,
-            path: MobileRuntimeWireContract.worktreeSetPath,
-            input: MobileWorkspacePinRequestWire(
-                worktree: worktreeSelector(workspaceID),
-                expectedRevision: revision,
-                isPinned: isPinned
-            ),
-            output: MobileWorkspacePinResultWire.self
-        )
+            workspaceID: workspaceID,
+            revision: revision
+        ) { patch in
+            patch.isPinned = isPinned
+        }
     }
 
     func removeWorkspace(hostID: String, workspaceID: String) async throws {
         let revision = try await workspaceMutationRevision(hostID: hostID, workspaceID: workspaceID)
-        let result: MobileWorkspaceRemoveResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_WorktreeServiceRemoveRequest()
+        request.worktree = worktreeSelector(workspaceID)
+        request.expectedRevision = Int64(revision)
+        request.force = true
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileRuntimeWireContract.worktreeRemovePath,
-            input: MobileWorkspaceRemoveRequestWire(
-                worktree: worktreeSelector(workspaceID),
-                expectedRevision: revision,
-                force: true,
-                runHooks: nil
-            ),
-            output: MobileWorkspaceRemoveResultWire.self
+            procedure: YiruRuntimeV1WorktreeServiceMethods.remove,
+            request: request,
+            response: Yiru_Runtime_V1_WorktreeServiceRemoveResponse.self
         )
-        guard result.removed else { throw WorkspaceRepositoryError.rejectedMutation }
+        guard response.removed else { throw WorkspaceRepositoryError.rejectedMutation }
     }
 
     func workspaceMutationRevision(hostID: String, workspaceID: String) async throws -> Int {
-        let result: MobileWorktreeShowResultWire = try await callRuntime(
-            hostID: hostID,
-            path: MobileRuntimeWireContract.worktreeShowPath,
-            input: MobileWorktreeShowRequestWire(worktree: worktreeSelector(workspaceID)),
-            output: MobileWorktreeShowResultWire.self
-        )
-        guard let revision = result.revision else {
+        let response = try await protocolWorktreeShow(hostID: hostID, workspaceID: workspaceID)
+        guard response.hasRevision else {
             throw WorkspaceRepositoryError.rejectedMutation
         }
-        return revision
+        return Int(response.revision)
+    }
+
+    func protocolWorktreeShow(
+        hostID: String,
+        workspaceID: String
+    ) async throws -> Yiru_Runtime_V1_WorktreeServiceShowResponse {
+        var request = Yiru_Runtime_V1_WorktreeServiceShowRequest()
+        request.worktree = worktreeSelector(workspaceID)
+        return try await protocolUnary(
+            hostID: hostID,
+            procedure: YiruRuntimeV1WorktreeServiceMethods.show,
+            request: request,
+            response: Yiru_Runtime_V1_WorktreeServiceShowResponse.self
+        )
+    }
+
+    // Why: WorktreeService/Set decides per patch field presence whether a field is
+    // touched, so each mutation fills only the fields it owns.
+    func protocolSetWorktree(
+        hostID: String,
+        workspaceID: String,
+        revision: Int,
+        patch: (inout Yiru_Runtime_V1_WorktreeSetPatch) -> Void
+    ) async throws {
+        var request = Yiru_Runtime_V1_WorktreeServiceSetRequest()
+        request.worktree = worktreeSelector(workspaceID)
+        request.expectedRevision = Int64(revision)
+        var value = Yiru_Runtime_V1_WorktreeSetPatch()
+        patch(&value)
+        request.patch = value
+        _ = try await protocolUnary(
+            hostID: hostID,
+            procedure: YiruRuntimeV1WorktreeServiceMethods.set,
+            request: request,
+            response: Yiru_Runtime_V1_WorktreeServiceSetResponse.self
+        )
     }
 
     func fetchWorkspaces(for hostID: String) async throws -> WorkspaceSnapshot {
         async let repos = fetchWorkspaceRepos(for: hostID)
-        let wire: MobileWorkspaceListWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_WorktreeServicePsRequest()
+        request.limit = 10_000
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileRuntimeWireContract.worktreeListPath,
-            input: MobileWorkspaceListRequestWire(limit: 10_000),
-            output: MobileWorkspaceListWire.self
+            procedure: YiruRuntimeV1WorktreeServiceMethods.ps,
+            request: request,
+            response: Yiru_Runtime_V1_WorktreeServicePsResponse.self
         )
         return WorkspaceSnapshot(
-            workspaces: wire.worktrees.map(WorkspaceSummary.init(wire:)),
+            workspaces: response.worktrees.map(WorkspaceSummary.init(ps:)),
             repos: await repos,
-            totalCount: wire.totalCount,
-            isTruncated: wire.truncated
+            totalCount: Int(response.totalCount),
+            isTruncated: response.truncated
         )
     }
 
     func fetchWorkspaceRepos(for hostID: String) async -> [WorkspaceRepo] {
-        let wire: MobileRepoListWire? = try? await callRuntime(
+        let response: Yiru_Runtime_V1_RepoServiceListResponse? = try? await protocolUnary(
             hostID: hostID,
-            path: MobileRuntimeWireContract.repoListPath,
-            input: RuntimeVoidInput(),
-            output: MobileRepoListWire.self
+            procedure: YiruRuntimeV1RepoServiceMethods.list,
+            request: Yiru_Runtime_V1_RepoServiceListRequest(),
+            response: Yiru_Runtime_V1_RepoServiceListResponse.self
         )
-        return wire?.repos.map(WorkspaceRepo.init(wire:)) ?? []
+        return response?.repos.map(WorkspaceRepo.init(repo:)) ?? []
     }
 
     func worktreeSelector(_ workspaceID: String) -> String {

@@ -1,10 +1,8 @@
-import { FEATURE_WALL_MAX_DWELL_MS } from '@yiru/runtime-protocol/workbench/feature-wall-telemetry'
-import type { FeatureWallExitAction } from '@yiru/runtime-protocol/workbench/feature-wall-tour-depth'
-import type { FeatureWallTourDepthSummary } from '@yiru/runtime-protocol/workbench/feature-wall-tour-depth'
-import type {
-  EventProps,
-  FeatureWallOpenSourceTelemetry
-} from '@yiru/runtime-protocol/workbench/telemetry-events'
+import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
+import type { FeatureWallOpenSourceTelemetry } from '@yiru/protocol/telemetry/events/foundations'
+import type { FeatureWallExitAction } from '@yiru/protocol/telemetry/feature-wall/depth'
+import type { FeatureWallTourDepthSummary } from '@yiru/protocol/telemetry/feature-wall/depth'
+import { FEATURE_WALL_MAX_DWELL_MS } from '@yiru/protocol/telemetry/feature-wall/dwell'
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { track } from '~renderer/telemetry/client'

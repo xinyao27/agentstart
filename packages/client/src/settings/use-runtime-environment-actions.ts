@@ -1,9 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query'
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { runtimeEnvironmentsClient } from '~renderer/runtime/runtime-environments-client'
 
 import {

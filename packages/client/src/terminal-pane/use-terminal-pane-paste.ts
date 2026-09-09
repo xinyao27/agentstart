@@ -1,7 +1,4 @@
-import {
-  keybindingMatchesAction,
-  type KeybindingOverrides
-} from '@yiru/runtime-protocol/workbench/keybindings'
+import { keybindingMatchesAction, type KeybindingOverrides } from '@yiru/protocol/keybindings'
 import { useEffect } from 'react'
 
 import type { PaneManager } from './pane-manager/pane-manager'

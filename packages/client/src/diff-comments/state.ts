@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import type { StateCreator } from 'zustand'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import { readProjectCatalogWorktree } from '~renderer/project-catalog/worktree-cache'

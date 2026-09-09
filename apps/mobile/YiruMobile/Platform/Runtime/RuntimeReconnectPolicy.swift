@@ -5,7 +5,11 @@ nonisolated struct RuntimeReconnectPolicy: Sendable {
     let fastAttemptLimit: Int
     let trickleDelay: Duration
     let authenticationRetryLimit: Int
+    let maximumJitterRatio: Double
+    let revivalMinimumInterval: Duration
 
+    // Why: positive-only jitter preserves each backoff floor while spreading hosts, and the
+    // revival interval coalesces path flaps without making a genuine recovery wait long.
     static let mobile = RuntimeReconnectPolicy(
         delays: [
             .milliseconds(500), .seconds(1), .seconds(2), .seconds(4), .seconds(8),
@@ -13,11 +17,16 @@ nonisolated struct RuntimeReconnectPolicy: Sendable {
         ],
         fastAttemptLimit: 12,
         trickleDelay: .seconds(90),
-        authenticationRetryLimit: 3
+        authenticationRetryLimit: 3,
+        maximumJitterRatio: 0.2,
+        revivalMinimumInterval: .seconds(8)
     )
 
     func delay(after attempt: Int) -> Duration {
-        guard attempt < fastAttemptLimit else { return trickleDelay }
-        return delays[min(max(0, attempt - 1), delays.count - 1)]
+        let baseDelay =
+            attempt < fastAttemptLimit
+            ? delays[min(max(0, attempt - 1), delays.count - 1)]
+            : trickleDelay
+        return baseDelay * Double.random(in: 1...(1 + maximumJitterRatio))
     }
 }

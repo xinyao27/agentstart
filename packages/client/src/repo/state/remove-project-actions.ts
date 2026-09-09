@@ -1,15 +1,14 @@
-import {
-  getRepoExecutionHostId,
-  getRepoIdFromWorktreeId
-} from '@yiru/runtime-protocol/model/workspace'
-import { isRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
+import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
+import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterProjectCatalogMutation } from '~renderer/project-catalog/mutation-refresh'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireRepoProtocolClient } from '~renderer/runtime/repo-catalog-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { closeRuntimeTerminal } from '~renderer/runtime/terminal-inspection'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 
@@ -51,12 +50,9 @@ export function createRepoRemoveProjectActions(
                 hostId: ownerHostId
               })
             : workspaceHostClient.repos.remove({ expectedRevision, repoId: projectId })
-          : callRuntimeOrpc(
-              target,
-              (client) => client.repo.rm,
-              { expectedRevision, repo: projectId },
-              { timeoutMs: 15_000 }
-            ))
+          : await (
+              await requireRepoProtocolClient(target)
+            ).rm({ expectedRevision, repo: projectId }, { timeoutMs: 15_000 }))
         await refreshAfterProjectCatalogMutation(target, result.revision)
 
         get().clearYiruHookTrustForRepo(projectId)
@@ -112,14 +108,10 @@ async function stopRemovedRuntimeTerminals(
   if (target.kind !== 'environment') {
     return
   }
+  const client = await openRuntimeTerminalClient(target)
   await Promise.allSettled(
     worktreeIds.map((worktreeId) =>
-      callRuntimeOrpc(
-        target,
-        (client) => client.terminal.stop,
-        { worktree: toRuntimeWorktreeSelector(worktreeId) },
-        { timeoutMs: 15_000 }
-      )
+      client.stop(toRuntimeWorktreeSelector(worktreeId), { timeoutMs: 15_000 })
     )
   )
 }

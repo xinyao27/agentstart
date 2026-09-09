@@ -1,9 +1,3 @@
-import {
-  resolveSourceControlRemoteOperationFailureOutcome,
-  resolveSourceControlSyncAfterPull,
-  resolveSourceControlSyncStart,
-  type SourceControlRemoteOperationOutcome
-} from '@yiru/runtime-protocol/model/review'
 import type { StateCreator } from 'zustand'
 import {
   fastForwardRuntimeGit,
@@ -17,6 +11,12 @@ import { publishRendererCommandResult } from '~renderer/runtime/renderer-command
 import { markSyncPushStageError } from '~renderer/source-control/remote-error'
 import type { AppState } from '~renderer/store/types'
 
+import {
+  resolveSourceControlRemoteOperationFailureOutcome,
+  resolveSourceControlSyncAfterPull,
+  resolveSourceControlSyncStart,
+  type SourceControlRemoteOperationOutcome
+} from '../source-control/workflow/operation'
 import type { EditorGitSlice } from './git-store'
 import { applyRemoteOperationFollowUp } from './source-control-operation-follow-up'
 import type { EditorSlice } from './store-contract'

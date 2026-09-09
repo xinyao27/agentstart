@@ -1,4 +1,5 @@
-import type { SetupAgentStartupPolicy, SparsePreset } from '@yiru/runtime-protocol/workbench/types'
+import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
+import type { SetupAgentStartupPolicy } from '@yiru/protocol/worktree/hooks'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretDown as ChevronDown } from '~renderer/icons/hugeicons'
@@ -109,7 +110,7 @@ export function AdvancedSection({
             )}
           >
             {smartNameSelection ? (
-              // Why: when a source (PR/MR/branch) is picked the
+              // Why: when a source (PR/branch) is picked the
               // smart field shows a pill instead of an editable name, so
               // surface the auto-derived workspace name here under Advanced
               // where it can be reviewed/overridden. When the user typed an
@@ -133,9 +134,8 @@ export function AdvancedSection({
             ) : null}
 
             {/* Why: only offer a manual branch name when creating from a
-                typed name or a base branch. When a tracked work item (PR/
-                MR) is the source, the branch is derived from
-                that item — a linked GitHub PR even re-resolves it at submit —
+                typed name or a base branch. When a tracked GitHub PR is the
+                source, the branch is derived from that item and re-resolved at submit,
                 so an override typed here would be silently ignored. */}
             {selectedRepoIsGit &&
             branchesEnabled &&

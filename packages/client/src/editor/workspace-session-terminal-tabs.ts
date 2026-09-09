@@ -1,4 +1,5 @@
-import type { TerminalTab, WorkspaceSessionState } from '@yiru/runtime-protocol/workbench/types'
+import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 
 export function buildSanitizedTabsByWorktree(
   tabsByWorktree: Record<string, TerminalTab[]>

@@ -3,7 +3,7 @@ import {
   type KeybindingOverrides,
   type KeybindingPlatform,
   type TerminalShortcutPolicy
-} from '@yiru/runtime-protocol/workbench/keybindings'
+} from '@yiru/protocol/keybindings'
 import { isFindQueryTooLarge } from '~renderer/search/query-bounds'
 import type { ManagedPane } from '~renderer/terminal-pane/pane-manager/pane-manager'
 

@@ -1,5 +1,5 @@
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 import { translate } from '~renderer/i18n/i18n'
 
 export type RepoHeaderCreateState = {

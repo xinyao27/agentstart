@@ -2,8 +2,8 @@ import {
   buildTerminalQuickCommandInput,
   flattenTerminalQuickCommand,
   isTerminalAgentQuickCommand
-} from '@yiru/runtime-protocol/workbench/terminal/quick-commands'
-import type { TerminalQuickCommand } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
 
 import { recordTerminalUserInputForLeaf } from './terminal-input-activity'
 

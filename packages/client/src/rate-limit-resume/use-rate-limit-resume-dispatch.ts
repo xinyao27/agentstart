@@ -1,4 +1,4 @@
-import type { RateLimitResumeSchedule } from '@yiru/runtime-protocol/workbench/rate-limit-resume/types'
+import type { RateLimitResumeSchedule } from '@yiru/protocol/rate-limit-resume-values'
 import { useEffect } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -22,12 +22,7 @@ function paneIsStillLive(schedule: RateLimitResumeSchedule): boolean {
   return ptyIds.includes(schedule.ptyId)
 }
 
-// Why: Phase 5 slice S5 — this used to be the callback registered on
-// the former preload dispatch callback. That push now arrives as
-// the reverse `shellServices.rateLimitResume.dispatch` RPC call (see
-// `renderer/runtime/shell-services-handler.ts`), which calls this function
-// directly. The outcome (`markFired`/`markFailed`/`markStale`) reports through
-// the same forward oRPC target that owns the schedule.
+// Why: Resume outcomes must return to the same runtime that owns the schedule.
 export async function handleRateLimitResumeDispatchRequest(
   schedule: RateLimitResumeSchedule
 ): Promise<void> {

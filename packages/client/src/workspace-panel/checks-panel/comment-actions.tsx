@@ -1,4 +1,4 @@
-import type { PRComment } from '@yiru/runtime-protocol/workbench/types'
+import type { PRComment } from '@yiru/protocol/hosted-review/review-types'
 import React, { useRef, useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,8 +1,5 @@
-import type {
-  ProviderRateLimits,
-  RateLimitRuntimeTarget
-} from '@yiru/runtime-protocol/workbench/rate-limit-types'
-import type { CodexSystemDefaultIdentity } from '@yiru/runtime-protocol/workbench/types'
+import type { ProviderRateLimits, RateLimitRuntimeTarget } from '@yiru/protocol/account-rate-types'
+import type { CodexSystemDefaultIdentity } from '@yiru/protocol/settings/managed-accounts'
 import { isCodexAuthError } from '~renderer/codex-auth-errors'
 
 type AccountRuntime = {

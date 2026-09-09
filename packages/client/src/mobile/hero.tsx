@@ -5,9 +5,9 @@ import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 
 import type { MobileNetworkInterface } from '../settings/mobile/network-interface-selection'
-import { AndroidLogo, IosBrandIcon } from './brand-icons'
+import { IosBrandIcon } from './brand-icons'
 import { NetworkInterfacePicker } from './network-interface-picker'
-import type { MobilePlatform, MobileReleaseLink } from './release-link'
+import type { MobileReleaseLink } from './release-link'
 import { WindowsFirewallNotice } from './windows-firewall-notice'
 export { HeroIntro } from './hero-intro'
 export { HeroPaired, type PairedDevice } from './hero-paired-devices'
@@ -39,8 +39,6 @@ function getDeviceLabel(): string {
 
 type HeroFlowProps = {
   stepIdx: StepIndex
-  platform: MobilePlatform
-  onPlatformChange: (platform: MobilePlatform) => void
   installQrUrl: string | null
   installCopy: MobileReleaseLink
   onOpenInstallUrl: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -62,8 +60,6 @@ type HeroFlowProps = {
 
 export function HeroFlow({
   stepIdx,
-  platform,
-  onPlatformChange,
   installQrUrl,
   installCopy,
   onOpenInstallUrl,
@@ -137,40 +133,13 @@ export function HeroFlow({
                   'Scan the QR with your phone or open the install link to grab Yiru Mobile.'
                 )}
               </p>
-              <div
-                className={mobilePageStyles.platformTabs}
-                role="group"
-                aria-label={translate(
-                  'auto.components.mobile.MobileHero.ec0607bf66',
-                  'Supported mobile platforms'
-                )}
-              >
-                <MobileHeroButton
-                  type="button"
-                  className={cn(
-                    'border-0 focus-visible:bg-accent',
-                    mobilePageStyles.platformTab,
-                    platform === 'ios' && mobilePageStyles.platformTabActive
-                  )}
-                  aria-pressed={platform === 'ios'}
-                  onClick={() => onPlatformChange('ios')}
+              <div className={mobilePageStyles.platformTabs}>
+                <span
+                  className={cn(mobilePageStyles.platformTab, mobilePageStyles.platformTabActive)}
                 >
                   <IosBrandIcon />
                   {translate('auto.components.mobile.MobileHero.711e6f4b47', 'iOS')}
-                </MobileHeroButton>
-                <MobileHeroButton
-                  type="button"
-                  className={cn(
-                    'border-0 focus-visible:bg-accent',
-                    mobilePageStyles.platformTab,
-                    platform === 'android' && mobilePageStyles.platformTabActive
-                  )}
-                  aria-pressed={platform === 'android'}
-                  onClick={() => onPlatformChange('android')}
-                >
-                  <AndroidLogo />
-                  {translate('auto.components.mobile.MobileHero.ac1eb64952', 'Android')}
-                </MobileHeroButton>
+                </span>
               </div>
               <div className={mobilePageStyles.inlineActions}>
                 <MobileHeroButton

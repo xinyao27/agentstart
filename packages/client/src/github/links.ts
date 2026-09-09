@@ -7,7 +7,7 @@ import {
   type GitHubPullRequestLink,
   parseGitHubPullRequestLink,
   parseGitHubPullRequestNumber
-} from '@yiru/runtime-protocol/model/review'
+} from '@yiru/protocol/hosted-review/links/pull-request'
 
 import { isWorkItemLinkQueryTooLarge } from '../source-control/work-item-query-bounds'
 
@@ -17,7 +17,7 @@ export {
   parseGitHubPullRequestNumber,
   type GitHubPullRequestLink,
   type RepoSlug
-} from '@yiru/runtime-protocol/model/review'
+} from '@yiru/protocol/hosted-review/links/pull-request'
 
 const HTTP_URL_PREFIX_RE = /^https?:\/\//i
 

@@ -1,4 +1,4 @@
-import type { HostedReviewCreationBlockedReason } from '@yiru/runtime-protocol/model/review'
+import type { HostedReviewCreationBlockedReason } from '@yiru/protocol/hosted-review/types'
 import { translate } from '~renderer/i18n/i18n'
 
 type PRRefreshStatus = 'queued' | 'in-flight' | 'paused' | 'error' | 'skipped' | undefined
@@ -9,8 +9,6 @@ type ChecksPanelEmptyStateInput = {
   hostedReviewBlockedReason: HostedReviewCreationBlockedReason | undefined
   hasUpstream: boolean | undefined
   hasCurrentBranch?: boolean
-  reviewLabel?: 'pull request' | 'merge request'
-  reviewShortLabel?: 'PR' | 'MR'
   hasAmbiguousGitHubHostedReview?: boolean
 }
 
@@ -25,8 +23,6 @@ type ChecksPanelEmptyStateCopy = {
 export function getChecksPanelEmptyStateCopy(
   input: ChecksPanelEmptyStateInput
 ): ChecksPanelEmptyStateCopy {
-  const reviewLabel = input.reviewLabel ?? 'pull request'
-  const reviewShortLabel = input.reviewShortLabel ?? 'PR'
   if (input.operationLabel) {
     return {
       title: translate(
@@ -37,7 +33,7 @@ export function getChecksPanelEmptyStateCopy(
       description: translate(
         'auto.components.right.sidebar.checks.panel.empty.state.05e4aec17b',
         '{{value0}} checks will be available after the operation completes',
-        { value0: reviewShortLabel }
+        { value0: 'PR' }
       )
     }
   }
@@ -92,7 +88,7 @@ export function getChecksPanelEmptyStateCopy(
       description: translate(
         'auto.components.right.sidebar.checks.panel.empty.state.f8543140cc',
         'Publish this branch before creating a {{value0}}.',
-        { value0: reviewLabel }
+        { value0: 'pull request' }
       )
     }
   }
@@ -106,7 +102,7 @@ export function getChecksPanelEmptyStateCopy(
       description: translate(
         'auto.components.right.sidebar.checks.panel.empty.state.6ce9d4e069',
         'Push your branch before creating a {{value0}}.',
-        { value0: reviewLabel }
+        { value0: 'pull request' }
       )
     }
   }
@@ -162,12 +158,12 @@ export function getChecksPanelEmptyStateCopy(
         title: translate(
           'auto.components.right.sidebar.checks.panel.empty.state.13e1c7d5ed',
           'No {{value0}} found',
-          { value0: reviewLabel }
+          { value0: 'pull request' }
         ),
         description: translate(
           'auto.components.right.sidebar.checks.panel.empty.state.5b0cfae9a5',
           'Create a {{value0}} to start checks and review.',
-          { value0: reviewLabel }
+          { value0: 'pull request' }
         )
       }
   }

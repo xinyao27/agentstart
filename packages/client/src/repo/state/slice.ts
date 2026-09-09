@@ -1,16 +1,12 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
 import type {
-  FolderWorkspacePathStatus,
-  FolderWorkspacePathStatusRequest
-} from '@yiru/runtime-protocol/workbench/folder-workspace-path-status'
+  ProjectGroup,
+  ProjectGroupImportResult,
+  NestedRepoScanResult
+} from '@yiru/protocol/project/group-model'
 import type {
   Project,
-  Repo,
-  ProjectGroup,
   ProjectHostSetup,
-  FolderWorkspace,
-  ProjectGroupImportResult,
-  NestedRepoScanResult,
   ProjectHostSetupCloneArgs,
   ProjectHostSetupCreateArgs,
   ProjectHostSetupCreateResult,
@@ -20,7 +16,13 @@ import type {
   ProjectHostSetupResult,
   ProjectHostSetupUpdateArgs,
   ProjectHostSetupUpdateResult
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import type {
+  FolderWorkspacePathStatus,
+  FolderWorkspacePathStatusRequest
+} from '@yiru/protocol/workspace/folder-path'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'

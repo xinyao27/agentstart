@@ -1,8 +1,8 @@
-import { isRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
+import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
 import type { StateCreator } from 'zustand'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { closeRuntimeTerminal } from '~renderer/runtime/terminal-inspection'
 import { disposeParkedTerminalWatchersForPtyIds } from '~renderer/runtime/terminal-parked-watcher-registry'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { shutdownBufferCaptures } from '~renderer/runtime/terminal-shutdown-buffer-captures'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 
@@ -114,13 +114,15 @@ export function createTerminalShutdownActions(
           remainingLivePtyIds?: string[]
         }
         try {
-          stopResult = await callRuntimeOrpc(
-            { kind: 'environment', environmentId: runtimeEnvironmentId },
-            (client) => client.terminal.stopExact,
+          stopResult = await (
+            await openRuntimeTerminalClient({
+              kind: 'environment',
+              environmentId: runtimeEnvironmentId
+            })
+          ).stopExact(
             {
               worktree: toRuntimeWorktreeSelector(worktreeId),
-              expectedPtyIds: expectedRuntimePtyIds,
-              keepHistory: keepIdentifiers
+              expectedPtyIds: expectedRuntimePtyIds
             },
             { timeoutMs: 15_000 }
           )
@@ -310,12 +312,14 @@ export function createTerminalShutdownActions(
       }
 
       if (runtimeEnvironmentId && expectedRuntimePtyIds.length === 0) {
-        await callRuntimeOrpc(
-          { kind: 'environment', environmentId: runtimeEnvironmentId },
-          (client) => client.terminal.stop,
-          { worktree: toRuntimeWorktreeSelector(worktreeId) },
-          { timeoutMs: 15_000 }
-        ).catch(() => null)
+        await openRuntimeTerminalClient({
+          kind: 'environment',
+          environmentId: runtimeEnvironmentId
+        })
+          .then((client) =>
+            client.stop(toRuntimeWorktreeSelector(worktreeId), { timeoutMs: 15_000 })
+          )
+          .catch(() => null)
       }
 
       await Promise.allSettled(

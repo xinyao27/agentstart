@@ -1,12 +1,10 @@
+import { evaluateRuntimeCompat } from '@yiru/protocol/runtime-compatibility'
 import {
   MIN_COMPATIBLE_RUNTIME_SERVER_VERSION,
   RUNTIME_PROTOCOL_VERSION
-} from '@yiru/runtime-protocol/protocol-version'
-import {
-  describeRuntimeCompatBlock,
-  evaluateRuntimeCompat
-} from '@yiru/runtime-protocol/runtime-compatibility'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
+} from '@yiru/protocol/runtime-versions'
+import { describeRuntimeCompatBlock } from '~renderer/runtime/compatibility-message'
+import type { RuntimeStatus } from '~renderer/runtime/status/model'
 
 /** Marker on the compat-gate block error. Tagged as a `.code` on a plain Error
  *  (not a subclass) so the gate keeps throwing an `Error` — its other consumer,

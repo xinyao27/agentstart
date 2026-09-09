@@ -1,5 +1,7 @@
-import { getEffectiveProjectGroupManualRank } from '@yiru/runtime-protocol/workbench/project-groups'
-import type { ProjectOrderBy, Repo, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectOrderBy } from '@yiru/protocol/settings/ui-state'
+import type { Worktree } from '@yiru/protocol/worktree/model'
+import { getEffectiveProjectGroupManualRank } from '~renderer/project-catalog/group-order'
 import { getRepoDisplayLabelKey, getRepoDisplayLabelsByPath } from '~renderer/repo/display-labels'
 
 import type { OrderedGroupEntry, WorktreeGroupEntry } from './worktree-list/rows'

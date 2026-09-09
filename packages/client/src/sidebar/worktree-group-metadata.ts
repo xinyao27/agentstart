@@ -1,5 +1,6 @@
-import { UNGROUPED_PROJECT_GROUP_KEY } from '@yiru/runtime-protocol/workbench/project-groups'
-import type { Repo, Worktree, WorktreeLineage } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type React from 'react'
 import { getGitHubPRCacheKey, getLegacyGitHubPRCacheKey } from '~renderer/github/cache-key'
 import { translate } from '~renderer/i18n/i18n'
@@ -9,6 +10,7 @@ import {
   List,
   PushPin as Pin
 } from '~renderer/icons/hugeicons'
+import { UNGROUPED_PROJECT_GROUP_KEY } from '~renderer/project-catalog/group-order'
 import { branchName } from '~renderer/source-control/branch-name'
 import type { AppState } from '~renderer/store/types'
 

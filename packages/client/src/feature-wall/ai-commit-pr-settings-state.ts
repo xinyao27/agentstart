@@ -1,15 +1,15 @@
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   getCommitMessageAgentCapability,
-  isCustomAgentId,
-  type CommitMessageAgentCapability,
-  type CommitMessageAgentChoice,
-  type CommitMessageModelCapability
-} from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
+  type CommitMessageAgentChoice
+} from '@yiru/protocol/source-control/catalog/agents'
 import type {
-  CommitMessageAiSettings,
-  GlobalSettings,
-  TuiAgent
-} from '@yiru/runtime-protocol/workbench/types'
+  CommitMessageAgentCapability,
+  CommitMessageModelCapability
+} from '@yiru/protocol/source-control/catalog/types'
+import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import type { CommitMessageAiSettings } from '@yiru/protocol/source-control/legacy-settings'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 
 export const EMPTY_COMMIT_MESSAGE_AI_SETTINGS: CommitMessageAiSettings = {

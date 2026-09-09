@@ -1,8 +1,4 @@
-import {
-  skillDirectoryName,
-  type DiscoveredSkill,
-  type SkillDiscoveryResult
-} from '@yiru/runtime-protocol/workbench/skills'
+import type { DiscoveredSkill, SkillDiscoveryResult } from '@yiru/protocol'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -12,6 +8,7 @@ import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { INSTALLED_AGENT_SKILLS_CHANGED_EVENT } from '~renderer/runtime/installed-agent-skill-discovery-state'
 import { discoverSkills } from '~renderer/runtime/skill-manage-client'
+import { skillDirectoryName } from '~renderer/skills/installation'
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~renderer/ui/tabs'

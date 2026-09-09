@@ -1,12 +1,9 @@
-import {
-  normalizeRuntimePathForComparison,
-  relativePathInsideRoot
-} from '@yiru/runtime-protocol/model/platform'
+import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
+import { normalizeRuntimePathForComparison, relativePathInsideRoot } from '@yiru/protocol/host/path'
 import type {
   ActiveRightSidebarTab,
-  FsChangedPayload,
   RightSidebarExplorerView
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/settings/ui-state'
 import { useEffect } from 'react'
 import { isWindowVisible } from '~renderer/application-shell/window-visibility-interval'
 import type { OpenFile } from '~renderer/editor/state'

@@ -1,6 +1,7 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
-import type { PRInfo, Repo } from '@yiru/runtime-protocol/workbench/types'
-import type { GitHubPRMergeMethod } from '@yiru/runtime-protocol/workbench/types'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { GitHubPRMergeMethod } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import type { GitHubPRAutoMergeAction } from '~renderer/github/pr-merge-state'
@@ -12,10 +13,6 @@ import {
   setGitHubHostedReviewAutoMerge,
   updateGitHubHostedReviewState
 } from './hosted-review-github-actions'
-import {
-  mergeGitLabHostedReview,
-  updateGitLabHostedReviewState
-} from './hosted-review-gitlab-actions'
 
 export type HostedReviewActionInfo = Pick<
   HostedReviewInfo,
@@ -36,9 +33,6 @@ export function useHostedReviewActions({
   review,
   githubPR,
   repo,
-  isGitLab,
-  shortLabel,
-  reviewLabel,
   defaultMergeMethod,
   autoMergeAction,
   onRefreshReview
@@ -46,9 +40,6 @@ export function useHostedReviewActions({
   review: HostedReviewActionInfo
   githubPR?: PRInfo | null
   repo: Repo
-  isGitLab: boolean
-  shortLabel: string
-  reviewLabel: string
   defaultMergeMethod: GitHubPRMergeMethod
   autoMergeAction: GitHubPRAutoMergeAction | null
   onRefreshReview: () => Promise<void>
@@ -70,18 +61,12 @@ export function useHostedReviewActions({
     setMerging(true)
     setActionError(null)
     try {
-      const result = isGitLab
-        ? await mergeGitLabHostedReview({
-            repo,
-            iid: review.number,
-            method
-          })
-        : await mergeGitHubHostedReview({
-            repo,
-            prNumber: review.number,
-            method,
-            prRepo: githubPR?.prRepo ?? null
-          })
+      const result = await mergeGitHubHostedReview({
+        repo,
+        prNumber: review.number,
+        method,
+        prRepo: githubPR?.prRepo ?? null
+      })
       if (!result.ok) {
         setActionError(result.error)
       } else {
@@ -95,7 +80,7 @@ export function useHostedReviewActions({
   }
 
   const handleAutoMerge = async () => {
-    if (isGitLab || !autoMergeAction) {
+    if (!autoMergeAction) {
       return
     }
     const enabled = autoMergeAction.kind === 'enable'
@@ -128,17 +113,17 @@ export function useHostedReviewActions({
     const isClosing = nextState === 'closed'
     const label = isClosing ? 'Close' : 'Reopen'
     const confirmed = await confirm({
-      title: `${label} ${shortLabel} ${isGitLab ? '!' : '#'}${review.number}?`,
+      title: `${label} PR #${review.number}?`,
       description: isClosing
         ? translate(
             'auto.components.right.sidebar.HostedReviewActions.a3d572a4de',
             'This will close the {{value0}}.',
-            { value0: reviewLabel }
+            { value0: 'pull request' }
           )
         : translate(
             'auto.components.right.sidebar.HostedReviewActions.78f5ff294c',
             'This will reopen the {{value0}}.',
-            { value0: reviewLabel }
+            { value0: 'pull request' }
           ),
       confirmLabel: label,
       confirmVariant: isClosing ? 'destructive' : 'default'
@@ -149,17 +134,11 @@ export function useHostedReviewActions({
     setStateUpdating(nextState)
     setActionError(null)
     try {
-      const result = isGitLab
-        ? await updateGitLabHostedReviewState({
-            repo,
-            iid: review.number,
-            nextState: isClosing ? 'closed' : 'opened'
-          })
-        : await updateGitHubHostedReviewState({
-            repo,
-            prNumber: review.number,
-            nextState
-          })
+      const result = await updateGitHubHostedReviewState({
+        repo,
+        prNumber: review.number,
+        nextState
+      })
       if (!result.ok) {
         setActionError(result.error)
         toast.error(result.error)
@@ -169,19 +148,19 @@ export function useHostedReviewActions({
             ? translate(
                 'auto.components.right.sidebar.HostedReviewActions.fa3ee9a515',
                 '{{value0}} closed',
-                { value0: shortLabel }
+                { value0: 'PR' }
               )
             : translate(
                 'auto.components.right.sidebar.HostedReviewActions.377269db6f',
                 '{{value0}} reopened',
-                { value0: shortLabel }
+                { value0: 'PR' }
               )
         )
         await onRefreshReview()
       }
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : `Failed to ${label.toLowerCase()} ${reviewLabel}`
+        err instanceof Error ? err.message : `Failed to ${label.toLowerCase()} pull request`
       setActionError(message)
       toast.error(message)
     } finally {

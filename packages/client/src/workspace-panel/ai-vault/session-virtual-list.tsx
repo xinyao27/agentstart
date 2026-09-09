@@ -1,15 +1,15 @@
 import { LegendList, type LegendListRenderItemProps } from '@legendapp/list/react'
-import type { AiVaultScope, AiVaultSession } from '@yiru/runtime-protocol/model/agent'
-import type { AgentStatusState } from '@yiru/runtime-protocol/model/agent'
+import type { AgentStatusState } from '@yiru/protocol/agent/status-records'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { LEGEND_LIST_SCROLL_AREA_PROPS } from '~renderer/sidebar/list-scroll-area'
+import type { AiVaultScope } from '~renderer/workspace-panel/ai-vault/session/providers'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
 import type { AiVaultOriginalPaneTarget } from './original-pane'
 import { EmptyState, SessionLoadingState, VaultGroupHeader } from './panel-controls'
 import type { AiVaultResumeStartup } from './resume-command'
 import { canContinueAiVaultSessionInNewSession } from './session-continuation'
-import type { AiVaultSessionGroup } from './session-filters'
 import {
   canOpenAiVaultSessionLogInYiru,
   canUseLocalAiVaultSessionPathActions
@@ -26,6 +26,7 @@ import {
   isAiVaultSessionInCurrentWorktree,
   type AiVaultSessionWorktreeInfo
 } from './session-worktree'
+import type { AiVaultSessionGroup } from './session/filter'
 import {
   buildAiVaultListModel,
   getAiVaultListRowKey,

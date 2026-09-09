@@ -1,4 +1,4 @@
-import type { GitHistoryItem } from '@yiru/runtime-protocol/workbench/git/history'
+import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
 
 import { makeEdge, makeOffPageEdge, type GitGraphRowGap, type LayoutContext } from './layout-path'
 import { GIT_GRAPH_COLORS } from './palette'

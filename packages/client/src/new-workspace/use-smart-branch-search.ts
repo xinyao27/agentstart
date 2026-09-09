@@ -1,5 +1,5 @@
-import { getRepoExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type { BaseRefSearchResult } from '@yiru/runtime-protocol/workbench/types'
+import type { BaseRefSearchResult } from '@yiru/protocol/git/worktree-source'
+import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
 import { useEffect, useState } from 'react'
 import { getRepoOwnerRoutedSettings } from '~renderer/repo/runtime-owner'
 import {

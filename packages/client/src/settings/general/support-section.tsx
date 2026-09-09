@@ -1,4 +1,4 @@
-import { YIRU_GITHUB_STARGAZERS_URL } from '@yiru/runtime-protocol/model/product'
+import { YIRU_GITHUB_STARGAZERS_URL } from '@yiru/protocol/hosted-review/yiru-repository'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'

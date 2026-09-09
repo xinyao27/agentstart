@@ -1,20 +1,19 @@
 import type {
+  BrowserCertificateFailure,
+  BrowserPage,
+  BrowserWorkspace
+} from '@yiru/protocol/workspace/browser-session'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
+
+import type { OpenFile } from '../../editor/state'
+import type { AppState } from '../../store/state'
+import type {
   RuntimeMobileSessionBrowserTab,
   RuntimeMobileSessionFileTab,
   RuntimeMobileSessionMarkdownTab,
   RuntimeMobileSessionTerminalClientTab
-} from '@yiru/runtime-protocol/workbench/runtime-types'
-import type {
-  BrowserCertificateFailure,
-  BrowserPage,
-  BrowserWorkspace,
-  Tab,
-  TerminalLayoutSnapshot,
-  TerminalTab
-} from '@yiru/runtime-protocol/workbench/types'
-
-import type { OpenFile } from '../../editor/state'
-import type { AppState } from '../../store/state'
+} from './session-model'
 
 export type TerminalSurface = RuntimeMobileSessionTerminalClientTab
 export type ReadyTerminalSurface = RuntimeMobileSessionTerminalClientTab & { status: 'ready' }

@@ -1,11 +1,11 @@
-import type { TerminalManagementSession } from '@yiru/runtime-protocol/contract'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import {
   killRuntimeDaemonSession,
-  listRuntimeDaemonSessions
+  listRuntimeDaemonSessions,
+  type RuntimeDaemonSession
 } from '~renderer/runtime/daemon-sessions-client'
 import { useAppStore } from '~renderer/store/state'
 import { activateTabAndFocusPane } from '~renderer/tab-bar/activate-and-focus-pane'
@@ -20,14 +20,12 @@ import { getManageSessionsSearchEntries } from './terminal/search'
 type ConfirmKind = 'killOne'
 
 export function ManageSessionsSection(): React.JSX.Element {
-  const [sessions, setSessions] = useState<TerminalManagementSession[]>([])
+  const [sessions, setSessions] = useState<RuntimeDaemonSession[]>([])
   const [isRefreshing, setIsRefreshing] = useState(true)
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false)
-  const [pendingKillSession, setPendingKillSession] = useState<TerminalManagementSession | null>(
-    null
-  )
+  const [pendingKillSession, setPendingKillSession] = useState<RuntimeDaemonSession | null>(null)
   const [busyKind, setBusyKind] = useState<ConfirmKind | null>(null)
-  const optimisticRollback = useRef<TerminalManagementSession[] | null>(null)
+  const optimisticRollback = useRef<RuntimeDaemonSession[] | null>(null)
   const isMounted = useRef(true)
   const mutationInFlight = useRef(false)
 
@@ -73,7 +71,7 @@ export function ManageSessionsSection(): React.JSX.Element {
     }
   }, [])
 
-  const refresh = useEventCallback(async (): Promise<TerminalManagementSession[]> => {
+  const refresh = useEventCallback(async (): Promise<RuntimeDaemonSession[]> => {
     setIsRefreshing(true)
     try {
       const result = await listRuntimeDaemonSessions()
@@ -131,7 +129,7 @@ export function ManageSessionsSection(): React.JSX.Element {
     }
   })
 
-  const handleKillOne = async (session: TerminalManagementSession) => {
+  const handleKillOne = async (session: RuntimeDaemonSession) => {
     setBusyKind('killOne')
     mutationInFlight.current = true
     try {

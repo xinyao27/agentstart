@@ -1,10 +1,5 @@
-import type {
-  AiVaultAgent,
-  AiVaultGroup,
-  AiVaultScope,
-  AiVaultSort
-} from '@yiru/runtime-protocol/model/agent'
-import type { ExecutionHostScope } from '@yiru/runtime-protocol/model/workspace'
+import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+import type { ExecutionHostScope } from '@yiru/protocol/host/identity'
 import { translate } from '~renderer/i18n/i18n'
 import {
   MagnifyingGlass as Search,
@@ -15,6 +10,11 @@ import { LoadingIndicator } from '~renderer/loading/indicator'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 import { Input } from '~renderer/ui/input'
+import type {
+  AiVaultGroup,
+  AiVaultScope,
+  AiVaultSort
+} from '~renderer/workspace-panel/ai-vault/session/providers'
 
 import {
   RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME,

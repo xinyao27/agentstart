@@ -1,12 +1,15 @@
-import type { AgentTrustInput } from '@yiru/runtime-protocol/contract'
+import type { HostAgentTrustInput } from '@yiru/protocol'
 import { useAppStore } from '~renderer/store/state'
 
-import { callRuntimeOrpc, type RuntimeClientTarget } from './orpc-client'
+import { requireHostRegistryTarget } from './host-registry-target'
 import { getActiveRuntimeTarget } from './rpc-client'
+import type { RuntimeClientTarget } from './runtime-target'
 
 export function markAgentWorkspaceTrusted(
-  input: AgentTrustInput,
+  input: HostAgentTrustInput,
   target: RuntimeClientTarget = getActiveRuntimeTarget(useAppStore.getState().settings)
 ): Promise<void> {
-  return callRuntimeOrpc(target, (client) => client.host.agentTrust.markTrusted, input)
+  return requireHostRegistryTarget(target).then((client) =>
+    client.markAgentTrusted(input, { timeoutMs: 15_000 })
+  )
 }

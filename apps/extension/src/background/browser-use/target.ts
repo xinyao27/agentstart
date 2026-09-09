@@ -39,7 +39,7 @@ export function browserPageId(tabId: number): string {
 }
 
 export async function listBrowserTabs(): Promise<chrome.tabs.Tab[]> {
-  return (await chrome.tabs.query({})).filter(isControllableTab)
+  return (await chrome.tabs.query({})).filter(isControllableBrowserTab)
 }
 
 export async function describeBrowserTab(
@@ -75,7 +75,7 @@ export async function resolveBrowserTab(input: BrowserCommandInput): Promise<chr
   if (typeof explicitPage === 'string' && explicitPage.length > 0) {
     const tabId = parseBrowserPageId(explicitPage)
     const tab = await chrome.tabs.get(tabId).catch(() => null)
-    if (!tab || !isControllableTab(tab)) {
+    if (!tab || !isControllableBrowserTab(tab)) {
       throw new Error(`browser_tab_not_found:${explicitPage}`)
     }
     await rememberBrowserTab(tab)
@@ -83,7 +83,7 @@ export async function resolveBrowserTab(input: BrowserCommandInput): Promise<chr
   }
 
   const active = (await chrome.tabs.query({ active: true, lastFocusedWindow: true })).find(
-    isControllableTab
+    isControllableBrowserTab
   )
   if (active) {
     await rememberBrowserTab(active)
@@ -95,7 +95,7 @@ export async function resolveBrowserTab(input: BrowserCommandInput): Promise<chr
     typeof stored === 'object' && stored !== null ? Reflect.get(stored, LAST_BROWSER_TAB_KEY) : null
   if (typeof storedId === 'number') {
     const remembered = await chrome.tabs.get(storedId).catch(() => null)
-    if (remembered && isControllableTab(remembered)) {
+    if (remembered && isControllableBrowserTab(remembered)) {
       return remembered
     }
   }
@@ -137,7 +137,7 @@ export async function waitForTabComplete(
 }
 
 export async function rememberBrowserTab(tab: chrome.tabs.Tab): Promise<void> {
-  if (tab.id !== undefined && isControllableTab(tab)) {
+  if (tab.id !== undefined && isControllableBrowserTab(tab)) {
     await chrome.storage.session.set({ [LAST_BROWSER_TAB_KEY]: tab.id })
   }
 }
@@ -170,13 +170,13 @@ export function parseBrowserPageId(value: string): number {
   return tabId
 }
 
-function isControllableTab(tab: chrome.tabs.Tab): boolean {
+export function isControllableBrowserTab(tab: chrome.tabs.Tab): boolean {
   const url = tab.url ?? tab.pendingUrl
   if (!url) {
     return false
   }
   try {
-    return url === 'about:blank' || ['file:', 'http:', 'https:'].includes(new URL(url).protocol)
+    return url === 'about:blank' || ['http:', 'https:'].includes(new URL(url).protocol)
   } catch {
     return false
   }

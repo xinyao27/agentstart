@@ -1,4 +1,4 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 
 export const QUICK_OPEN_RESULT_LIMIT = 50
 export const QUICK_OPEN_QUERY_MAX_BYTES = 2 * 1024
@@ -32,7 +32,7 @@ export function isQuickOpenQueryTooLarge(
   query: string,
   maxBytes = QUICK_OPEN_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 export function rankQuickOpenFiles(

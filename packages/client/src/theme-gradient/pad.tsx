@@ -1,10 +1,9 @@
-import { rgbToCss } from '@yiru/runtime-protocol/workbench/theme-gradient/color-space'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type {
   ThemeGradientDot,
   ThemeGradientHarmony,
   ThemeGradientTheme
-} from '@yiru/runtime-protocol/workbench/theme-gradient/theme'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/settings/theme-gradient'
 import type React from 'react'
 import { useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
@@ -13,6 +12,7 @@ import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
+import { rgbToCss } from './color-space'
 import { applyHarmony, colorFromPadPosition } from './pad-geometry'
 
 type ThemeGradientPadProps = {

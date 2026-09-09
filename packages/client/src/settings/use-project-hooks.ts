@@ -1,9 +1,7 @@
-import {
-  getRepoExecutionHostId,
-  parseExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { Repo, YiruHooks } from '@yiru/runtime-protocol/workbench/types'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
+import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
 import { useEffect, useRef, useState } from 'react'
 import { getRepoHostIdentity } from '~renderer/repo/state/host-identity'
 import { checkRuntimeHooks } from '~renderer/runtime/hooks-client'

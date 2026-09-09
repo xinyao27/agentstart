@@ -1,12 +1,12 @@
-import { getExtensionRuntimeClient } from '../runtime/session'
+import { requireArtifactClient } from '~renderer/runtime/artifact-target'
 
 export async function uploadBrowserArtifact(input: {
   blob: Blob
   fileName: string
   projectId: string
 }): Promise<string> {
-  const client = await getExtensionRuntimeClient()
-  const { artifact } = await client.artifact.begin({
+  const client = await requireArtifactClient()
+  const artifact = await client.begin({
     fileName: input.fileName,
     mimeType: input.blob.type || 'application/octet-stream',
     projectId: input.projectId
@@ -17,24 +17,24 @@ export async function uploadBrowserArtifact(input: {
       const bytes = new Uint8Array(
         await input.blob.slice(offset, offset + 384 * 1_024).arrayBuffer()
       )
-      await client.artifact.append({ dataBase64: bytesToBase64(bytes), id: artifact.id, offset })
+      await client.append({ dataBase64: bytesToBase64(bytes), id: artifact.id, offset })
       offset += bytes.byteLength
     }
-    await client.artifact.complete({ id: artifact.id })
+    await client.complete(artifact.id)
     return artifact.id
   } catch (error) {
-    await client.artifact.abort({ id: artifact.id }).catch(() => {})
+    await client.abort(artifact.id).catch(() => {})
     throw error
   }
 }
 
 export async function readBrowserArtifact(id: string): Promise<Blob> {
-  const client = await getExtensionRuntimeClient()
+  const client = await requireArtifactClient()
   const chunks: ArrayBuffer[] = []
   let offset = 0
   let mimeType = 'application/octet-stream'
   while (true) {
-    const page = await client.artifact.read({ id, limit: 384 * 1_024, offset })
+    const page = await client.read({ id, limit: 384 * 1_024, offset })
     const bytes = base64ToBytes(page.dataBase64)
     chunks.push(bytes.buffer)
     mimeType = page.mimeType

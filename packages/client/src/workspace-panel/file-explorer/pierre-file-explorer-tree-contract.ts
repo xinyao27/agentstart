@@ -1,5 +1,5 @@
 import type { ContextMenuOpenContext } from '@pierre/trees'
-import type { GitFileStatus } from '@yiru/runtime-protocol/workbench/types'
+import type { GitFileStatus } from '@yiru/protocol/git/status-types'
 import type React from 'react'
 
 import type { InlineInput } from './row'

@@ -1,9 +1,6 @@
-import type { PreflightStatus } from '@yiru/runtime-protocol/contract'
-import {
-  ONBOARDING_FINAL_STEP,
-  ONBOARDING_FLOW_VERSION
-} from '@yiru/runtime-protocol/workbench/constants'
-import type { OnboardingState } from '@yiru/runtime-protocol/workbench/types'
+import type { PreflightStatusValue as PreflightStatus } from '@yiru/protocol'
+import { ONBOARDING_FINAL_STEP, ONBOARDING_FLOW_VERSION } from '@yiru/protocol/settings/onboarding'
+import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
 
 import { STEPS } from './use-onboarding-flow-types'
 

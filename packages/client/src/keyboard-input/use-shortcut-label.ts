@@ -5,7 +5,7 @@ import {
   isDoubleTapBinding,
   type KeybindingActionId,
   type KeybindingOverrides
-} from '@yiru/runtime-protocol/workbench/keybindings'
+} from '@yiru/protocol/keybindings'
 
 import { useAppStore } from '../store/state'
 import { getShortcutPlatform } from './shortcut-platform'

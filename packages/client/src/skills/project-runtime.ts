@@ -1,7 +1,7 @@
-import type { ProjectExecutionRuntimeResolution } from '@yiru/runtime-protocol/workbench/project-execution-runtime'
-import type { SkillDiscoveryTarget } from '@yiru/runtime-protocol/workbench/skills'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
+import type { SkillDiscoveryTarget } from '~renderer/skills/discovery-target'
 
 export type ProjectAgentSkillRuntime = {
   runtime: 'host' | 'wsl'

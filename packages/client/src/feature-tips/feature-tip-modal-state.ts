@@ -1,12 +1,12 @@
-import type { FeatureInteractionState } from '@yiru/runtime-protocol/workbench/feature-interactions'
+import { isFeatureTipId, type FeatureTipId } from '@yiru/protocol/settings/feature-tips'
+import type { FeatureInteractionState } from '@yiru/protocol/telemetry/interactions/state'
+
 import {
-  FEATURE_TIPS,
+  getFeatureTips,
   getCompletedFeatureTipIds,
   getOrderedUnseenFeatureTips,
-  isFeatureTipId,
-  type FeatureTip,
-  type FeatureTipId
-} from '@yiru/runtime-protocol/workbench/feature-tips'
+  type FeatureTip
+} from './catalog'
 
 export function getFeatureTipForModal(args: {
   cliInstalled: boolean
@@ -16,7 +16,7 @@ export function getFeatureTipForModal(args: {
 }): FeatureTip | null {
   const modalTipId = isFeatureTipId(args.modalData.tipId) ? args.modalData.tipId : null
   if (modalTipId) {
-    return FEATURE_TIPS.find((tip) => tip.id === modalTipId) ?? null
+    return getFeatureTips().find((tip) => tip.id === modalTipId) ?? null
   }
 
   const pendingTips = getOrderedUnseenFeatureTips({

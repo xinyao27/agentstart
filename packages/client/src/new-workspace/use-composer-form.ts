@@ -106,7 +106,6 @@ export function useComposerForm(options: UseComposerStateOptions) {
     eligibleRepos: target.eligibleRepos,
     folderSourceRepos: target.folderSourceRepos,
     isProjectGroupTarget: target.isProjectGroupTarget,
-    linkedGitLabMR: source.linkedGitLabMR,
     linkedPR: source.linkedPR,
     linkedWorkItem: source.linkedWorkItem,
     name: source.name,

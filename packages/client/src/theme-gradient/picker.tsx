@@ -1,8 +1,8 @@
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   createEmptyThemeGradient,
   type ThemeGradientTheme
-} from '@yiru/runtime-protocol/workbench/theme-gradient/theme'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/settings/theme-gradient'
 import type React from 'react'
 
 import { ThemeGradientIntensityControl } from './intensity-control'

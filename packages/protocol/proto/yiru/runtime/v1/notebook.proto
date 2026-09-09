@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service NotebookService {
+  rpc RunPythonCell(NotebookServiceRunPythonCellRequest) returns (NotebookServiceRunPythonCellResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message NotebookServiceRunPythonCellRequest {
+  string code = 1;
+  string file_path = 2;
+  // Why: the legacy surface treats an absent preamble as empty, which is
+  // exactly proto3's zero value, so no presence wrapper is needed.
+  string preamble = 3;
+}
+
+message NotebookServiceRunPythonCellResponse {
+  string stdout = 1;
+  string stderr = 2;
+  // Why: exit_code is null when the process group is killed by a signal, and
+  // error is absent on successful runs.
+  optional int32 exit_code = 3;
+  optional string error = 4;
+}

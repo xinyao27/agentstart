@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 // Create-project flow hook for AddRepoDialog (yiru#763), split from
 // AddRepoCreateStep so the create-state machine stays scoped and testable.
 import { useLayoutEffect, useRef, useState } from 'react'
@@ -15,7 +15,7 @@ import {
 } from '~renderer/project-catalog/refresh'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { extractRuntimeErrorMessage } from '~renderer/runtime/error-message'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireRepoProtocolClient } from '~renderer/runtime/repo-catalog-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
 import { markOnboardingProjectAdded } from '~renderer/sidebar/onboarding-project-checklist'
@@ -103,9 +103,9 @@ export function useCreateRepo(
       const expectedRevision = readProjectCatalogMutationRevision(target)
       const result =
         target.kind === 'environment'
-          ? await callRuntimeOrpc(
-              target,
-              (client) => client.repo.create,
+          ? await (
+              await requireRepoProtocolClient(target)
+            ).create(
               {
                 expectedRevision,
                 parentPath,

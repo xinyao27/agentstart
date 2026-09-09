@@ -1,4 +1,4 @@
-import type { WorkspacePort } from '@yiru/runtime-protocol/workbench/workspace/ports'
+import type { WorkspacePort } from '@yiru/protocol'
 import type { WebLinkMouseEvent } from '~renderer/browser/link-gesture'
 import { translate } from '~renderer/i18n/i18n'
 import {

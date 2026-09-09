@@ -1,6 +1,6 @@
-import type { RuntimeFileReadChunkResult } from '@yiru/runtime-protocol/workbench/runtime-types'
+import type { FileReadChunkResult } from '@yiru/protocol'
 
-import { callRuntimeOrpc } from '../orpc-client'
+import { requireFilesTarget } from '../files-target'
 import { getActiveRuntimeTarget } from '../rpc-client'
 import { toRuntimeWorktreeSelector } from '../worktree-selector'
 import { canReadRelativeRuntimeFile, type RuntimeFileReadArgs } from './context'
@@ -63,10 +63,9 @@ async function readRuntimeBlobChunk(
   worktree: string,
   relativePath: string,
   offset: number
-): Promise<RuntimeFileReadChunkResult> {
-  return callRuntimeOrpc(
-    target,
-    (client) => client.files.readChunk,
+): Promise<FileReadChunkResult> {
+  const client = await requireFilesTarget(target)
+  return client.readChunk(
     { worktree, relativePath, offset, length: FILE_PREVIEW_CHUNK_BYTES },
     { timeoutMs: 60_000 }
   )

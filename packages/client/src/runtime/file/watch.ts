@@ -1,16 +1,11 @@
-import type { FsChangedPayload } from '@yiru/runtime-protocol/workbench/types'
+import type { FileWatchMessage } from '@yiru/protocol'
+import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
 
-import { callRuntimeOrpc, createRuntimeOrpcClient, type RuntimeClientTarget } from '../orpc-client'
+import { requireFilesTarget } from '../files-target'
 import { getActiveRuntimeTarget } from '../rpc-client'
+import type { RuntimeClientTarget } from '../runtime-target'
 import { toRuntimeWorktreeSelector } from '../worktree-selector'
 import type { RuntimeFileOperationArgs } from './context'
-
-type RuntimeFileWatchEvent =
-  | { type: 'starting'; subscriptionId: string }
-  | { type: 'ready'; subscriptionId: string }
-  | { type: 'changed'; worktree: string; events: FsChangedPayload['events'] }
-  | { type: 'error'; message: string }
-  | { type: 'end' }
 
 type RuntimeFileWatchListener = {
   onPayload: (payload: FsChangedPayload) => void
@@ -22,8 +17,7 @@ type SharedRuntimeFileWatch = {
   worktreeId: string
   listeners: Set<RuntimeFileWatchListener>
   start: Promise<void>
-  unsubscribe: (() => void) | null
-  remoteSubscriptionId: string | null
+  cancel: (() => void) | null
   closed: boolean
 }
 
@@ -84,8 +78,7 @@ function createSharedRuntimeFileWatch(
     worktreeId,
     listeners: new Set(),
     start: Promise.resolve(),
-    unsubscribe: null,
-    remoteSubscriptionId: null,
+    cancel: null,
     closed: false
   }
   // Why: editor reloads and Explorer can watch the same remote worktree. Keep
@@ -106,60 +99,42 @@ async function startSharedRuntimeFileWatch(
   shared: SharedRuntimeFileWatch,
   worktreePath: string
 ): Promise<void> {
-  const abort = new AbortController()
-  const connection = await createRuntimeOrpcClient(shared.target, {
-    timeoutMs: 15_000,
-    signal: abort.signal
-  })
-  try {
-    const stream = await connection.client.files.watch(
-      { worktree: toRuntimeWorktreeSelector(shared.worktreeId) },
-      { signal: abort.signal }
-    )
-    shared.unsubscribe = () => {
-      // Why: oRPC encodes its abort frame asynchronously, so the connection must
-      // detach that listener before the signal fires against a closed transport.
-      connection.close()
-      abort.abort()
-    }
-    if (shared.closed || sharedRuntimeFileWatches.get(key) !== shared) {
-      shared.unsubscribe()
-      shared.unsubscribe = null
-      unwatchSharedRuntimeFileWatch(shared)
-      return
-    }
-    void consumeSharedRuntimeFileWatch(key, shared, worktreePath, stream).finally(() => {
-      connection.close()
-      if (sharedRuntimeFileWatches.get(key) === shared && !shared.closed) {
-        sharedRuntimeFileWatches.delete(key)
-        shared.closed = true
-        shared.unsubscribe = null
-      }
-    })
-  } catch (error) {
-    connection.close()
-    throw error
+  const client = await requireFilesTarget(shared.target)
+  const watch = await client.watch(toRuntimeWorktreeSelector(shared.worktreeId))
+  shared.cancel = () => {
+    void watch.cancel()
   }
+  if (shared.closed || sharedRuntimeFileWatches.get(key) !== shared) {
+    shared.cancel()
+    shared.cancel = null
+    return
+  }
+  void consumeSharedRuntimeFileWatch(key, shared, worktreePath, watch.messages).finally(() => {
+    if (sharedRuntimeFileWatches.get(key) === shared && !shared.closed) {
+      sharedRuntimeFileWatches.delete(key)
+      shared.closed = true
+      shared.cancel = null
+    }
+  })
 }
 
 async function consumeSharedRuntimeFileWatch(
   key: string,
   shared: SharedRuntimeFileWatch,
   worktreePath: string,
-  stream: AsyncIterator<RuntimeFileWatchEvent> & AsyncIterable<RuntimeFileWatchEvent>
+  messages: AsyncIterable<FileWatchMessage>
 ): Promise<void> {
   try {
-    for await (const event of stream) {
+    for await (const event of messages) {
       if (event.type === 'starting' || event.type === 'ready') {
-        shared.remoteSubscriptionId = event.subscriptionId
         if (shared.closed) {
-          shared.unsubscribe?.()
-          shared.unsubscribe = null
-          unwatchSharedRuntimeFileWatch(shared)
+          shared.cancel?.()
+          shared.cancel = null
         }
       } else if (event.type === 'changed') {
+        const payload: FsChangedPayload = { worktreePath, events: [...event.events] }
         for (const listener of Array.from(shared.listeners)) {
-          listener.onPayload({ worktreePath, events: event.events })
+          listener.onPayload(payload)
         }
       } else if (event.type === 'error') {
         failSharedRuntimeFileWatch(key, shared, new Error(event.message))
@@ -168,11 +143,8 @@ async function consumeSharedRuntimeFileWatch(
           sharedRuntimeFileWatches.delete(key)
         }
         shared.closed = true
-        const unsubscribe = shared.unsubscribe
-        shared.unsubscribe = null
-        shared.remoteSubscriptionId = null
+        shared.cancel = null
         shared.listeners.clear()
-        unsubscribe?.()
       }
     }
   } catch (error) {
@@ -195,12 +167,11 @@ function failSharedRuntimeFileWatch(
     sharedRuntimeFileWatches.delete(key)
   }
   shared.closed = true
-  shared.remoteSubscriptionId = null
-  const unsubscribe = shared.unsubscribe
-  shared.unsubscribe = null
+  const cancel = shared.cancel
+  shared.cancel = null
   const listeners = Array.from(shared.listeners)
   shared.listeners.clear()
-  unsubscribe?.()
+  cancel?.()
   for (const listener of listeners) {
     listener.onError?.(error)
   }
@@ -212,19 +183,6 @@ function closeSharedRuntimeFileWatch(key: string, shared: SharedRuntimeFileWatch
   }
   shared.closed = true
   sharedRuntimeFileWatches.delete(key)
-  shared.unsubscribe?.()
-  shared.unsubscribe = null
-  unwatchSharedRuntimeFileWatch(shared)
-}
-
-function unwatchSharedRuntimeFileWatch(shared: SharedRuntimeFileWatch): void {
-  if (!shared.remoteSubscriptionId) {
-    return
-  }
-  void callRuntimeOrpc(
-    shared.target,
-    (client) => client.files.unwatch,
-    { subscriptionId: shared.remoteSubscriptionId },
-    { timeoutMs: 5_000 }
-  ).catch(() => {})
+  shared.cancel?.()
+  shared.cancel = null
 }

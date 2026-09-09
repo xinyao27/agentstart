@@ -1,4 +1,4 @@
-import type { UsageProvider } from '@yiru/runtime-protocol/workbench/stats/usage-breakdown'
+import type { UsageProvider } from '@yiru/protocol/stats/usage-breakdown'
 import { translate } from '~renderer/i18n/i18n'
 
 export function providerLabel(provider: UsageProvider): string {

@@ -1,4 +1,4 @@
-import type { SourceControlActionId } from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+import type { SourceControlActionId } from '@yiru/protocol/source-control/ai-actions'
 
 export function getRepositoryLocalCommandsSectionId(repoId: string): string {
   return `repo-${repoId}-local-commands`

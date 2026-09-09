@@ -1,5 +1,5 @@
-import { decodeTerminalMultiplexCreditRecord } from '@yiru/runtime-protocol/terminal-multiplex/flow-records'
-import type { TerminalMultiplexFrame } from '@yiru/runtime-protocol/terminal-multiplex/frame'
+import { decodeTerminalMultiplexCreditRecord } from '@yiru/protocol/terminal-multiplex/flow-records'
+import type { TerminalMultiplexFrame } from '@yiru/protocol/terminal-multiplex/frame'
 
 export function applyRemoteTerminalOutputCredit(
   frame: TerminalMultiplexFrame,

@@ -1,10 +1,14 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 actor RuntimeClient: ConnectionDiagnosticsRepository, HomeRuntime, HostConnectionRuntime,
     TerminalSessionRuntime
 {
     private let hosts: any HostRepository
     let timeout: Duration
+    // Why: AppDependencies retains one RuntimeClient for the process lifetime, so the path
+    // monitor intentionally has the same app-lifetime ownership instead of scene teardown.
     private let revivalMonitor: ConnectionRevivalMonitor
     private let connectionLogStore = RuntimeConnectionLogStore()
     let terminalClientInstanceID = UUID().uuidString.lowercased()
@@ -159,48 +163,215 @@ actor RuntimeClient: ConnectionDiagnosticsRepository, HomeRuntime, HostConnectio
         return credential
     }
 
-    func callRuntime<Input: Encodable & Sendable, Output: Decodable & Sendable>(
-        hostID: String,
-        path: String,
-        input: Input,
-        output: Output.Type
-    ) async throws -> Output {
-        let credential = try await credential(for: hostID)
-        return try await session(for: credential).call(path: path, input: input, output: output)
-    }
-
-    func probeRuntimeStatusForProtocolCompatibility(hostID: String) async throws
+    func protocolStatus(hostID: String) async throws
         -> MobileRuntimeStatusWire
     {
         let credential = try await credential(for: hostID)
-        return try await session(for: credential).probeStatusForProtocolCompatibility()
+        return try await session(for: credential).protocolStatus()
     }
 
-    func subscribeRuntime<Input: Encodable & Sendable, Output: Decodable & Sendable>(
-        hostID: String,
-        path: String,
-        input: Input,
-        output: Output.Type
-    ) async throws -> AsyncThrowingStream<Output, Error> {
+    func supportsCapability(hostID: String, capability: String) async throws -> Bool {
         let credential = try await credential(for: hostID)
-        return try await session(for: credential).subscribe(
-            path: path,
-            input: input,
-            output: output
+        return try await session(for: credential).supportsCapability(capability)
+    }
+
+    func protocolProjectRevision(hostID: String, projectID: String) async throws -> UInt64 {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolProjectRevision(projectID: projectID)
+    }
+
+    func protocolRepoHooks(hostID: String, projectID: String) async throws
+        -> Yiru_Runtime_V1_RepoServiceGetHooksResponse
+    {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolRepoHooks(projectID: projectID)
+    }
+
+    func protocolTerminalList(
+        hostID: String,
+        worktree: String,
+        limit: UInt32,
+        requireFreshPtyLiveness: Bool
+    ) async throws -> Yiru_Runtime_V1_TerminalServiceListResponse {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolTerminalList(
+            worktree: worktree,
+            limit: limit,
+            requireFreshPtyLiveness: requireFreshPtyLiveness
         )
     }
 
-    func subscribeRuntimeWithBinary<Input: Encodable & Sendable, Output: Decodable & Sendable>(
+    func protocolTerminalClose(
         hostID: String,
-        path: String,
-        input: Input,
-        output: Output.Type
-    ) async throws -> RuntimeOrpcBinarySubscription<Output> {
+        terminal: String
+    ) async throws -> Yiru_Runtime_V1_TerminalServiceCloseResponse {
         let credential = try await credential(for: hostID)
-        return try await session(for: credential).subscribeWithBinary(
-            path: path,
-            input: input,
-            output: output
+        return try await session(for: credential).protocolTerminalClose(terminal: terminal)
+    }
+
+    func protocolCreateWorktree(
+        hostID: String,
+        request: Yiru_Runtime_V1_WorktreeServiceCreateRequest
+    ) async throws -> Yiru_Runtime_V1_WorktreeServiceCreateResponse {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolCreateWorktree(request: request)
+    }
+
+    func protocolStatsSummary(
+        hostID: String,
+        range: Yiru_Runtime_V1_StatsUsageRange,
+        refreshUsage: Bool
+    ) async throws -> Yiru_Runtime_V1_GetSummaryResponse {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolStatsSummary(
+            range: range,
+            refreshUsage: refreshUsage
+        )
+    }
+
+    func protocolAgentHistory(
+        hostID: String,
+        limit: UInt32,
+        force: Bool,
+        compact: Bool,
+        scopePaths: [String]
+    ) async throws -> Yiru_Runtime_V1_AiVaultServiceListSessionsResponse {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolAgentHistory(
+            limit: limit,
+            force: force,
+            compact: compact,
+            scopePaths: scopePaths
+        )
+    }
+
+    func protocolInferAgentInterrupt(
+        hostID: String,
+        baseline: TerminalAgentInterruptBaseline
+    ) async throws -> Bool {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolInferAgentInterrupt(
+            paneKey: baseline.paneKey,
+            baselineUpdatedAt: baseline.updatedAt,
+            baselineStateStartedAt: baseline.stateStartedAt,
+            baselinePrompt: baseline.prompt,
+            baselineAgentType: baseline.agentType
+        )
+    }
+
+    func protocolAccounts(hostID: String) async throws -> Yiru_Runtime_V1_AccountsSnapshot {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolAccounts()
+    }
+
+    func protocolSelectAccount(
+        hostID: String,
+        provider: Yiru_Runtime_V1_AccountProvider,
+        accountID: String?
+    ) async throws -> Yiru_Runtime_V1_AccountsServiceSelectResponse {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolSelectAccount(
+            provider: provider,
+            accountID: accountID
+        )
+    }
+
+    func protocolAccountUpdates(hostID: String) async throws
+        -> AsyncThrowingStream<Yiru_Runtime_V1_AccountsSnapshot, Error>
+    {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolAccountUpdates()
+    }
+
+    func protocolTerminalAutoRestoreFit(hostID: String) async throws -> TimeInterval? {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolTerminalAutoRestoreFit()
+    }
+
+    func protocolSetTerminalAutoRestoreFit(
+        hostID: String,
+        milliseconds: TimeInterval?
+    ) async throws -> TimeInterval? {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolSetTerminalAutoRestoreFit(
+            milliseconds: milliseconds
+        )
+    }
+
+    func protocolMissedNotifications(hostID: String, after sequence: Int64) async throws
+        -> [RuntimeNotificationEvent]
+    {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolMissedNotifications(after: sequence)
+    }
+
+    func protocolRegisterPush(
+        hostID: String,
+        registration: NotificationsPushRegistration?
+    ) async throws {
+        let credential = try await credential(for: hostID)
+        try await session(for: credential).protocolRegisterPush(registration: registration)
+    }
+
+    func protocolNotificationUpdates(hostID: String) async throws
+        -> RuntimeNotificationStream
+    {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolNotificationUpdates()
+    }
+
+    func protocolSessionTabsEvents(
+        hostID: String,
+        worktree: String
+    ) async throws -> SessionTabsEventSource {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolSessionTabsEvents(worktree: worktree)
+    }
+
+    func protocolSessionTabsAllEvents(hostID: String) async throws -> SessionTabsAllEventSource {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolSessionTabsAllEvents()
+    }
+
+    func protocolClientEvents(hostID: String) async throws -> ClientEventsEventSource {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolClientEvents()
+    }
+
+    func protocolBrowserScreencast(
+        hostID: String,
+        request: Yiru_Runtime_V1_BrowserScreencastSubscribeRequest
+    ) async throws -> BrowserScreencastEventSource {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolBrowserScreencast(request: request)
+    }
+
+    func protocolClientEventsUnsubscribe(
+        hostID: String,
+        subscriptionID: String
+    ) async throws -> Bool {
+        var request = Yiru_Runtime_V1_ClientEventsServiceUnsubscribeRequest()
+        request.subscriptionID = subscriptionID
+        let response = try await protocolUnary(
+            hostID: hostID,
+            procedure: YiruRuntimeV1ClientEventsServiceMethods.unsubscribe,
+            request: request,
+            response: Yiru_Runtime_V1_ClientEventsServiceUnsubscribeResponse.self
+        )
+        return response.unsubscribed
+    }
+
+    func protocolUnary<Request: SwiftProtobuf.Message, Response: SwiftProtobuf.Message>(
+        hostID: String,
+        procedure: String,
+        request: Request,
+        response: Response.Type
+    ) async throws -> Response {
+        let credential = try await credential(for: hostID)
+        return try await session(for: credential).protocolUnary(
+            procedure: procedure,
+            request: request,
+            response: response
         )
     }
 

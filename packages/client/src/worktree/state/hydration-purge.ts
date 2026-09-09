@@ -1,7 +1,4 @@
-import {
-  folderWorkspaceKey,
-  parseWorkspaceKey
-} from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { folderWorkspaceKey, parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'

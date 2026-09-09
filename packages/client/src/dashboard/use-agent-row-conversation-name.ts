@@ -1,4 +1,4 @@
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import { getAgentRowConversationName } from '~renderer/agent/row-conversation-name'
 import { useAppStore } from '~renderer/store/state'
 import type { AppState } from '~renderer/store/types'

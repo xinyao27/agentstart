@@ -2,8 +2,9 @@ import {
   type ExecutionHostId,
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID
-} from '@yiru/runtime-protocol/model/workspace'
-import type { Project, ProjectHostSetup, Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { getRepoHostIdentity } from '~renderer/repo/state/host-identity'
 import type { AppState } from '~renderer/store/types'
 

@@ -147,7 +147,7 @@ struct SettingsView: View {
         private var debugNavigationSection: some View {
             SettingsSection {
                 SettingsNavigationRow(
-                    title: "UI Lab",
+                    title: "Design System",
                     glyph: .shapes,
                     trailing: "DEV ONLY",
                     action: showDesignSystem

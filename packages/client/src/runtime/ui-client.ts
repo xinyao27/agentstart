@@ -1,62 +1,36 @@
-import type {
-  RuntimeFeatureInteractionId,
-  RuntimePersistedUIState,
-  RuntimeUISubscriptionEvent,
-  UIUpdateInput
-} from '@yiru/runtime-protocol/contract'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { PersistedUIState } from '@yiru/protocol/settings/ui-state'
+import type { FeatureInteractionId } from '@yiru/protocol/telemetry/interactions/catalog'
 
-import { callRuntimeOrpc, createLocalRuntimeOrpcClient } from './orpc-client'
 import { getActiveRuntimeTarget } from './rpc-client'
-import { createRuntimeStreamFanOut } from './stream-fan-out'
+import { requireUiClient } from './ui-target'
 
 type RuntimeEnvironmentSettings =
   | Pick<GlobalSettings, 'activeRuntimeEnvironmentId'>
   | null
   | undefined
 
-const uiEvents = createRuntimeStreamFanOut({
-  resolveClient: async () => (await createLocalRuntimeOrpcClient()).client,
-  open: (client, signal) => client.ui.events.subscribe(undefined, { signal })
-})
-
-export function subscribeRuntimeUIChanges(
-  listener: (ui: RuntimePersistedUIState) => void
-): () => void {
-  return uiEvents.subscribe((event: RuntimeUISubscriptionEvent) => {
-    if (event.type !== 'changed') {
-      return
-    }
-    void getRuntimeUIState(null).then(listener).catch(console.error)
-  })
-}
-
 export async function getRuntimeUIState(
   settings: RuntimeEnvironmentSettings
-): Promise<RuntimePersistedUIState> {
-  const result = await callRuntimeOrpc(
-    getActiveRuntimeTarget(settings),
-    (client) => client.ui.get,
-    undefined
-  )
-  return result.ui
+): Promise<PersistedUIState> {
+  // Why: the persisted UI document is open-ended JSON on both sides; the
+  // renderer's closed projection reads only keys it knows.
+  const document = await (await requireUiClient(getActiveRuntimeTarget(settings))).get()
+  return document as PersistedUIState
 }
 
 export async function setRuntimeUIState(
   settings: RuntimeEnvironmentSettings,
-  updates: UIUpdateInput
+  updates: Partial<PersistedUIState>
 ): Promise<void> {
-  await callRuntimeOrpc(getActiveRuntimeTarget(settings), (client) => client.ui.set, updates)
+  await (await requireUiClient(getActiveRuntimeTarget(settings))).set({ ...updates })
 }
 
 export async function recordRuntimeUIFeatureInteraction(
   settings: RuntimeEnvironmentSettings,
-  id: RuntimeFeatureInteractionId
-): Promise<RuntimePersistedUIState> {
-  const result = await callRuntimeOrpc(
-    getActiveRuntimeTarget(settings),
-    (client) => client.ui.recordFeatureInteraction,
-    id
-  )
-  return result.ui
+  id: FeatureInteractionId
+): Promise<PersistedUIState> {
+  const client = await requireUiClient(getActiveRuntimeTarget(settings))
+  const document = await client.recordFeatureInteraction(id)
+  return document as PersistedUIState
 }

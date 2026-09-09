@@ -1,5 +1,5 @@
-import type { ExecutionHostKind } from '@yiru/runtime-protocol/model/workspace'
-import type { RuntimeCompatVerdict } from '@yiru/runtime-protocol/runtime-compatibility'
+import type { ExecutionHostKind } from '@yiru/protocol/host/identity'
+import type { RuntimeCompatVerdict } from '@yiru/protocol/runtime-compatibility'
 import type { ExecutionHostHealth } from '~renderer/execution-host-registry'
 
 // Why: the host-header dropdown shows different lifecycle actions per host kind.

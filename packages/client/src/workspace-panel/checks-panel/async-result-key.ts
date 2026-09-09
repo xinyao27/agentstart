@@ -1,4 +1,4 @@
-import type { GitHubOwnerRepo } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubOwnerRepo } from '@yiru/protocol/hosted-review/review-types'
 
 function normalizedPRRepoIdentity(prRepo?: GitHubOwnerRepo | null): string {
   if (!prRepo) {

@@ -1,5 +1,6 @@
-import { normalizeDisabledTuiAgents } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { GlobalSettings, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { normalizeDisabledTuiAgents } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 
 import type {

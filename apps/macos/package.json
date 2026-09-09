@@ -1,0 +1,14 @@
+{
+  "name": "@yiru/macos",
+  "version": "0.0.36",
+  "private": true,
+  "description": "Native macOS menu bar host for the Yiru daemon",
+  "scripts": {
+    "build": "vp run --filter '{.}^...' build && swift build -c release && vp run @yiru/workspace#package:macos",
+    "typecheck": "node -e \"if(process.platform==='darwin'){process.exit(require('node:child_process').spawnSync('swift',['build'],{stdio:'inherit'}).status??1)}else{console.log('Skipping macOS-only Swift build on '+process.platform)}\"",
+    "dev": "vp run build && open dist/Yiru.app"
+  },
+  "dependencies": {
+    "@yiru/daemon": "workspace:*"
+  }
+}

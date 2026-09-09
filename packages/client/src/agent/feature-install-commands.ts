@@ -1,4 +1,4 @@
-import { YIRU_GITHUB_REPOSITORY_URL } from '@yiru/runtime-protocol/model/product'
+import { YIRU_GITHUB_REPOSITORY_URL } from '@yiru/protocol/hosted-review/yiru-repository'
 
 export const YIRU_SKILLS_REPOSITORY_URL = YIRU_GITHUB_REPOSITORY_URL
 

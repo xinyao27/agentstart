@@ -1,11 +1,8 @@
-import {
-  isTerminalLeafId,
-  type TerminalLeafId
-} from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { isTerminalLeafId, type TerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/session'
 import { mintStablePaneId } from '~renderer/terminal-pane/pane-manager/mint-stable-pane-id'
 
 const EMPTY_TERMINAL_LAYOUT: TerminalLayoutSnapshot = {

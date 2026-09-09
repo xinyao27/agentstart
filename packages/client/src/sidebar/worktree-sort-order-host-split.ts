@@ -1,7 +1,4 @@
-import {
-  LOCAL_EXECUTION_HOST_ID,
-  toRuntimeExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+import { LOCAL_EXECUTION_HOST_ID, toRuntimeExecutionHostId } from '@yiru/protocol/host/identity'
 import {
   getRuntimeEnvironmentIdForWorktree,
   type WorktreeRuntimeOwnerState

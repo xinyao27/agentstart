@@ -1,5 +1,6 @@
-import type { WorkspaceKey, WorkspaceSessionState } from '@yiru/runtime-protocol/workbench/types'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import type { WorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
 
 export type WorkspaceSessionHydrationOptions = {
   additionalValidWorkspaceKeys?: readonly WorkspaceKey[]

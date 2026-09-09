@@ -1,10 +1,10 @@
-import type { ShellHtmlToPdfInput, ShellHtmlToPdfResult } from '@yiru/runtime-protocol/contract'
+import type { PdfExportInput, PdfExportResult } from '@yiru/client/pdf-export'
 
 import { requestBrowserPermissions } from '../browser/permission'
 
 const PDF_EXPORT_STORAGE_PREFIX = 'pdfExport:'
 
-export async function exportHtmlToPdf(input: ShellHtmlToPdfInput): Promise<ShellHtmlToPdfResult> {
+export async function exportHtmlToPdf(input: PdfExportInput): Promise<PdfExportResult> {
   if (!input.html.trim()) {
     return { error: 'No content to export', success: false }
   }
@@ -23,7 +23,7 @@ export async function exportHtmlToPdf(input: ShellHtmlToPdfInput): Promise<Shell
   }
 }
 
-function readExportResult(response: unknown): ShellHtmlToPdfResult {
+function readExportResult(response: unknown): PdfExportResult {
   if (typeof response !== 'object' || response === null) {
     return { error: 'PDF export returned no result', success: false }
   }

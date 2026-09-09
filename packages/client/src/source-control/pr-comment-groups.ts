@@ -1,4 +1,4 @@
-import type { PRComment } from '@yiru/runtime-protocol/workbench/types'
+import type { PRComment } from '@yiru/protocol/hosted-review/review-types'
 
 export type PRCommentGroup =
   | { kind: 'standalone'; comment: PRComment }

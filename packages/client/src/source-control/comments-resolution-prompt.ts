@@ -1,7 +1,5 @@
-import type { PRComment } from '@yiru/runtime-protocol/workbench/types'
+import type { PRComment } from '@yiru/protocol/hosted-review/review-types'
 import type { PRCommentGroup } from '~renderer/source-control/pr-comment-groups'
-
-export type PRCommentsResolutionReviewKind = 'PR' | 'MR'
 
 type SerializablePRComment = {
   id: number
@@ -99,14 +97,12 @@ function serializeGroup(group: PRCommentGroup): SerializablePRCommentGroup {
 }
 
 export function buildPRCommentsResolutionPrompt({
-  reviewKind,
   reviewNumber,
   reviewTitle,
   reviewUrl,
   groups,
   worktreePath
 }: {
-  reviewKind: PRCommentsResolutionReviewKind
   reviewNumber: number
   reviewTitle: string
   reviewUrl: string
@@ -117,10 +113,10 @@ export function buildPRCommentsResolutionPrompt({
     .map(serializeThread)
     .filter((thread): thread is SerializablePRCommentThread => thread !== null)
   const selectedGroups = groups.map(serializeGroup)
-  const reviewLabel = `${reviewKind} ${reviewKind === 'MR' ? '!' : '#'}${reviewNumber}`
+  const reviewLabel = `PR #${reviewNumber}`
   const payload = {
     review: {
-      kind: reviewKind,
+      kind: 'PR',
       number: reviewNumber,
       title: reviewTitle,
       url: reviewUrl,

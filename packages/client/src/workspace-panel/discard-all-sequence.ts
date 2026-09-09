@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 
 export type DiscardAllArea = 'staged' | 'unstaged' | 'untracked'
 

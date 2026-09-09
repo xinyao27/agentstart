@@ -1,4 +1,4 @@
-import type { PRCheckRunDetails } from '@yiru/runtime-protocol/workbench/types'
+import type { PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
 import { toast } from 'sonner'
 import { startFixChecksAgent } from '~renderer/editor/fix-checks-agent-launch'
 import { translate } from '~renderer/i18n/i18n'
@@ -17,7 +17,6 @@ import { clearPRCommentsListSelection } from '../pr-comments-list-selection'
 import { buildResolvePullRequestConflictsPrompt } from '../source-control'
 import type { useChecksPanelCommentActionsState } from './comment-actions-controller'
 import type { ChecksAgentComposerState } from './controller-types'
-import type { ChecksPanelReview } from './review'
 
 export function useChecksPanelAgentActions(context: useChecksPanelCommentActionsState) {
   const {
@@ -30,7 +29,6 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     commentsRef,
     commentsSelectionClearTokenRef,
     fetchComments,
-    fetchGitLabDetails,
     fetchPRCheckDetails,
     handleResolve,
     isCurrentAsyncResult,
@@ -61,7 +59,6 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
         'Review and edit the full command input before starting an agent.'
       ),
       prompt: buildResolvePullRequestConflictsPrompt({
-        reviewKind: activeConflictReview.provider === 'gitlab' ? 'MR' : 'PR',
         baseRef: activeConflictReview.conflictSummary?.baseRef,
         entries: conflictFiles.map((path) => ({ path })),
         worktreePath: activeWorktreePath ?? null
@@ -97,14 +94,13 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
       title: translate(
         'auto.components.right.sidebar.ChecksPanel.d00ebdc402',
         'Resolve {{value0}} Comments With AI',
-        { value0: activeReview.provider === 'gitlab' ? 'MR' : 'PR' }
+        { value0: 'PR' }
       ),
       description: translate(
         'auto.components.right.sidebar.ChecksPanel.ed3f79c031',
         'Review the prompt before starting an agent. Selected threads are marked resolved after launch.'
       ),
       prompt: buildPRCommentsResolutionPrompt({
-        reviewKind: activeReview.provider === 'gitlab' ? 'MR' : 'PR',
         reviewNumber: activeReview.number,
         reviewTitle: activeReview.title,
         reviewUrl: activeReview.url,
@@ -130,13 +126,7 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     })
   }
 
-  const refreshCommentsAfterBulkResolve = async (
-    provider: ChecksPanelReview['provider']
-  ): Promise<void> => {
-    if (provider === 'gitlab') {
-      await fetchGitLabDetails({ commitAsCurrent: true })
-      return
-    }
+  const refreshCommentsAfterBulkResolve = async (): Promise<void> => {
     await fetchComments({ force: true })
   }
 
@@ -182,7 +172,7 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     }
 
     if (asyncResultKeyRef.current === resolution.reviewContextKey) {
-      await refreshCommentsAfterBulkResolve(resolution.provider)
+      await refreshCommentsAfterBulkResolve()
     }
 
     if (failed > 0) {
@@ -228,7 +218,7 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     setIsFixingChecksWithAI(true)
     try {
       const checkRunDetailsByCheckKey: Record<string, PRCheckRunDetails> = {}
-      if (activeReview.provider !== 'gitlab' && repo) {
+      if (repo) {
         await Promise.all(
           broken.slice(0, 5).map(async (check, index) => {
             if (!check.checkRunId && !check.workflowRunId && !check.url) {
@@ -259,7 +249,6 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
         return
       }
       const basePrompt = buildFixBrokenChecksPrompt({
-        reviewKind: activeReview.provider === 'gitlab' ? 'MR' : 'PR',
         reviewNumber: activeReview.number,
         reviewTitle: activeReview.title,
         reviewUrl: activeReview.url,

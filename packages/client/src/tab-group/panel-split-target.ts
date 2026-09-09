@@ -1,5 +1,5 @@
 import type { DragEndEvent, DragMoveEvent, DragOverEvent } from '@dnd-kit/core'
-import type { TabGroup, TabGroupLayoutNode } from '@yiru/runtime-protocol/workbench/types'
+import type { TabGroup, TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
 import { isPaneColumnSplitDropNoOp } from '~renderer/tab-bar/state/split-drop-no-op'
 
 import {

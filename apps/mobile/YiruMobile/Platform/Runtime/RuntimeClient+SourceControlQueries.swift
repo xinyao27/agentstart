@@ -1,4 +1,6 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient {
     func sourceBranchCompare(
@@ -6,33 +8,26 @@ extension RuntimeClient {
         worktreeID: String,
         baseRef: String
     ) async throws -> SourceBranchComparison {
-        let result: MobileGitBranchCompareResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHistoryServiceBranchCompareRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.baseRef = baseRef
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileSourceControlWireContract.branchComparePath,
-            input: MobileGitBranchCompareRequestWire(
-                worktree: sourceWorktreeID(worktreeID),
-                baseRef: baseRef
-            ),
-            output: MobileGitBranchCompareResultWire.self
+            procedure: YiruRuntimeV1GitHistoryServiceMethods.branchCompare,
+            request: request,
+            response: Yiru_Runtime_V1_GitHistoryServiceBranchCompareResponse.self
         )
+        let summary = response.compare.summary
         return SourceBranchComparison(
-            baseRef: result.summary.baseRef,
-            baseOID: result.summary.baseOid,
-            headOID: result.summary.headOid,
-            mergeBase: result.summary.mergeBase,
-            changedFiles: result.summary.changedFiles,
-            commitsAhead: result.summary.commitsAhead,
-            status: result.summary.status,
-            errorMessage: result.summary.errorMessage,
-            entries: result.entries.map {
-                SourceBranchFile(
-                    path: $0.path,
-                    status: SourceFileStatus(rawValue: $0.status.rawValue) ?? .modified,
-                    oldPath: $0.oldPath,
-                    added: $0.added,
-                    removed: $0.removed
-                )
-            }
+            baseRef: summary.baseRef,
+            baseOID: summary.hasBaseOid ? summary.baseOid : nil,
+            headOID: summary.hasHeadOid ? summary.headOid : nil,
+            mergeBase: summary.hasMergeBase ? summary.mergeBase : nil,
+            changedFiles: Int(summary.changedFiles),
+            commitsAhead: summary.hasCommitsAhead ? Int(summary.commitsAhead) : nil,
+            status: sourceCompareStatus(summary.status),
+            errorMessage: summary.hasErrorMessage ? summary.errorMessage : nil,
+            entries: response.compare.entries.map(sourceBranchFile)
         )
     }
 
@@ -45,58 +40,51 @@ extension RuntimeClient {
         guard let headOID = comparison.headOID, let mergeBase = comparison.mergeBase else {
             throw SourceControlRepositoryError.unavailableBranchDiff
         }
-        let wire: MobileGitDiffResultWire = try await callRuntime(
-            hostID: hostID,
-            path: MobileSourceControlWireContract.branchDiffPath,
-            input: MobileGitBranchDiffRequestWire(
-                worktree: sourceWorktreeID(worktreeID),
-                filePath: entry.path,
-                compare: MobileGitBranchDiffCompareWire(
-                    baseRef: comparison.baseRef,
-                    baseOid: comparison.baseOID,
-                    headOid: headOID,
-                    mergeBase: mergeBase
-                ),
-                oldPath: entry.oldPath
-            ),
-            output: MobileGitDiffResultWire.self
-        )
-        switch wire.kind {
-        case .text:
-            let diff = WorkspaceDiffBuilder.build(
-                originalContent: wire.originalContent,
-                modifiedContent: wire.modifiedContent
-            )
-            return .diff(lines: diff.lines, isTruncated: diff.isTruncated)
-        case .binary:
-            guard wire.isImage == true else { throw WorkspaceContentError.unsupportedBinary }
-            let encoded = wire.modifiedContent.isEmpty ? wire.originalContent : wire.modifiedContent
-            guard let data = Data(base64Encoded: encoded) else {
-                throw WorkspaceContentError.invalidImage
-            }
-            return .image(data: data, mimeType: wire.mimeType)
+        var request = Yiru_Runtime_V1_GitHistoryServiceBranchDiffRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.filePath = entry.path
+        if let oldPath = entry.oldPath {
+            request.oldPath = oldPath
         }
+        request.mergeBase = mergeBase
+        request.headOid = headOID
+        let response = try await protocolUnary(
+            hostID: hostID,
+            procedure: YiruRuntimeV1GitHistoryServiceMethods.branchDiff,
+            request: request,
+            response: Yiru_Runtime_V1_GitHistoryServiceBranchDiffResponse.self
+        )
+        return try sourceFileDocument(response.diff)
     }
 
     func generateSourceCommitMessage(for hostID: String, worktreeID: String) async throws -> String
     {
-        let result: MobileGitGenerateCommitMessageResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitGenerationServiceGenerateCommitMessageRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileSourceControlWireContract.generateCommitMessagePath,
-            input: sourceWorktreeRequest(worktreeID),
-            output: MobileGitGenerateCommitMessageResultWire.self
+            procedure: YiruRuntimeV1GitGenerationServiceMethods.generateCommitMessage,
+            request: request,
+            response: Yiru_Runtime_V1_GitGenerationServiceGenerateCommitMessageResponse.self
         )
-        guard result.success, let message = result.message, !message.isEmpty else {
-            throw SourceControlRepositoryError.rejectedGeneration(result.error)
+        let message = response.hasMessage ? response.message : nil
+        guard response.success, let message, !message.isEmpty else {
+            throw SourceControlRepositoryError.rejectedGeneration(
+                response.hasError ? response.error : nil
+            )
         }
         return message
     }
 
     func cancelSourceCommitMessage(for hostID: String, worktreeID: String) async throws {
-        try await sourceWorktreeMutation(
+        var request = Yiru_Runtime_V1_GitGenerationServiceCancelGenerateCommitMessageRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        try await sourceMutation(
             hostID,
-            worktreeID,
-            MobileSourceControlWireContract.cancelGenerateCommitMessagePath
+            procedure: YiruRuntimeV1GitGenerationServiceMethods.cancelGenerateCommitMessage,
+            request: request,
+            response: Yiru_Runtime_V1_GitGenerationServiceCancelGenerateCommitMessageResponse.self,
+            isOK: { $0.ok }
         )
     }
 
@@ -105,24 +93,25 @@ extension RuntimeClient {
         worktreeID: String,
         limit: Int
     ) async throws -> [SourceCommit] {
-        let result: MobileGitHistoryResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHistoryServiceHistoryRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.limit = UInt32(limit)
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileSourceControlWireContract.historyPath,
-            input: MobileGitHistoryRequestWire(
-                worktree: sourceWorktreeID(worktreeID),
-                limit: limit
-            ),
-            output: MobileGitHistoryResultWire.self
+            procedure: YiruRuntimeV1GitHistoryServiceMethods.history,
+            request: request,
+            response: Yiru_Runtime_V1_GitHistoryServiceHistoryResponse.self
         )
-        return result.items.map { item in
+        return response.items.map { item in
             SourceCommit(
                 id: item.id,
                 parentID: item.parentIds.first,
-                displayID: item.displayId ?? String(item.id.prefix(7)),
+                displayID: item.displayID.isEmpty ? String(item.id.prefix(7)) : item.displayID,
                 subject: item.subject.isEmpty
                     ? String(localized: "(no commit message)") : item.subject,
-                author: item.author ?? "",
-                timestamp: item.timestamp.map(Date.init(timeIntervalSince1970:))
+                author: item.hasAuthor ? item.author : "",
+                timestamp: item.hasTimestampMs
+                    ? Date(timeIntervalSince1970: TimeInterval(item.timestampMs) / 1_000) : nil
             )
         }
     }
@@ -132,24 +121,38 @@ extension RuntimeClient {
         worktreeID: String,
         commitID: String
     ) async throws -> [SourceCommitFile] {
-        let result: MobileGitCommitCompareResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHistoryServiceCommitCompareRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.commitID = commitID
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileSourceControlWireContract.commitComparePath,
-            input: MobileGitCommitCompareRequestWire(
-                worktree: sourceWorktreeID(worktreeID),
-                commitId: commitID
-            ),
-            output: MobileGitCommitCompareResultWire.self
+            procedure: YiruRuntimeV1GitHistoryServiceMethods.commitCompare,
+            request: request,
+            response: Yiru_Runtime_V1_GitHistoryServiceCommitCompareResponse.self
         )
-        guard result.summary.status == "ready" else { return [] }
-        return result.entries.map { entry in
-            SourceCommitFile(
-                path: entry.path,
-                status: SourceFileStatus(rawValue: entry.status.rawValue) ?? .modified,
-                oldPath: entry.oldPath,
-                added: entry.added,
-                removed: entry.removed
-            )
+        guard sourceCompareStatus(response.compare.summary.status) == "ready" else { return [] }
+        return response.compare.entries.map(sourceCommitFile)
+    }
+}
+
+nonisolated private func sourceFileDocument(_ diff: Yiru_Runtime_V1_GitDiffResult) throws
+    -> WorkspaceFileDocument
+{
+    switch diff.kind {
+    case .text:
+        let built = WorkspaceDiffBuilder.build(
+            originalContent: diff.originalContent,
+            modifiedContent: diff.modifiedContent
+        )
+        return .diff(lines: built.lines, isTruncated: built.isTruncated)
+    case .binary:
+        guard diff.isImage else { throw WorkspaceContentError.unsupportedBinary }
+        let encoded = diff.modifiedContent.isEmpty ? diff.originalContent : diff.modifiedContent
+        guard let data = Data(base64Encoded: encoded) else {
+            throw WorkspaceContentError.invalidImage
         }
+        return .image(data: data, mimeType: diff.hasMimeType ? diff.mimeType : nil)
+    case .unspecified, .UNRECOGNIZED:
+        throw WorkspaceContentError.unsupportedBinary
     }
 }

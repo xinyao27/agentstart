@@ -1,8 +1,8 @@
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
 import {
   projectHostSetupProjectionFromRepos,
   type ProjectHostSetupProjection
-} from '@yiru/runtime-protocol/workbench/project-host-setup-projection'
-import type { Project, ProjectHostSetup } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/project/setup-projection'
 
 import type { AppState } from '../store/types'
 import { normalizeHydratedProjectHostSetupProjection } from './host-setup-selector-normalization'
@@ -27,7 +27,7 @@ function getCachedProjectHostSetupProjection(repos: AppState['repos']): ProjectH
     return cachedProjection
   }
 
-  const projection = projectHostSetupProjectionFromRepos(repos)
+  const projection = projectHostSetupProjectionFromRepos(repos, Date.now())
   projectHostSetupProjectionCache.set(repos, projection)
   return projection
 }

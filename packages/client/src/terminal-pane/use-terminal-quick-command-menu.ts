@@ -1,13 +1,13 @@
-import { getRepoIdFromWorktreeId } from '@yiru/runtime-protocol/model/workspace'
 import {
   getTerminalQuickCommandScope,
   isTerminalQuickCommandComplete,
   terminalQuickCommandMatchesRepo
-} from '@yiru/runtime-protocol/workbench/terminal/quick-commands'
+} from '@yiru/protocol/terminal/quick-commands'
 import type {
   TerminalQuickCommand,
   TerminalQuickCommandScope
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/terminal/quick-commands'
+import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
 import { useState } from 'react'
 
 import { translate } from '../i18n/i18n'

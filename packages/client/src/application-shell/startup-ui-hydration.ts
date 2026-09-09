@@ -1,11 +1,11 @@
+import { DEFAULT_WORKSPACE_PANEL_TITLEBAR_PINNED_IDS } from '@yiru/protocol/settings/panel-titlebar-pins'
+import { DEFAULT_STATUS_BAR_ITEMS } from '@yiru/protocol/settings/status-bar'
+import type { PersistedUIState } from '@yiru/protocol/settings/ui-state'
 import {
   DEFAULT_HIDE_SLEEPING_WORKSPACES,
-  DEFAULT_SHOW_SLEEPING_WORKSPACES,
-  DEFAULT_STATUS_BAR_ITEMS,
-  DEFAULT_WORKSPACE_PANEL_TITLEBAR_PINNED_IDS,
-  DEFAULT_WORKTREE_CARD_PROPERTIES
-} from '@yiru/runtime-protocol/workbench/constants'
-import type { PersistedUIState } from '@yiru/runtime-protocol/workbench/types'
+  DEFAULT_SHOW_SLEEPING_WORKSPACES
+} from '@yiru/protocol/settings/workspace-preferences'
+import { DEFAULT_WORKTREE_CARD_PROPERTIES } from '@yiru/protocol/settings/worktree-card-properties'
 
 export function hydratePersistedUIAfterStartupRead({
   persistedUI,

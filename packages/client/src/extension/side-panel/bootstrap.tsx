@@ -25,7 +25,6 @@ import { openCommandPalette } from '../command-palette/open'
 import { CommandPalette } from '../command-palette/palette'
 import { ConsoleSensorBridge } from '../context/console-bridge'
 import { getExtensionHostNavigation } from '../navigation'
-import { OperationProgressBridge } from '../operation-progress/bridge'
 import { ProjectGroupCatalogBridge } from '../project-group-catalog'
 import { DaemonCommandBridge } from '../runtime/command-bridge'
 import { ConnectionStatus } from '../runtime/connection-status'
@@ -119,7 +118,6 @@ function SidePanelBoundary(): React.JSX.Element {
         <AgentPresence />
         <ConsoleSensorBridge />
         <DaemonCommandBridge />
-        <OperationProgressBridge />
         <WorkspaceEventBridge />
         <WorkspacePortClaimsBridge />
         <CommandPalette />

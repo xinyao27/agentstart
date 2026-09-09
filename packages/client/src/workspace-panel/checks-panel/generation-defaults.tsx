@@ -1,11 +1,11 @@
-import { getCommitMessageModelDiscoveryHostKeyForScope } from '@yiru/runtime-protocol/workbench/commit-message/host-key'
+import { getCommitMessageModelDiscoveryHostKeyForScope } from '@yiru/protocol/source-control/discovery-host'
 import {
-  DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS,
   resolveSourceControlAiEnabled,
-  resolveSourceControlAiForOperation,
   resolveSourceControlAiPrCreationDefaults
-} from '@yiru/runtime-protocol/workbench/source-control/ai'
+} from '@yiru/protocol/source-control/resolution'
+import { DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS } from '@yiru/protocol/source-control/settings'
 import { getRuntimeGitScope } from '~renderer/runtime/git-client'
+import { resolveSourceControlAiForOperation } from '~renderer/source-control/ai/resolution'
 
 import type { useChecksPanelReviewContextState } from './review-context'
 

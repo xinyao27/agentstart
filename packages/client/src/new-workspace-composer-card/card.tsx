@@ -1,11 +1,8 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type {
-  GitHubWorkItem,
-  GitLabWorkItem,
-  SetupAgentStartupPolicy,
-  SparsePreset,
-  TuiAgent
-} from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
+import type { SetupAgentStartupPolicy } from '@yiru/protocol/worktree/hooks'
 import React from 'react'
 import { useContextualTour } from '~renderer/contextual-tours/use-contextual-tour'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'
@@ -61,7 +58,6 @@ type NewWorkspaceComposerCardProps = {
   branchNameOverride: string | undefined
   onBranchNameOverrideChange: (value: string | undefined) => void
   onSmartGitHubItemSelect: (item: GitHubWorkItem) => void
-  onSmartGitLabItemSelect: (item: GitLabWorkItem) => void
   onSmartBranchSelect: (refName: string, localBranchName: string) => void
   onSmartNameModeChange?: (mode: SmartNameMode) => void
   smartNameSelection: SmartWorkspaceNameSelection | null
@@ -141,7 +137,6 @@ export function NewWorkspaceComposerCard({
   branchNameOverride,
   onBranchNameOverrideChange,
   onSmartGitHubItemSelect,
-  onSmartGitLabItemSelect,
   onSmartBranchSelect,
   onSmartNameModeChange,
   smartNameSelection,
@@ -277,7 +272,6 @@ export function NewWorkspaceComposerCard({
           name={name}
           onNameValueChange={onNameValueChange}
           onSmartGitHubItemSelect={onSmartGitHubItemSelect}
-          onSmartGitLabItemSelect={onSmartGitLabItemSelect}
           onSmartBranchSelect={onSmartBranchSelect}
           onSmartNameModeChange={onSmartNameModeChange}
           smartNameSelection={smartNameSelection}

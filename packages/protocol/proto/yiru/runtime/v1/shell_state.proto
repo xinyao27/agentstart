@@ -1,0 +1,193 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+// Why: the legacy cache and onboarding procedures admit only the local
+// principal (`principals: ["local"]`) from the Chrome workbench, so the policy
+// is narrower than the runtime-routed services and must stay that way.
+service ShellCacheService {
+  rpc GetGitHub(ShellCacheServiceGetGitHubRequest) returns (ShellCacheGitHubCache) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SetGitHub(ShellCacheServiceSetGitHubRequest) returns (ShellCacheServiceSetGitHubResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+service ShellOnboardingService {
+  rpc Get(ShellOnboardingServiceGetRequest) returns (ShellOnboardingState) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Update(ShellOnboardingServiceUpdateRequest) returns (ShellOnboardingState) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+// Why: the cache authority normalizes every entry to `{data, fetchedAt}` but
+// the PR payload inside `data` is the raw GitHub API response, so only the
+// envelope is typed and the payload is a typed recursive JSON value.
+message ShellCacheGitHubCache {
+  repeated ShellCacheGitHubEntry pr = 1;
+}
+
+message ShellCacheGitHubEntry {
+  string key = 1;
+  ShellCacheGitHubRecord value = 2;
+}
+
+message ShellCacheGitHubRecord {
+  ShellCacheJsonValue data = 1;
+  double fetched_at = 2;
+}
+
+message ShellCacheServiceGetGitHubRequest {}
+
+message ShellCacheServiceSetGitHubRequest {
+  ShellCacheGitHubCache cache = 1;
+}
+
+message ShellCacheServiceSetGitHubResponse {}
+
+// Why: the same open-ended shape rule as SettingsJsonValue — a typed recursive
+// JSON value instead of google.protobuf.Struct or a JSON string.
+message ShellCacheJsonValue {
+  oneof kind {
+    ShellCacheJsonNull null_value = 1;
+    bool bool_value = 2;
+    double number_value = 3;
+    string string_value = 4;
+    ShellCacheJsonValueList list_value = 5;
+    ShellCacheJsonValueObject object_value = 6;
+  }
+}
+
+enum ShellCacheJsonNull {
+  SHELL_CACHE_JSON_NULL_UNSPECIFIED = 0;
+  SHELL_CACHE_JSON_NULL_VALUE = 1;
+}
+
+message ShellCacheJsonValueList {
+  repeated ShellCacheJsonValue values = 1;
+}
+
+message ShellCacheJsonValueObject {
+  repeated ShellCacheJsonValueEntry entries = 1;
+}
+
+message ShellCacheJsonValueEntry {
+  string key = 1;
+  ShellCacheJsonValue value = 2;
+}
+
+message ShellOnboardingServiceGetRequest {}
+
+message ShellOnboardingState {
+  int64 flow_version = 1;
+  optional double closed_at = 2;
+  optional ShellOnboardingOutcome outcome = 3;
+  int64 last_completed_step = 4;
+  ShellOnboardingChecklist checklist = 5;
+}
+
+enum ShellOnboardingOutcome {
+  SHELL_ONBOARDING_OUTCOME_UNSPECIFIED = 0;
+  SHELL_ONBOARDING_OUTCOME_COMPLETED = 1;
+  SHELL_ONBOARDING_OUTCOME_DISMISSED = 2;
+}
+
+message ShellOnboardingChecklist {
+  bool added_repo = 1;
+  bool chose_agent = 2;
+  bool ran_first_agent = 3;
+  bool ran_second_agent_on_same_task = 4;
+  bool tried_cmd_j = 5;
+  bool shaped_sidebar = 6;
+  bool reviewed_diff = 7;
+  bool opened_pr = 8;
+  bool added_folder = 9;
+  bool opened_file = 10;
+  bool ran_agent_on_file = 11;
+  bool dismissed = 12;
+}
+
+// Why: each update field distinguishes "leave untouched" from an explicit
+// value, and the nullable scalar fields additionally distinguish an explicit
+// null from a number, so the nullable scalars are wrapped oneofs.
+message ShellOnboardingServiceUpdateRequest {
+  optional int64 flow_version = 1;
+  optional ShellOnboardingNullableNumber closed_at = 2;
+  optional ShellOnboardingNullableOutcome outcome = 3;
+  optional int64 last_completed_step = 4;
+  optional ShellOnboardingChecklistUpdate checklist = 5;
+}
+
+message ShellOnboardingNullableNumber {
+  oneof value {
+    bool null = 1;
+    double number = 2;
+  }
+}
+
+message ShellOnboardingNullableOutcome {
+  oneof value {
+    bool null = 1;
+    ShellOnboardingOutcome outcome = 2;
+  }
+}
+
+message ShellOnboardingChecklistUpdate {
+  optional bool added_repo = 1;
+  optional bool chose_agent = 2;
+  optional bool ran_first_agent = 3;
+  optional bool ran_second_agent_on_same_task = 4;
+  optional bool tried_cmd_j = 5;
+  optional bool shaped_sidebar = 6;
+  optional bool reviewed_diff = 7;
+  optional bool opened_pr = 8;
+  optional bool added_folder = 9;
+  optional bool opened_file = 10;
+  optional bool ran_agent_on_file = 11;
+  optional bool dismissed = 12;
+}

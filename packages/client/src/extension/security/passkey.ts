@@ -1,32 +1,36 @@
-import type { DangerousApprovalOperation } from '@yiru/runtime-protocol/contract'
+import { requireDangerousApprovalClient } from '~renderer/runtime/dangerous-approval-target'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
-import { getExtensionRuntimeClient } from '../runtime/session'
 
 export async function enrollDangerousApproval(): Promise<void> {
-  const client = await getExtensionRuntimeClient()
-  const begin = await client.dangerousApproval.beginRegistration({})
+  const client = await requireDangerousApprovalClient()
+  const begin = await client.beginRegistration()
   const credential = await getExtensionBrowserCapabilities().createDangerousCredential(begin)
-  await client.dangerousApproval.finishRegistration({
+  await client.finishRegistration({
     ...credential,
     requestId: begin.requestId
   })
 }
 
+type DangerousApprovalOperation =
+  | 'ritual.enable-archive'
+  | 'security.manage-passkey'
+  | `terminal.approve:${string}`
+
 export async function confirmDangerousOperation(
   operation: DangerousApprovalOperation
 ): Promise<void> {
-  const client = await getExtensionRuntimeClient()
-  const status = await client.dangerousApproval.status({})
+  const client = await requireDangerousApprovalClient()
+  const status = await client.status()
   if (!status.configured || !status.credentialId) {
     return
   }
-  const begin = await client.dangerousApproval.beginApproval({ operation })
+  const begin = await client.beginApproval(operation)
   const assertion = await getExtensionBrowserCapabilities().requestDangerousAssertion({
     challenge: begin.challenge,
     credentialId: status.credentialId
   })
-  await client.dangerousApproval.finishApproval({
+  await client.finishApproval({
     ...assertion,
     operation,
     requestId: begin.requestId
@@ -35,5 +39,5 @@ export async function confirmDangerousOperation(
 
 export async function removeDangerousApproval(): Promise<void> {
   await confirmDangerousOperation('security.manage-passkey')
-  await (await getExtensionRuntimeClient()).dangerousApproval.remove({})
+  await (await requireDangerousApprovalClient()).remove()
 }

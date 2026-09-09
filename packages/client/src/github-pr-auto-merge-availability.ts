@@ -2,7 +2,7 @@ import type {
   PRMergeableState,
   PRReviewDecision,
   PRState
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/hosted-review/pull-request-types'
 
 export type GitHubPRAutoMergeAvailabilityInput = {
   state: PRState | 'open' | 'closed' | 'merged' | 'draft'

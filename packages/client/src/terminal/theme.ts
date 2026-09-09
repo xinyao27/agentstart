@@ -1,12 +1,12 @@
 import type { ITheme } from '@xterm/xterm'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { TerminalCustomTheme } from '@yiru/protocol/terminal/theme-types'
 import {
   makeCustomTerminalThemeSelection,
   normalizeTerminalCustomThemes,
   parseCustomTerminalThemeSelection,
-  terminalCustomThemeToXtermTheme,
-  type TerminalCustomTheme
-} from '@yiru/runtime-protocol/workbench/terminal/custom-themes'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+  terminalCustomThemeToXtermTheme
+} from '~renderer/terminal/themes/custom'
 
 import { getTheme, getThemeNames } from './themes/data'
 

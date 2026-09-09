@@ -1,9 +1,9 @@
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   DESKTOP_TERMINAL_SCROLLBACK_ROWS_MAX,
   DESKTOP_TERMINAL_SCROLLBACK_ROWS_MIN,
   normalizeDesktopTerminalScrollbackRows
-} from '@yiru/runtime-protocol/workbench/terminal/scrollback-policy'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/terminal/scrollback-policy'
 import { useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'

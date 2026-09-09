@@ -1,7 +1,7 @@
-import type { RuntimeMobileSessionBrowserTab } from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { Tab } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab } from '@yiru/protocol/workspace/tabs'
 import type { AppState } from '~renderer/store/types'
 
+import type { RuntimeMobileSessionBrowserTab } from './remote-session/session-model'
 import { isUnifiedTabActiveInActiveGroup } from './runtime-mobile-tab-activity'
 
 export function buildMobileBrowserTab(

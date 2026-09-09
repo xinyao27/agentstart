@@ -120,7 +120,7 @@ struct HostedReviewEmptyView: View {
     }
 
     private var emptyTitle: LocalizedStringResource {
-        eligibility.provider == .gitlab ? "No open merge request" : "No open pull request"
+        "No open pull request"
     }
 
     // Why: the "no PR" summary is always the generic "branch is not linked" line, never the

@@ -1,12 +1,12 @@
-import { mapWithConcurrency } from '@yiru/runtime-protocol/workbench/map-with-concurrency'
+import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
 import {
   WORKSPACE_CLEANUP_CLASSIFIER_VERSION,
   applyWorkspaceCleanupPolicy,
   canSelectWorkspaceCleanupCandidate,
-  shouldForceWorkspaceCleanupRemoval,
-  type WorkspaceCleanupCandidate
-} from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+  shouldForceWorkspaceCleanupRemoval
+} from '@yiru/protocol/workspace/cleanup-policy'
 import type { StateCreator } from 'zustand'
+import { mapWithConcurrency } from '~renderer/map-with-concurrency'
 import {
   clearWorkspaceCleanupDismissals as clearRuntimeWorkspaceCleanupDismissals,
   dismissWorkspaceCleanupCandidates as dismissRuntimeWorkspaceCleanupCandidates

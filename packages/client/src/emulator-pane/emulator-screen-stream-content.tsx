@@ -4,7 +4,6 @@ import { LoadingIndicator } from '~renderer/loading/indicator'
 
 import type { VisualStreamGeometry } from './emulator-device-frame-layout'
 import { useEmulatorFrameStream } from './use-emulator-frame-stream'
-import { useEmulatorVideoStream } from './use-emulator-video-stream'
 
 type StreamSize = {
   height: number
@@ -23,9 +22,6 @@ type EmulatorScreenStreamContentProps = {
   streamRotation?: VisualStreamGeometry['streamRotation']
 }
 
-// Android sessions stream H.264 over scrcpy://<serial>; iOS uses an MJPEG http URL.
-const SCRCPY_PREFIX = 'scrcpy://'
-
 export function EmulatorScreenStreamContent({
   loading,
   onStreamError,
@@ -37,48 +33,23 @@ export function EmulatorScreenStreamContent({
   streamKey,
   streamRotation = 0
 }: EmulatorScreenStreamContentProps) {
-  const androidDeviceId =
-    previewUrl && previewUrl.startsWith(SCRCPY_PREFIX)
-      ? previewUrl.slice(SCRCPY_PREFIX.length)
-      : null
-
-  const { canvasRef, error: videoError } = useEmulatorVideoStream(
-    androidDeviceId ?? undefined,
-    streamKey,
-    showStream && Boolean(androidDeviceId),
-    onStreamSize
-  )
   const frameStream = useEmulatorFrameStream(
-    androidDeviceId ? undefined : previewUrl,
+    previewUrl,
     streamKey,
-    showStream && Boolean(previewUrl) && !androidDeviceId
+    showStream && Boolean(previewUrl)
   )
 
   useEffect(() => {
-    if (frameStream.error || videoError) {
+    if (frameStream.error) {
       onStreamError()
     }
-  }, [frameStream.error, videoError, onStreamError])
+  }, [frameStream.error, onStreamError])
 
   const mediaStyle = resolveStreamMediaStyle(streamRotation, screenAspectRatio)
   const mediaClassName =
     streamRotation === 0
       ? 'block h-full w-full bg-black object-contain'
       : 'absolute left-1/2 top-1/2 block max-w-none bg-black object-contain'
-
-  if (androidDeviceId && showStream && !videoError) {
-    return (
-      <canvas
-        ref={canvasRef}
-        className={mediaClassName}
-        style={mediaStyle}
-        aria-label={translate(
-          'auto.components.emulator.pane.emulator.screen.stream.content.5ee64cd44e',
-          'Emulator screen'
-        )}
-      />
-    )
-  }
 
   if (showStream && frameStream.frameUrl) {
     return (
@@ -104,8 +75,8 @@ export function EmulatorScreenStreamContent({
     )
   }
 
-  const waitingForFrame = showStream && !frameStream.error && !videoError
-  const displayError = streamError || Boolean(frameStream.error) || Boolean(videoError)
+  const waitingForFrame = showStream && !frameStream.error
+  const displayError = streamError || Boolean(frameStream.error)
 
   return (
     <div className="bg-muted/20 text-muted-foreground flex h-full w-full flex-col items-center justify-center gap-3">

@@ -4,12 +4,12 @@ import {
   isResumableTuiAgent,
   type SleepingAgentLaunchConfig,
   type SleepingAgentSessionRecord
-} from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/session-resume'
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry
-} from '@yiru/runtime-protocol/model/agent'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/status-records'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
 import { isCompletedAgentWithLiveRecoveryRecord } from '~renderer/settings/completed-agent-live-recovery-record'
 import { readLastTerminalInputAt } from '~renderer/terminal-pane/input-activity-coalescing'

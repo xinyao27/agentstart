@@ -101,7 +101,6 @@ import {
   GitMergeIcon as HugeGitMergeIcon,
   GitPullRequestIcon as HugeGitPullRequestIcon,
   GithubIcon as HugeGithubIcon,
-  GitlabIcon as HugeGitlabIcon,
   Globe02Icon as HugeGlobe02Icon
 } from '@hugeicons/core-free-icons'
 
@@ -223,5 +222,4 @@ export const GitFork = createHugeIcon(HugeGitForkIcon)
 export const GitMerge = createHugeIcon(HugeGitMergeIcon)
 export const GitPullRequest = createHugeIcon(HugeGitPullRequestIcon)
 export const GithubLogo = createHugeIcon(HugeGithubIcon)
-export const GitlabLogo = createHugeIcon(HugeGitlabIcon)
 export const Globe = createHugeIcon(HugeGlobe02Icon)

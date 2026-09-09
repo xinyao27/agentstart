@@ -1,13 +1,8 @@
-import type {
-  FileLogTailReadInput,
-  RuntimeLogTailReadResult,
-  RuntimeLogTailWatchEvent
-} from '@yiru/runtime-protocol/contract'
-import {
-  callRuntimeOrpc,
-  createRuntimeOrpcClient,
-  type RuntimeClientTarget
-} from '~renderer/runtime/orpc-client'
+import type { LogTailReadResult, LogTailWatchMessage } from '@yiru/protocol'
+import { requireFilesTarget } from '~renderer/runtime/files-target'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
+
+export type RuntimeLogTailReadResult = LogTailReadResult
 
 export type RuntimeLogTailWatch = {
   /** Resolves once the watch is installed, or rejects if setup failed. */
@@ -18,11 +13,10 @@ export type RuntimeLogTailWatch = {
 
 export async function readRuntimeLogTailRange(
   target: RuntimeClientTarget,
-  args: FileLogTailReadInput
+  args: { filePath: string; fromByteOffset: number; expectedIdentity?: string }
 ): Promise<RuntimeLogTailReadResult> {
-  return callRuntimeOrpc(target, (client) => client.files.readLogTail, args, {
-    timeoutMs: 15_000
-  })
+  const client = await requireFilesTarget(target)
+  return client.readLogTail(args, { timeoutMs: 15_000 })
 }
 
 /**
@@ -34,7 +28,9 @@ export async function readRuntimeLogTailRange(
 export function watchRuntimeLogTail(
   target: RuntimeClientTarget,
   filePath: string,
-  subscriptionId: string,
+  // Why: a protobuf watch is a native stream the caller cancels directly, so this no
+  // longer travels to the server — kept so callers can still label their own session.
+  _subscriptionId: string,
   onChanged: (eventType: 'change' | 'rename') => void
 ): RuntimeLogTailWatch {
   const abort = new AbortController()
@@ -51,13 +47,12 @@ export function watchRuntimeLogTail(
   })
 
   void (async (): Promise<void> => {
-    const connection = await createRuntimeOrpcClient(target, { signal: abort.signal })
+    let cancel: (() => Promise<void>) | null = null
     try {
-      const stream = await connection.client.files.watchLogTail(
-        { filePath, subscriptionId },
-        { signal: abort.signal }
-      )
-      for await (const event of stream as AsyncIterable<RuntimeLogTailWatchEvent>) {
+      const client = await requireFilesTarget(target)
+      const watch = await client.watchLogTail(filePath, { signal: abort.signal })
+      cancel = watch.cancel
+      for await (const event of watch.messages as AsyncIterable<LogTailWatchMessage>) {
         if (event.type === 'ready') {
           deferred.resolve()
         } else if (event.type === 'changed') {
@@ -71,7 +66,7 @@ export function watchRuntimeLogTail(
         deferred.reject(error)
       }
     } finally {
-      connection.close()
+      await cancel?.()
     }
   })()
 

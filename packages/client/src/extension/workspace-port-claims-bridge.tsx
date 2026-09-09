@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
+import { workspacePortsScanQuery } from '~renderer/runtime/workspace-ports-target'
 
 import { getExtensionBrowserCapabilities } from './browser-capabilities'
-import { extensionOrpc } from './runtime/orpc'
 import { workspacePortClaims } from './workspace-port-claims'
 
 const WORKSPACE_PORT_REFRESH_INTERVAL_MS = 5_000
+const LOCAL_DAEMON_TARGET = { kind: 'local' } as const
 
 export function WorkspacePortClaimsBridge(): null {
   const catalog = useProjectCatalog()
@@ -15,7 +16,7 @@ export function WorkspacePortClaimsBridge(): null {
     id: project.id
   }))
   const workspacePorts = useQuery({
-    ...extensionOrpc.workspacePorts.scan.queryOptions({ input: {} }),
+    ...workspacePortsScanQuery(LOCAL_DAEMON_TARGET),
     refetchInterval: WORKSPACE_PORT_REFRESH_INTERVAL_MS
   })
   useEffect(() => {

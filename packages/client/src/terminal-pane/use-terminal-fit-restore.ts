@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 import { getAllDrivers } from './pane-manager/mobile-driver-state'
 import { getMobileFitOverridePtyIds } from './pane-manager/mobile-fit-overrides'

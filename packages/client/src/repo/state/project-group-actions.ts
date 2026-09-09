@@ -2,7 +2,7 @@ import type { StateCreator } from 'zustand'
 import { readProjectCatalogMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterProjectCatalogMutation } from '~renderer/project-catalog/mutation-refresh'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireProjectGroupProtocolClient } from '~renderer/runtime/project-group-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 import type { AppState } from '../../store/types'
@@ -28,9 +28,9 @@ export function createRepoProjectGroupActions(
     createProjectGroup: async (name) => {
       try {
         const target = getActiveRuntimeTarget(get().settings)
-        const result = await callRuntimeOrpc(
-          target,
-          (client) => client.projectGroup.create,
+        const result = await (
+          await requireProjectGroupProtocolClient(target)
+        ).create(
           {
             expectedRevision: readProjectCatalogMutationRevision(target),
             name,
@@ -53,9 +53,9 @@ export function createRepoProjectGroupActions(
         // Why: project groups are focused-host-scoped by design — fetch/create/update/
         // delete all route by the focused host, and the list is replaced (not merged).
         const target = getActiveRuntimeTarget(get().settings)
-        const result = await callRuntimeOrpc(
-          target,
-          (client) => client.projectGroup.update,
+        const result = await (
+          await requireProjectGroupProtocolClient(target)
+        ).update(
           {
             expectedRevision: readProjectCatalogMutationRevision(target),
             groupId,
@@ -79,9 +79,9 @@ export function createRepoProjectGroupActions(
       try {
         // Why: project groups are focused-host-scoped by design (see updateProjectGroup).
         const target = getActiveRuntimeTarget(get().settings)
-        const result = await callRuntimeOrpc(
-          target,
-          (client) => client.projectGroup.delete,
+        const result = await (
+          await requireProjectGroupProtocolClient(target)
+        ).delete(
           { expectedRevision: readProjectCatalogMutationRevision(target), groupId },
           { timeoutMs: 15_000 }
         )
@@ -165,13 +165,15 @@ export function createRepoProjectGroupActions(
           return false
         }
         const target = getActiveRuntimeTarget(settingsForRepoOwner(catalog, projectId))
-        const result = await callRuntimeOrpc(
-          target,
-          (client) => client.projectGroup.moveProject,
+        const result = await (
+          await requireProjectGroupProtocolClient(target)
+        ).moveProject(
           {
             expectedRevision: readProjectCatalogMutationRevision(target),
             repo: projectId,
-            groupId,
+            // Why: the wire treats a null groupId and an absent one the same as
+            // the legacy surface did — both clear the group assignment.
+            ...(groupId === null ? {} : { groupId }),
             order
           },
           { timeoutMs: 15_000 }

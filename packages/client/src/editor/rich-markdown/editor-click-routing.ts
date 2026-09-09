@@ -1,6 +1,6 @@
 import type { EditorView } from '@tiptap/pm/view'
 import type { Editor } from '@tiptap/react'
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import type { MutableRefObject } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

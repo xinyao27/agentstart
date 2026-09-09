@@ -1,9 +1,8 @@
-import {
-  AI_VAULT_AGENTS,
-  type AiVaultAgent,
-  type AiVaultGroup,
-  type AiVaultSort
-} from '@yiru/runtime-protocol/model/agent'
+import { AI_VAULT_AGENTS, type AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+import type {
+  AiVaultGroup,
+  AiVaultSort
+} from '~renderer/workspace-panel/ai-vault/session/providers'
 
 // Why: hide-empty used to default true; keep initial state, badge count, and Reset view
 // on one constant so a default flip cannot leave Reset pointing at the old value.

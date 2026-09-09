@@ -1,4 +1,4 @@
-import type { GitStatusEntry, GitStagingArea } from '@yiru/runtime-protocol/workbench/types'
+import type { GitStatusEntry, GitStagingArea } from '@yiru/protocol/git/status-types'
 import { normalizeRelativePath } from '~renderer/path'
 
 import { splitPathSegments } from '../path-tree'

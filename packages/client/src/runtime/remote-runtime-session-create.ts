@@ -1,7 +1,6 @@
-import type { SleepingAgentLaunchConfig } from '@yiru/runtime-protocol/model/agent'
-import type { StartupCommandDelivery } from '@yiru/runtime-protocol/workbench/codex-startup-delivery'
-import type { RuntimeMobileSessionCreateTerminalResult } from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
+import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 
 import { deliverLaunchPromptToAgentTab } from '../agent/launch-prompt-delivery'
 import { useAppStore } from '../store/state'
@@ -11,6 +10,7 @@ import {
   createRemoteSessionBrowserTabCommand,
   createRemoteSessionTerminalCommand
 } from './remote-session/commands'
+import type { RuntimeMobileSessionCreateTerminalResult } from './remote-session/session-model'
 import { requestRemoteSessionTabsRefresh } from './remote-session/tabs-refresh-requests'
 import { toRemoteTerminalSurfaceTabId } from './remote-terminal-surface-id'
 

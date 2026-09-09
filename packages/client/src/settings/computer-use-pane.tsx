@@ -1,8 +1,10 @@
 import type {
-  ComputerUsePermissionId,
-  ComputerUsePermissionState,
-  ComputerUsePermissionStatus
-} from '@yiru/runtime-protocol/workbench/computer-use-permissions-types'
+  ComputerClient,
+  ComputerHostPlatform,
+  ComputerPermissionId,
+  ComputerPermissionState,
+  ComputerPermissionStatus
+} from '@yiru/protocol'
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
@@ -16,8 +18,7 @@ import {
 } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { useEventCallback } from '~renderer/react/use-event-callback'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
-import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
+import { openComputerTarget } from '~renderer/runtime/computer-target'
 import { useAppStore } from '~renderer/store/state'
 import { cn } from '~renderer/ui/class-names'
 
@@ -27,7 +28,7 @@ import { ComputerUseSkillSetupPanel } from './computer-use-skill-setup-panel'
 export { getComputerUsePaneSearchEntries } from './computer-use-search'
 
 type PermissionDefinition = {
-  id: ComputerUsePermissionId
+  id: ComputerPermissionId
   labelKey: string
   labelDefault: string
   descriptionKey: string
@@ -54,7 +55,7 @@ const PERMISSIONS: PermissionDefinition[] = [
   }
 ]
 
-function statusLabel(status: ComputerUsePermissionStatus | undefined): string {
+function statusLabel(status: ComputerPermissionStatus | undefined): string {
   switch (status) {
     case 'granted':
       return 'Granted'
@@ -66,18 +67,32 @@ function statusLabel(status: ComputerUsePermissionStatus | undefined): string {
   }
 }
 
-function statusClass(status: ComputerUsePermissionStatus | undefined): string {
+function statusClass(status: ComputerPermissionStatus | undefined): string {
   if (status === 'granted') {
     return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
   }
   return 'border-border bg-muted text-muted-foreground'
 }
 
+// Why: Computer Use permissions belong to the local browser host.
+async function requireComputerClient(): Promise<ComputerClient> {
+  const client = await openComputerTarget()
+  if (!client) {
+    throw new Error(
+      translate(
+        'settings.computerUsePane.unavailable',
+        'Computer Use requires a local Yiru daemon connection'
+      )
+    )
+  }
+  return client
+}
+
 export function ComputerUsePane(): React.JSX.Element {
-  const [platform, setPlatform] = useState<NodeJS.Platform | null>(null)
-  const [states, setStates] = useState<ComputerUsePermissionState[]>([])
+  const [platform, setPlatform] = useState<ComputerHostPlatform | null>(null)
+  const [states, setStates] = useState<ComputerPermissionState[]>([])
   const [loading, setLoading] = useState(true)
-  const [pendingId, setPendingId] = useState<ComputerUsePermissionId | null>(null)
+  const [pendingId, setPendingId] = useState<ComputerPermissionId | null>(null)
   const [resetting, setResetting] = useState(false)
   // Why: reset changes OS permission state, so older status probes must not overwrite it.
   const resettingRef = useRef(false)
@@ -127,11 +142,8 @@ export function ComputerUsePane(): React.JSX.Element {
     const operationId = ++permissionOperationSequence.current
     setLoading(true)
     try {
-      const result = await callRuntimeOrpc(
-        getActiveRuntimeTarget(useAppStore.getState().settings),
-        (client) => client.computer.permissionsStatus,
-        {}
-      )
+      const client = await requireComputerClient()
+      const result = await client.permissionsStatus()
       if (operationId !== permissionOperationSequence.current) {
         return
       }
@@ -174,15 +186,12 @@ export function ComputerUsePane(): React.JSX.Element {
     return () => window.removeEventListener('focus', onFocus)
   }, [refresh])
 
-  const openPermission = async (id: ComputerUsePermissionId): Promise<void> => {
+  const openPermission = async (id: ComputerPermissionId): Promise<void> => {
     useAppStore.getState().recordFeatureInteraction('computer-use-setup')
     setPendingId(id)
     try {
-      const result = await callRuntimeOrpc(
-        getActiveRuntimeTarget(useAppStore.getState().settings),
-        (client) => client.computer.permissions,
-        { id }
-      )
+      const client = await requireComputerClient()
+      const result = await client.permissions({ id })
       if (!mountedRef.current) {
         return
       }
@@ -233,11 +242,8 @@ export function ComputerUsePane(): React.JSX.Element {
     const operationId = ++permissionOperationSequence.current
     setResetting(true)
     try {
-      const result = await callRuntimeOrpc(
-        getActiveRuntimeTarget(useAppStore.getState().settings),
-        (client) => client.computer.permissionsReset,
-        {}
-      )
+      const client = await requireComputerClient()
+      const result = await client.permissionsReset()
       if (operationId !== permissionOperationSequence.current) {
         return
       }

@@ -1,16 +1,20 @@
-import type { RuntimeClientEventSubscriptionEvent } from '@yiru/runtime-protocol/contract'
+import type { ClientEventsSubscriptionEventValue } from '@yiru/protocol'
 
+import { requireClientEventsClient } from './client-events-target'
 import { onLocalHostProgressEvent } from './host-progress-stream'
-import { callRuntimeOrpc, createLocalRuntimeOrpcClient } from './orpc-client'
+import { addRuntimeRepo, listRuntimeRepos, requireRepoProtocolClient } from './repo-catalog-target'
 import { shellClient } from './shell-client'
 import { createRuntimeStreamFanOut } from './stream-fan-out'
 import type { RepoWorkspaceApi } from './workspace-host-api'
 
 const LOCAL_TARGET = { kind: 'local' } as const
 
-const localClientEvents = createRuntimeStreamFanOut({
-  resolveClient: async () => (await createLocalRuntimeOrpcClient()).client,
-  open: (client, signal) => client.runtime.clientEvents.subscribe(undefined, { signal })
+const localClientEvents = createRuntimeStreamFanOut<
+  Awaited<ReturnType<typeof requireClientEventsClient>>,
+  ClientEventsSubscriptionEventValue
+>({
+  resolveClient: async () => requireClientEventsClient(LOCAL_TARGET),
+  open: (client, signal) => client.subscribe({ signal }).then((stream) => stream.events)
 })
 
 const localRepoClient: RepoWorkspaceApi = {
@@ -21,11 +25,10 @@ const localRepoClient: RepoWorkspaceApi = {
   reorderForHost: (args) => shellClient.repoHost.reorderForHost(args),
   cloneAbort: () => shellClient.repoHost.cloneAbort(),
   getDefaultCreateProjectParent: () => shellClient.repoHost.getDefaultCreateProjectParent(),
-  list: async () =>
-    (await callRuntimeOrpc(LOCAL_TARGET, (client) => client.repo.list, undefined)).repos,
+  list: async () => (await listRuntimeRepos(LOCAL_TARGET)).repos,
   add: async ({ expectedRevision, path, kind }) => {
     try {
-      return await callRuntimeOrpc(LOCAL_TARGET, (client) => client.repo.add, {
+      return await addRuntimeRepo(LOCAL_TARGET, {
         expectedRevision,
         path,
         kind
@@ -34,30 +37,23 @@ const localRepoClient: RepoWorkspaceApi = {
       return { error: error instanceof Error ? error.message : String(error) }
     }
   },
-  create: ({ expectedRevision, parentPath, name, kind }) =>
-    callRuntimeOrpc(LOCAL_TARGET, (client) => client.repo.create, {
+  create: async ({ expectedRevision, parentPath, name, kind }) =>
+    (await requireRepoProtocolClient(LOCAL_TARGET)).create({
       expectedRevision,
       parentPath,
       name,
       kind
     }),
-  clone: ({ expectedRevision, url, destination }) =>
-    callRuntimeOrpc(
-      LOCAL_TARGET,
-      (client) => client.repo.clone,
+  clone: async ({ expectedRevision, url, destination }) =>
+    (await requireRepoProtocolClient(LOCAL_TARGET)).clone(
       { expectedRevision, url, destination },
       { timeoutMs: 10 * 60_000 }
     ),
-  isGitAvailable: async () =>
-    (await callRuntimeOrpc(LOCAL_TARGET, (client) => client.repo.gitAvailable, undefined))
-      .available,
-  remove: ({ expectedRevision, repoId }) =>
-    callRuntimeOrpc(LOCAL_TARGET, (client) => client.repo.rm, {
-      expectedRevision,
-      repo: repoId
-    }),
+  isGitAvailable: async () => (await requireRepoProtocolClient(LOCAL_TARGET)).gitAvailable(),
+  remove: async ({ expectedRevision, repoId }) =>
+    (await requireRepoProtocolClient(LOCAL_TARGET)).rm({ expectedRevision, repo: repoId }),
   update: async ({ expectedRevision, repoId, updates }) =>
-    callRuntimeOrpc(LOCAL_TARGET, (client) => client.repo.update, {
+    (await requireRepoProtocolClient(LOCAL_TARGET)).update({
       expectedRevision,
       repo: repoId,
       updates
@@ -67,7 +63,7 @@ const localRepoClient: RepoWorkspaceApi = {
       callback({ phase, percent })
     ),
   onChanged: (callback) =>
-    localClientEvents.subscribe((event: RuntimeClientEventSubscriptionEvent) => {
+    localClientEvents.subscribe((event: ClientEventsSubscriptionEventValue) => {
       if (event.type === 'reposChanged') {
         callback()
       }

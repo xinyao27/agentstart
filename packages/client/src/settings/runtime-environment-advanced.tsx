@@ -1,7 +1,7 @@
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretDown as ChevronDown, ArrowClockwise as RefreshCw } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { cn } from '~renderer/ui/class-names'
 
 import { Button } from '../ui/button'
@@ -101,7 +101,11 @@ export function RuntimeEnvironmentAdvanced(
                     </SelectItem>
                   ) : null}
                   {props.environments.map((environment) => (
-                    <SelectItem key={environment.id} value={environment.id}>
+                    <SelectItem
+                      key={environment.id}
+                      value={environment.id}
+                      disabled={environment.pairingRequired}
+                    >
                       {environment.name}
                     </SelectItem>
                   ))}

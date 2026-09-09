@@ -1,4 +1,4 @@
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
 import type { StateCreator } from 'zustand'
 import {
   getAgentRowGeneratedTitleText,

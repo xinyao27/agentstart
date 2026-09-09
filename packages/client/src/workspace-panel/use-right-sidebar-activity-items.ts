@@ -1,5 +1,5 @@
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import { useShortcutLabel } from '~renderer/keyboard-input/use-shortcut-label'
 import { useRepoById } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'

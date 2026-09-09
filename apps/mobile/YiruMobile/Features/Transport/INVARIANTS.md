@@ -26,8 +26,9 @@
 
 ## Request and cancellation behavior
 
-- One receive loop owns the encrypted stream and dispatches oRPC responses by request ID. Feature
-  calls never race each other for `URLSessionWebSocketTask.receive()`.
+- One receive loop owns the encrypted stream and dispatches generated Protobuf frames by call ID.
+  During migration it also routes recognized legacy frames, but new capabilities cannot depend on
+  that path. Feature calls never race each other for `URLSessionWebSocketTask.receive()`.
 - View cancellation removes its pending response waiter and is not displayed as an error. It does
   not tear down a healthy shared session used by another feature.
 - A transport failure invalidates the peer and starts reconnection. Unary calls are not replayed

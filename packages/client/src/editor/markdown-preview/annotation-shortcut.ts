@@ -1,7 +1,4 @@
-import {
-  keybindingMatchesAction,
-  type KeybindingOverrides
-} from '@yiru/runtime-protocol/workbench/keybindings'
+import { keybindingMatchesAction, type KeybindingOverrides } from '@yiru/protocol/keybindings'
 
 export function isMarkdownPreviewAddReviewNoteShortcut(
   event: Pick<KeyboardEvent, 'key' | 'code' | 'metaKey' | 'ctrlKey' | 'altKey' | 'shiftKey'>,

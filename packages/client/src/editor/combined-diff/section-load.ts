@@ -1,4 +1,5 @@
-import type { GitDiffResult } from '@yiru/runtime-protocol/workbench/types'
+import type { GitDiffResult } from '@yiru/protocol/git/diff-values'
+import { getLargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
 import {
   getRuntimeGitBranchDiff,
   getRuntimeGitCommitDiff,
@@ -8,7 +9,6 @@ import { settingsForRuntimeOwner } from '~renderer/runtime/rpc-client'
 import { useAppStore } from '~renderer/store/state'
 
 import type { DiffSection } from '../diff-section/types'
-import { getLargeDiffRenderLimit } from '../large-diff-render-limit'
 import { getStoredTextDiffContent, getStoredTextDiffResult } from '../large-diff-section-content'
 import type { OpenFile } from '../state'
 import type { CombinedDiffModel } from './model'

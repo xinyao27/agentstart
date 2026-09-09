@@ -1,4 +1,4 @@
-import type { SkillProvider, SkillSourceKind } from '@yiru/runtime-protocol/workbench/skills'
+import type { SkillProvider, SkillSourceKind } from '@yiru/protocol'
 
 export const providerLabels: Record<SkillProvider, string> = {
   codex: 'Codex',

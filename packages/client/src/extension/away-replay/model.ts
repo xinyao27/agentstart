@@ -1,10 +1,10 @@
-import type { RuntimeWorkspaceEvent } from '@yiru/runtime-protocol/contract'
+import type { WorkspaceEventRecord } from '@yiru/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 export type AwayReplayMarker = Record<string, number>
 
 export type AwayReplayScope = {
-  events: RuntimeWorkspaceEvent[]
+  events: WorkspaceEventRecord[]
   latestId: number
   scope: string
 }
@@ -124,7 +124,7 @@ function projectFacts(scope: AwayReplayScope, projectName: string): string[] {
   ].filter((fact): fact is string => fact !== null)
 }
 
-function latestChangedFileCount(events: RuntimeWorkspaceEvent[]): number {
+function latestChangedFileCount(events: WorkspaceEventRecord[]): number {
   return events.reduce(
     (latest, event) =>
       event.kind === 'agent.workspace-changes' && typeof event.payload.changedFileCount === 'number'
@@ -134,11 +134,11 @@ function latestChangedFileCount(events: RuntimeWorkspaceEvent[]): number {
   )
 }
 
-function countKind(events: RuntimeWorkspaceEvent[], kind: string): number {
+function countKind(events: WorkspaceEventRecord[], kind: string): number {
   return events.filter((event) => event.kind === kind).length
 }
 
-function isReplayEvent(event: RuntimeWorkspaceEvent): boolean {
+function isReplayEvent(event: WorkspaceEventRecord): boolean {
   return (
     event.kind.startsWith('agent.') ||
     event.kind === 'worktree.create.starting-workspace' ||

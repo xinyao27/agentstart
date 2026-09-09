@@ -1,16 +1,18 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
 import type {
-  GitHubCommentResult,
-  GitHubOwnerRepo,
   GitHubPRRefreshAlias,
   GitHubPRRefreshEvent,
   GitHubPRRefreshReason,
+  PRInfo
+} from '@yiru/protocol/hosted-review/pull-request-types'
+import type {
+  GitHubCommentResult,
+  GitHubOwnerRepo,
   GitHubWorkItem,
   PRCheckDetail,
   PRCheckRunDetails,
-  PRComment,
-  PRInfo
-} from '@yiru/runtime-protocol/workbench/types'
+  PRComment
+} from '@yiru/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
 
 export type CacheEntry<T> = {
   data: T | null

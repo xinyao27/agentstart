@@ -1,8 +1,10 @@
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
 import {
   isConfirmedStaleFolderPathStatus,
   type FolderWorkspacePathStatus
-} from '@yiru/runtime-protocol/workbench/folder-workspace-path-status'
-import type { ProjectGroup, Repo, WorkspaceStatus } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/folder-path'
+import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { RepoForkIndicator } from '~renderer/repo/fork-indicator'

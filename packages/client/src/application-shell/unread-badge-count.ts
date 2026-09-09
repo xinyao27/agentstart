@@ -1,4 +1,5 @@
-import type { TerminalTab, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 export function getUnreadBadgeCount({
   worktreesByRepo,

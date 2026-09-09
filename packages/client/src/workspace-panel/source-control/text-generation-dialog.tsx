@@ -1,16 +1,15 @@
-import { buildBranchNamePrompt } from '@yiru/runtime-protocol/workbench/branch-name-from-work'
-import { buildCommitMessagePrompt } from '@yiru/runtime-protocol/workbench/commit-message/generation'
-import { buildPullRequestFieldsPrompt } from '@yiru/runtime-protocol/workbench/pull-request-generation'
-import {
-  resolveSourceControlAiForOperation,
-  type ResolvedSourceControlAiGenerationParams
-} from '@yiru/runtime-protocol/workbench/source-control/ai'
-import type { SourceControlTextActionId } from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { GlobalSettings, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { SourceControlTextActionId } from '@yiru/protocol/source-control/ai-actions'
+import { buildCommitMessagePrompt } from '@yiru/protocol/source-control/prompts/commit-message'
+import { buildPullRequestFieldsPrompt } from '@yiru/protocol/source-control/prompts/pull-request'
+import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as TriangleAlert } from '~renderer/icons/hugeicons'
+import { buildBranchNamePrompt } from '~renderer/new-workspace/naming/from-work'
 import type { SourceControlAiWriteTarget } from '~renderer/source-control/ai-recipe-save'
+import { resolveSourceControlAiForOperation } from '~renderer/source-control/ai/resolution'
 import {
   Dialog,
   DialogContent,

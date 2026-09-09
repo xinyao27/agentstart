@@ -1,4 +1,4 @@
-import type { HostedReviewCreationEligibility } from '@yiru/runtime-protocol/model/review'
+import type { HostedReviewCreationEligibility } from '@yiru/protocol/hosted-review/types'
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import { getRuntimeGitBranchCompare } from '~renderer/runtime/git-client'
 import { refreshGitStatusForWorktreeStrict } from '~renderer/workspace-panel/git-status-refresh'
@@ -17,11 +17,7 @@ export function useSourceControlCreateReviewPrerequisites(
     getCreatePrIntentOperationTarget,
     getHostedReviewCreationEligibility,
     isFolder,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
     linkedGitHubPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     remoteStatus,
     setGitBranchCompareResult,
     setGitStatus,
@@ -75,11 +71,7 @@ export function useSourceControlCreateReviewPrerequisites(
       ahead: upstreamStatus?.ahead,
       behind: upstreamStatus?.behind,
       linkedGitHubPR,
-      fallbackGitHubPR: fallbackGitHubPRNumber,
-      linkedGitLabMR,
-      linkedBitbucketPR,
-      linkedAzureDevOpsPR,
-      linkedGiteaPR
+      fallbackGitHubPR: fallbackGitHubPRNumber
     })
     setHostedReviewCreationState({
       repoId: activeRepo.id,

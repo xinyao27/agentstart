@@ -1,16 +1,12 @@
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
-import { encodeRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import { encodeRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { isTerminalLeafId, makePaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import {
   normalizeCompatibleAgentStatusEntryForOwner,
   normalizeCompatibleAgentTitleForOwner
-} from '@yiru/runtime-protocol/workbench/agent/title-owner'
-import type { RuntimeMobileSessionTabsResult } from '@yiru/runtime-protocol/workbench/runtime-types'
-import {
-  isTerminalLeafId,
-  makePaneKey,
-  parsePaneKey
-} from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalLayoutSnapshot, TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+} from '~renderer/agent/title/owner'
 import { resolvePaneAgentOwner } from '~renderer/pane-agent-owner'
 
 import {
@@ -22,6 +18,7 @@ import {
   isAgentStatusFresh,
   isMirroredCommandCodeTurnBump
 } from './agent-status-equality'
+import type { RuntimeMobileSessionTabsResult } from './session-model'
 import type {
   MirroredTerminalTab,
   ReadyTerminalSurface,

@@ -1,8 +1,10 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type { SetupScriptImportCandidate } from '@yiru/runtime-protocol/workbench/setup/script-imports'
-import type { GlobalSettings, YiruHooks } from '@yiru/runtime-protocol/workbench/types'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
+import { setupImportCandidate } from '~renderer/setup/import-candidate'
+import type { SetupScriptImportCandidate } from '~renderer/setup/import-candidate'
 
-import { callRuntimeOrpc } from './orpc-client'
+import { requireRepoProtocolClient } from './repo-catalog-target'
 import { getActiveRuntimeTarget } from './rpc-client'
 
 export type HookCheckResult = {
@@ -24,12 +26,21 @@ export async function checkRuntimeHooks(
   // target is a *different* runtime's own store, which has no concept of
   // other hosts from its own point of view — forwarding hostId there could
   // filter out that environment's own local repos.
-  return callRuntimeOrpc(
-    target,
-    (client) => client.repo.hooksCheck,
-    { repo: repoId, ...(target.kind === 'local' && hostId ? { hostId } : {}) },
+  const result = await (
+    await requireRepoProtocolClient(target)
+  ).hooksCheck(
+    {
+      repo: repoId,
+      ...(target.kind === 'local' && hostId ? { hostId } : {})
+    },
     { timeoutMs: 15_000 }
   )
+  return {
+    status: result.status,
+    hasHooks: result.hasHooks,
+    hooks: result.hooks,
+    mayNeedUpdate: result.mayNeedUpdate
+  }
 }
 
 export async function inspectRuntimeSetupScriptImports(
@@ -37,10 +48,8 @@ export async function inspectRuntimeSetupScriptImports(
   repoId: string
 ): Promise<SetupScriptImportCandidate[]> {
   const target = getActiveRuntimeTarget(settings)
-  return callRuntimeOrpc(
-    target,
-    (client) => client.repo.setupScriptImports,
-    { repo: repoId },
-    { timeoutMs: 15_000 }
-  )
+  const candidates = await (
+    await requireRepoProtocolClient(target)
+  ).setupScriptImports({ repo: repoId }, { timeoutMs: 15_000 })
+  return candidates.map(setupImportCandidate)
 }

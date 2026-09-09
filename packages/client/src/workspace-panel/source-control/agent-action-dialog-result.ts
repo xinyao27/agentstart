@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import type { getAgentCatalog } from '~renderer/agent/catalog'
 import type { useRepoById } from '~renderer/store/selectors'
 import type { useAppStore } from '~renderer/store/state'

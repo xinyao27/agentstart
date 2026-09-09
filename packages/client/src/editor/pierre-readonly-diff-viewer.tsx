@@ -1,4 +1,5 @@
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import { getLargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { selectWorktreeDiffComments } from '~renderer/diff-comments/worktree-selector'
 import { isDiffComment } from '~renderer/editor/diff-comment-compat'
@@ -12,7 +13,6 @@ import { DiffCodeView } from './diff-code-view/view'
 import { getDiffViewerLargeDiffSaveAction } from './diff-viewer-large-diff-save-action'
 import type { DiffViewerProps } from './diff-viewer-props'
 import { LargeDiffFallback } from './large-diff-fallback'
-import { getLargeDiffRenderLimit } from './large-diff-render-limit'
 import { registerPendingEditorFlush } from './pending-flush'
 
 export function PierreReadonlyDiffViewer(props: DiffViewerProps): React.JSX.Element {

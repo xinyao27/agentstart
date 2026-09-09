@@ -1,8 +1,4 @@
-import type { TerminalOpenMultiplexResult } from '@yiru/runtime-protocol/contract'
-import type { RuntimeRpcResponse } from '@yiru/runtime-protocol/rpc-envelope'
-import { TERMINAL_MULTIPLEX_DEFAULT_MAX_FRAME_BYTES } from '@yiru/runtime-protocol/terminal-multiplex/frame'
 import { openConfiguredBrowserHostTerminalMultiplex } from '~renderer/runtime/browser-host-runtime'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
 
 export type RuntimeTerminalMultiplexHandle = {
   unsubscribe: () => void
@@ -10,10 +6,8 @@ export type RuntimeTerminalMultiplexHandle = {
 }
 
 type OpenTerminalMultiplexOptions = {
-  target: RuntimeClientTarget
   environmentIdentity: string
-  callRuntime: (method: string, params: unknown) => Promise<TerminalOpenMultiplexResult>
-  onResponse: (response: RuntimeRpcResponse<unknown>) => void
+  onReady: () => void
   onBinary: (bytes: Uint8Array<ArrayBufferLike>) => void
   onError: (error: Error) => void
   onClose: () => void
@@ -24,25 +18,17 @@ const CLIENT_INSTANCE_ID = createClientInstanceId()
 export async function openTerminalMultiplexSubscription(
   options: OpenTerminalMultiplexOptions
 ): Promise<RuntimeTerminalMultiplexHandle> {
-  const ticket = await options.callRuntime('terminal.openMultiplex', {
-    environmentId: options.environmentIdentity,
-    clientInstanceId: CLIENT_INSTANCE_ID
-  })
-  if (
-    !ticket.bulkTicket ||
-    !ticket.bulkEndpoint ||
-    ticket.expiresAt <= Date.now() ||
-    ticket.maxFrameBytes !== TERMINAL_MULTIPLEX_DEFAULT_MAX_FRAME_BYTES
-  ) {
-    throw new Error('Runtime host returned an invalid terminal bulk ticket.')
-  }
+  // Why: the daemon admits a bulk ticket only for the connection principal that
+  // presents it, and browser hosts get one principal per connection, so the host
+  // dials its bulk connection and issues the ticket there rather than reusing one
+  // fetched over the shared control transport.
   return openConfiguredBrowserHostTerminalMultiplex({
+    clientInstanceId: CLIENT_INSTANCE_ID,
     environmentIdentity: options.environmentIdentity,
     onBinary: options.onBinary,
     onClose: options.onClose,
     onError: options.onError,
-    onResponse: options.onResponse,
-    ticket
+    onReady: options.onReady
   })
 }
 

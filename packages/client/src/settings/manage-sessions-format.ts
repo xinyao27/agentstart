@@ -1,5 +1,5 @@
-import type { TerminalManagementSession } from '@yiru/runtime-protocol/contract'
-import { splitWorktreeIdForFilesystem } from '@yiru/runtime-protocol/model/workspace'
+import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
+import type { RuntimeDaemonSession } from '~renderer/runtime/daemon-sessions-client'
 
 export function shortCwd(cwd: string): string {
   if (!cwd) {
@@ -22,7 +22,7 @@ export function formatWorkspace(session: { cwd: string | null; sessionId: string
   return 'unknown'
 }
 
-export function formatState(session: TerminalManagementSession): string {
+export function formatState(session: RuntimeDaemonSession): string {
   if (!session.isAlive) {
     return 'exited'
   }

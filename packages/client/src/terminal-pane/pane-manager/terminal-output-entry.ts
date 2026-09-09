@@ -1,7 +1,7 @@
 import {
   TERMINAL_OUTPUT_BACKLOG_MIN_CAP_CHARS,
   terminalOutputBacklogCapChars
-} from '@yiru/runtime-protocol/workbench/terminal/scrollback-policy'
+} from '@yiru/protocol/terminal/scrollback-policy'
 import { recordRendererCrashBreadcrumb } from '~renderer/crash-report/breadcrumb-recorder'
 
 import {

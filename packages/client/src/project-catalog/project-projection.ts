@@ -1,10 +1,8 @@
-import {
-  LOCAL_EXECUTION_HOST_ID,
-  toRuntimeExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { projectHostSetupProjectionFromRepos } from '@yiru/runtime-protocol/workbench/project-host-setup-projection'
-import type { Project, ProjectHostSetup, Repo } from '@yiru/runtime-protocol/workbench/types'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
+import { LOCAL_EXECUTION_HOST_ID, toRuntimeExecutionHostId } from '@yiru/protocol/host/identity'
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { projectHostSetupProjectionFromRepos } from '@yiru/protocol/project/setup-projection'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 
 export type ProjectProjection = {
   projects: Project[]
@@ -32,7 +30,7 @@ export function collectProjectProjection(
 }
 
 function projectProjectionForTarget(input: ProjectProjectionTarget): ProjectProjection {
-  const derived = projectHostSetupProjectionFromRepos(input.repos)
+  const derived = projectHostSetupProjectionFromRepos(input.repos, Date.now())
   const fetchedSetups = input.fetchedSetups.map((setup) => setupForTarget(setup, input.target))
   return {
     projects: mergeProjects(derived.projects, input.fetchedProjects, false),

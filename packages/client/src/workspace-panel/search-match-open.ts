@@ -1,4 +1,4 @@
-import type { SearchFileResult, SearchMatch } from '@yiru/runtime-protocol/workbench/types'
+import type { SearchFileResult, SearchMatch } from '@yiru/protocol/files/values'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 
 export function cancelRevealFrame(frameRef: React.RefObject<number | null>): void {

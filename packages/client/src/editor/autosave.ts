@@ -2,7 +2,7 @@ import {
   DEFAULT_EDITOR_AUTO_SAVE_DELAY_MS,
   MAX_EDITOR_AUTO_SAVE_DELAY_MS,
   MIN_EDITOR_AUTO_SAVE_DELAY_MS
-} from '@yiru/runtime-protocol/workbench/constants'
+} from '@yiru/protocol/settings/editor'
 import type { OpenFile } from '~renderer/editor/state'
 import { joinPath } from '~renderer/path'
 import { clampNumber } from '~renderer/terminal/theme'

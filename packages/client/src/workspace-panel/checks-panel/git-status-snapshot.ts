@@ -1,8 +1,5 @@
-import type {
-  GitPushTarget,
-  GitStatusEntry,
-  GitUpstreamStatus
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitStatusEntry, GitUpstreamStatus } from '@yiru/protocol/git/status-types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
 
 export type ChecksPanelGitStatusContextInput = {
   repoId: string | null | undefined
@@ -10,10 +7,6 @@ export type ChecksPanelGitStatusContextInput = {
   worktreePath: string | null | undefined
   branch: string
   linkedGitHubPR?: number | null
-  linkedGitLabMR?: number | null
-  linkedBitbucketPR?: number | null
-  linkedAzureDevOpsPR?: number | null
-  linkedGiteaPR?: number | null
   runtimeEnvironmentId: string | null
   repoConnectionId: string | null
   pushTarget: GitPushTarget | null | undefined
@@ -58,10 +51,6 @@ export function buildChecksPanelGitStatusContextKey(
     // Why: this key gates right-sidebar async commits too; link/unlink must
     // make pre-change PR refreshes stale even when repo/branch are unchanged.
     linkedGitHubPR: input.linkedGitHubPR ?? null,
-    linkedGitLabMR: input.linkedGitLabMR ?? null,
-    linkedBitbucketPR: input.linkedBitbucketPR ?? null,
-    linkedAzureDevOpsPR: input.linkedAzureDevOpsPR ?? null,
-    linkedGiteaPR: input.linkedGiteaPR ?? null,
     runtimeEnvironmentId: input.runtimeEnvironmentId ?? '',
     repoConnectionId: input.repoConnectionId ?? '',
     pushTarget: input.pushTarget

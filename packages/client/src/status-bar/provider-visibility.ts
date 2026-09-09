@@ -1,5 +1,5 @@
-import type { ProviderRateLimits } from '@yiru/runtime-protocol/workbench/rate-limit-types'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 export type UsageProviderSettings = Pick<
   GlobalSettings,

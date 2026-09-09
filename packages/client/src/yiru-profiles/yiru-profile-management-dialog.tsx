@@ -1,8 +1,4 @@
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
-import type {
-  YiruProfileSummary,
-  TransferYiruProfileProjectMode
-} from '@yiru/runtime-protocol/workbench/yiru-profiles'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -32,6 +28,10 @@ import {
   DropdownMenuTrigger
 } from '~renderer/ui/dropdown-menu'
 import { ScrollArea } from '~renderer/ui/scroll-area'
+import type {
+  YiruProfileSummary,
+  TransferYiruProfileProjectMode
+} from '~renderer/yiru-profiles/profile-model'
 
 import { YiruProfileAvatar } from './yiru-profile-avatar'
 import {

@@ -1,6 +1,7 @@
-import type { RuntimeFileReadChunkResult } from '@yiru/runtime-protocol/workbench/runtime-types'
+import type { FileReadChunkResult } from '@yiru/protocol'
+import { translate } from '~renderer/i18n/i18n'
 
-import { callRuntimeOrpc, isRuntimeOrpcErrorCode } from '../orpc-client'
+import { requireFilesTarget } from '../files-target'
 import {
   getRuntimeFileArgs,
   hasRemoteRuntimeOwner,
@@ -12,8 +13,6 @@ import { readRuntimeFilePreview } from './read'
 import { shellFilesClient } from './shell-files'
 
 const REMOTE_DOWNLOAD_CHUNK_BYTES = 384 * 1024
-const REMOTE_DOWNLOAD_UPDATE_REQUIRED_MESSAGE =
-  'Remote file download requires a newer runtime host. Update the runtime host and try again.'
 
 export async function downloadRuntimeFile(
   context: RuntimeFileOperationArgs,
@@ -23,7 +22,9 @@ export async function downloadRuntimeFile(
   const runtimeArgs = getRuntimeFileArgs(context, filePath)
   if (!runtimeArgs) {
     if (hasRemoteRuntimeOwner(context)) {
-      throw new Error('Remote file is outside the owning runtime worktree')
+      throw new Error(
+        translate('runtime.file.outsideOwner', 'Remote file is outside the owning runtime worktree')
+      )
     }
     const result = await readRuntimeFilePreview(context, filePath)
     return shellFilesClient.saveDownloadedFile({
@@ -33,15 +34,7 @@ export async function downloadRuntimeFile(
     })
   }
 
-  if (!(await remoteChunkedDownloadAvailable(runtimeArgs))) {
-    return downloadRemoteFileViaPreview(runtimeArgs, suggestedName)
-  }
-
   const download = await shellFilesClient.startDownloadedFile({ suggestedName })
-  if (download.canceled) {
-    return download
-  }
-
   let finished = false
   try {
     let offset = 0
@@ -58,7 +51,9 @@ export async function downloadRuntimeFile(
         break
       }
       if (chunk.bytesRead <= 0) {
-        throw new Error('Remote download stalled before reaching EOF')
+        throw new Error(
+          translate('runtime.file.downloadStalled', 'Remote download stalled before reaching EOF')
+        )
       }
     }
     const result = await shellFilesClient.finishDownloadedFile({
@@ -82,14 +77,18 @@ export async function streamRuntimeFileDownloadChunks(
 ): Promise<void> {
   const runtimeArgs = getRuntimeFileArgs(context, filePath)
   if (!runtimeArgs) {
-    throw new Error('Remote file is outside the owning runtime worktree')
+    throw new Error(
+      translate('runtime.file.outsideOwner', 'Remote file is outside the owning runtime worktree')
+    )
   }
   let offset = 0
   let first = true
   for (;;) {
     const chunk = await readRemoteDownloadChunk(runtimeArgs, offset)
     if (chunk.bytesRead <= 0 && !chunk.eof) {
-      throw new Error('Remote download stalled before reaching EOF')
+      throw new Error(
+        translate('runtime.file.downloadStalled', 'Remote download stalled before reaching EOF')
+      )
     }
     await consume({ contentBase64: chunk.contentBase64, first, last: chunk.eof })
     first = false
@@ -100,35 +99,12 @@ export async function streamRuntimeFileDownloadChunks(
   }
 }
 
-async function remoteChunkedDownloadAvailable(runtimeArgs: RuntimeFileArgs): Promise<boolean> {
-  try {
-    await callRuntimeOrpc(
-      runtimeArgs.target,
-      (client) => client.files.readChunk,
-      {
-        worktree: runtimeArgs.worktreeSelector,
-        relativePath: runtimeArgs.relativePath,
-        offset: 0,
-        length: 1
-      },
-      { timeoutMs: 60_000 }
-    )
-    return true
-  } catch (error) {
-    if (isRuntimeOrpcErrorCode(error, 'method_not_found')) {
-      return false
-    }
-    throw error
-  }
-}
-
 async function readRemoteDownloadChunk(
   runtimeArgs: RuntimeFileArgs,
   offset: number
-): Promise<RuntimeFileReadChunkResult> {
-  return callRuntimeOrpc(
-    runtimeArgs.target,
-    (client) => client.files.readChunk,
+): Promise<FileReadChunkResult> {
+  const client = await requireFilesTarget(runtimeArgs.target)
+  return client.readChunk(
     {
       worktree: runtimeArgs.worktreeSelector,
       relativePath: runtimeArgs.relativePath,
@@ -136,43 +112,5 @@ async function readRemoteDownloadChunk(
       length: REMOTE_DOWNLOAD_CHUNK_BYTES
     },
     { timeoutMs: 60_000 }
-  )
-}
-
-async function downloadRemoteFileViaPreview(
-  runtimeArgs: RuntimeFileArgs,
-  suggestedName: string
-): Promise<RuntimeFileDownloadResult> {
-  try {
-    const result = await callRuntimeOrpc(
-      runtimeArgs.target,
-      (client) => client.files.readPreview,
-      { worktree: runtimeArgs.worktreeSelector, relativePath: runtimeArgs.relativePath },
-      { timeoutMs: 15_000 }
-    )
-    // Why: old servers use an empty metadata-free binary result to signal an
-    // unsupported binary; recognized zero-byte previews are still complete.
-    if (result.isBinary && !result.content && !result.isImage && !result.mimeType) {
-      throw new Error(REMOTE_DOWNLOAD_UPDATE_REQUIRED_MESSAGE)
-    }
-    return shellFilesClient.saveDownloadedFile({
-      suggestedName,
-      content: result.content,
-      encoding: result.isBinary ? 'base64' : 'utf8'
-    })
-  } catch (error) {
-    if (isUnsupportedRemotePreviewDownload(error)) {
-      throw new Error(REMOTE_DOWNLOAD_UPDATE_REQUIRED_MESSAGE)
-    }
-    throw error
-  }
-}
-
-function isUnsupportedRemotePreviewDownload(error: unknown): boolean {
-  return (
-    isRuntimeOrpcErrorCode(error, 'method_not_found') ||
-    (isRuntimeOrpcErrorCode(error, 'runtime_error') &&
-      error instanceof Error &&
-      (error.message === 'file_too_large' || error.message === 'binary_file'))
   )
 }

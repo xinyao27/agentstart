@@ -1,7 +1,7 @@
 import {
   normalizeThemeGradient,
   type ThemeGradientTheme
-} from '@yiru/runtime-protocol/workbench/theme-gradient/theme'
+} from '@yiru/protocol/settings/theme-gradient'
 import type { StateCreator } from 'zustand'
 import { setRuntimeUIState } from '~renderer/runtime/ui-client'
 import type { AppState } from '~renderer/store/types'

@@ -1,7 +1,4 @@
-import {
-  getFirstIncompleteFeatureWallSetupStepId,
-  type FeatureWallSetupStepId
-} from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
+import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { EyeSlash as EyeOff } from '~renderer/icons/hugeicons'
@@ -15,6 +12,7 @@ import {
   ContextMenuTrigger
 } from '~renderer/ui/context-menu'
 
+import { getFirstIncompleteFeatureWallSetupStepId } from '../feature-wall/content/setup-steps'
 import type { FeatureWallSetupProgress } from '../feature-wall/setup-progress'
 import { SetupGuideProgressRing } from '../setup-guide/progress-ring'
 import { useSetupGuideProgress } from '../setup-guide/use-setup-guide-progress'

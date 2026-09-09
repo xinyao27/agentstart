@@ -1,10 +1,9 @@
+import { isPushHookFailure, sanitizePushFailureDetails } from '@yiru/protocol/git/push-hook-failure'
 import {
   buildFixPushFailurePrompt,
   hasExpandedPushFailureDetails,
-  isPushHookFailure,
-  sanitizePushFailureDetails,
   summarizePushFailure
-} from '@yiru/runtime-protocol/workbench/source-control/push-failure'
+} from '~renderer/source-control/prompts/push-failure'
 
 import type { SourceControlActionError } from './action-error'
 

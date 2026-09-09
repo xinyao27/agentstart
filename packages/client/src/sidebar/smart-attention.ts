@@ -3,14 +3,12 @@ import {
   type AgentStateHistoryEntry,
   type AgentStatusEntry,
   type MigrationUnsupportedPtyEntry
-} from '@yiru/runtime-protocol/model/agent'
-import type { AgentStatus } from '@yiru/runtime-protocol/workbench/agent/detection'
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type {
-  TerminalLayoutSnapshot,
-  TerminalTab,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/status-records'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { AgentStatus } from '~renderer/agent/title/core'
 import { migrationUnsupportedToAgentStatusEntry } from '~renderer/agent/unsupported-entry-migration'
 import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
 import {

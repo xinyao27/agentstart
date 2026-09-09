@@ -2,8 +2,8 @@ import {
   getRepoExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+} from '@yiru/protocol/host/identity'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import { translate } from '~renderer/i18n/i18n'
 import { getConnectionIdFromState } from '~renderer/runtime/connection-context'
 import { useAppStore } from '~renderer/store/state'

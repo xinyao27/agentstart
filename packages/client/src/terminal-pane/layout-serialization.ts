@@ -1,9 +1,9 @@
-import { isTerminalLeafId } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { isTerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode,
   TerminalPaneSplitDirection
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/session'
 import { recordRendererCrashBreadcrumb } from '~renderer/crash-report/breadcrumb-recorder'
 import type { PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
 import { isXtermInstanceDisposed } from '~renderer/terminal-pane/pane-manager/xterm-instance-disposed'

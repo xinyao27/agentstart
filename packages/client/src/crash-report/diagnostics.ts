@@ -1,7 +1,7 @@
 import type {
   CrashReportBreadcrumbData,
   CrashReportDetailValue
-} from '@yiru/runtime-protocol/workbench/crash-reporting'
+} from '@yiru/protocol/crash-reports/values'
 
 import { recordRendererCrashBreadcrumb } from './breadcrumb-recorder'
 import { collectRendererMemoryProfileCounts } from './memory-profile'

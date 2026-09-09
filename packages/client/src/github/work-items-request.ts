@@ -2,18 +2,18 @@ import {
   normalizeExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+} from '@yiru/protocol/host/identity'
+import type { ListWorkItemsResult } from '@yiru/protocol/hosted-review/query-types'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { Repo } from '@yiru/protocol/project/repository'
 import {
   getProjectSourceCacheScope,
   getProjectSourceRuntimeSettings,
   type ProjectSourceContext
-} from '@yiru/runtime-protocol/workbench/project-source-context'
-import type {
-  GitHubWorkItem,
-  ListWorkItemsResult,
-  Repo
-} from '@yiru/runtime-protocol/workbench/types'
-import { callRuntimeOrpc, type RuntimeClientTarget } from '~renderer/runtime/orpc-client'
+} from '@yiru/protocol/project/source-context'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 import type { AppState } from '~renderer/store/types'
 
 import { workItemsCacheKey } from './cache-policy'
@@ -153,10 +153,13 @@ export function listGitHubWorkItemsForRepo(
   args: GitHubWorkItemsListArgs
 ): Promise<ListWorkItemsResult<Omit<GitHubWorkItem, 'repoId'>>> {
   const { target, repo } = githubRuntimeRequest(context)
-  return callRuntimeOrpc(
-    target,
-    (client) => client.github.listWorkItems,
-    { repo, ...args },
-    { timeoutMs: 30_000 }
-  )
+  return openGitHubTarget().then((client) => {
+    if (!client) {
+      throw new Error('GitHub protocol capability is unavailable')
+    }
+    return client.listWorkItems(
+      { repo, limit: args.limit, page: args.page, query: args.query },
+      { timeoutMs: 30_000, ...runtimeCallDestination(target) }
+    )
+  })
 }

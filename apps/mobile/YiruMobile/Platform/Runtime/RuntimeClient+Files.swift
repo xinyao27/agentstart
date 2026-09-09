@@ -1,49 +1,28 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient: WorkspaceFilesRepository {
     func loadWorkspaceDirectory(
         for hostID: String,
         worktreeID: String,
         relativePath: String
-    ) async throws -> WorkspaceDirectoryLoad {
+    ) async throws -> [WorkspaceDirectoryEntry] {
         do {
-            do {
-                let wire: [MobileFileDirectoryEntryWire] = try await callRuntime(
-                    hostID: hostID,
-                    path: MobileSessionTabsWireContract.fileReadDirectoryPath,
-                    input: MobileFileDirectoryRequestWire(
-                        worktree: "id:\(worktreeID)",
-                        relativePath: relativePath
-                    ),
-                    output: [MobileFileDirectoryEntryWire].self
-                )
-                return .entries(
-                    wire.map {
-                        WorkspaceDirectoryEntry(
-                            name: $0.name,
-                            isDirectory: $0.isDirectory,
-                            isSymlink: $0.isSymlink
-                        )
-                    }
-                )
-            } catch let error as RuntimeOrpcError
-                where relativePath.isEmpty && isFilesMethodUnavailable(error)
-            {
-                let wire: MobileFileListResultWire = try await callRuntime(
-                    hostID: hostID,
-                    path: MobileSessionTabsWireContract.fileListPath,
-                    input: MobileSessionTabsWorktreeRequestWire(worktree: "id:\(worktreeID)"),
-                    output: MobileFileListResultWire.self
-                )
-                return .legacy(
-                    files: wire.files.map {
-                        WorkspaceLegacyFile(
-                            relativePath: $0.relativePath,
-                            basename: $0.basename,
-                            kind: $0.kind
-                        )
-                    },
-                    isTruncated: wire.truncated
+            var request = Yiru_Runtime_V1_FilesServiceReadDirectoryRequest()
+            request.worktree = "id:\(worktreeID)"
+            request.relativePath = relativePath
+            let response = try await protocolUnary(
+                hostID: hostID,
+                procedure: YiruRuntimeV1FilesServiceMethods.readDirectory,
+                request: request,
+                response: Yiru_Runtime_V1_FilesServiceReadDirectoryResponse.self
+            )
+            return response.entries.map {
+                WorkspaceDirectoryEntry(
+                    name: $0.name,
+                    isDirectory: $0.isDirectory,
+                    isSymlink: $0.isSymlink
                 )
             }
         } catch is CancellationError {
@@ -59,16 +38,36 @@ extension RuntimeClient: WorkspaceFilesRepository {
     func reconnectWorkspaceFiles(for hostID: String) async {
         await reconnect(hostID: hostID)
     }
-}
 
-nonisolated private func isFilesMethodUnavailable(_ error: RuntimeOrpcError) -> Bool {
-    error.serverCode == "forbidden"
-        || error.serverCode == "method_not_found"
-        || error.serverMessage?.contains("not available to mobile clients") == true
+    // Why: markdown creation and terminal file opens across two extensions share
+    // this single FilesService.Open projection so the `opened` semantics stay
+    // defined in one place.
+    func protocolFilesOpen(
+        hostID: String,
+        worktree: String,
+        relativePath: String
+    ) async throws -> Yiru_Runtime_V1_FileOpenResult {
+        var request = Yiru_Runtime_V1_FilesServiceOpenRequest()
+        request.worktree = worktree
+        request.relativePath = relativePath
+        let response = try await protocolUnary(
+            hostID: hostID,
+            procedure: YiruRuntimeV1FilesServiceMethods.open,
+            request: request,
+            response: Yiru_Runtime_V1_FilesServiceOpenResponse.self
+        )
+        return response.result
+    }
 }
 
 nonisolated private func workspaceFilesFailureMessage(_ error: Error) -> String {
-    if let message = (error as? RuntimeOrpcError)?.serverMessage,
+    if let message = (error as? RuntimeServiceError)?.serverMessage,
+        !message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    {
+        return message
+    }
+    if let transportError = error as? RuntimeTransportError,
+        case .serverStatus(_, let message) = transportError,
         !message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     {
         return message

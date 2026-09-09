@@ -1,10 +1,10 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
 import React from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { cn } from '~renderer/ui/class-names'
 
 function hostedReviewLabel(review: HostedReviewInfo): string {
-  return `${review.provider === 'gitlab' ? 'MR' : 'PR'} #${review.number}`
+  return `PR #${review.number}`
 }
 
 export function HostedReviewHeaderLink({

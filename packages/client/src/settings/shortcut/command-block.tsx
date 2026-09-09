@@ -3,7 +3,7 @@ import {
   type KeybindingActionId,
   type KeybindingDefinition,
   type KeybindingInput
-} from '@yiru/runtime-protocol/workbench/keybindings'
+} from '@yiru/protocol/keybindings'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

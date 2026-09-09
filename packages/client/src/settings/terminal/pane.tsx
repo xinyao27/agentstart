@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useAppStore } from '~renderer/store/state'
 import { isMacUserAgent, isWindowsUserAgent } from '~renderer/terminal-pane/pane-interactions'
 import { Separator } from '~renderer/ui/separator'

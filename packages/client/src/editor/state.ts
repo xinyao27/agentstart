@@ -26,7 +26,7 @@ export type {
   ActiveRightSidebarTab,
   RightSidebarExplorerView,
   RightSidebarTab
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/settings/ui-state'
 export type {
   ActivityBarPosition,
   BranchCompareSnapshot,

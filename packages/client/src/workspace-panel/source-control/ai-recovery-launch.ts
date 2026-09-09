@@ -1,11 +1,12 @@
+import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
+import { planAgentCliArgsSuffix } from '@yiru/protocol/agent/shell-command'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import { isTuiAgentEnabled } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
+} from '@yiru/protocol/source-control/ai-actions'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
-import { planAgentCliArgsSuffix } from '~renderer/agent/tui-startup'
+import { startupCommandErrorMessage } from '~renderer/agent/startup-error'
 import { translate } from '~renderer/i18n/i18n'
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import {
@@ -114,7 +115,7 @@ export async function launchSourceControlRecoveryAgentWithDefault({
   if (!agentArgsPlan.ok) {
     // Why: saved launch recipes are shared with direct launches; reject bad
     // argv before remote agent detection or terminal creation has side effects.
-    toast.error(agentArgsPlan.error)
+    toast.error(startupCommandErrorMessage(agentArgsPlan.error))
     return false
   }
   if (!basePrompt) {
@@ -155,7 +156,7 @@ export async function launchSourceControlRecoveryAgentWithDefault({
     toast.error(copy.noEnabledAgent)
     return false
   }
-  const result = launchAgentInNewTab({
+  const result = await launchAgentInNewTab({
     agent,
     worktreeId: activeWorktreeId,
     groupId: activeGroupId ?? activeWorktreeId,

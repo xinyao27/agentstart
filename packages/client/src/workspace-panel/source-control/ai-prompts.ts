@@ -3,12 +3,12 @@ export { buildPushFailureAgentCommandInput } from '~renderer/source-control/push
 export {
   appendCommitFailureCustomInstruction,
   buildFixCommitFailurePrompt
-} from '@yiru/runtime-protocol/model/review'
+} from '~renderer/source-control/prompts/commit-failure'
 export {
   appendPushFailureCustomInstruction,
   buildFixPushFailurePrompt
-} from '@yiru/runtime-protocol/workbench/source-control/push-failure'
+} from '~renderer/source-control/prompts/push-failure'
 export {
   buildResolveConflictsPrompt,
   buildResolvePullRequestConflictsPrompt
-} from '@yiru/runtime-protocol/model/review'
+} from '~renderer/source-control/prompts/conflicts'

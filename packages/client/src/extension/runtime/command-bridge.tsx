@@ -1,7 +1,9 @@
+import type { WorkspaceEventRecord } from '@yiru/protocol'
 import { useEffect } from 'react'
+import { listRuntimeRepos } from '~renderer/runtime/repo-catalog-target'
+import { watchWorkspaceEvents } from '~renderer/runtime/workspace-events-target'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
-import { getExtensionRuntimeClient } from './session'
 
 export function DaemonCommandBridge(): null {
   useEffect(() => {
@@ -18,48 +20,41 @@ async function consumeCommands(signal: AbortSignal): Promise<void> {
   let afterId = 0
   while (!signal.aborted) {
     try {
-      const subscription = await (
-        await getExtensionRuntimeClient()
-      ).workspaceEvents.subscribe({ afterId, scope: 'daemon' }, { signal })
-      for await (const message of subscription) {
-        if (signal.aborted) {
-          return
-        }
-        if (message.type !== 'event') {
-          continue
-        }
-        if (message.event.kind !== 'browser.open-tab.requested') {
-          if (
-            message.event.kind === 'ritual.start-day.complete' ||
-            message.event.kind === 'ritual.end-day.complete'
-          ) {
-            const projects = await (await getExtensionRuntimeClient()).repo.list()
-            await getExtensionBrowserCapabilities().applyScheduledRitual({
-              eventId: message.event.id,
-              kind: message.event.kind === 'ritual.start-day.complete' ? 'start-day' : 'end-day',
-              projectIds: projects.repos.map((project) => project.id)
-            })
-          }
-          afterId = message.event.id
-          continue
-        }
-        const url = message.event.payload.url
-        const projectId = message.event.payload.projectId
-        if (typeof url !== 'string') {
-          afterId = message.event.id
-          continue
-        }
-        await getExtensionBrowserCapabilities().openDaemonTabCommand({
-          eventId: message.event.id,
-          ...(typeof projectId === 'string' ? { projectId } : {}),
-          url
+      // Why: the daemon resumes the journal at this cursor, so a reopened watch
+      // never re-runs a command this bridge already applied.
+      await watchWorkspaceEvents({ kind: 'local' }, { afterId, scope: 'daemon' }, signal, (event) =>
+        applyCommand(event).then(() => {
+          afterId = event.id
         })
-        afterId = message.event.id
-      }
+      )
     } catch {
       if (!signal.aborted) {
         await new Promise<void>((resolve) => window.setTimeout(resolve, 1_500))
       }
     }
   }
+}
+
+async function applyCommand(event: WorkspaceEventRecord): Promise<void> {
+  if (event.kind !== 'browser.open-tab.requested') {
+    if (event.kind === 'ritual.start-day.complete' || event.kind === 'ritual.end-day.complete') {
+      const projects = await listRuntimeRepos({ kind: 'local' })
+      await getExtensionBrowserCapabilities().applyScheduledRitual({
+        eventId: event.id,
+        kind: event.kind === 'ritual.start-day.complete' ? 'start-day' : 'end-day',
+        projectIds: projects.repos.map((project) => project.id)
+      })
+    }
+    return
+  }
+  const url = event.payload.url
+  const projectId = event.payload.projectId
+  if (typeof url !== 'string') {
+    return
+  }
+  await getExtensionBrowserCapabilities().openDaemonTabCommand({
+    eventId: event.id,
+    ...(typeof projectId === 'string' ? { projectId } : {}),
+    url
+  })
 }

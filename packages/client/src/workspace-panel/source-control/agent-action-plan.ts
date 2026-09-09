@@ -1,12 +1,13 @@
-import { resolveLocalWindowsAgentStartupShell } from '@yiru/runtime-protocol/model/platform'
-import type { SessionOptionValue } from '@yiru/runtime-protocol/workbench/agent/session-options'
-import { TUI_AGENT_CONFIG } from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import { isTuiAgentEnabled } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
+import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
+import type { SessionOptionValue } from '@yiru/protocol/agent/session-options/types'
+import { planAgentCliArgsSuffix } from '@yiru/protocol/agent/shell-command'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { resolveLocalWindowsAgentStartupShell } from '@yiru/protocol/host/windows-terminal-shell'
+import { startupCommandErrorMessage } from '~renderer/agent/startup-error'
 import {
   buildAgentDraftLaunchPlan,
   buildAgentStartupPlan,
-  planAgentCliArgsSuffix,
   type AgentStartupPlan
 } from '~renderer/agent/tui-startup'
 import { translate } from '~renderer/i18n/i18n'
@@ -94,7 +95,7 @@ export function planSourceControlAgentActionLaunch(args: {
     }) ?? (platform === 'win32' ? 'powershell' : 'posix')
   const plannedArgs = planAgentCliArgsSuffix(args.agentArgs, shell)
   if (!plannedArgs.ok) {
-    return { ok: false, error: plannedArgs.error }
+    return { ok: false, error: startupCommandErrorMessage(plannedArgs.error) }
   }
   let startupPlan: AgentStartupPlan | null = null
   let delivery: SourceControlLaunchPlanDelivery

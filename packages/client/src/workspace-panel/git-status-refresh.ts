@@ -1,9 +1,6 @@
-import type {
-  GitPushTarget,
-  GitStatusResult,
-  GitUpstreamStatus,
-  GlobalSettings
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitStatusResult, GitUpstreamStatus } from '@yiru/protocol/git/status-types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { getRuntimeGitStatus, getRuntimeGitUpstreamStatus } from '~renderer/runtime/git-client'
 import {
   clearAutomaticPushTargetUpstreamStatusCache,

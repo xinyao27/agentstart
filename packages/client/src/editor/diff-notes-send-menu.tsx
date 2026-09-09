@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import React from 'react'
 import { formatDiffComments } from '~renderer/editor/diff-comments-format'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,4 +1,4 @@
-import type { WorkspacePort } from '@yiru/runtime-protocol/workbench/workspace/ports'
+import type { WorkspacePort } from '@yiru/protocol'
 
 export function getLocalWorkspacePortSections(
   scan: { ports: WorkspacePort[] } | null | undefined,

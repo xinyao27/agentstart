@@ -1,7 +1,4 @@
-import {
-  normalizeExecutionHostId,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+import { normalizeExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
 
 export type HostHeaderRect = {
   hostId: ExecutionHostId

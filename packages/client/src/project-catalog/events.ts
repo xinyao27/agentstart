@@ -1,9 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { subscribeRuntimeClientEvents } from '~renderer/runtime/client-events'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
-import { getRuntimeTargetOrpc } from '~renderer/runtime/query-target'
 import { repoHostClient } from '~renderer/runtime/repo-host-client'
+import {
+  RUNTIME_ENVIRONMENTS_QUERY_KEY,
+  runtimeEnvironmentsClient
+} from '~renderer/runtime/runtime-environments-client'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 import { worktreeHostClient } from '~renderer/runtime/worktree-host-client'
 
 import { invalidateProjectCatalogTarget } from './refresh'
@@ -13,10 +16,11 @@ const LOCAL_TARGET = { kind: 'local' } as const satisfies RuntimeClientTarget
 
 export function useProjectCatalogEvents(): void {
   const queryClient = useQueryClient()
-  const localOrpc = getRuntimeTargetOrpc(LOCAL_TARGET)
-  const environments = useQuery(
-    localOrpc.shell.runtimeEnvironments.list.queryOptions({ staleTime: 30_000 })
-  )
+  const environments = useQuery({
+    queryKey: RUNTIME_ENVIRONMENTS_QUERY_KEY,
+    queryFn: () => runtimeEnvironmentsClient.list(),
+    staleTime: 30_000
+  })
   const environmentKey = (environments.data ?? [])
     .map((environment) => environment.id)
     .sort()

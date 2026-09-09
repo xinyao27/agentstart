@@ -1,11 +1,9 @@
-import {
-  getRepoExecutionHostId,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+import type { WorktreeSetPatch } from '@yiru/protocol'
+import { getRepoExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
 import { readWorktreeMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterWorktreeMutation } from '~renderer/project-catalog/mutation-refresh'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
+import { setRuntimeWorktree } from '~renderer/runtime/worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 
 import { findRepoForHost } from '../../repo/state/host-identity'
@@ -24,23 +22,22 @@ export async function setWorktreeLineageForRuntime(
   const target = getActiveRuntimeTarget(settings)
   const repoId = getRepoIdFromWorktreeId(worktreeId)
   const expectedRevision = readWorktreeMutationRevision(target, repoId)
-  // Why: the local IPC handler for `worktrees:updateLineage` already delegates
-  // to `runtime.updateManagedWorktreeMeta` — the exact method `worktree.set`
-  // calls on the environment path — so routing local through the same oRPC
-  // call is not a behavior change, just one fewer preload channel.
-  const result = await callRuntimeOrpc(
-    target,
-    (client) => client.worktree.set,
-    {
-      expectedRevision,
-      worktree: toRuntimeWorktreeSelector(worktreeId),
+  // Why: `worktree.set`'s patch whitelist has never read `parentWorktree` or
+  // `noParent` (see the daemon's `parse_set`) — lineage capture happens as a
+  // side effect of `create`, not `set` — so these fields are inert on every
+  // transport this call has ever used. Routing local through the same call
+  // as the environment path is not a behavior change, just one fewer preload
+  // channel.
+  const result = await setRuntimeWorktree(target, {
+    worktree: toRuntimeWorktreeSelector(worktreeId),
+    expectedRevision,
+    patch: {
       ...(args.parentWorktreeId
         ? { parentWorktree: toRuntimeWorktreeSelector(args.parentWorktreeId) }
         : {}),
       ...(args.noParent === true ? { noParent: true } : {})
-    },
-    { timeoutMs: 15_000 }
-  )
+    } as WorktreeSetPatch
+  })
   await refreshAfterWorktreeMutation(target, repoId, result.revision)
   return { target }
 }

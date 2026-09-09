@@ -1,15 +1,17 @@
-import {
-  CUSTOM_AGENT_ID,
-  type CustomAgentId,
-  getCommitMessageAgentCapability,
-  isCustomAgentId,
-  listCommitMessageAgentCapabilities
-} from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import {
   SOURCE_CONTROL_TEXT_ACTION_IDS,
   type SourceControlActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-actions'
+import {
+  getCommitMessageAgentCapability,
+  listCommitMessageAgentCapabilities
+} from '@yiru/protocol/source-control/catalog/agents'
+import {
+  CUSTOM_AGENT_ID,
+  type CustomAgentId,
+  isCustomAgentId
+} from '@yiru/protocol/source-control/custom-agent'
 import { getAgentCatalog, type AgentCatalogEntry } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
@@ -51,7 +53,7 @@ export const getActionDescriptions = createLocalizedCatalog(
     ),
     resolveComments: translate(
       'auto.components.settings.source.control.action.recipe.options.resolveComments',
-      'Start an agent from selected unresolved PR or MR comments.'
+      'Start an agent from selected unresolved PR comments.'
     )
   })
 )

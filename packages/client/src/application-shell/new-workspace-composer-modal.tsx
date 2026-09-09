@@ -1,9 +1,7 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type {
-  TuiAgent,
-  WorkspaceCreateTelemetrySource,
-  WorkspaceStatus
-} from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
+import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
 import React, { useEffect, useState } from 'react'
 import AgentSettingsDialog from '~renderer/agent/settings-dialog'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query'
 import { translate } from '~renderer/i18n/i18n'
 import { ChatCircle, CheckCircle } from '~renderer/icons/hugeicons'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 import { Button } from '~renderer/ui/button'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
-import { getExtensionRuntimeClient } from '../runtime/session'
 import type { ForgePageIdentity } from './page-identity'
 
 type CommentDraftProps = {
@@ -21,9 +21,11 @@ export function CommentDraft({ identity, projectId }: CommentDraftProps): React.
         throw new Error('github_page_permission_denied')
       }
       const pageContext = await capabilities.readGitHubContext()
-      const result = await (
-        await getExtensionRuntimeClient()
-      ).githubCommentDraft.create({
+      const client = await openGitHubTarget()
+      if (!client) {
+        throw new Error('GitHub protocol capability is unavailable')
+      }
+      const result = await client.createCommentDraft({
         kind: identity.kind,
         number: identity.number,
         pageContext,

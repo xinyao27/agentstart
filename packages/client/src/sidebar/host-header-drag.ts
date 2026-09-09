@@ -1,4 +1,4 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
 import type { PointerEvent as ReactPointerEvent } from 'react'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'

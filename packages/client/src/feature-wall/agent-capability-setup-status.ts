@@ -5,14 +5,12 @@ import {
   ORCHESTRATION_SKILL_NAME
 } from '~renderer/agent/feature-install-commands'
 import { translate } from '~renderer/i18n/i18n'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
-import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
+import { openComputerTarget } from '~renderer/runtime/computer-target'
 import { useActiveProjectSkillRuntime } from '~renderer/skills/use-active-project-runtime'
 import {
   GLOBAL_AGENT_SKILL_SOURCE_KINDS,
   useInstalledAgentSkill
 } from '~renderer/skills/use-installed-agents'
-import { useAppStore } from '~renderer/store/state'
 
 import type {
   OnboardingFeatureSetupId,
@@ -224,10 +222,20 @@ function useComputerUsePermissionStatus(enabled: boolean): {
   checking: boolean
   unavailableReason: string | null
 } {
-  const target = getActiveRuntimeTarget(useAppStore((state) => state.settings))
   const permissions = useQuery({
-    queryKey: ['computer-use-permissions', target],
-    queryFn: () => callRuntimeOrpc(target, (client) => client.computer.permissionsStatus, {}),
+    queryKey: ['computer-use-permissions'],
+    queryFn: async () => {
+      const client = await openComputerTarget()
+      if (!client) {
+        throw new Error(
+          translate(
+            'feature.wall.agentCapabilitySetupStatus.computerUseUnavailable',
+            'Computer Use requires a local Yiru daemon connection'
+          )
+        )
+      }
+      return client.permissionsStatus()
+    },
     enabled
   })
   const result = permissions.data

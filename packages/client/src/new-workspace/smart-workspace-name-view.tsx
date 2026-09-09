@@ -1,22 +1,16 @@
 import type { Popover as PopoverPrimitive } from '@base-ui/react/popover'
-import type { GitHubWorkItem, GitLabWorkItem } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
 import type { Dispatch, RefObject, SetStateAction } from 'react'
 import { parseGitHubPullRequestLink } from '~renderer/github/links'
 import { translate } from '~renderer/i18n/i18n'
 import { TextAa as CaseSensitive, MagnifyingGlass as Search } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
-import { parseGitLabMergeRequestLink } from '~renderer/new-workspace/gitlab-links'
-import { Button } from '~renderer/ui/button'
 import { Command, CommandGroup, CommandItem, CommandList } from '~renderer/ui/command'
 import { Input } from '~renderer/ui/input'
 import { Popover, PopoverAnchor, PopoverContent } from '~renderer/ui/popover'
 
 import { resolveSmartWorkspaceCommandValue } from './smart-workspace-command-value'
-import type {
-  getMrStateFilters,
-  getSmartWorkspaceNameModes,
-  MrStateFilter
-} from './smart-workspace-localized-options'
+import type { getSmartWorkspaceNameModes } from './smart-workspace-localized-options'
 import { SmartWorkspaceModeTabs } from './smart-workspace-mode-tabs'
 import type { SmartWorkspaceNameSelection } from './smart-workspace-name-rows'
 import {
@@ -51,13 +45,10 @@ type SmartWorkspaceNameViewProps = {
   localInputRef: RefObject<HTMLInputElement | null>
   markSourcePopoverUserEngaged: () => void
   mode: SmartNameMode
-  mrStateFilter: MrStateFilter
-  mrStateFilters: ReturnType<typeof getMrStateFilters>
   onActiveSourceModeChange?: (mode: SmartNameMode) => void
   onBranchSelect: (refName: string, localBranchName: string) => void
   onClearSelectedSource: () => void
   onGitHubItemSelect: (item: GitHubWorkItem) => void
-  onGitLabItemSelect?: (item: GitLabWorkItem) => void
   onPlainEnter?: () => void
   onValueChange: (value: string) => void
   repoBackedSourcesDisabled: boolean
@@ -66,7 +57,6 @@ type SmartWorkspaceNameViewProps = {
   setCommandValue: Dispatch<SetStateAction<string>>
   setInputNode: (node: HTMLInputElement | null) => void
   setMode: Dispatch<SetStateAction<SmartNameMode>>
-  setMrStateFilter: Dispatch<SetStateAction<MrStateFilter>>
   setOpen: Dispatch<SetStateAction<boolean>>
   setSelectedSourceNode: (node: HTMLDivElement | null) => void
   tabsListRef: RefObject<HTMLDivElement | null>
@@ -90,13 +80,10 @@ export function SmartWorkspaceNameView({
   localInputRef,
   markSourcePopoverUserEngaged,
   mode,
-  mrStateFilter,
-  mrStateFilters,
   onActiveSourceModeChange,
   onBranchSelect,
   onClearSelectedSource,
   onGitHubItemSelect,
-  onGitLabItemSelect,
   onPlainEnter,
   onValueChange,
   repoBackedSourcesDisabled,
@@ -105,7 +92,6 @@ export function SmartWorkspaceNameView({
   setCommandValue,
   setInputNode,
   setMode,
-  setMrStateFilter,
   setOpen,
   setSelectedSourceNode,
   tabsListRef,
@@ -131,7 +117,7 @@ export function SmartWorkspaceNameView({
     if (/^#\d+$/.test(trimmed) || parseGitHubPullRequestLink(trimmed)?.type === 'pr') {
       return 'github'
     }
-    return parseGitLabMergeRequestLink(trimmed)?.type === 'mr' ? 'gitlab' : null
+    return null
   })()
   const resolvedCommandValue = resolveSmartWorkspaceCommandValue({
     currentValue: commandValue,
@@ -148,11 +134,11 @@ export function SmartWorkspaceNameView({
     : branchesEnabled
       ? translate(
           'auto.components.new.workspace.SmartWorkspaceNameField.smartPlaceholderWithBranches',
-          'Type a name, #1234, branch, GitHub PR or GitLab MR URL'
+          'Type a name, #1234, branch, or GitHub PR URL'
         )
       : translate(
           'auto.components.new.workspace.SmartWorkspaceNameField.smartPlaceholder',
-          'Type a name, #1234, GitHub PR or GitLab MR URL'
+          'Type a name, #1234, or GitHub PR URL'
         )
   const placeholder = disabled
     ? (disabledPlaceholder ??
@@ -164,27 +150,20 @@ export function SmartWorkspaceNameView({
             'auto.components.new.workspace.SmartWorkspaceNameField.searchGitHub',
             'Search GitHub PRs'
           )
-        : mode === 'gitlab'
+        : mode === 'branches'
           ? translate(
-              'auto.components.new.workspace.SmartWorkspaceNameField.searchGitLab',
-              'Search GitLab MRs'
+              'auto.components.new.workspace.SmartWorkspaceNameField.searchBranches',
+              'Search branches'
             )
-          : mode === 'branches'
-            ? translate(
-                'auto.components.new.workspace.SmartWorkspaceNameField.searchBranches',
-                'Search branches'
-              )
-            : translate(
-                'auto.components.new.workspace.SmartWorkspaceNameField.workspaceName',
-                'Workspace name'
-              )
+          : translate(
+              'auto.components.new.workspace.SmartWorkspaceNameField.workspaceName',
+              'Workspace name'
+            )
   const handleSelect = (row: SmartWorkspaceSourceRow): void => {
     if (row.kind === 'use-name' || row.kind === 'create-branch') {
       onValueChange(row.name)
     } else if (row.kind === 'github') {
       onGitHubItemSelect(row.item)
-    } else if (row.kind === 'gitlab') {
-      onGitLabItemSelect?.(row.item)
     } else if (row.kind === 'branch') {
       onBranchSelect(row.refName, row.localBranchName)
     }
@@ -282,7 +261,7 @@ export function SmartWorkspaceNameView({
                             return
                           }
                           // No highlighted row (e.g., stale results in
-                          // GitHub/GitLab modes where the highlight was
+                          // GitHub mode where the highlight was
                           // cleared to avoid auto-selecting a stale source).
                           // Fall through to onPlainEnter so the keypress
                           // doesn't feel inert.
@@ -313,28 +292,6 @@ export function SmartWorkspaceNameView({
             // root's onOpenChange (see handleSourcePopoverOpenChange).
             initialFocus={false}
           >
-            {mode === 'gitlab' ? (
-              // Why: GitLab MR-state filter — Open / Merged / Closed / All —
-              // mirrors the gitlab.com merge-requests page tab strip so users
-              // arriving from the web UI find a familiar control.
-              <div
-                className="border-border/40 flex shrink-0 items-center gap-1 border-b px-2 py-1.5"
-                onMouseDown={(e) => e.preventDefault()}
-              >
-                {mrStateFilters.map(({ id, label }) => (
-                  <Button
-                    key={id}
-                    type="button"
-                    variant={mrStateFilter === id ? 'secondary' : 'ghost'}
-                    size="sm"
-                    onClick={() => setMrStateFilter(id)}
-                    className="h-6 px-2 text-xs"
-                  >
-                    {label}
-                  </Button>
-                ))}
-              </div>
-            ) : null}
             <CommandList className="scrollbar-sleek !max-h-none min-h-0 flex-1">
               {typedTextActionRow ? (
                 <div

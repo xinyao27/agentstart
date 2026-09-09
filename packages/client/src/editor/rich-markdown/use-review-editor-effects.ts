@@ -1,5 +1,5 @@
 import type { Editor } from '@tiptap/react'
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import { useEffect, type RefObject } from 'react'
 
 import { richMarkdownAnnotationHighlightPluginKey } from './annotation-highlight'

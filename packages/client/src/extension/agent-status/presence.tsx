@@ -3,12 +3,13 @@ import { useEffect } from 'react'
 import { agentPhaseLabel } from '~renderer/agent-session/phase'
 import { useAgentPresence } from '~renderer/agent-session/presence'
 import { translate } from '~renderer/i18n/i18n'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
 import { getExtensionHostNavigation } from '../navigation'
 import { terminalsQuery } from '../runtime/queries'
-import { getExtensionRuntimeClient } from '../runtime/session'
 import { confirmDangerousOperation } from '../security/passkey'
+
 export function AgentPresence(): null {
   const terminals = useQuery(terminalsQuery)
   const projectId = new URLSearchParams(window.location.search).get('project')
@@ -78,7 +79,7 @@ export function AgentPresence(): null {
     void capabilities.consumePendingAgentApproval().then(async (terminal) => {
       if (terminal) {
         await confirmDangerousOperation(`terminal.approve:${terminal}`)
-        await (await getExtensionRuntimeClient()).terminal.approve({ terminal })
+        await (await openRuntimeTerminalClient({ kind: 'local' })).approve(terminal)
       }
     })
   }, [terminals.dataUpdatedAt])

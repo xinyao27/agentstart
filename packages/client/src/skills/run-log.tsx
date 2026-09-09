@@ -1,6 +1,6 @@
-import type { SkillUpdateRun } from '@yiru/runtime-protocol/workbench/skill-freshness'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretDown as ChevronDown } from '~renderer/icons/hugeicons'
+import type { SkillUpdateRun } from '~renderer/skills/freshness-model'
 import { Button } from '~renderer/ui/button'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '~renderer/ui/collapsible'
 import { ScrollArea } from '~renderer/ui/scroll-area'
@@ -37,12 +37,6 @@ export function SkillRunLog({ output }: { output: string }): React.JSX.Element |
  *  dialog keeps its own wording because it also explains partial convergence. */
 export function describeSkillRunFailure(run: Extract<SkillUpdateRun, { state: 'error' }>): string {
   switch (run.kind) {
-    case 'unsafe-command-path':
-      return translate(
-        'auto.components.skills.SkillRunLog.unsafeCommandPath',
-        'Could not run {{value0}} safely from this location.',
-        { value0: run.command }
-      )
     case 'launch-failed':
       return translate(
         'auto.components.skills.SkillRunLog.launchFailed',

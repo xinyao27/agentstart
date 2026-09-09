@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogQueryClient } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshProjectCatalogLineage } from '~renderer/project-catalog/refresh'
@@ -37,7 +37,6 @@ export function createWorktreeLineageActions(
   | 'assignWorktreeParent'
   | 'updateWorktreeGitIdentity'
   | 'updateWorktreeBaseStatus'
-  | 'updateWorktreeRemoteBranchConflict'
 > {
   return {
     updateWorktreeLineage: async (worktreeId, args) => {
@@ -207,14 +206,6 @@ export function createWorktreeLineageActions(
       set((s) => ({
         baseStatusByWorktreeId: {
           ...s.baseStatusByWorktreeId,
-          [event.worktreeId]: event
-        }
-      }))
-    },
-    updateWorktreeRemoteBranchConflict: (event) => {
-      set((s) => ({
-        remoteBranchConflictByWorktreeId: {
-          ...s.remoteBranchConflictByWorktreeId,
           [event.worktreeId]: event
         }
       }))

@@ -1,5 +1,5 @@
-import { isWindowsAbsolutePathLike } from '@yiru/runtime-protocol/model/platform'
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { useEffect, useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { createBrowserUuid } from '~renderer/browser/uuid'

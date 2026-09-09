@@ -4,8 +4,13 @@ import {
   readProjectCatalogSnapshot
 } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterProjectCatalogMutation } from '~renderer/project-catalog/mutation-refresh'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import {
+  createRuntimeProjectHostSetup,
+  deleteRuntimeProjectHostSetup,
+  updateRuntimeProjectHostSetup
+} from '~renderer/runtime/project-host-setup-target'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
+import { requireRepoProtocolClient } from '~renderer/runtime/repo-catalog-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
 
@@ -36,12 +41,10 @@ export function createRepoHostSetupActions(
       try {
         const target = getProjectSetupRuntimeTarget(args.hostId)
         await assertProjectHostSetupMutationRuntimeCapabilities(target)
-        const response = await callRuntimeOrpc(
-          target,
-          (client) => client.projectHostSetup.create,
-          { ...args, expectedRevision: readProjectCatalogMutationRevision(target) },
-          { timeoutMs: 15_000 }
-        )
+        const response = await createRuntimeProjectHostSetup(target, {
+          ...args,
+          expectedRevision: readProjectCatalogMutationRevision(target)
+        })
         await refreshAfterProjectCatalogMutation(target, response.revision)
         const result = response.result
         const setup = setupWithFetchedOwner(result.setup, target)
@@ -62,12 +65,10 @@ export function createRepoHostSetupActions(
           ? getProjectSetupRuntimeTarget(currentSetup.hostId)
           : { kind: 'local' as const }
         await assertProjectHostSetupMutationRuntimeCapabilities(target)
-        const response = await callRuntimeOrpc(
-          target,
-          (client) => client.projectHostSetup.update,
-          { ...args, expectedRevision: readProjectCatalogMutationRevision(target) },
-          { timeoutMs: 15_000 }
-        )
+        const response = await updateRuntimeProjectHostSetup(target, {
+          ...args,
+          expectedRevision: readProjectCatalogMutationRevision(target)
+        })
         await refreshAfterProjectCatalogMutation(target, response.revision)
         const result = response.result
         const setup = setupWithFetchedOwner(result.setup, target)
@@ -89,12 +90,10 @@ export function createRepoHostSetupActions(
           ? getProjectSetupRuntimeTarget(currentSetup.hostId)
           : { kind: 'local' as const }
         await assertProjectHostSetupMutationRuntimeCapabilities(target)
-        const response = await callRuntimeOrpc(
-          target,
-          (client) => client.projectHostSetup.delete,
-          { ...args, expectedRevision: readProjectCatalogMutationRevision(target) },
-          { timeoutMs: 15_000 }
-        )
+        const response = await deleteRuntimeProjectHostSetup(target, {
+          ...args,
+          expectedRevision: readProjectCatalogMutationRevision(target)
+        })
         await refreshAfterProjectCatalogMutation(target, response.revision)
         const result = response.result
         const repo = result.repo ? repoWithFetchedOwner(result.repo, target) : undefined
@@ -125,9 +124,9 @@ export function createRepoHostSetupActions(
                 url: args.url,
                 destination: args.destination
               })
-            : await callRuntimeOrpc(
-                target,
-                (client) => client.repo.clone,
+            : await (
+                await requireRepoProtocolClient(target)
+              ).clone(
                 {
                   expectedRevision,
                   url: args.url,

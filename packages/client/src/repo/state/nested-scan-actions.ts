@@ -1,7 +1,7 @@
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterProjectCatalogMutation } from '~renderer/project-catalog/mutation-refresh'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireProjectGroupProtocolClient } from '~renderer/runtime/project-group-target'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
@@ -24,12 +24,9 @@ export function createRepoNestedScanActions(
             : undefined
         try {
           return normalizeNestedRepoScanResult(
-            await callRuntimeOrpc(
-              target,
-              (client) => client.projectGroup.scanNested,
-              { path, scanId: controls?.scanId },
-              { timeoutMs: 20_000 }
-            )
+            await (
+              await requireProjectGroupProtocolClient(target)
+            ).scanNested({ path, scanId: controls?.scanId }, { timeoutMs: 20_000 })
           )
         } finally {
           unsubscribe?.()
@@ -43,12 +40,9 @@ export function createRepoNestedScanActions(
       try {
         const target = getActiveRuntimeTarget(get().settings)
         return (
-          await callRuntimeOrpc(
-            target,
-            (client) => client.projectGroup.cancelNestedScan,
-            { scanId },
-            { timeoutMs: 15_000 }
-          )
+          await (
+            await requireProjectGroupProtocolClient(target)
+          ).cancelNestedScan(scanId, { timeoutMs: 15_000 })
         ).cancelled
       } catch (err) {
         console.error('Failed to cancel nested repo scan:', err)
@@ -58,9 +52,9 @@ export function createRepoNestedScanActions(
     importNestedRepos: async (args) => {
       try {
         const target = getActiveRuntimeTarget(get().settings)
-        const result = await callRuntimeOrpc(
-          target,
-          (client) => client.projectGroup.importNested,
+        const result = await (
+          await requireProjectGroupProtocolClient(target)
+        ).importNested(
           {
             expectedRevision: readProjectCatalogMutationRevision(target),
             parentPath: args.parentPath,

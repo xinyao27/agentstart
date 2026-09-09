@@ -1,5 +1,5 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
-import type { MarkdownDocument } from '@yiru/runtime-protocol/workbench/types'
+import type { MarkdownDocument } from '@yiru/protocol/files/values'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 
 export const MARKDOWN_DOC_COMPLETION_QUERY_MAX_BYTES = 2 * 1024
 
@@ -7,7 +7,7 @@ export function isMarkdownDocCompletionQueryTooLarge(
   query: string,
   maxBytes = MARKDOWN_DOC_COMPLETION_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 function normalizeCompletionText(value: string): string {

@@ -1,14 +1,15 @@
-import { parseRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
-import type { TerminalPaneSplitSource } from '@yiru/runtime-protocol/workbench/feature-education-telemetry'
-import type { TerminalPaneLayoutNode } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalPaneSplitSource } from '@yiru/protocol/telemetry/education'
+import { parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import type { TerminalPaneLayoutNode } from '@yiru/protocol/workspace/session'
 
 import { readProjectCatalogRuntimeState } from '../project-catalog/runtime-state'
 import { useAppStore } from '../store/state'
 import { getRuntimeEnvironmentIdForWorktree } from '../worktree/runtime-owner'
-import { callRuntimeOrpc } from './orpc-client'
 import { isRemoteRuntimeSessionActive } from './remote-runtime-session-environment'
 import { reserveRemoteRuntimeSplitMirrorTelemetry } from './remote-runtime-split-telemetry'
 import { isRemoteTerminalSurfaceTabId, toHostSessionTabId } from './remote-terminal-surface-id'
+import { requireSessionTabsClient } from './session-tabs-target'
+import { openRuntimeTerminalClient } from './terminal-protocol'
 import { toRuntimeWorktreeSelector } from './worktree-selector'
 
 export function splitRemoteRuntimeTerminal(
@@ -27,15 +28,14 @@ export function splitRemoteRuntimeTerminal(
   // Why: paired splits must execute on the host pane; a local split would be
   // mirrored back as a separate tab instead of preserving pane geometry.
   const releaseMirrorSuppression = reserveRemoteRuntimeSplitMirrorTelemetry(ptyId, direction)
-  void callRuntimeOrpc(
-    { kind: 'environment', environmentId },
-    (client) => client.terminal.split,
-    { terminal: remote.handle, direction, telemetrySource },
-    { timeoutMs: 15_000 }
-  ).catch((error) => {
-    releaseMirrorSuppression()
-    logRemoteRuntimeTerminalFailure('split terminal', error)
-  })
+  void openRuntimeTerminalClient({ kind: 'environment', environmentId })
+    .then((client) =>
+      client.split({ terminal: remote.handle, direction, telemetrySource }, { timeoutMs: 15_000 })
+    )
+    .catch((error) => {
+      releaseMirrorSuppression()
+      logRemoteRuntimeTerminalFailure('split terminal', error)
+    })
   return true
 }
 
@@ -50,12 +50,9 @@ export function closeRemoteRuntimeTerminal(ptyId: string | null | undefined): bo
   }
   // Why: the host owns the pane graph; close it there before a later snapshot
   // can resurrect the locally detached mirror.
-  void callRuntimeOrpc(
-    { kind: 'environment', environmentId },
-    (client) => client.terminal.close,
-    { terminal: remote.handle },
-    { timeoutMs: 15_000 }
-  ).catch((error) => logRemoteRuntimeTerminalFailure('close terminal pane', error))
+  void openRuntimeTerminalClient({ kind: 'environment', environmentId })
+    .then((client) => client.close(remote.handle, { timeoutMs: 15_000 }))
+    .catch((error) => logRemoteRuntimeTerminalFailure('close terminal pane', error))
   return true
 }
 
@@ -77,17 +74,17 @@ export async function updateRemoteRuntimePaneLayout(args: {
     ? toHostSessionTabId(args.tabId)
     : args.tabId
   try {
-    await callRuntimeOrpc(
-      { kind: 'environment', environmentId },
-      (client) => client.session.tabs.updatePaneLayout,
-      {
-        worktree: toRuntimeWorktreeSelector(args.worktreeId),
-        tabId: hostTabId,
-        root: args.root,
-        expandedLeafId: args.expandedLeafId,
-        ...(args.titlesByLeafId ? { titlesByLeafId: args.titlesByLeafId } : {})
-      },
-      { timeoutMs: 15_000 }
+    await requireSessionTabsClient({ kind: 'environment', environmentId }).then((client) =>
+      client.updatePaneLayout(
+        {
+          worktree: toRuntimeWorktreeSelector(args.worktreeId),
+          tabId: hostTabId,
+          root: args.root,
+          expandedLeafId: args.expandedLeafId,
+          ...(args.titlesByLeafId ? { titlesByLeafId: args.titlesByLeafId } : {})
+        },
+        { timeoutMs: 15_000 }
+      )
     )
     return true
   } catch (error) {
@@ -119,16 +116,16 @@ export function setRemoteRuntimeTabProps(args: {
           tabId: args.tabId
         }) ??
         (isRemoteTerminalSurfaceTabId(args.tabId) ? toHostSessionTabId(args.tabId) : args.tabId)
-      return callRuntimeOrpc(
-        { kind: 'environment', environmentId },
-        (client) => client.session.tabs.setTabProps,
-        {
-          worktree: toRuntimeWorktreeSelector(args.worktreeId),
-          tabId: hostTabId,
-          ...(args.color !== undefined ? { color: args.color } : {}),
-          ...(args.isPinned !== undefined ? { isPinned: args.isPinned } : {})
-        },
-        { timeoutMs: 15_000 }
+      return requireSessionTabsClient({ kind: 'environment', environmentId }).then((client) =>
+        client.setTabProps(
+          {
+            worktree: toRuntimeWorktreeSelector(args.worktreeId),
+            tabId: hostTabId,
+            ...(args.color !== undefined ? { color: args.color } : {}),
+            ...(args.isPinned !== undefined ? { isPinned: args.isPinned } : {})
+          },
+          { timeoutMs: 15_000 }
+        )
       )
     })
     .catch((error) => logRemoteRuntimeTerminalFailure('set tab props', error))
@@ -145,12 +142,9 @@ export function clearRemoteRuntimeTerminalBuffer(ptyId: string | null | undefine
     return false
   }
   // Why: local clear is undone when the next host snapshot replays its buffer.
-  void callRuntimeOrpc(
-    { kind: 'environment', environmentId },
-    (client) => client.terminal.clearBuffer,
-    { terminal: remote.handle },
-    { timeoutMs: 15_000 }
-  ).catch((error) => logRemoteRuntimeTerminalFailure('clear terminal buffer', error))
+  void openRuntimeTerminalClient({ kind: 'environment', environmentId })
+    .then((client) => client.clearBuffer(remote.handle, { timeoutMs: 15_000 }))
+    .catch((error) => logRemoteRuntimeTerminalFailure('clear terminal buffer', error))
   return true
 }
 

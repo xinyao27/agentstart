@@ -1,48 +1,50 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient: TerminalFileRepository {
     func resolveTerminalFile(_ request: TerminalFileOpenRequest) async throws
         -> TerminalFileDestination?
     {
-        let result: MobileFilesResolveResultWire = try await callRuntime(
+        var call = Yiru_Runtime_V1_FilesServiceResolveTerminalPathRequest()
+        call.worktree = "id:\(request.worktreeID)"
+        call.pathText = request.tappedFile.pathText
+        if let terminalID = request.terminalID {
+            call.terminal = terminalID
+        }
+        if let cwd = request.cwd {
+            call.cwd = cwd
+        }
+        let response = try await protocolUnary(
             hostID: request.hostID,
-            path: MobileFilesWireContract.resolveTerminalPathPath,
-            input: MobileFilesResolveRequestWire(
-                worktree: "id:\(request.worktreeID)",
-                pathText: request.tappedFile.pathText,
-                terminal: request.terminalID,
-                cwd: request.cwd
-            ),
-            output: MobileFilesResolveResultWire.self
+            procedure: YiruRuntimeV1FilesServiceMethods.resolveTerminalPath,
+            request: call,
+            response: Yiru_Runtime_V1_FilesServiceResolveTerminalPathResponse.self
         )
-        guard result.exists, !result.isDirectory, let target = result.openTarget else { return nil }
-        switch target.kind {
-        case "worktree-file":
-            guard let relativePath = target.relativePath, let absolutePath = target.absolutePath,
-                let provider = target.provider
-            else { return nil }
+        let resolution = response.result
+        guard resolution.exists, !resolution.isDirectory, resolution.hasOpenTarget,
+            let target = resolution.openTarget.target
+        else { return nil }
+        switch target {
+        case .worktreeFile(let target):
+            guard let provider = terminalFileProvider(target.provider) else { return nil }
             return .worktree(
-                relativePath: relativePath,
-                absolutePath: absolutePath,
+                relativePath: target.relativePath,
+                absolutePath: target.absolutePath,
                 provider: provider
             )
-        case "absolute-file":
-            guard let absolutePath = target.absolutePath, let grantID = target.grantId else {
-                return nil
-            }
+        case .absoluteFile(let target):
             return .artifact(
                 TerminalArtifactSource(
                     hostID: request.hostID,
                     worktreeID: request.worktreeID,
-                    absolutePath: absolutePath,
-                    grantID: grantID,
+                    absolutePath: target.absolutePath,
+                    grantID: target.grantID,
                     terminalID: request.terminalID,
                     pathText: request.tappedFile.pathText,
                     cwd: request.cwd
                 )
             )
-        default:
-            return nil
         }
     }
 
@@ -51,14 +53,10 @@ extension RuntimeClient: TerminalFileRepository {
         worktreeID: String,
         relativePath: String
     ) async throws {
-        let result: MobileFileOpenResultWire = try await callRuntime(
+        let result = try await protocolFilesOpen(
             hostID: hostID,
-            path: MobileSessionTabsWireContract.fileOpenPath,
-            input: MobileFileReadRequestWire(
-                worktree: "id:\(worktreeID)",
-                relativePath: relativePath
-            ),
-            output: MobileFileOpenResultWire.self
+            worktree: "id:\(worktreeID)",
+            relativePath: relativePath
         )
         guard result.opened else { throw TerminalArtifactError.unavailable }
     }
@@ -119,33 +117,46 @@ extension RuntimeClient: TerminalFileRepository {
         -> TerminalArtifactLoad
     {
         if terminalArtifactKind(source.absolutePath) == .image {
-            let wire: MobileFilePreviewResultWire = try await callRuntime(
+            var call = Yiru_Runtime_V1_FilesServiceReadTerminalArtifactPreviewRequest()
+            call.worktree = "id:\(source.worktreeID)"
+            call.grantID = source.grantID
+            call.absolutePath = source.absolutePath
+            let response = try await protocolUnary(
                 hostID: source.hostID,
-                path: MobileFilesWireContract.readTerminalArtifactPreviewPath,
-                input: terminalArtifactRequest(source),
-                output: MobileFilePreviewResultWire.self
+                procedure: YiruRuntimeV1FilesServiceMethods.readTerminalArtifactPreview,
+                request: call,
+                response: Yiru_Runtime_V1_FilesServiceReadTerminalArtifactPreviewResponse.self
             )
-            guard wire.isBinary, wire.isImage == true,
-                let data = Data(base64Encoded: wire.content)
-            else { throw TerminalArtifactError.invalidImage }
+            let preview = response.result
+            guard preview.isBinary, preview.isImage, !preview.content.isEmpty else {
+                throw TerminalArtifactError.invalidImage
+            }
             return TerminalArtifactLoad(
                 source: source,
-                document: .image(data: data, mimeType: wire.mimeType)
+                document: .image(
+                    data: preview.content,
+                    mimeType: preview.hasMimeType ? preview.mimeType : nil
+                )
             )
         }
-        let wire: MobileFileReadResultWire = try await callRuntime(
+        var call = Yiru_Runtime_V1_FilesServiceReadTerminalArtifactRequest()
+        call.worktree = "id:\(source.worktreeID)"
+        call.grantID = source.grantID
+        call.absolutePath = source.absolutePath
+        let response = try await protocolUnary(
             hostID: source.hostID,
-            path: MobileFilesWireContract.readTerminalArtifactPath,
-            input: terminalArtifactRequest(source),
-            output: MobileFileReadResultWire.self
+            procedure: YiruRuntimeV1FilesServiceMethods.readTerminalArtifact,
+            request: call,
+            response: Yiru_Runtime_V1_FilesServiceReadTerminalArtifactResponse.self
         )
+        let read = response.result
         let document: WorkspaceFileDocument =
             terminalArtifactKind(source.absolutePath) == .html
-            ? .html(content: wire.content, isTruncated: wire.truncated)
+            ? .html(content: read.content, isTruncated: read.truncated)
             : .text(
-                content: wire.content,
-                isTruncated: wire.truncated,
-                byteLength: wire.byteLength
+                content: read.content,
+                isTruncated: read.truncated,
+                byteLength: Int64(read.byteLength)
             )
         return TerminalArtifactLoad(source: source, document: document)
     }
@@ -170,18 +181,18 @@ extension RuntimeClient: TerminalFileRepository {
         async throws
         -> TerminalArtifactSource
     {
-        let result: MobileFileMutationResultWire = try await callRuntime(
+        var call = Yiru_Runtime_V1_FilesServiceWriteTerminalArtifactRequest()
+        call.worktree = "id:\(source.worktreeID)"
+        call.grantID = source.grantID
+        call.absolutePath = source.absolutePath
+        call.content = content
+        let response = try await protocolUnary(
             hostID: source.hostID,
-            path: MobileFilesWireContract.writeTerminalArtifactPath,
-            input: MobileTerminalArtifactWriteRequestWire(
-                worktree: "id:\(source.worktreeID)",
-                grantId: source.grantID,
-                absolutePath: source.absolutePath,
-                content: content
-            ),
-            output: MobileFileMutationResultWire.self
+            procedure: YiruRuntimeV1FilesServiceMethods.writeTerminalArtifact,
+            request: call,
+            response: Yiru_Runtime_V1_FilesServiceWriteTerminalArtifactResponse.self
         )
-        guard result.ok else { throw TerminalArtifactError.unavailable }
+        guard response.result.ok else { throw TerminalArtifactError.unavailable }
         return source
     }
 }
@@ -207,12 +218,12 @@ nonisolated private func terminalArtifactKind(_ path: String) -> TerminalArtifac
     }
 }
 
-nonisolated private func terminalArtifactRequest(_ source: TerminalArtifactSource)
-    -> MobileTerminalArtifactRequestWire
-{
-    MobileTerminalArtifactRequestWire(
-        worktree: "id:\(source.worktreeID)",
-        grantId: source.grantID,
-        absolutePath: source.absolutePath
-    )
+nonisolated private func terminalFileProvider(
+    _ provider: Yiru_Runtime_V1_TerminalArtifactProvider
+) -> String? {
+    switch provider {
+    case .local: "local"
+    case .ssh: "ssh"
+    case .unspecified, .UNRECOGNIZED: nil
+    }
 }

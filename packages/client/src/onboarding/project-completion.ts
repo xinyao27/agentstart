@@ -1,5 +1,6 @@
-import { ONBOARDING_FINAL_STEP } from '@yiru/runtime-protocol/workbench/constants'
-import type { GlobalSettings, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { ONBOARDING_FINAL_STEP } from '@yiru/protocol/settings/onboarding'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { buildOnboardingFolderAgentStartup } from '~renderer/onboarding/folder-agent-startup'
 import { track } from '~renderer/telemetry/client'
 import { activateAndRevealWorktree } from '~renderer/worktree/activation'

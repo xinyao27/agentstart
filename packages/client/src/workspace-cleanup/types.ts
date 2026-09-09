@@ -4,7 +4,7 @@ import type {
   WorkspaceCleanupScanArgs,
   WorkspaceCleanupScanProgress,
   WorkspaceCleanupScanResult
-} from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+} from '@yiru/protocol'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 

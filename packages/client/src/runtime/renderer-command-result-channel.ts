@@ -1,9 +1,9 @@
 import type {
   LocalBaseRefRefreshResult,
   LocalBaseRefUpdateSuggestion,
-  RemoveWorktreeResult,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
+  RemoveWorktreeResult
+} from '@yiru/protocol/worktree/create-result'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type { RemoteOperationErrorOptions } from '~renderer/source-control/remote-error'
 
 export type RendererCommandResult =

@@ -1,6 +1,6 @@
-import type { KeybindingOverrides } from '@yiru/runtime-protocol/workbench/keybindings'
-import { isTerminalAgentQuickCommand } from '@yiru/runtime-protocol/workbench/terminal/quick-commands'
-import type { TerminalQuickCommand } from '@yiru/runtime-protocol/workbench/types'
+import type { KeybindingOverrides } from '@yiru/protocol/keybindings'
+import { isTerminalAgentQuickCommand } from '@yiru/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
 import {

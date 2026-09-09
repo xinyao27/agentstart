@@ -8,8 +8,9 @@ import {
   type Boundary,
   type Placement
 } from '@floating-ui/dom'
-import type { ContextualTourStepPlacement } from '@yiru/runtime-protocol/workbench/contextual-tours'
 import type { CSSProperties } from 'react'
+
+import type { ContextualTourStepPlacement } from './catalog'
 
 export type ContextualTourPanelPlacement = 'top' | 'right' | 'bottom' | 'left'
 

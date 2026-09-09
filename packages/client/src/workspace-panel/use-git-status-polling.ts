@@ -1,4 +1,4 @@
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 import { useEffect, useRef } from 'react'
 import { isWindowVisible } from '~renderer/application-shell/window-visibility-interval'
 import { useEventCallback } from '~renderer/react/use-event-callback'

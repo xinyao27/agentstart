@@ -1,57 +1,41 @@
+import type { AgentStatusClient } from '@yiru/protocol'
 import type {
   AgentStatusIpcPayload,
   MigrationUnsupportedPtyEntry
-} from '@yiru/runtime-protocol/model/agent'
-import type { AgentInterruptInferenceRequest } from '@yiru/runtime-protocol/workbench/agent/interrupt-intent'
+} from '@yiru/protocol/agent/status-records'
+import type { AgentInterruptInferenceRequest } from '~renderer/terminal-pane/agent/interrupt-intent'
 
-import {
-  callRuntimeOrpc,
-  createLocalRuntimeOrpcClient,
-  type RuntimeOrpcClient
-} from './orpc-client'
+import { openAgentStatusProtocolClient, requireAgentStatusClient } from './agent-status-target'
 
 // Why: every PTY host funnels hooks back to the shell runtime's one agent-status
 // authority. On web, the local adapter intentionally resolves to the paired host.
-const LOCAL_RUNTIME_TARGET = { kind: 'local' } as const
 
-export function getAgentStatusSnapshot(): Promise<AgentStatusIpcPayload[]> {
-  return callRuntimeOrpc(
-    LOCAL_RUNTIME_TARGET,
-    (client) => client.agentStatus.getSnapshot,
-    undefined
-  )
+export async function getAgentStatusSnapshot(): Promise<AgentStatusIpcPayload[]> {
+  return (await requireAgentStatusClient()).getSnapshot({ timeoutMs: 15_000 })
 }
 
-export function getMigrationUnsupportedAgentStatusSnapshot(): Promise<
+export async function getMigrationUnsupportedAgentStatusSnapshot(): Promise<
   MigrationUnsupportedPtyEntry[]
 > {
-  return callRuntimeOrpc(
-    LOCAL_RUNTIME_TARGET,
-    (client) => client.agentStatus.getMigrationUnsupportedSnapshot,
-    undefined
-  )
+  return (await requireAgentStatusClient()).getMigrationUnsupportedSnapshot({ timeoutMs: 15_000 })
 }
 
-export function inferAgentStatusInterrupt(
+export async function inferAgentStatusInterrupt(
   request: AgentInterruptInferenceRequest
 ): Promise<boolean> {
-  return callRuntimeOrpc(
-    LOCAL_RUNTIME_TARGET,
-    (client) => client.agentStatus.inferInterrupt,
-    request
-  )
+  return (await requireAgentStatusClient()).inferInterrupt(request, { timeoutMs: 15_000 })
 }
 
 export function dropAgentStatusOnHost(paneKey: string): void {
-  dispatchAgentStatusMutation((client) => client.agentStatus.drop({ paneKey }))
+  dispatchAgentStatusMutation((client) => client.drop(paneKey))
 }
 
 export function dropAgentStatusesByTabPrefixOnHost(tabId: string): void {
-  dispatchAgentStatusMutation((client) => client.agentStatus.dropByTabPrefix({ tabId }))
+  dispatchAgentStatusMutation((client) => client.dropByTabPrefix(tabId))
 }
 
 export function retireAgentPaneAuthorityOnHost(paneKey: string): void {
-  dispatchAgentStatusMutation((client) => client.agentStatus.retirePaneAuthority({ paneKey }))
+  dispatchAgentStatusMutation((client) => client.retirePaneAuthority(paneKey))
 }
 
 export function transferAgentPaneAuthorityOnHost(args: {
@@ -59,12 +43,18 @@ export function transferAgentPaneAuthorityOnHost(args: {
   toPaneKey: string
   ptyId?: string
 }): void {
-  dispatchAgentStatusMutation((client) => client.agentStatus.transferPaneAuthority(args))
+  dispatchAgentStatusMutation((client) => client.transferPaneAuthority(args))
 }
 
-function dispatchAgentStatusMutation(mutate: (client: RuntimeOrpcClient) => Promise<void>): void {
+function dispatchAgentStatusMutation(mutate: (client: AgentStatusClient) => Promise<void>): void {
   void Promise.resolve()
-    .then(async () => mutate((await createLocalRuntimeOrpcClient()).client))
+    .then(async () => {
+      const client = await openAgentStatusProtocolClient()
+      if (!client) {
+        return
+      }
+      await mutate(client)
+    })
     .catch(() => {
       // Why: these mirror the old fire-and-forget IPC teardown messages. A
       // disconnect must not turn routine pane disposal into an unhandled rejection.

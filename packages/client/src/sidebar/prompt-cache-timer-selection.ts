@@ -1,5 +1,5 @@
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 
 export type PromptCacheCountdownSelection = {
   startedAt: number

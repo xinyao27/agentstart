@@ -1,6 +1,6 @@
 import { translate } from '~renderer/i18n/i18n'
-import { callRuntimeOrpcByPath, type RuntimeClientTarget } from '~renderer/runtime/orpc-client'
 import { isRemoteTerminalSurfaceTabId } from '~renderer/runtime/remote-terminal-surface-id'
+import type { RuntimeClientTarget } from '~renderer/runtime/rpc-client'
 import {
   REMOTE_TERMINAL_SNAPSHOT_TOO_LARGE,
   type RemoteRuntimeMultiplexedTerminal
@@ -49,7 +49,6 @@ export class RemoteRuntimePtyState {
     priority: 'active'
   }
   private callbacksValue: RemoteRuntimeCallbacks = {}
-  private sideEffectSequence = 0
   private pendingClaim = false
   private pendingClaimInput = ''
   private pendingClaimTimer: ReturnType<typeof setTimeout> | null = null
@@ -182,11 +181,6 @@ export class RemoteRuntimePtyState {
     this.clearStreamReference()
   }
 
-  nextSideEffectSequence(): number {
-    this.sideEffectSequence += 1
-    return this.sideEffectSequence
-  }
-
   beginViewportClaim(): void {
     this.pendingClaim = true
     if (this.pendingClaimTimer !== null) {
@@ -311,12 +305,6 @@ export class RemoteRuntimePtyState {
 
   isGoneError(error: unknown): boolean {
     return isRemoteTerminalGoneMessage(runtimeTerminalErrorMessage(error))
-  }
-
-  async callRuntime<TResult>(method: string, params?: unknown): Promise<TResult> {
-    return callRuntimeOrpcByPath<TResult>(this.targetValue, method.split('.'), params, {
-      timeoutMs: 15_000
-    })
   }
 
   private resolveClaimWaiters(ready: boolean): void {

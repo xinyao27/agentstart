@@ -1,4 +1,4 @@
-import { isWslUncPath } from '@yiru/runtime-protocol/model/platform'
+import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { getConnectionId } from '~renderer/runtime/connection-context'

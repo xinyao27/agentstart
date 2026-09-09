@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { getAgentCatalog, AgentIcon, type AgentCatalogEntry } from '~renderer/agent/catalog'
 import { openHttpLink } from '~renderer/editor/http-link-routing'

@@ -1,7 +1,3 @@
-import {
-  buildTargetedSkillUpdateCommand,
-  type SkillUpdateRun
-} from '@yiru/runtime-protocol/workbench/skill-freshness'
 import { useState, useSyncExternalStore } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -12,6 +8,8 @@ import {
 } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { notifyInstalledAgentSkillsChanged } from '~renderer/runtime/installed-agent-skill-discovery-state'
+import type { SkillUpdateRun } from '~renderer/skills/freshness-model'
+import { buildTargetedSkillUpdateCommand } from '~renderer/skills/update-command'
 import { Button } from '~renderer/ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '~renderer/ui/dialog'
 import { ScrollArea } from '~renderer/ui/scroll-area'
@@ -34,12 +32,6 @@ import { useSkillFreshness } from './use-skill-freshness'
 
 function describeSkillUpdateFailure(run: Extract<SkillUpdateRun, { state: 'error' }>): string {
   switch (run.kind) {
-    case 'unsafe-command-path':
-      return translate(
-        'auto.components.skills.SkillFreshnessUpdateDialog.unsafeCommandPath',
-        'Could not run {{value0}} safely from this location.',
-        { value0: run.command }
-      )
     case 'launch-failed':
       return translate(
         'auto.components.skills.SkillFreshnessUpdateDialog.launchFailed',

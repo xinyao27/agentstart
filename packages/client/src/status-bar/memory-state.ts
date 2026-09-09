@@ -1,8 +1,9 @@
-import type { MemorySnapshot } from '@yiru/runtime-protocol/workbench/types'
+import type { MemorySnapshot } from '@yiru/protocol/diagnostics/memory-values'
 import type { StateCreator } from 'zustand'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import type { AppState } from '~renderer/store/types'
+
+import { readRuntimeMemorySnapshot } from './memory-client'
 
 export type MemorySlice = {
   memorySnapshot: MemorySnapshot | null
@@ -23,16 +24,11 @@ export const createMemorySlice: StateCreator<AppState, [], [], MemorySlice> = (s
       }
       const request = (async () => {
         try {
-          // Why: this segment reports the active runtime's own resource use —
-          // switching the active environment must show that host's memory,
-          // not the machine displaying the Chrome client. `diagnostics.memory`
-          // covers both targets through the same runtime method.
+          // Why: this segment reports the active runtime's own resource use, so switching
+          // environments must follow the selected-target reader instead of sampling the
+          // machine displaying Chrome.
           const target = getActiveRuntimeTarget(get().settings)
-          const snapshot = await callRuntimeOrpc(
-            target,
-            (client) => client.diagnostics.memory,
-            undefined
-          )
+          const snapshot = await readRuntimeMemorySnapshot(target)
           set({ memorySnapshot: snapshot, memorySnapshotError: null })
         } catch (err) {
           // Why: the always-on Resource Manager status-bar segment needs to know when

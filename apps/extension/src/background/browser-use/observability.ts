@@ -1,4 +1,4 @@
-import type { BrowserConsoleEntry, BrowserNetworkEntry } from '@yiru/runtime-protocol/contract'
+import type { BrowserConsoleEntry, BrowserNetworkEntry } from '@yiru/protocol/browser-observation'
 
 import { acquireCdp, releaseCdp, sendCdp, subscribeCdp } from '../cdp/session'
 import { optionalNumber, readArray, readNumberValue, readStringValue } from './command-value'

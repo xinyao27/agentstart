@@ -1,6 +1,6 @@
-import type { DiscoveredSkill } from '@yiru/runtime-protocol/workbench/skills'
-import { TUI_AGENT_AUTO_PICK_ORDER } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { DiscoveredSkill } from '@yiru/protocol'
+import { TUI_AGENT_AUTO_PICK_ORDER } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { getAgentLabel } from '~renderer/agent/catalog'
 import { ORCHESTRATION_SKILL_NAME } from '~renderer/agent/feature-install-commands'
 
@@ -95,8 +95,6 @@ const ORCHESTRATION_SKILL_LOCATION_IDS_BY_AGENT: Partial<
   Record<TuiAgent, readonly OrchestrationSkillLocationId[]>
 > = {
   claude: ['claude-home', 'agents-home'],
-  // Why: Agent Teams runs Claude Code, so it reads the same ~/.claude skills.
-  'claude-agent-teams': ['claude-home', 'agents-home'],
   openclaude: ['claude-home', 'agents-home'],
   codex: ['codex-home', 'codex-plugin-cache', 'agents-home'],
   grok: ['grok-home', 'agents-home'],

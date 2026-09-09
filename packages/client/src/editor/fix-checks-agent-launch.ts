@@ -1,18 +1,15 @@
-import { resolveSourceControlActionRecipe } from '@yiru/runtime-protocol/workbench/source-control/ai'
-import {
-  DEFAULT_SOURCE_CONTROL_ACTION_COMMAND_TEMPLATES,
-  renderSourceControlActionCommandTemplate
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { LaunchSource } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import { isTuiAgentEnabled } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type {
-  GitHubWorkItem,
-  TuiAgent,
-  WorkspaceCreateTelemetrySource
-} from '@yiru/runtime-protocol/workbench/types'
+import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
+import { planAgentCliArgsSuffix } from '@yiru/protocol/agent/shell-command'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import { renderSourceControlActionCommandTemplate } from '@yiru/protocol/source-control/action-recipes'
+import { DEFAULT_SOURCE_CONTROL_ACTION_COMMAND_TEMPLATES } from '@yiru/protocol/source-control/ai-actions'
+import { resolveSourceControlActionRecipe } from '@yiru/protocol/source-control/resolution'
+import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
-import { planAgentCliArgsSuffix } from '~renderer/agent/tui-startup'
+import { startupCommandErrorMessage } from '~renderer/agent/startup-error'
 import { findGithubPrWorkspaceAttachment } from '~renderer/editor/github-work-item-workspace-attachment'
 import { translate } from '~renderer/i18n/i18n'
 import { CLIENT_PLATFORM } from '~renderer/new-workspace/workspace-creation'
@@ -158,7 +155,7 @@ export async function startFixChecksAgent(args: StartFixChecksAgentArgs): Promis
       launchPlatform === 'win32' ? 'powershell' : 'posix'
     )
     if (!agentArgsPlan.ok) {
-      toast.error(agentArgsPlan.error)
+      toast.error(startupCommandErrorMessage(agentArgsPlan.error))
       return false
     }
     if (!activateAndRevealWorktree(targetWorktreeId)) {
@@ -170,7 +167,7 @@ export async function startFixChecksAgent(args: StartFixChecksAgentArgs): Promis
       )
       return false
     }
-    const result = launchAgentInNewTab({
+    const result = await launchAgentInNewTab({
       agent,
       worktreeId: targetWorktreeId,
       groupId: args.groupId ?? targetWorktreeId,

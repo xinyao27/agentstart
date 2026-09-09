@@ -1,0 +1,145 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+// Why: the passkey ceremony gates the daemon host's own dangerous-operation
+// grants (WebAuthn assertions verified against the local credential store),
+// so the whole service stays local — a remote runtime never holds the
+// credential or the grant table.
+service DangerousApprovalService {
+  rpc Status(DangerousApprovalServiceStatusRequest) returns (DangerousApprovalServiceStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc BeginRegistration(DangerousApprovalServiceBeginRegistrationRequest) returns (DangerousApprovalServiceBeginRegistrationResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc FinishRegistration(DangerousApprovalServiceFinishRegistrationRequest) returns (DangerousApprovalServiceStatusResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc BeginApproval(DangerousApprovalServiceBeginApprovalRequest) returns (DangerousApprovalServiceBeginApprovalResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc FinishApproval(DangerousApprovalServiceFinishApprovalRequest) returns (DangerousApprovalServiceFinishApprovalResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Remove(DangerousApprovalServiceRemoveRequest) returns (DangerousApprovalServiceStatusResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+// Why: the legacy surface answers the status shape for read, registration
+// completion, and removal alike, so one response message carries
+// `{configured, credentialId}` for all three.
+message DangerousApprovalServiceStatusResponse {
+  bool configured = 1;
+  optional string credential_id = 2;
+}
+
+message DangerousApprovalServiceBeginRegistrationResponse {
+  string challenge = 1;
+  string request_id = 2;
+  string user_id = 3;
+}
+
+message DangerousApprovalServiceBeginApprovalResponse {
+  string challenge = 1;
+  string request_id = 2;
+}
+
+message DangerousApprovalServiceFinishApprovalResponse {
+  int64 approved_until = 1;
+}
+
+message DangerousApprovalServiceStatusRequest {}
+
+message DangerousApprovalServiceBeginRegistrationRequest {}
+
+message DangerousApprovalServiceRemoveRequest {}
+
+message DangerousApprovalServiceBeginApprovalRequest {
+  string operation = 1;
+}
+
+message DangerousApprovalServiceFinishRegistrationRequest {
+  string request_id = 1;
+  DangerousApprovalCeremonyResponse response = 2;
+}
+
+message DangerousApprovalServiceFinishApprovalRequest {
+  string request_id = 1;
+  string operation = 2;
+  DangerousApprovalCeremonyResponse response = 3;
+}
+
+// Why: authenticator data, public key, and signature are optional WebAuthn
+// fields whose presence differs between registration and assertion, while
+// client data and the credential id are always required.
+message DangerousApprovalCeremonyResponse {
+  optional string authenticator_data = 1;
+  string client_data_json = 2;
+  string credential_id = 3;
+  optional string public_key_spki = 4;
+  optional string signature = 5;
+}

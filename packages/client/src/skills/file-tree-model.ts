@@ -1,4 +1,4 @@
-import type { SkillDirectoryEntry } from '@yiru/runtime-protocol/workbench/skills'
+import type { SkillDirectoryEntry } from '@yiru/protocol'
 
 export const SKILL_FILE_NAME = 'SKILL.md'
 

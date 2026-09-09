@@ -1,19 +1,22 @@
 import {
-  configureBrowserHostRuntime,
+  configureBrowserHostAppControl,
+  configureBrowserHostDiagnostics,
+  configureBrowserHostLocalDownloads,
+  configureBrowserHostNotificationSounds,
+  configureBrowserHostProtocol,
+  configureBrowserHostStats,
+  configureBrowserHostStatus,
   configureBrowserHostTerminalMultiplex
 } from '../../runtime/browser-host-runtime'
-import {
-  ExtensionRuntimeClient,
-  type ExtensionConnectionState,
-  type ExtensionRuntimeOrpcClient
-} from './client'
+import { ExtensionRuntimeClient, type ExtensionConnectionState } from './client'
 import { openExtensionTerminalMultiplex } from './terminal-multiplex'
 
 export type ExtensionRuntimeBootstrap = {
   authToken: string
   endpoint: string
+  expectedRuntimeId: string | null
   protocolVersion: number
-  runtimeId: string
+  rpcProtocol: 'yiru-protobuf-v2'
 }
 
 let runtimeClient: ExtensionRuntimeClient | null = null
@@ -21,13 +24,24 @@ let runtimeLabel = ''
 
 export function configureExtensionRuntime(bootstrap: ExtensionRuntimeBootstrap): void {
   runtimeClient?.close()
-  runtimeClient = new ExtensionRuntimeClient(bootstrap)
+  const nextRuntimeClient = new ExtensionRuntimeClient(bootstrap)
+  runtimeClient = nextRuntimeClient
   runtimeLabel = new URL(bootstrap.endpoint).host
-  configureBrowserHostRuntime(async () => ({
-    client: await getExtensionRuntimeClient(),
-    close: () => {},
-    transport: 'extension'
-  }))
+  configureBrowserHostAppControl({
+    restart: (timeoutMs) => nextRuntimeClient.restartApp(timeoutMs),
+    recordStartupDiagnostic: (event, details, timeoutMs) =>
+      nextRuntimeClient.recordStartupDiagnostic(event, details, timeoutMs)
+  })
+  configureBrowserHostDiagnostics((timeoutMs) => nextRuntimeClient.getMemorySnapshot(timeoutMs))
+  configureBrowserHostLocalDownloads(() => nextRuntimeClient.getLocalDownloadClient())
+  configureBrowserHostNotificationSounds((cachedAssetId) =>
+    nextRuntimeClient.loadNotificationSound(cachedAssetId)
+  )
+  configureBrowserHostProtocol(() => nextRuntimeClient.getProtocolTransport())
+  configureBrowserHostStats((input, timeoutMs) =>
+    nextRuntimeClient.getStatsSummary(input, timeoutMs)
+  )
+  configureBrowserHostStatus((timeoutMs) => nextRuntimeClient.getStatus(timeoutMs))
   configureBrowserHostTerminalMultiplex((options) =>
     openExtensionTerminalMultiplex(bootstrap, options)
   )
@@ -35,20 +49,6 @@ export function configureExtensionRuntime(bootstrap: ExtensionRuntimeBootstrap):
 
 export function getExtensionRuntimeLabel(): string {
   return runtimeLabel
-}
-
-export async function getExtensionRuntimeClient(): Promise<ExtensionRuntimeOrpcClient> {
-  if (!runtimeClient) {
-    throw new Error('extension_runtime_not_configured')
-  }
-  return runtimeClient.getOrpcClient()
-}
-
-export function closeExtensionRuntime(): void {
-  runtimeClient?.close()
-  runtimeClient = null
-  configureBrowserHostRuntime(null)
-  configureBrowserHostTerminalMultiplex(null)
 }
 
 export function getExtensionConnectionSnapshot(): ExtensionConnectionState {

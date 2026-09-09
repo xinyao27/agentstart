@@ -2,7 +2,7 @@ import {
   getRepoExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+} from '@yiru/protocol/host/identity'
 
 import { findRepoForHost } from '../../repo/state/host-identity'
 import type { AppState } from '../../store/types'

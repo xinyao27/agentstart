@@ -1,7 +1,9 @@
 import { executeBrowserEnvironment } from './environment'
+import { executeBrowserGrab } from './grab'
 import { executeBrowserInteraction } from './interaction'
 import { executeBrowserNavigation } from './navigation'
 import { executeBrowserObservability } from './observability'
+import { executeBrowserPageControl } from './page-control'
 import { executeBrowserPointer } from './pointer'
 
 const NAVIGATION_METHODS = new Set([
@@ -98,7 +100,28 @@ const POINTER_METHODS = new Set([
   'browser.mouseWheel'
 ])
 
-export function executeBrowserCommand(method: string, input: unknown): Promise<unknown> {
+const PAGE_CONTROL_METHODS = new Set([
+  'browser.pageControl.openDevTools',
+  'browser.pageControl.register',
+  'browser.pageControl.setActive',
+  'browser.pageControl.setAnnotationViewport',
+  'browser.pageControl.setViewportOverride',
+  'browser.pageControl.unregister'
+])
+
+const GRAB_METHODS = new Set([
+  'browser.grab.awaitSelection',
+  'browser.grab.cancel',
+  'browser.grab.captureSelection',
+  'browser.grab.extractHover',
+  'browser.grab.setMode'
+])
+
+export async function executeBrowserCommand(
+  method: string,
+  input: unknown,
+  authorityId: string | null
+): Promise<unknown> {
   if (NAVIGATION_METHODS.has(method)) {
     return executeBrowserNavigation(method, input)
   }
@@ -114,5 +137,18 @@ export function executeBrowserCommand(method: string, input: unknown): Promise<u
   if (POINTER_METHODS.has(method)) {
     return executeBrowserPointer(method, input)
   }
-  return Promise.reject(new Error(`browser_command_unsupported:${method}`))
+  if (PAGE_CONTROL_METHODS.has(method)) {
+    return executeBrowserPageControl(method, readCommandObject(input), authorityId)
+  }
+  if (GRAB_METHODS.has(method)) {
+    return executeBrowserGrab(method, readCommandObject(input), authorityId)
+  }
+  throw new Error(`browser_command_unsupported:${method}`)
+}
+
+function readCommandObject(input: unknown): object {
+  if (typeof input !== 'object' || input === null || Array.isArray(input)) {
+    throw new Error('browser_command_input_invalid')
+  }
+  return input
 }

@@ -1,7 +1,7 @@
 import type {
-  WorkspaceSpaceItem,
-  WorkspaceSpaceWorktree
-} from '@yiru/runtime-protocol/workbench/workspace/space-types'
+  WorkspaceSpaceItemValue as WorkspaceSpaceItem,
+  WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree
+} from '@yiru/protocol'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle } from '~renderer/icons/hugeicons'

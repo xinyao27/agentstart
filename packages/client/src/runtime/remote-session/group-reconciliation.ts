@@ -1,8 +1,8 @@
-import type { RuntimeMobileSessionTabsResult } from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { TabGroup } from '@yiru/runtime-protocol/workbench/types'
+import type { TabGroup } from '@yiru/protocol/workspace/tabs'
 
 import { buildMirroredHostGroups } from './group-mirror'
 import type { resolveRemoteSessionSnapshotSelection } from './selection-reconciliation'
+import type { RuntimeMobileSessionTabsResult } from './session-model'
 import { pushRecentTabId, sanitizeRecentTabIds } from './store-equality'
 import type { buildRemoteSessionSurfaceMirror } from './surface-reconciliation'
 import type { RemoteSessionTabsSyncState } from './tabs-state'

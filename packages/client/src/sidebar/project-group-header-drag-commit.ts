@@ -1,4 +1,4 @@
-import type { ProjectGroup } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
 
 import type { ProjectGroupHeaderDragSession } from './project-group-header-drag-contract'
 import { getProjectGroupTabOrderUpdatesForSidebarDrop } from './project-group-header-drop'

@@ -6,7 +6,7 @@ import type {
   CodexUsageScope,
   CodexUsageSessionRow,
   CodexUsageSummary
-} from '@yiru/runtime-protocol/workbench/codex-usage-types'
+} from '@yiru/protocol/provider-usage/models'
 import type { StateCreator } from 'zustand'
 import { codexProviderUsageClient } from '~renderer/runtime/provider-usage-client'
 import type { AppState } from '~renderer/store/types'

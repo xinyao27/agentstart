@@ -1,4 +1,4 @@
-import type { GitHistoryItemRef } from '@yiru/runtime-protocol/workbench/git/history'
+import type { GitHistoryItemRef } from '@yiru/protocol/git/history-types'
 import React from 'react'
 import { CloudCheck, GitBranch, GitCommit, Tag as TagIcon, Target } from '~renderer/icons/hugeicons'
 import { cn } from '~renderer/ui/class-names'

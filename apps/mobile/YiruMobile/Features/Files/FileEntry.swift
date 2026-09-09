@@ -6,17 +6,6 @@ nonisolated struct WorkspaceDirectoryEntry: Hashable, Sendable {
     let isSymlink: Bool
 }
 
-nonisolated struct WorkspaceLegacyFile: Hashable, Sendable {
-    let relativePath: String
-    let basename: String
-    let kind: String
-}
-
-nonisolated enum WorkspaceDirectoryLoad: Sendable {
-    case entries([WorkspaceDirectoryEntry])
-    case legacy(files: [WorkspaceLegacyFile], isTruncated: Bool)
-}
-
 nonisolated enum WorkspaceFileKind: Hashable, Sendable {
     case directory
     case text
@@ -61,32 +50,6 @@ nonisolated enum WorkspaceFileProjection {
         var result: [WorkspaceFileRow] = []
         visit("", depth: 0, cache: cache, expanded: expanded, rows: &result)
         return result
-    }
-
-    static func legacyCache(_ files: [WorkspaceLegacyFile]) -> [String: WorkspaceDirectoryState] {
-        var children: [String: [String: Bool]] = ["": [:]]
-        for file in files {
-            let parts = file.relativePath.split(separator: "/").map(String.init)
-            var parent = ""
-            for (index, name) in parts.enumerated() {
-                let isDirectory = index < parts.count - 1
-                children[parent, default: [:]][name] =
-                    children[parent, default: [:]][name] == true || isDirectory
-                parent = join(parent, name)
-                if isDirectory, children[parent] == nil { children[parent] = [:] }
-            }
-        }
-        return children.mapValues { children in
-            WorkspaceDirectoryState(
-                entries: children.map { name, isDirectory in
-                    WorkspaceDirectoryEntry(
-                        name: name,
-                        isDirectory: isDirectory,
-                        isSymlink: false
-                    )
-                }
-            )
-        }
     }
 
     static func canPreview(_ row: WorkspaceFileRow) -> Bool {

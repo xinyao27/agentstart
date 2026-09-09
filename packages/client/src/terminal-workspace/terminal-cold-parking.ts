@@ -1,4 +1,4 @@
-import type { TabGroupLayoutNode } from '@yiru/runtime-protocol/workbench/types'
+import type { TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
 import type { RefObject } from 'react'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'

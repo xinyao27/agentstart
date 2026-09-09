@@ -1,5 +1,5 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { GitHubWorkItem, GitLabWorkItem } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle } from '~renderer/icons/hugeicons'
@@ -21,7 +21,6 @@ type NameSectionProps = {
   name: string
   onNameValueChange: (value: string) => void
   onSmartGitHubItemSelect: (item: GitHubWorkItem) => void
-  onSmartGitLabItemSelect: (item: GitLabWorkItem) => void
   onSmartBranchSelect: (refName: string, localBranchName: string) => void
   onSmartNameModeChange?: (mode: SmartNameMode) => void
   smartNameSelection: SmartWorkspaceNameSelection | null
@@ -50,7 +49,6 @@ export function NameSection({
   name,
   onNameValueChange,
   onSmartGitHubItemSelect,
-  onSmartGitLabItemSelect,
   onSmartBranchSelect,
   onSmartNameModeChange,
   smartNameSelection,
@@ -88,7 +86,6 @@ export function NameSection({
         value={name}
         onValueChange={onNameValueChange}
         onGitHubItemSelect={onSmartGitHubItemSelect}
-        onGitLabItemSelect={onSmartGitLabItemSelect}
         onBranchSelect={onSmartBranchSelect}
         selectedSource={smartNameSelection}
         onClearSelectedSource={onClearSmartNameSelection}

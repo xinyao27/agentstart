@@ -3,9 +3,10 @@ import {
   normalizeExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { FolderWorkspacePathStatusRequest } from '@yiru/runtime-protocol/workbench/folder-workspace-path-status'
-import type { FolderWorkspace, ProjectGroup } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import type { FolderWorkspacePathStatusRequest } from '@yiru/protocol/workspace/folder-path'
 
 export function getProjectGroupExecutionHostIdForRows(
   group: Pick<ProjectGroup, 'connectionId' | 'executionHostId'>,

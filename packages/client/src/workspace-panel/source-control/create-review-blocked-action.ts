@@ -2,7 +2,7 @@ import type {
   HostedReviewCreationBlockedReason,
   HostedReviewCreationEligibility,
   HostedReviewProvider
-} from '@yiru/runtime-protocol/model/review'
+} from '@yiru/protocol/hosted-review/types'
 import {
   localizedHostedReviewCopy,
   resolveSupportedHostedReviewCopyProvider
@@ -24,15 +24,7 @@ export function canClickBlockedCreateReviewReason(
 }
 
 export function resolveHostedReviewAuthInstruction(provider: HostedReviewProvider): string {
-  if (provider === 'gitlab') {
-    return 'Run glab auth login'
-  }
-  if (provider === 'azure-devops') {
-    return 'Set YIRU_AZURE_DEVOPS_TOKEN'
-  }
-  if (provider === 'gitea') {
-    return 'Set YIRU_GITEA_TOKEN'
-  }
+  void provider
   return 'Run gh auth login'
 }
 

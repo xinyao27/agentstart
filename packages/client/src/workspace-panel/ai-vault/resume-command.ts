@@ -1,29 +1,26 @@
 import {
-  buildAiVaultResumeCommand,
-  buildAiVaultResumeShellCommand,
-  realHomeCodexResumeEnvDeletion,
-  type AiVaultSession
-} from '@yiru/runtime-protocol/model/agent'
+  resolveTuiAgentLaunchArgs,
+  resolveTuiAgentLaunchEnv
+} from '@yiru/protocol/agent/launch-defaults'
+import { buildAgentResumeStartupPlan } from '@yiru/protocol/agent/resume-startup'
 import {
   isResumableTuiAgent,
   type SleepingAgentLaunchConfig
-} from '@yiru/runtime-protocol/model/agent'
-import { parseWslUncPath } from '@yiru/runtime-protocol/model/platform'
-import { resolveWindowsShellStartupFamily } from '@yiru/runtime-protocol/model/platform'
-import {
-  LOCAL_EXECUTION_HOST_ID,
-  parseExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import {
-  resolveTuiAgentLaunchArgs,
-  resolveTuiAgentLaunchEnv
-} from '@yiru/runtime-protocol/workbench/tui-agent/launch-defaults'
-import type { AgentStartupShell } from '@yiru/runtime-protocol/workbench/tui-agent/startup-shell'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
-import { buildAgentResumeStartupPlan } from '~renderer/agent/tui-startup'
+} from '@yiru/protocol/agent/session-resume'
+import type { AgentStartupShell } from '@yiru/protocol/agent/shell-command'
+import { LOCAL_EXECUTION_HOST_ID, parseExecutionHostId } from '@yiru/protocol/host/identity'
+import { resolveWindowsShellStartupFamily } from '@yiru/protocol/host/windows-terminal-shell'
+import { parseWslUncPath } from '@yiru/protocol/host/wsl-paths'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import { CLIENT_PLATFORM } from '~renderer/new-workspace/workspace-creation'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'
 import type { AppState } from '~renderer/store/types'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
+import { realHomeCodexResumeEnvDeletion } from '~renderer/workspace-panel/ai-vault/session/resume'
+import {
+  buildAiVaultResumeCommand,
+  buildAiVaultResumeShellCommand
+} from '~renderer/workspace-panel/ai-vault/session/resume'
 import { getIndexedWorktreeMap } from '~renderer/worktree/repo-index'
 import { getExecutionHostIdForWorktree } from '~renderer/worktree/runtime-owner'
 

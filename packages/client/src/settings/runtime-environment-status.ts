@@ -1,17 +1,18 @@
 import {
-  MIN_COMPATIBLE_RUNTIME_SERVER_VERSION,
-  PROJECT_HOST_SETUP_RUNTIME_CAPABILITY,
-  PROJECT_SOURCE_CONTEXT_RUNTIME_CAPABILITY,
-  RUNTIME_PROTOCOL_VERSION,
-  WORKSPACE_RUN_CONTEXT_RUNTIME_CAPABILITY
-} from '@yiru/runtime-protocol/protocol-version'
+  PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
+  PROJECT_CONTEXT_PROTOCOL_CAPABILITY
+} from '@yiru/protocol'
 import {
-  describeRuntimeCompatBlock,
   evaluateRuntimeCompat,
   type RuntimeCompatVerdict
-} from '@yiru/runtime-protocol/runtime-compatibility'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
+} from '@yiru/protocol/runtime-compatibility'
+import {
+  MIN_COMPATIBLE_RUNTIME_SERVER_VERSION,
+  RUNTIME_PROTOCOL_VERSION
+} from '@yiru/protocol/runtime-versions'
 import { translate } from '~renderer/i18n/i18n'
+import { describeRuntimeCompatBlock } from '~renderer/runtime/compatibility-message'
+import type { RuntimeStatus } from '~renderer/runtime/status/model'
 
 export const LOCAL_RUNTIME_VALUE = '__local__'
 export const NO_RUNTIME_VALUE = '__none__'
@@ -91,9 +92,8 @@ export function getHostModelCapabilitySummary(
     )
   }
   const missing = [
-    PROJECT_HOST_SETUP_RUNTIME_CAPABILITY,
-    PROJECT_SOURCE_CONTEXT_RUNTIME_CAPABILITY,
-    WORKSPACE_RUN_CONTEXT_RUNTIME_CAPABILITY
+    PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
+    PROJECT_CONTEXT_PROTOCOL_CAPABILITY
   ].filter((capability) => !capabilities.includes(capability))
   if (missing.length === 0) {
     return translate(
@@ -111,21 +111,13 @@ export function getHostModelCapabilitySummary(
 
 function getHostModelCapabilityLabel(capability: string): string {
   switch (capability) {
-    case PROJECT_HOST_SETUP_RUNTIME_CAPABILITY:
+    case PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY:
       return translate(
         'auto.components.settings.RuntimeEnvironmentsPane.hostModelCapabilityProjectSetup',
         'project setup'
       )
-    case PROJECT_SOURCE_CONTEXT_RUNTIME_CAPABILITY:
-      return translate(
-        'auto.components.settings.RuntimeEnvironmentsPane.hostModelCapabilityProjectSourceContext',
-        'project source context'
-      )
-    case WORKSPACE_RUN_CONTEXT_RUNTIME_CAPABILITY:
-      return translate(
-        'auto.components.settings.RuntimeEnvironmentsPane.hostModelCapabilityWorkspaceRunContext',
-        'workspace run context'
-      )
+    case PROJECT_CONTEXT_PROTOCOL_CAPABILITY:
+      return translate('runtime.hostModel.projectContext', 'project and workspace context')
     default:
       return capability
   }

@@ -1,21 +1,18 @@
-import {
-  runtimePtyEnvironmentId,
-  runtimePtyHandle
-} from '@yiru/runtime-protocol/terminal-identity/id'
-import { makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import { isTerminalInputTooLargeWithDeferredMeasurement } from '@yiru/runtime-protocol/workbench/terminal/input'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { runtimePtyEnvironmentId, runtimePtyHandle } from '@yiru/protocol/terminal-identity'
+import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { isTerminalInputTooLargeWithDeferredMeasurement } from '~renderer/terminal-pane/pty/input-chunks'
 
 import { useAppStore } from '../store/state'
-import { callRuntimeOrpc, isRuntimeOrpcErrorCode } from './orpc-client'
-import { getActiveRuntimeTarget } from './rpc-client'
+import { getActiveRuntimeTarget, type RuntimeClientTarget } from './rpc-client'
+import { openRuntimeTerminalClient } from './terminal-protocol'
 
 export type RuntimeTerminalProcessInspection = {
   foregroundProcess: string | null
   hasChildProcesses: boolean
 }
 
-type TerminalTarget = Parameters<typeof callRuntimeOrpc>[0]
+type TerminalTarget = RuntimeClientTarget
 
 const DESKTOP_RUNTIME_CLIENT = { id: 'yiru-desktop', type: 'desktop' } as const
 
@@ -26,9 +23,6 @@ function isRuntimePtyInputTooLarge(data: string): boolean | Promise<boolean> {
 function isTerminalGoneError(error: unknown): boolean {
   const message = error instanceof Error ? error.message : String(error)
   return (
-    isRuntimeOrpcErrorCode(error, 'terminal_handle_stale') ||
-    isRuntimeOrpcErrorCode(error, 'terminal_exited') ||
-    isRuntimeOrpcErrorCode(error, 'terminal_gone') ||
     message.includes('terminal_handle_stale') ||
     message.includes('terminal_exited') ||
     message.includes('terminal_gone') ||
@@ -53,9 +47,7 @@ export async function hasRuntimeTerminal(ptyId: string): Promise<boolean> {
     return false
   }
   try {
-    await callRuntimeOrpc(targetForRuntimePty(ptyId), (client) => client.terminal.show, {
-      terminal
-    })
+    await (await openRuntimeTerminalClient(targetForRuntimePty(ptyId))).show(terminal)
     return true
   } catch (error) {
     if (isTerminalGoneError(error)) {
@@ -70,7 +62,7 @@ export async function closeRuntimeTerminal(ptyId: string): Promise<void> {
   if (!terminal) {
     return
   }
-  await callRuntimeOrpc(targetForRuntimePty(ptyId), (client) => client.terminal.close, { terminal })
+  await (await openRuntimeTerminalClient(targetForRuntimePty(ptyId))).close(terminal)
 }
 
 export async function clearRuntimeTerminalBuffer(ptyId: string): Promise<void> {
@@ -78,37 +70,15 @@ export async function clearRuntimeTerminalBuffer(ptyId: string): Promise<void> {
   if (!terminal) {
     return
   }
-  await callRuntimeOrpc(targetForRuntimePty(ptyId), (client) => client.terminal.clearBuffer, {
-    terminal
-  })
-}
-
-export async function readRuntimeTerminalBuffer(
-  ptyId: string,
-  limit = 10_000
-): Promise<string | null> {
-  const terminal = runtimePtyHandle(ptyId)
-  if (!terminal) {
-    return null
-  }
-  const result = await callRuntimeOrpc(
-    targetForRuntimePty(ptyId),
-    (client) => client.terminal.read,
-    { terminal, limit }
-  )
-  return result.terminal.tail.join('\n')
+  await (await openRuntimeTerminalClient(targetForRuntimePty(ptyId))).clearBuffer(terminal)
 }
 
 export async function listRuntimeTerminalSessions() {
-  return callRuntimeOrpc({ kind: 'local' }, (client) => client.terminal.management.listSessions, {})
+  return (await openRuntimeTerminalClient({ kind: 'local' })).listManagedSessions()
 }
 
 export async function killRuntimeTerminalSession(sessionId: string): Promise<boolean> {
-  const result = await callRuntimeOrpc(
-    { kind: 'local' },
-    (client) => client.terminal.management.killOne,
-    { sessionId }
-  )
+  const result = await (await openRuntimeTerminalClient({ kind: 'local' })).killManaged(sessionId)
   return result.success
 }
 
@@ -143,12 +113,9 @@ export async function inspectRuntimeTerminalProcess(
   }
 
   try {
-    const result = await callRuntimeOrpc(
-      target,
-      (client) => client.terminal.inspectProcess,
-      { terminal },
-      { timeoutMs: 15_000 }
-    )
+    const result = await (
+      await openRuntimeTerminalClient(target)
+    ).inspectProcess(terminal, { timeoutMs: 15_000 })
     return result.process
   } catch (error) {
     if (isTerminalGoneError(error)) {
@@ -193,12 +160,10 @@ function sendRuntimePtyInputWithinLimit(
     return false
   }
 
-  void callRuntimeOrpc(
-    target,
-    (client) => client.terminal.send,
-    { terminal, text: data, client: DESKTOP_RUNTIME_CLIENT },
-    { timeoutMs: 15_000 }
-  )
+  void openRuntimeTerminalClient(target)
+    .then((client) =>
+      client.send({ terminal, text: data, client: DESKTOP_RUNTIME_CLIENT }, { timeoutMs: 15_000 })
+    )
     .then((result) => {
       if (result.send.accepted === true) {
         recordRuntimeTerminalInputForPtyId(ptyId)
@@ -227,12 +192,9 @@ export async function sendRuntimePtyInputVerified(
   }
 
   try {
-    const result = await callRuntimeOrpc(
-      target,
-      (client) => client.terminal.send,
-      { terminal, text: data, client: DESKTOP_RUNTIME_CLIENT },
-      { timeoutMs: 15_000 }
-    )
+    const result = await (
+      await openRuntimeTerminalClient(target)
+    ).send({ terminal, text: data, client: DESKTOP_RUNTIME_CLIENT }, { timeoutMs: 15_000 })
     if (result.send.accepted === true) {
       recordRuntimeTerminalInputForPtyId(ptyId)
       return true

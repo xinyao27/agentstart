@@ -23,11 +23,7 @@ struct AppRouteDestinationView: View {
                 snapshotCache: model.dependencies.homeSnapshotCache
             )
         case .designSystemCatalog:
-            #if DEBUG
-                VisualParityCatalogView(dependencies: model.dependencies)
-            #else
-                DesignSystemCatalogView()
-            #endif
+            DesignSystemCatalogView()
         case .settings:
             SettingsView(
                 credentialCleanupRepository: model.dependencies.credentialCleanupRepository,
@@ -38,9 +34,7 @@ struct AppRouteDestinationView: View {
                 showTroubleshooting: model.showTroubleshooting,
                 showAbout: model.showAbout,
                 showDesignSystem: model.showDesignSystemCatalog,
-                // Why: UI Lab is reachable from Settings in Debug so simulator captures and
-                // interaction checks always exercise the same surface; Release omits
-                // development-only navigation.
+                // Why: the design-system catalog is development navigation, not a user setting.
                 showsDebugNavigation: showsDebugNavigation
             )
         case .appearanceSettings:
@@ -265,8 +259,6 @@ struct AppRouteDestinationView: View {
             )
         case .pairLinkError(let error):
             PairingLinkErrorView(error: error, onCancel: model.cancelPairing)
-        case .terminalPrototype:
-            TerminalPrototypeView(factory: model.dependencies.terminalSurfaceFactory)
         }
     }
 

@@ -45,7 +45,7 @@ extension WorkspaceCreationSheet {
     func sourceGlyph(_ selection: WorkspaceSourceSelection) -> YiruIconID {
         switch selection {
         case .branch, .newBranch: .gitMerge
-        case .hosted(let item, _): item.provider == .github ? .gitPullRequest : .gitMerge
+        case .hosted: .gitPullRequest
         }
     }
 

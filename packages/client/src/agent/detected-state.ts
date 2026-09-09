@@ -1,14 +1,15 @@
-import type {
-  PathSource,
-  ShellHydrationFailureReason,
-  TuiAgent
-} from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { PathSource, ShellHydrationFailureReason } from '@yiru/protocol/host/shell-environment'
 import type { StateCreator } from 'zustand'
 import {
   getLocalAgentPreflightContext,
   localPreflightContextKey
 } from '~renderer/preflight/context'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import {
+  preflightDetectAgents,
+  preflightDetectRemoteAgents,
+  preflightRefreshAgents
+} from '~renderer/runtime/preflight-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 import type { AppState } from '../store/types'
@@ -87,11 +88,7 @@ export const createDetectedAgentsSlice: StateCreator<AppState, [], [], DetectedA
       isDetectingAgents: true
     })
     const requestGeneration = localDetectionGeneration
-    const pending = callRuntimeOrpc(
-      getActiveRuntimeTarget(get().settings),
-      (client) => client.preflight.detectAgents,
-      context ?? {}
-    )
+    const pending = preflightDetectAgents(getActiveRuntimeTarget(get().settings), context ?? {})
       .then((ids) => {
         const typed = ids as TuiAgent[]
         if (requestGeneration === localDetectionGeneration) {
@@ -128,11 +125,7 @@ export const createDetectedAgentsSlice: StateCreator<AppState, [], [], DetectedA
       isRefreshingAgents: true
     })
     const requestGeneration = localDetectionGeneration
-    const pending = callRuntimeOrpc(
-      getActiveRuntimeTarget(get().settings),
-      (client) => client.preflight.refreshAgents,
-      context ?? {}
-    )
+    const pending = preflightRefreshAgents(getActiveRuntimeTarget(get().settings), context ?? {})
       .then((result) => {
         const typed = result.agents as TuiAgent[]
         if (requestGeneration === localDetectionGeneration) {
@@ -204,11 +197,9 @@ export const createDetectedAgentsSlice: StateCreator<AppState, [], [], DetectedA
       isDetectingRemoteAgents: { ...s.isDetectingRemoteAgents, [connectionId]: true }
     }))
 
-    const pending = callRuntimeOrpc(
-      getActiveRuntimeTarget(get().settings),
-      (client) => client.preflight.detectRemoteAgents,
-      { connectionId }
-    )
+    const pending = preflightDetectRemoteAgents(getActiveRuntimeTarget(get().settings), {
+      connectionId
+    })
       .then((ids) => {
         const typed = ids as TuiAgent[]
         set((s) => ({
@@ -267,11 +258,7 @@ export const createDetectedAgentsSlice: StateCreator<AppState, [], [], DetectedA
       isDetectingRuntimeAgents: { ...s.isDetectingRuntimeAgents, [environmentId]: true }
     }))
 
-    const pending = callRuntimeOrpc(
-      { kind: 'environment', environmentId },
-      (client) => client.preflight.detectAgents,
-      undefined
-    )
+    const pending = preflightDetectAgents({ kind: 'environment', environmentId })
       .then((ids) => {
         const typed = ids as TuiAgent[]
         // Why: skip committing if the environment was removed (retained out)

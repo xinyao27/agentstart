@@ -1,7 +1,7 @@
 import type {
   WorkspaceStatus,
   WorkspaceStatusDefinition
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/status/model'
 
 import { getWorkspaceStatusFromGroupKey } from '../workspace-status'
 import { getWorktreeLineageDropTargetId } from '../worktree-lineage-drag-drop'

@@ -1,6 +1,6 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { GitHubOwnerRepo } from '@yiru/runtime-protocol/workbench/types'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
+import type { GitHubOwnerRepo } from '@yiru/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 import type { AppState } from '~renderer/store/types'
 
 import { prCommentsCacheSuffix, sourceScopedRepoCacheKey } from './cache-policy'

@@ -1,16 +1,18 @@
-import {
-  MAX_TERMINAL_CUSTOM_THEMES,
-  normalizeTerminalCustomThemes,
-  type TerminalCustomTheme,
-  type WarpThemeImportPreview,
-  type WarpThemeImportSource
-} from '@yiru/runtime-protocol/workbench/terminal/custom-themes'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type {
+  TerminalCustomTheme,
+  WarpThemeImportPreview,
+  WarpThemeImportSource
+} from '@yiru/protocol/terminal/theme-types'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { previewWarpThemeImportOnActiveHost } from '~renderer/runtime/settings-import-client'
+import {
+  MAX_TERMINAL_CUSTOM_THEMES,
+  normalizeTerminalCustomThemes
+} from '~renderer/terminal/themes/custom'
 
 /** Which entry point opened the import flow; only affects modal copy. */
 export type ThemeImportMode = 'warp' | 'yaml'

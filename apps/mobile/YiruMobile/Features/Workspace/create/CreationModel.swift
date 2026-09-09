@@ -15,6 +15,7 @@ final class WorkspaceCreationModel {
     private(set) var agents: [WorkspaceCreationAgent] = []
     private(set) var isCreating = false
     private(set) var isLoadingSetup = false
+    private(set) var setupInspectionFailed = false
     private(set) var errorMessage: String?
     private(set) var setupDetails = WorkspaceSetupDetails.empty
     private(set) var trustPrompt: WorkspaceSetupTrustPrompt?
@@ -25,7 +26,6 @@ final class WorkspaceCreationModel {
     var sourceError: String?
     var hostedSources: [WorkspaceHostedSource] = []
     var isResolvingSource = false
-    private(set) var isGitLabAvailable = false
     var reuseEligibleBranch: String?
     var crossRepoPrompt: WorkspaceCrossRepoPrompt?
 
@@ -71,7 +71,8 @@ final class WorkspaceCreationModel {
 
     var canCreate: Bool {
         !selectedRepoID.isEmpty && !isCreating && !isLoadingSetup
-            && (setupDetails.command == nil || setupDetails.runPolicy != .ask
+            && !setupInspectionFailed
+            && (setupDetails.decisionContent == nil || setupDetails.runPolicy != .ask
                 || setupDecisionChoice != nil)
     }
 
@@ -92,7 +93,6 @@ final class WorkspaceCreationModel {
                 agents.contains(where: { $0.id == options.preferredAgentID })
                 ? options.preferredAgentID : WorkspaceCreationAgent.blankID
             trustedHooks = options.trustedHooks
-            isGitLabAvailable = options.isGitLabAvailable
             phase = .ready
         } catch is CancellationError {
             return
@@ -105,9 +105,11 @@ final class WorkspaceCreationModel {
         let repoID = selectedRepoID
         guard !repoID.isEmpty else {
             setupDetails = .empty
+            setupInspectionFailed = false
             return
         }
         isLoadingSetup = true
+        setupInspectionFailed = false
         setupDecisionChoice = nil
         defer { isLoadingSetup = false }
         do {
@@ -115,7 +117,7 @@ final class WorkspaceCreationModel {
             guard selectedRepoID == repoID, !Task.isCancelled else { return }
             setupDetails = details
             shouldRunSetup = details.runPolicy != .skipByDefault
-            if details.command != nil, details.runPolicy == .ask {
+            if details.decisionContent != nil, details.runPolicy == .ask {
                 isAdvancedExpanded = true
             }
         } catch is CancellationError {
@@ -123,6 +125,10 @@ final class WorkspaceCreationModel {
         } catch {
             guard selectedRepoID == repoID else { return }
             setupDetails = .empty
+            setupInspectionFailed = true
+            errorMessage = String(
+                localized: "Yiru could not safely inspect this repository's setup commands."
+            )
         }
     }
 
@@ -199,7 +205,7 @@ final class WorkspaceCreationModel {
     }
 
     private var requestedSetupDecision: WorkspaceSetupDecision? {
-        guard setupDetails.command != nil else { return .inherit }
+        guard setupDetails.decisionContent != nil else { return .inherit }
         switch setupDetails.runPolicy {
         case .ask:
             return setupDecisionChoice
@@ -246,12 +252,9 @@ final class WorkspaceCreationModel {
                 displayName: isNameAutoManaged ? hostedSource?.title : nil,
                 compareBaseRef: hostedBase?.compareBaseRef,
                 pushTarget: hostedBase?.pushTarget,
-                startupDraft: selectedAgent?.runtimeID == nil ? nil : hostedSource?.url,
-                linkedPullRequest: hostedSource?.provider == .github ? hostedSource?.number : nil,
-                linkedMergeRequest: hostedSource?.provider == .gitlab ? hostedSource?.number : nil,
+                linkedPullRequest: hostedSource?.number,
                 setupDecision: setupDecision,
-                agentID: selectedAgent?.runtimeID,
-                startupCommand: selectedAgent?.launchCommand
+                agentID: selectedAgent?.runtimeID
             ),
             existingPaths: existingPaths
         )

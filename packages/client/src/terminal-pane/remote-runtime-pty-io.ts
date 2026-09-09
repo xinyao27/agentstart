@@ -1,7 +1,8 @@
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import {
   isTerminalInputTooLargeWithDeferredMeasurement,
   iterateTerminalInputChunks
-} from '@yiru/runtime-protocol/workbench/terminal/input'
+} from '~renderer/terminal-pane/pty/input-chunks'
 
 import {
   createRemoteRuntimePtyTextBatcher,
@@ -179,7 +180,9 @@ export class RemoteRuntimePtyIo {
 
   private async sendInputFallback(targetHandle: string, text: string): Promise<void> {
     try {
-      await this.state.callRuntime('terminal.send', {
+      await (
+        await openRuntimeTerminalClient(this.state.target)
+      ).send({
         terminal: targetHandle,
         text,
         client: { id: this.clientId, type: 'desktop' },
@@ -207,13 +210,15 @@ export class RemoteRuntimePtyIo {
     if (claim) {
       this.state.beginViewportClaim()
     }
-    void this.state
-      .callRuntime('terminal.updateViewport', {
-        terminal: targetHandle,
-        client: { id: this.clientId, type: 'desktop' },
-        viewport: { cols, rows },
-        ...(claim ? { claim: true } : {})
-      })
+    void openRuntimeTerminalClient(this.state.target)
+      .then((client) =>
+        client.updateViewport({
+          terminal: targetHandle,
+          client: { id: this.clientId, type: 'desktop' },
+          viewport: { cols, rows },
+          claim
+        })
+      )
       .catch((error) => {
         if (this.state.isGoneError(error)) {
           this.state.handleRemoteError(error)

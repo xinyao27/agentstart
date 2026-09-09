@@ -192,9 +192,7 @@ function isForgeWorkItem(rawUrl: string | undefined): boolean {
   try {
     const url = new URL(rawUrl)
     return (
-      (url.hostname === 'github.com' &&
-        /^\/[^/]+\/[^/]+\/(pull|issues)\/\d+\/?$/.test(url.pathname)) ||
-      (url.hostname === 'gitlab.com' && /\/-\/(merge_requests|issues)\/\d+\/?$/.test(url.pathname))
+      url.hostname === 'github.com' && /^\/[^/]+\/[^/]+\/(pull|issues)\/\d+\/?$/.test(url.pathname)
     )
   } catch {
     return false

@@ -1,5 +1,5 @@
 import type { Terminal } from '@xterm/xterm'
-import { detectAgentStatusFromTitle } from '~renderer/agent/status'
+import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 import { useAppStore } from '~renderer/store/state'
 
 import {

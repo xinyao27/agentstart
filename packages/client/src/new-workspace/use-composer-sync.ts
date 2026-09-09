@@ -1,5 +1,7 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { ProjectGroup, Repo, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
 import { useEffect } from 'react'
 import type { AppState } from '~renderer/store/state'
 
@@ -15,7 +17,6 @@ type UseComposerSyncOptions = {
   eligibleRepos: Repo[]
   folderSourceRepos: Repo[]
   isProjectGroupTarget: boolean
-  linkedGitLabMR: number | null
   linkedPR: number | null
   linkedWorkItem: LinkedWorkItemSummary | null
   name: string
@@ -43,7 +44,6 @@ export function useComposerSync(options: UseComposerSyncOptions): void {
     eligibleRepos,
     folderSourceRepos,
     isProjectGroupTarget,
-    linkedGitLabMR,
     linkedPR,
     linkedWorkItem,
     name,
@@ -93,7 +93,6 @@ export function useComposerSync(options: UseComposerSyncOptions): void {
       projectSourceContext,
       agent,
       linkedPR,
-      linkedGitLabMR,
       ...(baseBranch !== undefined ? { baseBranch } : {}),
       ...(compareBaseRef !== undefined ? { compareBaseRef } : {})
     })
@@ -103,7 +102,6 @@ export function useComposerSync(options: UseComposerSyncOptions): void {
     attachmentPaths,
     baseBranch,
     compareBaseRef,
-    linkedGitLabMR,
     linkedPR,
     linkedWorkItem,
     name,

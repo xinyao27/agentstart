@@ -1,32 +1,18 @@
-import { isPositiveHostedReviewNumber } from '@yiru/runtime-protocol/model/review'
-import type { Worktree, GitPushTarget, WorktreeMeta } from '@yiru/runtime-protocol/workbench/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import { isPositiveHostedReviewNumber } from '@yiru/protocol/hosted-review/types'
+import type { Worktree, WorktreeMeta } from '@yiru/protocol/worktree/model'
 import { updateProjectCatalogWorktree } from '~renderer/project-catalog/worktree-cache'
 import { branchName } from '~renderer/source-control/branch-name'
 
-export type HostedReviewLinkKey =
-  | 'linkedPR'
-  | 'linkedGitLabMR'
-  | 'linkedBitbucketPR'
-  | 'linkedAzureDevOpsPR'
-  | 'linkedGiteaPR'
+export type HostedReviewLinkKey = 'linkedPR'
 
-export const HOSTED_REVIEW_LINK_KEYS: readonly HostedReviewLinkKey[] = [
-  'linkedPR',
-  'linkedGitLabMR',
-  'linkedBitbucketPR',
-  'linkedAzureDevOpsPR',
-  'linkedGiteaPR'
-]
+export const HOSTED_REVIEW_LINK_KEYS: readonly HostedReviewLinkKey[] = ['linkedPR']
 
 export const CLEARED_HOSTED_REVIEW_LINK_UPDATES: Pick<
   WorktreeMeta,
   HostedReviewLinkKey | 'pushTarget'
 > = {
   linkedPR: null,
-  linkedGitLabMR: null,
-  linkedBitbucketPR: null,
-  linkedAzureDevOpsPR: null,
-  linkedGiteaPR: null,
   pushTarget: undefined
 }
 
@@ -141,10 +127,6 @@ export function getHostedReviewLinkUpdates(
 ): Pick<WorktreeMeta, HostedReviewLinkKey | 'pushTarget'> {
   return {
     linkedPR: worktree.linkedPR ?? null,
-    linkedGitLabMR: worktree.linkedGitLabMR ?? null,
-    linkedBitbucketPR: worktree.linkedBitbucketPR ?? null,
-    linkedAzureDevOpsPR: worktree.linkedAzureDevOpsPR ?? null,
-    linkedGiteaPR: worktree.linkedGiteaPR ?? null,
     pushTarget: worktree.pushTarget
   }
 }
@@ -236,23 +218,9 @@ export function getPositiveHostedReviewLinkUpdateKey(
 
 export function clearOlderHostedReviewLinksForReplacement(
   updates: Partial<WorktreeMeta>,
-  existingWorktree: Worktree
+  _existingWorktree: Worktree
 ): Partial<WorktreeMeta> {
-  const replacementKey = getPositiveHostedReviewLinkUpdateKey(updates)
-  if (!replacementKey) {
-    return updates
-  }
-  let normalized = updates
-  for (const key of HOSTED_REVIEW_LINK_KEYS) {
-    if (key === replacementKey || existingWorktree[key] == null) {
-      continue
-    }
-    // Why: one branch can only push to one hosted-review head; keeping older
-    // provider links lets stale metadata win the target lookup after replacement.
-    normalized = normalized === updates ? { ...updates } : normalized
-    normalized[key] = null
-  }
-  return normalized
+  return updates
 }
 
 export function getHostedReviewLinkForMetaRefresh(

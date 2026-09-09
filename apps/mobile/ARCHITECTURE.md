@@ -40,21 +40,19 @@ App ───────→ Features ───────→ DesignSystem
 - Feature 不能直接创建 URLSession、Keychain、通知中心或全局 singleton。
 - `Platform` 不拥有产品状态；它只把系统能力适配成 feature 定义的窄接口。
 - `DesignSystem` 不依赖 feature、transport 或 persistence。
-- 跨进程 wire contract 的 source of truth 是 `packages/runtime-protocol`。Swift wire model
-  应当从这个 source of truth 生成而非
-  在多个 feature 手抄一套相似 JSON 结构；改动协议时必须同步维护
-  `MobileWire.generated.swift`。
+- 新的跨进程 wire contract 仅定义在 `packages/protocol/proto`，Swift、Rust 和
+  TypeScript binding 均由同一份 Protobuf schema 生成。配对与 E2EE bootstrap 模型位于各自
+  feature，终端内部 multiplex 记录位于 `Platform/Terminal/Multiplex`。每迁移一项 capability，
+  同批删除旧 caller、route、contract 和生成条目。
 
 Pairing 是第一个完整纵向切片：`PairingCodeDecoder` 只负责边界校验，`PairingModel` 只负责
 页面状态，`DirectPairingClient` 负责配对用例，`KeychainHostRepository` 负责持久身份。
 `AuthenticatedRuntimeConnection` 集中拥有公钥钉扎、E2EE 握手和 cipher counter，配对与后续
-runtime capability 不各写一套 transport。E2EE 和移动工作区 schema、domain constant、oRPC
-method identifier 从 TypeScript source of truth 生成 Swift wire model；domain model 不向 UI 暴露
-wire 类型。
+runtime capability 不各写一套 transport。新 capability 的 E2EE payload 仅封装已生成的
+Protobuf frame。domain model 不向 UI 暴露 wire 类型。
 
 `RuntimeHostSession` 是每个 host 唯一的物理连接 owner，负责连接代际、heartbeat、退避和恢复；
-`RuntimeOrpcPeer` 是加密流唯一的 reader，并按 request ID 分发 unary response 与 event iterator；
-iterator 严格遵循锁定 oRPC 版本的 response、message/error/done 和 abort frame 生命周期。
+唯一 receive loop 先解密，再将 Protobuf frame 交给 `RuntimeProtocolAdapter`。
 `RuntimeClient` 只维护 stable logical session 与值语义 snapshot，再把窄 capability protocol
 提供给 feature。当前产品已退役第一方 Cloud Relay，因此原生端只在输入边界校验旧 pairing
 field，不会重新引入已删除的 provisioning、credential rotation 或 relay endpoint lifecycle。
@@ -104,10 +102,9 @@ route-level 错误不会关闭其他 terminal，最后一个 route 释放后才�
 控制连接 generation 或后台时效失效时，所有 route 一起失败，各页面重新执行
 `show → ticket → E2EE bulk → authoritative snapshot`，不复用旧 parser sequence。
 
-Terminal 控制面的 `status/list/show/openMultiplex` 使用 runtime-protocol 中的原生客户端投影，
-由同一个 drift-checked generator 产出 Swift `Codable` 类型。inner frame 的 kind、version、header
-大小、frame cap 与 opcode 同样来自 TypeScript source of truth；`TerminalMultiplexFrameCodec` 只负责
-严格 little-endian frame 边界，不承担 session、flow-control 或 renderer 状态。
+Terminal 控制面的 `status/list/show/openMultiplex` 仍是待迁移切片。它们迁入
+`packages/protocol/proto` 后，Swift 客户端、Rust handler 与 frame 常量都必须由同一 schema
+生成，并同时删除 TypeScript wire generator 与旧 binary side channel。
 
 Workspace session 以 `session.tabs` publication 为唯一 tab 权威源；本地只拥有 pending selection、
 短期 close tombstone 和已访问 terminal surface 集合。`publicationEpoch + snapshotVersion` 拒绝同一

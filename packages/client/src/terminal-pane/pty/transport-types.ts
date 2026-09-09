@@ -1,7 +1,7 @@
-import type { SleepingAgentLaunchConfig } from '@yiru/runtime-protocol/model/agent'
-import type { ParsedAgentStatusPayload } from '@yiru/runtime-protocol/model/agent'
-import type { StartupCommandDelivery } from '@yiru/runtime-protocol/workbench/codex-startup-delivery'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
+import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
+import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import type { PtyDataMeta } from '~renderer/runtime/pty-data-meta'
 
 export type PtyBufferSnapshot = {

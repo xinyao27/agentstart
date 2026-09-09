@@ -3,7 +3,7 @@
 // availability, guarding against stale async results when the target changes.
 import { useEffect, useRef, useState } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireRepoProtocolClient } from '~renderer/runtime/repo-catalog-target'
 import { browseRuntimeServerDirectory } from '~renderer/runtime/server-directory-browser'
 import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
 
@@ -282,12 +282,10 @@ export function useCreateProjectDefaults({
     const runtimeEnvironmentId = activeCreateParentRuntimeEnvironmentId
     const targetKey = activeCreateParentTargetKey
     const probe = runtimeEnvironmentId
-      ? callRuntimeOrpc(
-          { kind: 'environment', environmentId: runtimeEnvironmentId },
-          (client) => client.repo.gitAvailable,
-          undefined,
-          { timeoutMs: RUNTIME_GIT_AVAILABILITY_TIMEOUT_MS }
-        ).then((result) => result.available)
+      ? requireRepoProtocolClient({
+          kind: 'environment',
+          environmentId: runtimeEnvironmentId
+        }).then((client) => client.gitAvailable({ timeoutMs: RUNTIME_GIT_AVAILABILITY_TIMEOUT_MS }))
       : workspaceHostClient.repos.isGitAvailable()
     const timeoutMs = runtimeEnvironmentId
       ? RUNTIME_GIT_AVAILABILITY_TIMEOUT_MS

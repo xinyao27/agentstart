@@ -1,4 +1,4 @@
-import type { ContextualTourId } from '@yiru/runtime-protocol/workbench/contextual-tours'
+import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
 import { useAppStore } from '~renderer/store/state'
 
 type RequestContextualTourWhenReadyArgs = {

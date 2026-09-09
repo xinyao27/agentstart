@@ -1,4 +1,3 @@
-import type { TerminalManagementSession } from '@yiru/runtime-protocol/contract'
 import { translate } from '~renderer/i18n/i18n'
 import {
   Trash as Trash2,
@@ -7,6 +6,7 @@ import {
   X
 } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
+import type { RuntimeDaemonSession } from '~renderer/runtime/daemon-sessions-client'
 import { cn } from '~renderer/ui/class-names'
 
 import { Button } from '../ui/button'
@@ -14,7 +14,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { formatState, formatWorkspace } from './manage-sessions-format'
 
 type ManageSessionsTableProps = {
-  sessions: TerminalManagementSession[]
+  sessions: RuntimeDaemonSession[]
   hasLoadedOnce: boolean
   sessionCount: number
   isBusy: boolean
@@ -25,7 +25,7 @@ type ManageSessionsTableProps = {
   onKillAll: () => void
   onRestartDaemon: () => void
   onNavigate: (tabId: string) => void
-  onRequestKill: (session: TerminalManagementSession) => void
+  onRequestKill: (session: RuntimeDaemonSession) => void
 }
 
 export function ManageSessionsTable({

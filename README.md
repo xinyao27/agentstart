@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <strong>Coding agents in Chrome, backed by a Bun-native daemon.</strong><br />
+  <strong>Coding agents in Chrome, backed by a native Rust daemon.</strong><br />
   Keep agents, isolated Git worktrees, terminals, browser context, and reviews together.
 </p>
 
@@ -17,7 +17,7 @@
 
 ## What is Yiru?
 
-Yiru is an open-source Chrome workspace for agent-assisted software development. A single Bun daemon owns the repositories, worktrees, terminals, sessions, and event history; the extension supplies cross-tab navigation and one full workspace per tab.
+Yiru is an open-source Chrome workspace for agent-assisted software development. A single Rust daemon owns the repositories, worktrees, terminals, sessions, and event history; the extension supplies cross-tab navigation and one full workspace per tab.
 
 Each task can live in its own worktree while Yiru keeps the surrounding workflow visible: agent sessions, terminals, source control, browser evidence, pull requests, and notifications. The iOS companion pairs directly with the daemon using end-to-end encryption.
 
@@ -25,7 +25,7 @@ Each task can live in its own worktree while Yiru keeps the surrounding workflow
 
 - **Parallel worktrees:** Run independent tasks against the same repository and compare their results before merging.
 - **Agent sessions:** Start, monitor, resume, and organize terminal-based coding agents from one workspace.
-- **Bun-native terminals:** Use PTYs, bounded scrollback, process facts, and persistent event history owned by the daemon.
+- **Native terminals:** Use PTYs, bounded scrollback, process facts, and persistent event history owned by the daemon.
 - **Chrome navigation:** Use the side panel as a cross-tab project/session navigator and each tab as a focused workspace.
 - **Deterministic context:** Match page URLs, exact git remotes, and known workspace ports; when no fact matches, Yiru hides the suggestion instead of guessing.
 - **Browser evidence:** Record CDP actions, simulate network responses, compare screenshots, inspect Console events, pick elements, and write DevTools or EyeDropper changes back to the worktree.
@@ -57,8 +57,8 @@ To build the current platform locally instead:
 ```bash
 pnpm install
 vp run @yiru/daemon#build
-apps/daemon/dist/yiru service install
-apps/daemon/dist/yiru native-messaging install
+apps/daemon/target/release/yiru service install
+apps/daemon/target/release/yiru native-messaging install
 ```
 
 Then build the extension and load `apps/extension/.output/chrome-mv3` from
@@ -80,7 +80,7 @@ Install the mobile app, then pair it directly with the daemon.
 
 ## Develop locally
 
-Yiru is a pnpm monorepo. Development requires Bun 1.4, Node.js 24, and pnpm 12.1.0.
+Yiru is a pnpm monorepo. Development requires Rust 1.95, Node.js 24, pnpm 12.1.0, and Bun 1.4 for the build scripts.
 
 ```bash
 pnpm install
@@ -103,7 +103,7 @@ pnpm fmt                 # Format the repository
 Any package task is reachable from the repository root with `vp run <package>#<task>`:
 
 ```bash
-vp run @yiru/daemon#build:release  # Compile the daemon target matrix
+vp run @yiru/daemon#build           # Compile the daemon for this platform
 vp run @yiru/extension#build       # Build the unpacked Chrome extension
 vp run yiru-mobile#build           # Build the native iOS companion
 ```

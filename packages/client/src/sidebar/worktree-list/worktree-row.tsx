@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type React from 'react'
 import { cn } from '~renderer/ui/class-names'
 

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Yiru Release"
-  short_description: "Prepare, publish, and monitor coordinated Yiru releases"
-  default_prompt: "Use $yiru-release to prepare and publish the next coordinated Yiru release."

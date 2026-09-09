@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 import React from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,0 +1,219 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+// Why: every procedure drives the daemon host's own desktop shell (pickers,
+// Finder/Explorer reveals, default open) so the whole service stays local —
+// the legacy surface restricted these procedures to the local principal and
+// remote runtime relays never carried them.
+service ShellPlatformService {
+  rpc OpenPath(ShellPlatformServiceOpenPathRequest) returns (ShellPlatformServiceUnitResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc OpenFileUri(ShellPlatformServiceOpenFileUriRequest) returns (ShellPlatformServiceUnitResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc OpenInExternalEditor(ShellPlatformServiceOpenInExternalEditorRequest) returns (ShellPlatformServiceOutcomeResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc OpenInFileManager(ShellPlatformServicePathRequest) returns (ShellPlatformServiceOutcomeResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc OpenFilePath(ShellPlatformServicePathRequest) returns (ShellPlatformServiceOpenedResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PathExists(ShellPlatformServicePathRequest) returns (ShellPlatformServiceExistsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PickAttachment(ShellPlatformServicePickRequest) returns (ShellPlatformServicePickedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PickImage(ShellPlatformServicePickRequest) returns (ShellPlatformServicePickedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PickAudio(ShellPlatformServicePickRequest) returns (ShellPlatformServicePickedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PickDirectory(ShellPlatformServicePickDirectoryRequest) returns (ShellPlatformServicePickedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+enum ShellPlatformOpenFailure {
+  SHELL_PLATFORM_OPEN_FAILURE_UNSPECIFIED = 0;
+  SHELL_PLATFORM_OPEN_FAILURE_NOT_ABSOLUTE = 1;
+  SHELL_PLATFORM_OPEN_FAILURE_NOT_FOUND = 2;
+  SHELL_PLATFORM_OPEN_FAILURE_LAUNCH_FAILED = 3;
+  SHELL_PLATFORM_OPEN_FAILURE_REMOTE_RUNTIME_UNSUPPORTED = 4;
+}
+
+// Why: the legacy surface answers `{ok: false, reason}` in-band instead of an
+// RPC error so callers can render inline failure states, and `{ok: true}`
+// without a reason on success.
+message ShellPlatformServiceOutcomeResponse {
+  bool ok = 1;
+  ShellPlatformOpenFailure reason = 2;
+}
+
+message ShellPlatformServiceOpenPathRequest {
+  string path = 1;
+}
+
+message ShellPlatformServiceOpenFileUriRequest {
+  string uri = 1;
+}
+
+message ShellPlatformServiceOpenInExternalEditorRequest {
+  string path = 1;
+  optional string command = 2;
+  optional string connection_id = 3;
+}
+
+message ShellPlatformServicePathRequest {
+  string path = 1;
+}
+
+message ShellPlatformServiceOpenedResponse {
+  bool opened = 1;
+}
+
+message ShellPlatformServiceExistsResponse {
+  bool exists = 1;
+}
+
+message ShellPlatformServicePickRequest {}
+
+message ShellPlatformServicePickDirectoryRequest {
+  optional string default_path = 1;
+}
+
+// Why: an absent path is the user cancelling the native picker, distinct from
+// an empty selection, so the field stays optional instead of defaulting.
+message ShellPlatformServicePickedResponse {
+  optional string path = 1;
+}
+
+message ShellPlatformServiceUnitResponse {}

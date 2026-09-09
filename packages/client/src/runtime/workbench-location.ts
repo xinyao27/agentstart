@@ -1,4 +1,4 @@
-import type { WorkspacePanelTabContentType } from '@yiru/runtime-protocol/workbench/types'
+import type { WorkspacePanelTabContentType } from '@yiru/protocol/workspace/tabs'
 
 export type WorkbenchPage = 'activity' | 'automations' | 'mobile' | 'search' | 'settings' | 'skills'
 

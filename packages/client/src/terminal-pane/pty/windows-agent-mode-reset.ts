@@ -1,4 +1,4 @@
-import type { AgentType } from '@yiru/runtime-protocol/model/agent'
+import type { AgentType } from '@yiru/protocol/agent/status-records'
 import { useAppStore } from '~renderer/store/state'
 
 type WindowsAgentModeResetOptions = {

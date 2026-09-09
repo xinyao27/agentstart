@@ -1,5 +1,6 @@
-import { callRuntimeOrpc, isRuntimeOrpcErrorCode } from '~renderer/runtime/orpc-client'
+import { RuntimeProtocolError, StatusCode } from '@yiru/protocol'
 import type { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 
 export const ACTIVE_AGENT_SEND_RPC_TIMEOUT_MS = 15000
 
@@ -21,12 +22,9 @@ export async function getTerminalAgentSendReadiness(
   options: { allowLegacyFallback: boolean }
 ): Promise<TerminalAgentSendReadinessResult> {
   try {
-    const { agentStatus } = await callRuntimeOrpc(
-      runtimeTarget,
-      (client) => client.terminal.agentStatus,
-      { terminal: terminalHandle },
-      { timeoutMs: ACTIVE_AGENT_SEND_RPC_TIMEOUT_MS }
-    )
+    const { agentStatus } = await (
+      await openRuntimeTerminalClient(runtimeTarget)
+    ).agentStatus(terminalHandle, { timeoutMs: ACTIVE_AGENT_SEND_RPC_TIMEOUT_MS })
     if (!agentStatus.isRunningAgent) {
       return { status: 'no-agent', supportsGuardedSend: true }
     }
@@ -35,7 +33,7 @@ export async function getTerminalAgentSendReadiness(
     }
     return { status: 'sendable', supportsGuardedSend: true }
   } catch (error) {
-    if (isRuntimeOrpcErrorCode(error, 'method_not_found')) {
+    if (error instanceof RuntimeProtocolError && error.code === StatusCode.UNIMPLEMENTED) {
       if (!options.allowLegacyFallback) {
         // Why: selected-target sends are immediate; without terminal.agentStatus
         // an older remote runtime cannot rule out permission/action prompts.
@@ -60,12 +58,9 @@ async function getLegacyTerminalAgentSendStatus(
   terminalHandle: string
 ): Promise<TerminalAgentSendReadiness> {
   try {
-    const { isRunningAgent } = await callRuntimeOrpc(
-      runtimeTarget,
-      (client) => client.terminal.isRunningAgent,
-      { terminal: terminalHandle },
-      { timeoutMs: ACTIVE_AGENT_SEND_RPC_TIMEOUT_MS }
-    )
+    const { isRunningAgent } = await (
+      await openRuntimeTerminalClient(runtimeTarget)
+    ).isRunningAgent(terminalHandle, { timeoutMs: ACTIVE_AGENT_SEND_RPC_TIMEOUT_MS })
     return isRunningAgent ? 'sendable' : 'no-agent'
   } catch (error) {
     if (isRuntimeTerminalUnavailable(error)) {

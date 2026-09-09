@@ -1,5 +1,5 @@
-import type { GitHistoryItem } from '@yiru/runtime-protocol/workbench/git/history'
-import type { GitBranchChangeEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

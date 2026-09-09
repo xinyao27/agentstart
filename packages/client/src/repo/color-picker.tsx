@@ -1,7 +1,4 @@
-import {
-  normalizeRepoBadgeColor,
-  resolveRepoBadgeColor
-} from '@yiru/runtime-protocol/workbench/repo-badge-color'
+import { normalizeRepoBadgeColor, resolveRepoBadgeColor } from '@yiru/protocol/project/appearance'
 import * as React from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { translate } from '~renderer/i18n/i18n'

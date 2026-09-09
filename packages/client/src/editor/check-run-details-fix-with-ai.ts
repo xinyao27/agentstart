@@ -1,9 +1,9 @@
-import { resolveSourceControlActionRecipe } from '@yiru/runtime-protocol/workbench/source-control/ai'
+import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-actions'
+import { resolveSourceControlActionRecipe } from '@yiru/protocol/source-control/resolution'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { startFixChecksAgent } from '~renderer/editor/fix-checks-agent-launch'
@@ -62,7 +62,7 @@ export async function startCheckRunDetailsFixWithAI(args: {
     toast.message(
       translate(
         'auto.components.editor.check.run.details.fix.with.ai.7c3e1b5d42',
-        'Open a PR or MR before launching an AI fix.'
+        'Open a PR before launching an AI fix.'
       )
     )
     return false

@@ -1,4 +1,4 @@
-import type { ReadClipboardTextOptions } from '@yiru/runtime-protocol/model/ui'
+import type { ReadClipboardTextOptions } from '~renderer/clipboard/text'
 export type ShellUiApi = {
   readClipboardText: (options?: ReadClipboardTextOptions) => Promise<string>
   readSelectionClipboardText: (options?: ReadClipboardTextOptions) => Promise<string>

@@ -37,7 +37,7 @@ const reviewAndBranchStatusIconClassName = 'size-[13px] translate-x-px'
 const branchStatusIconClassName = cn(reviewAndBranchStatusIconClassName, 'text-muted-foreground/70')
 
 function getReviewStatusTooltip(review: WorktreeCardPrDisplay): string {
-  const label = getReviewLabel(review)
+  const label = getReviewLabel()
   if (review.state === 'merged') {
     return `${label}: Merged`
   }
@@ -98,11 +98,7 @@ export function WorktreeCardStatusSlot(
               className={cn('inline-flex size-5 items-center justify-center p-0.5', className)}
               {...activityStatusAttribute}
             >
-              <ReviewIcon
-                review={prDisplay}
-                className={reviewAndBranchStatusIconClassName}
-                variant="generic"
-              />
+              <ReviewIcon review={prDisplay} className={reviewAndBranchStatusIconClassName} />
               <span className="sr-only">{passiveStatusLabel}</span>
             </span>
           }

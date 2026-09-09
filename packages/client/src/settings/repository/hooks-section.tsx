@@ -1,13 +1,13 @@
-import { getRepoExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import { resolveHookCommandSourcePolicy } from '@yiru/runtime-protocol/workbench/hook-command-source-policy'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
+import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { resolveHookCommandSourcePolicy } from '@yiru/protocol/setup/command-source-policy'
 import type {
   HookCommandSourcePolicy,
-  YiruHooks,
-  Repo,
-  RepoHookSettings,
   SetupAgentStartupPolicy,
   SetupRunPolicy
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/worktree/hooks'
+import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'

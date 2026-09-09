@@ -1,6 +1,6 @@
-import { recognizeAgentProcessFromCommandLine } from '@yiru/runtime-protocol/workbench/agent/process-recognition'
-import { isTuiAgent } from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { isTuiAgent } from '@yiru/protocol/agent/identity'
+import { recognizeAgentProcessFromCommandLine } from '@yiru/protocol/agent/process/recognition'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { useAppStore } from '~renderer/store/state'
 
 const MANUAL_AGENT_COMMAND_MAX_CHARS = 4096

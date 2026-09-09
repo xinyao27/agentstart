@@ -1,4 +1,4 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 import { translate } from '~renderer/i18n/i18n'
 import { shouldHandleTextControlPaste } from '~renderer/keyboard-input/paste/write'
 export type DirEntry = {
@@ -12,7 +12,7 @@ export function isRemoteFileBrowserFilterQueryTooLarge(
   query: string,
   maxBytes = REMOTE_FILE_BROWSER_FILTER_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 export function filterEntries(entries: DirEntry[], filter: string): DirEntry[] {

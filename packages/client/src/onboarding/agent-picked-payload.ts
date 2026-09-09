@@ -5,12 +5,9 @@
 // instrument-first plan in docs/agent-on-path-detection.md can ship dark
 // for two weeks before a dashboard read shows the fields are null-only.
 
-import type { EventProps } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import type {
-  PathSource,
-  ShellHydrationFailureReason,
-  TuiAgent
-} from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { PathSource, ShellHydrationFailureReason } from '@yiru/protocol/host/shell-environment'
+import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
 import { tuiAgentToAgentKind } from '~renderer/telemetry/client'
 
 export type AgentPickedSnapshot = {

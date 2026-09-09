@@ -1,9 +1,9 @@
 import type {
-  CrashReportRecord,
   RendererErrorReportArgs,
   RendererErrorReportKind,
   RendererErrorSurface
-} from '@yiru/runtime-protocol/workbench/crash-reporting'
+} from '@yiru/protocol/crash-reports/renderer-error'
+import type { CrashReportRecord } from '@yiru/protocol/crash-reports/values'
 
 import { getChromeVersion } from './browser-version'
 

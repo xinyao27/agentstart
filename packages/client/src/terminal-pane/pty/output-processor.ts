@@ -1,6 +1,6 @@
-import { createAgentStatusOscProcessor } from '@yiru/runtime-protocol/workbench/agent/status-osc'
 import type { PtyDataMeta } from '~renderer/runtime/pty-data-meta'
 
+import { createAgentStatusOscProcessor } from './agent-status-osc'
 import type { PtyTransport, RuntimePtyTransportOptions } from './transport-types'
 
 type PtyOutputCallbacks = Parameters<PtyTransport['connect']>[0]['callbacks']
@@ -25,9 +25,6 @@ export function createPtyOutputProcessor({ onAgentStatus }: PtyOutputProcessorOp
     meta?: PtyDataMeta
   ) => void
   clearAccumulatedState: () => void
-  clearStaleTitleTimer: () => void
-  flushPendingSideEffects: () => void
-  resetBellDetector: () => void
   resetAgentStatusCarry: () => void
 } {
   let processAgentStatusChunk = createAgentStatusOscProcessor()
@@ -80,9 +77,6 @@ export function createPtyOutputProcessor({ onAgentStatus }: PtyOutputProcessorOp
   return {
     processData,
     clearAccumulatedState: resetAgentStatusCarry,
-    clearStaleTitleTimer: () => {},
-    flushPendingSideEffects: () => {},
-    resetBellDetector: () => {},
     resetAgentStatusCarry
   }
 }

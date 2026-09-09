@@ -1,13 +1,18 @@
 import { useMutation } from '@tanstack/react-query'
-import type { BrowserCssChange } from '@yiru/runtime-protocol/contract'
+import type { BrowserWritebackCssChange as BrowserCssChange } from '@yiru/protocol'
+import { AgentSessionClient } from '@yiru/protocol/agent-session'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Bug, CheckCircle, Code, FloppyDisk } from '~renderer/icons/hugeicons'
+import { openConfiguredBrowserHostProtocol } from '~renderer/runtime/browser-host-runtime'
+import { openBrowserWritebackTarget } from '~renderer/runtime/browser-writeback-target'
+import { listRuntimeRepos } from '~renderer/runtime/repo-catalog-target'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
+import { scanWorkspacePorts } from '~renderer/runtime/workspace-ports-target'
 import { Button } from '~renderer/ui/button'
 
 import { identifyLocalPage } from '../context/page-identity'
 import { projectDisplayName } from '../project-display-name'
-import { getExtensionRuntimeClient } from '../runtime/session'
 import type { DevToolsCapabilities, DevToolsDiagnostic } from './bootstrap'
 
 const STYLE_SNAPSHOT_EXPRESSION = String.raw`(() => Array.from(document.styleSheets).flatMap((sheet, index) => {
@@ -86,13 +91,12 @@ export function DevToolsPage({
       if (!pageUrl || changes.length === 0) {
         throw new Error('devtools_changes_missing')
       }
-      const client = await getExtensionRuntimeClient()
-      const started = await client.browserWriteback.applyCss({
-        changes,
-        pageUrl,
-        projectId: workspace.projectId,
-        worktreeId: workspace.worktreeId
-      })
+      const client = await openBrowserWritebackTarget()
+      if (!client) {
+        throw new Error('browser_writeback_protocol_unavailable')
+      }
+      const target = { projectId: workspace.projectId, worktreeId: workspace.worktreeId }
+      const started = await client.applyCss({ changes, pageUrl, target })
       let detail = 'The agent ended, but the requested stylesheet delta was not visible.'
       let verified = false
       try {
@@ -108,13 +112,12 @@ export function DevToolsPage({
       } catch (error) {
         detail = (error instanceof Error ? error.message : String(error)).slice(0, 4_096)
       }
-      await client.browserWriteback.recordVerification({
+      await client.recordVerification({
         detail,
         pageUrl,
-        projectId: workspace.projectId,
         success: verified,
-        terminalHandle: started.terminalHandle,
-        worktreeId: workspace.worktreeId
+        target,
+        terminalHandle: started.terminalHandle
       })
       return { ...started, verified }
     }
@@ -138,7 +141,7 @@ export function DevToolsPage({
   })
   const sendDiagnostic = useMutation({
     mutationFn: async (input: { diagnostic: DevToolsDiagnostic; workspace: ExactWorkspace }) =>
-      (await getExtensionRuntimeClient()).agentSession.start({
+      new AgentSessionClient(await openConfiguredBrowserHostProtocol()).start({
         agent: 'codex',
         prompt: diagnosticPrompt(input.diagnostic),
         title: translate('extension.devtools.diagnosticAgentTitle', 'Browser diagnostic'),
@@ -291,7 +294,7 @@ export function DevToolsPage({
 async function waitForAgentCompletion(terminalHandle: string): Promise<void> {
   const deadline = Date.now() + 5 * 60_000
   while (Date.now() < deadline) {
-    const result = await (await getExtensionRuntimeClient()).terminal.list({ limit: 500 })
+    const result = await (await openRuntimeTerminalClient({ kind: 'local' })).list({ limit: 500 })
     const terminal = result.terminals.find(
       (candidate) => candidate.handle === terminalHandle || candidate.ptyId === terminalHandle
     )
@@ -314,8 +317,10 @@ async function resolveWorkspaces(rawUrl: string): Promise<{
   if (!identity) {
     throw new Error('devtools_local_preview_required')
   }
-  const client = await getExtensionRuntimeClient()
-  const [ports, projects] = await Promise.all([client.workspacePorts.scan({}), client.repo.list()])
+  const [ports, projects] = await Promise.all([
+    scanWorkspacePorts({ kind: 'local' }),
+    listRuntimeRepos({ kind: 'local' })
+  ])
   const workspaces = ports.ports.flatMap((port) =>
     port.kind === 'workspace' && port.port === identity.port
       ? [

@@ -1,4 +1,4 @@
-import type { ReactErrorBoundaryReportArgs } from '@yiru/runtime-protocol/workbench/crash-reporting'
+import type { ReactErrorBoundaryReportArgs } from '@yiru/protocol/crash-reports/values'
 import type React from 'react'
 
 import { reportRendererErrorCrash } from './renderer-error'

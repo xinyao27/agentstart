@@ -1,8 +1,12 @@
-import { folderWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterProjectCatalogMutation } from '~renderer/project-catalog/mutation-refresh'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import {
+  createRuntimeFolderWorkspace,
+  deleteRuntimeFolderWorkspace,
+  updateRuntimeFolderWorkspace
+} from '~renderer/runtime/folder-workspace-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { formatFolderWorkspaceCreateError } from '~renderer/sidebar/folder-workspace-path-status'
 
@@ -20,12 +24,10 @@ export function createFolderWorkspaceActions(
         const target = getActiveRuntimeTarget(
           getFolderWorkspacePathStatusRouteSettings(options, get().settings)
         )
-        const result = await callRuntimeOrpc(
-          target,
-          (client) => client.folderWorkspace.create,
-          { ...args, expectedRevision: readProjectCatalogMutationRevision(target) },
-          { timeoutMs: 15_000 }
-        )
+        const result = await createRuntimeFolderWorkspace(target, {
+          ...args,
+          expectedRevision: readProjectCatalogMutationRevision(target)
+        })
         await refreshAfterProjectCatalogMutation(target, result.revision)
         set({ folderWorkspacePathStatuses: {} })
         return result.folderWorkspace
@@ -38,16 +40,11 @@ export function createFolderWorkspaceActions(
     updateFolderWorkspace: async (folderWorkspaceId, updates) => {
       try {
         const target = getActiveRuntimeTarget(get().settings)
-        const result = await callRuntimeOrpc(
-          target,
-          (client) => client.folderWorkspace.update,
-          {
-            expectedRevision: readProjectCatalogMutationRevision(target),
-            folderWorkspaceId,
-            updates
-          },
-          { timeoutMs: 15_000 }
-        )
+        const result = await updateRuntimeFolderWorkspace(target, {
+          expectedRevision: readProjectCatalogMutationRevision(target),
+          folderWorkspaceId,
+          updates
+        })
         await refreshAfterProjectCatalogMutation(target, result.revision)
         if (!result.folderWorkspace) {
           return false
@@ -62,15 +59,10 @@ export function createFolderWorkspaceActions(
     deleteFolderWorkspace: async (folderWorkspaceId) => {
       try {
         const target = getActiveRuntimeTarget(get().settings)
-        const result = await callRuntimeOrpc(
-          target,
-          (client) => client.folderWorkspace.delete,
-          {
-            expectedRevision: readProjectCatalogMutationRevision(target),
-            folderWorkspaceId
-          },
-          { timeoutMs: 15_000 }
-        )
+        const result = await deleteRuntimeFolderWorkspace(target, {
+          expectedRevision: readProjectCatalogMutationRevision(target),
+          folderWorkspaceId
+        })
         await refreshAfterProjectCatalogMutation(target, result.revision)
         if (!result.deleted) {
           return false

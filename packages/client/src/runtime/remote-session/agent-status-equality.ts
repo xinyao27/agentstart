@@ -1,11 +1,11 @@
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry
-} from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/status-records'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/session'
 
 export function sameStringArray(a: readonly string[], b: readonly string[]): boolean {
   if (a.length !== b.length) {

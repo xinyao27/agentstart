@@ -1,14 +1,9 @@
-import {
-  ONBOARDING_FINAL_STEP,
-  ONBOARDING_FLOW_VERSION
-} from '@yiru/runtime-protocol/workbench/constants'
-import type { EventProps } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import { applyAgentPermissionMode } from '@yiru/runtime-protocol/workbench/tui-agent/permissions'
-import type {
-  GlobalSettings,
-  OnboardingState,
-  TuiAgent
-} from '@yiru/runtime-protocol/workbench/types'
+import { applyAgentPermissionMode } from '@yiru/protocol/agent/launch/permissions'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { ONBOARDING_FINAL_STEP, ONBOARDING_FLOW_VERSION } from '@yiru/protocol/settings/onboarding'
+import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
 import { useRef } from 'react'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { useAppStore } from '~renderer/store/state'

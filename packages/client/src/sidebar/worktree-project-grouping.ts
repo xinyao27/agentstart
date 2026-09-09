@@ -1,6 +1,8 @@
-import { isWindowsAbsolutePathLike, parseWslUncPath } from '@yiru/runtime-protocol/model/platform'
-import { getPortableProjectIdentityKey } from '@yiru/runtime-protocol/workbench/project-host-setup-projection'
-import type { Project, ProjectHostSetup, Repo } from '@yiru/runtime-protocol/workbench/types'
+import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
+import { parseWslUncPath } from '@yiru/protocol/host/wsl-paths'
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { getPortableProjectIdentityKey } from '@yiru/protocol/project/setup-projection'
 
 import type { ProjectGroupingModel } from './worktree-list/rows'
 

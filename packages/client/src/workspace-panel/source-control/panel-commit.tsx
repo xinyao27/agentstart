@@ -42,7 +42,6 @@ export function SourceControlPanelCommit({
     handleGeneratePullRequestFieldsClick,
     handlePrimaryClick,
     hasPartiallyStagedChanges,
-    hostedReviewCreateProvider,
     inFlightRemoteOpKind,
     isAbortingOperation,
     isCommitting,
@@ -106,7 +105,6 @@ export function SourceControlPanelCommit({
 
       {directCreatePrAction ? (
         <CreateHostedReviewComposer
-          provider={hostedReviewCreateProvider}
           branch={branchName}
           base={prBase}
           setBase={setPrBase}

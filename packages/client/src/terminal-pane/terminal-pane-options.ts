@@ -1,9 +1,9 @@
 import {
   DEFAULT_TERMINAL_FONT_SIZE,
   resolveTerminalFontWeights
-} from '@yiru/runtime-protocol/workbench/terminal/fonts'
-import { normalizeTerminalLineHeight } from '@yiru/runtime-protocol/workbench/terminal/line-height-settings'
-import { normalizeDesktopTerminalScrollbackRows } from '@yiru/runtime-protocol/workbench/terminal/scrollback-policy'
+} from '@yiru/protocol/terminal/font-settings'
+import { normalizeTerminalLineHeight } from '@yiru/protocol/terminal/line-height'
+import { normalizeDesktopTerminalScrollbackRows } from '@yiru/protocol/terminal/scrollback-policy'
 
 import { getConnectionId } from '../runtime/connection-context'
 import { getRenderingHostSnapshot } from '../runtime/shell-platform-client'

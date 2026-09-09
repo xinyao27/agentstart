@@ -1,8 +1,7 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/runtime-protocol/workbench/types'
+import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
 import {
-  GitMerge,
   CaretRight as ChevronRight,
   ArrowSquareOut as ExternalLink
 } from '~renderer/icons/hugeicons'
@@ -32,12 +31,12 @@ export function FolderWorkspacePrChecksRow({
   onToggle,
   onLoadCheckDetails
 }: FolderWorkspacePrChecksRowProps): React.JSX.Element {
-  const ReviewIcon = row.provider === 'gitlab' ? GitMerge : PullRequestIcon
+  const ReviewIcon = PullRequestIcon
   const StatusIcon = CHECK_ICON[row.checkTone] ?? CHECK_ICON.neutral
   // Why: match the regular PR checks header; the review identity leads,
   // while aggregate check state stays with the summary metadata.
   const showStatusIcon = row.checkTone !== 'neutral'
-  const reviewProviderLabel = row.provider === 'gitlab' ? 'MR' : 'PR'
+  const reviewProviderLabel = 'PR'
   const toggleDetailsLabel = expanded
     ? translate(
         'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.hideDetails',

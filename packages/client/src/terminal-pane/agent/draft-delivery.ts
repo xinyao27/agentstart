@@ -1,7 +1,7 @@
-import { isExpectedAgentProcess } from '@yiru/runtime-protocol/workbench/agent/process-recognition'
-import { TUI_AGENT_CONFIG } from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
+import { isExpectedAgentProcess } from '@yiru/protocol/agent/process/recognition'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { agentDeliversDraftViaNativePrefill } from '~renderer/agent/native-draft-prefill'
 import { POST_PASTE_SUBMIT_DELAY_MS } from '~renderer/agent/paste-submit-delay'
 import {

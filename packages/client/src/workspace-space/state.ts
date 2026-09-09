@@ -1,7 +1,4 @@
-import type {
-  WorkspaceSpaceAnalysis,
-  WorkspaceSpaceScanProgress
-} from '@yiru/runtime-protocol/workbench/workspace/space-types'
+import type { WorkspaceSpaceAnalysisValue as WorkspaceSpaceAnalysis } from '@yiru/protocol'
 import type { StateCreator } from 'zustand'
 import {
   analyzeWorkspaceSpace as analyzeRuntimeWorkspaceSpace,
@@ -9,63 +6,21 @@ import {
 } from '~renderer/runtime/workspace-space-client'
 import type { AppState } from '~renderer/store/types'
 
+import {
+  removeDeletedWorktreesFromAnalysis,
+  errorMessage,
+  isWorkspaceSpaceScanCancelled
+} from './analysis-state'
+
 let inFlightScan: Promise<WorkspaceSpaceAnalysis> | null = null
 
 export type WorkspaceSpaceSlice = {
   workspaceSpaceAnalysis: WorkspaceSpaceAnalysis | null
-  workspaceSpaceScanProgress: WorkspaceSpaceScanProgress | null
   workspaceSpaceScanError: string | null
   workspaceSpaceScanning: boolean
-  applyWorkspaceSpaceProgress: (progress: WorkspaceSpaceScanProgress) => void
   cancelWorkspaceSpaceScan: () => Promise<boolean>
   refreshWorkspaceSpace: () => Promise<WorkspaceSpaceAnalysis>
   removeWorkspaceSpaceWorktrees: (worktreeIds: readonly string[]) => void
-}
-
-function removeDeletedWorktreesFromAnalysis(
-  analysis: WorkspaceSpaceAnalysis,
-  deletedWorktreeIds: readonly string[]
-): WorkspaceSpaceAnalysis {
-  const deletedSet = new Set(deletedWorktreeIds)
-  const worktrees = analysis.worktrees.filter((worktree) => !deletedSet.has(worktree.worktreeId))
-  const rowsByRepoId = new Map<string, typeof worktrees>()
-  for (const worktree of worktrees) {
-    const repoRows = rowsByRepoId.get(worktree.repoId) ?? []
-    repoRows.push(worktree)
-    rowsByRepoId.set(worktree.repoId, repoRows)
-  }
-  const repos = analysis.repos.map((repo) => {
-    const repoRows = rowsByRepoId.get(repo.repoId) ?? []
-    return {
-      ...repo,
-      worktreeCount: repoRows.length,
-      scannedWorktreeCount: repoRows.filter((row) => row.status === 'ok').length,
-      unavailableWorktreeCount: repoRows.filter((row) => row.status !== 'ok').length,
-      totalSizeBytes: repoRows.reduce((sum, row) => sum + row.sizeBytes, 0),
-      reclaimableBytes: repoRows.reduce((sum, row) => sum + row.reclaimableBytes, 0)
-    }
-  })
-  return {
-    ...analysis,
-    totalSizeBytes: worktrees.reduce((sum, row) => sum + row.sizeBytes, 0),
-    reclaimableBytes: worktrees.reduce((sum, row) => sum + row.reclaimableBytes, 0),
-    worktreeCount: worktrees.length,
-    scannedWorktreeCount: worktrees.filter((row) => row.status === 'ok').length,
-    unavailableWorktreeCount:
-      worktrees.filter((row) => row.status !== 'ok').length +
-      repos.filter((repo) => repo.error !== null).length,
-    repos,
-    worktrees
-  }
-}
-
-function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error)
-}
-
-function isWorkspaceSpaceScanCancelled(error: unknown): boolean {
-  const message = errorMessage(error).toLowerCase()
-  return message.includes('workspace space scan cancelled') || message.includes('was cancelled')
 }
 
 export const createWorkspaceSpaceSlice: StateCreator<AppState, [], [], WorkspaceSpaceSlice> = (
@@ -73,39 +28,12 @@ export const createWorkspaceSpaceSlice: StateCreator<AppState, [], [], Workspace
   get
 ) => ({
   workspaceSpaceAnalysis: null,
-  workspaceSpaceScanProgress: null,
   workspaceSpaceScanError: null,
   workspaceSpaceScanning: false,
-  applyWorkspaceSpaceProgress: (progress) =>
-    set((state) => {
-      if (
-        state.workspaceSpaceScanProgress?.scanId !== progress.scanId &&
-        !state.workspaceSpaceScanning
-      ) {
-        return state
-      }
-      return {
-        workspaceSpaceScanProgress: progress,
-        workspaceSpaceScanning: true
-      }
-    }),
   cancelWorkspaceSpaceScan: async () => {
     const cancelled = await cancelRuntimeWorkspaceSpaceScan()
     if (cancelled) {
       get().recordFeatureInteraction?.('workspace-cleanup')
-    }
-    if (cancelled) {
-      set((state) =>
-        state.workspaceSpaceScanProgress
-          ? {
-              workspaceSpaceScanProgress: {
-                ...state.workspaceSpaceScanProgress,
-                state: 'cancelling',
-                updatedAt: Date.now()
-              }
-            }
-          : state
-      )
     }
     return cancelled
   },
@@ -116,7 +44,7 @@ export const createWorkspaceSpaceSlice: StateCreator<AppState, [], [], Workspace
     get().recordFeatureInteraction?.('workspace-cleanup')
     set({
       workspaceSpaceScanning: true,
-      workspaceSpaceScanProgress: null,
+
       workspaceSpaceScanError: null
     })
     // Why: the compact Resource Manager card and the full Space page share
@@ -129,8 +57,7 @@ export const createWorkspaceSpaceSlice: StateCreator<AppState, [], [], Workspace
         const analysis = result.analysis
         set({
           workspaceSpaceAnalysis: analysis,
-          workspaceSpaceScanning: false,
-          workspaceSpaceScanProgress: null
+          workspaceSpaceScanning: false
         })
         return analysis
       })
@@ -139,8 +66,7 @@ export const createWorkspaceSpaceSlice: StateCreator<AppState, [], [], Workspace
           workspaceSpaceScanError: isWorkspaceSpaceScanCancelled(error)
             ? null
             : errorMessage(error),
-          workspaceSpaceScanning: false,
-          workspaceSpaceScanProgress: null
+          workspaceSpaceScanning: false
         })
         throw error
       })

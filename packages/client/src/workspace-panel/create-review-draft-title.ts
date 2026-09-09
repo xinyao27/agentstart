@@ -1,5 +1,5 @@
-import { humanizeBranchSlug } from '@yiru/runtime-protocol/workbench/branch-name-from-work'
-import { normalizeHostedReviewHeadRef } from '@yiru/runtime-protocol/workbench/hosted-review-refs'
+import { normalizeHostedReviewHeadRef } from '@yiru/protocol/hosted-review/refs'
+import { humanizeBranchSlug } from '~renderer/new-workspace/naming/from-work'
 
 export function resolveCreateReviewDraftTitle({
   branch,

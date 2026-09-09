@@ -1,12 +1,10 @@
 import type { LegendListRef } from '@legendapp/list/react'
-import type {
-  FolderWorkspace,
-  ProjectGroup,
-  Repo,
-  Worktree,
-  WorktreeLineage,
-  WorkspaceStatusDefinition
-} from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
+import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { useEffect, useRef, useState } from 'react'
 import type { PendingSidebarWorktreeReveal } from '~renderer/application-shell/state/slice'
 import { useAppStore } from '~renderer/store/state'

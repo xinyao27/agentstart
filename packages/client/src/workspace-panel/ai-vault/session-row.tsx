@@ -1,5 +1,4 @@
-import type { AiVaultScope, AiVaultSession } from '@yiru/runtime-protocol/model/agent'
-import type { AgentStatusState } from '@yiru/runtime-protocol/model/agent'
+import type { AgentStatusState } from '@yiru/protocol/agent/status-records'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { cn } from '~renderer/ui/class-names'
@@ -9,12 +8,13 @@ import {
   AI_VAULT_SESSION_DRAG_START_EVENT,
   writeAiVaultSessionDragData
 } from '~renderer/workspace-panel/ai-vault/session-drag'
+import type { AiVaultScope } from '~renderer/workspace-panel/ai-vault/session/providers'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
 import { SessionRowTrailingActions } from '../session-row-trailing-actions'
 import type { AiVaultResumeStartup } from './resume-command'
 import { SessionActionMenuItems } from './session-action-menu-items'
 import { SessionInlineDetails } from './session-details'
-import { latestSessionConversationTurn } from './session-display'
 import type { AiVaultSessionResumeActions } from './session-resume'
 import {
   conversationRoleLabel,
@@ -26,6 +26,7 @@ import {
   shouldShowAiVaultSessionWorktreeLine,
   type AiVaultSessionWorktreeInfo
 } from './session-worktree'
+import { latestSessionConversationTurn } from './session/display'
 
 export function VaultSessionRow({
   session,

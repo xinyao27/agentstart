@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import React, { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useEventCallback } from '~renderer/react/use-event-callback'

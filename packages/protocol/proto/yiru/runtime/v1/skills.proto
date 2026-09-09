@@ -1,0 +1,541 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+// Why: Discovery is read-only; installation and live CLI runs act on the selected runtime host.
+service SkillsService {
+  rpc Discover(SkillsServiceDiscoverRequest) returns (SkillsServiceDiscoverResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ManageFreshnessInventory(SkillsServiceManageFreshnessInventoryRequest) returns (SkillsServiceManageFreshnessInventoryResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ManageStartUpdateRun(SkillsServiceManageStartUpdateRunRequest) returns (SkillsServiceManageStartUpdateRunResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ManageStartInstallRun(SkillsServiceManageStartInstallRunRequest) returns (SkillsServiceManageStartInstallRunResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ManageStartRemoveRun(SkillsServiceManageStartRemoveRunRequest) returns (SkillsServiceManageStartRemoveRunResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ManageListSkillFiles(SkillsServiceManageListSkillFilesRequest) returns (SkillsServiceManageListSkillFilesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ManageReadSkillDirFile(SkillsServiceManageReadSkillDirFileRequest) returns (SkillsServiceManageReadSkillDirFileResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  // Why: cancel and acknowledge return the settled run so a client sees the
+  // outcome immediately instead of racing the push event.
+  rpc ManageCancelUpdateRun(SkillsServiceManageCancelUpdateRunRequest) returns (SkillsServiceManageCancelUpdateRunResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  // Why: acknowledging only clears the shared runner's settled-run flag in
+  // memory; it writes no file and kills nothing, so it sits below the `host`
+  // tier that cancel and the start verbs need.
+  rpc ManageAcknowledgeUpdateRun(SkillsServiceManageAcknowledgeUpdateRunRequest) returns (SkillsServiceManageAcknowledgeUpdateRunResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ManageGetUpdateRun(SkillsServiceManageGetUpdateRunRequest) returns (SkillsServiceManageGetUpdateRunResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  // Why: one run at a time, one subscription shape: it reports the shared
+  // runner's state, never drives it, so subscription count should scale with
+  // clients, not verbs.
+  rpc ManageEventsSubscribe(SkillsServiceManageEventsSubscribeRequest) returns (stream SkillsServiceManageEventsSubscribeResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+enum SkillProvider {
+  SKILL_PROVIDER_UNSPECIFIED = 0;
+  SKILL_PROVIDER_CODEX = 1;
+  SKILL_PROVIDER_CLAUDE = 2;
+  SKILL_PROVIDER_AGENT_SKILLS = 3;
+}
+
+enum SkillSourceKind {
+  SKILL_SOURCE_KIND_UNSPECIFIED = 0;
+  SKILL_SOURCE_KIND_HOME = 1;
+  SKILL_SOURCE_KIND_REPO = 2;
+  SKILL_SOURCE_KIND_BUNDLED = 3;
+  SKILL_SOURCE_KIND_PLUGIN = 4;
+}
+
+enum SkillInstallationTopology {
+  SKILL_INSTALLATION_TOPOLOGY_UNSPECIFIED = 0;
+  SKILL_INSTALLATION_TOPOLOGY_CANONICAL_COPY = 1;
+  SKILL_INSTALLATION_TOPOLOGY_PROVIDER_ALIAS = 2;
+  SKILL_INSTALLATION_TOPOLOGY_INDEPENDENT_COPY = 3;
+  SKILL_INSTALLATION_TOPOLOGY_EXTERNAL_LINK = 4;
+  SKILL_INSTALLATION_TOPOLOGY_BROKEN_LINK = 5;
+  SKILL_INSTALLATION_TOPOLOGY_READ_ONLY = 6;
+  SKILL_INSTALLATION_TOPOLOGY_REPO_SCOPE = 7;
+  SKILL_INSTALLATION_TOPOLOGY_PLUGIN_CACHE = 8;
+  SKILL_INSTALLATION_TOPOLOGY_UNKNOWN = 9;
+}
+
+enum SkillDiscoverRuntime {
+  SKILL_DISCOVER_RUNTIME_UNSPECIFIED = 0;
+  SKILL_DISCOVER_RUNTIME_HOST = 1;
+  SKILL_DISCOVER_RUNTIME_WSL = 2;
+}
+
+// Why: the authority only ever reports a source root as skipped because it
+// does not exist; the enum exists so that reason is named instead of a bool.
+enum SkillDiscoverySkippedReason {
+  SKILL_DISCOVERY_SKIPPED_REASON_UNSPECIFIED = 0;
+  SKILL_DISCOVERY_SKIPPED_REASON_MISSING = 1;
+}
+
+enum SkillFreshnessStatus {
+  SKILL_FRESHNESS_STATUS_UNSPECIFIED = 0;
+  SKILL_FRESHNESS_STATUS_CURRENT = 1;
+  SKILL_FRESHNESS_STATUS_OUTDATED = 2;
+  SKILL_FRESHNESS_STATUS_NEWER_KNOWN = 3;
+  SKILL_FRESHNESS_STATUS_UNRECOGNIZED = 4;
+  SKILL_FRESHNESS_STATUS_INACCESSIBLE = 5;
+}
+
+enum SkillUpdateOperation {
+  SKILL_UPDATE_OPERATION_UNSPECIFIED = 0;
+  SKILL_UPDATE_OPERATION_UPDATE = 1;
+  SKILL_UPDATE_OPERATION_INSTALL = 2;
+  SKILL_UPDATE_OPERATION_REMOVE = 3;
+}
+
+enum SkillUpdateFailureKind {
+  SKILL_UPDATE_FAILURE_KIND_UNSPECIFIED = 0;
+  SKILL_UPDATE_FAILURE_KIND_LAUNCH_FAILED = 1;
+  SKILL_UPDATE_FAILURE_KIND_COMMAND_EXITED = 2;
+  SKILL_UPDATE_FAILURE_KIND_INCOMPLETE = 3;
+}
+
+enum SkillUpdateStartFailureReason {
+  SKILL_UPDATE_START_FAILURE_REASON_UNSPECIFIED = 0;
+  SKILL_UPDATE_START_FAILURE_REASON_ALREADY_RUNNING = 1;
+  SKILL_UPDATE_START_FAILURE_REASON_INVALID_NAMES = 2;
+  SKILL_UPDATE_START_FAILURE_REASON_INVALID_SOURCE = 3;
+  SKILL_UPDATE_START_FAILURE_REASON_INVALID_SCOPE = 4;
+}
+
+enum SkillDirectoryErrorReason {
+  SKILL_DIRECTORY_ERROR_REASON_UNSPECIFIED = 0;
+  SKILL_DIRECTORY_ERROR_REASON_INVALID_PATH = 1;
+  SKILL_DIRECTORY_ERROR_REASON_UNREADABLE = 2;
+}
+
+enum SkillFileErrorReason {
+  SKILL_FILE_ERROR_REASON_UNSPECIFIED = 0;
+  SKILL_FILE_ERROR_REASON_INVALID_PATH = 1;
+  SKILL_FILE_ERROR_REASON_UNREADABLE = 2;
+  SKILL_FILE_ERROR_REASON_BINARY = 3;
+}
+
+message SkillManageGlobalScope {}
+
+message SkillManageProjectScope {
+  string repo_path = 1;
+}
+
+message SkillManageScope {
+  oneof scope {
+    SkillManageGlobalScope global = 1;
+    SkillManageProjectScope project = 2;
+  }
+}
+
+message SkillPlacement {
+  string id = 1;
+  string root_id = 2;
+  string root_path = 3;
+  string root_label = 4;
+  optional string owner = 5;
+  repeated SkillProvider providers = 6;
+  SkillSourceKind source_kind = 7;
+  string source_label = 8;
+  string directory_path = 9;
+  string skill_file_path = 10;
+  optional string link_target_path = 11;
+  SkillInstallationTopology topology = 12;
+  uint32 file_count = 13;
+  optional int64 updated_at = 14;
+}
+
+message DiscoveredSkill {
+  string id = 1;
+  string name = 2;
+  string folder_name = 3;
+  optional string description = 4;
+  repeated SkillProvider providers = 5;
+  SkillSourceKind source_kind = 6;
+  string source_label = 7;
+  string root_path = 8;
+  repeated SkillPlacement placements = 9;
+  string directory_path = 10;
+  string skill_file_path = 11;
+  bool installed = 12;
+  uint32 file_count = 13;
+  optional int64 updated_at = 14;
+  optional string install_source = 15;
+}
+
+message SkillDiscoverySource {
+  string id = 1;
+  string label = 2;
+  string path = 3;
+  SkillSourceKind source_kind = 4;
+  repeated SkillProvider providers = 5;
+  optional string owner = 6;
+  bool exists = 7;
+  SkillDiscoverySkippedReason skipped_reason = 8;
+}
+
+message SkillsServiceDiscoverRequest {
+  SkillDiscoverRuntime runtime = 1;
+  optional string cwd = 2;
+  optional string execution_host_id = 3;
+}
+
+message SkillsServiceDiscoverResponse {
+  repeated DiscoveredSkill skills = 1;
+  repeated SkillDiscoverySource sources = 2;
+  int64 scanned_at = 3;
+}
+
+message SkillFreshnessInstallation {
+  string id = 1;
+  string name = 2;
+  string root_id = 3;
+  repeated SkillProvider providers = 4;
+  SkillSourceKind source_kind = 5;
+  string source_label = 6;
+  string unresolved_path = 7;
+  optional string resolved_path = 8;
+  optional string physical_identity = 9;
+  SkillInstallationTopology topology = 10;
+  SkillFreshnessStatus status = 11;
+  optional uint64 installed_release_revision = 12;
+  optional string installed_app_version = 13;
+  uint64 current_release_revision = 14;
+  string current_package_digest = 15;
+  string current_app_version = 16;
+  optional string observed_package_digest = 17;
+  optional string observed_git_tree_sha = 18;
+  optional string error_category = 19;
+}
+
+message SkillFreshnessInventory {
+  repeated SkillFreshnessInstallation installations = 1;
+  repeated string eligible_update_names = 2;
+  int64 scanned_at = 3;
+}
+
+message SkillsServiceManageFreshnessInventoryRequest {}
+
+message SkillsServiceManageFreshnessInventoryResponse {
+  SkillFreshnessInventory inventory = 1;
+}
+
+message SkillUpdateRunSubject {
+  SkillUpdateOperation operation = 1;
+  repeated string names = 2;
+  optional string source = 3;
+}
+
+message SkillUpdateRunIdle {}
+
+message SkillUpdateRunRunning {
+  SkillUpdateRunSubject subject = 1;
+  int64 started_at = 2;
+  string output = 3;
+  optional bool stopping = 4;
+}
+
+message SkillUpdateRunSuccess {
+  SkillUpdateRunSubject subject = 1;
+  int64 finished_at = 2;
+  string output = 3;
+}
+
+message SkillUpdateRunError {
+  SkillUpdateRunSubject subject = 1;
+  int64 finished_at = 2;
+  string output = 3;
+  repeated string failed_names = 4;
+  SkillUpdateFailureKind kind = 5;
+  optional string command = 6;
+  optional string detail = 7;
+  optional int32 exit_code = 8;
+}
+
+message SkillUpdateRun {
+  oneof state {
+    SkillUpdateRunIdle idle = 1;
+    SkillUpdateRunRunning running = 2;
+    SkillUpdateRunSuccess success = 3;
+    SkillUpdateRunError error = 4;
+  }
+}
+
+message SkillUpdateStartResult {
+  bool started = 1;
+  SkillUpdateStartFailureReason reason = 2;
+}
+
+message SkillsServiceManageStartUpdateRunRequest {
+  repeated string names = 1;
+}
+
+message SkillsServiceManageStartUpdateRunResponse {
+  SkillUpdateStartResult result = 1;
+}
+
+message SkillsServiceManageStartInstallRunRequest {
+  string source = 1;
+  repeated string skill_names = 2;
+  SkillManageScope scope = 3;
+}
+
+message SkillsServiceManageStartInstallRunResponse {
+  SkillUpdateStartResult result = 1;
+}
+
+message SkillsServiceManageStartRemoveRunRequest {
+  repeated string names = 1;
+  SkillManageScope scope = 2;
+}
+
+message SkillsServiceManageStartRemoveRunResponse {
+  SkillUpdateStartResult result = 1;
+}
+
+message SkillDirectoryEntry {
+  string relative_path = 1;
+  uint64 size = 2;
+}
+
+message SkillDirectoryListingOk {
+  repeated SkillDirectoryEntry files = 1;
+  bool truncated = 2;
+}
+
+message SkillDirectoryListing {
+  oneof result {
+    SkillDirectoryListingOk ok = 1;
+    SkillDirectoryErrorReason error = 2;
+  }
+}
+
+message SkillsServiceManageListSkillFilesRequest {
+  string directory_path = 1;
+}
+
+message SkillsServiceManageListSkillFilesResponse {
+  SkillDirectoryListing listing = 1;
+}
+
+message SkillFileReadOk {
+  string content = 1;
+  bool truncated = 2;
+}
+
+message SkillFileReadResult {
+  oneof result {
+    SkillFileReadOk ok = 1;
+    SkillFileErrorReason error = 2;
+  }
+}
+
+message SkillsServiceManageReadSkillDirFileRequest {
+  string directory_path = 1;
+  string relative_path = 2;
+}
+
+message SkillsServiceManageReadSkillDirFileResponse {
+  SkillFileReadResult result = 1;
+}
+
+message SkillsServiceManageCancelUpdateRunRequest {}
+
+message SkillsServiceManageCancelUpdateRunResponse {
+  SkillUpdateRun run = 1;
+}
+
+message SkillsServiceManageAcknowledgeUpdateRunRequest {}
+
+message SkillsServiceManageAcknowledgeUpdateRunResponse {
+  SkillUpdateRun run = 1;
+}
+
+message SkillsServiceManageGetUpdateRunRequest {}
+
+message SkillsServiceManageGetUpdateRunResponse {
+  SkillUpdateRun run = 1;
+}
+
+message SkillsServiceManageEventsSubscribeRequest {}
+
+message SkillEventsReady {
+  string subscription_id = 1;
+}
+
+message SkillEventsEnd {}
+
+message SkillsServiceManageEventsSubscribeResponse {
+  oneof event {
+    SkillEventsReady ready = 1;
+    SkillUpdateRun run = 2;
+    SkillEventsEnd end = 3;
+  }
+}

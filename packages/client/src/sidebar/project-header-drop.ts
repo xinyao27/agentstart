@@ -1,5 +1,5 @@
-import { getEffectiveProjectGroupManualRank } from '@yiru/runtime-protocol/workbench/project-groups'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { getEffectiveProjectGroupManualRank } from '~renderer/project-catalog/group-order'
 
 import type { Row } from './worktree-list/groups'
 import {

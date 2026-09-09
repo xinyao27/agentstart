@@ -1,4 +1,4 @@
-import type { GitHistoryItem } from '@yiru/runtime-protocol/workbench/git/history'
+import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
 import type React from 'react'
 import { cn } from '~renderer/ui/class-names'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'

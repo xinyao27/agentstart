@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+import "yiru/runtime/v1/git_common.proto";
+
+// Remote synchronization: fetch, pull, fast-forward-only pull, push, and
+// upstream-fork sync. See apps/daemon/src/rpc/git.rs's METHODS table
+// (git.fetch, git.pull, git.fastForward, git.push, git.forkSync).
+service GitRemoteService {
+  rpc Fetch(GitRemoteServiceFetchRequest) returns (GitRemoteServiceFetchResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Pull(GitRemoteServicePullRequest) returns (GitRemoteServicePullResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc FastForward(GitRemoteServiceFastForwardRequest) returns (GitRemoteServiceFastForwardResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Push(GitRemoteServicePushRequest) returns (GitRemoteServicePushResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ForkSync(GitRemoteServiceForkSyncRequest) returns (GitRemoteServiceForkSyncResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message GitRemoteServiceFetchRequest {
+  string worktree = 1;
+  optional GitPushTarget push_target = 2;
+}
+
+// fetch/pull/fastForward/push/rebaseFromBase are not status-shaped: success is
+// always {"ok":true} and any git/validation failure (including remote.rs's
+// normalize_remote_error rewrite of auth/network/non-fast-forward stderr into
+// a stable message) surfaces as an RPC error, never as response data.
+message GitRemoteServiceFetchResponse {
+  bool ok = 1;
+}
+
+message GitRemoteServicePullRequest {
+  string worktree = 1;
+  optional GitPushTarget push_target = 2;
+}
+
+message GitRemoteServicePullResponse {
+  bool ok = 1;
+}
+
+message GitRemoteServiceFastForwardRequest {
+  string worktree = 1;
+  optional GitPushTarget push_target = 2;
+}
+
+message GitRemoteServiceFastForwardResponse {
+  bool ok = 1;
+}
+
+message GitRemoteServicePushRequest {
+  string worktree = 1;
+  optional GitPushTarget push_target = 2;
+  bool publish = 3;
+  bool force_with_lease = 4;
+}
+
+message GitRemoteServicePushResponse {
+  bool ok = 1;
+}
+
+message GitRemoteServiceForkSyncRequest {
+  string worktree = 1;
+  string expected_upstream_owner = 2;
+  string expected_upstream_repo = 3;
+}
+
+enum GitForkSyncStatus {
+  GIT_FORK_SYNC_STATUS_UNSPECIFIED = 0;
+  GIT_FORK_SYNC_STATUS_BLOCKED = 1;
+  GIT_FORK_SYNC_STATUS_UP_TO_DATE = 2;
+  GIT_FORK_SYNC_STATUS_SYNCED = 3;
+}
+
+enum GitForkSyncBlockReason {
+  GIT_FORK_SYNC_BLOCK_REASON_UNSPECIFIED = 0;
+  GIT_FORK_SYNC_BLOCK_REASON_MISSING_ORIGIN = 1;
+  GIT_FORK_SYNC_BLOCK_REASON_MISSING_UPSTREAM = 2;
+  GIT_FORK_SYNC_BLOCK_REASON_UPSTREAM_MISMATCH = 3;
+  GIT_FORK_SYNC_BLOCK_REASON_MISSING_UPSTREAM_DEFAULT_BRANCH = 4;
+  GIT_FORK_SYNC_BLOCK_REASON_MISSING_ORIGIN_BRANCH = 5;
+  GIT_FORK_SYNC_BLOCK_REASON_DIVERGED = 6;
+}
+
+message GitRemoteServiceForkSyncResponse {
+  string origin_remote = 1;
+  string upstream_remote = 2;
+  uint64 ahead = 3;
+  uint64 behind = 4;
+  GitForkSyncStatus status = 5;
+  optional GitForkSyncBlockReason reason = 6;
+  optional string branch_name = 7;
+}

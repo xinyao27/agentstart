@@ -6,7 +6,7 @@ import {
   type FileContents
 } from '@pierre/diffs'
 import type { DiffLineAnnotation } from '@pierre/diffs/react'
-import type { GitFileStatus } from '@yiru/runtime-protocol/model/review'
+import type { GitFileStatus } from '@yiru/protocol/git/status-types'
 import { useState } from 'react'
 
 import { resolvePierreDiffLanguage } from '../pierre-diff-language'

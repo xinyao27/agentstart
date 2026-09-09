@@ -1,11 +1,9 @@
 import type {
   BrowserCertificateFailure,
   BrowserPage,
-  BrowserWorkspace,
-  Tab,
-  TabGroup,
-  TerminalTab
-} from '@yiru/runtime-protocol/workbench/types'
+  BrowserWorkspace
+} from '@yiru/protocol/workspace/browser-session'
+import type { Tab, TabGroup, TerminalTab } from '@yiru/protocol/workspace/tabs'
 
 import type { OpenFile } from '../../editor/state'
 import { sameStringArray } from './agent-status-equality'

@@ -1,3 +1,5 @@
+import { workspaceStatusLabel } from '~renderer/sidebar/workspace-status-label'
+
 import { orderMainWorktreeFirst } from './project-row-order'
 import { getWorkspaceStatusFromGroupKey, getWorkspaceStatusVisualMeta } from './workspace-status'
 import { PR_GROUP_META, PR_GROUP_ORDER, PROJECT_GROUP_META } from './worktree-group-metadata'
@@ -41,7 +43,7 @@ function buildGroupHeader(
     return {
       type: 'header',
       key,
-      label: definition?.label ?? status,
+      label: definition ? workspaceStatusLabel(definition) : status,
       count: group.items.length,
       tone: meta.tone,
       icon: meta.icon,

@@ -1,5 +1,5 @@
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
-import { parseSshPtyId } from '@yiru/runtime-protocol/terminal-identity/id'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import { parseSshPtyId } from '@yiru/protocol/terminal-identity'
 import { getConnectionIdFromState } from '~renderer/runtime/connection-context'
 import { useAppStore } from '~renderer/store/state'
 import { dispatchTerminalCommandFinishedEvent } from '~renderer/terminal/command-finished-event'

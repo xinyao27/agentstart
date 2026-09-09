@@ -1,5 +1,5 @@
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { RightSidebarExplorerView } from '@yiru/runtime-protocol/workbench/types'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import type { RightSidebarExplorerView } from '@yiru/protocol/settings/ui-state'
 import { useState } from 'react'
 import { basename } from '~renderer/path'
 import { useRuntimeFileListForWorktree } from '~renderer/quick-open/file-list'

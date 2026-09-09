@@ -1,7 +1,7 @@
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
 import { translate } from '~renderer/i18n/i18n'
 import { Trash as Trash2 } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 
 import { Button } from '../ui/button'
 import {

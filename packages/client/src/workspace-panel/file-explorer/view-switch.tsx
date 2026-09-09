@@ -1,4 +1,4 @@
-import type { RightSidebarExplorerView } from '@yiru/runtime-protocol/workbench/types'
+import type { RightSidebarExplorerView } from '@yiru/protocol/settings/ui-state'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Tabs, TabsList, TabsTrigger } from '~renderer/ui/tabs'

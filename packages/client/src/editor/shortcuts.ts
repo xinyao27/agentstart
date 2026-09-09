@@ -1,7 +1,4 @@
-import {
-  keybindingMatchesAction,
-  type KeybindingActionId
-} from '@yiru/runtime-protocol/workbench/keybindings'
+import { keybindingMatchesAction, type KeybindingActionId } from '@yiru/protocol/keybindings'
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { getShortcutPlatform } from '~renderer/keyboard-input/shortcut-platform'
 import { useAppStore } from '~renderer/store/state'

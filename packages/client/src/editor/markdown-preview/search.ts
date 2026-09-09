@@ -1,8 +1,5 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
-import {
-  keybindingMatchesAction,
-  type KeybindingOverrides
-} from '@yiru/runtime-protocol/workbench/keybindings'
+import { keybindingMatchesAction, type KeybindingOverrides } from '@yiru/protocol/keybindings'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 
 export const MARKDOWN_PREVIEW_SEARCH_QUERY_MAX_BYTES = 2 * 1024
 
@@ -10,7 +7,7 @@ export function isMarkdownPreviewSearchQueryTooLarge(
   query: string,
   maxBytes = MARKDOWN_PREVIEW_SEARCH_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 export function isMarkdownPreviewFindShortcut(

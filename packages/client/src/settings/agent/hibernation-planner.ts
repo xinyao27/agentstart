@@ -2,15 +2,13 @@ import {
   getAgentResumeArgv,
   isResumableTuiAgent,
   type SleepingAgentSessionRecord
-} from '@yiru/runtime-protocol/model/agent'
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
-import { parseRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type {
-  GlobalSettings,
-  TerminalLayoutSnapshot,
-  TerminalTab
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/session-resume'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 
 import { isCompletedAgentWithLiveRecoveryRecord } from '../completed-agent-live-recovery-record'
 import { getEffectiveAgentHibernationIdleMs } from './hibernation-idle-threshold'

@@ -1,5 +1,5 @@
-import type { KeybindingPlatform } from '@yiru/runtime-protocol/workbench/keybindings'
-import { makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import type { KeybindingPlatform } from '@yiru/protocol/keybindings'
+import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import { useEffect } from 'react'
 import { normalizeSelectedTextForFileSearch } from '~renderer/editor/file-search-selection'
 import {

@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service WorkspaceSpaceService {
+  rpc Analyze(WorkspaceSpaceServiceAnalyzeRequest) returns (WorkspaceSpaceServiceAnalyzeResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Cancel(WorkspaceSpaceServiceCancelRequest) returns (WorkspaceSpaceServiceCancelResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message WorkspaceSpaceServiceAnalyzeRequest {}
+
+// Why: the legacy analyze result is an untagged union — either the finished
+// analysis or the cancelled marker — so the response carries that two-way
+// choice as a oneof instead of nullable fields that could combine.
+message WorkspaceSpaceServiceAnalyzeResponse {
+  oneof result {
+    WorkspaceSpaceAnalysis analysis = 1;
+    bool cancelled = 2;
+  }
+}
+
+message WorkspaceSpaceServiceCancelRequest {}
+
+message WorkspaceSpaceServiceCancelResponse {
+  bool cancelled = 1;
+}
+
+message WorkspaceSpaceAnalysis {
+  int64 scanned_at = 1;
+  uint64 total_size_bytes = 2;
+  uint64 reclaimable_bytes = 3;
+  uint32 worktree_count = 4;
+  uint32 scanned_worktree_count = 5;
+  uint32 unavailable_worktree_count = 6;
+  repeated WorkspaceSpaceRepoSummary repos = 7;
+  repeated WorkspaceSpaceWorktree worktrees = 8;
+}
+
+message WorkspaceSpaceRepoSummary {
+  string repo_id = 1;
+  string display_name = 2;
+  string path = 3;
+  bool is_remote = 4;
+  uint32 worktree_count = 5;
+  uint32 scanned_worktree_count = 6;
+  uint32 unavailable_worktree_count = 7;
+  uint64 total_size_bytes = 8;
+  uint64 reclaimable_bytes = 9;
+  optional string error = 10;
+}
+
+message WorkspaceSpaceWorktree {
+  string worktree_id = 1;
+  string repo_id = 2;
+  string repo_display_name = 3;
+  string repo_path = 4;
+  string display_name = 5;
+  string path = 6;
+  string branch = 7;
+  bool is_main_worktree = 8;
+  bool is_remote = 9;
+  bool is_sparse = 10;
+  bool can_delete = 11;
+  int64 last_activity_at = 12;
+  // Why: the status vocabulary ("ok", "missing", "error", "permission-denied",
+  // "unavailable") is decided by the scan's failure classification at runtime,
+  // so the wire keeps the string rather than an enum that would drift.
+  string status = 13;
+  optional string error = 14;
+  int64 scanned_at = 15;
+  uint64 size_bytes = 16;
+  uint64 reclaimable_bytes = 17;
+  uint32 skipped_entry_count = 18;
+  repeated WorkspaceSpaceItem top_level_items = 19;
+  uint32 omitted_top_level_item_count = 20;
+  uint64 omitted_top_level_size_bytes = 21;
+}
+
+// Why: the item kind mirrors the host filesystem probe's closed four-way
+// classification, so it is an enum rather than a string.
+enum WorkspaceSpaceItemKind {
+  WORKSPACE_SPACE_ITEM_KIND_UNSPECIFIED = 0;
+  WORKSPACE_SPACE_ITEM_KIND_DIRECTORY = 1;
+  WORKSPACE_SPACE_ITEM_KIND_FILE = 2;
+  WORKSPACE_SPACE_ITEM_KIND_SYMLINK = 3;
+  WORKSPACE_SPACE_ITEM_KIND_OTHER = 4;
+}
+
+message WorkspaceSpaceItem {
+  string name = 1;
+  string path = 2;
+  WorkspaceSpaceItemKind kind = 3;
+  uint64 size_bytes = 4;
+}

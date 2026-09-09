@@ -1,4 +1,4 @@
-import type { ProviderRateLimits } from '@yiru/runtime-protocol/workbench/rate-limit-types'
+import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
 import { translate } from '~renderer/i18n/i18n'
 
 export type FeatureWallUsageProviderConnection = {

@@ -1,14 +1,14 @@
 import {
   ALL_EXECUTION_HOSTS_SCOPE,
-  getExecutionHostLabel,
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId,
   toRuntimeExecutionHostId,
   type ExecutionHostId,
   type ExecutionHostScope
-} from '@yiru/runtime-protocol/model/workspace'
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
+} from '@yiru/protocol/host/identity'
 import { useState } from 'react'
+import { getExecutionHostLabel } from '~renderer/execution-host/labels'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { getAiVaultResumeWorkspaceExecutionHostId } from '~renderer/workspace-panel/ai-vault/resume-target'
 
 import type { AiVaultSessionResumeTargetState } from './session-resume'

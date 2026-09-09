@@ -1,5 +1,5 @@
-import type { CliInstallStatus } from '@yiru/runtime-protocol/workbench/cli-install-types'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { CliInstallStatus } from '@yiru/protocol/cli-values'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import {

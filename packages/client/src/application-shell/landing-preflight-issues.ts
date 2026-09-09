@@ -1,5 +1,5 @@
-import { projectHostSetupProjectionFromRepos } from '@yiru/runtime-protocol/workbench/project-host-setup-projection'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { projectHostSetupProjectionFromRepos } from '@yiru/protocol/project/setup-projection'
 import { translate } from '~renderer/i18n/i18n'
 
 export type PreflightIssue = {
@@ -23,7 +23,7 @@ export type LandingPreflightIssueOptions = {
 }
 
 export function hasGitHubBackedProject(repos: readonly Repo[]): boolean {
-  const projection = projectHostSetupProjectionFromRepos(repos)
+  const projection = projectHostSetupProjectionFromRepos(repos, Date.now())
   return projection.projects.some((project) => project.providerIdentity?.provider === 'github')
 }
 
@@ -46,7 +46,7 @@ export function getLandingPreflightIssues(
     })
   }
 
-  // Why: gh only powers GitHub pull requests and checks; GitLab-only projects should
+  // Why: gh only powers GitHub pull requests and checks; plain Git projects should
   // not see GitHub setup pressure on the landing screen.
   if (!options.hasGitHubBackedProject) {
     return issues

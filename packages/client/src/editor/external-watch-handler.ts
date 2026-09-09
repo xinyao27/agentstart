@@ -1,4 +1,4 @@
-import type { FsChangedPayload } from '@yiru/runtime-protocol/workbench/types'
+import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
 import { getExternalFileChangeRelativePath } from '~renderer/workspace-panel/file-explorer/use-watch'
 import {
   YIRU_WORKTREE_FILE_CHANGE_EVENT,

@@ -1,4 +1,4 @@
-import { MAX_PR_BOT_AUTHOR_OVERRIDES } from '@yiru/runtime-protocol/model/review'
+import { MAX_PR_BOT_AUTHOR_OVERRIDES } from '@yiru/protocol/hosted-review/bot-overrides'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { updateRendererPRBotAuthorOverride } from '~renderer/runtime/settings-client'

@@ -1,22 +1,23 @@
 import {
   LOCAL_EXECUTION_HOST_ID,
-  getLocalExecutionHostLabel,
   getSettingsFocusedExecutionHostId,
   parseExecutionHostId,
   toRuntimeExecutionHostId,
   type ExecutionHostId,
   type ExecutionHostKind
-} from '@yiru/runtime-protocol/model/workspace'
-import {
-  MIN_COMPATIBLE_RUNTIME_SERVER_VERSION,
-  RUNTIME_PROTOCOL_VERSION
-} from '@yiru/runtime-protocol/protocol-version'
+} from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
 import {
   evaluateRuntimeCompat,
   type RuntimeCompatVerdict
-} from '@yiru/runtime-protocol/runtime-compatibility'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { GlobalSettings, Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/runtime-compatibility'
+import {
+  MIN_COMPATIBLE_RUNTIME_SERVER_VERSION,
+  RUNTIME_PROTOCOL_VERSION
+} from '@yiru/protocol/runtime-versions'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { getLocalExecutionHostLabel } from '~renderer/execution-host/labels'
+import type { RuntimeStatus } from '~renderer/runtime/status/model'
 
 export type ExecutionHostHealth =
   | 'local'

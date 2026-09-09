@@ -8,8 +8,8 @@
  * deliberately dependency-light — no pane/xterm imports — so pane-less
  * consumers can use it.
  */
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 /** Delay before BEL/completion OS notifications so the richer
  *  agent-task-complete notification can win a same-burst BEL race. */

@@ -1,11 +1,8 @@
-import {
-  renderCompiledMessage,
-  type TranslationVariables
-} from '@yiru/runtime-protocol/workbench/localization/message-renderer'
-import type { UiLanguage } from '@yiru/runtime-protocol/workbench/ui-language'
-import type { SupportedUiLocale } from '@yiru/runtime-protocol/workbench/ui-locale'
+import type { UiLanguage } from '@yiru/protocol/settings/ui-language'
 
+import type { SupportedUiLocale } from './locale'
 import zhMessages from './locales/zh.json'
+import { renderCompiledMessage, type TranslationVariables } from './message-renderer'
 import { DEFAULT_LOCALE, resolveUiLocale } from './supported-languages'
 
 let activeLocale: SupportedUiLocale = DEFAULT_LOCALE

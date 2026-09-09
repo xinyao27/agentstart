@@ -1,4 +1,4 @@
-import type { ContextualTourId } from '@yiru/runtime-protocol/workbench/contextual-tours'
+import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
 import {
   normalizeFeatureEducationSource,
   normalizeSetupGuideSource,
@@ -6,14 +6,14 @@ import {
   type SetupGuideCloseOutcome,
   type SetupGuideSource,
   type TerminalPaneSplitSource
-} from '@yiru/runtime-protocol/workbench/feature-education-telemetry'
+} from '@yiru/protocol/telemetry/education'
+import type { EventName, EventProps } from '@yiru/protocol/telemetry/events/catalog'
+import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+
 import {
   getFeatureWallSetupSectionId,
-  isFeatureWallSetupStepId,
-  type FeatureWallSetupStepId
-} from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
-import type { EventName, EventProps } from '@yiru/runtime-protocol/workbench/telemetry-events'
-
+  isFeatureWallSetupStepId
+} from '../feature-wall/content/setup-steps'
 import { track } from '../telemetry/client'
 
 const SETUP_GUIDE_TELEMETRY_COMPLETED_STEPS_STORAGE_KEY =

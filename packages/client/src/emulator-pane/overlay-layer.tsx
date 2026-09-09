@@ -1,4 +1,4 @@
-import type { Tab, TabGroup } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab, TabGroup } from '@yiru/protocol/workspace/tabs'
 import { useShallow } from 'zustand/react/shallow'
 import { useAppStore } from '~renderer/store/state'
 

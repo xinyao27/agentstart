@@ -1,9 +1,10 @@
-import type {
-  ClaudeRateLimitAccountsState,
-  CodexRateLimitAccountsState
-} from '@yiru/runtime-protocol/workbench/types'
+import {
+  AccountsClient,
+  type ClaudeRateLimitAccountsState,
+  type CodexRateLimitAccountsState
+} from '@yiru/protocol'
 
-import { callRuntimeOrpc, callShellOrpc } from './orpc-client'
+import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'
 
 type AccountAddTarget = {
   runtime?: 'host' | 'wsl'
@@ -24,21 +25,22 @@ export type ShellAccountsApi = {
   }
 }
 
+async function client(): Promise<AccountsClient> {
+  return new AccountsClient(await openConfiguredBrowserHostProtocol())
+}
+
 export const shellAccountsApi: ShellAccountsApi = {
   claude: {
-    list: () =>
-      callRuntimeOrpc({ kind: 'local' }, (client) => client.accounts.listCachedClaude, undefined),
-    add: (input) => callShellOrpc((client) => client.shell.accounts.claude.add, input),
-    cancelPendingLogin: () =>
-      callShellOrpc((client) => client.shell.accounts.claude.cancelPendingLogin, undefined),
-    reauthenticate: (input) =>
-      callShellOrpc((client) => client.shell.accounts.claude.reauthenticate, input)
+    list: async () => (await client()).listCachedClaude(),
+    add: async (input) => (await client()).addClaude(input, { timeoutMs: 190_000 }),
+    cancelPendingLogin: async () => (await client()).cancelPendingLogin({ timeoutMs: 5_000 }),
+    reauthenticate: async (input) =>
+      (await client()).reauthenticateClaude(input.accountId, { timeoutMs: 190_000 })
   },
   codex: {
-    list: () =>
-      callRuntimeOrpc({ kind: 'local' }, (client) => client.accounts.listCachedCodex, undefined),
-    add: (input) => callShellOrpc((client) => client.shell.accounts.codex.add, input),
-    reauthenticate: (input) =>
-      callShellOrpc((client) => client.shell.accounts.codex.reauthenticate, input)
+    list: async () => (await client()).listCachedCodex(),
+    add: async (input) => (await client()).addCodex(input, { timeoutMs: 130_000 }),
+    reauthenticate: async (input) =>
+      (await client()).reauthenticateCodex(input.accountId, { timeoutMs: 130_000 })
   }
 }

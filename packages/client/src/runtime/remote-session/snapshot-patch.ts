@@ -1,5 +1,3 @@
-import type { RuntimeMobileSessionTabsResult } from '@yiru/runtime-protocol/workbench/runtime-types'
-
 import { sameStringArray } from './agent-status-equality'
 import {
   appendTabGroupLayout,
@@ -10,6 +8,7 @@ import {
 import type { buildRemoteSessionGroupReconciliation } from './group-reconciliation'
 import type { buildRemoteSessionResourceReconciliation } from './resource-reconciliation'
 import type { resolveRemoteSessionSnapshotSelection } from './selection-reconciliation'
+import type { RuntimeMobileSessionTabsResult } from './session-model'
 import {
   sameBrowserTabs,
   sameGroups,

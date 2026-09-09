@@ -1,9 +1,7 @@
-import type {
-  FolderWorkspace,
-  ProjectGroup,
-  Repo,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 type WorktreeOwnerRecord = Pick<Worktree, 'id' | 'repoId' | 'hostId'>
 type RepoOwnerRecord = Pick<Repo, 'id' | 'connectionId' | 'executionHostId'>

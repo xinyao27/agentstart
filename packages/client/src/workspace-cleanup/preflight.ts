@@ -1,8 +1,8 @@
+import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
 import {
   canQueueWorkspaceCleanupCandidate,
-  shouldForceWorkspaceCleanupRemoval,
-  type WorkspaceCleanupCandidate
-} from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+  shouldForceWorkspaceCleanupRemoval
+} from '@yiru/protocol/workspace/cleanup-policy'
 import { translate } from '~renderer/i18n/i18n'
 import { scanWorkspaceCleanup as scanRuntimeWorkspaceCleanup } from '~renderer/runtime/workspace-cleanup-client'
 import type { AppState } from '~renderer/store/types'

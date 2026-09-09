@@ -1,19 +1,27 @@
-import type { ShellHtmlToPdfInput, ShellHtmlToPdfResult } from '@yiru/runtime-protocol/contract'
-import type {
-  DeveloperPermissionId,
-  DeveloperPermissionRequestResult,
-  DeveloperPermissionState
-} from '@yiru/runtime-protocol/workbench/developer-permissions-types'
+import {
+  AccountsClient,
+  DeveloperPermissionsClient,
+  type DeveloperPermissionId,
+  type DeveloperPermissionRequestResult,
+  type DeveloperPermissionState,
+  type WindowsMobileFirewallRepairResult,
+  type WindowsMobileFirewallStatus
+} from '@yiru/protocol'
+import { WorktreeLabelsClient } from '@yiru/protocol/worktree-labels'
+import type { PdfExportInput, PdfExportResult } from '~renderer/extension/pdf-export'
 import type {
   LocalhostWorktreeLabelResult,
   LocalhostWorktreeLabelRoute
-} from '@yiru/runtime-protocol/workbench/localhost-worktree-labels'
-import type {
-  WindowsMobileFirewallRepairResult,
-  WindowsMobileFirewallStatus
-} from '@yiru/runtime-protocol/workbench/windows-mobile-firewall'
+} from '~renderer/ports/loopback-url'
 
-import { callShellOrpc } from './orpc-client'
+import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'
+import { openWindowsFirewallTarget } from './windows-firewall-target'
+
+const WINDOWS_FIREWALL_STATUS_TIMEOUT_MS = 15_000
+const WINDOWS_FIREWALL_REPAIR_TIMEOUT_MS = 310_000
+// Why: reading a permission spawns the macOS helper app, and requesting one
+// waits for System Settings to open, so both outlast an ordinary shell call.
+const DEVELOPER_PERMISSIONS_TIMEOUT_MS = 30_000
 
 export type ShellMiniMaxCredentialsApi = {
   getStatus: () => Promise<{ configured: boolean }>
@@ -33,47 +41,56 @@ export type ShellLocalhostWorktreeLabelsApi = {
   register: (args: LocalhostWorktreeLabelRoute) => Promise<LocalhostWorktreeLabelResult>
 }
 export type ShellExportApi = {
-  htmlToPdf: (args: ShellHtmlToPdfInput) => Promise<ShellHtmlToPdfResult>
+  htmlToPdf: (args: PdfExportInput) => Promise<PdfExportResult>
 }
 
-function restoreShellDocument<T>(value: unknown): T {
-  return value as T
+async function accountsClient(): Promise<AccountsClient> {
+  return new AccountsClient(await openConfiguredBrowserHostProtocol())
+}
+
+async function developerPermissionsClient(): Promise<DeveloperPermissionsClient> {
+  return new DeveloperPermissionsClient(await openConfiguredBrowserHostProtocol())
 }
 
 export const shellMiniMaxCredentialsApi: ShellMiniMaxCredentialsApi = {
-  getStatus: async () =>
-    restoreShellDocument(
-      await callShellOrpc((client) => client.shell.minimaxCredentials.getStatus, undefined)
-    ),
-  saveCookie: async (cookie) =>
-    restoreShellDocument(
-      await callShellOrpc((client) => client.shell.minimaxCredentials.saveCookie, { cookie })
-    ),
-  clearCookie: async () =>
-    restoreShellDocument(
-      await callShellOrpc((client) => client.shell.minimaxCredentials.clearCookie, undefined)
-    )
+  getStatus: async () => {
+    return (await accountsClient()).getMiniMaxCredentials({ timeoutMs: 12_000 })
+  },
+  saveCookie: async (cookie) => {
+    return (await accountsClient()).saveMiniMaxCookie(cookie, { timeoutMs: 12_000 })
+  },
+  clearCookie: async () => {
+    return (await accountsClient()).clearMiniMaxCookie({ timeoutMs: 12_000 })
+  }
 }
 export const shellMobileApi: ShellMobileApi = {
-  getWindowsFirewallStatus: (input) =>
-    callShellOrpc((client) => client.shell.mobile.getWindowsFirewallStatus, input),
-  repairWindowsFirewall: () =>
-    callShellOrpc((client) => client.shell.mobile.repairWindowsFirewall, undefined),
-  openWindowsNetworkSettings: () =>
-    callShellOrpc((client) => client.shell.mobile.openWindowsNetworkSettings, undefined)
+  getWindowsFirewallStatus: async (input) =>
+    (await openWindowsFirewallTarget()).getStatus(input, {
+      timeoutMs: WINDOWS_FIREWALL_STATUS_TIMEOUT_MS
+    }),
+  repairWindowsFirewall: async () =>
+    (await openWindowsFirewallTarget()).repair({ timeoutMs: WINDOWS_FIREWALL_REPAIR_TIMEOUT_MS }),
+  openWindowsNetworkSettings: async () =>
+    (await openWindowsFirewallTarget()).openNetworkSettings({
+      timeoutMs: WINDOWS_FIREWALL_STATUS_TIMEOUT_MS
+    })
 }
 export const shellDeveloperPermissionsApi: ShellDeveloperPermissionsApi = {
-  getStatus: () =>
-    callShellOrpc((client) => client.shell.developerPermissions.getStatus, undefined),
-  request: (input) => callShellOrpc((client) => client.shell.developerPermissions.request, input)
-}
-export const shellExportApi: ShellExportApi = {
-  htmlToPdf: async (input) =>
-    restoreShellDocument(await callShellOrpc((client) => client.shell.export.htmlToPdf, input))
+  getStatus: async () =>
+    (await developerPermissionsClient()).getStatus({
+      timeoutMs: DEVELOPER_PERMISSIONS_TIMEOUT_MS
+    }),
+  request: async (input) =>
+    (await developerPermissionsClient()).request(input.id, {
+      timeoutMs: DEVELOPER_PERMISSIONS_TIMEOUT_MS
+    })
 }
 export const shellLocalhostWorktreeLabelsApi: ShellLocalhostWorktreeLabelsApi = {
   register: async (input) =>
-    restoreShellDocument(
-      await callShellOrpc((client) => client.shell.localhostWorktreeLabels.register, input)
-    )
+    new WorktreeLabelsClient(await openConfiguredBrowserHostProtocol()).register({
+      ...input,
+      worktreePath: input.worktreePath ?? undefined,
+      repoId: input.repoId ?? undefined,
+      worktreeId: input.worktreeId ?? undefined
+    })
 }

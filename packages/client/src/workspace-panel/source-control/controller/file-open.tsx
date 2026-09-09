@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { joinPath } from '~renderer/path'
 import { useAppStore } from '~renderer/store/state'

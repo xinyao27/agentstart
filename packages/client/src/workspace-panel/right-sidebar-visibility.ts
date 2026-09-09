@@ -1,4 +1,4 @@
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
 import type { AppState } from '~renderer/store/types'
 
 type ActiveView = AppState['activeView']

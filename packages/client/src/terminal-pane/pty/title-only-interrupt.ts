@@ -1,6 +1,6 @@
-import { AGENT_INTERRUPT_SETTLE_MS } from '@yiru/runtime-protocol/workbench/agent/interrupt-intent'
-import { detectAgentStatusFromTitle } from '~renderer/agent/status'
+import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 import { useAppStore } from '~renderer/store/state'
+import { AGENT_INTERRUPT_SETTLE_MS } from '~renderer/terminal-pane/agent/interrupt-intent'
 
 type TitleOnlyInterruptOptions = {
   paneKey: string

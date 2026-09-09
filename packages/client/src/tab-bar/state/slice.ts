@@ -1,10 +1,10 @@
+import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
 import type {
   Tab,
   TabContentType,
   TabGroup,
-  TabGroupLayoutNode,
-  WorkspaceSessionState
-} from '@yiru/runtime-protocol/workbench/types'
+  TabGroupLayoutNode
+} from '@yiru/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
 import type { TabSplitDirection } from '~renderer/tab-bar/split-direction'
 import type { WorkspaceSessionHydrationOptions } from '~renderer/workspace/session-hydration-keys'

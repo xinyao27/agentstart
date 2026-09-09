@@ -1,4 +1,4 @@
-import type { TabGroupLayoutNode } from '@yiru/runtime-protocol/workbench/types'
+import type { TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
 import { useEffect, type RefObject } from 'react'
 import { useAppStore } from '~renderer/store/state'
 
@@ -91,8 +91,7 @@ export function useLegacyColdParkingWatchers({
       syncParkedTerminalTabWatchers({
         worktreeId: workspace.id,
         tabs,
-        parkedTabIds,
-        ...(deferredTabIds ? { restoreTitleOnStartTabIds: deferredTabIds } : {})
+        parkedTabIds
       })
     }
   }, [

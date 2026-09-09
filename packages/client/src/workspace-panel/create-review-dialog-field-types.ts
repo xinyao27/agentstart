@@ -1,6 +1,6 @@
-import type { HostedReviewCreationEligibility } from '@yiru/runtime-protocol/model/review'
-import type { SourceControlAiPrCreationDefaults } from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { HostedReviewCreationEligibility } from '@yiru/protocol/hosted-review/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { SourceControlAiPrCreationDefaults } from '@yiru/protocol/source-control/ai-types'
 import type {
   RuntimeGeneratePullRequestFieldsOverrides,
   RuntimeGitContext

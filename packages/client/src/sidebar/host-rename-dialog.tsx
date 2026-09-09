@@ -1,4 +1,4 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'

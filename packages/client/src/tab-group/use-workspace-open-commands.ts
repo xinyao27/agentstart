@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { buildDuplicatedBrowserTabOptions } from '~renderer/browser-tab-projection/duplicate-options'
 import { openMobileEmulatorTab } from '~renderer/emulator-pane/open-tab'
 import { useProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'

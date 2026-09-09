@@ -1,9 +1,6 @@
-import {
-  isPathInsideOrEqual,
-  normalizeRuntimePathForComparison
-} from '@yiru/runtime-protocol/model/platform'
-import { getRepoIdFromWorktreeId } from '@yiru/runtime-protocol/model/workspace'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { isPathInsideOrEqual, normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
 import type { AppState } from '~renderer/store/types'
 import { getIndexedRepoMap, getIndexedWorktreeMap } from '~renderer/worktree/repo-index'
 

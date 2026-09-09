@@ -1,5 +1,5 @@
 import type { Dispatch, RefObject, SetStateAction } from 'react'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireEmulatorClient } from '~renderer/runtime/emulator-target'
 import { useAppStore } from '~renderer/store/state'
 
 import { emulatorPaneErrorMessage } from './error-message'
@@ -34,11 +34,12 @@ export function useEmulatorPaneShutdown({
       useAppStore.getState().setTabLabel(tabId, 'Shutting down…')
     }
     try {
-      const res = (await callRuntimeOrpc({ kind: 'local' }, (client) => client.emulator.shutdown, {
+      const client = await requireEmulatorClient()
+      const res = await client.shutdown({
         ...(deviceTarget ? { device: deviceTarget } : {}),
         worktree: worktreeId
-      })) as { deviceUdid?: string }
-      const shutdownTarget = res?.deviceUdid || deviceTarget
+      })
+      const shutdownTarget = res.deviceUdid || deviceTarget
       window.dispatchEvent(
         new CustomEvent(EMULATOR_LOCAL_SHUTDOWN_EVENT, {
           detail: { worktreeId, deviceUdid: shutdownTarget }

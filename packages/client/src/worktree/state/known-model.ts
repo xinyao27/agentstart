@@ -1,11 +1,11 @@
-import { folderWorkspaceToWorktree } from '@yiru/runtime-protocol/workbench/folder-workspace-worktree'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import { folderWorkspaceToWorktree } from '@yiru/protocol/workspace/folder'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import type {
   DetectedWorktreeListResult,
-  FolderWorkspace,
   Worktree,
   WorktreeMeta
-} from '@yiru/runtime-protocol/workbench/types'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+} from '@yiru/protocol/worktree/model'
 
 import type { AppState } from '../../store/types'
 import { folderWorkspaceWorktreeCache } from './refresh-model'

@@ -1,6 +1,7 @@
 # Agent Session History invariants
 
-- The Workspace action exists only when the host advertises `aiVault.v1`.
+- The Workspace action exists only when the host advertises `aiVault.protobuf.v1`, the typed
+  `AiVaultService.ListSessions` availability probe.
 - Workspace scope includes only the active worktree path; Project scope additionally includes
   same-repository sibling worktrees; All sends no scope hint and performs no client narrowing.
 - Refresh bypasses the host cache. Scope changes reuse it.

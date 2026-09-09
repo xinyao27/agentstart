@@ -1,4 +1,4 @@
-import type { WorkspacePort } from '@yiru/runtime-protocol/workbench/workspace/ports'
+import type { WorkspacePort } from '@yiru/protocol'
 import React from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,14 +1,14 @@
 import {
-  getContextualTour,
   normalizeContextualTourIds,
   type ContextualTourId
-} from '@yiru/runtime-protocol/workbench/contextual-tours'
+} from '@yiru/protocol/settings/contextual-tours'
+import type { PersistedUIState } from '@yiru/protocol/settings/ui-state'
+import type { FeatureInteractionId } from '@yiru/protocol/telemetry/interactions/catalog'
 import {
   normalizeFeatureInteractions,
-  type FeatureInteractionId,
   type FeatureInteractionState
-} from '@yiru/runtime-protocol/workbench/feature-interactions'
-import type { PersistedUIState } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/telemetry/interactions/state'
+import { getContextualTour } from '~renderer/contextual-tours/catalog'
 import {
   hasContextualTourTarget,
   getNextVisibleContextualTourStepIndex

@@ -1,4 +1,5 @@
-import type { HookCommandSourcePolicy, YiruHooks } from '@yiru/runtime-protocol/workbench/types'
+import type { HookCommandSourcePolicy } from '@yiru/protocol/worktree/hooks'
+import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle, CaretRight as ChevronRight } from '~renderer/icons/hugeicons'
 import { cn } from '~renderer/ui/class-names'

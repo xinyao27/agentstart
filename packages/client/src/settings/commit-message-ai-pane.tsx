@@ -1,14 +1,11 @@
-import {
-  CUSTOM_AGENT_ID,
-  isCustomAgentId
-} from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import { normalizeSourceControlAiSettings } from '@yiru/runtime-protocol/workbench/source-control/ai'
-import { SOURCE_CONTROL_TEXT_ACTION_IDS } from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { SOURCE_CONTROL_TEXT_ACTION_IDS } from '@yiru/protocol/source-control/ai-actions'
 import type {
   SourceControlAiSettingsPatch,
   SourceControlAiSettings
-} from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-types'
+import { CUSTOM_AGENT_ID, isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import { normalizeSourceControlAiSettings } from '@yiru/protocol/source-control/settings'
 import { useRef } from 'react'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
@@ -247,7 +244,6 @@ export function CommitMessageAiPane({
       keywords: [
         translate('auto.components.settings.CommitMessageAiPane.19e10a12bb', 'hosted review'),
         translate('auto.components.settings.CommitMessageAiPane.b388463881', 'pull request'),
-        translate('auto.components.settings.CommitMessageAiPane.fdee745b87', 'merge request'),
         translate('auto.components.settings.CommitMessageAiPane.02bab6542c', 'pr'),
         translate('auto.components.settings.CommitMessageAiPane.ebed4d2a29', 'draft'),
         translate('auto.components.settings.CommitMessageAiPane.6c84ba6de3', 'template'),

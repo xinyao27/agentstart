@@ -7,7 +7,6 @@ import { AgentPresence } from '../agent-status/presence'
 import { AutomationsPage } from '../automations/page'
 import { CommandPalette } from '../command-palette/palette'
 import { ConsoleSensorBridge } from '../context/console-bridge'
-import { OperationProgressBridge } from '../operation-progress/bridge'
 import { ProjectGroupCatalogBridge } from '../project-group-catalog'
 import { DaemonCommandBridge } from '../runtime/command-bridge'
 import { ConnectionStatus } from '../runtime/connection-status'
@@ -37,7 +36,6 @@ export function ExtensionWorkbenchSurface({
         <AgentPresence />
         <ConsoleSensorBridge />
         <DaemonCommandBridge />
-        <OperationProgressBridge />
         <WorkspaceEventBridge />
         <WorkspacePortClaimsBridge />
         <ProjectGroupCatalogBridge />

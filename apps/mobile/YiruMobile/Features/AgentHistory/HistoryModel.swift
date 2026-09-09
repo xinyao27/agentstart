@@ -15,7 +15,7 @@ nonisolated enum AgentHistoryPhase: Sendable {
 final class AgentHistoryModel {
     private(set) var phase = AgentHistoryPhase.loading
     var isConnected = false
-    private(set) var snapshot = AgentHistorySnapshot(sessions: [], issues: [])
+    private(set) var snapshot = AgentHistorySnapshot(sessions: [], issues: [], scannedAt: "")
     private(set) var workspaces: [WorkspaceSummary] = []
     private(set) var isRefreshing = false
     private(set) var resumingSessionID: String?

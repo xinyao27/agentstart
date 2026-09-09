@@ -1,4 +1,4 @@
-import type { ParsedAgentStatusPayload } from '@yiru/runtime-protocol/model/agent'
+import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
 
 import type { AgentCompletionStatusSnapshot } from './completion-coordinator-types'
 

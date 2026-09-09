@@ -1,8 +1,8 @@
 import type {
   SearchFileResult,
   SearchMatch,
-  SearchResult
-} from '@yiru/runtime-protocol/workbench/types'
+  FileSearchResult as SearchResult
+} from '@yiru/protocol/files/values'
 
 export type SearchRow =
   | {

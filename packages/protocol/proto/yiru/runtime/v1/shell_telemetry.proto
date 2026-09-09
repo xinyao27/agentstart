@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service ShellTelemetryService {
+  rpc Track(ShellTelemetryServiceTrackRequest) returns (ShellTelemetryServiceMutatedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetConsentState(ShellTelemetryServiceGetConsentStateRequest) returns (ShellTelemetryServiceConsentStateResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SetOptIn(ShellTelemetryServiceSetOptInRequest) returns (ShellTelemetryServiceMutatedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AcknowledgeBanner(ShellTelemetryServiceAcknowledgeBannerRequest) returns (ShellTelemetryServiceMutatedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+// Why: the event properties are validated per-event against the shipped
+// schema set, so their values stay open-ended and ride the typed recursive
+// JSON value pattern instead of a closed message per event.
+message ShellTelemetryJsonValue {
+  oneof kind {
+    ShellTelemetryJsonNull null_value = 1;
+    bool bool_value = 2;
+    double number_value = 3;
+    string string_value = 4;
+    ShellTelemetryJsonValueList list_value = 5;
+    ShellTelemetryJsonValueObject object_value = 6;
+  }
+}
+
+enum ShellTelemetryJsonNull {
+  SHELL_TELEMETRY_JSON_NULL_UNSPECIFIED = 0;
+  SHELL_TELEMETRY_JSON_NULL_VALUE = 1;
+}
+
+message ShellTelemetryJsonValueList {
+  repeated ShellTelemetryJsonValue values = 1;
+}
+
+message ShellTelemetryJsonValueObject {
+  repeated ShellTelemetryJsonValueEntry entries = 1;
+}
+
+message ShellTelemetryJsonValueEntry {
+  string key = 1;
+  ShellTelemetryJsonValue value = 2;
+}
+
+message ShellTelemetryServiceTrackRequest {
+  string name = 1;
+  repeated ShellTelemetryJsonValueEntry props = 2;
+}
+
+message ShellTelemetryServiceGetConsentStateRequest {}
+
+// Why: the consent resolver answers one closed progression — enabled, pending
+// banner, or disabled for exactly one reason — so the wire flattens the
+// tagged union into a single enum the caller can switch on.
+enum ShellTelemetryConsentState {
+  SHELL_TELEMETRY_CONSENT_STATE_UNSPECIFIED = 0;
+  SHELL_TELEMETRY_CONSENT_STATE_ENABLED = 1;
+  SHELL_TELEMETRY_CONSENT_STATE_PENDING_BANNER = 2;
+  SHELL_TELEMETRY_CONSENT_STATE_DISABLED_DO_NOT_TRACK = 3;
+  SHELL_TELEMETRY_CONSENT_STATE_DISABLED_YIRU_DISABLED = 4;
+  SHELL_TELEMETRY_CONSENT_STATE_DISABLED_CI = 5;
+  SHELL_TELEMETRY_CONSENT_STATE_DISABLED_USER_OPT_OUT = 6;
+}
+
+message ShellTelemetryServiceConsentStateResponse {
+  ShellTelemetryConsentState state = 1;
+}
+
+message ShellTelemetryServiceSetOptInRequest {
+  bool opted_in = 1;
+}
+
+message ShellTelemetryServiceAcknowledgeBannerRequest {}
+
+message ShellTelemetryServiceMutatedResponse {}

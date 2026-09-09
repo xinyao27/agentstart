@@ -338,6 +338,7 @@ private extension InactiveAccountUsage {
         accountID = legacy.accountId
         usage = AccountProviderUsage(legacy: legacy.rateLimits)
         isFetching = legacy.isFetching
+        updatedAt = nil
     }
 }
 

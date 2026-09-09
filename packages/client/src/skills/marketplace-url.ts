@@ -1,4 +1,4 @@
-import { canonicalizeSkillInstallSource } from '@yiru/runtime-protocol/workbench/skill-freshness'
+import { canonicalizeSkillInstallSource } from '~renderer/skills/install-source'
 
 import type { SkillInstallRequest } from './install-dialog'
 

@@ -1,15 +1,16 @@
-import type { CliInstallStatus } from '@yiru/runtime-protocol/workbench/cli-install-types'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
+import type { CliInstallStatus } from '@yiru/protocol/cli-values'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { readCliInstallStatus } from '~renderer/runtime/cli-install-client'
-import { callRuntimeOrpc, type RuntimeClientTarget } from '~renderer/runtime/orpc-client'
 import {
   assertRuntimeStatusCompatible,
   isRuntimeCompatBlockError
 } from '~renderer/runtime/protocol-compat'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
+import { readRuntimeStatus } from '~renderer/runtime/status-client'
+import type { RuntimeStatus } from '~renderer/runtime/status/model'
 import { useAppStore } from '~renderer/store/state'
 
 import {
@@ -224,12 +225,7 @@ function RuntimeStatusContent(props: {
     let consecutiveFailures = 0
     const probe = async (): Promise<void> => {
       try {
-        const status = await callRuntimeOrpc(
-          runtimeTarget,
-          (client) => client.status.get,
-          undefined,
-          { timeoutMs: RUNTIME_STATUS_TIMEOUT_MS }
-        )
+        const status = await readRuntimeStatus(runtimeTarget, RUNTIME_STATUS_TIMEOUT_MS)
         if (cancelled) {
           return
         }

@@ -2,7 +2,7 @@ import type {
   DeveloperPermissionId,
   DeveloperPermissionState,
   DeveloperPermissionStatus
-} from '@yiru/runtime-protocol/workbench/developer-permissions-types'
+} from '@yiru/protocol'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,9 +1,9 @@
+import { supportsHostedReviewCreation } from '@yiru/protocol/hosted-review/creation-provider'
 import type {
   HostedReviewCreationEligibility,
   HostedReviewInfo,
   HostedReviewProvider
-} from '@yiru/runtime-protocol/model/review'
-import { supportsHostedReviewCreation } from '@yiru/runtime-protocol/model/review'
+} from '@yiru/protocol/hosted-review/types'
 import {
   localizedHostedReviewCopy,
   resolveSupportedHostedReviewCopyProvider
@@ -23,10 +23,6 @@ export function resolveProvisionalHostedReviewProvider(input: {
   activeRepoId?: string | null
   linkedGitHubPR?: number | null
   fallbackGitHubPR?: number | null
-  linkedGitLabMR?: number | null
-  linkedBitbucketPR?: number | null
-  linkedAzureDevOpsPR?: number | null
-  linkedGiteaPR?: number | null
 }): HostedReviewProvider {
   if (input.hostedReview?.provider && supportsHostedReviewCreation(input.hostedReview.provider)) {
     return input.hostedReview.provider
@@ -37,15 +33,6 @@ export function resolveProvisionalHostedReviewProvider(input: {
     supportsHostedReviewCreation(input.hostedReviewCreationState.data.provider)
   ) {
     return input.hostedReviewCreationState.data.provider
-  }
-  if (input.linkedGitLabMR != null) {
-    return 'gitlab'
-  }
-  if (input.linkedAzureDevOpsPR != null) {
-    return 'azure-devops'
-  }
-  if (input.linkedGiteaPR != null) {
-    return 'gitea'
   }
   if (input.linkedGitHubPR != null || input.fallbackGitHubPR != null) {
     return 'github'

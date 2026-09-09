@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service WorkspacePortsService {
+  rpc Scan(WorkspacePortsServiceScanRequest) returns (WorkspacePortsServiceScanResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Kill(WorkspacePortsServiceKillRequest) returns (WorkspacePortsServiceKillResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SubscribeEvents(WorkspacePortsServiceSubscribeEventsRequest) returns (stream WorkspacePortsServiceEvent) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_RESTART_FROM_REQUEST
+    };
+  }
+}
+
+// Why: the listener census spans every platform the host adapters can probe,
+// so the enum mirrors that closed set instead of collapsing unknowns early.
+enum WorkspacePortsPlatform {
+  WORKSPACE_PORTS_PLATFORM_UNSPECIFIED = 0;
+  WORKSPACE_PORTS_PLATFORM_AIX = 1;
+  WORKSPACE_PORTS_PLATFORM_ANDROID = 2;
+  WORKSPACE_PORTS_PLATFORM_CYGWIN = 3;
+  WORKSPACE_PORTS_PLATFORM_DARWIN = 4;
+  WORKSPACE_PORTS_PLATFORM_FREEBSD = 5;
+  WORKSPACE_PORTS_PLATFORM_HAIKU = 6;
+  WORKSPACE_PORTS_PLATFORM_LINUX = 7;
+  WORKSPACE_PORTS_PLATFORM_NETBSD = 8;
+  WORKSPACE_PORTS_PLATFORM_OPENBSD = 9;
+  WORKSPACE_PORTS_PLATFORM_SUNOS = 10;
+  WORKSPACE_PORTS_PLATFORM_WINDOWS = 11;
+  WORKSPACE_PORTS_PLATFORM_UNKNOWN = 12;
+}
+
+enum WorkspacePortsProtocol {
+  WORKSPACE_PORTS_PROTOCOL_UNSPECIFIED = 0;
+  WORKSPACE_PORTS_PROTOCOL_HTTP = 1;
+  WORKSPACE_PORTS_PROTOCOL_HTTPS = 2;
+  WORKSPACE_PORTS_PROTOCOL_UNKNOWN = 3;
+}
+
+enum WorkspacePortsAttributionConfidence {
+  WORKSPACE_PORTS_ATTRIBUTION_CONFIDENCE_UNSPECIFIED = 0;
+  WORKSPACE_PORTS_ATTRIBUTION_CONFIDENCE_COMMAND = 1;
+  WORKSPACE_PORTS_ATTRIBUTION_CONFIDENCE_CWD = 2;
+  WORKSPACE_PORTS_ATTRIBUTION_CONFIDENCE_NONE = 3;
+}
+
+message WorkspacePortsOwner {
+  WorkspacePortsAttributionConfidence confidence = 1;
+  string display_name = 2;
+  string path = 3;
+  string repo_id = 4;
+  string worktree_id = 5;
+}
+
+// Why: a port is either attributed to a workspace (optionally with an
+// advertised URL), a container, or external — a closed three-way union, so
+// the classification is a oneof rather than nullable fields that could combine.
+message WorkspacePortsClassification {
+  oneof kind {
+    WorkspacePortsWorkspace workspace = 1;
+    WorkspacePortsContainer container = 2;
+    WorkspacePortsExternal external = 3;
+  }
+}
+
+message WorkspacePortsWorkspace {
+  WorkspacePortsOwner owner = 1;
+  optional string advertised_url = 2;
+}
+
+message WorkspacePortsContainer {}
+
+message WorkspacePortsExternal {}
+
+message WorkspacePortsPort {
+  string id = 1;
+  uint32 port = 2;
+  string bind_host = 3;
+  string connect_host = 4;
+  WorkspacePortsProtocol protocol = 5;
+  optional uint32 pid = 6;
+  optional string process_name = 7;
+  WorkspacePortsClassification classification = 8;
+}
+
+message WorkspacePortsServiceScanRequest {
+  optional string repo_id = 1;
+}
+
+message WorkspacePortsServiceScanResponse {
+  WorkspacePortsPlatform platform = 1;
+  int64 scanned_at = 2;
+  repeated WorkspacePortsPort ports = 3;
+  optional string unavailable_reason = 4;
+}
+
+message WorkspacePortsServiceKillRequest {
+  optional string repo_id = 1;
+  // Why: the legacy surface admitted any finite JSON number for both fields
+  // and matched them against the probed listener, so the wire keeps doubles.
+  double pid = 2;
+  double port = 3;
+}
+
+message WorkspacePortsServiceKillResponse {
+  bool ok = 1;
+  optional string reason = 2;
+}
+
+message WorkspacePortsServiceSubscribeEventsRequest {}
+
+message WorkspacePortsAdvertisedUrlChanged {
+  uint32 port = 1;
+  string worktree_id = 2;
+}
+
+message WorkspacePortsServiceEvent {
+  oneof event {
+    WorkspacePortsSubscribeReady ready = 1;
+    WorkspacePortsAdvertisedUrlChanged advertised_url_changed = 2;
+    WorkspacePortsStreamEnd end = 3;
+  }
+}
+
+message WorkspacePortsSubscribeReady {
+  string subscription_id = 1;
+}
+
+message WorkspacePortsStreamEnd {}

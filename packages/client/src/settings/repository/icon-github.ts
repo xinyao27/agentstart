@@ -1,6 +1,8 @@
-import { githubAvatarIcon, type RepoIcon } from '@yiru/runtime-protocol/model/workspace'
-import type { GitHubRepositoryIdentity, Repo } from '@yiru/runtime-protocol/workbench/types'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import type { GitHubRepositoryIdentity } from '@yiru/protocol/hosted-review/pull-request-types'
+import { githubAvatarIcon, type RepoIcon } from '@yiru/protocol/project/icon'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 import type { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 type RuntimeTarget = ReturnType<typeof getActiveRuntimeTarget>
@@ -16,28 +18,19 @@ export type RepositoryGitHubAvatarResolution = {
 // Why: `runtime:` hosts are the only non-local execution host (SSH was removed
 // from the product), so one runtime call serves both — no local/environment
 // fork is needed.
-function resolveRepositoryIdentityLive(
+async function resolveRepositoryIdentityLive(
   runtimeTarget: RuntimeTarget,
   repo: Repo,
   method: 'github.repoUpstream' | 'github.repoSlug'
 ): Promise<GitHubRepositoryIdentity | null> {
+  const client = await openGitHubTarget()
+  if (!client) {
+    throw new Error('GitHub protocol capability is unavailable')
+  }
+  const options = { timeoutMs: 30_000, ...runtimeCallDestination(runtimeTarget) }
   return method === 'github.repoUpstream'
-    ? callRuntimeOrpc(
-        runtimeTarget,
-        (client) => client.github.repoUpstream,
-        { repo: repo.id },
-        {
-          timeoutMs: 30_000
-        }
-      )
-    : callRuntimeOrpc(
-        runtimeTarget,
-        (client) => client.github.repoSlug,
-        { repo: repo.id },
-        {
-          timeoutMs: 30_000
-        }
-      )
+    ? client.getRepoUpstream(repo.id, options)
+    : client.getRepoSlug(repo.id, options)
 }
 
 export function resolveRepositoryUpstreamLive(

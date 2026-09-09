@@ -4,25 +4,31 @@ on:
   pull_request:
     paths:
       - 'apps/daemon/**'
+      - 'apps/computer-use-macos/**'
       - 'scripts/build-skill-resources.mjs'
       - 'skills/**'
-      - 'packages/runtime-protocol/**'
+      - 'packages/protocol/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
+      - 'rust-toolchain.toml'
       - '.github/workflows/daemon-native-build.yml'
+      - '.github/workflows/daemon-release.yml'
   push:
     branches:
       - main
     paths:
       - 'apps/daemon/**'
+      - 'apps/computer-use-macos/**'
       - 'scripts/build-skill-resources.mjs'
       - 'skills/**'
-      - 'packages/runtime-protocol/**'
+      - 'packages/protocol/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
+      - 'rust-toolchain.toml'
       - '.github/workflows/daemon-native-build.yml'
+      - '.github/workflows/daemon-release.yml'
   workflow_dispatch:
 
 permissions:
@@ -71,15 +77,23 @@ jobs:
           node-version-file: package.json
           cache: pnpm
 
+      - name: Setup Rust
+        run: rustup toolchain install 1.95.0 --profile minimal --component clippy,rustfmt
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Typecheck daemon
         run: pnpm exec vp run @yiru/daemon#typecheck
 
-      - name: Build native Bun executable
+      - name: Check daemon
+        run: pnpm exec vp run @yiru/daemon#lint
+
+      # Why: pull requests cannot access release signing credentials; this compile-only binary is
+      # never uploaded or presented as a signed release artifact.
+      - name: Build unsigned Rust daemon for CI
         run: pnpm exec vp run @yiru/daemon#build
 
       - name: Build macOS computer-use helper
         if: runner.os == 'macOS'
-        run: pnpm exec vp run @yiru/daemon#build:computer-macos -- --universal
+        run: pnpm exec vp run @yiru/computer-use-macos#build -- --universal

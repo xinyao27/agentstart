@@ -1,4 +1,4 @@
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 import { useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { FolderPlus } from '~renderer/icons/hugeicons'

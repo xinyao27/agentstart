@@ -96,7 +96,7 @@ nonisolated struct MobileE2EECipher: Sendable {
         else {
             throw MobileE2EEError.invalidFrame
         }
-        return data.dropFirst(headerLength)
+        return Data(data.dropFirst(headerLength))
     }
 
     private func makeHeader(

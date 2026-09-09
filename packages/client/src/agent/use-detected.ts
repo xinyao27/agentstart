@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { useEffect, useRef } from 'react'
 import { useAppStore } from '~renderer/store/state'
 

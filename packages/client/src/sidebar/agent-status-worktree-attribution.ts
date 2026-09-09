@@ -1,11 +1,8 @@
 import type {
   AgentStatusEntry,
   AgentStatusOrchestrationContext
-} from '@yiru/runtime-protocol/model/agent'
-import {
-  parseLegacyNumericPaneKey,
-  parsePaneKey
-} from '@yiru/runtime-protocol/workbench/stable-pane-id'
+} from '@yiru/protocol/agent/status-records'
+import { parseLegacyNumericPaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
 
 export type AgentStatusPaneIdentity = { tabId: string; paneId: string }
 

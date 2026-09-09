@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 import { ArrowCounterClockwise as RotateCcw } from '~renderer/icons/hugeicons'
 import { OSC52_CLIPBOARD_SETTING_ID } from '~renderer/terminal-pane/osc52-clipboard-setting-anchor'

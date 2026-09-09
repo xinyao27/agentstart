@@ -1,13 +1,11 @@
 import type { LegendListRef } from '@legendapp/list/react'
-import { keybindingMatchesAction } from '@yiru/runtime-protocol/workbench/keybindings'
-import type {
-  ProjectGroup,
-  ProjectOrderBy,
-  Repo,
-  Worktree,
-  WorktreeLineage,
-  WorkspaceStatusDefinition
-} from '@yiru/runtime-protocol/workbench/types'
+import { keybindingMatchesAction } from '@yiru/protocol/keybindings'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectOrderBy } from '@yiru/protocol/settings/ui-state'
+import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
+import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { useEffect } from 'react'
 import { getShortcutPlatform } from '~renderer/keyboard-input/shortcut-platform'
 import { useEventCallback } from '~renderer/react/use-event-callback'

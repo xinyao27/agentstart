@@ -1,4 +1,4 @@
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
 import { useAppStore } from '~renderer/store/state'
 
 export function dropCommandFinishedStatusIfSameTurn(

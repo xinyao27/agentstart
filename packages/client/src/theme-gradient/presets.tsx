@@ -1,4 +1,4 @@
-import type { ThemeGradientTheme } from '@yiru/runtime-protocol/workbench/theme-gradient/theme'
+import type { ThemeGradientTheme } from '@yiru/protocol/settings/theme-gradient'
 import type React from 'react'
 import { useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'

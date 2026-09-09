@@ -1,7 +1,7 @@
 import type {
   RepoSourceControlAiOverrides,
   SourceControlAiSettings
-} from '@yiru/runtime-protocol/workbench/source-control/ai-types'
+} from '@yiru/protocol/source-control/ai-types'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Label } from '~renderer/ui/label'

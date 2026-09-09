@@ -1,24 +1,20 @@
 import type {
   GitForkSyncExpectedUpstream,
-  GitForkSyncResult,
-  GitPushTarget,
-  GitUpstreamStatus
-} from '@yiru/runtime-protocol/workbench/types'
+  GitForkSyncResult
+} from '@yiru/protocol/git/fork-sync-types'
+import type { GitUpstreamStatus } from '@yiru/protocol/git/status-types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
 
-import { callRuntimeOrpc } from '../orpc-client'
-import { getRuntimeGitTarget, getRuntimeGitWorktree, type RuntimeGitContext } from './context'
+import { openRuntimeGitClient } from './client'
+import { getRuntimeGitWorktree, type RuntimeGitContext } from './context'
 
 export async function getRuntimeGitUpstreamStatus(
   context: RuntimeGitContext,
   pushTarget?: GitPushTarget
 ): Promise<GitUpstreamStatus> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.upstreamStatus,
-    {
-      worktree: getRuntimeGitWorktree(context),
-      ...(pushTarget ? { pushTarget } : {})
-    },
+  const client = await openRuntimeGitClient(context)
+  return client.upstreamStatus(
+    { worktree: getRuntimeGitWorktree(context), pushTarget },
     { timeoutMs: 15_000 }
   )
 }
@@ -27,13 +23,9 @@ export async function fetchRuntimeGit(
   context: RuntimeGitContext,
   pushTarget?: GitPushTarget
 ): Promise<void> {
-  await callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.fetch,
-    {
-      worktree: getRuntimeGitWorktree(context),
-      ...(pushTarget ? { pushTarget } : {})
-    },
+  const client = await openRuntimeGitClient(context)
+  await client.fetch(
+    { worktree: getRuntimeGitWorktree(context), pushTarget },
     { timeoutMs: 30_000 }
   )
 }
@@ -42,9 +34,8 @@ export async function syncRuntimeGitForkDefaultBranch(
   context: RuntimeGitContext,
   expectedUpstream: GitForkSyncExpectedUpstream
 ): Promise<GitForkSyncResult> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.forkSync,
+  const client = await openRuntimeGitClient(context)
+  return client.forkSync(
     { worktree: getRuntimeGitWorktree(context), expectedUpstream },
     { timeoutMs: 60_000 }
   )
@@ -54,28 +45,17 @@ export async function pullRuntimeGit(
   context: RuntimeGitContext,
   pushTarget?: GitPushTarget
 ): Promise<void> {
-  await callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.pull,
-    {
-      worktree: getRuntimeGitWorktree(context),
-      ...(pushTarget ? { pushTarget } : {})
-    },
-    { timeoutMs: 30_000 }
-  )
+  const client = await openRuntimeGitClient(context)
+  await client.pull({ worktree: getRuntimeGitWorktree(context), pushTarget }, { timeoutMs: 30_000 })
 }
 
 export async function fastForwardRuntimeGit(
   context: RuntimeGitContext,
   pushTarget?: GitPushTarget
 ): Promise<void> {
-  await callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.fastForward,
-    {
-      worktree: getRuntimeGitWorktree(context),
-      ...(pushTarget ? { pushTarget } : {})
-    },
+  const client = await openRuntimeGitClient(context)
+  await client.fastForward(
+    { worktree: getRuntimeGitWorktree(context), pushTarget },
     { timeoutMs: 30_000 }
   )
 }
@@ -84,9 +64,8 @@ export async function rebaseRuntimeGitFromBase(
   context: RuntimeGitContext,
   baseRef: string
 ): Promise<void> {
-  await callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.rebaseFromBase,
+  const client = await openRuntimeGitClient(context)
+  await client.rebaseFromBase(
     { worktree: getRuntimeGitWorktree(context), baseRef },
     { timeoutMs: 30_000 }
   )
@@ -96,15 +75,6 @@ export async function pushRuntimeGit(
   context: RuntimeGitContext,
   args: { publish?: boolean; pushTarget?: GitPushTarget; forceWithLease?: boolean } = {}
 ): Promise<void> {
-  await callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.push,
-    {
-      worktree: getRuntimeGitWorktree(context),
-      ...(args.publish !== undefined ? { publish: args.publish } : {}),
-      ...(args.pushTarget !== undefined ? { pushTarget: args.pushTarget } : {}),
-      ...(args.forceWithLease !== undefined ? { forceWithLease: args.forceWithLease } : {})
-    },
-    { timeoutMs: 30_000 }
-  )
+  const client = await openRuntimeGitClient(context)
+  await client.push({ worktree: getRuntimeGitWorktree(context), ...args }, { timeoutMs: 30_000 })
 }

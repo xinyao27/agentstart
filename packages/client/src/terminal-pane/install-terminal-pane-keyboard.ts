@@ -1,5 +1,5 @@
 import type { IDisposable } from '@xterm/xterm'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 import {
   armTerminalImePendingCandidateKeyRelease,

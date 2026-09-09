@@ -8,7 +8,7 @@ import { WarningCircle as AlertCircle } from '~renderer/icons/hugeicons'
 import { useShortcutKeyDetails } from '~renderer/keyboard-input/use-shortcut-label'
 import { useProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { useEventCallback } from '~renderer/react/use-event-callback'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { runNotebookPythonCell } from '~renderer/runtime/notebook-target'
 import { useAppStore } from '~renderer/store/state'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
 
@@ -346,7 +346,7 @@ export default function IpynbViewer({
       const target = environmentId
         ? ({ kind: 'environment', environmentId } as const)
         : ({ kind: 'local' } as const)
-      const result = await callRuntimeOrpc(target, (client) => client.notebook.runPythonCell, {
+      const result = await runNotebookPythonCell(target, {
         filePath,
         code: cell.source,
         preamble

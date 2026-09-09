@@ -1,4 +1,4 @@
-import type { Tab } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab } from '@yiru/protocol/workspace/tabs'
 import { getEditorDisplayLabel } from '~renderer/editor/labels'
 import { normalizeRelativePath } from '~renderer/path'
 import { useAppStore } from '~renderer/store/state'

@@ -1,20 +1,18 @@
+import type { WorkspaceCleanupDismissal } from '@yiru/protocol'
 import {
   normalizeExecutionHostScope,
   normalizeVisibleExecutionHostIds
-} from '@yiru/runtime-protocol/model/workspace'
-import { persistedUIValuesEqual } from '@yiru/runtime-protocol/workbench/persisted-ui-equality'
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+} from '@yiru/protocol/host/identity'
+import { persistedUIValuesEqual } from '@yiru/protocol/settings/ui-equality'
 import type {
-  PersistedTrustedYiruHooks,
   PersistedUIState,
   StatusBarItem,
   VisibleWorkspaceHostIds,
   TopLevelView
-} from '@yiru/runtime-protocol/workbench/types'
-import {
-  WORKSPACE_CLEANUP_CLASSIFIER_VERSION,
-  type WorkspaceCleanupDismissal
-} from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+} from '@yiru/protocol/settings/ui-state'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { WORKSPACE_CLEANUP_CLASSIFIER_VERSION } from '@yiru/protocol/workspace/cleanup-policy'
+import type { PersistedTrustedYiruHooks } from '@yiru/protocol/worktree/hooks'
 import { buildAgentNotificationId } from '~renderer/agent/notification-id'
 
 import type { AppState } from '../../store/types'

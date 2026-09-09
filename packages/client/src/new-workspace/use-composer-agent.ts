@@ -1,8 +1,6 @@
-import {
-  filterEnabledTuiAgents,
-  isTuiAgentEnabled
-} from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { GlobalSettings, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { filterEnabledTuiAgents, isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 import { useAppStore } from '~renderer/store/state'

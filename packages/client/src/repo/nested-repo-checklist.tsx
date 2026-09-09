@@ -1,4 +1,4 @@
-import type { NestedRepoScanResult } from '@yiru/runtime-protocol/workbench/types'
+import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
 import type { Dispatch, SetStateAction } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { GitMerge } from '~renderer/icons/hugeicons'

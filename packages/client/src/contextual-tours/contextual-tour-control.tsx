@@ -1,9 +1,9 @@
-import type { ContextualTourStepControl } from '@yiru/runtime-protocol/workbench/contextual-tours'
 import type { JSX } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'
 import { Switch } from '~renderer/ui/switch'
 
+import type { ContextualTourStepControl } from './catalog'
 import { CONTEXTUAL_TOUR_ENABLE_AUTO_WORKSPACE_NAME_EVENT } from './contextual-tour-composer-events'
 
 export function ContextualTourControl({

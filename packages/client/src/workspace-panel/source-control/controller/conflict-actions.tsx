@@ -1,14 +1,11 @@
-import { shouldForcePushWithLeaseForUpstream } from '@yiru/runtime-protocol/model/review'
-import type { GitConflictOperation } from '@yiru/runtime-protocol/workbench/types'
+import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
 import { toast } from 'sonner'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
-import {
-  localizedHostedReviewCopy,
-  resolveSupportedHostedReviewCopyProvider
-} from '~renderer/i18n/hosted-review-localized-copy'
+import { localizedHostedReviewCopy } from '~renderer/i18n/hosted-review-localized-copy'
 import { translate } from '~renderer/i18n/i18n'
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import { abortRuntimeGitMerge, abortRuntimeGitRebase } from '~renderer/runtime/git-client'
+import { shouldForcePushWithLeaseForUpstream } from '~renderer/source-control/workflow/operation'
 import { useAppStore } from '~renderer/store/state'
 import { showWorkspaceSidebar } from '~renderer/workspace-panel/show-sidebar'
 
@@ -33,11 +30,7 @@ export function useSourceControlConflictActions(scope: SourceControlRemoteAction
     fetchPRForBranch,
     handleCommit,
     isAbortingOperation,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
     linkedGitHubPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     refreshActiveGitStatusAfterMutation,
     refreshBranchCompareRef,
     remoteStatus,
@@ -159,9 +152,7 @@ export function useSourceControlConflictActions(scope: SourceControlRemoteAction
     if (!repoPath || !repoId || !branch) {
       return
     }
-    const copy = localizedHostedReviewCopy(
-      resolveSupportedHostedReviewCopyProvider(result.provider)
-    )
+    const copy = localizedHostedReviewCopy('github')
     if (openChecks) {
       showWorkspaceSidebar({
         view: 'source-control',
@@ -170,42 +161,12 @@ export function useSourceControlConflictActions(scope: SourceControlRemoteAction
       })
     }
     try {
-      if (worktreeId && result.provider === 'github') {
+      if (worktreeId) {
         await updateWorktreeMeta(worktreeId, { linkedPR: result.number })
       }
-      if (worktreeId && result.provider === 'gitlab') {
-        await updateWorktreeMeta(worktreeId, { linkedGitLabMR: result.number })
-      }
-      if (worktreeId && result.provider === 'azure-devops') {
-        await updateWorktreeMeta(worktreeId, { linkedAzureDevOpsPR: result.number })
-      }
-      if (worktreeId && result.provider === 'gitea') {
-        await updateWorktreeMeta(worktreeId, { linkedGiteaPR: result.number })
-      }
       const linkedReviewNumbers = {
-        linkedGitHubPR: result.provider === 'github' ? result.number : linkedGitHubPR,
-        fallbackGitHubPR: fallbackGitHubPRNumber,
-        linkedGitLabMR: result.provider === 'gitlab' ? result.number : linkedGitLabMR,
-        linkedBitbucketPR,
-        linkedAzureDevOpsPR:
-          result.provider === 'azure-devops' ? result.number : linkedAzureDevOpsPR,
-        linkedGiteaPR: result.provider === 'gitea' ? result.number : linkedGiteaPR
-      }
-      if (result.provider === 'gitlab') {
-        await fetchHostedReviewForBranch(repoPath, branch, {
-          force: true,
-          repoId,
-          ...linkedReviewNumbers
-        })
-        return
-      }
-      if (result.provider !== 'github') {
-        await fetchHostedReviewForBranch(repoPath, branch, {
-          force: true,
-          repoId,
-          ...linkedReviewNumbers
-        })
-        return
+        linkedGitHubPR: result.number,
+        fallbackGitHubPR: fallbackGitHubPRNumber ?? linkedGitHubPR
       }
       await Promise.all([
         fetchHostedReviewForBranch(repoPath, branch, {

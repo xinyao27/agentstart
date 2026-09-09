@@ -1,4 +1,3 @@
-import { classifySchemeLessLocalDevAddress } from '@yiru/runtime-protocol/workbench/browser/url'
 import { translate } from '~renderer/i18n/i18n'
 
 const HOST_FILE_EXTENSIONS = new Set([
@@ -84,4 +83,19 @@ export function classifyHostUrl(query: string): HostUrlClassification | null {
   // Try exact local-dev forms first so localhost keeps http:// parity with
   // the previous inline classifier before falling back to public hostnames.
   return classifyLocalDevUrl(query) ?? classifyHostLikeUrl(query)
+}
+
+const LOCAL_ADDRESS_PATTERN =
+  /^(?:localhost|127(?:\.\d{1,3}){3}|0\.0\.0\.0|\[[0-9a-f:]+\])(?::\d+)?(?:[/?#].*)?$/i
+
+function classifySchemeLessLocalDevAddress(rawInput: string): URL | null {
+  const trimmed = rawInput.trim()
+  if (!LOCAL_ADDRESS_PATTERN.test(trimmed)) {
+    return null
+  }
+  try {
+    return new URL(`http://${trimmed}`)
+  } catch {
+    return null
+  }
 }

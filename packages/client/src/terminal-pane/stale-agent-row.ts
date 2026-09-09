@@ -1,4 +1,4 @@
-import { makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'

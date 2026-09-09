@@ -1,9 +1,5 @@
-import type {
-  BrowserTab,
-  Tab,
-  TerminalTab,
-  WorkspaceVisibleTabType
-} from '@yiru/runtime-protocol/workbench/types'
+import type { BrowserTab } from '@yiru/protocol/workspace/browser-session'
+import type { Tab, TerminalTab, WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
 
 import type { OpenFile } from '../editor/state'
 import type { HoveredTabInsertion } from '../tab-group/use-tab-drag-split'

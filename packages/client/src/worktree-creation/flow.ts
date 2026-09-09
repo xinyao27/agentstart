@@ -1,4 +1,4 @@
-import type { CreateWorktreeResult } from '@yiru/runtime-protocol/workbench/types'
+import type { CreateWorktreeResult } from '@yiru/protocol/worktree/create-result'
 import { toast } from 'sonner'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import {
@@ -76,13 +76,9 @@ async function executeWorktreeCreation(
         request.agent ?? undefined,
         request.branchNameOverride,
         request.workspaceStatus,
-        request.linkedGitLabMR,
         request.startup,
         request.pendingFirstAgentMessageRename,
         creationId,
-        request.linkedBitbucketPR,
-        request.linkedAzureDevOpsPR,
-        request.linkedGiteaPR,
         request.compareBaseRef
       )
   } catch (error) {

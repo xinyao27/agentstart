@@ -1,5 +1,5 @@
-import type { AgentType, ParsedAgentStatusPayload } from '@yiru/runtime-protocol/model/agent'
-import { isWslUncPath } from '@yiru/runtime-protocol/model/platform'
+import type { AgentType, ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
+import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
 import { CLIENT_PLATFORM } from '~renderer/new-workspace/workspace-creation'
 import { useAppStore } from '~renderer/store/state'
 

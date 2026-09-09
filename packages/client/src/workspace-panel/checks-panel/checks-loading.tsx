@@ -1,22 +1,14 @@
 import { useEffect } from 'react'
-import { gitLabPipelineJobsToPRChecks } from '~renderer/gitlab-pipeline-checks'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 
 import { installWindowVisibilityTimeoutPoller } from '../window-visibility-timeout-poller'
-import {
-  checksPanelAsyncResultKey,
-  checksPanelHostedReviewAsyncResultKey
-} from './async-result-key'
-import { gitLabMRCommentsToPRComments, fetchGitLabMRDetailsForChecks } from './gitlab-review'
+import { checksPanelAsyncResultKey } from './async-result-key'
 import type { useChecksPanelPollingEffectsState } from './polling-effects'
 
 export function useChecksPanelChecksLoading(context: useChecksPanelPollingEffectsState) {
   const {
-    activeGitLabReview,
-    asyncResultKeyRef,
     branch,
     fetchPRChecks,
-    hostedReviewCacheKey,
     isCurrentAsyncResult,
     isPanelVisible,
     pollIntervalRef,
@@ -26,10 +18,7 @@ export function useChecksPanelChecksLoading(context: useChecksPanelPollingEffect
     prevChecksRef,
     repo,
     setChecks,
-    setChecksLoading,
-    setComments,
-    setCommentsLoading,
-    settings
+    setChecksLoading
   } = context
 
   const fetchChecks = useEventCallback(
@@ -96,73 +85,8 @@ export function useChecksPanelChecksLoading(context: useChecksPanelPollingEffect
     }
   )
 
-  const fetchGitLabDetails = useEventCallback(
-    async ({
-      mrNumberOverride,
-      headShaOverride,
-      commitAsCurrent = false
-    }: {
-      mrNumberOverride?: number | null
-      headShaOverride?: string | null
-      commitAsCurrent?: boolean
-    } = {}) => {
-      const targetMRNumber = mrNumberOverride ?? activeGitLabReview?.number ?? null
-      const targetHeadSha = headShaOverride ?? activeGitLabReview?.headSha ?? null
-      if (!repo || !targetMRNumber) {
-        return
-      }
-      const requestKey = checksPanelHostedReviewAsyncResultKey(
-        hostedReviewCacheKey,
-        branch,
-        'gitlab',
-        targetMRNumber,
-        targetHeadSha
-      )
-      if (commitAsCurrent) {
-        asyncResultKeyRef.current = requestKey
-      }
-      setChecksLoading(true)
-      setCommentsLoading(true)
-      try {
-        const details = await fetchGitLabMRDetailsForChecks({
-          repoPath: repo.path,
-          repoId: repo.id,
-          settings,
-          iid: targetMRNumber
-        })
-        if (!isCurrentAsyncResult(requestKey)) {
-          return
-        }
-        const result = gitLabPipelineJobsToPRChecks(details?.pipelineJobs ?? [])
-        setChecks(result)
-        setComments(gitLabMRCommentsToPRComments(details?.comments))
-        const signature = JSON.stringify(result.map((c) => `${c.name}:${c.status}:${c.conclusion}`))
-        pollIntervalRef.current =
-          signature === prevChecksRef.current
-            ? Math.min(pollIntervalRef.current * 2, 120_000)
-            : 30_000
-        prevChecksRef.current = signature
-      } catch (err) {
-        if (!isCurrentAsyncResult(requestKey)) {
-          return
-        }
-        console.warn('Failed to fetch GitLab MR checks:', err)
-        setChecks([])
-        setComments([])
-      } finally {
-        if (isCurrentAsyncResult(requestKey)) {
-          setChecksLoading(false)
-          setCommentsLoading(false)
-        }
-      }
-    }
-  )
-
   // Fetch checks on mount + poll with exponential backoff
   useEffect(() => {
-    if (activeGitLabReview) {
-      return
-    }
     if (!prNumber || !isPanelVisible) {
       setChecks([])
       return
@@ -177,30 +101,9 @@ export function useChecksPanelChecksLoading(context: useChecksPanelPollingEffect
       run: () => fetchChecks(),
       getDelayMs: () => pollIntervalRef.current
     })
-  }, [
-    activeGitLabReview,
-    fetchChecks,
-    isPanelVisible,
-    prNumber,
-    prevChecksRef,
-    pollIntervalRef,
-    setChecks
-  ])
+  }, [fetchChecks, isPanelVisible, prNumber, prevChecksRef, pollIntervalRef, setChecks])
 
-  useEffect(() => {
-    if (!activeGitLabReview || !isPanelVisible) {
-      return
-    }
-
-    pollIntervalRef.current = 30_000
-    prevChecksRef.current = ''
-    return installWindowVisibilityTimeoutPoller({
-      run: () => fetchGitLabDetails(),
-      getDelayMs: () => pollIntervalRef.current
-    })
-  }, [activeGitLabReview, fetchGitLabDetails, isPanelVisible, prevChecksRef, pollIntervalRef])
-
-  return { ...context, fetchChecks, fetchGitLabDetails }
+  return { ...context, fetchChecks }
 }
 
 export type useChecksPanelChecksLoadingState = ReturnType<typeof useChecksPanelChecksLoading>

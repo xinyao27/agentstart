@@ -1,8 +1,10 @@
-import { resolveGitHubPRMergeMethods } from '@yiru/runtime-protocol/workbench/github-pr-merge-methods'
-import type { PRInfo, Repo, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import React from 'react'
 import { presentGitHubPRMergeState } from '~renderer/github/pr-merge-state'
 import { translate } from '~renderer/i18n/i18n'
+import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import {
   GitMerge,
   GitPullRequest as GitPullRequestClosed,
@@ -22,7 +24,7 @@ import {
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '~renderer/ui/tooltip'
 
 import { runWorktreeDelete } from '../sidebar/delete-worktree/flow'
-import { presentGitLabMRMergeState } from './gitlab-mr-merge-state'
+import { resolveGitHubPRMergeMethods } from '../source-control/merge-methods'
 import {
   ClosedReviewActions,
   HostedReviewActionError,
@@ -48,30 +50,24 @@ export default function HostedReviewActions({
   worktree: Worktree
   onRefreshReview: () => Promise<void>
 }): React.JSX.Element | null {
+  useUiLocale()
   const isDeletingWorktree = useAppStore(
     (s) => s.deleteStateByWorktreeId[worktree.id]?.isDeleting ?? false
   )
-  const isGitLab = review.provider === 'gitlab'
-  const shortLabel = isGitLab ? 'MR' : 'PR'
-  const reviewLabel = isGitLab ? 'merge request' : 'pull request'
-  const mergePresentation = (() => {
-    if (isGitLab) {
-      return { ...presentGitLabMRMergeState(review), autoMergeAction: null }
-    }
-    return presentGitHubPRMergeState({
-      ...githubPR,
-      state: review.state,
-      mergeable: review.mergeable,
-      mergeStateStatus: review.mergeStateStatus,
-      reviewDecision: review.reviewDecision,
-      checksStatus: review.status,
-      autoMergeEnabled: review.autoMergeEnabled,
-      autoMergeAllowed: review.autoMergeAllowed,
-      mergeQueueRequired: review.mergeQueueRequired
-    })
-  })()
-  const mergeMethods = (() =>
-    resolveGitHubPRMergeMethods(isGitLab ? null : (githubPR?.mergeMethodSettings ?? null)))()
+  const shortLabel = 'PR'
+  const reviewLabel = 'pull request'
+  const mergePresentation = presentGitHubPRMergeState({
+    ...githubPR,
+    state: review.state,
+    mergeable: review.mergeable,
+    mergeStateStatus: review.mergeStateStatus,
+    reviewDecision: review.reviewDecision,
+    checksStatus: review.status,
+    autoMergeEnabled: review.autoMergeEnabled,
+    autoMergeAllowed: review.autoMergeAllowed,
+    mergeQueueRequired: review.mergeQueueRequired
+  })
+  const mergeMethods = resolveGitHubPRMergeMethods(githubPR?.mergeMethodSettings ?? null)
   const {
     merging,
     stateUpdating,
@@ -84,9 +80,6 @@ export default function HostedReviewActions({
     review,
     githubPR,
     repo,
-    isGitLab,
-    shortLabel,
-    reviewLabel,
     defaultMergeMethod: mergeMethods.defaultMethod,
     autoMergeAction: mergePresentation.autoMergeAction,
     onRefreshReview

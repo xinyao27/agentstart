@@ -1,5 +1,6 @@
-import type { PersistedUIState, UpdateStatus } from '@yiru/runtime-protocol/workbench/types'
-import type { WorkspacePortScanResult } from '@yiru/runtime-protocol/workbench/workspace/ports'
+import type { WorkspacePortScanResult } from '@yiru/protocol'
+import type { PersistedUIState } from '@yiru/protocol/settings/ui-state'
+import type { UpdaterStatus as UpdateStatus } from '@yiru/protocol/updater-values'
 
 import type { PendingSidebarRowReveal, PendingSidebarWorktreeReveal } from './slice'
 

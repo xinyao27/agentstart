@@ -48,7 +48,7 @@ nonisolated struct TerminalBulkRoute: Sendable {
     }
 
     func setAppState(_ state: TerminalMultiplexAppState) async {
-        await bulk.setAppState(state)
+        await bulk.setAppState(state, routeID: id)
     }
 
     func close() async {

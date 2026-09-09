@@ -1,5 +1,5 @@
 import type { Editor } from '@tiptap/react'
-import type { MarkdownDocument } from '@yiru/runtime-protocol/workbench/types'
+import type { MarkdownDocument } from '@yiru/protocol/files/values'
 import { useEffect } from 'react'
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react'
 

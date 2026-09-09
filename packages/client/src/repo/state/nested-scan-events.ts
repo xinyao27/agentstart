@@ -1,5 +1,5 @@
-import type { NestedRepoScanResult } from '@yiru/runtime-protocol/workbench/types'
-import { createRuntimeOrpcClient } from '~renderer/runtime/orpc-client'
+import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import { requireProjectGroupProtocolClient } from '~renderer/runtime/project-group-target'
 import type { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 import { normalizeNestedRepoScanResult } from './update-model'
@@ -13,17 +13,13 @@ export async function subscribeToNestedRepoScanProgress(
 ): Promise<() => void> {
   const abort = new AbortController()
   try {
-    const connection = await createRuntimeOrpcClient(target, {
-      timeoutMs: 15_000,
-      signal: abort.signal
-    })
-    const stream = await connection.client.projectGroup.events.subscribe(undefined, {
-      signal: abort.signal
-    })
+    const stream = await (
+      await requireProjectGroupProtocolClient(target)
+    ).subscribeEvents({ signal: abort.signal })
     void (async () => {
       try {
-        for await (const event of stream) {
-          if (event.type === 'nestedRepoScanProgress' && event.scanId === scanId) {
+        for await (const event of stream.events) {
+          if (event.type === 'progress' && event.scanId === scanId) {
             onProgress(normalizeNestedRepoScanResult(event.scan))
           }
         }
@@ -31,7 +27,7 @@ export async function subscribeToNestedRepoScanProgress(
         // Why: the scan RPC resolves independently; losing progress ticks does
         // not turn an otherwise successful scan into a failure.
       } finally {
-        connection.close()
+        await stream.cancel()
       }
     })()
     return () => abort.abort()

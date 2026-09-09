@@ -2,11 +2,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Camera, CheckCircle } from '~renderer/icons/hugeicons'
+import {
+  saveVisualRegression,
+  visualRegressionLatestQuery
+} from '~renderer/runtime/visual-regression-target'
 import { Button } from '~renderer/ui/button'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
-import { extensionOrpc } from '../runtime/orpc'
-import { worktreesQuery } from '../runtime/queries'
+import { worktreesQuery, WORKSPACE_EVENTS_QUERY_ROOT } from '../runtime/queries'
 import { pngDataUrlToBlob, readBrowserArtifact, uploadBrowserArtifact } from './artifact-upload'
 
 type VisualRegressionProps = {
@@ -28,9 +31,7 @@ export function VisualRegression({
 }: VisualRegressionProps): React.JSX.Element {
   const capabilities = getExtensionBrowserCapabilities()
   const queryClient = useQueryClient()
-  const latestQuery = extensionOrpc.visualRegression.latest.queryOptions({
-    input: { pageUrl, projectId, worktreeId }
-  })
+  const latestQuery = visualRegressionLatestQuery({ pageUrl, projectId, worktreeId })
   const latest = useQuery(latestQuery)
   const automaticCaptureAccess = useQuery({
     queryKey: ['extension-host', 'persistent-page-capture', pageUrl],
@@ -60,7 +61,7 @@ export function VisualRegression({
         fileName: `visual-regression-${new Date().toISOString().replaceAll(':', '-')}.png`,
         projectId
       })
-      return extensionOrpc.visualRegression.save.call({
+      return saveVisualRegression({
         diffRatio: comparison?.ratio ?? null,
         height: current.height,
         imageArtifactId,
@@ -74,7 +75,7 @@ export function VisualRegression({
       previousHead.current = head
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: latestQuery.queryKey }),
-        queryClient.invalidateQueries({ queryKey: extensionOrpc.workspaceEvents.key() })
+        queryClient.invalidateQueries({ queryKey: WORKSPACE_EVENTS_QUERY_ROOT })
       ])
     }
   })

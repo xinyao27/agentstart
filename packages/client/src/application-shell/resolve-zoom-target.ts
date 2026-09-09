@@ -1,4 +1,4 @@
-import type { TopLevelView } from '@yiru/runtime-protocol/workbench/types'
+import type { TopLevelView } from '@yiru/protocol/settings/ui-state'
 
 /**
  * Determine which zoom domain (terminal, editor, simulator, or UI) should be adjusted

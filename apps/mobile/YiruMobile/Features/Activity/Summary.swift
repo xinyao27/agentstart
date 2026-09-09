@@ -12,14 +12,6 @@ nonisolated enum ActivityUsageRange: String, CaseIterable, Codable, Sendable {
         case .ninetyDays: "90 days"
         }
     }
-
-    var wire: MobileStatsRangeWire {
-        switch self {
-        case .sevenDays: .sevenDays
-        case .thirtyDays: .thirtyDays
-        case .ninetyDays: .ninetyDays
-        }
-    }
 }
 
 nonisolated enum ActivityMetric: String, CaseIterable, Hashable, Sendable {
@@ -37,9 +29,30 @@ nonisolated enum ActivityMetric: String, CaseIterable, Hashable, Sendable {
 nonisolated struct ActivityDailyPoint: Codable, Hashable, Identifiable, Sendable {
     let day: String
     let activity: Double
+    let agentStarts: Double?
+    let prsCreated: Double?
     let tokens: Double
+    let unpricedTokens: Double?
     let valueUSD: Double?
     var id: String { day }
+
+    init(
+        day: String,
+        activity: Double,
+        agentStarts: Double? = nil,
+        prsCreated: Double? = nil,
+        tokens: Double,
+        unpricedTokens: Double? = nil,
+        valueUSD: Double?
+    ) {
+        self.day = day
+        self.activity = activity
+        self.agentStarts = agentStarts
+        self.prsCreated = prsCreated
+        self.tokens = tokens
+        self.unpricedTokens = unpricedTokens
+        self.valueUSD = valueUSD
+    }
 }
 
 nonisolated struct ActivityProviderUsage: Codable, Hashable, Identifiable, Sendable {
@@ -64,11 +77,43 @@ nonisolated struct ActivityBreakdown: Codable, Hashable, Identifiable, Sendable 
     let providers: [ActivityProviderUsage]
 }
 
-// Why: the supplemental payload also carries per-day and per-model token series,
-// but `daily`/`models` above already feed every chart and breakdown, so only the
-// metered value is kept — decoding older cached snapshots simply ignores the rest.
+nonisolated struct ActivitySupplementalDailyUsage: Codable, Hashable, Identifiable, Sendable {
+    let day: String
+    let tokens: Double
+    let valueUSD: Double?
+    let unpricedTokens: Double
+    var id: String { day }
+}
+
 nonisolated struct ActivitySupplementalUsage: Codable, Hashable, Sendable {
+    let daily: [ActivitySupplementalDailyUsage]
+    let models: [ActivityBreakdown]
     let meteredValueUSD: Double?
+
+    init(
+        daily: [ActivitySupplementalDailyUsage] = [],
+        models: [ActivityBreakdown] = [],
+        meteredValueUSD: Double?
+    ) {
+        self.daily = daily
+        self.models = models
+        self.meteredValueUSD = meteredValueUSD
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case daily
+        case models
+        case meteredValueUSD
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        daily =
+            try values.decodeIfPresent([ActivitySupplementalDailyUsage].self, forKey: .daily)
+            ?? []
+        models = try values.decodeIfPresent([ActivityBreakdown].self, forKey: .models) ?? []
+        meteredValueUSD = try values.decodeIfPresent(Double.self, forKey: .meteredValueUSD)
+    }
 }
 
 nonisolated struct ActivityStatsSummary: Codable, Hashable, Sendable {
@@ -153,10 +198,23 @@ nonisolated private func mergeDaily(_ values: [ActivityDailyPoint]) -> [Activity
             points.contains { $0.valueUSD == nil }
             ? nil : points.compactMap(\.valueUSD).reduce(0, +)
         output.append(
-            ActivityDailyPoint(day: day, activity: activity, tokens: tokens, valueUSD: value)
+            ActivityDailyPoint(
+                day: day,
+                activity: activity,
+                agentStarts: mergeKnown(points.map(\.agentStarts)),
+                prsCreated: mergeKnown(points.map(\.prsCreated)),
+                tokens: tokens,
+                unpricedTokens: mergeKnown(points.map(\.unpricedTokens)),
+                valueUSD: value
+            )
         )
     }
     return output.sorted { $0.day < $1.day }
+}
+
+nonisolated private func mergeKnown(_ values: [Double?]) -> Double? {
+    guard values.allSatisfy({ $0 != nil }) else { return nil }
+    return values.compactMap { $0 }.reduce(0, +)
 }
 
 nonisolated private func mergeDailyProviders(_ values: [ActivityDailyProviderUsage])
@@ -209,7 +267,25 @@ nonisolated private func mergeSupplementalUsage(
         meteredValues.allSatisfy { $0 != nil }
         ? meteredValues.compactMap { $0 }.reduce(0, +)
         : nil
-    return ActivitySupplementalUsage(meteredValueUSD: meteredValueUSD)
+    return ActivitySupplementalUsage(
+        daily: mergeSupplementalDaily(values.flatMap(\.daily)),
+        models: mergeBreakdowns(values.flatMap(\.models)),
+        meteredValueUSD: meteredValueUSD
+    )
+}
+
+nonisolated private func mergeSupplementalDaily(
+    _ values: [ActivitySupplementalDailyUsage]
+) -> [ActivitySupplementalDailyUsage] {
+    Dictionary(grouping: values, by: \.day).map { day, entries in
+        ActivitySupplementalDailyUsage(
+            day: day,
+            tokens: entries.reduce(0) { $0 + $1.tokens },
+            valueUSD: entries.contains { $0.valueUSD == nil }
+                ? nil : entries.compactMap(\.valueUSD).reduce(0, +),
+            unpricedTokens: entries.reduce(0) { $0 + $1.unpricedTokens }
+        )
+    }.sorted { $0.day < $1.day }
 }
 
 nonisolated private func mergeProviders(_ values: [ActivityProviderUsage])

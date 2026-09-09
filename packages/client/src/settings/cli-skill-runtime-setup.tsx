@@ -1,10 +1,9 @@
-import type { CliInstallStatus } from '@yiru/runtime-protocol/workbench/cli-install-types'
+import type { CliInstallStatus } from '@yiru/protocol/cli-values'
 import {
   deriveGlobalWindowsRuntimeDefaultFromLegacySettings,
   normalizeGlobalWindowsRuntimeDefault
-} from '@yiru/runtime-protocol/workbench/project-execution-runtime'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
-import { buildWslLoginShellCommand } from '@yiru/runtime-protocol/workbench/wsl-login-shell-command'
+} from '@yiru/protocol/project/runtime-preference'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { toast } from 'sonner'
 import { buildAgentFeatureSkillInstallCommand } from '~renderer/agent/feature-install-commands'
 import { translate } from '~renderer/i18n/i18n'
@@ -18,6 +17,8 @@ import {
   isYiruCliAvailableOnPath,
   showYiruCliRegistrationPromptToast
 } from '~renderer/skills/agent-cli-prerequisite'
+
+import { buildWslLoginShellCommand } from './wsl-login-command'
 
 export type LocalAgentRuntime = {
   runtime: 'host' | 'wsl'

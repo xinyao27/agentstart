@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type { JSX } from 'react'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { ScrollArea } from '~renderer/ui/scroll-area'

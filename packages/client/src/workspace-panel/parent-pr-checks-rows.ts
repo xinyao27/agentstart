@@ -1,7 +1,9 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
-import { hostedReviewInfoFromGitHubPRInfo } from '@yiru/runtime-protocol/workbench/hosted-review-github'
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { PRCheckDetail, Repo, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import { hostedReviewInfoFromGitHubPRInfo } from '@yiru/protocol/hosted-review/github-mapping'
+import type { PRCheckDetail } from '@yiru/protocol/hosted-review/review-types'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { getGitHubRepoCacheKey } from '~renderer/github/cache-key'
 import { prChecksCacheSuffix } from '~renderer/github/state'
 import {
@@ -116,14 +118,7 @@ function buildParentPrChecksRow(
   const refreshIdentity = getParentPrChecksRefreshIdentity(args.worktree, args.repo, branch)
   const outcome = args.refreshOutcomes?.get(refreshIdentity)
   const reviewSnapshot = getReviewSnapshot(args, branch, outcome)
-  const fallbackDisplay = getWorktreeCardPrDisplay(
-    reviewSnapshot.review,
-    args.worktree.linkedPR,
-    args.worktree.linkedGitLabMR ?? null,
-    args.worktree.linkedBitbucketPR ?? null,
-    args.worktree.linkedAzureDevOpsPR ?? null,
-    args.worktree.linkedGiteaPR ?? null
-  )
+  const fallbackDisplay = getWorktreeCardPrDisplay(reviewSnapshot.review, args.worktree.linkedPR)
   const review = reviewSnapshot.review
   const status = classifyParentPrChecksRowStatus({
     isUnavailable: !args.repo || isFolderRepo(args.repo) || args.worktree.isBare || !branch,
@@ -218,7 +213,7 @@ function getReviewLabel(
   if (provider === undefined || number === undefined) {
     return null
   }
-  return provider === 'gitlab' ? `!${number}` : `#${number}`
+  return `#${number}`
 }
 
 function getCheckDetails(
@@ -295,22 +290,11 @@ function getBranchName(worktree: Worktree): string | null {
 }
 
 function hasLinkedReview(worktree: Worktree): boolean {
-  return Boolean(
-    worktree.linkedPR ??
-    worktree.linkedGitLabMR ??
-    worktree.linkedBitbucketPR ??
-    worktree.linkedAzureDevOpsPR ??
-    worktree.linkedGiteaPR ??
-    null
-  )
+  return worktree.linkedPR != null
 }
 
 function getLinkedReviewHints(worktree: Worktree): Parameters<typeof linkedReviewHintKey>[0] {
   return {
-    linkedGitHubPR: worktree.linkedPR ?? null,
-    linkedGitLabMR: worktree.linkedGitLabMR ?? null,
-    linkedBitbucketPR: worktree.linkedBitbucketPR ?? null,
-    linkedAzureDevOpsPR: worktree.linkedAzureDevOpsPR ?? null,
-    linkedGiteaPR: worktree.linkedGiteaPR ?? null
+    linkedGitHubPR: worktree.linkedPR ?? null
   }
 }

@@ -1,10 +1,7 @@
-import { runtimePtyEnvironmentId } from '@yiru/runtime-protocol/terminal-identity/id'
-import type { RuntimeMobileSessionTabsResult } from '@yiru/runtime-protocol/workbench/runtime-types'
-import type {
-  TerminalLayoutSnapshot,
-  TerminalTab,
-  TuiAgent
-} from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { runtimePtyEnvironmentId } from '@yiru/protocol/terminal-identity'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { sanitizeTerminalLayoutPaneTitlesForLabels } from '~renderer/terminal-pane/title-sanitization'
 
 import { resolveTerminalLayoutRoot } from '../remote-terminal-layout-resolution'
@@ -13,6 +10,7 @@ import {
   toRemoteTerminalSurfaceTabId,
   REMOTE_TERMINAL_SURFACE_TAB_PREFIX
 } from '../remote-terminal-surface-id'
+import type { RuntimeMobileSessionTabsResult } from './session-model'
 import type {
   ReadyBrowserSurface,
   ReadyEditorSurface,

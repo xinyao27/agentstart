@@ -1,16 +1,8 @@
-import {
-  AI_VAULT_AGENTS,
-  type AiVaultAgent,
-  type AiVaultGroup,
-  type AiVaultScope,
-  type AiVaultSort
-} from '@yiru/runtime-protocol/model/agent'
-import {
-  getExecutionHostLabel,
-  type ExecutionHostScope
-} from '@yiru/runtime-protocol/model/workspace'
+import { AI_VAULT_AGENTS, type AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+import type { ExecutionHostScope } from '@yiru/protocol/host/identity'
 import type React from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
+import { getExecutionHostLabel } from '~renderer/execution-host/labels'
 import { translate } from '~renderer/i18n/i18n'
 import {
   Archive as ArchiveRestore,
@@ -37,10 +29,15 @@ import {
   DropdownMenuTrigger
 } from '~renderer/ui/dropdown-menu'
 import { ToggleGroup, ToggleGroupItem } from '~renderer/ui/toggle-group'
+import type {
+  AiVaultGroup,
+  AiVaultScope,
+  AiVaultSort
+} from '~renderer/workspace-panel/ai-vault/session/providers'
 
 import { RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME } from '../right-sidebar-button-styles'
 import type { AiVaultHostScopeOption } from './host-scope'
-import { agentLabel, type AiVaultSessionGroup } from './session-filters'
+import { agentLabel, type AiVaultSessionGroup } from './session/filter'
 
 const VAULT_HEADER_CONTROL_CLASS = 'size-6 shrink-0'
 

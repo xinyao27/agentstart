@@ -5,7 +5,7 @@ import { cn } from '~renderer/ui/class-names'
 import type { SmartWorkspaceSourceRow } from './smart-workspace-source-results'
 
 export type SmartWorkspaceNameSelection = {
-  kind: 'github-pr' | 'gitlab-mr' | 'branch'
+  kind: 'github-pr' | 'branch'
   label: string
   url?: string
 }
@@ -87,18 +87,6 @@ export function SmartWorkspaceRowLabel({
     return (
       <span className="min-w-0 truncate">
         <span className="text-foreground font-medium">#{row.item.number}</span> {row.item.title}
-      </span>
-    )
-  }
-  if (row.kind === 'gitlab') {
-    const prefix = row.item.type === 'mr' ? '!' : '#'
-    return (
-      <span className="min-w-0 truncate">
-        <span className="text-foreground font-medium">
-          {prefix}
-          {row.item.number}
-        </span>{' '}
-        {row.item.title}
       </span>
     )
   }

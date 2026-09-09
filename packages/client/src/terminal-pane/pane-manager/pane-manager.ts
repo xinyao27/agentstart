@@ -3,7 +3,7 @@
 // from the terminal-pane lazy chunk (use-terminal-pane-lifecycle.ts) — so its
 // CSS ships in that chunk instead of the app's eager main.css.
 import './pane-manager.css'
-import { FIRST_PANE_ID } from '@yiru/runtime-protocol/workbench/pane-key'
+import { FIRST_PANE_ID } from '~renderer/terminal-pane/pane-manager/first-pane-id'
 
 import { shouldFollowMouseFocus } from './focus-follows-mouse'
 import { LivePaneOwner } from './live-pane-owner'

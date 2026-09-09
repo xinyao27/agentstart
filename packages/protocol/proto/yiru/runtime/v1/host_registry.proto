@@ -1,0 +1,273 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service HostRegistryService {
+  rpc IsWslAvailable(HostRegistryServiceIsWslAvailableRequest) returns (HostRegistryServiceIsWslAvailableResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListWslDistros(HostRegistryServiceListWslDistrosRequest) returns (HostRegistryServiceListWslDistrosResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc IsGitBashAvailable(HostRegistryServiceIsGitBashAvailableRequest) returns (HostRegistryServiceIsGitBashAvailableResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc IsPwshAvailable(HostRegistryServiceIsPwshAvailableRequest) returns (HostRegistryServiceIsPwshAvailableResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc MarkAgentTrusted(HostRegistryServiceMarkAgentTrustedRequest) returns (HostRegistryServiceMarkAgentTrustedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc List(HostRegistryServiceListRequest) returns (HostRegistryServiceListResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Add(HostRegistryServiceAddRequest) returns (HostRegistryServiceAddResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Probe(HostRegistryServiceProbeRequest) returns (HostRegistryServiceProbeResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Remove(HostRegistryServiceRemoveRequest) returns (HostRegistryServiceRemoveResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message HostRegistryServiceListRequest {}
+
+message HostRegistryServiceIsWslAvailableRequest {}
+
+message HostRegistryServiceIsWslAvailableResponse {
+  bool available = 1;
+}
+
+message HostRegistryServiceListWslDistrosRequest {}
+
+message HostRegistryServiceListWslDistrosResponse {
+  repeated string distros = 1;
+}
+
+message HostRegistryServiceIsGitBashAvailableRequest {}
+
+message HostRegistryServiceIsGitBashAvailableResponse {
+  bool available = 1;
+}
+
+message HostRegistryServiceIsPwshAvailableRequest {}
+
+message HostRegistryServiceIsPwshAvailableResponse {
+  bool available = 1;
+}
+
+// Why: Cursor, Copilot, and Codex each own a distinct trust-file format the
+// authority writes; the closed preset set is the wire selector for it.
+enum AgentTrustPreset {
+  AGENT_TRUST_PRESET_UNSPECIFIED = 0;
+  AGENT_TRUST_PRESET_CURSOR = 1;
+  AGENT_TRUST_PRESET_COPILOT = 2;
+  AGENT_TRUST_PRESET_CODEX = 3;
+}
+
+message HostRegistryServiceMarkAgentTrustedRequest {
+  AgentTrustPreset preset = 1;
+  string workspace_path = 2;
+}
+
+message HostRegistryServiceMarkAgentTrustedResponse {}
+
+message HostRegistryServiceListResponse {
+  repeated RegisteredHost hosts = 1;
+  int64 revision = 2;
+}
+
+message HostRegistryServiceAddRequest {
+  int64 expected_revision = 1;
+  HostKind kind = 2;
+  string label = 3;
+  string target = 4;
+}
+
+message HostRegistryServiceAddResponse {
+  RegisteredHost host = 1;
+  int64 revision = 2;
+}
+
+message HostRegistryServiceProbeRequest {
+  string host_id = 1;
+}
+
+message HostRegistryServiceProbeResponse {
+  repeated HostCapability capabilities = 1;
+  RegisteredHost host = 2;
+}
+
+message HostRegistryServiceRemoveRequest {
+  int64 expected_revision = 1;
+  string host_id = 2;
+}
+
+message HostRegistryServiceRemoveResponse {
+  bool removed = 1;
+  int64 revision = 2;
+}
+
+message RegisteredHost {
+  string id = 1;
+  HostKind kind = 2;
+  string label = 3;
+  HostPlatform platform = 4;
+  optional string target = 5;
+}
+
+enum HostKind {
+  HOST_KIND_UNSPECIFIED = 0;
+  HOST_KIND_LOCAL = 1;
+  HOST_KIND_SSH = 2;
+  HOST_KIND_WSL = 3;
+}
+
+enum HostPlatform {
+  HOST_PLATFORM_UNSPECIFIED = 0;
+  HOST_PLATFORM_DARWIN = 1;
+  HOST_PLATFORM_LINUX = 2;
+  HOST_PLATFORM_WINDOWS = 3;
+  HOST_PLATFORM_UNKNOWN = 4;
+}
+
+message HostCapability {
+  HostCapabilityKind kind = 1;
+  bool available = 2;
+  optional string detail = 3;
+}
+
+enum HostCapabilityKind {
+  HOST_CAPABILITY_KIND_UNSPECIFIED = 0;
+  HOST_CAPABILITY_KIND_FILESYSTEM = 1;
+  HOST_CAPABILITY_KIND_GIT = 2;
+  HOST_CAPABILITY_KIND_PTY = 3;
+}
+
+message HostRevisionConflict {
+  int64 expected_revision = 1;
+  int64 actual_revision = 2;
+  string scope = 3;
+}

@@ -2,10 +2,10 @@
 // agent is worth seeing whether the user is in a raw terminal,
 // or looking at a different workspace entirely.
 
-import { formatAgentTypeLabel } from '@yiru/runtime-protocol/model/agent'
-import { formatResetDuration } from '@yiru/runtime-protocol/model/ui'
 import { toast } from 'sonner'
+import { formatAgentTypeLabel } from '~renderer/agent/title/type-label'
 import { translate } from '~renderer/i18n/i18n'
+import { formatResetDuration } from '~renderer/status-bar/reset-time'
 import { useWorktreeById } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
 import { activateTabAndFocusPane } from '~renderer/tab-bar/activate-and-focus-pane'

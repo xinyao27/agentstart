@@ -1,5 +1,6 @@
-import type { ComputerUsePermissionStatusResult } from '@yiru/runtime-protocol/workbench/computer-use-permissions-types'
-import type { GlobalSettings, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { ComputerPermissionStatusResult } from '@yiru/protocol'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 export type SetupScriptProbeState = {
@@ -67,9 +68,10 @@ export function getSetupGuideProgressReady(input: SetupGuideProgressReadinessInp
   )
 }
 
-export function getComputerUsePermissionSetupState(
-  status: ComputerUsePermissionStatusResult | null
-): { ready: boolean; unavailable: boolean } {
+export function getComputerUsePermissionSetupState(status: ComputerPermissionStatusResult | null): {
+  ready: boolean
+  unavailable: boolean
+} {
   return {
     ready:
       status !== null &&

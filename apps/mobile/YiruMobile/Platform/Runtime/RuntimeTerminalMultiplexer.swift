@@ -1,4 +1,6 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 actor RuntimeTerminalMultiplexer {
     private struct ConnectedBulk: Sendable {
@@ -29,12 +31,13 @@ actor RuntimeTerminalMultiplexer {
         -> any TerminalSession
     {
         guard !isShutdown else { throw RuntimeTerminalMultiplexerError.closed }
-        let result: MobileTerminalShowResultWire = try await controlSession.call(
-            path: MobileTerminalWireContract.showPath,
-            input: MobileTerminalHandleRequestWire(terminal: terminalID),
-            output: MobileTerminalShowResultWire.self
+        var request = Yiru_Runtime_V1_TerminalServiceShowRequest()
+        request.terminal = terminalID
+        let shown = try await controlSession.protocolUnary(
+            procedure: YiruRuntimeV1TerminalServiceMethods.show,
+            request: request,
+            response: Yiru_Runtime_V1_TerminalServiceShowResponse.self
         )
-        let shown = result.terminal
         guard !isShutdown else { throw RuntimeTerminalMultiplexerError.closed }
         var activeBulk = try await activeBulk()
         let route: TerminalBulkRoute
@@ -126,12 +129,8 @@ actor RuntimeTerminalMultiplexer {
         let controlSession = controlSession
         let clientInstanceID = clientInstanceID
         return Task {
-            let controlGeneration = try await controlSession.connectedGeneration()
-            let status: MobileRuntimeStatusWire = try await controlSession.call(
-                path: MobileTerminalWireContract.statusPath,
-                input: RuntimeNullWire(),
-                output: MobileRuntimeStatusWire.self
-            )
+            let status = try await controlSession.protocolStatus()
+            let controlGeneration = await controlSession.generation()
             guard
                 status.capabilities?.contains(MobileTerminalWireContract.multiplexCapability)
                     == true
@@ -141,13 +140,19 @@ actor RuntimeTerminalMultiplexer {
             guard await controlSession.generation() == controlGeneration else {
                 throw RuntimeTerminalMultiplexerError.controlGenerationChanged
             }
-            let ticket: MobileTerminalOpenMultiplexWire = try await controlSession.call(
-                path: MobileTerminalWireContract.openMultiplexPath,
-                input: MobileTerminalOpenMultiplexRequestWire(
-                    environmentId: status.runtimeId,
-                    clientInstanceId: clientInstanceID
-                ),
-                output: MobileTerminalOpenMultiplexWire.self
+            var request = Yiru_Runtime_V1_TerminalServiceOpenMultiplexRequest()
+            request.environmentID = status.runtimeId
+            request.clientInstanceID = clientInstanceID
+            let response = try await controlSession.protocolUnary(
+                procedure: YiruRuntimeV1TerminalServiceMethods.openMultiplex,
+                request: request,
+                response: Yiru_Runtime_V1_TerminalServiceOpenMultiplexResponse.self
+            )
+            // Why: the duplex stream retains terminal framing inside protobuf payloads.
+            let ticket = MobileTerminalOpenMultiplexWire(
+                bulkTicket: response.bulkTicket,
+                expiresAt: Int64(response.expiresAt),
+                maxFrameBytes: Int(response.maxFrameBytes)
             )
             guard await controlSession.generation() == controlGeneration else {
                 throw RuntimeTerminalMultiplexerError.controlGenerationChanged

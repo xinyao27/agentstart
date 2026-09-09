@@ -1,7 +1,8 @@
-import { isFreshNonDoneAgentStatus, type AgentType } from '@yiru/runtime-protocol/model/agent'
-import { isTuiAgent } from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
-import { detectAgentStatusFromTitle, agentTypeToIconAgent } from '~renderer/agent/status'
+import { isTuiAgent } from '@yiru/protocol/agent/identity'
+import { isFreshNonDoneAgentStatus, type AgentType } from '@yiru/protocol/agent/status-records'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { agentTypeToIconAgent } from '~renderer/agent/status'
+import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 import { resolvePaneAgentOwner } from '~renderer/pane-agent-owner'
 import { useAppStore } from '~renderer/store/state'
 

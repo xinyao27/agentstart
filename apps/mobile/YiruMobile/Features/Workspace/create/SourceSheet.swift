@@ -4,7 +4,6 @@ struct WorkspaceSourceSheet: View {
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isSearchFocused: Bool
     @State private var mode = WorkspaceSourceMode.smart
-    @State private var gitLabState = WorkspaceGitLabMRState.opened
     @Bindable var model: WorkspaceCreationModel
 
     var body: some View {
@@ -13,7 +12,6 @@ struct WorkspaceSourceSheet: View {
             VStack(spacing: Theme.Spacing.small) {
                 searchField
                 modeBar
-                if mode == .gitlab { gitLabStateBar }
                 if let prompt = model.crossRepoPrompt { crossRepoPrompt(prompt) }
                 ScrollView {
                     sourceRows
@@ -29,7 +27,6 @@ struct WorkspaceSourceSheet: View {
             // Why: seed the source drawer from the current repository each time it opens, so a
             // prior folder/name choice cannot leak into a later Git repository selection.
             mode = model.selectedRepo?.kind == .folder ? .text : .smart
-            gitLabState = .opened
             try? await Task.sleep(for: .milliseconds(120))
             isSearchFocused = true
         }
@@ -80,9 +77,6 @@ struct WorkspaceSourceSheet: View {
             if model.selectedRepo?.kind == .git {
                 modeButton(.smart, title: "Smart", glyph: .sparkle)
                 modeButton(.github, title: "GitHub", glyph: .githubLogo)
-                if model.isGitLabAvailable {
-                    modeButton(.gitlab, title: "GitLab", glyph: .gitlabLogo)
-                }
                 modeButton(.branch, title: "Branch", glyph: .gitMerge)
             }
             modeButton(.text, title: "Name", glyph: .textFormat)
@@ -118,18 +112,6 @@ struct WorkspaceSourceSheet: View {
             in: .capsule
         )
         .accessibilityAddTraits(mode == value ? .isSelected : [])
-    }
-
-    private var gitLabStateBar: some View {
-        Picker("Merge request state", selection: $gitLabState) {
-            Text("Open").tag(WorkspaceGitLabMRState.opened)
-            Text("Merged").tag(WorkspaceGitLabMRState.merged)
-            Text("Closed").tag(WorkspaceGitLabMRState.closed)
-            Text("All").tag(WorkspaceGitLabMRState.all)
-        }
-        .pickerStyle(.segmented)
-        .labelsHidden()
-        .frame(minHeight: Theme.Size.minimumHitTarget)
     }
 
     private func crossRepoPrompt(_ prompt: WorkspaceCrossRepoPrompt) -> some View {
@@ -174,7 +156,7 @@ struct WorkspaceSourceSheet: View {
                     createBranchRow
                     if !model.sourceRefs.isEmpty { rowDivider }
                 }
-                if mode == .smart || mode == .github || mode == .gitlab {
+                if mode == .smart || mode == .github {
                     hostedRows
                 }
                 if mode == .smart || mode == .branch {
@@ -233,10 +215,8 @@ struct WorkspaceSourceSheet: View {
         ForEach(Array(sources.enumerated()), id: \.element.id) { index, source in
             sourceRow(
                 title: source.title,
-                subtitle: source.provider == .github
-                    ? String(localized: "PR #") + String(source.number)
-                    : String(localized: "MR !") + String(source.number),
-                glyph: source.provider == .github ? .githubLogo : .gitlabLogo,
+                subtitle: String(localized: "PR #") + String(source.number),
+                glyph: .githubLogo,
                 status: source.state
             ) {
                 Task {
@@ -309,15 +289,9 @@ struct WorkspaceSourceSheet: View {
     private func search() async {
         switch mode {
         case .smart:
-            await model.searchSmartSources(query: model.name, gitLabState: gitLabState)
+            await model.searchSmartSources(query: model.name)
         case .github:
-            await model.searchHostedSources(provider: .github, query: model.name)
-        case .gitlab:
-            await model.searchHostedSources(
-                provider: .gitlab,
-                query: model.name,
-                gitLabState: gitLabState
-            )
+            await model.searchHostedSources(query: model.name)
         case .branch:
             await model.searchSources(query: model.name)
         case .text:
@@ -326,14 +300,13 @@ struct WorkspaceSourceSheet: View {
     }
 
     private var searchScope: String {
-        "\(mode.rawValue):\(gitLabState.rawValue):\(model.selectedRepoID):\(model.name)"
+        "\(mode.rawValue):\(model.selectedRepoID):\(model.name)"
     }
 
     private var visibleHostedSources: [WorkspaceHostedSource] {
         switch mode {
         case .smart: model.hostedSources
-        case .github: model.hostedSources.filter { $0.provider == .github }
-        case .gitlab: model.hostedSources.filter { $0.provider == .gitlab }
+        case .github: model.hostedSources
         case .branch, .text: []
         }
     }
@@ -359,7 +332,6 @@ struct WorkspaceSourceSheet: View {
         switch mode {
         case .smart: "Start typing to create a name or find a source."
         case .github: "Start typing to search GitHub pull requests."
-        case .gitlab: "Start typing to search GitLab merge requests."
         case .branch: "No matching branches."
         case .text: "No results found."
         }

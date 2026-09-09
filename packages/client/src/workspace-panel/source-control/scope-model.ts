@@ -1,4 +1,5 @@
-import type { GitBranchChangeEntry, GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 import { translate } from '~renderer/i18n/i18n'
 
 import { SECTION_LABELS } from './panel-constants'

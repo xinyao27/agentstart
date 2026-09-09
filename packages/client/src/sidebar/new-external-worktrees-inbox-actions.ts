@@ -1,5 +1,5 @@
-import { mergeExternalWorktreeInboxPaths } from '@yiru/runtime-protocol/workbench/external-worktree-inbox'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { mergeExternalWorktreeInboxPaths } from '@yiru/protocol/worktree/external/paths'
 import { translate } from '~renderer/i18n/i18n'
 
 export type NewExternalWorktreesInboxActionState = {

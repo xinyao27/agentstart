@@ -1,7 +1,7 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireNotificationsTarget } from '~renderer/runtime/notifications-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { useAppStore } from '~renderer/store/state'
@@ -80,7 +80,9 @@ export async function sendNotificationSettingsTestNotification(
   }
 
   const target = getActiveRuntimeTarget(useAppStore.getState().settings)
-  const result = await callRuntimeOrpc(target, (client) => client.notifications.report, {
+  const result = await (
+    await requireNotificationsTarget(target)
+  ).report({
     source: 'test',
     requireDisplayConfirmation: true
   })
@@ -89,6 +91,7 @@ export async function sendNotificationSettingsTestNotification(
       notificationSettings.customSoundId !== 'system'
         ? await shellClient.notifications.playSound({
             force: true,
+            soundId: notificationSettings.customSoundId,
             volume: volumeDraft
           })
         : null

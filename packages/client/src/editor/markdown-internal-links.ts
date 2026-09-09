@@ -1,12 +1,9 @@
 import {
-  isWindowsAbsolutePathLike,
-  relativePathInsideRoot
-} from '@yiru/runtime-protocol/model/platform'
-import {
   filesystemPathHrefToFileUri,
   filesystemPathToFileUri,
   fileUriToFilesystemPath
-} from '@yiru/runtime-protocol/model/platform'
+} from '@yiru/protocol/host/file-uri-path'
+import { isWindowsAbsolutePathLike, relativePathInsideRoot } from '@yiru/protocol/host/path'
 
 // Pure classifier for markdown link targets. Called by the link-activation
 // dispatcher (activateMarkdownLink slice action) from three call sites —

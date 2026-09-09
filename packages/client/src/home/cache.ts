@@ -1,10 +1,7 @@
-import type { ContributionPoint } from '@yiru/runtime-protocol/model/ui'
-import { isStatsUsageBoundedRange } from '@yiru/runtime-protocol/stats-usage-range'
-import type {
-  ProjectUsageValue,
-  UsageProvider
-} from '@yiru/runtime-protocol/workbench/stats/usage-breakdown'
-import type { StatsSummary } from '@yiru/runtime-protocol/workbench/types'
+import { isStatsUsageBoundedRange } from '@yiru/protocol/stats/range'
+import type { ProjectUsageValue, UsageProvider } from '@yiru/protocol/stats/usage-breakdown'
+import type { StatsSummary } from '@yiru/protocol/stats/values'
+import type { ContributionPoint } from '~renderer/contribution-heatmap/calendar'
 
 import type { ModelUsageValue, UsageValue } from './usage-value'
 

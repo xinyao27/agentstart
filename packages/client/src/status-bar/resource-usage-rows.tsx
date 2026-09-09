@@ -1,5 +1,6 @@
-import { ORPHAN_WORKTREE_ID } from '@yiru/runtime-protocol/workbench/constants'
-import type { BrowserWorkspace, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import { ORPHAN_WORKTREE_ID } from '@yiru/protocol/terminal/session-identity'
+import type { BrowserWorkspace } from '@yiru/protocol/workspace/browser-session'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

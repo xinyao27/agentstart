@@ -90,10 +90,8 @@ final class AccountModel {
             let becameConnected = connected && !isConnected
             isConnected = connected
             guard becameConnected else { continue }
-            // Why: re-fetch the account snapshot on every transition back to connected. A
-            // stream's first event is not a sufficient contract for recovery because an
-            // older Desktop may acknowledge the subscription before publishing its current
-            // rate-limit snapshot.
+            // Why: list and the stream's ready snapshot share one authoritative payload, but
+            // re-fetching on each reconnect also restores the page before resubscription retries.
             await refresh(replacingFailure: snapshot == nil)
         }
     }
@@ -176,7 +174,7 @@ final class AccountModel {
     }
 
     private func failureMessage(for error: Error) -> String {
-        if let message = (error as? RuntimeOrpcError)?.serverMessage, !message.isEmpty {
+        if let message = (error as? RuntimeServiceError)?.serverMessage, !message.isEmpty {
             return message
         }
         return String(localized: "Yiru could not load accounts from this host.")

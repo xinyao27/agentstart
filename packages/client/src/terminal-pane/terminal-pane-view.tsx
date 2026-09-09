@@ -1,5 +1,6 @@
-import type { KeybindingOverrides } from '@yiru/runtime-protocol/workbench/keybindings'
-import type { GlobalSettings, TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { KeybindingOverrides } from '@yiru/protocol/keybindings'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { AgentSessionContinuationDialog } from '~renderer/agent-session-continuation/dialog'

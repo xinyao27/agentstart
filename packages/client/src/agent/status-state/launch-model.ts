@@ -2,8 +2,8 @@ import {
   agentProviderSessionsEqual,
   type AgentProviderSessionMetadata,
   type SleepingAgentLaunchConfig
-} from '@yiru/runtime-protocol/model/agent'
-import type { AgentStatusEntry, AgentType } from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/session-resume'
+import type { AgentStatusEntry, AgentType } from '@yiru/protocol/agent/status-records'
 
 import type { AppState } from '../../store/types'
 import { getLeafIdFromPaneKey, getTabIdFromPaneKey } from './retention-model'

@@ -8,7 +8,7 @@ import {
   type KeybindingMatchOptions,
   type KeybindingOverrides,
   type PhysicalModifierToken
-} from '@yiru/runtime-protocol/workbench/keybindings'
+} from '@yiru/protocol/keybindings'
 
 export type WindowShortcutInput = {
   type?: string

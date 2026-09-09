@@ -1,7 +1,5 @@
-import type {
-  CrashReportCopySubmissionFailure,
-  CrashReportRecord
-} from '@yiru/runtime-protocol/workbench/crash-reporting'
+import type { CrashReportCopySubmissionFailure } from '@yiru/protocol/crash-reports/copy-values'
+import type { CrashReportRecord } from '@yiru/protocol/crash-reports/values'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { useEventCallback } from '~renderer/react/use-event-callback'

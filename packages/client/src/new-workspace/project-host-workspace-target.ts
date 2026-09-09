@@ -2,9 +2,10 @@ import {
   ALL_EXECUTION_HOSTS_SCOPE,
   type ExecutionHostId,
   type ExecutionHostScope
-} from '@yiru/runtime-protocol/model/workspace'
-import { projectHostSetupProjectionFromRepos } from '@yiru/runtime-protocol/workbench/project-host-setup-projection'
-import type { Project, ProjectHostSetup, Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { projectHostSetupProjectionFromRepos } from '@yiru/protocol/project/setup-projection'
 
 import { resolveComposerRepoId } from './composer-repo'
 
@@ -65,7 +66,7 @@ function getProjectSetupModel({
   if (eligibleRepos.length === 0) {
     return null
   }
-  const projection = projectHostSetupProjectionFromRepos(eligibleRepos)
+  const projection = projectHostSetupProjectionFromRepos(eligibleRepos, Date.now())
   return {
     projects: projection.projects,
     setups: projection.setups
@@ -195,7 +196,7 @@ export function resolveWorkspaceCreationTarget(
 
   const legacySetup =
     setups.find((setup) => setup.repoId === legacyRepo.id && isReadySetup(setup)) ??
-    projectHostSetupProjectionFromRepos([legacyRepo]).setups[0]
+    projectHostSetupProjectionFromRepos([legacyRepo], Date.now()).setups[0]
   const legacyTarget = legacySetup ? createTarget(legacySetup, repoById) : null
   if (!legacyTarget) {
     return { status: 'unavailable', reason: 'setup-not-found' }

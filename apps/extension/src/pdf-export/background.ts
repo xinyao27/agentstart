@@ -1,4 +1,4 @@
-import type { ShellHtmlToPdfResult } from '@yiru/runtime-protocol/contract'
+import type { PdfExportResult } from '@yiru/client/pdf-export'
 
 import { acquireCdp, releaseCdp, sendCdp } from '../background/cdp/session'
 
@@ -42,7 +42,7 @@ export function handlePdfExportMessage(
   return true
 }
 
-async function exportPdf(token: string): Promise<ShellHtmlToPdfResult> {
+async function exportPdf(token: string): Promise<PdfExportResult> {
   const ready = waitForExportPage(token)
   const tab = await chrome.tabs.create({
     active: false,
@@ -122,7 +122,7 @@ function readPdfData(response: unknown): string {
   return data
 }
 
-async function downloadPdf(data: string, filename: string): Promise<ShellHtmlToPdfResult> {
+async function downloadPdf(data: string, filename: string): Promise<PdfExportResult> {
   let downloadId: number
   try {
     downloadId = await chrome.downloads.download({
@@ -138,7 +138,7 @@ async function downloadPdf(data: string, filename: string): Promise<ShellHtmlToP
   return waitForDownload(downloadId)
 }
 
-function waitForDownload(downloadId: number): Promise<ShellHtmlToPdfResult> {
+function waitForDownload(downloadId: number): Promise<PdfExportResult> {
   return new Promise((resolve) => {
     const timer = setTimeout(
       () => settle({ error: 'PDF download timed out', success: false }),
@@ -163,7 +163,7 @@ function waitForDownload(downloadId: number): Promise<ShellHtmlToPdfResult> {
         })
       }
     }
-    const settle = (result: ShellHtmlToPdfResult): void => {
+    const settle = (result: PdfExportResult): void => {
       clearTimeout(timer)
       chrome.downloads.onChanged.removeListener(onChanged)
       resolve(result)

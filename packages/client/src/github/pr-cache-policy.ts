@@ -1,4 +1,4 @@
-import type { PRInfo } from '@yiru/runtime-protocol/workbench/types'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
 import type { AppState } from '~renderer/store/types'
 
 import { withBoundedCacheEntry } from './cache-policy'

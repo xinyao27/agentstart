@@ -2,44 +2,55 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { translate } from '~renderer/i18n/i18n'
 import { Button } from '~renderer/ui/button'
 
-import { extensionOrpc } from '../runtime/orpc'
+import { openLocalUpdaterTarget } from '../../runtime/updater-target'
+
+const UPDATE_QUERY_KEY = ['extension-host', 'daemon-update'] as const
+
+async function checkDaemonUpdate() {
+  const client = await openLocalUpdaterTarget()
+  return client.check()
+}
 
 export function DaemonUpdateCard(): React.JSX.Element {
   const queryClient = useQueryClient()
-  const statusQuery = extensionOrpc.update.check.queryOptions({
-    input: {},
+  const statusQuery = useQuery({
+    queryKey: UPDATE_QUERY_KEY,
+    queryFn: checkDaemonUpdate,
     staleTime: 6 * 60 * 60_000
   })
-  const status = useQuery(statusQuery)
   const check = useMutation({
-    mutationFn: async () => extensionOrpc.update.check.call({ force: true }),
-    onSuccess: (result) => queryClient.setQueryData(statusQuery.queryKey, result)
+    mutationFn: checkDaemonUpdate,
+    onSuccess: (result) => queryClient.setQueryData(UPDATE_QUERY_KEY, result)
   })
-  const value = check.data ?? status.data
+  const snapshot = check.data ?? statusQuery.data
+  const available = snapshot?.status.state === 'available' ? snapshot.status : null
   return (
     <section className="border-border mt-5 border p-4">
       <h2 className="font-medium">
         {translate('extension.automations.daemonUpdate', 'Daemon update')}
       </h2>
       <p className="text-muted-foreground mt-1 text-sm">
-        {value
-          ? translate(
-              'extension.automations.daemonVersion',
-              'Installed {{current}} · latest {{latest}}',
-              { current: value.currentVersion, latest: value.latestVersion ?? 'unknown' }
-            )
+        {snapshot
+          ? available
+            ? translate(
+                'extension.automations.updateAvailableVersion',
+                'Update {{version}} is available.',
+                {
+                  version: available.version
+                }
+              )
+            : translate(
+                'extension.automations.daemonVersion',
+                'Installed {{current}} · latest {{latest}}',
+                {
+                  current: snapshot.appVersion,
+                  latest: 'unknown'
+                }
+              )
           : translate('extension.automations.updateNotChecked', 'Update status has not loaded.')}
       </p>
-      {value?.updateAvailable ? (
-        <div className="mt-3">
-          <p className="text-sm">
-            {translate(
-              'extension.automations.updateAvailable',
-              'Update available. Run this trusted installer command in a terminal:'
-            )}
-          </p>
-          <pre className="bg-muted mt-2 overflow-x-auto p-2 text-xs">{value.installCommand}</pre>
-        </div>
+      {available?.releaseUrl ? (
+        <pre className="bg-muted mt-2 overflow-x-auto p-2 text-xs">{available.releaseUrl}</pre>
       ) : null}
       <Button
         type="button"
@@ -51,7 +62,7 @@ export function DaemonUpdateCard(): React.JSX.Element {
       >
         {translate('extension.automations.checkUpdate', 'Check now')}
       </Button>
-      {check.isError || status.isError ? (
+      {check.isError || statusQuery.isError ? (
         <p className="text-destructive mt-2 text-sm">
           {translate(
             'extension.automations.updateCheckFailed',

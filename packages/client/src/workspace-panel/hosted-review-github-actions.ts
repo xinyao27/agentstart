@@ -1,10 +1,9 @@
-import type { GitHubMutationResult } from '@yiru/runtime-protocol/contract'
-import {
-  getRepoExecutionHostId,
-  parseExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { GitHubPRMergeMethod, PRInfo, Repo } from '@yiru/runtime-protocol/workbench/types'
-import { callRuntimeOrpc, type RuntimeClientTarget } from '~renderer/runtime/orpc-client'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
+import type { GitHubPRMergeMethod, PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 
 type GitHubPRRepo = PRInfo['prRepo']
 
@@ -17,23 +16,30 @@ function getGitHubActionTarget(repo: Repo): RuntimeClientTarget {
     : { kind: 'local' }
 }
 
+async function requireGitHubClient() {
+  const client = await openGitHubTarget()
+  if (!client) {
+    throw new Error('GitHub protocol capability is unavailable')
+  }
+  return client
+}
+
 export async function mergeGitHubHostedReview(args: {
   repo: Repo
   prNumber: number
   method: GitHubPRMergeMethod
   prRepo?: GitHubPRRepo | null
-}): Promise<GitHubMutationResult> {
+}) {
   const target = getGitHubActionTarget(args.repo)
-  return callRuntimeOrpc(
-    target,
-    (client) => client.github.mergePR,
+  const client = await requireGitHubClient()
+  return client.mergePr(
     {
       repo: args.repo.id,
       prNumber: args.prNumber,
       method: args.method,
-      prRepo: args.prRepo ?? null
+      prRepo: args.prRepo ?? undefined
     },
-    { timeoutMs: 30_000 }
+    { timeoutMs: 30_000, ...runtimeCallDestination(target) }
   )
 }
 
@@ -43,19 +49,18 @@ export async function setGitHubHostedReviewAutoMerge(args: {
   enabled: boolean
   method?: GitHubPRMergeMethod
   prRepo?: GitHubPRRepo | null
-}): Promise<GitHubMutationResult> {
+}) {
   const target = getGitHubActionTarget(args.repo)
-  return callRuntimeOrpc(
-    target,
-    (client) => client.github.setPRAutoMerge,
+  const client = await requireGitHubClient()
+  return client.setPrAutoMerge(
     {
       repo: args.repo.id,
       prNumber: args.prNumber,
       enabled: args.enabled,
       method: args.method,
-      prRepo: args.prRepo ?? null
+      prRepo: args.prRepo ?? undefined
     },
-    { timeoutMs: 30_000 }
+    { timeoutMs: 30_000, ...runtimeCallDestination(target) }
   )
 }
 
@@ -63,16 +68,11 @@ export async function updateGitHubHostedReviewState(args: {
   repo: Repo
   prNumber: number
   nextState: 'open' | 'closed'
-}): Promise<GitHubMutationResult> {
+}) {
   const target = getGitHubActionTarget(args.repo)
-  return callRuntimeOrpc(
-    target,
-    (client) => client.github.updatePRState,
-    {
-      repo: args.repo.id,
-      prNumber: args.prNumber,
-      updates: { state: args.nextState }
-    },
-    { timeoutMs: 30_000 }
-  )
+  const client = await requireGitHubClient()
+  return client.updatePrState(args.repo.id, args.prNumber, args.nextState, {
+    timeoutMs: 30_000,
+    ...runtimeCallDestination(target)
+  })
 }

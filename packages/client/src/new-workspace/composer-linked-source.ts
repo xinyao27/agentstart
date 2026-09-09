@@ -1,19 +1,16 @@
-import { shouldApplyWorkspaceSourceAutoName } from '@yiru/runtime-protocol/model/workspace'
-import type {
-  GitHubWorkItem,
-  GitLabWorkItem,
-  GitPushTarget
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
 import type { Dispatch, RefObject, SetStateAction } from 'react'
 import type { WorkspaceCreateErrorDisplay } from '~renderer/new-workspace-composer-card/workspace-create-error-format'
+import {
+  getLinkedWorkItemSuggestedName,
+  getLinkedWorkItemWorkspaceName
+} from '~renderer/new-workspace/naming/name'
+import { shouldApplyWorkspaceSourceAutoName } from '~renderer/new-workspace/naming/source'
 
 import { resolveComposerManualBranchNameChange } from './composer-branch-selection'
 import type { SmartGitHubPrStartPointSelection } from './resolve-smart-github-submit'
-import {
-  getLinkedWorkItemSuggestedName,
-  getLinkedWorkItemWorkspaceName,
-  type LinkedWorkItemSummary
-} from './workspace-creation'
+import type { LinkedWorkItemSummary } from './workspace-creation'
 
 type ComposerLinkedSourceOptions = {
   branchAutoNameRef: RefObject<string>
@@ -29,7 +26,6 @@ type ComposerLinkedSourceOptions = {
   setCreateError: Dispatch<SetStateAction<WorkspaceCreateErrorDisplay | null>>
   setForkPushWarning: Dispatch<SetStateAction<string | null>>
   setLinkPopoverOpen: (open: boolean) => void
-  setLinkedGitLabMR: Dispatch<SetStateAction<number | null>>
   setLinkedPR: Dispatch<SetStateAction<number | null>>
   setLinkedWorkItem: Dispatch<SetStateAction<LinkedWorkItemSummary | null>>
   setName: Dispatch<SetStateAction<string>>
@@ -47,7 +43,6 @@ export function createComposerLinkedSourceActions(options: ComposerLinkedSourceO
     applyOptions: { preserveBranchNameOverride?: boolean } = {}
   ): void => {
     options.setLinkedPR(item.number)
-    options.setLinkedGitLabMR(null)
     options.setLinkedWorkItem({
       type: 'pr',
       provider: 'github',
@@ -73,44 +68,6 @@ export function createComposerLinkedSourceActions(options: ComposerLinkedSourceO
       options.setBranchNameOverridePreservesNameEdits(false)
       options.branchAutoNameRef.current = ''
     }
-  }
-
-  const applyLinkedGitLabWorkItem = (item: GitLabWorkItem): void => {
-    options.startPointSelectionRef.current = null
-    options.setLinkedGitLabMR(item.number)
-    options.setLinkedPR(null)
-    options.setLinkedWorkItem({
-      type: item.type,
-      number: item.number,
-      title: item.title,
-      url: item.url
-    })
-    // Why: the GitHub naming heuristic consumes the same branch/title shape.
-    const suggestedName = getLinkedWorkItemSuggestedName({
-      type: 'pr',
-      number: item.number,
-      title: item.title,
-      branchName: item.branchName
-    } as unknown as GitHubWorkItem)
-    const titleName = getLinkedWorkItemWorkspaceName({
-      type: item.type,
-      number: item.number,
-      title: item.title
-    })
-    const nextName = titleName?.seedName ?? suggestedName
-    if (
-      nextName &&
-      shouldApplyWorkspaceSourceAutoName({
-        currentName: options.name,
-        lastAutoName: options.lastAutoNameRef.current
-      })
-    ) {
-      options.setName(nextName)
-      options.lastAutoNameRef.current = nextName
-    }
-    options.setBranchNameOverride(undefined)
-    options.setBranchNameOverridePreservesNameEdits(false)
-    options.branchAutoNameRef.current = ''
   }
 
   const handleSelectLinkedItem = (item: GitHubWorkItem): void => {
@@ -161,7 +118,6 @@ export function createComposerLinkedSourceActions(options: ComposerLinkedSourceO
   }
 
   return {
-    applyLinkedGitLabWorkItem,
     applyLinkedWorkItem,
     handleBranchNameOverrideChange,
     handleNameValueChange,

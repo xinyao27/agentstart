@@ -1,4 +1,4 @@
-import { FOLDER_WORKSPACE_PATH_STATUS_TTL_MS } from '@yiru/runtime-protocol/workbench/folder-workspace-path-status'
+import { FOLDER_WORKSPACE_PATH_STATUS_TTL_MS } from '@yiru/protocol/workspace/folder-path'
 import { useEffect, useState } from 'react'
 
 type FolderWorkspacePathStatusCacheClockEntry = {

@@ -1,5 +1,5 @@
-import { resolveSourceControlReviewRemoteStep } from '@yiru/runtime-protocol/model/review'
 import { translate } from '~renderer/i18n/i18n'
+import { resolveSourceControlReviewRemoteStep } from '~renderer/source-control/workflow/review'
 
 import type { CreatePrIntentRunToken } from '../create-pr-intent-flow'
 import type { SourceControlCreateReviewPrerequisitesController } from './create-review-prerequisites'

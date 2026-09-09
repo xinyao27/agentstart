@@ -1,15 +1,15 @@
+import type {
+  WorkspaceSpaceItemValue as WorkspaceSpaceItem,
+  WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree
+} from '@yiru/protocol'
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry,
   type MigrationUnsupportedPtyEntry
-} from '@yiru/runtime-protocol/model/agent'
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
-import type {
-  WorkspaceSpaceItem,
-  WorkspaceSpaceWorktree
-} from '@yiru/runtime-protocol/workbench/workspace/space-types'
+} from '@yiru/protocol/agent/status-records'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
 import {
   classifyTitleActivity,
@@ -24,7 +24,7 @@ export function isWorkspaceSpaceFilterQueryTooLarge(
   query: string,
   maxBytes = WORKSPACE_SPACE_FILTER_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 export type WorkspaceSpaceDeleteReadiness = {

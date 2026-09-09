@@ -1,12 +1,11 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient: TerminalQuickCommandRepository {
     func supportsQuickCommands(for hostID: String) async throws -> Bool {
-        let status: MobileRuntimeStatusWire = try await callRuntime(
-            hostID: hostID,
-            path: MobileTerminalWireContract.statusPath,
-            input: RuntimeNullWire(),
-            output: MobileRuntimeStatusWire.self
+        let status = try await protocolStatus(
+            hostID: hostID
         )
         return status.capabilities?.contains(MobileQuickCommandsWireContract.capability) == true
     }
@@ -15,17 +14,17 @@ extension RuntimeClient: TerminalQuickCommandRepository {
         guard try await supportsQuickCommands(for: hostID) else {
             throw TerminalQuickCommandRepositoryError.unsupported
         }
-        let result: MobileQuickCommandsResultWire = try await callRuntime(
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileQuickCommandsWireContract.getPath,
-            input: RuntimeNullWire(),
-            output: MobileQuickCommandsResultWire.self
+            procedure: YiruRuntimeV1SettingsServiceMethods.getTerminalQuickCommands,
+            request: Yiru_Runtime_V1_SettingsServiceGetTerminalQuickCommandsRequest(),
+            response: Yiru_Runtime_V1_SettingsServiceTerminalQuickCommandsResponse.self
         )
-        guard result.terminalQuickCommands.count <= 40 else {
+        guard response.terminalQuickCommands.count <= 40 else {
             throw TerminalQuickCommandRepositoryError.invalidResponse
         }
-        let commands = result.terminalQuickCommands.compactMap(TerminalQuickCommand.init(wire:))
-        guard commands.count == result.terminalQuickCommands.count,
+        let commands = response.terminalQuickCommands.compactMap(TerminalQuickCommand.init(proto:))
+        guard commands.count == response.terminalQuickCommands.count,
             Set(commands.map(\.id)).count == commands.count
         else { throw TerminalQuickCommandRepositoryError.invalidResponse }
         return commands
@@ -35,25 +34,28 @@ extension RuntimeClient: TerminalQuickCommandRepository {
         for hostID: String,
         mutation: TerminalQuickCommandMutation
     ) async throws -> [TerminalQuickCommand] {
-        let wire: MobileQuickCommandMutationWire
+        var mutationProto = Yiru_Runtime_V1_SettingsQuickCommandMutation()
         switch mutation {
         case .upsert(let command):
-            wire = MobileQuickCommandMutationWire(
-                type: "upsert", command: command.wire, id: nil)
+            mutationProto.upsert = command.upsert
         case .delete(let id):
-            wire = MobileQuickCommandMutationWire(type: "delete", command: nil, id: id)
+            mutationProto.delete = Yiru_Runtime_V1_SettingsQuickCommandDelete.with {
+                $0.id = id
+            }
         }
-        let result: MobileQuickCommandsResultWire = try await callRuntime(
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileQuickCommandsWireContract.updatePath,
-            input: MobileQuickCommandUpdateRequestWire(mutation: wire),
-            output: MobileQuickCommandsResultWire.self
+            procedure: YiruRuntimeV1SettingsServiceMethods.updateTerminalQuickCommands,
+            request: Yiru_Runtime_V1_SettingsServiceUpdateTerminalQuickCommandsRequest.with {
+                $0.mutation = mutationProto
+            },
+            response: Yiru_Runtime_V1_SettingsServiceTerminalQuickCommandsResponse.self
         )
-        guard result.terminalQuickCommands.count <= 40 else {
+        guard response.terminalQuickCommands.count <= 40 else {
             throw TerminalQuickCommandRepositoryError.invalidResponse
         }
-        let commands = result.terminalQuickCommands.compactMap(TerminalQuickCommand.init(wire:))
-        guard commands.count == result.terminalQuickCommands.count else {
+        let commands = response.terminalQuickCommands.compactMap(TerminalQuickCommand.init(proto:))
+        guard commands.count == response.terminalQuickCommands.count else {
             throw TerminalQuickCommandRepositoryError.invalidResponse
         }
         return commands
@@ -82,10 +84,9 @@ extension RuntimeClient: TerminalQuickCommandRepository {
             delivery = nil
             agentPrompt = prompt
         }
-        let created: MobileSessionCreateTerminalResultWire = try await callRuntime(
+        let created: MobileSessionCreateTerminalResultWire = try await sessionTabsCreateTerminal(
             hostID: hostID,
-            path: MobileSessionTabsWireContract.createTerminalPath,
-            input: MobileSessionCreateTerminalRequestWire(
+            request: MobileSessionCreateTerminalRequestWire(
                 worktree: "id:\(worktreeID)",
                 afterTabId: afterTabID,
                 activate: true,
@@ -98,22 +99,17 @@ extension RuntimeClient: TerminalQuickCommandRepository {
                 launchAgent: nil,
                 startupCommandDelivery: delivery,
                 agentPrompt: agentPrompt
-            ),
-            output: MobileSessionCreateTerminalResultWire.self
+            )
         )
         guard let terminal = created.tab.terminal else {
             throw TerminalQuickCommandRepositoryError.rejectedLaunch
         }
         if case .terminal(let value, false) = command.action {
-            let sent: MobileQuickCommandTerminalSendResultWire = try await callRuntime(
+            let sent = try await protocolTerminalSend(
                 hostID: hostID,
-                path: MobileQuickCommandsWireContract.terminalSendPath,
-                input: MobileQuickCommandTerminalSendRequestWire(
-                    terminal: terminal,
-                    text: value,
-                    enter: false
-                ),
-                output: MobileQuickCommandTerminalSendResultWire.self
+                terminal: terminal,
+                text: value,
+                enter: false
             )
             guard sent.send.accepted, sent.send.handle == terminal else {
                 throw TerminalQuickCommandRepositoryError.rejectedLaunch

@@ -8,9 +8,9 @@ import {
   refreshProjectCatalogWorktrees,
   type ProjectWorktreeCatalog
 } from '../project-catalog/refresh'
-import type { RuntimeClientTarget } from '../runtime/orpc-client'
 import { targetKey } from '../runtime/query-target'
 import { getActiveRuntimeTarget } from '../runtime/rpc-client'
+import type { RuntimeClientTarget } from '../runtime/runtime-target'
 import { settingsForWorktreeOwner } from './state/runtime-owner'
 import { getRepoIdFromWorktreeId } from './state/types'
 

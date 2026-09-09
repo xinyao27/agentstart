@@ -1,5 +1,6 @@
-import type { ContextualTourStepAction } from '@yiru/runtime-protocol/workbench/contextual-tours'
 import type { RequestActiveTerminalPaneSplitDetail } from '~renderer/constants/terminal'
+
+import type { ContextualTourStepAction } from './catalog'
 
 export function performContextualTourStepAction(args: {
   action: ContextualTourStepAction

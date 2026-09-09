@@ -31,11 +31,7 @@ export function useSourceControlHostedReviewState(scope: SourceControlStatusRefr
     hostedReviewEntry,
     isBranchVisible,
     isFolder,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
     linkedGitHubPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     remoteStatus
   } = scope
   const manualReviewUrl = (() =>
@@ -44,10 +40,6 @@ export function useSourceControlHostedReviewState(scope: SourceControlStatusRefr
       hostedReviewCreationProvider: hostedReviewCreation?.provider ?? null,
       linkedGitHubPR,
       fallbackGitHubPRNumber,
-      linkedGitLabMR,
-      linkedBitbucketPR,
-      linkedAzureDevOpsPR,
-      linkedGiteaPR,
       baseRef: compareBaseRef,
       branchName,
       repoRemoteName: activeRepo?.gitRemoteIdentity?.remoteName ?? null,
@@ -83,20 +75,13 @@ export function useSourceControlHostedReviewState(scope: SourceControlStatusRefr
         : null,
       activeRepoId: activeRepo?.id ?? null,
       linkedGitHubPR,
-      fallbackGitHubPR: fallbackGitHubPRNumber,
-      linkedGitLabMR,
-      linkedBitbucketPR,
-      linkedAzureDevOpsPR,
-      linkedGiteaPR
+      fallbackGitHubPR: fallbackGitHubPRNumber
     }))()
   const hasConcreteProviderHint =
     hostedReview !== null ||
     hostedReviewCreation !== null ||
     linkedGitHubPR !== null ||
-    fallbackGitHubPRNumber !== null ||
-    linkedGitLabMR !== null ||
-    linkedAzureDevOpsPR !== null ||
-    linkedGiteaPR !== null
+    fallbackGitHubPRNumber !== null
   if (hasConcreteProviderHint) {
     const nextProviderHint = {
       repoId: activeRepo?.id ?? null,
@@ -130,19 +115,14 @@ export function useSourceControlHostedReviewState(scope: SourceControlStatusRefr
   })()
   const hasHostedReviewLink = hasPositiveHostedReviewNumberLink({
     linkedGitHubPR,
-    fallbackGitHubPR: fallbackGitHubPRNumber,
-    linkedGitLabMR,
-    linkedBitbucketPR,
-    linkedAzureDevOpsPR,
-    linkedGiteaPR
+    fallbackGitHubPR: fallbackGitHubPRNumber
   })
   // Why: Repo.connectionId is dead — nothing sets it since remote hosts were
   // removed (#63) — the SSH exclusion this used to gate on never fires.
   const isHostedReviewStateLoading = hasHostedReviewLink && hostedReviewEntry === undefined
   const hasResolvableReviewPushTargetLink = hasResolvableHostedReviewPushTargetLink({
     linkedGitHubPR,
-    fallbackGitHubPR: fallbackGitHubPRNumber,
-    linkedGitLabMR
+    fallbackGitHubPR: fallbackGitHubPRNumber
   })
   useEffect(() => {
     // Why: resolving review heads can hit provider/SSH APIs, so keep it tied

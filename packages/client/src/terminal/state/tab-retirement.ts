@@ -1,5 +1,5 @@
-import type { SleepingAgentSessionRecord } from '@yiru/runtime-protocol/model/agent'
-import { isRuntimePtyId, parseRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
+import type { SleepingAgentSessionRecord } from '@yiru/protocol/agent/session-resume'
+import { isRuntimePtyId, parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
 import {
   getRuntimeEnvironmentIdForWorktree,
   type WorktreeRuntimeOwnerState

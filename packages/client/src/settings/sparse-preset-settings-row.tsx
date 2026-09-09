@@ -1,4 +1,4 @@
-import type { SparsePreset } from '@yiru/runtime-protocol/workbench/types'
+import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
 import { translate } from '~renderer/i18n/i18n'
 import { Bookmark, Pencil, Trash as Trash2 } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'

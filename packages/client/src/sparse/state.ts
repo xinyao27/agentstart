@@ -1,7 +1,7 @@
-import type { SparsePreset } from '@yiru/runtime-protocol/workbench/types'
+import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
 import type { StateCreator } from 'zustand'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
+import { requireRepoProtocolClient } from '~renderer/runtime/repo-catalog-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 import type { AppState } from '../store/types'
@@ -101,11 +101,9 @@ export const createSparsePresetsSlice: StateCreator<AppState, [], [], SparsePres
       sparsePresetsErrorByRepo: { ...s.sparsePresetsErrorByRepo, [repoId]: undefined }
     }))
     try {
-      const { presets } = await callRuntimeOrpc(
-        getActiveRuntimeTarget(get().settings),
-        (client) => client.repo.sparsePresets,
-        { repo: repoId }
-      )
+      const { presets } = await (
+        await requireRepoProtocolClient(getActiveRuntimeTarget(get().settings))
+      ).sparsePresets({ repo: repoId })
       set((s) => ({
         sparsePresetsByRepo: { ...s.sparsePresetsByRepo, [repoId]: presets },
         sparsePresetsLoadingByRepo: { ...s.sparsePresetsLoadingByRepo, [repoId]: false },
@@ -138,16 +136,14 @@ export const createSparsePresetsSlice: StateCreator<AppState, [], [], SparsePres
           return null
         }
       }
-      const { preset: saved } = await callRuntimeOrpc(
-        getActiveRuntimeTarget(get().settings),
-        (client) => client.repo.saveSparsePreset,
-        {
-          repo: args.repoId,
-          ...(args.id ? { id: args.id } : {}),
-          name: args.name,
-          directories: args.directories
-        }
-      )
+      const { preset: saved } = await (
+        await requireRepoProtocolClient(getActiveRuntimeTarget(get().settings))
+      ).saveSparsePreset({
+        repo: args.repoId,
+        ...(args.id ? { id: args.id } : {}),
+        name: args.name,
+        directories: args.directories
+      })
       set((s) => {
         const existing = s.sparsePresetsByRepo[args.repoId]
         if (existing === undefined) {
@@ -192,11 +188,9 @@ export const createSparsePresetsSlice: StateCreator<AppState, [], [], SparsePres
       }
     }))
     try {
-      await callRuntimeOrpc(
-        getActiveRuntimeTarget(get().settings),
-        (client) => client.repo.removeSparsePreset,
-        { repo: repoId, presetId }
-      )
+      await (
+        await requireRepoProtocolClient(getActiveRuntimeTarget(get().settings))
+      ).removeSparsePreset({ repo: repoId, presetId })
       publishRendererCommandResult({
         type: 'sparse-preset',
         operation: 'remove',

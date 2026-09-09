@@ -1,10 +1,8 @@
-import { folderWorkspaceToWorktree } from '@yiru/runtime-protocol/workbench/folder-workspace-worktree'
-import type {
-  FolderWorkspace,
-  ProjectGroup,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import { folderWorkspaceToWorktree } from '@yiru/protocol/workspace/folder'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 import { getProjectGroupHeaderKey } from './groups'
 

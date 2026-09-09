@@ -1,19 +1,15 @@
 import {
-  getTuiAgentDefaultArgs,
-  getTuiAgentDefaultEnv,
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/runtime-protocol/workbench/tui-agent/launch-defaults'
+} from '@yiru/protocol/agent/launch-defaults'
 import {
   applyAgentPermissionMode,
   resolveAgentPermissionModeSummary,
   type AgentPermissionMode
-} from '@yiru/runtime-protocol/workbench/tui-agent/permissions'
-import {
-  isTuiAgentEnabled,
-  normalizeDisabledTuiAgents
-} from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/launch/permissions'
+import { getTuiAgentDefaultArgs, getTuiAgentDefaultEnv } from '@yiru/protocol/agent/launch/settings'
+import { isTuiAgentEnabled, normalizeDisabledTuiAgents } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { getAgentCatalog, AgentIcon } from '~renderer/agent/catalog'
 import { useDetectedAgents } from '~renderer/agent/use-detected'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,5 +1,5 @@
-import { mode2031SequenceFor } from '@yiru/runtime-protocol/workbench/terminal/color-scheme-protocol'
-import type { TerminalColorSchemeMode } from '@yiru/runtime-protocol/workbench/terminal/color-scheme-protocol'
+import { mode2031SequenceFor } from '~renderer/terminal-pane/emulator/color-scheme'
+import type { TerminalColorSchemeMode } from '~renderer/terminal-pane/emulator/color-scheme'
 
 import type { PtyTransport } from './pty/transport-types'
 

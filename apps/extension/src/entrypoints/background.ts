@@ -7,8 +7,10 @@ import {
   registerAgentPresenceListeners
 } from '../background/agent-presence'
 import { registerBrowserEnvironmentListeners } from '../background/browser-use/environment'
+import { registerBrowserGrabListeners } from '../background/browser-use/grab'
 import { handleBrowserUseMessage } from '../background/browser-use/messages'
 import { registerBrowserObservabilityListeners } from '../background/browser-use/observability'
+import { registerBrowserPageControlListeners } from '../background/browser-use/page-control'
 import { registerBrowserUseTargetListeners } from '../background/browser-use/target'
 import { handleConsoleSensorMessage } from '../background/cdp/console-messages'
 import { registerConsoleSensorListeners } from '../background/cdp/console-sensor'
@@ -59,6 +61,8 @@ export default defineBackground({
     registerLauncherListeners()
     registerAgentPresenceListeners()
     registerBrowserEnvironmentListeners()
+    registerBrowserGrabListeners()
+    registerBrowserPageControlListeners()
     registerBrowserObservabilityListeners()
     registerBrowserUseTargetListeners()
     registerPreviewClaimListeners()

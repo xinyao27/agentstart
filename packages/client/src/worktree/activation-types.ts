@@ -1,16 +1,16 @@
+import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
+import type { SessionOptionValue } from '@yiru/protocol/agent/session-options/types'
 import type {
   AgentProviderSessionMetadata,
   SleepingAgentLaunchConfig
-} from '@yiru/runtime-protocol/model/agent'
-import type { SessionOptionValue } from '@yiru/runtime-protocol/workbench/agent/session-options'
-import type { StartupCommandDelivery } from '@yiru/runtime-protocol/workbench/codex-startup-delivery'
+} from '@yiru/protocol/agent/session-resume'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { SetupSplitDirection } from '@yiru/protocol/settings/workspace-preferences'
 import type {
-  GlobalSettings,
-  SetupSplitDirection,
-  TuiAgent,
   WorktreeDefaultTabsLaunch,
   WorktreeSetupLaunch
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/worktree/create-result'
 
 import type { AgentStartedTelemetry } from '../agent/started-telemetry'
 import type { PendingSidebarWorktreeReveal } from '../application-shell/state/slice'

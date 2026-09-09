@@ -1,4 +1,4 @@
-import type { Tab } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab } from '@yiru/protocol/workspace/tabs'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'
 

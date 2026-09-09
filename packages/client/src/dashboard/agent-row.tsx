@@ -1,9 +1,10 @@
-import { agentPhaseFromStatus } from '@yiru/runtime-protocol/model/agent'
+import { agentPhaseFromStatus } from '@yiru/protocol/agent/phase'
 import React, { useState } from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { getAgentRowPrimaryText } from '~renderer/agent/row-primary-text'
-import { agentTypeToIconAgent, formatAgentTypeLabel } from '~renderer/agent/status'
+import { agentTypeToIconAgent } from '~renderer/agent/status'
 import { AgentStateDot, agentStateLabel, type AgentDotState } from '~renderer/agent/status-dot'
+import { formatAgentTypeLabel } from '~renderer/agent/title/type-label'
 import { cn } from '~renderer/ui/class-names'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 

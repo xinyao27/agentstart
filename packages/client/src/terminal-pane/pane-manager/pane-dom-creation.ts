@@ -5,7 +5,7 @@ import { Unicode11Addon } from '@xterm/addon-unicode11'
 import { WebLinksAddon } from '@xterm/addon-web-links'
 import { Terminal } from '@xterm/xterm'
 import type { ITerminalOptions } from '@xterm/xterm'
-import type { TerminalLeafId } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import type { TerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
 import { getTerminalUrlOpenHint } from '~renderer/terminal-pane/terminal-link-open-hints'
 
 import { attachPaneDrag } from './pane-drag-pointer'

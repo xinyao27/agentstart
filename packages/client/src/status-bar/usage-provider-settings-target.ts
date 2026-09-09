@@ -1,4 +1,4 @@
-import type { ProviderRateLimits } from '@yiru/runtime-protocol/workbench/rate-limit-types'
+import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
 
 export function getUsageProviderAccountsSectionId(
   provider: ProviderRateLimits['provider']

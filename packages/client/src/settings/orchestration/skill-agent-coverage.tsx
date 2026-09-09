@@ -1,4 +1,4 @@
-import type { DiscoveredSkill } from '@yiru/runtime-protocol/workbench/skills'
+import type { DiscoveredSkill } from '@yiru/protocol'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { useDetectedAgents } from '~renderer/agent/use-detected'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,4 +1,4 @@
-import type { Tab, TabGroup, TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab, TabGroup, TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { SYNC_FIT_PANES_EVENT } from '~renderer/constants/terminal'

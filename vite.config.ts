@@ -3,6 +3,16 @@ import { resolve } from 'node:path'
 import { defineConfig } from 'vite-plus'
 
 const lintProfile = process.env.YIRU_LINT_PROFILE
+// Why: SwiftPM checkouts and generated protobuf bindings are external/generated inputs; linting
+// them creates non-actionable violations and makes regeneration non-deterministic.
+const lintIgnorePatterns = [
+  '**/node_modules',
+  '**/.build',
+  '**/build',
+  '**/dist',
+  '**/out',
+  'packages/protocol/typescript/generated/**'
+]
 
 const yiruRootToolingConfig = defineConfig({
   staged: {
@@ -14,7 +24,15 @@ const yiruRootToolingConfig = defineConfig({
     // their authored content; toolchain migration must not rewrite that prose.
     // worker-configuration.d.ts must stay byte-identical to `wrangler types`
     // output because the APNs gateway CI gate diffs the regenerated file.
-    ignorePatterns: ['**/*.md', '**/build', '**/worker-configuration.d.ts'],
+    // SwiftPM's .build contains read-only dependency checkouts, not project source. Protobuf's
+    // TypeScript filenames and formatting are generator-owned and must stay reproducible.
+    ignorePatterns: [
+      '**/*.md',
+      '**/.build',
+      '**/build',
+      '**/worker-configuration.d.ts',
+      'packages/protocol/typescript/generated/**'
+    ],
     singleQuote: true,
     semi: false,
     printWidth: 100,
@@ -42,7 +60,7 @@ const yiruRootToolingConfig = defineConfig({
               { allowDefaultCaseForExhaustiveSwitch: false }
             ]
           },
-          ignorePatterns: ['**/node_modules', '**/build', '**/dist', '**/out'],
+          ignorePatterns: lintIgnorePatterns,
           options: { typeAware: true, typeCheck: false }
         }
       : lintProfile === 'react-doctor'
@@ -62,7 +80,7 @@ const yiruRootToolingConfig = defineConfig({
               'react-doctor/no-derived-state-effect': 'error',
               'react-doctor/no-initialize-state': 'error'
             },
-            ignorePatterns: ['**/node_modules', '**/build', '**/dist', '**/out'],
+            ignorePatterns: lintIgnorePatterns,
             options: { typeAware: false, typeCheck: false },
             jsPlugins: [{ name: 'react-doctor', specifier: 'oxlint-plugin-react-doctor' }]
           }
@@ -207,7 +225,7 @@ const yiruRootToolingConfig = defineConfig({
                 }
               }
             ],
-            ignorePatterns: ['**/node_modules', '**/build', '**/dist', '**/out'],
+            ignorePatterns: lintIgnorePatterns,
             options: {
               // Why: Yiru type-checks three explicit tsc projects and enables only the
               // switch exhaustiveness type-aware rule in a separate narrow lint pass.

@@ -1,7 +1,7 @@
 import {
   recognizeAgentProcess,
   type RecognizedAgentProcess
-} from '@yiru/runtime-protocol/workbench/agent/process-recognition'
+} from '@yiru/protocol/agent/process/recognition'
 import type { RuntimeTerminalProcessInspection } from '~renderer/runtime/terminal-inspection'
 
 import { CompletionCoordinatorLayer1 } from './completion-coordinator-layer-1'

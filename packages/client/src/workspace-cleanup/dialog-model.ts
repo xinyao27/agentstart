@@ -2,7 +2,7 @@ import type {
   WorkspaceCleanupCandidate,
   WorkspaceCleanupScanError,
   WorkspaceCleanupScanProgress
-} from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+} from '@yiru/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { WorkspaceCleanupRemovalProgress } from './background-removal'

@@ -1,7 +1,10 @@
-import type { ContributionCalendarDay, ContributionPoint } from '@yiru/runtime-protocol/model/ui'
-import { buildContributionCalendar } from '@yiru/runtime-protocol/model/ui'
 import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
 import { useState } from 'react'
+import type {
+  ContributionCalendarDay,
+  ContributionPoint
+} from '~renderer/contribution-heatmap/calendar'
+import { buildContributionCalendar } from '~renderer/contribution-heatmap/calendar'
 import { translate } from '~renderer/i18n/i18n'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import { cn } from '~renderer/ui/class-names'

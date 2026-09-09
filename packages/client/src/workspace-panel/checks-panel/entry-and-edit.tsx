@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
-import { toast } from 'sonner'
 import { useEventCallback } from '~renderer/react/use-event-callback'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { refreshHostedReviewCard } from '~renderer/source-control/hosted-review-state/slice'
 import { useAppStore } from '~renderer/store/state'
@@ -11,9 +11,7 @@ import type { useChecksPanelRefreshActionState } from './refresh-action'
 
 export function useChecksPanelEntryAndEdit(context: useChecksPanelRefreshActionState) {
   const {
-    activeGitLabReview,
     activeReview,
-    activeWorktree,
     activeWorktreeId,
     branch,
     checksFetchedAt,
@@ -23,17 +21,10 @@ export function useChecksPanelEntryAndEdit(context: useChecksPanelRefreshActionS
     fallbackGitHubPRNumber,
     fetchChecks,
     fetchComments,
-    fetchGitLabDetails,
     fetchHostedReviewForBranch,
     fetchPRForBranch,
-    hostedReviewCacheKey,
     isFolder,
-    isGitLabReviewContext,
     isPanelVisible,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     linkedPR,
     mountedRef,
     pollIntervalRef,
@@ -58,23 +49,6 @@ export function useChecksPanelEntryAndEdit(context: useChecksPanelRefreshActionS
       }
       // Why: automatic tab entry must retain coordinator rate limits and only
       // force detail panes already proven stale.
-      if (isGitLabReviewContext) {
-        void fetchHostedReviewForBranch(repo.path, branch, {
-          force: true,
-          repoId: repo.id,
-          linkedGitHubPR: linkedPR,
-          fallbackGitHubPR: fallbackGitHubPRNumber,
-          currentHeadOid: activeWorktree?.head ?? null,
-          linkedGitLabMR,
-          linkedBitbucketPR,
-          linkedAzureDevOpsPR,
-          linkedGiteaPR
-        })
-        if (activeGitLabReview) {
-          void fetchGitLabDetails()
-        }
-        return
-      }
       enqueueGitHubPRRefresh(activeWorktreeId, 'active', 80)
       if (options.refreshChecks) {
         void fetchChecks({ force: true })
@@ -88,9 +62,7 @@ export function useChecksPanelEntryAndEdit(context: useChecksPanelRefreshActionS
   // Why: entry refresh catches external review changes before cache expiry, while
   // the grace window suppresses duplicate fetches from rapid visibility changes.
   const entryKey =
-    isPanelVisible && repo && !isFolder && branch
-      ? `${activeWorktreeId ?? ''}::${activeGitLabReview ? hostedReviewCacheKey : prCacheKey}`
-      : ''
+    isPanelVisible && repo && !isFolder && branch ? `${activeWorktreeId ?? ''}::${prCacheKey}` : ''
   const lastEntryKeyRef = useRef<string>('')
   useEffect(() => {
     if (!entryKey) {
@@ -142,29 +114,6 @@ export function useChecksPanelEntryAndEdit(context: useChecksPanelRefreshActionS
     if (!repo || !branch) {
       return
     }
-    if (activeReview?.provider === 'gitlab') {
-      const refreshedReview = await refreshHostedReviewCard(fetchHostedReviewForBranch, {
-        repoPath: repo.path,
-        repoId: repo.id,
-        branch,
-        linkedGitHubPR: linkedPR,
-        fallbackGitHubPR: fallbackGitHubPRNumber,
-        linkedGitLabMR,
-        linkedBitbucketPR,
-        linkedAzureDevOpsPR,
-        linkedGiteaPR
-      })
-      const refreshedGitLabReview =
-        refreshedReview?.provider === 'gitlab' ? refreshedReview : activeGitLabReview
-      if (refreshedGitLabReview) {
-        await fetchGitLabDetails({
-          mrNumberOverride: refreshedGitLabReview.number,
-          headShaOverride: refreshedGitLabReview.headSha,
-          commitAsCurrent: true
-        })
-      }
-      return
-    }
     const refreshedPR = await fetchPRForBranch(repo.path, branch, {
       force: true,
       repoId: repo.id,
@@ -177,11 +126,7 @@ export function useChecksPanelEntryAndEdit(context: useChecksPanelRefreshActionS
       repoId: repo.id,
       branch,
       linkedGitHubPR: linkedPR,
-      fallbackGitHubPR: refreshedPR?.number ?? fallbackGitHubPRNumber,
-      linkedGitLabMR,
-      linkedBitbucketPR,
-      linkedAzureDevOpsPR,
-      linkedGiteaPR
+      fallbackGitHubPR: refreshedPR?.number ?? fallbackGitHubPRNumber
     })
   }
 
@@ -213,40 +158,25 @@ export function useChecksPanelEntryAndEdit(context: useChecksPanelRefreshActionS
     }
     setTitleSaving(true)
     try {
-      if (activeReview.provider === 'gitlab') {
-        const result = await callRuntimeOrpc(
-          getActiveRuntimeTarget(useAppStore.getState().settings),
-          (client) => client.gitlab.updateMR,
-          {
-            repo: repo.id,
-            iid: activeReview.number,
-            updates: { title: nextTitle }
-          },
-          { timeoutMs: 30_000 }
-        )
-        if (!result.ok) {
-          toast.error(result.error)
-          return
-        }
+      if (!pr) {
+        return
+      }
+      const target = getActiveRuntimeTarget(useAppStore.getState().settings)
+      const client = await openGitHubTarget()
+      if (!client) {
+        throw new Error('GitHub protocol capability is unavailable')
+      }
+      const ok = await client.updatePrTitle(
+        {
+          repo: repo.id,
+          prNumber: pr.number,
+          title: nextTitle,
+          prRepo: pr.prRepo ?? undefined
+        },
+        { timeoutMs: 30_000, ...runtimeCallDestination(target) }
+      )
+      if (ok) {
         await refreshHostedReviewAfterMutation()
-      } else {
-        if (!pr) {
-          return
-        }
-        const ok = await callRuntimeOrpc(
-          getActiveRuntimeTarget(useAppStore.getState().settings),
-          (client) => client.github.updatePRTitle,
-          {
-            repo: repo.id,
-            prNumber: pr.number,
-            title: nextTitle,
-            prRepo: pr.prRepo ?? null
-          },
-          { timeoutMs: 30_000 }
-        )
-        if (ok) {
-          await refreshHostedReviewAfterMutation()
-        }
       }
     } finally {
       clearTitleInputFocusTimer()

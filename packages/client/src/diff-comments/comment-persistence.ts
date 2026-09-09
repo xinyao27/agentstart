@@ -1,10 +1,10 @@
+import type { WorktreeSetPatch } from '@yiru/protocol'
 import { readWorktreeMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterWorktreeMutation } from '~renderer/project-catalog/mutation-refresh'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { readProjectCatalogWorktree } from '~renderer/project-catalog/worktree-cache'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { getActiveRuntimeTarget, settingsForRuntimeOwner } from '~renderer/runtime/rpc-client'
-import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
+import { setRuntimeWorktree } from '~renderer/runtime/worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
 import { getRepoIdFromWorktreeId } from '~renderer/worktree/state/types'
@@ -24,21 +24,13 @@ async function persistLatestComments(worktreeId: string): Promise<void> {
   )
   const target = getActiveRuntimeTarget(settings)
   const expectedRevision = readWorktreeMutationRevision(target, repoId)
-  if (target.kind === 'local') {
-    const result = await workspaceHostClient.worktrees.updateMeta({
-      expectedRevision,
-      worktreeId,
-      updates: { diffComments }
-    })
-    await refreshAfterWorktreeMutation(target, repoId, result.revision)
-    return
-  }
-  const result = await callRuntimeOrpc(
-    target,
-    (client) => client.worktree.set,
-    { expectedRevision, worktree: toRuntimeWorktreeSelector(worktreeId), diffComments },
-    { timeoutMs: 15_000 }
-  )
+  // Why: `diffComments` is workbench-shaped one-for-one with the protobuf
+  // patch's own `WorktreeDiffComment[]`; only the field name is shared here.
+  const result = await setRuntimeWorktree(target, {
+    expectedRevision,
+    worktree: toRuntimeWorktreeSelector(worktreeId),
+    patch: { diffComments } as WorktreeSetPatch
+  })
   await refreshAfterWorktreeMutation(target, repoId, result.revision)
 }
 

@@ -1,17 +1,13 @@
 import type { IDisposable } from '@xterm/xterm'
-import type {
-  ParsedAgentStatusPayload,
-  SleepingAgentLaunchConfig
-} from '@yiru/runtime-protocol/model/agent'
-import type { StartupCommandDelivery } from '@yiru/runtime-protocol/workbench/codex-startup-delivery'
-import type { EventProps } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import type { TerminalKittyKeyboardModeTracker } from '@yiru/runtime-protocol/workbench/terminal/kitty-keyboard-mode-tracker'
-import type {
-  GlobalSettings,
-  SetupSplitDirection,
-  TerminalLayoutSnapshot,
-  TuiAgent
-} from '@yiru/runtime-protocol/workbench/types'
+import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
+import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
+import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { SetupSplitDirection } from '@yiru/protocol/settings/workspace-preferences'
+import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 
 import type { EffectiveMacOptionAsAlt } from '../keyboard-layout/detect-option-as-alt'
 import type {

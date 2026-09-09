@@ -1,5 +1,5 @@
-import { isFreshNonDoneAgentStatus, type AgentType } from '@yiru/runtime-protocol/model/agent'
-import { resolveCompatibleAgentTypeForOwner } from '@yiru/runtime-protocol/workbench/agent/title-owner'
+import { isFreshNonDoneAgentStatus, type AgentType } from '@yiru/protocol/agent/status-records'
+import { resolveCompatibleAgentTypeForOwner } from '~renderer/agent/title/owner'
 import { inspectRuntimeTerminalProcess } from '~renderer/runtime/terminal-inspection'
 import { useAppStore } from '~renderer/store/state'
 

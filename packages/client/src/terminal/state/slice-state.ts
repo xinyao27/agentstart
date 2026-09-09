@@ -1,16 +1,16 @@
+import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
 import type {
   AgentProviderSessionMetadata,
   SleepingAgentLaunchConfig
-} from '@yiru/runtime-protocol/model/agent'
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type { StartupCommandDelivery } from '@yiru/runtime-protocol/workbench/codex-startup-delivery'
+} from '@yiru/protocol/agent/session-resume'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { SetupSplitDirection } from '@yiru/protocol/settings/workspace-preferences'
 import type {
-  SetupSplitDirection,
   TerminalLayoutSnapshot,
-  TerminalTab,
-  TuiAgent,
   WorkspaceSessionState
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import type { AgentStartedTelemetry } from '~renderer/agent/started-telemetry'
 import type { CodexRestartNotice } from '~renderer/terminal/codex-restart-notice'
 import type { WorkspaceSessionHydrationOptions } from '~renderer/workspace/session-hydration-keys'

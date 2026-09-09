@@ -1,4 +1,5 @@
-import type { ProjectGroup, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

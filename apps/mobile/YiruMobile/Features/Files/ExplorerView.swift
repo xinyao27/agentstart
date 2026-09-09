@@ -80,21 +80,6 @@ struct WorkspaceFileExplorerView: View {
                 )
             case .ready:
                 List {
-                    if model.isLegacyListTruncated {
-                        Text("Showing first 5000 files")
-                            .font(.system(size: Theme.Typography.metadata))
-                            .foregroundStyle(Theme.Colors.mutedForeground)
-                            .listRowInsets(
-                                EdgeInsets(
-                                    top: Theme.Spacing.small,
-                                    leading: Theme.Spacing.standard,
-                                    bottom: Theme.Spacing.small,
-                                    trailing: Theme.Spacing.medium
-                                )
-                            )
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Theme.Colors.background)
-                    }
                     ForEach(model.rows) { row in
                         rowView(row)
                             .listRowInsets(EdgeInsets())

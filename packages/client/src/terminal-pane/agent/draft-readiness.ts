@@ -1,10 +1,10 @@
-import { isRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
-import { createDraftPasteReadyScanner } from '@yiru/runtime-protocol/workbench/draft-paste-ready-scanner'
-import type { DraftPasteReadySignal } from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { DraftPasteReadySignal } from '@yiru/protocol/agent/launch/config'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
 import { subscribeToRuntimeTerminalData } from '~renderer/runtime/terminal-stream'
 
 import { subscribeToPtyData } from '../pty/data-sidecar-subscriptions'
+import { createDraftPasteReadyScanner } from './draft-readiness-scanner'
 
 const BRACKETED_PASTE_QUIET_MS = 1500
 

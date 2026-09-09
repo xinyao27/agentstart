@@ -1,13 +1,14 @@
 import type {
-  AgentPhase,
   BrowserReplayEvent,
-  ConsoleSensorEntry,
-  ShellHtmlToPdfInput,
-  ShellHtmlToPdfResult,
-  ShellServicesNotificationsDismissOutput,
-  ShellServicesNotificationsDisplayInput,
-  ShellServicesNotificationsDisplayOutput
-} from '@yiru/runtime-protocol/contract'
+  WorkspaceConsoleSensorEntry as ConsoleSensorEntry
+} from '@yiru/protocol'
+import type { AgentPhase } from '@yiru/protocol/agent/phase'
+import type {
+  NotificationDismissResult,
+  NotificationDisplayInput,
+  NotificationDisplayResult
+} from '~renderer/extension/notification-request'
+import type { PdfExportInput, PdfExportResult } from '~renderer/extension/pdf-export'
 
 export type BrowserReplayCapture = {
   endedAt: number
@@ -108,16 +109,28 @@ export type ExtensionBrowserCapabilities = {
     }[]
   >
   downloadArtifact: (input: { id: string; ticket: string }) => Promise<void>
-  dismissWorkbenchNotifications: (
-    notificationIds: string[]
-  ) => Promise<ShellServicesNotificationsDismissOutput>
+  dismissWorkbenchNotifications: (notificationIds: string[]) => Promise<NotificationDismissResult>
   disableContextAwareness: () => Promise<void>
   displayWorkbenchNotification: (
-    input: ShellServicesNotificationsDisplayInput
-  ) => Promise<ShellServicesNotificationsDisplayOutput>
+    input: NotificationDisplayInput
+  ) => Promise<NotificationDisplayResult>
   enableContextAwareness: () => Promise<boolean>
-  executeBrowserCommand: (method: string, input: unknown) => Promise<unknown>
-  exportHtmlToPdf: (input: ShellHtmlToPdfInput) => Promise<ShellHtmlToPdfResult>
+  executeBrowserCommand: (
+    method: string,
+    input: unknown,
+    authorityId?: string | null,
+    stream?: {
+      sendBinary: (
+        receiptId: string,
+        sequence: number,
+        isEnd: boolean,
+        payload: Uint8Array<ArrayBufferLike>,
+        signal: AbortSignal
+      ) => Promise<void>
+      signal: AbortSignal
+    }
+  ) => Promise<unknown>
+  exportHtmlToPdf: (input: PdfExportInput) => Promise<PdfExportResult>
   fillGitHubComment: (draft: string) => Promise<void>
   finishDay: () => Promise<void>
   highlightVisualChanges: (

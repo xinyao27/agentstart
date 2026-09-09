@@ -16,6 +16,7 @@ import Foundation
 // limit only trades a broken screen for an unbounded-memory-pressure crash
 // on the same feed.
 nonisolated private let runtimeWebSocketMaximumMessageSize = 8 * 1024 * 1024
+nonisolated let authenticatedRuntimeProtobufCapability = "yiru-protobuf-v2"
 
 nonisolated private final class PingResult: @unchecked Sendable {
     private let lock = NSLock()
@@ -44,11 +45,17 @@ nonisolated private final class PingResult: @unchecked Sendable {
 }
 
 actor AuthenticatedRuntimeConnection {
+    nonisolated let capabilities: Set<String>
     private let socket: URLSessionWebSocketTask
-    private var cipher: AuthenticatedRuntimeCipher
+    private var cipher: MobileE2EECipher
     private var isClosed = false
 
-    private init(socket: URLSessionWebSocketTask, cipher: AuthenticatedRuntimeCipher) {
+    private init(
+        socket: URLSessionWebSocketTask,
+        cipher: MobileE2EECipher,
+        capabilities: Set<String>
+    ) {
+        self.capabilities = capabilities
         self.socket = socket
         self.cipher = cipher
     }
@@ -83,58 +90,6 @@ actor AuthenticatedRuntimeConnection {
                         try await withTaskCancellationHandler {
                             await log(.info, "Starting encrypted handshake", nil)
                             return try await authenticate(
-                                socket: socket,
-                                desktopPublicKey: desktopPublicKey,
-                                deviceToken: deviceToken
-                            )
-                        } onCancel: {
-                            socket.cancel(with: .goingAway, reason: nil)
-                        }
-                    }
-                    group.addTask {
-                        try await Task.sleep(for: timeout)
-                        throw AuthenticatedRuntimeError.timeout
-                    }
-                    guard let connection = try await group.next() else {
-                        throw CancellationError()
-                    }
-                    group.cancelAll()
-                    return connection
-                }
-            } catch {
-                socket.cancel(with: .goingAway, reason: nil)
-                throw error
-            }
-        } onCancel: {
-            socket.cancel(with: .goingAway, reason: nil)
-        }
-    }
-
-    static func connectTerminalBulk(
-        endpoint: String,
-        desktopPublicKeyBase64: String,
-        deviceToken: String,
-        timeout: Duration = .seconds(17)
-    ) async throws -> AuthenticatedRuntimeConnection {
-        guard let url = URL(string: endpoint), url.scheme == "ws" || url.scheme == "wss" else {
-            throw AuthenticatedRuntimeError.invalidEndpoint
-        }
-        guard let desktopPublicKey = Data(base64Encoded: desktopPublicKeyBase64),
-            desktopPublicKey.base64EncodedString() == desktopPublicKeyBase64,
-            desktopPublicKey.count == 32
-        else { throw AuthenticatedRuntimeError.invalidDesktopKey }
-
-        let socket = URLSession.shared.webSocketTask(with: url)
-        socket.maximumMessageSize = runtimeWebSocketMaximumMessageSize
-        socket.resume()
-        return try await withTaskCancellationHandler {
-            do {
-                return try await withThrowingTaskGroup(
-                    of: AuthenticatedRuntimeConnection.self
-                ) { group in
-                    group.addTask {
-                        try await withTaskCancellationHandler {
-                            try await authenticateTerminalBulk(
                                 socket: socket,
                                 desktopPublicKey: desktopPublicKey,
                                 deviceToken: deviceToken
@@ -201,39 +156,15 @@ actor AuthenticatedRuntimeConnection {
         try await socket.send(.string(try cipher.sealText(encodedText(auth))))
 
         let response = try cipher.openText(try await receivePlaintext(over: socket))
-        try validateAuthentication(response, transcriptHash: schedule.transcriptHash)
-        return AuthenticatedRuntimeConnection(socket: socket, cipher: .v2(cipher))
-    }
-
-    private static func authenticateTerminalBulk(
-        socket: URLSessionWebSocketTask,
-        desktopPublicKey: Data,
-        deviceToken: String
-    ) async throws -> AuthenticatedRuntimeConnection {
-        let keyPair = try SodiumKeyExchange.makeKeyPair()
-        let hello = LegacyMobileE2EEHelloFrame(
-            type: "e2ee_hello",
-            publicKeyB64: keyPair.publicKey.base64EncodedString()
+        let capabilities = try validateAuthentication(
+            response,
+            transcriptHash: schedule.transcriptHash
         )
-        try await sendPlaintext(hello, over: socket)
-
-        let readyData = Data(try await receivePlaintext(over: socket).utf8)
-        guard
-            let ready = try? JSONDecoder().decode(LegacyMobileE2EEReadyFrame.self, from: readyData),
-            ready.type == "e2ee_ready"
-        else { throw AuthenticatedRuntimeError.unexpectedMessage }
-        let sharedSecret = try SodiumKeyExchange.sharedSecret(
-            secretKey: keyPair.secretKey,
-            desktopPublicKey: desktopPublicKey
+        return AuthenticatedRuntimeConnection(
+            socket: socket,
+            cipher: cipher,
+            capabilities: capabilities
         )
-        let legacyCipher = try LegacyMobileE2EECipher(sharedKey: sharedSecret)
-        var cipher = AuthenticatedRuntimeCipher.legacy(legacyCipher)
-        let auth = LegacyMobileE2EEAuthFrame(type: "e2ee_auth", deviceToken: deviceToken)
-        try await socket.send(.string(try cipher.sealText(encodedText(auth))))
-        try validateLegacyAuthentication(
-            try cipher.openText(try await receivePlaintext(over: socket))
-        )
-        return AuthenticatedRuntimeConnection(socket: socket, cipher: cipher)
     }
 
     func sendText(_ plaintext: String) async throws {
@@ -324,20 +255,6 @@ nonisolated private struct MobileE2EEAuthFrame: Encodable {
     let transcriptHashB64: String
 }
 
-nonisolated private struct LegacyMobileE2EEHelloFrame: Encodable {
-    let type: String
-    let publicKeyB64: String
-}
-
-nonisolated private struct LegacyMobileE2EEReadyFrame: Decodable {
-    let type: String
-}
-
-nonisolated private struct LegacyMobileE2EEAuthFrame: Encodable {
-    let type: String
-    let deviceToken: String
-}
-
 nonisolated private func encodedText<Value: Encodable>(_ value: Value) throws -> String {
     let data = try JSONEncoder().encode(value)
     guard let text = String(data: data, encoding: .utf8) else {
@@ -346,7 +263,9 @@ nonisolated private func encodedText<Value: Encodable>(_ value: Value) throws ->
     return text
 }
 
-nonisolated private func validateAuthentication(_ text: String, transcriptHash: Data) throws {
+nonisolated private func validateAuthentication(_ text: String, transcriptHash: Data) throws
+    -> Set<String>
+{
     let data = Data(text.utf8)
     guard let object = try? JSONSerialization.jsonObject(with: data),
         let frame = object as? [String: Any]
@@ -366,12 +285,11 @@ nonisolated private func validateAuthentication(_ text: String, transcriptHash: 
     else {
         throw AuthenticatedRuntimeError.unexpectedMessage
     }
-}
-
-nonisolated private func validateLegacyAuthentication(_ text: String) throws {
-    let data = Data(text.utf8)
-    guard let object = try? JSONSerialization.jsonObject(with: data),
-        let frame = object as? [String: Any],
-        frame["type"] as? String == "e2ee_authenticated"
-    else { throw AuthenticatedRuntimeError.authenticationFailed }
+    guard let values = frame["capabilities"] else { return [] }
+    guard let capabilities = values as? [String], capabilities.count <= 32,
+        capabilities.allSatisfy({ !$0.isEmpty && $0.utf8.count <= 64 })
+    else {
+        throw AuthenticatedRuntimeError.unexpectedMessage
+    }
+    return Set(capabilities)
 }

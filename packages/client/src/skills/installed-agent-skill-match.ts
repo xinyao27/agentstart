@@ -1,4 +1,4 @@
-import type { DiscoveredSkill, SkillSourceKind } from '@yiru/runtime-protocol/workbench/skills'
+import type { DiscoveredSkill, SkillSourceKind } from '@yiru/protocol'
 import { ORCHESTRATION_SKILL_NAME } from '~renderer/agent/feature-install-commands'
 
 type InstalledAgentSkillMatchOptions = {

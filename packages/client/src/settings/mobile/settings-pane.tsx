@@ -1,9 +1,6 @@
-import {
-  YIRU_ANDROID_LATEST_APK_URL,
-  YIRU_IOS_TESTFLIGHT_URL
-} from '@yiru/runtime-protocol/model/product'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
+import { YIRU_IOS_TESTFLIGHT_URL } from '~renderer/mobile/downloads'
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
 
@@ -45,16 +42,6 @@ export function MobileSettingsPane(): React.JSX.Element {
             className="hover:text-foreground focus-visible:text-foreground focus-visible:bg-accent h-auto border-0 p-0 underline underline-offset-2"
           >
             {translate('auto.components.settings.MobileSettingsPane.testFlight', 'TestFlight')}
-          </Button>{' '}
-          <span aria-hidden="true">/</span>{' '}
-          <Button
-            variant="ghost"
-            size="xs"
-            type="button"
-            onClick={(event) => openHttpLink(YIRU_ANDROID_LATEST_APK_URL, { event })}
-            className="hover:text-foreground focus-visible:text-foreground focus-visible:bg-accent h-auto border-0 p-0 underline underline-offset-2"
-          >
-            {translate('auto.components.settings.MobileSettingsPane.androidApk', 'Android APK')}
           </Button>
           .
         </p>

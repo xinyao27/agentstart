@@ -1,5 +1,6 @@
-import type { FeatureInteractionId } from '@yiru/runtime-protocol/workbench/feature-interaction-catalog'
-import type { GlobalSettings, StatusBarItem } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { StatusBarItem } from '@yiru/protocol/settings/ui-state'
+import type { FeatureInteractionId } from '@yiru/protocol/telemetry/interactions/catalog'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useAvailableStatusBarToggles } from '~renderer/status-bar/use-available-status-bar-toggles'

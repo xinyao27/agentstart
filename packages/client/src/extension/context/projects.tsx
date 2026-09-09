@@ -1,13 +1,14 @@
-import { skipToken, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { translate } from '~renderer/i18n/i18n'
 import { GitBranch } from '~renderer/icons/hugeicons'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
+import { projectContextResolveQuery } from '~renderer/runtime/project-context-target'
+import { workspacePortsScanQuery } from '~renderer/runtime/workspace-ports-target'
 import { Button } from '~renderer/ui/button'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
 import { getExtensionHostNavigation } from '../navigation'
 import { projectDisplayName } from '../project-display-name'
-import { extensionOrpc } from '../runtime/orpc'
 import { ColorWriteback } from './color-writeback'
 import { CommentDraft } from './comment-draft'
 import { ConsoleSensor } from './console-sensor'
@@ -27,6 +28,8 @@ type ContextMatch = {
   worktreeId?: string
 }
 
+const LOCAL_DAEMON_TARGET = { kind: 'local' } as const
+
 export function ContextProjects(): React.JSX.Element | null {
   const capabilities = getExtensionBrowserCapabilities()
   const projectCatalog = useProjectCatalog()
@@ -44,15 +47,12 @@ export function ContextProjects(): React.JSX.Element | null {
   const forgeIdentity = activePage.data ? identifyForgePage(activePage.data) : null
   const localIdentity = activePage.data ? identifyLocalPage(activePage.data) : null
   const remoteProjects = useQuery(
-    extensionOrpc.projectContext.resolve.queryOptions({
-      input: forgeIdentity ? { canonicalKey: forgeIdentity.canonicalKey } : skipToken
-    })
+    projectContextResolveQuery(forgeIdentity ? { canonicalKey: forgeIdentity.canonicalKey } : null)
   )
-  const workspacePorts = useQuery(
-    extensionOrpc.workspacePorts.scan.queryOptions({
-      input: localIdentity ? {} : skipToken
-    })
-  )
+  const workspacePorts = useQuery({
+    ...workspacePortsScanQuery(LOCAL_DAEMON_TARGET),
+    enabled: Boolean(localIdentity)
+  })
   const matches: ContextMatch[] = forgeIdentity
     ? (remoteProjects.data?.matches ?? [])
     : localIdentity

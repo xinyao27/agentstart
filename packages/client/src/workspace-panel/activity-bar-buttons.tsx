@@ -1,4 +1,4 @@
-import type { CheckStatus } from '@yiru/runtime-protocol/workbench/types'
+import type { CheckStatus } from '@yiru/protocol/hosted-review/pull-request-types'
 import React from 'react'
 import type { ActiveRightSidebarTab } from '~renderer/editor/state'
 import { translate } from '~renderer/i18n/i18n'

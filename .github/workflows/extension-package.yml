@@ -4,11 +4,8 @@ on:
   pull_request:
     paths:
       - 'apps/extension/**'
-      - 'apps/daemon/**'
       - 'packages/client/**'
-      - 'packages/runtime-protocol/**'
-      - 'scripts/build-skill-resources.mjs'
-      - 'skills/**'
+      - 'packages/protocol/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
@@ -20,11 +17,8 @@ on:
       - 'extension-v*'
     paths:
       - 'apps/extension/**'
-      - 'apps/daemon/**'
       - 'packages/client/**'
-      - 'packages/runtime-protocol/**'
-      - 'scripts/build-skill-resources.mjs'
-      - 'skills/**'
+      - 'packages/protocol/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
@@ -68,10 +62,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build daemon and Web Store package
-        run: |
-          pnpm exec vp run @yiru/daemon#build
-          pnpm exec vp run @yiru/extension#package:web-store
+      - name: Build Web Store package
+        run: pnpm exec vp run @yiru/extension#package:web-store
 
       - name: Upload review-ready extension package
         uses: actions/upload-artifact@v7

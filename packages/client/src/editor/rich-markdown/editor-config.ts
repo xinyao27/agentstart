@@ -1,5 +1,5 @@
 import type { Editor, UseEditorOptions } from '@tiptap/react'
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import type { MutableRefObject, Dispatch, SetStateAction } from 'react'
 
 import { encodeRawMarkdownHtmlForRichEditor } from '../raw-markdown-html'

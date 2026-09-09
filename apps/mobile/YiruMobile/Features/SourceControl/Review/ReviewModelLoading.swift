@@ -68,11 +68,14 @@ extension SourceReviewModel {
     // transport error tells the user nothing they can act on. Detect that case and name the
     // fix instead of surfacing a bare RPC code.
     private func reviewLoadFailureMessage(_ error: any Error) -> String {
-        guard let orpc = error as? RuntimeOrpcError else { return error.localizedDescription }
+        guard let serviceError = error as? RuntimeServiceError else {
+            return error.localizedDescription
+        }
         let outdatedHost =
-            orpc.serverCode == "forbidden"
-            || orpc.serverCode == "method_not_found"
-            || orpc.serverMessage?.localizedCaseInsensitiveContains("not available to mobile")
+            serviceError.serverCode == "forbidden"
+            || serviceError.serverCode == "method_not_found"
+            || serviceError.serverMessage?.localizedCaseInsensitiveContains(
+                "not available to mobile")
                 == true
         return outdatedHost
             ? String(localized: "Update the Yiru daemon to review changes on mobile.")

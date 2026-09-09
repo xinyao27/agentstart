@@ -1,5 +1,5 @@
-import { isRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
-import { isRemoteTerminalSurfaceTabId } from '@yiru/runtime-protocol/workbench/terminal/surface-id'
+import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { isRemoteTerminalSurfaceTabId } from '@yiru/protocol/terminal/surface-identity'
 import type { AppState } from '~renderer/store/types'
 
 export function isWebOnlyMirroredTerminalTab(

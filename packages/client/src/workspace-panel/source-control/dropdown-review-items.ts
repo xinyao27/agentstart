@@ -1,4 +1,4 @@
-import { supportsHostedReviewCreation } from '@yiru/runtime-protocol/model/review'
+import { supportsHostedReviewCreation } from '@yiru/protocol/hosted-review/creation-provider'
 import {
   localizedHostedReviewCopy,
   resolveSupportedHostedReviewCopyProvider

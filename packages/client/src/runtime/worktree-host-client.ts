@@ -1,33 +1,43 @@
-import type {
-  RuntimeClientEventSubscriptionEvent,
-  RuntimeWorktreeStateSubscriptionEvent
-} from '@yiru/runtime-protocol/contract'
+import type { WorktreeSetPatch, ClientEventsSubscriptionEventValue } from '@yiru/protocol'
 
-import { onLocalHostProgressEvent } from './host-progress-stream'
-import { callRuntimeOrpc, createLocalRuntimeOrpcClient } from './orpc-client'
+import { requireClientEventsClient } from './client-events-target'
 import { createRuntimeStreamFanOut } from './stream-fan-out'
 import type { WorktreeWorkspaceApi } from './workspace-host-api'
+import {
+  createRuntimeWorktree,
+  detectedListRuntimeWorktrees,
+  forceDeleteRuntimeWorktreeBranch,
+  listRuntimeWorktreeLineage,
+  listRuntimeWorktrees,
+  persistRuntimeWorktreeSortOrder,
+  prefetchRuntimeWorktreeCreateBase,
+  removeRuntimeWorktree,
+  resolveRuntimeWorktreePrBase,
+  setRuntimeWorktree,
+  subscribeRuntimeWorktreeStateEvents
+} from './worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from './worktree-selector'
 
 const LOCAL_TARGET = { kind: 'local' } as const
 
-const localClientEvents = createRuntimeStreamFanOut({
-  resolveClient: async () => (await createLocalRuntimeOrpcClient()).client,
-  open: (client, signal) => client.runtime.clientEvents.subscribe(undefined, { signal })
+const localClientEvents = createRuntimeStreamFanOut<
+  Awaited<ReturnType<typeof requireClientEventsClient>>,
+  ClientEventsSubscriptionEventValue
+>({
+  resolveClient: async () => requireClientEventsClient(LOCAL_TARGET),
+  open: (client, signal) => client.subscribe({ signal }).then((stream) => stream.events)
 })
 const localStateEvents = createRuntimeStreamFanOut({
-  resolveClient: async () => (await createLocalRuntimeOrpcClient()).client,
-  open: (client, signal) => client.worktree.stateEvents.subscribe(undefined, { signal })
+  resolveClient: async () => LOCAL_TARGET,
+  open: (target, signal) => subscribeRuntimeWorktreeStateEvents(target, signal)
 })
 
 const localWorktreeClient: WorktreeWorkspaceApi = {
   list: async ({ repoId }) =>
-    (await callRuntimeOrpc(LOCAL_TARGET, (client) => client.worktree.list, { repo: repoId }))
-      .worktrees,
-  listDetected: ({ repoId }) =>
-    callRuntimeOrpc(LOCAL_TARGET, (client) => client.worktree.detectedList, { repo: repoId }),
+    (await listRuntimeWorktrees(LOCAL_TARGET, { repo: repoId })).worktrees,
+  listDetected: (args) => detectedListRuntimeWorktrees(LOCAL_TARGET, { repo: args.repoId }),
   create: (args) =>
-    callRuntimeOrpc(LOCAL_TARGET, (client) => client.worktree.create, {
+    createRuntimeWorktree(LOCAL_TARGET, {
       repo: args.repoId,
       expectedRevision: args.expectedRevision,
       name: args.name,
@@ -35,10 +45,6 @@ const localWorktreeClient: WorktreeWorkspaceApi = {
       compareBaseRef: args.compareBaseRef,
       branchNameOverride: args.branchNameOverride,
       linkedPR: args.linkedPR,
-      linkedGitLabMR: args.linkedGitLabMR,
-      linkedBitbucketPR: args.linkedBitbucketPR,
-      linkedAzureDevOpsPR: args.linkedAzureDevOpsPR,
-      linkedGiteaPR: args.linkedGiteaPR,
       operationId: args.creationId,
       displayName: args.displayName,
       sparseCheckout: args.sparseCheckout,
@@ -63,37 +69,24 @@ const localWorktreeClient: WorktreeWorkspaceApi = {
       workspaceStatus: args.workspaceStatus,
       manualOrder: args.manualOrder
     }),
-  onCreateProgress: (callback) =>
-    onLocalHostProgressEvent('worktreeCreateProgress', ({ type: _type, ...progress }) =>
-      callback(progress)
-    ),
+  // Why: the Rust progress authority only streams clone progress, so this
+  // adapter has nothing to forward; creation progress reaches the shell through
+  // the worktree state-events stream.
+  onCreateProgress: () => () => {},
   prefetchCreateBase: async ({ repoId, baseBranch }) => {
-    await callRuntimeOrpc(
-      LOCAL_TARGET,
-      (client) => client.worktree.prefetchCreateBase,
-      { repo: repoId, baseBranch },
-      { suppressFeatureInteraction: true }
-    )
+    await prefetchRuntimeWorktreeCreateBase(LOCAL_TARGET, { repo: repoId, baseBranch })
   },
   resolvePrBase: ({ repoId, ...input }) =>
-    callRuntimeOrpc(LOCAL_TARGET, (client) => client.worktree.resolvePrBase, {
-      repo: repoId,
-      ...input
-    }),
-  resolveMrBase: ({ repoId, ...input }) =>
-    callRuntimeOrpc(LOCAL_TARGET, (client) => client.worktree.resolveMrBase, {
-      repo: repoId,
-      ...input
-    }),
+    resolveRuntimeWorktreePrBase(LOCAL_TARGET, { repo: repoId, ...input }),
   remove: ({ expectedRevision, worktreeId, force, skipArchive }) =>
-    callRuntimeOrpc(LOCAL_TARGET, (client) => client.worktree.rm, {
+    removeRuntimeWorktree(LOCAL_TARGET, {
       expectedRevision,
       worktree: toRuntimeWorktreeSelector(worktreeId),
       force,
       runHooks: skipArchive !== true
     }),
   forceDeletePreservedBranch: ({ worktreeId, branchName, expectedHead }) =>
-    callRuntimeOrpc(LOCAL_TARGET, (client) => client.worktree.forceDeleteBranch, {
+    forceDeleteRuntimeWorktreeBranch(LOCAL_TARGET, {
       worktree: toRuntimeWorktreeSelector(worktreeId),
       branchName,
       expectedHead
@@ -104,47 +97,41 @@ const localWorktreeClient: WorktreeWorkspaceApi = {
       updates.pushTarget === undefined
         ? { ...updates, pushTarget: null }
         : updates
-    return callRuntimeOrpc(LOCAL_TARGET, (client) => client.worktree.set, {
+    return setRuntimeWorktree(LOCAL_TARGET, {
       expectedRevision,
       worktree: toRuntimeWorktreeSelector(worktreeId),
-      ...rpcUpdates
+      // Why: `WorktreeMeta` (workbench domain model) and `WorktreeSetPatch`
+      // (protobuf wire patch) are independently declared but describe the
+      // same patchable field set one-for-one; only the field the daemon's
+      // `set` handler actually reads ever flows through here.
+      patch: rpcUpdates as WorktreeSetPatch
     })
   },
-  listLineage: () =>
-    callRuntimeOrpc(LOCAL_TARGET, (client) => client.worktree.lineageList, undefined),
+  listLineage: () => listRuntimeWorktreeLineage(LOCAL_TARGET),
   persistSortOrder: async ({ orderedIds }) => {
-    await callRuntimeOrpc(LOCAL_TARGET, (client) => client.worktree.persistSortOrder, {
-      orderedIds
-    })
+    await persistRuntimeWorktreeSortOrder(LOCAL_TARGET, { orderedIds })
   },
   onChanged: (callback) =>
-    localClientEvents.subscribe((event: RuntimeClientEventSubscriptionEvent) => {
+    localClientEvents.subscribe((event: ClientEventsSubscriptionEventValue) => {
       if (event.type === 'worktreesChanged') {
         callback({ repoId: event.repoId, ...(event.renamed ? { renamed: event.renamed } : {}) })
       }
     }),
   onGitStatusMetadataChanged: (callback) =>
-    localClientEvents.subscribe((event: RuntimeClientEventSubscriptionEvent) => {
+    localClientEvents.subscribe((event: ClientEventsSubscriptionEventValue) => {
       if (event.type === 'worktreesChanged') {
         callback({ repoId: event.repoId })
       }
     }),
   onHeadIdentitiesChanged: (callback) =>
-    localClientEvents.subscribe((event: RuntimeClientEventSubscriptionEvent) => {
+    localClientEvents.subscribe((event: ClientEventsSubscriptionEventValue) => {
       if (event.type === 'worktreeHeadIdentitiesChanged') {
         callback({ repoId: event.repoId, identities: event.identities })
       }
     }),
   onBaseStatus: (callback) =>
-    localStateEvents.subscribe((event: RuntimeWorktreeStateSubscriptionEvent) => {
+    localStateEvents.subscribe((event) => {
       if (event.type === 'baseStatus') {
-        const { type: _type, ...payload } = event
-        callback(payload)
-      }
-    }),
-  onRemoteBranchConflict: (callback) =>
-    localStateEvents.subscribe((event: RuntimeWorktreeStateSubscriptionEvent) => {
-      if (event.type === 'remoteBranchConflict') {
         const { type: _type, ...payload } = event
         callback(payload)
       }

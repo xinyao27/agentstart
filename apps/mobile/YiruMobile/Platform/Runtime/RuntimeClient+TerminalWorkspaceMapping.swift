@@ -4,11 +4,9 @@ extension RuntimeClient {
     func fetchWorkspaceTabs(for hostID: String, worktreeID: String) async throws
         -> TerminalWorkspaceSnapshot
     {
-        let wire: MobileSessionTabsWire = try await callRuntime(
+        let wire: MobileSessionTabsWire = try await sessionTabsSnapshot(
             hostID: hostID,
-            path: MobileSessionTabsWireContract.listPath,
-            input: MobileSessionTabsWorktreeRequestWire(worktree: worktreeSelector(worktreeID)),
-            output: MobileSessionTabsWire.self
+            worktreeSelector: worktreeSelector(worktreeID)
         )
         return await mapWorkspaceSnapshot(wire, hostID: hostID, worktreeID: worktreeID)
     }
@@ -60,17 +58,13 @@ extension RuntimeClient {
     private func fetchTerminalSummaries(for hostID: String, worktreeID: String) async throws
         -> [TerminalSummary]
     {
-        let wire: MobileTerminalListWire = try await callRuntime(
+        let response = try await protocolTerminalList(
             hostID: hostID,
-            path: MobileTerminalWireContract.listPath,
-            input: MobileTerminalListRequestWire(
-                worktree: worktreeSelector(worktreeID),
-                limit: 1_000,
-                requireFreshPtyLiveness: true
-            ),
-            output: MobileTerminalListWire.self
+            worktree: worktreeSelector(worktreeID),
+            limit: 1_000,
+            requireFreshPtyLiveness: true
         )
-        return wire.terminals.map(TerminalSummary.init(wire:))
+        return response.terminals.map(TerminalSummary.init(protocol:))
     }
 
     func mapWorkspaceTab(
@@ -81,7 +75,9 @@ extension RuntimeClient {
         let content: TerminalWorkspaceTabContent
         switch wire.type {
         case .terminal:
-            if let target = readyTerminalTarget(
+            if wire.status == .sleeping {
+                content = .terminal(.sleeping)
+            } else if let target = readyTerminalTarget(
                 wire,
                 terminals: terminals,
                 worktreeID: worktreeID

@@ -138,11 +138,11 @@ struct WorkspaceBrowserPane: View {
     private func browserCanvas(pageID: String?, size: CGSize) -> some View {
         ZStack {
             Theme.Colors.background
-            if let frame = model.frame, frame.sequence == model.renderedFrameSequence,
-                let image = model.renderedFrame,
-                let geometry = workspaceBrowserFrameGeometry(size: size, metadata: frame.metadata)
+            if let rendered = model.renderedFrame,
+                let geometry = workspaceBrowserFrameGeometry(
+                    size: size, metadata: rendered.frame.metadata)
             {
-                Image(decorative: image, scale: 1, orientation: .up)
+                Image(decorative: rendered.image, scale: 1, orientation: .up)
                     .resizable()
                     .frame(width: geometry.renderedWidth, height: geometry.renderedHeight)
                     .scaleEffect(visualZoom)
@@ -162,7 +162,7 @@ struct WorkspaceBrowserPane: View {
                     didLongPress = false
                     return
                 }
-                guard let metadata = model.frame?.metadata,
+                guard let metadata = model.renderedFrame?.frame.metadata,
                     let point = workspaceBrowserPoint(
                         location: value.location,
                         size: size,
@@ -211,7 +211,7 @@ struct WorkspaceBrowserPane: View {
                     }
                     guard !didLongPress,
                         hypot(value.translation.width, value.translation.height) > 22,
-                        let metadata = model.frame?.metadata
+                        let metadata = model.renderedFrame?.frame.metadata
                     else { return }
                     if zoomScale > 1.01 {
                         zoomOffset = clampedWorkspaceBrowserOffset(
@@ -238,7 +238,7 @@ struct WorkspaceBrowserPane: View {
             MagnificationGesture()
                 .updating($pinchScale) { value, state, _ in state = value }
                 .onEnded { value in
-                    guard let metadata = model.frame?.metadata else { return }
+                    guard let metadata = model.renderedFrame?.frame.metadata else { return }
                     zoomScale = min(max(zoomScale * value, 1), 3.5)
                     zoomOffset = clampedWorkspaceBrowserOffset(
                         zoomOffset,
@@ -249,7 +249,7 @@ struct WorkspaceBrowserPane: View {
                 }
         )
         .onLongPressGesture(minimumDuration: 0.55, maximumDistance: 16) {
-            guard let metadata = model.frame?.metadata,
+            guard let metadata = model.renderedFrame?.frame.metadata,
                 let point = workspaceBrowserPoint(
                     location: lastTouchLocation,
                     size: size,
@@ -350,7 +350,7 @@ struct WorkspaceBrowserPane: View {
             height: translation.height - lastScrollTranslation.height
         )
         guard abs(delta.width) + abs(delta.height) >= 1,
-            let metadata = model.frame?.metadata,
+            let metadata = model.renderedFrame?.frame.metadata,
             let point = workspaceBrowserPoint(
                 location: location,
                 size: size,

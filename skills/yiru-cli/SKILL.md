@@ -12,12 +12,13 @@ description: >-
 
 # Yiru CLI
 
-Treat the running Bun daemon as the source of truth. Use `--json` for agent-driven calls.
+Treat the running Rust daemon as the source of truth. Use `--json` for agent-driven calls.
 
 ## Select the executable
 
 Use the explicit executable supplied by the environment or task. A source checkout uses
-`apps/daemon/dist/yiru` after `vp run @yiru/daemon#build`; an installed host uses `yiru` from PATH.
+`apps/daemon/target/release/yiru` after `vp run @yiru/daemon#build`; an installed host uses `yiru`
+from PATH.
 If both could identify different daemons and the target is unclear, ask which daemon is in scope.
 
 Examples below use `YIRU` as a placeholder for that exact executable. Replace the token before
@@ -78,7 +79,7 @@ YIRU terminal close --terminal <handle> --json
 ```
 
 Read before sending unless the next input is unambiguous. `send` reports whether input was accepted;
-an accepted write means Bun buffered the complete input, so do not resend a suffix.
+an accepted write means the daemon buffered the complete input, so do not resend a suffix.
 
 ## Events
 

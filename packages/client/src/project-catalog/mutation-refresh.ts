@@ -1,5 +1,5 @@
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
-import { getRuntimeTargetOrpc } from '~renderer/runtime/query-target'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
+import { worktreeCatalogQueryKey } from '~renderer/runtime/worktree-catalog-query'
 
 import {
   readProjectCatalogQueryClient,
@@ -23,6 +23,6 @@ export async function refreshAfterWorktreeMutation(
 ): Promise<void> {
   recordWorktreeMutationRevision(target, repoId, revision)
   await readProjectCatalogQueryClient().invalidateQueries({
-    queryKey: getRuntimeTargetOrpc(target).worktree.key()
+    queryKey: worktreeCatalogQueryKey(target)
   })
 }

@@ -46,9 +46,6 @@ export async function downloadRemoteEntry(
     const result = node.isDirectory
       ? await downloadRuntimeFolder(runtimeContext, node.path, node.name)
       : await downloadRuntimeFile(runtimeContext, node.path, node.name)
-    if (result.canceled) {
-      return
-    }
     toast.success(
       translate(
         'auto.components.right.sidebar.FileExplorerRow.bce4d4e44f',

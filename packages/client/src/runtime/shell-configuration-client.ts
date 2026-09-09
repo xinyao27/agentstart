@@ -1,7 +1,4 @@
-import type {
-  KeybindingActionId,
-  KeybindingFileSnapshot
-} from '@yiru/runtime-protocol/workbench/keybindings'
+import type { KeybindingActionId, KeybindingFileSnapshot } from '@yiru/protocol/keybindings'
 import type {
   CreateLocalYiruProfileArgs,
   CreateLocalYiruProfileResult,
@@ -12,10 +9,11 @@ import type {
   TransferYiruProfileProjectArgs,
   TransferYiruProfileProjectResult,
   YiruProfileListResult
-} from '@yiru/runtime-protocol/workbench/yiru-profiles'
+} from '~renderer/yiru-profiles/profile-model'
 
-import { callShellOrpc } from './orpc-client'
 import { subscribeShellEvent } from './shell-events-client'
+import { keybindingFileSnapshot, requireShellKeybindingsClient } from './shell-keybindings-target'
+import { requireShellYiruProfilesClient } from './shell-yiru-profiles-target'
 
 export type ShellKeybindingsApi = {
   get: () => Promise<KeybindingFileSnapshot>
@@ -43,26 +41,37 @@ export type ShellYiruProfilesApi = {
 }
 
 export const shellKeybindingsApi: ShellKeybindingsApi = {
-  get: () => callShellOrpc((client) => client.shell.keybindings.get, undefined),
-  ensureFile: () => callShellOrpc((client) => client.shell.keybindings.ensureFile, undefined),
-  setAction: (args) => callShellOrpc((client) => client.shell.keybindings.setAction, args),
-  reload: () => callShellOrpc((client) => client.shell.keybindings.reload, undefined),
-  openFile: () => callShellOrpc((client) => client.shell.keybindings.openFile, undefined),
-  revealFile: () => callShellOrpc((client) => client.shell.keybindings.revealFile, undefined),
+  get: async () => keybindingFileSnapshot(await (await requireShellKeybindingsClient()).get()),
+  ensureFile: async () =>
+    keybindingFileSnapshot(await (await requireShellKeybindingsClient()).ensureFile()),
+  setAction: async (args) =>
+    keybindingFileSnapshot(
+      await (
+        await requireShellKeybindingsClient()
+      ).setAction({
+        actionId: args.actionId,
+        bindings: args.bindings
+      })
+    ),
+  reload: async () =>
+    keybindingFileSnapshot(await (await requireShellKeybindingsClient()).reload()),
+  openFile: async () =>
+    keybindingFileSnapshot(await (await requireShellKeybindingsClient()).openFile()),
+  revealFile: async () =>
+    keybindingFileSnapshot(await (await requireShellKeybindingsClient()).revealFile()),
   onChanged: (callback) =>
     subscribeShellEvent((event) => {
       if (event.type === 'keybindingsChanged') {
-        callback(event.snapshot)
+        callback(keybindingFileSnapshot(event.snapshot))
       }
     })
 }
 
 export const shellYiruProfilesApi: ShellYiruProfilesApi = {
-  list: () => callShellOrpc((client) => client.shell.yiruProfiles.list, undefined),
-  createLocal: (args) => callShellOrpc((client) => client.shell.yiruProfiles.createLocal, args),
-  switchProfile: (args) => callShellOrpc((client) => client.shell.yiruProfiles.switchProfile, args),
-  transferProject: (args) =>
-    callShellOrpc((client) => client.shell.yiruProfiles.transferProject, args),
-  findProjectProfiles: (args) =>
-    callShellOrpc((client) => client.shell.yiruProfiles.findProjectProfiles, args)
+  list: async () => (await requireShellYiruProfilesClient()).list(),
+  createLocal: async (args) => (await requireShellYiruProfilesClient()).createLocal(args),
+  switchProfile: async (args) => (await requireShellYiruProfilesClient()).switchProfile(args),
+  transferProject: async (args) => (await requireShellYiruProfilesClient()).transferProject(args),
+  findProjectProfiles: async (args) =>
+    (await requireShellYiruProfilesClient()).findProjectProfiles(args)
 }

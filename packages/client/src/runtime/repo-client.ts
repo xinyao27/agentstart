@@ -1,8 +1,9 @@
-import { legacyBaseRefSearchResult } from '@yiru/runtime-protocol/model/review'
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type { BaseRefSearchResult, GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { BaseRefSearchResult } from '@yiru/protocol/git/worktree-source'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
-import { callRuntimeOrpc } from './orpc-client'
+import { legacyBaseRefSearchResult } from '../new-workspace/base-ref-result'
+import { requireRepoRefsProtocolClient } from './repo-catalog-target'
 import { isRuntimeRepoRefSearchQueryWithinLimit } from './repo-search-bounds'
 import { getActiveRuntimeTarget } from './rpc-client'
 
@@ -17,12 +18,11 @@ export async function getRuntimeRepoBaseRefDefault(
   hostId?: ExecutionHostId
 ): Promise<RuntimeRepoBaseRefDefault> {
   const target = getActiveRuntimeTarget(settings)
-  return callRuntimeOrpc(
-    target,
-    (client) => client.repo.baseRefDefault,
-    // Why: a repoId can collide across execution hosts within a local store
-    // (host OS vs a WSL distro); a paired environment's own store has no
-    // "disambiguate by hostId" concept, so hostId is local-only.
+  const client = await requireRepoRefsProtocolClient(target)
+  // Why: a repoId can collide across execution hosts within a local store
+  // (host OS vs a WSL distro); a paired environment's own store has no
+  // "disambiguate by hostId" concept, so hostId is local-only.
+  return client.baseRefDefault(
     { repo: repoId, ...(target.kind === 'local' && hostId ? { hostId } : {}) },
     { timeoutMs: 15_000 }
   )
@@ -39,9 +39,8 @@ export async function searchRuntimeRepoBaseRefs(
     return []
   }
   const target = getActiveRuntimeTarget(settings)
-  const result = await callRuntimeOrpc(
-    target,
-    (client) => client.repo.searchRefs,
+  const client = await requireRepoRefsProtocolClient(target)
+  const result = await client.searchRefs(
     { repo: repoId, query, limit, ...(target.kind === 'local' && hostId ? { hostId } : {}) },
     { timeoutMs: 15_000 }
   )
@@ -59,9 +58,8 @@ export async function searchRuntimeRepoBaseRefDetails(
     return []
   }
   const target = getActiveRuntimeTarget(settings)
-  const result = await callRuntimeOrpc(
-    target,
-    (client) => client.repo.searchRefs,
+  const client = await requireRepoRefsProtocolClient(target)
+  const result = await client.searchRefs(
     { repo: repoId, query, limit, ...(target.kind === 'local' && hostId ? { hostId } : {}) },
     { timeoutMs: 15_000 }
   )

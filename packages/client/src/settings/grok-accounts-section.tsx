@@ -1,4 +1,4 @@
-import type { GrokAccountStatus } from '@yiru/runtime-protocol/workbench/rate-limit-types'
+import type { GrokAccountStatus } from '@yiru/protocol/accounts-values'
 import { useEffect, useState } from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { openHttpLink } from '~renderer/editor/http-link-routing'

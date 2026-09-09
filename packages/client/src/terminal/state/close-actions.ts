@@ -1,8 +1,8 @@
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { closeRuntimeTerminal } from '~renderer/runtime/terminal-inspection'
 import { retireParkedTerminalTab } from '~renderer/runtime/terminal-parked-watcher-registry'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { forgetForegroundTerminalTabs } from '~renderer/tab-bar/foreground-terminals'
 import { forgetAgentHibernationTabOutput } from '~renderer/terminal-pane/agent/hibernation-output-activity'
 import { forgetAgentStartupDeliveriesForTabs } from '~renderer/terminal-pane/agent/startup-delivery-guards'
@@ -46,11 +46,9 @@ export function createTerminalCloseActions(
           for (const terminal of retirementPlan.runtimeTerminals) {
             const environmentId = terminal.environmentId ?? fallbackRuntimeEnvironmentId
             retirementTasks.push(
-              callRuntimeOrpc(
-                environmentId ? { kind: 'environment', environmentId } : { kind: 'local' },
-                (client) => client.terminal.close,
-                { terminal: terminal.handle }
-              )
+              openRuntimeTerminalClient(
+                environmentId ? { kind: 'environment', environmentId } : { kind: 'local' }
+              ).then((client) => client.close(terminal.handle))
             )
           }
         }

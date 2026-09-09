@@ -1,4 +1,4 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle, Trash as Trash2, X } from '~renderer/icons/hugeicons'

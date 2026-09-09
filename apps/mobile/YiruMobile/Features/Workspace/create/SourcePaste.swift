@@ -9,7 +9,6 @@ nonisolated func workspaceSourceQueryWithinLimit(_ value: String) -> Bool {
 nonisolated enum WorkspacePasteIntent: Hashable, Sendable {
     case githubNumber(Int)
     case githubLink(slug: WorkspaceRepoSlug, number: Int)
-    case gitLabLink(host: String, path: String, number: Int)
 }
 
 nonisolated struct WorkspaceCrossRepoPrompt: Hashable, Sendable {
@@ -31,7 +30,7 @@ nonisolated func workspacePasteIntent(_ value: String) -> WorkspacePasteIntent? 
         return .githubNumber(number)
     }
     guard let components = URLComponents(string: trimmed),
-        let host = components.host,
+        components.host != nil,
         components.scheme == "https" || components.scheme == "http"
     else { return nil }
     let path = components.path.split(separator: "/").map(String.init)
@@ -41,12 +40,7 @@ nonisolated func workspacePasteIntent(_ value: String) -> WorkspacePasteIntent? 
             number: number
         )
     }
-    guard let separator = path.firstIndex(of: "-"), separator >= 2,
-        separator + 2 < path.count,
-        path[separator + 1].lowercased() == "merge_requests",
-        let number = Int(path[separator + 2]), number > 0
-    else { return nil }
-    return .gitLabLink(host: host, path: path[..<separator].joined(separator: "/"), number: number)
+    return nil
 }
 
 nonisolated extension WorkspaceRepoSlug {

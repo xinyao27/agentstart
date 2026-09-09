@@ -1,0 +1,602 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service AccountsService {
+  rpc List(AccountsServiceListRequest) returns (AccountsServiceListResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListCachedClaude(AccountsServiceListCachedClaudeRequest) returns (AccountsServiceListCachedClaudeResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListCachedCodex(AccountsServiceListCachedCodexRequest) returns (AccountsServiceListCachedCodexResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Subscribe(AccountsServiceSubscribeRequest) returns (stream AccountsServiceSubscribeResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_RESTART_FROM_REQUEST
+    };
+  }
+
+  rpc Select(AccountsServiceSelectRequest) returns (AccountsServiceSelectResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Remove(AccountsServiceRemoveRequest) returns (AccountsServiceRemoveResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Unsubscribe(AccountsServiceUnsubscribeRequest) returns (AccountsServiceUnsubscribeResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RefreshRateLimits(AccountsServiceRefreshRateLimitsRequest) returns (AccountsServiceRefreshRateLimitsResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RefreshRateLimitsForTarget(AccountsServiceRefreshRateLimitsForTargetRequest) returns (AccountsServiceRefreshRateLimitsForTargetResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ConsumeCodexResetCredit(AccountsServiceConsumeCodexResetCreditRequest) returns (AccountsServiceConsumeCodexResetCreditResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RefreshInactiveAccounts(AccountsServiceRefreshInactiveAccountsRequest) returns (AccountsServiceRefreshInactiveAccountsResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RefreshGrokRateLimits(AccountsServiceRefreshGrokRateLimitsRequest) returns (AccountsServiceRefreshGrokRateLimitsResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetGrokStatus(AccountsServiceGetGrokStatusRequest) returns (AccountsServiceGetGrokStatusResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Add(AccountsServiceAddRequest) returns (AccountsServiceAddResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CancelPendingLogin(AccountsServiceCancelPendingLoginRequest) returns (AccountsServiceCancelPendingLoginResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Reauthenticate(AccountsServiceReauthenticateRequest) returns (AccountsServiceReauthenticateResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetMiniMaxCredentials(AccountsServiceGetMiniMaxCredentialsRequest) returns (AccountsServiceGetMiniMaxCredentialsResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SaveMiniMaxCookie(AccountsServiceSaveMiniMaxCookieRequest) returns (AccountsServiceSaveMiniMaxCookieResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ClearMiniMaxCookie(AccountsServiceClearMiniMaxCookieRequest) returns (AccountsServiceClearMiniMaxCookieResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+enum AccountProvider {
+  ACCOUNT_PROVIDER_UNSPECIFIED = 0;
+  ACCOUNT_PROVIDER_CLAUDE = 1;
+  ACCOUNT_PROVIDER_CODEX = 2;
+  ACCOUNT_PROVIDER_CURSOR = 3;
+  ACCOUNT_PROVIDER_GEMINI = 4;
+  ACCOUNT_PROVIDER_OPEN_CODE_GO = 5;
+  ACCOUNT_PROVIDER_KIMI = 6;
+  ACCOUNT_PROVIDER_ANTIGRAVITY = 7;
+  ACCOUNT_PROVIDER_MINIMAX = 8;
+  ACCOUNT_PROVIDER_GROK = 9;
+}
+
+enum AccountUsageStatus {
+  ACCOUNT_USAGE_STATUS_UNSPECIFIED = 0;
+  ACCOUNT_USAGE_STATUS_IDLE = 1;
+  ACCOUNT_USAGE_STATUS_FETCHING = 2;
+  ACCOUNT_USAGE_STATUS_OK = 3;
+  ACCOUNT_USAGE_STATUS_ERROR = 4;
+  ACCOUNT_USAGE_STATUS_UNAVAILABLE = 5;
+}
+
+enum ManagedAccountRuntime {
+  MANAGED_ACCOUNT_RUNTIME_UNSPECIFIED = 0;
+  MANAGED_ACCOUNT_RUNTIME_HOST = 1;
+  MANAGED_ACCOUNT_RUNTIME_WSL = 2;
+}
+
+enum ClaudeManagedAuthMethod {
+  CLAUDE_MANAGED_AUTH_METHOD_UNSPECIFIED = 0;
+  CLAUDE_MANAGED_AUTH_METHOD_SUBSCRIPTION_OAUTH = 1;
+  CLAUDE_MANAGED_AUTH_METHOD_UNKNOWN = 2;
+}
+
+enum CodexSystemAuthKind {
+  CODEX_SYSTEM_AUTH_KIND_UNSPECIFIED = 0;
+  CODEX_SYSTEM_AUTH_KIND_NONE = 1;
+  CODEX_SYSTEM_AUTH_KIND_OAUTH = 2;
+  CODEX_SYSTEM_AUTH_KIND_API_KEY = 3;
+}
+
+enum UsageRateLimitSource {
+  USAGE_RATE_LIMIT_SOURCE_UNSPECIFIED = 0;
+  USAGE_RATE_LIMIT_SOURCE_OAUTH = 1;
+  USAGE_RATE_LIMIT_SOURCE_CLI = 2;
+  USAGE_RATE_LIMIT_SOURCE_WEB = 3;
+}
+
+enum UsageRateLimitFailureKind {
+  USAGE_RATE_LIMIT_FAILURE_KIND_UNSPECIFIED = 0;
+  USAGE_RATE_LIMIT_FAILURE_KIND_MISSING_CREDENTIALS = 1;
+  USAGE_RATE_LIMIT_FAILURE_KIND_STALE_TOKEN = 2;
+  USAGE_RATE_LIMIT_FAILURE_KIND_REFRESHABLE_CREDENTIALS_WITHOUT_TOKEN = 3;
+  USAGE_RATE_LIMIT_FAILURE_KIND_DELEGATED_REFRESH_REQUIRED = 4;
+  USAGE_RATE_LIMIT_FAILURE_KIND_DEFERRED_BY_LIVE_SESSION = 5;
+  USAGE_RATE_LIMIT_FAILURE_KIND_KEYCHAIN_UNAVAILABLE = 6;
+  USAGE_RATE_LIMIT_FAILURE_KIND_MISSING_SCOPE = 7;
+  USAGE_RATE_LIMIT_FAILURE_KIND_NETWORK = 8;
+  USAGE_RATE_LIMIT_FAILURE_KIND_SERVER = 9;
+  USAGE_RATE_LIMIT_FAILURE_KIND_PARSE = 10;
+  USAGE_RATE_LIMIT_FAILURE_KIND_RATE_LIMITED = 11;
+  USAGE_RATE_LIMIT_FAILURE_KIND_CLI_UNAVAILABLE = 12;
+  USAGE_RATE_LIMIT_FAILURE_KIND_USAGE_UNAVAILABLE = 13;
+  USAGE_RATE_LIMIT_FAILURE_KIND_UNKNOWN = 14;
+}
+
+enum CodexRateLimitResetOutcome {
+  CODEX_RATE_LIMIT_RESET_OUTCOME_UNSPECIFIED = 0;
+  CODEX_RATE_LIMIT_RESET_OUTCOME_RESET = 1;
+  CODEX_RATE_LIMIT_RESET_OUTCOME_NOTHING_TO_RESET = 2;
+  CODEX_RATE_LIMIT_RESET_OUTCOME_NO_CREDIT = 3;
+  CODEX_RATE_LIMIT_RESET_OUTCOME_ALREADY_REDEEMED = 4;
+}
+
+message AccountsServiceListRequest {}
+message AccountsServiceListResponse {
+  AccountsSnapshot snapshot = 1;
+}
+message AccountsServiceListCachedClaudeRequest {}
+message AccountsServiceListCachedClaudeResponse {
+  AccountRoster roster = 1;
+}
+message AccountsServiceListCachedCodexRequest {}
+message AccountsServiceListCachedCodexResponse {
+  AccountRoster roster = 1;
+}
+message AccountsServiceSubscribeRequest {}
+
+message AccountsServiceSubscribeResponse {
+  oneof event {
+    AccountsSubscriptionReady ready = 1;
+    AccountsSnapshot snapshot = 2;
+    AccountsSubscriptionEnd end = 3;
+  }
+}
+
+message AccountsSubscriptionReady {
+  AccountsSnapshot snapshot = 1;
+  string subscription_id = 2;
+}
+message AccountsSubscriptionEnd {}
+
+message AccountsServiceSelectRequest {
+  AccountProvider provider = 1;
+  optional string account_id = 2;
+  ManagedAccountRuntime runtime = 3;
+  optional string wsl_distro = 4;
+}
+message AccountsServiceSelectResponse {
+  AccountRoster roster = 1;
+}
+
+message AccountsServiceRemoveRequest {
+  AccountProvider provider = 1;
+  string account_id = 2;
+}
+message AccountsServiceRemoveResponse {
+  AccountRoster roster = 1;
+}
+message AccountsServiceUnsubscribeRequest {
+  string subscription_id = 1;
+}
+message AccountsServiceUnsubscribeResponse {
+  bool unsubscribed = 1;
+}
+
+message AccountsServiceRefreshRateLimitsRequest {
+  CursorRateLimitRefreshContext cursor_context = 1;
+}
+message AccountsServiceRefreshRateLimitsResponse {
+  AccountRateLimitState rate_limits = 1;
+}
+
+message AccountsServiceRefreshRateLimitsForTargetRequest {
+  AccountProvider provider = 1;
+  RateLimitRuntimeTarget target = 2;
+}
+message AccountsServiceRefreshRateLimitsForTargetResponse {
+  AccountRateLimitState rate_limits = 1;
+}
+message AccountsServiceConsumeCodexResetCreditRequest {}
+message AccountsServiceConsumeCodexResetCreditResponse {
+  CodexRateLimitResetResult result = 1;
+}
+message AccountsServiceRefreshInactiveAccountsRequest {
+  AccountProvider provider = 1;
+}
+message AccountsServiceRefreshInactiveAccountsResponse {}
+message AccountsServiceRefreshGrokRateLimitsRequest {}
+message AccountsServiceRefreshGrokRateLimitsResponse {
+  AccountRateLimitState rate_limits = 1;
+}
+message AccountsServiceGetGrokStatusRequest {}
+message AccountsServiceGetGrokStatusResponse {
+  GrokAccountStatus status = 1;
+}
+
+message AccountsServiceAddRequest {
+  AccountProvider provider = 1;
+  ManagedAccountRuntime runtime = 2;
+  optional string wsl_distro = 3;
+}
+message AccountsServiceReauthenticateRequest {
+  AccountProvider provider = 1;
+  string account_id = 2;
+}
+message AccountsServiceAddResponse {
+  AccountRoster roster = 1;
+}
+message AccountsServiceReauthenticateResponse {
+  AccountRoster roster = 1;
+}
+message AccountsServiceCancelPendingLoginRequest {}
+message AccountsServiceCancelPendingLoginResponse {
+  bool cancelled = 1;
+}
+message AccountsServiceGetMiniMaxCredentialsRequest {}
+message AccountsServiceSaveMiniMaxCookieRequest {
+  string cookie = 1;
+}
+message AccountsServiceClearMiniMaxCookieRequest {}
+message AccountsServiceGetMiniMaxCredentialsResponse {
+  bool configured = 1;
+}
+message AccountsServiceSaveMiniMaxCookieResponse {
+  bool configured = 1;
+}
+message AccountsServiceClearMiniMaxCookieResponse {
+  bool configured = 1;
+}
+
+message AccountsSnapshot {
+  AccountRoster claude = 1;
+  AccountRoster codex = 2;
+  AccountRateLimitState rate_limits = 3;
+}
+
+message AccountRoster {
+  repeated ManagedAccount accounts = 1;
+  optional string active_account_id = 2;
+  ManagedAccountSelection active_account_ids_by_runtime = 3;
+  optional CodexSystemIdentity system_default = 4;
+}
+
+message ManagedAccount {
+  string id = 1;
+  string email = 2;
+  optional string organization_name = 3;
+  optional string workspace_label = 4;
+  ManagedAccountRuntime runtime = 5;
+  optional string wsl_distro = 6;
+  ClaudeManagedAuthMethod claude_auth_method = 7;
+  optional string organization_uuid = 8;
+  optional string provider_account_id = 9;
+  optional string workspace_account_id = 10;
+  double created_at_ms = 11;
+  double updated_at_ms = 12;
+  double last_authenticated_at_ms = 13;
+}
+
+message ManagedAccountSelection {
+  optional string host = 1;
+  repeated ManagedAccountWslSelection wsl = 2;
+}
+
+message ManagedAccountWslSelection {
+  string distro = 1;
+  optional string account_id = 2;
+}
+
+message CodexSystemIdentity {
+  bool has_auth = 1;
+  CodexSystemAuthKind auth_kind = 2;
+  optional string email = 3;
+  optional string provider_account_id = 4;
+  optional string workspace_label = 5;
+}
+
+message AccountRateLimitState {
+  ProviderRateLimits claude = 1;
+  ProviderRateLimits codex = 2;
+  ProviderRateLimits cursor = 3;
+  ProviderRateLimits gemini = 4;
+  ProviderRateLimits open_code_go = 5;
+  ProviderRateLimits kimi = 6;
+  ProviderRateLimits antigravity = 7;
+  ProviderRateLimits minimax = 8;
+  ProviderRateLimits grok = 9;
+  repeated InactiveAccountUsage inactive_claude_accounts = 10;
+  repeated InactiveAccountUsage inactive_codex_accounts = 11;
+  bool minimax_cookie_configured = 12;
+  bool grok_auth_configured = 13;
+  RateLimitRuntimeTarget claude_target = 14;
+  RateLimitRuntimeTarget codex_target = 15;
+}
+
+message ProviderRateLimits {
+  AccountProvider provider = 1;
+  RateLimitWindow session = 2;
+  RateLimitWindow weekly = 3;
+  RateLimitWindow fable_weekly = 4;
+  RateLimitWindow monthly = 5;
+  repeated RateLimitBucket buckets = 6;
+  optional string plan_type = 7;
+  double updated_at_ms = 8;
+  optional string error = 9;
+  AccountUsageStatus status = 10;
+  RateLimitResetCredits rate_limit_reset_credits = 11;
+  UsageRateLimitMetadata usage_metadata = 12;
+  bool has_fable_weekly = 13;
+  bool has_monthly = 14;
+  bool has_buckets = 15;
+  bool has_rate_limit_reset_credits = 16;
+  bool has_plan_type = 17;
+}
+
+message RateLimitWindow {
+  double used_percent = 1;
+  double window_minutes = 2;
+  optional double resets_at_ms = 3;
+  optional string reset_description = 4;
+}
+
+message RateLimitBucket {
+  string name = 1;
+  RateLimitWindow window = 2;
+}
+
+message InactiveAccountUsage {
+  string account_id = 1;
+  ProviderRateLimits rate_limits = 2;
+  double updated_at_ms = 3;
+  bool is_fetching = 4;
+}
+
+message RateLimitRuntimeTarget {
+  ManagedAccountRuntime runtime = 1;
+  optional string wsl_distro = 2;
+}
+
+message CursorRateLimitRefreshContext {
+  string execution_host_id = 1;
+  optional string workspace_id = 2;
+}
+
+message RateLimitResetCredit {
+  string status = 1;
+  optional double expires_at_ms = 2;
+  optional double granted_at_ms = 3;
+}
+
+message RateLimitResetCredits {
+  uint64 available_count = 1;
+  optional uint64 total_earned_count = 2;
+  optional double next_expires_at_ms = 3;
+  repeated RateLimitResetCredit credits = 4;
+  bool has_credits = 5;
+}
+
+message UsageRateLimitMetadata {
+  UsageRateLimitSource source = 1;
+  repeated UsageRateLimitSource attempted_sources = 2;
+  UsageRateLimitFailureKind failure_kind = 3;
+  optional string credential_source = 4;
+  optional string auth_provenance = 5;
+  optional bool deferred_by_live_claude_session = 6;
+  UsageRateLimitSource last_successful_source = 7;
+  bool has_attempted_sources = 8;
+}
+
+message CodexRateLimitResetResult {
+  CodexRateLimitResetOutcome outcome = 1;
+  AccountRateLimitState rate_limits = 2;
+}
+
+message GrokAccountStatus {
+  bool signed_in = 1;
+  optional string email = 2;
+  optional string team_id = 3;
+  bool token_fresh = 4;
+  optional string error = 5;
+}

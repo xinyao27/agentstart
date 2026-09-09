@@ -1,4 +1,4 @@
-import type { EventProps } from '@yiru/runtime-protocol/workbench/telemetry-events'
+import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
 import { track } from '~renderer/telemetry/client'
 
 export type YiruCliFeatureTipSource = EventProps<'yiru_cli_feature_tip_shown'>['source']

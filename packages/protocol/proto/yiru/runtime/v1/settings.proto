@@ -1,0 +1,429 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+// Why: the settings authority persists one routing document owned by the
+// renderer but answers the wire with a normalized nine-field projection
+// (RuntimeClientSettings in the legacy contract) plus separately-modeled
+// quick commands and import previews, so this service mirrors that split.
+service SettingsService {
+  rpc Get(SettingsServiceGetRequest) returns (SettingsServiceGetResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Update(SettingsServiceUpdateRequest) returns (SettingsServiceGetResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetTerminalQuickCommands(SettingsServiceGetTerminalQuickCommandsRequest) returns (SettingsServiceTerminalQuickCommandsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc UpdateTerminalQuickCommands(SettingsServiceUpdateTerminalQuickCommandsRequest) returns (SettingsServiceTerminalQuickCommandsResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc UpdatePRBotAuthorOverride(SettingsServiceUpdatePRBotAuthorOverrideRequest) returns (SettingsServiceGetResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetDocument(SettingsServiceGetDocumentRequest) returns (SettingsServiceGetDocumentResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SetDocument(SettingsServiceSetDocumentRequest) returns (SettingsServiceGetDocumentResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListFonts(SettingsServiceListFontsRequest) returns (SettingsServiceListFontsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PreviewGhosttyImport(SettingsServicePreviewGhosttyImportRequest) returns (SettingsGhosttyImportPreview) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PreviewWarpThemeImport(SettingsServicePreviewWarpThemeImportRequest) returns (SettingsWarpThemeImportPreview) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+// Why: the contract's TuiAgent enum is a closed 34-member list the daemon
+// validates against, so the wire carries the agent name instead of a parallel
+// numbering that would drift every time a preset ships.
+message SettingsTuiAgentValue {
+  oneof value {
+    bool null = 1;
+    string agent = 2;
+  }
+}
+
+message SettingsSnapshot {
+  SettingsTuiAgentValue default_tui_agent = 1;
+  repeated string disabled_tui_agents = 2;
+  map<string, string> agent_cmd_overrides = 3;
+  map<string, string> agent_default_args = 4;
+  repeated SettingsAgentEnv agent_default_env = 5;
+  bool agent_status_hooks_enabled = 6;
+  string minimax_group_id = 7;
+  string minimax_usage_models = 8;
+  repeated string pr_bot_author_overrides = 9;
+}
+
+message SettingsAgentEnv {
+  string agent = 1;
+  map<string, string> vars = 2;
+}
+
+message SettingsServiceGetRequest {}
+
+message SettingsServiceGetResponse {
+  SettingsSnapshot settings = 1;
+}
+
+message SettingsServiceGetDocumentRequest {}
+
+// Why: the settings authority answers the workbench with the whole routing
+// document (`client_settings()`), not the nine-field mobile projection, so the
+// full-document methods carry the normalized nine fields typed and every
+// other document key as ordered typed JSON entries — one encoding per key,
+// no google.protobuf.Struct.
+message SettingsDocument {
+  SettingsSnapshot settings = 1;
+  repeated SettingsJsonValueEntry fields = 2;
+}
+
+message SettingsServiceGetDocumentResponse {
+  SettingsDocument document = 1;
+}
+
+message SettingsServiceSetDocumentRequest {
+  repeated SettingsJsonValueEntry updates = 1;
+}
+
+enum SettingsQuickCommandAction {
+  SETTINGS_QUICK_COMMAND_ACTION_UNSPECIFIED = 0;
+  SETTINGS_QUICK_COMMAND_ACTION_TERMINAL_COMMAND = 1;
+  SETTINGS_QUICK_COMMAND_ACTION_AGENT_PROMPT = 2;
+}
+
+message SettingsQuickCommandScope {
+  oneof scope {
+    bool global = 1;
+    string repo_id = 2;
+  }
+}
+
+// Why: terminal-command and agent-prompt commands carry disjoint required
+// fields in the legacy strict union, so the kind is a oneof rather than
+// optional fields that could combine.
+message SettingsQuickCommand {
+  string id = 1;
+  string label = 2;
+  SettingsQuickCommandScope scope = 3;
+  oneof kind {
+    SettingsTerminalCommand terminal_command = 4;
+    SettingsAgentPrompt agent_prompt = 5;
+  }
+}
+
+message SettingsTerminalCommand {
+  string command = 1;
+  bool append_enter = 2;
+}
+
+message SettingsAgentPrompt {
+  string agent = 1;
+  string prompt = 2;
+}
+
+message SettingsServiceGetTerminalQuickCommandsRequest {}
+
+message SettingsServiceTerminalQuickCommandsResponse {
+  repeated SettingsQuickCommand terminal_quick_commands = 1;
+}
+
+message SettingsQuickCommandDelete {
+  string id = 1;
+}
+
+message SettingsQuickCommandUpsert {
+  SettingsQuickCommand command = 1;
+}
+
+message SettingsQuickCommandMutation {
+  oneof mutation {
+    SettingsQuickCommandDelete delete = 1;
+    SettingsQuickCommandUpsert upsert = 2;
+  }
+}
+
+message SettingsServiceUpdateTerminalQuickCommandsRequest {
+  SettingsQuickCommandMutation mutation = 1;
+}
+
+message SettingsServiceUpdateRequest {
+  optional SettingsTuiAgentValue default_tui_agent = 1;
+  repeated string disabled_tui_agents = 2;
+  optional SettingsStringMap agent_default_args = 3;
+  optional SettingsAgentEnvList agent_default_env = 4;
+  optional bool agent_status_hooks_enabled = 5;
+  optional string minimax_group_id = 6;
+  optional string minimax_usage_models = 7;
+  optional SettingsAuthorList pr_bot_author_overrides = 8;
+}
+
+message SettingsStringMap {
+  map<string, string> values = 1;
+}
+
+message SettingsAgentEnvList {
+  repeated SettingsAgentEnv entries = 1;
+}
+
+message SettingsAuthorList {
+  repeated string authors = 1;
+}
+
+message SettingsServiceUpdatePRBotAuthorOverrideRequest {
+  string author = 1;
+  bool is_bot = 2;
+}
+
+message SettingsServiceListFontsRequest {}
+
+message SettingsServiceListFontsResponse {
+  repeated string fonts = 1;
+}
+
+message SettingsServicePreviewGhosttyImportRequest {}
+
+message SettingsServicePreviewWarpThemeImportRequest {
+  SettingsWarpImportKind kind = 1;
+}
+
+enum SettingsWarpImportKind {
+  SETTINGS_WARP_IMPORT_KIND_UNSPECIFIED = 0;
+  SETTINGS_WARP_IMPORT_KIND_AUTO = 1;
+  SETTINGS_WARP_IMPORT_KIND_CHOOSE_FILE = 2;
+  SETTINGS_WARP_IMPORT_KIND_CHOOSE_FOLDER = 3;
+}
+
+// Why: theme diffs are open-ended Ghostty/Warp key-value pairs whose value
+// kinds are decided by the theme file, so a typed recursive JSON value keeps
+// this honest without google.protobuf.Struct or a JSON string (the same
+// pattern ComputerJsonValue established).
+message SettingsJsonValue {
+  oneof kind {
+    SettingsJsonNull null_value = 1;
+    bool bool_value = 2;
+    double number_value = 3;
+    string string_value = 4;
+    SettingsJsonValueList list_value = 5;
+    SettingsJsonValueObject object_value = 6;
+  }
+}
+
+enum SettingsJsonNull {
+  SETTINGS_JSON_NULL_UNSPECIFIED = 0;
+  SETTINGS_JSON_NULL_VALUE = 1;
+}
+
+message SettingsJsonValueList {
+  repeated SettingsJsonValue values = 1;
+}
+
+message SettingsJsonValueObject {
+  repeated SettingsJsonValueEntry entries = 1;
+}
+
+message SettingsJsonValueEntry {
+  string key = 1;
+  SettingsJsonValue value = 2;
+}
+
+message SettingsGhosttyImportPreview {
+  bool found = 1;
+  optional string config_path = 2;
+  repeated string config_paths = 3;
+  repeated SettingsJsonValueEntry diff = 4;
+  repeated string unsupported_keys = 5;
+  optional string error = 6;
+}
+
+enum SettingsWarpThemeSource {
+  SETTINGS_WARP_THEME_SOURCE_UNSPECIFIED = 0;
+  SETTINGS_WARP_THEME_SOURCE_WARP = 1;
+  SETTINGS_WARP_THEME_SOURCE_GHOSTTY = 2;
+  SETTINGS_WARP_THEME_SOURCE_MANUAL = 3;
+}
+
+enum SettingsWarpThemeMode {
+  SETTINGS_WARP_THEME_MODE_UNSPECIFIED = 0;
+  SETTINGS_WARP_THEME_MODE_DARK = 1;
+  SETTINGS_WARP_THEME_MODE_LIGHT = 2;
+  SETTINGS_WARP_THEME_MODE_UNKNOWN = 3;
+}
+
+message SettingsWarpThemePreview {
+  string id = 1;
+  string name = 2;
+  SettingsWarpThemeSource source = 3;
+  SettingsWarpThemeMode mode = 4;
+  repeated SettingsJsonValueEntry terminal = 5;
+  string imported_at = 6;
+  optional string source_label = 7;
+  repeated string unsupported_features = 8;
+  string selection_value = 9;
+}
+
+message SettingsWarpThemeSkippedFile {
+  string label = 1;
+  string reason = 2;
+}
+
+message SettingsWarpThemeImportPreview {
+  bool found = 1;
+  optional bool canceled = 2;
+  optional bool desktop_only = 3;
+  optional string source_label = 4;
+  repeated SettingsWarpThemePreview themes = 5;
+  repeated SettingsWarpThemeSkippedFile skipped_files = 6;
+  optional string error = 7;
+}

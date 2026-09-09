@@ -1,11 +1,9 @@
-import type { TerminalShowResult } from '@yiru/runtime-protocol/contract'
-import { TERMINAL_MULTIPLEX_RUNTIME_CAPABILITY } from '@yiru/runtime-protocol/protocol-version'
-import type { RuntimeRpcResponse } from '@yiru/runtime-protocol/rpc-envelope'
-import type { RuntimeStatusResult } from '@yiru/runtime-protocol/status'
-import type { TerminalMultiplexOpcode as TerminalMultiplexOpcodeValue } from '@yiru/runtime-protocol/terminal-multiplex/frame'
+import { TERMINAL_MULTIPLEX_PROTOCOL_CAPABILITY } from '@yiru/protocol/terminal-multiplex'
+import type { TerminalMultiplexOpcode as TerminalMultiplexOpcodeValue } from '@yiru/protocol/terminal-multiplex/frame'
 
-import { callRuntimeOrpcByPath, type RuntimeClientTarget } from '../orpc-client'
-import { unwrapRuntimeRpcResult } from '../rpc-client'
+import type { RuntimeClientTarget } from '../runtime-target'
+import { readRuntimeStatus } from '../status-client'
+import { openRuntimeTerminalClient } from '../terminal-protocol'
 import {
   openTerminalMultiplexSubscription,
   type RuntimeTerminalMultiplexHandle
@@ -76,7 +74,7 @@ export class RemoteRuntimeTerminalMultiplexer {
     callbacks: RemoteRuntimeMultiplexedTerminalCallbacks
   }): Promise<RemoteRuntimeMultiplexedTerminal> {
     const [show] = await Promise.all([
-      this.callRuntime<TerminalShowResult>('terminal.show', { terminal: args.terminal }),
+      openRuntimeTerminalClient(this.target).then((client) => client.show(args.terminal)),
       this.ensureConnected()
     ])
     const transportGeneration = show.terminal.transportGeneration
@@ -126,18 +124,21 @@ export class RemoteRuntimeTerminalMultiplexer {
   private async openConnection(): Promise<void> {
     const attempt = ++this.connectionAttempt
     try {
-      const status = await this.callRuntime<RuntimeStatusResult>('status.get', undefined)
+      const status = await readRuntimeStatus(this.target)
       if (
         this.target.kind !== 'local' &&
-        !status.capabilities?.includes(TERMINAL_MULTIPLEX_RUNTIME_CAPABILITY)
+        !status.capabilities?.includes(TERMINAL_MULTIPLEX_PROTOCOL_CAPABILITY)
       ) {
         throw new Error('Runtime host does not advertise terminal.multiplex.')
       }
       const subscription = await openTerminalMultiplexSubscription({
-        target: this.target,
         environmentIdentity: this.target.kind === 'local' ? 'local' : this.target.environmentId,
-        callRuntime: (method, params) => this.callRuntime(method, params),
-        onResponse: (response) => this.handleResponse(attempt, response),
+        onReady: () => {
+          if (attempt === this.connectionAttempt) {
+            this.serverReady = true
+            this.resolveIfReady()
+          }
+        },
         onBinary: (bytes) => this.handleBinary(attempt, bytes),
         onError: (error) => this.failConnection(attempt, error),
         onClose: () =>
@@ -152,21 +153,6 @@ export class RemoteRuntimeTerminalMultiplexer {
         this.handleBinary(attempt, frame)
       }
       this.resolveIfReady()
-    } catch (error) {
-      this.failConnection(attempt, error instanceof Error ? error : new Error(String(error)))
-    }
-  }
-
-  private handleResponse(attempt: number, response: RuntimeRpcResponse<unknown>): void {
-    if (attempt !== this.connectionAttempt) {
-      return
-    }
-    try {
-      const event = unwrapRuntimeRpcResult(response)
-      if (isReadyEvent(event)) {
-        this.serverReady = true
-        this.resolveIfReady()
-      }
     } catch (error) {
       this.failConnection(attempt, error instanceof Error ? error : new Error(String(error)))
     }
@@ -283,14 +269,4 @@ export class RemoteRuntimeTerminalMultiplexer {
     this.nextCorrelationId = 1
     this.pendingFrames.splice(0)
   }
-
-  private callRuntime<TResult>(method: string, params: unknown): Promise<TResult> {
-    return callRuntimeOrpcByPath<TResult>(this.target, method.split('.'), params, {
-      timeoutMs: 15_000
-    })
-  }
-}
-
-function isReadyEvent(value: unknown): value is { type: 'ready' } {
-  return typeof value === 'object' && value !== null && 'type' in value && value.type === 'ready'
 }

@@ -1,20 +1,14 @@
-import {
-  runtimePtyEnvironmentId,
-  runtimePtyHandle
-} from '@yiru/runtime-protocol/terminal-identity/id'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { runtimePtyEnvironmentId, runtimePtyHandle } from '@yiru/protocol/terminal-identity'
 
-import { callRuntimeOrpc } from './orpc-client'
-import { RuntimeRpcCallError, getActiveRuntimeTarget } from './rpc-client'
+import { getActiveRuntimeTarget } from './rpc-client'
 import { getRuntimeTerminalMultiplexer } from './terminal-multiplex/registry'
+import { openRuntimeTerminalClient } from './terminal-protocol'
 import { publishRendererTerminalSideEffects } from './terminal-side-effect-client'
 
 const LIVE_TAIL_SUBSCRIPTION_TIMEOUT_MS = 10_000
 
 export function runtimeTerminalErrorMessage(error: unknown): string {
-  if (error instanceof RuntimeRpcCallError) {
-    return error.message
-  }
   return error instanceof Error ? error.message : String(error)
 }
 
@@ -55,7 +49,6 @@ export async function subscribeToRuntimeTerminalData(
     rejectLiveTail = null
   }
 
-  let sideEffectSeq = 0
   const stream = await getRuntimeTerminalMultiplexer(target).subscribeTerminal({
     terminal,
     client: { id: clientId, type: 'desktop' },
@@ -70,11 +63,11 @@ export async function subscribeToRuntimeTerminalData(
         }
         onParsed()
       },
-      onSideEffectBatch: (batch) => {
-        sideEffectSeq += 1
+      onSideEffectBatch: (batch, meta) => {
         publishRendererTerminalSideEffects({
           ptyId,
-          seq: sideEffectSeq,
+          seq: meta.seq,
+          epoch: meta.epoch,
           facts: batch.facts,
           replay: batch.replay
         })
@@ -131,12 +124,13 @@ export function subscribeToRuntimeTerminalExit(
     ? ({ kind: 'environment', environmentId } as const)
     : getActiveRuntimeTarget(settings)
   const controller = new AbortController()
-  void callRuntimeOrpc(
-    target,
-    (client) => client.terminal.wait,
-    { terminal, for: 'exit' },
-    { signal: controller.signal, timeoutMs: 24 * 60 * 60 * 1_000 }
-  )
+  void openRuntimeTerminalClient(target)
+    .then((client) =>
+      client.wait(
+        { terminal, for: 'exit' },
+        { signal: controller.signal, timeoutMs: 24 * 60 * 60 * 1_000 }
+      )
+    )
     .then((result) => {
       if (!controller.signal.aborted) {
         onExit(result.wait.exitCode ?? 0)

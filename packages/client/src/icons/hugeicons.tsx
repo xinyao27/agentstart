@@ -116,7 +116,6 @@ export {
   GitMerge,
   GitPullRequest,
   GithubLogo,
-  GitlabLogo,
   Globe
 } from './hugeicons-1'
 export {

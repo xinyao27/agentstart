@@ -1,4 +1,4 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 
 export type WorktreeSymlinkPathSuggestion = {
   name: string
@@ -19,7 +19,7 @@ export function isWorktreeSymlinkPathQueryTooLarge(
   query: string,
   maxBytes = WORKTREE_SYMLINK_PATH_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 export function getWorktreeSymlinkPathFilterState<T extends WorktreeSymlinkPathSuggestion>({

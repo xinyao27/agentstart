@@ -1,14 +1,14 @@
 import type { QueryClient } from '@tanstack/react-query'
-import type { RuntimeClientEvent } from '@yiru/runtime-protocol/workbench/runtime-client-events'
 import { readProjectCatalogSnapshot } from '~renderer/project-catalog/catalog-snapshot'
 import { projectCatalogTargetForRepo } from '~renderer/project-catalog/query'
 import {
   refreshProjectCatalogTargetRepos,
   refreshProjectCatalogWorktrees
 } from '~renderer/project-catalog/refresh'
+import type { RuntimeClientEvent } from '~renderer/runtime/client-event-model'
 import { subscribeRuntimeClientEvents } from '~renderer/runtime/client-events'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
 import { targetKey } from '~renderer/runtime/query-target'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 import { useAppStore } from '~renderer/store/state'
 import { activateAndRevealKnownWorktree } from '~renderer/worktree/activation'
 

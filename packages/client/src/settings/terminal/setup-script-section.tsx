@@ -1,4 +1,5 @@
-import type { GlobalSettings, SetupScriptLaunchMode } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { SetupScriptLaunchMode } from '@yiru/protocol/settings/workspace-preferences'
 import { translate } from '~renderer/i18n/i18n'
 import { ToggleGroup, ToggleGroupItem } from '~renderer/ui/toggle-group'
 

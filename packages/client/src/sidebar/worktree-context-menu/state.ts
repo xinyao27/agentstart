@@ -1,9 +1,7 @@
-import { getRepoExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type { Repo, Worktree } from '@yiru/runtime-protocol/workbench/types'
-import {
-  parseWorkspaceKey,
-  worktreeWorkspaceKey
-} from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { parseWorkspaceKey, worktreeWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { translate } from '~renderer/i18n/i18n'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useAppStore } from '~renderer/store/state'

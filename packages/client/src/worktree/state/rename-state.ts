@@ -1,5 +1,5 @@
-import { splitWorktreeIdForFilesystem } from '@yiru/runtime-protocol/model/workspace'
-import { worktreeWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { worktreeWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
 
 import type { AppState } from '../../store/types'
 import {
@@ -12,7 +12,6 @@ export const WORKTREE_ID_KEYED_MAP_KEYS = [
   'tabsByWorktree',
   'deleteStateByWorktreeId',
   'baseStatusByWorktreeId',
-  'remoteBranchConflictByWorktreeId',
   'fileSearchStateByWorktree',
   'browserTabsByWorktree',
   'activeBrowserTabIdByWorktree',

@@ -1,13 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { AgentSessionStatus, type AgentSession } from '@yiru/protocol/agent-session'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
+import { agentSessionListQuery, followupAgentSession } from '~renderer/runtime/agent-session/query'
 import { Button } from '~renderer/ui/button'
 
 import {
   getExtensionBrowserCapabilities,
   type BrowserContextPayload
 } from '../browser-capabilities'
-import { extensionOrpc } from '../runtime/orpc'
+
+const LOCAL_TARGET = { kind: 'local' } as const
 
 export function ContextInbox(): React.JSX.Element | null {
   const capabilities = getExtensionBrowserCapabilities()
@@ -16,12 +19,7 @@ export function ContextInbox(): React.JSX.Element | null {
     queryKey: ['extension-host', 'pending-page-context'],
     queryFn: capabilities.consumePendingPageContext
   })
-  const sessions = useQuery(
-    extensionOrpc.agentSession.list.queryOptions({
-      input: {},
-      refetchInterval: 2_000
-    })
-  )
+  const sessions = useQuery(agentSessionListQuery(LOCAL_TARGET))
   const clear = useMutation({
     mutationFn: capabilities.clearPendingPageContext,
     onError: () =>
@@ -30,7 +28,7 @@ export function ContextInbox(): React.JSX.Element | null {
   })
   const send = useMutation({
     mutationFn: async (input: { context: BrowserContextPayload; sessionId: string }) =>
-      extensionOrpc.agentSession.followup.call({
+      followupAgentSession(LOCAL_TARGET, {
         prompt: contextPrompt(input.context),
         sessionId: input.sessionId
       }),
@@ -71,9 +69,9 @@ function ContextReview(props: {
   isSending: boolean
   onClear: () => void
   onSend: (sessionId: string) => void
-  sessions: { id: string; status: string; title: string | null }[]
+  sessions: Pick<AgentSession, 'id' | 'status' | 'title'>[]
 }): React.JSX.Element {
-  const running = props.sessions.filter((session) => session.status === 'running')
+  const running = props.sessions.filter((session) => session.status === AgentSessionStatus.RUNNING)
   return (
     <div className="border-sidebar-border border p-2">
       <p className="truncate text-xs font-semibold">{props.context.pageTitle}</p>

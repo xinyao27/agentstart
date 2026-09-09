@@ -1,7 +1,5 @@
-import type {
-  CodexRateLimitAccountsState,
-  GlobalSettings
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { CodexRateLimitAccountsState } from '@yiru/protocol/settings/managed-accounts'
 import { translate } from '~renderer/i18n/i18n'
 import { ArrowClockwise as RefreshCw, Trash as Trash2 } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'

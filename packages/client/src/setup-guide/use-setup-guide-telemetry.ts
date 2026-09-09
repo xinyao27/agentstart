@@ -1,10 +1,8 @@
-import type { SetupGuideSource } from '@yiru/runtime-protocol/workbench/feature-education-telemetry'
+import type { SetupGuideSource } from '@yiru/protocol/telemetry/education'
 import {
   FEATURE_WALL_SETUP_STEP_IDS,
-  getFirstIncompleteFeatureWallSetupStepId,
-  getFeatureWallSetupSteps,
   type FeatureWallSetupStepId
-} from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
+} from '@yiru/protocol/telemetry/feature-wall/types'
 import { useEffect, useRef, useState } from 'react'
 import {
   persistEmittedSetupGuideStepId,
@@ -15,6 +13,10 @@ import {
 } from '~renderer/feature-tips/telemetry'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 
+import {
+  getFirstIncompleteFeatureWallSetupStepId,
+  getFeatureWallSetupSteps
+} from '../feature-wall/content/setup-steps'
 import type { FeatureWallSetupProgress } from '../feature-wall/setup-progress'
 
 type SetupGuideTelemetrySession = {

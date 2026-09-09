@@ -1,9 +1,6 @@
-import {
-  getRepoExecutionHostId,
-  LOCAL_EXECUTION_HOST_ID
-} from '@yiru/runtime-protocol/model/workspace'
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { SettingsSearchEntry } from '../search'

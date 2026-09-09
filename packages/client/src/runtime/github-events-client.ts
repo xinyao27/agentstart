@@ -1,14 +1,17 @@
-import type {
-  RuntimeGitHubSubscriptionEvent,
-  RuntimeGitHubWorkItemMutatedEvent
-} from '@yiru/runtime-protocol/contract'
-import {
-  getRepoExecutionHostId,
-  parseExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { GitHubPRRefreshEvent, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubEvent } from '@yiru/protocol'
+type RuntimeGitHubWorkItemMutatedEvent = {
+  repoPath: string
+  repoId?: string
+  type: 'pr'
+  number: number
+}
+import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
+import type { GitHubPRRefreshEvent } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { Repo } from '@yiru/protocol/project/repository'
 
-import { createRuntimeOrpcClient, type RuntimeClientTarget } from './orpc-client'
+import { runtimeCallDestination } from './github-runtime-destination'
+import { openGitHubTarget } from './github-target'
+import type { RuntimeClientTarget } from './runtime-target'
 
 function githubEventTarget(repo: Repo): RuntimeClientTarget {
   const host = parseExecutionHostId(getRepoExecutionHostId(repo))
@@ -19,15 +22,23 @@ function githubEventTarget(repo: Repo): RuntimeClientTarget {
 
 function subscribeGitHubEvents(
   target: RuntimeClientTarget,
-  onEvent: (event: RuntimeGitHubSubscriptionEvent) => void
+  onEvent: (event: GitHubEvent) => void
 ): () => void {
   const controller = new AbortController()
   void (async () => {
-    let connection: Awaited<ReturnType<typeof createRuntimeOrpcClient>> | null = null
     try {
-      connection = await createRuntimeOrpcClient(target, { signal: controller.signal })
-      const stream = await connection.client.github.events.subscribe(undefined, {
-        signal: controller.signal
+      const client = await openGitHubTarget()
+      if (!client) {
+        return
+      }
+      // Why: while the target opens, the owning surface can unmount (StrictMode
+      // remount, dependency churn); opening then only cancels on the next tick.
+      if (controller.signal.aborted) {
+        return
+      }
+      const stream = await client.subscribeEvents({
+        signal: controller.signal,
+        ...runtimeCallDestination(target)
       })
       for await (const event of stream) {
         if (controller.signal.aborted) {
@@ -38,8 +49,6 @@ function subscribeGitHubEvents(
     } catch {
       // Why: aborting the owning surface must stay as quiet as the old IPC
       // unsubscribe path; connection failures are retried by its next mount.
-    } finally {
-      connection?.close()
     }
   })()
   return () => controller.abort()
@@ -50,7 +59,10 @@ export function subscribeGitHubPrRefreshEvents(
 ): () => void {
   return subscribeGitHubEvents({ kind: 'local' }, (event) => {
     if (event.type === 'prRefresh') {
-      onRefresh(event.event)
+      // Why: the protobuf decoder passes skippedReason through as a plain
+      // string, but the daemon only ever sends the values the workbench
+      // union names — the stream type just cannot express that narrowing.
+      onRefresh(event.event as GitHubPRRefreshEvent)
     }
   })
 }
@@ -61,7 +73,15 @@ export function subscribeGitHubWorkItemMutations(
 ): () => void {
   return subscribeGitHubEvents(githubEventTarget(repo), (event) => {
     if (event.type === 'workItemMutated') {
-      onMutated(event.item)
+      // Why: the protobuf event has no `type` discriminant and carries repoId
+      // as a plain string without presence, so an empty value maps back to the
+      // contract's absent repoId instead of comparing as an id.
+      onMutated({
+        repoPath: event.item.repoPath,
+        ...(event.item.repoId ? { repoId: event.item.repoId } : {}),
+        type: 'pr',
+        number: event.item.number
+      })
     }
   })
 }

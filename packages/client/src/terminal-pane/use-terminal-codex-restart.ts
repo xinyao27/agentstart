@@ -1,4 +1,4 @@
-import { makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import { useEffect } from 'react'
 import { CODEX_ACCOUNT_RESTART_STARTUP } from '~renderer/agent-session/codex-restart'
 import { useEventCallback } from '~renderer/react/use-event-callback'

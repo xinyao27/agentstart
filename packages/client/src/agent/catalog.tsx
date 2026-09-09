@@ -1,8 +1,4 @@
-import {
-  getTuiAgentLaunchCommand,
-  TUI_AGENT_CONFIG
-} from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import type React from 'react'
 import openClaudeLogoUrl from '~renderer/assets/brand/openclaude-logo.png?url'
 import { translate } from '~renderer/i18n/i18n'
@@ -33,32 +29,12 @@ export type AgentCatalogEntry = {
   homepageUrl: string
 }
 
-function getCatalogPlatform(): NodeJS.Platform {
-  const userAgent = typeof navigator === 'undefined' ? '' : navigator.userAgent
-  if (userAgent.includes('Windows')) {
-    return 'win32'
-  }
-  if (userAgent.includes('Mac')) {
-    return 'darwin'
-  }
-  if (userAgent) {
-    return 'linux'
-  }
-  return typeof process === 'undefined' ? 'linux' : process.platform
-}
-
 export const getAgentCatalog = createLocalizedCatalog((): AgentCatalogEntry[] => [
   {
     id: 'claude',
     label: translate('auto.lib.agent.catalog.0708ed89f1', 'Claude'),
     cmd: 'claude',
     homepageUrl: 'https://docs.anthropic.com/claude/docs/claude-code'
-  },
-  {
-    id: 'claude-agent-teams',
-    label: translate('auto.lib.agent.catalog.bf53f09bf8', 'Claude Agent Teams'),
-    cmd: getTuiAgentLaunchCommand(TUI_AGENT_CONFIG['claude-agent-teams'], getCatalogPlatform()),
-    homepageUrl: 'https://code.claude.com/docs/agent-teams'
   },
   {
     id: 'openclaude',
@@ -323,7 +299,7 @@ export function AgentIcon({
   if (!agent) {
     return <AgentLetterIcon letter="?" size={size} />
   }
-  if (agent === 'claude' || agent === 'claude-agent-teams') {
+  if (agent === 'claude') {
     return <ClaudeIcon size={size} />
   }
   if (agent === 'codex') {

@@ -191,6 +191,21 @@ struct TerminalWorkspaceContentView: View {
         switch tab.content {
         case .terminal(.ready):
             EmptyView()
+        case .terminal(.sleeping):
+            AppUnavailableState(
+                "Terminal is sleeping",
+                iconID: .moon,
+                description: Text("Resume this workspace to reconnect its terminals.")
+            ) {
+                Button("Resume Workspace", iconID: .play) {
+                    Task { await model.resumeWorkspace() }
+                }
+                .appProminentGlassButton()
+                .appButtonContext(.regular)
+                .disabled(!model.isConnected || model.operation != nil)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Theme.Colors.background)
         case .terminal(.pending):
             if model.isPendingTerminalTimedOut(tab.id) {
                 AppUnavailableState(

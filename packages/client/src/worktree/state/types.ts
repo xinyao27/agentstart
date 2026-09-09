@@ -1,29 +1,29 @@
-import { getRepoIdFromWorktreeId } from '@yiru/runtime-protocol/model/workspace'
-import type { TerminalGitHubPRLink } from '@yiru/runtime-protocol/workbench/terminal/github-pr-link-detector'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { WorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
+import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
 import type {
   CreateWorktreeResult,
-  CreateSparseCheckoutRequest,
+  ForceDeleteWorktreeBranchResult,
+  RemoveWorktreeResult,
+  WorktreeBaseStatusEvent
+} from '@yiru/protocol/worktree/create-result'
+import type { SetupDecision } from '@yiru/protocol/worktree/hooks'
+import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+import type { WorkspaceLineage, WorktreeLineage } from '@yiru/protocol/worktree/lineage'
+import type {
   DetectedWorktreeListResult,
   DetectedWorktree,
-  ForceDeleteWorktreeBranchResult,
-  GitPushTarget,
-  RemoveWorktreeResult,
-  SetupDecision,
-  TuiAgent,
-  WorkspaceCreateTelemetrySource,
-  WorkspaceStatus,
-  WorkspaceLineage,
-  WorktreeStartupLaunch,
   Worktree,
-  WorktreeLineage,
-  WorktreeBaseStatusEvent,
-  WorktreeRemoteBranchConflictEvent,
-  WorktreeMeta,
-  WorkspaceKey
-} from '@yiru/runtime-protocol/workbench/types'
-import type { WorktreeForceDeleteReason } from '@yiru/runtime-protocol/workbench/workspace/worktree-removal'
+  WorktreeMeta
+} from '@yiru/protocol/worktree/model'
+import type { CreateSparseCheckoutRequest } from '@yiru/protocol/worktree/sparse'
+import type { TerminalGitHubPRLink } from '~renderer/runtime/terminal-side-effect-client'
 import type { PendingWorktreeCreation } from '~renderer/worktree-creation/pending'
-export { getRepoIdFromWorktreeId } from '@yiru/runtime-protocol/model/workspace'
+import type { WorktreeStartupLaunch } from '~renderer/worktree/create-model'
+import type { WorktreeForceDeleteReason } from '~renderer/worktree/removal-policy'
+export { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
 
 export type WorktreeDeleteState = {
   isDeleting: boolean
@@ -74,7 +74,6 @@ export type WorktreeSlice = {
   renamingWorktreeId: WorktreeRenameRequest | null
   deleteStateByWorktreeId: Record<string, WorktreeDeleteState>
   baseStatusByWorktreeId: Record<string, WorktreeBaseStatusEvent>
-  remoteBranchConflictByWorktreeId: Record<string, WorktreeRemoteBranchConflictEvent>
   /**
    * Monotonically increasing counter that signals when the sidebar sort order
    * should be recomputed.  Only bumped by events that represent meaningful
@@ -127,15 +126,11 @@ export type WorktreeSlice = {
     createdWithAgent?: TuiAgent,
     branchNameOverride?: string,
     workspaceStatus?: WorkspaceStatus,
-    linkedGitLabMR?: number,
     startup?: WorktreeStartupLaunch,
     pendingFirstAgentMessageRename?: boolean,
     /** When set, correlates the backend's `createWorktree:progress` events to a
      *  renderer pending creation. Synchronous callers omit it. */
     creationId?: string,
-    linkedBitbucketPR?: number | null,
-    linkedAzureDevOpsPR?: number | null,
-    linkedGiteaPR?: number | null,
     compareBaseRef?: string
   ) => Promise<CreateWorktreeResult>
   /** Register an in-flight background creation and make it the active surface. */
@@ -256,7 +251,6 @@ export type WorktreeSlice = {
     identity: { head?: string; branch?: string | null }
   ) => void
   updateWorktreeBaseStatus: (event: WorktreeBaseStatusEvent) => void
-  updateWorktreeRemoteBranchConflict: (event: WorktreeRemoteBranchConflictEvent) => void
 }
 
 export function findWorktreeById(

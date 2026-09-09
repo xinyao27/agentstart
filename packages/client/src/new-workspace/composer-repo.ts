@@ -1,5 +1,5 @@
-import type { ExecutionHostScope } from '@yiru/runtime-protocol/model/workspace'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { ExecutionHostScope } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
 import {
   getNewWorkspaceDialogEligibleRepos,
   resolveNewWorkspaceDialogGitRepoId,

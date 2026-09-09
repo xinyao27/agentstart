@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import { translate } from '~renderer/i18n/i18n'
 import { getRelativePathInsideRoot, normalizeRelativePath } from '~renderer/path'
 

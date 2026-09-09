@@ -1,8 +1,8 @@
 import {
   agentProviderSessionsEqual,
   type SleepingAgentSessionRecord
-} from '@yiru/runtime-protocol/model/agent'
-import { AGENT_STATUS_STALE_AFTER_MS } from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/session-resume'
+import { AGENT_STATUS_STALE_AFTER_MS } from '@yiru/protocol/agent/status-records'
 import { useAppStore } from '~renderer/store/state'
 
 import {

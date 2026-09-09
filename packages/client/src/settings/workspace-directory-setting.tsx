@@ -1,5 +1,5 @@
-import { LOCAL_EXECUTION_HOST_ID } from '@yiru/runtime-protocol/model/workspace'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import { LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import React, { useId, useRef, useState } from 'react'
 import {
   getEffectiveHostSetting,

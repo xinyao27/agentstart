@@ -1,7 +1,6 @@
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
-  GitMerge,
   DotsThree as Ellipsis,
   Link,
   LinkBreak as Unlink,
@@ -41,10 +40,10 @@ export function ChecksPanelReviewHeader({
   onUnlinkPullRequest,
   onLinkAnotherPullRequest
 }: ChecksPanelReviewHeaderProps): React.JSX.Element {
-  const reviewNumberLabel = review.provider === 'gitlab' ? `!${review.number}` : `#${review.number}`
-  const ReviewIcon = review.provider === 'gitlab' ? GitMerge : PullRequestIcon
-  const reviewHostLabel = review.provider === 'gitlab' ? 'GitLab' : 'GitHub'
-  const showPullRequestMenu = review.provider === 'github'
+  const reviewNumberLabel = `#${review.number}`
+  const ReviewIcon = PullRequestIcon
+  const reviewHostLabel = 'GitHub'
+  const showPullRequestMenu = true
   const openTitle = translate(
     'auto.components.right.sidebar.ChecksPanel.5c88c6db07',
     'Open on {{value0}}',

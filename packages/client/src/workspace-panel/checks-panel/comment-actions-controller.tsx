@@ -1,4 +1,4 @@
-import type { PRComment } from '@yiru/runtime-protocol/workbench/types'
+import type { PRComment } from '@yiru/protocol/hosted-review/review-types'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { mergePRCommentIntoList } from '~renderer/github/state'
@@ -11,12 +11,10 @@ import {
 import { pickDefaultSourceControlAgent } from '../source-control'
 import { checksPanelAsyncResultKey } from './async-result-key'
 import type { useChecksPanelEntryAndEditState } from './entry-and-edit'
-import { resolveGitLabMRDiscussionForChecks } from './gitlab-review'
 
 export function useChecksPanelCommentActions(context: useChecksPanelEntryAndEditState) {
   const {
     activeConnectionId,
-    activeGitLabReview,
     activeReview,
     activeWorktreeId,
     addPRConversationComment,
@@ -45,29 +43,6 @@ export function useChecksPanelCommentActions(context: useChecksPanelEntryAndEdit
     const notifyOnFailure = options.notifyOnFailure !== false
     const rollbackThread = (previousThreadComments: PRComment[]): void => {
       setComments((prev) => restorePRCommentThreadSnapshot(prev, previousThreadComments))
-    }
-    if (repo && activeGitLabReview) {
-      let previousThreadComments: PRComment[] = []
-      setComments((prev) => {
-        previousThreadComments = prev.filter((comment) => comment.threadId === threadId)
-        return markPRCommentThreadResolved(prev, threadId, resolve)
-      })
-      const result = await resolveGitLabMRDiscussionForChecks({
-        repoPath: repo.path,
-        repoId: repo.id,
-        settings,
-        iid: activeGitLabReview.number,
-        discussionId: threadId,
-        resolved: resolve
-      })
-      if (!result.ok) {
-        rollbackThread(previousThreadComments)
-        if (notifyOnFailure) {
-          toast.error(result.error)
-        }
-        return false
-      }
-      return true
     }
     if (!repo || !prNumber) {
       return false
@@ -133,14 +108,12 @@ export function useChecksPanelCommentActions(context: useChecksPanelEntryAndEdit
     : aiActionDisabledReason
       ? aiActionDisabledReason
       : !activeReview
-        ? 'Open a PR or MR before launching an AI action.'
+        ? 'Open a PR before launching an AI action.'
         : !repo
           ? 'Select a repository before launching an AI action.'
-          : activeReview.provider === 'github' && !prNumber
+          : !prNumber
             ? 'Open a GitHub PR before resolving comments.'
-            : activeReview.provider === 'gitlab' && !activeGitLabReview
-              ? 'Open a GitLab MR before resolving comments.'
-              : undefined
+            : undefined
 
   const handleAddPRComment = async (body: string) => {
     if (!repo || !prNumber || !pr?.prRepo) {

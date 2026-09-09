@@ -1,9 +1,9 @@
-import { agentKindToTuiAgent } from '@yiru/runtime-protocol/workbench/agent/kind'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { agentKindToTuiAgent } from '@yiru/protocol/telemetry/agent-kind'
 import type {
-  TuiAgent,
   WorktreeDefaultTabsLaunch,
   WorktreeSetupLaunch
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/worktree/create-result'
 
 import type { WorktreeActivationStore, WorktreeStartupPayload } from './activation-types'
 import { queueWorktreeSetupCommands } from './setup-commands'

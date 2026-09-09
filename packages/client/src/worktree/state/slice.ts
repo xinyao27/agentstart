@@ -31,7 +31,6 @@ export const createWorktreeSlice: StateCreator<AppState, [], [], WorktreeSlice> 
   renamingWorktreeId: null,
   deleteStateByWorktreeId: {},
   baseStatusByWorktreeId: {},
-  remoteBranchConflictByWorktreeId: {},
   sortEpoch: 0,
   everActivatedWorktreeIds: new Set<string>(),
   lastVisitedAtByWorktreeId: {},

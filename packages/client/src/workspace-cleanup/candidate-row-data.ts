@@ -1,4 +1,4 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import {

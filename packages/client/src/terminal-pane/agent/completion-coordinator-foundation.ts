@@ -1,5 +1,5 @@
-import type { AgentStatus } from '@yiru/runtime-protocol/workbench/agent/detection'
-import type { RecognizedAgentProcess } from '@yiru/runtime-protocol/workbench/agent/process-recognition'
+import type { RecognizedAgentProcess } from '@yiru/protocol/agent/process/recognition'
+import type { AgentStatus } from '~renderer/agent/title/core'
 import type { RuntimeTerminalProcessInspection } from '~renderer/runtime/terminal-inspection'
 
 import type {

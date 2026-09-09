@@ -1,16 +1,15 @@
-import type { SleepingAgentLaunchConfig } from '@yiru/runtime-protocol/model/agent'
-import type { StartupCommandDelivery } from '@yiru/runtime-protocol/workbench/codex-startup-delivery'
-import type {
-  BrowserTabCreateResult,
-  RuntimeMobileSessionCreateTerminalResult
-} from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
+import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { BrowserRuntimeClient } from '@yiru/protocol/browser-runtime'
 
-import { callRuntimeOrpc } from '../orpc-client'
+import { openRuntimeProtocolTarget } from '../protocol-target'
 import { isRemoteTerminalSurfaceTabId, toHostSessionTabId } from '../remote-terminal-surface-id'
+import { requireSessionTabsClient } from '../session-tabs-target'
 import { toRuntimeWorktreeSelector } from '../worktree-selector'
 import { recordRemoteSessionCloseIntent } from './close-intent'
 import { recordRemoteSessionFocusIntent } from './focus-intent'
+import type { RuntimeMobileSessionCreateTerminalResult } from './session-model'
 
 export type RemoteSessionCommandResult<T> =
   | { status: 'completed'; value: T }
@@ -32,24 +31,40 @@ export async function createRemoteSessionTerminalCommand(args: {
   activate?: boolean
 }): Promise<RemoteSessionCommandResult<RuntimeMobileSessionCreateTerminalResult>> {
   try {
-    const value = await callRuntimeOrpc(
-      { kind: 'environment', environmentId: args.environmentId },
-      (client) => client.session.tabs.createTerminal,
-      {
-        worktree: toRuntimeWorktreeSelector(args.worktreeId),
-        afterTabId: args.afterTabId ? toHostSessionTabId(args.afterTabId) : undefined,
-        targetGroupId: args.targetGroupId,
-        command: args.command,
-        cwd: args.cwd,
-        ...(args.env ? { env: args.env } : {}),
-        ...(args.envToDelete ? { envToDelete: args.envToDelete } : {}),
-        startupCommandDelivery: args.startupCommandDelivery,
-        ...(args.launchConfig ? { launchConfig: args.launchConfig } : {}),
-        agent: args.agent,
-        ...(args.launchAgent ? { launchAgent: args.launchAgent } : {}),
-        activate: args.activate !== false
-      },
-      { timeoutMs: 15_000 }
+    const value = await requireSessionTabsClient({
+      kind: 'environment',
+      environmentId: args.environmentId
+    }).then((client) =>
+      client.createTerminal(
+        {
+          worktree: toRuntimeWorktreeSelector(args.worktreeId),
+          afterTabId: args.afterTabId ? toHostSessionTabId(args.afterTabId) : undefined,
+          targetGroupId: args.targetGroupId,
+          command: args.command,
+          cwd: args.cwd,
+          ...(args.env ? { env: args.env } : {}),
+          ...(args.envToDelete ? { envToDelete: args.envToDelete } : {}),
+          startupCommandDelivery: args.startupCommandDelivery,
+          ...(args.launchConfig
+            ? {
+                launchConfig: {
+                  agentArgs: args.launchConfig.agentArgs,
+                  agentEnv: args.launchConfig.agentEnv,
+                  ...(args.launchConfig.agentCommand === undefined
+                    ? {}
+                    : { agentCommand: args.launchConfig.agentCommand }),
+                  ...(args.launchConfig.ompResumeFilePath === undefined
+                    ? {}
+                    : { ompResumeFilePath: args.launchConfig.ompResumeFilePath })
+                }
+              }
+            : {}),
+          agent: args.agent,
+          ...(args.launchAgent ? { launchAgent: args.launchAgent } : {}),
+          activate: args.activate !== false
+        },
+        { timeoutMs: 15_000 }
+      )
     )
     if (args.activate !== false) {
       recordRemoteSessionFocusIntent(args.worktreeId, value.tab.id)
@@ -67,29 +82,19 @@ export async function createRemoteSessionBrowserTabCommand(args: {
   url?: string
   profileId?: string | null
   targetGroupId?: string
-}): Promise<RemoteSessionCommandResult<BrowserTabCreateResult>> {
+}): Promise<RemoteSessionCommandResult<Awaited<ReturnType<BrowserRuntimeClient['createTab']>>>> {
   try {
-    // Why: dispatches by contract path through the negotiated oRPC client
-    // instead of the compatibility bridge with a bare method
-    // string — the bare-string channel skips capability negotiation and
-    // always lands on the legacy dispatcher, which no longer serves domains
-    // retired from it (see docs/runtime-orpc-migration.md Phase 6 D-stage).
-    const value = await callRuntimeOrpc(
-      { kind: 'environment', environmentId: args.environmentId },
-      (client) => client.browser.tabCreate,
-      {
-        browserPageId: args.browserPageId,
-        worktree: toRuntimeWorktreeSelector(args.worktreeId),
-        url: args.url,
-        profileId: args.profileId ?? undefined,
-        activate: true,
-        ...(args.targetGroupId ? { targetGroupId: args.targetGroupId } : {}),
-        // Why: paired clients stage the local mirror while the host webview registers.
-        waitForRegistration: false
-      },
-      { timeoutMs: 15_000 }
+    const client = new BrowserRuntimeClient(
+      await openRuntimeProtocolTarget({ kind: 'environment', environmentId: args.environmentId })
     )
-    recordRemoteSessionFocusIntent(args.worktreeId, value.browserPageId)
+    const value = await client.createTab(
+      {
+        worktree: toRuntimeWorktreeSelector(args.worktreeId),
+        ...(args.url === undefined ? {} : { url: args.url }),
+        ...(args.profileId == null ? {} : { profileId: args.profileId })
+      },
+      { timeoutMs: 30_000 }
+    )
     return { status: 'completed', value }
   } catch (error) {
     return { status: 'failed', error }
@@ -106,22 +111,24 @@ export function setRemoteSessionTabPropsCommand(args: {
   const hostTabId = isRemoteTerminalSurfaceTabId(args.tabId)
     ? toHostSessionTabId(args.tabId)
     : args.tabId
-  void callRuntimeOrpc(
-    { kind: 'environment', environmentId: args.environmentId },
-    (client) => client.session.tabs.setTabProps,
-    {
-      worktree: toRuntimeWorktreeSelector(args.worktreeId),
-      tabId: hostTabId,
-      ...(args.color !== undefined ? { color: args.color } : {}),
-      ...(args.isPinned !== undefined ? { isPinned: args.isPinned } : {})
-    },
-    { timeoutMs: 15_000 }
-  ).catch((error) => {
-    console.warn(
-      '[remote-session-command] failed to set tab props:',
-      error instanceof Error ? error.message : String(error)
+  void requireSessionTabsClient({ kind: 'environment', environmentId: args.environmentId })
+    .then((client) =>
+      client.setTabProps(
+        {
+          worktree: toRuntimeWorktreeSelector(args.worktreeId),
+          tabId: hostTabId,
+          ...(args.color !== undefined ? { color: args.color } : {}),
+          ...(args.isPinned !== undefined ? { isPinned: args.isPinned } : {})
+        },
+        { timeoutMs: 15_000 }
+      )
     )
-  })
+    .catch((error) => {
+      console.warn(
+        '[remote-session-command] failed to set tab props:',
+        error instanceof Error ? error.message : String(error)
+      )
+    })
 }
 
 export async function closeRemoteSessionTabCommand(args: {
@@ -134,11 +141,14 @@ export async function closeRemoteSessionTabCommand(args: {
     : args.tabId
   recordRemoteSessionCloseIntent(args.worktreeId, hostTabId, Date.now())
   try {
-    const value = await callRuntimeOrpc(
-      { kind: 'environment', environmentId: args.environmentId },
-      (client) => client.session.tabs.close,
-      { worktree: toRuntimeWorktreeSelector(args.worktreeId), tabId: hostTabId },
-      { timeoutMs: 15_000 }
+    const value = await requireSessionTabsClient({
+      kind: 'environment',
+      environmentId: args.environmentId
+    }).then((client) =>
+      client.close(
+        { worktree: toRuntimeWorktreeSelector(args.worktreeId), tabId: hostTabId },
+        { timeoutMs: 15_000 }
+      )
     )
     return { status: 'completed', value }
   } catch (error) {

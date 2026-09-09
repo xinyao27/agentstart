@@ -4,14 +4,12 @@ import {
   getWorktreeExecutionHostId,
   type ExecutionHostId,
   type ExecutionHostScope
-} from '@yiru/runtime-protocol/model/workspace'
-import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '@yiru/runtime-protocol/workbench/constants'
-import type {
-  Worktree,
-  Repo,
-  TerminalTab,
-  WorktreeLineage
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '@yiru/protocol/settings/workspace-preferences'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { getAllWorktreesFromState, getRepoMapFromState } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
 import { getWorktreeIdsWithLiveAgent, isInactiveWorkspace } from '~renderer/worktree/activity-state'

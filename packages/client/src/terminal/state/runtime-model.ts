@@ -1,12 +1,9 @@
-import { WINDOWS_GIT_BASH_SHELL } from '@yiru/runtime-protocol/model/platform'
-import { isWslUncPath } from '@yiru/runtime-protocol/model/platform'
-import type { ProjectExecutionRuntimeResolution } from '@yiru/runtime-protocol/workbench/project-execution-runtime'
-import {
-  parseLegacyNumericPaneKey,
-  parsePaneKey
-} from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalLayoutSnapshot } from '@yiru/runtime-protocol/workbench/types'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { WINDOWS_GIT_BASH_SHELL } from '@yiru/protocol/host/windows-terminal-shell'
+import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
+import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
+import { parseLegacyNumericPaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
 import { getFolderWorkspaceConnectionId } from '~renderer/editor/folder-workspace-connection'
 import { resolveLocalWindowsTerminalShellOverrideForTab } from '~renderer/local-windows-terminal-runtime'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'

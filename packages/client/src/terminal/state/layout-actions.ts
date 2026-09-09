@@ -1,4 +1,4 @@
-import { makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'

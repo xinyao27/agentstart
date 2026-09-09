@@ -1,5 +1,5 @@
-import type { resolveSourceControlAiForOperation } from '@yiru/runtime-protocol/workbench/source-control/ai'
-import type { SourceControlAiPrCreationDefaults } from '@yiru/runtime-protocol/workbench/source-control/ai-types'
+import type { SourceControlAiPrCreationDefaults } from '@yiru/protocol/source-control/ai-types'
+import type { resolveSourceControlAiForOperation } from '@yiru/protocol/source-control/resolution'
 import { useEffect } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { getConnectionId } from '~renderer/runtime/connection-context'

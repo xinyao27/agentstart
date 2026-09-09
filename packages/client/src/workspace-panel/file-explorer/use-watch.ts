@@ -1,9 +1,9 @@
+import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
 import {
   isPathInsideOrEqual,
   normalizeRuntimePathForComparison,
   relativePathInsideRoot
-} from '@yiru/runtime-protocol/model/platform'
-import type { FsChangedPayload } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/path'
 import { useEffect, useRef } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { joinPath, normalizeRelativePath, dirname } from '~renderer/path'
@@ -73,20 +73,6 @@ function normalizeExplorerAbsolutePath(path: string): string {
     return path
   }
   return path.replace(/[\\/]+$/, '')
-}
-
-export function payloadRequiresDeferredTreeRefresh(
-  payload: FsChangedPayload,
-  currentWorktreePath: string
-): boolean {
-  if (
-    normalizeRuntimePathForComparison(payload.worktreePath) !==
-    normalizeRuntimePathForComparison(currentWorktreePath)
-  ) {
-    return false
-  }
-
-  return payload.events.some((evt) => evt.kind === 'rename')
 }
 
 export function getFileExplorerWatchRuntimeEnvironmentId(
@@ -263,7 +249,6 @@ export function useFileExplorerWatch({
             }
           }
         }
-        // 'rename' is deferred to v2 (design §5.3)
       }
 
       if (needsFullRefresh) {
@@ -355,9 +340,6 @@ export function useFileExplorerWatch({
   useEffect(() => {
     if (inlineInput === null && dragSourcePath === null && deferredRef.current.length > 0) {
       const deferred = deferredRef.current.splice(0)
-      const requiresFullRefresh = worktreePath
-        ? deferred.some((payload) => payloadRequiresDeferredTreeRefresh(payload, worktreePath))
-        : false
       // Why: replay every deferred payload through `processPayload` so the
       // tree cache reconciles to disk state after inline input or drag ends
       // (design §6.2). Editor-tab reloads are handled independently by
@@ -368,12 +350,6 @@ export function useFileExplorerWatch({
           processPayloadRef.current(payload)
         }
       }
-      // Why: create/delete/update payloads replay into targeted refreshDir
-      // calls above. Only event kinds this reconciler cannot apply safely
-      // should pay the full expanded-tree refresh cost after a deferred flush.
-      if (requiresFullRefresh) {
-        void refreshTreeRef.current()
-      }
     }
-  }, [inlineInput, dragSourcePath, worktreePath])
+  }, [inlineInput, dragSourcePath])
 }

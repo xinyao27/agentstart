@@ -1,4 +1,4 @@
-import { normalizeDesktopTerminalScrollbackRows } from '@yiru/runtime-protocol/workbench/terminal/scrollback-policy'
+import { normalizeDesktopTerminalScrollbackRows } from '@yiru/protocol/terminal/scrollback-policy'
 import { useEffect } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import {

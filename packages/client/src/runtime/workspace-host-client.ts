@@ -8,9 +8,7 @@ type WorkspaceHostClient = {
   worktrees: typeof worktreeHostClient
 }
 
-// Why: workspace features depend on one oRPC host surface. Grouping these
-// domain clients keeps desktop and paired Web callers aligned without adding
-// another renderer facade.
+// Why: Workspace features use the same typed host clients across local and paired runtimes.
 export const workspaceHostClient: WorkspaceHostClient = {
   fileHost: shellFilesClient,
   repos: repoHostClient,

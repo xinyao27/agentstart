@@ -1,4 +1,4 @@
-import type { CrashReportBreadcrumbData } from '@yiru/runtime-protocol/workbench/crash-reporting'
+import type { CrashReportBreadcrumbData } from '@yiru/protocol/crash-reports/values'
 
 import { shellClient } from './shell-client'
 

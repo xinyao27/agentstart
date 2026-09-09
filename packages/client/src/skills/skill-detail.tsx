@@ -1,16 +1,11 @@
-import {
-  skillDirectoryName,
-  skillPlacements,
-  type DiscoveredSkill,
-  type SkillDirectoryEntry,
-  type SkillDirectoryListing
-} from '@yiru/runtime-protocol/workbench/skills'
+import type { DiscoveredSkill, SkillDirectoryEntry, SkillDirectoryListing } from '@yiru/protocol'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { FolderOpen, ArrowClockwise as RefreshCw, Trash } from '~renderer/icons/hugeicons'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { listSkillManageFiles } from '~renderer/runtime/skill-manage-client'
+import { skillDirectoryName, skillPlacements } from '~renderer/skills/installation'
 import { Badge } from '~renderer/ui/badge'
 import { Button } from '~renderer/ui/button'
 import { ScrollArea } from '~renderer/ui/scroll-area'

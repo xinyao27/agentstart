@@ -1,14 +1,12 @@
 import {
-  getExecutionHostLabel,
   getRepoExecutionHostId,
   getWorktreeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type {
-  Repo,
-  Worktree,
-  WorkspaceStatusDefinition
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
+import type { Worktree } from '@yiru/protocol/worktree/model'
+import { getExecutionHostLabel } from '~renderer/execution-host/labels'
 import type { AppState } from '~renderer/store/types'
 
 import { getGroupKeyForWorktree } from './worktree-group-keys'

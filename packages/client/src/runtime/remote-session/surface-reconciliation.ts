@@ -1,9 +1,9 @@
-import { encodeRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
-import type { RuntimeMobileSessionTabsResult } from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { encodeRuntimePtyId } from '@yiru/protocol/terminal-identity'
 
 import { toRemoteTerminalSurfaceTabId } from '../remote-terminal-surface-id'
 import { buildHostGroupIdByTabId, chooseTargetGroupId } from './group-mirror'
+import type { RuntimeMobileSessionTabsResult } from './session-model'
 import { sameOpenFiles } from './store-equality'
 import {
   browserWorkspaceHasRemoteEnvironmentPage,

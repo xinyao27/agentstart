@@ -1,13 +1,18 @@
-import { REMOTE_SERVER_UPDATE_CAPABILITY } from '@yiru/runtime-protocol/workbench/remote-server-update'
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { UpdateCheckOptions } from '@yiru/runtime-protocol/workbench/types'
+import {
+  RuntimeProtocolError,
+  StatusCode,
+  UPDATER_PROTOCOL_CAPABILITY,
+  type UpdaterCheckOptions,
+  type UpdaterSnapshot
+} from '@yiru/protocol'
 import {
   compareAppVersions,
   isPerfPrereleaseAppVersion,
   isPrereleaseAppVersion,
   isValidAppVersion
 } from '~renderer/app-version'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
+import type { RuntimeStatus } from '~renderer/runtime/status/model'
 
 import { remoteServerUpdateErrorMessage } from './remote-server-update-errors'
 import {
@@ -15,10 +20,9 @@ import {
   DEFAULT_REMOTE_SERVER_UPDATE_TIMING,
   type RemoteServerUpdateEntry,
   type RemoteServerUpdateRunOptions,
-  type RemoteServerUpdateTiming,
   type RemoteServerUpdateTransport
 } from './remote-server-update-model'
-import { pollRemoteServerUpdater } from './remote-server-updater-polling'
+import { nextRemoteServerUpdaterSnapshot } from './remote-server-updater-stream'
 
 export { checkingRemoteServerUpdateEntry, DEFAULT_REMOTE_SERVER_UPDATE_TIMING }
 export type {
@@ -33,8 +37,7 @@ export async function inspectRemoteServerUpdate(
   environment: PublicKnownRuntimeEnvironment,
   clientVersion: string,
   transport: RemoteServerUpdateTransport,
-  checkOptions?: UpdateCheckOptions,
-  timing: RemoteServerUpdateTiming = DEFAULT_REMOTE_SERVER_UPDATE_TIMING
+  checkOptions?: UpdaterCheckOptions
 ): Promise<RemoteServerUpdateEntry> {
   const base = checkingRemoteServerUpdateEntry(environment)
   let status: RuntimeStatus
@@ -49,7 +52,7 @@ export async function inspectRemoteServerUpdate(
   }
 
   const currentVersion = status.appVersion?.trim() || null
-  const supportsRemoteUpdate = status.capabilities?.includes(REMOTE_SERVER_UPDATE_CAPABILITY)
+  const supportsRemoteUpdate = status.capabilities?.includes(UPDATER_PROTOCOL_CAPABILITY)
   const support = status.remoteUpdateSupport ?? null
   const versionComparable =
     currentVersion !== null && isValidAppVersion(currentVersion) && isValidAppVersion(clientVersion)
@@ -77,18 +80,7 @@ export async function inspectRemoteServerUpdate(
       if (first.runtimeId !== status.runtimeId) {
         throw new Error('remote_update_runtime_changed')
       }
-      const checked =
-        first.status.state === 'available' || first.status.state === 'not-available'
-          ? first
-          : await pollRemoteServerUpdater(
-              environment.id,
-              status.runtimeId,
-              transport,
-              timing,
-              (snapshot) =>
-                snapshot.status.state === 'available' || snapshot.status.state === 'not-available',
-              () => undefined
-            )
+      const checked = checkedUpdaterSnapshot(first)
       if (checked.status.state === 'available') {
         return {
           ...base,
@@ -154,107 +146,138 @@ export async function runRemoteServerUpdate(
       includePerfPrerelease:
         entry.targetVersion !== null && isPerfPrereleaseAppVersion(entry.targetVersion)
     }
-    const first = await transport.check(
+    const subscription = await transport.subscribeStatus(
       entry.environmentId,
-      options.checkOptions ?? inferredCheckOptions
+      timing.operationTimeoutMs
     )
-    if (first.runtimeId !== entry.runtimeId) {
-      throw new Error('remote_update_runtime_changed')
-    }
-    const available = await pollRemoteServerUpdater(
-      entry.environmentId,
-      entry.runtimeId,
-      transport,
-      timing,
-      (snapshot) =>
-        snapshot.status.state === 'available' || snapshot.status.state === 'not-available',
-      () => undefined
-    )
-    if (available.status.state === 'not-available') {
-      const status = await transport.getRuntimeStatus(entry.environmentId, 10_000)
-      const currentVersion = status.appVersion?.trim() ?? ''
+    const snapshots = subscription.snapshots[Symbol.asyncIterator]()
+    let downloadedVersion: string
+    let available: UpdaterSnapshot
+    try {
+      const first = await transport.check(
+        entry.environmentId,
+        options.checkOptions ?? inferredCheckOptions
+      )
+      if (first.runtimeId !== entry.runtimeId) {
+        throw new Error('remote_update_runtime_changed')
+      }
+      available =
+        first.status.state === 'available' || first.status.state === 'not-available'
+          ? first
+          : await nextRemoteServerUpdaterSnapshot(
+              snapshots,
+              entry.runtimeId,
+              (snapshot) =>
+                snapshot.status.state === 'available' || snapshot.status.state === 'not-available',
+              () => undefined
+            )
+      if (available.status.state === 'not-available') {
+        const status = await transport.getRuntimeStatus(entry.environmentId, 10_000)
+        const currentVersion = status.appVersion?.trim() ?? ''
+        if (
+          status.runtimeId !== entry.runtimeId ||
+          !entry.targetVersion ||
+          !updateReachedTarget(currentVersion, entry.targetVersion)
+        ) {
+          throw new Error('remote_update_requested_version_unavailable')
+        }
+        next = { ...next, phase: 'current', currentVersion, runtimeId: status.runtimeId }
+        onProgress(next)
+        return next
+      }
+      if (available.status.state !== 'available') {
+        throw new Error('remote_update_status_unavailable')
+      }
       if (
-        status.runtimeId !== entry.runtimeId ||
-        !entry.targetVersion ||
-        !updateReachedTarget(currentVersion, entry.targetVersion)
+        entry.targetVersion &&
+        isValidAppVersion(entry.targetVersion) &&
+        compareAppVersions(available.status.version, entry.targetVersion) < 0
       ) {
         throw new Error('remote_update_requested_version_unavailable')
       }
-      next = { ...next, phase: 'current', currentVersion, runtimeId: status.runtimeId }
-      onProgress(next)
-      return next
-    }
-    if (available.status.state !== 'available') {
-      throw new Error('remote_update_status_unavailable')
-    }
-    if (
-      entry.targetVersion &&
-      isValidAppVersion(entry.targetVersion) &&
-      compareAppVersions(available.status.version, entry.targetVersion) < 0
-    ) {
-      throw new Error('remote_update_requested_version_unavailable')
-    }
 
-    next = {
-      ...next,
-      phase: 'downloading',
-      targetVersion: available.status.version,
-      progress: 0
-    }
-    onProgress(next)
-    const download = await transport.download(entry.environmentId)
-    if (download.runtimeId !== entry.runtimeId) {
-      throw new Error('remote_update_runtime_changed')
-    }
-    const downloaded = await pollRemoteServerUpdater(
-      entry.environmentId,
-      entry.runtimeId,
-      transport,
-      timing,
-      (snapshot) => snapshot.status.state === 'downloaded',
-      (snapshot) => {
-        if (snapshot.status.state === 'downloading') {
-          next = { ...next, progress: snapshot.status.percent }
-          onProgress(next)
-        }
+      next = {
+        ...next,
+        phase: 'downloading',
+        targetVersion: available.status.version,
+        progress: 0
       }
-    )
-    if (downloaded.status.state !== 'downloaded') {
-      throw new Error('remote_update_download_incomplete')
+      onProgress(next)
+      const download = await transport.download(entry.environmentId)
+      if (download.runtimeId !== entry.runtimeId) {
+        throw new Error('remote_update_runtime_changed')
+      }
+      const downloaded = await nextRemoteServerUpdaterSnapshot(
+        snapshots,
+        entry.runtimeId,
+        (snapshot) => snapshot.status.state === 'downloaded',
+        (snapshot) => {
+          if (snapshot.status.state === 'downloading') {
+            next = { ...next, progress: snapshot.status.percent }
+            onProgress(next)
+          }
+        }
+      )
+      if (downloaded.status.state !== 'downloaded') {
+        throw new Error('remote_update_download_incomplete')
+      }
+      downloadedVersion = downloaded.status.version
+    } finally {
+      await subscription.cancel('Updater download completed').catch(() => {})
     }
 
-    const install = await transport.install(entry.environmentId)
-    if (install.runtimeId !== entry.runtimeId) {
-      throw new Error('remote_update_runtime_changed')
+    let targetVersion = downloadedVersion
+    let installResult: Awaited<ReturnType<RemoteServerUpdateTransport['install']>> | null = null
+    let ambiguousInstallError: unknown = null
+    try {
+      installResult = await transport.install(entry.environmentId)
+    } catch (error) {
+      if (!isAmbiguousInstallFailure(error)) {
+        throw error
+      }
+      ambiguousInstallError = error
     }
-    next = { ...next, phase: 'restarting', targetVersion: install.targetVersion, progress: null }
+    if (installResult) {
+      if (installResult.runtimeId !== entry.runtimeId) {
+        throw new Error('remote_update_runtime_changed')
+      }
+      if (installResult.targetVersion !== downloadedVersion) {
+        throw new Error('remote_update_download_incomplete')
+      }
+      targetVersion = installResult.targetVersion
+    }
+    next = { ...next, phase: 'restarting', targetVersion, progress: null }
     onProgress(next)
 
     const now = transport.now ?? Date.now
     const reconnectDeadline = now() + timing.reconnectTimeoutMs
     while (now() < reconnectDeadline) {
+      let status: RuntimeStatus | null = null
       try {
-        const status = await transport.getRuntimeStatus(entry.environmentId, 10_000)
-        const version = status.appVersion?.trim() ?? ''
-        if (
-          status.runtimeId !== install.runtimeId &&
-          updateReachedTarget(version, install.targetVersion)
-        ) {
-          next = {
-            ...next,
-            phase: 'updated',
-            currentVersion: version,
-            runtimeId: status.runtimeId,
-            liveTabCount: status.liveTabCount,
-            liveLeafCount: status.liveLeafCount
-          }
-          onProgress(next)
-          return next
-        }
+        status = await transport.getRuntimeStatus(entry.environmentId, 10_000)
       } catch {
         // A refused connection is expected while the owning runtime restarts.
       }
+      if (status && status.runtimeId !== entry.runtimeId) {
+        const version = status.appVersion?.trim() ?? ''
+        if (!updateReachedTarget(version, targetVersion)) {
+          throw new Error('remote_update_runtime_changed')
+        }
+        next = {
+          ...next,
+          phase: 'updated',
+          currentVersion: version,
+          runtimeId: status.runtimeId,
+          liveTabCount: status.liveTabCount,
+          liveLeafCount: status.liveLeafCount
+        }
+        onProgress(next)
+        return next
+      }
       await transport.wait(Math.min(timing.pollIntervalMs, Math.max(0, reconnectDeadline - now())))
+    }
+    if (ambiguousInstallError) {
+      throw new Error('remote_update_install_not_applied', { cause: ambiguousInstallError })
     }
     throw new Error('remote_update_reconnect_timeout')
   } catch (error) {
@@ -267,4 +290,27 @@ export async function runRemoteServerUpdate(
     onProgress(next)
     return next
   }
+}
+
+function isAmbiguousInstallFailure(error: unknown): boolean {
+  if (!(error instanceof RuntimeProtocolError)) {
+    // Why: browser/WebSocket failures can surface as native errors after the target accepted the
+    // install; reconcile against the restarted runtime before reporting a false failure.
+    return true
+  }
+  return (
+    error.code === StatusCode.UNAVAILABLE ||
+    error.code === StatusCode.CANCELLED ||
+    error.code === StatusCode.DEADLINE_EXCEEDED ||
+    error.code === StatusCode.UNKNOWN ||
+    error.code === StatusCode.INTERNAL ||
+    error.code === StatusCode.DATA_LOSS
+  )
+}
+
+function checkedUpdaterSnapshot(snapshot: UpdaterSnapshot): UpdaterSnapshot {
+  if (snapshot.status.state !== 'available' && snapshot.status.state !== 'not-available') {
+    throw new Error('remote_update_status_unavailable')
+  }
+  return snapshot
 }

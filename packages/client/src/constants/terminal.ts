@@ -1,4 +1,4 @@
-import type { TerminalPaneSplitSource } from '@yiru/runtime-protocol/workbench/feature-education-telemetry'
+import type { TerminalPaneSplitSource } from '@yiru/protocol/telemetry/education'
 
 export const TOGGLE_TERMINAL_PANE_EXPAND_EVENT = 'yiru-toggle-terminal-pane-expand'
 export const FOCUS_TERMINAL_PANE_EVENT = 'yiru-focus-terminal-pane'

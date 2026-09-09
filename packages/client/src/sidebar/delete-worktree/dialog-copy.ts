@@ -1,5 +1,6 @@
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { Repo, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 type WorktreeRepoRef = Pick<Worktree, 'repoId'>
 

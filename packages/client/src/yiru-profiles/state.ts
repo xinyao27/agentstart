@@ -1,13 +1,13 @@
+import type { StateCreator } from 'zustand'
+import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
+import { shellClient } from '~renderer/runtime/shell-client'
+import type { AppState } from '~renderer/store/types'
 import type {
   YiruProfileSummary,
   SwitchYiruProfileResult,
   TransferYiruProfileProjectArgs,
   TransferYiruProfileProjectResult
-} from '@yiru/runtime-protocol/workbench/yiru-profiles'
-import type { StateCreator } from 'zustand'
-import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
-import { shellClient } from '~renderer/runtime/shell-client'
-import type { AppState } from '~renderer/store/types'
+} from '~renderer/yiru-profiles/profile-model'
 
 export type YiruProfilesSlice = {
   yiruProfiles: YiruProfileSummary[]

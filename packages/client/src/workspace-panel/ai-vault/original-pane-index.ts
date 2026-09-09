@@ -1,5 +1,5 @@
-import type { AiVaultSession } from '@yiru/runtime-protocol/model/agent'
-import type { AgentStatusState } from '@yiru/runtime-protocol/model/agent'
+import type { AgentStatusState } from '@yiru/protocol/agent/status-records'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
 import {
   promptsMatchSession,

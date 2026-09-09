@@ -1,10 +1,9 @@
-import {
-  LOCAL_EXECUTION_HOST_ID,
-  getRepoExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { PRInfo } from '@yiru/runtime-protocol/workbench/types'
+import { LOCAL_EXECUTION_HOST_ID, getRepoExecutionHostId } from '@yiru/protocol/host/identity'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
 import type { StateCreator } from 'zustand'
-import { callRuntimeOrpc, type RuntimeClientTarget } from '~renderer/runtime/orpc-client'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 import type { AppState } from '~renderer/store/types'
 
 import { isStaleExactLinkedPRLookup } from './linked-pr-policy'
@@ -93,19 +92,21 @@ export function createGitHubPRActions(
           const ghRequest: { target: RuntimeClientTarget; repo: string } = runtimeRepo
             ? { target: runtimeRepo.target, repo: runtimeRepo.repo.id }
             : { target: { kind: 'local' }, repo: repoId ?? repoPath }
-          const outcome = await callRuntimeOrpc(
-            ghRequest.target,
-            (client) => client.github.refreshPRForBranch,
+          const client = await openGitHubTarget()
+          if (!client) {
+            throw new Error('GitHub protocol capability is unavailable')
+          }
+          const outcome = await client.refreshPrForBranch(
+            ghRequest.repo,
+            branch,
             {
-              repo: ghRequest.repo,
-              branch,
               linkedPRNumber,
               currentHeadOid: requestHeadOid,
               ...(fallbackPRNumber !== null
                 ? { fallbackPRNumber, acceptMergedFallbackPR: fallbackPRSource !== null }
                 : {})
             },
-            { timeoutMs: 30_000 }
+            { timeoutMs: 30_000, ...runtimeCallDestination(ghRequest.target) }
           )
           const pr: PRInfo | null = outcome.kind === 'found' ? outcome.pr : null
           if (outcome.kind === 'upstream-error') {

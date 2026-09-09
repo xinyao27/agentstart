@@ -1,5 +1,5 @@
-import { detectAgentStatusFromTitle } from '@yiru/runtime-protocol/workbench/agent/detection'
-import { isRecognizedAgentType } from '@yiru/runtime-protocol/workbench/agent/process-recognition'
+import { isRecognizedAgentType } from '@yiru/protocol/agent/process/recognition'
+import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 
 import {
   titleHasExplicitAgentIdentity,

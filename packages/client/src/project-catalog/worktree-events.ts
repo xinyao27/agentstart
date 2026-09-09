@@ -1,6 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
 import { targetKey } from '~renderer/runtime/query-target'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 import { useAppStore } from '~renderer/store/state'
 
 import { readProjectCatalogSnapshot } from './catalog-snapshot'

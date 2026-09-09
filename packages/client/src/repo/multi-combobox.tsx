@@ -1,4 +1,4 @@
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, CaretUpDown as ChevronsUpDown } from '~renderer/icons/hugeicons'

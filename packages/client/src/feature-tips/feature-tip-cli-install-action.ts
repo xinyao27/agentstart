@@ -1,4 +1,4 @@
-import type { CliInstallStatus } from '@yiru/runtime-protocol/workbench/cli-install-types'
+import type { CliInstallStatus } from '@yiru/protocol/cli-values'
 
 export type FeatureTipCliInstallResult =
   | { kind: 'installed'; status: CliInstallStatus }

@@ -111,8 +111,7 @@ export function createWorktreeActivityActions(
           repoId: repo.id,
           branch,
           linkedGitHubPR: alreadyLinked ? link.number : null,
-          fallbackGitHubPR: null,
-          linkedGitLabMR: worktree.linkedGitLabMR ?? null
+          fallbackGitHubPR: null
         })
       }
     },

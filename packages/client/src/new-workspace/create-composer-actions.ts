@@ -1,10 +1,9 @@
-import { buildWorkspaceSourceSelection } from '@yiru/runtime-protocol/model/workspace'
+import { buildWorkspaceSourceSelection } from '~renderer/new-workspace/naming/source'
 import type { SmartWorkspaceNameSelection } from '~renderer/new-workspace/smart-workspace-name-field'
 import { getSmartNameSelection as getFolderSmartNameSelection } from '~renderer/sidebar/folder-workspace-composer-model'
 
 import { createComposerBranchSourceActions } from './composer-branch-source'
 import { createComposerGitHubItemSelect } from './composer-github-source'
-import { createComposerGitLabItemSelect } from './composer-gitlab-source'
 import { createComposerLinkedSourceActions } from './composer-linked-source'
 import { createComposerTargetActions } from './composer-target-actions'
 import {
@@ -29,7 +28,6 @@ export function createComposerActions(form: ReturnType<typeof useComposerForm>) 
     setCreateError: source.setCreateError,
     setForkPushWarning: source.setForkPushWarning,
     setLinkPopoverOpen: linkPicker.setOpen,
-    setLinkedGitLabMR: source.setLinkedGitLabMR,
     setLinkedPR: source.setLinkedPR,
     setLinkedWorkItem: source.setLinkedWorkItem,
     setName: source.setName,
@@ -55,7 +53,6 @@ export function createComposerActions(form: ReturnType<typeof useComposerForm>) 
       setBranchNameOverridePreservesNameEdits: source.setBranchNameOverridePreservesNameEdits,
       setCompareBaseRef: source.setCompareBaseRef,
       setForkPushWarning: source.setForkPushWarning,
-      setLinkedGitLabMR: source.setLinkedGitLabMR,
       setLinkedPR: source.setLinkedPR,
       setLinkedWorkItem: source.setLinkedWorkItem,
       setName: source.setName,
@@ -82,7 +79,6 @@ export function createComposerActions(form: ReturnType<typeof useComposerForm>) 
     setBranchNameOverridePreservesNameEdits: source.setBranchNameOverridePreservesNameEdits,
     setCompareBaseRef: source.setCompareBaseRef,
     setForkPushWarning: source.setForkPushWarning,
-    setLinkedGitLabMR: source.setLinkedGitLabMR,
     setLinkedPR: source.setLinkedPR,
     setLinkedWorkItem: source.setLinkedWorkItem,
     setProjectError: target.setProjectError,
@@ -99,7 +95,6 @@ export function createComposerActions(form: ReturnType<typeof useComposerForm>) 
     workspaceHostScope: target.workspaceHostScope
   })
   const branch = createComposerBranchSourceActions({
-    applyLinkedGitLabWorkItem: linked.applyLinkedGitLabWorkItem,
     applyLinkedWorkItem: linked.applyLinkedWorkItem,
     branchAutoNameRef: source.branchAutoNameRef,
     lastAutoNameRef: source.lastAutoNameRef,
@@ -114,7 +109,6 @@ export function createComposerActions(form: ReturnType<typeof useComposerForm>) 
     setBranchNameOverridePreservesNameEdits: source.setBranchNameOverridePreservesNameEdits,
     setCompareBaseRef: source.setCompareBaseRef,
     setForkPushWarning: source.setForkPushWarning,
-    setLinkedGitLabMR: source.setLinkedGitLabMR,
     setLinkedPR: source.setLinkedPR,
     setLinkedWorkItem: source.setLinkedWorkItem,
     setName: source.setName,
@@ -139,7 +133,6 @@ export function createComposerActions(form: ReturnType<typeof useComposerForm>) 
     setBranchNameOverridePreservesNameEdits: source.setBranchNameOverridePreservesNameEdits,
     setCompareBaseRef: source.setCompareBaseRef,
     setForkPushWarning: source.setForkPushWarning,
-    setLinkedGitLabMR: source.setLinkedGitLabMR,
     setLinkedPR: source.setLinkedPR,
     setLinkedWorkItem: source.setLinkedWorkItem,
     setName: source.setName,
@@ -147,28 +140,6 @@ export function createComposerActions(form: ReturnType<typeof useComposerForm>) 
     setStartFromResetHint: source.setStartFromResetHint,
     settings: target.settings,
     startPointSelectionRef: source.startPointSelectionRef
-  })
-  const handleSmartGitLabItemSelect = createComposerGitLabItemSelect({
-    applyLinkedGitLabWorkItem: linked.applyLinkedGitLabWorkItem,
-    branchAutoNameRef: source.branchAutoNameRef,
-    eligibleRepos: target.eligibleRepos,
-    handleBaseBranchMrSelect: branch.handleBaseBranchMrSelect,
-    isProjectGroupTarget: target.isProjectGroupTarget,
-    lastAutoNameRef: source.lastAutoNameRef,
-    name: source.name,
-    selectedRepo: target.selectedRepo,
-    setBaseBranch: source.setBaseBranch,
-    setBranchNameOverride: source.setBranchNameOverride,
-    setBranchNameOverridePreservesNameEdits: source.setBranchNameOverridePreservesNameEdits,
-    setCompareBaseRef: source.setCompareBaseRef,
-    setForkPushWarning: source.setForkPushWarning,
-    setLinkedGitLabMR: source.setLinkedGitLabMR,
-    setLinkedPR: source.setLinkedPR,
-    setLinkedWorkItem: source.setLinkedWorkItem,
-    setName: source.setName,
-    setPushTarget: source.setPushTarget,
-    setStartFromResetHint: source.setStartFromResetHint,
-    settings: target.settings
   })
   const smartNameSelection = target.isProjectGroupTarget
     ? getFolderSmartNameSelection(source.linkedWorkItem)
@@ -182,7 +153,6 @@ export function createComposerActions(form: ReturnType<typeof useComposerForm>) 
     ...linked,
     ...targetActions,
     handleSmartGitHubItemSelect,
-    handleSmartGitLabItemSelect,
     resolvePendingSmartGitHubSubmit,
     smartNameSelection
   }

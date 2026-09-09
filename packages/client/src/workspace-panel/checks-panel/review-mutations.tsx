@@ -17,10 +17,6 @@ export function useChecksPanelReviewMutations(context: useChecksPanelAgentAction
     fetchPRComments,
     fetchPRForBranch,
     isCurrentAsyncResult,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     linkedPR,
     openModal,
     panelContextKey,
@@ -62,11 +58,7 @@ export function useChecksPanelReviewMutations(context: useChecksPanelAgentAction
         repoPath: repo.path,
         repoId: repo.id,
         branch,
-        linkedGitHubPR: linkedPRNumber,
-        linkedGitLabMR,
-        linkedBitbucketPR,
-        linkedAzureDevOpsPR,
-        linkedGiteaPR
+        linkedGitHubPR: linkedPRNumber
       })
       if (!isCurrentRequestContext()) {
         return

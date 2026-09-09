@@ -1,4 +1,4 @@
-import type { GitPushTarget } from '@yiru/runtime-protocol/workbench/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
 
 // Why: a fork-PR worktree pushes to a contributor's fork, not origin. Render
 // "owner:branch" from the fork remote URL when available so the maintainer can

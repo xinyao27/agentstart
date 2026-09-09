@@ -1,5 +1,5 @@
-import { isExpectedAgentProcess } from '@yiru/runtime-protocol/workbench/agent/process-recognition'
-import { isShellProcess } from '~renderer/agent/tui-startup'
+import { isExpectedAgentProcess } from '@yiru/protocol/agent/process/recognition'
+import { isShellProcess } from '@yiru/protocol/agent/process/shell-process'
 import { inspectRuntimeTerminalProcess } from '~renderer/runtime/terminal-inspection'
 import { useAppStore } from '~renderer/store/state'
 import { classifyTitleActivity } from '~renderer/terminal-pane/agent/evidence'

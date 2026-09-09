@@ -40,7 +40,6 @@ type PRCommentsHeaderProps = {
   commentCounts: Record<PRCommentAudienceFilter, number>
   commentFilter: PRCommentAudienceFilter
   displayMode: PRCommentsListDisplayMode
-  reviewKind: 'PR' | 'MR'
   commentsLoading: boolean
   commentsDisabled?: boolean
   commentsDisabledReason?: string
@@ -63,7 +62,6 @@ export function PRCommentsHeader({
   commentCounts,
   commentFilter,
   displayMode,
-  reviewKind,
   commentsLoading,
   commentsDisabled,
   commentsDisabledReason,
@@ -108,7 +106,7 @@ export function PRCommentsHeader({
                       aria-label={translate(
                         'auto.components.right.sidebar.checks.panel.content.d7a2f9c401',
                         'Send unresolved {{value0}} comments',
-                        { value0: reviewKind }
+                        { value0: 'PR' }
                       )}
                       disabled={commentsLoading || resolveCommentsWithAIDisabled}
                       title={
@@ -128,7 +126,7 @@ export function PRCommentsHeader({
                     : translate(
                         'auto.components.right.sidebar.checks.panel.content.d7a2f9c401',
                         'Send unresolved {{value0}} comments',
-                        { value0: reviewKind }
+                        { value0: 'PR' }
                       )}
                 </TooltipContent>
               </Tooltip>

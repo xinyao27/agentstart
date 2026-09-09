@@ -1,9 +1,6 @@
-import {
-  FEATURE_WALL_WORKFLOWS,
-  type FeatureWallWorkflow
-} from '@yiru/runtime-protocol/workbench/feature-wall-workflows'
 import type { KeyboardEvent, RefObject } from 'react'
 
+import { getFeatureWallWorkflows, type FeatureWallWorkflow } from './content/workflows'
 import {
   getFeatureWallRailNavigationTarget,
   type FeatureWallRailNavigationKey
@@ -26,9 +23,9 @@ export function useFeatureWallTourRailKeydown({
     const nextIndex = getFeatureWallRailNavigationTarget({
       currentIndex: index,
       key: event.key as FeatureWallRailNavigationKey,
-      itemCount: FEATURE_WALL_WORKFLOWS.length
+      itemCount: getFeatureWallWorkflows().length
     })
-    const nextWorkflow = FEATURE_WALL_WORKFLOWS[nextIndex]
+    const nextWorkflow = getFeatureWallWorkflows()[nextIndex]
     if (!nextWorkflow) {
       return
     }

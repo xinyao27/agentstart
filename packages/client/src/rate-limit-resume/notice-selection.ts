@@ -1,7 +1,4 @@
-import type {
-  RateLimitHit,
-  RateLimitResumeSchedule
-} from '@yiru/runtime-protocol/workbench/rate-limit-resume/types'
+import type { RateLimitHit, RateLimitResumeSchedule } from '@yiru/protocol/rate-limit-resume-values'
 import type { AppState } from '~renderer/store/types'
 
 export type RateLimitNotice = {

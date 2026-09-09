@@ -1,4 +1,4 @@
-import type { GitHubPRRefreshReason } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubPRRefreshReason } from '@yiru/protocol/hosted-review/pull-request-types'
 
 import type { PRRefreshState, PRRefreshStateClearToken } from './store-contract'
 

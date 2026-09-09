@@ -1,6 +1,6 @@
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
 import { translate } from '~renderer/i18n/i18n'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
+import type { RuntimeStatus } from '~renderer/runtime/status/model'
 import { useAppStore } from '~renderer/store/state'
 
 import {

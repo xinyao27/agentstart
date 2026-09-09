@@ -1,4 +1,4 @@
-import type { GitHubPRRefreshAlias, PRInfo } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubPRRefreshAlias, PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 

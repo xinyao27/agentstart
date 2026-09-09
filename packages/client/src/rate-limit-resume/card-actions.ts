@@ -1,7 +1,4 @@
-import type {
-  RateLimitHit,
-  RateLimitResumeSchedule
-} from '@yiru/runtime-protocol/workbench/rate-limit-resume/types'
+import type { RateLimitHit, RateLimitResumeSchedule } from '@yiru/protocol/rate-limit-resume-values'
 // Side-effecting handlers behind the notice card's buttons, kept out of the
 // component so it only decides layout and wiring.
 import {

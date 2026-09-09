@@ -1,6 +1,6 @@
-import { getContextualTour } from '@yiru/runtime-protocol/workbench/contextual-tours'
-import { hasFeatureInteraction } from '@yiru/runtime-protocol/workbench/feature-interactions'
+import { hasFeatureInteraction } from '@yiru/protocol/telemetry/interactions/state'
 import type { StateCreator } from 'zustand'
+import { getContextualTour } from '~renderer/contextual-tours/catalog'
 import {
   getContextualTourRequestDecision,
   hasContextualTourTarget,

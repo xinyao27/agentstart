@@ -1,11 +1,11 @@
 import type { Terminal } from '@xterm/xterm'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { inspectRuntimeTerminalProcess } from '~renderer/runtime/terminal-inspection'
 import { useAppStore } from '~renderer/store/state'
 import { dispatchTerminalCommandFinishedEvent } from '~renderer/terminal/command-finished-event'
 
+import { observeTerminalCommandStarts } from '../emulator/command-lifecycle'
 import { createPaneForegroundAgentTracker } from '../pane-foreground-agent-tracker'
-import { createTerminalCommandLifecycle } from '../terminal-command-lifecycle'
 import { dropCommandFinishedStatusIfSameTurn } from './command-finished-status'
 import type { ShellCommandAgentInference } from './shell-command-agent-inference'
 import type { TerminalInputIntent } from './terminal-input-intent'
@@ -30,7 +30,6 @@ export type ForegroundAgentSession = {
   handleCommandFinished: (exitCode: number | null) => void
   sampleVisible: (forceRoutingConfirmation?: boolean) => void
   onCommandStarted: (agent: TuiAgent | null) => void
-  handlePtyData: (data: string) => void
   dispose: () => void
 }
 
@@ -133,22 +132,17 @@ export function createForegroundAgentSession(
     isVisibleSampleSettled = false
     sampleVisible(true)
   })
-  const commandLifecycle = createTerminalCommandLifecycle({
-    onCommandStarted: () => {
-      deferredStatusDrop = null
-      isVisibleSamplePending = false
-      isVisibleSampleSettled = false
-      tracker.onCommandStarted(options.shellCommandInference.getAgent())
-    },
-    onCommandFinished: handleCommandFinished
+  const commandLifecycle = observeTerminalCommandStarts(options.terminal, () => {
+    deferredStatusDrop = null
+    isVisibleSamplePending = false
+    isVisibleSampleSettled = false
+    tracker.onCommandStarted(options.shellCommandInference.getAgent())
   })
-  commandLifecycle.attachXtermConsumer(options.terminal)
 
   return {
     handleCommandFinished,
     sampleVisible,
     onCommandStarted: tracker.onCommandStarted,
-    handlePtyData: commandLifecycle.handlePtyData,
     dispose: () => {
       commandLifecycle.dispose()
       deferredStatusDrop = null

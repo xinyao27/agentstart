@@ -1,13 +1,11 @@
-import { getExecutionHostLabel, type ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
 import {
-  PROJECT_HOST_SETUP_RUNTIME_CAPABILITY,
-  WORKSPACE_RUN_CONTEXT_RUNTIME_CAPABILITY
-} from '@yiru/runtime-protocol/protocol-version'
-import type {
-  ProjectHostSetup,
-  ProjectHostSetupState
-} from '@yiru/runtime-protocol/workbench/types'
+  PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
+  PROJECT_CONTEXT_PROTOCOL_CAPABILITY
+} from '@yiru/protocol'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ProjectHostSetup, ProjectHostSetupState } from '@yiru/protocol/project/model'
 import type { ExecutionHostRegistryEntry } from '~renderer/execution-host-registry'
+import { getExecutionHostLabel } from '~renderer/execution-host/labels'
 import { translate } from '~renderer/i18n/i18n'
 
 export type SetupHostOption = {
@@ -98,8 +96,8 @@ function getHostSetupAvailability(host: ExecutionHostRegistryEntry): {
       }
     }
     if (
-      !capabilities.includes(PROJECT_HOST_SETUP_RUNTIME_CAPABILITY) ||
-      !capabilities.includes(WORKSPACE_RUN_CONTEXT_RUNTIME_CAPABILITY)
+      !capabilities.includes(PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY) ||
+      !capabilities.includes(PROJECT_CONTEXT_PROTOCOL_CAPABILITY)
     ) {
       return {
         isAvailable: false,

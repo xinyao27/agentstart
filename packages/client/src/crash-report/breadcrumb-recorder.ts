@@ -1,4 +1,4 @@
-import type { CrashReportBreadcrumbData } from '@yiru/runtime-protocol/workbench/crash-reporting'
+import type { CrashReportBreadcrumbData } from '@yiru/protocol/crash-reports/values'
 import { recordRendererCrashReportBreadcrumb } from '~renderer/runtime/crash-report-client'
 
 // Why a leaf module: terminal hot paths record breadcrumbs without loading

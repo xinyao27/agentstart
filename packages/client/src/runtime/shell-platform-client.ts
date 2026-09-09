@@ -1,19 +1,28 @@
-import type {
-  ShellOpenExternalEditorRequest,
-  ShellOpenExternalEditorResult,
-  ShellOpenLocalPathResult,
-  ShellRenderingHost
-} from '@yiru/runtime-protocol/contract'
+import {
+  SHELL_PLATFORM_PROTOCOL_CAPABILITY,
+  ShellPlatformClient,
+  type ShellPlatformOpenExternalEditorInput
+} from '@yiru/protocol'
+import type { ShellPlatformOutcomeValue } from '@yiru/protocol'
+import { translate } from '~renderer/i18n/i18n'
+import type { RenderingHostBootstrap as ShellRenderingHost } from '~renderer/rendering-host-bootstrap'
 import { parseRenderingHostBootstrap } from '~renderer/rendering-host-bootstrap'
 
-import { callShellOrpc } from './orpc-client'
+import {
+  openConfiguredBrowserHostProtocol,
+  readConfiguredBrowserHostStatus
+} from './browser-host-runtime'
+
+type ShellOpenExternalEditorRequest = Omit<ShellPlatformOpenExternalEditorInput, 'connectionId'> & {
+  connectionId?: string | null
+}
 
 export type ShellPlatformApi = {
   openPath: (path: string) => Promise<void>
-  openInFileManager: (path: string) => Promise<ShellOpenLocalPathResult>
+  openInFileManager: (path: string) => Promise<ShellPlatformOutcomeValue>
   openInExternalEditor: {
-    (request: ShellOpenExternalEditorRequest): Promise<ShellOpenExternalEditorResult>
-    (path: string, command?: string): Promise<ShellOpenLocalPathResult>
+    (request: ShellOpenExternalEditorRequest): Promise<ShellPlatformOutcomeValue>
+    (path: string, command?: string): Promise<ShellPlatformOutcomeValue>
   }
   openUrl: (url: string) => Promise<void>
   openFilePath: (path: string) => Promise<boolean>
@@ -41,6 +50,21 @@ function resolveRenderingHost(): ShellRenderingHost {
   }
 }
 
+// Why: the shell platform namespace is protobuf-only, so a missing capability
+// means the connected daemon predates the cutover — an error, not a legacy retry.
+async function openShellPlatformTarget(): Promise<ShellPlatformClient> {
+  const status = await readConfiguredBrowserHostStatus()
+  if (!status.capabilities?.includes(SHELL_PLATFORM_PROTOCOL_CAPABILITY)) {
+    throw new Error(
+      translate(
+        'runtime.shellPlatformTarget.unavailable',
+        'This action needs a current Yiru daemon connection.'
+      )
+    )
+  }
+  return new ShellPlatformClient(await openConfiguredBrowserHostProtocol())
+}
+
 const renderingHostSnapshot = resolveRenderingHost()
 
 export function getRenderingHostSnapshot(): ShellRenderingHost {
@@ -49,31 +73,39 @@ export function getRenderingHostSnapshot(): ShellRenderingHost {
 
 function openInExternalEditor(
   request: ShellOpenExternalEditorRequest
-): Promise<ShellOpenExternalEditorResult>
-function openInExternalEditor(path: string, command?: string): Promise<ShellOpenLocalPathResult>
-function openInExternalEditor(
+): Promise<ShellPlatformOutcomeValue>
+function openInExternalEditor(path: string, command?: string): Promise<ShellPlatformOutcomeValue>
+async function openInExternalEditor(
   request: ShellOpenExternalEditorRequest | string,
   command?: string
-): Promise<ShellOpenExternalEditorResult> {
-  return callShellOrpc(
-    (client) => client.shell.platform.openInExternalEditor,
-    typeof request === 'string' ? { path: request, command } : request
-  )
+): Promise<ShellPlatformOutcomeValue> {
+  const input: ShellPlatformOpenExternalEditorInput =
+    typeof request === 'string'
+      ? {
+          path: request,
+          ...(command === undefined ? {} : { command })
+        }
+      : {
+          path: request.path,
+          ...(request.command === undefined ? {} : { command: request.command }),
+          ...(request.connectionId == null ? {} : { connectionId: request.connectionId })
+        }
+  return (await openShellPlatformTarget()).openInExternalEditor(input)
 }
 
-export const daemonShellPlatformApi: ShellPlatformApi = {
-  openPath: (path) => callShellOrpc((client) => client.shell.platform.openPath, { path }),
-  openInFileManager: (path) =>
-    callShellOrpc((client) => client.shell.platform.openInFileManager, { path }),
+export const daemonShellPlatformApi: Omit<ShellPlatformApi, 'openUrl' | 'pickRepoIconImage'> = {
+  openPath: async (path) => {
+    await (await openShellPlatformTarget()).openPath(path)
+  },
+  openInFileManager: async (path) => (await openShellPlatformTarget()).openInFileManager(path),
   openInExternalEditor,
-  openUrl: (url) => callShellOrpc((client) => client.shell.platform.openUrl, { url }),
-  openFilePath: (path) => callShellOrpc((client) => client.shell.platform.openFilePath, { path }),
-  openFileUri: (uri) => callShellOrpc((client) => client.shell.platform.openFileUri, { uri }),
-  pathExists: (path) => callShellOrpc((client) => client.shell.platform.pathExists, { path }),
-  pickAttachment: () => callShellOrpc((client) => client.shell.platform.pickAttachment, undefined),
-  pickImage: () => callShellOrpc((client) => client.shell.platform.pickImage, undefined),
-  pickRepoIconImage: () =>
-    callShellOrpc((client) => client.shell.platform.pickRepoIconImage, undefined),
-  pickAudio: () => callShellOrpc((client) => client.shell.platform.pickAudio, undefined),
-  pickDirectory: (input) => callShellOrpc((client) => client.shell.platform.pickDirectory, input)
+  openFilePath: async (path) => (await openShellPlatformTarget()).openFilePath(path),
+  openFileUri: async (uri) => {
+    await (await openShellPlatformTarget()).openFileUri(uri)
+  },
+  pathExists: async (path) => (await openShellPlatformTarget()).pathExists(path),
+  pickAttachment: async () => (await openShellPlatformTarget()).pickAttachment(),
+  pickImage: async () => (await openShellPlatformTarget()).pickImage(),
+  pickAudio: async () => (await openShellPlatformTarget()).pickAudio(),
+  pickDirectory: async (input) => (await openShellPlatformTarget()).pickDirectory(input)
 }

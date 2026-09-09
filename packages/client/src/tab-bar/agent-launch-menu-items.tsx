@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import type React from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,8 +1,10 @@
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { GlobalSettings, Repo, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-actions'
 import { useEffect, useRef, useState } from 'react'
 
 import { sourceControlActionRecipeMatchesTarget } from './source-control/action-recipe-match'

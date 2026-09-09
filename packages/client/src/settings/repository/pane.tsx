@@ -1,19 +1,14 @@
-import {
-  getRepoExecutionHostId,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { getRepoKindLabel, isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type {
-  YiruHooks,
-  Project,
-  ProjectUpdateArgs,
-  Repo,
-  RepoHookSettings
-} from '@yiru/runtime-protocol/workbench/types'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
+import { getRepoExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { Project, ProjectUpdateArgs } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
+import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
 import { useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { translate } from '~renderer/i18n/i18n'
 import { Trash as Trash2 } from '~renderer/icons/hugeicons'
+import { getRepoKindLabel } from '~renderer/project-catalog/kind-label'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'

@@ -1,4 +1,4 @@
-import type { SkillFreshnessInventory } from '@yiru/runtime-protocol/workbench/skill-freshness'
+import type { SkillFreshnessInventory } from '~renderer/skills/freshness-model'
 
 export type SkillFreshnessDisplayStatus = 'installed' | 'up-to-date' | 'update-available'
 

@@ -143,22 +143,9 @@ struct WorkspaceListRow: View {
     @ViewBuilder
     private var metaGlyphs: some View {
         let hasComment = !workspace.comment.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        let hasGitLabReview =
-            workspace.linkedPullRequest == nil
-            && workspace.linkedGitLabMergeRequest != nil
-        if hasComment || hasGitLabReview {
-            HStack(spacing: 8) {
-                if hasComment {
-                    YiruIcon(.chat, size: WorkspaceListMetrics.standardIcon)
-                }
-                if hasGitLabReview {
-                    YiruIcon(
-                        .gitMerge,
-                        size: WorkspaceListMetrics.standardIcon
-                    )
-                }
-            }
-            .foregroundStyle(Theme.Colors.mutedForeground)
+        if hasComment {
+            YiruIcon(.chat, size: WorkspaceListMetrics.standardIcon)
+                .foregroundStyle(Theme.Colors.mutedForeground)
         }
     }
 

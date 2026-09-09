@@ -1,6 +1,6 @@
 import type { BaseUIEvent } from '@base-ui/react/types'
-import { makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalQuickCommand } from '@yiru/runtime-protocol/workbench/types'
+import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import {

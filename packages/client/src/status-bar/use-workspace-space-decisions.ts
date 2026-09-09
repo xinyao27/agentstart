@@ -1,4 +1,4 @@
-import type { WorkspaceSpaceWorktree } from '@yiru/runtime-protocol/workbench/workspace/space-types'
+import type { WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree } from '@yiru/protocol'
 import { useNow } from '~renderer/dashboard/use-now'
 import { getRepoMapFromState, getWorktreeMapFromState } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'

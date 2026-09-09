@@ -12,7 +12,7 @@ struct WorkspaceSetupSection: View {
             }
             .frame(minHeight: Theme.Size.minimumHitTarget)
             .padding(.bottom, Theme.Spacing.medium)
-        } else if let command = model.setupDetails.command {
+        } else if let command = model.setupDetails.decisionContent {
             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                 HStack {
                     Text("Setup script")

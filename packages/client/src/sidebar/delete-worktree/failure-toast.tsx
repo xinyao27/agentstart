@@ -1,10 +1,10 @@
-import {
-  isLockedWorktreeRemovalError,
-  type WorktreeForceDeleteReason
-} from '@yiru/runtime-protocol/workbench/workspace/worktree-removal'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { Button } from '~renderer/ui/button'
+import {
+  isLockedWorktreeRemovalError,
+  type WorktreeForceDeleteReason
+} from '~renderer/worktree/removal-policy'
 
 import { getDeleteWorktreeToastCopy } from './toast'
 

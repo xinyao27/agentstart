@@ -1,4 +1,4 @@
-import { isTerminalLeafId, makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { isTerminalLeafId, makePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import { useAppStore } from '~renderer/store/state'
 import type { AppState } from '~renderer/store/types'
 

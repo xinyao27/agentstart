@@ -1,12 +1,11 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type { ContextualTourId } from '@yiru/runtime-protocol/workbench/contextual-tours'
-import type {
-  FeatureInteractionId,
-  FeatureInteractionState
-} from '@yiru/runtime-protocol/workbench/feature-interactions'
-import type { FeatureTipId } from '@yiru/runtime-protocol/workbench/feature-tips'
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { TuiAgent, TopLevelView } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
+import type { FeatureTipId } from '@yiru/protocol/settings/feature-tips'
+import type { TopLevelView } from '@yiru/protocol/settings/ui-state'
+import type { FeatureInteractionId } from '@yiru/protocol/telemetry/interactions/catalog'
+import type { FeatureInteractionState } from '@yiru/protocol/telemetry/interactions/state'
 import type { SettingsNavTarget } from '~renderer/settings/navigation-types'
 
 import type { AgentSendPopoverTargetMode, OpenAgentSendPopoverTargetModeArgs } from './slice'
@@ -55,7 +54,7 @@ export type UIShellState = {
     note: string
     attachments: string[]
     linkedWorkItem: {
-      type: 'pr' | 'mr'
+      type: 'pr'
       number: number
       title: string
       url: string
@@ -64,7 +63,6 @@ export type UIShellState = {
     projectSourceContext?: ProjectSourceContext | null
     agent: TuiAgent
     linkedPR: number | null
-    linkedGitLabMR?: number | null
     // Why: repo-scoped start ref selected via the "Start from" picker.
     // Absent means "use the repo's effective base ref".
     baseBranch?: string

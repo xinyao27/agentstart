@@ -1,5 +1,5 @@
-import type { AddRepoExistingWorkspaceSource } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { AddRepoExistingWorkspaceSource } from '@yiru/protocol/telemetry/events/foundations'
 import type { Dispatch, SetStateAction } from 'react'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
@@ -8,7 +8,7 @@ import { readProjectCatalogMutationRevision } from '~renderer/project-catalog/ca
 import { refreshAfterProjectCatalogMutation } from '~renderer/project-catalog/mutation-refresh'
 import { projectCatalogTargetForRepo } from '~renderer/project-catalog/query'
 import { extractRuntimeErrorMessage } from '~renderer/runtime/error-message'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireRepoProtocolClient } from '~renderer/runtime/repo-catalog-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
 import { useAppStore } from '~renderer/store/state'
@@ -130,9 +130,9 @@ export function useAddRepoCloneFlow({
       const expectedRevision = readProjectCatalogMutationRevision(target)
       const cloneResult =
         target.kind === 'environment'
-          ? await callRuntimeOrpc(
-              target,
-              (client) => client.repo.clone,
+          ? await (
+              await requireRepoProtocolClient(target)
+            ).clone(
               {
                 expectedRevision,
                 url: trimmedUrl,

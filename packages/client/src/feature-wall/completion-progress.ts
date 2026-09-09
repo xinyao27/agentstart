@@ -1,7 +1,7 @@
-import type { AgentsStepId } from '@yiru/runtime-protocol/workbench/agents-orchestration-steps'
-import type { FeatureWallWorkflowId } from '@yiru/runtime-protocol/workbench/feature-wall-workflows'
-import type { ReviewStepId } from '@yiru/runtime-protocol/workbench/review-steps'
-import type { WorkbenchStepId } from '@yiru/runtime-protocol/workbench/workbench-steps'
+import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallWorkflowId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 
 export const FEATURE_WALL_AGENT_STEP_IDS: readonly AgentsStepId[] = [
   'statuses',

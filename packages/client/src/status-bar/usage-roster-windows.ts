@@ -1,11 +1,8 @@
-import type {
-  ProviderRateLimits,
-  RateLimitWindow
-} from '@yiru/runtime-protocol/workbench/rate-limit-types'
-import { clampUsedPercent } from '@yiru/runtime-protocol/workbench/usage-percentage-display'
+import type { ProviderRateLimits, RateLimitWindow } from '@yiru/protocol/account-rate-types'
 import { formatWindowLabel } from '~renderer/status-bar/window-label-formatter'
 
 import { formatResetCountdown, getWindowSections } from './tooltip'
+import { clampUsedPercent } from './usage-percentage'
 
 export type UsageSection = { label: string; window: RateLimitWindow }
 

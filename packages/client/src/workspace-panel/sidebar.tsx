@@ -1,4 +1,4 @@
-import type { ActiveRightSidebarTab } from '@yiru/runtime-protocol/workbench/types'
+import type { ActiveRightSidebarTab } from '@yiru/protocol/settings/ui-state'
 import { useEffect } from 'react'
 import { useShortcutLabel } from '~renderer/keyboard-input/use-shortcut-label'
 import { useAppStore } from '~renderer/store/state'

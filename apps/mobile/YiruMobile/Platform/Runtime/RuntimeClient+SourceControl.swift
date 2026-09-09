@@ -1,4 +1,6 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient: SourceControlRepository {
     func launchSourceControlAgent(
@@ -17,68 +19,97 @@ extension RuntimeClient: SourceControlRepository {
                 ?? snapshot.tabs.last(where: { $0.terminalTarget != nil }),
             let terminal = tab.terminalTarget
         else { throw SourceReviewRepositoryError.missingTerminal }
-        let result: MobileReviewTerminalSendResultWire = try await callRuntime(
+        let response = try await protocolTerminalSend(
             hostID: hostID,
-            path: MobileReviewWireContract.terminalSendPath,
-            input: MobileReviewTerminalSendRequestWire(
-                terminal: terminal.id,
-                text: prompt,
-                enter: true
-            ),
-            output: MobileReviewTerminalSendResultWire.self
+            terminal: terminal.id,
+            text: prompt
         )
-        guard result.send.accepted else { throw SourceReviewRepositoryError.terminalRejected }
+        guard response.send.accepted else { throw SourceReviewRepositoryError.terminalRejected }
     }
 
     func sourceStatus(for hostID: String, worktreeID: String) async throws -> SourceStatusSnapshot {
-        let wire: MobileGitStatusResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitStatusServiceStatusRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileSourceControlWireContract.statusPath,
-            input: sourceWorktreeRequest(worktreeID),
-            output: MobileGitStatusResultWire.self
+            procedure: YiruRuntimeV1GitStatusServiceMethods.status,
+            request: request,
+            response: Yiru_Runtime_V1_GitStatusServiceStatusResponse.self
         )
+        let status = response.status
         return SourceStatusSnapshot(
-            entries: wire.entries.map(sourceEntry),
-            conflictOperation: SourceConflictOperation(rawValue: wire.conflictOperation),
-            head: wire.head,
-            branch: wire.branch,
-            upstream: wire.upstreamStatus.map {
-                SourceUpstreamStatus(
-                    hasUpstream: $0.hasUpstream,
-                    name: $0.upstreamName,
-                    ahead: $0.ahead,
-                    behind: $0.behind,
-                    hasConfiguredPushTarget: $0.hasConfiguredPushTarget == true,
-                    behindCommitsArePatchEquivalent: $0.behindCommitsArePatchEquivalent == true
-                )
-            },
-            didHitLimit: wire.didHitLimit == true
+            entries: status.entries.map(sourceEntry),
+            conflictOperation: sourceConflictOperation(status.conflictOperation),
+            head: status.hasHead ? status.head : nil,
+            branch: status.hasBranch ? status.branch : nil,
+            upstream: status.hasUpstreamStatus ? sourceUpstreamStatus(status.upstreamStatus) : nil,
+            didHitLimit: status.hasDidHitLimit ? status.didHitLimit : false
         )
     }
 
     func stageSourceFile(for hostID: String, worktreeID: String, path: String) async throws {
-        try await sourceFileMutation(
-            hostID, worktreeID, path, MobileSourceControlWireContract.stagePath)
+        var request = Yiru_Runtime_V1_GitStagingServiceStageRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.filePath = path
+        try await sourceMutation(
+            hostID,
+            procedure: YiruRuntimeV1GitStagingServiceMethods.stage,
+            request: request,
+            response: Yiru_Runtime_V1_GitStagingServiceStageResponse.self,
+            isOK: { $0.ok }
+        )
     }
 
     func unstageSourceFile(for hostID: String, worktreeID: String, path: String) async throws {
-        try await sourceFileMutation(
-            hostID, worktreeID, path, MobileSourceControlWireContract.unstagePath)
+        var request = Yiru_Runtime_V1_GitStagingServiceUnstageRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.filePath = path
+        try await sourceMutation(
+            hostID,
+            procedure: YiruRuntimeV1GitStagingServiceMethods.unstage,
+            request: request,
+            response: Yiru_Runtime_V1_GitStagingServiceUnstageResponse.self,
+            isOK: { $0.ok }
+        )
     }
 
     func discardSourceFile(for hostID: String, worktreeID: String, path: String) async throws {
-        try await sourceFileMutation(
-            hostID, worktreeID, path, MobileSourceControlWireContract.discardPath)
+        var request = Yiru_Runtime_V1_GitStagingServiceDiscardRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.filePath = path
+        try await sourceMutation(
+            hostID,
+            procedure: YiruRuntimeV1GitStagingServiceMethods.discard,
+            request: request,
+            response: Yiru_Runtime_V1_GitStagingServiceDiscardResponse.self,
+            isOK: { $0.ok }
+        )
     }
 
     func stageSourceFiles(for hostID: String, worktreeID: String, paths: [String]) async throws {
-        try await sourceBulkMutation(
-            hostID, worktreeID, paths, MobileSourceControlWireContract.bulkStagePath)
+        var request = Yiru_Runtime_V1_GitStagingServiceBulkStageRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.filePaths = paths
+        try await sourceMutation(
+            hostID,
+            procedure: YiruRuntimeV1GitStagingServiceMethods.bulkStage,
+            request: request,
+            response: Yiru_Runtime_V1_GitStagingServiceBulkStageResponse.self,
+            isOK: { $0.ok }
+        )
     }
 
     func unstageSourceFiles(for hostID: String, worktreeID: String, paths: [String]) async throws {
-        try await sourceBulkMutation(
-            hostID, worktreeID, paths, MobileSourceControlWireContract.bulkUnstagePath)
+        var request = Yiru_Runtime_V1_GitStagingServiceBulkUnstageRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.filePaths = paths
+        try await sourceMutation(
+            hostID,
+            procedure: YiruRuntimeV1GitStagingServiceMethods.bulkUnstage,
+            request: request,
+            response: Yiru_Runtime_V1_GitStagingServiceBulkUnstageResponse.self,
+            isOK: { $0.ok }
+        )
     }
 
     func commitSourceFiles(
@@ -86,28 +117,44 @@ extension RuntimeClient: SourceControlRepository {
         worktreeID: String,
         message: String
     ) async throws {
-        let result: MobileGitCommitResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitStagingServiceCommitRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.message = message
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileSourceControlWireContract.commitPath,
-            input: MobileGitCommitRequestWire(
-                worktree: sourceWorktreeID(worktreeID),
-                message: message
-            ),
-            output: MobileGitCommitResultWire.self
+            procedure: YiruRuntimeV1GitStagingServiceMethods.commit,
+            request: request,
+            response: Yiru_Runtime_V1_GitStagingServiceCommitResponse.self
         )
-        guard result.success else {
-            throw SourceControlRepositoryError.rejectedCommit(result.error)
+        guard response.success else {
+            throw SourceControlRepositoryError.rejectedCommit(
+                response.hasError ? response.error : nil
+            )
         }
     }
 
     func fetchSourceRemote(for hostID: String, worktreeID: String) async throws {
-        try await sourceWorktreeMutation(
-            hostID, worktreeID, MobileSourceControlWireContract.fetchPath)
+        var request = Yiru_Runtime_V1_GitRemoteServiceFetchRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        try await sourceMutation(
+            hostID,
+            procedure: YiruRuntimeV1GitRemoteServiceMethods.fetch,
+            request: request,
+            response: Yiru_Runtime_V1_GitRemoteServiceFetchResponse.self,
+            isOK: { $0.ok }
+        )
     }
 
     func pullSourceRemote(for hostID: String, worktreeID: String) async throws {
-        try await sourceWorktreeMutation(
-            hostID, worktreeID, MobileSourceControlWireContract.pullPath)
+        var request = Yiru_Runtime_V1_GitRemoteServicePullRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        try await sourceMutation(
+            hostID,
+            procedure: YiruRuntimeV1GitRemoteServiceMethods.pull,
+            request: request,
+            response: Yiru_Runtime_V1_GitRemoteServicePullResponse.self,
+            isOK: { $0.ok }
+        )
     }
 
     func pushSourceRemote(
@@ -116,37 +163,35 @@ extension RuntimeClient: SourceControlRepository {
         publish: Bool,
         forceWithLease: Bool
     ) async throws {
-        let result: MobileGitMutationResultWire = try await callRuntime(
-            hostID: hostID,
-            path: MobileSourceControlWireContract.pushPath,
-            input: MobileGitPushRequestWire(
-                worktree: sourceWorktreeID(worktreeID),
-                publish: publish ? true : nil,
-                forceWithLease: forceWithLease ? true : nil
-            ),
-            output: MobileGitMutationResultWire.self
+        var request = Yiru_Runtime_V1_GitRemoteServicePushRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.publish = publish
+        request.forceWithLease = forceWithLease
+        try await sourceMutation(
+            hostID,
+            procedure: YiruRuntimeV1GitRemoteServiceMethods.push,
+            request: request,
+            response: Yiru_Runtime_V1_GitRemoteServicePushResponse.self,
+            isOK: { $0.ok }
         )
-        guard result.ok else { throw SourceControlRepositoryError.rejectedMutation }
     }
 
     func fastForwardSourceRemote(for hostID: String, worktreeID: String) async throws {
-        try await sourceWorktreeMutation(
+        var request = Yiru_Runtime_V1_GitRemoteServiceFastForwardRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        try await sourceMutation(
             hostID,
-            worktreeID,
-            MobileSourceControlWireContract.fastForwardPath
+            procedure: YiruRuntimeV1GitRemoteServiceMethods.fastForward,
+            request: request,
+            response: Yiru_Runtime_V1_GitRemoteServiceFastForwardResponse.self,
+            isOK: { $0.ok }
         )
     }
 
     func liveWorktreeDisplayName(for hostID: String, worktreeID: String) async -> String? {
         guard
-            let result: MobileWorktreeShowResultWire = try? await callRuntime(
-                hostID: hostID,
-                path: MobileRuntimeWireContract.worktreeShowPath,
-                input: MobileWorktreeShowRequestWire(worktree: sourceWorktreeID(worktreeID)),
-                output: MobileWorktreeShowResultWire.self
-            ),
-            let name = result.worktree.displayName?.trimmingCharacters(in: .whitespacesAndNewlines),
-            !name.isEmpty
+            let response = try? await protocolWorktreeShow(hostID: hostID, workspaceID: worktreeID),
+            let name = nonEmptyBaseRef(response.worktree.displayName)
         else { return nil }
         return name
     }
@@ -159,33 +204,36 @@ extension RuntimeClient: SourceControlRepository {
         // Why: a worktree can pin a comparison base that differs from its repository default,
         // so resolve worktree first, then the repo projection, then the default resolver. That
         // order keeps branch review and rebase actions on the same ref.
-        if let worktree = try? await callRuntime(
-            hostID: hostID,
-            path: MobileRuntimeWireContract.worktreeShowPath,
-            input: MobileWorktreeShowRequestWire(worktree: sourceWorktreeID(worktreeID)),
-            output: MobileWorktreeShowResultWire.self
-        ), let baseRef = nonEmptyBaseRef(worktree.worktree.baseRef) {
-            return baseRef
-        }
-        if let repos = try? await callRuntime(
-            hostID: hostID,
-            path: MobileRuntimeWireContract.repoListPath,
-            input: RuntimeVoidInput(),
-            output: MobileRepoListWire.self
-        ),
+        if let show = try? await protocolWorktreeShow(hostID: hostID, workspaceID: worktreeID),
             let baseRef = nonEmptyBaseRef(
-                repos.repos.first(where: { $0.id == repoID })?.worktreeBaseRef
+                show.worktree.hasBaseRef ? show.worktree.baseRef : nil
             )
         {
             return baseRef
         }
-        let result: MobileRepoBaseRefDefaultResultWire = try await callRuntime(
+        if let list: Yiru_Runtime_V1_RepoServiceListResponse = try? await protocolUnary(
             hostID: hostID,
-            path: MobileWorkspaceCreationWireContract.baseRefDefaultPath,
-            input: MobileRepoBaseRefDefaultRequestWire(repo: "id:\(repoID)"),
-            output: MobileRepoBaseRefDefaultResultWire.self
+            procedure: YiruRuntimeV1RepoServiceMethods.list,
+            request: Yiru_Runtime_V1_RepoServiceListRequest(),
+            response: Yiru_Runtime_V1_RepoServiceListResponse.self
+        ), let repo = list.repos.first(where: { $0.id == repoID }),
+            let baseRef = nonEmptyBaseRef(repo.hasWorktreeBaseRef ? repo.worktreeBaseRef : nil)
+        {
+            return baseRef
+        }
+        var request = Yiru_Runtime_V1_RepoServiceBaseRefDefaultRequest()
+        request.repo = "id:\(repoID)"
+        let response = try await protocolUnary(
+            hostID: hostID,
+            procedure: YiruRuntimeV1RepoServiceMethods.baseRefDefault,
+            request: request,
+            response: Yiru_Runtime_V1_RepoServiceBaseRefDefaultResponse.self
         )
-        guard let baseRef = nonEmptyBaseRef(result.defaultBaseRef) else {
+        guard
+            let baseRef = nonEmptyBaseRef(
+                response.hasDefaultBaseRef ? response.defaultBaseRef : nil
+            )
+        else {
             throw SourceControlRepositoryError.missingBaseRef
         }
         return baseRef
@@ -196,16 +244,16 @@ extension RuntimeClient: SourceControlRepository {
         worktreeID: String,
         baseRef: String
     ) async throws {
-        let result: MobileGitMutationResultWire = try await callRuntime(
-            hostID: hostID,
-            path: MobileSourceControlWireContract.rebaseFromBasePath,
-            input: MobileGitRebaseRequestWire(
-                worktree: sourceWorktreeID(worktreeID),
-                baseRef: baseRef
-            ),
-            output: MobileGitMutationResultWire.self
+        var request = Yiru_Runtime_V1_GitHistoryRewriteServiceRebaseFromBaseRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.baseRef = baseRef
+        try await sourceMutation(
+            hostID,
+            procedure: YiruRuntimeV1GitHistoryRewriteServiceMethods.rebaseFromBase,
+            request: request,
+            response: Yiru_Runtime_V1_GitHistoryRewriteServiceRebaseFromBaseResponse.self,
+            isOK: { $0.ok }
         )
-        guard result.ok else { throw SourceControlRepositoryError.rejectedMutation }
     }
 
     func abortSourceConflict(
@@ -213,26 +261,56 @@ extension RuntimeClient: SourceControlRepository {
         worktreeID: String,
         operation: SourceConflictOperation
     ) async throws {
-        let path =
-            switch operation {
-            case .merge: MobileSourceControlWireContract.abortMergePath
-            case .rebase: MobileSourceControlWireContract.abortRebasePath
-            case .revert: MobileSourceControlWireContract.abortRevertPath
-            }
-        try await sourceWorktreeMutation(hostID, worktreeID, path)
+        switch operation {
+        case .merge:
+            var request = Yiru_Runtime_V1_GitHistoryRewriteServiceAbortMergeRequest()
+            request.worktree = sourceWorktreeID(worktreeID)
+            try await sourceMutation(
+                hostID,
+                procedure: YiruRuntimeV1GitHistoryRewriteServiceMethods.abortMerge,
+                request: request,
+                response: Yiru_Runtime_V1_GitHistoryRewriteServiceAbortMergeResponse.self,
+                isOK: { $0.ok }
+            )
+        case .rebase:
+            var request = Yiru_Runtime_V1_GitHistoryRewriteServiceAbortRebaseRequest()
+            request.worktree = sourceWorktreeID(worktreeID)
+            try await sourceMutation(
+                hostID,
+                procedure: YiruRuntimeV1GitHistoryRewriteServiceMethods.abortRebase,
+                request: request,
+                response: Yiru_Runtime_V1_GitHistoryRewriteServiceAbortRebaseResponse.self,
+                isOK: { $0.ok }
+            )
+        case .revert:
+            var request = Yiru_Runtime_V1_GitHistoryRewriteServiceAbortRevertRequest()
+            request.worktree = sourceWorktreeID(worktreeID)
+            try await sourceMutation(
+                hostID,
+                procedure: YiruRuntimeV1GitHistoryRewriteServiceMethods.abortRevert,
+                request: request,
+                response: Yiru_Runtime_V1_GitHistoryRewriteServiceAbortRevertResponse.self,
+                isOK: { $0.ok }
+            )
+        }
     }
 
     func sourceLocalBranches(
         for hostID: String,
         worktreeID: String
     ) async throws -> SourceLocalBranches {
-        let result: MobileGitLocalBranchesResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitStatusServiceLocalBranchesRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileSourceControlWireContract.localBranchesPath,
-            input: sourceWorktreeRequest(worktreeID),
-            output: MobileGitLocalBranchesResultWire.self
+            procedure: YiruRuntimeV1GitStatusServiceMethods.localBranches,
+            request: request,
+            response: Yiru_Runtime_V1_GitStatusServiceLocalBranchesResponse.self
         )
-        return SourceLocalBranches(current: result.current, branches: result.branches)
+        return SourceLocalBranches(
+            current: response.hasCurrent ? response.current : nil,
+            branches: response.branches
+        )
     }
 
     func checkoutSourceBranch(
@@ -240,16 +318,16 @@ extension RuntimeClient: SourceControlRepository {
         worktreeID: String,
         branch: String
     ) async throws {
-        let result: MobileGitCheckoutResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitBranchServiceCheckoutRequest()
+        request.worktree = sourceWorktreeID(worktreeID)
+        request.branch = branch
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileSourceControlWireContract.checkoutPath,
-            input: MobileGitCheckoutRequestWire(
-                worktree: sourceWorktreeID(worktreeID),
-                branch: branch
-            ),
-            output: MobileGitCheckoutResultWire.self
+            procedure: YiruRuntimeV1GitBranchServiceMethods.checkout,
+            request: request,
+            response: Yiru_Runtime_V1_GitBranchServiceCheckoutResponse.self
         )
-        guard result.ok else { throw SourceControlRepositoryError.rejectedMutation }
+        guard response.ok else { throw SourceControlRepositoryError.rejectedMutation }
     }
 }
 

@@ -1,5 +1,5 @@
-import { formatAgentTypeLabel } from '@yiru/runtime-protocol/model/agent'
-import type { RateLimitResumeSchedule } from '@yiru/runtime-protocol/workbench/rate-limit-resume/types'
+import type { RateLimitResumeSchedule } from '@yiru/protocol/rate-limit-resume-values'
+import { formatAgentTypeLabel } from '~renderer/agent/title/type-label'
 import { translate } from '~renderer/i18n/i18n'
 import { ClockCountdown } from '~renderer/icons/hugeicons'
 import { useAppStore } from '~renderer/store/state'

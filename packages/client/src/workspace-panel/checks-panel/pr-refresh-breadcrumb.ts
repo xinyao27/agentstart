@@ -1,12 +1,12 @@
 import type {
   CrashReportBreadcrumbData,
   CrashReportDetailValue
-} from '@yiru/runtime-protocol/workbench/crash-reporting'
+} from '@yiru/protocol/crash-reports/values'
 import { recordRendererCrashBreadcrumb } from '~renderer/crash-report/diagnostics'
 import { getGitHubPRRefreshStateExpiryAt, type PRRefreshState } from '~renderer/github/state'
 
 type ChecksPanelPRRefreshBreadcrumbEvent = 'start' | 'done' | 'stale_cleared'
-type ChecksPanelReviewProvider = 'github' | 'gitlab'
+type ChecksPanelReviewProvider = 'github'
 
 type ChecksPanelPRRefreshBreadcrumbArgs = {
   event: ChecksPanelPRRefreshBreadcrumbEvent

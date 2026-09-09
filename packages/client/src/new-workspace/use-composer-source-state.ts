@@ -1,12 +1,10 @@
-import type { GitPushTarget } from '@yiru/runtime-protocol/workbench/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
 import { useEffect, useRef, useState } from 'react'
 import { CONTEXTUAL_TOUR_ENABLE_AUTO_WORKSPACE_NAME_EVENT } from '~renderer/contextual-tours/contextual-tour-composer-events'
 import type { WorkspaceCreateErrorDisplay } from '~renderer/new-workspace-composer-card/workspace-create-error-format'
+import { getWorkspaceSourceProvider as getLinkedWorkItemProvider } from '~renderer/new-workspace/naming/source'
 import type { SmartNameMode } from '~renderer/new-workspace/smart-workspace-source-results'
-import {
-  getLinkedWorkItemProvider,
-  type LinkedWorkItemSummary
-} from '~renderer/new-workspace/workspace-creation'
+import type { LinkedWorkItemSummary } from '~renderer/new-workspace/workspace-creation'
 import type { AppState } from '~renderer/store/state'
 
 import type { UseComposerStateOptions } from './composer-contract'
@@ -56,12 +54,6 @@ export function useComposerSourceState(options: UseComposerSourceStateOptions) {
       return options.draft.linkedPR
     }
     return initialLinkedWorkItem?.type === 'pr' ? initialLinkedWorkItem.number : null
-  })
-  const [linkedGitLabMR, setLinkedGitLabMR] = useState<number | null>(() => {
-    if (options.persistDraft && options.draft?.linkedGitLabMR !== undefined) {
-      return options.draft.linkedGitLabMR
-    }
-    return initialLinkedWorkItem?.type === 'mr' ? initialLinkedWorkItem.number : null
   })
   const [baseBranch, setBaseBranch] = useState<string | undefined>(
     options.persistDraft ? options.draft?.baseBranch : options.initialBaseBranch
@@ -131,7 +123,6 @@ export function useComposerSourceState(options: UseComposerSourceStateOptions) {
     forkPushWarning,
     lastAutoNameRef,
     lastAutoNoteRef,
-    linkedGitLabMR,
     linkedPR,
     linkedWorkItem,
     name,
@@ -148,7 +139,6 @@ export function useComposerSourceState(options: UseComposerSourceStateOptions) {
     setCompareBaseRef,
     setCreateError,
     setForkPushWarning,
-    setLinkedGitLabMR,
     setLinkedPR,
     setLinkedWorkItem,
     setName,

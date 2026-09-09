@@ -1,16 +1,14 @@
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/runtime-protocol/workbench/tui-agent/launch-defaults'
-import { isTuiAgentEnabled } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type {
-  GlobalSettings,
-  SetupDecision,
-  TuiAgent,
-  WorkspaceCreateTelemetrySource,
-  WorkspaceStatus,
-  WorktreeMeta
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/launch-defaults'
+import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
+import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
+import type { SetupDecision } from '@yiru/protocol/worktree/hooks'
+import type { WorktreeMeta } from '@yiru/protocol/worktree/model'
 import type { Dispatch, SetStateAction } from 'react'
 import { toast } from 'sonner'
 import type { AgentStartedTelemetry } from '~renderer/agent/started-telemetry'
@@ -165,12 +163,8 @@ export async function submitRepoWorkspace(options: SubmitRepoWorkspaceOptions): 
       options.agent,
       resolution.branchNameOverride,
       options.workspaceStatus,
-      resolution.linkedGitLabMR,
       backendStartup,
       pendingFirstAgentMessageRename,
-      undefined,
-      undefined,
-      undefined,
       undefined,
       resolution.compareBaseRef
     )

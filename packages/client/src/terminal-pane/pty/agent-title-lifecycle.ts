@@ -1,5 +1,6 @@
-import type { AgentType } from '@yiru/runtime-protocol/model/agent'
-import { detectAgentStatusFromTitle, isClaudeAgent } from '~renderer/agent/status'
+import type { AgentType } from '@yiru/protocol/agent/status-records'
+import { isClaudeAgent } from '~renderer/agent/title/provider'
+import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 import { useAppStore } from '~renderer/store/state'
 
 import type { AgentNotificationController } from './agent-notification-controller'

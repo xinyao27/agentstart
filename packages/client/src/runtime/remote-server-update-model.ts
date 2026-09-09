@@ -1,11 +1,12 @@
 import type {
-  RemoteServerUpdateInstallResult,
-  RemoteServerUpdaterSnapshot,
-  RemoteServerUpdateSupport
-} from '@yiru/runtime-protocol/workbench/remote-server-update'
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { UpdateCheckOptions } from '@yiru/runtime-protocol/workbench/types'
+  UpdaterCheckOptions,
+  UpdaterInstallResult,
+  UpdaterSnapshot,
+  UpdaterStatusSubscription,
+  UpdaterSupport
+} from '@yiru/protocol'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
+import type { RuntimeStatus } from '~renderer/runtime/status/model'
 
 export type RemoteServerUpdatePhase =
   | 'checking'
@@ -30,19 +31,16 @@ export type RemoteServerUpdateEntry = {
   runtimeId: string | null
   liveTabCount: number
   liveLeafCount: number
-  support: RemoteServerUpdateSupport | null
+  support: UpdaterSupport | null
   error: string | null
 }
 
 export type RemoteServerUpdateTransport = {
   getRuntimeStatus: (environmentId: string, timeoutMs?: number) => Promise<RuntimeStatus>
-  getUpdaterStatus: (environmentId: string) => Promise<RemoteServerUpdaterSnapshot>
-  check: (
-    environmentId: string,
-    options: UpdateCheckOptions
-  ) => Promise<RemoteServerUpdaterSnapshot>
-  download: (environmentId: string) => Promise<RemoteServerUpdaterSnapshot>
-  install: (environmentId: string) => Promise<RemoteServerUpdateInstallResult>
+  subscribeStatus: (environmentId: string, timeoutMs: number) => Promise<UpdaterStatusSubscription>
+  check: (environmentId: string, options: UpdaterCheckOptions) => Promise<UpdaterSnapshot>
+  download: (environmentId: string) => Promise<UpdaterSnapshot>
+  install: (environmentId: string) => Promise<UpdaterInstallResult>
   wait: (milliseconds: number) => Promise<void>
   now?: () => number
 }
@@ -60,7 +58,7 @@ export const DEFAULT_REMOTE_SERVER_UPDATE_TIMING: RemoteServerUpdateTiming = {
 }
 
 export type RemoteServerUpdateRunOptions = {
-  checkOptions?: UpdateCheckOptions
+  checkOptions?: UpdaterCheckOptions
   timing?: RemoteServerUpdateTiming
 }
 

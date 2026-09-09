@@ -6,7 +6,7 @@ import type {
   OpenCodeUsageScope,
   OpenCodeUsageSessionRow,
   OpenCodeUsageSummary
-} from '@yiru/runtime-protocol/workbench/opencode-usage-types'
+} from '@yiru/protocol/provider-usage/models'
 import type { StateCreator } from 'zustand'
 import { openCodeProviderUsageClient } from '~renderer/runtime/provider-usage-client'
 import type { AppState } from '~renderer/store/types'

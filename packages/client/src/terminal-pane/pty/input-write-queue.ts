@@ -1,8 +1,8 @@
-import { yieldToEventLoop } from '@yiru/runtime-protocol/model/ui'
+import { yieldToEventLoop } from '~renderer/event-loop-yield'
 import {
   isTerminalInputTooLargeWithDeferredMeasurement,
   iterateTerminalInputChunks
-} from '@yiru/runtime-protocol/workbench/terminal/input'
+} from '~renderer/terminal-pane/pty/input-chunks'
 
 // Why: 4096 UTF-16 code units encode to at most ~12KB UTF-8, safely under the
 // 16KB TERMINAL_INPUT_CHUNK_MAX_BYTES cap without paying byte measurement on

@@ -1,12 +1,10 @@
-import type {
-  SkillManageScope,
-  SkillUpdateRun
-} from '@yiru/runtime-protocol/workbench/skill-freshness'
+import type { SkillManageScope } from '@yiru/protocol'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle, CheckCircle as CheckCircle2 } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
+import type { SkillUpdateRun } from '~renderer/skills/freshness-model'
 import { Button } from '~renderer/ui/button'
 import {
   Dialog,

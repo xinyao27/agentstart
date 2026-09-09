@@ -1,7 +1,7 @@
-import type { FeatureTip } from '@yiru/runtime-protocol/workbench/feature-tips'
 import { useEffect, useRef, useState, type JSX } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
+import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { installCliCommand } from '~renderer/runtime/cli-install-client'
 import {
@@ -21,6 +21,7 @@ import {
   DialogTitle
 } from '~renderer/ui/dialog'
 
+import type { FeatureTip } from './catalog'
 import { CliFeatureTipVisual } from './cli-feature-tip-visual'
 import { CliSkillSetupTerminal } from './cli-skill-setup-terminal'
 import { CommandPaletteFeatureTipVisual } from './command-palette-feature-tip-visual'
@@ -53,6 +54,7 @@ function FeatureTipVisual({ tip }: { tip: FeatureTip }): JSX.Element {
 }
 
 export default function FeatureTipsModal(): JSX.Element | null {
+  useUiLocale()
   const activeModal = useAppStore((s) => s.activeModal)
   const closeModal = useAppStore((s) => s.closeModal)
   const openSettingsPage = useAppStore((s) => s.openSettingsPage)

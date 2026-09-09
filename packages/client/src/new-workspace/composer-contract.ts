@@ -1,14 +1,11 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type {
-  GitHubWorkItem,
-  GitPushTarget,
-  GitLabWorkItem,
-  SetupAgentStartupPolicy,
-  SparsePreset,
-  TuiAgent,
-  WorkspaceCreateTelemetrySource,
-  WorkspaceStatus
-} from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
+import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
+import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
+import type { SetupAgentStartupPolicy } from '@yiru/protocol/worktree/hooks'
 import type { NewWorkspaceProjectOption } from '~renderer/new-workspace-composer-card/new-workspace-project-options'
 import type { ProjectHostSetupOption } from '~renderer/new-workspace-composer-card/project-host-setup-options'
 import type { WorkspaceCreateErrorDisplay } from '~renderer/new-workspace-composer-card/workspace-create-error-format'
@@ -68,17 +65,9 @@ export type ComposerCardProps = {
   branchNameOverride: string | undefined
   onBranchNameOverrideChange: (value: string | undefined) => void
   onSmartGitHubItemSelect: (item: GitHubWorkItem) => void
-  onSmartGitLabItemSelect: (item: GitLabWorkItem) => void
   onSmartBranchSelect: (refName: string, localBranchName: string) => void
   onSmartNameModeChange?: (mode: SmartNameMode) => void
   smartNameGitHubSourceContext?: ProjectSourceContext | null
-  /** GitLab parallel of onBaseBranchPrSelect. */
-  onBaseBranchMrSelect?: (
-    baseBranch: string,
-    item: GitLabWorkItem,
-    pushTarget?: GitPushTarget,
-    compareBaseRef?: string
-  ) => void
   smartNameSelection: SmartWorkspaceNameSelection | null
   onClearSmartNameSelection: () => void
   /** True when the selected source is an existing LOCAL branch that can be

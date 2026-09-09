@@ -1,4 +1,5 @@
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { workspaceStatusLabel } from '~renderer/sidebar/workspace-status-label'
 
 import { getManualOrderAnchorRepo, sortProjectEntries } from './project-row-order'
 import { getWorkspaceStatus, getWorkspaceStatusGroupKey } from './workspace-status'
@@ -61,7 +62,8 @@ function collectNaturalWorktreeGroups(
     } else if (context.groupBy === 'workspace-status') {
       const status = getWorkspaceStatus(worktree, context.workspaceStatuses)
       key = getWorkspaceStatusGroupKey(status)
-      label = context.workspaceStatuses.find((entry) => entry.id === status)?.label ?? status
+      const definition = context.workspaceStatuses.find((entry) => entry.id === status)
+      label = definition ? workspaceStatusLabel(definition) : status
     } else {
       const prGroup = getPRGroupKey(worktree, context.repoMap, context.prCache, context.settings)
       key = `pr:${prGroup}`

@@ -1,8 +1,9 @@
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 import {
   isPositiveHostedReviewNumber,
   type HostedReviewProvider
-} from '@yiru/runtime-protocol/model/review'
-import type { GitStatusEntry, Worktree } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/hosted-review/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import React from 'react'
 import { getGitHubPRCacheKey } from '~renderer/github/cache-key'
 import {
@@ -208,13 +209,7 @@ function resolveLocalReviewDetails(
   hostedReview: ReviewTabDetails | null,
   githubReview: { number: number } | null
 ): ReviewTabDetails | null {
-  if (hostedReview?.provider === 'gitlab' && isPositiveHostedReviewNumber(hostedReview.number)) {
-    return hostedReview
-  }
   const linkedReview = resolveLinkedReviewDetails(worktree)
-  if (linkedReview && linkedReview.provider !== 'github') {
-    return linkedReview
-  }
   if (githubReview && isPositiveHostedReviewNumber(githubReview.number)) {
     return { provider: 'github', number: githubReview.number }
   }
@@ -228,27 +223,15 @@ function resolveLinkedReviewDetails(worktree: Worktree | null): ReviewTabDetails
   if (!worktree) {
     return null
   }
-  const linkedReviews: readonly ReviewTabDetails[] = [
-    { provider: 'gitlab', number: worktree.linkedGitLabMR ?? 0 },
-    { provider: 'bitbucket', number: worktree.linkedBitbucketPR ?? 0 },
-    { provider: 'azure-devops', number: worktree.linkedAzureDevOpsPR ?? 0 },
-    { provider: 'gitea', number: worktree.linkedGiteaPR ?? 0 },
-    { provider: 'github', number: worktree.linkedPR ?? 0 }
-  ]
-  return linkedReviews.find((review) => isPositiveHostedReviewNumber(review.number)) ?? null
+  const number = worktree.linkedPR ?? 0
+  return isPositiveHostedReviewNumber(number) ? { provider: 'github', number } : null
 }
 
 function formatReviewTabLabel(review: ReviewTabDetails): string {
   const copy = localizedHostedReviewCopy(resolveSupportedHostedReviewCopyProvider(review.provider))
-  return review.provider === 'gitlab'
-    ? translate(
-        'auto.components.workspace.panel.source.control.workspace.panel.mergeRequestNumber',
-        '{{value0}} !{{value1}}',
-        { value0: copy.shortLabel, value1: review.number }
-      )
-    : translate(
-        'auto.components.workspace.panel.source.control.workspace.panel.pullRequestNumber',
-        '{{value0}} #{{value1}}',
-        { value0: copy.shortLabel, value1: review.number }
-      )
+  return translate(
+    'auto.components.workspace.panel.source.control.workspace.panel.pullRequestNumber',
+    '{{value0}} #{{value1}}',
+    { value0: copy.shortLabel, value1: review.number }
+  )
 }

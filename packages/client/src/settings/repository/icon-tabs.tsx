@@ -1,5 +1,5 @@
-import type { RepoIcon } from '@yiru/runtime-protocol/model/workspace'
-import { faviconUrlFromWebsite } from '@yiru/runtime-protocol/model/workspace'
+import type { RepoIcon } from '@yiru/protocol/project/icon'
+import { faviconUrlFromWebsite } from '@yiru/protocol/project/icon'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

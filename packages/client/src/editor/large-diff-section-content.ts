@@ -1,6 +1,5 @@
-import type { GitDiffResult } from '@yiru/runtime-protocol/workbench/types'
-
-import type { LargeDiffRenderLimit } from './large-diff-render-limit'
+import type { GitDiffResult } from '@yiru/protocol/git/diff-values'
+import type { LargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
 
 export function shouldPruneLargeDiffContent(
   renderLimit: LargeDiffRenderLimit | null | undefined

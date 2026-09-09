@@ -1,6 +1,6 @@
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { useAppStore } from '~renderer/store/state'
 import {
   getUpdateCheckClickOptions,

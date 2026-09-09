@@ -1,10 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import type {
-  DiscoveredSkill,
-  SkillDiscoveryResult,
-  SkillDiscoveryTarget,
-  SkillSourceKind
-} from '@yiru/runtime-protocol/workbench/skills'
+import type { DiscoveredSkill, SkillDiscoveryResult, SkillSourceKind } from '@yiru/protocol'
 import { useEffect } from 'react'
 import {
   getInstalledAgentSkillDiscoveryGeneration,
@@ -16,6 +11,7 @@ import {
   writeInstalledAgentSkillDiscovery
 } from '~renderer/runtime/installed-agent-skill-discovery-state'
 import { discoverSkills } from '~renderer/runtime/skill-manage-client'
+import type { SkillDiscoveryTarget } from '~renderer/skills/discovery-target'
 import { markOrchestrationSetupComplete } from '~renderer/skills/orchestration-setup-state'
 
 import { useEventCallback } from '../react/use-event-callback'

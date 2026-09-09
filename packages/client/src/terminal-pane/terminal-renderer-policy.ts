@@ -1,6 +1,6 @@
-import type { AgentType } from '@yiru/runtime-protocol/model/agent'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
-import { isGeminiTerminalTitle } from '~renderer/agent/status'
+import type { AgentType } from '@yiru/protocol/agent/status-records'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { isGeminiTerminalTitle } from '~renderer/agent/title/core'
 
 export type TerminalGpuAccelerationMode = GlobalSettings['terminalGpuAcceleration']
 

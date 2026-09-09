@@ -22,7 +22,6 @@ enum AppRoute: Hashable {
     case pair
     case pairConfirm(PairingOffer)
     case pairLinkError(PairingLinkError)
-    case terminalPrototype
 }
 
 extension AppRoute {
@@ -37,7 +36,7 @@ extension AppRoute {
         case .activityInsights, .designSystemCatalog, .settings, .appearanceSettings,
             .browserSettings, .connectionLog, .notificationSettings,
             .troubleshooting, .about, .terminalSettings, .pair, .pairConfirm,
-            .pairLinkError, .terminalPrototype:
+            .pairLinkError:
             nil
         }
     }

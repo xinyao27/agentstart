@@ -1,11 +1,9 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type {
-  GitHubRepositoryIdentity,
-  PRCheckDetail,
-  Repo,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubRepositoryIdentity } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { PRCheckDetail } from '@yiru/protocol/hosted-review/review-types'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { getWorktreeGitIdentityDisplay } from '~renderer/worktree/git-identity-display'
 
 import {
@@ -21,10 +19,6 @@ type FetchHostedReview = (
     repoId?: string
     staleWhileRevalidate?: boolean
     linkedGitHubPR?: number | null
-    linkedGitLabMR?: number | null
-    linkedBitbucketPR?: number | null
-    linkedAzureDevOpsPR?: number | null
-    linkedGiteaPR?: number | null
     currentHeadOid?: string | null
   }
 ) => Promise<HostedReviewInfo | null>
@@ -132,10 +126,6 @@ async function refreshParentPrChecksCandidate(
       force,
       repoId: candidate.repo.id,
       linkedGitHubPR: candidate.worktree.linkedPR ?? null,
-      linkedGitLabMR: candidate.worktree.linkedGitLabMR ?? null,
-      linkedBitbucketPR: candidate.worktree.linkedBitbucketPR ?? null,
-      linkedAzureDevOpsPR: candidate.worktree.linkedAzureDevOpsPR ?? null,
-      linkedGiteaPR: candidate.worktree.linkedGiteaPR ?? null,
       currentHeadOid: candidate.worktree.head ?? null,
       staleWhileRevalidate: true
     })
@@ -190,12 +180,5 @@ function getBranchName(worktree: Worktree): string | null {
 }
 
 function hasLinkedReview(worktree: Worktree): boolean {
-  return Boolean(
-    worktree.linkedPR ??
-    worktree.linkedGitLabMR ??
-    worktree.linkedBitbucketPR ??
-    worktree.linkedAzureDevOpsPR ??
-    worktree.linkedGiteaPR ??
-    null
-  )
+  return worktree.linkedPR != null
 }

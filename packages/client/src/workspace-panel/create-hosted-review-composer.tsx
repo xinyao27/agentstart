@@ -1,11 +1,6 @@
-import type { HostedReviewProvider } from '@yiru/runtime-protocol/model/review'
-import {
-  localizedHostedReviewCopy,
-  resolveSupportedHostedReviewCopyProvider
-} from '~renderer/i18n/hosted-review-localized-copy'
+import { localizedHostedReviewCopy } from '~renderer/i18n/hosted-review-localized-copy'
 import { translate } from '~renderer/i18n/i18n'
 import {
-  GitMerge,
   GitPullRequest as GitPullRequestArrow,
   Sparkle as Sparkles,
   Square,
@@ -41,7 +36,6 @@ export type CreateHostedReviewComposerPrimaryAction = {
 
 export type CreateHostedReviewComposerProps = {
   className?: string
-  provider: HostedReviewProvider
   branch: string
   base: string
   setBase: (value: string) => void
@@ -74,7 +68,6 @@ export type CreateHostedReviewComposerProps = {
 
 export function CreateHostedReviewComposer({
   className,
-  provider,
   branch,
   base,
   setBase,
@@ -104,8 +97,8 @@ export function CreateHostedReviewComposer({
   onPrimaryAction,
   onDropdownAction
 }: CreateHostedReviewComposerProps): React.JSX.Element {
-  const copy = localizedHostedReviewCopy(resolveSupportedHostedReviewCopyProvider(provider))
-  const ReviewIcon = provider === 'gitlab' ? GitMerge : GitPullRequestArrow
+  const copy = localizedHostedReviewCopy('github')
+  const ReviewIcon = GitPullRequestArrow
   const normalizedBase = stripBaseRef(base)
   const strippedBranch = stripBaseRef(branch)
   const baseSameAsBranch = normalizedBase.toLowerCase() === strippedBranch.toLowerCase()

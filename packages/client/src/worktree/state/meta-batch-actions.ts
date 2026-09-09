@@ -1,11 +1,9 @@
-import type { WorktreeMeta } from '@yiru/runtime-protocol/workbench/types'
-import {
-  getActiveSidebarWorkspaceId,
-  parseWorkspaceKey
-} from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { WorktreeMeta } from '@yiru/protocol/worktree/model'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { updateProjectCatalogWorktree } from '~renderer/project-catalog/worktree-cache'
+import { getActiveSidebarWorkspaceId } from '~renderer/sidebar/active-workspace'
 import { refreshOwnedWorktreeCatalog } from '~renderer/worktree/catalog-refresh'
 
 import type { AppState } from '../../store/types'

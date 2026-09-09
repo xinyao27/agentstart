@@ -1,7 +1,7 @@
-import type { ParsedExecutionHost } from '@yiru/runtime-protocol/model/workspace'
-import { parseExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import { getProjectSourceRuntimeSettings } from '@yiru/runtime-protocol/workbench/project-source-context'
+import type { ParsedExecutionHost } from '@yiru/protocol/host/identity'
+import { parseExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import { getProjectSourceRuntimeSettings } from '@yiru/protocol/project/source-context'
 import type { RuntimeClientTarget } from '~renderer/runtime/rpc-client'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 

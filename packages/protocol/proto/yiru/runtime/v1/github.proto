@@ -1,0 +1,1313 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+import "yiru/runtime/v1/github_shell.proto";
+
+// GitHubService covers PR/issue reads, mutations, and hosted-review creation for the
+// `github`, `githubCommentDraft`, and `hostedReview` legacy namespaces. GitHub is the only
+// hosted-review provider Yiru supports; this service intentionally has no GitLab/Bitbucket/Gitea
+// surface.
+service GitHubService {
+  rpc GetRepoSlug(GitHubServiceGetRepoSlugRequest) returns (GitHubServiceGetRepoSlugResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetRepoUpstream(GitHubServiceGetRepoUpstreamRequest) returns (GitHubServiceGetRepoUpstreamResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetRateLimit(GitHubServiceGetRateLimitRequest) returns (GitHubServiceGetRateLimitResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListWorkItems(GitHubServiceListWorkItemsRequest) returns (GitHubServiceListWorkItemsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListLabels(GitHubServiceListLabelsRequest) returns (GitHubServiceListLabelsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListAssignableUsers(GitHubServiceListAssignableUsersRequest) returns (GitHubServiceListAssignableUsersResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetWorkItem(GitHubServiceGetWorkItemRequest) returns (GitHubServiceGetWorkItemResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetWorkItemByOwnerRepo(GitHubServiceGetWorkItemByOwnerRepoRequest) returns (GitHubServiceGetWorkItemByOwnerRepoResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetWorkItemDetails(GitHubServiceGetWorkItemDetailsRequest) returns (GitHubServiceGetWorkItemDetailsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetPrForBranch(GitHubServiceGetPrForBranchRequest) returns (GitHubServiceGetPrForBranchResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RefreshPrForBranch(GitHubServiceRefreshPrForBranchRequest) returns (GitHubServiceRefreshPrForBranchResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetPrChecks(GitHubServiceGetPrChecksRequest) returns (GitHubServiceGetPrChecksResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetPrCheckDetails(GitHubServiceGetPrCheckDetailsRequest) returns (GitHubServiceGetPrCheckDetailsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RerunPrChecks(GitHubServiceRerunPrChecksRequest) returns (GitHubServiceRerunPrChecksResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetPrComments(GitHubServiceGetPrCommentsRequest) returns (GitHubServiceGetPrCommentsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetPrFileContents(GitHubServiceGetPrFileContentsRequest) returns (GitHubServiceGetPrFileContentsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ResolveReviewThread(GitHubServiceResolveReviewThreadRequest) returns (GitHubServiceResolveReviewThreadResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SetPrFileViewed(GitHubServiceSetPrFileViewedRequest) returns (GitHubServiceSetPrFileViewedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc UpdatePrTitle(GitHubServiceUpdatePrTitleRequest) returns (GitHubServiceUpdatePrTitleResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc UpdatePr(GitHubServiceUpdatePrRequest) returns (GitHubServiceUpdatePrResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc UpdatePrState(GitHubServiceUpdatePrStateRequest) returns (GitHubServiceUpdatePrStateResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc MergePr(GitHubServiceMergePrRequest) returns (GitHubServiceMergePrResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SetPrAutoMerge(GitHubServiceSetPrAutoMergeRequest) returns (GitHubServiceSetPrAutoMergeResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RequestPrReviewers(GitHubServiceRequestPrReviewersRequest) returns (GitHubServiceRequestPrReviewersResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RemovePrReviewers(GitHubServiceRemovePrReviewersRequest) returns (GitHubServiceRemovePrReviewersResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AddPrComment(GitHubServiceAddPrCommentRequest) returns (GitHubServiceAddPrCommentResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AddPrReviewComment(GitHubServiceAddPrReviewCommentRequest) returns (GitHubServiceAddPrReviewCommentResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AddPrReviewCommentReply(GitHubServiceAddPrReviewCommentReplyRequest) returns (GitHubServiceAddPrReviewCommentReplyResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CreateCommentDraft(GitHubServiceCreateCommentDraftRequest) returns (GitHubServiceCreateCommentDraftResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetHostedReviewForBranch(GitHubServiceGetHostedReviewForBranchRequest) returns (GitHubServiceGetHostedReviewForBranchResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetHostedReviewCreationEligibility(GitHubServiceGetHostedReviewCreationEligibilityRequest) returns (GitHubServiceGetHostedReviewCreationEligibilityResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CreateHostedReview(GitHubServiceCreateHostedReviewRequest) returns (GitHubServiceCreateHostedReviewResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SubscribeEvents(GitHubServiceSubscribeEventsRequest) returns (stream GitHubServiceSubscribeEventsResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+// ---- Shared value types ----
+
+message GitHubRepoRef {
+  string owner = 1;
+  string repo = 2;
+}
+
+message GitHubUser {
+  string login = 1;
+  optional string name = 2;
+  string avatar_url = 3;
+  optional string review_state = 4;
+}
+
+message GitHubMergeMethodSettings {
+  string default_method = 1;
+  bool merge_allowed = 2;
+  bool squash_allowed = 3;
+  bool rebase_allowed = 4;
+}
+
+enum GitHubChecksState {
+  GIT_HUB_CHECKS_STATE_UNSPECIFIED = 0;
+  GIT_HUB_CHECKS_STATE_NONE = 1;
+  GIT_HUB_CHECKS_STATE_PENDING = 2;
+  GIT_HUB_CHECKS_STATE_SUCCESS = 3;
+  GIT_HUB_CHECKS_STATE_FAILURE = 4;
+}
+
+message GitHubChecksSummary {
+  GitHubChecksState state = 1;
+  uint32 total = 2;
+  uint32 passed = 3;
+  uint32 failed = 4;
+  uint32 pending = 5;
+}
+
+enum GitHubReviewDecision {
+  GIT_HUB_REVIEW_DECISION_UNSPECIFIED = 0;
+  GIT_HUB_REVIEW_DECISION_APPROVED = 1;
+  GIT_HUB_REVIEW_DECISION_CHANGES_REQUESTED = 2;
+  GIT_HUB_REVIEW_DECISION_REVIEW_REQUIRED = 3;
+}
+
+message GitHubConflictSummary {
+  string base_ref = 1;
+  string base_commit = 2;
+  uint64 commits_behind = 3;
+  repeated string files = 4;
+  optional bool merge_clean = 5;
+}
+
+message GitHubWorkItem {
+  string id = 1;
+  uint64 number = 2;
+  string title = 3;
+  GitHubPrState state = 4;
+  string url = 5;
+  repeated string labels = 6;
+  string updated_at = 7;
+  optional string author = 8;
+  optional string author_avatar_url = 9;
+  string branch_name = 10;
+  string base_ref_name = 11;
+  optional string head_sha = 12;
+  optional string merge_state_status = 13;
+  optional uint64 additions = 14;
+  optional uint64 deletions = 15;
+  optional uint64 changed_files = 16;
+  optional GitHubReviewDecision review_decision = 17;
+  repeated GitHubUser review_requests = 18;
+  repeated GitHubUser latest_reviews = 19;
+  repeated GitHubUser assignees = 20;
+  optional GitHubChecksSummary checks_summary = 21;
+  optional GitHubPrMergeable mergeable = 22;
+  optional bool auto_merge_enabled = 23;
+  optional bool auto_merge_allowed = 24;
+  optional bool merge_queue_required = 25;
+  optional GitHubMergeMethodSettings merge_method_settings = 26;
+  optional bool maintainer_can_modify = 27;
+  optional GitHubRepoRef pr_repo = 28;
+  optional bool is_cross_repository = 29;
+}
+
+// A condensed projection of GitHubWorkItem used everywhere a branch/PR lookup returns a summary
+// rather than the full item (branch resolution, refresh events, hosted-review status).
+message GitHubPrSummary {
+  uint64 number = 1;
+  string title = 2;
+  GitHubPrState state = 3;
+  string url = 4;
+  string updated_at = 5;
+  GitHubChecksState checks_status = 6;
+  GitHubPrMergeable mergeable = 7;
+  optional string head_ref_name = 8;
+  optional GitHubReviewDecision review_decision = 9;
+  optional bool auto_merge_enabled = 10;
+  optional bool auto_merge_allowed = 11;
+  optional bool merge_queue_required = 12;
+  optional GitHubMergeMethodSettings merge_method_settings = 13;
+  optional string merge_state_status = 14;
+  optional string head_sha = 15;
+  optional string base_ref_name = 16;
+  optional GitHubRepoRef pr_repo = 17;
+  optional GitHubRepoRef head_repo = 18;
+  optional string confirmed_contained_head_oid = 19;
+  optional string head_diverged_from_merged_pr_at_oid = 20;
+  optional GitHubConflictSummary conflict_summary = 21;
+}
+
+enum GitHubReactionContent {
+  GIT_HUB_REACTION_CONTENT_UNSPECIFIED = 0;
+  GIT_HUB_REACTION_CONTENT_THUMBS_UP = 1;
+  GIT_HUB_REACTION_CONTENT_THUMBS_DOWN = 2;
+  GIT_HUB_REACTION_CONTENT_LAUGH = 3;
+  GIT_HUB_REACTION_CONTENT_CONFUSED = 4;
+  GIT_HUB_REACTION_CONTENT_HEART = 5;
+  GIT_HUB_REACTION_CONTENT_HOORAY = 6;
+  GIT_HUB_REACTION_CONTENT_ROCKET = 7;
+  GIT_HUB_REACTION_CONTENT_EYES = 8;
+}
+
+message GitHubCommentReaction {
+  GitHubReactionContent content = 1;
+  uint64 count = 2;
+}
+
+message GitHubComment {
+  uint64 id = 1;
+  string author = 2;
+  string author_avatar_url = 3;
+  string body = 4;
+  string created_at = 5;
+  string url = 6;
+  bool is_bot = 7;
+  optional string path = 8;
+  optional uint64 line = 9;
+  optional uint64 start_line = 10;
+  optional bool is_outdated = 11;
+  optional string thread_id = 12;
+  optional bool is_resolved = 13;
+  repeated GitHubCommentReaction reactions = 14;
+}
+
+enum GitHubFileStatus {
+  GIT_HUB_FILE_STATUS_UNSPECIFIED = 0;
+  GIT_HUB_FILE_STATUS_ADDED = 1;
+  GIT_HUB_FILE_STATUS_REMOVED = 2;
+  GIT_HUB_FILE_STATUS_MODIFIED = 3;
+  GIT_HUB_FILE_STATUS_RENAMED = 4;
+  GIT_HUB_FILE_STATUS_COPIED = 5;
+  GIT_HUB_FILE_STATUS_CHANGED = 6;
+  GIT_HUB_FILE_STATUS_UNCHANGED = 7;
+}
+
+enum GitHubFileViewedState {
+  GIT_HUB_FILE_VIEWED_STATE_UNSPECIFIED = 0;
+  GIT_HUB_FILE_VIEWED_STATE_VIEWED = 1;
+  GIT_HUB_FILE_VIEWED_STATE_UNVIEWED = 2;
+  GIT_HUB_FILE_VIEWED_STATE_DISMISSED = 3;
+}
+
+message GitHubFileEntry {
+  string path = 1;
+  optional string old_path = 2;
+  GitHubFileStatus status = 3;
+  uint64 additions = 4;
+  uint64 deletions = 5;
+  bool is_binary = 6;
+  repeated uint64 review_comment_line_numbers = 7;
+  GitHubFileViewedState viewed_state = 8;
+}
+
+enum GitHubCheckRunStatus {
+  GIT_HUB_CHECK_RUN_STATUS_UNSPECIFIED = 0;
+  GIT_HUB_CHECK_RUN_STATUS_QUEUED = 1;
+  GIT_HUB_CHECK_RUN_STATUS_IN_PROGRESS = 2;
+  GIT_HUB_CHECK_RUN_STATUS_COMPLETED = 3;
+}
+
+enum GitHubCheckConclusion {
+  GIT_HUB_CHECK_CONCLUSION_UNSPECIFIED = 0;
+  GIT_HUB_CHECK_CONCLUSION_PENDING = 1;
+  GIT_HUB_CHECK_CONCLUSION_SUCCESS = 2;
+  GIT_HUB_CHECK_CONCLUSION_FAILURE = 3;
+  GIT_HUB_CHECK_CONCLUSION_CANCELLED = 4;
+  GIT_HUB_CHECK_CONCLUSION_SKIPPED = 5;
+  GIT_HUB_CHECK_CONCLUSION_NEUTRAL = 6;
+  GIT_HUB_CHECK_CONCLUSION_TIMED_OUT = 7;
+  GIT_HUB_CHECK_CONCLUSION_ACTION_REQUIRED = 8;
+}
+
+message GitHubCheckEntry {
+  string name = 1;
+  GitHubCheckRunStatus status = 2;
+  GitHubCheckConclusion conclusion = 3;
+  optional string url = 4;
+  optional uint64 check_run_id = 5;
+  optional uint64 workflow_run_id = 6;
+}
+
+message GitHubCheckAnnotation {
+  optional string path = 1;
+  optional uint64 start_line = 2;
+  optional uint64 end_line = 3;
+  optional string annotation_level = 4;
+  optional string title = 5;
+  string message = 6;
+  optional string raw_details = 7;
+}
+
+message GitHubCheckJobStep {
+  string name = 1;
+  optional string status = 2;
+  optional string conclusion = 3;
+  optional string started_at = 4;
+  optional string completed_at = 5;
+}
+
+message GitHubCheckJob {
+  optional uint64 id = 1;
+  string name = 2;
+  optional string status = 3;
+  optional string conclusion = 4;
+  optional string started_at = 5;
+  optional string completed_at = 6;
+  optional string url = 7;
+  optional string log_tail = 8;
+  repeated GitHubCheckJobStep steps = 9;
+}
+
+message GitHubCheckDetails {
+  string name = 1;
+  optional string status = 2;
+  optional string conclusion = 3;
+  optional string url = 4;
+  optional string details_url = 5;
+  optional string started_at = 6;
+  optional string completed_at = 7;
+  optional string title = 8;
+  optional string summary = 9;
+  optional string text = 10;
+  repeated GitHubCheckAnnotation annotations = 11;
+  repeated GitHubCheckJob jobs = 12;
+}
+
+message GitHubMutationResult {
+  bool ok = 1;
+  optional string error = 2;
+}
+
+message GitHubCommentResult {
+  bool ok = 1;
+  optional string error = 2;
+  optional GitHubComment comment = 3;
+}
+
+message GitHubRateLimitBucket {
+  uint64 remaining = 1;
+  uint64 limit = 2;
+  uint64 reset_at = 3;
+}
+
+message GitHubRateLimitSnapshot {
+  GitHubRateLimitBucket core = 1;
+  GitHubRateLimitBucket search = 2;
+  GitHubRateLimitBucket graphql = 3;
+  double fetched_at_ms = 4;
+}
+
+message GitHubRefreshNoPr {}
+
+message GitHubRefreshUpstreamError {
+  string error_type = 1;
+  string message = 2;
+}
+
+message GitHubRefreshOutcome {
+  double fetched_at_ms = 1;
+  oneof result {
+    GitHubPrSummary found = 2;
+    GitHubRefreshNoPr no_pr = 3;
+    GitHubRefreshUpstreamError upstream_error = 4;
+  }
+}
+
+// ---- Requests / responses ----
+
+message GitHubServiceGetRepoSlugRequest {
+  string repo = 1;
+}
+message GitHubServiceGetRepoSlugResponse {
+  optional GitHubRepoRef repo = 1;
+}
+
+message GitHubServiceGetRepoUpstreamRequest {
+  string repo = 1;
+}
+message GitHubServiceGetRepoUpstreamResponse {
+  optional GitHubRepoRef upstream = 1;
+}
+
+message GitHubServiceGetRateLimitRequest {
+  bool force = 1;
+}
+message GitHubServiceGetRateLimitResponse {
+  bool ok = 1;
+  optional string error = 2;
+  optional GitHubRateLimitSnapshot snapshot = 3;
+}
+
+message GitHubServiceListWorkItemsRequest {
+  string repo = 1;
+  uint64 limit = 2;
+  uint64 page = 3;
+  optional string query = 4;
+}
+message GitHubServiceListWorkItemsResponse {
+  repeated GitHubWorkItem items = 1;
+  optional GitHubRepoRef source = 2;
+}
+
+message GitHubServiceListLabelsRequest {
+  string repo = 1;
+}
+message GitHubServiceListLabelsResponse {
+  repeated string labels = 1;
+}
+
+message GitHubServiceListAssignableUsersRequest {
+  string repo = 1;
+}
+message GitHubServiceListAssignableUsersResponse {
+  repeated GitHubUser users = 1;
+}
+
+message GitHubServiceGetWorkItemRequest {
+  string repo = 1;
+  uint64 number = 2;
+}
+message GitHubServiceGetWorkItemResponse {
+  optional GitHubWorkItem item = 1;
+}
+
+message GitHubServiceGetWorkItemByOwnerRepoRequest {
+  string repo = 1;
+  uint64 number = 2;
+  GitHubRepoRef owner_repo = 3;
+}
+message GitHubServiceGetWorkItemByOwnerRepoResponse {
+  optional GitHubWorkItem item = 1;
+}
+
+message GitHubServiceGetWorkItemDetailsRequest {
+  string repo = 1;
+  uint64 number = 2;
+}
+message GitHubServiceGetWorkItemDetailsResponse {
+  optional GitHubWorkItemDetails details = 1;
+}
+message GitHubWorkItemDetails {
+  GitHubWorkItem item = 1;
+  string body = 2;
+  repeated GitHubComment comments = 3;
+  optional string head_sha = 4;
+  optional string base_sha = 5;
+  optional string pull_request_id = 6;
+  repeated GitHubCheckEntry checks = 7;
+  repeated GitHubFileEntry files = 8;
+  bool files_unavailable = 9;
+  repeated GitHubUser participants = 10;
+  repeated string assignees = 11;
+}
+
+message GitHubPrBranchLookup {
+  optional uint64 linked_pr_number = 1;
+  optional uint64 fallback_pr_number = 2;
+  bool accept_merged_fallback_pr = 3;
+  optional string current_head_oid = 4;
+}
+
+message GitHubServiceGetPrForBranchRequest {
+  string repo = 1;
+  string branch = 2;
+  GitHubPrBranchLookup lookup = 3;
+}
+message GitHubServiceGetPrForBranchResponse {
+  optional GitHubPrSummary pr = 1;
+}
+
+message GitHubServiceRefreshPrForBranchRequest {
+  string repo = 1;
+  string branch = 2;
+  GitHubPrBranchLookup lookup = 3;
+}
+message GitHubServiceRefreshPrForBranchResponse {
+  GitHubRefreshOutcome outcome = 1;
+}
+
+message GitHubServiceGetPrChecksRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  optional string head_sha = 3;
+  optional GitHubRepoRef pr_repo = 4;
+  bool no_cache = 5;
+}
+message GitHubServiceGetPrChecksResponse {
+  repeated GitHubCheckEntry checks = 1;
+}
+
+message GitHubServiceGetPrCheckDetailsRequest {
+  string repo = 1;
+  optional uint64 check_run_id = 2;
+  optional uint64 workflow_run_id = 3;
+  optional string check_name = 4;
+  optional string url = 5;
+  optional GitHubRepoRef pr_repo = 6;
+}
+message GitHubServiceGetPrCheckDetailsResponse {
+  optional GitHubCheckDetails details = 1;
+}
+
+message GitHubServiceRerunPrChecksRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  optional string head_sha = 3;
+  bool failed_only = 4;
+  optional GitHubRepoRef pr_repo = 5;
+}
+message GitHubServiceRerunPrChecksResponse {
+  bool ok = 1;
+  optional string error = 2;
+  optional uint64 count = 3;
+}
+
+message GitHubServiceGetPrCommentsRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  optional GitHubRepoRef pr_repo = 3;
+  bool no_cache = 4;
+}
+message GitHubServiceGetPrCommentsResponse {
+  repeated GitHubComment comments = 1;
+}
+
+message GitHubServiceGetPrFileContentsRequest {
+  string repo = 1;
+  string path = 2;
+  optional string old_path = 3;
+  GitHubFileStatus status = 4;
+  string head_sha = 5;
+  string base_sha = 6;
+}
+message GitHubServiceGetPrFileContentsResponse {
+  string original = 1;
+  string modified = 2;
+  bool original_is_binary = 3;
+  bool modified_is_binary = 4;
+  bool original_too_large = 5;
+  bool modified_too_large = 6;
+}
+
+message GitHubServiceResolveReviewThreadRequest {
+  string repo = 1;
+  string thread_id = 2;
+  bool resolve = 3;
+}
+message GitHubServiceResolveReviewThreadResponse {
+  bool ok = 1;
+}
+
+message GitHubServiceSetPrFileViewedRequest {
+  string repo = 1;
+  string pull_request_id = 2;
+  string path = 3;
+  bool viewed = 4;
+}
+message GitHubServiceSetPrFileViewedResponse {
+  bool ok = 1;
+}
+
+message GitHubServiceUpdatePrTitleRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  string title = 3;
+  optional GitHubRepoRef pr_repo = 4;
+}
+message GitHubServiceUpdatePrTitleResponse {
+  bool ok = 1;
+}
+
+message GitHubServiceUpdatePrRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  optional string title = 3;
+  optional string body = 4;
+  optional GitHubRepoRef pr_repo = 5;
+}
+message GitHubServiceUpdatePrResponse {
+  GitHubMutationResult result = 1;
+}
+
+enum GitHubPrOpenState {
+  GIT_HUB_PR_OPEN_STATE_UNSPECIFIED = 0;
+  GIT_HUB_PR_OPEN_STATE_OPEN = 1;
+  GIT_HUB_PR_OPEN_STATE_CLOSED = 2;
+}
+
+message GitHubServiceUpdatePrStateRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  GitHubPrOpenState state = 3;
+}
+message GitHubServiceUpdatePrStateResponse {
+  GitHubMutationResult result = 1;
+}
+
+enum GitHubMergeMethod {
+  GIT_HUB_MERGE_METHOD_UNSPECIFIED = 0;
+  GIT_HUB_MERGE_METHOD_MERGE = 1;
+  GIT_HUB_MERGE_METHOD_SQUASH = 2;
+  GIT_HUB_MERGE_METHOD_REBASE = 3;
+}
+
+message GitHubServiceMergePrRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  GitHubMergeMethod method = 3;
+  optional GitHubRepoRef pr_repo = 4;
+}
+message GitHubServiceMergePrResponse {
+  GitHubMutationResult result = 1;
+}
+
+message GitHubServiceSetPrAutoMergeRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  bool enabled = 3;
+  GitHubMergeMethod method = 4;
+  optional GitHubRepoRef pr_repo = 5;
+}
+message GitHubServiceSetPrAutoMergeResponse {
+  GitHubMutationResult result = 1;
+}
+
+message GitHubServiceRequestPrReviewersRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  repeated string reviewers = 3;
+}
+message GitHubServiceRequestPrReviewersResponse {
+  GitHubMutationResult result = 1;
+}
+
+message GitHubServiceRemovePrReviewersRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  repeated string reviewers = 3;
+}
+message GitHubServiceRemovePrReviewersResponse {
+  GitHubMutationResult result = 1;
+}
+
+message GitHubServiceAddPrCommentRequest {
+  string repo = 1;
+  uint64 number = 2;
+  string body = 3;
+  optional GitHubRepoRef pr_repo = 4;
+}
+message GitHubServiceAddPrCommentResponse {
+  GitHubCommentResult result = 1;
+}
+
+message GitHubServiceAddPrReviewCommentRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  string commit_id = 3;
+  string path = 4;
+  uint64 line = 5;
+  optional uint64 start_line = 6;
+  string body = 7;
+}
+message GitHubServiceAddPrReviewCommentResponse {
+  GitHubCommentResult result = 1;
+}
+
+message GitHubServiceAddPrReviewCommentReplyRequest {
+  string repo = 1;
+  uint64 pr_number = 2;
+  uint64 comment_id = 3;
+  string body = 4;
+  optional string thread_id = 5;
+  optional string path = 6;
+  optional uint64 line = 7;
+  optional GitHubRepoRef pr_repo = 8;
+}
+message GitHubServiceAddPrReviewCommentReplyResponse {
+  GitHubCommentResult result = 1;
+}
+
+enum GitHubCommentDraftKind {
+  GIT_HUB_COMMENT_DRAFT_KIND_UNSPECIFIED = 0;
+  GIT_HUB_COMMENT_DRAFT_KIND_ISSUE = 1;
+  GIT_HUB_COMMENT_DRAFT_KIND_PULL_REQUEST = 2;
+}
+
+message GitHubServiceCreateCommentDraftRequest {
+  string project_id = 1;
+  GitHubCommentDraftKind kind = 2;
+  uint64 number = 3;
+  string page_url = 4;
+  string page_context = 5;
+}
+message GitHubServiceCreateCommentDraftResponse {
+  string draft = 1;
+  double generated_at_ms = 2;
+}
+
+message GitHubServiceGetHostedReviewForBranchRequest {
+  string repo = 1;
+  string branch = 2;
+  GitHubPrBranchLookup lookup = 3;
+}
+message GitHubServiceGetHostedReviewForBranchResponse {
+  optional GitHubPrSummary review = 1;
+}
+
+message GitHubHostedReviewSummary {
+  uint64 number = 1;
+  string url = 2;
+}
+
+enum GitHubHostedReviewProvider {
+  GIT_HUB_HOSTED_REVIEW_PROVIDER_UNSPECIFIED = 0;
+  GIT_HUB_HOSTED_REVIEW_PROVIDER_GITHUB = 1;
+  GIT_HUB_HOSTED_REVIEW_PROVIDER_UNSUPPORTED = 2;
+}
+
+enum GitHubHostedReviewBlockedReason {
+  GIT_HUB_HOSTED_REVIEW_BLOCKED_REASON_UNSPECIFIED = 0;
+  GIT_HUB_HOSTED_REVIEW_BLOCKED_REASON_DETACHED_HEAD = 1;
+  GIT_HUB_HOSTED_REVIEW_BLOCKED_REASON_EXISTING_REVIEW = 2;
+  GIT_HUB_HOSTED_REVIEW_BLOCKED_REASON_UNSUPPORTED_PROVIDER = 3;
+  GIT_HUB_HOSTED_REVIEW_BLOCKED_REASON_DEFAULT_BRANCH = 4;
+  GIT_HUB_HOSTED_REVIEW_BLOCKED_REASON_DIRTY = 5;
+  GIT_HUB_HOSTED_REVIEW_BLOCKED_REASON_NO_UPSTREAM = 6;
+  GIT_HUB_HOSTED_REVIEW_BLOCKED_REASON_NEEDS_SYNC = 7;
+  GIT_HUB_HOSTED_REVIEW_BLOCKED_REASON_AUTH_REQUIRED = 8;
+  GIT_HUB_HOSTED_REVIEW_BLOCKED_REASON_NEEDS_PUSH = 9;
+}
+
+enum GitHubHostedReviewNextAction {
+  GIT_HUB_HOSTED_REVIEW_NEXT_ACTION_UNSPECIFIED = 0;
+  GIT_HUB_HOSTED_REVIEW_NEXT_ACTION_OPEN_EXISTING_REVIEW = 1;
+  GIT_HUB_HOSTED_REVIEW_NEXT_ACTION_COMMIT = 2;
+  GIT_HUB_HOSTED_REVIEW_NEXT_ACTION_PUBLISH = 3;
+  GIT_HUB_HOSTED_REVIEW_NEXT_ACTION_SYNC = 4;
+  GIT_HUB_HOSTED_REVIEW_NEXT_ACTION_AUTHENTICATE = 5;
+  GIT_HUB_HOSTED_REVIEW_NEXT_ACTION_PUSH = 6;
+}
+
+message GitHubServiceGetHostedReviewCreationEligibilityRequest {
+  string repo = 1;
+  optional string worktree = 2;
+  string branch = 3;
+  optional string base = 4;
+  optional bool has_uncommitted_changes = 5;
+  optional bool has_upstream = 6;
+  optional uint64 ahead = 7;
+  optional uint64 behind = 8;
+  optional uint64 linked_github_pr = 9;
+  optional uint64 fallback_github_pr = 10;
+}
+message GitHubServiceGetHostedReviewCreationEligibilityResponse {
+  GitHubHostedReviewProvider provider = 1;
+  optional GitHubHostedReviewSummary review = 2;
+  optional string default_base_ref = 3;
+  optional string head = 4;
+  bool can_create = 5;
+  GitHubHostedReviewBlockedReason blocked_reason = 6;
+  GitHubHostedReviewNextAction next_action = 7;
+}
+
+message GitHubServiceCreateHostedReviewRequest {
+  string repo = 1;
+  optional string worktree = 2;
+  GitHubHostedReviewProvider provider = 3;
+  string base = 4;
+  optional string head = 5;
+  string title = 6;
+  optional string body = 7;
+  bool draft = 8;
+  bool use_template = 9;
+}
+message GitHubServiceCreateHostedReviewResponse {
+  bool ok = 1;
+  optional string code = 2;
+  optional string error = 3;
+  optional uint64 number = 4;
+  optional string url = 5;
+  optional GitHubHostedReviewSummary existing_review = 6;
+}
+
+message GitHubServiceSubscribeEventsRequest {}
+
+message GitHubEventsSubscriptionReady {}
+
+message GitHubWorkItemMutatedEvent {
+  string repo_path = 1;
+  string repo_id = 2;
+  uint64 number = 3;
+}
+
+message GitHubPrRefreshAlias {
+  string cache_key = 1;
+  string repo_id = 2;
+  string repo_path = 3;
+  string branch = 4;
+  optional string connection_id = 5;
+  optional string current_head_oid = 6;
+  optional uint64 linked_pr_number = 7;
+  optional uint64 fallback_pr_number = 8;
+  optional GitHubPrRefreshFallbackSource fallback_pr_source = 9;
+  optional string worktree_id = 10;
+}
+
+message GitHubPrRefreshQueued {}
+
+message GitHubPrRefreshInFlight {
+  double request_started_at_ms = 1;
+}
+
+message GitHubPrRefreshPaused {
+  uint64 paused_until_ms = 1;
+  string skipped_reason = 2;
+}
+
+message GitHubPrRefreshSkipped {
+  string skipped_reason = 1;
+}
+
+message GitHubPrRefreshCompleted {
+  GitHubRefreshOutcome outcome = 1;
+  double request_started_at_ms = 2;
+}
+
+message GitHubPrRefreshEvent {
+  uint64 sequence = 1;
+  GitHubPrRefreshReason reason = 2;
+  repeated GitHubPrRefreshAlias aliases = 3;
+  oneof status {
+    GitHubPrRefreshQueued queued = 4;
+    GitHubPrRefreshInFlight in_flight = 5;
+    GitHubPrRefreshPaused paused = 6;
+    GitHubPrRefreshSkipped skipped = 7;
+    GitHubPrRefreshCompleted completed = 8;
+  }
+}
+
+message GitHubServiceSubscribeEventsResponse {
+  oneof event {
+    GitHubEventsSubscriptionReady ready = 1;
+    GitHubWorkItemMutatedEvent work_item_mutated = 2;
+    GitHubPrRefreshEvent pr_refresh = 3;
+  }
+}

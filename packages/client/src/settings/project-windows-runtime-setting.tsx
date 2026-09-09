@@ -1,13 +1,10 @@
-import type { LocalWindowsRuntimePreference } from '@yiru/runtime-protocol/workbench/project-execution-runtime'
+import type { Project, ProjectUpdateArgs } from '@yiru/protocol/project/model'
+import type { LocalWindowsRuntimePreference } from '@yiru/protocol/project/runtime-preference'
 import {
   normalizeProjectRuntimePreference,
   resolveProjectExecutionRuntime
-} from '@yiru/runtime-protocol/workbench/project-execution-runtime'
-import type {
-  GlobalSettings,
-  Project,
-  ProjectUpdateArgs
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/project/runtime-preference'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 

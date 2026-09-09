@@ -1,4 +1,4 @@
-import type { WorkspacePort } from '@yiru/runtime-protocol/workbench/workspace/ports'
+import type { WorkspacePort } from '@yiru/protocol'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import type { WebLinkMouseEvent } from '~renderer/browser/link-gesture'

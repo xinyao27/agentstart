@@ -1,4 +1,4 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/runtime-protocol/workbench/types'
+import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
 import React from 'react'
 import { toast } from 'sonner'
 import { openHttpLink } from '~renderer/editor/http-link-routing'

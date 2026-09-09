@@ -1,8 +1,8 @@
+import { captureTerminalShutdownBuffersBestEffort } from '~renderer/runtime/terminal-shutdown-buffer-captures'
 import {
   shouldPreserveTerminalScrollbackBuffers,
   type RepoConnection
-} from '@yiru/runtime-protocol/workbench/workspace/session-terminal-buffers'
-import { captureTerminalShutdownBuffersBestEffort } from '~renderer/runtime/terminal-shutdown-buffer-captures'
+} from '~renderer/terminal-workspace/scrollback-buffers'
 
 import {
   selectIdsBeyondHotRetain,

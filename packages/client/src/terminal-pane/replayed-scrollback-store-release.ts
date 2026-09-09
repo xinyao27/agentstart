@@ -1,7 +1,7 @@
 import {
   shouldPreserveTerminalScrollbackBuffers,
   type RepoConnection
-} from '@yiru/runtime-protocol/workbench/workspace/session-terminal-buffers'
+} from '~renderer/terminal-workspace/scrollback-buffers'
 
 export function canReleaseReplayedScrollbackFromStore(args: {
   hasScrollbackRefs: boolean

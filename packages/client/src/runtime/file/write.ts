@@ -1,6 +1,6 @@
 import { normalizeRelativePath } from '~renderer/path'
 
-import { callRuntimeOrpc } from '../orpc-client'
+import { requireFilesTarget } from '../files-target'
 import { getActiveRuntimeTarget } from '../rpc-client'
 import {
   assertNativeFileFallbackAllowed,
@@ -23,9 +23,8 @@ export async function writeRuntimeFile(
     await shellFilesClient.writeFile({ filePath, content, connectionId: context.connectionId })
     return
   }
-  await callRuntimeOrpc(
-    runtimeArgs.target,
-    (client) => client.files.write,
+  const client = await requireFilesTarget(runtimeArgs.target)
+  await client.write(
     { worktree: runtimeArgs.worktreeSelector, relativePath: runtimeArgs.relativePath, content },
     { timeoutMs: 15_000 }
   )
@@ -44,12 +43,12 @@ export async function createRuntimePath(
       : shellFilesClient.createFile({ filePath: path, connectionId: context.connectionId }))
     return
   }
-  const input = { worktree: runtimeArgs.worktreeSelector, relativePath: runtimeArgs.relativePath }
+  const client = await requireFilesTarget(runtimeArgs.target)
   await (kind === 'directory'
-    ? callRuntimeOrpc(runtimeArgs.target, (client) => client.files.createDir, input, {
+    ? client.createDirectory(runtimeArgs.worktreeSelector, runtimeArgs.relativePath, {
         timeoutMs: 15_000
       })
-    : callRuntimeOrpc(runtimeArgs.target, (client) => client.files.createFile, input, {
+    : client.createFile(runtimeArgs.worktreeSelector, runtimeArgs.relativePath, {
         timeoutMs: 15_000
       }))
 }
@@ -66,9 +65,8 @@ export async function renameRuntimePath(
     await shellFilesClient.rename({ oldPath, newPath, connectionId: context.connectionId })
     return
   }
-  await callRuntimeOrpc(
-    runtimeArgs.target,
-    (client) => client.files.rename,
+  const client = await requireFilesTarget(runtimeArgs.target)
+  await client.rename(
     {
       worktree: runtimeArgs.worktreeSelector,
       oldRelativePath: runtimeArgs.relativePath,
@@ -94,9 +92,8 @@ export async function copyRuntimePath(
     })
     return
   }
-  await callRuntimeOrpc(
-    sourceArgs.target,
-    (client) => client.files.copy,
+  const client = await requireFilesTarget(sourceArgs.target)
+  await client.copy(
     {
       worktree: sourceArgs.worktreeSelector,
       sourceRelativePath: sourceArgs.relativePath,
@@ -121,9 +118,8 @@ export async function deleteRuntimePath(
     })
     return
   }
-  await callRuntimeOrpc(
-    runtimeArgs.target,
-    (client) => client.files.delete,
+  const client = await requireFilesTarget(runtimeArgs.target)
+  await client.delete(
     { worktree: runtimeArgs.worktreeSelector, relativePath: runtimeArgs.relativePath, recursive },
     { timeoutMs: 15_000 }
   )
@@ -138,9 +134,8 @@ export async function deleteRuntimeRelativePath(
   if (!worktree || !canReadRelativeRuntimeFile(relativePath)) {
     return false
   }
-  await callRuntimeOrpc(
-    getActiveRuntimeTarget(context.settings),
-    (client) => client.files.delete,
+  const client = await requireFilesTarget(getActiveRuntimeTarget(context.settings))
+  await client.delete(
     { worktree, relativePath: normalizeRelativePath(relativePath), recursive },
     { timeoutMs: 15_000 }
   )

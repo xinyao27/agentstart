@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import { DiffCommentCard } from '~renderer/diff-comments/diff-comment-card'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, Copy } from '~renderer/icons/hugeicons'

@@ -1,4 +1,4 @@
-import type { AgentType } from '@yiru/runtime-protocol/model/agent'
+import type { AgentType } from '@yiru/protocol/agent/status-records'
 
 /**
  * The owner-evidence signals a terminal pane can carry, strongest launch intent

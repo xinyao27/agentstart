@@ -4,8 +4,8 @@ export {
   runtimeMobileSessionSyncKeysEqual
 } from './runtime-mobile-session-sync-key'
 export type { RuntimeMobileSessionSyncKey } from './runtime-mobile-session-sync-key'
-import type { RuntimeSyncWindowGraph } from '@yiru/runtime-protocol/workbench/runtime-types'
-import { isTerminalLeafId } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { isTerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
+import type { RuntimeSyncWindowGraph } from '~renderer/runtime/status/window-graph'
 import type { AppState } from '~renderer/store/types'
 import { serializePaneTree } from '~renderer/terminal-pane/layout-serialization'
 import { warnTerminalLifecycleAnomaly } from '~renderer/terminal-pane/terminal-lifecycle-diagnostics'
@@ -240,10 +240,11 @@ async function syncRuntimeGraph(): Promise<void> {
   }
 
   try {
-    const result = await shellClient.runtime.syncWindowGraph(graph)
-    getStoreState()?.setRuntimeAgentOrchestrationByPaneKey?.(
-      result?.agentOrchestrationByPaneKey ?? {}
-    )
+    await shellClient.runtime.syncWindowGraph(graph)
+    // Why: the legacy JSON result carried an optional orchestration map the
+    // protobuf status response has no field for; the Rust authority never
+    // populated it, so the renderer keeps its empty map exactly as before.
+    getStoreState()?.setRuntimeAgentOrchestrationByPaneKey?.({})
   } catch (error) {
     console.error('[runtime] Failed to sync renderer graph:', error)
   }

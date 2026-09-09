@@ -1,6 +1,6 @@
-import type { TerminalKittyKeyboardModeTracker } from '@yiru/runtime-protocol/workbench/terminal/kitty-keyboard-mode-tracker'
 import { scheduleRuntimeGraphSync } from '~renderer/runtime/sync-runtime-graph'
 import { useAppStore } from '~renderer/store/state'
+import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 import { createTerminalZeroDimensionsMessage } from '~renderer/terminal/zero-dimensions-diagnostic'
 
 import type { ManagedPane, PaneManager } from '../pane-manager/pane-manager'

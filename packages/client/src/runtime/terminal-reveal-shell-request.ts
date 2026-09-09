@@ -1,9 +1,5 @@
-import type {
-  ShellServicesTerminalRevealInput,
-  ShellServicesTerminalRevealOutput
-} from '@yiru/runtime-protocol/contract'
-import { parseRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
-import { makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import {
   activateTerminalInitiatedWorktree,
   focusTerminalInitiatedTab,
@@ -15,6 +11,7 @@ import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'
 import { singlePaneLayoutSnapshot } from '~renderer/terminal/state/layout-state'
 
+import type { TerminalRevealRequest, TerminalRevealResult } from './shell-host/terminal-request'
 import { resolveTerminalPresentation } from './terminal-create-presentation'
 import { activateExistingLeafInLayout, addSplitLeafToLayout } from './terminal-reveal-split-layout'
 
@@ -28,9 +25,7 @@ function tryMakePaneKey(tabId: string, leafId: string): string | null {
 
 // Why: reveal adopts a PTY already spawned by the daemon; create owns a new
 // renderer surface and therefore has a different lifecycle.
-export function revealTerminalSessionViaShell(
-  input: ShellServicesTerminalRevealInput
-): ShellServicesTerminalRevealOutput {
+export function revealTerminalSessionViaShell(input: TerminalRevealRequest): TerminalRevealResult {
   if (isRuntimeEnvironmentActive() && input.source !== 'runtime-session') {
     throw new Error(
       translate(

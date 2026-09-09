@@ -1,7 +1,3 @@
-import type {
-  ShellServicesTerminalCreateInput,
-  ShellServicesTerminalCreateOutput
-} from '@yiru/runtime-protocol/contract'
 import {
   activateTerminalInitiatedWorktree,
   focusTerminalInitiatedTab,
@@ -12,6 +8,7 @@ import { useAppStore } from '~renderer/store/state'
 import type { AppState } from '~renderer/store/types'
 import { requestBackgroundTerminalWorktreeMount } from '~renderer/terminal/background-terminal-worktree-mount'
 
+import type { TerminalCreateRequest, TerminalCreateResult } from './shell-host/terminal-request'
 import { resolveTerminalPresentation } from './terminal-create-presentation'
 
 function reorderCreatedTabAfterAnchor(worktreeId: string, tabId: string, afterTabId: string): void {
@@ -40,9 +37,7 @@ function reorderCreatedTabAfterAnchor(worktreeId: string, tabId: string, afterTa
 
 // Why: create mints the surface and queues PTY startup; reveal adopts a PTY
 // that the daemon already spawned, so the two lifecycles stay separate.
-export function createTerminalTabViaShell(
-  input: ShellServicesTerminalCreateInput
-): ShellServicesTerminalCreateOutput {
+export function createTerminalTabViaShell(input: TerminalCreateRequest): TerminalCreateResult {
   // Why: runtime-session requests are host-owned tabs materialized by this
   // renderer, not ordinary local creates that bypass remote runtime mode.
   if (isRuntimeEnvironmentActive() && input.source !== 'runtime-session') {

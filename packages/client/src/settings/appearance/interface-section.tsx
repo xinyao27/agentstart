@@ -1,6 +1,6 @@
-import { DEFAULT_APP_FONT_FAMILY } from '@yiru/runtime-protocol/workbench/constants'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
-import type { UiLanguage } from '@yiru/runtime-protocol/workbench/ui-language'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { DEFAULT_APP_FONT_FAMILY } from '@yiru/protocol/settings/interface-font'
+import type { UiLanguage } from '@yiru/protocol/settings/ui-language'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

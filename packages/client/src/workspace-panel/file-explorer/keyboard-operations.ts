@@ -1,7 +1,4 @@
-import {
-  keybindingMatchesAction,
-  type KeybindingOverrides
-} from '@yiru/runtime-protocol/workbench/keybindings'
+import { keybindingMatchesAction, type KeybindingOverrides } from '@yiru/protocol/keybindings'
 import { shellClient } from '~renderer/runtime/shell-client'
 
 import { pasteFileExplorerClipboard, setFileExplorerClipboard } from './clipboard'

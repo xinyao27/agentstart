@@ -1,7 +1,7 @@
 import {
   encodeServeSimTouchFrame,
   type ServeSimTouchFrame
-} from '@yiru/runtime-protocol/workbench/emulator-touch-frame'
+} from '@yiru/protocol/emulator/touch-frame'
 import { useEffect, useRef, useState } from 'react'
 import {
   encodeServeSimKeyboardFrame,

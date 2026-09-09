@@ -1,4 +1,4 @@
-import type { ReviewStepId } from '@yiru/runtime-protocol/workbench/review-steps'
+import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import type { JSX } from 'react'
 
 import { PANEL_HEIGHT, PANEL_WIDTH } from './review-animated-visual-shared'

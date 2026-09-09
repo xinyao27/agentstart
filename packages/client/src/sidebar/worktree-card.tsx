@@ -1,8 +1,10 @@
-import { parseExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import { DEFAULT_AGENT_ACTIVITY_DISPLAY_MODE } from '@yiru/runtime-protocol/workbench/constants'
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { Repo, Tab, TerminalTab, Worktree } from '@yiru/runtime-protocol/workbench/types'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { parseExecutionHostId } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
+import { DEFAULT_AGENT_ACTIVITY_DISPLAY_MODE } from '@yiru/protocol/settings/workspace-preferences'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { useState } from 'react'
 
 import { AgentPhaseLabel } from '../agent-session/phase'
@@ -96,14 +98,7 @@ export function shouldBeginWorktreeRename(
 }
 
 function reviewNumber(worktree: Worktree): number | null {
-  return (
-    worktree.linkedPR ??
-    worktree.linkedGitLabMR ??
-    worktree.linkedBitbucketPR ??
-    worktree.linkedAzureDevOpsPR ??
-    worktree.linkedGiteaPR ??
-    null
-  )
+  return worktree.linkedPR ?? null
 }
 
 export function WorktreeCard({

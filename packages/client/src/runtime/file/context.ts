@@ -1,11 +1,8 @@
-import {
-  isWindowsAbsolutePathLike,
-  relativePathInsideRoot
-} from '@yiru/runtime-protocol/model/platform'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import { isWindowsAbsolutePathLike, relativePathInsideRoot } from '@yiru/protocol/host/path'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
-import type { RuntimeClientTarget } from '../orpc-client'
 import { getActiveRuntimeTarget } from '../rpc-client'
+import type { RuntimeClientTarget } from '../runtime-target'
 import { toRuntimeWorktreePathSelector, toRuntimeWorktreeSelector } from '../worktree-selector'
 
 export type RuntimeReadableFileContent = {
@@ -32,9 +29,7 @@ export type RuntimeFileOperationArgs = {
   connectionId?: string
 }
 
-export type RuntimeFileDownloadResult =
-  | { canceled: true }
-  | { canceled: false; destinationPath: string }
+export type RuntimeFileDownloadResult = { destinationPath: string }
 
 export type RuntimeFileArgs = {
   target: RuntimeClientTarget

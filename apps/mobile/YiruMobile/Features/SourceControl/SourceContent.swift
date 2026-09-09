@@ -28,10 +28,7 @@ struct SourceControlContentView: View {
                 case .changes:
                     Text("Changes")
                 case .pullRequest:
-                    Text(
-                        model.hostedReviewEligibility?.provider == .gitlab
-                            ? "Merge Request" : "Pull Request"
-                    )
+                    Text("Pull Request")
                 case .history:
                     Text("Commits")
                 }

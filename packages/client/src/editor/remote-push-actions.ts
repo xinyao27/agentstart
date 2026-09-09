@@ -1,13 +1,13 @@
-import {
-  resolveSourceControlRemoteOperationFailureOutcome,
-  type SourceControlRemoteOperationOutcome
-} from '@yiru/runtime-protocol/model/review'
 import type { StateCreator } from 'zustand'
 import { getRuntimeGitUpstreamStatus, pushRuntimeGit } from '~renderer/runtime/git-client'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 import type { AppState } from '~renderer/store/types'
 import { invalidateAutomaticPushTargetUpstreamStatusCache } from '~renderer/workspace-panel/push-target-upstream-refresh-cache'
 
+import {
+  resolveSourceControlRemoteOperationFailureOutcome,
+  type SourceControlRemoteOperationOutcome
+} from '../source-control/workflow/operation'
 import type { EditorGitSlice } from './git-store'
 import { applyRemoteOperationFollowUp } from './source-control-operation-follow-up'
 import type { EditorSlice } from './store-contract'

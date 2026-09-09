@@ -1,8 +1,8 @@
-import { interpretSourceControlHostedReviewCreateResult } from '@yiru/runtime-protocol/model/review'
-import { normalizeHostedReviewHeadRef } from '@yiru/runtime-protocol/workbench/hosted-review-refs'
+import { normalizeHostedReviewHeadRef } from '@yiru/protocol/hosted-review/refs'
 import { toast } from 'sonner'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
+import { interpretSourceControlHostedReviewCreateResult } from '~renderer/source-control/workflow/review'
 
 import { formatCreateError } from '../create-pull-request-review-copy'
 import { clearPullRequestGenerationRequiresPushBeforeCreate } from '../pull-request-generation-state'
@@ -109,9 +109,7 @@ export function useChecksPanelCreateReview(context: useChecksPanelReviewCreation
       const outcome = interpretSourceControlHostedReviewCreateResult(result)
       if (outcome.kind === 'created') {
         await handlePullRequestCreated({
-          provider: hostedReviewCreateProvider,
-          number: outcome.number,
-          url: outcome.url
+          number: outcome.number
         })
         if (prCreationDefaults.openAfterCreate) {
           openHttpLink(outcome.url, { worktreeId: activeWorktreeId })
@@ -151,9 +149,7 @@ export function useChecksPanelCreateReview(context: useChecksPanelReviewCreation
         )
         if (number) {
           await handlePullRequestCreated({
-            provider: hostedReviewCreateProvider,
-            number,
-            url: outcome.url
+            number
           })
           if (activePullRequestGenerationKey) {
             updatePullRequestGenerationRecord(

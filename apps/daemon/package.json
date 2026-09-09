@@ -2,57 +2,15 @@
   "name": "@yiru/daemon",
   "version": "0.0.36",
   "private": true,
-  "description": "Local Yiru runtime daemon and command-line client",
-  "homepage": "https://github.com/xinyao27/yiru#readme",
-  "bugs": {
-    "url": "https://github.com/xinyao27/yiru/issues"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "xinyao",
-    "email": "hi@xinyao.me"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/xinyao27/yiru.git",
-    "directory": "apps/daemon"
-  },
-  "funding": "https://github.com/sponsors/xinyao27",
-  "bin": {
-    "yiru": "./dist/yiru"
-  },
-  "type": "module",
+  "description": "Yiru runtime daemon, CLI, Native Messaging host, and host adapters",
   "scripts": {
-    "build": "vp run build:workspace-deps && bun scripts/build.mjs",
-    "build:computer-macos": "bun scripts/build-computer-macos.mjs",
-    "build:release": "vp run build:workspace-deps && bun scripts/build.mjs --all",
-    "build:workspace-deps": "vp run --filter '{.}^...' build",
-    "check": "vp check --fix && vp run typecheck",
-    "dev": "vp run build:workspace-deps && bun ../../scripts/build-skill-resources.mjs --output dist/skill-resources && bun src/entry.ts daemon",
-    "fmt": "vp fmt .",
-    "lint": "vp lint . --fix",
-    "typecheck": "tsc --noEmit"
+    "build": "vp run --filter '{.}^...' build && cargo build --release --locked",
+    "dev": "vp run --filter '{.}^...' build && cargo run --locked -- daemon",
+    "fmt": "cargo fmt --all",
+    "lint": "vp run --filter '{.}^...' build && cargo fmt --all --check && cargo clippy --locked --all-targets -- -D warnings",
+    "typecheck": "vp run --filter '{.}^...' build && cargo check --locked"
   },
   "dependencies": {
-    "@orpc/client": "catalog:",
-    "@orpc/server": "catalog:",
-    "@xterm/addon-serialize": "catalog:",
-    "@xterm/addon-unicode11": "catalog:",
-    "@xterm/headless": "catalog:",
-    "@yiru/runtime-protocol": "workspace:*",
-    "jsonc-parser": "catalog:",
-    "posthog-node": "catalog:",
-    "qrcode": "catalog:",
-    "tweetnacl": "catalog:",
-    "yaml": "catalog:",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@types/bun": "catalog:",
-    "@types/node": "catalog:",
-    "@types/qrcode": "catalog:",
-    "rolldown": "catalog:",
-    "typescript": "catalog:",
-    "vite-plus": "catalog:"
+    "@yiru/protocol": "workspace:*"
   }
 }

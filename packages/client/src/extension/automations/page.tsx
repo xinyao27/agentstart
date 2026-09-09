@@ -1,16 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { RitualRunResult } from '@yiru/runtime-protocol/contract'
+import type { RitualRunResult } from '@yiru/protocol'
 import { translate } from '~renderer/i18n/i18n'
 import { Moon, Sun } from '~renderer/icons/hugeicons'
+import { runRitual } from '~renderer/runtime/ritual-target'
+import { terminalQueryRoot } from '~renderer/runtime/terminal-query'
 import { Button } from '~renderer/ui/button'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
-import { extensionOrpc } from '../runtime/orpc'
-import { projectsQuery } from '../runtime/queries'
+import { projectsQuery, WORKSPACE_EVENTS_QUERY_ROOT } from '../runtime/queries'
 import { BrowserAiSettings } from './browser-ai'
 import { RitualScheduleSettings } from './schedule'
 import { DangerousApprovalSettings } from './security'
 import { DaemonUpdateCard } from './update'
+
+const LOCAL_DAEMON_TARGET = { kind: 'local' } as const
 
 export function AutomationsPage(): React.JSX.Element {
   const capabilities = getExtensionBrowserCapabilities()
@@ -23,7 +26,7 @@ export function AutomationsPage(): React.JSX.Element {
   })
   const ritual = useMutation({
     mutationFn: async (kind: RitualRunResult['kind']) => {
-      const result = await extensionOrpc.ritual.run.call({ kind })
+      const result = await runRitual(LOCAL_DAEMON_TARGET, kind)
       await (kind === 'start-day'
         ? capabilities.arrangeStartDay(
             result.projects
@@ -35,8 +38,8 @@ export function AutomationsPage(): React.JSX.Element {
     },
     onSuccess: async () => {
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: extensionOrpc.terminal.key() }),
-        queryClient.invalidateQueries({ queryKey: extensionOrpc.workspaceEvents.key() })
+        queryClient.invalidateQueries({ queryKey: terminalQueryRoot({ kind: 'local' }) }),
+        queryClient.invalidateQueries({ queryKey: WORKSPACE_EVENTS_QUERY_ROOT })
       ])
     }
   })

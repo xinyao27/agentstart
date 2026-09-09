@@ -1,11 +1,8 @@
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type {
-  GlobalSettings,
-  Repo,
-  SetupAgentStartupPolicy,
-  SetupRunPolicy,
-  YiruHooks
-} from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { SetupAgentStartupPolicy, SetupRunPolicy } from '@yiru/protocol/worktree/hooks'
+import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

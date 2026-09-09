@@ -1,9 +1,6 @@
-import { splitWorktreeId } from '@yiru/runtime-protocol/model/workspace'
-import type {
-  ProjectUsageValue,
-  UsageProvider
-} from '@yiru/runtime-protocol/workbench/stats/usage-breakdown'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectUsageValue, UsageProvider } from '@yiru/protocol/stats/usage-breakdown'
+import { splitWorktreeId } from '@yiru/protocol/worktree/identity'
 
 type ProviderAccumulator = {
   hasUnknownValue: boolean

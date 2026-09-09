@@ -1,18 +1,16 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient: SourceReviewRepository {
     func sourceReviewMetadata(for hostID: String, worktreeID: String) async throws
         -> SourceReviewMetadata
     {
-        let result: MobileReviewMetadataResultWire = try await callRuntime(
-            hostID: hostID,
-            path: MobileReviewWireContract.metadataGetPath,
-            input: MobileReviewMetadataRequestWire(worktree: reviewWorktree(worktreeID)),
-            output: MobileReviewMetadataResultWire.self
-        )
+        let response = try await protocolWorktreeShow(hostID: hostID, workspaceID: worktreeID)
+        let record = response.worktree
         return SourceReviewMetadata(
-            comments: (result.worktree.diffComments ?? []).map(sourceReviewComment),
-            state: result.worktree.mobileDiffReview.map(sourceReviewState) ?? .empty
+            comments: record.diffComments.map(sourceReviewComment),
+            state: record.hasMobileDiffReview ? sourceReviewState(record.mobileDiffReview) : .empty
         )
     }
 
@@ -22,16 +20,17 @@ extension RuntimeClient: SourceReviewRepository {
         comments: [SourceReviewComment],
         state: SourceReviewState
     ) async throws {
-        let _: MobileReviewMetadataResultWire = try await callRuntime(
+        let revision = try await workspaceMutationRevision(hostID: hostID, workspaceID: worktreeID)
+        try await protocolSetWorktree(
             hostID: hostID,
-            path: MobileReviewWireContract.metadataSetPath,
-            input: MobileReviewMetadataSetRequestWire(
-                worktree: reviewWorktree(worktreeID),
-                diffComments: comments.map(sourceReviewCommentWire),
-                mobileDiffReview: sourceReviewStateWire(state)
-            ),
-            output: MobileReviewMetadataResultWire.self
-        )
+            workspaceID: worktreeID,
+            revision: revision
+        ) { patch in
+            var list = Yiru_Runtime_V1_WorktreeDiffCommentList()
+            list.values = comments.map(worktreeDiffComment)
+            patch.diffComments = list
+            patch.mobileDiffReview = worktreeMobileDiffReview(state)
+        }
     }
 
     func sourceReviewDiff(
@@ -59,26 +58,20 @@ extension RuntimeClient: SourceReviewRepository {
             return .document(document)
         }
         do {
-            let result: MobileGitDiffResultWire = try await callRuntime(
+            var request = Yiru_Runtime_V1_GitStatusServiceDiffRequest()
+            request.worktree = reviewWorktree(worktreeID)
+            request.filePath = item.filePath
+            request.staged = item.scope == .staged
+            let response = try await protocolUnary(
                 hostID: hostID,
-                path: MobileSessionTabsWireContract.gitDiffPath,
-                input: MobileGitDiffRequestWire(
-                    worktree: reviewWorktree(worktreeID),
-                    filePath: item.filePath,
-                    staged: item.scope == .staged,
-                    compareAgainstHead: nil
-                ),
-                output: MobileGitDiffResultWire.self
+                procedure: YiruRuntimeV1GitStatusServiceMethods.diff,
+                request: request,
+                response: Yiru_Runtime_V1_GitStatusServiceDiffResponse.self
             )
-            switch result.kind {
-            case .text:
-                break
-            case .binary:
-                return .binary
-            }
+            guard response.diff.kind != .binary else { return .binary }
             let diff = WorkspaceDiffBuilder.build(
-                originalContent: result.originalContent,
-                modifiedContent: result.modifiedContent
+                originalContent: response.diff.originalContent,
+                modifiedContent: response.diff.modifiedContent
             )
             return .document(.diff(lines: diff.lines, isTruncated: diff.isTruncated))
         } catch {
@@ -119,17 +112,12 @@ extension RuntimeClient: SourceReviewRepository {
         terminalID: String,
         comments: [SourceReviewComment]
     ) async throws {
-        let result: MobileReviewTerminalSendResultWire = try await callRuntime(
+        let response = try await protocolTerminalSend(
             hostID: hostID,
-            path: MobileReviewWireContract.terminalSendPath,
-            input: MobileReviewTerminalSendRequestWire(
-                terminal: terminalID,
-                text: sourceReviewPrompt(comments),
-                enter: true
-            ),
-            output: MobileReviewTerminalSendResultWire.self
+            terminal: terminalID,
+            text: sourceReviewPrompt(comments)
         )
-        guard result.send.accepted else { throw SourceReviewRepositoryError.terminalRejected }
+        guard response.send.accepted else { throw SourceReviewRepositoryError.terminalRejected }
     }
 
     func openSourceReviewInSession(
@@ -138,124 +126,134 @@ extension RuntimeClient: SourceReviewRepository {
         item: SourceReviewItem
     ) async throws {
         guard item.scope != .branch else { return }
-        do {
-            let _: MobileFileOpenResultWire = try await callRuntime(
-                hostID: hostID,
-                path: MobileReviewWireContract.fileOpenDiffPath,
-                input: MobileReviewFileOpenDiffRequestWire(
-                    worktree: reviewWorktree(worktreeID),
-                    relativePath: item.filePath,
-                    staged: item.scope == .staged
-                ),
-                output: MobileFileOpenResultWire.self
-            )
-        } catch let error as RuntimeOrpcError where isOpenDiffUnavailable(error) {
-            // Why: older Desktop runtimes do not expose files.openDiff. Fall back to the
-            // regular tab path so the session flow is preserved instead of ejecting the user
-            // into the standalone review route.
-            let _: MobileFileOpenResultWire = try await callRuntime(
-                hostID: hostID,
-                path: MobileSessionTabsWireContract.fileOpenPath,
-                input: MobileFileReadRequestWire(
-                    worktree: reviewWorktree(worktreeID),
-                    relativePath: item.filePath
-                ),
-                output: MobileFileOpenResultWire.self
-            )
-        }
+        var request = Yiru_Runtime_V1_FilesServiceOpenDiffRequest()
+        request.worktree = reviewWorktree(worktreeID)
+        request.relativePath = item.filePath
+        request.staged = item.scope == .staged
+        _ = try await protocolUnary(
+            hostID: hostID,
+            procedure: YiruRuntimeV1FilesServiceMethods.openDiff,
+            request: request,
+            response: Yiru_Runtime_V1_FilesServiceOpenDiffResponse.self
+        )
+    }
+
+    // Why: the review flows drive an agent terminal from notes, so the send shape
+    // (text plus optional submit) is shared by source-control review, hosted review
+    // triage, the notes sender, and quick-command launches.
+    func protocolTerminalSend(
+        hostID: String,
+        terminal: String,
+        text: String,
+        enter: Bool = true
+    ) async throws -> Yiru_Runtime_V1_TerminalServiceSendResponse {
+        var request = Yiru_Runtime_V1_TerminalServiceSendRequest()
+        request.terminal = terminal
+        request.text = text
+        request.enter = enter
+        return try await protocolUnary(
+            hostID: hostID,
+            procedure: YiruRuntimeV1TerminalServiceMethods.send,
+            request: request,
+            response: Yiru_Runtime_V1_TerminalServiceSendResponse.self
+        )
     }
 }
 
 nonisolated private func reviewWorktree(_ id: String) -> String { "id:\(id)" }
 
-nonisolated private func isOpenDiffUnavailable(_ error: RuntimeOrpcError) -> Bool {
-    error.serverCode == "forbidden"
-        || error.serverCode == "method_not_found"
-        || error.serverMessage?.localizedCaseInsensitiveContains("not available to mobile") == true
-}
-
-nonisolated private func sourceReviewComment(_ wire: MobileReviewCommentWire)
+nonisolated private func sourceReviewComment(_ comment: Yiru_Runtime_V1_WorktreeDiffComment)
     -> SourceReviewComment
 {
     SourceReviewComment(
-        id: wire.id,
-        worktreeID: wire.worktreeId,
-        filePath: wire.filePath,
-        source: wire.source,
-        selectedText: wire.selectedText,
-        startLine: wire.startLine,
-        lineNumber: wire.lineNumber,
-        body: wire.body,
-        createdAt: wire.createdAt,
-        updatedAt: wire.updatedAt,
-        sentAt: wire.sentAt,
-        scope: wire.scope.flatMap { SourceReviewScope(rawValue: $0.rawValue) },
-        oldPath: wire.oldPath,
-        diffIdentity: wire.diffIdentity
+        id: comment.id,
+        worktreeID: comment.worktreeID,
+        filePath: comment.filePath,
+        source: comment.hasSource ? comment.source : nil,
+        selectedText: comment.hasSelectedText ? comment.selectedText : nil,
+        startLine: comment.hasStartLine ? Int(comment.startLine) : nil,
+        lineNumber: comment.hasLineNumber ? Int(comment.lineNumber) : 0,
+        body: comment.body,
+        createdAt: comment.createdAt,
+        updatedAt: comment.hasUpdatedAt ? comment.updatedAt : nil,
+        sentAt: comment.hasSentAt ? comment.sentAt : nil,
+        scope: comment.hasScope ? SourceReviewScope(rawValue: comment.scope) : nil,
+        oldPath: comment.hasOldPath ? comment.oldPath : nil,
+        diffIdentity: comment.hasDiffIdentity ? comment.diffIdentity : nil
     )
 }
 
-nonisolated private func sourceReviewCommentWire(_ value: SourceReviewComment)
-    -> MobileReviewCommentWire
+nonisolated private func worktreeDiffComment(_ value: SourceReviewComment)
+    -> Yiru_Runtime_V1_WorktreeDiffComment
 {
-    MobileReviewCommentWire(
-        id: value.id,
-        worktreeId: value.worktreeID,
-        filePath: value.filePath,
-        source: value.source,
-        selectedText: value.selectedText,
-        startLine: value.startLine,
-        lineNumber: value.lineNumber,
-        body: value.body,
-        createdAt: value.createdAt,
-        updatedAt: value.updatedAt,
-        sentAt: value.sentAt,
-        scope: value.scope.flatMap { MobileReviewScopeWire(rawValue: $0.rawValue) },
-        oldPath: value.oldPath,
-        diffIdentity: value.diffIdentity,
-        side: "modified"
-    )
+    var comment = Yiru_Runtime_V1_WorktreeDiffComment()
+    comment.id = value.id
+    comment.worktreeID = value.worktreeID
+    comment.filePath = value.filePath
+    if let source = value.source { comment.source = source }
+    if let selectedText = value.selectedText { comment.selectedText = selectedText }
+    if let startLine = value.startLine { comment.startLine = Double(startLine) }
+    comment.lineNumber = Double(value.lineNumber)
+    comment.body = value.body
+    comment.createdAt = value.createdAt
+    if let updatedAt = value.updatedAt { comment.updatedAt = updatedAt }
+    if let sentAt = value.sentAt { comment.sentAt = sentAt }
+    if let scope = value.scope { comment.scope = scope.rawValue }
+    if let oldPath = value.oldPath { comment.oldPath = oldPath }
+    if let diffIdentity = value.diffIdentity { comment.diffIdentity = diffIdentity }
+    comment.side = "modified"
+    return comment
 }
 
-nonisolated private func sourceReviewState(_ wire: MobileReviewStateWire) -> SourceReviewState {
+nonisolated private func sourceReviewState(_ review: Yiru_Runtime_V1_WorktreeMobileDiffReview)
+    -> SourceReviewState
+{
     SourceReviewState(
-        updatedAt: wire.updatedAt,
-        completedAt: wire.completedAt,
-        files: wire.files.mapValues {
-            SourceReviewFileState(
-                key: $0.key,
-                filePath: $0.filePath,
-                oldPath: $0.oldPath,
-                scope: SourceReviewScope(rawValue: $0.scope.rawValue) ?? .unstaged,
-                lastOpenedAt: $0.lastOpenedAt,
-                lastSeenDiffIdentity: $0.lastSeenDiffIdentity,
-                reviewedAt: $0.reviewedAt,
-                reviewDiffIdentity: $0.reviewDiffIdentity
-            )
-        }
+        updatedAt: review.hasUpdatedAt ? review.updatedAt : nil,
+        completedAt: review.hasCompletedAt ? review.completedAt : nil,
+        files: review.files.mapValues { sourceReviewFileState($0) }
     )
 }
 
-nonisolated private func sourceReviewStateWire(_ state: SourceReviewState)
-    -> MobileReviewStateWire
+nonisolated private func sourceReviewFileState(_ file: Yiru_Runtime_V1_WorktreeMobileDiffReviewFile)
+    -> SourceReviewFileState
 {
-    MobileReviewStateWire(
-        version: 1,
-        updatedAt: state.updatedAt,
-        completedAt: state.completedAt,
-        files: state.files.mapValues {
-            MobileReviewFileStateWire(
-                key: $0.key,
-                filePath: $0.filePath,
-                oldPath: $0.oldPath,
-                scope: MobileReviewScopeWire(rawValue: $0.scope.rawValue) ?? .unstaged,
-                lastOpenedAt: $0.lastOpenedAt,
-                lastSeenDiffIdentity: $0.lastSeenDiffIdentity,
-                reviewedAt: $0.reviewedAt,
-                reviewDiffIdentity: $0.reviewDiffIdentity
-            )
-        }
+    SourceReviewFileState(
+        key: file.key,
+        filePath: file.filePath,
+        oldPath: file.hasOldPath ? file.oldPath : nil,
+        scope: SourceReviewScope(rawValue: file.scope) ?? .unstaged,
+        lastOpenedAt: file.hasLastOpenedAt ? file.lastOpenedAt : nil,
+        lastSeenDiffIdentity: file.hasLastSeenDiffIdentity ? file.lastSeenDiffIdentity : nil,
+        reviewedAt: file.hasReviewedAt ? file.reviewedAt : nil,
+        reviewDiffIdentity: file.hasReviewDiffIdentity ? file.reviewDiffIdentity : nil
     )
+}
+
+nonisolated private func worktreeMobileDiffReview(_ state: SourceReviewState)
+    -> Yiru_Runtime_V1_WorktreeMobileDiffReview
+{
+    var review = Yiru_Runtime_V1_WorktreeMobileDiffReview()
+    review.version = 1
+    if let updatedAt = state.updatedAt { review.updatedAt = updatedAt }
+    if let completedAt = state.completedAt { review.completedAt = completedAt }
+    review.files = state.files.mapValues { value in
+        var file = Yiru_Runtime_V1_WorktreeMobileDiffReviewFile()
+        file.key = value.key
+        file.filePath = value.filePath
+        if let oldPath = value.oldPath { file.oldPath = oldPath }
+        file.scope = value.scope.rawValue
+        if let lastOpenedAt = value.lastOpenedAt { file.lastOpenedAt = lastOpenedAt }
+        if let lastSeenDiffIdentity = value.lastSeenDiffIdentity {
+            file.lastSeenDiffIdentity = lastSeenDiffIdentity
+        }
+        if let reviewedAt = value.reviewedAt { file.reviewedAt = reviewedAt }
+        if let reviewDiffIdentity = value.reviewDiffIdentity {
+            file.reviewDiffIdentity = reviewDiffIdentity
+        }
+        return file
+    }
+    return review
 }
 
 nonisolated private func sourceReviewPrompt(_ comments: [SourceReviewComment]) -> String {

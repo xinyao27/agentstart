@@ -1,15 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { relativePathInsideRoot } from '@yiru/runtime-protocol/model/platform'
-import { getRepoExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type {
-  AddRepoDefaultCheckoutHandoffSource,
-  EventProps
-} from '@yiru/runtime-protocol/workbench/telemetry-events'
-import type {
-  DetectedWorktreeListResult,
-  Repo,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
+import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
+import { relativePathInsideRoot } from '@yiru/protocol/host/path'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
+import type { AddRepoDefaultCheckoutHandoffSource } from '@yiru/protocol/telemetry/events/foundations'
+import type { DetectedWorktreeListResult, Worktree } from '@yiru/protocol/worktree/model'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import {
   refreshProjectCatalogTargetRepos,

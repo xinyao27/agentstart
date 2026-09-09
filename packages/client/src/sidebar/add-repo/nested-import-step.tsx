@@ -1,5 +1,5 @@
-import { getRuntimePathBasename } from '@yiru/runtime-protocol/model/platform'
-import type { NestedRepoScanResult } from '@yiru/runtime-protocol/workbench/types'
+import { getRuntimePathBasename } from '@yiru/protocol/host/path'
+import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
 import { useId, useState, type Dispatch, type SetStateAction } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { StopCircle as CircleStop } from '~renderer/icons/hugeicons'

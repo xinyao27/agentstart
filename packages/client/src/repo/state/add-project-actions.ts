@@ -1,5 +1,5 @@
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 import type { StateCreator } from 'zustand'
 import {
   readProjectCatalogMutationRevision,
@@ -7,10 +7,10 @@ import {
 } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterProjectCatalogMutation } from '~renderer/project-catalog/mutation-refresh'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { setupExistingRuntimeProjectFolder } from '~renderer/runtime/project-host-setup-target'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
+import { addRuntimeRepo } from '~renderer/runtime/repo-catalog-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
-import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
 
 import type { AppState } from '../../store/types'
 import { getRepoHostIdentity } from './host-identity'
@@ -42,27 +42,9 @@ export function createRepoAddProjectActions(
         const expectedRevision = readProjectCatalogMutationRevision(target)
         let repo: Repo
         try {
-          if (target.kind === 'local') {
-            const result = await workspaceHostClient.repos.add({
-              expectedRevision,
-              path,
-              kind
-            })
-            if ('error' in result) {
-              throw new Error(result.error)
-            }
-            await refreshAfterProjectCatalogMutation(target, result.revision)
-            repo = result.repo
-          } else {
-            const result = await callRuntimeOrpc(
-              target,
-              (client) => client.repo.add,
-              { expectedRevision, path, kind },
-              { timeoutMs: 15_000 }
-            )
-            await refreshAfterProjectCatalogMutation(target, result.revision)
-            repo = result.repo
-          }
+          const result = await addRuntimeRepo(target, { expectedRevision, path, kind })
+          await refreshAfterProjectCatalogMutation(target, result.revision)
+          repo = result.repo
         } catch (err) {
           const message = err instanceof Error ? err.message : String(err)
           if (kind !== 'git' || !message.includes('Not a valid git repository')) {
@@ -85,8 +67,8 @@ export function createRepoAddProjectActions(
           }
           // Why: folder mode is a capability downgrade, not a silent fallback.
           // Show an in-app confirmation dialog so users understand that worktrees,
-          // SCM, PRs, and checks will be unavailable for this root. The dialog's
-          // The dialog routes the accepted path through the folder-add command.
+          // SCM, PRs, and checks will be unavailable for this root. The accepted
+          // path is then routed through the explicit folder-add command.
           const { openModal } = get()
           openModal('confirm-non-git-folder', {
             folderPath: path,
@@ -130,14 +112,23 @@ export function createRepoAddProjectActions(
       try {
         const target = getProjectSetupRuntimeTarget(args.hostId)
         await assertProjectHostSetupMutationRuntimeCapabilities(target)
-        const response = await callRuntimeOrpc(
-          target,
-          (client) => client.projectHostSetup.setupExistingFolder,
-          { ...args, expectedRevision: readProjectCatalogMutationRevision(target) },
-          { timeoutMs: 15_000 }
-        )
+        // Why: the setup verb carries no display name — the daemon derives the
+        // setup's name from the imported folder, exactly as the legacy contract did.
+        const response = await setupExistingRuntimeProjectFolder(target, {
+          expectedRevision: readProjectCatalogMutationRevision(target),
+          hostId: args.hostId,
+          kind: args.kind,
+          path: args.path,
+          projectId: args.projectId,
+          setupMethod: args.setupMethod
+        })
         await refreshAfterProjectCatalogMutation(target, response.revision)
         const result = response.result
+        // Why: the import verb always attaches the created repo row; anything
+        // else is a daemon contract violation worth failing loudly.
+        if (!result.repo) {
+          throw new Error('project_host_setup_import_missing_repo')
+        }
         const repo = repoWithFetchedOwner(result.repo, target)
         const setup = setupWithFetchedOwner(result.setup, target)
         publishRendererCommandResult({

@@ -1,13 +1,12 @@
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { Worktree } from '@yiru/protocol/worktree/model'
+import { toast } from 'sonner'
+import { translate } from '~renderer/i18n/i18n'
+import { activateRuntimeWorktree } from '~renderer/runtime/worktree-lifecycle-target'
+import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 
 import { readProjectCatalogRuntimeState } from '../project-catalog/runtime-state'
-import {
-  activateRemoteRuntimeSessionWorktree,
-  isRemoteRuntimeSessionActive
-} from '../runtime/remote-runtime-session'
 import { useAppStore } from '../store/state'
-import { resumeSleepingAgentSessionsForWorktree } from '../terminal-workspace/resume-sleeping-agent-session'
 import { activateAndRevealFolderWorkspace } from '../workspace/activation'
 import type { ActivateAndRevealResult, ActivateWorktreeOptions } from './activation-types'
 import { buildCreatedAgentReopenStartup } from './agent-startup'
@@ -70,7 +69,6 @@ export function activateAndRevealKnownWorktree(
       state.recordWorktreeVisit(worktreeId)
     }
   }
-  resumeSleepingAgentSessionsForWorktree(worktreeId)
   const primaryTabId = ensureWorktreeHasInitialTerminal(
     { ...useAppStore.getState(), ...runtimeState },
     worktreeId,
@@ -94,13 +92,13 @@ function notifyHostRuntimeOfWorktreeActivation(
     return
   }
   const environmentId = getRuntimeEnvironmentIdForWorktree(runtimeState, worktreeId)
-  if (!isRemoteRuntimeSessionActive(environmentId)) {
-    return
-  }
-  void activateRemoteRuntimeSessionWorktree({
-    worktreeId,
-    environmentId,
-    notifyDesktop: true
+  void activateRuntimeWorktree(
+    environmentId ? { kind: 'environment', environmentId } : { kind: 'local' },
+    { worktree: toRuntimeWorktreeSelector(worktreeId), notifyClients: false }
+  ).catch((error: unknown) => {
+    toast.error(translate('worktree.activation.failed', 'Failed to activate workspace'), {
+      description: error instanceof Error ? error.message : String(error)
+    })
   })
 }
 

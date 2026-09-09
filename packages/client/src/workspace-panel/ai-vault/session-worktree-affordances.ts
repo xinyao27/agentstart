@@ -1,6 +1,6 @@
-import type { AiVaultScope } from '@yiru/runtime-protocol/model/agent'
-import { normalizeRuntimePathSeparators } from '@yiru/runtime-protocol/model/platform'
+import { normalizeRuntimePathSeparators } from '@yiru/protocol/host/path'
 import { translate } from '~renderer/i18n/i18n'
+import type { AiVaultScope } from '~renderer/workspace-panel/ai-vault/session/providers'
 
 import type { AiVaultSessionWorktreeInfo, AiVaultSessionWorktreeStatus } from './session-worktree'
 

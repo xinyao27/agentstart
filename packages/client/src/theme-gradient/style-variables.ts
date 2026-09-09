@@ -1,4 +1,4 @@
-import type { ThemeGradientTheme } from '@yiru/runtime-protocol/workbench/theme-gradient/theme'
+import type { ThemeGradientTheme } from '@yiru/protocol/settings/theme-gradient'
 import { useEffect } from 'react'
 import { useAppStore } from '~renderer/store/state'
 

@@ -21,11 +21,9 @@ extension RuntimeClient: TerminalWorkspaceRepository {
     func workspaceTabUpdates(for hostID: String, worktreeID: String) async throws
         -> AsyncThrowingStream<TerminalWorkspaceSnapshot, Error>
     {
-        let source = try await subscribeRuntime(
+        let source = try await sessionTabsEventUpdates(
             hostID: hostID,
-            path: MobileSessionTabsWireContract.subscribePath,
-            input: MobileSessionTabsWorktreeRequestWire(worktree: worktreeSelector(worktreeID)),
-            output: MobileSessionTabsEventWire.self
+            worktreeSelector: worktreeSelector(worktreeID)
         )
         let (stream, continuation) = AsyncThrowingStream.makeStream(
             of: TerminalWorkspaceSnapshot.self
@@ -65,26 +63,23 @@ extension RuntimeClient: TerminalWorkspaceRepository {
     func workspaceInvalidations(for hostID: String) async throws
         -> AsyncThrowingStream<TerminalWorkspaceInvalidation, Error>
     {
-        let source = try await subscribeRuntime(
-            hostID: hostID,
-            path: MobileClientEventsWireContract.subscribePath,
-            input: RuntimeVoidInput(),
-            output: MobileClientEventWire.self
-        )
+        let source = try await protocolClientEvents(hostID: hostID)
         let (stream, continuation) = AsyncThrowingStream.makeStream(
             of: TerminalWorkspaceInvalidation.self
         )
         let forwardingTask = Task {
+            var subscriptionID: String?
             do {
                 for try await event in source {
-                    switch event {
-                    case .ready:
+                    switch event.event {
+                    case .ready(let ready):
+                        subscriptionID = ready.subscriptionID
                         continuation.yield(.ready)
                     case .reposChanged:
                         continuation.yield(.repositoriesChanged)
-                    case .worktreesChanged(let repoID):
-                        continuation.yield(.worktreesChanged(repoID: repoID))
-                    case .ignored:
+                    case .worktreesChanged(let changed):
+                        continuation.yield(.worktreesChanged(repoID: changed.repoID))
+                    case .activateWorktree, .worktreeHeadIdentitiesChanged, nil:
                         continue
                     case .end:
                         continuation.yield(.end)
@@ -98,6 +93,20 @@ extension RuntimeClient: TerminalWorkspaceRepository {
             } catch {
                 continuation.finish(throwing: error)
             }
+            // Why: the stream ended without the daemon's end event (consumer stop or
+            // transport loss), so tear the subscription down out of band — the keyed
+            // Unsubscribe unary carries the ready envelope's id, then the source
+            // cancel drops the flow-controlled call; after a daemon end event both
+            // are already no-ops.
+            Task {
+                if let subscriptionID {
+                    _ = try? await self.protocolClientEventsUnsubscribe(
+                        hostID: hostID,
+                        subscriptionID: subscriptionID
+                    )
+                }
+                try? await source.cancel()
+            }
         }
         continuation.onTermination = { _ in forwardingTask.cancel() }
         return stream
@@ -107,27 +116,15 @@ extension RuntimeClient: TerminalWorkspaceRepository {
         for hostID: String,
         worktreeID: String,
         tabID: String,
-        leafID: String?,
-        terminalID: String?
+        leafID: String?
     ) async throws -> TerminalWorkspaceSnapshot {
-        let wire: MobileSessionTabsWire = try await callRuntime(
+        let wire: MobileSessionTabsWire = try await sessionTabsActivate(
             hostID: hostID,
-            path: MobileSessionTabsWireContract.activatePath,
-            input: MobileSessionTabMutationRequestWire(
-                worktree: worktreeSelector(worktreeID),
-                tabId: tabID,
-                leafId: leafID,
-                notifyClients: false
-            ),
-            output: MobileSessionTabsWire.self
+            worktreeSelector: worktreeSelector(worktreeID),
+            tabID: tabID,
+            leafID: leafID,
+            notifyClients: false
         )
-        if let terminalID {
-            // Why: Desktop keeps terminal input focus separate from the workspace-tab
-            // activation RPC, so focus the selected PTY after the authoritative tab mutation —
-            // and keep a successful tab switch usable if a stale/retired handle races this
-            // best-effort focus request.
-            try? await focusTerminal(hostID: hostID, terminalID: terminalID)
-        }
         return await mapWorkspaceSnapshot(wire, hostID: hostID, worktreeID: worktreeID)
     }
 
@@ -138,10 +135,9 @@ extension RuntimeClient: TerminalWorkspaceRepository {
         agentID: String?
     ) async throws -> TerminalWorkspaceSnapshot {
         let current = try await fetchWorkspaceTabs(for: hostID, worktreeID: worktreeID)
-        let created: MobileSessionCreateTerminalResultWire = try await callRuntime(
+        let created: MobileSessionCreateTerminalResultWire = try await sessionTabsCreateTerminal(
             hostID: hostID,
-            path: MobileSessionTabsWireContract.createTerminalPath,
-            input: MobileSessionCreateTerminalRequestWire(
+            request: MobileSessionCreateTerminalRequestWire(
                 worktree: worktreeSelector(worktreeID),
                 afterTabId: afterTabID,
                 activate: true,
@@ -154,8 +150,7 @@ extension RuntimeClient: TerminalWorkspaceRepository {
                 launchAgent: nil,
                 startupCommandDelivery: nil,
                 agentPrompt: nil
-            ),
-            output: MobileSessionCreateTerminalResultWire.self
+            )
         )
         let createdSnapshot = workspaceSnapshotAfterCreatingTerminal(
             current: current,
@@ -171,8 +166,7 @@ extension RuntimeClient: TerminalWorkspaceRepository {
                 for: hostID,
                 worktreeID: worktreeID,
                 tabID: createdTab.id,
-                leafID: createdTab.leafID,
-                terminalID: createdTab.terminalTarget?.id
+                leafID: createdTab.leafID
             )
             // Why: the activation RPC can race the publication that adds the new tab. Do not
             // replace the authoritative create response with a stale snapshot that hides it.
@@ -193,15 +187,10 @@ extension RuntimeClient: TerminalWorkspaceRepository {
         worktreeID: String,
         url: String
     ) async throws -> TerminalWorkspaceSnapshot {
-        let result: MobileBrowserTabCreateResultWire = try await callRuntime(
+        let browserPageID = try await browserTabCreate(
             hostID: hostID,
-            path: MobileSessionTabsWireContract.browserTabCreatePath,
-            input: MobileBrowserTabCreateRequestWire(
-                worktree: worktreeSelector(worktreeID),
-                url: url,
-                activate: true
-            ),
-            output: MobileBrowserTabCreateResultWire.self
+            worktreeID: worktreeID,
+            url: url
         )
         var latestSnapshot: TerminalWorkspaceSnapshot?
         for delay in [100, 300, 800, 1_200] {
@@ -210,7 +199,7 @@ extension RuntimeClient: TerminalWorkspaceRepository {
             latestSnapshot = snapshot
             if snapshot.tabs.contains(where: { tab in
                 guard case .browser(let browser) = tab.content else { return false }
-                return browser.pageID == result.browserPageId
+                return browser.pageID == browserPageID
             }) {
                 return snapshot
             }
@@ -229,18 +218,12 @@ extension RuntimeClient: TerminalWorkspaceRepository {
         tabID: String,
         leafID: String?
     ) async throws -> TerminalWorkspaceSnapshot {
-        let result: MobileSessionTabCloseResultWire = try await callRuntime(
+        let closed = try await sessionTabsClose(
             hostID: hostID,
-            path: MobileSessionTabsWireContract.closePath,
-            input: MobileSessionTabMutationRequestWire(
-                worktree: worktreeSelector(worktreeID),
-                tabId: tabID,
-                leafId: leafID,
-                notifyClients: false
-            ),
-            output: MobileSessionTabCloseResultWire.self
+            worktreeSelector: worktreeSelector(worktreeID),
+            tabID: tabID
         )
-        guard result.closed else { throw TerminalWorkspaceRepositoryError.rejectedMutation }
+        guard closed else { throw TerminalWorkspaceRepositoryError.rejectedMutation }
         return try await fetchWorkspaceTabs(for: hostID, worktreeID: worktreeID)
     }
 

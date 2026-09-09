@@ -1,4 +1,4 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
 
 import type { HostSectionOption } from './host-section-rows'
 

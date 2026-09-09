@@ -6,7 +6,6 @@ nonisolated enum TerminalBulkConnectionError: Error, Sendable {
     case iteratorEnded
     case maxStreamsExceeded
     case routeIDsExhausted
-    case server(status: Int)
     case staleAfterBackground
     case staleControlGeneration
 }
@@ -38,8 +37,6 @@ nonisolated func terminalBulkCloseDetails(_ error: Error) -> (code: Int, reason:
         }
         return (1002, "invalid terminal peer message")
     }
-    if error is RuntimeOrpcSideChannelError {
-        return (1002, "invalid terminal side channel")
-    }
+
     return (1001, "terminal connection closed")
 }

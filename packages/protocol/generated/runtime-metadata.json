@@ -1,0 +1,1158 @@
+{
+  "schemaVersion": 1,
+  "protocol": {
+    "version": 6,
+    "minCompatibleClientVersion": 6,
+    "minCompatibleServerVersion": 6
+  },
+  "keybindings": [
+    {
+      "id": "worktree.quickOpen",
+      "title": "Legacy file search shortcut",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "app.settings",
+      "title": "Open Settings",
+      "scope": "global",
+      "conflictGroup": "menu",
+      "defaultBindings": {
+        "darwin": ["Mod+Comma"],
+        "linux": ["Mod+Comma"],
+        "win32": ["Mod+Comma"]
+      }
+    },
+    {
+      "id": "app.forceReload",
+      "title": "Force Reload",
+      "scope": "global",
+      "conflictGroup": "menu",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+R"],
+        "linux": ["Mod+Shift+R"],
+        "win32": ["Mod+Shift+R"]
+      }
+    },
+    {
+      "id": "app.commandPalette",
+      "title": "Open Command Palette",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+K"],
+        "linux": ["Mod+K"],
+        "win32": ["Mod+K"]
+      }
+    },
+    {
+      "id": "worktree.navigateUp",
+      "title": "Previous worktree",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+ArrowUp"],
+        "linux": ["Mod+Shift+ArrowUp"],
+        "win32": ["Mod+Shift+ArrowUp"]
+      }
+    },
+    {
+      "id": "worktree.navigateDown",
+      "title": "Next worktree",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+ArrowDown"],
+        "linux": ["Mod+Shift+ArrowDown"],
+        "win32": ["Mod+Shift+ArrowDown"]
+      }
+    },
+    {
+      "id": "workspace.create",
+      "title": "Create worktree",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+N", "Mod+Shift+N"],
+        "linux": ["Mod+N", "Mod+Shift+N"],
+        "win32": ["Mod+N", "Mod+Shift+N"]
+      }
+    },
+    {
+      "id": "workspace.rename",
+      "title": "Rename worktree",
+      "scope": "global",
+      "conflictGroup": "workspace-shell",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+R"],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "workspace.delete",
+      "title": "Delete Workspace",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "workspace.selectByIndex",
+      "title": "Select Workspace 1–9",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+1"],
+        "linux": ["Mod+1"],
+        "win32": ["Mod+1"]
+      }
+    },
+    {
+      "id": "sidebar.left.toggle",
+      "title": "Toggle Sidebar",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+B"],
+        "linux": ["Mod+B"],
+        "win32": ["Mod+B"]
+      }
+    },
+    {
+      "id": "sidebar.right.toggle",
+      "title": "Open Explorer Tab",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+L"],
+        "linux": ["Mod+L"],
+        "win32": ["Mod+L"]
+      }
+    },
+    {
+      "id": "sidebar.explorer.toggle",
+      "title": "Show Explorer",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+E"],
+        "linux": ["Mod+Shift+E"],
+        "win32": ["Mod+Shift+E"]
+      }
+    },
+    {
+      "id": "sidebar.search.toggle",
+      "title": "Show Search",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+F"],
+        "linux": ["Mod+Shift+F"],
+        "win32": ["Mod+Shift+F"]
+      }
+    },
+    {
+      "id": "sidebar.sourceControl.toggle",
+      "title": "Show Changes & Review",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+G"],
+        "linux": ["Mod+Shift+G"],
+        "win32": ["Mod+Shift+G"]
+      }
+    },
+    {
+      "id": "sidebar.checks.toggle",
+      "title": "Show Review",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "sidebar.ports.toggle",
+      "title": "Show Ports",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+I"],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "sidebar.sleepingWorkspaces.toggle",
+      "title": "Toggle Sleeping Workspaces",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "sidebar.focusWorktreeList",
+      "title": "Focus worktree list",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+0"],
+        "linux": ["Mod+Shift+0"],
+        "win32": ["Mod+Shift+0"]
+      }
+    },
+    {
+      "id": "zoom.in",
+      "title": "Zoom In",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Equal", "Mod+Shift+Plus", "Mod+NumpadAdd"],
+        "linux": ["Mod+Equal", "Mod+Shift+Plus", "Mod+NumpadAdd"],
+        "win32": ["Mod+Equal", "Mod+Shift+Plus", "Mod+NumpadAdd"]
+      }
+    },
+    {
+      "id": "zoom.out",
+      "title": "Zoom Out",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Minus", "Mod+NumpadSubtract"],
+        "linux": ["Mod+Minus", "Mod+NumpadSubtract"],
+        "win32": ["Mod+Minus", "Mod+NumpadSubtract"]
+      }
+    },
+    {
+      "id": "zoom.reset",
+      "title": "Reset Size",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+0"],
+        "linux": ["Mod+0"],
+        "win32": ["Mod+0"]
+      }
+    },
+    {
+      "id": "worktree.history.back",
+      "title": "Worktree History Back",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+ArrowLeft"],
+        "linux": ["Mod+Alt+ArrowLeft"],
+        "win32": ["Mod+Alt+ArrowLeft"]
+      }
+    },
+    {
+      "id": "worktree.history.forward",
+      "title": "Worktree History Forward",
+      "scope": "global",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+ArrowRight"],
+        "linux": ["Mod+Alt+ArrowRight"],
+        "win32": ["Mod+Alt+ArrowRight"]
+      }
+    },
+    {
+      "id": "tab.newTerminal",
+      "title": "New terminal tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+T"],
+        "linux": ["Mod+T"],
+        "win32": ["Mod+T"]
+      }
+    },
+    {
+      "id": "tab.newAgent",
+      "title": "New agent tab (default agent)",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+T"],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newBrowser",
+      "title": "New browser tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+B"],
+        "linux": ["Mod+Shift+B"],
+        "win32": ["Mod+Shift+B"]
+      }
+    },
+    {
+      "id": "tab.newSimulator",
+      "title": "New mobile emulator tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+Shift+E"],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newMarkdown",
+      "title": "New markdown tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+M"],
+        "linux": ["Mod+Shift+M"],
+        "win32": ["Mod+Shift+M"]
+      }
+    },
+    {
+      "id": "tab.openMarkdown",
+      "title": "Open markdown tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+O"],
+        "linux": ["Mod+Shift+O"],
+        "win32": ["Mod+Shift+O"]
+      }
+    },
+    {
+      "id": "tab.close",
+      "title": "Close active tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+W"],
+        "linux": ["Mod+W"],
+        "win32": ["Mod+W"]
+      }
+    },
+    {
+      "id": "tab.closeAll",
+      "title": "Close all editor tabs",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+W"],
+        "linux": ["Mod+Alt+W"],
+        "win32": ["Mod+Alt+W"]
+      }
+    },
+    {
+      "id": "tab.rename",
+      "title": "Rename active tab",
+      "scope": "tabs",
+      "conflictGroup": "workspace-shell",
+      "defaultBindings": {
+        "darwin": ["Mod+R"],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.reopenClosed",
+      "title": "Reopen closed tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+T"],
+        "linux": ["Mod+Shift+T"],
+        "win32": ["Mod+Shift+T"]
+      }
+    },
+    {
+      "id": "tab.nextSameType",
+      "title": "Next tab (same type)",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+BracketRight"],
+        "linux": ["Mod+Shift+BracketRight"],
+        "win32": ["Mod+Shift+BracketRight"]
+      }
+    },
+    {
+      "id": "tab.previousSameType",
+      "title": "Previous tab (same type)",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+BracketLeft"],
+        "linux": ["Mod+Shift+BracketLeft"],
+        "win32": ["Mod+Shift+BracketLeft"]
+      }
+    },
+    {
+      "id": "tab.nextAllTypes",
+      "title": "Next tab (all types)",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+BracketRight"],
+        "linux": ["Mod+Alt+BracketRight"],
+        "win32": ["Mod+Alt+BracketRight"]
+      }
+    },
+    {
+      "id": "tab.previousAllTypes",
+      "title": "Previous tab (all types)",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+BracketLeft"],
+        "linux": ["Mod+Alt+BracketLeft"],
+        "win32": ["Mod+Alt+BracketLeft"]
+      }
+    },
+    {
+      "id": "tab.previousRecent",
+      "title": "Previous recent tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Ctrl+Tab"],
+        "linux": ["Ctrl+Tab"],
+        "win32": ["Ctrl+Tab"]
+      }
+    },
+    {
+      "id": "tab.nextTerminal",
+      "title": "Next terminal tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Ctrl+PageDown"],
+        "linux": ["Ctrl+PageDown"],
+        "win32": ["Ctrl+PageDown"]
+      }
+    },
+    {
+      "id": "tab.previousTerminal",
+      "title": "Previous terminal tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Ctrl+PageUp"],
+        "linux": ["Ctrl+PageUp"],
+        "win32": ["Ctrl+PageUp"]
+      }
+    },
+    {
+      "id": "tab.selectByIndex",
+      "title": "Select Tab 1–9",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": ["Ctrl+1"],
+        "linux": ["Alt+1"],
+        "win32": ["Alt+1"]
+      }
+    },
+    {
+      "id": "tab.openQuickCommandsMenu",
+      "title": "Toggle Quick Commands menu",
+      "scope": "tabs",
+      "conflictGroup": "global",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "browser.find",
+      "title": "Find in Browser",
+      "scope": "browser",
+      "defaultBindings": {
+        "darwin": ["Mod+F"],
+        "linux": ["Mod+F"],
+        "win32": ["Mod+F"]
+      }
+    },
+    {
+      "id": "browser.back",
+      "title": "Go Back in Browser",
+      "scope": "browser",
+      "defaultBindings": {
+        "darwin": ["Mod+BracketLeft"],
+        "linux": ["Alt+ArrowLeft"],
+        "win32": ["Alt+ArrowLeft"]
+      }
+    },
+    {
+      "id": "browser.forward",
+      "title": "Go Forward in Browser",
+      "scope": "browser",
+      "defaultBindings": {
+        "darwin": ["Mod+BracketRight"],
+        "linux": ["Alt+ArrowRight"],
+        "win32": ["Alt+ArrowRight"]
+      }
+    },
+    {
+      "id": "browser.reload",
+      "title": "Reload Browser Page",
+      "scope": "browser",
+      "defaultBindings": {
+        "darwin": ["Mod+R"],
+        "linux": ["Mod+R"],
+        "win32": ["Mod+R"]
+      }
+    },
+    {
+      "id": "browser.hardReload",
+      "title": "Hard Reload Browser Page",
+      "scope": "browser",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+R"],
+        "linux": ["Mod+Shift+R"],
+        "win32": ["Mod+Shift+R"]
+      }
+    },
+    {
+      "id": "browser.focusAddressBar",
+      "title": "Focus Browser Address Bar",
+      "scope": "browser",
+      "defaultBindings": {
+        "darwin": ["Mod+L"],
+        "linux": ["Mod+L"],
+        "win32": ["Mod+L"]
+      }
+    },
+    {
+      "id": "browser.grabElement",
+      "title": "Grab Page Element",
+      "scope": "browser",
+      "defaultBindings": {
+        "darwin": ["Mod+C"],
+        "linux": ["Mod+C"],
+        "win32": ["Mod+C"]
+      }
+    },
+    {
+      "id": "editor.find",
+      "title": "Find in editor",
+      "scope": "editor",
+      "defaultBindings": {
+        "darwin": ["Mod+F"],
+        "linux": ["Mod+F"],
+        "win32": ["Mod+F"]
+      }
+    },
+    {
+      "id": "editor.replace",
+      "title": "Replace in editor",
+      "scope": "editor",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+F"],
+        "linux": ["Mod+H"],
+        "win32": ["Mod+H"]
+      }
+    },
+    {
+      "id": "editor.save",
+      "title": "Save File",
+      "scope": "editor",
+      "defaultBindings": {
+        "darwin": ["Mod+S"],
+        "linux": ["Mod+S"],
+        "win32": ["Mod+S"]
+      }
+    },
+    {
+      "id": "editor.markdownPreview",
+      "title": "Show Markdown Preview",
+      "scope": "editor",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+V"],
+        "linux": ["Mod+Shift+V"],
+        "win32": ["Mod+Shift+V"]
+      }
+    },
+    {
+      "id": "editor.addReviewNote",
+      "title": "Add Review Note",
+      "scope": "editor",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+N"],
+        "linux": ["Mod+Alt+N"],
+        "win32": ["Mod+Alt+N"]
+      }
+    },
+    {
+      "id": "sourceControl.sendReviewNotes",
+      "title": "Send Review Notes to Agent",
+      "scope": "global",
+      "conflictGroup": "editor",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "fileExplorer.undo",
+      "title": "Undo file operation",
+      "scope": "fileExplorer",
+      "defaultBindings": {
+        "darwin": ["Mod+Z"],
+        "linux": ["Mod+Z"],
+        "win32": ["Mod+Z"]
+      }
+    },
+    {
+      "id": "fileExplorer.redo",
+      "title": "Redo file operation",
+      "scope": "fileExplorer",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+Z"],
+        "linux": ["Mod+Shift+Z", "Ctrl+Y"],
+        "win32": ["Mod+Shift+Z", "Ctrl+Y"]
+      }
+    },
+    {
+      "id": "fileExplorer.rename",
+      "title": "Rename file",
+      "scope": "fileExplorer",
+      "allowBareKeybindings": true,
+      "defaultBindings": {
+        "darwin": ["Enter", "F2"],
+        "linux": ["Enter", "F2"],
+        "win32": ["Enter", "F2"]
+      }
+    },
+    {
+      "id": "fileExplorer.copy",
+      "title": "Copy file",
+      "scope": "fileExplorer",
+      "defaultBindings": {
+        "darwin": ["Mod+C"],
+        "linux": ["Mod+C"],
+        "win32": ["Mod+C"]
+      }
+    },
+    {
+      "id": "fileExplorer.cut",
+      "title": "Cut file",
+      "scope": "fileExplorer",
+      "defaultBindings": {
+        "darwin": ["Mod+X"],
+        "linux": ["Mod+X"],
+        "win32": ["Mod+X"]
+      }
+    },
+    {
+      "id": "fileExplorer.paste",
+      "title": "Paste file",
+      "scope": "fileExplorer",
+      "defaultBindings": {
+        "darwin": ["Mod+V"],
+        "linux": ["Mod+V"],
+        "win32": ["Mod+V"]
+      }
+    },
+    {
+      "id": "fileExplorer.selectAll",
+      "title": "Select all files",
+      "scope": "fileExplorer",
+      "defaultBindings": {
+        "darwin": ["Mod+A"],
+        "linux": ["Mod+A"],
+        "win32": ["Mod+A"]
+      }
+    },
+    {
+      "id": "fileExplorer.copyPath",
+      "title": "Copy file path",
+      "scope": "fileExplorer",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+C"],
+        "linux": ["Alt+Shift+C"],
+        "win32": ["Alt+Shift+C"]
+      }
+    },
+    {
+      "id": "fileExplorer.copyRelativePath",
+      "title": "Copy relative file path",
+      "scope": "fileExplorer",
+      "defaultBindings": {
+        "darwin": ["Mod+Alt+Shift+C"],
+        "linux": ["Mod+Alt+Shift+C"],
+        "win32": ["Mod+Alt+Shift+C"]
+      }
+    },
+    {
+      "id": "fileExplorer.delete",
+      "title": "Delete file",
+      "scope": "fileExplorer",
+      "allowBareKeybindings": true,
+      "defaultBindings": {
+        "darwin": ["Mod+Backspace", "Delete"],
+        "linux": ["Delete"],
+        "win32": ["Delete"]
+      }
+    },
+    {
+      "id": "settings.search",
+      "title": "Search Settings",
+      "scope": "settings",
+      "defaultBindings": {
+        "darwin": ["Mod+F"],
+        "linux": ["Mod+F"],
+        "win32": ["Mod+F"]
+      }
+    },
+    {
+      "id": "terminal.copySelection",
+      "title": "Copy terminal selection",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+C"],
+        "linux": ["Mod+Shift+C"],
+        "win32": ["Mod+Shift+C"]
+      }
+    },
+    {
+      "id": "terminal.paste",
+      "title": "Paste into terminal",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": ["Mod+V"],
+        "linux": ["Ctrl+V", "Ctrl+Shift+V", "Shift+Insert"],
+        "win32": ["Ctrl+V", "Ctrl+Shift+V", "Shift+Insert"]
+      }
+    },
+    {
+      "id": "terminal.search",
+      "title": "Search active pane",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": ["Mod+F"],
+        "linux": ["Mod+F"],
+        "win32": ["Mod+F"]
+      }
+    },
+    {
+      "id": "terminal.clear",
+      "title": "Clear active pane",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": ["Mod+K"],
+        "linux": ["Mod+K"],
+        "win32": ["Mod+K"]
+      }
+    },
+    {
+      "id": "terminal.focusNextPane",
+      "title": "Focus next pane",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": ["Mod+BracketRight"],
+        "linux": ["Mod+BracketRight"],
+        "win32": ["Mod+BracketRight"]
+      }
+    },
+    {
+      "id": "terminal.focusPreviousPane",
+      "title": "Focus previous pane",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": ["Mod+BracketLeft"],
+        "linux": ["Mod+BracketLeft"],
+        "win32": ["Mod+BracketLeft"]
+      }
+    },
+    {
+      "id": "terminal.equalizePaneSizes",
+      "title": "Equalize pane sizes",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "terminal.expandPane",
+      "title": "Expand / collapse pane",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+Enter"],
+        "linux": ["Mod+Shift+Enter"],
+        "win32": ["Mod+Shift+Enter"]
+      }
+    },
+    {
+      "id": "terminal.setTitle",
+      "title": "Set Title…",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "terminal.clearPaneTitle",
+      "title": "Clear Pane Title",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "terminal.closePane",
+      "title": "Close active pane",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": ["Mod+W"],
+        "linux": ["Mod+W"],
+        "win32": ["Mod+W"]
+      }
+    },
+    {
+      "id": "terminal.splitRight",
+      "title": "Split terminal right",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": ["Mod+D"],
+        "linux": ["Mod+Shift+D"],
+        "win32": ["Mod+Shift+D"]
+      }
+    },
+    {
+      "id": "terminal.splitDown",
+      "title": "Split terminal down",
+      "scope": "terminal",
+      "defaultBindings": {
+        "darwin": ["Mod+Shift+D"],
+        "linux": ["Alt+Shift+D"],
+        "win32": ["Alt+Shift+D"]
+      }
+    },
+    {
+      "id": "tab.newAgent.claude",
+      "title": "New Claude tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.openclaude",
+      "title": "New OpenClaude tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.codex",
+      "title": "New Codex tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.devin",
+      "title": "New Devin tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.ante",
+      "title": "New Ante tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.trae",
+      "title": "New Trae tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.autohand",
+      "title": "New Autohand Code tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.opencode",
+      "title": "New OpenCode tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.mimo-code",
+      "title": "New MiMo Code tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.pi",
+      "title": "New Pi tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.omp",
+      "title": "New OMP tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.gemini",
+      "title": "New Gemini tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.antigravity",
+      "title": "New Antigravity tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.aider",
+      "title": "New Aider tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.goose",
+      "title": "New Goose tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.amp",
+      "title": "New Amp tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.kilo",
+      "title": "New Kilocode tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.kiro",
+      "title": "New Kiro tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.crush",
+      "title": "New Charm tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.aug",
+      "title": "New Auggie tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.cline",
+      "title": "New Cline tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.codebuff",
+      "title": "New Codebuff tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.command-code",
+      "title": "New Command Code tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.continue",
+      "title": "New Continue tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.cursor",
+      "title": "New Cursor tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.droid",
+      "title": "New Droid tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.kimi",
+      "title": "New Kimi tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.mistral-vibe",
+      "title": "New Mistral Vibe tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.qwen-code",
+      "title": "New Qwen Code tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.rovo",
+      "title": "New Rovo Dev tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.hermes",
+      "title": "New Hermes tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.openclaw",
+      "title": "New OpenClaw tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.copilot",
+      "title": "New GitHub Copilot tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    },
+    {
+      "id": "tab.newAgent.grok",
+      "title": "New Grok tab",
+      "scope": "tabs",
+      "defaultBindings": {
+        "darwin": [],
+        "linux": [],
+        "win32": []
+      }
+    }
+  ]
+}

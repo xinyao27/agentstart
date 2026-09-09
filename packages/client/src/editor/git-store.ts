@@ -1,15 +1,17 @@
-import type { SourceControlRemoteOpKind } from '@yiru/runtime-protocol/model/review'
 import type {
   GitBranchChangeEntry,
-  GitBranchCompareSummary,
+  GitBranchCompareSummary
+} from '@yiru/protocol/git/branch-compare-types'
+import type {
   GitConflictKind,
   GitConflictOperation,
-  GitPushTarget,
   GitStatusEntry,
   GitStatusResult,
   GitUpstreamStatus
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/git/status-types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
 
+import type { SourceControlRemoteOpKind } from '../source-control/workflow/types'
 import type { GitRuntimeOperationOptions } from './file-model'
 
 export type RemoteOpKind = SourceControlRemoteOpKind

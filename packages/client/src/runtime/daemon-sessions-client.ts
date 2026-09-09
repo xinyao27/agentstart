@@ -1,13 +1,7 @@
-import type {
-  TerminalManagementKillAllResult,
-  TerminalManagementKillOneResult,
-  TerminalManagementListResult,
-  TerminalManagementRestartResult
-} from '@yiru/runtime-protocol/contract'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
-import { callRuntimeOrpc } from './orpc-client'
 import { getActiveRuntimeTarget } from './rpc-client'
+import { openRuntimeTerminalClient } from './terminal-protocol'
 
 type RuntimeSettings = Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null | undefined
 
@@ -15,44 +9,29 @@ type RuntimeSettings = Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null
 // needs a window well beyond the default call timeout.
 const KILL_ALL_TIMEOUT_MS = 30_000
 
-export async function listRuntimeDaemonSessions(
-  settings?: RuntimeSettings
-): Promise<TerminalManagementListResult> {
-  return callRuntimeOrpc(
-    getActiveRuntimeTarget(settings),
-    (client) => client.terminal.management.listSessions,
-    {}
-  )
+export async function listRuntimeDaemonSessions(settings?: RuntimeSettings) {
+  const client = await openRuntimeTerminalClient(getActiveRuntimeTarget(settings))
+  return client.listManagedSessions()
 }
 
-export async function killAllRuntimeDaemonSessions(
-  settings?: RuntimeSettings
-): Promise<TerminalManagementKillAllResult> {
-  return callRuntimeOrpc(
-    getActiveRuntimeTarget(settings),
-    (client) => client.terminal.management.killAll,
-    {},
-    { timeoutMs: KILL_ALL_TIMEOUT_MS }
-  )
+export async function killAllRuntimeDaemonSessions(settings?: RuntimeSettings) {
+  const client = await openRuntimeTerminalClient(getActiveRuntimeTarget(settings))
+  return client.killAllManaged({ timeoutMs: KILL_ALL_TIMEOUT_MS })
 }
 
-export async function killRuntimeDaemonSession(
-  sessionId: string,
-  settings?: RuntimeSettings
-): Promise<TerminalManagementKillOneResult> {
-  return callRuntimeOrpc(
-    getActiveRuntimeTarget(settings),
-    (client) => client.terminal.management.killOne,
-    { sessionId }
-  )
+export async function killRuntimeDaemonSession(sessionId: string, settings?: RuntimeSettings) {
+  const client = await openRuntimeTerminalClient(getActiveRuntimeTarget(settings))
+  return client.killManaged(sessionId)
 }
 
-export async function restartRuntimeDaemon(
-  settings?: RuntimeSettings
-): Promise<TerminalManagementRestartResult> {
-  return callRuntimeOrpc(
-    getActiveRuntimeTarget(settings),
-    (client) => client.terminal.management.restart,
-    {}
-  )
+export async function restartRuntimeDaemon(settings?: RuntimeSettings) {
+  const client = await openRuntimeTerminalClient(getActiveRuntimeTarget(settings))
+  return client.restartManaged()
 }
+
+// Why: the daemon's own PTY session registry, as opposed to the terminal panes
+// a workspace owns — derived from the client call so this feature has no
+// separately maintained type to drift from the wire shape.
+export type RuntimeDaemonSession = Awaited<
+  ReturnType<typeof listRuntimeDaemonSessions>
+>['sessions'][number]

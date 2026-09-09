@@ -1,4 +1,4 @@
-import { isClaudeAgent } from '~renderer/agent/status'
+import { isClaudeAgent } from '~renderer/agent/title/provider'
 import { classifyTitleActivity } from '~renderer/terminal-pane/agent/evidence'
 
 export function shouldSeedCacheTimerOnInitialTitle(args: {

@@ -1,8 +1,6 @@
-import { normalizeSourceControlGroupOrder } from '@yiru/runtime-protocol/workbench/source-control/group-order'
-import type {
-  GitStatusEntry,
-  SourceControlGroupOrder
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import { normalizeSourceControlGroupOrder } from '@yiru/protocol/source-control/group-order'
+import type { SourceControlGroupOrder } from '@yiru/protocol/source-control/group-order'
 
 export const SOURCE_CONTROL_AREAS = ['unstaged', 'staged', 'untracked'] as const
 export type SourceControlSectionArea = (typeof SOURCE_CONTROL_AREAS)[number]

@@ -1,4 +1,4 @@
-import type { MarkdownDocument } from '@yiru/runtime-protocol/workbench/types'
+import type { MarkdownDocument } from '@yiru/protocol/files/values'
 import React, { useEffect, useMemo, useRef } from 'react'
 import { createConnectionIdForFileSelector } from '~renderer/editor/connection-owner-resolution'
 import { isMarkdownComment } from '~renderer/editor/diff-comment-compat'

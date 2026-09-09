@@ -1,5 +1,6 @@
-import { getProjectHostSetupForRepo } from '@yiru/runtime-protocol/workbench/project-host-setup-projection'
-import type { ProjectHostSetup, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { getProjectHostSetupForRepo } from '@yiru/protocol/project/setup-projection'
 import type { SetupScriptPromptInspection } from '~renderer/sidebar/setup-script-prompt'
 
 export type SetupScriptPromptState = SetupScriptPromptInspection
@@ -20,7 +21,7 @@ export function getRepoProjectId(
     return setup.projectId
   }
   const repo = repos.find((candidate) => candidate.id === repoId)
-  return repo ? getProjectHostSetupForRepo(projectHostSetups, repo).projectId : null
+  return repo ? getProjectHostSetupForRepo(projectHostSetups, repo, Date.now()).projectId : null
 }
 
 export function getRenderedSetupScriptPromptState(input: {

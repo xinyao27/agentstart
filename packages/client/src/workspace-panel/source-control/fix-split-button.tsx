@@ -1,9 +1,9 @@
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { LaunchSource } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-actions'
+import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { SlidersHorizontal, Sparkle, CaretDown as ChevronDown } from '~renderer/icons/hugeicons'

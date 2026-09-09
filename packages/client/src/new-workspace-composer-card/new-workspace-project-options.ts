@@ -1,11 +1,8 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
-import { projectHostSetupProjectionFromRepos } from '@yiru/runtime-protocol/workbench/project-host-setup-projection'
-import type {
-  Project,
-  ProjectGroup,
-  ProjectHostSetup,
-  Repo
-} from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { projectHostSetupProjectionFromRepos } from '@yiru/protocol/project/setup-projection'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 import type { ExecutionHostRegistryEntry } from '~renderer/execution-host-registry'
 
 import {
@@ -48,7 +45,7 @@ export function isNewWorkspaceProjectOptionQueryTooLarge(
   query: string,
   maxBytes = NEW_WORKSPACE_PROJECT_OPTION_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 type BuildNewWorkspaceProjectOptionsInput = {
@@ -73,7 +70,7 @@ function getProjectModel({
   if (projects.length > 0 || projectHostSetups.length > 0) {
     return { projects, projectHostSetups }
   }
-  const projection = projectHostSetupProjectionFromRepos(eligibleRepos)
+  const projection = projectHostSetupProjectionFromRepos(eligibleRepos, Date.now())
   return {
     projects: projection.projects,
     projectHostSetups: projection.setups

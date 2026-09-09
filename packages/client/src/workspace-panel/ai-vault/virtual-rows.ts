@@ -1,6 +1,6 @@
-import type { AiVaultSession } from '@yiru/runtime-protocol/model/agent'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
-import type { AiVaultSessionGroup } from './session-filters'
+import type { AiVaultSessionGroup } from './session/filter'
 
 // Why: groups and their sessions are one flat list so LegendList owns a single
 // scroller and can pin the group rows through stickyHeaderIndices.

@@ -1,5 +1,5 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
-import type { CheckStatus } from '@yiru/runtime-protocol/workbench/types'
+import type { CheckStatus } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
 import { translate } from '~renderer/i18n/i18n'
 
 import type {

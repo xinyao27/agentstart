@@ -1,14 +1,13 @@
 import {
-  getExecutionHostLabel,
-  LOCAL_EXECUTION_HOST_ID,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import {
-  PROJECT_HOST_SETUP_RUNTIME_CAPABILITY,
-  WORKSPACE_RUN_CONTEXT_RUNTIME_CAPABILITY
-} from '@yiru/runtime-protocol/protocol-version'
-import type { ProjectHostSetup, Repo } from '@yiru/runtime-protocol/workbench/types'
+  PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
+  PROJECT_CONTEXT_PROTOCOL_CAPABILITY
+} from '@yiru/protocol'
+import { LOCAL_EXECUTION_HOST_ID, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
 import type { ExecutionHostRegistryEntry } from '~renderer/execution-host-registry'
+import { getExecutionHostLabel } from '~renderer/execution-host/labels'
+import { translate } from '~renderer/i18n/i18n'
 
 export type ProjectHostSetupOption =
   | {
@@ -147,7 +146,7 @@ function buildNeedsSetupOptions({
         detail: availability.isAvailable
           ? pendingSetup
             ? getPendingSetupDetail(pendingSetup)
-            : 'Project not set up on this host'
+            : translate('project.hostSetup.notSetUp', 'Project not set up on this host')
           : availability.detail,
         isAvailable: availability.isAvailable
       }
@@ -161,23 +160,26 @@ function getHostSetupAvailability(host: ExecutionHostRegistryEntry): {
   if (host.health === 'blocked') {
     return {
       isAvailable: false,
-      detail: 'Runtime host version is incompatible'
+      detail: translate('project.hostSetup.incompatible', 'Runtime host version is incompatible')
     }
   }
   if (host.kind === 'runtime') {
     if (!host.capabilities) {
       return {
         isAvailable: false,
-        detail: 'Checking host capabilities'
+        detail: translate('project.hostSetup.checking', 'Checking host capabilities')
       }
     }
     if (
-      !host.capabilities.includes(PROJECT_HOST_SETUP_RUNTIME_CAPABILITY) ||
-      !host.capabilities.includes(WORKSPACE_RUN_CONTEXT_RUNTIME_CAPABILITY)
+      !host.capabilities.includes(PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY) ||
+      !host.capabilities.includes(PROJECT_CONTEXT_PROTOCOL_CAPABILITY)
     ) {
       return {
         isAvailable: false,
-        detail: 'Update Yiru on this host to set up projects'
+        detail: translate(
+          'project.hostSetup.upgrade',
+          'Update Yiru on this host to set up projects'
+        )
       }
     }
   }
@@ -190,13 +192,13 @@ function getHostSetupAvailability(host: ExecutionHostRegistryEntry): {
 function getPendingSetupDetail(setup: ProjectHostSetup): string {
   switch (setup.setupState) {
     case 'not-set-up':
-      return 'Project tracked on this host but not set up'
+      return translate('project.hostSetup.tracked', 'Project tracked on this host but not set up')
     case 'setting-up':
-      return 'Project setup is in progress'
+      return translate('project.hostSetup.progress', 'Project setup is in progress')
     case 'error':
-      return 'Project setup needs attention'
+      return translate('project.hostSetup.attention', 'Project setup needs attention')
     case 'unsupported':
-      return 'Project is unsupported on this host'
+      return translate('project.hostSetup.unsupported', 'Project is unsupported on this host')
     case 'ready':
       return setup.path
   }

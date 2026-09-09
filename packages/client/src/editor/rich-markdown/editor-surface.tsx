@@ -1,6 +1,6 @@
 import { EditorContent } from '@tiptap/react'
 import type { Editor } from '@tiptap/react'
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import type React from 'react'
 import { cn } from '~renderer/ui/class-names'
 

@@ -1,4 +1,4 @@
-import { callRuntimeOrpc, createRuntimeOrpcClient } from '../orpc-client'
+import { requireSessionTabsClient } from '../session-tabs-target'
 import { toRuntimeWorktreeSelector } from '../worktree-selector'
 import { createRemoteSessionTerminalCommand } from './commands'
 import {
@@ -16,11 +16,11 @@ async function refreshRequestedRemoteSessionTabs(
   request: RemoteSessionTabsRefreshRequest
 ): Promise<void> {
   try {
-    const snapshot = await callRuntimeOrpc(
-      { kind: 'environment', environmentId: request.environmentId },
-      (client) => client.session.tabs.list,
-      { worktree: toRuntimeWorktreeSelector(request.worktreeId) },
-      { timeoutMs: 15_000 }
+    const snapshot = await requireSessionTabsClient({
+      kind: 'environment',
+      environmentId: request.environmentId
+    }).then((client) =>
+      client.list(toRuntimeWorktreeSelector(request.worktreeId), { timeoutMs: 15_000 })
     )
     applyRemoteSessionTabsStorePatch((state) =>
       applyFreshRemoteSessionTabsSnapshot(state, snapshot, request.environmentId)
@@ -63,16 +63,12 @@ export function subscribeAllRemoteSessionTabs(
   const controller = new AbortController()
   registerUnsubscribe(() => controller.abort())
   void (async () => {
-    let connection: Awaited<ReturnType<typeof createRuntimeOrpcClient>> | null = null
+    let cancel: ((reason?: string) => Promise<void>) | null = null
     try {
-      connection = await createRuntimeOrpcClient(
-        { kind: 'environment', environmentId },
-        { signal: controller.signal }
-      )
-      const stream = await connection.client.session.tabs.subscribeAll(undefined, {
-        signal: controller.signal
-      })
-      for await (const event of stream) {
+      const client = await requireSessionTabsClient({ kind: 'environment', environmentId })
+      const stream = await client.subscribeAll({ signal: controller.signal })
+      cancel = stream.cancel
+      for await (const event of stream.events) {
         if (isDisposed() || controller.signal.aborted) {
           return
         }
@@ -94,7 +90,7 @@ export function subscribeAllRemoteSessionTabs(
         )
       }
     } finally {
-      connection?.close()
+      await cancel?.('remote session tabs global subscription closed')
     }
   })()
 }

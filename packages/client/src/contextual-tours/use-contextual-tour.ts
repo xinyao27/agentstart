@@ -1,8 +1,8 @@
-import type { ContextualTourId } from '@yiru/runtime-protocol/workbench/contextual-tours'
+import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
 import {
   hasFeatureInteraction,
   type FeatureInteractionState
-} from '@yiru/runtime-protocol/workbench/feature-interactions'
+} from '@yiru/protocol/telemetry/interactions/state'
 import { useEffect, useRef } from 'react'
 import { useAppStore } from '~renderer/store/state'
 

@@ -8,9 +8,9 @@
 //
 // See docs/mobile-presence-lock.md.
 
-import type { RuntimeTerminalDriverState } from '@yiru/runtime-protocol/workbench/runtime-types'
+import type { TerminalDriverState } from '@yiru/protocol'
 
-export type DriverState = RuntimeTerminalDriverState
+export type DriverState = TerminalDriverState
 
 const driverByPtyId = new Map<string, DriverState>()
 

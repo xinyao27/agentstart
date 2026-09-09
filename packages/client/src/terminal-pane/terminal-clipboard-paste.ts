@@ -1,7 +1,7 @@
 import {
   isClipboardTextTooLargeError,
   type ReadClipboardTextOptions
-} from '@yiru/runtime-protocol/model/ui'
+} from '~renderer/clipboard/text'
 
 import { TERMINAL_PASTE_MAX_BYTES, type TerminalPasteTextOptions } from './paste/coordinator'
 

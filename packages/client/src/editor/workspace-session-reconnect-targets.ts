@@ -1,5 +1,5 @@
-import { parseSshPtyId } from '@yiru/runtime-protocol/terminal-identity/id'
-import type { WorkspaceSessionState } from '@yiru/runtime-protocol/workbench/types'
+import { parseSshPtyId } from '@yiru/protocol/terminal-identity'
+import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
 
 import type { WorkspaceSessionSnapshot } from './workspace-session'
 

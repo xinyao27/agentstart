@@ -1,13 +1,12 @@
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogSnapshot } from '~renderer/project-catalog/catalog-snapshot'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import {
   clearRecentRuntimeCompatibilityFailure,
-  clearRuntimeCompatibilityCache,
-  unwrapRuntimeRpcResult
+  clearRuntimeCompatibilityCache
 } from '~renderer/runtime/rpc-client'
 import { runtimeEnvironmentsClient } from '~renderer/runtime/runtime-environments-client'
+import type { RuntimeStatus } from '~renderer/runtime/status/model'
 
 import type { AppState } from '../store/types'
 
@@ -131,11 +130,11 @@ export const createRuntimeStatusSlice: StateCreator<AppState, [], [], RuntimeSta
 
   refreshRuntimeEnvironmentStatus: async (environmentId, timeoutMs = 10_000) => {
     try {
-      const response = await runtimeEnvironmentsClient.getStatus({
+      const status = await runtimeEnvironmentsClient.getStatus({
         selector: environmentId,
         timeoutMs
       })
-      const status = unwrapRuntimeRpcResult<RuntimeStatus>(response)
+
       // setRuntimeEnvironmentStatus drops any stale compat failure on a non-null
       // (reachable) status, so a recovered host's reuse-flagged refetches re-probe.
       get().setRuntimeEnvironmentStatus(environmentId, { status, checkedAt: Date.now() })

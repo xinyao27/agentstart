@@ -1,22 +1,21 @@
-import type { RuntimeWorktreeCreateProgressEvent } from '@yiru/runtime-protocol/contract'
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
+import type { GitHubPrStartPoint } from '@yiru/protocol/git/worktree-source'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
 import type {
-  CreateWorktreeArgs,
   CreateWorktreeResult,
-  DetectedWorktreeListResult,
   ForceDeleteWorktreeBranchResult,
-  GitHubPrStartPoint,
-  GitPushTarget,
   RemoveWorktreeResult,
-  Repo,
+  WorktreeBaseStatusEvent
+} from '@yiru/protocol/worktree/create-result'
+import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
+import type {
+  DetectedWorktreeListResult,
   Worktree,
-  WorktreeBaseStatusEvent,
   WorktreeHeadIdentity,
-  WorktreeLineage,
-  WorktreeMeta,
-  WorktreeRemoteBranchConflictEvent,
-  WorkspaceLineage
-} from '@yiru/runtime-protocol/workbench/types'
+  WorktreeMeta
+} from '@yiru/protocol/worktree/model'
+import type { WorktreeCreateProgressEvent as RuntimeWorktreeCreateProgressEvent } from '~renderer/worktree-creation/progress'
+import type { CreateWorktreeArgs } from '~renderer/worktree/create-model'
 
 import type { ShellRepoHostApi } from './shell-system-client'
 
@@ -37,7 +36,7 @@ export type RepoWorkspaceApi = ShellRepoHostApi & {
   remove: (args: {
     expectedRevision: number
     repoId: string
-  }) => Promise<{ removed: true; revision?: number }>
+  }) => Promise<{ removed: boolean; revision?: number }>
   update: (args: {
     expectedRevision: number
     repoId: string
@@ -90,15 +89,6 @@ export type WorktreeWorkspaceApi = {
     baseRefName?: string
     isCrossRepository?: boolean
   }) => Promise<GitHubPrStartPoint | { error: string }>
-  resolveMrBase: (args: {
-    repoId: string
-    mrIid: number
-    sourceBranch?: string
-    targetBranch?: string
-    isCrossRepository?: boolean
-  }) => Promise<
-    { baseBranch: string; compareBaseRef?: string; pushTarget?: GitPushTarget } | { error: string }
-  >
   remove: (args: {
     expectedRevision: number
     worktreeId: string
@@ -132,7 +122,4 @@ export type WorktreeWorkspaceApi = {
     callback: (data: { repoId: string; identities: WorktreeHeadIdentity[] }) => void
   ) => () => void
   onBaseStatus: (callback: (data: WorktreeBaseStatusEvent) => void) => () => void
-  onRemoteBranchConflict: (
-    callback: (data: WorktreeRemoteBranchConflictEvent) => void
-  ) => () => void
 }

@@ -1,4 +1,4 @@
-import { RICH_MARKDOWN_MAX_SIZE_BYTES } from '@yiru/runtime-protocol/workbench/constants'
+import { RICH_MARKDOWN_MAX_SIZE_BYTES } from '~renderer/editor/rich-markdown/size-limit'
 
 const richMarkdownSizeEncoder = new TextEncoder()
 // Why: rich-mode eligibility is checked during render-model work, so this

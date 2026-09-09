@@ -1,13 +1,13 @@
-import type { AgentsStepId } from '@yiru/runtime-protocol/workbench/agents-orchestration-steps'
 import {
   getCommitMessageAgentCapability,
-  isCustomAgentId,
   resolveCommitMessageAgentChoice
-} from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import type { FeatureWallTourDepthSummary } from '@yiru/runtime-protocol/workbench/feature-wall-tour-depth'
-import type { FeatureWallWorkflowId } from '@yiru/runtime-protocol/workbench/feature-wall-workflows'
-import type { ReviewStepId } from '@yiru/runtime-protocol/workbench/review-steps'
-import type { WorkbenchStepId } from '@yiru/runtime-protocol/workbench/workbench-steps'
+} from '@yiru/protocol/source-control/catalog/agents'
+import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import type { FeatureWallTourDepthSummary } from '@yiru/protocol/telemetry/feature-wall/depth'
+import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallWorkflowId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import { useEffect, useState } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'

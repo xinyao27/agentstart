@@ -1,4 +1,4 @@
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import type { RuntimeTerminalProcessInspection } from '~renderer/runtime/terminal-inspection'
 import { useAppStore } from '~renderer/store/state'
 import { createCodexAutoApprovalHookCompletionSuppressor } from '~renderer/terminal-pane/codex-auto-approval-notification-suppression'

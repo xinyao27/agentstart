@@ -1,4 +1,4 @@
-import { resolveSourceControlActionRecipe } from '@yiru/runtime-protocol/workbench/source-control/ai'
+import { resolveSourceControlActionRecipe } from '@yiru/protocol/source-control/resolution'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, Pencil, X } from '~renderer/icons/hugeicons'
@@ -34,7 +34,6 @@ export function ChecksPanelReviewView({
   const {
     activeConflictReview,
     activeConnectionId,
-    activeGitLabReview,
     activeReview,
     activeSourceControlLaunchPlatform,
     activeWorktree,
@@ -90,7 +89,7 @@ export function ChecksPanelReviewView({
   if (!activeReview) {
     return null
   }
-  const reviewShortLabel = activeReview.provider === 'gitlab' ? 'MR' : 'PR'
+  const reviewShortLabel = 'PR'
   const shouldShowReviewTriageStrip =
     activeConflictReview !== null || getBrokenChecks(checks).length > 0
   const shouldShowReviewActions =
@@ -202,7 +201,6 @@ export function ChecksPanelReviewView({
         {shouldShowReviewTriageStrip && sourceControlAiActionsVisible && (
           <PRTriageStrip
             review={activeConflictReview ?? activeReview}
-            reviewKind={reviewShortLabel}
             checks={checks}
             isResolvingConflictsWithAI={isResolvingConflictsWithAI}
             onResolveConflictsWithAI={() => void handleResolveConflictsWithAI()}
@@ -216,7 +214,7 @@ export function ChecksPanelReviewView({
         )}
         {activeConflictReview && (
           <>
-            {/* Why: the triage strip owns the single Resolve action for PR and MR
+            {/* Why: the triage strip owns the single Resolve action for PR
               conflicts; the file list and fallback notice are informational. */}
             <ConflictingFilesSection pr={activeConflictReview} />
             <MergeConflictNotice
@@ -240,7 +238,6 @@ export function ChecksPanelReviewView({
         <PRCommentsList
           comments={comments}
           commentsLoading={commentsLoading}
-          reviewKind={reviewShortLabel}
           commentsDisabled={!canTargetPRComments}
           commentsDisabledReason={commentsDisabledReason}
           selectionContextKey={stateRequestKey}
@@ -252,7 +249,7 @@ export function ChecksPanelReviewView({
             sourceControlAiActionsVisible ? handleResolveCommentsWithAI : undefined
           }
           onReply={pr ? handleReplyToComment : undefined}
-          onResolve={pr || activeGitLabReview ? handleResolve : undefined}
+          onResolve={pr ? handleResolve : undefined}
         />
         <SourceControlAgentActionDialog
           open={sourceControlAiActionsVisible && agentComposerState !== null}

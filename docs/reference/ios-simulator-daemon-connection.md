@@ -21,7 +21,7 @@ To pair manually, open **Yiru Mobile** from the Chrome side panel and scan its Q
 can be generated from the CLI:
 
 ```sh
-apps/daemon/dist/yiru mobile pair \
+apps/daemon/target/release/yiru mobile pair \
   --address 127.0.0.1 \
   --device-name 'iOS Simulator' \
   --json
@@ -34,7 +34,7 @@ Open the returned `yiru://` link in a booted Simulator with `xcrun simctl openur
 | Piece | Where it lives |
 | --- | --- |
 | Direct mobile listener and pairing offer | [`apps/daemon/src/mobile`](../../apps/daemon/src/mobile) |
-| Pairing URL / QR page | [`mobile-page.tsx`](../../packages/client/src/extension/workspace/mobile-page.tsx) |
+| Pairing URL / QR page | [`page.tsx`](../../packages/client/src/mobile/page.tsx) |
 | Deep-link decoding and confirmation | [`Features/Pairing`](../../apps/mobile/YiruMobile/Features/Pairing) |
 | Host profile persistence | [`KeychainHostRepository.swift`](../../apps/mobile/YiruMobile/Platform/Persistence/KeychainHostRepository.swift) |
 | Authenticated socket and E2EE handshake | [`Platform/Runtime`](../../apps/mobile/YiruMobile/Platform/Runtime) |

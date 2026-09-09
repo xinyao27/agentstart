@@ -1,5 +1,5 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
-import { resolveHostedReviewCreationProvider } from '@yiru/runtime-protocol/model/review'
+import { resolveHostedReviewCreationProvider } from '@yiru/protocol/hosted-review/creation-provider'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { localizedHostedReviewCopy } from '~renderer/i18n/hosted-review-localized-copy'
@@ -265,10 +265,6 @@ export function useSourceControlStatusRefresh(scope: SourceControlInteractionSta
   ])
   const linkedGitHubPR = activeWorktree?.linkedPR ?? null
   const fallbackGitHubPRNumber = linkedGitHubPR == null ? (activePrFromQueue?.number ?? null) : null
-  const linkedGitLabMR = activeWorktree?.linkedGitLabMR ?? null
-  const linkedBitbucketPR = activeWorktree?.linkedBitbucketPR ?? null
-  const linkedAzureDevOpsPR = activeWorktree?.linkedAzureDevOpsPR ?? null
-  const linkedGiteaPR = activeWorktree?.linkedGiteaPR ?? null
   return {
     ...scope,
     refreshActiveGitStatus,
@@ -287,11 +283,7 @@ export function useSourceControlStatusRefresh(scope: SourceControlInteractionSta
     compareBaseRef,
     pickerBaseRef,
     linkedGitHubPR,
-    fallbackGitHubPRNumber,
-    linkedGitLabMR,
-    linkedBitbucketPR,
-    linkedAzureDevOpsPR,
-    linkedGiteaPR
+    fallbackGitHubPRNumber
   }
 }
 

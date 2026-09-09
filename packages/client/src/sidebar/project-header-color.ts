@@ -1,5 +1,5 @@
-import { DEFAULT_REPO_BADGE_COLOR, REPO_COLORS } from '@yiru/runtime-protocol/workbench/constants'
-import { normalizeRepoBadgeColor } from '@yiru/runtime-protocol/workbench/repo-badge-color'
+import { DEFAULT_REPO_BADGE_COLOR, REPO_COLORS } from '@yiru/protocol/project/appearance'
+import { normalizeRepoBadgeColor } from '@yiru/protocol/project/appearance'
 
 const PROJECT_GROUP_HEADER_KEY_PREFIX = 'repo:'
 const PROVIDER_PROJECT_HEADER_KEY_PREFIX = 'project:'

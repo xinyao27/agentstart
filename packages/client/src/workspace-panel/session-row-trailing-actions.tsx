@@ -1,4 +1,3 @@
-import type { AiVaultSession } from '@yiru/runtime-protocol/model/agent'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -13,13 +12,14 @@ import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '~renderer/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
 import { SessionActionMenuItems } from './ai-vault/session-action-menu-items'
-import { agentLabel } from './ai-vault/session-filters'
 import {
   aiVaultWorktreeJumpTooltip,
   type AiVaultSessionWorktreeInfo
 } from './ai-vault/session-worktree'
+import { agentLabel } from './ai-vault/session/filter'
 
 // Why: hover-only actions live on the title row and collapse on hover-capable
 // devices so the prompt keeps the full width until the row is hovered.

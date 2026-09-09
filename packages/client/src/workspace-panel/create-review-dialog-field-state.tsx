@@ -1,4 +1,4 @@
-import type { SourceControlAiPrCreationDefaults } from '@yiru/runtime-protocol/workbench/source-control/ai-types'
+import type { SourceControlAiPrCreationDefaults } from '@yiru/protocol/source-control/ai-types'
 import { useEffect, useRef, useState } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { cancelRuntimeGeneratePullRequestFields } from '~renderer/runtime/git-client'

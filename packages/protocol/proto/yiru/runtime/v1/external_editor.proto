@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service ExternalEditorService {
+  rpc OpenRemoteSsh(ExternalEditorServiceOpenRemoteSshRequest) returns (ExternalEditorServiceOpenRemoteSshResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message ExternalEditorServiceOpenRemoteSshRequest {
+  string path = 1;
+  optional string command = 2;
+  string connection_id = 3;
+}
+
+message ExternalEditorServiceOpenRemoteSshResponse {
+  bool ok = 1;
+  ExternalEditorUnsupportedReason reason = 2;
+}
+
+enum ExternalEditorUnsupportedReason {
+  EXTERNAL_EDITOR_UNSUPPORTED_REASON_UNSPECIFIED = 0;
+  EXTERNAL_EDITOR_UNSUPPORTED_REASON_REMOTE_RUNTIME = 1;
+}

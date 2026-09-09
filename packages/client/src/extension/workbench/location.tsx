@@ -1,4 +1,5 @@
-import type { Worktree, WorkspacePanelTabContentType } from '@yiru/runtime-protocol/workbench/types'
+import type { WorkspacePanelTabContentType } from '@yiru/protocol/workspace/tabs'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { useEffect, useRef } from 'react'
 
 import { useProjectCatalog } from '../../project-catalog/provider'

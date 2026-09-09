@@ -1,15 +1,10 @@
-import {
-  LOCAL_EXECUTION_HOST_ID,
-  toRuntimeExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { sanitizeRepoIcon } from '@yiru/runtime-protocol/model/workspace'
-import type { FolderWorkspacePathStatus } from '@yiru/runtime-protocol/workbench/folder-workspace-path-status'
-import { normalizeRepoBadgeColor } from '@yiru/runtime-protocol/workbench/repo-badge-color'
-import type {
-  ProjectUpdateArgs,
-  Repo,
-  NestedRepoScanResult
-} from '@yiru/runtime-protocol/workbench/types'
+import { LOCAL_EXECUTION_HOST_ID, toRuntimeExecutionHostId } from '@yiru/protocol/host/identity'
+import { normalizeRepoBadgeColor } from '@yiru/protocol/project/appearance'
+import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import { sanitizeRepoIcon } from '@yiru/protocol/project/icon'
+import type { ProjectUpdateArgs } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { FolderWorkspacePathStatus } from '@yiru/protocol/workspace/folder-path'
 import type { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 import type { AppState } from '../../store/types'
@@ -163,7 +158,7 @@ export function getRuntimeTargetHostId(
     : LOCAL_EXECUTION_HOST_ID
 }
 
-// Why: the web client owns no local host — `createLocalRuntimeOrpcClient` routes
+// Why: the web client owns no local host — the configured browser runtime routes
 // its `local` calls to the paired runtime — so a local-target catalog answers
 // with that same host's projects and stamps them `local`. Every project then
 // exists twice under two hosts, and workspace ownership resolves to

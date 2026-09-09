@@ -1,8 +1,8 @@
 import { LigaturesAddon } from '@xterm/addon-ligatures'
 import { Terminal } from '@xterm/xterm'
-import { resolveTerminalFontWeights } from '@yiru/runtime-protocol/workbench/terminal/fonts'
-import { normalizeTerminalLineHeight } from '@yiru/runtime-protocol/workbench/terminal/line-height-settings'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { resolveTerminalFontWeights } from '@yiru/protocol/terminal/font-settings'
+import { normalizeTerminalLineHeight } from '@yiru/protocol/terminal/line-height'
 
 import '@xterm/xterm/css/xterm.css'
 import { useEffect, useRef, useState } from 'react'

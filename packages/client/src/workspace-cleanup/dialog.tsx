@@ -1,8 +1,6 @@
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import {
-  canQueueWorkspaceCleanupCandidate,
-  type WorkspaceCleanupCandidate
-} from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import { canQueueWorkspaceCleanupCandidate } from '@yiru/protocol/workspace/cleanup-policy'
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'

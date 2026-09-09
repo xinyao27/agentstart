@@ -5,8 +5,9 @@ type BootstrapResponse = {
   result?: {
     authToken: string
     endpoint: string
+    expectedRuntimeId: string | null
     protocolVersion: number
-    runtimeId: string
+    rpcProtocol: 'yiru-protobuf-v2'
   }
 }
 
@@ -185,6 +186,10 @@ function isBootstrapResponse(value: unknown): value is BootstrapResponse & {
   result: NonNullable<BootstrapResponse['result']>
 } {
   const result = typeof value === 'object' && value !== null ? Reflect.get(value, 'result') : null
+  const expectedRuntimeId =
+    typeof result === 'object' && result !== null
+      ? Reflect.get(result, 'expectedRuntimeId')
+      : undefined
   return (
     typeof value === 'object' &&
     value !== null &&
@@ -193,8 +198,9 @@ function isBootstrapResponse(value: unknown): value is BootstrapResponse & {
     result !== null &&
     typeof Reflect.get(result, 'authToken') === 'string' &&
     typeof Reflect.get(result, 'endpoint') === 'string' &&
+    (expectedRuntimeId === null || typeof expectedRuntimeId === 'string') &&
     typeof Reflect.get(result, 'protocolVersion') === 'number' &&
-    typeof Reflect.get(result, 'runtimeId') === 'string'
+    Reflect.get(result, 'rpcProtocol') === 'yiru-protobuf-v2'
   )
 }
 

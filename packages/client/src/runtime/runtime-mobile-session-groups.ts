@@ -1,5 +1,4 @@
-import type { RuntimeMobileSessionTabGroup } from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { Tab, TabGroup, TabGroupLayoutNode } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab, TabGroup, TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
 import type { AppState } from '~renderer/store/types'
 
 import {
@@ -7,6 +6,7 @@ import {
   getGroupVisibleTabOrder,
   type VisibleTabRef
 } from '../tab-bar/group-tab-order'
+import type { RuntimeMobileSessionTabGroup } from './remote-session/session-model'
 
 function isEditorSurfaceTab(tab: Pick<Tab, 'contentType'>): boolean {
   // Why: mobile file snapshots can faithfully mirror ordinary edit/diff files;

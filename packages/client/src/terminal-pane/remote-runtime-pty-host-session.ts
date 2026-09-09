@@ -1,8 +1,9 @@
 import type {
   RuntimeMobileSessionTerminalClientTab,
   RuntimeMobileSessionTabsResult
-} from '@yiru/runtime-protocol/workbench/runtime-types'
+} from '~renderer/runtime/remote-session/session-model'
 import { toHostSessionTabId } from '~renderer/runtime/remote-terminal-surface-id'
+import { requireSessionTabsClient } from '~renderer/runtime/session-tabs-target'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 
 import type { RuntimePtyTransportOptions } from './pty/transport-types'
@@ -28,15 +29,11 @@ export class RemoteRuntimePtyHostSession {
     }
     const hostTabId = toHostSessionTabId(tabId)
     const worktree = toRuntimeWorktreeSelector(this.worktreeId)
-    const activated = await this.state.callRuntime<RuntimeMobileSessionTabsResult>(
-      'session.tabs.activate',
-      {
-        worktree,
-        tabId: hostTabId,
-        ...(this.leafId ? { leafId: this.leafId } : {})
-      }
-    )
+    const activated = await this.activate(worktree, hostTabId)
     const immediate = this.findReadyHandle(activated, hostTabId)
+    if (this.isSleeping(activated, hostTabId)) {
+      return null
+    }
     if (immediate) {
       return immediate
     }
@@ -52,15 +49,12 @@ export class RemoteRuntimePtyHostSession {
       await new Promise((resolve) =>
         setTimeout(resolve, Math.min(HOST_SESSION_ATTACH_POLL_MS, remainingMs))
       )
-      const listed = await this.state.callRuntime<RuntimeMobileSessionTabsResult>(
-        'session.tabs.list',
-        { worktree }
-      )
+      const listed = await this.list(worktree)
       const handle = this.findReadyHandle(listed, hostTabId)
       if (handle) {
         return handle
       }
-      if (!this.hasSurface(listed, hostTabId)) {
+      if (this.isSleeping(listed, hostTabId) || !this.hasSurface(listed, hostTabId)) {
         return null
       }
     }
@@ -72,11 +66,37 @@ export class RemoteRuntimePtyHostSession {
       return null
     }
     const hostTabId = toHostSessionTabId(tabId)
-    const listed = await this.state.callRuntime<RuntimeMobileSessionTabsResult>(
-      'session.tabs.list',
-      { worktree: toRuntimeWorktreeSelector(this.worktreeId) }
-    )
+    const listed = await this.list(toRuntimeWorktreeSelector(this.worktreeId))
     return this.findReadyHandle(listed, hostTabId)
+  }
+
+  private isSleeping(snapshot: RuntimeMobileSessionTabsResult, tabId: string): boolean {
+    return snapshot.tabs.some(
+      (tab) =>
+        tab.type === 'terminal' &&
+        tab.parentTabId === tabId &&
+        (!this.leafId || tab.leafId === this.leafId) &&
+        tab.status === 'sleeping'
+    )
+  }
+
+  private activate(worktree: string, hostTabId: string): Promise<RuntimeMobileSessionTabsResult> {
+    return requireSessionTabsClient(this.state.target).then((client) =>
+      client.activate(
+        {
+          worktree,
+          tabId: hostTabId,
+          ...(this.leafId ? { leafId: this.leafId } : {})
+        },
+        { timeoutMs: 15_000 }
+      )
+    )
+  }
+
+  private list(worktree: string): Promise<RuntimeMobileSessionTabsResult> {
+    return requireSessionTabsClient(this.state.target).then((client) =>
+      client.list(worktree, { timeoutMs: 15_000 })
+    )
   }
 
   private findReadyHandle(

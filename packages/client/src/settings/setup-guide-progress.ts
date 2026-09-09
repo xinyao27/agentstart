@@ -1,9 +1,9 @@
-import {
-  FEATURE_WALL_SETUP_STEPS,
-  getFirstIncompleteFeatureWallSetupStepId,
-  type FeatureWallSetupStepId
-} from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
+import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 
+import {
+  getFeatureWallSetupSteps,
+  getFirstIncompleteFeatureWallSetupStepId
+} from '../feature-wall/content/setup-steps'
 import type { FeatureWallSetupProgress } from '../feature-wall/setup-progress'
 import { useSetupGuideProgress } from '../setup-guide/use-setup-guide-progress'
 
@@ -18,16 +18,16 @@ export function getSettingsSetupGuideProgress(progress: {
   ready: boolean
   stepDone: Partial<Record<FeatureWallSetupStepId, boolean>>
 }): SettingsSetupGuideProgress {
-  const doneCount = FEATURE_WALL_SETUP_STEPS.filter((step) => progress.stepDone[step.id]).length
+  const doneCount = getFeatureWallSetupSteps().filter((step) => progress.stepDone[step.id]).length
   const firstIncompleteStepId =
-    doneCount === FEATURE_WALL_SETUP_STEPS.length
+    doneCount === getFeatureWallSetupSteps().length
       ? null
       : getFirstIncompleteFeatureWallSetupStepId(progress.stepDone)
 
   return {
     ready: progress.ready,
     doneCount,
-    total: FEATURE_WALL_SETUP_STEPS.length,
+    total: getFeatureWallSetupSteps().length,
     firstIncompleteStepId
   }
 }

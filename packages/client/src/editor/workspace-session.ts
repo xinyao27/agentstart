@@ -1,13 +1,9 @@
-import type {
-  BrowserPage,
-  BrowserWorkspace,
-  PersistedOpenFile,
-  WorkspaceSessionState,
-  WorkspaceVisibleTabType
-} from '@yiru/runtime-protocol/workbench/types'
-import { normalizeBrowserHistoryEntries } from '@yiru/runtime-protocol/workbench/workspace/session-browser-history'
-import { pruneLocalTerminalScrollbackBuffers } from '@yiru/runtime-protocol/workbench/workspace/session-terminal-buffers'
+import type { BrowserPage, BrowserWorkspace } from '@yiru/protocol/workspace/browser-session'
+import type { PersistedOpenFile, WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
+import { normalizeBrowserHistoryEntries } from '~renderer/browser/session/history'
 import type { AppState } from '~renderer/store/state'
+import { pruneLocalTerminalScrollbackBuffers } from '~renderer/terminal-workspace/scrollback-buffers'
 
 import type { OpenFile } from './state'
 import { buildLastVisitedAtByWorktreeId } from './workspace-session-focus-recency'

@@ -10,8 +10,9 @@ type ExtensionBootstrapResponse =
 export type ExtensionBootstrapResult = {
   authToken: string
   endpoint: string
+  expectedRuntimeId: string | null
   protocolVersion: number
-  runtimeId: string
+  rpcProtocol: 'yiru-protobuf-v2'
 }
 
 export function classifyUnavailableResponse(value: unknown): ExtensionUnavailableReason {
@@ -53,12 +54,19 @@ export function isExtensionBootstrapResponse(value: unknown): value is Extension
 }
 
 function isExtensionBootstrapResult(result: unknown): result is ExtensionBootstrapResult {
+  const rpcProtocol =
+    typeof result === 'object' && result !== null ? Reflect.get(result, 'rpcProtocol') : undefined
+  const expectedRuntimeId =
+    typeof result === 'object' && result !== null
+      ? Reflect.get(result, 'expectedRuntimeId')
+      : undefined
   return (
     typeof result === 'object' &&
     result !== null &&
     typeof Reflect.get(result, 'authToken') === 'string' &&
     typeof Reflect.get(result, 'endpoint') === 'string' &&
+    (expectedRuntimeId === null || typeof expectedRuntimeId === 'string') &&
     typeof Reflect.get(result, 'protocolVersion') === 'number' &&
-    typeof Reflect.get(result, 'runtimeId') === 'string'
+    rpcProtocol === 'yiru-protobuf-v2'
   )
 }

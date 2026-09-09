@@ -1,0 +1,319 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+service AgentStatusService {
+  rpc InferInterrupt(AgentStatusServiceInferInterruptRequest) returns (AgentStatusServiceInferInterruptResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetSnapshot(AgentStatusServiceGetSnapshotRequest) returns (AgentStatusServiceGetSnapshotResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetMigrationUnsupportedSnapshot(AgentStatusServiceGetMigrationUnsupportedSnapshotRequest) returns (AgentStatusServiceGetMigrationUnsupportedSnapshotResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Subscribe(AgentStatusServiceSubscribeRequest) returns (stream AgentStatusServiceSubscribeResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_RESTART_FROM_REQUEST
+    };
+  }
+
+  rpc Drop(AgentStatusServiceDropRequest) returns (AgentStatusServiceDropResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc DropByTabPrefix(AgentStatusServiceDropByTabPrefixRequest) returns (AgentStatusServiceDropByTabPrefixResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RetirePaneAuthority(AgentStatusServiceRetirePaneAuthorityRequest) returns (AgentStatusServiceRetirePaneAuthorityResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc TransferPaneAuthority(AgentStatusServiceTransferPaneAuthorityRequest) returns (AgentStatusServiceTransferPaneAuthorityResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+enum AgentInterruptIntent {
+  AGENT_INTERRUPT_INTENT_UNSPECIFIED = 0;
+  AGENT_INTERRUPT_INTENT_PLAIN_ESCAPE = 1;
+  AGENT_INTERRUPT_INTENT_CTRL_C = 2;
+}
+
+enum AgentStatusState {
+  AGENT_STATUS_STATE_UNSPECIFIED = 0;
+  AGENT_STATUS_STATE_WORKING = 1;
+  AGENT_STATUS_STATE_BLOCKED = 2;
+  AGENT_STATUS_STATE_WAITING = 3;
+  AGENT_STATUS_STATE_DONE = 4;
+}
+
+enum AgentSubagentState {
+  AGENT_SUBAGENT_STATE_UNSPECIFIED = 0;
+  AGENT_SUBAGENT_STATE_WORKING = 1;
+  AGENT_SUBAGENT_STATE_BLOCKED = 2;
+  AGENT_SUBAGENT_STATE_WAITING = 3;
+  AGENT_SUBAGENT_STATE_IDLE = 4;
+}
+
+enum AgentProviderSessionKey {
+  AGENT_PROVIDER_SESSION_KEY_UNSPECIFIED = 0;
+  AGENT_PROVIDER_SESSION_KEY_SESSION_ID = 1;
+  AGENT_PROVIDER_SESSION_KEY_CONVERSATION_ID = 2;
+}
+
+enum AgentMigrationUnsupportedReason {
+  AGENT_MIGRATION_UNSUPPORTED_REASON_UNSPECIFIED = 0;
+  AGENT_MIGRATION_UNSUPPORTED_REASON_LEGACY_NUMERIC_PANE_KEY = 1;
+}
+
+enum AgentMigrationUnsupportedSource {
+  AGENT_MIGRATION_UNSUPPORTED_SOURCE_UNSPECIFIED = 0;
+  AGENT_MIGRATION_UNSUPPORTED_SOURCE_LOCAL = 1;
+  AGENT_MIGRATION_UNSUPPORTED_SOURCE_SSH = 2;
+}
+
+message AgentStatusServiceInferInterruptRequest {
+  string pane_key = 1;
+  optional double baseline_updated_at = 2;
+  optional double baseline_state_started_at = 3;
+  string baseline_prompt = 4;
+  optional string baseline_agent_type = 5;
+  AgentInterruptIntent intent = 6;
+  optional uint32 input_count = 7;
+}
+
+message AgentStatusServiceInferInterruptResponse {
+  bool inferred = 1;
+}
+
+message AgentStatusSubagent {
+  string id = 1;
+  AgentSubagentState state = 2;
+  int64 started_at = 3;
+  optional string agent_type = 4;
+  optional string model = 5;
+  optional string description = 6;
+}
+
+message AgentProviderSession {
+  AgentProviderSessionKey key = 1;
+  string id = 2;
+  optional string transcript_path = 3;
+}
+
+// Why: the legacy surface distinguishes an explicitly local (null)
+// connectionId from an absent one on restored entries, so the nullable shape
+// is preserved instead of collapsing both into "unset".
+message AgentStatusNullableString {
+  oneof value {
+    string text = 1;
+    bool null = 2;
+  }
+}
+
+message AgentStatusSnapshotEntry {
+  string pane_key = 1;
+  int64 received_at = 2;
+  int64 state_started_at = 3;
+  AgentStatusState state = 4;
+  string prompt = 5;
+  optional string launch_token = 6;
+  optional string tab_id = 7;
+  optional string worktree_id = 8;
+  optional AgentStatusNullableString connection_id = 9;
+  optional string agent_type = 10;
+  optional string model = 11;
+  optional string tool_name = 12;
+  optional string tool_input = 13;
+  optional string interactive_prompt = 14;
+  optional string last_assistant_message = 15;
+  repeated AgentStatusSubagent subagents = 16;
+  optional AgentProviderSession provider_session = 17;
+  optional bool provider_session_only = 18;
+  optional string prompt_interaction_key = 19;
+  optional string tool_use_id = 20;
+  optional string tool_agent_id = 21;
+  optional string tool_agent_type = 22;
+  optional bool interrupted = 23;
+}
+
+message AgentMigrationUnsupportedPtyEntry {
+  string pty_id = 1;
+  AgentMigrationUnsupportedReason reason = 2;
+  AgentMigrationUnsupportedSource source = 3;
+  int64 updated_at = 4;
+  optional string worktree_id = 5;
+  optional string tab_id = 6;
+  optional string leaf_id = 7;
+  optional string pane_key = 8;
+}
+
+message AgentStatusServiceGetSnapshotRequest {}
+
+message AgentStatusServiceGetSnapshotResponse {
+  repeated AgentStatusSnapshotEntry statuses = 1;
+}
+
+message AgentStatusServiceGetMigrationUnsupportedSnapshotRequest {}
+
+message AgentStatusServiceGetMigrationUnsupportedSnapshotResponse {
+  repeated AgentMigrationUnsupportedPtyEntry migration_unsupported_ptys = 1;
+}
+
+message AgentStatusSubscribeSnapshot {
+  repeated AgentStatusSnapshotEntry statuses = 1;
+  repeated AgentMigrationUnsupportedPtyEntry migration_unsupported_ptys = 2;
+}
+
+message AgentStatusSubscribeReady {
+  string subscription_id = 1;
+  AgentStatusSubscribeSnapshot snapshot = 2;
+}
+
+message AgentStatusPaneKey {
+  string pane_key = 1;
+}
+
+message AgentStatusPtyKey {
+  string pty_id = 1;
+}
+
+message AgentStatusServiceSubscribeRequest {}
+
+message AgentStatusServiceSubscribeResponse {
+  oneof event {
+    AgentStatusSubscribeReady ready = 1;
+    AgentStatusSnapshotEntry set = 2;
+    AgentStatusPaneKey clear = 3;
+    AgentMigrationUnsupportedPtyEntry migration_unsupported = 4;
+    AgentStatusPtyKey migration_unsupported_clear = 5;
+  }
+}
+
+message AgentStatusServiceDropRequest {
+  string pane_key = 1;
+}
+
+message AgentStatusServiceDropResponse {}
+
+message AgentStatusServiceDropByTabPrefixRequest {
+  string tab_id = 1;
+}
+
+message AgentStatusServiceDropByTabPrefixResponse {}
+
+message AgentStatusServiceRetirePaneAuthorityRequest {
+  string pane_key = 1;
+}
+
+message AgentStatusServiceRetirePaneAuthorityResponse {}
+
+message AgentStatusServiceTransferPaneAuthorityRequest {
+  string from_pane_key = 1;
+  string to_pane_key = 2;
+  optional string pty_id = 3;
+}
+
+message AgentStatusServiceTransferPaneAuthorityResponse {}

@@ -20,7 +20,6 @@ import { useMobilePairingDevicePolling } from '../settings/mobile/pairing-device
 import type { PairedDevice, StepIndex } from './hero'
 import { MobilePageContent } from './page-content'
 import { shouldShowPairedAfterDeviceRefresh, type MobilePageStage as FlowStage } from './page-stage'
-import type { MobilePlatform } from './release-link'
 import { useMobileInstallActions } from './use-mobile-install-actions'
 import { useMobileInstallQr } from './use-mobile-install-qr'
 import { useMobilePageEscape } from './use-mobile-page-escape'
@@ -28,7 +27,6 @@ import { useMobilePageEscape } from './use-mobile-page-escape'
 export default function MobilePage(): React.JSX.Element {
   const [stage, setStage] = useState<FlowStage | null>(null)
   const [stepIdx, setStepIdx] = useState<StepIndex>(0)
-  const [platform, setPlatform] = useState<MobilePlatform>('ios')
 
   const [pairQrDataUrl, setPairQrDataUrl] = useState<string | null>(null)
   const [pairingUrl, setPairingUrl] = useState<string | null>(null)
@@ -52,8 +50,8 @@ export default function MobilePage(): React.JSX.Element {
     (s) => s.settings?.activeRuntimeEnvironmentId ?? null
   )
   const closeMobilePage = useAppStore((s) => s.closeMobilePage)
-  const installQrUrl = useMobileInstallQr(stage, platform)
-  const { copyInstallUrl, openInstallUrl } = useMobileInstallActions(platform)
+  const installQrUrl = useMobileInstallQr(stage)
+  const { copyInstallUrl, openInstallUrl } = useMobileInstallActions()
 
   const setPairingDeviceBaseline = (count: number | null): void => {
     deviceCountAtPairStartRef.current = count
@@ -378,12 +376,10 @@ export default function MobilePage(): React.JSX.Element {
       pairLoading={pairLoading}
       pairQrDataUrl={pairQrDataUrl}
       pairingUrl={pairingUrl}
-      platform={platform}
       refreshingNetworkInterfaces={refreshingNetworkInterfaces}
       revokeDevice={(id) => void revokeDevice(id)}
       revokingDeviceIds={revokingDeviceIds}
       selectedAddress={selectedAddress}
-      onPlatformChange={setPlatform}
       showPairedDevices={showPairedDevices}
       stage={stage}
       stepIdx={stepIdx}

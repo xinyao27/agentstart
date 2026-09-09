@@ -1,4 +1,4 @@
-import type { ProjectGroup } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
 
 import type { Row } from './worktree-list/groups'
 import {

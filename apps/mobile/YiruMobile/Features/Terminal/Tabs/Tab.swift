@@ -2,6 +2,7 @@ import Foundation
 
 nonisolated enum TerminalWorkspaceTerminal: Hashable, Sendable {
     case pending
+    case sleeping
     case ready(TerminalTarget)
 }
 
@@ -92,7 +93,7 @@ nonisolated struct TerminalWorkspaceTab: Identifiable, Hashable, Sendable {
         switch content {
         case .terminal:
             switch terminalAgentID {
-            case "claude", "claude-agent-teams": "agent-claude"
+            case "claude": "agent-claude"
             case "codex": "agent-openai"
             default: nil
             }
@@ -130,7 +131,7 @@ nonisolated struct TerminalWorkspaceTab: Identifiable, Hashable, Sendable {
         if let candidate {
             switch candidate.lowercased() {
             case "openai", "openai-codex", "codex": return "codex"
-            case "claude", "claude-code", "claude-agent-teams": return "claude"
+            case "claude", "claude-code": return "claude"
             default: return candidate
             }
         }
@@ -140,6 +141,11 @@ nonisolated struct TerminalWorkspaceTab: Identifiable, Hashable, Sendable {
     var terminalTarget: TerminalTarget? {
         guard case .terminal(.ready(let target)) = content else { return nil }
         return target
+    }
+
+    var isSleepingTerminal: Bool {
+        guard case .terminal(.sleeping) = content else { return false }
+        return true
     }
 
     var isPendingTerminal: Bool {

@@ -1,9 +1,10 @@
-import type { CliInstallStatus } from '@yiru/runtime-protocol/workbench/cli-install-types'
 import type {
-  ComputerUsePermissionSetupResult,
-  ComputerUsePermissionStatusResult
-} from '@yiru/runtime-protocol/workbench/computer-use-permissions-types'
-import type { EventProps } from '@yiru/runtime-protocol/workbench/telemetry-events'
+  ComputerClient,
+  ComputerPermissionSetupResult,
+  ComputerPermissionStatusResult
+} from '@yiru/protocol'
+import type { CliInstallStatus } from '@yiru/protocol/cli-values'
+import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
 import {
   COMPUTER_USE_SKILL_NAME,
   YIRU_CLI_SKILL_NAME,
@@ -12,9 +13,9 @@ import {
   buildAgentFeatureSkillInstallCommand
 } from '~renderer/agent/feature-install-commands'
 import { BROWSER_USE_ENABLED_STORAGE_KEY } from '~renderer/browser/setup-state'
+import { translate } from '~renderer/i18n/i18n'
 import { installCliCommand, readCliInstallStatus } from '~renderer/runtime/cli-install-client'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
-import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
+import { openComputerTarget } from '~renderer/runtime/computer-target'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { showYiruCliRegistrationPromptToast } from '~renderer/skills/agent-cli-prerequisite'
 import {
@@ -22,7 +23,6 @@ import {
   ORCHESTRATION_SETUP_DISMISSED_STORAGE_KEY,
   notifyOrchestrationSetupStateChanged
 } from '~renderer/skills/orchestration-setup-state'
-import { useAppStore } from '~renderer/store/state'
 
 export type OnboardingFeatureSetupId = 'browserUse' | 'computerUse' | 'orchestration'
 
@@ -80,8 +80,8 @@ export type OnboardingFeatureSetupDeps = {
   showCliRegistrationPrompt?: () => Promise<void>
   installCli: () => Promise<CliInstallStatus>
   writeClipboardText: (text: string) => Promise<void>
-  getComputerUsePermissionStatus: () => Promise<ComputerUsePermissionStatusResult>
-  openComputerUsePermissionSetup: () => Promise<ComputerUsePermissionSetupResult>
+  getComputerUsePermissionStatus: () => Promise<ComputerPermissionStatusResult>
+  openComputerUsePermissionSetup: () => Promise<ComputerPermissionSetupResult>
   setStorageItem: (key: string, value: string) => void
   removeStorageItem: (key: string) => void
   notifyOrchestrationStateChanged: () => void
@@ -156,6 +156,20 @@ export function onboardingFeatureSetupRunTelemetry(
   }
 }
 
+// Why: Computer Use permissions belong to the local browser host.
+async function requireComputerClient(): Promise<ComputerClient> {
+  const client = await openComputerTarget()
+  if (!client) {
+    throw new Error(
+      translate(
+        'onboarding.featureSetup.computerUseUnavailable',
+        'Computer Use requires a local Yiru daemon connection'
+      )
+    )
+  }
+  return client
+}
+
 export function createOnboardingFeatureSetupDeps(): OnboardingFeatureSetupDeps {
   return {
     getCliStatus: () => readCliInstallStatus(),
@@ -163,17 +177,9 @@ export function createOnboardingFeatureSetupDeps(): OnboardingFeatureSetupDeps {
     installCli: () => installCliCommand(),
     writeClipboardText: (text) => shellClient.ui.writeClipboardText(text),
     getComputerUsePermissionStatus: () =>
-      callRuntimeOrpc(
-        getActiveRuntimeTarget(useAppStore.getState().settings),
-        (client) => client.computer.permissionsStatus,
-        {}
-      ),
+      requireComputerClient().then((client) => client.permissionsStatus()),
     openComputerUsePermissionSetup: () =>
-      callRuntimeOrpc(
-        getActiveRuntimeTarget(useAppStore.getState().settings),
-        (client) => client.computer.permissions,
-        {}
-      ),
+      requireComputerClient().then((client) => client.permissions()),
     setStorageItem: (key, value) => localStorage.setItem(key, value),
     removeStorageItem: (key) => localStorage.removeItem(key),
     notifyOrchestrationStateChanged: notifyOrchestrationSetupStateChanged

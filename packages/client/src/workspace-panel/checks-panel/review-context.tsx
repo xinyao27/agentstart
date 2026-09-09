@@ -1,4 +1,4 @@
-import { resolveHostedReviewCreationProvider } from '@yiru/runtime-protocol/model/review'
+import { resolveHostedReviewCreationProvider } from '@yiru/protocol/hosted-review/creation-provider'
 import { getGitHubRepoCacheKey } from '~renderer/github/cache-key'
 import { prChecksCacheSuffix, prCommentsCacheSuffix } from '~renderer/github/state'
 import { localizedHostedReviewCopy } from '~renderer/i18n/hosted-review-localized-copy'
@@ -26,10 +26,6 @@ export function useChecksPanelReviewContext(context: useChecksPanelReviewIdentit
     gitStatusInvalidation,
     gitStatusSnapshot,
     hostedReviewCreationSnapshot,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     linkedPR,
     panelContextKey,
     pr,
@@ -104,11 +100,7 @@ export function useChecksPanelReviewContext(context: useChecksPanelReviewIdentit
               ? (gitStatusSnapshot.remoteStatus?.behind ?? null)
               : null,
           linkedGitHubPR: linkedPR,
-          fallbackGitHubPR: fallbackGitHubPRNumber,
-          linkedGitLabMR,
-          linkedBitbucketPR,
-          linkedAzureDevOpsPR,
-          linkedGiteaPR
+          fallbackGitHubPR: fallbackGitHubPRNumber
         })
       : ''
   const gitStatusInputs = readChecksPanelGitStatusSnapshot(gitStatusSnapshot, panelContextKey)

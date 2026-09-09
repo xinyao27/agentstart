@@ -1,8 +1,8 @@
-import { isExpectedAgentProcess } from '@yiru/runtime-protocol/workbench/agent/process-recognition'
-import { createDraftPasteReadyScanner } from '@yiru/runtime-protocol/workbench/draft-paste-ready-scanner'
-import type { DraftPasteReadySignal } from '@yiru/runtime-protocol/workbench/tui-agent/config'
+import type { DraftPasteReadySignal } from '@yiru/protocol/agent/launch/config'
+import { isExpectedAgentProcess } from '@yiru/protocol/agent/process/recognition'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { inspectRuntimeTerminalProcess } from '~renderer/runtime/terminal-inspection'
+import { createDraftPasteReadyScanner } from '~renderer/terminal-pane/agent/draft-readiness-scanner'
 import { getSettingsForWorktreeRuntimeOwner } from '~renderer/worktree/runtime-owner'
 
 import { sendAgentDraftPasteContent } from '../agent/draft-paste-content'

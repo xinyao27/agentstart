@@ -1,10 +1,10 @@
-import { isCustomAgentId } from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import type { ResolvedSourceControlAiGenerationParams } from '@yiru/runtime-protocol/workbench/source-control/ai'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId,
   SourceControlTextActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+} from '@yiru/protocol/source-control/ai-actions'
+import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
 import {
   saveSourceControlActionRecipe,
   type SourceControlAiWriteTarget

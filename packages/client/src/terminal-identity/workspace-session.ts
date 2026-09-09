@@ -2,17 +2,18 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+} from '@yiru/protocol/host/identity'
+import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
+import { useAppStore } from '~renderer/store/state'
+
 import {
   canonicalizeSessionTerminalIds,
   hasCanonicalizableSessionTerminalIds,
   persistenceSessionTerminalIds,
   type SessionTerminalIdFields
-} from '@yiru/runtime-protocol/terminal-identity/session'
-import type { WorkspaceSessionState } from '@yiru/runtime-protocol/workbench/types'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
-import { useAppStore } from '~renderer/store/state'
+} from './session'
 
 const TERMINAL_ID_EXCHANGE_LIMIT = 10_000
 
@@ -31,9 +32,9 @@ export async function exchangePersistedWorkspaceSessionTerminalIds(
     return session
   }
   const target = targetForSessionHost(hostId)
-  const listed = await callRuntimeOrpc(
-    target,
-    (client) => client.terminal.list,
+  const listed = await (
+    await openRuntimeTerminalClient(target)
+  ).list(
     { limit: TERMINAL_ID_EXCHANGE_LIMIT, requireFreshPtyLiveness: true },
     { timeoutMs: 15_000 }
   )

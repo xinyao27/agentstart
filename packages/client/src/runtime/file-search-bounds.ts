@@ -1,4 +1,5 @@
-import type { SearchOptions, SearchResult } from '@yiru/runtime-protocol/workbench/types'
+import type { FileSearchInput } from '@yiru/protocol/files/values'
+import type { FileSearchResult as SearchResult } from '@yiru/protocol/files/values'
 
 export const RUNTIME_FILE_SEARCH_TEXT_MAX_BYTES = 8 * 1024
 
@@ -40,7 +41,7 @@ export function isRuntimeFileSearchTextWithinLimit(
 }
 
 export function getRuntimeFileSearchRejectedField(
-  options: Pick<SearchOptions, 'query' | 'includePattern' | 'excludePattern'>
+  options: Pick<FileSearchInput, 'query' | 'includePattern' | 'excludePattern'>
 ): RuntimeFileSearchRejectedField | null {
   if (!isRuntimeFileSearchTextWithinLimit(options.query)) {
     return 'query'

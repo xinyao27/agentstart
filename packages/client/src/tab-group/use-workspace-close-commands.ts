@@ -1,4 +1,4 @@
-import type { Tab, TabGroup } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab, TabGroup } from '@yiru/protocol/workspace/tabs'
 import { useProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { browserWorkspaceHasRemoteOwner } from '~renderer/runtime/remote-browser-tab-ownership'
 import {

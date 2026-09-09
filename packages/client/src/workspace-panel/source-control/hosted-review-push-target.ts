@@ -1,8 +1,9 @@
-import type { HostedReviewState } from '@yiru/runtime-protocol/model/review'
-import { isPositiveHostedReviewNumber } from '@yiru/runtime-protocol/model/review'
-import { getPublishTargetDisplayName } from '@yiru/runtime-protocol/workbench/git/publish-target-status'
-import { gitRefTargetsBranchName } from '@yiru/runtime-protocol/workbench/git/remote-branch-name'
-import type { GitPushTarget, GitUpstreamStatus } from '@yiru/runtime-protocol/workbench/types'
+import { getPublishTargetDisplayName } from '@yiru/protocol/git/publish-target'
+import { gitRefTargetsBranchName } from '@yiru/protocol/git/remote-branch-name'
+import type { GitUpstreamStatus } from '@yiru/protocol/git/status-types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { HostedReviewState } from '@yiru/protocol/hosted-review/types'
+import { isPositiveHostedReviewNumber } from '@yiru/protocol/hosted-review/types'
 
 export function hasUsableHostedReviewPushTarget(args: {
   pushTarget?: GitPushTarget
@@ -34,37 +35,22 @@ export function hasUsableHostedReviewPushTarget(args: {
 export function hasResolvableHostedReviewPushTargetLink(args: {
   linkedGitHubPR?: number | null
   fallbackGitHubPR?: number | null
-  linkedGitLabMR?: number | null
 }): boolean {
-  // Why: only GitHub (including a queue-discovered same-repo fallbackGitHubPR,
-  // whose head IS the checked-out branch) and GitLab links resolve to a push
-  // target — this mirrors getHostedReviewPushTargetLookup in the worktrees store.
+  // Why: a queue-discovered same-repo fallbackGitHubPR has the checked-out
+  // branch as its head and can resolve a safe push target before persistence.
   // Omitting fallbackGitHubPR left worktrees without persisted linkedPR metadata
   // (e.g. child worktrees) blocked as "target unavailable" despite a real upstream.
   return (
     isPositiveHostedReviewNumber(args.linkedGitHubPR) ||
-    isPositiveHostedReviewNumber(args.fallbackGitHubPR) ||
-    isPositiveHostedReviewNumber(args.linkedGitLabMR)
+    isPositiveHostedReviewNumber(args.fallbackGitHubPR)
   )
 }
 
 export function hasPositiveHostedReviewNumberLink(args: {
   linkedGitHubPR?: number | null
   fallbackGitHubPR?: number | null
-  linkedGitLabMR?: number | null
-  linkedBitbucketPR?: number | null
-  linkedAzureDevOpsPR?: number | null
-  linkedGiteaPR?: number | null
 }): boolean {
-  // Why: a linked review from any provider blocks unsafe pushes. Build on the
-  // resolvable subset so the two helpers cannot drift — a resolvable link is by
-  // definition also a blocking link; only the resolver-less providers are added.
-  return (
-    hasResolvableHostedReviewPushTargetLink(args) ||
-    isPositiveHostedReviewNumber(args.linkedBitbucketPR) ||
-    isPositiveHostedReviewNumber(args.linkedAzureDevOpsPR) ||
-    isPositiveHostedReviewNumber(args.linkedGiteaPR)
-  )
+  return hasResolvableHostedReviewPushTargetLink(args)
 }
 
 export function resolveHostedReviewActionUpstreamStatus(args: {

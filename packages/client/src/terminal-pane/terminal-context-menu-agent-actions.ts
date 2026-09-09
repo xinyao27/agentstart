@@ -1,5 +1,5 @@
-import { isTerminalAgentQuickCommand } from '@yiru/runtime-protocol/workbench/terminal/quick-commands'
-import type { TerminalQuickCommand } from '@yiru/runtime-protocol/workbench/types'
+import { isTerminalAgentQuickCommand } from '@yiru/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import type { ManagedPane } from '~renderer/terminal-pane/pane-manager/pane-manager'
 import { runQuickCommandInNewTab } from '~renderer/terminal-quick-commands/run-in-new-tab'

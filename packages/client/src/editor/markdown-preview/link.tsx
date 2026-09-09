@@ -1,5 +1,6 @@
-import { relativePathInsideRoot } from '@yiru/runtime-protocol/model/platform'
-import type { MarkdownDocument, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { MarkdownDocument } from '@yiru/protocol/files/values'
+import { relativePathInsideRoot } from '@yiru/protocol/host/path'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type { MutableRefObject } from 'react'
 import type { Components } from 'react-markdown'
 import { toast } from 'sonner'

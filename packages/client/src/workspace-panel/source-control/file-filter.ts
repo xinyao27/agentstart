@@ -1,4 +1,4 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 
 export const SOURCE_CONTROL_FILE_FILTER_QUERY_MAX_BYTES = 2 * 1024
 
@@ -21,7 +21,7 @@ export function isSourceControlFileFilterQueryTooLarge(
   query: string,
   maxBytes = SOURCE_CONTROL_FILE_FILTER_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 export function getSourceControlFileFilterState(query: string): SourceControlFileFilterState {

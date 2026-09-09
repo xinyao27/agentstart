@@ -2,10 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { CheckCircle, Crosshair } from '~renderer/icons/hugeicons'
+import { terminalQueryRoot } from '~renderer/runtime/terminal-query'
 import { Button } from '~renderer/ui/button'
 
+import { openBrowserWritebackTarget } from '../../runtime/browser-writeback-target'
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
-import { extensionOrpc } from '../runtime/orpc'
+import { WORKSPACE_EVENTS_QUERY_ROOT } from '../runtime/queries'
 import { isEyeDropperCancellation } from './eye-dropper-cancellation'
 
 type ColorWritebackProps = {
@@ -30,11 +32,14 @@ export function ColorWriteback({ projectId, worktreeId }: ColorWritebackProps): 
         return null
       }
       setPickedColor(color)
-      return extensionOrpc.browserWriteback.applyColor.call({
+      const client = await openBrowserWritebackTarget()
+      if (!client) {
+        throw new Error('browser_writeback_protocol_unavailable')
+      }
+      return client.applyColor({
         color,
         intent: 'Color picked from the current browser view',
-        projectId,
-        worktreeId
+        target: { projectId, worktreeId }
       })
     },
     onSuccess: async (result) => {
@@ -42,8 +47,8 @@ export function ColorWriteback({ projectId, worktreeId }: ColorWritebackProps): 
         return
       }
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: extensionOrpc.terminal.key() }),
-        queryClient.invalidateQueries({ queryKey: extensionOrpc.workspaceEvents.key() })
+        queryClient.invalidateQueries({ queryKey: terminalQueryRoot({ kind: 'local' }) }),
+        queryClient.invalidateQueries({ queryKey: WORKSPACE_EVENTS_QUERY_ROOT })
       ])
     }
   })

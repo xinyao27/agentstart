@@ -1,4 +1,6 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient: WorkspaceContentRepository {
     func createWorkspaceMarkdown(
@@ -9,28 +11,27 @@ extension RuntimeClient: WorkspaceContentRepository {
         for attempt in 1...100 {
             let relativePath = attempt == 1 ? "untitled.md" : "untitled-\(attempt).md"
             do {
-                let result: MobileFileMutationResultWire = try await callRuntime(
+                var request = Yiru_Runtime_V1_FilesServiceCreateFileRequest()
+                request.worktree = worktree
+                request.relativePath = relativePath
+                let response = try await protocolUnary(
                     hostID: hostID,
-                    path: MobileSessionTabsWireContract.fileCreatePath,
-                    input: MobileFileReadRequestWire(
-                        worktree: worktree,
-                        relativePath: relativePath
-                    ),
-                    output: MobileFileMutationResultWire.self
+                    procedure: YiruRuntimeV1FilesServiceMethods.createFile,
+                    request: request,
+                    response: Yiru_Runtime_V1_FilesServiceCreateFileResponse.self
                 )
-                guard result.ok else { throw TerminalWorkspaceRepositoryError.rejectedMutation }
-            } catch let error as RuntimeOrpcError where isExistingFileError(error) && attempt < 100
+                guard response.result.ok else {
+                    throw TerminalWorkspaceRepositoryError.rejectedMutation
+                }
+            } catch let error as RuntimeTransportError
+                where isExistingFileError(error) && attempt < 100
             {
                 continue
             }
-            let opened: MobileFileOpenResultWire = try await callRuntime(
+            let opened = try await protocolFilesOpen(
                 hostID: hostID,
-                path: MobileSessionTabsWireContract.fileOpenPath,
-                input: MobileFileReadRequestWire(
-                    worktree: worktree,
-                    relativePath: relativePath
-                ),
-                output: MobileFileOpenResultWire.self
+                worktree: worktree,
+                relativePath: relativePath
             )
             guard opened.opened else { throw TerminalWorkspaceRepositoryError.rejectedMutation }
             try await Task.sleep(for: .milliseconds(300))
@@ -46,23 +47,23 @@ extension RuntimeClient: WorkspaceContentRepository {
         descriptor: WorkspaceMarkdownTab
     ) async throws -> WorkspaceMarkdownDocument {
         do {
-            let wire: MobileMarkdownReadResultWire = try await callRuntime(
+            var request = Yiru_Runtime_V1_MarkdownServiceReadTabRequest()
+            request.worktree = worktreeSelector(worktreeID)
+            request.tabID = tab.id
+            let response = try await protocolUnary(
                 hostID: hostID,
-                path: MobileSessionTabsWireContract.markdownReadPath,
-                input: MobileMarkdownTabRequestWire(
-                    worktree: worktreeSelector(worktreeID),
-                    tabId: tab.id
-                ),
-                output: MobileMarkdownReadResultWire.self
+                procedure: YiruRuntimeV1MarkdownServiceMethods.readTab,
+                request: request,
+                response: Yiru_Runtime_V1_MarkdownServiceReadTabResponse.self
             )
             return WorkspaceMarkdownDocument(
-                content: wire.content,
-                version: wire.version,
-                editable: wire.editable,
-                isHostDirty: wire.isDirty,
-                readOnlyReason: wire.readOnlyReason.map(WorkspaceMarkdownReadOnlyReason.init(wire:))
+                content: response.content,
+                version: response.version,
+                editable: response.editable,
+                isHostDirty: response.isDirty,
+                readOnlyReason: workspaceMarkdownReadOnlyReason(response)
             )
-        } catch let error as RuntimeOrpcError
+        } catch let error as RuntimeServiceError
             where error.serverCode == "renderer_unavailable"
             || (error.serverCode == "runtime_error"
                 && error.serverMessage == "renderer_unavailable")
@@ -93,20 +94,20 @@ extension RuntimeClient: WorkspaceContentRepository {
         baseVersion: String,
         content: String
     ) async throws -> WorkspaceMarkdownDocument {
-        let wire: MobileMarkdownSaveResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_MarkdownServiceSaveTabRequest()
+        request.worktree = worktreeSelector(worktreeID)
+        request.tabID = tabID
+        request.baseVersion = baseVersion
+        request.content = content
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileSessionTabsWireContract.markdownSavePath,
-            input: MobileMarkdownSaveRequestWire(
-                worktree: worktreeSelector(worktreeID),
-                tabId: tabID,
-                baseVersion: baseVersion,
-                content: content
-            ),
-            output: MobileMarkdownSaveResultWire.self
+            procedure: YiruRuntimeV1MarkdownServiceMethods.saveTab,
+            request: request,
+            response: Yiru_Runtime_V1_MarkdownServiceSaveTabResponse.self
         )
         return WorkspaceMarkdownDocument(
-            content: wire.content,
-            version: wire.version,
+            content: response.content,
+            version: response.version,
             editable: true,
             isHostDirty: false,
             readOnlyReason: nil
@@ -119,30 +120,23 @@ extension RuntimeClient: WorkspaceContentRepository {
         descriptor: WorkspaceFileTab
     ) async throws -> WorkspaceFileDocument {
         if let diffSource = descriptor.diffSource {
-            let wire: MobileGitDiffResultWire = try await callRuntime(
+            var request = Yiru_Runtime_V1_GitStatusServiceDiffRequest()
+            request.worktree = worktreeSelector(worktreeID)
+            request.filePath = descriptor.relativePath
+            request.staged = diffSource == .staged
+            let response = try await protocolUnary(
                 hostID: hostID,
-                path: MobileSessionTabsWireContract.gitDiffPath,
-                input: MobileGitDiffRequestWire(
-                    worktree: worktreeSelector(worktreeID),
-                    filePath: descriptor.relativePath,
-                    staged: diffSource == .staged,
-                    compareAgainstHead: nil
-                ),
-                output: MobileGitDiffResultWire.self
+                procedure: YiruRuntimeV1GitStatusServiceMethods.diff,
+                request: request,
+                response: Yiru_Runtime_V1_GitStatusServiceDiffResponse.self
             )
-            switch wire.kind {
-            case .text:
-                let result = WorkspaceDiffBuilder.build(
-                    originalContent: wire.originalContent,
-                    modifiedContent: wire.modifiedContent
-                )
-                return .diff(lines: result.lines, isTruncated: result.isTruncated)
-            case .binary:
-                guard wire.isImage == true else { throw WorkspaceContentError.unsupportedBinary }
+            let wire = response.diff
+            if wire.kind == .binary {
+                guard wire.isImage else { throw WorkspaceContentError.unsupportedBinary }
                 let encodedContent: String
                 if !wire.modifiedContent.isEmpty {
                     encodedContent = wire.modifiedContent
-                } else if wire.modifiedDeleted == true {
+                } else if wire.modifiedDeleted {
                     encodedContent = wire.originalContent
                 } else {
                     throw WorkspaceContentError.invalidImage
@@ -150,24 +144,36 @@ extension RuntimeClient: WorkspaceContentRepository {
                 guard let data = Data(base64Encoded: encodedContent) else {
                     throw WorkspaceContentError.invalidImage
                 }
-                return .image(data: data, mimeType: wire.mimeType)
+                return .image(
+                    data: data,
+                    mimeType: wire.hasMimeType ? wire.mimeType : nil
+                )
             }
+            let result = WorkspaceDiffBuilder.build(
+                originalContent: wire.originalContent,
+                modifiedContent: wire.modifiedContent
+            )
+            return .diff(lines: result.lines, isTruncated: result.isTruncated)
         }
         switch workspaceArtifactKind(descriptor.relativePath) {
         case .image:
-            let wire: MobileFilePreviewResultWire = try await callRuntime(
+            var request = Yiru_Runtime_V1_FilesServiceReadPreviewRequest()
+            request.worktree = worktreeSelector(worktreeID)
+            request.relativePath = descriptor.relativePath
+            let response = try await protocolUnary(
                 hostID: hostID,
-                path: MobileSessionTabsWireContract.fileReadPreviewPath,
-                input: MobileFileReadRequestWire(
-                    worktree: worktreeSelector(worktreeID),
-                    relativePath: descriptor.relativePath
-                ),
-                output: MobileFilePreviewResultWire.self
+                procedure: YiruRuntimeV1FilesServiceMethods.readPreview,
+                request: request,
+                response: Yiru_Runtime_V1_FilesServiceReadPreviewResponse.self
             )
-            guard wire.isImage == true, let data = Data(base64Encoded: wire.content) else {
+            let preview = response.result
+            guard preview.isImage, !preview.content.isEmpty else {
                 throw WorkspaceContentError.invalidImage
             }
-            return .image(data: data, mimeType: wire.mimeType)
+            return .image(
+                data: preview.content,
+                mimeType: preview.hasMimeType ? preview.mimeType : nil
+            )
         case .html:
             let wire = try await readWorkspaceTextFile(
                 for: hostID,
@@ -184,7 +190,7 @@ extension RuntimeClient: WorkspaceContentRepository {
             return .text(
                 content: wire.content,
                 isTruncated: wire.truncated,
-                byteLength: wire.byteLength
+                byteLength: Int64(bitPattern: wire.byteLength)
             )
         }
     }
@@ -193,16 +199,17 @@ extension RuntimeClient: WorkspaceContentRepository {
         for hostID: String,
         worktreeID: String,
         relativePath: String
-    ) async throws -> MobileFileReadResultWire {
-        try await callRuntime(
+    ) async throws -> Yiru_Runtime_V1_FileReadResult {
+        var request = Yiru_Runtime_V1_FilesServiceReadRequest()
+        request.worktree = worktreeSelector(worktreeID)
+        request.relativePath = relativePath
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileSessionTabsWireContract.fileReadPath,
-            input: MobileFileReadRequestWire(
-                worktree: worktreeSelector(worktreeID),
-                relativePath: relativePath
-            ),
-            output: MobileFileReadResultWire.self
+            procedure: YiruRuntimeV1FilesServiceMethods.read,
+            request: request,
+            response: Yiru_Runtime_V1_FilesServiceReadResponse.self
         )
+        return response.result
     }
 }
 
@@ -221,18 +228,22 @@ nonisolated private func workspaceArtifactKind(_ path: String) -> WorkspaceArtif
     return .text
 }
 
-nonisolated private func isExistingFileError(_ error: RuntimeOrpcError) -> Bool {
-    let message = error.serverMessage?.lowercased() ?? ""
-    return message.contains("eexist") || message.contains("already exists")
+nonisolated private func isExistingFileError(_ error: RuntimeTransportError) -> Bool {
+    guard case .serverStatus(_, let message) = error else { return false }
+    let normalized = message.lowercased()
+    return normalized.contains("eexist") || normalized.contains("already exists")
 }
 
-nonisolated private extension WorkspaceMarkdownReadOnlyReason {
-    init(wire: MobileMarkdownReadOnlyReasonWire) {
-        switch wire {
-        case .unsupportedPreview: self = .unsupportedPreview
-        case .unsupportedTab: self = .unsupportedTab
-        case .unsupportedUntitled: self = .unsupportedUntitled
-        case .fileTooLarge: self = .fileTooLarge
-        }
+nonisolated private func workspaceMarkdownReadOnlyReason(
+    _ response: Yiru_Runtime_V1_MarkdownServiceReadTabResponse
+) -> WorkspaceMarkdownReadOnlyReason? {
+    guard response.hasReadOnlyReason else { return nil }
+    switch response.readOnlyReason {
+    case .unsupportedPreview: return .unsupportedPreview
+    case .unsupportedTab: return .unsupportedTab
+    case .unsupportedUntitled: return .unsupportedUntitled
+    case .fileTooLarge: return .fileTooLarge
+    case .unspecified: return nil
+    case .UNRECOGNIZED: return nil
     }
 }

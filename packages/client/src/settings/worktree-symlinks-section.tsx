@@ -1,8 +1,5 @@
-import {
-  getRepoExecutionHostId,
-  LOCAL_EXECUTION_HOST_ID
-} from '@yiru/runtime-protocol/model/workspace'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { useEffect, useState } from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import { translate } from '~renderer/i18n/i18n'

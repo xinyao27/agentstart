@@ -1,4 +1,4 @@
-import type { TopLevelView } from '@yiru/runtime-protocol/workbench/types'
+import type { TopLevelView } from '@yiru/protocol/settings/ui-state'
 
 import { KNOWN_TOP_LEVEL_VIEWS } from './persistence-model'
 

@@ -1,7 +1,8 @@
-import type { GitHubCommentResult, PRComment } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubCommentResult, PRComment } from '@yiru/protocol/hosted-review/review-types'
 import type { StateCreator } from 'zustand'
 import { translate } from '~renderer/i18n/i18n'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 import type { AppState } from '~renderer/store/types'
 
 import {
@@ -40,16 +41,18 @@ export function createGitHubCommentActions(
 
       const request = (async () => {
         try {
-          const comments = await callRuntimeOrpc(
-            route.target,
-            (client) => client.github.prComments,
+          const client = await openGitHubTarget()
+          if (!client) {
+            throw new Error('GitHub protocol capability is unavailable')
+          }
+          const comments = await client.getPrComments(
             {
               repo: route.repo,
               prNumber,
-              prRepo: options?.prRepo ?? null,
+              prRepo: options?.prRepo ?? undefined,
               noCache: options?.force
             },
-            { timeoutMs: 30_000 }
+            { timeoutMs: 30_000, ...runtimeCallDestination(route.target) }
           )
           set((s) => ({
             commentsCache: withBoundedCacheEntry(s.commentsCache, cacheKey, {
@@ -75,16 +78,18 @@ export function createGitHubCommentActions(
       const cacheKey = route.cacheKey
       let result: GitHubCommentResult
       try {
-        result = await callRuntimeOrpc(
-          route.target,
-          (client) => client.github.addPRComment,
+        const client = await openGitHubTarget()
+        if (!client) {
+          throw new Error('GitHub protocol capability is unavailable')
+        }
+        result = await client.addPrComment(
           {
             repo: route.repo,
             number: prNumber,
             body,
-            prRepo: options?.prRepo ?? null
+            prRepo: options?.prRepo ?? undefined
           },
-          { timeoutMs: 30_000 }
+          { timeoutMs: 30_000, ...runtimeCallDestination(route.target) }
         )
       } catch (err) {
         const error = err instanceof Error ? err.message : 'Failed to post comment.'
@@ -118,9 +123,11 @@ export function createGitHubCommentActions(
       const cacheKey = route.cacheKey
       let result: GitHubCommentResult
       try {
-        result = await callRuntimeOrpc(
-          route.target,
-          (client) => client.github.addPRReviewCommentReply,
+        const client = await openGitHubTarget()
+        if (!client) {
+          throw new Error('GitHub protocol capability is unavailable')
+        }
+        result = await client.addPrReviewCommentReply(
           {
             repo: route.repo,
             prNumber,
@@ -129,9 +136,9 @@ export function createGitHubCommentActions(
             threadId: options?.threadId,
             path: options?.path,
             line: options?.line,
-            prRepo: options?.prRepo ?? null
+            prRepo: options?.prRepo ?? undefined
           },
-          { timeoutMs: 30_000 }
+          { timeoutMs: 30_000, ...runtimeCallDestination(route.target) }
         )
       } catch (err) {
         const error = err instanceof Error ? err.message : 'Failed to post reply.'
@@ -187,12 +194,14 @@ export function createGitHubCommentActions(
 
       let ok = false
       try {
-        ok = await callRuntimeOrpc(
-          route.target,
-          (client) => client.github.resolveReviewThread,
-          { repo: route.repo, threadId, resolve },
-          { timeoutMs: 30_000 }
-        )
+        const client = await openGitHubTarget()
+        if (!client) {
+          throw new Error('GitHub protocol capability is unavailable')
+        }
+        ok = await client.resolveReviewThread(route.repo, threadId, resolve, {
+          timeoutMs: 30_000,
+          ...runtimeCallDestination(route.target)
+        })
       } catch (err) {
         console.error('Failed to update review thread:', err)
         ok = false

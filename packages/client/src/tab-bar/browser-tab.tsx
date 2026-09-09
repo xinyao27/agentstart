@@ -1,8 +1,8 @@
 import { useSortable } from '@dnd-kit/sortable'
-import { redactKagiSessionToken } from '@yiru/runtime-protocol/workbench/browser/url'
-import { YIRU_BROWSER_BLANK_URL } from '@yiru/runtime-protocol/workbench/constants'
-import type { BrowserTab as BrowserTabState } from '@yiru/runtime-protocol/workbench/types'
+import type { BrowserTab as BrowserTabState } from '@yiru/protocol/workspace/browser-session'
+import { YIRU_BROWSER_BLANK_URL } from '@yiru/protocol/workspace/browser-session'
 import { useEffect, useState } from 'react'
+import { redactKagiSessionToken } from '~renderer/browser/session/kagi-link'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
 import {

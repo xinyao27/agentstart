@@ -1,21 +1,12 @@
-import {
-  GitGenerateCommitMessageInputSchema,
-  GitGeneratePullRequestFieldsInputSchema
-} from '@yiru/runtime-protocol/contract'
-import type { HostedReviewProvider } from '@yiru/runtime-protocol/model/review'
-import { getRepoIdFromWorktreeId } from '@yiru/runtime-protocol/model/workspace'
-import type {
-  CommitMessageAgentCapability,
-  CommitMessageModelCapability
-} from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import { getCommitMessageModelDiscoveryHostKeyForScope } from '@yiru/runtime-protocol/workbench/commit-message/host-key'
-import type { ResolvedSourceControlAiGenerationParams } from '@yiru/runtime-protocol/workbench/source-control/ai'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GitGenerationOverridesInput } from '@yiru/protocol'
+import type { HostedReviewProvider } from '@yiru/protocol/hosted-review/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { getCommitMessageModelDiscoveryHostKeyForScope } from '@yiru/protocol/source-control/discovery-host'
+import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
 
-import { callRuntimeOrpc } from '../orpc-client'
+import { openRuntimeGitClient } from './client'
 import {
   getRuntimeGitScope,
-  getRuntimeGitTarget,
   getRuntimeGitWorktree,
   type RuntimeGitContext,
   type RuntimeGitSettings
@@ -43,15 +34,6 @@ export type RuntimePullRequestGenerationInput = {
   useTemplate?: boolean
 }
 
-type RuntimeDiscoverCommitMessageModelsResult =
-  | {
-      success: true
-      capability: CommitMessageAgentCapability
-      models: CommitMessageModelCapability[]
-      defaultModelId: string
-    }
-  | { success: false; error: string }
-
 export type RuntimeGenerateCommitMessageOverrides = {
   sourceControlAiResolvedParams?: ResolvedSourceControlAiGenerationParams
   sourceControlAi?: GlobalSettings['sourceControlAi']
@@ -60,75 +42,52 @@ export type RuntimeGenerateCommitMessageOverrides = {
 
 export type RuntimeGeneratePullRequestFieldsOverrides = RuntimeGenerateCommitMessageOverrides
 
-function getRuntimeCommitMessageSettings(
+// Why: repoId and enableGitHubAttribution were validated by the legacy input
+// contract but GitAuthority::resolve_generation_params never reads them (see
+// input/generation.rs's parse_overrides) — they stay dropped from the wire.
+function generationOverrides(
   settings: RuntimeGitSettings | null | undefined,
-  connectionId?: string
-): Partial<
-  Pick<
-    GlobalSettings,
-    'commitMessageAi' | 'sourceControlAi' | 'agentCmdOverrides' | 'enableGitHubAttribution'
-  >
-> & { commitMessageDiscoveryHostKey?: string } {
+  connectionId: string | undefined,
+  overrides: RuntimeGenerateCommitMessageOverrides | undefined
+): GitGenerationOverridesInput {
   if (!settings) {
-    return {}
+    return {
+      ...(overrides?.sourceControlAiResolvedParams
+        ? { resolvedParams: overrides.sourceControlAiResolvedParams }
+        : {}),
+      ...(overrides?.sourceControlAi ? { sourceControlAi: overrides.sourceControlAi } : {}),
+      ...(overrides?.agentCmdOverrides ? { agentCommands: overrides.agentCmdOverrides } : {})
+    }
   }
   const scope = getRuntimeGitScope(settings, connectionId)
   return {
-    ...(settings.commitMessageAi !== undefined
-      ? { commitMessageAi: settings.commitMessageAi }
+    ...(overrides?.agentCmdOverrides
+      ? { agentCommands: overrides.agentCmdOverrides }
+      : settings.agentCmdOverrides
+        ? { agentCommands: settings.agentCmdOverrides }
+        : {}),
+    discoveryHostKey: getCommitMessageModelDiscoveryHostKeyForScope(scope),
+    ...(overrides?.sourceControlAi
+      ? { sourceControlAi: overrides.sourceControlAi }
+      : settings.sourceControlAi
+        ? { sourceControlAi: settings.sourceControlAi }
+        : {}),
+    ...(overrides?.sourceControlAiResolvedParams
+      ? { resolvedParams: overrides.sourceControlAiResolvedParams }
       : {}),
-    ...(settings.sourceControlAi !== undefined
-      ? { sourceControlAi: settings.sourceControlAi }
-      : {}),
-    ...(settings.agentCmdOverrides !== undefined
-      ? { agentCmdOverrides: settings.agentCmdOverrides }
-      : {}),
-    ...(settings.enableGitHubAttribution !== undefined
-      ? { enableGitHubAttribution: settings.enableGitHubAttribution }
-      : {}),
-    commitMessageDiscoveryHostKey: getCommitMessageModelDiscoveryHostKeyForScope(scope)
+    ...(settings.commitMessageAi ? { commitMessageAi: settings.commitMessageAi } : {})
   }
-}
-
-function getRuntimeGitRepoId(context: RuntimeGitContext): string | undefined {
-  return context.worktreeId ? getRepoIdFromWorktreeId(context.worktreeId) : undefined
 }
 
 export async function generateRuntimeCommitMessage(
   context: RuntimeGitContext,
   overrides?: RuntimeGenerateCommitMessageOverrides
 ): Promise<RuntimeGenerateCommitMessageResult> {
-  const input = GitGenerateCommitMessageInputSchema.parse({
-    worktree: getRuntimeGitWorktree(context),
-    repoId: getRuntimeGitRepoId(context),
-    ...getRuntimeCommitMessageSettings(context.settings, context.connectionId),
-    ...(overrides?.sourceControlAiResolvedParams
-      ? { sourceControlAiResolvedParams: overrides.sourceControlAiResolvedParams }
-      : {}),
-    ...(overrides?.sourceControlAi ? { sourceControlAi: overrides.sourceControlAi } : {}),
-    ...(overrides?.agentCmdOverrides ? { agentCmdOverrides: overrides.agentCmdOverrides } : {})
-  })
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.generateCommitMessage,
-    input,
-    { timeoutMs: 75_000 }
-  )
-}
-
-export async function discoverRuntimeCommitMessageModels(
-  context: RuntimeGitContext,
-  agentId: string
-): Promise<RuntimeDiscoverCommitMessageModelsResult> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.discoverCommitMessageModels,
+  const client = await openRuntimeGitClient(context)
+  return client.generateCommitMessage(
     {
       worktree: getRuntimeGitWorktree(context),
-      agentId,
-      ...(context.settings?.agentCmdOverrides
-        ? { agentCmdOverrides: context.settings.agentCmdOverrides }
-        : {})
+      overrides: generationOverrides(context.settings, context.connectionId, overrides)
     },
     { timeoutMs: 75_000 }
   )
@@ -137,9 +96,8 @@ export async function discoverRuntimeCommitMessageModels(
 export async function cancelRuntimeGenerateCommitMessage(
   context: RuntimeGitContext
 ): Promise<void> {
-  await callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.cancelGenerateCommitMessage,
+  const client = await openRuntimeGitClient(context)
+  await client.cancelGenerateCommitMessage(
     { worktree: getRuntimeGitWorktree(context) },
     { timeoutMs: 5_000 }
   )
@@ -150,21 +108,17 @@ export async function generateRuntimePullRequestFields(
   input: RuntimePullRequestGenerationInput,
   overrides?: RuntimeGeneratePullRequestFieldsOverrides
 ): Promise<RuntimeGeneratePullRequestFieldsResult> {
-  const request = GitGeneratePullRequestFieldsInputSchema.parse({
-    worktree: getRuntimeGitWorktree(context),
-    repoId: getRuntimeGitRepoId(context),
-    ...input,
-    ...getRuntimeCommitMessageSettings(context.settings, context.connectionId),
-    ...(overrides?.sourceControlAiResolvedParams
-      ? { sourceControlAiResolvedParams: overrides.sourceControlAiResolvedParams }
-      : {}),
-    ...(overrides?.sourceControlAi ? { sourceControlAi: overrides.sourceControlAi } : {}),
-    ...(overrides?.agentCmdOverrides ? { agentCmdOverrides: overrides.agentCmdOverrides } : {})
-  })
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.generatePullRequestFields,
-    request,
+  const client = await openRuntimeGitClient(context)
+  return client.generatePullRequestFields(
+    {
+      worktree: getRuntimeGitWorktree(context),
+      base: input.base,
+      title: input.title,
+      body: input.body,
+      draft: input.draft,
+      ...(input.useTemplate === undefined ? {} : { useTemplate: input.useTemplate }),
+      overrides: generationOverrides(context.settings, context.connectionId, overrides)
+    },
     { timeoutMs: 75_000 }
   )
 }
@@ -172,9 +126,8 @@ export async function generateRuntimePullRequestFields(
 export async function cancelRuntimeGeneratePullRequestFields(
   context: RuntimeGitContext
 ): Promise<void> {
-  await callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.cancelGeneratePullRequestFields,
+  const client = await openRuntimeGitClient(context)
+  await client.cancelGeneratePullRequestFields(
     { worktree: getRuntimeGitWorktree(context) },
     { timeoutMs: 5_000 }
   )

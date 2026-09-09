@@ -1,9 +1,9 @@
-import type { AgentType } from '@yiru/runtime-protocol/model/agent'
-import { getAgentSessionOptionCatalog } from '@yiru/runtime-protocol/workbench/agent/session-option-catalog'
+import { getAgentSessionOptionCatalog } from '@yiru/protocol/agent/session-options/catalog'
 import type {
   SessionOptionDescriptor,
   SessionOptionValue
-} from '@yiru/runtime-protocol/workbench/agent/session-options'
+} from '@yiru/protocol/agent/session-options/types'
+import type { AgentType } from '@yiru/protocol/agent/status-records'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 

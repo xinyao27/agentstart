@@ -147,48 +147,12 @@ nonisolated enum TerminalMultiplexFlowRecordCodec {
         return data
     }
 
-    static func decodeVisibility(_ data: Data) -> TerminalMultiplexVisibilityRecord? {
-        let wire = TerminalMultiplexVisibilityRecordWire.self
-        guard data.count == wire.bytes,
-            let isVisible = decodeBool(TerminalWireBytes.byte(in: data, at: wire.visibleOffset)),
-            let hasDeliveryInterest = decodeBool(
-                TerminalWireBytes.byte(in: data, at: wire.deliveryInterestOffset)
-            ),
-            Int(TerminalWireBytes.byte(in: data, at: wire.priorityOffset)) <= wire.priorityMax,
-            TerminalWireBytes.byte(in: data, at: wire.reserved8Offset) == 0
-        else {
-            return nil
-        }
-        return TerminalMultiplexVisibilityRecord(
-            isVisible: isVisible,
-            hasDeliveryInterest: hasDeliveryInterest,
-            priority: TerminalWireBytes.byte(in: data, at: wire.priorityOffset),
-            stateVersion: TerminalWireBytes.uint32(in: data, at: wire.stateVersionOffset)
-        )
-    }
-
     static func encode(_ record: TerminalMultiplexKillRecord) -> Data {
         let wire = TerminalMultiplexKillRecordWire.self
         var data = Data(repeating: 0, count: wire.bytes)
         data[wire.keepHistoryOffset] = encodeBool(record.keepHistory)
         data[wire.immediateOffset] = UInt8(wire.immediateValue)
         return data
-    }
-
-    static func decodeKill(_ data: Data) -> TerminalMultiplexKillRecord? {
-        let wire = TerminalMultiplexKillRecordWire.self
-        guard data.count == wire.bytes,
-            let keepHistory = decodeBool(
-                TerminalWireBytes.byte(in: data, at: wire.keepHistoryOffset)
-            ),
-            Int(TerminalWireBytes.byte(in: data, at: wire.immediateOffset))
-                == wire.immediateValue,
-            TerminalWireBytes.uint16(in: data, at: wire.reserved16Offset) == 0,
-            TerminalWireBytes.uint32(in: data, at: wire.reserved32Offset) == 0
-        else {
-            return nil
-        }
-        return TerminalMultiplexKillRecord(keepHistory: keepHistory)
     }
 
     static func encode(_ record: TerminalMultiplexInputRecord) -> Data? {
@@ -202,25 +166,6 @@ nonisolated enum TerminalMultiplexFlowRecordCodec {
         TerminalWireBytes.write(UInt32(record.data.count), to: &data, at: wire.dataBytesOffset)
         data.append(record.data)
         return data
-    }
-
-    static func decodeInput(_ data: Data) -> TerminalMultiplexInputRecord? {
-        let wire = TerminalMultiplexInputRecordWire.self
-        guard data.count >= wire.headerBytes,
-            Int(TerminalWireBytes.byte(in: data, at: wire.kindOffset)) <= wire.kindMax,
-            TerminalWireBytes.byte(in: data, at: wire.reserved8Offset) == 0,
-            TerminalWireBytes.uint16(in: data, at: wire.reserved16Offset) == 0,
-            Int(TerminalWireBytes.uint32(in: data, at: wire.dataBytesOffset))
-                == data.count - wire.headerBytes
-        else {
-            return nil
-        }
-        let input = data.subdata(in: wire.headerBytes..<data.count)
-        guard String(data: input, encoding: .utf8) != nil else { return nil }
-        return TerminalMultiplexInputRecord(
-            kind: TerminalWireBytes.byte(in: data, at: wire.kindOffset),
-            data: input
-        )
     }
 
     private static func decodeBool(_ value: UInt8) -> Bool? {

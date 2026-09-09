@@ -1,7 +1,6 @@
-import type { RuntimeMobileSessionTabsResult } from '@yiru/runtime-protocol/workbench/runtime-types'
-
 import { toRemoteTerminalSurfaceTabId } from '../remote-terminal-surface-id'
 import { buildHostToLocalTabIdMap, updateHostSessionTabIdMappings } from './group-mirror'
+import type { RuntimeMobileSessionTabsResult } from './session-model'
 import { findCurrentVisibleUnifiedTabId } from './store-equality'
 import type { buildRemoteSessionSurfaceMirror } from './surface-reconciliation'
 import type { RemoteSessionTabsSyncState } from './tabs-state'

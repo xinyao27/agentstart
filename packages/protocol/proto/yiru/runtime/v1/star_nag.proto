@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+// Chrome-only workbench nag that asks the user to star the Yiru GitHub repo. All eight methods
+// mutate process-lifetime prompt state or persisted UI preferences; none are safe to route to a
+// runtime environment or a non-Chrome peer.
+service StarNagShellService {
+  rpc Dismiss(StarNagShellServiceDismissRequest) returns (StarNagShellServiceDismissResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Later(StarNagShellServiceLaterRequest) returns (StarNagShellServiceLaterResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Complete(StarNagShellServiceCompleteRequest) returns (StarNagShellServiceCompleteResponse) {
+    option idempotency_level = IDEMPOTENT;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc OpenWeb(StarNagShellServiceOpenWebRequest) returns (StarNagShellServiceOpenWebResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  // Why IDEMPOTENT: mirrors GitHubShellService.StarYiru, whose PUT-based star action this method
+  // delegates to; retrying a dropped response re-stars a repo that is already starred.
+  rpc StarYiru(StarNagShellServiceStarYiruRequest) returns (StarNagShellServiceStarYiruResponse) {
+    option idempotency_level = IDEMPOTENT;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AgentValueMoment(StarNagShellServiceAgentValueMomentRequest) returns (StarNagShellServiceAgentValueMomentResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ShowAgentValueMoment(StarNagShellServiceShowAgentValueMomentRequest) returns (StarNagShellServiceShowAgentValueMomentResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc OnboardingCompleted(StarNagShellServiceOnboardingCompletedRequest) returns (StarNagShellServiceOnboardingCompletedResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message StarNagShellServiceDismissRequest {}
+message StarNagShellServiceDismissResponse {}
+
+message StarNagShellServiceLaterRequest {}
+message StarNagShellServiceLaterResponse {}
+
+message StarNagShellServiceCompleteRequest {}
+message StarNagShellServiceCompleteResponse {}
+
+message StarNagShellServiceOpenWebRequest {}
+message StarNagShellServiceOpenWebResponse {}
+
+message StarNagShellServiceStarYiruRequest {}
+message StarNagShellServiceStarYiruResponse {
+  bool starred = 1;
+}
+
+message StarNagShellServiceAgentValueMomentRequest {}
+message StarNagShellServiceAgentValueMomentResponse {
+  // Unset means the moment was skipped; a present mode means it is ready to show.
+  optional StarNagPromptMode mode = 1;
+}
+
+message StarNagShellServiceShowAgentValueMomentRequest {}
+message StarNagShellServiceShowAgentValueMomentResponse {}
+
+message StarNagShellServiceOnboardingCompletedRequest {}
+message StarNagShellServiceOnboardingCompletedResponse {}
+
+enum StarNagPromptMode {
+  STAR_NAG_PROMPT_MODE_UNSPECIFIED = 0;
+  STAR_NAG_PROMPT_MODE_GH = 1;
+  STAR_NAG_PROMPT_MODE_WEB = 2;
+}

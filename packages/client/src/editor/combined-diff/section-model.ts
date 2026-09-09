@@ -1,4 +1,5 @@
-import type { GitBranchChangeEntry, GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 
 export type CombinedDiffMode = 'all' | 'uncommitted' | 'branch' | 'commit'
 export type CombinedDiffEntry = GitStatusEntry | GitBranchChangeEntry

@@ -1,6 +1,6 @@
-import type { SleepingAgentLaunchConfig } from '@yiru/runtime-protocol/model/agent'
-import { resolveCompatibleAgentTypeForOwner } from '@yiru/runtime-protocol/workbench/agent/title-owner'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { resolveCompatibleAgentTypeForOwner } from '~renderer/agent/title/owner'
 import { scheduleRuntimeGraphSync } from '~renderer/runtime/sync-runtime-graph'
 import { useAppStore } from '~renderer/store/state'
 

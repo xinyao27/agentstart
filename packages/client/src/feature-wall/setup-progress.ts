@@ -1,10 +1,10 @@
-import type { FeatureInteractionState } from '@yiru/runtime-protocol/workbench/feature-interactions'
-import { hasFeatureInteraction } from '@yiru/runtime-protocol/workbench/feature-interactions'
-import {
-  FEATURE_WALL_SETUP_STEPS,
-  type FeatureWallSetupStepId
-} from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
-import type { GlobalSettings, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureInteractionState } from '@yiru/protocol/telemetry/interactions/state'
+import { hasFeatureInteraction } from '@yiru/protocol/telemetry/interactions/state'
+import type { Worktree } from '@yiru/protocol/worktree/model'
+
+import { getFeatureWallSetupSteps } from './content/setup-steps'
 
 export type FeatureWallSetupProgressInput = {
   ready?: boolean
@@ -65,7 +65,7 @@ export function getFeatureWallSetupProgress(
   return {
     ready: input.ready ?? true,
     stepDone,
-    coreDoneCount: FEATURE_WALL_SETUP_STEPS.filter((step) => stepDone[step.id]).length,
-    coreTotal: FEATURE_WALL_SETUP_STEPS.length
+    coreDoneCount: getFeatureWallSetupSteps().filter((step) => stepDone[step.id]).length,
+    coreTotal: getFeatureWallSetupSteps().length
   }
 }

@@ -1,4 +1,4 @@
-import type { WorkspaceStatus } from '@yiru/runtime-protocol/workbench/types'
+import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
 
 import { getFullDropIndexForWorktreeDragUnit } from '../worktree-drag-units'
 import type { WorktreeDragGroup } from '../worktree-manual-order'

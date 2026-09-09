@@ -79,7 +79,7 @@ end
 
 def resolve_requested_version(options, history)
   requested = options[:version].to_s.strip
-  requested = ENV.fetch("MOBILE_IOS_RELEASE_VERSION", "").strip if requested.empty?
+  requested = ENV.fetch("MOBILE_RELEASE_VERSION", "").strip if requested.empty?
 
   unless requested.empty?
     UI.user_error!("iOS release version must be x.y.z") unless requested.match?(/\A\d+\.\d+\.\d+\z/)
@@ -97,7 +97,7 @@ def resolve_requested_version(options, history)
 
   version = versions.max_by { |candidate| Gem::Version.new(candidate) }
   should_bump = truthy_option?(options[:bump_patch]) ||
-                truthy_option?(ENV["MOBILE_IOS_BUMP_PATCH_VERSION"])
+                truthy_option?(ENV["MOBILE_BUMP_PATCH_VERSION"])
   version = bump_patch_version(version) if should_bump
 
   UI.user_error!("iOS release version must be x.y.z") unless version.match?(/\A\d+\.\d+\.\d+\z/)
@@ -281,7 +281,7 @@ platform :ios do
     version = resolve_requested_version(options, history)
     ensure_open_version_train!(app, version)
     build_number = next_testflight_build_number(history)
-    UI.message("Prepared native Yiru Mobile iOS #{version} (#{build_number})")
+    UI.message("Prepared Yiru Mobile #{version} (#{build_number})")
   end
 
   desc "Build and export a signed native archive without uploading it"
@@ -300,7 +300,7 @@ platform :ios do
       team_id: team_id,
       force_profiles: false,
     )
-    UI.success("Archived native Yiru Mobile iOS #{version} (#{build_number}) without upload")
+    UI.success("Archived Yiru Mobile #{version} (#{build_number}) without upload")
   end
 
   desc "Build, sign, upload, and distribute the native iOS app through TestFlight"
@@ -338,6 +338,6 @@ platform :ios do
       )
     end
 
-    UI.success("Uploaded native Yiru Mobile iOS #{version} (#{build_number})")
+    UI.success("Uploaded Yiru Mobile #{version} (#{build_number})")
   end
 end

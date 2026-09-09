@@ -1,14 +1,13 @@
+export { buildAgentResumeStartupPlan } from '@yiru/protocol/agent/resume-startup'
 export {
-  buildAgentResumeStartupPlan,
-  buildAgentDraftLaunchPlan,
-  buildAgentStartupPlan,
   planAgentCliArgsSuffix,
-  isShellProcess,
   quoteStartupArg,
   resolveStartupShell
-} from '@yiru/runtime-protocol/workbench/tui-agent/startup'
-export type {
-  AgentCliArgsPlan,
-  AgentDraftLaunchPlan,
-  AgentStartupPlan
-} from '@yiru/runtime-protocol/workbench/tui-agent/startup'
+} from '@yiru/protocol/agent/shell-command'
+export { isShellProcess } from '@yiru/protocol/agent/process/shell-process'
+export {
+  buildAgentDraftLaunchPlan,
+  buildAgentStartupPlan
+} from '@yiru/protocol/agent/launch/startup'
+export type { AgentCliArgsPlan } from '@yiru/protocol/agent/shell-command'
+export type { AgentDraftLaunchPlan, AgentStartupPlan } from '@yiru/protocol/agent/launch/startup'

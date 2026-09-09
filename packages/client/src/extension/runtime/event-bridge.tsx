@@ -3,11 +3,19 @@ import { useEffect } from 'react'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { projectCatalogTargetForRepo } from '~renderer/project-catalog/query'
 import { invalidateProjectCatalogTarget } from '~renderer/project-catalog/refresh'
-import { createRuntimeOrpcClient, type RuntimeClientTarget } from '~renderer/runtime/orpc-client'
-import { getRuntimeTargetOrpc, targetKey } from '~renderer/runtime/query-target'
+import { agentSessionQueryRoot } from '~renderer/runtime/agent-session/query'
+import { targetKey } from '~renderer/runtime/query-target'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
+import { terminalQueryRoot } from '~renderer/runtime/terminal-query'
+import { watchWorkspaceEvents } from '~renderer/runtime/workspace-events-target'
+import { worktreeDetectedListQuery } from '~renderer/runtime/worktree-catalog-query'
 
-import { extensionOrpc } from './orpc'
-import { terminalsQuery, worktreesQuery, workspaceEventsQuery } from './queries'
+import {
+  terminalsQuery,
+  worktreesQuery,
+  workspaceEventsQuery,
+  WORKSPACE_EVENTS_QUERY_ROOT
+} from './queries'
 
 const lastSeenByScope = new Map<string, number>()
 const PROJECT_CATALOG_SCOPE = 'project-catalog'
@@ -37,24 +45,22 @@ export function WorkspaceEventBridge(): null {
             await invalidateProjectCatalogTarget(queryClient, target)
             return
           }
-          const targetOrpc = getRuntimeTargetOrpc(target)
           await Promise.all([
             queryClient.invalidateQueries({
-              queryKey: targetOrpc.workspaceEvents.list.queryKey({ input: { scope } })
+              queryKey: [...WORKSPACE_EVENTS_QUERY_ROOT, scope]
             }),
             queryClient.invalidateQueries({
-              queryKey: targetOrpc.worktree.detectedList.queryKey({ input: { repo: scope } })
+              queryKey: worktreeDetectedListQuery(target, scope).queryKey
             }),
-            queryClient.invalidateQueries({ queryKey: targetOrpc.terminal.key() }),
-            queryClient.invalidateQueries({ queryKey: targetOrpc.agentSession.key() }),
+            queryClient.invalidateQueries({ queryKey: terminalQueryRoot(target) }),
+            queryClient.invalidateQueries({ queryKey: agentSessionQueryRoot(target) }),
             ...(target.kind === 'local'
               ? [
                   queryClient.invalidateQueries({
                     queryKey: workspaceEventsQuery(scope).queryKey
                   }),
                   queryClient.invalidateQueries({ queryKey: worktreesQuery(scope).queryKey }),
-                  queryClient.invalidateQueries({ queryKey: terminalsQuery.queryKey }),
-                  queryClient.invalidateQueries({ queryKey: extensionOrpc.agentSession.key() })
+                  queryClient.invalidateQueries({ queryKey: terminalsQuery.queryKey })
                 ]
               : [])
           ])
@@ -78,29 +84,24 @@ async function consumeScope(
 ): Promise<void> {
   const cursorKey = `${targetKey(target)}:${scope}`
   while (!signal.aborted) {
-    let close = (): void => {}
     try {
-      const connection = await createRuntimeOrpcClient(target, { signal })
-      close = connection.close
-      const subscription = await connection.client.workspaceEvents.subscribe(
+      // Why: the cursor is read on every attempt so a reopened watch resumes
+      // after the last event this scope applied instead of replaying the tail.
+      await watchWorkspaceEvents(
+        target,
         { afterId: lastSeenByScope.get(cursorKey) ?? 0, scope },
-        { signal }
-      )
-      for await (const message of subscription) {
-        if (signal.aborted) {
-          return
-        }
-        if (message.type === 'event') {
-          lastSeenByScope.set(cursorKey, message.event.id)
+        signal,
+        async (event) => {
           await invalidate()
+          // Why: a failed invalidation must replay this event on reconnect instead of advancing
+          // the cursor and silently losing the state refresh it represented.
+          lastSeenByScope.set(cursorKey, event.id)
         }
-      }
+      )
     } catch {
       if (!signal.aborted) {
         await waitForRetry(signal)
       }
-    } finally {
-      close()
     }
   }
 }
@@ -129,14 +130,14 @@ function parseScopeEntry(value: string): { scope: string; target: RuntimeClientT
 
 async function waitForRetry(signal: AbortSignal): Promise<void> {
   await new Promise<void>((resolve) => {
-    const timeout = window.setTimeout(resolve, 1_500)
-    signal.addEventListener(
-      'abort',
-      () => {
-        window.clearTimeout(timeout)
-        resolve()
-      },
-      { once: true }
-    )
+    const onAbort = (): void => {
+      window.clearTimeout(timeout)
+      resolve()
+    }
+    const timeout = window.setTimeout(() => {
+      signal.removeEventListener('abort', onAbort)
+      resolve()
+    }, 1_500)
+    signal.addEventListener('abort', onAbort, { once: true })
   })
 }

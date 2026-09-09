@@ -1,5 +1,5 @@
-import { agentProviderSessionsEqual } from '@yiru/runtime-protocol/model/agent'
-import { AGENT_STATUS_STALE_AFTER_MS } from '@yiru/runtime-protocol/model/agent'
+import { agentProviderSessionsEqual } from '@yiru/protocol/agent/session-resume'
+import { AGENT_STATUS_STALE_AFTER_MS } from '@yiru/protocol/agent/status-records'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
 
 import type { AppState } from '../../store/types'

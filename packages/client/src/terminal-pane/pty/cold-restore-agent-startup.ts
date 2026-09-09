@@ -1,14 +1,14 @@
 import {
+  resolveTuiAgentLaunchArgs,
+  resolveTuiAgentLaunchEnv
+} from '@yiru/protocol/agent/launch-defaults'
+import { buildAgentResumeStartupPlan } from '@yiru/protocol/agent/resume-startup'
+import {
   agentProviderSessionsEqual,
   isResumableTuiAgent,
   normalizeAgentProviderSession,
   type ResumableTuiAgent
-} from '@yiru/runtime-protocol/model/agent'
-import {
-  resolveTuiAgentLaunchArgs,
-  resolveTuiAgentLaunchEnv
-} from '@yiru/runtime-protocol/workbench/tui-agent/launch-defaults'
-import { buildAgentResumeStartupPlan } from '~renderer/agent/tui-startup'
+} from '@yiru/protocol/agent/session-resume'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import { useAppStore } from '~renderer/store/state'
 

@@ -1,10 +1,11 @@
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry
-} from '@yiru/runtime-protocol/model/agent'
-import { getRepoIdFromWorktreeId } from '@yiru/runtime-protocol/model/workspace'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
-import { detectAgentStatusFromTitle, isExplicitAgentStatusFresh } from '~renderer/agent/status'
+} from '@yiru/protocol/agent/status-records'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
+import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 import type { AppState } from '~renderer/store/types'
 import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
 

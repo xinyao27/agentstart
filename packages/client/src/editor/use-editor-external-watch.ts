@@ -1,5 +1,5 @@
-import { normalizeRuntimePathForComparison } from '@yiru/runtime-protocol/model/platform'
-import type { FsChangedPayload } from '@yiru/runtime-protocol/workbench/types'
+import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
+import { normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
 import { useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
 import { subscribeRuntimeFileChanges } from '~renderer/runtime/file-client'

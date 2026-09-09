@@ -2,7 +2,7 @@ import {
   extractWorkIdentifier,
   formatIdentifierFirst,
   stripWorkIdentifierEcho
-} from '@yiru/runtime-protocol/model/review'
+} from '@yiru/protocol/hosted-review/links/reference'
 
 export const GENERATED_TAB_TITLE_MAX_LENGTH = 40
 export const GENERATED_TAB_TITLE_SOURCE_SCAN_LIMIT = 512
@@ -80,9 +80,9 @@ export function deriveGeneratedTabTitle(prompt: string): string | null {
   const promptPreview = prompt.slice(0, GENERATED_TAB_TITLE_SOURCE_SCAN_LIMIT)
   const firstClause = promptPreview
     .trim()
-    // Strip URLs before markdown punctuation: a GitLab URL like
-    // `/merge_requests/42` contains `_`, and folding that to a space first would
-    // split the URL and leak fragments ("requests") into the title. No `\b`
+    // Strip URLs before markdown punctuation: URL paths can contain `_`, and
+    // folding that to a space first would split the URL and leak fragments into
+    // the title. No `\b`
     // anchor: a URL wrapped in markdown emphasis (`_https://…_`) is preceded by
     // a word char, where `\bhttps` would fail to match and leak the whole URL.
     .replace(/https?:\/\/\S+/gi, ' ')

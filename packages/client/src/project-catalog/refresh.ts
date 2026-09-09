@@ -1,20 +1,26 @@
 import type { QueryClient } from '@tanstack/react-query'
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type {
-  DetectedWorktreeListResult,
-  Repo,
-  Worktree,
-  WorktreeLineage,
-  WorkspaceLineage
-} from '@yiru/runtime-protocol/workbench/types'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
-import { getRuntimeTargetOrpc } from '~renderer/runtime/query-target'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
+import type { DetectedWorktreeListResult, Worktree } from '@yiru/protocol/worktree/model'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
+import { projectCatalogProjectsQueryKey } from '~renderer/runtime/project-target'
+import { RUNTIME_ENVIRONMENTS_QUERY_KEY } from '~renderer/runtime/runtime-environments-client'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
+import {
+  worktreeCatalogQueryKey,
+  worktreeDetectedListQuery,
+  worktreeLineageListQuery
+} from '~renderer/runtime/worktree-catalog-query'
 
+import { projectCatalogFolderWorkspaceQueryKey } from './folder-workspace-query'
+import { projectCatalogProjectGroupQueryKey } from './project-group-query'
+import { projectCatalogProjectHostSetupQueryKey } from './project-host-setup-query'
 import {
   projectCatalogRepoForTarget,
   projectCatalogRepoKey,
   projectCatalogTargetForRepo
 } from './query'
+import { projectCatalogRepoQuery, projectCatalogRepoQueryKey } from './repo-query'
 import { collectProjectCatalogWorktrees } from './worktree-assembly'
 
 const LOCAL_TARGET = { kind: 'local' } as const satisfies RuntimeClientTarget
@@ -29,7 +35,7 @@ export async function refreshProjectCatalogTargetRepos(
   target: RuntimeClientTarget
 ): Promise<Repo[]> {
   const result = await queryClient.fetchQuery({
-    ...getRuntimeTargetOrpc(target).repo.list.queryOptions(),
+    ...projectCatalogRepoQuery(target),
     staleTime: 0
   })
   return result.repos.map((repo) => projectCatalogRepoForTarget(repo, target))
@@ -39,14 +45,13 @@ export async function invalidateProjectCatalogTarget(
   queryClient: QueryClient,
   target: RuntimeClientTarget
 ): Promise<void> {
-  const orpc = getRuntimeTargetOrpc(target)
   await Promise.all([
-    queryClient.invalidateQueries({ queryKey: orpc.repo.key() }),
-    queryClient.invalidateQueries({ queryKey: orpc.projectGroup.key() }),
-    queryClient.invalidateQueries({ queryKey: orpc.folderWorkspace.key() }),
-    queryClient.invalidateQueries({ queryKey: orpc.project.key() }),
-    queryClient.invalidateQueries({ queryKey: orpc.projectHostSetup.key() }),
-    queryClient.invalidateQueries({ queryKey: orpc.worktree.key() })
+    queryClient.invalidateQueries({ queryKey: projectCatalogRepoQueryKey(target) }),
+    queryClient.invalidateQueries({ queryKey: projectCatalogProjectGroupQueryKey(target) }),
+    queryClient.invalidateQueries({ queryKey: projectCatalogFolderWorkspaceQueryKey(target) }),
+    queryClient.invalidateQueries({ queryKey: projectCatalogProjectsQueryKey(target) }),
+    queryClient.invalidateQueries({ queryKey: projectCatalogProjectHostSetupQueryKey(target) }),
+    queryClient.invalidateQueries({ queryKey: worktreeCatalogQueryKey(target) })
   ])
 }
 
@@ -65,9 +70,7 @@ function readRuntimeEnvironmentsFromQuery(
   queryClient: QueryClient
 ): PublicKnownRuntimeEnvironment[] {
   return (
-    queryClient.getQueryData<PublicKnownRuntimeEnvironment[]>(
-      getRuntimeTargetOrpc(LOCAL_TARGET).shell.runtimeEnvironments.list.queryKey()
-    ) ?? []
+    queryClient.getQueryData<PublicKnownRuntimeEnvironment[]>(RUNTIME_ENVIRONMENTS_QUERY_KEY) ?? []
   )
 }
 
@@ -77,9 +80,7 @@ export async function refreshProjectCatalogWorktrees(
 ): Promise<ProjectWorktreeCatalog> {
   const target = projectCatalogTargetForRepo(repo)
   const result = await queryClient.fetchQuery({
-    ...getRuntimeTargetOrpc(target).worktree.detectedList.queryOptions({
-      input: { repo: repo.id }
-    }),
+    ...worktreeDetectedListQuery(target, repo.id),
     staleTime: 0
   })
   const collected = collectProjectCatalogWorktrees([{ repo, target }], [{ data: result }])
@@ -98,7 +99,7 @@ export async function refreshProjectCatalogLineage(
   worktreeLineageById: Record<string, WorktreeLineage>
 }> {
   const result = await queryClient.fetchQuery({
-    ...getRuntimeTargetOrpc(target).worktree.lineageList.queryOptions(),
+    ...worktreeLineageListQuery(target),
     staleTime: 0
   })
   return {

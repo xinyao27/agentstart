@@ -13,7 +13,9 @@
     "./extension-install": "./src/extension/install/bootstrap.tsx",
     "./extension-settings": "./src/extension/settings/bootstrap.tsx",
     "./styles": "./src/assets/main.css",
-    "./vite": "./vite.ts"
+    "./vite": "./vite.ts",
+    "./pdf-export": "./src/extension/pdf-export.ts",
+    "./notifications": "./src/extension/notification-request.ts"
   },
   "scripts": {
     "fmt": "vp fmt .",
@@ -28,9 +30,6 @@
     "@hugeicons/core-free-icons": "catalog:",
     "@hugeicons/react": "catalog:",
     "@legendapp/list": "catalog:",
-    "@orpc/client": "catalog:",
-    "@orpc/server": "catalog:",
-    "@orpc/tanstack-query": "catalog:",
     "@pierre/diffs": "catalog:",
     "@pierre/trees": "catalog:",
     "@rolldown/plugin-babel": "catalog:",
@@ -67,7 +66,7 @@
     "@xterm/addon-web-links": "catalog:",
     "@xterm/addon-webgl": "catalog:workbench",
     "@xterm/xterm": "catalog:workbench",
-    "@yiru/runtime-protocol": "workspace:*",
+    "@yiru/protocol": "workspace:*",
     "babel-plugin-react-compiler": "catalog:",
     "class-variance-authority": "catalog:",
     "cmdk": "catalog:",

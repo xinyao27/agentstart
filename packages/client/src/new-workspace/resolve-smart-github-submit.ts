@@ -1,21 +1,19 @@
+import type { GitHubPrStartPoint, GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 import {
   buildProjectSourceContextFromRepo,
   type ProjectSourceContext
-} from '@yiru/runtime-protocol/workbench/project-source-context'
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type {
-  GitHubPrStartPoint,
-  GitHubWorkItem,
-  GitPushTarget,
-  GlobalSettings,
-  Repo
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/project/source-context'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type { Dispatch, RefObject, SetStateAction } from 'react'
 import {
   lookupGitHubWorkItemByOwnerRepoForSource,
   lookupGitHubWorkItemForSource
 } from '~renderer/github/work-item-source-lookup'
 import { translate } from '~renderer/i18n/i18n'
+import { getWorkspaceSourceProvider as getLinkedWorkItemProvider } from '~renderer/new-workspace/naming/source'
 import { getSettingsForRepoRuntimeOwner } from '~renderer/repo/runtime-owner'
 
 import { getForkPushWarning } from './fork-push-warning'
@@ -26,7 +24,7 @@ import {
   lookupSmartGitHubSubmitItem,
   type SmartGitHubSubmitResolution
 } from './smart-github-submit'
-import { getLinkedWorkItemProvider, type LinkedWorkItemSummary } from './workspace-creation'
+import type { LinkedWorkItemSummary } from './workspace-creation'
 
 export type PendingSmartGitHubSubmitResolution =
   | { kind: 'none' }
@@ -61,7 +59,6 @@ type ResolveSmartGitHubSubmitOptions = {
   setBranchNameOverridePreservesNameEdits: Dispatch<SetStateAction<boolean>>
   setCompareBaseRef: Dispatch<SetStateAction<string | undefined>>
   setForkPushWarning: Dispatch<SetStateAction<string | null>>
-  setLinkedGitLabMR: Dispatch<SetStateAction<number | null>>
   setLinkedPR: Dispatch<SetStateAction<number | null>>
   setLinkedWorkItem: Dispatch<SetStateAction<LinkedWorkItemSummary | null>>
   setName: Dispatch<SetStateAction<string>>
@@ -86,7 +83,6 @@ export async function resolveSmartGitHubSubmit({
   setBranchNameOverridePreservesNameEdits,
   setCompareBaseRef,
   setForkPushWarning,
-  setLinkedGitLabMR,
   setLinkedPR,
   setLinkedWorkItem,
   setName,
@@ -197,7 +193,6 @@ export async function resolveSmartGitHubSubmit({
     ? createStartPointResolution(item, startPoint)
     : { ...getSmartGitHubSubmitResolution(item), kind: 'metadata-only' }
   setLinkedPR(resolution.linkedPR)
-  setLinkedGitLabMR(null)
   setLinkedWorkItem(resolution.linkedWorkItem)
   setName(resolution.workspaceName)
   lastAutoNameRef.current = resolution.workspaceName

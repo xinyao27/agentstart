@@ -56,3 +56,22 @@ function getPhaseStepIndex(phase: PendingWorktreeCreation['phase']): number {
       return 4
   }
 }
+
+export type WorktreeCreateProgressPhase =
+  | 'preparing'
+  | 'fetching'
+  | 'creating'
+  | 'copying-files'
+  | 'checking-setup'
+  | 'running-setup'
+  | 'starting-workspace'
+
+export type WorktreeCreateProgressEvent = {
+  type: 'worktreeCreateProgress'
+  operationId?: string
+  repoId: string
+  phase: WorktreeCreateProgressPhase
+  copiedFileCount?: number
+  setupCommand?: string
+  setupConfigured?: boolean
+}

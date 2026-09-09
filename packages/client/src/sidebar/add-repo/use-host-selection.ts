@@ -3,7 +3,7 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
+} from '@yiru/protocol/host/identity'
 import { useState } from 'react'
 import { useAppStore } from '~renderer/store/state'
 

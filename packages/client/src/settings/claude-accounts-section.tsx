@@ -1,7 +1,5 @@
-import type {
-  ClaudeRateLimitAccountsState,
-  GlobalSettings
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { ClaudeRateLimitAccountsState } from '@yiru/protocol/settings/managed-accounts'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Plus, ArrowClockwise as RefreshCw, Trash as Trash2, X } from '~renderer/icons/hugeicons'

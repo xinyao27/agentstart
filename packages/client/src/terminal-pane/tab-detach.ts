@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import type { AppState } from '~renderer/store/state'
 import type { PaneExternalDropTarget } from '~renderer/terminal-pane/pane-manager/pane-manager'
 

@@ -1,11 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { translate } from '~renderer/i18n/i18n'
 import { Bug, StopCircle } from '~renderer/icons/hugeicons'
+import { terminalQueryRoot } from '~renderer/runtime/terminal-query'
+import { requireWorkspaceEventsAppendClient } from '~renderer/runtime/workspace-events-target'
 import { Button } from '~renderer/ui/button'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
-import { extensionOrpc } from '../runtime/orpc'
-import { getExtensionRuntimeClient } from '../runtime/session'
+import { WORKSPACE_EVENTS_QUERY_ROOT } from '../runtime/queries'
 
 type ConsoleSensorProps = {
   pageUrl: string
@@ -51,11 +52,11 @@ export function ConsoleSensor({
         return { claimedTerminalHandle: null, eventsAppended: 0 }
       }
       const result = await (
-        await getExtensionRuntimeClient()
-      ).workspaceEvents.appendConsole({ entries, pageUrl, projectId, worktreeId })
+        await requireWorkspaceEventsAppendClient({ kind: 'local' })
+      ).appendConsole({ entries, pageUrl, projectId, worktreeId })
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: extensionOrpc.workspaceEvents.key() }),
-        queryClient.invalidateQueries({ queryKey: extensionOrpc.terminal.key() })
+        queryClient.invalidateQueries({ queryKey: WORKSPACE_EVENTS_QUERY_ROOT }),
+        queryClient.invalidateQueries({ queryKey: terminalQueryRoot({ kind: 'local' }) })
       ])
       return result
     },

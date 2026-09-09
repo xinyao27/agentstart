@@ -1,7 +1,7 @@
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+} from '@yiru/protocol/source-control/ai-actions'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as TriangleAlert } from '~renderer/icons/hugeicons'

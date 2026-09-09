@@ -1,9 +1,6 @@
 import type { GitStatusEntry as PierreGitStatusEntry } from '@pierre/trees'
-import type {
-  GitBranchChangeEntry,
-  GitFileStatus,
-  GitStatusEntry
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { GitFileStatus, GitStatusEntry } from '@yiru/protocol/git/status-types'
 import { normalizeRelativePath } from '~renderer/path'
 
 import type { SourceControlTreeDirectoryNode } from './directory-action-paths'

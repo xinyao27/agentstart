@@ -1,8 +1,5 @@
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
-import type {
-  WorkspaceCleanupCandidate,
-  WorkspaceCleanupScanProgress
-} from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+import type { WorkspaceCleanupCandidate, WorkspaceCleanupScanProgress } from '@yiru/protocol'
+import type { Repo } from '@yiru/protocol/project/repository'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

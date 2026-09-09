@@ -4,7 +4,7 @@ import type { StepIndex } from './hero'
 import type { MobilePageStage } from './page-stage'
 import { mobilePageStyles } from './page-tailwind'
 import { MobilePageToolbar } from './page-toolbar'
-import { getMobileReleaseLink, type MobilePlatform } from './release-link'
+import { getMobileReleaseLink } from './release-link'
 
 type MobilePageContentProps = {
   closeMobilePage: () => void
@@ -24,12 +24,10 @@ type MobilePageContentProps = {
   pairLoading: boolean
   pairQrDataUrl: string | null
   pairingUrl: string | null
-  platform: MobilePlatform
   refreshingNetworkInterfaces: boolean
   revokeDevice: (id: string) => void
   revokingDeviceIds: string[]
   selectedAddress: string | undefined
-  onPlatformChange: (platform: MobilePlatform) => void
   showPairedDevices: (deviceCount: number) => void
   stage: MobilePageStage | null
   stepIdx: StepIndex
@@ -53,12 +51,10 @@ export function MobilePageContent({
   pairLoading,
   pairQrDataUrl,
   pairingUrl,
-  platform,
   refreshingNetworkInterfaces,
   revokeDevice,
   revokingDeviceIds,
   selectedAddress,
-  onPlatformChange,
   showPairedDevices,
   stage,
   stepIdx
@@ -80,10 +76,8 @@ export function MobilePageContent({
           ) : (
             <HeroFlow
               stepIdx={stepIdx}
-              platform={platform}
-              onPlatformChange={onPlatformChange}
               installQrUrl={installQrUrl}
-              installCopy={getMobileReleaseLink(platform)}
+              installCopy={getMobileReleaseLink()}
               onOpenInstallUrl={openInstallUrl}
               onCopyInstallUrl={copyInstallUrl}
               pairQrDataUrl={pairQrDataUrl}

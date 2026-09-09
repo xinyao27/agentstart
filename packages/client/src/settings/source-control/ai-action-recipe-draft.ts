@@ -2,8 +2,8 @@ import {
   DEFAULT_SOURCE_CONTROL_ACTION_COMMAND_TEMPLATES,
   SOURCE_CONTROL_ACTION_IDS,
   type SourceControlActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { SourceControlAiSettings } from '@yiru/runtime-protocol/workbench/source-control/ai-types'
+} from '@yiru/protocol/source-control/ai-actions'
+import type { SourceControlAiSettings } from '@yiru/protocol/source-control/ai-types'
 
 export type ActionRecipeDraftValue = {
   commandInputTemplate: string

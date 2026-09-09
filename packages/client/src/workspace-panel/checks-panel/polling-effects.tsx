@@ -16,10 +16,6 @@ export function useChecksPanelPollingEffects(context: useChecksPanelStatusEffect
     hostedReviewCreationRequestKey,
     isFolder,
     isPanelVisible,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     linkedPR,
     pr,
     prCacheKey,
@@ -49,11 +45,7 @@ export function useChecksPanelPollingEffects(context: useChecksPanelStatusEffect
       ahead: remoteStatus?.ahead,
       behind: remoteStatus?.behind,
       linkedGitHubPR: linkedPR,
-      fallbackGitHubPR: fallbackGitHubPRNumber,
-      linkedGitLabMR,
-      linkedBitbucketPR,
-      linkedAzureDevOpsPR,
-      linkedGiteaPR
+      fallbackGitHubPR: fallbackGitHubPRNumber
     })
       .then((result) => {
         if (!stale) {
@@ -86,10 +78,6 @@ export function useChecksPanelPollingEffects(context: useChecksPanelStatusEffect
     isPanelVisible,
     linkedPR,
     fallbackGitHubPRNumber,
-    linkedGitLabMR,
-    linkedBitbucketPR,
-    linkedAzureDevOpsPR,
-    linkedGiteaPR,
     remoteStatus?.ahead,
     remoteStatus?.behind,
     remoteStatus?.hasUpstream,

@@ -1,8 +1,8 @@
-import type { ShellOpenLocalPathResult } from '@yiru/runtime-protocol/workbench/shell-open-types'
+import type { ShellPlatformOutcomeValue } from '@yiru/protocol'
 
 import type { ShellPlatformApi } from './shell-platform-client'
 
-const unavailablePathResult: ShellOpenLocalPathResult = {
+const unavailablePathResult: ShellPlatformOutcomeValue = {
   ok: false,
   reason: 'remote-runtime-unsupported'
 }

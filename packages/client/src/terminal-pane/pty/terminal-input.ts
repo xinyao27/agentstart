@@ -1,5 +1,5 @@
 import type { Terminal } from '@xterm/xterm'
-import { isTerminalQueryReply } from '@yiru/runtime-protocol/terminal-query-reply'
+import { isTerminalQueryReply } from '@yiru/protocol/terminal/query-reply'
 import { useAppStore } from '~renderer/store/state'
 import { isPtyLocked } from '~renderer/terminal-pane/pane-manager/mobile-driver-state'
 

@@ -73,7 +73,7 @@ export function WorktreeCardMetaBadges({
           label={translate(
             'auto.components.sidebar.WorktreeCardMeta.3ea2702e62',
             'Linked {{value0}} #{{value1}}',
-            { value0: getReviewLabel(review), value1: review.number }
+            { value0: getReviewLabel(), value1: review.number }
           )}
         >
           <ReviewIcon review={review} />
@@ -150,7 +150,7 @@ export function WorktreeCardDetailsHover({
     void copyLinkedWorkItemLink(
       review.url,
       translate('auto.components.sidebar.WorktreeCardMeta.reviewLinkLabel', '{{value0}} link', {
-        value0: getReviewLabel(review)
+        value0: getReviewLabel()
       })
     )
   }

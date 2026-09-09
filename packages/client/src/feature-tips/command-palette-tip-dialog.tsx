@@ -1,4 +1,3 @@
-import type { FeatureTip } from '@yiru/runtime-protocol/workbench/feature-tips'
 import type { JSX } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { formatShortcutLabel, useShortcutLabel } from '~renderer/keyboard-input/use-shortcut-label'
@@ -13,6 +12,7 @@ import {
   DialogTitle
 } from '~renderer/ui/dialog'
 
+import type { FeatureTip } from './catalog'
 import { CommandPaletteFeatureTipVisual } from './command-palette-feature-tip-visual'
 import { FeatureTipActions } from './feature-tip-actions'
 

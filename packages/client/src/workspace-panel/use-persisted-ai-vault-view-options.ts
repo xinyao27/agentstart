@@ -1,5 +1,9 @@
-import type { AiVaultAgent, AiVaultGroup, AiVaultSort } from '@yiru/runtime-protocol/model/agent'
+import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
 import { useRef, useState } from 'react'
+import type {
+  AiVaultGroup,
+  AiVaultSort
+} from '~renderer/workspace-panel/ai-vault/session/providers'
 
 import {
   createDefaultAiVaultViewOptions,

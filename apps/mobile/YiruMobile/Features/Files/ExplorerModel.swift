@@ -14,7 +14,6 @@ final class WorkspaceFileExplorerModel {
     private(set) var phase = WorkspaceFileExplorerPhase.loading
     private(set) var cache: [String: WorkspaceDirectoryState] = [:]
     private(set) var expanded: Set<String> = []
-    private(set) var isLegacyListTruncated = false
     private(set) var isConnected = false
     // Why: mirrors SourceControlModel.liveWorktreeDisplayName — refreshed on every root
     // load (initial, reconnect, pull-to-refresh) so a rename made elsewhere is reflected,
@@ -154,20 +153,13 @@ final class WorkspaceFileExplorerModel {
         state.error = nil
         cache[relativePath] = state
         do {
-            let result = try await repository.loadWorkspaceDirectory(
+            let entries = try await repository.loadWorkspaceDirectory(
                 for: hostID,
                 worktreeID: worktreeID,
                 relativePath: relativePath
             )
             guard revisions[relativePath] == revision, !Task.isCancelled else { return }
-            switch result {
-            case .entries(let entries):
-                cache[relativePath] = WorkspaceDirectoryState(entries: entries)
-                if isRoot { isLegacyListTruncated = false }
-            case .legacy(let files, let isTruncated):
-                cache = WorkspaceFileProjection.legacyCache(files)
-                isLegacyListTruncated = isTruncated
-            }
+            cache[relativePath] = WorkspaceDirectoryState(entries: entries)
             if isRoot { phase = .ready }
         } catch is CancellationError {
             return

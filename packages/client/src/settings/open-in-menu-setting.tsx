@@ -1,5 +1,6 @@
-import { OPEN_IN_APPLICATIONS_MAX } from '@yiru/runtime-protocol/workbench/open-in-applications'
-import type { GlobalSettings, OpenInApplication } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { OpenInApplication } from '@yiru/protocol/settings/open-in'
+import { OPEN_IN_APPLICATIONS_MAX } from '@yiru/protocol/settings/open-in'
 import type React from 'react'
 import { useState } from 'react'
 import {

@@ -1,4 +1,4 @@
-import { YIRU_GITHUB_REPOSITORY_URL } from '@yiru/runtime-protocol/model/product'
+import { YIRU_GITHUB_REPOSITORY_URL } from '@yiru/protocol/hosted-review/yiru-repository'
 import { useEffect, useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'

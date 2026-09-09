@@ -1,4 +1,4 @@
-import type { ShellHtmlToPdfInput } from '@yiru/runtime-protocol/contract'
+import type { PdfExportInput } from '@yiru/client/pdf-export'
 
 const PDF_EXPORT_STORAGE_PREFIX = 'pdfExport:'
 
@@ -32,7 +32,7 @@ function cloneNodes(nodes: NodeListOf<ChildNode>): Node[] {
   return Array.from(nodes, (node) => document.importNode(node, true))
 }
 
-function readExportInput(value: unknown): ShellHtmlToPdfInput | null {
+function readExportInput(value: unknown): PdfExportInput | null {
   if (typeof value !== 'object' || value === null) {
     return null
   }

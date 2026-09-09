@@ -1,8 +1,8 @@
-import { splitWorktreeIdForFilesystem } from '@yiru/runtime-protocol/model/workspace'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
 
-import type { RuntimeClientTarget } from '../orpc-client'
 import { getActiveRuntimeTarget } from '../rpc-client'
+import type { RuntimeClientTarget } from '../runtime-target'
 import { toRuntimeWorktreePathSelector, toRuntimeWorktreeSelector } from '../worktree-selector'
 
 export type RuntimeGitSettings = Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> &

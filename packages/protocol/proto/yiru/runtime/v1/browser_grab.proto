@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+// Why: grab commands share BrowserHostService.Execute's oneof (see browser.proto) but their
+// request messages live here so browser.proto stays within its line budget.
+
+message BrowserGrabRect {
+  double height = 1;
+  double width = 2;
+  double x = 3;
+  double y = 4;
+}
+
+message BrowserGrabSetModeCommand {
+  string browser_page_id = 1;
+  bool enabled = 2;
+}
+
+message BrowserGrabAwaitCommand {
+  string browser_page_id = 1;
+  string op_id = 2;
+}
+
+message BrowserGrabCaptureCommand {
+  string browser_page_id = 1;
+  optional BrowserGrabRect rect = 2;
+}

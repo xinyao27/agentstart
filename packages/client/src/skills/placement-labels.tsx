@@ -1,7 +1,4 @@
-import type {
-  SkillInstallationTopology,
-  SkillPlacement
-} from '@yiru/runtime-protocol/workbench/skills'
+import type { SkillInstallationTopology, SkillPlacement } from '@yiru/protocol'
 import { translate } from '~renderer/i18n/i18n'
 import {
   ArrowSquareOut,

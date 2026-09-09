@@ -1,11 +1,11 @@
-import type { PreflightCheckInput, PreflightStatus } from '@yiru/runtime-protocol/contract'
+import type { PreflightStatusValue as PreflightStatus } from '@yiru/protocol'
 import type { StateCreator } from 'zustand'
 import {
   getLocalPreflightContext,
   localPreflightContextKey,
   type LocalPreflightContext
 } from '~renderer/preflight/context'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { preflightCheck } from '~renderer/runtime/preflight-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 import type { AppState } from '../store/types'
@@ -31,7 +31,7 @@ function getErrorMessage(error: unknown): string {
 function buildPreflightArgs(
   force: boolean,
   context: LocalPreflightContext
-): PreflightCheckInput | undefined {
+): { force?: boolean } | undefined {
   const wslDistro = context?.wslDistro
   const wslDefault = context?.wslDefault === true
   const projectRuntime = context?.projectRuntime
@@ -78,13 +78,9 @@ export const createPreflightSlice: StateCreator<AppState, [], [], PreflightSlice
       preflightStatusError: null
     })
 
-    // Why: one path for both targets now that the contract carries the WSL /
+    // Why: one path for both targets now that the wire carries the WSL /
     // project-runtime context the preload channel used to own.
-    const request = callRuntimeOrpc(
-      runtimeTarget,
-      (client) => client.preflight.check,
-      preflightArgs ?? (force ? { force } : {})
-    )
+    const request = preflightCheck(runtimeTarget, preflightArgs ?? (force ? { force } : {}))
       .then((status) => {
         if (requestId !== latestPreflightRequestId) {
           return

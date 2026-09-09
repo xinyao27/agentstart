@@ -1,10 +1,10 @@
-import type { AppStarSource } from '@yiru/runtime-protocol/workbench/gh-star-source'
 import type {
   GitHubPRRefreshCandidate,
   GitHubPRRefreshEnqueueResult,
-  GitHubPRRefreshReason,
-  GitHubViewer
-} from '@yiru/runtime-protocol/workbench/types'
+  GitHubPRRefreshReason
+} from '@yiru/protocol/hosted-review/pull-request-types'
+import type { GitHubViewer } from '@yiru/protocol/hosted-review/review-types'
+import type { AppStarSource } from '@yiru/protocol/telemetry/star-source'
 
 import { shellClient } from './shell-client'
 

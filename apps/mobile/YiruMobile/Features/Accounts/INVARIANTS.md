@@ -5,17 +5,18 @@ Accounts 页面同时负责 provider 选择、用量快照和 reset countdown，
 ## Entrypoints and transport
 
 - Workspace List 的 host 菜单进入 `Accounts · <host>`，返回后仍在同一个 host。
-- 首次显示调用 `accounts.list`，同时订阅 `accounts.subscribe`；`ready` 和 `snapshot`
-  都替换完整 snapshot。
-- 订阅失败后用 `accounts.list` 回退，并持续重订阅。页面退出必须取消 stream。
-- Claude 和 Codex 分别调用 `selectClaude` / `selectCodex`；选择成功立即 list，不能只等待
-  下一次 server push。其他 provider 不显示账号切换入口。
+- 首次显示调用 protobuf `AccountsService.List`，同时调用 `AccountsService.Subscribe`；订阅
+  首帧必须是带完整 snapshot 的 `ready`，后续 `snapshot` 都替换完整状态。
+- 订阅失败后重新调用 protobuf `List` 刷新当前内容，并持续重订阅；这不是旧 wire fallback。
+  页面退出必须发送 protobuf stream cancellation。
+- Claude 和 Codex 都调用强类型 `AccountsService.Select`；选择成功立即 list，不能只等待下一次
+  server push。其他 provider 不显示账号切换入口，daemon 也必须拒绝其 selection。
 
 ## State and recovery
 
 - 无 snapshot 且尚未连上时显示 Connecting；连接后首次请求显示 Loading；两种 loader 都是灰色。
 - 已有 snapshot 时，刷新或订阅错误不得清空现有内容。
-- 未连接时不创建 `accounts.subscribe`、不调用 `accounts.list`；断连期间保留已有 snapshot，
+- 未连接时不创建 protobuf subscription、不调用 protobuf list；断连期间保留已有 snapshot，
   重连后重新 list 并恢复订阅。
 - 断连时刷新、Use default 和 managed account 行不可操作；重连后恢复。
 - 同时只能有一个账号切换 mutation。失败保留原 snapshot 并显示 server message。

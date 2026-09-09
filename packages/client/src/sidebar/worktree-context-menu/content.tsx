@@ -19,6 +19,7 @@ import {
   LinkBreak as Unlink,
   FlowArrow as Workflow
 } from '~renderer/icons/hugeicons'
+import { workspaceStatusLabel } from '~renderer/sidebar/workspace-status-label'
 import { cn } from '~renderer/ui/class-names'
 import {
   ContextMenuContent,
@@ -121,7 +122,7 @@ export function WorktreeContextMenuContent({
                   onClick={() => workspaceActions.handleAssignWorkspaceStatus(status.id)}
                 >
                   <meta.icon className={cn('size-3.5', meta.tone)} />
-                  {status.label}
+                  {workspaceStatusLabel(status)}
                 </ContextMenuRadioItem>
               )
             })}

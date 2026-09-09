@@ -1,4 +1,4 @@
-import type { OnboardingState } from '@yiru/runtime-protocol/workbench/types'
+import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
 import { useEffect, useRef, useState } from 'react'
 import { applyDocumentTheme } from '~renderer/editor/document-theme'
 import { translate } from '~renderer/i18n/i18n'

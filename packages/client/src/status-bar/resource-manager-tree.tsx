@@ -1,4 +1,4 @@
-import type { MemorySnapshot } from '@yiru/runtime-protocol/workbench/types'
+import type { MemorySnapshot } from '@yiru/protocol/diagnostics/memory-values'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretRight as ChevronRight } from '~renderer/icons/hugeicons'

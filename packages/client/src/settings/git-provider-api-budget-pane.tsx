@@ -2,7 +2,6 @@ import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'
 
 import { GitHubRateLimitPanel } from '../github/rate-limit-display'
-import { GitLabRateLimitPanel } from '../gitlab/rate-limit-display'
 import { matchesSettingsSearch } from './search'
 import { SearchableSetting } from './searchable-setting'
 
@@ -42,32 +41,6 @@ export function GitProviderApiBudgetPane({
         className="space-y-3"
       >
         <GitHubRateLimitPanel />
-      </SearchableSetting>
-    ) : null,
-    matchesSettingsSearch(searchQuery, {
-      title: translate('auto.components.settings.GitPane.0de4ae556c', 'GitLab API Budget'),
-      description: translate(
-        'auto.components.settings.GitPane.c4f610d057',
-        'Current GitLab CLI REST rate-limit headers when available.'
-      ),
-      keywords: [
-        translate('auto.components.settings.GitPane.8a527d48e3', 'gitlab'),
-        translate('auto.components.settings.GitPane.3072428ac7', 'glab'),
-        translate('auto.components.settings.GitPane.b9c011fbc2', 'rate limit'),
-        translate('auto.components.settings.GitPane.cdd793134e', 'api budget')
-      ]
-    }) ? (
-      <SearchableSetting
-        key="gitlab-api-budget"
-        title={translate('auto.components.settings.GitPane.0de4ae556c', 'GitLab API Budget')}
-        description={translate(
-          'auto.components.settings.GitPane.c4f610d057',
-          'Current GitLab CLI REST rate-limit headers when available.'
-        )}
-        keywords={['gitlab', 'glab', 'rate limit', 'api budget']}
-        className="space-y-3"
-      >
-        <GitLabRateLimitPanel />
       </SearchableSetting>
     ) : null
   ].filter(Boolean)

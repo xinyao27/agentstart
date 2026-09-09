@@ -1,9 +1,7 @@
-import type {
-  BrowserWorkspace,
-  TerminalLayoutSnapshot,
-  TerminalTab,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
+import type { BrowserWorkspace } from '@yiru/protocol/workspace/browser-session'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 /** `null` === "no local sample" (e.g. SSH PTY); UI renders as em-dash. */
 export type Metric = number | null

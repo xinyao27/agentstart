@@ -1,9 +1,4 @@
-import type {
-  ContextualTourId,
-  ContextualTourStepPlacement,
-  ContextualTourStepControl,
-  ContextualTourStepAction
-} from '@yiru/runtime-protocol/workbench/contextual-tours'
+import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
 import {
   useLayoutEffect,
   useRef,
@@ -20,6 +15,11 @@ import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 
+import type {
+  ContextualTourStepPlacement,
+  ContextualTourStepControl,
+  ContextualTourStepAction
+} from './catalog'
 import { ContextualTourArrow } from './contextual-tour-arrow'
 import { ContextualTourControl } from './contextual-tour-control'
 import {

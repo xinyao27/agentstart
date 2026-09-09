@@ -1,8 +1,9 @@
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import {
   isTerminalAgentQuickCommand,
   supportsTerminalAgentQuickCommand
-} from '@yiru/runtime-protocol/workbench/terminal/quick-commands'
-import type { TerminalQuickCommand, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'

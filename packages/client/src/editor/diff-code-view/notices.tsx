@@ -1,3 +1,4 @@
+import type { LargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
 import { Suspense } from 'react'
 import { lazyWithRetry as lazy } from '~renderer/application-shell/lazy-with-retry'
 import { translate } from '~renderer/i18n/i18n'
@@ -8,7 +9,6 @@ import {
 import { Button } from '~renderer/ui/button'
 
 import { LargeDiffFallback } from '../large-diff-fallback'
-import type { LargeDiffRenderLimit } from '../large-diff-render-limit'
 
 const ImageDiffViewer = lazy(() => import('../image-diff-viewer'))
 

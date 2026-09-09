@@ -1,9 +1,10 @@
-import { createSequencedSetupAgentCommands } from '@yiru/runtime-protocol/workbench/setup/agent-sequencing'
-import { getSetupRunnerCommandPlatformForPath } from '@yiru/runtime-protocol/workbench/setup/runner-command'
+import { createSequencedSetupAgentCommands } from '@yiru/protocol/setup/agent-sequencing'
+import { getSetupRunnerCommandPlatformForPath } from '@yiru/protocol/setup/runner-command'
 import type {
   WorktreeDefaultTabsLaunch,
   WorktreeSetupLaunch
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/worktree/create-result'
+import { createBrowserUuid } from '~renderer/browser/uuid'
 
 import { queueHookCommandsForFirstWorktreeTab } from '../agent/hook-command-delivery'
 import { isRemoteRuntimeSessionActive } from '../runtime/remote-runtime-session'
@@ -128,6 +129,7 @@ function sequenceSetupBeforeAgent(
     navigator.userAgent.includes('Windows') ? 'windows' : 'posix'
   )
   const sequenced = createSequencedSetupAgentCommands({
+    nonce: createBrowserUuid(),
     runnerScriptPath: setup.runnerScriptPath,
     startupCommand: startup.command,
     platform

@@ -1,8 +1,5 @@
-import {
-  isWindowsAbsolutePathLike,
-  normalizeRuntimePathSeparators
-} from '@yiru/runtime-protocol/model/platform'
-import type { DirEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { DirectoryEntry as DirEntry } from '@yiru/protocol/files/values'
+import { isWindowsAbsolutePathLike, normalizeRuntimePathSeparators } from '@yiru/protocol/host/path'
 
 import {
   readRuntimeDirectory,
@@ -86,9 +83,6 @@ export async function downloadRuntimeFolder(
   suggestedName: string
 ): Promise<RuntimeFileDownloadResult> {
   const download = await shellFilesClient.startDownloadedFolder({ suggestedName })
-  if (download.canceled) {
-    return download
-  }
   let finished = false
   try {
     await downloadRuntimeDirectoryTree(

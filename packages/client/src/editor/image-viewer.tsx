@@ -1,6 +1,6 @@
-import { buildImageDataUri } from '@yiru/runtime-protocol/model/ui'
 import type { JSX } from 'react'
 import { useEffect, useRef, useState } from 'react'
+import { buildImageDataUri } from '~renderer/editor/image-data-uri'
 import { translate } from '~renderer/i18n/i18n'
 import {
   Image as ImageIcon,

@@ -1,9 +1,7 @@
-import {
-  sanitizeCrashReportString,
-  type CrashReportCopySubmissionFailure,
-  type CrashReportDiagnosticBundle,
-  type CrashReportSubmitResult
-} from '@yiru/runtime-protocol/workbench/crash-reporting'
+import type { CrashReportCopySubmissionFailure } from '@yiru/protocol/crash-reports/copy-values'
+import type { CrashReportDiagnosticBundle } from '@yiru/protocol/crash-reports/diagnostic-bundle'
+import { sanitizeCrashReportString } from '@yiru/protocol/crash-reports/redaction'
+import type { CrashReportSubmitResult } from '@yiru/protocol/crash-reports/values'
 import { translate } from '~renderer/i18n/i18n'
 
 export const CRASH_REPORT_SUBMIT_FAILURE_TOAST_ID = 'crash-report-submit-failure'

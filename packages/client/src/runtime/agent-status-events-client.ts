@@ -1,13 +1,13 @@
-import type { AgentStatusHostSnapshot } from '@yiru/runtime-protocol/contract'
+import type { AgentStatusHostSnapshotValue } from '@yiru/protocol'
 import type {
   AgentStatusIpcPayload,
   MigrationUnsupportedPtyEntry
-} from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/status-records'
 
-import { createRuntimeOrpcClient, type RuntimeClientTarget } from './orpc-client'
+import { openAgentStatusProtocolClient } from './agent-status-target'
 
 type AgentStatusEventHandlers = {
-  onReady: (snapshot: AgentStatusHostSnapshot) => void
+  onReady: (snapshot: AgentStatusHostSnapshotValue) => void
   onSet: (status: AgentStatusIpcPayload) => void
   onClear: (paneKey: string) => void
   onMigrationUnsupported: (entry: MigrationUnsupportedPtyEntry) => void
@@ -15,10 +15,6 @@ type AgentStatusEventHandlers = {
 }
 
 const AGENT_STATUS_RECONNECT_MS = 1_000
-
-function agentStatusTarget(): RuntimeClientTarget | null {
-  return { kind: 'local' }
-}
 
 export function subscribeAgentStatusEvents(handlers: AgentStatusEventHandlers): () => void {
   let cancelled = false
@@ -32,23 +28,24 @@ export function subscribeAgentStatusEvents(handlers: AgentStatusEventHandlers): 
       retryTimer = null
     }
     controller?.abort()
-    const target = agentStatusTarget()
-    if (!target || cancelled) {
+    if (cancelled) {
       return
     }
     const currentGeneration = ++generation
     const streamController = new AbortController()
     controller = streamController
     void (async () => {
-      let connection: Awaited<ReturnType<typeof createRuntimeOrpcClient>> | null = null
+      let cancel: ((reason?: string) => Promise<void>) | null = null
       try {
-        connection = await createRuntimeOrpcClient(target, {
+        const client = await openAgentStatusProtocolClient()
+        if (!client || streamController.signal.aborted || currentGeneration !== generation) {
+          return
+        }
+        const stream = await client.subscribe({
           signal: streamController.signal
         })
-        const stream = await connection.client.agentStatus.events.subscribe(undefined, {
-          signal: streamController.signal
-        })
-        for await (const event of stream) {
+        cancel = stream.cancel
+        for await (const event of stream.events) {
           if (streamController.signal.aborted || currentGeneration !== generation) {
             return
           }
@@ -68,7 +65,7 @@ export function subscribeAgentStatusEvents(handlers: AgentStatusEventHandlers): 
         // Why: renderer teardown aborts the iterator; a dropped host stream is
         // retried below instead of surfacing a user-visible failure.
       } finally {
-        connection?.close()
+        await cancel?.('agent-status subscription closed')
         if (!cancelled && !streamController.signal.aborted && currentGeneration === generation) {
           retryTimer = setTimeout(openStream, AGENT_STATUS_RECONNECT_MS)
         }

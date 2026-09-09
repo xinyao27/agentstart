@@ -1,6 +1,6 @@
 # Mobile access across networks
 
-Yiru does not operate a relay or account service. Yiru Mobile connects directly to the Bun daemon,
+Yiru does not operate a relay or account service. Yiru Mobile connects directly to the Rust daemon,
 and its application payload remains end-to-end encrypted. When the phone and daemon are not on the
 same LAN, provide network reachability with a private overlay such as Tailscale or WireGuard.
 

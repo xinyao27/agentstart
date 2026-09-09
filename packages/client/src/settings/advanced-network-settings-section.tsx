@@ -1,12 +1,9 @@
-import {
-  normalizeProxyBypassRules,
-  normalizeProxyUrl
-} from '@yiru/runtime-protocol/workbench/network-proxy'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type React from 'react'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretDown as ChevronDown } from '~renderer/icons/hugeicons'
+import { normalizeProxyBypassRules, normalizeProxyUrl } from '~renderer/settings/network-proxy'
 import { useAppStore } from '~renderer/store/state'
 import { cn } from '~renderer/ui/class-names'
 

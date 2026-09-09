@@ -3,33 +3,25 @@ import SwiftUI
 
 nonisolated enum HostedReviewProvider: String, Hashable, Sendable {
     case github
-    case gitlab
-    case bitbucket
-    case azureDevOps = "azure-devops"
-    case gitea
     case unsupported
 
     var title: String {
         switch self {
         case .github: "GitHub"
-        case .gitlab: "GitLab"
-        case .bitbucket: "Bitbucket"
-        case .azureDevOps: "Azure DevOps"
-        case .gitea: "Gitea"
         case .unsupported: String(localized: "Hosted review")
         }
     }
 
     var supportsCreation: Bool {
         switch self {
-        case .github, .gitlab, .azureDevOps, .gitea: true
-        case .bitbucket, .unsupported: false
+        case .github: true
+        case .unsupported: false
         }
     }
 
-    var reviewTitle: String { self == .gitlab ? "Merge Request" : "Pull Request" }
-    var reviewLabel: String { self == .gitlab ? "merge request" : "pull request" }
-    var shortReviewTitle: String { self == .gitlab ? "MR" : "PR" }
+    var reviewTitle: String { "Pull Request" }
+    var reviewLabel: String { "pull request" }
+    var shortReviewTitle: String { "PR" }
 }
 
 nonisolated enum HostedReviewState: String, Hashable, Sendable {

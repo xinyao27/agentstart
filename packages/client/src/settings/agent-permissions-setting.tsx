@@ -1,4 +1,4 @@
-import type { AgentPermissionMode } from '@yiru/runtime-protocol/workbench/tui-agent/permissions'
+import type { AgentPermissionMode } from '@yiru/protocol/agent/launch/permissions'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { AgentPermissionsSettingProps } from './agents-pane-types'

@@ -1,9 +1,9 @@
 import {
   isAgentForegroundWrapperProcess,
   recognizeAgentProcess
-} from '@yiru/runtime-protocol/workbench/agent/process-recognition'
-import { isShellProcess } from '@yiru/runtime-protocol/workbench/shell-process-detection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/process/recognition'
+import { isShellProcess } from '@yiru/protocol/agent/process/shell-process'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import type { PaneForegroundAgentEntry } from '~renderer/terminal-pane/pane-foreground-agent-state'
 
 // Why: settle after exec, then place the final generic retry beyond sequential

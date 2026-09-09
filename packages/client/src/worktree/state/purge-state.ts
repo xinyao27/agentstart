@@ -1,4 +1,4 @@
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import { forgetForegroundTerminalTabs } from '~renderer/tab-bar/foreground-terminals'
 import { forgetAgentHibernationTabOutput } from '~renderer/terminal-pane/agent/hibernation-output-activity'
 import { forgetAgentStartupDeliveriesForTabs } from '~renderer/terminal-pane/agent/startup-delivery-guards'
@@ -248,7 +248,6 @@ export function buildWorktreePurgeState(s: AppState, worktreeIds: string[]): Par
     // Delete state
     deleteStateByWorktreeId: omitByWorktree(s.deleteStateByWorktreeId),
     baseStatusByWorktreeId: omitByWorktree(s.baseStatusByWorktreeId),
-    remoteBranchConflictByWorktreeId: omitByWorktree(s.remoteBranchConflictByWorktreeId),
     // File search
     fileSearchStateByWorktree: omitByWorktree(s.fileSearchStateByWorktree),
     // Browser state

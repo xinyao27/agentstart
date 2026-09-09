@@ -1,29 +1,29 @@
 import {
   normalizeExecutionHostOrder,
   normalizeExecutionHostScope
-} from '@yiru/runtime-protocol/model/workspace'
-import { normalizeBrowserPageZoomLevel } from '@yiru/runtime-protocol/workbench/browser/page-zoom'
-import { normalizeKagiSessionLink } from '@yiru/runtime-protocol/workbench/browser/url'
-import {
-  DEFAULT_HIDE_SLEEPING_WORKSPACES,
-  normalizeAgentActivityDisplayMode,
-  normalizeWorkspacePanelTitlebarPinnedIds,
-  normalizeWorktreeCardProperties
-} from '@yiru/runtime-protocol/workbench/constants'
-import { normalizeContextualTourIds } from '@yiru/runtime-protocol/workbench/contextual-tours'
-import { normalizeFeatureInteractions } from '@yiru/runtime-protocol/workbench/feature-interactions'
-import { normalizeFeatureTipIds } from '@yiru/runtime-protocol/workbench/feature-tips'
-import { normalizeManualRepoOrder } from '@yiru/runtime-protocol/workbench/manual-repo-order'
-import { clampMarkdownTocPanelWidth } from '@yiru/runtime-protocol/workbench/markdown-toc-panel-width'
-import { normalizeStatusBarItems } from '@yiru/runtime-protocol/workbench/status-bar-defaults'
-import { normalizeStatusBarUsageMode } from '@yiru/runtime-protocol/workbench/status-bar-usage-mode'
+} from '@yiru/protocol/host/identity'
+import { normalizeManualRepoOrder } from '@yiru/protocol/project/manual-order'
+import { normalizeContextualTourIds } from '@yiru/protocol/settings/contextual-tours'
+import { normalizeFeatureTipIds } from '@yiru/protocol/settings/feature-tips'
+import { clampMarkdownTocPanelWidth } from '@yiru/protocol/settings/markdown-toc'
+import { normalizeWorkspacePanelTitlebarPinnedIds } from '@yiru/protocol/settings/panel-titlebar-pins'
+import { normalizeStatusBarItems } from '@yiru/protocol/settings/status-bar'
 import {
   normalizeThemeGradient,
   normalizeThemeGradientsByWorkspace
-} from '@yiru/runtime-protocol/workbench/theme-gradient/theme'
-import { normalizeUsagePercentageDisplay } from '@yiru/runtime-protocol/workbench/usage-percentage-display'
-import { normalizeWorkspaceStatuses } from '@yiru/runtime-protocol/workbench/workspace/statuses'
+} from '@yiru/protocol/settings/theme-gradient'
+import { normalizeStatusBarUsageMode } from '@yiru/protocol/settings/usage-display'
+import { normalizeUsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
+import {
+  DEFAULT_HIDE_SLEEPING_WORKSPACES,
+  normalizeAgentActivityDisplayMode
+} from '@yiru/protocol/settings/workspace-preferences'
+import { normalizeWorktreeCardProperties } from '@yiru/protocol/settings/worktree-card-properties'
+import { normalizeFeatureInteractions } from '@yiru/protocol/telemetry/interactions/state'
+import { normalizeWorkspaceStatuses } from '@yiru/protocol/workspace/status/normalize'
 import type { StateCreator } from 'zustand'
+import { normalizeKagiSessionLink } from '~renderer/browser/session/kagi-link'
+import { normalizeBrowserPageZoomLevel } from '~renderer/browser/zoom'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { setRuntimeUIState } from '~renderer/runtime/ui-client'
 import {

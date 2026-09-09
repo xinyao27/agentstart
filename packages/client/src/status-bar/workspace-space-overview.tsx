@@ -1,8 +1,7 @@
 import type {
-  WorkspaceSpaceAnalysis,
-  WorkspaceSpaceScanProgress,
-  WorkspaceSpaceWorktree
-} from '@yiru/runtime-protocol/workbench/workspace/space-types'
+  WorkspaceSpaceAnalysisValue as WorkspaceSpaceAnalysis,
+  WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree
+} from '@yiru/protocol'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -15,7 +14,7 @@ import { LoadingIndicator } from '~renderer/loading/indicator'
 import { Button } from '~renderer/ui/button'
 
 import { BreakdownList } from './workspace-space-breakdown'
-import { formatBytes } from './workspace-space-format'
+import { formatBytes, getWorkspaceSpaceScanningLabel } from './workspace-space-format'
 import { Metric, UpdatedMetric } from './workspace-space-metrics'
 import type { WorkspaceSpaceSortKey } from './workspace-space-presentation'
 import { FilterToolbar, SelectionToolbar } from './workspace-space-toolbar'
@@ -23,10 +22,8 @@ import { WorkspaceTreemap } from './workspace-space-treemap'
 
 type WorkspaceSpaceOverviewProps = {
   analysis: WorkspaceSpaceAnalysis | null
-  progress: WorkspaceSpaceScanProgress | null
   scanError: string | null
   isScanning: boolean
-  progressLabel: string | null
   rows: WorkspaceSpaceWorktree[]
   isInitialScan: boolean
   inspectedWorktree: WorkspaceSpaceWorktree | null
@@ -52,10 +49,8 @@ type WorkspaceSpaceOverviewProps = {
 
 export function WorkspaceSpaceOverview({
   analysis,
-  progress,
   scanError,
   isScanning,
-  progressLabel,
   rows,
   isInitialScan,
   inspectedWorktree,
@@ -120,25 +115,16 @@ export function WorkspaceSpaceOverview({
           ) : (
             <HardDrive className="size-4 shrink-0" />
           )}
-          <span className="truncate">{getScanSummary(analysis, isScanning, progressLabel)}</span>
+          <span className="truncate">{getScanSummary(analysis, isScanning)}</span>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={isScanning ? onCancelScan : onRefresh}
-          disabled={progress?.state === 'cancelling'}
           className="w-28 gap-1.5"
         >
-          {isScanning ? (
-            progress?.state === 'cancelling' ? (
-              <LoadingIndicator className="size-3.5" />
-            ) : (
-              <X className="size-3.5" />
-            )
-          ) : (
-            <RefreshCw className="size-3.5" />
-          )}
-          {getScanActionLabel(analysis !== null, isScanning, progress?.state === 'cancelling')}
+          {isScanning ? <X className="size-3.5" /> : <RefreshCw className="size-3.5" />}
+          {getScanActionLabel(analysis !== null, isScanning)}
         </Button>
       </div>
 
@@ -206,17 +192,13 @@ export function WorkspaceSpaceOverview({
   )
 }
 
-function getScanSummary(
-  analysis: WorkspaceSpaceAnalysis | null,
-  isScanning: boolean,
-  progressLabel: string | null
-): string {
+function getScanSummary(analysis: WorkspaceSpaceAnalysis | null, isScanning: boolean): string {
   if (analysis) {
     return isScanning
       ? translate(
           'auto.components.status.bar.WorkspaceSpaceManagerPanel.34174bd83d',
           '{{value0}}. You can leave this page; the last result stays visible.',
-          { value0: progressLabel ?? 'Scanning workspace sizes' }
+          { value0: getWorkspaceSpaceScanningLabel() }
         )
       : translate(
           'auto.components.status.bar.WorkspaceSpaceManagerPanel.d595295d7d',
@@ -228,7 +210,7 @@ function getScanSummary(
     ? translate(
         'auto.components.status.bar.WorkspaceSpaceManagerPanel.265d956765',
         '{{value0}}. You can leave this page.',
-        { value0: progressLabel ?? 'Scanning workspace sizes' }
+        { value0: getWorkspaceSpaceScanningLabel() }
       )
     : translate(
         'auto.components.status.bar.WorkspaceSpaceManagerPanel.e91dd2a9ae',
@@ -236,15 +218,9 @@ function getScanSummary(
       )
 }
 
-function getScanActionLabel(
-  hasAnalysis: boolean,
-  isScanning: boolean,
-  isCancelling: boolean
-): string {
+function getScanActionLabel(hasAnalysis: boolean, isScanning: boolean): string {
   if (isScanning) {
-    return isCancelling
-      ? translate('auto.components.status.bar.WorkspaceSpaceManagerPanel.1fce91d1b9', 'Stopping')
-      : translate('auto.components.status.bar.WorkspaceSpaceManagerPanel.8dc9ddac8a', 'Cancel')
+    return translate('auto.components.status.bar.WorkspaceSpaceManagerPanel.8dc9ddac8a', 'Cancel')
   }
   return hasAnalysis
     ? translate('auto.components.status.bar.WorkspaceSpaceManagerPanel.508673bac0', 'Refresh')

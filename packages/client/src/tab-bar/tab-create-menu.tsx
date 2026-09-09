@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
@@ -174,9 +174,9 @@ export function TabCreateMenu(props: TabBarProps): React.JSX.Element {
         break
     }
   }
-  const launchAgent = (agent: TuiAgent): void => {
+  const launchAgent = async (agent: TuiAgent): Promise<void> => {
     const option = runtime.agentLaunchOptions.find((candidate) => candidate.agent === agent)
-    const result = launchAgentInNewTab({
+    const result = await launchAgentInNewTab({
       agent,
       worktreeId,
       groupId: runtime.resolvedGroupId,

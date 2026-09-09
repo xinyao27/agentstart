@@ -1,16 +1,16 @@
 import {
   ALL_EXECUTION_HOSTS_SCOPE,
   LOCAL_EXECUTION_HOST_ID,
-  getLocalExecutionHostLabel,
   getRepoExecutionHostId,
   getWorktreeExecutionHostId,
   type ExecutionHostId,
   type ExecutionHostKind,
   type ExecutionHostScope
-} from '@yiru/runtime-protocol/model/workspace'
-import type { RuntimeCompatVerdict } from '@yiru/runtime-protocol/runtime-compatibility'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { RuntimeCompatVerdict } from '@yiru/protocol/runtime-compatibility'
 import type { ExecutionHostHealth } from '~renderer/execution-host-registry'
+import { getLocalExecutionHostLabel } from '~renderer/execution-host/labels'
 
 import type { Row } from './worktree-list/groups'
 

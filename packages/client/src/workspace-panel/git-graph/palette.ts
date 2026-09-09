@@ -1,7 +1,4 @@
-import {
-  GIT_HISTORY_LANE_COLORS,
-  GIT_HISTORY_REF_COLOR
-} from '@yiru/runtime-protocol/workbench/git/history'
+import { GIT_HISTORY_LANE_COLORS, GIT_HISTORY_REF_COLOR } from '@yiru/protocol/git/history-types'
 
 // Why: lanes paint from the design system's own graph tokens rather than
 // vscode-git-graph's 12 upstream hexes, which were tuned for that extension's

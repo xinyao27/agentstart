@@ -46,6 +46,52 @@ type TerminalWorktreeMountSnapshot = {
   mountedWorktreeIds: ReadonlySet<string>
 }
 
+function readOnlySetEquals(a: ReadonlySet<string>, b: ReadonlySet<string>): boolean {
+  if (a.size !== b.size) {
+    return false
+  }
+  for (const value of a) {
+    if (!b.has(value)) {
+      return false
+    }
+  }
+  return true
+}
+
+function readOnlyMapOfSetsEquals(
+  a: ReadonlyMap<string, ReadonlySet<string>>,
+  b: ReadonlyMap<string, ReadonlySet<string>>
+): boolean {
+  if (a.size !== b.size) {
+    return false
+  }
+  for (const [key, value] of a) {
+    const other = b.get(key)
+    if (!other || !readOnlySetEquals(value, other)) {
+      return false
+    }
+  }
+  return true
+}
+
+// Why: `backgroundMountRevision` is deliberately excluded — it is the notify
+// counter itself, and comparing it would defeat content-aware notification.
+function mountSnapshotContentEquals(
+  a: TerminalWorktreeMountSnapshot,
+  b: TerminalWorktreeMountSnapshot
+): boolean {
+  return (
+    a.anyMountedWorktreeHasLayout === b.anyMountedWorktreeHasLayout &&
+    readOnlySetEquals(a.mountedWorktreeIds, b.mountedWorktreeIds) &&
+    readOnlySetEquals(a.measurableBackgroundWorktreeIds, b.measurableBackgroundWorktreeIds) &&
+    readOnlyMapOfSetsEquals(
+      a.activationDeferredMountTabIdsByWorktree,
+      b.activationDeferredMountTabIdsByWorktree
+    ) &&
+    readOnlyMapOfSetsEquals(a.backgroundMountTabIdsByWorktree, b.backgroundMountTabIdsByWorktree)
+  )
+}
+
 // Why: tracks which worktrees have ever been activated (only visited
 // worktrees mount a TerminalPane, preventing mass PTY spawning on session
 // restore) and, for the active worktree, which of its tabs a cold activation
@@ -92,7 +138,7 @@ export function useTerminalWorktreeMounting({
   const backgroundMountRevisionListenersRef = useRef(new Set<() => void>())
   const notifyBackgroundMountRevision = useEventCallback((): void => {
     const currentSnapshot = mountSnapshotRef.current
-    mountSnapshotRef.current = {
+    const candidate = {
       activationDeferredMountTabIdsByWorktree: new Map(
         activationDeferredMountTabIdsByWorktreeRef.current
       ),
@@ -108,6 +154,15 @@ export function useTerminalWorktreeMounting({
       measurableBackgroundWorktreeIds: new Set(measurableBackgroundWorktreeIdsRef.current),
       mountedWorktreeIds: new Set(mountedWorktreeIdsRef.current)
     }
+    // Why: the activation effect calls this on every pass and one of its deps
+    // (`workspaceSurfaces`) is rebuilt each render. Bumping the revision
+    // unconditionally re-renders through useSyncExternalStore, which re-runs
+    // the effect and loops into React error #185. Notify only when the tracked
+    // content actually changed; the revision itself is not content.
+    if (mountSnapshotContentEquals(currentSnapshot, candidate)) {
+      return
+    }
+    mountSnapshotRef.current = candidate
     for (const listener of backgroundMountRevisionListenersRef.current) {
       listener()
     }

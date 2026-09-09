@@ -1,4 +1,5 @@
 import Foundation
+import YiruProtocol
 
 nonisolated enum WorkspaceKind: String, Codable, Sendable {
     case git
@@ -36,23 +37,6 @@ nonisolated struct WorkspaceAgent: Codable, Hashable, Sendable {
     let interrupted: Bool
     let stateStartedAt: Date
     let updatedAt: Date
-
-    init(wire: MobileWorkspaceAgentWire) {
-        paneKey = wire.paneKey
-        parentPaneKey = wire.parentPaneKey
-        state = WorkspaceAgentState(rawValue: wire.state.rawValue) ?? .done
-        agentType = wire.agentType
-        prompt = wire.prompt
-        displayName = wire.displayName ?? wire.taskTitle
-        lastAssistantMessage = wire.lastAssistantMessage
-        interrupted = wire.interrupted
-        stateStartedAt = Self.date(milliseconds: wire.stateStartedAt)
-        updatedAt = Self.date(milliseconds: wire.updatedAt)
-    }
-
-    private static func date(milliseconds: Int64) -> Date {
-        Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1_000)
-    }
 }
 
 nonisolated struct WorkspaceSummary: Codable, Identifiable, Hashable, Sendable {
@@ -81,7 +65,6 @@ nonisolated struct WorkspaceSummary: Codable, Identifiable, Hashable, Sendable {
     let manualOrder: Double?
     let createdAt: Date?
     let linkedPullRequest: WorkspacePullRequest?
-    let linkedGitLabMergeRequest: Int?
     let comment: String
     var isPinned: Bool
     var isActive: Bool
@@ -94,46 +77,51 @@ nonisolated struct WorkspaceSummary: Codable, Identifiable, Hashable, Sendable {
     var activity: WorkspaceActivity
     let agents: [WorkspaceAgent]
 
-    init(wire: MobileWorkspaceListItemWire) {
-        id = wire.worktreeId
-        kind = WorkspaceKind(rawValue: wire.workspaceKind?.rawValue ?? "git") ?? .git
-        repoID = wire.repoId
-        executionHostID = wire.hostId
-        resumeTargetStatus = wire.resumeTargetStatus?.rawValue
-        terminalPlatform = wire.terminalPlatform
-        priorWorktreeIDs = wire.priorWorktreeIds ?? []
-        repoName = wire.repo
-        path = wire.path
-        branch = wire.branch
-        name = wire.displayName
-        workspaceStatus = wire.workspaceStatus
-        isArchived = wire.isArchived
-        isMainWorktree = wire.isMainWorktree ?? false
-        reportedMainWorktree = wire.isMainWorktree
-        hasHostSidebarActivity = wire.hasHostSidebarActivity
-        worktreeInstanceID = wire.worktreeInstanceId
-        lineageWorktreeInstanceID = wire.lineageWorktreeInstanceId
-        parentWorktreeInstanceID = wire.parentWorktreeInstanceId
-        parentWorktreeID = wire.parentWorktreeId
-        childWorktreeIDs = wire.childWorktreeIds
-        sortOrder = wire.sortOrder
-        manualOrder = wire.manualOrder
-        createdAt = wire.createdAt.map(Self.date(milliseconds:))
-        linkedPullRequest = wire.linkedPR.map {
-            WorkspacePullRequest(number: $0.number, state: $0.state)
-        }
-        linkedGitLabMergeRequest = wire.linkedGitLabMR
-        comment = wire.comment
-        isPinned = wire.isPinned
-        isActive = wire.isActive
-        isUnread = wire.unread
-        liveTerminalCount = wire.liveTerminalCount
-        hasAttachedPty = wire.hasAttachedPty
-        lastActivity = wire.lastActivityAt.map(Self.date(milliseconds:))
-        lastOutput = wire.lastOutputAt.map(Self.date(milliseconds:))
-        preview = wire.preview
-        activity = WorkspaceActivity(rawValue: wire.status.rawValue) ?? .inactive
-        agents = wire.agents.map(WorkspaceAgent.init(wire:))
+    // Why: the protobuf ps record mirrors the retired JSON projection; the lineage
+    // instance ids it omits map to nil, which keeps the list's lineage validation
+    // on its permissive nil branch instead of failing every parent pair closed.
+    nonisolated init(ps: Yiru_Runtime_V1_WorktreePsSummary) {
+        id = ps.worktreeID
+        kind = WorkspaceKind(rawValue: ps.workspaceKind) ?? .git
+        repoID = ps.repoID
+        executionHostID = ps.hostID.isEmpty ? nil : ps.hostID
+        resumeTargetStatus = ps.resumeTargetStatus.isEmpty ? nil : ps.resumeTargetStatus
+        terminalPlatform = ps.terminalPlatform.isEmpty ? nil : ps.terminalPlatform
+        priorWorktreeIDs = ps.priorWorktreeIds
+        repoName = ps.repo
+        path = ps.path
+        branch = ps.branch
+        name = ps.displayName
+        workspaceStatus = ps.workspaceStatus
+        isArchived = ps.isArchived
+        isMainWorktree = ps.isMainWorktree
+        reportedMainWorktree = ps.isMainWorktree
+        hasHostSidebarActivity = ps.hasHostSidebarActivity_p
+        worktreeInstanceID = ps.hasWorktreeInstanceID ? ps.worktreeInstanceID : nil
+        lineageWorktreeInstanceID =
+            ps.hasLineageWorktreeInstanceID ? ps.lineageWorktreeInstanceID : nil
+        parentWorktreeInstanceID =
+            ps.hasParentWorktreeInstanceID ? ps.parentWorktreeInstanceID : nil
+        parentWorktreeID = ps.hasParentWorktreeID ? ps.parentWorktreeID : nil
+        childWorktreeIDs = ps.childWorktreeIds
+        sortOrder = ps.sortOrder
+        manualOrder = ps.hasManualOrder ? ps.manualOrder : nil
+        createdAt = ps.hasCreatedAt ? Self.date(milliseconds: ps.createdAt) : nil
+        linkedPullRequest =
+            ps.hasLinkedPr
+            ? WorkspacePullRequest(number: Int(ps.linkedPr.number), state: ps.linkedPr.state)
+            : nil
+        comment = ps.comment
+        isPinned = ps.isPinned
+        isActive = ps.isActive
+        isUnread = ps.unread
+        liveTerminalCount = Int(ps.liveTerminalCount)
+        hasAttachedPty = ps.hasAttachedPty_p
+        lastActivity = ps.hasLastActivityAt ? Self.date(milliseconds: ps.lastActivityAt) : nil
+        lastOutput = ps.hasLastOutputAt ? Self.date(milliseconds: ps.lastOutputAt) : nil
+        preview = ps.preview
+        activity = WorkspaceActivity(rawValue: ps.status) ?? .inactive
+        agents = ps.agents.map(WorkspaceAgent.init(ps:))
     }
 
     private static func date(milliseconds: Int64) -> Date {
@@ -222,7 +210,6 @@ nonisolated struct WorkspaceSummary: Codable, Identifiable, Hashable, Sendable {
         manualOrder = nil
         createdAt = nil
         linkedPullRequest = nil
-        linkedGitLabMergeRequest = nil
         comment = ""
         isPinned = false
         isActive = activity == .active || activity == .working
@@ -264,39 +251,7 @@ nonisolated struct WorkspaceRepo: Hashable, Sendable {
     let slug: WorkspaceRepoSlug?
     let remoteURL: String?
 
-    init(wire: MobileRepoListItemWire) {
-        id = wire.id
-        path = wire.path
-        name = wire.displayName
-        badgeColor = wire.badgeColor
-        connectionID = wire.connectionId
-        kind = WorkspaceRepoKind(rawValue: wire.kind?.rawValue ?? "git") ?? .git
-        if let upstream = wire.upstream {
-            slug = WorkspaceRepoSlug(owner: upstream.owner, repo: upstream.repo)
-        } else {
-            slug = Self.slug(remoteURL: wire.gitRemoteIdentity?.remoteUrl)
-        }
-        remoteURL = wire.gitRemoteIdentity?.remoteUrl
-        switch wire.repoIcon {
-        case .lucide(let name): icon = .lucide(name: name)
-        case .emoji(let emoji): icon = .emoji(emoji)
-        case .image(let source, _, let label):
-            if source.hasPrefix("data:image/png;base64,"),
-                let delimiter = source.firstIndex(of: ",")
-            {
-                icon = .image(
-                    data: Data(base64Encoded: String(source[source.index(after: delimiter)...])),
-                    url: nil,
-                    label: label
-                )
-            } else {
-                icon = .image(data: nil, url: URL(string: source), label: label)
-            }
-        case nil: icon = nil
-        }
-    }
-
-    private static func slug(remoteURL: String?) -> WorkspaceRepoSlug? {
+    static func slug(remoteURL: String?) -> WorkspaceRepoSlug? {
         guard var value = remoteURL?.trimmingCharacters(in: .whitespacesAndNewlines),
             !value.isEmpty
         else { return nil }

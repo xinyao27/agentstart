@@ -1,4 +1,4 @@
-import type { RuntimeClientTarget } from '../orpc-client'
+import type { RuntimeClientTarget } from '../runtime-target'
 import { RemoteRuntimeTerminalMultiplexer } from './multiplexer'
 
 const multiplexers = new Map<string, RemoteRuntimeTerminalMultiplexer>()

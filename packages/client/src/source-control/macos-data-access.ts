@@ -1,7 +1,7 @@
 import type {
   ActiveRightSidebarTab,
   RightSidebarExplorerView
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/settings/ui-state'
 
 const MAC_APP_DATA_SEGMENT_RE = /(^|\/)Library\/(Containers|Group Containers)\//
 

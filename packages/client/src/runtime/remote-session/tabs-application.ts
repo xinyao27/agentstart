@@ -1,5 +1,3 @@
-import type { RuntimeMobileSessionTabsResult } from '@yiru/runtime-protocol/workbench/runtime-types'
-
 import type { AppState } from '../../store/state'
 import { useAppStore } from '../../store/state'
 import {
@@ -10,6 +8,7 @@ import { clearRemoteSessionFocusIntent, peekRemoteSessionFocusIntent } from './f
 import { buildRemoteSessionGroupReconciliation } from './group-reconciliation'
 import { buildRemoteSessionResourceReconciliation } from './resource-reconciliation'
 import { resolveRemoteSessionSnapshotSelection } from './selection-reconciliation'
+import type { RuntimeMobileSessionTabsResult } from './session-model'
 import { buildRemoteSessionSnapshotPatch } from './snapshot-patch'
 import { buildRemoteSessionSurfaceMirror } from './surface-reconciliation'
 import type { RemoteSessionTabsSyncState } from './tabs-state'

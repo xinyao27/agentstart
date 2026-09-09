@@ -1,7 +1,4 @@
-import type {
-  KeybindingActionId,
-  KeybindingInput
-} from '@yiru/runtime-protocol/workbench/keybindings'
+import type { KeybindingActionId, KeybindingInput } from '@yiru/protocol/keybindings'
 import React from 'react'
 
 import { ShortcutRecorderButton } from './recorder-button'

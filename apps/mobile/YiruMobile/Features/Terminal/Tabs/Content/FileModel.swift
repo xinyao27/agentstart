@@ -79,7 +79,7 @@ final class WorkspaceFileModel {
     // transport error need different recovery, and one generic message hides which applies.
     nonisolated private static func loadFailureMessage(for error: Error) -> LocalizedStringResource
     {
-        guard let runtimeError = error as? RuntimeOrpcError else {
+        guard let runtimeError = error as? RuntimeServiceError else {
             return "Couldn't load file preview"
         }
         let normalized = (runtimeError.serverMessage ?? runtimeError.serverCode ?? "").lowercased()

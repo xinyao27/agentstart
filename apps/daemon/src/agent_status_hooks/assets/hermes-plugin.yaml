@@ -1,0 +1,17 @@
+# Managed by Yiru. Do not edit; changes may be overwritten.
+name: yiru-status
+version: 1.0.0
+description: 'Reports Hermes Agent lifecycle events to Yiru.'
+author: 'Yiru'
+kind: standalone
+provides_hooks:
+  - on_session_start
+  - pre_llm_call
+  - post_llm_call
+  - pre_tool_call
+  - post_tool_call
+  - pre_approval_request
+  - post_approval_response
+  - on_session_end
+  - on_session_finalize
+  - on_session_reset

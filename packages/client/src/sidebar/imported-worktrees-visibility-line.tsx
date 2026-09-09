@@ -1,4 +1,4 @@
-import { normalizeRuntimePathForComparison } from '@yiru/runtime-protocol/model/platform'
+import { normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
 import React, { useState } from 'react'
 import { getExternalWorktreeParentPath } from '~renderer/external-worktree-visibility'
 import { translate } from '~renderer/i18n/i18n'

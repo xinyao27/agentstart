@@ -3,7 +3,7 @@ import {
   type LegendListRef,
   type LegendListRenderItemProps
 } from '@legendapp/list/react'
-import type { ProjectGroup } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
 import { useRef } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'

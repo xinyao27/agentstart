@@ -1,24 +1,15 @@
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
+import { sleepRuntimeWorktree } from '~renderer/runtime/worktree-lifecycle-target'
+import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 import {
   clearWorktreeSleepIntent,
   markWorktreeSleepIntent
 } from '~renderer/sidebar/worktree-sleep-intent'
 import { useAppStore } from '~renderer/store/state'
+import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
 
-/**
- * Shared "sleep worktree" flow (close all panels to free memory / CPU)
- * used by WorktreeContextMenu and MemoryStatusSegment's per-row hover action.
- *
- * Why this is a module helper rather than inlined at each call site: the guard
- * that clears `activeWorktreeId` before tearing down terminals isn't optional
- * polish — shutting down the active worktree while its TerminalPane is still
- * visible causes a visible "reboot" flicker and can crash the pane (PTY exit
- * callbacks race against the live xterm instance). See the original comment
- * in WorktreeContextMenu's handleCloseTerminals for the full reasoning.
- * Centralizing the sequence here keeps that safety invariant in one place so
- * a new caller can't accidentally skip it.
- */
+// Why: release the visible panes before the daemon stops their processes, avoiding remount races.
 export async function runSleepWorktree(worktreeId: string): Promise<boolean> {
   return runSleepWorktrees([worktreeId])
 }
@@ -111,19 +102,11 @@ export async function runSleepWorktrees(worktreeIds: readonly string[]): Promise
   if (worktreeIds.length === 0) {
     return true
   }
-  const {
-    activeWorktreeId,
-    setActiveWorktree,
-    shutdownWorktreeBrowsers,
-    shutdownWorktreeTerminals
-  } = useAppStore.getState()
+  const { activeWorktreeId, setActiveWorktree, shutdownWorktreeBrowsers } = useAppStore.getState()
   let activeSleepIntentWorktreeId: string | null = null
   if (activeWorktreeId && worktreeIds.includes(activeWorktreeId)) {
     const restoreSidebarPosition = preserveSidebarWorktreePosition(activeWorktreeId)
-    // Why: clearing the active workspace can unmount TerminalPanes before
-    // shutdownWorktreeTerminals writes PTY suppressions. Use a non-rendering
-    // intent marker so those exits do not stamp activity, without inserting an
-    // extra Zustand update that can disturb the sidebar's scroll restoration.
+    // Why: pane teardown must not stamp activity for an intentional sleep.
     markWorktreeSleepIntent(activeWorktreeId)
     activeSleepIntentWorktreeId = activeWorktreeId
     setActiveWorktree(null)
@@ -133,22 +116,18 @@ export async function runSleepWorktrees(worktreeIds: readonly string[]): Promise
   try {
     for (const worktreeId of worktreeIds) {
       try {
-        // Why: sleep mirrors removeWorktree's shutdown sequence so legacy
-        // browser session records are drained before terminal ownership changes.
+        // Why: browser resources belong to this browser host; PTY shutdown belongs to the daemon.
         await shutdownWorktreeBrowsers(worktreeId)
       } catch (err) {
         errors.push(err instanceof Error ? err.message : String(err))
         continue
       }
       try {
-        // Why: sleep is reversible — the tab record stays in tabsByWorktree, the
-        // layout stays in terminalLayoutsByTabId, only the live PTY processes are
-        // released. keepIdentifiers preserves tab.ptyId / ptyIdsByLeafId /
-        // lastKnownRelayPtyIdByTabId so wake re-spawns against the same on-disk
-        // history dir (local) or relay session id (SSH); it also captures
-        // serializer buffers into buffersByLeafId for SSH wake to reseed
-        // scrollback. See DESIGN_DOC_TERMINAL_HISTORY_FIX_V2.md §3.3.c.
-        await shutdownWorktreeTerminals(worktreeId, { keepIdentifiers: true })
+        const environmentId = getRuntimeEnvironmentIdForWorktree(useAppStore.getState(), worktreeId)
+        await sleepRuntimeWorktree(
+          environmentId ? { kind: 'environment', environmentId } : { kind: 'local' },
+          toRuntimeWorktreeSelector(worktreeId)
+        )
       } catch (err) {
         errors.push(err instanceof Error ? err.message : String(err))
       }

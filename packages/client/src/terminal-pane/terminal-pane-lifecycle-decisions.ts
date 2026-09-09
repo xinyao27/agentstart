@@ -1,6 +1,6 @@
 import type { Terminal } from '@xterm/xterm'
-import type { TerminalPaneSplitSource } from '@yiru/runtime-protocol/workbench/feature-education-telemetry'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalPaneSplitSource } from '@yiru/protocol/telemetry/education'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 
 import { RESET_KITTY_KEYBOARD_PROTOCOL } from './layout-serialization'
 import { writeTerminalOutput } from './pane-manager/pane-terminal-output-scheduler'

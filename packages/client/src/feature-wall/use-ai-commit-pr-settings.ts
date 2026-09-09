@@ -1,10 +1,10 @@
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import {
-  CUSTOM_AGENT_ID,
   getCommitMessageAgentCapability,
-  isCustomAgentId,
   resolveCommitMessageAgentChoice
-} from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import type { CommitMessageAiSettings, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/catalog/agents'
+import { CUSTOM_AGENT_ID, isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import type { CommitMessageAiSettings } from '@yiru/protocol/source-control/legacy-settings'
 import { useState } from 'react'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 import { useAppStore } from '~renderer/store/state'

@@ -1,9 +1,6 @@
-import {
-  toRuntimeExecutionHostId,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import { toRuntimeExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 
 import { fetchWorkspaceSessionWithRuntimeHostOwners } from '../../editor/workspace-session-host-persistence'
 import { shellClient } from '../../runtime/shell-client'

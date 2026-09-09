@@ -1,0 +1,14 @@
+version: v2
+clean: true
+plugins:
+  - local: protoc-gen-es
+    out: typescript/generated
+    opt:
+      - target=js+dts
+      - import_extension=js
+  - remote: buf.build/apple/swift:v1.38.1
+    out: swift/Sources/YiruProtocol/Generated
+    opt:
+      - Visibility=Public
+inputs:
+  - directory: proto

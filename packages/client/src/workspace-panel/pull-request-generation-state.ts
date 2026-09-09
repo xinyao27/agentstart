@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 

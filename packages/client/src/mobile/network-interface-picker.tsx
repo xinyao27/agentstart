@@ -1,6 +1,6 @@
-import { parseManualNetworkAddress } from '@yiru/runtime-protocol/mobile-development-pairing'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
+import { parseManualNetworkAddress } from '~renderer/mobile/network-address'
 
 import { AddressPicker } from '../network/address-picker'
 import type { MobileNetworkInterface } from '../settings/mobile/network-interface-selection'

@@ -1,4 +1,3 @@
-import { shouldShowUsagePercentageDisplayChangeNotice } from '@yiru/runtime-protocol/workbench/usage-percentage-display-change-notice'
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { translate } from '~renderer/i18n/i18n'
@@ -7,6 +6,7 @@ import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
 
 import { USAGE_PERCENTAGE_DISPLAY_SETTING_ID } from '../settings/appearance/usage-percentage-search'
+import { shouldShowUsagePercentageDisplayChangeNotice } from './usage-change-notice'
 
 // Why: let startup modals settle before the status-bar callout competes for focus.
 const SHOW_DELAY_MS = 1_800

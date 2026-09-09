@@ -1,16 +1,12 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import type {
-  DetectedWorktree,
-  FolderWorkspace,
-  Project,
-  ProjectGroup,
-  ProjectHostSetup,
-  ProjectOrderBy,
-  Repo,
-  Worktree,
-  WorktreeLineage,
-  WorkspaceStatusDefinition
-} from '@yiru/runtime-protocol/workbench/types'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectOrderBy } from '@yiru/protocol/settings/ui-state'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
+import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
+import type { DetectedWorktree, Worktree } from '@yiru/protocol/worktree/model'
 import type React from 'react'
 import type { AppState } from '~renderer/store/types'
 

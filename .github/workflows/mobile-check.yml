@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'apps/mobile/**'
-      - 'packages/runtime-protocol/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'

@@ -1,0 +1,676 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+import "yiru/runtime/v1/host_registry.proto";
+
+// Why: computer-use drives a local, signed desktop-automation helper. Every
+// method is CLI-only and local-route-only until Chrome's legacy JSON path
+// migrates onto this service.
+service ComputerService {
+  rpc Capabilities(ComputerServiceCapabilitiesRequest) returns (ComputerServiceCapabilitiesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListApps(ComputerServiceListAppsRequest) returns (ComputerServiceListAppsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Permissions(ComputerServicePermissionsRequest) returns (ComputerServicePermissionsResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PermissionsStatus(ComputerServicePermissionsStatusRequest) returns (ComputerServicePermissionsStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PermissionsReset(ComputerServicePermissionsResetRequest) returns (ComputerServicePermissionsResetResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListWindows(ComputerServiceListWindowsRequest) returns (ComputerServiceListWindowsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetAppState(ComputerServiceGetAppStateRequest) returns (ComputerServiceGetAppStateResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Click(ComputerServiceClickRequest) returns (ComputerServiceActionResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PerformSecondaryAction(ComputerServicePerformSecondaryActionRequest) returns (ComputerServiceActionResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Scroll(ComputerServiceScrollRequest) returns (ComputerServiceActionResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Drag(ComputerServiceDragRequest) returns (ComputerServiceActionResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc TypeText(ComputerServiceTypeTextRequest) returns (ComputerServiceActionResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PressKey(ComputerServicePressKeyRequest) returns (ComputerServiceActionResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Hotkey(ComputerServiceHotkeyRequest) returns (ComputerServiceActionResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PasteText(ComputerServicePasteTextRequest) returns (ComputerServiceActionResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SetValue(ComputerServiceSetValueRequest) returns (ComputerServiceActionResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+// Shared targeting for every observe/action call: which app, which
+// session-or-worktree namespace owns the cached snapshot, and which window.
+message ComputerObserveTarget {
+  string app = 1;
+  oneof namespace {
+    string session = 2;
+    string worktree = 3;
+  }
+  oneof window {
+    uint32 window_id = 4;
+    uint32 window_index = 5;
+  }
+  bool no_screenshot = 6;
+  bool restore_window = 7;
+}
+
+message ComputerPoint {
+  double x = 1;
+  double y = 2;
+}
+
+enum ComputerMouseButton {
+  COMPUTER_MOUSE_BUTTON_UNSPECIFIED = 0;
+  COMPUTER_MOUSE_BUTTON_LEFT = 1;
+  COMPUTER_MOUSE_BUTTON_RIGHT = 2;
+  COMPUTER_MOUSE_BUTTON_MIDDLE = 3;
+}
+
+enum ComputerScrollDirection {
+  COMPUTER_SCROLL_DIRECTION_UNSPECIFIED = 0;
+  COMPUTER_SCROLL_DIRECTION_UP = 1;
+  COMPUTER_SCROLL_DIRECTION_DOWN = 2;
+  COMPUTER_SCROLL_DIRECTION_LEFT = 3;
+  COMPUTER_SCROLL_DIRECTION_RIGHT = 4;
+}
+
+enum ComputerPermissionId {
+  COMPUTER_PERMISSION_ID_UNSPECIFIED = 0;
+  COMPUTER_PERMISSION_ID_ACCESSIBILITY = 1;
+  COMPUTER_PERMISSION_ID_SCREENSHOTS = 2;
+}
+
+enum ComputerPermissionStatus {
+  COMPUTER_PERMISSION_STATUS_UNSPECIFIED = 0;
+  COMPUTER_PERMISSION_STATUS_GRANTED = 1;
+  COMPUTER_PERMISSION_STATUS_NOT_GRANTED = 2;
+  COMPUTER_PERMISSION_STATUS_UNSUPPORTED = 3;
+}
+
+message ComputerPermissionState {
+  ComputerPermissionId id = 1;
+  ComputerPermissionStatus status = 2;
+}
+
+enum ComputerErrorCode {
+  COMPUTER_ERROR_CODE_UNSPECIFIED = 0;
+  COMPUTER_ERROR_CODE_APP_NOT_FOUND = 1;
+  COMPUTER_ERROR_CODE_APP_BLOCKED = 2;
+  COMPUTER_ERROR_CODE_WINDOW_NOT_FOUND = 3;
+  COMPUTER_ERROR_CODE_WINDOW_NOT_FOCUSED = 4;
+  COMPUTER_ERROR_CODE_WINDOW_STALE = 5;
+  COMPUTER_ERROR_CODE_PROVIDER_INCOMPATIBLE = 6;
+  COMPUTER_ERROR_CODE_UNSUPPORTED_CAPABILITY = 7;
+  COMPUTER_ERROR_CODE_PERMISSION_DENIED = 8;
+  COMPUTER_ERROR_CODE_ELEMENT_NOT_FOUND = 9;
+  COMPUTER_ERROR_CODE_ELEMENT_NOT_CLICKABLE = 10;
+  COMPUTER_ERROR_CODE_ACTION_NOT_SUPPORTED = 11;
+  COMPUTER_ERROR_CODE_VALUE_NOT_SETTABLE = 12;
+  COMPUTER_ERROR_CODE_INVALID_ARGUMENT = 13;
+  COMPUTER_ERROR_CODE_ACTION_TIMEOUT = 14;
+  COMPUTER_ERROR_CODE_SCREENSHOT_FAILED = 15;
+  COMPUTER_ERROR_CODE_ACCESSIBILITY_ERROR = 16;
+}
+
+// Why: window and app metadata carries a small, genuinely provider-specific
+// bag (macOS layer/alpha, Linux AT-SPI backend/role/runtimeId). A typed
+// recursive JSON value keeps this open-ended without falling back to
+// google.protobuf.Struct or a JSON string.
+message ComputerJsonValue {
+  oneof kind {
+    ComputerJsonNull null_value = 1;
+    bool bool_value = 2;
+    double number_value = 3;
+    string string_value = 4;
+    ComputerJsonValueList list_value = 5;
+    ComputerJsonValueObject object_value = 6;
+  }
+}
+
+enum ComputerJsonNull {
+  COMPUTER_JSON_NULL_UNSPECIFIED = 0;
+  COMPUTER_JSON_NULL_VALUE = 1;
+}
+
+message ComputerJsonValueList {
+  repeated ComputerJsonValue values = 1;
+}
+
+message ComputerJsonValueObject {
+  repeated ComputerJsonValueEntry entries = 1;
+}
+
+message ComputerJsonValueEntry {
+  string key = 1;
+  ComputerJsonValue value = 2;
+}
+
+message ComputerAppInfo {
+  string name = 1;
+  optional string bundle_id = 2;
+  int32 pid = 3;
+}
+
+message ComputerWindowInfo {
+  optional int32 id = 1;
+  optional int32 index = 2;
+  string title = 3;
+  optional double x = 4;
+  optional double y = 5;
+  double width = 6;
+  double height = 7;
+  optional bool is_minimized = 8;
+  optional bool is_offscreen = 9;
+  optional int32 screen_index = 10;
+  map<string, ComputerJsonValue> platform = 11;
+}
+
+message ComputerWindowListEntry {
+  ComputerWindowInfo window = 1;
+  ComputerAppInfo app = 2;
+  uint32 index = 3;
+  optional bool is_main = 4;
+}
+
+message ComputerListedApp {
+  string name = 1;
+  optional string bundle_id = 2;
+  int32 pid = 3;
+  bool is_running = 4;
+  optional string last_used_at = 5;
+  optional int32 use_count = 6;
+}
+
+message ComputerSnapshotTruncation {
+  bool truncated = 1;
+  optional uint32 max_nodes = 2;
+  optional uint32 max_depth = 3;
+  optional bool max_depth_reached = 4;
+}
+
+message ComputerSnapshotData {
+  string id = 1;
+  ComputerAppInfo app = 2;
+  ComputerWindowInfo window = 3;
+  string tree_text = 4;
+  uint32 element_count = 5;
+  optional uint32 focused_element_id = 6;
+  optional ComputerSnapshotTruncation truncation = 7;
+}
+
+message ComputerScreenshotData {
+  optional bytes data = 1;
+  uint32 width = 2;
+  uint32 height = 3;
+  double scale = 4;
+  optional string path = 5;
+  bool data_omitted = 6;
+  optional string expires_at = 7;
+}
+
+enum ComputerScreenshotEngine {
+  COMPUTER_SCREENSHOT_ENGINE_UNSPECIFIED = 0;
+  COMPUTER_SCREENSHOT_ENGINE_SCREEN_CAPTURE_KIT = 1;
+  COMPUTER_SCREENSHOT_ENGINE_CG_WINDOW_LIST = 2;
+  COMPUTER_SCREENSHOT_ENGINE_UNKNOWN = 3;
+}
+
+message ComputerScreenshotMetadata {
+  optional ComputerScreenshotEngine engine = 1;
+  optional int32 window_id = 2;
+}
+
+message ComputerScreenshotCaptured {
+  optional ComputerScreenshotMetadata metadata = 1;
+}
+
+message ComputerScreenshotSkipped {}
+
+message ComputerScreenshotFailed {
+  ComputerErrorCode code = 1;
+  string message = 2;
+  optional ComputerScreenshotMetadata metadata = 3;
+}
+
+message ComputerScreenshotStatus {
+  oneof state {
+    ComputerScreenshotCaptured captured = 1;
+    ComputerScreenshotSkipped skipped = 2;
+    ComputerScreenshotFailed failed = 3;
+  }
+}
+
+enum ComputerVerifiedProperty {
+  COMPUTER_VERIFIED_PROPERTY_UNSPECIFIED = 0;
+  COMPUTER_VERIFIED_PROPERTY_FOCUSED_TEXT = 1;
+  COMPUTER_VERIFIED_PROPERTY_SELECTION = 2;
+  COMPUTER_VERIFIED_PROPERTY_VALUE = 3;
+}
+
+enum ComputerUnverifiedReason {
+  COMPUTER_UNVERIFIED_REASON_UNSPECIFIED = 0;
+  COMPUTER_UNVERIFIED_REASON_SYNTHETIC_INPUT = 1;
+  COMPUTER_UNVERIFIED_REASON_CLIPBOARD_PASTE = 2;
+  COMPUTER_UNVERIFIED_REASON_PROVIDER_UNAVAILABLE = 3;
+  COMPUTER_UNVERIFIED_REASON_WINDOW_CHANGED = 4;
+  COMPUTER_UNVERIFIED_REASON_VALUE_MISMATCH = 5;
+}
+
+message ComputerActionVerified {
+  ComputerVerifiedProperty property = 1;
+  optional string expected = 2;
+  optional string actual_preview = 3;
+}
+
+message ComputerActionUnverified {
+  ComputerUnverifiedReason reason = 1;
+  optional string expected = 2;
+  optional string actual_preview = 3;
+}
+
+message ComputerActionVerification {
+  oneof state {
+    ComputerActionVerified verified = 1;
+    ComputerActionUnverified unverified = 2;
+  }
+}
+
+enum ComputerActionPath {
+  COMPUTER_ACTION_PATH_UNSPECIFIED = 0;
+  COMPUTER_ACTION_PATH_ACCESSIBILITY = 1;
+  COMPUTER_ACTION_PATH_SYNTHETIC = 2;
+  COMPUTER_ACTION_PATH_CLIPBOARD = 3;
+}
+
+message ComputerActionMetadata {
+  ComputerActionPath path = 1;
+  optional string action_name = 2;
+  optional string fallback_reason = 3;
+  optional int32 target_window_id = 4;
+  optional int32 target_window_index = 5;
+  optional ComputerActionVerification verification = 6;
+}
+
+message ComputerServiceCapabilitiesRequest {}
+
+message ComputerAppSupport {
+  bool list = 1;
+  bool bundle_ids = 2;
+  bool pids = 3;
+}
+
+message ComputerWindowSupport {
+  bool list = 1;
+  bool target_by_id = 2;
+  bool target_by_index = 3;
+  bool focus = 4;
+  bool move_resize = 5;
+}
+
+message ComputerObservationSupport {
+  bool screenshot = 1;
+  bool annotated_screenshot = 2;
+  bool element_frames = 3;
+  bool ocr = 4;
+}
+
+message ComputerActionSupport {
+  bool click = 1;
+  bool type_text = 2;
+  bool press_key = 3;
+  bool hotkey = 4;
+  bool paste_text = 5;
+  bool scroll = 6;
+  bool drag = 7;
+  bool set_value = 8;
+  bool perform_action = 9;
+}
+
+message ComputerSurfaceSupport {
+  bool menus = 1;
+  bool dialogs = 2;
+  bool dock = 3;
+  bool menubar = 4;
+}
+
+message ComputerServiceCapabilitiesResponse {
+  HostPlatform platform = 1;
+  string provider = 2;
+  string provider_version = 3;
+  uint32 protocol_version = 4;
+  ComputerAppSupport apps = 5;
+  ComputerWindowSupport windows = 6;
+  ComputerObservationSupport observation = 7;
+  ComputerActionSupport actions = 8;
+  ComputerSurfaceSupport surfaces = 9;
+}
+
+message ComputerServiceListAppsRequest {}
+
+message ComputerServiceListAppsResponse {
+  repeated ComputerListedApp apps = 1;
+}
+
+message ComputerServicePermissionsRequest {
+  optional ComputerPermissionId id = 1;
+}
+
+message ComputerServicePermissionsResponse {
+  HostPlatform platform = 1;
+  optional string helper_app_path = 2;
+  optional ComputerPermissionId permission_id = 3;
+  bool opened_settings = 4;
+  bool launched_helper = 5;
+  repeated ComputerPermissionState permissions = 6;
+  optional string next_step = 7;
+}
+
+message ComputerServicePermissionsStatusRequest {}
+
+message ComputerServicePermissionsStatusResponse {
+  HostPlatform platform = 1;
+  optional string helper_app_path = 2;
+  optional string helper_unavailable_reason = 3;
+  repeated ComputerPermissionState permissions = 4;
+}
+
+message ComputerServicePermissionsResetRequest {}
+
+message ComputerServicePermissionsResetResponse {
+  HostPlatform platform = 1;
+  optional string helper_app_path = 2;
+  optional string helper_unavailable_reason = 3;
+  repeated ComputerPermissionState permissions = 4;
+  optional string bundle_id = 5;
+}
+
+message ComputerServiceListWindowsRequest {
+  string app = 1;
+}
+
+message ComputerServiceListWindowsResponse {
+  ComputerAppInfo app = 1;
+  repeated ComputerWindowListEntry windows = 2;
+}
+
+message ComputerServiceGetAppStateRequest {
+  ComputerObserveTarget target = 1;
+}
+
+message ComputerServiceGetAppStateResponse {
+  ComputerSnapshotData snapshot = 1;
+  optional ComputerScreenshotData screenshot = 2;
+  ComputerScreenshotStatus screenshot_status = 3;
+}
+
+message ComputerServiceActionResponse {
+  ComputerSnapshotData snapshot = 1;
+  optional ComputerScreenshotData screenshot = 2;
+  ComputerScreenshotStatus screenshot_status = 3;
+  optional ComputerActionMetadata action = 4;
+}
+
+message ComputerServiceClickRequest {
+  ComputerObserveTarget target = 1;
+  oneof locator {
+    uint32 element_index = 2;
+    ComputerPoint point = 3;
+  }
+  optional uint32 click_count = 4;
+  optional ComputerMouseButton mouse_button = 5;
+}
+
+message ComputerServicePerformSecondaryActionRequest {
+  ComputerObserveTarget target = 1;
+  uint32 element_index = 2;
+  string action = 3;
+}
+
+message ComputerServiceScrollRequest {
+  ComputerObserveTarget target = 1;
+  oneof locator {
+    uint32 element_index = 2;
+    ComputerPoint point = 3;
+  }
+  ComputerScrollDirection direction = 4;
+  optional double pages = 5;
+}
+
+message ComputerServiceDragRequest {
+  ComputerObserveTarget target = 1;
+  oneof from_locator {
+    uint32 from_element_index = 2;
+    ComputerPoint from_point = 3;
+  }
+  oneof to_locator {
+    uint32 to_element_index = 4;
+    ComputerPoint to_point = 5;
+  }
+}
+
+message ComputerServiceTypeTextRequest {
+  ComputerObserveTarget target = 1;
+  string text = 2;
+}
+
+message ComputerServicePressKeyRequest {
+  ComputerObserveTarget target = 1;
+  string key = 2;
+}
+
+message ComputerServiceHotkeyRequest {
+  ComputerObserveTarget target = 1;
+  string key = 2;
+}
+
+message ComputerServicePasteTextRequest {
+  ComputerObserveTarget target = 1;
+  string text = 2;
+}
+
+message ComputerServiceSetValueRequest {
+  ComputerObserveTarget target = 1;
+  uint32 element_index = 2;
+  string value = 3;
+}

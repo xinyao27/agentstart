@@ -1,18 +1,18 @@
-import type { StatusBarUsageMode } from '@yiru/runtime-protocol/workbench/status-bar-usage-mode'
 import type {
   ManualRepoOrderEntry,
-  PersistedTrustedYiruHooks,
   StatusBarItem,
   WorkspaceTitlebarActionId,
-  WorkspaceStatusDefinition,
   AgentActivityDisplayMode,
   ProjectOrderBy,
   WorktreeCardProperty,
   WorkspaceHostOrder,
   WorkspaceHostScope,
   VisibleWorkspaceHostIds
-} from '@yiru/runtime-protocol/workbench/types'
-import type { UsagePercentageDisplay } from '@yiru/runtime-protocol/workbench/usage-percentage-display'
+} from '@yiru/protocol/settings/ui-state'
+import type { StatusBarUsageMode } from '@yiru/protocol/settings/usage-display'
+import type { UsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
+import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
+import type { PersistedTrustedYiruHooks } from '@yiru/protocol/worktree/hooks'
 import type { YiruHookScriptKind } from '~renderer/sidebar/yiru-hook-trust'
 
 export type UIWorkspaceState = {

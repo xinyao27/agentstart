@@ -1,4 +1,4 @@
-import type { Tab, TabGroup } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab, TabGroup } from '@yiru/protocol/workspace/tabs'
 import type { AppState } from '~renderer/store/types'
 
 import { reconcileTabOrder } from './reconcile-order'

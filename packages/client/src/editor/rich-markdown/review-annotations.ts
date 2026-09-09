@@ -1,6 +1,6 @@
 import type { JSONContent } from '@tiptap/core'
 import type { Editor } from '@tiptap/react'
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import type { Dispatch, SetStateAction } from 'react'
 
 import type { RichMarkdownAnnotationHighlightRange } from './annotation-highlight'

@@ -1,11 +1,8 @@
-import {
-  getRepoExecutionHostId,
-  parseExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { RepoIcon } from '@yiru/runtime-protocol/model/workspace'
-import { DEFAULT_REPO_BADGE_COLOR } from '@yiru/runtime-protocol/workbench/constants'
-import { normalizeRepoBadgeColor } from '@yiru/runtime-protocol/workbench/repo-badge-color'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
+import { DEFAULT_REPO_BADGE_COLOR } from '@yiru/protocol/project/appearance'
+import { normalizeRepoBadgeColor } from '@yiru/protocol/project/appearance'
+import type { RepoIcon } from '@yiru/protocol/project/icon'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

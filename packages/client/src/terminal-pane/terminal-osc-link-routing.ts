@@ -1,4 +1,4 @@
-import { isWindowsAbsolutePathLike } from '@yiru/runtime-protocol/model/platform'
+import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
 import { resolveTerminalFileLinkText } from '~renderer/terminal/links/provider'
 
 import { openDetectedFilePath } from './terminal-file-open-routing'

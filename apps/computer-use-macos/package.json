@@ -1,0 +1,17 @@
+{
+  "name": "@yiru/computer-use-macos",
+  "version": "0.0.36",
+  "private": true,
+  "description": "Signed macOS helper for Yiru computer use",
+  "scripts": {
+    "build": "bun scripts/build.mjs",
+    "check": "vp check --fix",
+    "fmt": "vp fmt .",
+    "lint": "vp lint . --fix"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "@types/node": "catalog:",
+    "vite-plus": "catalog:"
+  }
+}

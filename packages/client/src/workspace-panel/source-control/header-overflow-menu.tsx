@@ -1,4 +1,4 @@
-import type { SourceControlViewMode } from '@yiru/runtime-protocol/workbench/types'
+import type { SourceControlViewMode } from '@yiru/protocol/settings/workspace-preferences'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

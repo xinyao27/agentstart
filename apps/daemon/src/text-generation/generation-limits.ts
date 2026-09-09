@@ -1,2 +1,0 @@
-export const GENERATION_TIMEOUT_MS = 60_000
-export const MAX_AGENT_OUTPUT_BYTES = 4 * 1024 * 1024

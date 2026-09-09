@@ -4,7 +4,7 @@ import {
   keybindingIsActiveInContext,
   type KeybindingDefinition,
   type TerminalShortcutPolicy
-} from '@yiru/runtime-protocol/workbench/keybindings'
+} from '@yiru/protocol/keybindings'
 import { translate } from '~renderer/i18n/i18n'
 
 // Describes how a shortcut behaves while a terminal/TUI has keyboard focus,

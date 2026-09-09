@@ -1,7 +1,6 @@
-import type { UpdateCheckOptions } from '@yiru/runtime-protocol/workbench/types'
+import type { UpdaterCheckOptions, UpdaterClient } from '@yiru/protocol'
 import type { StateCreator } from 'zustand'
 import { isValidAppVersion } from '~renderer/app-version'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { runRemoteServerUpdateBatch } from '~renderer/runtime/remote-server-update-batch'
 import {
   checkingRemoteServerUpdateEntry,
@@ -13,6 +12,7 @@ import {
 import { getRuntimeEnvironmentStatus } from '~renderer/runtime/rpc-client'
 import { runtimeEnvironmentsClient } from '~renderer/runtime/runtime-environments-client'
 import { shellClient } from '~renderer/runtime/shell-client'
+import { openUpdaterTarget } from '~renderer/runtime/updater-target'
 
 import type { AppState } from '../store/types'
 
@@ -20,46 +20,30 @@ const MAX_CONCURRENT_REMOTE_SERVER_UPDATES = 2
 
 const transport: RemoteServerUpdateTransport = {
   getRuntimeStatus: getRuntimeEnvironmentStatus,
-  getUpdaterStatus: (environmentId) =>
-    callRuntimeOrpc(
-      { kind: 'environment', environmentId },
-      (client) => client.updater.getStatus,
-      undefined,
-      { timeoutMs: 15_000 }
-    ),
-  check: (environmentId, options) =>
-    callRuntimeOrpc(
-      { kind: 'environment', environmentId },
-      (client) => client.updater.check,
-      options,
-      { timeoutMs: 15_000 }
-    ),
-  download: (environmentId) =>
-    callRuntimeOrpc(
-      { kind: 'environment', environmentId },
-      (client) => client.updater.download,
-      undefined,
-      { timeoutMs: 15_000 }
-    ),
-  install: (environmentId) =>
-    callRuntimeOrpc(
-      { kind: 'environment', environmentId },
-      (client) => client.updater.install,
-      undefined,
-      { timeoutMs: 15_000 }
-    ),
+  subscribeStatus: async (environmentId, timeoutMs) =>
+    (await updaterClient(environmentId)).subscribeStatus({ timeoutMs }),
+  check: async (environmentId, options) =>
+    (await updaterClient(environmentId)).check(options, { timeoutMs: 15_000 }),
+  download: async (environmentId) =>
+    (await updaterClient(environmentId)).download({ timeoutMs: 15_000 }),
+  install: async (environmentId) =>
+    (await updaterClient(environmentId)).install({ timeoutMs: 15_000 }),
   wait: (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds))
+}
+
+async function updaterClient(environmentId: string): Promise<UpdaterClient> {
+  return openUpdaterTarget({ kind: 'environment', environmentId })
 }
 
 export type RemoteServerUpdatesSlice = {
   remoteServerUpdates: Map<string, RemoteServerUpdateEntry>
-  remoteServerUpdateCheckOptions: UpdateCheckOptions | null
+  remoteServerUpdateCheckOptions: UpdaterCheckOptions | null
   remoteServerUpdatesChecking: boolean
   remoteServerUpdatesRunning: boolean
   remoteServerUpdateDialogOpen: boolean
   remoteServerUpdatesLastCheckedAt: number | null
   setRemoteServerUpdateDialogOpen: (open: boolean) => void
-  refreshRemoteServerUpdates: (options?: UpdateCheckOptions) => Promise<void>
+  refreshRemoteServerUpdates: (options?: UpdaterCheckOptions) => Promise<void>
   startRemoteServerUpdates: (environmentIds?: readonly string[]) => Promise<void>
 }
 
@@ -98,7 +82,7 @@ export const createRemoteServerUpdatesSlice: StateCreator<
     })
     try {
       const listed = await runtimeEnvironmentsClient.list()
-      const environments = listed
+      const environments = listed.filter((environment) => !environment.pairingRequired)
       get().setRuntimeEnvironments(listed)
       const previous = get().remoteServerUpdates
       set({

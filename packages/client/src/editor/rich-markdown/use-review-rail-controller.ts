@@ -1,5 +1,5 @@
 import type { Editor } from '@tiptap/react'
-import type { DiffComment } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { MutableRefObject } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'

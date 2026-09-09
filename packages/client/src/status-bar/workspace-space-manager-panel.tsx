@@ -1,5 +1,5 @@
-import type { GitStatusResult } from '@yiru/runtime-protocol/workbench/types'
-import type { WorkspaceSpaceWorktree } from '@yiru/runtime-protocol/workbench/workspace/space-types'
+import type { WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree } from '@yiru/protocol'
+import type { GitStatusResult } from '@yiru/protocol/git/status-types'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -13,7 +13,6 @@ import { runWorktreeBatchDelete } from '../sidebar/delete-worktree/flow'
 import { refreshGitStatusForWorktree } from '../workspace-panel/git-status-refresh'
 import { useWorkspaceSpaceDecisions } from './use-workspace-space-decisions'
 import type { WorkspaceGitRefreshState } from './workspace-space-decision'
-import { getWorkspaceSpaceProgressLabel } from './workspace-space-format'
 import { WorkspaceSpaceOverview } from './workspace-space-overview'
 import {
   filterWorkspaceSpaceRows,
@@ -35,7 +34,6 @@ const GIT_STATUS_REFRESH_CONCURRENCY = 6
 
 export function WorkspaceSpaceManagerPanel(): React.JSX.Element {
   const analysis = useAppStore((state) => state.workspaceSpaceAnalysis)
-  const progress = useAppStore((state) => state.workspaceSpaceScanProgress)
   const scanError = useAppStore((state) => state.workspaceSpaceScanError)
   const isScanning = useAppStore((state) => state.workspaceSpaceScanning)
   const refreshWorkspaceSpace = useAppStore((state) => state.refreshWorkspaceSpace)
@@ -214,7 +212,6 @@ export function WorkspaceSpaceManagerPanel(): React.JSX.Element {
   const visibleSelectionState = allVisibleSelected ? true : someVisibleSelected ? 'mixed' : false
   const isInitialScan = isScanning && !analysis
   const hasRows = sourceRows.length > 0
-  const progressLabel = getWorkspaceSpaceProgressLabel(progress)
   const selectedReclaimableBytes = (() =>
     rows
       .filter((row) => selectedDeletableIdSet.has(row.worktreeId))
@@ -356,10 +353,8 @@ export function WorkspaceSpaceManagerPanel(): React.JSX.Element {
     <div className="space-y-5">
       <WorkspaceSpaceOverview
         analysis={analysis}
-        progress={progress}
         scanError={scanError}
         isScanning={isScanning}
-        progressLabel={progressLabel}
         rows={sourceRows}
         isInitialScan={isInitialScan}
         inspectedWorktree={inspectedWorktree}

@@ -1,9 +1,9 @@
 import {
   isAgentForegroundWrapperProcess,
   isExpectedAgentProcess
-} from '@yiru/runtime-protocol/workbench/agent/process-recognition'
-import { isShellProcess } from '@yiru/runtime-protocol/workbench/shell-process-detection'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/process/recognition'
+import { isShellProcess } from '@yiru/protocol/agent/process/shell-process'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   inspectRuntimeTerminalProcess,
   sendRuntimePtyInputVerified

@@ -1,4 +1,4 @@
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
 
 type AgentPaneAuthorityAlias = {
   ownerPaneKey: string

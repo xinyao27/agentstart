@@ -42,7 +42,6 @@ export function createComposerCardProps({
     branchNameOverride: isFolderTarget ? undefined : source.branchNameOverride,
     onBranchNameOverrideChange: isFolderTarget ? () => {} : actions.handleBranchNameOverrideChange,
     onSmartGitHubItemSelect: actions.handleSmartGitHubItemSelect,
-    onSmartGitLabItemSelect: actions.handleSmartGitLabItemSelect,
     onSmartBranchSelect: isFolderTarget ? () => {} : actions.handleSmartBranchSelect,
     onSmartNameModeChange: source.setSmartNameMode,
     smartNameGitHubSourceContext: github.selectedRepoGitHubSourceContext,
@@ -94,7 +93,6 @@ export function createComposerCardProps({
     baseBranch: isFolderTarget ? undefined : source.baseBranch,
     onBaseBranchChange: isFolderTarget ? () => {} : actions.handleBaseBranchChange,
     onBaseBranchPrSelect: isFolderTarget ? () => {} : actions.handleBaseBranchPrSelect,
-    onBaseBranchMrSelect: isFolderTarget ? () => {} : actions.handleBaseBranchMrSelect,
     baseBranchLinkedPrNumber:
       source.linkedWorkItem?.type === 'pr' && source.baseBranch
         ? source.linkedWorkItem.number

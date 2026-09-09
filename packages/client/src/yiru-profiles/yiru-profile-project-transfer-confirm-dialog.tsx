@@ -1,8 +1,4 @@
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
-import type {
-  YiruProfileSummary,
-  TransferYiruProfileProjectMode
-} from '@yiru/runtime-protocol/workbench/yiru-profiles'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { translate } from '~renderer/i18n/i18n'
 import { ArrowsLeftRight as ArrowRightLeft } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
@@ -15,6 +11,10 @@ import {
   DialogHeader,
   DialogTitle
 } from '~renderer/ui/dialog'
+import type {
+  YiruProfileSummary,
+  TransferYiruProfileProjectMode
+} from '~renderer/yiru-profiles/profile-model'
 
 import type { YiruProfileSwitchLiveWorkSummary } from './yiru-profile-switch-liveness'
 

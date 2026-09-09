@@ -1,8 +1,8 @@
-import type { AgentType } from '@yiru/runtime-protocol/model/agent'
-import { resolveTerminalTitleAgentType } from '@yiru/runtime-protocol/model/agent'
-import { isTerminalLeafId, makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { AgentType } from '@yiru/protocol/agent/status-records'
+import { isTerminalLeafId, makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { detectAgentSendTitleStatus } from '~renderer/agent/send-title-status'
+import { resolveTerminalTitleAgentType } from '~renderer/agent/title/provider'
 import type { AppState } from '~renderer/store/types'
 import {
   resolveRuntimePaneTitleLeafResolution,

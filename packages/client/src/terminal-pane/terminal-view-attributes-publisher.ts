@@ -9,13 +9,12 @@
  * are app-global, so identical snapshots publish once.
  */
 import type { ITheme } from '@xterm/xterm'
-import type { TerminalColorSchemeMode } from '@yiru/runtime-protocol/workbench/terminal/color-scheme-protocol'
-import type {
-  TerminalViewAttributes,
-  TerminalViewRgb
-} from '@yiru/runtime-protocol/workbench/terminal/view-attributes'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { TerminalViewAttributesInput as TerminalViewAttributes } from '@yiru/protocol/terminal/types'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
+import type { TerminalColorSchemeMode } from '~renderer/terminal-pane/emulator/color-scheme'
+
+type TerminalViewRgb = TerminalViewAttributes['foreground']
 
 type ParsedCssColor = {
   rgb: TerminalViewRgb
@@ -224,9 +223,9 @@ function publishHostViewAttributes(
   ]
   void Promise.all(
     targets.map((target) =>
-      callRuntimeOrpc(target, (client) => client.terminal.updateViewAttributes, attributes).catch(
-        () => null
-      )
+      openRuntimeTerminalClient(target)
+        .then((client) => client.updateViewAttributes(attributes))
+        .catch(() => null)
     )
   )
   return true

@@ -1,4 +1,4 @@
-import type { SkillManageOperation } from '@yiru/runtime-protocol/workbench/skill-freshness'
+import type { SkillUpdateOperation as SkillManageOperation } from '@yiru/protocol'
 import { translate } from '~renderer/i18n/i18n'
 import {
   WarningCircle as AlertCircle,

@@ -1,7 +1,7 @@
-import type { ProviderRateLimits } from '@yiru/runtime-protocol/workbench/rate-limit-types'
-import { normalizeStatusBarUsageMode } from '@yiru/runtime-protocol/workbench/status-bar-usage-mode'
-import type { StatusBarItem } from '@yiru/runtime-protocol/workbench/ui-state-types'
-import { normalizeUsagePercentageDisplay } from '@yiru/runtime-protocol/workbench/usage-percentage-display'
+import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
+import type { StatusBarItem } from '@yiru/protocol/settings/ui-state'
+import { normalizeStatusBarUsageMode } from '@yiru/protocol/settings/usage-display'
+import { normalizeUsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
 import { Suspense, useState } from 'react'
 
 import { translate } from '../i18n/i18n'
@@ -16,6 +16,7 @@ import {
   ContextMenuTrigger
 } from '../ui/context-menu'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu'
+import { getExecutionHostIdForWorktree } from '../worktree/runtime-owner'
 import { PortsStatusSegment } from './ports-status-segment'
 import { ProviderUsageSegment } from './provider-usage-segment'
 import { getVisibleUsageProvider } from './provider-visibility'
@@ -150,7 +151,15 @@ export function StatusBar(): React.JSX.Element | null {
       return
     }
     setIsRefreshing(true)
-    void refreshRateLimits().finally(() => setIsRefreshing(false))
+    const state = useAppStore.getState()
+    const worktreeId = state.activeWorktreeId
+    const cursorContext = worktreeId
+      ? {
+          executionHostId: getExecutionHostIdForWorktree(state, worktreeId),
+          workspaceId: worktreeId
+        }
+      : undefined
+    void refreshRateLimits(cursorContext).finally(() => setIsRefreshing(false))
   }
 
   return (

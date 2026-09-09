@@ -1,8 +1,8 @@
-import { encodeRuntimePtyId, parseRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
-import type { RuntimeTerminalCreate } from '@yiru/runtime-protocol/workbench/runtime-types'
+import { encodeRuntimePtyId, parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
 import { translate } from '~renderer/i18n/i18n'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
 import { isRemoteTerminalSurfaceTabId } from '~renderer/runtime/remote-terminal-surface-id'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { runtimeTerminalErrorMessage } from '~renderer/runtime/terminal-stream'
 import { toRuntimeTerminalWorktreeSelector } from '~renderer/runtime/worktree-selector'
 import { useAppStore } from '~renderer/store/state'
@@ -148,8 +148,8 @@ export class RemoteRuntimePtyConnection {
       return undefined
     }
     const created = await retryRuntimeUnavailable(
-      () =>
-        this.state.callRuntime<{ terminal: RuntimeTerminalCreate }>('terminal.create', {
+      async () =>
+        (await openRuntimeTerminalClient(this.state.target)).create({
           worktree: toRuntimeTerminalWorktreeSelector(worktreeId),
           viewport: { cols: connectOptions.cols ?? 80, rows: connectOptions.rows ?? 24 },
           ...this.createOptions(connectOptions),
@@ -216,7 +216,7 @@ export class RemoteRuntimePtyConnection {
 
   private async closeRemoteTerminal(handle: string): Promise<void> {
     try {
-      await this.state.callRuntime('terminal.close', { terminal: handle })
+      await (await openRuntimeTerminalClient(this.state.target)).close(handle)
     } catch {
       // Best-effort parity with local disconnect/kill.
     }

@@ -1,11 +1,12 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { EmulatorAvailabilityValue, EmulatorDeviceValue } from '@yiru/protocol'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { ArrowClockwise as RefreshCw } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
-import { AndroidLogo, IosBrandIcon } from '~renderer/mobile/brand-icons'
+import { IosBrandIcon } from '~renderer/mobile/brand-icons'
 import { useEventCallback } from '~renderer/react/use-event-callback'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { requireEmulatorClient } from '~renderer/runtime/emulator-target'
 import { Badge } from '~renderer/ui/badge'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
@@ -18,24 +19,6 @@ import { MobileEmulatorAgentControlRow } from './emulator-agent-control-row'
 import { MobileEmulatorAvailabilityDetails } from './emulator-availability-details'
 import { getMobileEmulatorSearchEntries } from './emulator-search'
 
-type SimulatorDeviceRow = {
-  name: string
-  udid: string
-  state: string
-  runtime?: string
-  isAvailable?: boolean
-}
-
-type EmulatorAvailability = {
-  platform: string
-  available: boolean
-  devices: SimulatorDeviceRow[]
-  simctl: { ok: boolean; message?: string }
-  serveSim: { ok: boolean; message?: string }
-  android: { sdkFound: boolean; sdkPath?: string; message: string }
-  message: string
-}
-
 type MobileEmulatorSettingsPaneProps = {
   settings: GlobalSettings
   updateSettings: (updates: Partial<GlobalSettings>) => void
@@ -46,7 +29,7 @@ const AUTOMATIC_DEVICE_LABEL = 'Auto-select device'
 const SIMULATOR_STATE_SUFFIX_RE =
   /\s+\((Booted|Booting|Creating|Shutdown|Shutting Down|Unavailable|Unknown)\)\s*$/i
 
-function statusText(availability: EmulatorAvailability | null, enabled: boolean): string {
+function statusText(availability: EmulatorAvailabilityValue | null, enabled: boolean): string {
   if (!enabled) {
     return translate('auto.components.settings.MobileEmulatorSettingsPane.a4f1c82d90', 'Disabled')
   }
@@ -61,7 +44,10 @@ function statusText(availability: EmulatorAvailability | null, enabled: boolean)
     : translate('auto.components.settings.MobileEmulatorSettingsPane.d704fb5023', 'Needs setup')
 }
 
-function statusBadgeClassName(availability: EmulatorAvailability | null, enabled: boolean): string {
+function statusBadgeClassName(
+  availability: EmulatorAvailabilityValue | null,
+  enabled: boolean
+): string {
   if (!enabled) {
     return 'border-border/50 bg-muted/30 text-muted-foreground'
   }
@@ -73,7 +59,7 @@ function statusBadgeClassName(availability: EmulatorAvailability | null, enabled
     : 'border-destructive/30 bg-destructive/10 text-destructive'
 }
 
-function deviceLabel(device: SimulatorDeviceRow): string {
+function deviceLabel(device: EmulatorDeviceValue): string {
   const state = device.state.trim()
   const name = device.name.replace(SIMULATOR_STATE_SUFFIX_RE, '').trim()
   if (device.isAvailable === false) {
@@ -85,25 +71,20 @@ function deviceLabel(device: SimulatorDeviceRow): string {
   return `${name} (${state})`
 }
 
-function isAndroidDevice(device: SimulatorDeviceRow): boolean {
-  return device.runtime === 'Android'
-}
-
-function DeviceSelectItemLabel({ device }: { device: SimulatorDeviceRow }): React.JSX.Element {
-  const Icon = isAndroidDevice(device) ? AndroidLogo : IosBrandIcon
+function DeviceSelectItemLabel({ device }: { device: EmulatorDeviceValue }): React.JSX.Element {
   return (
     <span className="flex min-w-0 items-center gap-2">
-      <Icon className="text-muted-foreground size-3.5 shrink-0 fill-current" />
+      <IosBrandIcon className="text-muted-foreground size-3.5 shrink-0 fill-current" />
       <span className="truncate">{deviceLabel(device)}</span>
     </span>
   )
 }
 
-function availabilityDetail(availability: EmulatorAvailability | null): string {
+function availabilityDetail(availability: EmulatorAvailabilityValue | null): string {
   if (!availability) {
     return translate(
       'auto.components.settings.MobileEmulatorSettingsPane.06b06429c6',
-      'Checking Android SDK and iOS Simulator support.'
+      'Checking iOS Simulator support.'
     )
   }
   if (availability.available) {
@@ -125,18 +106,14 @@ export function MobileEmulatorSettingsPane({
   settings,
   updateSettings
 }: MobileEmulatorSettingsPaneProps): React.JSX.Element {
-  const [availability, setAvailability] = useState<EmulatorAvailability | null>(null)
+  const [availability, setAvailability] = useState<EmulatorAvailabilityValue | null>(null)
   const [refreshing, setRefreshing] = useState(false)
   const enabled = settings.mobileEmulatorEnabled !== false
 
   const refreshAvailability = useEventCallback(async (): Promise<void> => {
     setRefreshing(true)
     try {
-      const result = (await callRuntimeOrpc(
-        { kind: 'local' },
-        (client) => client.emulator.availability,
-        {}
-      )) as EmulatorAvailability
+      const result = await (await requireEmulatorClient()).availability()
       setAvailability(result)
     } catch (error) {
       setAvailability({
@@ -145,7 +122,6 @@ export function MobileEmulatorSettingsPane({
         devices: [],
         simctl: { ok: false },
         serveSim: { ok: false },
-        android: { sdkFound: false, message: '' },
         message: error instanceof Error ? error.message : 'Could not check emulator availability.'
       })
     } finally {
@@ -245,16 +221,7 @@ export function MobileEmulatorSettingsPane({
             </div>
           </div>
 
-          {enabled ? (
-            <MobileEmulatorAvailabilityDetails
-              availability={availability}
-              configuredPath={settings.androidSdkPath ?? null}
-              onSetAndroidSdkPath={async (path) => {
-                await updateSettings({ androidSdkPath: path })
-                await refreshAvailability()
-              }}
-            />
-          ) : null}
+          {enabled ? <MobileEmulatorAvailabilityDetails availability={availability} /> : null}
         </div>
 
         <SettingsRow

@@ -1,73 +1,51 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient {
     func workspaceSourceRefs(for hostID: String, repoID: String, query: String) async throws
         -> [WorkspaceSourceRef]
     {
-        let wire: MobileRepoSearchRefsResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_RepoServiceSearchRefsRequest()
+        request.repo = "id:\(repoID)"
+        request.query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        request.limit = 20
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileWorkspaceCreationWireContract.searchRefsPath,
-            input: MobileRepoSearchRefsRequestWire(
-                repo: "id:\(repoID)",
-                query: query.trimmingCharacters(in: .whitespacesAndNewlines),
-                limit: 20
-            ),
-            output: MobileRepoSearchRefsResultWire.self
+            procedure: YiruRuntimeV1RepoServiceMethods.searchRefs,
+            request: request,
+            response: Yiru_Runtime_V1_RepoServiceSearchRefsResponse.self
         )
-        if let details = wire.refDetails {
-            return details.map {
+        if response.hasRefDetails {
+            return response.refDetails.values.map {
                 WorkspaceSourceRef(refName: $0.refName, localBranchName: $0.localBranchName)
             }
         }
-        return wire.refs.map { WorkspaceSourceRef(refName: $0, localBranchName: $0) }
+        return response.refs.map { WorkspaceSourceRef(refName: $0, localBranchName: $0) }
     }
 
     func workspaceHostedSources(
         for hostID: String,
         repoID: String,
-        provider: WorkspaceHostedSourceProvider,
-        query: String,
-        gitLabState: WorkspaceGitLabMRState
+        query: String
     ) async throws -> [WorkspaceHostedSource] {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        switch provider {
-        case .github:
-            do {
-                let wire: MobileGitHubWorkItemsResultWire = try await callRuntime(
-                    hostID: hostID,
-                    path: MobileWorkspaceCreationWireContract.githubWorkItemsPath,
-                    input: MobileGitHubWorkItemsRequestWire(
-                        repo: "id:\(repoID)",
-                        limit: 50,
-                        query: trimmed.isEmpty ? "is:pr" : "is:pr \(trimmed)"
-                    ),
-                    output: MobileGitHubWorkItemsResultWire.self
-                )
-                return wire.items.map { WorkspaceHostedSource(wire: $0, provider: .github) }
-            } catch let error as RuntimeOrpcError
-                where error.serverMessage?.contains(
-                    "GitHub work items require a GitHub remote for SSH repositories"
-                ) == true
-            {
-                throw WorkspaceHostedSourceError.githubRemoteRequired
-            }
-        case .gitlab:
-            let wire: MobileGitLabMergeRequestsResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHubServiceListWorkItemsRequest()
+        request.repo = "id:\(repoID)"
+        request.limit = 50
+        request.query = trimmed.isEmpty ? "is:pr" : "is:pr \(trimmed)"
+        do {
+            let response = try await protocolUnary(
                 hostID: hostID,
-                path: MobileWorkspaceCreationWireContract.gitLabMergeRequestsPath,
-                input: MobileGitLabMergeRequestsRequestWire(
-                    repo: "id:\(repoID)",
-                    state: MobileGitLabMRStateWire(rawValue: gitLabState.rawValue) ?? .opened,
-                    page: 1,
-                    perPage: 50,
-                    query: trimmed.isEmpty ? nil : trimmed
-                ),
-                output: MobileGitLabMergeRequestsResultWire.self
+                procedure: YiruRuntimeV1GitHubServiceMethods.listWorkItems,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceListWorkItemsResponse.self
             )
-            if let error = wire.error, error.type != "not_found" {
-                throw WorkspaceHostedSourceError.rejected(error.message)
-            }
-            return wire.items.map { WorkspaceHostedSource(wire: $0, provider: .gitlab) }
+            return response.items.map(WorkspaceHostedSource.init(item:))
+        } catch let error as RuntimeTransportError
+            where isGitHubRemoteRequired(error)
+        {
+            throw WorkspaceHostedSourceError.githubRemoteRequired
         }
     }
 
@@ -76,47 +54,34 @@ extension RuntimeClient {
         repoID: String,
         source: WorkspaceHostedSource
     ) async throws -> WorkspaceHostedBase {
-        let result: MobileWorkspaceHostedBaseResultWire
-        switch source.provider {
-        case .github:
-            result = try await callRuntime(
-                hostID: hostID,
-                path: MobileWorkspaceCreationWireContract.resolvePrBasePath,
-                input: MobileWorkspaceResolvePrBaseRequestWire(
-                    repo: "id:\(repoID)",
-                    prNumber: source.number,
-                    headRefName: source.branchName,
-                    baseRefName: source.baseRefName,
-                    isCrossRepository: source.isCrossRepository
-                ),
-                output: MobileWorkspaceHostedBaseResultWire.self
+        var request = Yiru_Runtime_V1_WorktreeServiceResolvePrBaseRequest()
+        request.repo = "id:\(repoID)"
+        request.prNumber = Int64(source.number)
+        if let headRefName = source.branchName { request.headRefName = headRefName }
+        if let baseRefName = source.baseRefName { request.baseRefName = baseRefName }
+        request.isCrossRepository = source.isCrossRepository ?? false
+        let response = try await protocolUnary(
+            hostID: hostID,
+            procedure: YiruRuntimeV1WorktreeServiceMethods.resolvePrBase,
+            request: request,
+            response: Yiru_Runtime_V1_WorktreeServiceResolvePrBaseResponse.self
+        )
+        switch response.result {
+        case .success(let base):
+            return WorkspaceHostedBase(
+                baseBranch: base.baseBranch,
+                compareBaseRef: base.hasCompareBaseRef ? base.compareBaseRef : nil,
+                pushTarget: base.hasPushTarget
+                    ? WorkspacePushTarget(pushTarget: base.pushTarget) : nil,
+                branchNameOverride: base.hasBranchNameOverride ? base.branchNameOverride : nil
             )
-        case .gitlab:
-            result = try await callRuntime(
-                hostID: hostID,
-                path: MobileWorkspaceCreationWireContract.resolveMrBasePath,
-                input: MobileWorkspaceResolveMrBaseRequestWire(
-                    repo: "id:\(repoID)",
-                    mrIid: source.number,
-                    sourceBranch: source.branchName,
-                    targetBranch: source.baseRefName,
-                    isCrossRepository: source.isCrossRepository
-                ),
-                output: MobileWorkspaceHostedBaseResultWire.self
-            )
-        }
-        if let error = result.error { throw WorkspaceHostedSourceError.rejected(error) }
-        guard let baseBranch = result.baseBranch else {
+        case .error(let message):
+            throw WorkspaceHostedSourceError.rejected(message)
+        case nil:
             throw WorkspaceHostedSourceError.rejected(
                 String(localized: "Failed to resolve base branch.")
             )
         }
-        return WorkspaceHostedBase(
-            baseBranch: baseBranch,
-            compareBaseRef: result.compareBaseRef,
-            pushTarget: result.pushTarget.map(WorkspacePushTarget.init(wire:)),
-            branchNameOverride: result.branchNameOverride
-        )
     }
 
     func workspacePastedGitHubSource(
@@ -125,71 +90,72 @@ extension RuntimeClient {
         number: Int,
         slug: WorkspaceRepoSlug?
     ) async throws -> WorkspaceHostedSource? {
-        let wire: MobileWorkspaceSourceItemWire?
         if let slug {
-            wire = try await callRuntime(
+            var request = Yiru_Runtime_V1_GitHubServiceGetWorkItemByOwnerRepoRequest()
+            request.repo = "id:\(repoID)"
+            request.number = UInt64(number)
+            request.ownerRepo = hostedSourceRepoRef(slug)
+            let response = try await protocolUnary(
                 hostID: hostID,
-                path: MobileWorkspaceCreationWireContract.githubWorkItemByOwnerRepoPath,
-                input: MobileGitHubWorkItemByOwnerRepoRequestWire(
-                    repo: "id:\(repoID)",
-                    owner: slug.owner,
-                    ownerRepo: slug.repo,
-                    number: number,
-                    type: .pr
-                ),
-                output: MobileWorkspaceSourceItemWire?.self
+                procedure: YiruRuntimeV1GitHubServiceMethods.getWorkItemByOwnerRepo,
+                request: request,
+                response: Yiru_Runtime_V1_GitHubServiceGetWorkItemByOwnerRepoResponse.self
             )
-        } else {
-            wire = try await callRuntime(
-                hostID: hostID,
-                path: MobileWorkspaceCreationWireContract.githubWorkItemPath,
-                input: MobileGitHubWorkItemRequestWire(
-                    repo: "id:\(repoID)", number: number, type: .pr),
-                output: MobileWorkspaceSourceItemWire?.self
-            )
+            guard response.hasItem else { return nil }
+            return WorkspaceHostedSource(item: response.item)
         }
-        return wire.map { WorkspaceHostedSource(wire: $0, provider: .github) }
-    }
-
-    func workspacePastedGitLabSource(
-        for hostID: String,
-        repoID: String,
-        host: String,
-        path: String,
-        number: Int
-    ) async throws -> WorkspaceHostedSource? {
-        let wire: MobileWorkspaceSourceItemWire? = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHubServiceGetWorkItemRequest()
+        request.repo = "id:\(repoID)"
+        request.number = UInt64(number)
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileWorkspaceCreationWireContract.gitLabWorkItemByPathPath,
-            input: MobileGitLabWorkItemByPathRequestWire(
-                repo: "id:\(repoID)", host: host, path: path, iid: number, type: .mr),
-            output: MobileWorkspaceSourceItemWire?.self
+            procedure: YiruRuntimeV1GitHubServiceMethods.getWorkItem,
+            request: request,
+            response: Yiru_Runtime_V1_GitHubServiceGetWorkItemResponse.self
         )
-        return wire.map { WorkspaceHostedSource(wire: $0, provider: .gitlab) }
+        guard response.hasItem else { return nil }
+        return WorkspaceHostedSource(item: response.item)
     }
 
     func workspaceRepoSlug(for hostID: String, repoID: String) async throws -> WorkspaceRepoSlug? {
-        let wire: MobileGitHubRepoSlugResultWire? = try await callRuntime(
+        var request = Yiru_Runtime_V1_GitHubServiceGetRepoSlugRequest()
+        request.repo = "id:\(repoID)"
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileWorkspaceCreationWireContract.githubRepoSlugPath,
-            input: MobileGitHubRepoSlugRequestWire(repo: "id:\(repoID)"),
-            output: MobileGitHubRepoSlugResultWire?.self
+            procedure: YiruRuntimeV1GitHubServiceMethods.getRepoSlug,
+            request: request,
+            response: Yiru_Runtime_V1_GitHubServiceGetRepoSlugResponse.self
         )
-        return wire.map { WorkspaceRepoSlug(owner: $0.owner, repo: $0.repo) }
+        guard response.hasRepo else { return nil }
+        return WorkspaceRepoSlug(owner: response.repo.owner, repo: response.repo.repo)
     }
 
     func persistWorkspaceSetupTrust(
         for hostID: String,
         trustedHooks: WorkspaceTrustedHooks
     ) async throws -> WorkspaceTrustedHooks {
-        let wire: MobileWorkspaceUIResultWire = try await callRuntime(
+        let fields = try await protocolUiSet(
             hostID: hostID,
-            path: MobileWorkspaceCreationWireContract.uiSetPath,
-            input: MobileWorkspaceUISetRequestWire(
-                trustedYiruHooks: trustedHooks.mapValues(\.wire)
-            ),
-            output: MobileWorkspaceUIResultWire.self
+            fields: [
+                "trustedYiruHooks": .object(trustedHooks.mapValues(\.uiValue))
+            ]
         )
-        return wire.ui.trustedYiruHooks?.mapValues(WorkspaceTrustedHookRepo.init(wire:)) ?? [:]
+        return workspaceTrustedHooks(fields)
+    }
+}
+
+// Why: the SSH-repo remote requirement is only reported as a `gh` message string,
+// so the mobile client matches it the same way the workbench does.
+nonisolated private func isGitHubRemoteRequired(_ error: RuntimeTransportError) -> Bool {
+    guard case .serverStatus(_, let message) = error else { return false }
+    return message.contains("GitHub work items require a GitHub remote for SSH repositories")
+}
+
+nonisolated private func hostedSourceRepoRef(_ slug: WorkspaceRepoSlug)
+    -> Yiru_Runtime_V1_GitHubRepoRef
+{
+    Yiru_Runtime_V1_GitHubRepoRef.with {
+        $0.owner = slug.owner
+        $0.repo = slug.repo
     }
 }

@@ -1,4 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
+import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   buildNestedRepoImportActionTelemetry,
   buildNestedRepoImportResultTelemetry,
@@ -6,8 +8,7 @@ import {
   createNestedRepoTelemetryAttemptId,
   shouldEmitNestedRepoImportSubmitTelemetry,
   type NestedRepoTelemetryRuntimeKind
-} from '@yiru/runtime-protocol/workbench/nested-repo-telemetry'
-import type { GlobalSettings, NestedRepoScanResult } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/telemetry/nested-repo'
 import { useRef, useState } from 'react'
 import { getSelectedNestedRepoPathsInScanOrder } from '~renderer/onboarding/nested-repo-selected-paths'
 import {

@@ -1,9 +1,6 @@
-import {
-  detectAgentStatusFromTitle,
-  MAX_OSC_TITLE_CHARS
-} from '@yiru/runtime-protocol/workbench/agent/detection'
+import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 
-export const DECORATIVE_AGENT_TITLE_SIGNATURE_SOURCE_SCAN_LIMIT = MAX_OSC_TITLE_CHARS
+export const DECORATIVE_AGENT_TITLE_SIGNATURE_SOURCE_SCAN_LIMIT = 1024
 
 export function getDecorativeAgentTitleSignature(title: string): string | null {
   // Why: this runs on renderer state/session hot paths; oversized titles are

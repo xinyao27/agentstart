@@ -1,4 +1,4 @@
-import type { AppMemory, UsageValues } from '@yiru/runtime-protocol/workbench/types'
+import type { AppMemory, UsageValues } from '@yiru/protocol/diagnostics/memory-values'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretDown as ChevronDown, CaretRight as ChevronRight } from '~renderer/icons/hugeicons'
@@ -197,17 +197,10 @@ export function AppSection({
         <div className="border-border/30 border-t">
           <AppSubRow
             label={translate(
-              'auto.components.status.bar.ResourceUsageStatusSegment.81cd37af99',
-              'Main'
+              'auto.components.status.bar.ResourceUsageStatusSegment.74e3c11c6f',
+              'Daemon'
             )}
-            values={app.main}
-          />
-          <AppSubRow
-            label={translate(
-              'auto.components.status.bar.ResourceUsageStatusSegment.d406915b78',
-              'Renderer'
-            )}
-            values={app.renderer}
+            values={app.daemon}
           />
           {(app.other.cpu > 0 || app.other.memory > 0) && (
             <AppSubRow

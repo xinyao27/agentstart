@@ -1,13 +1,8 @@
-import type {
-  ShellServicesUICommandInput,
-  ShellServicesUICommandOutput
-} from '@yiru/runtime-protocol/contract'
 import { CLOSE_TERMINAL_PANE_EVENT, SPLIT_TERMINAL_PANE_EVENT } from '~renderer/constants/terminal'
 import type { CloseTerminalPaneDetail, SplitTerminalPaneDetail } from '~renderer/constants/terminal'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { basename } from '~renderer/path'
 import { readProjectCatalogSnapshot } from '~renderer/project-catalog/catalog-snapshot'
-import { runSleepWorktree } from '~renderer/sidebar/sleep-worktree-flow'
 import { useAppStore } from '~renderer/store/state'
 import type { AppState } from '~renderer/store/types'
 import { activateTabAndFocusPane } from '~renderer/tab-bar/activate-and-focus-pane'
@@ -27,6 +22,7 @@ import {
 } from '../application-shell/use-ipc-events'
 import { createBackgroundSleepingAgentWakeDispatcher } from '../application-shell/wake-sleeping-agents-in-background'
 import { closeMobileSessionTabInStore } from './mobile-session-tab-close'
+import type { UiCommandRequest, UiCommandResult } from './shell-host/ui-request'
 
 const backgroundSleepingAgentWakeDispatcher = createBackgroundSleepingAgentWakeDispatcher()
 
@@ -37,7 +33,7 @@ function isPinnedSessionTab(store: AppState, worktreeId: string, visibleId: stri
 }
 
 async function activateNotifiedWorktree(
-  command: Extract<ShellServicesUICommandInput, { type: 'activateWorktree' }>
+  command: Extract<UiCommandRequest, { type: 'activateWorktree' }>
 ): Promise<void> {
   if (isRuntimeEnvironmentActive()) {
     // Why: this reverse command targets the host shell's local worktree ids;
@@ -62,8 +58,8 @@ async function activateNotifiedWorktree(
 }
 
 export async function handleShellServicesUICommand(
-  command: ShellServicesUICommandInput
-): Promise<ShellServicesUICommandOutput> {
+  command: UiCommandRequest
+): Promise<UiCommandResult> {
   switch (command.type) {
     case 'activateWorktree':
       void activateNotifiedWorktree(command).catch((error) => {
@@ -171,8 +167,9 @@ export async function handleShellServicesUICommand(
       }
       return { accepted: true }
     case 'sleepWorktree':
-      if (!(await runSleepWorktree(command.worktreeId))) {
-        throw new Error('sleep_failed')
+      // Why: daemon has saved recovery state; the shell only releases its visible workspace.
+      if (useAppStore.getState().activeWorktreeId === command.worktreeId) {
+        useAppStore.getState().setActiveWorktree(null)
       }
       return { accepted: true }
     case 'resumeSleepingAgents':
@@ -181,9 +178,7 @@ export async function handleShellServicesUICommand(
   }
 }
 
-function focusEditorTab(
-  command: Extract<ShellServicesUICommandInput, { type: 'focusEditorTab' }>
-): void {
+function focusEditorTab(command: Extract<UiCommandRequest, { type: 'focusEditorTab' }>): void {
   const store = useAppStore.getState()
   const tab = (store.unifiedTabsByWorktree[command.worktreeId] ?? []).find(
     (item) => item.id === command.tabId
@@ -211,9 +206,7 @@ function focusEditorTab(
   store.revealWorktreeInSidebar(command.worktreeId)
 }
 
-function closeSessionTab(
-  command: Extract<ShellServicesUICommandInput, { type: 'closeSessionTab' }>
-): void {
+function closeSessionTab(command: Extract<UiCommandRequest, { type: 'closeSessionTab' }>): void {
   const store = useAppStore.getState()
   const browserTarget = resolveBrowserSessionTabTarget(store, command.worktreeId, command.tabId)
   if (browserTarget) {

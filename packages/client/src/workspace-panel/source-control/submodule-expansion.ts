@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 import { basename } from '~renderer/path'
 
 import type { SourceControlSectionArea } from './section-order'

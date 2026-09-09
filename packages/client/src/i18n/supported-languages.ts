@@ -3,12 +3,9 @@ import {
   UI_LANGUAGE_ENGLISH,
   UI_LANGUAGE_SYSTEM,
   type UiLanguage
-} from '@yiru/runtime-protocol/workbench/ui-language'
-import {
-  DEFAULT_UI_LOCALE,
-  resolveRendererUiLocale,
-  type SupportedUiLocale
-} from '@yiru/runtime-protocol/workbench/ui-locale'
+} from '@yiru/protocol/settings/ui-language'
+
+import { DEFAULT_UI_LOCALE, resolveRendererUiLocale, type SupportedUiLocale } from './locale'
 
 export const DEFAULT_LOCALE = DEFAULT_UI_LOCALE
 

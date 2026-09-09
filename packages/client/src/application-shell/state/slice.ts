@@ -1,16 +1,16 @@
-import { DEFAULT_BROWSER_PAGE_ZOOM_LEVEL } from '@yiru/runtime-protocol/workbench/browser/page-zoom'
+import { DEFAULT_WORKSPACE_PANEL_TITLEBAR_PINNED_IDS } from '@yiru/protocol/settings/panel-titlebar-pins'
+import { DEFAULT_STATUS_BAR_ITEMS } from '@yiru/protocol/settings/status-bar'
+import { DEFAULT_STATUS_BAR_USAGE_MODE } from '@yiru/protocol/settings/usage-display'
+import { DEFAULT_USAGE_PERCENTAGE_DISPLAY } from '@yiru/protocol/settings/usage-display'
 import {
   DEFAULT_AGENT_ACTIVITY_DISPLAY_MODE,
-  DEFAULT_SHOW_SLEEPING_WORKSPACES,
-  DEFAULT_WORKSPACE_PANEL_TITLEBAR_PINNED_IDS,
-  DEFAULT_WORKTREE_CARD_PROPERTIES
-} from '@yiru/runtime-protocol/workbench/constants'
-import { DEFAULT_STATUS_BAR_ITEMS } from '@yiru/runtime-protocol/workbench/status-bar-defaults'
-import { DEFAULT_STATUS_BAR_USAGE_MODE } from '@yiru/runtime-protocol/workbench/status-bar-usage-mode'
-import type { LaunchSource } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import { DEFAULT_USAGE_PERCENTAGE_DISPLAY } from '@yiru/runtime-protocol/workbench/usage-percentage-display'
-import { cloneDefaultWorkspaceStatuses } from '@yiru/runtime-protocol/workbench/workspace/statuses'
+  DEFAULT_SHOW_SLEEPING_WORKSPACES
+} from '@yiru/protocol/settings/workspace-preferences'
+import { DEFAULT_WORKTREE_CARD_PROPERTIES } from '@yiru/protocol/settings/worktree-card-properties'
+import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
+import { cloneDefaultWorkspaceStatuses } from '@yiru/protocol/workspace/status/normalize'
 import type { StateCreator } from 'zustand'
+import { DEFAULT_BROWSER_PAGE_ZOOM_LEVEL } from '~renderer/browser/zoom'
 
 import type { AppState } from '../../store/types'
 import type { UISlice } from './slice-state'

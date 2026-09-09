@@ -1,4 +1,4 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/runtime-protocol/workbench/types'
+import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
 
 export type OpenCheckRunDetailsState = {
   contextKey: string

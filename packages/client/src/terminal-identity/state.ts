@@ -4,7 +4,7 @@ import {
   type DurablePtyId,
   type RuntimePtyId,
   type TerminalIdIndex
-} from '@yiru/runtime-protocol/terminal-identity/id'
+} from '@yiru/protocol/terminal-identity'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../store/types'

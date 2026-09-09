@@ -4,4 +4,4 @@ export {
   toHostSessionTabId,
   toRemoteTerminalSurfaceTabId,
   REMOTE_TERMINAL_SURFACE_TAB_PREFIX
-} from '@yiru/runtime-protocol/workbench/terminal/surface-id'
+} from '@yiru/protocol/terminal/surface-identity'

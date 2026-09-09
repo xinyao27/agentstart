@@ -11,15 +11,11 @@
 // The renderer does NOT bundle `posthog-node` or any PostHog SDK. There is
 // one PostHog client in the process tree and it lives in main. That
 // invariant is what keeps the vendor out of the renderer's attack surface.
-import type { TelemetryConsentState } from '@yiru/runtime-protocol/workbench/telemetry-consent-types'
-import type { EventName, EventProps } from '@yiru/runtime-protocol/workbench/telemetry-events'
+import type { TelemetryConsentState } from '@yiru/protocol/telemetry/consent'
+import type { EventName, EventProps } from '@yiru/protocol/telemetry/events/catalog'
 import { shellClient } from '~renderer/runtime/shell-client'
 
-// Re-exported so renderer call sites can import the mapper from this lib
-// alongside `track`. The implementation lives in `runtime-protocol/workbench/agent/kind`
-// because main-process telemetry emission needs the same mapping when it
-// receives a `TuiAgent`-derived agent kind through the spawn IPC.
-export { tuiAgentToAgentKind } from '@yiru/runtime-protocol/workbench/agent/kind'
+export { tuiAgentToAgentKind } from '@yiru/protocol/telemetry/agent-kind'
 
 // Why: single source-of-truth for the privacy doc URL linked from the two
 // telemetry surfaces (FirstLaunchBanner, PrivacyPane). Keeping it here — in

@@ -1,9 +1,9 @@
-import type { ExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
+import type { ExecutionHostId } from '@yiru/protocol/host/identity'
 import type {
   ProjectHostSetup,
   ProjectHostSetupCreateResult,
   ProjectHostSetupResult
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/project/model'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Plus, X } from '~renderer/icons/hugeicons'

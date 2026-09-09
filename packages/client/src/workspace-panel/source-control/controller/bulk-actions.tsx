@@ -1,7 +1,7 @@
-import { shouldForcePushWithLeaseForUpstream } from '@yiru/runtime-protocol/model/review'
 import { useRef } from 'react'
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import { bulkStageRuntimeGitPaths, bulkUnstageRuntimeGitPaths } from '~renderer/runtime/git-client'
+import { shouldForcePushWithLeaseForUpstream } from '~renderer/source-control/workflow/operation'
 import { getStageAllPaths } from '~renderer/workspace-panel/discard-all-sequence'
 
 import type {

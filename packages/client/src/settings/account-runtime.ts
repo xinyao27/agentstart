@@ -1,9 +1,9 @@
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type {
   ClaudeRateLimitAccountsState,
   CodexRateLimitAccountsState,
-  CodexSystemDefaultIdentity,
-  GlobalSettings
-} from '@yiru/runtime-protocol/workbench/types'
+  CodexSystemDefaultIdentity
+} from '@yiru/protocol/settings/managed-accounts'
 import { translate } from '~renderer/i18n/i18n'
 
 export type AccountRuntime = {

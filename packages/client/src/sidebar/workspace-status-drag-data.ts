@@ -1,4 +1,4 @@
-import { measureClipboardTextByteLength } from '@yiru/runtime-protocol/model/ui'
+import { measureUtf8ByteLength } from '@yiru/protocol/text/utf8-length'
 
 export const WORKSPACE_STATUS_DRAG_TYPE = 'application/x-yiru-worktree-id'
 export const WORKSPACE_STATUS_DRAG_IDS_TYPE = 'application/x-yiru-worktree-ids'
@@ -94,7 +94,7 @@ function readWorkspaceStatusDragPayload(
   }
   if (
     value.length > WORKSPACE_STATUS_DRAG_PAYLOAD_MAX_BYTES ||
-    measureClipboardTextByteLength(value, {
+    measureUtf8ByteLength(value, {
       stopAfterBytes: WORKSPACE_STATUS_DRAG_PAYLOAD_MAX_BYTES
     }).exceededLimit
   ) {

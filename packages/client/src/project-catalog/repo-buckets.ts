@@ -1,4 +1,4 @@
-import type { DetectedWorktreeListResult, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { DetectedWorktreeListResult, Worktree } from '@yiru/protocol/worktree/model'
 
 import { projectCatalogRepoKey, type ProjectCatalog } from './query'
 

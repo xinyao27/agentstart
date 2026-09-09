@@ -1,4 +1,4 @@
-import type { BrowserTab as BrowserTabState } from '@yiru/runtime-protocol/workbench/types'
+import type { BrowserTab as BrowserTabState } from '@yiru/protocol/workspace/browser-session'
 import type { OpenFile } from '~renderer/editor/state'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { joinPath } from '~renderer/path'

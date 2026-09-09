@@ -1,4 +1,4 @@
-import type { TerminalLayoutSnapshot } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
 import { useEffect } from 'react'
 
 import type { PaneManager } from './pane-manager/pane-manager'

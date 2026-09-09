@@ -1,4 +1,5 @@
-import type { MarkdownDocument, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { MarkdownDocument } from '@yiru/protocol/files/values'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import React from 'react'
 import type { ComponentProps, RefObject } from 'react'
 import Markdown from 'react-markdown'

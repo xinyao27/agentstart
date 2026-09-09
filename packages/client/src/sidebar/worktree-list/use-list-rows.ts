@@ -3,8 +3,8 @@ import {
   getRepoExecutionHostId,
   getSettingsFocusedExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { folderWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+} from '@yiru/protocol/host/identity'
+import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import { useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { getHostDisplayLabelOverrides } from '~renderer/host-setting-overrides'

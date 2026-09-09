@@ -1,12 +1,15 @@
-import type { ProjectSourceContext } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { GitHubWorkItem, GlobalSettings, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { normalizeGitHubLinkQuery } from '~renderer/github/links'
 import {
   lookupGitHubWorkItemByOwnerRepoForSource,
   lookupGitHubWorkItemForSource
 } from '~renderer/github/work-item-source-lookup'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 type UseLinkedWorkItemPickerOptions = {
@@ -80,12 +83,17 @@ export function useLinkedWorkItemPicker({
       return
     }
     let isCancelled = false
-    void callRuntimeOrpc(
-      getActiveRuntimeTarget(selectedRepoSettings),
-      (client) => client.github.listWorkItems,
-      { repo: selectedRepo.id, limit: 100 },
-      { timeoutMs: 30_000 }
-    )
+    const target = getActiveRuntimeTarget(selectedRepoSettings)
+    void openGitHubTarget()
+      .then((client) => {
+        if (!client) {
+          throw new Error('GitHub protocol capability is unavailable')
+        }
+        return client.listWorkItems(
+          { repo: selectedRepo.id, limit: 100 },
+          { timeoutMs: 30_000, ...runtimeCallDestination(target) }
+        )
+      })
       .then((envelope) => {
         if (!isCancelled) {
           setListResult({

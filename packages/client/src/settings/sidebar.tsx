@@ -1,5 +1,5 @@
-import type { RepoIcon } from '@yiru/runtime-protocol/model/workspace'
-import type { GitHubRepositoryIdentity } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubRepositoryIdentity } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { RepoIcon } from '@yiru/protocol/project/icon'
 import type { CSSProperties, RefObject } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { MagnifyingGlass as Search, ArrowLeft } from '~renderer/icons/hugeicons'

@@ -1,4 +1,4 @@
-import type { AgentInterruptInputIntent } from '@yiru/runtime-protocol/workbench/agent/interrupt-intent'
+import type { AgentInterruptInputIntent } from '~renderer/terminal-pane/agent/interrupt-intent'
 
 type TerminalInputIntentInput = {
   interruptInference: {

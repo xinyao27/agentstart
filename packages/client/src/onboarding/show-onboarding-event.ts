@@ -1,4 +1,4 @@
-import type { OnboardingState } from '@yiru/runtime-protocol/workbench/types'
+import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
 import { shellClient } from '~renderer/runtime/shell-client'
 
 const ONBOARDING_REOPENED_EVENT = 'yiru:onboarding-reopened'

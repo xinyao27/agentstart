@@ -1,5 +1,5 @@
-import { isWindowsAbsolutePathLike } from '@yiru/runtime-protocol/model/platform'
-import { isWslUncPath } from '@yiru/runtime-protocol/model/platform'
+import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
+import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
 
 import { isWindowsUserAgent } from '../pane-interactions'
 

@@ -1,18 +1,18 @@
+import { FOLDER_WORKSPACE_PROTOCOL_CAPABILITY } from '@yiru/protocol'
 import {
   getRepoExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { FOLDER_WORKSPACE_PATH_STATUS_RUNTIME_CAPABILITY } from '@yiru/runtime-protocol/protocol-version'
+} from '@yiru/protocol/host/identity'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   FOLDER_WORKSPACE_PATH_STATUS_TTL_MS,
   type FolderWorkspacePathStatus,
   type FolderWorkspacePathStatusRequest
-} from '@yiru/runtime-protocol/workbench/folder-workspace-path-status'
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/folder-path'
 import { translate } from '~renderer/i18n/i18n'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
+import { getRuntimeFolderPathStatus } from '~renderer/runtime/folder-workspace-target'
 import {
   assertRuntimeEnvironmentCapability,
   getActiveRuntimeTarget
@@ -102,7 +102,7 @@ export async function fetchRuntimeAddProjectPathStatus(args: {
 }): Promise<FolderWorkspacePathStatus | null> {
   await assertRuntimeEnvironmentCapability(
     args.target.environmentId,
-    FOLDER_WORKSPACE_PATH_STATUS_RUNTIME_CAPABILITY,
+    FOLDER_WORKSPACE_PROTOCOL_CAPABILITY,
     translate(
       'auto.store.slices.repos.2975400634',
       'Update Yiru on this runtime host to open non-Git folders.'
@@ -110,12 +110,10 @@ export async function fetchRuntimeAddProjectPathStatus(args: {
     15_000
   )
   try {
-    const { status } = await callRuntimeOrpc(
-      args.target,
-      (client) => client.folderWorkspace.getPathStatus,
-      { scope: 'path', path: args.path },
-      { timeoutMs: 15_000 }
-    )
+    const { status } = await getRuntimeFolderPathStatus(args.target, {
+      scope: 'path',
+      path: args.path
+    })
     return status
   } catch (err) {
     console.warn('Failed to check runtime folder path status:', err)

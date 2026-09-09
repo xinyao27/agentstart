@@ -1,10 +1,9 @@
-import { repoIsRemote } from '@yiru/runtime-protocol/workbench/agent/launch-remote'
-import { isTuiAgent } from '@yiru/runtime-protocol/workbench/tui-agent/config'
+import { isTuiAgent } from '@yiru/protocol/agent/identity'
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/runtime-protocol/workbench/tui-agent/launch-defaults'
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/launch-defaults'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 import { getAgentLaunchPlatformForRepo } from '../agent/launch-platform'
 import { buildAgentStartupPlan } from '../agent/tui-startup'
@@ -14,6 +13,7 @@ import { readProjectCatalogRuntimeState } from '../project-catalog/runtime-state
 import { useAppStore } from '../store/state'
 import { tuiAgentToAgentKind } from '../telemetry/client'
 import type { WorktreeStartupPayload } from './activation-types'
+import { getRuntimeEnvironmentIdForWorktree } from './runtime-owner'
 
 export function buildCreatedAgentReopenStartup(
   worktree: Worktree
@@ -24,6 +24,10 @@ export function buildCreatedAgentReopenStartup(
   }
   const state = useAppStore.getState()
   const runtimeState = readProjectCatalogRuntimeState()
+  // Why: remote activation is daemon-owned; its initial-terminal path does not consume local startup plans.
+  if (getRuntimeEnvironmentIdForWorktree({ ...state, ...runtimeState }, worktree.id)) {
+    return undefined
+  }
   const repo = runtimeState.repos.find((entry) => entry.id === worktree.repoId)
   const launchPlatform = repo
     ? getAgentLaunchPlatformForRepo(
@@ -37,7 +41,7 @@ export function buildCreatedAgentReopenStartup(
     agentArgs: resolveTuiAgentLaunchArgs(agent, state.settings?.agentDefaultArgs),
     agentEnv: resolveTuiAgentLaunchEnv(agent, state.settings?.agentDefaultEnv),
     platform: launchPlatform,
-    isRemote: repo ? repoIsRemote(repo) : false,
+    isRemote: false,
     allowEmptyPromptLaunch: true
   })
   if (!startupPlan) {

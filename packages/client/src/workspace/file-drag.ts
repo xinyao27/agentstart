@@ -1,5 +1,5 @@
-import { normalizeRuntimePathForComparison } from '@yiru/runtime-protocol/model/platform'
-import { measureClipboardTextByteLength } from '@yiru/runtime-protocol/model/ui'
+import { normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
+import { measureUtf8ByteLength } from '@yiru/protocol/text/utf8-length'
 export const WORKSPACE_FILE_PATH_MIME = 'text/x-yiru-file-path'
 export const WORKSPACE_FILE_PATHS_MIME = 'text/x-yiru-file-paths'
 const WORKSPACE_FILE_DRAG_MAX_PATHS = 256
@@ -26,7 +26,7 @@ function validateWorkspaceFileDragPaths(
   }
   let byteLength = 0
   for (const path of paths) {
-    const measurement = measureClipboardTextByteLength(path, {
+    const measurement = measureUtf8ByteLength(path, {
       stopAfterBytes: options.maxPathBytes - byteLength
     })
     byteLength += measurement.byteLength
@@ -154,7 +154,7 @@ export function readWorkspaceFileDragPaths(
     return { byteLength: 0, pathCount: 0, paths: [], status: 'accepted' }
   }
 
-  const rawMeasurement = measureClipboardTextByteLength(data, { stopAfterBytes: maxPathBytes })
+  const rawMeasurement = measureUtf8ByteLength(data, { stopAfterBytes: maxPathBytes })
   if (rawMeasurement.exceededLimit) {
     return {
       byteLength: rawMeasurement.byteLength,

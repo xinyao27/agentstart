@@ -3,7 +3,7 @@ import {
   normalizeRuntimePathForComparison,
   normalizeRuntimePathSeparators,
   relativePathInsideRoot
-} from '@yiru/runtime-protocol/model/platform'
+} from '@yiru/protocol/host/path'
 import { joinPath, normalizeRelativePath } from '~renderer/path'
 
 import { splitPathSegments } from '../path-tree'

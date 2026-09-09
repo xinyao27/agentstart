@@ -1,18 +1,15 @@
+import type { GitBranchCompareResult } from '@yiru/protocol/git/branch-compare-types'
+import type { GitCommitCompareResult } from '@yiru/protocol/git/compare-values'
+import type { GitDiffResult } from '@yiru/protocol/git/diff-values'
+import type { GitHistoryOptions, GitHistoryResult } from '@yiru/protocol/git/history-types'
 import type {
-  GitHistoryOptions,
-  GitHistoryResult
-} from '@yiru/runtime-protocol/workbench/git/history'
-import type {
-  GitBranchCompareResult,
-  GitCommitCompareResult,
   GitConflictOperation,
-  GitDiffResult,
   GitStagingArea,
   GitStatusResult
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/git/status-types'
 
-import { callRuntimeOrpc } from '../orpc-client'
-import { getRuntimeGitTarget, getRuntimeGitWorktree, type RuntimeGitContext } from './context'
+import { openRuntimeGitClient } from './client'
+import { getRuntimeGitWorktree, type RuntimeGitContext } from './context'
 
 export async function getRuntimeGitStatus(
   context: RuntimeGitContext,
@@ -23,20 +20,21 @@ export async function getRuntimeGitStatus(
     signal?: AbortSignal
   }
 ): Promise<GitStatusResult> {
-  const input = {
-    worktree: getRuntimeGitWorktree(context),
-    ...(options?.includeIgnored ? { includeIgnored: true } : {}),
-    ...(options?.bypassEffectiveUpstreamNegativeCache
-      ? { bypassEffectiveUpstreamNegativeCache: true }
-      : {}),
-    ...(options?.reuseLineStats ? { reuseLineStats: true } : {})
-  }
-  return callRuntimeOrpc(getRuntimeGitTarget(context), (client) => client.git.status, input, {
-    timeoutMs: 15_000,
-    // Why: the safety refresh is bounded by its timeout and guarded against
-    // stale results, while active refreshes must cancel host-side Git work.
-    ...(options?.reuseLineStats ? {} : { signal: options?.signal })
-  })
+  const client = await openRuntimeGitClient(context)
+  return client.status(
+    {
+      worktree: getRuntimeGitWorktree(context),
+      includeIgnored: options?.includeIgnored,
+      bypassNegativeCache: options?.bypassEffectiveUpstreamNegativeCache,
+      reuseLineStats: options?.reuseLineStats
+    },
+    {
+      timeoutMs: 15_000,
+      // Why: the safety refresh is bounded by its timeout and guarded against
+      // stale results, while active refreshes must cancel host-side Git work.
+      ...(options?.reuseLineStats ? {} : { signal: options?.signal })
+    }
+  )
 }
 
 export async function getRuntimeGitSubmoduleStatus(
@@ -44,9 +42,8 @@ export async function getRuntimeGitSubmoduleStatus(
   submodulePath: string,
   area: GitStagingArea = 'unstaged'
 ): Promise<GitStatusResult> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.submoduleStatus,
+  const client = await openRuntimeGitClient(context)
+  return client.submoduleStatus(
     { worktree: getRuntimeGitWorktree(context), submodulePath, area },
     { timeoutMs: 15_000 }
   )
@@ -59,9 +56,8 @@ export async function getRuntimeGitIgnoredPaths(
   if (paths.length === 0) {
     return []
   }
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.checkIgnored,
+  const client = await openRuntimeGitClient(context)
+  return client.checkIgnored(
     { worktree: getRuntimeGitWorktree(context), paths },
     { timeoutMs: 15_000 }
   )
@@ -71,9 +67,8 @@ export async function getRuntimeGitHistory(
   context: RuntimeGitContext,
   options: GitHistoryOptions = {}
 ): Promise<GitHistoryResult> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.history,
+  const client = await openRuntimeGitClient(context)
+  return client.history(
     { worktree: getRuntimeGitWorktree(context), ...options },
     { timeoutMs: 15_000 }
   )
@@ -82,9 +77,8 @@ export async function getRuntimeGitHistory(
 export async function getRuntimeGitConflictOperation(
   context: RuntimeGitContext
 ): Promise<GitConflictOperation> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.conflictOperation,
+  const client = await openRuntimeGitClient(context)
+  return client.conflictOperation(
     { worktree: getRuntimeGitWorktree(context) },
     { timeoutMs: 15_000 }
   )
@@ -94,21 +88,16 @@ export async function getRuntimeGitDiff(
   context: RuntimeGitContext,
   args: { filePath: string; staged: boolean; compareAgainstHead?: boolean }
 ): Promise<GitDiffResult> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.diff,
-    { worktree: getRuntimeGitWorktree(context), ...args },
-    { timeoutMs: 15_000 }
-  )
+  const client = await openRuntimeGitClient(context)
+  return client.diff({ worktree: getRuntimeGitWorktree(context), ...args }, { timeoutMs: 15_000 })
 }
 
 export async function getRuntimeGitBranchCompare(
   context: RuntimeGitContext,
   baseRef: string
 ): Promise<GitBranchCompareResult> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.branchCompare,
+  const client = await openRuntimeGitClient(context)
+  return client.branchCompare(
     { worktree: getRuntimeGitWorktree(context), baseRef },
     { timeoutMs: 15_000 }
   )
@@ -118,9 +107,8 @@ export async function getRuntimeGitCommitCompare(
   context: RuntimeGitContext,
   commitId: string
 ): Promise<GitCommitCompareResult> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.commitCompare,
+  const client = await openRuntimeGitClient(context)
+  return client.commitCompare(
     { worktree: getRuntimeGitWorktree(context), commitId },
     { timeoutMs: 15_000 }
   )
@@ -134,10 +122,14 @@ export async function getRuntimeGitBranchDiff(
     oldPath?: string
   }
 ): Promise<GitDiffResult> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.branchDiff,
-    { worktree: getRuntimeGitWorktree(context), ...args },
+  const client = await openRuntimeGitClient(context)
+  return client.branchDiff(
+    {
+      worktree: getRuntimeGitWorktree(context),
+      filePath: args.filePath,
+      oldPath: args.oldPath,
+      compare: { headOid: args.compare.headOid, mergeBase: args.compare.mergeBase }
+    },
     { timeoutMs: 15_000 }
   )
 }
@@ -146,21 +138,8 @@ export async function getRuntimeGitCommitDiff(
   context: RuntimeGitContext,
   args: { commitOid: string; parentOid?: string | null; filePath: string; oldPath?: string }
 ): Promise<GitDiffResult> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.commitDiff,
-    { worktree: getRuntimeGitWorktree(context), ...args },
-    { timeoutMs: 15_000 }
-  )
-}
-
-export async function getRuntimeGitRemoteFileUrl(
-  context: RuntimeGitContext,
-  args: { relativePath: string; line: number }
-): Promise<string | null> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.remoteFileUrl,
+  const client = await openRuntimeGitClient(context)
+  return client.commitDiff(
     { worktree: getRuntimeGitWorktree(context), ...args },
     { timeoutMs: 15_000 }
   )
@@ -170,9 +149,8 @@ export async function getRuntimeGitRemoteCommitUrl(
   context: RuntimeGitContext,
   args: { sha: string }
 ): Promise<string | null> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.remoteCommitUrl,
+  const client = await openRuntimeGitClient(context)
+  return client.remoteCommitUrl(
     { worktree: getRuntimeGitWorktree(context), ...args },
     { timeoutMs: 15_000 }
   )
@@ -181,9 +159,8 @@ export async function getRuntimeGitRemoteCommitUrl(
 export async function findRuntimeGitHugeFoldersToIgnore(
   context: RuntimeGitContext
 ): Promise<string[]> {
-  return callRuntimeOrpc(
-    getRuntimeGitTarget(context),
-    (client) => client.git.findHugeFoldersToIgnore,
+  const client = await openRuntimeGitClient(context)
+  return client.findHugeFoldersToIgnore(
     { worktree: getRuntimeGitWorktree(context) },
     { timeoutMs: 15_000 }
   )

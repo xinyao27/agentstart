@@ -28,11 +28,7 @@ extension WorkspaceCreationModel {
         }
     }
 
-    func searchHostedSources(
-        provider: WorkspaceHostedSourceProvider,
-        query: String,
-        gitLabState: WorkspaceGitLabMRState = .opened
-    ) async {
+    func searchHostedSources(query: String) async {
         let repoID = selectedRepoID
         guard !repoID.isEmpty, workspaceSourceQueryWithinLimit(query) else {
             hostedSources = []
@@ -46,9 +42,7 @@ extension WorkspaceCreationModel {
             let sources = try await repository.workspaceHostedSources(
                 for: hostID,
                 repoID: repoID,
-                provider: provider,
-                query: query,
-                gitLabState: gitLabState
+                query: query
             )
             guard selectedRepoID == repoID, !Task.isCancelled else { return }
             hostedSources = sources
@@ -64,7 +58,7 @@ extension WorkspaceCreationModel {
         }
     }
 
-    func searchSmartSources(query: String, gitLabState: WorkspaceGitLabMRState = .opened) async {
+    func searchSmartSources(query: String) async {
         let repoID = selectedRepoID
         guard !repoID.isEmpty, workspaceSourceQueryWithinLimit(query) else {
             hostedSources = []
@@ -74,24 +68,7 @@ extension WorkspaceCreationModel {
         isSearchingSources = true
         sourceError = nil
         defer { isSearchingSources = false }
-        let gitLabAvailable = isGitLabAvailable
-        async let githubResult = hostedSourceResult(
-            repoID: repoID,
-            provider: .github,
-            query: query,
-            gitLabState: gitLabState
-        )
-        async let gitLabResult: [WorkspaceHostedSource] = {
-            guard gitLabAvailable else { return [] }
-            return
-                (try? await repository.workspaceHostedSources(
-                    for: hostID,
-                    repoID: repoID,
-                    provider: .gitlab,
-                    query: query,
-                    gitLabState: gitLabState
-                )) ?? []
-        }()
+        async let githubResult = hostedSourceResult(repoID: repoID, query: query)
         async let branchResult: [WorkspaceSourceRef]? =
             query.trimmingCharacters(
                 in: .whitespacesAndNewlines
@@ -103,24 +80,15 @@ extension WorkspaceCreationModel {
                 query: query
             )
         let github = await githubResult
-        let gitLabSources = await gitLabResult
         let branches = await branchResult ?? []
         guard selectedRepoID == repoID, !Task.isCancelled else { return }
-        hostedSources = github.sources + gitLabSources
+        hostedSources = github.sources
         sourceRefs = branches
         if github.needsRemote {
             sourceError = WorkspaceHostedSourceError.githubRemoteRequired.message
         }
         if let pasted = await resolvePastedSource(query) {
-            // Why: Smart mode fans out GitHub, GitLab, and branch searches together, so a pasted
-            // source must replace only the matching provider's rows — dropping the others makes
-            // a GitHub link hide otherwise valid GitLab results.
-            switch pasted.provider {
-            case .github:
-                hostedSources = [pasted] + gitLabSources
-            case .gitlab:
-                hostedSources = github.sources + [pasted]
-            }
+            hostedSources = [pasted]
         }
     }
 
@@ -288,18 +256,14 @@ extension WorkspaceCreationModel {
 
     private func hostedSourceResult(
         repoID: String,
-        provider: WorkspaceHostedSourceProvider,
-        query: String,
-        gitLabState: WorkspaceGitLabMRState
+        query: String
     ) async -> (sources: [WorkspaceHostedSource], needsRemote: Bool) {
         do {
             return (
                 try await repository.workspaceHostedSources(
                     for: hostID,
                     repoID: repoID,
-                    provider: provider,
-                    query: query,
-                    gitLabState: gitLabState
+                    query: query
                 ),
                 false
             )
@@ -336,15 +300,6 @@ extension WorkspaceCreationModel {
                 crossRepoPrompt = nil
                 return try await repository.workspacePastedGitHubSource(
                     for: hostID, repoID: selectedRepoID, number: number, slug: slug)
-            case .gitLabLink(let host, let path, let number):
-                crossRepoPrompt = nil
-                return try await repository.workspacePastedGitLabSource(
-                    for: hostID,
-                    repoID: selectedRepoID,
-                    host: host,
-                    path: path,
-                    number: number
-                )
             }
         } catch {
             return nil

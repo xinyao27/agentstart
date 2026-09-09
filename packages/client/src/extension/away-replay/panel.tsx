@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
-import type { RuntimeWorkspaceEvent } from '@yiru/runtime-protocol/contract'
+import type { WorkspaceEventRecord } from '@yiru/protocol'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { ClockCounterClockwise } from '~renderer/icons/hugeicons'
 import { useEventCallback } from '~renderer/react/use-event-callback'
+import { requireWorkspaceEventsClient } from '~renderer/runtime/workspace-events-target'
 import { Button } from '~renderer/ui/button'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
 import { getExtensionHostNavigation } from '../navigation'
-import { extensionOrpc } from '../runtime/orpc'
-import { projectsQuery } from '../runtime/queries'
+import { projectsQuery, WORKSPACE_EVENTS_QUERY_ROOT } from '../runtime/queries'
 import {
   buildAwayReplayFacts,
   latestAwayReplayMarker,
@@ -38,7 +38,7 @@ export function AwayReplay(): React.JSX.Element | null {
   const replay = useQuery({
     enabled: projectIds.length > 0,
     queryKey: [
-      ...extensionOrpc.workspaceEvents.list.key({ type: 'query' }),
+      ...WORKSPACE_EVENTS_QUERY_ROOT,
       'away-replay',
       projectKey,
       markerKey,
@@ -123,22 +123,23 @@ async function loadAwayReplay(
   projectIds: string[],
   cycle: ReplayCycle
 ): Promise<AwayReplayScope[]> {
+  const client = await requireWorkspaceEventsClient({ kind: 'local' })
   return Promise.all(
     projectIds.map(async (scope) => {
       const afterId = cycle.marker[scope]
       if (afterId === undefined) {
-        const current = await extensionOrpc.workspaceEvents.list.call({
+        const current = await client.list({
           afterId: Number.MAX_SAFE_INTEGER,
           limit: 1,
           scope
         })
         return { events: [], latestId: current.latestId, scope }
       }
-      const events: RuntimeWorkspaceEvent[] = []
+      const events: WorkspaceEventRecord[] = []
       let cursor = afterId
       let latestId = afterId
       do {
-        const page = await extensionOrpc.workspaceEvents.list.call({
+        const page = await client.list({
           afterId: cursor,
           limit: EVENT_PAGE_SIZE,
           scope

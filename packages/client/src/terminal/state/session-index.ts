@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 
 function indexFirstById<T extends { id: string }>(rows: readonly T[]): Map<string, T> {
   const index = new Map<string, T>()

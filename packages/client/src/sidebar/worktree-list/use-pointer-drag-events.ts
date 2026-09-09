@@ -1,7 +1,7 @@
 import type {
   WorkspaceStatus,
   WorkspaceStatusDefinition
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/status/model'
 import { useEffect } from 'react'
 
 import { getFullDropIndexForWorktreeDragUnit } from '../worktree-drag-units'

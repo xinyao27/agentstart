@@ -1,1 +1,1 @@
-export { isWorkItemLookupText } from '@yiru/runtime-protocol/model/review'
+export { isWorkItemLookupText } from '@yiru/protocol/hosted-review/links/lookup-text'

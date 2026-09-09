@@ -1,9 +1,9 @@
-import { HEX_COLOR_RE } from '@yiru/runtime-protocol/workbench/color-validation'
+import { HEX_COLOR_RE } from '@yiru/protocol/settings/color-values'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   normalizeLeftSidebarTintColor,
   normalizeLeftSidebarTintOpacity
-} from '@yiru/runtime-protocol/workbench/left-sidebar-appearance'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/settings/sidebar-appearance'
 
 import { resolveEffectiveTerminalAppearance } from '../terminal/theme'
 

@@ -1,7 +1,8 @@
-import type { GhosttyImportPreview, GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useState } from 'react'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { previewGhosttyImportOnActiveHost } from '~renderer/runtime/settings-import-client'
+import type { GhosttyImportPreview } from '~renderer/settings/import-preview'
 
 export type UseGhosttyImportReturn = {
   open: boolean

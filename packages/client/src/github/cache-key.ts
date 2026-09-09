@@ -1,8 +1,5 @@
-import {
-  LOCAL_EXECUTION_HOST_ID,
-  normalizeExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import { LOCAL_EXECUTION_HOST_ID, normalizeExecutionHostId } from '@yiru/protocol/host/identity'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 type RuntimeFocusSettings = Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null | undefined
 

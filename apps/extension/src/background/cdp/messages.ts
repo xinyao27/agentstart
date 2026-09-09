@@ -1,4 +1,4 @@
-import type { BrowserReplayEvent } from '@yiru/runtime-protocol/contract'
+import type { BrowserReplayEvent } from '@yiru/protocol'
 
 import { isRecording, replayRecording, startRecording, stopRecording } from './recording'
 

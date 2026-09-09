@@ -1,4 +1,4 @@
-import type { PRInfo } from '@yiru/runtime-protocol/workbench/types'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
 import { buildGitHubPRRefreshStateClearToken } from '~renderer/github/state'
 import { getRuntimeGitStatus, getRuntimeGitUpstreamStatus } from '~renderer/runtime/git-client'
 import { refreshHostedReviewCard } from '~renderer/source-control/hosted-review-state/slice'
@@ -16,7 +16,6 @@ import { recordChecksPanelPRRefreshBreadcrumb } from './pr-refresh-breadcrumb'
 export function useChecksPanelRefreshAction(context: useChecksPanelCommentsLoadingState) {
   const {
     activeConnectionId,
-    activeGitLabReview,
     activeWorktreeId,
     activeWorktreePath,
     activeWorktreePushTarget,
@@ -24,7 +23,6 @@ export function useChecksPanelRefreshAction(context: useChecksPanelCommentsLoadi
     branch,
     expireGitHubPRRefreshState,
     fallbackGitHubPRNumber,
-    fetchGitLabDetails,
     fetchHostedReviewForBranch,
     fetchPRChecks,
     fetchPRComments,
@@ -32,11 +30,6 @@ export function useChecksPanelRefreshAction(context: useChecksPanelCommentsLoadi
     gitStatusSnapshot,
     isCurrentAsyncResult,
     isFolder,
-    isGitLabReviewContext,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     linkedPR,
     ownerSettings,
     panelContextKey,
@@ -79,7 +72,7 @@ export function useChecksPanelRefreshAction(context: useChecksPanelCommentsLoadi
     refreshRequestKeyRef.current = refreshRequestKey
     const isCurrentRequest = (): boolean => refreshRequestKeyRef.current === refreshRequestKey
     const refreshStartedAt = Date.now()
-    const refreshProvider = isGitLabReviewContext ? 'gitlab' : 'github'
+    const refreshProvider = 'github'
     let refreshOutcome = 'started'
     setIsRefreshing(true)
     recordChecksPanelPRRefreshBreadcrumb({
@@ -89,8 +82,8 @@ export function useChecksPanelRefreshAction(context: useChecksPanelCommentsLoadi
       worktreeId: activeWorktreeId,
       branch,
       prCacheKey,
-      prNumber: activeGitLabReview?.number ?? prNumber,
-      prState: activeGitLabReview?.state ?? pr?.state,
+      prNumber,
+      prState: pr?.state,
       prChecksStatus: pr?.checksStatus,
       refreshState: prCacheKey ? useAppStore.getState().prRefreshStates[prCacheKey] : null
     })
@@ -170,37 +163,6 @@ export function useChecksPanelRefreshAction(context: useChecksPanelCommentsLoadi
           console.warn('[ChecksPanel] pre-refresh git identity refresh failed', error)
         }
       }
-      if (isGitLabReviewContext) {
-        const refreshedReview = await refreshHostedReviewCard(fetchHostedReviewForBranch, {
-          repoPath: repo.path,
-          repoId: repo.id,
-          branch,
-          linkedGitHubPR: linkedPR,
-          fallbackGitHubPR: fallbackGitHubPRNumber,
-          linkedGitLabMR,
-          linkedBitbucketPR,
-          linkedAzureDevOpsPR,
-          linkedGiteaPR
-        })
-        if (!isCurrentRequest()) {
-          return
-        }
-        const refreshedGitLabReview =
-          refreshedReview?.provider === 'gitlab' ? refreshedReview : activeGitLabReview
-        if (refreshedGitLabReview) {
-          await fetchGitLabDetails({
-            mrNumberOverride: refreshedGitLabReview.number,
-            headShaOverride: refreshedGitLabReview.headSha,
-            commitAsCurrent: true
-          })
-          refreshOutcome = 'review'
-        } else {
-          setChecks([])
-          setComments([])
-          refreshOutcome = 'no-review'
-        }
-        return
-      }
       const refreshStoreState = useAppStore.getState()
       const rawPRRefreshState = refreshStoreState.prRefreshStates[prCacheKey]
       const startedPRRefreshToken = buildGitHubPRRefreshStateClearToken(
@@ -230,11 +192,7 @@ export function useChecksPanelRefreshAction(context: useChecksPanelCommentsLoadi
         repoId: repo.id,
         branch,
         linkedGitHubPR: linkedPR,
-        fallbackGitHubPR: refreshedPR?.number ?? fallbackGitHubPRNumber,
-        linkedGitLabMR,
-        linkedBitbucketPR,
-        linkedAzureDevOpsPR,
-        linkedGiteaPR
+        fallbackGitHubPR: refreshedPR?.number ?? fallbackGitHubPRNumber
       })
       if (!isCurrentRequest()) {
         return
@@ -334,8 +292,8 @@ export function useChecksPanelRefreshAction(context: useChecksPanelCommentsLoadi
         worktreeId: activeWorktreeId,
         branch,
         prCacheKey,
-        prNumber: activeGitLabReview?.number ?? prNumber,
-        prState: activeGitLabReview?.state ?? pr?.state,
+        prNumber,
+        prState: pr?.state,
         prChecksStatus: pr?.checksStatus,
         refreshState: prCacheKey ? useAppStore.getState().prRefreshStates[prCacheKey] : null,
         outcome: refreshOutcome,

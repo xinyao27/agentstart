@@ -2,6 +2,14 @@ import type { HostBrowserTabProjection } from '~renderer/browser-tab-projection/
 import { getExtensionBrowserCapabilities } from '~renderer/extension/browser-capabilities'
 import { useAppStore } from '~renderer/store/state'
 
+type BrowserCommandBinarySink = (
+  receiptId: string,
+  sequence: number,
+  isEnd: boolean,
+  payload: Uint8Array<ArrayBufferLike>,
+  signal: AbortSignal
+) => Promise<void>
+
 const NAVIGATION_METHODS = new Set([
   'browser.back',
   'browser.forward',
@@ -11,9 +19,17 @@ const NAVIGATION_METHODS = new Set([
 
 export async function executeHostBrowserCommand(
   method: string,
-  rawInput: unknown
+  rawInput: unknown,
+  authorityId: string | null = null,
+  sendBinary?: BrowserCommandBinarySink,
+  signal?: AbortSignal
 ): Promise<unknown> {
-  const result = await getExtensionBrowserCapabilities().executeBrowserCommand(method, rawInput)
+  const result = await getExtensionBrowserCapabilities().executeBrowserCommand(
+    method,
+    rawInput,
+    authorityId,
+    sendBinary && signal ? { sendBinary, signal } : undefined
+  )
   await reconcileHostBrowserCommand(method, rawInput, result)
   return result
 }

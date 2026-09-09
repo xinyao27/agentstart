@@ -1,13 +1,11 @@
-import { shouldApplyWorkspaceSourceAutoName } from '@yiru/runtime-protocol/model/workspace'
-import type {
-  GitHubWorkItem,
-  GitPushTarget,
-  GlobalSettings,
-  Repo
-} from '@yiru/runtime-protocol/workbench/types'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type { Dispatch, RefObject, SetStateAction } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
+import { shouldApplyWorkspaceSourceAutoName } from '~renderer/new-workspace/naming/source'
 import { getSettingsForRepoRuntimeOwner } from '~renderer/repo/runtime-owner'
 import {
   getLinkedItemDisplayName,
@@ -40,7 +38,6 @@ type ComposerGitHubSourceOptions = {
   setBranchNameOverridePreservesNameEdits: Dispatch<SetStateAction<boolean>>
   setCompareBaseRef: Dispatch<SetStateAction<string | undefined>>
   setForkPushWarning: Dispatch<SetStateAction<string | null>>
-  setLinkedGitLabMR: Dispatch<SetStateAction<number | null>>
   setLinkedPR: Dispatch<SetStateAction<number | null>>
   setLinkedWorkItem: Dispatch<SetStateAction<LinkedWorkItemSummary | null>>
   setName: Dispatch<SetStateAction<string>>
@@ -55,7 +52,6 @@ export function createComposerGitHubItemSelect(options: ComposerGitHubSourceOpti
     if (options.isProjectGroupTarget) {
       const linkedItem = toGitHubLinkedWorkItem(item)
       options.setLinkedPR(item.number)
-      options.setLinkedGitLabMR(null)
       options.setLinkedWorkItem(linkedItem)
       const nextName = getLinkedItemDisplayName(linkedItem)
       if (

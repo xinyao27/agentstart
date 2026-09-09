@@ -1,7 +1,4 @@
-import type {
-  DiagnosticsBundle,
-  DiagnosticsStatus
-} from '@yiru/runtime-protocol/workbench/support-report'
+import type { DiagnosticsBundle, DiagnosticsStatus } from '@yiru/protocol/diagnostics-values'
 import { translate } from '~renderer/i18n/i18n'
 import {
   Check,

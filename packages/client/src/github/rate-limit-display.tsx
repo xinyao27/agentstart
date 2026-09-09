@@ -1,11 +1,12 @@
-import type { GitHubRateLimitSnapshot } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubRateLimitSnapshot } from '@yiru/protocol/hosted-review/query-types'
 import React, { useEffect, useRef, useState } from 'react'
 import { installWindowVisibilityInterval } from '~renderer/application-shell/window-visibility-interval'
 import { translate } from '~renderer/i18n/i18n'
 import { Gauge, ArrowClockwise as RefreshCw } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { useEventCallback } from '~renderer/react/use-event-callback'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { getProviderRateLimitScope } from '~renderer/settings/provider-account-scope'
 import { ProviderHostScopeControl } from '~renderer/settings/provider-host-scope-control'
@@ -94,9 +95,13 @@ export function useGitHubRateLimitSnapshot(options?: { autoRefresh?: boolean }):
     setIsFetching(true)
     try {
       const target = getActiveRuntimeTarget(settings)
-      const params = force ? { force: true } : undefined
-      const res = await callRuntimeOrpc(target, (client) => client.github.rateLimit, params ?? {}, {
-        timeoutMs: 30_000
+      const client = await openGitHubTarget()
+      if (!client) {
+        throw new Error('GitHub protocol capability is unavailable')
+      }
+      const res = await client.getRateLimit(force, {
+        timeoutMs: 30_000,
+        ...runtimeCallDestination(target)
       })
       if (token !== latestToken.current) {
         return

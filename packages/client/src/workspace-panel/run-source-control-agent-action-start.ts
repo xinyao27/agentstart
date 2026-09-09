@@ -1,9 +1,11 @@
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { LaunchSource } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import type { GlobalSettings, Repo, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-actions'
+import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { translate } from '~renderer/i18n/i18n'
@@ -71,7 +73,7 @@ export async function runSourceControlAgentActionStart({
       agentArgs
     })
   } else if (worktreeId) {
-    const result = launchAgentInNewTab({
+    const result = await launchAgentInNewTab({
       agent: selectedAgent,
       worktreeId,
       groupId: groupId ?? worktreeId,

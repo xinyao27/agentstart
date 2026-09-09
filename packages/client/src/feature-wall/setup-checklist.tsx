@@ -1,11 +1,8 @@
-import type {
-  FeatureWallSetupStep,
-  FeatureWallSetupStepId
-} from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
-import { getFeatureWallSetupStepsForSection } from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import { useEffect } from 'react'
 import { translate } from '~renderer/i18n/i18n'
+import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import { Check } from '~renderer/icons/hugeicons'
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
@@ -15,6 +12,8 @@ import { AgentStep } from '../onboarding/agent-step'
 import { NotificationStep } from '../onboarding/notification-step'
 import { AgentCapabilitiesSetupAction } from './agent-capabilities-setup-action'
 import { BrowserAction } from './browser-action'
+import type { FeatureWallSetupStep } from './content/setup-steps'
+import { getFeatureWallSetupStepsForSection } from './content/setup-steps'
 import type { FeatureWallSetupProgress } from './setup-progress'
 import {
   SetupBrowserVisual,
@@ -210,6 +209,7 @@ function NotificationAction(): React.JSX.Element {
 export function FeatureWallSetupChecklist(
   props: FeatureWallSetupChecklistProps
 ): React.JSX.Element {
+  useUiLocale()
   const { activeStep, progress, onSelectStep, layout = 'modal' } = props
   const isEmbedded = layout === 'embedded'
   const activeDone = activeStep ? progress.stepDone[activeStep.id] : false

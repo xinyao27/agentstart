@@ -1,6 +1,6 @@
-import { normalizeKagiSessionLink } from '@yiru/runtime-protocol/workbench/browser/url'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { normalizeKagiSessionLink } from '~renderer/browser/session/kagi-link'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'
 

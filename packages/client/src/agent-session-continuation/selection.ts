@@ -1,5 +1,5 @@
-import { isTuiAgent } from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { isTuiAgent } from '@yiru/protocol/agent/identity'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 
 export function chooseInitialContinuationAgent(args: {
   availableAgents: TuiAgent[]

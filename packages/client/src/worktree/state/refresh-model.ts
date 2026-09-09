@@ -1,10 +1,10 @@
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
 import type {
-  FolderWorkspace,
-  LocalBaseRefRefreshResult,
   TerminalLayoutSnapshot,
-  TerminalPaneLayoutNode,
-  Worktree
-} from '@yiru/runtime-protocol/workbench/types'
+  TerminalPaneLayoutNode
+} from '@yiru/protocol/workspace/session'
+import type { LocalBaseRefRefreshResult } from '@yiru/protocol/worktree/create-result'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 
 export const WORKTREE_REMOVAL_AMBIGUOUS_ERROR =

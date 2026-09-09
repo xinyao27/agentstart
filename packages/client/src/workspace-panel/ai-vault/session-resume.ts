@@ -1,9 +1,6 @@
-import {
-  isAiVaultSessionResumableContent,
-  type AiVaultSession
-} from '@yiru/runtime-protocol/model/agent'
-import type { Repo, Worktree } from '@yiru/runtime-protocol/workbench/types'
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { translate } from '~renderer/i18n/i18n'
 import type { AppState } from '~renderer/store/types'
 import {
@@ -11,6 +8,8 @@ import {
   getAiVaultResumeWorkspaceExecutionHostId,
   getAiVaultResumeWorkspaceTargetStatus
 } from '~renderer/workspace-panel/ai-vault/resume-target'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
+import { isAiVaultSessionResumableContent } from '~renderer/workspace-panel/ai-vault/session/recovery'
 import { getIndexedWorktreeMap } from '~renderer/worktree/repo-index'
 
 import {

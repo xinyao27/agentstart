@@ -2,8 +2,8 @@ import type {
   AgentStatusEntry,
   AgentStatusState,
   AgentType
-} from '@yiru/runtime-protocol/model/agent'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/status-records'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 
 // ─── Shared data types ────────────────────────────────────────────────────────
 

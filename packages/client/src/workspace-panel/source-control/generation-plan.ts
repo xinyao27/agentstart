@@ -1,10 +1,9 @@
-import { planCommitMessageGeneration } from '@yiru/runtime-protocol/workbench/commit-message/plan'
-import type { ResolvedSourceControlAiGenerationParams } from '@yiru/runtime-protocol/workbench/source-control/ai'
-import {
-  renderSourceControlActionCommandTemplate,
-  type SourceControlTextActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+import { renderSourceControlActionCommandTemplate } from '@yiru/protocol/source-control/action-recipes'
+import type { SourceControlTextActionId } from '@yiru/protocol/source-control/ai-actions'
+import { planCommitMessageGeneration } from '@yiru/protocol/source-control/command/plan'
+import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
 import { translate } from '~renderer/i18n/i18n'
+import { localizeGenerationFailure } from '~renderer/source-control/ai/failure-copy'
 
 export type SourceControlGenerationPlanResult =
   | { ok: true; commandLabel: string; delivery: string; caveat: string }
@@ -13,7 +12,7 @@ export type SourceControlGenerationPlanResult =
 const SYNTHETIC_COMMIT_PROMPT =
   'Generate a concise git commit message for a synthetic dry-run diff. Return only the commit message.'
 const SYNTHETIC_PULL_REQUEST_PROMPT =
-  'Generate a hosted review title and description for a synthetic branch diff. Preserve any existing pull request or merge request template in the current description. Return structured pull request fields.'
+  'Generate a pull request title and description for a synthetic branch diff. Preserve any existing pull request template in the current description. Return structured pull request fields.'
 
 const SYNTHETIC_TEXT_GENERATION_CONTEXT: Record<
   SourceControlTextActionId,
@@ -70,17 +69,25 @@ export function planSourceControlTextGeneration(
   }
   const planned = planCommitMessageGeneration(params, prompt)
   if (!planned.ok) {
-    return { ok: false, error: planned.error }
+    return { ok: false, error: localizeGenerationFailure(planned.reason) }
   }
   const delivery =
     planned.plan.stdinPayload === null
-      ? 'Prompt is delivered as command arguments.'
-      : 'Prompt is piped to the agent over stdin.'
+      ? translate(
+          'sourceControl.generationPreview.argv',
+          'Prompt is delivered as command arguments.'
+        )
+      : translate(
+          'sourceControl.generationPreview.stdin',
+          'Prompt is piped to the agent over stdin.'
+        )
   return {
     ok: true,
     commandLabel: [planned.plan.binary, ...planned.plan.args].join(' '),
     delivery,
-    caveat:
+    caveat: translate(
+      'sourceControl.generationPreview.caveat',
       'This checks Yiru’s planner only. It does not invoke the CLI, prove PATH or binary availability, or reproduce main-process Windows .cmd resolution.'
+    )
   }
 }

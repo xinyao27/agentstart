@@ -1,4 +1,4 @@
-import type { SkillDiscoveryResult } from '@yiru/runtime-protocol/workbench/skills'
+import type { SkillDiscoveryResult } from '@yiru/protocol'
 
 export const INSTALLED_AGENT_SKILLS_CHANGED_EVENT = 'yiru:installed-agent-skills-changed'
 

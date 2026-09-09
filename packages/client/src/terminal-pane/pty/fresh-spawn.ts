@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 
 import type { ColdRestoreAgentResumeStartup } from './cold-restore-agent-startup'
 import type { PtyConnectResult, PtyTransport } from './transport-types'

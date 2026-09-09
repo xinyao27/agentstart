@@ -1,16 +1,12 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
-import { hostedReviewInfoFromGitHubPRInfo } from '@yiru/runtime-protocol/workbench/hosted-review-github'
-import type { PRInfo } from '@yiru/runtime-protocol/workbench/types'
+import { hostedReviewInfoFromGitHubPRInfo } from '@yiru/protocol/hosted-review/github-mapping'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
 
 export type ChecksPanelReview = HostedReviewInfo
 
 export type ChecksPanelReviewSelectionInput = {
   hostedReview: HostedReviewInfo | null | undefined
   pr: PRInfo | null | undefined
-  linkedGitLabMR: number | null
-  linkedBitbucketPR: number | null
-  linkedAzureDevOpsPR: number | null
-  linkedGiteaPR: number | null
 }
 
 export function gitHubPRToChecksPanelReview(pr: PRInfo): ChecksPanelReview {
@@ -21,23 +17,7 @@ export function gitHubPRToChecksPanelReview(pr: PRInfo): ChecksPanelReview {
 
 export function selectChecksPanelReview({
   hostedReview,
-  pr,
-  linkedGitLabMR,
-  linkedBitbucketPR,
-  linkedAzureDevOpsPR,
-  linkedGiteaPR
+  pr
 }: ChecksPanelReviewSelectionInput): ChecksPanelReview | null {
-  const gitLabHostedReview = hostedReview?.provider === 'gitlab' ? hostedReview : null
-  if (gitLabHostedReview) {
-    return gitLabHostedReview
-  }
-  const hasNonGitHubLinkedReview =
-    linkedGitLabMR !== null ||
-    linkedBitbucketPR !== null ||
-    linkedAzureDevOpsPR !== null ||
-    linkedGiteaPR !== null
-  if (hasNonGitHubLinkedReview) {
-    return null
-  }
-  return pr ? gitHubPRToChecksPanelReview(pr) : null
+  return pr ? gitHubPRToChecksPanelReview(pr) : (hostedReview ?? null)
 }

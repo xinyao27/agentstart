@@ -1,8 +1,5 @@
-import type { SleepingAgentSessionRecord } from '@yiru/runtime-protocol/model/agent'
-import {
-  parseLegacyNumericPaneKey,
-  parsePaneKey
-} from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import type { SleepingAgentSessionRecord } from '@yiru/protocol/agent/session-resume'
+import { parseLegacyNumericPaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import {
   WAKE_HIBERNATED_AGENTS_WORKTREE_EVENT,
   type WakeHibernatedAgentsWorktreeDetail

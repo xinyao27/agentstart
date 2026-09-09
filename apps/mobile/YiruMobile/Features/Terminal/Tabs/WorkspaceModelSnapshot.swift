@@ -8,7 +8,8 @@ extension TerminalWorkspaceModel {
         guard hasReceivedInitialSnapshot, operation == nil else { return }
         if let pendingActiveTabID,
             let selected = tabs.first(where: { $0.id == pendingActiveTabID }),
-            selected.terminalTarget == nil
+            selected.terminalTarget == nil,
+            !selected.isSleepingTerminal
         {
             await activateSelection(selected, reportsFailure: false)
             return
@@ -57,16 +58,20 @@ extension TerminalWorkspaceModel {
             : nil
         if let requestedInitialTabID {
             activeTabID = requestedInitialTabID
-            pendingActiveTabID = requestedInitialTabID
+            pendingActiveTabID = activeTab?.isSleepingTerminal == true ? nil : requestedInitialTabID
         } else if let pendingActiveTabID,
             tabs.contains(where: { $0.id == pendingActiveTabID })
         {
             activeTabID = pendingActiveTabID
-            if snapshotActiveID == pendingActiveTabID,
-                confirmsWorkspaceSelection(publicationEpoch: snapshot.publicationEpoch)
+            if activeTab?.isSleepingTerminal == true
+                || (snapshotActiveID == pendingActiveTabID
+                    && confirmsWorkspaceSelection(publicationEpoch: snapshot.publicationEpoch))
             {
                 self.pendingActiveTabID = nil
             }
+        } else if let activeTabID, tabs.contains(where: { $0.id == activeTabID }) {
+            // Why: another client's persisted selection must not move this client's focus.
+            pendingActiveTabID = nil
         } else {
             pendingActiveTabID = nil
             activeTabID = snapshotActiveID

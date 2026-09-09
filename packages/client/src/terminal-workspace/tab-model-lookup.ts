@@ -1,5 +1,5 @@
-import type { KeybindingContext } from '@yiru/runtime-protocol/workbench/keybindings'
-import type { Tab } from '@yiru/runtime-protocol/workbench/types'
+import type { KeybindingContext } from '@yiru/protocol/keybindings'
+import type { Tab } from '@yiru/protocol/workspace/tabs'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import type { useAppStore } from '~renderer/store/state'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'

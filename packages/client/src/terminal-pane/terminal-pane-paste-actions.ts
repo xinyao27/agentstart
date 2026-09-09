@@ -1,4 +1,4 @@
-import type { ReadClipboardTextOptions } from '@yiru/runtime-protocol/model/ui'
+import type { ReadClipboardTextOptions } from '~renderer/clipboard/text'
 import { translate } from '~renderer/i18n/i18n'
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import { shellClient } from '~renderer/runtime/shell-client'

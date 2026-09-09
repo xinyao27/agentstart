@@ -1,4 +1,5 @@
-import type { TerminalLayoutSnapshot, TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { classifyTitleActivity } from '~renderer/terminal-pane/agent/evidence'
 
 export function emptyLayoutSnapshot(): TerminalLayoutSnapshot {

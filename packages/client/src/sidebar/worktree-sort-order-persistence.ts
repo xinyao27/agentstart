@@ -1,6 +1,6 @@
-import { parseExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { parseExecutionHostId } from '@yiru/protocol/host/identity'
 import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
+import { persistRuntimeWorktreeSortOrder } from '~renderer/runtime/worktree-lifecycle-target'
 import type { WorktreeRuntimeOwnerState } from '~renderer/worktree/runtime-owner'
 
 import { splitWorktreeSortOrderByHost } from './worktree-sort-order-host-split'
@@ -20,11 +20,9 @@ export function persistWorktreeSortOrderByHost(
     const parsed = parseExecutionHostId(group.hostId)
     if (parsed?.kind === 'runtime') {
       ignoreSortOrderPersistenceFailure(
-        callRuntimeOrpc(
+        persistRuntimeWorktreeSortOrder(
           { kind: 'environment', environmentId: parsed.environmentId },
-          (client) => client.worktree.persistSortOrder,
-          { orderedIds: group.orderedIds },
-          { timeoutMs: 15_000 }
+          { orderedIds: group.orderedIds }
         )
       )
       continue

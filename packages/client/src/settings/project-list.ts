@@ -2,9 +2,10 @@ import {
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { projectHostSetupProjectionFromRepos } from '@yiru/runtime-protocol/workbench/project-host-setup-projection'
-import type { Project, ProjectHostSetup, Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { projectHostSetupProjectionFromRepos } from '@yiru/protocol/project/setup-projection'
 
 export type SettingsProject = {
   projectId: string
@@ -44,7 +45,7 @@ export function getSettingsProjectRepresentativeRepoId(
  * persisted projects/setups) so the nav and pane lists agree exactly.
  */
 export function buildSettingsProjectList(repos: readonly Repo[]): SettingsProject[] {
-  const projection = projectHostSetupProjectionFromRepos(repos)
+  const projection = projectHostSetupProjectionFromRepos(repos, Date.now())
   const setupsByProjectId = new Map<string, ProjectHostSetup[]>()
   for (const setup of projection.setups) {
     const projectSetups = setupsByProjectId.get(setup.projectId)

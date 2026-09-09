@@ -1,4 +1,6 @@
-import type { FolderWorkspace, ProjectGroup, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { useEventCallback } from '~renderer/react/use-event-callback'

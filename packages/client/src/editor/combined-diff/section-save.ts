@@ -1,3 +1,4 @@
+import { getLargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
 import { joinPath } from '~renderer/path'
 import { getConnectionIdForFile } from '~renderer/runtime/connection-context'
 import { writeRuntimeFile } from '~renderer/runtime/file-client'
@@ -6,7 +7,6 @@ import { useAppStore } from '~renderer/store/state'
 import { findWorktreeById } from '~renderer/worktree/state/types'
 
 import type { DiffSection } from '../diff-section/types'
-import { getLargeDiffRenderLimit } from '../large-diff-render-limit'
 import { getStoredTextDiffContent, getStoredTextDiffResult } from '../large-diff-section-content'
 import type { OpenFile } from '../state'
 

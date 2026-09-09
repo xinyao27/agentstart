@@ -1,7 +1,4 @@
-import {
-  getTuiAgentDetectCommands,
-  TUI_AGENT_CONFIG
-} from '@yiru/runtime-protocol/workbench/tui-agent/config'
+import { getTuiAgentDetectCommands, TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
 
 const TERMINAL_STARTUP_COMMAND_EXTENSION_RE = /\.(?:exe|cmd|bat|ps1)$/i
 // Why: startup commands can carry pasted scripts; classifier work should stay bounded.

@@ -1,10 +1,10 @@
-import type { ProjectExecutionRuntimeResolution } from '@yiru/runtime-protocol/workbench/project-execution-runtime'
-import type { SkillDiscoveryTarget } from '@yiru/runtime-protocol/workbench/skills'
+import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
 import { useShallow } from 'zustand/react/shallow'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { projectCatalogRepoBuckets } from '~renderer/project-catalog/repo-buckets'
 import { getRenderingHostSnapshot } from '~renderer/runtime/shell-platform-client'
+import type { SkillDiscoveryTarget } from '~renderer/skills/discovery-target'
 import {
   getProjectAgentSkillRuntime,
   getProjectAgentSkillTerminalShellOverride,

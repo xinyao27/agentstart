@@ -1,6 +1,6 @@
-import type { YiruProfileSummary } from '@yiru/runtime-protocol/workbench/yiru-profiles'
 import { UserCircle as CircleUserRound } from '~renderer/icons/hugeicons'
 import { DropdownMenuLabel } from '~renderer/ui/dropdown-menu'
+import type { YiruProfileSummary } from '~renderer/yiru-profiles/profile-model'
 
 import { YiruProfileAvatar } from './yiru-profile-avatar'
 

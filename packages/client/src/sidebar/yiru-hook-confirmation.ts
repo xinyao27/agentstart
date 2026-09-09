@@ -2,9 +2,9 @@ import {
   getRepoExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { resolveHookCommandSourcePolicy } from '@yiru/runtime-protocol/workbench/hook-command-source-policy'
-import type { YiruHooks } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import { resolveHookCommandSourcePolicy } from '@yiru/protocol/setup/command-source-policy'
+import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
 import { getRuntimeEnvironmentIdForRepo } from '~renderer/repo/runtime-owner'
 import { checkRuntimeHooks } from '~renderer/runtime/hooks-client'
 import type { AppState } from '~renderer/store/types'

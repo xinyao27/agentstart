@@ -1,4 +1,4 @@
-import type { WorkspaceCleanupBlocker } from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+import type { WorkspaceCleanupBlocker } from '@yiru/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 type ContextDetailKind = 'terminal' | 'editor' | 'browser' | 'diff' | 'agent'

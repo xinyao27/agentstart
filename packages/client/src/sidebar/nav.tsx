@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { openCommandPalette } from '~renderer/extension/command-palette/open'
 import { translate } from '~renderer/i18n/i18n'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'

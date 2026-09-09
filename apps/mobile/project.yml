@@ -30,6 +30,8 @@ packages:
   Hugeicons:
     url: https://github.com/iSapozhnik/hugeicons-swift.git
     exactVersion: 4.1.7
+  YiruProtocol:
+    path: ../../packages/protocol/swift
 
 schemes:
   YiruMobile:
@@ -59,6 +61,7 @@ targets:
       - package: SwiftTerm
       - package: Textual
       - package: Hugeicons
+      - package: YiruProtocol
       - target: YiruWidgets
       - target: YiruNotificationService
     info:

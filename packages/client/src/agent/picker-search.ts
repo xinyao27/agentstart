@@ -1,4 +1,4 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 import type { AgentCatalogEntry } from '~renderer/agent/catalog'
 
 type RankedAgent = {
@@ -14,7 +14,7 @@ export function isAgentPickerQueryTooLarge(
   query: string,
   maxBytes = AGENT_PICKER_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 export function getAgentPickerCommandValue({

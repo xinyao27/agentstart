@@ -1,142 +1,113 @@
-import type {
-  SkillFreshnessInventory,
-  SkillManageScope,
-  SkillUpdateRun,
-  SkillUpdateStartResult
-} from '@yiru/runtime-protocol/workbench/skill-freshness'
+import type { SkillManageScope, SkillUpdateStartResult } from '@yiru/protocol'
 import type {
   SkillDirectoryListing,
   SkillDiscoveryResult,
-  SkillDiscoveryTarget,
   SkillFileReadResult
-} from '@yiru/runtime-protocol/workbench/skills'
+} from '@yiru/protocol'
+import type { SkillDiscoveryTarget } from '~renderer/skills/discovery-target'
+import { flattenSkillUpdateRun } from '~renderer/skills/freshness-model'
+import type { SkillFreshnessInventory, SkillUpdateRun } from '~renderer/skills/freshness-model'
 import { useAppStore } from '~renderer/store/state'
 
-import { callRuntimeOrpc, createRuntimeOrpcClient, type RuntimeClientTarget } from './orpc-client'
 import { getActiveRuntimeTarget } from './rpc-client'
+import { requireSkillsProtocolClient } from './skills-protocol-target'
 
-function activeSkillManageTarget(): RuntimeClientTarget {
+function activeSkillManageTarget() {
   return getActiveRuntimeTarget(useAppStore.getState().settings)
 }
 
-export function discoverSkills(target?: SkillDiscoveryTarget): Promise<SkillDiscoveryResult> {
-  return callRuntimeOrpc(activeSkillManageTarget(), (client) => client.skills.discover, target)
+export async function discoverSkills(target?: SkillDiscoveryTarget): Promise<SkillDiscoveryResult> {
+  const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+  // Why: the protobuf Discover request carries runtime/cwd/executionHostId;
+  // WSL distro and project-runtime resolution moved into the daemon authority.
+  return client.discover({
+    runtime: target?.runtime,
+    cwd: target?.cwd ?? undefined,
+    executionHostId: target?.executionHostId ?? undefined
+  })
 }
 
-export function getSkillFreshnessInventory(): Promise<SkillFreshnessInventory> {
-  return callRuntimeOrpc(
-    activeSkillManageTarget(),
-    (client) => client.skills.manage.freshnessInventory,
-    undefined
-  )
+export async function getSkillFreshnessInventory(): Promise<SkillFreshnessInventory> {
+  const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+  // Why: schemaVersion 1 is the renderer-side freshness cache contract; the
+  // wire carries only the inventory itself.
+  return { schemaVersion: 1, ...(await client.manageFreshnessInventory()) }
 }
 
-export function startSkillManageUpdateRun(names: string[]): Promise<SkillUpdateStartResult> {
-  return callRuntimeOrpc(
-    activeSkillManageTarget(),
-    (client) => client.skills.manage.startUpdateRun,
-    {
-      names
-    }
-  )
+export async function startSkillManageUpdateRun(names: string[]): Promise<SkillUpdateStartResult> {
+  const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+  return client.manageStartUpdateRun(names)
 }
 
-export function startSkillManageInstallRun(request: {
+export async function startSkillManageInstallRun(request: {
   source: string
   skillNames?: string[]
   scope: SkillManageScope
 }): Promise<SkillUpdateStartResult> {
-  return callRuntimeOrpc(
-    activeSkillManageTarget(),
-    (client) => client.skills.manage.startInstallRun,
-    request
-  )
+  const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+  return client.manageStartInstallRun(request)
 }
 
-export function startSkillManageRemoveRun(request: {
+export async function startSkillManageRemoveRun(request: {
   names: string[]
   scope: SkillManageScope
 }): Promise<SkillUpdateStartResult> {
-  return callRuntimeOrpc(
-    activeSkillManageTarget(),
-    (client) => client.skills.manage.startRemoveRun,
-    request
-  )
+  const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+  return client.manageStartRemoveRun(request)
 }
 
-export function listSkillManageFiles(directoryPath: string): Promise<SkillDirectoryListing> {
-  return callRuntimeOrpc(
-    activeSkillManageTarget(),
-    (client) => client.skills.manage.listSkillFiles,
-    {
-      directoryPath
-    }
-  )
+export async function listSkillManageFiles(directoryPath: string): Promise<SkillDirectoryListing> {
+  const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+  return client.manageListSkillFiles(directoryPath)
 }
 
-export function readSkillManageDirFile(request: {
+export async function readSkillManageDirFile(request: {
   directoryPath: string
   relativePath: string
 }): Promise<SkillFileReadResult> {
-  return callRuntimeOrpc(
-    activeSkillManageTarget(),
-    (client) => client.skills.manage.readSkillDirFile,
-    request
-  )
+  const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+  return client.manageReadSkillDirFile(request.directoryPath, request.relativePath)
 }
 
-export function cancelSkillManageUpdateRun(): Promise<SkillUpdateRun> {
-  return callRuntimeOrpc(
-    activeSkillManageTarget(),
-    (client) => client.skills.manage.cancelUpdateRun,
-    undefined
-  )
+export async function cancelSkillManageUpdateRun(): Promise<SkillUpdateRun> {
+  const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+  return flattenSkillUpdateRun(await client.manageCancelUpdateRun())
 }
 
-export function acknowledgeSkillManageUpdateRun(): Promise<SkillUpdateRun> {
-  return callRuntimeOrpc(
-    activeSkillManageTarget(),
-    (client) => client.skills.manage.acknowledgeUpdateRun,
-    undefined
-  )
+export async function acknowledgeSkillManageUpdateRun(): Promise<SkillUpdateRun> {
+  const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+  return flattenSkillUpdateRun(await client.manageAcknowledgeUpdateRun())
 }
 
-export function getSkillManageUpdateRun(): Promise<SkillUpdateRun> {
-  return callRuntimeOrpc(
-    activeSkillManageTarget(),
-    (client) => client.skills.manage.getUpdateRun,
-    undefined
-  )
+export async function getSkillManageUpdateRun(): Promise<SkillUpdateRun> {
+  const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+  return flattenSkillUpdateRun(await client.manageGetUpdateRun())
 }
 
 // Why: the run is one host-wide operation, so one subscription per renderer
-// lifetime is enough — mirrors the upstream-open step of the web adapter's
-// `createRuntimeStreamFanOut`, minus the multi-listener fan-out that helper
-// needs and this module-level store (its one subscriber) does not.
+// lifetime is enough — the shared runner reports its own state and this
+// subscription only forwards run events to the single listener.
 export function subscribeSkillManageUpdateRun(onRun: (run: SkillUpdateRun) => void): () => void {
   const controller = new AbortController()
   void (async () => {
-    let connection: Awaited<ReturnType<typeof createRuntimeOrpcClient>> | null = null
     try {
-      connection = await createRuntimeOrpcClient(activeSkillManageTarget(), {
-        signal: controller.signal
-      })
-      const stream = await connection.client.skills.manage.events.subscribe(undefined, {
-        signal: controller.signal
-      })
-      for await (const event of stream) {
-        if (controller.signal.aborted) {
-          return
+      const client = await requireSkillsProtocolClient(activeSkillManageTarget())
+      const events = await client.manageEventsSubscribe({ signal: controller.signal })
+      try {
+        for await (const event of events.messages) {
+          if (controller.signal.aborted) {
+            return
+          }
+          if (event.type === 'run') {
+            onRun(flattenSkillUpdateRun(event.run))
+          }
         }
-        if (event.type === 'run') {
-          onRun(event.run)
-        }
+      } finally {
+        await events.cancel('subscriber detached')
       }
     } catch {
       // Why: an aborted subscription (unmount, or a dropped transport that a
       // reconnect will replace) must not surface as an unhandled rejection.
-    } finally {
-      connection?.close()
     }
   })()
   return () => controller.abort()

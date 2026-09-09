@@ -1,11 +1,6 @@
-import {
-  isAiVaultSessionRecoverableEmpty,
-  type AiVaultScope,
-  type AiVaultSession
-} from '@yiru/runtime-protocol/model/agent'
-import type { AgentStatusState } from '@yiru/runtime-protocol/model/agent'
-import { splitWorktreeIdForFilesystem } from '@yiru/runtime-protocol/model/workspace'
-import { resolveRepoBadgeColor } from '@yiru/runtime-protocol/workbench/repo-badge-color'
+import type { AgentStatusState } from '@yiru/protocol/agent/status-records'
+import { resolveRepoBadgeColor } from '@yiru/protocol/project/appearance'
+import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
 import type React from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { AgentStateDot } from '~renderer/agent/status-dot'
@@ -13,16 +8,19 @@ import { translate } from '~renderer/i18n/i18n'
 import RepoBadgeLabel from '~renderer/repo/badge-label'
 import { useRepoById } from '~renderer/store/selectors'
 import { Badge } from '~renderer/ui/badge'
+import type { AiVaultScope } from '~renderer/workspace-panel/ai-vault/session/providers'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
+import { isAiVaultSessionRecoverableEmpty } from '~renderer/workspace-panel/ai-vault/session/recovery'
 
 import { SessionTime } from './session-details'
-import { sessionModelLabel } from './session-display'
-import { agentLabel } from './session-filters'
 import {
   aiVaultWorktreeStatusLabel,
   shouldShowAiVaultWorktreeStatusBadge,
   shouldShowAiVaultSessionWorktreeLine,
   type AiVaultSessionWorktreeInfo
 } from './session-worktree'
+import { sessionModelLabel } from './session/display'
+import { agentLabel } from './session/filter'
 
 export function getSessionDetailsId(sessionId: string): string {
   return `ai-vault-session-details-${sessionId.replace(/[^A-Za-z0-9_-]/g, '-')}`

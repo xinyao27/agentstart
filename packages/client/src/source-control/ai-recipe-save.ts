@@ -1,22 +1,21 @@
-import {
-  normalizeRepoSourceControlAiOverrides,
-  normalizeSourceControlAiSettings
-} from '@yiru/runtime-protocol/workbench/source-control/ai'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   DEFAULT_SOURCE_CONTROL_ACTION_COMMAND_TEMPLATES,
   SOURCE_CONTROL_ACTION_IDS,
   SOURCE_CONTROL_TEXT_ACTION_IDS,
   type SourceControlActionId,
   type SourceControlActionRecipe
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+} from '@yiru/protocol/source-control/ai-actions'
 import type {
   CompleteSourceControlActionRecipe,
   RepoSourceControlAiOverrides,
   SourceControlAiOperation,
   SourceControlAiSettings,
   WritableRepoSourceControlAiOverrides
-} from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import type { GlobalSettings, Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-types'
+import { normalizeRepoSourceControlAiOverrides } from '@yiru/protocol/source-control/repo-overrides'
+import { normalizeSourceControlAiSettings } from '@yiru/protocol/source-control/settings'
 
 export type SourceControlAiWriteTarget = { type: 'repo'; repoId: string } | { type: 'global' }
 

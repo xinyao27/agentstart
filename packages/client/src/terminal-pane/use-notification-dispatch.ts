@@ -1,16 +1,16 @@
 import {
   isFreshNonDoneAgentStatus,
   type AgentStatusEntry
-} from '@yiru/runtime-protocol/model/agent'
-import { resolveCompatibleAgentTypeForOwner } from '@yiru/runtime-protocol/workbench/agent/title-owner'
+} from '@yiru/protocol/agent/status-records'
 import { buildAgentNotificationId } from '~renderer/agent/notification-id'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { resolveCompatibleAgentTypeForOwner } from '~renderer/agent/title/owner'
+import { requireNotificationsTarget } from '~renderer/runtime/notifications-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { getRepoMapFromState, getWorktreeMapFromState } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
 import { resolveCommittedTitleAgentType } from '~renderer/terminal-pane/agent/evidence'
 import { showBlockedNotificationFallbackToast } from '~renderer/terminal-pane/blocked-notification-fallback'
-import { playDesktopNotificationSound } from '~renderer/terminal-pane/desktop-notification-sound'
+import { playNotificationSound } from '~renderer/terminal-pane/notification-sound'
 
 import type {
   AgentCompletionDispatchMeta,
@@ -217,21 +217,24 @@ export function dispatchTerminalNotification(
       : null
 
   const target = getActiveRuntimeTarget(state.settings)
-  void callRuntimeOrpc(target, (client) => client.notifications.report, {
-    source: event.source,
-    ...(notificationId ? { notificationId } : {}),
-    worktreeId,
-    paneKey: event.paneKey,
-    repoLabel: repo?.displayName,
-    worktreeLabel: worktree?.displayName || worktree?.branch || worktreeId,
-    hasMultipleActiveRepos: countReposNeedingNotificationDisambiguation(state) > 1,
-    terminalTitle: event.terminalTitle,
-    isActiveWorktree: state.activeWorktreeId === worktreeId,
-    ...agentSnapshot
-  })
+  requireNotificationsTarget(target)
+    .then((client) =>
+      client.report({
+        source: event.source,
+        ...(notificationId ? { notificationId } : {}),
+        worktreeId,
+        paneKey: event.paneKey,
+        repoLabel: repo?.displayName,
+        worktreeLabel: worktree?.displayName || worktree?.branch || worktreeId,
+        hasMultipleActiveRepos: countReposNeedingNotificationDisambiguation(state) > 1,
+        terminalTitle: event.terminalTitle,
+        isActiveWorktree: state.activeWorktreeId === worktreeId,
+        ...agentSnapshot
+      })
+    )
     .then((result) => {
       if (result.delivered) {
-        void playDesktopNotificationSound(customSoundId, customSoundVolume)
+        void playNotificationSound(customSoundId, customSoundVolume)
         return
       }
       // Why: macOS is silently swallowing notifications (permission off or

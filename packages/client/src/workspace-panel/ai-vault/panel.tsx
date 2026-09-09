@@ -1,4 +1,3 @@
-import type { AiVaultScope, AiVaultSession } from '@yiru/runtime-protocol/model/agent'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { AgentSessionContinuationDialog } from '~renderer/agent-session-continuation/dialog'
@@ -15,6 +14,8 @@ import {
   useRepos
 } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
+import type { AiVaultScope } from '~renderer/workspace-panel/ai-vault/session/providers'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
 import {
   LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
@@ -35,7 +36,6 @@ import {
   getRestorableAiVaultScope,
   normalizeAiVaultScopeForContext
 } from './scope-state'
-import { filterAiVaultSessions, groupAiVaultSessions } from './session-filters'
 import { useAiVaultSessionLaunchActions } from './session-launch-actions'
 import { openAiVaultSessionLogInYiru } from './session-log-open'
 import { buildAiVaultProjectContext, buildAiVaultSessionProjectById } from './session-projects'
@@ -46,6 +46,7 @@ import {
 } from './session-resume'
 import { AiVaultSessionVirtualList } from './session-virtual-list'
 import { useAiVaultSessionWorktreeMap, withAiVaultCurrentWorktreeStatus } from './session-worktree'
+import { filterAiVaultSessions, groupAiVaultSessions } from './session/filter'
 import { countAiVaultViewAdjustments } from './view-defaults'
 
 function LocalAiVaultPanel(): React.JSX.Element {

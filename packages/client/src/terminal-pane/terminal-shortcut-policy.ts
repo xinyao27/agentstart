@@ -1,7 +1,4 @@
-import {
-  keybindingMatchesAction,
-  type KeybindingOverrides
-} from '@yiru/runtime-protocol/workbench/keybindings'
+import { keybindingMatchesAction, type KeybindingOverrides } from '@yiru/protocol/keybindings'
 
 import type { WindowsShiftEnterEncoding } from './terminal-windows-shift-enter'
 

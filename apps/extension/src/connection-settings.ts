@@ -3,9 +3,11 @@ import type { DaemonConnectionSettings } from '@yiru/client/extension-settings'
 import type { NativeBootstrapResult } from './background/native-bootstrap'
 import { readEnterprisePolicy } from './enterprise-policy'
 
+const CURRENT_PROTOCOL_VERSION = 2
 const ENDPOINT_KEY = 'daemonEndpoint'
 const TOKEN_KEY = 'daemonAuthToken'
 const PROTOCOL_VERSION_KEY = 'daemonProtocolVersion'
+const RPC_PROTOCOL = 'yiru-protobuf-v2' satisfies NativeBootstrapResult['rpcProtocol']
 
 export async function readDaemonConnectionSettings(): Promise<DaemonConnectionSettings> {
   const [synced, session, local, policy] = await Promise.all([
@@ -25,7 +27,8 @@ export async function readDaemonConnectionSettings(): Promise<DaemonConnectionSe
   return {
     authToken: sessionToken ?? legacyToken ?? '',
     endpoint: policy.daemonEndpoint ?? readString(synced, ENDPOINT_KEY) ?? '',
-    protocolVersion: policy.protocolVersion ?? readNumber(local, PROTOCOL_VERSION_KEY) ?? 1
+    protocolVersion:
+      policy.protocolVersion ?? readNumber(local, PROTOCOL_VERSION_KEY) ?? CURRENT_PROTOCOL_VERSION
   }
 }
 
@@ -37,7 +40,8 @@ export async function readCustomRuntimeBootstrap(): Promise<NativeBootstrapResul
   validateSettings(settings)
   return {
     ...settings,
-    runtimeId: `custom:${settings.endpoint}`
+    expectedRuntimeId: null,
+    rpcProtocol: RPC_PROTOCOL
   }
 }
 
@@ -74,7 +78,7 @@ function validateSettings(settings: DaemonConnectionSettings): void {
     (endpoint.protocol !== 'ws:' && endpoint.protocol !== 'wss:') ||
     !settings.authToken.trim() ||
     !Number.isInteger(settings.protocolVersion) ||
-    settings.protocolVersion < 1
+    settings.protocolVersion !== CURRENT_PROTOCOL_VERSION
   ) {
     throw new Error('daemon_connection_settings_invalid')
   }

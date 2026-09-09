@@ -1,14 +1,15 @@
+import type { Repo } from '@yiru/protocol/project/repository'
 import {
   getTerminalQuickCommandBody,
   getTerminalQuickCommandScope,
   isTerminalAgentQuickCommand
-} from '@yiru/runtime-protocol/workbench/terminal/quick-commands'
+} from '@yiru/protocol/terminal/quick-commands'
 import type {
-  Repo,
   TerminalQuickCommand,
   TerminalQuickCommandScope
-} from '@yiru/runtime-protocol/workbench/types'
-import { AgentIcon, getAgentLabel } from '~renderer/agent/catalog'
+} from '@yiru/protocol/terminal/quick-commands'
+import { AgentIcon } from '~renderer/agent/catalog'
+import { getAgentLabel } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
 import { Pencil, Trash as Trash2 } from '~renderer/icons/hugeicons'
 import { cn } from '~renderer/ui/class-names'

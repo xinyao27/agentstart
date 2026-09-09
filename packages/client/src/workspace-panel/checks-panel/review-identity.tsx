@@ -1,5 +1,5 @@
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { PRInfo } from '@yiru/runtime-protocol/workbench/types'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
 import { useEffect, useState } from 'react'
 import { useNow } from '~renderer/dashboard/use-now'
 import { getGitHubPRCacheKey } from '~renderer/github/cache-key'
@@ -12,7 +12,6 @@ import { useAppStore } from '~renderer/store/state'
 
 import { selectReviewCacheEntry } from '../review-cache-entry-selection'
 import { hasAmbiguousGitHubHostedReviewForChecksPanel } from './ambiguous-github-review'
-import { isGitLabChecksPanelReview } from './gitlab-review'
 import { recordChecksPanelPRRefreshBreadcrumb } from './pr-refresh-breadcrumb'
 import { type ChecksPanelReview, selectChecksPanelReview } from './review'
 import type { useChecksPanelStateCoreState } from './state-core'
@@ -134,20 +133,10 @@ export function useChecksPanelReviewIdentity(context: useChecksPanelStateCoreSta
   // known review number from metadata or the visible cache.
   const linkedPR = activeWorktree?.linkedPR ?? null
   const fallbackGitHubPRNumber = linkedPR == null ? (pr?.number ?? null) : null
-  const linkedGitLabMR = activeWorktree?.linkedGitLabMR ?? null
-  const linkedBitbucketPR = activeWorktree?.linkedBitbucketPR ?? null
-  const linkedAzureDevOpsPR = activeWorktree?.linkedAzureDevOpsPR ?? null
-  const linkedGiteaPR = activeWorktree?.linkedGiteaPR ?? null
   const activeReview: ChecksPanelReview | null = selectChecksPanelReview({
     hostedReview,
-    pr,
-    linkedGitLabMR,
-    linkedBitbucketPR,
-    linkedAzureDevOpsPR,
-    linkedGiteaPR
+    pr
   })
-  const activeGitLabReview = isGitLabChecksPanelReview(activeReview) ? activeReview : null
-  const isGitLabReviewContext = Boolean(activeGitLabReview || linkedGitLabMR !== null)
   const activeConflictReview = activeReview?.mergeable === 'CONFLICTING' ? activeReview : null
   const prRefreshState = useAppStore((s) =>
     prCacheKey ? s.getEffectiveGitHubPRRefreshState(prCacheKey, prRefreshStateNow) : undefined
@@ -228,13 +217,7 @@ export function useChecksPanelReviewIdentity(context: useChecksPanelStateCoreSta
     hasAmbiguousGitHubHostedReview,
     linkedPR,
     fallbackGitHubPRNumber,
-    linkedGitLabMR,
-    linkedBitbucketPR,
-    linkedAzureDevOpsPR,
-    linkedGiteaPR,
     activeReview,
-    activeGitLabReview,
-    isGitLabReviewContext,
     activeConflictReview,
     prRefreshState,
     rawPRRefreshState,

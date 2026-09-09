@@ -28,12 +28,7 @@ export function useChecksPanelStatusEffects(context: useChecksPanelGenerationFie
     gitStatusSnapshotRerunContextRef,
     gitStatusSnapshotRetryTimerRef,
     isFolder,
-    isGitLabReviewContext,
     isPanelVisible,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     linkedPR,
     ownerSettings,
     panelContextKey,
@@ -66,13 +61,9 @@ export function useChecksPanelStatusEffects(context: useChecksPanelGenerationFie
         linkedGitHubPR: linkedPR,
         fallbackGitHubPR: fallbackGitHubPRNumber,
         currentHeadOid: activeWorktree?.head ?? null,
-        linkedGitLabMR,
-        linkedBitbucketPR,
-        linkedAzureDevOpsPR,
-        linkedGiteaPR,
         staleWhileRevalidate: true
       })
-      if (activeWorktreeId && !isGitLabReviewContext) {
+      if (activeWorktreeId) {
         const refreshRequest = resolveChecksPanelPRRefreshRequest({
           cachedHasPR: prCachedHasPR,
           cachedFetchedAt: prFetchedAt ?? null,
@@ -88,13 +79,8 @@ export function useChecksPanelStatusEffects(context: useChecksPanelGenerationFie
     fallbackGitHubPRNumber,
     fetchHostedReviewForBranch,
     isFolder,
-    isGitLabReviewContext,
     isPanelVisible,
     activeWorktree?.head,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
-    linkedGiteaPR,
-    linkedGitLabMR,
     linkedPR,
     prCachedHasPR,
     prFetchedAt,

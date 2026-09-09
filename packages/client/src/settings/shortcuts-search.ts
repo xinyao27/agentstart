@@ -1,4 +1,4 @@
-import { KEYBINDING_DEFINITIONS } from '@yiru/runtime-protocol/workbench/keybindings'
+import { KEYBINDING_DEFINITIONS } from '@yiru/protocol/keybindings'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
 

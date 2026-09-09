@@ -3,20 +3,18 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   type ExecutionHostId,
   type ExecutionHostKind
-} from '@yiru/runtime-protocol/model/workspace'
-import type { RuntimeCompatVerdict } from '@yiru/runtime-protocol/runtime-compatibility'
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
-import type {
-  GlobalSettings,
-  Repo,
-  WorkspaceHostScope
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { RuntimeCompatVerdict } from '@yiru/protocol/runtime-compatibility'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { WorkspaceHostScope } from '@yiru/protocol/settings/ui-state'
 import {
   buildExecutionHostRegistry,
   type ExecutionHostHealth
 } from '~renderer/execution-host-registry'
 import { translate } from '~renderer/i18n/i18n'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
+import type { RuntimeStatus } from '~renderer/runtime/status/model'
 
 export type SidebarHostOption = {
   id: ExecutionHostId

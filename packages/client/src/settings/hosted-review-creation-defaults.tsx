@@ -1,4 +1,4 @@
-import type { SourceControlAiSettings } from '@yiru/runtime-protocol/workbench/source-control/ai-types'
+import type { SourceControlAiSettings } from '@yiru/protocol/source-control/ai-types'
 import { translate } from '~renderer/i18n/i18n'
 import { Checkbox } from '~renderer/ui/checkbox'
 
@@ -7,16 +7,7 @@ import { SearchableSetting } from './searchable-setting'
 
 type HostedReviewDefaultKey = keyof NonNullable<SourceControlAiSettings['prCreationDefaults']>
 
-const KEYWORDS = [
-  'hosted review',
-  'pull request',
-  'merge request',
-  'pr',
-  'draft',
-  'template',
-  'generate',
-  'open'
-]
+const KEYWORDS = ['hosted review', 'pull request', 'pr', 'draft', 'template', 'generate', 'open']
 
 function getHostedReviewDefaultRows(): {
   key: HostedReviewDefaultKey

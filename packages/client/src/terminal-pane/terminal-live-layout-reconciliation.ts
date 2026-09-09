@@ -1,8 +1,8 @@
-import { isRuntimePtyId } from '@yiru/runtime-protocol/terminal-identity/id'
+import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
 import type {
   TerminalPaneLayoutNode,
   TerminalPaneSplitDirection
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/session'
 
 /**
  * Whether a tab's split layout is owned by a runtime host rather than built

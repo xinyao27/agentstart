@@ -1,5 +1,6 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
-import type { PRInfo, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 import {
   getWorktreeCardPrDisplay,
@@ -22,15 +23,9 @@ export function canUseParentPrChecksHostedReviewCacheEntry(
   if ((entry.linkedReviewHintKey ?? '') !== '') {
     return false
   }
-  const display = getWorktreeCardPrDisplay(
-    review,
-    worktree.linkedPR,
-    worktree.linkedGitLabMR ?? null,
-    worktree.linkedBitbucketPR ?? null,
-    worktree.linkedAzureDevOpsPR ?? null,
-    worktree.linkedGiteaPR ?? null,
-    { reviewHintKey: entry.linkedReviewHintKey }
-  )
+  const display = getWorktreeCardPrDisplay(review, worktree.linkedPR, {
+    reviewHintKey: entry.linkedReviewHintKey
+  })
   return display?.provider === review.provider && display.number === review.number
 }
 
@@ -57,28 +52,9 @@ function getLinkedReviewNumberForProvider(
   worktree: Worktree,
   provider: HostedReviewInfo['provider']
 ): number | null {
-  switch (provider) {
-    case 'github':
-      return worktree.linkedPR
-    case 'gitlab':
-      return worktree.linkedGitLabMR ?? null
-    case 'bitbucket':
-      return worktree.linkedBitbucketPR ?? null
-    case 'azure-devops':
-      return worktree.linkedAzureDevOpsPR ?? null
-    case 'gitea':
-      return worktree.linkedGiteaPR ?? null
-    case 'unsupported':
-      return null
-  }
+  return provider === 'github' ? worktree.linkedPR : null
 }
 
 function hasLinkedReview(worktree: Worktree): boolean {
-  return (
-    worktree.linkedPR != null ||
-    worktree.linkedGitLabMR != null ||
-    worktree.linkedBitbucketPR != null ||
-    worktree.linkedAzureDevOpsPR != null ||
-    worktree.linkedGiteaPR != null
-  )
+  return worktree.linkedPR != null
 }

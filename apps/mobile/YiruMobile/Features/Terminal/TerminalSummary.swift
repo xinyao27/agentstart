@@ -1,4 +1,5 @@
 import Foundation
+import YiruProtocol
 
 nonisolated struct TerminalTarget: Identifiable, Hashable, Sendable {
     let id: String
@@ -20,21 +21,22 @@ nonisolated struct TerminalSummary: Identifiable, Hashable, Sendable {
     let lastOutput: Date?
     let preview: String
 
-    init(wire: MobileTerminalSummaryWire) {
-        id = wire.handle
-        ptyID = wire.ptyId
-        worktreeID = wire.worktreeId
-        worktreePath = wire.worktreePath
-        branch = wire.branch
-        tabID = wire.tabId
-        leafID = wire.leafId
-        title = wire.title
-        isConnected = wire.connected
-        isWritable = wire.writable
-        lastOutput = wire.lastOutputAt.map {
-            Date(timeIntervalSince1970: TimeInterval($0) / 1_000)
-        }
-        preview = wire.preview
+    init(protocol terminal: Yiru_Runtime_V1_TerminalSummary) {
+        id = terminal.handle
+        ptyID = terminal.hasPtyID ? terminal.ptyID : nil
+        worktreeID = terminal.worktreeID
+        worktreePath = terminal.worktreePath
+        branch = terminal.branch
+        tabID = terminal.tabID
+        leafID = terminal.leafID
+        title = terminal.hasTitle ? terminal.title : nil
+        isConnected = terminal.connected
+        isWritable = terminal.writable
+        lastOutput =
+            terminal.hasLastOutputAt
+            ? Date(timeIntervalSince1970: TimeInterval(terminal.lastOutputAt) / 1_000)
+            : nil
+        preview = terminal.preview
     }
 
     var displayTitle: String {

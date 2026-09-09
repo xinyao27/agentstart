@@ -2,11 +2,7 @@ import type { Popover as PopoverPrimitive } from '@base-ui/react/popover'
 import { useEffect, useRef, useState } from 'react'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 
-import {
-  getMrStateFilters,
-  getSmartWorkspaceNameModes,
-  type MrStateFilter
-} from './smart-workspace-localized-options'
+import { getSmartWorkspaceNameModes } from './smart-workspace-localized-options'
 import type { SmartWorkspaceNameSelection } from './smart-workspace-name-rows'
 import type { SmartNameMode } from './smart-workspace-source-results'
 
@@ -15,7 +11,6 @@ const SEARCH_DEBOUNCE_MS = 200
 type UseSmartWorkspaceInputOptions = {
   branchesEnabled: boolean
   disabled: boolean
-  gitlabSourceAvailable: boolean
   inputRef?: React.RefObject<HTMLInputElement | null>
   onActiveSourceModeChange?: (mode: SmartNameMode) => void
   repoBackedSourcesDisabled: boolean
@@ -27,7 +22,6 @@ type UseSmartWorkspaceInputOptions = {
 export function useSmartWorkspaceInput({
   branchesEnabled,
   disabled,
-  gitlabSourceAvailable,
   inputRef,
   onActiveSourceModeChange,
   repoBackedSourcesDisabled,
@@ -37,7 +31,6 @@ export function useSmartWorkspaceInput({
 }: UseSmartWorkspaceInputOptions) {
   useUiLocale()
   const [mode, setMode] = useState<SmartNameMode>(textOnly ? 'text' : 'smart')
-  const [mrStateFilter, setMrStateFilter] = useState<MrStateFilter>('opened')
   const [open, setOpen] = useState(false)
   const [debouncedQuery, setDebouncedQuery] = useState(value)
   const [commandValue, setCommandValue] = useState('')
@@ -53,15 +46,11 @@ export function useSmartWorkspaceInput({
     if (item.id === 'github') {
       return !repoBackedSourcesDisabled
     }
-    if (item.id === 'gitlab') {
-      return gitlabSourceAvailable
-    }
     if (item.id === 'branches') {
       return branchesEnabled && !repoBackedSourcesDisabled
     }
     return true
   })
-  const mrStateFilters = getMrStateFilters()
   const activeMode = availableModes.some((item) => item.id === mode)
     ? mode
     : (availableModes[0]?.id ?? 'text')
@@ -152,12 +141,9 @@ export function useSmartWorkspaceInput({
     localInputRef,
     markPopoverEngaged,
     mode: activeMode,
-    mrStateFilter,
-    mrStateFilters,
     setCommandValue,
     setInputNode,
     setMode,
-    setMrStateFilter,
     setOpen,
     setSelectedSourceNode,
     tabsListRef,

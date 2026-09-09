@@ -1,4 +1,4 @@
-import { getRepoIdFromWorktreeId } from '@yiru/runtime-protocol/model/workspace'
+import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
 
 type HydratedWorktree = { id: string }
 

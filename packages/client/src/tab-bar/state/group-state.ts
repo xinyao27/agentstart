@@ -1,9 +1,5 @@
-import type {
-  Tab,
-  TabContentType,
-  TabGroup,
-  WorkspaceSessionState
-} from '@yiru/runtime-protocol/workbench/types'
+import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { Tab, TabContentType, TabGroup } from '@yiru/protocol/workspace/tabs'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 
 export function findTabAndWorktree(

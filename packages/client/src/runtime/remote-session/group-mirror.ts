@@ -1,15 +1,8 @@
-import type {
-  RuntimeMobileSessionTabsResult,
-  RuntimeMobileSessionTabGroup
-} from '@yiru/runtime-protocol/workbench/runtime-types'
-import type {
-  TabGroup,
-  TabGroupLayoutNode,
-  TerminalTab
-} from '@yiru/runtime-protocol/workbench/types'
+import type { TabGroup, TabGroupLayoutNode, TerminalTab } from '@yiru/protocol/workspace/tabs'
 
 import { toRemoteTerminalSurfaceTabId } from '../remote-terminal-surface-id'
 import { resolveRemoteSessionReorderedOrder } from './reorder-intent'
+import type { RuntimeMobileSessionTabsResult, RuntimeMobileSessionTabGroup } from './session-model'
 import { pushRecentTabId, sanitizeRecentTabIds } from './store-equality'
 import type {
   MirroredBrowserTab,

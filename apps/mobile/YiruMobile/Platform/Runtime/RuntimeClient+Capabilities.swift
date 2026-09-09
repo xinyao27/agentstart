@@ -1,14 +1,14 @@
 import Foundation
+import SwiftProtobuf
+import YiruProtocol
 
 extension RuntimeClient: TerminalHostCapabilityRepository {
     func terminalCapabilities(for hostID: String) async -> TerminalHostCapabilities {
         guard
-            let status: MobileRuntimeStatusWire = try? await callRuntime(
-                hostID: hostID,
-                path: MobileTerminalWireContract.statusPath,
-                input: RuntimeNullWire(),
-                output: MobileRuntimeStatusWire.self
-            )
+            let status: MobileRuntimeStatusWire =
+                try? await protocolStatus(
+                    hostID: hostID
+                )
         else {
             return TerminalHostCapabilities(
                 browserScreencastSupported: false,
@@ -19,7 +19,7 @@ extension RuntimeClient: TerminalHostCapabilityRepository {
         let capabilities = Set(status.capabilities ?? [])
         return TerminalHostCapabilities(
             browserScreencastSupported: capabilities.contains("browser.screencast.v1"),
-            agentHistorySupported: capabilities.contains(MobileAgentHistoryWireContract.capability),
+            agentHistorySupported: capabilities.contains(agentHistoryRuntimeCapability),
             quickCommandsSupported: capabilities.contains(
                 MobileQuickCommandsWireContract.capability
             )
@@ -34,99 +34,81 @@ extension RuntimeClient: TerminalDisplayModeRuntime {
         mode: TerminalDisplayMode,
         viewport: TerminalGridSize?
     ) async throws -> TerminalDisplayMode {
-        let wire: MobileTerminalSetDisplayModeResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_TerminalServiceSetDisplayModeRequest()
+        request.terminal = terminalID
+        request.mode = mode == .auto ? .auto : .desktop
+        request.client = .with {
+            $0.id = terminalClientInstanceID
+            $0.kind = .mobile
+        }
+        if let viewport {
+            request.viewport = .with {
+                $0.cols = UInt32(viewport.columns)
+                $0.rows = UInt32(viewport.rows)
+            }
+        }
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileTerminalWireContract.setDisplayModePath,
-            input: MobileTerminalSetDisplayModeRequestWire(
-                terminal: terminalID,
-                mode: mode == .auto ? .auto : .desktop,
-                client: MobileTerminalDisplayModeClientWire(
-                    id: terminalClientInstanceID,
-                    type: .mobile
-                ),
-                viewport: viewport.map {
-                    MobileTerminalDisplayModeViewportWire(cols: $0.columns, rows: $0.rows)
-                }
-            ),
-            output: MobileTerminalSetDisplayModeResultWire.self
+            procedure: YiruRuntimeV1TerminalServiceMethods.setDisplayMode,
+            request: request,
+            response: Yiru_Runtime_V1_TerminalServiceSetDisplayModeResponse.self
         )
-        switch wire.mode {
+        switch response.mode {
         case .auto: return .auto
         case .desktop: return .desktop
+        case .unspecified, .UNRECOGNIZED: throw TerminalWorkspaceRepositoryError.rejectedMutation
         }
     }
 }
 
 extension RuntimeClient {
-    func focusTerminal(hostID: String, terminalID: String) async throws {
-        let result: MobileTerminalFocusResultWire = try await callRuntime(
-            hostID: hostID,
-            path: MobileTerminalWireContract.focusPath,
-            input: MobileTerminalHandleRequestWire(terminal: terminalID),
-            output: MobileTerminalFocusResultWire.self
-        )
-        guard result.focus.handle == terminalID else {
-            throw TerminalWorkspaceRepositoryError.rejectedMutation
-        }
-    }
-
     func inferAgentInterrupt(
         hostID: String,
         baseline: TerminalAgentInterruptBaseline
     ) async -> Bool {
         do {
-            return try await callRuntime(
-                hostID: hostID,
-                path: MobileAgentStatusWireContract.inferInterruptPath,
-                input: MobileAgentStatusInferInterruptRequestWire(
-                    paneKey: baseline.paneKey,
-                    baselineUpdatedAt: baseline.updatedAt,
-                    baselineStateStartedAt: baseline.stateStartedAt,
-                    baselinePrompt: baseline.prompt,
-                    baselineAgentType: baseline.agentType,
-                    intent: "plain-escape",
-                    inputCount: nil
-                ),
-                output: Bool.self
-            )
+            return try await protocolInferAgentInterrupt(hostID: hostID, baseline: baseline)
         } catch {
             return false
         }
     }
 
     func renameTerminal(hostID: String, terminalID: String, title: String) async throws -> String {
-        let result: MobileTerminalRenameResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_TerminalServiceRenameRequest()
+        request.terminal = terminalID
+        request.title = title
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileTerminalWireContract.renamePath,
-            input: MobileTerminalRenameRequestWire(terminal: terminalID, title: title),
-            output: MobileTerminalRenameResultWire.self
+            procedure: YiruRuntimeV1TerminalServiceMethods.rename,
+            request: request,
+            response: Yiru_Runtime_V1_TerminalServiceRenameResponse.self
         )
-        guard result.rename.handle == terminalID else {
+        guard response.handle == terminalID else {
             throw TerminalWorkspaceRepositoryError.rejectedMutation
         }
-        return result.rename.title ?? String(localized: "Terminal")
+        return response.hasTitle ? response.title : String(localized: "Terminal")
     }
 
     func clearTerminal(hostID: String, terminalID: String) async throws {
-        let result: MobileTerminalClearBufferResultWire = try await callRuntime(
+        var request = Yiru_Runtime_V1_TerminalServiceClearBufferRequest()
+        request.terminal = terminalID
+        let response = try await protocolUnary(
             hostID: hostID,
-            path: MobileTerminalWireContract.clearBufferPath,
-            input: MobileTerminalHandleRequestWire(terminal: terminalID),
-            output: MobileTerminalClearBufferResultWire.self
+            procedure: YiruRuntimeV1TerminalServiceMethods.clearBuffer,
+            request: request,
+            response: Yiru_Runtime_V1_TerminalServiceClearBufferResponse.self
         )
-        guard result.clear.handle == terminalID, result.clear.cleared else {
+        guard response.handle == terminalID, response.cleared else {
             throw TerminalWorkspaceRepositoryError.rejectedMutation
         }
     }
 
     func closeTerminal(hostID: String, terminalID: String) async throws {
-        let result: MobileTerminalCloseResultWire = try await callRuntime(
+        let result = try await protocolTerminalClose(
             hostID: hostID,
-            path: MobileTerminalWireContract.closePath,
-            input: MobileTerminalHandleRequestWire(terminal: terminalID),
-            output: MobileTerminalCloseResultWire.self
+            terminal: terminalID
         )
-        guard result.close.handle == terminalID else {
+        guard result.hasClose, result.close.handle == terminalID else {
             throw TerminalWorkspaceRepositoryError.rejectedMutation
         }
     }

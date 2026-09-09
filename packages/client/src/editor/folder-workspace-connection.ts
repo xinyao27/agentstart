@@ -1,6 +1,8 @@
-import { isPathInsideOrEqual } from '@yiru/runtime-protocol/model/platform'
-import { getProjectGroupSubtreeIds } from '@yiru/runtime-protocol/workbench/project-groups'
-import type { FolderWorkspace, ProjectGroup, Repo } from '@yiru/runtime-protocol/workbench/types'
+import { isPathInsideOrEqual } from '@yiru/protocol/host/path'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import { getProjectGroupSubtreeIds } from '@yiru/protocol/project/group-tree'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
 
 export type FolderWorkspaceConnectionState = {
   folderWorkspaces: FolderWorkspace[]

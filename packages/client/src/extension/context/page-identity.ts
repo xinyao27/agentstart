@@ -23,14 +23,10 @@ export function identifyForgePage(rawUrl: string): ForgePageIdentity | null {
     return null
   }
   const segments = url.pathname.split('/').filter(Boolean)
-  switch (url.hostname.toLowerCase()) {
-    case 'github.com':
-      return identifyGitHubPage(url, segments)
-    case 'gitlab.com':
-      return identifyGitLabPage(url, segments)
-    default:
-      return null
+  if (url.hostname.toLowerCase() !== 'github.com') {
+    return null
   }
+  return identifyGitHubPage(url, segments)
 }
 
 export function identifyLocalPage(rawUrl: string): LocalPageIdentity | null {
@@ -60,23 +56,6 @@ function identifyGitHubPage(url: URL, segments: string[]): ForgePageIdentity | n
   const [owner, repo, route, numberText] = segments
   const kind = route === 'pull' ? 'pull-request' : route === 'issues' ? 'issue' : null
   return createIdentity(url, owner, repo, kind, numberText)
-}
-
-function identifyGitLabPage(url: URL, segments: string[]): ForgePageIdentity | null {
-  const markerIndex = segments.indexOf('-')
-  if (markerIndex < 2 || markerIndex !== segments.length - 3) {
-    return null
-  }
-  const route = segments[markerIndex + 1]
-  const kind = route === 'merge_requests' ? 'pull-request' : route === 'issues' ? 'issue' : null
-  const projectPath = segments.slice(0, markerIndex)
-  return createIdentity(
-    url,
-    projectPath.slice(0, -1).join('/'),
-    projectPath.at(-1) ?? '',
-    kind,
-    segments.at(-1) ?? ''
-  )
 }
 
 function createIdentity(

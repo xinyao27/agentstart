@@ -1,7 +1,4 @@
-import type {
-  DiagnosticsBundle,
-  DiagnosticsStatus
-} from '@yiru/runtime-protocol/workbench/support-report'
+import type { DiagnosticsBundle, DiagnosticsStatus } from '@yiru/protocol'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

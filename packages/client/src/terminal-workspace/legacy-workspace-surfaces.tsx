@@ -1,8 +1,5 @@
-import type {
-  TerminalTab,
-  TopLevelView,
-  WorkspaceVisibleTabType
-} from '@yiru/runtime-protocol/workbench/types'
+import type { TopLevelView } from '@yiru/protocol/settings/ui-state'
+import type { TerminalTab, WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
 import React, { Suspense } from 'react'
 import { lazyWithRetry as lazy } from '~renderer/application-shell/lazy-with-retry'
 import { translate } from '~renderer/i18n/i18n'

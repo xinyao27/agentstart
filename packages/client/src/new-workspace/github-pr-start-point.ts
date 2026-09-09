@@ -1,7 +1,7 @@
-import type { GitHubPrStartPoint, GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import type { GitHubPrStartPoint } from '@yiru/protocol/git/worktree-source'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
-import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
+import { resolveRuntimeWorktreePrBase } from '~renderer/runtime/worktree-lifecycle-target'
 
 type PrStartPointSettings = Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null | undefined
 
@@ -29,15 +29,7 @@ export async function resolveGitHubPrStartPointForRepo({
     ...(baseRefName ? { baseRefName } : {}),
     ...(isCrossRepository !== undefined ? { isCrossRepository } : {})
   }
-  const result =
-    target.kind === 'local'
-      ? await workspaceHostClient.worktrees.resolvePrBase({ repoId, ...prFields })
-      : await callRuntimeOrpc(
-          target,
-          (client) => client.worktree.resolvePrBase,
-          { repo: repoId, ...prFields },
-          { timeoutMs: 30_000 }
-        )
+  const result = await resolveRuntimeWorktreePrBase(target, { repo: repoId, ...prFields })
   if ('error' in result) {
     throw new Error(result.error)
   }

@@ -1,6 +1,4 @@
-import { parseExecutionHostId } from '@yiru/runtime-protocol/model/workspace'
-import { describeRuntimeCompatBlock } from '@yiru/runtime-protocol/runtime-compatibility'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
+import { parseExecutionHostId } from '@yiru/protocol/host/identity'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -14,10 +12,8 @@ import {
 } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
-import {
-  clearRuntimeCompatibilityCache,
-  unwrapRuntimeRpcResult
-} from '~renderer/runtime/rpc-client'
+import { describeRuntimeCompatBlock } from '~renderer/runtime/compatibility-message'
+import { clearRuntimeCompatibilityCache } from '~renderer/runtime/rpc-client'
 import { runtimeEnvironmentsClient } from '~renderer/runtime/runtime-environments-client'
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
@@ -91,11 +87,11 @@ export function HostSectionHeaderMenu({ row }: { row: HostHeaderRow }): React.JS
     // version skew instead of trusting the prior pass.
     clearRuntimeCompatibilityCache(parsed.environmentId)
     try {
-      const response = await runtimeEnvironmentsClient.getStatus({
+      const runtimeStatus = await runtimeEnvironmentsClient.getStatus({
         selector: parsed.environmentId,
         timeoutMs: 10_000
       })
-      const runtimeStatus = unwrapRuntimeRpcResult<RuntimeStatus>(response)
+
       // Why: feed the probe result into the shared store so the host header and
       // other host pickers reflect this check without a separate fetch.
       useAppStore.getState().setRuntimeEnvironmentStatus(parsed.environmentId, {

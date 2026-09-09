@@ -210,14 +210,14 @@ function releaseRevisionFromVersion(version) {
   return revision
 }
 
-export async function buildSkillResources(outputDirectory) {
-  const [daemonPackage, directories] = await Promise.all([
-    readFile(DAEMON_PACKAGE_PATH, 'utf8').then(JSON.parse),
+export async function buildSkillResources(outputDirectory, appVersionOverride) {
+  const [appVersion, directories] = await Promise.all([
+    appVersionOverride ??
+      readFile(DAEMON_PACKAGE_PATH, 'utf8').then(JSON.parse).then(packageVersion),
     readdir(SKILLS_ROOT, { withFileTypes: true })
   ])
-  const appVersion = daemonPackage.version
   if (typeof appVersion !== 'string') {
-    throw new Error('Daemon package version is missing')
+    throw new Error('Skill resource release version is missing')
   }
   const releaseRevision = releaseRevisionFromVersion(appVersion)
   const registry = { schemaVersion: 1, skills: {} }
@@ -277,15 +277,22 @@ export async function buildSkillResources(outputDirectory) {
   return Object.keys(artifacts).map((name) => join(outputDirectory, name))
 }
 
+function packageVersion(manifest) {
+  return manifest.version
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === import.meta.filename) {
   const outputFlagIndex = process.argv.indexOf('--output')
   const outputDirectory = process.argv[outputFlagIndex + 1]
+  const versionFlagIndex = process.argv.indexOf('--version')
+  const appVersion = versionFlagIndex < 0 ? undefined : process.argv[versionFlagIndex + 1]
   if (
     outputFlagIndex < 0 ||
     !outputDirectory ||
-    basename(process.argv[outputFlagIndex]) !== '--output'
+    basename(process.argv[outputFlagIndex]) !== '--output' ||
+    (versionFlagIndex >= 0 && !appVersion)
   ) {
-    throw new Error('Usage: build-skill-resources.mjs --output <directory>')
+    throw new Error('Usage: build-skill-resources.mjs --output <directory> [--version <version>]')
   }
-  await buildSkillResources(resolve(outputDirectory))
+  await buildSkillResources(resolve(outputDirectory), appVersion)
 }

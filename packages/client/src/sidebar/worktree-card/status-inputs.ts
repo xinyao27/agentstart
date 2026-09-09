@@ -1,4 +1,4 @@
-import type { TerminalPaneLayoutNode } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalPaneLayoutNode } from '@yiru/protocol/workspace/session'
 import type { AppState } from '~renderer/store/types'
 
 // Why: these selectors return fresh maps whose top-level values preserve

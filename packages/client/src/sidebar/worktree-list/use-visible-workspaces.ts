@@ -1,5 +1,5 @@
 import type { OnViewableItemsChangedInfo } from '@legendapp/list/react'
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { projectCatalogRepoBuckets } from '~renderer/project-catalog/repo-buckets'
@@ -69,10 +69,7 @@ export function useVisibleWorkspaces(args: {
     const currentWorktree = args.currentWorktreeId
       ? (args.worktreeMap.get(args.currentWorktreeId) ?? null)
       : null
-    const hasGitHubReview =
-      currentWorktree !== null &&
-      ((currentWorktree.linkedGitLabMR ?? null) === null ||
-        (currentWorktree.linkedPR ?? null) !== null)
+    const hasGitHubReview = currentWorktree !== null
     const tracksSidebarWorktree = rightSidebarShowsPR && hasGitHubReview
     const tracksVisibleRows = args.groupBy === 'pr-status' || cardProperties.includes('status')
     if (!tracksVisibleRows && !tracksSidebarWorktree) {

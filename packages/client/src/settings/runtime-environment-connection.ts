@@ -1,7 +1,4 @@
 import type { QueryClient } from '@tanstack/react-query'
-import { describeRuntimeCompatBlock } from '@yiru/runtime-protocol/runtime-compatibility'
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -9,7 +6,8 @@ import {
   refreshProjectCatalogTargetRepos,
   refreshProjectCatalogWorktrees
 } from '~renderer/project-catalog/refresh'
-import { unwrapRuntimeRpcResult } from '~renderer/runtime/rpc-client'
+import { describeRuntimeCompatBlock } from '~renderer/runtime/compatibility-message'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { runtimeEnvironmentsClient } from '~renderer/runtime/runtime-environments-client'
 
 import {
@@ -34,11 +32,14 @@ export async function connectRuntimeEnvironment(
 ): Promise<boolean> {
   const { environment, mountedRef, queryClient } = options
   try {
-    const response = await runtimeEnvironmentsClient.getStatus({
+    if (environment.pairingRequired) {
+      throw new Error(translate('runtimeEnvironment.pairingRequired', 'Re-pairing required'))
+    }
+    const runtimeStatus = await runtimeEnvironmentsClient.getStatus({
       selector: environment.id,
       timeoutMs: 15_000
     })
-    const runtimeStatus = unwrapRuntimeRpcResult<RuntimeStatus>(response)
+
     const compatibility = evaluateHostDetails(runtimeStatus)
     setRuntimeEnvironmentStatus(environment.id, runtimeStatus)
     if (mountedRef.current) {

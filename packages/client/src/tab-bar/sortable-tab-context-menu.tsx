@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { translate } from '~renderer/i18n/i18n'
 import {
   Sidebar as PanelRightClose,

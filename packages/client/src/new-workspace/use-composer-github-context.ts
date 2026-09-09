@@ -1,14 +1,18 @@
-import { buildProjectSourceContextFromRepo } from '@yiru/runtime-protocol/workbench/project-source-context'
-import type { GlobalSettings, Project, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Project } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { buildProjectSourceContextFromRepo } from '@yiru/protocol/project/source-context'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { parseGitHubPullRequestLink } from '~renderer/github/links'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { getWorkspaceSourceProvider as getLinkedWorkItemProvider } from '~renderer/new-workspace/naming/source'
+import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
+import { openGitHubTarget } from '~renderer/runtime/github-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import type { AppState } from '~renderer/store/state'
 
 import type { UseComposerStateOptions } from './composer-contract'
 import type { WorkspaceCreationTargetResolution } from './project-host-workspace-target'
-import { getLinkedWorkItemProvider, type LinkedWorkItemSummary } from './workspace-creation'
+import type { LinkedWorkItemSummary } from './workspace-creation'
 
 type UseComposerGitHubContextOptions = Pick<
   UseComposerStateOptions,
@@ -44,12 +48,16 @@ export function useComposerGitHubContext(options: UseComposerGitHubContextOption
       return
     }
     let isCancelled = false
-    const request = callRuntimeOrpc(
-      getActiveRuntimeTarget(options.repoSettings),
-      (client) => client.github.repoSlug,
-      { repo: options.repoId },
-      { timeoutMs: 30_000 }
-    )
+    const target = getActiveRuntimeTarget(options.repoSettings)
+    const request = openGitHubTarget().then((client) => {
+      if (!client) {
+        throw new Error('GitHub protocol capability is unavailable')
+      }
+      return client.getRepoSlug(options.repoId, {
+        timeoutMs: 30_000,
+        ...runtimeCallDestination(target)
+      })
+    })
     void request
       .then((slug) => {
         if (!isCancelled) {

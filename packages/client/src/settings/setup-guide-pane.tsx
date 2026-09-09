@@ -1,20 +1,22 @@
-import {
-  getFeatureWallSetupSteps,
-  getFirstIncompleteFeatureWallSetupStepId
-} from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
-import type { FeatureWallSetupStepId } from '@yiru/runtime-protocol/workbench/feature-wall-setup-steps'
+import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
+import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import { ArrowCounterClockwise } from '~renderer/icons/hugeicons'
 import { showOnboardingFromRenderer } from '~renderer/onboarding/show-onboarding-event'
 import { Button } from '~renderer/ui/button'
 
+import {
+  getFeatureWallSetupSteps,
+  getFirstIncompleteFeatureWallSetupStepId
+} from '../feature-wall/content/setup-steps'
 import { FeatureWallSetupChecklist } from '../feature-wall/setup-checklist'
 import { useSettingsSetupGuideFullProgress } from './setup-guide-progress'
 
 export function SettingsSetupGuidePane(): React.JSX.Element {
-  const setupSteps = (() => getFeatureWallSetupSteps())()
+  useUiLocale()
+  const setupSteps = getFeatureWallSetupSteps()
   const [isRestartingOnboarding, setIsRestartingOnboarding] = useState(false)
   const [orchestrationSkillInstalled, setOrchestrationSkillInstalled] = useState(false)
   const [browserUseSkillInstalled, setBrowserUseSkillInstalled] = useState(false)

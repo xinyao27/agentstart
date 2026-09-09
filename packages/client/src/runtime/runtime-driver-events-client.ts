@@ -1,16 +1,33 @@
-import type {
-  RuntimeDriverEvent,
-  RuntimeDriverSubscriptionEvent
-} from '@yiru/runtime-protocol/contract'
+import {
+  DRIVER_EVENTS_PROTOCOL_CAPABILITY,
+  DriverEventsClient,
+  type DriverEventsSubscriptionEventValue
+} from '@yiru/protocol'
+type RuntimeDriverEvent = Exclude<DriverEventsSubscriptionEventValue, { type: 'ready' | 'end' }>
 
-import { createLocalRuntimeOrpcClient } from './orpc-client'
+import { openRuntimeProtocolTarget } from './protocol-target'
+import { readRuntimeStatus } from './status-client'
 import { createRuntimeStreamFanOut } from './stream-fan-out'
 
-// Why: these locks describe terminals and BrowserViews owned by the shell's
-// runtime. A remote PTY carries its own driver state on its dedicated stream.
-const runtimeDriverEvents = createRuntimeStreamFanOut({
-  resolveClient: async () => (await createLocalRuntimeOrpcClient()).client,
-  open: (client, signal) => client.runtime.driverEvents.subscribe(undefined, { signal })
+// Why: these locks describe terminals owned by the shell's runtime. A remote
+// PTY carries its own driver state on its dedicated stream. LOCAL admission is
+// not contract-guaranteed, so the stream anchors to the local rendering shell
+// and a missing capability means the daemon predates the cutover.
+async function requireDriverEventsClient(): Promise<DriverEventsClient> {
+  const target = { kind: 'local' } as const
+  const status = await readRuntimeStatus(target)
+  if (!status.capabilities?.includes(DRIVER_EVENTS_PROTOCOL_CAPABILITY)) {
+    throw new Error('runtime.driverEvents.protobuf.v1 capability is not available')
+  }
+  return new DriverEventsClient(await openRuntimeProtocolTarget(target))
+}
+
+const runtimeDriverEvents = createRuntimeStreamFanOut<
+  DriverEventsClient,
+  DriverEventsSubscriptionEventValue
+>({
+  resolveClient: requireDriverEventsClient,
+  open: (client, signal) => client.subscribe({ signal }).then((stream) => stream.events)
 })
 
 type RuntimeDriverEventHandlers = {
@@ -25,7 +42,7 @@ export function subscribeRuntimeDriverEvents(handlers: RuntimeDriverEventHandler
 }
 
 function handleRuntimeDriverSubscriptionEvent(
-  event: RuntimeDriverSubscriptionEvent,
+  event: DriverEventsSubscriptionEventValue,
   handlers: RuntimeDriverEventHandlers
 ): void {
   switch (event.type) {
@@ -33,7 +50,6 @@ function handleRuntimeDriverSubscriptionEvent(
       handlers.onReady()
       return
     case 'terminalDriverChanged':
-    case 'browserDriverChanged':
     case 'terminalFitOverrideChanged':
       handlers.onEvent(event)
       break

@@ -1,7 +1,7 @@
 import {
   YIRU_GITHUB_RELEASES_URL,
   YIRU_GITHUB_REPOSITORY_URL
-} from '@yiru/runtime-protocol/model/product'
+} from '@yiru/protocol/hosted-review/yiru-repository'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 import logo from '~renderer/assets/brand/yiru-wordmark.png?url'

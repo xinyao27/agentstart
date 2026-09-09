@@ -1,5 +1,5 @@
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import type { DashboardAgentRow } from '~renderer/dashboard/use-dashboard-data'
 
 /** Row-identity key for an in-process subagent child row. The NUL separator

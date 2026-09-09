@@ -1,11 +1,11 @@
+import { normalizeDisabledTuiAgents } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import {
   KEYBINDING_DEFINITIONS,
   agentTabActionId,
   type KeybindingActionId,
   type KeybindingDefinition
-} from '@yiru/runtime-protocol/workbench/keybindings'
-import { normalizeDisabledTuiAgents } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/keybindings'
 
 export type ShortcutGroup = {
   title: string

@@ -1,4 +1,4 @@
-import { keybindingMatchesAction } from '@yiru/runtime-protocol/workbench/keybindings'
+import { keybindingMatchesAction } from '@yiru/protocol/keybindings'
 import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

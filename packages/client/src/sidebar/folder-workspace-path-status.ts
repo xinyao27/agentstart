@@ -1,5 +1,5 @@
-import type { FolderWorkspacePathStatus } from '@yiru/runtime-protocol/workbench/folder-workspace-path-status'
-import { blocksFolderWorkspaceActivation } from '@yiru/runtime-protocol/workbench/folder-workspace-path-status'
+import type { FolderWorkspacePathStatus } from '@yiru/protocol/workspace/folder-path'
+import { blocksFolderWorkspaceActivation } from '@yiru/protocol/workspace/folder-path'
 import { translate } from '~renderer/i18n/i18n'
 
 export function getFolderWorkspacePathStatusTitle(

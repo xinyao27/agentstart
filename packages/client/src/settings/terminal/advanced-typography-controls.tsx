@@ -1,11 +1,11 @@
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   DEFAULT_TERMINAL_FONT_WEIGHT,
   TERMINAL_FONT_WEIGHT_MAX,
   TERMINAL_FONT_WEIGHT_MIN,
   TERMINAL_FONT_WEIGHT_STEP,
   normalizeTerminalFontWeight
-} from '@yiru/runtime-protocol/workbench/terminal/fonts'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/terminal/font-settings'
 import { translate } from '~renderer/i18n/i18n'
 import {
   fontFamilyHasKnownLigatures,

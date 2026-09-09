@@ -1,7 +1,7 @@
 {
   "name": "@yiru/cli",
   "version": "0.0.36",
-  "description": "Install and run the Yiru Bun daemon CLI",
+  "description": "Install and run the Yiru daemon CLI",
   "homepage": "https://github.com/xinyao27/yiru#readme",
   "bugs": {
     "url": "https://github.com/xinyao27/yiru/issues"
@@ -21,6 +21,7 @@
     "yiru": "./yiru.mjs"
   },
   "files": [
+    "install",
     "yiru.mjs"
   ],
   "type": "module",

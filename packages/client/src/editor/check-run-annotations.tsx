@@ -1,4 +1,4 @@
-import type { PRCheckAnnotation } from '@yiru/runtime-protocol/workbench/types'
+import type { PRCheckAnnotation } from '@yiru/protocol/hosted-review/review-types'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { ArrowSquareOut as ExternalLink } from '~renderer/icons/hugeicons'

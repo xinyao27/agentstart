@@ -1,4 +1,4 @@
-import type { RepoIcon } from '@yiru/runtime-protocol/model/workspace'
+import type { RepoIcon } from '@yiru/protocol/project/icon'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'

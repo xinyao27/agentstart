@@ -1,4 +1,5 @@
-import type { GitBranchChangeEntry, GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { selectWorktreeDiffCommentsOrEmpty } from '~renderer/diff-comments/worktree-selector'

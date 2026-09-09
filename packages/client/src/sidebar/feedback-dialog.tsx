@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { YIRU_GITHUB_ISSUES_URL } from '@yiru/runtime-protocol/model/product'
-import type { GitHubViewer } from '@yiru/runtime-protocol/workbench/types'
+import type { GitHubViewer } from '@yiru/protocol/hosted-review/review-types'
+import { YIRU_GITHUB_ISSUES_URL } from '@yiru/protocol/hosted-review/yiru-repository'
 import React, { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { openHttpLink } from '~renderer/editor/http-link-routing'

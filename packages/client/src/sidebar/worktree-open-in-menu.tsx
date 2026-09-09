@@ -1,4 +1,4 @@
-import type { OpenInApplication, OpenInTargetKey } from '@yiru/runtime-protocol/workbench/types'
+import type { OpenInApplication, OpenInTargetKey } from '@yiru/protocol/settings/open-in'
 import React from 'react'
 import { OpenInApplicationIcon } from '~renderer/external-editor/application-catalog'
 import { getLocalFileManagerLabel } from '~renderer/external-editor/file-manager-label'

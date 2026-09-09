@@ -1,4 +1,4 @@
-import type { AgentPhase } from '@yiru/runtime-protocol/contract'
+import type { AgentPhase } from '@yiru/protocol/agent/phase'
 
 const PRESENCE_KEY = 'agentPresenceBySource.v1'
 const PRESENCE_TTL_MS = 45_000

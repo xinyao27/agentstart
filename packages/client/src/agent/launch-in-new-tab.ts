@@ -1,13 +1,13 @@
-import { resolveLocalWindowsAgentStartupShell } from '@yiru/runtime-protocol/model/platform'
-import { repoIsRemote } from '@yiru/runtime-protocol/workbench/agent/launch-remote'
-import type { SessionOptionValue } from '@yiru/runtime-protocol/workbench/agent/session-options'
-import type { LaunchSource } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import { TUI_AGENT_CONFIG } from '@yiru/runtime-protocol/workbench/tui-agent/config'
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/runtime-protocol/workbench/tui-agent/launch-defaults'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/launch-defaults'
+import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
+import type { SessionOptionValue } from '@yiru/protocol/agent/session-options/types'
+import type { StartupHostPlatform } from '@yiru/protocol/agent/shell-command'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { resolveLocalWindowsAgentStartupShell } from '@yiru/protocol/host/windows-terminal-shell'
+import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
 import { toast } from 'sonner'
 import { seedCommandCodeSubmittedPromptStatus } from '~renderer/agent/command-code-status-seed'
 import { getAgentLaunchPlatformForRepo } from '~renderer/agent/launch-platform'
@@ -26,6 +26,8 @@ import { useAppStore } from '~renderer/store/state'
 import { reconcileTabOrder } from '~renderer/tab-bar/reconcile-order'
 import { track, tuiAgentToAgentKind } from '~renderer/telemetry/client'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
+
+import { requestRemoteAgentLaunchHost } from './launch-host-request'
 
 export type LaunchAgentInNewTabArgs = {
   agent: TuiAgent
@@ -49,8 +51,8 @@ export type LaunchAgentInNewTabArgs = {
   /** User-authored Quick Command label for local tabs created from the tab bar. */
   quickCommandLabel?: string | null
   /** Shell platform that will execute the startup command. Defaults to the
-   * renderer OS; SSH and WSL worktrees run a Linux shell even from Windows. */
-  launchPlatform?: NodeJS.Platform
+   * local project runtime; remote launches always use their runtime status. */
+  launchPlatform?: StartupHostPlatform
   /** Called after the prompt is actually delivered to the agent input path. */
   onPromptDelivered?: () => void
   /** Model and per-model option picks for this launch. Overrides the persisted
@@ -65,29 +67,9 @@ export type LaunchAgentInNewTabResult = {
   promptDeliveryResult?: Promise<{ delivered: boolean; failureNotified: boolean }>
 } | null
 
-/**
- * Create a new terminal tab and queue the agent's launch command, optionally
- * with an initial prompt.
- *
- * Why: this is the single entry point for "launch agent X in a new tab" from
- * the tab-bar quick-launch menu and the Source Control "send notes to agent"
- * action. It mirrors the `+` button's path (`createNewTerminalTab`) — createTab,
- * flip `activeTabType` to terminal, and persist the appended tab-bar order —
- * then queues the agent startup through the same `pendingStartupByTabId`
- * channel the new-workspace ("cmd+N") flow uses. TerminalPane consumes the
- * queued command on first mount and the local PTY provider writes it once the
- * shell is ready (see `pty-connection.ts`: startup-command path).
- *
- * Default submission mode follows `promptInjectionMode`: argv/flag agents
- * include the prompt directly in the launch command, while followup-path
- * agents launch empty and receive a post-ready draft paste. Generated contexts
- * can override this with draft or submit-after-ready delivery.
- *
- * Returns `null` when no startup plan can be built — for example, a whitespace-
- * only prompt on the trim-empty branch of `buildAgentStartupPlan`. Callers
- * surface that as a launch failure (see `QuickLaunchButton.runLaunch`).
- */
-export function launchAgentInNewTab(args: LaunchAgentInNewTabArgs): LaunchAgentInNewTabResult {
+export async function launchAgentInNewTab(
+  args: LaunchAgentInNewTabArgs
+): Promise<LaunchAgentInNewTabResult> {
   const {
     agent,
     worktreeId,
@@ -101,21 +83,30 @@ export function launchAgentInNewTab(args: LaunchAgentInNewTabArgs): LaunchAgentI
     launchPlatform,
     onPromptDelivered
   } = args
-  const store = useAppStore.getState()
+  let store = useAppStore.getState()
   const worktree = store.allWorktrees?.().find((entry: { id: string }) => entry.id === worktreeId)
   const repo = worktree ? store.repos?.find((entry) => entry.id === worktree.repoId) : null
-  const resolvedLaunchPlatform =
+  const runtimeEnvironmentId = getRuntimeEnvironmentIdForWorktree(store, worktreeId)
+  const isRemote = Boolean(runtimeEnvironmentId)
+  let resolvedLaunchPlatform =
     launchPlatform ??
     (repo
       ? getAgentLaunchPlatformForRepo(getLocalProjectExecutionRuntimeContext(store, worktreeId))
       : CLIENT_PLATFORM)
-  // Why: SSH remotes must use the relay's public CLI command.
-  const isRemote = repo ? repoIsRemote(repo) : false
-  const queuedShell = resolveLocalWindowsAgentStartupShell({
+  let queuedShell = resolveLocalWindowsAgentStartupShell({
     platform: resolvedLaunchPlatform,
     isRemote,
     terminalWindowsShell: store.settings?.terminalWindowsShell
   })
+  if (runtimeEnvironmentId) {
+    const host = await requestRemoteAgentLaunchHost(worktreeId, runtimeEnvironmentId)
+    if (!host) {
+      return null
+    }
+    store = useAppStore.getState()
+    resolvedLaunchPlatform = host.platform
+    queuedShell = host.shell
+  }
   const cmdOverrides = store.settings?.agentCmdOverrides ?? {}
   const effectiveAgentArgs =
     agentArgs !== undefined
@@ -203,7 +194,6 @@ export function launchAgentInNewTab(args: LaunchAgentInNewTabArgs): LaunchAgentI
     return null
   }
 
-  const runtimeEnvironmentId = getRuntimeEnvironmentIdForWorktree(store, worktreeId)
   if (isRemoteRuntimeSessionActive(runtimeEnvironmentId)) {
     const remoteHostDelivery = launchAgentInRemoteHostTab({
       agent,

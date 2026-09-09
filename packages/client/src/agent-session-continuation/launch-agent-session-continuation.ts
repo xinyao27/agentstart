@@ -1,8 +1,8 @@
-import type { SessionOptionValue } from '@yiru/runtime-protocol/workbench/agent/session-options'
-import type { LaunchSource } from '@yiru/runtime-protocol/workbench/telemetry-events'
-import { TUI_AGENT_CONFIG } from '@yiru/runtime-protocol/workbench/tui-agent/config'
-import { isTuiAgentEnabled } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
+import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
+import type { SessionOptionValue } from '@yiru/protocol/agent/session-options/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
 import { toast } from 'sonner'
 import { getAgentLabel } from '~renderer/agent/catalog'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
@@ -108,7 +108,7 @@ export async function launchAgentSessionContinuation({
   await preflightAgentTrust({ agent, workspacePath })
 
   const label = getAgentLabel(agent)
-  const result = launchAgentInNewTab({
+  const result = await launchAgentInNewTab({
     agent,
     worktreeId,
     ...(groupId ? { groupId } : {}),

@@ -1,8 +1,8 @@
-import type { ParsedAgentStatusPayload } from '@yiru/runtime-protocol/model/agent'
+import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
 import {
   getSyntheticAgentTerminalTitle,
   getSyntheticAgentTitleProfile
-} from '@yiru/runtime-protocol/workbench/synthetic-agent-title'
+} from '~renderer/agent/title/synthetic'
 import { classifyTitleActivity } from '~renderer/terminal-pane/agent/evidence'
 
 export function resolveAgentStatusTerminalTitle(

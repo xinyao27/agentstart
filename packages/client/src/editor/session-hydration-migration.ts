@@ -1,4 +1,5 @@
-import type { PersistedOpenFile, Tab, TabGroup } from '@yiru/runtime-protocol/workbench/types'
+import type { PersistedOpenFile } from '@yiru/protocol/workspace/session'
+import type { Tab, TabGroup } from '@yiru/protocol/workspace/tabs'
 import type { AppState } from '~renderer/store/types'
 
 import {

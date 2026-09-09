@@ -1,13 +1,7 @@
-import type {
-  Repo,
-  Worktree,
-  WorktreeLineage,
-  WorkspaceLineage
-} from '@yiru/runtime-protocol/workbench/types'
-import {
-  folderWorkspaceKey,
-  parseWorkspaceKey
-} from '@yiru/runtime-protocol/workbench/workspace/scope'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { folderWorkspaceKey, parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type { AppState } from '~renderer/store/types'
 import {
   buildParentPrChecksRows,

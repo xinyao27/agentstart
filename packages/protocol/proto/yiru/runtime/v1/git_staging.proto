@@ -1,0 +1,231 @@
+syntax = "proto3";
+
+package yiru.runtime.v1;
+
+import "yiru/protocol/v1/annotations.proto";
+
+// Index and working-tree mutation that does not touch commit history or refs:
+// staging/unstaging/discarding paths (individually and in bulk), committing the
+// index, and appending a known huge folder to .gitignore. See
+// apps/daemon/src/rpc/git.rs's METHODS table (git.stage, git.unstage,
+// git.discard, git.bulkStage, git.bulkUnstage, git.bulkDiscard, git.commit,
+// git.appendGitignore).
+service GitStagingService {
+  rpc Stage(GitStagingServiceStageRequest) returns (GitStagingServiceStageResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Unstage(GitStagingServiceUnstageRequest) returns (GitStagingServiceUnstageResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Discard(GitStagingServiceDiscardRequest) returns (GitStagingServiceDiscardResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc BulkStage(GitStagingServiceBulkStageRequest) returns (GitStagingServiceBulkStageResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc BulkUnstage(GitStagingServiceBulkUnstageRequest) returns (GitStagingServiceBulkUnstageResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc BulkDiscard(GitStagingServiceBulkDiscardRequest) returns (GitStagingServiceBulkDiscardResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Commit(GitStagingServiceCommitRequest) returns (GitStagingServiceCommitResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AppendGitignore(GitStagingServiceAppendGitignoreRequest) returns (GitStagingServiceAppendGitignoreResponse) {
+    option (yiru.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (yiru.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message GitStagingServiceStageRequest {
+  string worktree = 1;
+  string file_path = 2;
+}
+
+message GitStagingServiceStageResponse {
+  bool ok = 1;
+}
+
+message GitStagingServiceUnstageRequest {
+  string worktree = 1;
+  string file_path = 2;
+}
+
+message GitStagingServiceUnstageResponse {
+  bool ok = 1;
+}
+
+message GitStagingServiceDiscardRequest {
+  string worktree = 1;
+  string file_path = 2;
+}
+
+message GitStagingServiceDiscardResponse {
+  bool ok = 1;
+}
+
+message GitStagingServiceBulkStageRequest {
+  string worktree = 1;
+  repeated string file_paths = 2;
+}
+
+message GitStagingServiceBulkStageResponse {
+  bool ok = 1;
+}
+
+message GitStagingServiceBulkUnstageRequest {
+  string worktree = 1;
+  repeated string file_paths = 2;
+}
+
+message GitStagingServiceBulkUnstageResponse {
+  bool ok = 1;
+}
+
+message GitStagingServiceBulkDiscardRequest {
+  string worktree = 1;
+  repeated string file_paths = 2;
+}
+
+message GitStagingServiceBulkDiscardResponse {
+  bool ok = 1;
+}
+
+message GitStagingServiceCommitRequest {
+  string worktree = 1;
+  string message = 2;
+}
+
+message GitStagingServiceCommitResponse {
+  bool success = 1;
+  optional string error = 2;
+}
+
+message GitStagingServiceAppendGitignoreRequest {
+  string worktree = 1;
+  string folder_name = 2;
+}
+
+message GitStagingServiceAppendGitignoreResponse {
+  // False when the line was already present (append_gitignore's Value::Bool(false)).
+  bool appended = 1;
+}

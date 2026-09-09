@@ -2,8 +2,6 @@ import Foundation
 
 nonisolated let workspaceCreationAgentCatalog: [WorkspaceCreationAgent] = [
     .init(id: "claude", label: "Claude", launchCommand: "claude"),
-    .init(
-        id: "claude-agent-teams", label: "Claude Agent Teams", launchCommand: "yiru claude-teams"),
     .init(id: "openclaude", label: "OpenClaude", launchCommand: "openclaude"),
     .init(id: "codex", label: "Codex", launchCommand: "codex"),
     .init(id: "grok", label: "Grok", launchCommand: "grok"),

@@ -1,7 +1,5 @@
-import {
-  DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS,
-  resolveSourceControlAiForOperation
-} from '@yiru/runtime-protocol/workbench/source-control/ai'
+import { DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS } from '@yiru/protocol/source-control/settings'
+import { resolveSourceControlAiForOperation } from '~renderer/source-control/ai/resolution'
 
 import {
   normalizeCreateReviewBaseSearchResults,

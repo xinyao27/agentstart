@@ -1,10 +1,7 @@
-import {
-  isRuntimePathAbsolute,
-  normalizeRuntimePathForComparison
-} from '@yiru/runtime-protocol/model/platform'
-import { splitWorktreeIdForFilesystem } from '@yiru/runtime-protocol/model/workspace'
-import type { ProjectHostSetupProjection } from '@yiru/runtime-protocol/workbench/project-host-setup-projection'
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import { isRuntimePathAbsolute, normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
+import type { ProjectHostSetupProjection } from '@yiru/protocol/project/setup-projection'
+import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 export function deriveAiVaultWorkspaceScopePaths(
   activeWorktree: Pick<Worktree, 'id' | 'path' | 'priorWorktreeIds' | 'repoId'> | null,
@@ -150,4 +147,10 @@ function isAiVaultWorkspaceScopePathClaimed(
     return false
   }
   return claimedComparisonPaths.has(normalizeRuntimePathForComparison(trimmedPath))
+}
+
+// Why: the daemon rejects more than 64 scope paths; keep the caller-prioritized
+// prefix while leaving the full scope available for local filtering.
+export function limitAiVaultScopePaths(paths: readonly string[] | undefined): string[] | undefined {
+  return paths?.slice(0, 64)
 }

@@ -1,12 +1,12 @@
+import type { TerminalListResult } from '@yiru/protocol'
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry
-} from '@yiru/runtime-protocol/model/agent'
-import type { RuntimeTerminalListResult } from '@yiru/runtime-protocol/workbench/runtime-types'
-import { isTerminalLeafId, makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type { TerminalLayoutSnapshot } from '@yiru/runtime-protocol/workbench/types'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+} from '@yiru/protocol/agent/status-records'
+import { isTerminalLeafId, makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 import {
   classifyTitleActivity,
@@ -148,12 +148,9 @@ export async function probeActiveAgentNoteTarget({
   if (!terminal) {
     return false
   }
-  const agentCheck = await callRuntimeOrpc(
-    runtimeTarget,
-    (client) => client.terminal.isRunningAgent,
-    { terminal: terminal.handle },
-    { timeoutMs: ACTIVE_AGENT_PROBE_RPC_TIMEOUT_MS }
-  )
+  const agentCheck = await (
+    await openRuntimeTerminalClient(runtimeTarget)
+  ).isRunningAgent(terminal.handle, { timeoutMs: ACTIVE_AGENT_PROBE_RPC_TIMEOUT_MS })
   return agentCheck.isRunningAgent
 }
 
@@ -162,10 +159,10 @@ export async function findActiveRuntimeTerminal(
   worktreeId: string,
   noteTarget: ActiveTerminalNoteTarget,
   timeoutMs: number
-): Promise<RuntimeTerminalListResult['terminals'][number] | null> {
-  const { terminals } = await callRuntimeOrpc(
-    runtimeTarget,
-    (client) => client.terminal.list,
+): Promise<TerminalListResult['terminals'][number] | null> {
+  const { terminals } = await (
+    await openRuntimeTerminalClient(runtimeTarget)
+  ).list(
     // Why: worktree ids can look like branch names or paths; keep the lookup unambiguous.
     { worktree: toRuntimeWorktreeSelector(worktreeId), limit: ACTIVE_AGENT_TERMINAL_LIST_LIMIT },
     { timeoutMs }

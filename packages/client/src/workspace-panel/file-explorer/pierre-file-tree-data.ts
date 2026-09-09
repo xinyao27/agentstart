@@ -1,5 +1,5 @@
 import type { GitStatus, GitStatusEntry } from '@pierre/trees'
-import type { GitFileStatus } from '@yiru/runtime-protocol/workbench/types'
+import type { GitFileStatus } from '@yiru/protocol/git/status-types'
 import { normalizeRelativePath } from '~renderer/path'
 
 import type { FileExplorerRowProjection } from './row-projection'

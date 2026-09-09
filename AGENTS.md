@@ -1,11 +1,12 @@
 # AGENTS.md
 
-Yiru is a Bun daemon with a Chrome MV3 workbench and a native SwiftUI iOS companion for running
+Yiru is a Rust daemon with a Chrome MV3 workbench and a native SwiftUI iOS companion for running
 coding agents across many git worktrees on local, WSL, and SSH hosts.
 
 This file is the contract for every agent writing code here: structure, naming, cohesion, code
 quality. For browser visual work, [`docs/style-guide.md`](./docs/style-guide.md) is canonical. For
-mobile visual work, use [`apps/mobile/DESIGN.md`](./apps/mobile/DESIGN.md).
+mobile visual work, use [`apps/mobile/DESIGN.md`](./apps/mobile/DESIGN.md). For the daemon's runtime
+ownership and transport boundaries, [`apps/daemon/ARCHITECTURE.md`](./apps/daemon/ARCHITECTURE.md).
 
 **The organizing principle.** Tailwind won because the style lives next to the markup: one place to look, one place to change. Apply that to all code. A feature's directory, filenames, and module boundaries exist so an agent can find the code from the feature name alone and change it without touching the rest of the tree. Optimize for *"where does this live?"* being answerable in one guess.
 
@@ -13,24 +14,25 @@ mobile visual work, use [`apps/mobile/DESIGN.md`](./apps/mobile/DESIGN.md).
 
 ## Read first
 
-These are hard rules regardless of who enforces them. Some still fail CI; several lost their
-automated check when the repository-contract scripts that enforced them were deleted, and are
-convention plus review only until a replacement check exists. The table says which is which — do
-not treat "no automated check" as "not a rule." No exceptions inside a feature task.
+These are hard rules regardless of who enforces them. Some fail CI; the rest are convention plus
+review. The table says which is which — "no automated check" does not mean "not a rule." No
+exceptions inside a feature task.
 
 | Never | Enforced by |
 | --- | --- |
 | Write or retain any test, smoke check, E2E harness, or validation-only script. | Section 9 |
-| Add an `eslint-disable`/`oxlint-disable max-lines` or a max-lines baseline | Convention only — no automated check (the script that enforced this was deleted) |
+| Add an `eslint-disable`/`oxlint-disable max-lines`, a max-lines baseline, or a `#[allow(…)]` that silences clippy | Convention only |
 | Add a hand-written project-owned `.d.ts`; generated platform bindings are the only exception | Convention only |
-| Add a variable to the `@theme inline` block in `packages/client/src/assets/main.css` | Convention only — no automated check (the script that enforced this was deleted) |
-| Use a native `<button>`/`<input>`/`<textarea>`/`<select>` in client feature TSX; write `rounded-*`; use `bg-black/N`-style alpha washes; import `ui/*-styles.ts` from feature code | Convention only — no automated check (the script that enforced this was deleted) |
+| Add a variable to the `@theme inline` block in `packages/client/src/assets/main.css` | Convention only |
+| Use a native `<button>`/`<input>`/`<textarea>`/`<select>` in client feature TSX; write `rounded-*`; use `bg-black/N`-style alpha washes; import `ui/*-styles.ts` from feature code | Convention only |
 | Use `interface`, `enum`, `namespace`, or `any` | oxlint + `erasableSyntaxOnly` |
-| Ship a user-visible string that isn't wrapped in `t()` / `translate()` | Convention only — no automated check (the script that enforced this was deleted) |
+| Write `unsafe`, `.unwrap()`, or `panic!` in daemon code | `unsafe_code = "forbid"` + Section 4a |
+| Ship a user-visible string that isn't wrapped in `t()` / `translate()` | Convention only |
 | Hardcode `e.metaKey`, a path separator, or a platform font | Section 7 |
 | Import daemon or extension-host implementations from `packages/client/src` | Section 1 |
+| Reach a client or host across the process boundary through anything but a protobuf capability declared in `packages/protocol/proto/` | Section 1 |
 | Name a file or folder `helpers`, `utils`, `common`, `misc`, or `shared-stuff`; add an `index.ts` re-export barrel | Section 2 |
-| Rename or move a file without updating the paths written as *strings* — build scripts, CI jobs, baselines, allowlists, `Why:` comments | Convention only — no automated check (the script that enforced this was deleted) |
+| Rename or move a file without updating the paths written as *strings* — build scripts, CI jobs, allowlists, `Why:` comments | Convention only |
 | Follow an absolute path from a subagent result into the main repo instead of this worktree | Section 12 |
 
 ---
@@ -39,14 +41,16 @@ not treat "no automated check" as "not a rule." No exceptions inside a feature t
 
 ```
 apps/
-  daemon/       Bun runtime, CLI, Native Messaging host, host adapters, and authoritative state
+  computer-use-macos/
+                standalone signed SwiftPM helper for macOS accessibility and screen capture
+  daemon/       Rust runtime, CLI, Native Messaging host, host adapters, and authoritative state
   extension/    WXT-managed Chrome MV3 host: background, side panel, DevTools, browser bootstrap
+  macos/        SwiftPM menu bar host that supervises the daemon binary on macOS
   mobile/       native SwiftUI app, widgets, and notification service extension
   apns-gateway/ stateless Cloudflare Worker forwarding opaque encrypted pushes to APNs
 packages/
   client/       source-only browser workbench UI consumed through declared exports
-  runtime-protocol/
-                cross-client domain, daemon RPC, and mobile E2EE transport contracts
+  protocol/     protobuf source of truth plus generated Swift, Rust, and TypeScript bindings
   cli/          npm/bunx installer shim for compiled daemon releases
 skills/         agent skill packages shipped to end users, one folder per skill
 scripts/        workspace-level tooling whose inputs cross package boundaries
@@ -69,17 +73,23 @@ it is shipped to users' agent installs rather than built into one client, and it
 truth for that skill.
 
 **Import direction is one-way.** `packages/client` may import pure contracts and models, but never
-`apps/daemon`, `apps/extension`, Bun, Node, or Chrome globals. `apps/extension` imports only declared
+`apps/extension`, Node, or Chrome globals — and `apps/daemon` is a separate Rust binary it cannot
+import at all, only call over the protocol. `apps/extension` imports only declared
 `@yiru/client` exports and owns browser APIs, Native Messaging bootstrap, and capability adapters.
 `apps/daemon` owns filesystem, git, process, PTY, persistence, and runtime capability effects.
-`packages/runtime-protocol` stays pure and never imports an app. After bootstrap,
-client-to-daemon capability traffic has one
-transport: authenticated oRPC over WebSocket.
+`packages/protocol` stays pure and never imports an app. Its `proto/` tree is the only source of
+truth for cross-language wire messages and method policy. After bootstrap, client-to-daemon
+capability traffic uses binary Protobuf frames over the authenticated WebSocket; the iOS adapter
+places the same frames inside the existing E2EE transport. Real sockets, authentication, and E2EE
+remain in their owning apps.
+
+Capability changes update their protobuf schema, generated bindings, owning authority, and active
+callers together. Keep one authenticated binary capability path across Chrome and iOS.
 
 `@yiru/client` is independently consumable source. Hosts import only its declared package exports;
 they never reach into `packages/client/src`. Its `@yiru/client/vite` preset owns source resolution,
-React/Tailwind plugins, and client aliases, while the package owns its own typecheck, lint, and i18n
-generation. Changing client implementation must not require an extension-host edit unless the
+React/Tailwind plugins, and client aliases, while the package owns its own `fmt`, `lint`, and
+`typecheck` tasks. Changing client implementation must not require an extension-host edit unless the
 bootstrap capability surface itself changes.
 
 ### Where a new file goes
@@ -110,8 +120,8 @@ Past ~15 files, a feature folder has sub-features inside it — nest them (`sour
 **A typical feature change should touch 1–3 files in one folder.** If a small behavior change needs a dozen edits, that's a structural defect — the feature is smeared across the tree, or you're editing the wrong layer.
 
 Crossing the process boundary is the one legitimate multi-file change. Keep a runtime capability to
-three touchpoints sharing one feature name: the contract in `packages/runtime-protocol/src/`, the
-handler in `apps/daemon/src/rpc/`, and the caller in `packages/client/src/`. A browser-owned
+three touchpoints sharing one feature name: the schema in `packages/protocol/proto/yiru/<feature>/`,
+the handler in `apps/daemon/src/rpc/`, and the caller in `packages/client/src/`. A browser-owned
 capability has the same narrow shape: client capability type, `apps/extension` implementation, and
 feature caller. Keep Chrome APIs out of the source-only client package.
 
@@ -149,7 +159,7 @@ Splitting is good; scattering is not. The difference is whether the pieces stay 
 
 ---
 
-## 4. TypeScript
+## 4. TypeScript: client, extension, gateway, and scripts
 
 `strict`, `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`, `verbatimModuleSyntax`, and `erasableSyntaxOnly` are all on.
 
@@ -169,6 +179,39 @@ Splitting is good; scattering is not. The difference is whether the pieces stay 
 - Extension source cannot use `~renderer`; it consumes public `@yiru/client` exports. Client source
   cannot import app source. These are architectural rules, not style preferences; review currently
   enforces them.
+
+---
+
+## 4a. Rust: the daemon
+
+One crate, `yiru-daemon`, edition 2024, toolchain 1.95, `unsafe_code = "forbid"`. Sections 1–3 apply
+unchanged: a feature is a folder, named for the thing, and you should find it from the feature name
+in one guess. `snake_case` files and folders is the only naming difference.
+
+- **A module is a feature.** `src/<feature>/` holds everything that belongs only to it. Its root is
+  the sibling `<feature>.rs` next to the folder — the style throughout `src/rpc/` — or
+  `<feature>/mod.rs`. Match whichever the neighbours use; don't introduce a third shape.
+- **A capability is one handler.** `src/rpc/<feature>.rs` plus its `src/rpc/<feature>/` folder, named
+  for the same feature as its `packages/protocol/proto/yiru/<feature>/` schema. Handlers use the
+  generated typed method descriptors; transport, authentication, authorization, deadlines, and
+  resource limits are already enforced before a handler runs — never re-implement or bypass them.
+- **Errors are owned, typed, and matchable.** A `thiserror`-derived enum per feature, returned in
+  `Result`. `anyhow` is deliberately not a dependency: a caller across the protocol boundary has to
+  be able to match on the failure, not read a string.
+- **No panics on a request path.** `.unwrap()` and `panic!` appear nowhere in the crate and must stay
+  that way. `.expect("…")` is only for a genuine start-up invariant, and its message names the
+  invariant. `unreachable!` is allowed where the type system can't express why a branch is dead.
+- **Clippy is a gate, not advice.** `cargo clippy --locked --all-targets -- -D warnings` must pass
+  with zero warnings, and there are zero `#[allow(…)]` in the crate. Fix the code.
+- **No `#[cfg(test)]`, no `cargo test` target, no dev-dependencies.** Section 9 applies to Rust too.
+- **Cohesion over a line count.** Section 3's `.ts`/`.tsx` caps have no Rust equivalent, so the seam
+  rule is all you get: split when a unit has its own reason to change — an authority, a transport
+  frame, a parser, a persistence migration. 75 modules already run past 500 lines; those are seams
+  nobody has found yet, not a licence to add more.
+- **Dependencies are pinned and trimmed.** Exact versions in `Cargo.toml`, `default-features = false`
+  with an explicit feature list wherever the default pulls in what the daemon does not use.
+- Build paths with `Path`/`PathBuf` joins, never string concatenation, and route host-scoped effects
+  through `src/hosts/` (Section 7).
 
 ---
 
@@ -196,7 +239,10 @@ Work down the ladder and stop at the first level that fits. A fact lives at exac
 
 ## 6. Formatting and comments
 
-Formatting is not a decision — `vp fmt` owns it: single quotes, no semicolons, 100 columns, no trailing commas, sorted imports, sorted Tailwind classes. Don't hand-format around it.
+Formatting is not a decision. `vp fmt` owns every TypeScript, JSON, and CSS file: single quotes, no
+semicolons, 100 columns, no trailing commas, sorted imports, sorted Tailwind classes. `cargo fmt`
+owns the daemon. Markdown and the generated protobuf bindings are deliberately excluded from both.
+Don't hand-format around any of it.
 
 **Comments explain why, never what.** A comment exists only when the reason isn't recoverable from the code — a safety constraint, a platform quirk, a compatibility shim, a deliberate rule. One or two lines; capture the reason and stop. Don't restate the mechanism, narrate control flow, or quote a document.
 
@@ -212,10 +258,10 @@ Work runs on the local machine, in a WSL distro, and over SSH. Every path that t
 a process, or a git binary must work on all of them, on macOS, Linux, and Windows alike — code,
 commands, and scripts.
 
-- Resolve paths with `path.join` in local effects and the selected `Host` path methods in host-scoped
-  effects. Never assume `/` or `\`.
+- Resolve paths with `Path`/`PathBuf` joins in the daemon, `path.join` in Node-side tooling, and the
+  selected host's own path methods in host-scoped effects. Never assume `/` or `\`.
 - Route filesystem, git, terminal, and search operations through authenticated daemon capabilities
-  and `apps/daemon/src/hosts/`; browser features never call Node or Bun directly.
+  and `apps/daemon/src/hosts/`; browser features never touch a process or a filesystem directly.
 - Scope cached host state — capabilities, versions, connection health — to the host that executes it. One host's answer must never leak into another's.
 - Keyboard shortcuts branch on platform: `navigator.userAgent.includes('Mac')` → `metaKey`, else `ctrlKey`.
 
@@ -233,7 +279,10 @@ Yiru shells out to **the user's** git binary, whose version differs across nativ
 - Adopting a newer feature means exercising preferred and fallback paths against the relevant real
   git binaries during the task. Any temporary verification harness must be removed before finish.
 
-GitHub, GitLab, Bitbucket, Gitea, and Azure DevOps are all supported: keep provider-specific behavior behind explicit checks, and don't give a generic source-control concept a GitHub-only name. The user's `gh` rate limit is a shared resource — batch requests and skip calls you don't need.
+GitHub is the only hosted-review provider. Git repositories from every host still work through the
+generic Git capabilities, but do not add provider-specific APIs for GitLab, Bitbucket, Gitea, or
+Azure DevOps. The user's `gh` rate limit is a shared resource — batch requests and skip calls you
+don't need.
 
 ---
 
@@ -251,13 +300,17 @@ builds, typechecking, linting, repository-contract checks, and running the app.
 
 ## 10. Verify before you finish
 
-`pnpm check` is the gate — repository lint/format fixes followed by the workspace typecheck graph.
-The design-token budget, UI style drift, source-path references, max-lines ratchet, and localization
-coverage rules currently have no repository-contract script; they still apply and require review.
-`pnpm typecheck`, `pnpm lint`, and `pnpm fmt` run the pieces individually.
+`pnpm check` is the gate, and it spans both languages: `cargo fmt` on the daemon, repository
+lint/format fixes, the workspace typecheck graph, then `cargo fmt --check` plus zero-warning clippy.
+`pnpm typecheck`, `pnpm lint`, and `pnpm fmt` run the TypeScript pieces individually; `vp run
+@yiru/daemon#lint` runs the Rust gate alone. CI additionally builds the daemon on Linux, macOS, and
+Windows, so a change that only compiles on your platform fails there.
+
+The design-token budget, UI style drift, source-path references, and localization coverage rules
+have no automated check; they still apply and require review.
 
 **Reach into a package with `vp run <package>#<task>`**, from anywhere in the repo — `vp run
-@yiru/daemon#build:release`, `vp run @yiru/extension#build`, `vp run yiru-mobile#dev`. The root
+@yiru/daemon#build`, `vp run @yiru/extension#build`, `vp run yiru-mobile#dev`. The root
 `package.json` holds only what the whole workspace shares. Inside a package, one script calls another
 with `vp run <task>`, never `pnpm run <task>`, so the task graph stays visible to the runner.
 

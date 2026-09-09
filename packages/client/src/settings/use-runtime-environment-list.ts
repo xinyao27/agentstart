@@ -1,12 +1,10 @@
-import type { PublicKnownRuntimeEnvironment } from '@yiru/runtime-protocol/workbench/runtime-environments'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
 import type { MutableRefObject } from 'react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
-import { unwrapRuntimeRpcResult } from '~renderer/runtime/rpc-client'
+import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { runtimeEnvironmentsClient } from '~renderer/runtime/runtime-environments-client'
 import { useAppStore } from '~renderer/store/state'
 
@@ -43,20 +41,29 @@ export function useRuntimeEnvironmentList(): RuntimeEnvironmentList {
         setDetailsByEnvironmentId((current) => {
           const next: Record<string, RuntimeHostDetails> = {}
           for (const environment of nextEnvironments) {
-            next[environment.id] = current[environment.id] ?? {
-              status: 'loading',
-              runtimeStatus: null,
-              compatibility: null,
-              error: null
-            }
+            next[environment.id] = environment.pairingRequired
+              ? {
+                  status: 'error',
+                  runtimeStatus: null,
+                  compatibility: null,
+                  error: translate('runtimeEnvironment.pairingRequired', 'Re-pairing required')
+                }
+              : (current[environment.id] ?? {
+                  status: 'loading',
+                  runtimeStatus: null,
+                  compatibility: null,
+                  error: null
+                })
           }
           return next
         })
       }
       await Promise.allSettled(
-        nextEnvironments.map((environment) =>
-          probeRuntimeEnvironment(environment, mountedRef, setDetailsByEnvironmentId)
-        )
+        nextEnvironments
+          .filter((environment) => !environment.pairingRequired)
+          .map((environment) =>
+            probeRuntimeEnvironment(environment, mountedRef, setDetailsByEnvironmentId)
+          )
       )
     } catch (error) {
       if (mountedRef.current) {
@@ -96,11 +103,11 @@ async function probeRuntimeEnvironment(
   setDetails: React.Dispatch<React.SetStateAction<Record<string, RuntimeHostDetails>>>
 ): Promise<void> {
   try {
-    const response = await runtimeEnvironmentsClient.getStatus({
+    const runtimeStatus = await runtimeEnvironmentsClient.getStatus({
       selector: environment.id,
       timeoutMs: 10_000
     })
-    const runtimeStatus = unwrapRuntimeRpcResult<RuntimeStatus>(response)
+
     useAppStore.getState().setRuntimeEnvironmentStatus(environment.id, {
       status: runtimeStatus,
       checkedAt: Date.now()

@@ -1,4 +1,4 @@
-import { shouldForcePushWithLeaseForUpstream } from '@yiru/runtime-protocol/model/review'
+import { shouldForcePushWithLeaseForUpstream } from '~renderer/source-control/workflow/operation'
 
 import { canSubmitCommit, resolveCommitDisabledReason } from './commit-eligibility'
 import type { DropdownActionInputs } from './dropdown-items'

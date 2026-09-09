@@ -1,6 +1,6 @@
-import type { DirEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { DirectoryEntry as DirEntry } from '@yiru/protocol/files/values'
 
-import { callRuntimeOrpc } from './orpc-client'
+import { requireFilesTarget } from './files-target'
 
 export type RuntimeServerDirectoryListing = {
   resolvedPath: string
@@ -11,10 +11,6 @@ export async function browseRuntimeServerDirectory(
   environmentId: string,
   path: string
 ): Promise<RuntimeServerDirectoryListing> {
-  return callRuntimeOrpc(
-    { kind: 'environment', environmentId },
-    (client) => client.files.browseServerDir,
-    { path },
-    { timeoutMs: 15_000 }
-  )
+  const client = await requireFilesTarget({ kind: 'environment', environmentId })
+  return client.browseServerDirectory(path, { timeoutMs: 15_000 })
 }

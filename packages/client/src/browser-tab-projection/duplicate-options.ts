@@ -1,4 +1,4 @@
-import type { BrowserTab } from '@yiru/runtime-protocol/workbench/types'
+import type { BrowserTab } from '@yiru/protocol/workspace/browser-session'
 
 export function buildDuplicatedBrowserTabOptions(
   source: Pick<BrowserTab, 'title' | 'sessionProfileId' | 'sessionPartition'>

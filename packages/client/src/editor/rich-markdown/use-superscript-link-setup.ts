@@ -1,4 +1,4 @@
-import { parseWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import { useLayoutEffect, useState } from 'react'
 import { useAppStore } from '~renderer/store/state'
 import type { AppState } from '~renderer/store/types'

@@ -4,7 +4,7 @@ import {
   getTerminalInputByteLength,
   isTerminalInputTooLargeWithDeferredMeasurement,
   iterateTerminalInputChunks
-} from '@yiru/runtime-protocol/workbench/terminal/input'
+} from '~renderer/terminal-pane/pty/input-chunks'
 
 export type RemoteRuntimePtyBatcher = {
   push: (data: string) => boolean

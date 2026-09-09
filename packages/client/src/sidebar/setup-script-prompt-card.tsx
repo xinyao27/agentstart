@@ -1,11 +1,11 @@
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { SetupScriptImportCandidate } from '@yiru/runtime-protocol/workbench/setup/script-imports'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { checkRuntimeHooks, inspectRuntimeSetupScriptImports } from '~renderer/runtime/hooks-client'
+import type { SetupScriptImportCandidate } from '~renderer/setup/import-candidate'
 import { buildSetupScriptPromptActionTelemetry } from '~renderer/setup/script-telemetry'
 import {
   buildImportedHookSettings,

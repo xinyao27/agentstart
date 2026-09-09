@@ -1,4 +1,4 @@
-import type { AgentPhase } from '@yiru/runtime-protocol/contract'
+import type { AgentPhase } from '@yiru/protocol/agent/phase'
 
 import { translate } from '../i18n/translate'
 

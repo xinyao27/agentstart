@@ -1,8 +1,3 @@
-import {
-  isAiVaultSessionResumableContent,
-  type AiVaultScope,
-  type AiVaultSession
-} from '@yiru/runtime-protocol/model/agent'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -15,8 +10,10 @@ import {
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
+import type { AiVaultScope } from '~renderer/workspace-panel/ai-vault/session/providers'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
+import { isAiVaultSessionResumableContent } from '~renderer/workspace-panel/ai-vault/session/recovery'
 
-import { sessionDetailConversationTurns } from './session-display'
 import { SessionSubagentsSection } from './session-subagents'
 import { SessionUnsavedConversationNotice } from './session-unsaved-notice'
 import {
@@ -26,6 +23,7 @@ import {
   shouldShowAiVaultSessionWorktreeLine,
   type AiVaultSessionWorktreeInfo
 } from './session-worktree'
+import { sessionDetailConversationTurns } from './session/display'
 
 export function SessionInlineDetails({
   id,

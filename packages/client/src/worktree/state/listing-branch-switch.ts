@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 function indexUnambiguousWorktrees(
   worktrees: readonly Worktree[],
@@ -17,10 +17,6 @@ function indexUnambiguousWorktrees(
 function branchScopedReviewContextMatches(left: Worktree, right: Worktree): boolean {
   return (
     left.linkedPR === right.linkedPR &&
-    left.linkedGitLabMR === right.linkedGitLabMR &&
-    left.linkedBitbucketPR === right.linkedBitbucketPR &&
-    left.linkedAzureDevOpsPR === right.linkedAzureDevOpsPR &&
-    left.linkedGiteaPR === right.linkedGiteaPR &&
     left.pushTarget?.remoteName === right.pushTarget?.remoteName &&
     left.pushTarget?.branchName === right.pushTarget?.branchName
   )

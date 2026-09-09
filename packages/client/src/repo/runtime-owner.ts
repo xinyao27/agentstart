@@ -2,8 +2,9 @@ import {
   getRepoExecutionHostId,
   getSettingsFocusedExecutionHostId,
   parseExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type { GlobalSettings, Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 export type RepoRuntimeOwnerState = {
   repos?: readonly Pick<Repo, 'id' | 'connectionId' | 'executionHostId'>[]

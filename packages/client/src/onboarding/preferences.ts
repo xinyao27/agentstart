@@ -1,5 +1,6 @@
-import { resolveAgentPermissionModeSummary } from '@yiru/runtime-protocol/workbench/tui-agent/permissions'
-import type { GlobalSettings, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import { resolveAgentPermissionModeSummary } from '@yiru/protocol/agent/launch/permissions'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useEffect, useRef, useState } from 'react'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 import { applyDocumentTheme } from '~renderer/editor/document-theme'

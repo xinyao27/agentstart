@@ -1,4 +1,4 @@
-import type { TerminalPaneSplitSource } from '@yiru/runtime-protocol/workbench/feature-education-telemetry'
+import type { TerminalPaneSplitSource } from '@yiru/protocol/telemetry/education'
 import { splitRemoteRuntimeTerminal } from '~renderer/runtime/remote-runtime-session'
 import type { ManagedPane, PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
 

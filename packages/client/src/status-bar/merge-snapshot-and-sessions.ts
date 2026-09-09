@@ -17,17 +17,17 @@
  * See docs/resource-usage-merge-spec.md for the full design.
  */
 
-import { parsePtySessionId } from '@yiru/runtime-protocol/model/workspace'
-import {
-  getRepoIdFromWorktreeId,
-  getWorktreePathBasenameFromId
-} from '@yiru/runtime-protocol/model/workspace'
-import { parsePaneKey as parseStablePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
 import type {
   MemorySnapshot,
   SessionMemory,
   WorktreeMemory
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/diagnostics/memory-values'
+import { parsePaneKey as parseStablePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { parsePtySessionId } from '@yiru/protocol/terminal/session-identity'
+import {
+  getRepoIdFromWorktreeId,
+  getWorktreePathBasenameFromId
+} from '@yiru/protocol/worktree/identity'
 
 import { buildResourceSessionBindingIndex } from './resource-session-bindings'
 import type {

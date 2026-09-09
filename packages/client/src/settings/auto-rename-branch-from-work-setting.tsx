@@ -1,17 +1,17 @@
-import { buildBranchNamePrompt } from '@yiru/runtime-protocol/workbench/branch-name-from-work'
-import { normalizeSourceControlAiSettings } from '@yiru/runtime-protocol/workbench/source-control/ai'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   resolveSourceControlActionCommandTemplate,
   setSourceControlActionDefault
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+} from '@yiru/protocol/source-control/action-recipes'
 import type {
   SourceControlAiSettingsPatch,
   SourceControlAiSettings
-} from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-types'
+import { normalizeSourceControlAiSettings } from '@yiru/protocol/source-control/settings'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretDown as ChevronDown } from '~renderer/icons/hugeicons'
+import { buildBranchNamePrompt } from '~renderer/new-workspace/naming/from-work'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useAppStore } from '~renderer/store/state'
 import { cn } from '~renderer/ui/class-names'

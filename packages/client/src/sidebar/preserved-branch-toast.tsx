@@ -1,4 +1,5 @@
-import type { RemoveWorktreeResult, Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { RemoveWorktreeResult } from '@yiru/protocol/worktree/create-result'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { Trash as Trash2 } from '~renderer/icons/hugeicons'

@@ -1,4 +1,4 @@
-import type { HostedReviewInfo } from '@yiru/runtime-protocol/model/review'
+import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
 
 export type HostedReviewCacheEntry = {
   data: HostedReviewInfo | null

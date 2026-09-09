@@ -1,4 +1,4 @@
-import type { GitFileStatus } from '@yiru/runtime-protocol/workbench/types'
+import type { GitFileStatus } from '@yiru/protocol/git/status-types'
 import { useEffect, useRef } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import type { RuntimeFileOperationArgs } from '~renderer/runtime/file-client'

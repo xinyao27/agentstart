@@ -1,14 +1,14 @@
-import type { CustomAgentId } from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import { isCustomAgentId } from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { resolveSourceControlActionCommandTemplate } from '@yiru/protocol/source-control/action-recipes'
 import {
   DEFAULT_SOURCE_CONTROL_ACTION_COMMAND_TEMPLATES,
-  resolveSourceControlActionCommandTemplate,
   type SourceControlActionId,
   type SourceControlActionRecipe
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { RepoSourceControlAiOverrides } from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import type { SourceControlAiSettings } from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-actions'
+import type { RepoSourceControlAiOverrides } from '@yiru/protocol/source-control/ai-types'
+import type { SourceControlAiSettings } from '@yiru/protocol/source-control/ai-types'
+import type { CustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
 
 export const ACTION_MODE_INHERIT = 'inherit'
 export const ACTION_MODE_OVERRIDE = 'override'

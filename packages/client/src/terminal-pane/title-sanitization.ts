@@ -1,8 +1,8 @@
 import type {
   TerminalLayoutSnapshot,
-  TerminalPaneLayoutNode,
-  TerminalTab
-} from '@yiru/runtime-protocol/workbench/types'
+  TerminalPaneLayoutNode
+} from '@yiru/protocol/workspace/session'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 
 function collectLeafIds(node: TerminalPaneLayoutNode | null): string[] {
   if (!node) {

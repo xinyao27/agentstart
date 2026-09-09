@@ -1,10 +1,11 @@
-import { slugifyForWorkspaceName } from '@yiru/runtime-protocol/model/workspace'
-import { resolveHookCommandSourcePolicy } from '@yiru/runtime-protocol/workbench/hook-command-source-policy'
-import type { FolderWorkspaceLinkedReview, YiruHooks } from '@yiru/runtime-protocol/workbench/types'
+import { resolveHookCommandSourcePolicy } from '@yiru/protocol/setup/command-source-policy'
+import type { FolderWorkspaceLinkedReview } from '@yiru/protocol/workspace/folder'
+import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
 import { sendFollowupPromptWhenAgentReady } from '~renderer/agent/followup-delivery'
 import { showAgentPromptNotSentToast } from '~renderer/agent/prompt-timeout-toast'
 import type { AgentStartupPlan } from '~renderer/agent/tui-startup'
 import { createBrowserUuid } from '~renderer/browser/uuid'
+import { slugifyForWorkspaceName } from '~renderer/new-workspace/naming/name'
 import { useAppStore } from '~renderer/store/state'
 import {
   getSettingsForAgentTabRuntimeOwner,
@@ -17,18 +18,13 @@ import {
   queuePendingAgentStartupDelivery,
   resolveAgentStartupTabId
 } from '../terminal-pane/agent/startup-delayed-delivery'
-export { getLinkedWorkItemSuggestedName } from '@yiru/runtime-protocol/model/workspace'
-export { getLinkedWorkItemWorkspaceName } from '@yiru/runtime-protocol/model/workspace'
-export { getWorkspaceIntentName } from '@yiru/runtime-protocol/model/workspace'
 export { PER_REPO_FETCH_LIMIT, CROSS_REPO_DISPLAY_LIMIT } from '~renderer/work-items'
 
-export const CLIENT_PLATFORM: NodeJS.Platform = navigator.userAgent.includes('Windows')
+export const CLIENT_PLATFORM: 'win32' | 'darwin' | 'linux' = navigator.userAgent.includes('Windows')
   ? 'win32'
   : navigator.userAgent.includes('Mac')
     ? 'darwin'
     : 'linux'
-
-export { getLinkedWorkItemProvider } from '../source-control/work-item-provider'
 
 export type LinkedWorkItemSummary = Omit<FolderWorkspaceLinkedReview, 'provider'> & {
   provider?: FolderWorkspaceLinkedReview['provider']

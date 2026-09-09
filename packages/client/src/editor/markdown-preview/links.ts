@@ -1,9 +1,9 @@
-import { isWindowsAbsolutePathLike } from '@yiru/runtime-protocol/model/platform'
 import {
   filesystemPathHrefToFileUri,
   filesystemPathToFileUri,
   fileUriToFilesystemPath
-} from '@yiru/runtime-protocol/model/platform'
+} from '@yiru/protocol/host/file-uri-path'
+import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
 import type { HttpLinkSourceOwner, OpenHttpLinkOptions } from '~renderer/editor/http-link-routing'
 
 function toFileUrl(filePath: string): string {

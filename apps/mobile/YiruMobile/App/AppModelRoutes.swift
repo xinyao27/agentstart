@@ -200,10 +200,6 @@ extension AppModel {
         routes.append(.terminalSettings)
     }
 
-    func showTerminalPrototype() {
-        routes.append(.terminalPrototype)
-    }
-
     // Why: land the user inside the host they just paired. Clearing back to Home instead
     // makes the very first thing a new user does end one tap short of the thing they
     // paired for.

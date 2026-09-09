@@ -1,11 +1,10 @@
-import {
-  CUSTOM_AGENT_ID,
-  isCustomAgentId,
-  listCommitMessageAgentCapabilities
-} from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import type { ResolvedSourceControlAiGenerationParams } from '@yiru/runtime-protocol/workbench/source-control/ai'
-import type { SourceControlTextActionId } from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import type { GlobalSettings, Repo, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { SourceControlTextActionId } from '@yiru/protocol/source-control/ai-actions'
+import { listCommitMessageAgentCapabilities } from '@yiru/protocol/source-control/catalog/agents'
+import { CUSTOM_AGENT_ID, isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 import { getAgentCatalog, AgentIcon } from '~renderer/agent/catalog'

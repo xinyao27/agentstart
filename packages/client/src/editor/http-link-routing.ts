@@ -1,16 +1,13 @@
-import {
-  parseLoopbackUrlWithPort,
-  type LocalhostWorktreeLabelRoute
-} from '@yiru/runtime-protocol/workbench/localhost-worktree-labels'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
-import type {
-  WorkspacePort,
-  WorkspacePortScanResult
-} from '@yiru/runtime-protocol/workbench/workspace/ports'
+import type { WorkspacePort, WorkspacePortScanResult } from '@yiru/protocol'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import {
   shouldOpenWebLinkInYiruBrowser,
   type WebLinkMouseEvent
 } from '~renderer/browser/link-gesture'
+import {
+  parseLoopbackUrlWithPort,
+  type LocalhostWorktreeLabelRoute
+} from '~renderer/ports/loopback-url'
 import { shellClient } from '~renderer/runtime/shell-client'
 
 export type OpenHttpLinkOptions = {

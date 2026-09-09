@@ -1,4 +1,4 @@
-import type { SetupSplitDirection } from '@yiru/runtime-protocol/workbench/types'
+import type { SetupSplitDirection } from '@yiru/protocol/settings/workspace-preferences'
 
 import type { PaneManager, ManagedPane } from '../pane-manager/pane-manager'
 import { safeFit } from '../pane-manager/pane-tree-ops'

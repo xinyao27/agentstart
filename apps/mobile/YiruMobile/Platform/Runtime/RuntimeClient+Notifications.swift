@@ -1,95 +1,92 @@
+import YiruProtocol
+
+nonisolated private struct InvalidPushRegistrationError: Error {}
+
 extension RuntimeClient: NotificationRuntimeRepository {
     func registerRemoteNotifications(
         for hostID: String,
         token: String?,
         environment: String?
     ) async throws {
-        let _: MobileNotificationRegisterPushResultWire = try await callRuntime(
+        try await protocolRegisterPush(
             hostID: hostID,
-            path: MobileNotificationsWireContract.registerPushPath,
-            input: MobileNotificationRegisterPushRequestWire(
-                environment: environment,
-                token: token
-            ),
-            output: MobileNotificationRegisterPushResultWire.self
+            registration: try protocolPushRegistration(token: token, environment: environment)
         )
     }
 
     func notificationUpdates(for hostID: String) async throws
-        -> AsyncThrowingStream<RuntimeNotificationEvent, Error>
+        -> RuntimeNotificationStream
     {
-        let source = try await subscribeRuntime(
-            hostID: hostID,
-            path: MobileNotificationsWireContract.subscribePath,
-            input: RuntimeVoidInput(),
-            output: MobileNotificationEventWire.self
-        )
-        let (stream, continuation) = AsyncThrowingStream.makeStream(
-            of: RuntimeNotificationEvent.self
-        )
-        let task = Task {
-            do {
-                for try await event in source {
-                    continuation.yield(mapNotificationEvent(event))
-                }
-                continuation.finish()
-            } catch is CancellationError {
-                continuation.finish()
-            } catch {
-                continuation.finish(throwing: error)
-            }
-        }
-        continuation.onTermination = { _ in task.cancel() }
-        return stream
+        try await protocolNotificationUpdates(hostID: hostID)
     }
 
     func missedNotifications(for hostID: String, after sequence: Int64) async throws
         -> [RuntimeNotificationEvent]
     {
-        let result: MobileNotificationGetMissedResultWire = try await callRuntime(
+        try await protocolMissedNotifications(
             hostID: hostID,
-            path: MobileNotificationsWireContract.getMissedPath,
-            input: MobileNotificationGetMissedRequestWire(lastSeenSeq: max(sequence, 0)),
-            output: MobileNotificationGetMissedResultWire.self
-        )
-        return result.notifications.map(mapNotificationEvent)
-    }
-
-    func unsubscribeNotifications(for hostID: String, subscriptionID: String) async throws {
-        let _: MobileNotificationUnsubscribeResultWire = try await callRuntime(
-            hostID: hostID,
-            path: MobileNotificationsWireContract.unsubscribePath,
-            input: MobileNotificationUnsubscribeRequestWire(subscriptionId: subscriptionID),
-            output: MobileNotificationUnsubscribeResultWire.self
+            after: max(sequence, 0)
         )
     }
 }
 
-nonisolated private func mapNotificationEvent(_ wire: MobileNotificationEventWire)
-    -> RuntimeNotificationEvent
-{
-    switch wire {
-    case .notification(
-        let source,
-        let title,
-        let body,
-        let worktreeID,
-        let notificationID,
-        let sequence
-    ):
-        .notification(
+nonisolated func mapProtocolSubscribeEvent(
+    _ wire: Yiru_Runtime_V1_SubscribeResponse
+) throws -> RuntimeNotificationEvent? {
+    guard let event = wire.event else { return nil }
+    switch event {
+    case .ready:
+        return nil
+    case .notification(let notification):
+        return try mapProtocolNotificationEvent(notification)
+    }
+}
+
+nonisolated private func protocolPushRegistration(
+    token: String?,
+    environment: String?
+) throws -> NotificationsPushRegistration? {
+    switch (token, environment) {
+    case (nil, nil):
+        return nil
+    case (let token?, "production"):
+        return NotificationsPushRegistration(environment: .production, token: token)
+    case (let token?, "sandbox"):
+        return NotificationsPushRegistration(environment: .sandbox, token: token)
+    default:
+        throw InvalidPushRegistrationError()
+    }
+}
+
+nonisolated func mapProtocolNotificationEvent(
+    _ wire: Yiru_Runtime_V1_ReplayNotificationEvent
+) throws -> RuntimeNotificationEvent? {
+    guard wire.sequence > 0 else { throw RuntimeResponseValidationError("notification.sequence") }
+    guard let event = wire.event else { return nil }
+    switch event {
+    case .notification(let notification):
+        guard let source = try protocolNotificationSource(notification.source) else { return nil }
+        return .notification(
             source: source,
-            title: title,
-            body: body,
-            worktreeID: worktreeID,
-            notificationID: notificationID,
-            sequence: sequence
+            title: notification.title,
+            body: notification.body,
+            worktreeID: notification.hasWorktreeID ? notification.worktreeID : nil,
+            notificationID: notification.hasNotificationID ? notification.notificationID : nil,
+            sequence: wire.sequence
         )
-    case .dismiss(let notificationID, let sequence):
-        .dismiss(notificationID: notificationID, sequence: sequence)
-    case .ready(let subscriptionID):
-        .ready(subscriptionID: subscriptionID)
-    case .end:
-        .end
+    case .dismiss(let dismiss):
+        return .dismiss(notificationID: dismiss.notificationID, sequence: wire.sequence)
+    }
+}
+
+nonisolated private func protocolNotificationSource(
+    _ source: Yiru_Runtime_V1_NotificationSource
+) throws -> String? {
+    switch source {
+    case .agentTaskComplete: "agent-task-complete"
+    case .terminalBell: "terminal-bell"
+    case .test: "test"
+    case .UNRECOGNIZED: nil
+    case .unspecified: throw RuntimeResponseValidationError("notification.source")
     }
 }

@@ -45,7 +45,8 @@ nonisolated struct TerminalReplaySnapshot: Equatable, Sendable {
     let metadata: TerminalSnapshotMetadata
 
     var replayBytes: Data {
-        var replay = Data("\u{001B}[?1049l\u{001B}[2J\u{001B}[3J\u{001B}[H".utf8)
+        // Why: 1049 would restore an uninitialized saved cursor and disable autowrap after reset.
+        var replay = Data("\u{001B}[?1047l\u{001B}[2J\u{001B}[3J\u{001B}[H".utf8)
         replay.append(normalScrollback)
         replay.append(normalScreen)
         replay.append(Data("\u{001B}[?1049h\u{001B}[2J\u{001B}[H".utf8))

@@ -1,22 +1,18 @@
-import type {
-  AgentsStep,
-  AgentsStepId
-} from '@yiru/runtime-protocol/workbench/agents-orchestration-steps'
-import {
-  FEATURE_WALL_WORKFLOWS,
-  type FeatureWallWorkflow,
-  type FeatureWallWorkflowId
-} from '@yiru/runtime-protocol/workbench/feature-wall-workflows'
-import type { ReviewStep, ReviewStepId } from '@yiru/runtime-protocol/workbench/review-steps'
-import type {
-  WorkbenchStep,
-  WorkbenchStepId
-} from '@yiru/runtime-protocol/workbench/workbench-steps'
+import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallWorkflowId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
 import type { JSX, KeyboardEvent } from 'react'
 import { translate } from '~renderer/i18n/i18n'
+import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import { Check } from '~renderer/icons/hugeicons'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
+
+import type { AgentsStep } from './content/agents-orchestration-steps'
+import type { ReviewStep } from './content/review-steps'
+import type { WorkbenchStep } from './content/workbench-steps'
+import { getFeatureWallWorkflows, type FeatureWallWorkflow } from './content/workflows'
 
 const SUB_STEP_LABELS = ['a', 'b', 'c', 'd', 'e', 'f'] as const
 
@@ -40,6 +36,7 @@ export function FeatureWallRail(props: {
   reviewStepDone: Record<ReviewStepId, boolean>
   onSelectReviewStep: (id: ReviewStepId) => void
 }): JSX.Element {
+  useUiLocale()
   const {
     selectedId,
     previewPanelId,
@@ -66,7 +63,7 @@ export function FeatureWallRail(props: {
       aria-label={translate('auto.components.feature.wall.FeatureWallRail.7593d15f94', 'Workflows')}
     >
       <div role="tablist" aria-orientation="vertical" className="flex flex-col gap-1.5 pt-1.5">
-        {FEATURE_WALL_WORKFLOWS.map((workflow, index) => {
+        {getFeatureWallWorkflows().map((workflow, index) => {
           const isSelected = workflow.id === selectedId
           const isDone = workflowDone[workflow.id] === true
           const subSteps =

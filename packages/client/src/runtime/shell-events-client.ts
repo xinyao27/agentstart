@@ -1,45 +1,54 @@
-import type { ShellEvent, ShellSubscriptionEvent } from '@yiru/runtime-protocol/contract'
+import {
+  SHELL_EVENTS_PROTOCOL_CAPABILITY,
+  ShellEventsClient,
+  type ShellEventsSubscriptionEventValue
+} from '@yiru/protocol'
 
-import { callShellOrpc } from './orpc-client'
-import { createRuntimeStreamFanOut, type RuntimeStreamConnectionState } from './stream-fan-out'
+import { openRuntimeProtocolTarget } from './protocol-target'
+import { readRuntimeStatus } from './status-client'
+import { createRuntimeStreamFanOut } from './stream-fan-out'
 
-type ShellEventConnectionListener = (state: RuntimeStreamConnectionState) => void
-type ShellEventResyncListener = () => void
+export type ShellSubscriptionEvent = ShellEventsSubscriptionEventValue
+export type ShellEvent = Exclude<ShellEventsSubscriptionEventValue, { type: 'ready' | 'resync' }>
 
-const connectionListeners = new Set<ShellEventConnectionListener>()
-const resyncListeners = new Set<ShellEventResyncListener>()
-let connectionState: RuntimeStreamConnectionState = 'idle'
-let lastSeenSeq: number | undefined
-let stopBootstrap: (() => void) | null = null
+// Why: shell.events is LOCAL-only by contract, so its stream anchors to the
+// fixed local rendering shell, never the active environment — and a missing
+// capability means the daemon predates the cutover, an error rather than a
+// legacy retry.
+async function requireShellEventsClient(): Promise<ShellEventsClient> {
+  const target = { kind: 'local' } as const
+  const status = await readRuntimeStatus(target)
+  if (!status.capabilities?.includes(SHELL_EVENTS_PROTOCOL_CAPABILITY)) {
+    throw new Error('shell.events.protobuf.v1 capability is not available')
+  }
+  return new ShellEventsClient(await openRuntimeProtocolTarget(target))
+}
 
-const shellEventFanOut = createRuntimeStreamFanOut<void, ShellSubscriptionEvent>({
-  resolveClient: () => Promise.resolve(),
-  open: (_client, signal) =>
-    callShellOrpc((client) => client.shell.events.subscribe, { lastSeenSeq }, { signal }),
+const shellEventFanOut = createRuntimeStreamFanOut<
+  ShellEventsClient,
+  ShellEventsSubscriptionEventValue
+>({
+  resolveClient: requireShellEventsClient,
+  open: (client, signal) =>
+    client.subscribe({ lastSeenSeq }, { signal }).then((stream) => stream.events),
   // Why: menu and window intent delivery must recover without a reconnect
   // stampede when the browser resumes or its transport briefly drops.
   retryDelayMs: (attempt) => {
     const exponentialMs = Math.min(30_000, 500 * 2 ** Math.min(attempt - 1, 6))
     return exponentialMs + Math.floor(Math.random() * Math.min(1_000, exponentialMs / 4))
-  },
-  onConnectionStateChange: (state) => {
-    connectionState = state
-    for (const listener of Array.from(connectionListeners)) {
-      listener(state)
-    }
   }
 })
 
-function observeShellSubscriptionEvent(event: ShellSubscriptionEvent): void {
+let lastSeenSeq: number | undefined
+let stopBootstrap: (() => void) | null = null
+
+function observeShellSubscriptionEvent(event: ShellEventsSubscriptionEventValue): void {
   if (event.type === 'ready') {
     lastSeenSeq = event.seq
     return
   }
   if (event.type === 'resync') {
     lastSeenSeq = event.seq
-    for (const listener of Array.from(resyncListeners)) {
-      listener()
-    }
     return
   }
   lastSeenSeq = Math.max(lastSeenSeq ?? 0, event.seq)
@@ -58,15 +67,4 @@ export function subscribeShellEvent(
       listener(event)
     }
   })
-}
-
-export function subscribeShellEventConnection(listener: ShellEventConnectionListener): () => void {
-  listener(connectionState)
-  connectionListeners.add(listener)
-  return () => connectionListeners.delete(listener)
-}
-
-export function subscribeShellEventResync(listener: ShellEventResyncListener): () => void {
-  resyncListeners.add(listener)
-  return () => resyncListeners.delete(listener)
 }

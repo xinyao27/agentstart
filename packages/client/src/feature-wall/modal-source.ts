@@ -1,4 +1,4 @@
-import type { FeatureWallOpenSourceTelemetry } from '@yiru/runtime-protocol/workbench/telemetry-events'
+import type { FeatureWallOpenSourceTelemetry } from '@yiru/protocol/telemetry/events/foundations'
 
 export function getFeatureWallOpenSource(
   modalData: Record<string, unknown>

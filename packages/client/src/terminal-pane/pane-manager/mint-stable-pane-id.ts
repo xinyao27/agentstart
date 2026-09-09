@@ -1,4 +1,4 @@
-import type { TerminalLeafId } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import type { TerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
 
 // Why: older browser runtimes can lack crypto.randomUUID. The fallback still
 // produces a UUID-shaped v4 id so pane-key validation remains deterministic.

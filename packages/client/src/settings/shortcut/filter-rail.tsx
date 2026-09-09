@@ -1,8 +1,5 @@
-import { isClipboardTextByteLengthOverLimit } from '@yiru/runtime-protocol/model/ui'
-import {
-  formatKeybindingList,
-  type KeybindingDefinition
-} from '@yiru/runtime-protocol/workbench/keybindings'
+import { formatKeybindingList, type KeybindingDefinition } from '@yiru/protocol/keybindings'
+import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { MagnifyingGlass as Search, X } from '~renderer/icons/hugeicons'
@@ -42,7 +39,7 @@ export function isShortcutLocalSearchQueryTooLarge(
   query: string,
   maxBytes = SHORTCUT_LOCAL_SEARCH_QUERY_MAX_BYTES
 ): boolean {
-  return isClipboardTextByteLengthOverLimit(query, maxBytes)
+  return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 
 export function normalizeShortcutLocalSearchQuery(query: string): string | null {

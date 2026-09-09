@@ -1,5 +1,5 @@
-import { isConfirmedStaleFolderPathStatus } from '@yiru/runtime-protocol/workbench/folder-workspace-path-status'
-import type { ProjectGroup } from '@yiru/runtime-protocol/workbench/types'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import { isConfirmedStaleFolderPathStatus } from '@yiru/protocol/workspace/folder-path'
 import { useEffect, useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import {

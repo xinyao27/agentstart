@@ -1,4 +1,4 @@
-import type { TerminalKittyKeyboardModeTracker } from '@yiru/runtime-protocol/workbench/terminal/kitty-keyboard-mode-tracker'
+import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 import { recordTerminalOutput } from '~renderer/terminal-pane/pane-manager/pane-scroll'
 import { writeTerminalOutput } from '~renderer/terminal-pane/pane-manager/pane-terminal-output-scheduler'
 import { ensureArabicShapingJoinerForText } from '~renderer/terminal-pane/pane-manager/terminal-arabic-shaping-joiner'

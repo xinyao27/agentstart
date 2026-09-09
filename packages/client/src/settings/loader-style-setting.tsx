@@ -2,7 +2,7 @@ import {
   LOADER_STYLES,
   normalizeLoaderStyle,
   type LoaderStyle
-} from '@yiru/runtime-protocol/workbench/loader-style'
+} from '@yiru/protocol/settings/loader'
 import { translate } from '~renderer/i18n/i18n'
 import { LoadingIndicatorPreview } from '~renderer/loading/indicator'
 import { Button } from '~renderer/ui/button'

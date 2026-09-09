@@ -1,5 +1,5 @@
 import { createBrowserUuid } from '~renderer/browser/uuid'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 
 import type { PtyTransport, RuntimePtyTransportOptions } from './pty/transport-types'
 import { RemoteRuntimePtyConnection } from './remote-runtime-pty-connection'

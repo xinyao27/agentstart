@@ -1,18 +1,16 @@
-import {
-  getRepoExecutionHostId,
-  parseExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import { getManualRepoOrder } from '@yiru/runtime-protocol/workbench/manual-repo-order'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
 import type { StateCreator } from 'zustand'
 import {
   readProjectCatalogMutationRevision,
   readProjectCatalogQueryClient
 } from '~renderer/project-catalog/catalog-snapshot'
+import { getManualRepoOrder } from '~renderer/project-catalog/group-order'
 import { refreshAfterProjectCatalogMutation } from '~renderer/project-catalog/mutation-refresh'
 import { invalidateAllProjectCatalogTargets } from '~renderer/project-catalog/refresh'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { notifyInstalledAgentSkillsChanged } from '~renderer/runtime/installed-agent-skill-discovery-state'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { updateRuntimeProject } from '~renderer/runtime/project-target'
+import { requireRepoProtocolClient } from '~renderer/runtime/repo-catalog-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { setRuntimeUIState } from '~renderer/runtime/ui-client'
 import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
@@ -34,16 +32,11 @@ export function createRepoUpdateActions(
       try {
         const catalog = readProjectCatalogRuntimeState()
         const target = getProjectUpdateRuntimeTarget(catalog, projectId)
-        const response = await callRuntimeOrpc(
-          target,
-          (client) => client.project.update,
-          {
-            expectedRevision: readProjectCatalogMutationRevision(target),
-            projectId,
-            updates
-          },
-          { timeoutMs: 15_000 }
-        )
+        const response = await updateRuntimeProject(target, {
+          expectedRevision: readProjectCatalogMutationRevision(target),
+          projectId,
+          updates
+        })
         await refreshAfterProjectCatalogMutation(target, response.revision)
         set({ folderWorkspacePathStatuses: {} })
         if ('localWindowsRuntimePreference' in updates) {
@@ -86,9 +79,9 @@ export function createRepoUpdateActions(
                   repoId: projectId,
                   updates: sanitizedUpdates
                 })
-              : await callRuntimeOrpc(
-                  target,
-                  (client) => client.repo.update,
+              : await (
+                  await requireRepoProtocolClient(target)
+                ).update(
                   { expectedRevision, repo: projectId, updates: sanitizedUpdates },
                   { timeoutMs: 15_000 }
                 )
@@ -142,12 +135,9 @@ export function createRepoUpdateActions(
                   hostId: group.hostId,
                   orderedIds: group.orderedIds
                 })
-              : await callRuntimeOrpc(
-                  target,
-                  (client) => client.repo.reorder,
-                  { expectedRevision, orderedIds: group.orderedIds },
-                  { timeoutMs: 15_000 }
-                )
+              : await (
+                  await requireRepoProtocolClient(target)
+                ).reorder({ expectedRevision, orderedIds: group.orderedIds }, { timeoutMs: 15_000 })
           await refreshAfterProjectCatalogMutation(target, result.revision)
         }
         await setRuntimeUIState(catalog.settings, { manualRepoOrder })

@@ -1,61 +1,82 @@
-import type {
-  CodexUsageLimitProbe,
-  RateLimitHit,
-  RateLimitResumeSchedule
-} from '@yiru/runtime-protocol/workbench/rate-limit-resume/types'
-import { useAppStore } from '~renderer/store/state'
+import type { CodexUsageLimitProbe, RateLimitHit, RateLimitResumeSchedule } from '@yiru/protocol'
 
-import { callRuntimeOrpc } from './orpc-client'
-import { getActiveRuntimeTarget } from './rpc-client'
+import { openRateLimitResumeTarget } from './rate-limit-resume-target'
 
-function activeTarget() {
-  return getActiveRuntimeTarget(useAppStore.getState().settings)
+export async function inspectCodexUsageLimit(
+  probe: CodexUsageLimitProbe
+): Promise<RateLimitHit | null> {
+  const client = await openRateLimitResumeTarget()
+  if (!client) {
+    throw new Error('Rate limit resume service unavailable')
+  }
+  return client.inspectCodex(probe)
 }
 
-export function inspectCodexUsageLimit(probe: CodexUsageLimitProbe): Promise<RateLimitHit | null> {
-  return callRuntimeOrpc(activeTarget(), (client) => client.rateLimitResume.inspectCodex, probe)
+export async function listRateLimitResumes(): Promise<RateLimitResumeSchedule[]> {
+  const client = await openRateLimitResumeTarget()
+  if (!client) {
+    throw new Error('Rate limit resume service unavailable')
+  }
+  return client.list()
 }
 
-export function listRateLimitResumes(): Promise<RateLimitResumeSchedule[]> {
-  return callRuntimeOrpc(activeTarget(), (client) => client.rateLimitResume.list, undefined)
-}
-
-export function scheduleRuntimeRateLimitResume(
+export async function scheduleRuntimeRateLimitResume(
   hit: RateLimitHit
 ): Promise<RateLimitResumeSchedule> {
-  return callRuntimeOrpc(activeTarget(), (client) => client.rateLimitResume.schedule, hit)
+  const client = await openRateLimitResumeTarget()
+  if (!client) {
+    throw new Error('Rate limit resume service unavailable')
+  }
+  return client.schedule(hit)
 }
 
-export function cancelRuntimeRateLimitResume(id: string): Promise<RateLimitResumeSchedule> {
-  return callRuntimeOrpc(activeTarget(), (client) => client.rateLimitResume.cancel, { id })
+export async function cancelRuntimeRateLimitResume(id: string): Promise<RateLimitResumeSchedule> {
+  const client = await openRateLimitResumeTarget()
+  if (!client) {
+    throw new Error('Rate limit resume service unavailable')
+  }
+  return client.cancel(id)
 }
 
-export function runRuntimeRateLimitResumeNow(id: string): Promise<RateLimitResumeSchedule> {
-  return callRuntimeOrpc(activeTarget(), (client) => client.rateLimitResume.runNow, { id })
+export async function runRuntimeRateLimitResumeNow(id: string): Promise<RateLimitResumeSchedule> {
+  const client = await openRateLimitResumeTarget()
+  if (!client) {
+    throw new Error('Rate limit resume service unavailable')
+  }
+  return client.runNow(id)
 }
 
-export function markRateLimitResumeFired(id: string): Promise<RateLimitResumeSchedule> {
-  return callRuntimeOrpc(activeTarget(), (client) => client.rateLimitResume.markFired, { id })
+export async function markRateLimitResumeFired(id: string): Promise<RateLimitResumeSchedule> {
+  const client = await openRateLimitResumeTarget()
+  if (!client) {
+    throw new Error('Rate limit resume service unavailable')
+  }
+  return client.markFired(id)
 }
 
-export function markRateLimitResumeFailed(
+export async function markRateLimitResumeFailed(
   id: string,
   reason: string
 ): Promise<RateLimitResumeSchedule> {
-  return callRuntimeOrpc(activeTarget(), (client) => client.rateLimitResume.markFailed, {
-    id,
-    reason
-  })
+  const client = await openRateLimitResumeTarget()
+  if (!client) {
+    throw new Error('Rate limit resume service unavailable')
+  }
+  return client.markFailed(id, reason)
 }
 
-export function markRateLimitResumeStale(id: string): Promise<RateLimitResumeSchedule> {
-  return callRuntimeOrpc(activeTarget(), (client) => client.rateLimitResume.markStale, { id })
+export async function markRateLimitResumeStale(id: string): Promise<RateLimitResumeSchedule> {
+  const client = await openRateLimitResumeTarget()
+  if (!client) {
+    throw new Error('Rate limit resume service unavailable')
+  }
+  return client.markStale(id)
 }
 
-export function notifyRateLimitResumeRendererReady(): Promise<void> {
-  return callRuntimeOrpc(
-    activeTarget(),
-    (client) => client.rateLimitResume.rendererReady,
-    undefined
-  )
+export async function notifyRateLimitResumeRendererReady(): Promise<void> {
+  const client = await openRateLimitResumeTarget()
+  if (!client) {
+    throw new Error('Rate limit resume service unavailable')
+  }
+  return client.rendererReady()
 }

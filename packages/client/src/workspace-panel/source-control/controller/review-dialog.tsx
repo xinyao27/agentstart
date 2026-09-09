@@ -25,11 +25,7 @@ export function useSourceControlReviewDialog(scope: SourceControlReviewGeneratio
     isCreatePrIntentInFlight,
     isCreatingPr,
     isFolder,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
     linkedGitHubPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
     openPullRequestGenerationDialog,
     prGenerating,
     pullRequestFieldsInitialized,
@@ -166,11 +162,7 @@ export function useSourceControlReviewDialog(scope: SourceControlReviewGeneratio
       ahead: remoteStatus?.ahead,
       behind: remoteStatus?.behind,
       linkedGitHubPR,
-      fallbackGitHubPR: fallbackGitHubPRNumber,
-      linkedGitLabMR,
-      linkedBitbucketPR,
-      linkedAzureDevOpsPR,
-      linkedGiteaPR
+      fallbackGitHubPR: fallbackGitHubPRNumber
     })
       .then((result) => {
         if (!stale) {
@@ -211,10 +203,6 @@ export function useSourceControlReviewDialog(scope: SourceControlReviewGeneratio
     isFolder,
     linkedGitHubPR,
     fallbackGitHubPRNumber,
-    linkedGitLabMR,
-    linkedBitbucketPR,
-    linkedAzureDevOpsPR,
-    linkedGiteaPR,
     prGenerating,
     remoteStatus?.ahead,
     remoteStatus?.behind,

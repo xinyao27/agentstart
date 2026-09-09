@@ -1,8 +1,5 @@
-import type {
-  ContextualTour,
-  ContextualTourId
-} from '@yiru/runtime-protocol/workbench/contextual-tours'
-import type { ContextualTourOutcome } from '@yiru/runtime-protocol/workbench/feature-education-telemetry'
+import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
+import type { ContextualTourOutcome } from '@yiru/protocol/telemetry/education'
 import { translate } from '~renderer/i18n/i18n'
 import { formatShortcutLabel } from '~renderer/keyboard-input/use-shortcut-label'
 import {
@@ -15,6 +12,7 @@ import {
 } from '~renderer/runtime/contextual-tour-gate'
 import { useAppStore } from '~renderer/store/state'
 
+import type { ContextualTour } from './catalog'
 import type { ActiveTourRenderState } from './contextual-tour-overlay-surface'
 
 export type ContextualTourMeasurementAction =

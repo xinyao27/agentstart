@@ -2,9 +2,9 @@ import {
   agentProviderSessionsEqual,
   getAgentResumeArgv,
   isResumableTuiAgent,
-  type AgentStatusEntry,
   type SleepingAgentSessionRecord
-} from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/session-resume'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
 
 export function isCompletedAgentWithLiveRecoveryRecord(
   entry: AgentStatusEntry | undefined,

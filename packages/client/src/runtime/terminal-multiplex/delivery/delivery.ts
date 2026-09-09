@@ -1,19 +1,19 @@
 import {
   TerminalMultiplexOpcode,
   type TerminalMultiplexFrame
-} from '@yiru/runtime-protocol/terminal-multiplex/frame'
+} from '@yiru/protocol/terminal-multiplex/frame'
 import {
   createTerminalMultiplexRecoveryState,
   reduceRecovery,
   type TerminalMultiplexRecoveryEvent,
   type TerminalMultiplexRecoveryState
-} from '@yiru/runtime-protocol/terminal-multiplex/recovery'
-import { decodeTerminalMultiplexSnapshotEndRecord } from '@yiru/runtime-protocol/terminal-multiplex/snapshot-records'
-import * as streamRecords from '@yiru/runtime-protocol/terminal-multiplex/stream-records'
+} from '@yiru/protocol/terminal-multiplex/recovery'
+import { decodeTerminalMultiplexSnapshotEndRecord } from '@yiru/protocol/terminal-multiplex/snapshot-records'
+import * as streamRecords from '@yiru/protocol/terminal-multiplex/stream-records'
 
 import { RemoteTerminalManualSnapshot } from '../snapshot/manual'
+import { publishRemoteTerminalSnapshot } from '../snapshot/publication'
 import { RemoteTerminalSnapshotAssembler, type RemoteTerminalSnapshot } from '../snapshot/snapshot'
-import { REMOTE_TERMINAL_SNAPSHOT_TOO_LARGE } from '../types'
 import {
   once,
   RemoteTerminalDeliveryAcks,
@@ -21,6 +21,7 @@ import {
   sendRemoteTerminalDeliveryAck
 } from './ack'
 import { applyRemoteTerminalOutputCredit } from './credit'
+import { reportTerminalDeliveryFailure } from './failure-message'
 import { RemoteTerminalOrderedEvents } from './ordered-events'
 import { executeRemoteTerminalRecoveryEffect } from './recovery-effects'
 import type { PendingRemoteTerminalOutput, RemoteTerminalDeliveryOptions } from './types'
@@ -38,7 +39,9 @@ export class RemoteTerminalDelivery {
 
   constructor(options: RemoteTerminalDeliveryOptions) {
     this.options = options
-    this.orderedEvents = new RemoteTerminalOrderedEvents(options.callbacks)
+    this.orderedEvents = new RemoteTerminalOrderedEvents(options.callbacks, () =>
+      this.recover('side-effect backlog')
+    )
     this.acks = new RemoteTerminalDeliveryAcks({
       routeId: options.routeId,
       send: options.send,
@@ -111,7 +114,7 @@ export class RemoteTerminalDelivery {
     }
     if (frame.opcode === TerminalMultiplexOpcode.End) {
       if (!streamRecords.decodeTerminalMultiplexEndRecord(frame)) {
-        this.options.callbacks.onError?.('Invalid remote terminal end record.')
+        reportTerminalDeliveryFailure(this.options.callbacks, 'end-record')
         return true
       }
       this.acks.deferExit(frame.seq)
@@ -120,8 +123,11 @@ export class RemoteTerminalDelivery {
     if (frame.opcode === TerminalMultiplexOpcode.ModelRestore) {
       const value = streamRecords.decodeTerminalMultiplexModelRestoreRecord(frame)
       if (!value) {
-        this.options.callbacks.onError?.('Invalid remote terminal restore record.')
+        reportTerminalDeliveryFailure(this.options.callbacks, 'restore-record')
         return true
+      }
+      if (!value.snapshotFollows) {
+        this.orderedEvents.publishThrough(frame.seq)
       }
       this.dispatch({ type: 'client-model-restore', snapshotFollows: value.snapshotFollows })
       return true
@@ -181,7 +187,7 @@ export class RemoteTerminalDelivery {
     try {
       data = new TextDecoder('utf-8', { fatal: true }).decode(payload)
     } catch {
-      this.options.callbacks.onError?.('Remote terminal output is not valid UTF-8.')
+      reportTerminalDeliveryFailure(this.options.callbacks, 'utf8')
       return
     }
     this.expectedSequence = output.endSeq
@@ -220,9 +226,9 @@ export class RemoteTerminalDelivery {
         }
       }
       if (end.status === 2) {
-        this.options.callbacks.onError?.(REMOTE_TERMINAL_SNAPSHOT_TOO_LARGE)
+        reportTerminalDeliveryFailure(this.options.callbacks, 'snapshot-too-large')
       } else if (end.status === 1) {
-        this.options.callbacks.onError?.('Remote terminal snapshot is unavailable.')
+        reportTerminalDeliveryFailure(this.options.callbacks, 'snapshot-unavailable')
       }
       return
     }
@@ -236,16 +242,9 @@ export class RemoteTerminalDelivery {
       this.ackManualSnapshot(result)
       return
     }
-    this.options.callbacks.onSnapshot(
-      result.data,
-      {
-        cols: result.cols,
-        rows: result.rows,
-        wireByteLength: result.wireByteLength,
-        ...(result.pendingEscapeTailAnsi
-          ? { pendingEscapeTailAnsi: result.pendingEscapeTailAnsi }
-          : {})
-      },
+    publishRemoteTerminalSnapshot(
+      result,
+      this.options.callbacks,
       once(() => this.ackSnapshot(result))
     )
   }

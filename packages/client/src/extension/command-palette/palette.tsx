@@ -1,9 +1,6 @@
 import { useQueries, useQuery } from '@tanstack/react-query'
-import { keybindingMatchesAction } from '@yiru/runtime-protocol/workbench/keybindings'
-import {
-  ALL_TUI_AGENTS,
-  TUI_AGENT_DISPLAY_NAMES
-} from '@yiru/runtime-protocol/workbench/tui-agent/display-names'
+import { ALL_TUI_AGENTS, TUI_AGENT_DISPLAY_NAMES } from '@yiru/protocol/agent/display-names'
+import { keybindingMatchesAction } from '@yiru/protocol/keybindings'
 import { useDeferredValue, useEffect, useRef, useState } from 'react'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
@@ -22,7 +19,8 @@ import { getShortcutPlatform } from '~renderer/keyboard-input/shortcut-platform'
 import { joinPath } from '~renderer/path'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { projectCatalogRepoKey, projectCatalogTargetForRepo } from '~renderer/project-catalog/query'
-import { getRuntimeTargetOrpc, targetKey } from '~renderer/runtime/query-target'
+import { targetKey } from '~renderer/runtime/query-target'
+import { terminalListQuery } from '~renderer/runtime/terminal-query'
 import { useActiveWorktree } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
 import {
@@ -79,12 +77,7 @@ export function CommandPalette({
   const catalog = useProjectCatalog()
   const runtimeTargets = commandPaletteRuntimeTargets(catalog.repos)
   const terminalQueries = useQueries({
-    queries: runtimeTargets.map(({ target }) =>
-      getRuntimeTargetOrpc(target).terminal.list.queryOptions({
-        input: { limit: 500 },
-        refetchInterval: 2_000
-      })
-    )
+    queries: runtimeTargets.map(({ target }) => terminalListQuery(target, { limit: 500 }, 2_000))
   })
   const terminalsByTarget = new Map(
     runtimeTargets.map(({ key }, index) => [key, terminalQueries[index]?.data?.terminals ?? []])
@@ -233,7 +226,7 @@ export function CommandPalette({
                   value={`agent launch ${TUI_AGENT_DISPLAY_NAMES[agent]} ${agent}`}
                   onSelect={() =>
                     runCurrentWorktreeAction((groupId) => {
-                      launchAgentInNewTab({
+                      void launchAgentInNewTab({
                         agent,
                         worktreeId: activeWorktreeId,
                         groupId,

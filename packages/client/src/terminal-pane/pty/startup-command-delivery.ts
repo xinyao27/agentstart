@@ -1,5 +1,5 @@
-import type { StartupCommandDelivery } from '@yiru/runtime-protocol/workbench/codex-startup-delivery'
-import { shouldUseShellReadyStartupDelivery } from '@yiru/runtime-protocol/workbench/codex-startup-delivery'
+import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
+import { shouldUseShellReadyStartupDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
 
 import {
   createShellReadyMarkerScanState,

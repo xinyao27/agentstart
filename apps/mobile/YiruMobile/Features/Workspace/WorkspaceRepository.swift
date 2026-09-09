@@ -43,9 +43,7 @@ nonisolated protocol WorkspaceCreationRepository: Sendable {
     func workspaceHostedSources(
         for hostID: String,
         repoID: String,
-        provider: WorkspaceHostedSourceProvider,
-        query: String,
-        gitLabState: WorkspaceGitLabMRState
+        query: String
     ) async throws -> [WorkspaceHostedSource]
     func resolveWorkspaceHostedSource(
         for hostID: String,
@@ -57,13 +55,6 @@ nonisolated protocol WorkspaceCreationRepository: Sendable {
         repoID: String,
         number: Int,
         slug: WorkspaceRepoSlug?
-    ) async throws -> WorkspaceHostedSource?
-    func workspacePastedGitLabSource(
-        for hostID: String,
-        repoID: String,
-        host: String,
-        path: String,
-        number: Int
     ) async throws -> WorkspaceHostedSource?
     func workspaceRepoSlug(for hostID: String, repoID: String) async throws -> WorkspaceRepoSlug?
     func persistWorkspaceSetupTrust(

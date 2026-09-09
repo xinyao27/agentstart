@@ -1,10 +1,10 @@
-import type { AiVaultSession } from '@yiru/runtime-protocol/model/agent'
-import type { AgentStatusState } from '@yiru/runtime-protocol/model/agent'
+import type { AgentStatusState } from '@yiru/protocol/agent/status-records'
 import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'
 import { activateTabAndFocusPane } from '~renderer/tab-bar/activate-and-focus-pane'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 import { activateAndRevealWorktree } from '~renderer/worktree/activation'
 
 import { findOriginalAiVaultSessionPane } from './original-pane'

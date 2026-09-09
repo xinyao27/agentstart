@@ -1,4 +1,4 @@
-import type { RuntimeWorkspacePortScanResult } from '@yiru/runtime-protocol/contract'
+import type { WorkspacePortScanResult } from '@yiru/protocol'
 
 import { projectDisplayName } from './project-display-name'
 
@@ -10,7 +10,7 @@ export type WorkspacePortClaim = {
 }
 
 export function workspacePortClaims(
-  scan: RuntimeWorkspacePortScanResult,
+  scan: WorkspacePortScanResult,
   projects: readonly { displayName: string; id: string }[]
 ): WorkspacePortClaim[] {
   return scan.ports.flatMap((port) =>

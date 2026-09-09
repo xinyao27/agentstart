@@ -1,10 +1,10 @@
 import type {
   GitBranchChangeEntry,
-  GitBranchCompareSummary,
-  GitCommitCompareSummary,
-  GitStatusEntry,
-  WorkspaceVisibleTabType
-} from '@yiru/runtime-protocol/workbench/types'
+  GitBranchCompareSummary
+} from '@yiru/protocol/git/branch-compare-types'
+import type { GitCommitCompareSummary } from '@yiru/protocol/git/compare-values'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
 
 import type { OpenCheckRunDetailsState } from './check-run-details-tab'
 import type {

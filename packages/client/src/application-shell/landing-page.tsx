@@ -1,6 +1,6 @@
-import { YIRU_GITHUB_STARGAZERS_URL } from '@yiru/runtime-protocol/model/product'
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import { YIRU_GITHUB_STARGAZERS_URL } from '@yiru/protocol/hosted-review/yiru-repository'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 import { useEffect, useRef, useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
@@ -19,9 +19,9 @@ import {
   completeShellStarNag,
   starYiruFromShell
 } from '~renderer/runtime/github-shell-client'
+import { preflightCheck } from '~renderer/runtime/preflight-target'
 import { Button } from '~renderer/ui/button'
 
-import { callRuntimeOrpc } from '../runtime/orpc-client'
 import { getActiveRuntimeTarget } from '../runtime/rpc-client'
 import { useAppStore } from '../store/state'
 import { cn } from '../ui/class-names'
@@ -247,9 +247,8 @@ export default function Landing(): React.JSX.Element {
   useEffect(() => {
     let cancelled = false
     const refreshPreflight = (force = false): void => {
-      void callRuntimeOrpc(
+      void preflightCheck(
         getActiveRuntimeTarget(useAppStore.getState().settings),
-        (client) => client.preflight.check,
         force ? { force: true } : {}
       ).then((status) => {
         if (cancelled) {
@@ -290,11 +289,9 @@ export default function Landing(): React.JSX.Element {
     // Why: some users complete `gh auth login` without ever leaving the Yiru
     // window. Poll only while a warning is visible so the banner self-clears.
     const intervalId = window.setInterval(() => {
-      void callRuntimeOrpc(
-        getActiveRuntimeTarget(useAppStore.getState().settings),
-        (client) => client.preflight.check,
-        { force: true }
-      ).then((status) => {
+      void preflightCheck(getActiveRuntimeTarget(useAppStore.getState().settings), {
+        force: true
+      }).then((status) => {
         if (cancelled) {
           return
         }

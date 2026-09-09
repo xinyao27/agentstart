@@ -1,5 +1,5 @@
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
-import type { GitConflictOperation } from '@yiru/runtime-protocol/workbench/types'
+import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'
 import { useProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'

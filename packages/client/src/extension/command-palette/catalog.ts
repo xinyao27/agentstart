@@ -1,11 +1,11 @@
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
 import {
   projectCatalogRepoKey,
   projectCatalogTargetForRepo,
   type ProjectCatalog
 } from '~renderer/project-catalog/query'
-import type { RuntimeClientTarget } from '~renderer/runtime/orpc-client'
 import { targetKey } from '~renderer/runtime/query-target'
+import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 
 export type CommandPaletteRuntimeTarget = {
   key: string

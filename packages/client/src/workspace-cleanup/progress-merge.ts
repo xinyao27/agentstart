@@ -1,7 +1,4 @@
-import type {
-  WorkspaceCleanupCandidate,
-  WorkspaceCleanupScanProgress
-} from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+import type { WorkspaceCleanupCandidate, WorkspaceCleanupScanProgress } from '@yiru/protocol'
 
 let progressCandidateIndex: {
   scanToken: number

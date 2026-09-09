@@ -1,9 +1,12 @@
-import type { AiVaultListResult, AiVaultSession } from '@yiru/runtime-protocol/model/agent'
-import type { ExecutionHostScope } from '@yiru/runtime-protocol/model/workspace'
+import type { ExecutionHostScope } from '@yiru/protocol/host/identity'
 import { useEffect, useRef, useState } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { listAiVaultSessions } from '~renderer/runtime/ai-vault-client'
 import { useAppStore } from '~renderer/store/state'
+import type {
+  AiVaultListResult,
+  AiVaultSession
+} from '~renderer/workspace-panel/ai-vault/session/record'
 
 const SESSION_LIMIT = 500
 

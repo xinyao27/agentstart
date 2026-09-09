@@ -1,4 +1,4 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/runtime-protocol/workbench/workspace/cleanup'
+import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
 import { useRef, useState } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'

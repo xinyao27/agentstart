@@ -3,9 +3,9 @@ import { translate } from '~renderer/i18n/i18n'
 import { Crosshair } from '~renderer/icons/hugeicons'
 import { Button } from '~renderer/ui/button'
 
+import { openBrowserWritebackTarget } from '../../runtime/browser-writeback-target'
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
 import { getExtensionHostNavigation } from '../navigation'
-import { getExtensionRuntimeClient } from '../runtime/session'
 
 type ElementPickerProps = {
   projectId: string
@@ -22,20 +22,22 @@ export function ElementPicker(props: ElementPickerProps): React.JSX.Element {
       if (!element) {
         return null
       }
-      const client = await getExtensionRuntimeClient()
-      const result = await client.browserWriteback.locateElement({
+      const client = await openBrowserWritebackTarget()
+      if (!client) {
+        throw new Error('browser_writeback_protocol_unavailable')
+      }
+      const result = await client.locateElement({
         evidence: {
-          column: element.column,
-          componentName: element.componentName,
-          fileName: element.sourceFile,
-          line: element.line
+          ...(element.column === null ? {} : { column: element.column }),
+          ...(element.componentName === null ? {} : { componentName: element.componentName }),
+          ...(element.sourceFile === null ? {} : { fileName: element.sourceFile }),
+          ...(element.line === null ? {} : { line: element.line })
         },
         outerHtml: element.outerHtml,
         pageUrl: element.pageUrl,
-        projectId: props.projectId,
         selector: element.selector,
         styles: element.computedStyles,
-        worktreeId: props.worktreeId
+        target: { projectId: props.projectId, worktreeId: props.worktreeId }
       })
       return result.terminalHandle
     },

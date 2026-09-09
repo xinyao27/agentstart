@@ -1,9 +1,6 @@
-import {
-  getRepoExecutionHostId,
-  getRepoIdFromWorktreeId,
-  LOCAL_EXECUTION_HOST_ID
-} from '@yiru/runtime-protocol/model/workspace'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

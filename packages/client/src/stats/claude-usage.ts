@@ -6,7 +6,7 @@ import type {
   ClaudeUsageScope,
   ClaudeUsageSessionRow,
   ClaudeUsageSummary
-} from '@yiru/runtime-protocol/workbench/claude-usage-types'
+} from '@yiru/protocol/provider-usage/models'
 import type { StateCreator } from 'zustand'
 import { claudeProviderUsageClient } from '~renderer/runtime/provider-usage-client'
 import type { AppState } from '~renderer/store/types'

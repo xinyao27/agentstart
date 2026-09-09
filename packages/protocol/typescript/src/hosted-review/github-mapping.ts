@@ -1,0 +1,25 @@
+import type { PRInfo } from './pull-request-types'
+import type { HostedReviewInfo } from './types'
+
+export function hostedReviewInfoFromGitHubPRInfo(pr: PRInfo): HostedReviewInfo {
+  return {
+    provider: 'github',
+    number: pr.number,
+    title: pr.title,
+    state: pr.state,
+    url: pr.url,
+    status: pr.checksStatus,
+    updatedAt: pr.updatedAt,
+    mergeable: pr.mergeable,
+    ...(pr.reviewDecision !== undefined ? { reviewDecision: pr.reviewDecision } : {}),
+    ...(pr.autoMergeEnabled !== undefined ? { autoMergeEnabled: pr.autoMergeEnabled } : {}),
+    ...(pr.autoMergeAllowed !== undefined ? { autoMergeAllowed: pr.autoMergeAllowed } : {}),
+    ...(pr.mergeQueueRequired !== undefined ? { mergeQueueRequired: pr.mergeQueueRequired } : {}),
+    ...(pr.mergeStateStatus !== undefined ? { mergeStateStatus: pr.mergeStateStatus } : {}),
+    ...(pr.headSha ? { headSha: pr.headSha } : {}),
+    ...(pr.confirmedContainedHeadOid
+      ? { confirmedContainedHeadOid: pr.confirmedContainedHeadOid }
+      : {}),
+    ...(pr.conflictSummary ? { conflictSummary: pr.conflictSummary } : {})
+  }
+}

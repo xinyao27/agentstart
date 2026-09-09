@@ -1,4 +1,4 @@
-import { measureClipboardTextByteLength } from '@yiru/runtime-protocol/model/ui'
+import { measureUtf8ByteLength } from '@yiru/protocol/text/utf8-length'
 import {
   buildServeSimKeyboardFramesForKey,
   type ServeSimKeyboardFrame
@@ -50,7 +50,7 @@ function validateEmulatorKeyboardPasteText(
   maxBytes?: number
 ): EmulatorKeyboardPasteValidation {
   const byteLimit = getPositiveIntegerLimit(maxBytes, EMULATOR_KEYBOARD_PASTE_MAX_BYTES)
-  const byteLengthMeasurement = measureClipboardTextByteLength(text, { stopAfterBytes: byteLimit })
+  const byteLengthMeasurement = measureUtf8ByteLength(text, { stopAfterBytes: byteLimit })
   if (byteLengthMeasurement.exceededLimit) {
     return { byteLength: byteLengthMeasurement.byteLength, reason: 'too-large', status: 'rejected' }
   }

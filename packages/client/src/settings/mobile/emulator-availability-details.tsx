@@ -1,30 +1,20 @@
 import type React from 'react'
-import { toast } from 'sonner'
-import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
 import {
   CheckCircle as CheckCircle2,
-  WarningCircle as CircleAlert,
-  FolderOpen,
-  X
+  WarningCircle as CircleAlert
 } from '~renderer/icons/hugeicons'
-import { shellClient } from '~renderer/runtime/shell-client'
-import { Button } from '~renderer/ui/button'
 
 type EmulatorAvailability = {
   platform: string
   simctl: { ok: boolean; message?: string }
   serveSim: { ok: boolean; message?: string }
-  android: { sdkFound: boolean; sdkPath?: string; message: string }
+  message: string
 }
 
 type MobileEmulatorAvailabilityDetailsProps = {
   availability: EmulatorAvailability | null
-  configuredPath?: string | null
-  onSetAndroidSdkPath: (path: string | null) => void | Promise<void>
 }
-
-const ANDROID_STUDIO_URL = 'https://developer.android.com/studio'
 
 function ToolchainStatusIcon({ ok }: { ok: boolean }): React.JSX.Element {
   return ok ? (
@@ -61,152 +51,35 @@ function ToolchainStatusRow({
   )
 }
 
-const sdkPathActionClassName = 'h-6 px-2'
-
 export function MobileEmulatorAvailabilityDetails({
-  availability,
-  configuredPath,
-  onSetAndroidSdkPath
+  availability
 }: MobileEmulatorAvailabilityDetailsProps): React.JSX.Element | null {
   if (!availability) {
     return null
   }
-  const android = availability.android ?? { sdkFound: false, sdkPath: undefined, message: '' }
   const iosOk = Boolean(availability.simctl?.ok && availability.serveSim?.ok)
-  const showIos = availability.platform === 'darwin'
-
-  const handleLocate = async (): Promise<void> => {
-    try {
-      const picked = await shellClient.shell.pickDirectory({
-        defaultPath: android.sdkPath ?? configuredPath ?? undefined
-      })
-      if (picked) {
-        await onSetAndroidSdkPath(picked)
-      }
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : translate(
-              'auto.components.settings.MobileEmulatorSdkStatus.63fe73a1ea',
-              'Could not update Android SDK folder.'
-            )
-      )
-    }
-  }
-
-  const handleClear = async (): Promise<void> => {
-    try {
-      await onSetAndroidSdkPath(null)
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : translate(
-              'auto.components.settings.MobileEmulatorSdkStatus.63fe73a1ea',
-              'Could not update Android SDK folder.'
-            )
-      )
-    }
-  }
 
   return (
     <div className="mt-3">
       <div className="divide-border/40 border-border/50 divide-y border px-3">
         <ToolchainStatusRow
-          ok={android.sdkFound}
+          ok={iosOk}
           title={translate(
-            'auto.components.settings.MobileEmulatorSdkStatus.027cbf668a',
-            'Android SDK'
+            'auto.components.settings.MobileEmulatorSdkStatus.76eb88b88e',
+            'iOS Simulator (Xcode)'
           )}
           detail={
-            android.sdkFound ? (
-              <>
-                {configuredPath
-                  ? translate(
-                      'auto.components.settings.MobileEmulatorSdkStatus.f6d080d128',
-                      'Using configured path'
-                    )
-                  : translate(
-                      'auto.components.settings.MobileEmulatorSdkStatus.7fe4bd5907',
-                      'Detected at'
-                    )}{' '}
-                <code className="bg-muted px-1 py-0.5">{android.sdkPath}</code>
-              </>
-            ) : (
-              android.message ||
-              translate(
-                'auto.components.settings.MobileEmulatorSdkStatus.2784f0b22d',
-                'Not found. Install Android Studio, then create a Virtual Device.'
-              )
-            )
-          }
-          actions={
-            <>
-              {!android.sdkFound ? (
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  onClick={(event) => openHttpLink(ANDROID_STUDIO_URL, { event })}
-                >
-                  {translate(
-                    'auto.components.settings.MobileEmulatorSdkStatus.b94ff260e6',
-                    'Download Android Studio'
-                  )}
-                </Button>
-              ) : null}
-              <Button
-                type="button"
-                size="xs"
-                variant="quiet"
-                onClick={() => void handleLocate()}
-                className={sdkPathActionClassName}
-              >
-                <FolderOpen className="size-3" />
-                {translate(
-                  'auto.components.settings.MobileEmulatorSdkStatus.18925b082d',
-                  'Locate SDK folder'
-                )}
-              </Button>
-              {configuredPath ? (
-                <Button
-                  type="button"
-                  size="xs"
-                  variant="quiet"
-                  onClick={() => void handleClear()}
-                  className={sdkPathActionClassName}
-                >
-                  <X className="size-3" />
-                  {translate(
-                    'auto.components.settings.MobileEmulatorSdkStatus.8c52684db8',
-                    'Clear'
-                  )}
-                </Button>
-              ) : null}
-            </>
+            iosOk
+              ? translate('auto.components.settings.MobileEmulatorSdkStatus.c6f3ea4f12', 'Ready')
+              : availability.simctl?.message ||
+                availability.serveSim?.message ||
+                availability.message ||
+                translate(
+                  'auto.components.settings.MobileEmulatorSdkStatus.e4f14b50d7',
+                  'Install Xcode and add an iOS Simulator runtime.'
+                )
           }
         />
-
-        {showIos ? (
-          <ToolchainStatusRow
-            ok={iosOk}
-            title={translate(
-              'auto.components.settings.MobileEmulatorSdkStatus.76eb88b88e',
-              'iOS Simulator (Xcode)'
-            )}
-            detail={
-              iosOk
-                ? translate('auto.components.settings.MobileEmulatorSdkStatus.c6f3ea4f12', 'Ready')
-                : availability.simctl?.message ||
-                  availability.serveSim?.message ||
-                  translate(
-                    'auto.components.settings.MobileEmulatorSdkStatus.e4f14b50d7',
-                    'Install Xcode and add an iOS Simulator runtime.'
-                  )
-            }
-          />
-        ) : null}
       </div>
     </div>
   )

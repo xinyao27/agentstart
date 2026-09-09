@@ -1,34 +1,29 @@
-import type { RPCLinkOptions } from '@orpc/client/websocket'
+import { RuntimePeer } from '@yiru/protocol'
 
 import { ExtensionShellServicesChannel } from './shell-services-channel'
 
-type RpcWebSocket = RPCLinkOptions<Record<never, never>>['websocket']
+const SIDE_CHANNEL_BUFFER_LIMIT_BYTES = 1024 * 1024
 
 export class ExtensionSocketMultiplexer {
   private isClosed = false
-  private readonly rpcPeer: ExtensionRpcSocket
+  readonly protocolPeer: RuntimePeer
   private readonly shellServices: ExtensionShellServicesChannel
   private readonly socket: WebSocket
 
   constructor(socket: WebSocket) {
     this.socket = socket
     this.socket.binaryType = 'arraybuffer'
-    this.rpcPeer = new ExtensionRpcSocket(socket)
-    this.shellServices = new ExtensionShellServicesChannel(
-      (payload) => this.send(payload),
-      (payload) => this.send(payload),
-      () => socket.close(1011, 'Shell services failed')
+    this.protocolPeer = new RuntimePeer(
+      (payload, signal) => this.sendSideChannel(payload, signal),
+      () => this.closeFailedProtocol()
     )
+    this.shellServices = new ExtensionShellServicesChannel(this.protocolPeer)
     socket.addEventListener('message', this.handleMessage)
     socket.addEventListener('close', this.handleClose)
     socket.addEventListener('error', this.handleError)
   }
 
-  get rpcSocket(): RpcWebSocket {
-    return this.rpcPeer
-  }
-
-  connectShellServices(): boolean {
+  connectShellServices(): Promise<boolean> {
     return this.shellServices.connect()
   }
 
@@ -36,7 +31,7 @@ export class ExtensionSocketMultiplexer {
     this.finishClose()
   }
 
-  private finishClose(event?: CloseEvent): void {
+  private finishClose(): void {
     if (this.isClosed) {
       return
     }
@@ -45,34 +40,37 @@ export class ExtensionSocketMultiplexer {
     this.socket.removeEventListener('close', this.handleClose)
     this.socket.removeEventListener('error', this.handleError)
     this.shellServices.close()
-    this.rpcPeer.close(event)
+    this.protocolPeer.close()
   }
 
   private readonly handleMessage = (event: MessageEvent<unknown>): void => {
     if (typeof event.data === 'string') {
-      if (this.shellServices.receiveText(event.data)) {
-        return
-      }
-      this.rpcPeer.receive(event.data)
+      this.socket.close(1003, 'Unsupported daemon message')
       return
     }
     if (event.data instanceof ArrayBuffer) {
       const bytes = new Uint8Array(event.data)
-      if (this.shellServices.receiveBinary(bytes)) {
+      if (this.protocolPeer.receive(bytes)) {
         return
       }
-      this.rpcPeer.receive(event.data)
+      this.socket.close(1003, 'Unsupported daemon message')
       return
     }
     this.socket.close(1003, 'Unsupported daemon message')
   }
 
-  private readonly handleClose = (event: CloseEvent): void => {
-    this.finishClose(event)
+  private readonly handleClose = (): void => {
+    this.finishClose()
   }
 
   private readonly handleError = (): void => {
-    this.rpcPeer.error()
+    this.protocolPeer.close(new Error('Runtime WebSocket failed'))
+  }
+
+  private closeFailedProtocol(): void {
+    if (!this.isClosed) {
+      this.socket.close(1011, 'Runtime protocol failed')
+    }
   }
 
   private send(payload: string | Uint8Array<ArrayBufferLike>): boolean {
@@ -82,45 +80,44 @@ export class ExtensionSocketMultiplexer {
     this.socket.send(typeof payload === 'string' ? payload : copySocketBytes(payload))
     return true
   }
+
+  private async sendSideChannel(
+    payload: Uint8Array<ArrayBufferLike>,
+    signal?: AbortSignal
+  ): Promise<void> {
+    while (
+      !this.isClosed &&
+      this.socket.readyState === WebSocket.OPEN &&
+      this.socket.bufferedAmount > SIDE_CHANNEL_BUFFER_LIMIT_BYTES
+    ) {
+      await waitForSocketCapacity(signal)
+    }
+    if (signal?.aborted) {
+      throw signal.reason
+    }
+    if (!this.send(payload)) {
+      throw new Error('Runtime WebSocket is not writable')
+    }
+  }
 }
 
-class ExtensionRpcSocket extends EventTarget {
-  private readonly socket: WebSocket
-
-  constructor(socket: WebSocket) {
-    super()
-    this.socket = socket
-  }
-
-  get readyState(): WebSocket['readyState'] {
-    return this.socket.readyState
-  }
-
-  send(data: string | ArrayBufferLike | Blob | ArrayBufferView<ArrayBufferLike>): void {
-    this.socket.send(
-      typeof data === 'string' || data instanceof Blob ? data : copySocketBytes(data)
-    )
-  }
-
-  receive(data: string | ArrayBuffer): void {
-    this.dispatchEvent(new MessageEvent('message', { data }))
-  }
-
-  error(): void {
-    this.dispatchEvent(new Event('error'))
-  }
-
-  close(event?: CloseEvent): void {
-    this.dispatchEvent(
-      event
-        ? new CloseEvent('close', {
-            code: event.code,
-            reason: event.reason,
-            wasClean: event.wasClean
-          })
-        : new CloseEvent('close')
-    )
-  }
+function waitForSocketCapacity(signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(signal.reason)
+      return
+    }
+    const timer = setTimeout(finish, 10)
+    signal?.addEventListener('abort', abort, { once: true })
+    function abort(): void {
+      clearTimeout(timer)
+      reject(signal?.reason)
+    }
+    function finish(): void {
+      signal?.removeEventListener('abort', abort)
+      resolve()
+    }
+  })
 }
 
 function copySocketBytes(value: ArrayBufferLike | ArrayBufferView<ArrayBufferLike>): ArrayBuffer {

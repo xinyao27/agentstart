@@ -1,15 +1,11 @@
+import type { BrowserPage, BrowserWorkspace } from '@yiru/protocol/workspace/browser-session'
+import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
+
+import type { OpenFile } from '../../editor/state'
 import type {
   RuntimeMobileSessionTabsResult,
   RuntimeMobileSessionBrowserTab
-} from '@yiru/runtime-protocol/workbench/runtime-types'
-import type {
-  BrowserPage,
-  BrowserWorkspace,
-  Tab,
-  TerminalTab
-} from '@yiru/runtime-protocol/workbench/types'
-
-import type { OpenFile } from '../../editor/state'
+} from './session-model'
 import type {
   MirroredBrowserTab,
   MirroredEditorTab,

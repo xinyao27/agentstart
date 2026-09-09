@@ -2,7 +2,6 @@
 // Why: one guarded command keeps the Chrome, iOS, and required runtime release workflows aligned
 // without moving signing keys onto a developer machine.
 import { spawnSync } from 'node:child_process'
-import { createHash } from 'node:crypto'
 import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { createInterface } from 'node:readline/promises'
@@ -10,18 +9,27 @@ import { createInterface } from 'node:readline/promises'
 const REPOSITORY = 'xinyao27/yiru'
 const ROOT = join(import.meta.dirname, '..')
 const FORMULA_PATH = join(ROOT, 'Formula', 'yiru.rb')
-const BUILD_PATH = join(ROOT, 'apps', 'daemon', 'scripts', 'build.mjs')
+const RUST_DAEMON_ROOT = join(ROOT, 'apps', 'daemon')
+const RUST_MANIFEST_PATH = join(RUST_DAEMON_ROOT, 'Cargo.toml')
+// Why: the macOS bundle reports its own version to Finder and Gatekeeper from Info.plist, so it is
+// written here beside the package versions rather than substituted at package time.
+const MACOS_INFO_PLIST_PATH = join(ROOT, 'apps', 'macos', 'Info.plist')
 const PACKAGE_PATHS = [
   join(ROOT, 'package.json'),
   join(ROOT, 'apps', 'daemon', 'package.json'),
+  join(ROOT, 'apps', 'computer-use-macos', 'package.json'),
   join(ROOT, 'apps', 'extension', 'package.json'),
+  join(ROOT, 'apps', 'macos', 'package.json'),
   join(ROOT, 'packages', 'cli', 'package.json')
 ]
+// Why: the release workflow pins these Homebrew checksums from its signed artifacts because Rust
+// release bytes exist only after CI signs and notarizes them and cannot be built locally; prepare
+// keeps the formula URLs aligned with the version instead.
 const RELEASE_ARTIFACTS = [
-  'yiru-bun-darwin-arm64',
-  'yiru-bun-darwin-x64',
-  'yiru-bun-linux-arm64',
-  'yiru-bun-linux-x64'
+  'yiru-rust-darwin-arm64',
+  'yiru-rust-darwin-x64',
+  'yiru-rust-linux-arm64',
+  'yiru-rust-linux-x64'
 ]
 const DEFAULT_RELEASE_TARGETS = ['daemon', 'extension', 'ios']
 const OPTIONAL_RELEASE_TARGETS = ['apns']
@@ -113,6 +121,11 @@ function assertToolchain() {
     fail(`Release commands require Node.js 24; found ${process.versions.node}`)
   }
   captureRequired('pnpm', ['--version'])
+  const rustVersion = captureRequired('rustc', ['--version'])
+  if (!rustVersion.startsWith('rustc 1.95.0 ')) {
+    fail(`Release commands require Rust 1.95.0; found ${rustVersion}`)
+  }
+  captureRequired('cargo', ['--version'])
 }
 
 function assertCleanWorktree() {
@@ -157,38 +170,32 @@ function updateVersionSources(version) {
     writePackageVersion(path, version)
   }
 
-  const buildSource = readFileSync(BUILD_PATH, 'utf8')
-  const nextBuildSource = replaceExactlyOnce(
-    buildSource,
-    /process\.env\.npm_package_version \?\? '\d+\.\d+\.\d+'/g,
-    `process.env.npm_package_version ?? '${version}'`,
-    'daemon fallback version'
+  const rustManifest = readFileSync(RUST_MANIFEST_PATH, 'utf8')
+  writeFileSync(
+    RUST_MANIFEST_PATH,
+    replaceExactlyOnce(
+      rustManifest,
+      /^version = "\d+\.\d+\.\d+"$/m,
+      `version = "${version}"`,
+      'Rust daemon package version'
+    )
   )
-  writeFileSync(BUILD_PATH, nextBuildSource)
+  execute('cargo', ['check'], { cwd: RUST_DAEMON_ROOT })
+
+  const macosInfoPlist = readFileSync(MACOS_INFO_PLIST_PATH, 'utf8')
+  writeFileSync(
+    MACOS_INFO_PLIST_PATH,
+    replaceExactlyOnce(
+      macosInfoPlist,
+      /<key>CFBundleShortVersionString<\/key><string>\d+\.\d+\.\d+<\/string>/,
+      `<key>CFBundleShortVersionString</key><string>${version}</string>`,
+      'macOS bundle short version'
+    )
+  )
 
   const formula = readFileSync(FORMULA_PATH, 'utf8')
     .replace(/version "\d+\.\d+\.\d+"/, `version "${version}"`)
     .replace(/\/releases\/download\/v\d+\.\d+\.\d+\//g, `/releases/download/v${version}/`)
-  writeFileSync(FORMULA_PATH, formula)
-}
-
-function artifactChecksum(name) {
-  const path = join(ROOT, 'apps', 'daemon', 'dist', name)
-  return createHash('sha256').update(readFileSync(path)).digest('hex')
-}
-
-function updateFormulaChecksums() {
-  let formula = readFileSync(FORMULA_PATH, 'utf8')
-  for (const artifact of RELEASE_ARTIFACTS) {
-    const escapedArtifact = artifact.replaceAll('-', '\\-')
-    const pattern = new RegExp(`(url "[^"]+/${escapedArtifact}",[\\s\\S]*?sha256 ")[0-9a-f]{64}(")`)
-    formula = replaceExactlyOnce(
-      formula,
-      pattern,
-      `$1${artifactChecksum(artifact)}$2`,
-      `${artifact} checksum`
-    )
-  }
   writeFileSync(FORMULA_PATH, formula)
 }
 
@@ -201,10 +208,6 @@ function verifyFormula(version) {
     if (!formula.includes(`/v${version}/${artifact}`)) {
       fail(`Homebrew formula is missing ${artifact} for ${version}`)
     }
-  }
-  const checksums = formula.match(/sha256 "[0-9a-f]{64}"/g) ?? []
-  if (checksums.length !== RELEASE_ARTIFACTS.length) {
-    fail('Homebrew formula must contain four release checksums.')
   }
 }
 
@@ -477,8 +480,7 @@ async function prepare(version) {
 
   console.log(`Preparing Yiru ${previousVersion} → ${version}`)
   updateVersionSources(version)
-  execute('pnpm', ['exec', 'vp', 'run', '@yiru/daemon#build:release'])
-  updateFormulaChecksums()
+  execute('pnpm', ['exec', 'vp', 'run', '@yiru/daemon#build'])
   execute('pnpm', ['exec', 'vp', 'run', '@yiru/extension#package:web-store'])
   execute('pnpm', ['check'])
   verifyFormula(version)
@@ -487,9 +489,13 @@ async function prepare(version) {
   const releaseFiles = [
     'package.json',
     'apps/daemon/package.json',
+    'apps/computer-use-macos/package.json',
+    'apps/daemon/Cargo.toml',
+    'apps/daemon/Cargo.lock',
     'apps/extension/package.json',
+    'apps/macos/package.json',
+    'apps/macos/Info.plist',
     'packages/cli/package.json',
-    'apps/daemon/scripts/build.mjs',
     'Formula/yiru.rb'
   ]
   console.log(`  git add ${releaseFiles.join(' ')}`)

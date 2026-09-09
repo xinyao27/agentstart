@@ -1,16 +1,14 @@
-import { normalizeLoaderStyle } from '@yiru/runtime-protocol/workbench/loader-style'
-import { normalizeOpenInApplications } from '@yiru/runtime-protocol/workbench/open-in-applications'
-import type { RuntimeStatus } from '@yiru/runtime-protocol/workbench/runtime-types'
-import { normalizeTerminalCustomThemes } from '@yiru/runtime-protocol/workbench/terminal/custom-themes'
-import { normalizeTerminalQuickCommands } from '@yiru/runtime-protocol/workbench/terminal/quick-commands'
-import { normalizeDesktopTerminalScrollbackRows } from '@yiru/runtime-protocol/workbench/terminal/scrollback-policy'
 import {
   normalizeTuiAgentArgsRecord,
   normalizeTuiAgentEnvRecord
-} from '@yiru/runtime-protocol/workbench/tui-agent/launch-defaults'
-import { normalizeDisabledTuiAgents } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
-import { normalizeUiLanguage } from '@yiru/runtime-protocol/workbench/ui-language'
+} from '@yiru/protocol/agent/launch/settings'
+import { normalizeDisabledTuiAgents } from '@yiru/protocol/agent/selection'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { normalizeLoaderStyle } from '@yiru/protocol/settings/loader'
+import { normalizeOpenInApplications } from '@yiru/protocol/settings/open-in'
+import { normalizeUiLanguage } from '@yiru/protocol/settings/ui-language'
+import { normalizeTerminalQuickCommands } from '@yiru/protocol/terminal/quick-commands'
+import { normalizeDesktopTerminalScrollbackRows } from '@yiru/protocol/terminal/scrollback-policy'
 import type { StateCreator } from 'zustand'
 import { bumpProviderRuntimeSessionGeneration } from '~renderer/agent/provider-runtime-context'
 import { readProjectCatalogQueryClient } from '~renderer/project-catalog/catalog-snapshot'
@@ -22,12 +20,12 @@ import { assertRuntimeStatusCompatible } from '~renderer/runtime/protocol-compat
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 import {
   clearRuntimeCompatibilityCache,
-  markRuntimeEnvironmentCompatible,
-  unwrapRuntimeRpcResult
+  markRuntimeEnvironmentCompatible
 } from '~renderer/runtime/rpc-client'
 import { runtimeEnvironmentsClient } from '~renderer/runtime/runtime-environments-client'
 import { getRendererSettings, updateRendererSettings } from '~renderer/runtime/settings-client'
 import type { AppState } from '~renderer/store/types'
+import { normalizeTerminalCustomThemes } from '~renderer/terminal/themes/custom'
 
 import { createSettingsSearchState, type SettingsSearchState } from './search-state'
 
@@ -58,11 +56,11 @@ async function verifyRuntimeEnvironmentReachable(environmentId: string | null): 
   if (!environmentId) {
     return
   }
-  const response = await runtimeEnvironmentsClient.getStatus({
+  const status = await runtimeEnvironmentsClient.getStatus({
     selector: environmentId,
     timeoutMs: 15_000
   })
-  const status = unwrapRuntimeRpcResult<RuntimeStatus>(response)
+
   assertRuntimeStatusCompatible(status)
   // Why: the switch probe already proved compatibility; avoid immediately
   // re-probing through the heavier generic runtime RPC path during hydration.

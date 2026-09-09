@@ -1,16 +1,17 @@
-import { CUSTOM_AGENT_ID } from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import type { CustomAgentId } from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import { isFolderRepo } from '@yiru/runtime-protocol/workbench/repo-kind'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { isFolderRepo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { setSourceControlActionDefault } from '@yiru/protocol/source-control/action-recipes'
 import {
   SOURCE_CONTROL_ACTION_IDS,
-  setSourceControlActionDefault,
   type SourceControlActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+} from '@yiru/protocol/source-control/ai-actions'
 import type {
   SourceControlAiSettings,
   SourceControlAiSettingsPatch
-} from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import type { GlobalSettings, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-types'
+import { CUSTOM_AGENT_ID } from '@yiru/protocol/source-control/custom-agent'
+import type { CustomAgentId } from '@yiru/protocol/source-control/custom-agent'
 import type React from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,9 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 import {
   effectiveExternalWorktreeVisibility,
   isLegacyRepoForExternalWorktreeVisibility
-} from '@yiru/runtime-protocol/workbench/workspace/worktree-ownership'
+} from '@yiru/protocol/worktree/external/ownership'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Eye, EyeSlash as EyeOff } from '~renderer/icons/hugeicons'

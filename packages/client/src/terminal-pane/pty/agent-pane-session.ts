@@ -1,4 +1,4 @@
-import type { AgentType, ParsedAgentStatusPayload } from '@yiru/runtime-protocol/model/agent'
+import type { AgentType, ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
 import { inferAgentStatusInterrupt } from '~renderer/runtime/agent-status-client'
 import { useAppStore } from '~renderer/store/state'
 import { markTerminalBracketedPasteInterrupted } from '~renderer/terminal/bracketed-paste'

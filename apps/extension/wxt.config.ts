@@ -38,7 +38,7 @@ export default defineConfig({
       }
       if (wxt.config.command === 'serve') {
         // Why: WXT promotes these permissions during development; Chrome must not see duplicates.
-        for (const permission of ['scripting', 'tabs']) {
+        for (const permission of ['scripting']) {
           const index = optionalPermissions.indexOf(permission)
           if (index >= 0) {
             optionalPermissions.splice(index, 1)
@@ -84,13 +84,11 @@ export default defineConfig({
       'http://127.0.0.1/*',
       'http://localhost/*',
       'https://*/*',
-      'https://github.com/*',
-      'https://gitlab.com/*'
+      'https://github.com/*'
     ],
     optional_permissions: [
       'activeTab',
       'bookmarks',
-      'downloads',
       'history',
       'idle',
       'notifications',
@@ -98,18 +96,19 @@ export default defineConfig({
       'scripting',
       'system.display',
       'tabCapture',
-      'tabs',
-      'userScripts',
-      'webNavigation'
+      'userScripts'
     ],
     options_page: 'settings.html',
     permissions: [
       'contextMenus',
       'debugger',
+      'downloads',
       'nativeMessaging',
       'sidePanel',
       'storage',
-      'tabGroups'
+      'tabGroups',
+      'tabs',
+      'webNavigation'
     ],
     storage: { managed_schema: 'managed-storage-schema.json' }
   },

@@ -2,8 +2,8 @@ import {
   findYiruDispatchTaskMarkerIndex,
   YIRU_DISPATCH_STATUS_PREAMBLE_PREFIX,
   YIRU_DISPATCH_STATUS_TASK_MARKER
-} from '@yiru/runtime-protocol/model/agent'
-import type { AgentStatusEntry } from '@yiru/runtime-protocol/model/agent'
+} from '@yiru/protocol/agent/dispatch-prompt'
+import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
 
 export const YIRU_DISPATCH_PREAMBLE_PREFIX = YIRU_DISPATCH_STATUS_PREAMBLE_PREFIX
 const YIRU_DISPATCH_TASK_MARKER = YIRU_DISPATCH_STATUS_TASK_MARKER

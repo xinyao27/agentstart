@@ -1,12 +1,12 @@
-import { terminalMultiplexCrc32c } from '@yiru/runtime-protocol/terminal-multiplex/crc32c'
-import type { TerminalMultiplexFrame } from '@yiru/runtime-protocol/terminal-multiplex/frame'
-import { decodeTerminalMultiplexJson } from '@yiru/runtime-protocol/terminal-multiplex/json'
+import { terminalMultiplexCrc32c } from '@yiru/protocol/terminal-multiplex/crc32c'
+import type { TerminalMultiplexFrame } from '@yiru/protocol/terminal-multiplex/frame'
+import { decodeTerminalMultiplexJson } from '@yiru/protocol/terminal-multiplex/json'
 import {
   decodeTerminalMultiplexSnapshotChunkRecord,
   decodeTerminalMultiplexSnapshotEndRecord,
   decodeTerminalMultiplexSnapshotStartRecord,
   TERMINAL_MULTIPLEX_SNAPSHOT_CHUNK_DATA_BYTES
-} from '@yiru/runtime-protocol/terminal-multiplex/snapshot-records'
+} from '@yiru/protocol/terminal-multiplex/snapshot-records'
 
 // Why: docs/reference/terminal-multiplex.md OQ-2 selects one 2 MiB snapshot cap for every lane;
 // telemetry can justify raising it later without creating a decoder fallback.
@@ -22,6 +22,8 @@ export type RemoteTerminalSnapshot = {
   pendingDeliveryStartSeq: bigint
   pendingEscapeTailAnsi?: string
   source: 'headless' | 'provider'
+  epoch: bigint
+  lastTitle: string | null
 }
 
 export class RemoteTerminalSnapshotAssembler {
@@ -117,7 +119,9 @@ export class RemoteTerminalSnapshotAssembler {
       const data = renderDualScreen(text[0]!, text[1]!, text[2]!, this.activeBuffer)
       const snapshot = {
         id: this.id,
+        epoch: frame.epoch,
         data,
+        lastTitle: typeof metadata?.lastTitle === 'string' ? metadata.lastTitle : null,
         cols: this.cols,
         rows: this.rows,
         wireByteLength: record.assembledBytes,

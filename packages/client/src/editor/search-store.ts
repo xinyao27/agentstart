@@ -1,4 +1,5 @@
-import type { SearchResult, WorkspaceSessionState } from '@yiru/runtime-protocol/workbench/types'
+import type { FileSearchResult as SearchResult } from '@yiru/protocol/files/values'
+import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
 import type { WorkspaceSessionHydrationOptions } from '~renderer/workspace/session-hydration-keys'
 
 import type { PendingEditorReveal } from './file-model'

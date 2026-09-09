@@ -1,4 +1,4 @@
-import type { ReadClipboardTextOptions } from '@yiru/runtime-protocol/model/ui'
+import type { ReadClipboardTextOptions } from '~renderer/clipboard/text'
 import { shellClient } from '~renderer/runtime/shell-client'
 
 export const PRIMARY_SELECTION_MAX_LENGTH = 65_536

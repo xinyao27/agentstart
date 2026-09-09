@@ -1,6 +1,3 @@
-import type { HostedReviewProvider } from '@yiru/runtime-protocol/model/review'
-import { refreshHostedReviewCard } from '~renderer/source-control/hosted-review-state/slice'
-
 import { showWorkspaceSidebar } from '../show-sidebar'
 import type { useChecksPanelReviewMutationsState } from './review-mutations'
 
@@ -10,17 +7,9 @@ export function useChecksPanelReviewCreation(context: useChecksPanelReviewMutati
     activeWorktree,
     activeWorktreeId,
     branch,
-    fallbackGitHubPRNumber,
-    fetchGitLabDetails,
-    fetchHostedReviewForBranch,
     fetchUpstreamStatus,
     isPublishingBranch,
     isRemoteOperationActive,
-    linkedAzureDevOpsPR,
-    linkedBitbucketPR,
-    linkedGitLabMR,
-    linkedGiteaPR,
-    linkedPR,
     ownerSettings,
     pushBranch,
     refreshLinkedGitHubPullRequest,
@@ -90,11 +79,7 @@ export function useChecksPanelReviewCreation(context: useChecksPanelReviewMutati
     }
   }
 
-  const handlePullRequestCreated = async (result: {
-    provider: HostedReviewProvider
-    number: number
-    url: string
-  }): Promise<void> => {
+  const handlePullRequestCreated = async (result: { number: number }): Promise<void> => {
     if (!repo || !branch) {
       return
     }
@@ -104,51 +89,8 @@ export function useChecksPanelReviewCreation(context: useChecksPanelReviewMutati
       sourceControlView: 'review'
     })
     try {
-      if (activeWorktreeId && result.provider === 'github') {
+      if (activeWorktreeId) {
         await updateWorktreeMeta(activeWorktreeId, { linkedPR: result.number })
-      }
-      if (activeWorktreeId && result.provider === 'gitlab') {
-        await updateWorktreeMeta(activeWorktreeId, { linkedGitLabMR: result.number })
-      }
-      if (activeWorktreeId && result.provider === 'azure-devops') {
-        await updateWorktreeMeta(activeWorktreeId, { linkedAzureDevOpsPR: result.number })
-      }
-      if (activeWorktreeId && result.provider === 'gitea') {
-        await updateWorktreeMeta(activeWorktreeId, { linkedGiteaPR: result.number })
-      }
-      const linkedReviewNumbers = {
-        linkedGitHubPR: result.provider === 'github' ? result.number : linkedPR,
-        fallbackGitHubPR: fallbackGitHubPRNumber,
-        linkedGitLabMR: result.provider === 'gitlab' ? result.number : linkedGitLabMR,
-        linkedBitbucketPR,
-        linkedAzureDevOpsPR:
-          result.provider === 'azure-devops' ? result.number : linkedAzureDevOpsPR,
-        linkedGiteaPR: result.provider === 'gitea' ? result.number : linkedGiteaPR
-      }
-      if (result.provider === 'gitlab') {
-        const refreshedReview = await refreshHostedReviewCard(fetchHostedReviewForBranch, {
-          repoPath: repo.path,
-          repoId: repo.id,
-          branch,
-          ...linkedReviewNumbers
-        })
-        const refreshedGitLabReview =
-          refreshedReview?.provider === 'gitlab' ? refreshedReview : null
-        await fetchGitLabDetails({
-          mrNumberOverride: result.number,
-          headShaOverride: refreshedGitLabReview?.headSha,
-          commitAsCurrent: true
-        })
-        return
-      }
-      if (result.provider !== 'github') {
-        await refreshHostedReviewCard(fetchHostedReviewForBranch, {
-          repoPath: repo.path,
-          repoId: repo.id,
-          branch,
-          ...linkedReviewNumbers
-        })
-        return
       }
       await refreshLinkedGitHubPullRequest(result.number)
     } catch {

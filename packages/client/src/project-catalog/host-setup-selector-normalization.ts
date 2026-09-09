@@ -1,8 +1,9 @@
+import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
 import {
   getProjectIdentityKey,
   type ProjectHostSetupProjection
-} from '@yiru/runtime-protocol/workbench/project-host-setup-projection'
-import type { Project, ProjectHostSetup, Repo } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/project/setup-projection'
 
 export type NormalizedProjectHostSetupProjection = ProjectHostSetupProjection & {
   changed: boolean

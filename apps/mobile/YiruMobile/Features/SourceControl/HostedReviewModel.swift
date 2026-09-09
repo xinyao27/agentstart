@@ -61,9 +61,6 @@ final class HostedReviewModel {
         if let linked = workspace.linkedPullRequest {
             linkedProvider = .github
             linkedNumber = linked.number
-        } else if let linked = workspace.linkedGitLabMergeRequest {
-            linkedProvider = .gitlab
-            linkedNumber = linked
         }
     }
 

@@ -3,14 +3,10 @@ import {
   isMorphVariant,
   isRingVariant,
   type AICSSLoaderVariant
-} from '@yiru/runtime-protocol/model/loader'
-import {
-  getLatticeCells,
-  getMorphDots,
-  getRingDots
-} from '@yiru/runtime-protocol/model/loader-geometry'
+} from '@yiru/protocol/settings/loader'
 import type { CSSProperties } from 'react'
 import { useLayoutEffect, useRef, useState } from 'react'
+import { getLatticeCells, getMorphDots, getRingDots } from '~renderer/loading/geometry'
 
 import './orbs.css'
 

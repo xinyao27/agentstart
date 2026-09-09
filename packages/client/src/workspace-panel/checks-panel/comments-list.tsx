@@ -1,4 +1,4 @@
-import type { PRComment } from '@yiru/runtime-protocol/workbench/types'
+import type { PRComment } from '@yiru/protocol/hosted-review/review-types'
 import React, { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { LoadingIndicator } from '~renderer/loading/indicator'
@@ -39,7 +39,6 @@ import { PRCommentsHeader, type PRCommentsListDisplayMode } from './comments-hea
 export function PRCommentsList({
   comments,
   commentsLoading,
-  reviewKind = 'PR',
   commentsDisabled,
   commentsDisabledReason,
   selectionContextKey,
@@ -55,7 +54,6 @@ export function PRCommentsList({
 }: {
   comments: PRComment[]
   commentsLoading: boolean
-  reviewKind?: 'PR' | 'MR'
   commentsDisabled?: boolean
   commentsDisabledReason?: string
   selectionContextKey?: string
@@ -233,7 +231,6 @@ export function PRCommentsList({
         commentCounts={commentCounts}
         commentFilter={commentFilter}
         displayMode={displayMode}
-        reviewKind={reviewKind}
         commentsLoading={commentsLoading}
         commentsDisabled={commentsDisabled}
         commentsDisabledReason={commentsDisabledReason}

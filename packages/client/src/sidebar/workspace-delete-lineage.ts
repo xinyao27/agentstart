@@ -1,4 +1,5 @@
-import type { Worktree, WorktreeLineage } from '@yiru/runtime-protocol/workbench/types'
+import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 type WorkspaceDeleteLineage = {
   descendants: Worktree[]

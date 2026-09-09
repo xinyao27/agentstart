@@ -2,8 +2,8 @@ import {
   isTuiAgentEnabled,
   pickTuiAgent,
   TUI_AGENT_AUTO_PICK_ORDER
-} from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 
 export function pickQuickWorkspaceAgent(
   preferred: TuiAgent | 'blank' | null | undefined,

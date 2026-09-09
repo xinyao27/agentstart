@@ -1,4 +1,4 @@
-import type { ReactErrorBoundaryReportArgs } from '@yiru/runtime-protocol/workbench/crash-reporting'
+import type { ReactErrorBoundaryReportArgs } from '@yiru/protocol/crash-reports/values'
 import React from 'react'
 import { isLazyChunkLoadError } from '~renderer/application-shell/lazy-with-retry'
 import { reportReactErrorBoundaryCrash } from '~renderer/crash-report/react-error-boundary'

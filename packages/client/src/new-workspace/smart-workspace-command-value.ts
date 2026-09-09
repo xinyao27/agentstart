@@ -1,16 +1,11 @@
-export type SmartWorkspaceCommandRowKind =
-  | 'use-name'
-  | 'create-branch'
-  | 'github'
-  | 'gitlab'
-  | 'branch'
+export type SmartWorkspaceCommandRowKind = 'use-name' | 'create-branch' | 'github' | 'branch'
 
 export type SmartWorkspaceCommandRow = {
   kind: SmartWorkspaceCommandRowKind
   value: string
 }
 
-export type SmartWorkspaceSourceIntent = 'github' | 'gitlab' | null
+export type SmartWorkspaceSourceIntent = 'github' | null
 
 export function resolveSmartWorkspaceCommandValue({
   currentValue,
@@ -36,11 +31,6 @@ export function resolveSmartWorkspaceCommandValue({
     const githubRow = rows.find((row) => row.kind === 'github')
     if (githubRow) {
       return githubRow.value
-    }
-  } else if (sourceIntent === 'gitlab') {
-    const gitlabRow = rows.find((row) => row.kind === 'gitlab')
-    if (gitlabRow) {
-      return gitlabRow.value
     }
   }
 

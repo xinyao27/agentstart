@@ -1,10 +1,10 @@
+import type { Tab } from '@yiru/protocol/workspace/tabs'
+import type { AppState } from '~renderer/store/types'
+
 import type {
   RuntimeMobileSessionFileTab,
   RuntimeMobileSessionMarkdownTab
-} from '@yiru/runtime-protocol/workbench/runtime-types'
-import type { Tab } from '@yiru/runtime-protocol/workbench/types'
-import type { AppState } from '~renderer/store/types'
-
+} from './remote-session/session-model'
 import { isUnifiedTabActiveInActiveGroup } from './runtime-mobile-tab-activity'
 
 export type OpenFileByWorktreeAndId = Map<string, Map<string, AppState['openFiles'][number]>>

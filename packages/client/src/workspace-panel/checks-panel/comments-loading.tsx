@@ -1,4 +1,5 @@
-import type { PRInfo, PRCheckDetail } from '@yiru/runtime-protocol/workbench/types'
+import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { PRCheckDetail } from '@yiru/protocol/hosted-review/review-types'
 import { useEffect } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { subscribeGitHubWorkItemMutations } from '~renderer/runtime/github-events-client'
@@ -8,7 +9,6 @@ import type { useChecksPanelChecksLoadingState } from './checks-loading'
 
 export function useChecksPanelCommentsLoading(context: useChecksPanelChecksLoadingState) {
   const {
-    activeGitLabReview,
     branch,
     fetchPRCheckDetails,
     fetchPRComments,
@@ -95,9 +95,6 @@ export function useChecksPanelCommentsLoading(context: useChecksPanelChecksLoadi
   }
 
   useEffect(() => {
-    if (activeGitLabReview) {
-      return
-    }
     if (!repo || !prNumber || !isPanelVisible) {
       setComments([])
       return
@@ -129,7 +126,6 @@ export function useChecksPanelCommentsLoading(context: useChecksPanelChecksLoadi
       cancelled = true
     }
   }, [
-    activeGitLabReview,
     repo,
     prNumber,
     pr?.headSha,
@@ -144,7 +140,7 @@ export function useChecksPanelCommentsLoading(context: useChecksPanelChecksLoadi
   ])
 
   useEffect(() => {
-    if (activeGitLabReview || !repo || !prNumber || !isPanelVisible) {
+    if (!repo || !prNumber || !isPanelVisible) {
       return undefined
     }
     return subscribeGitHubWorkItemMutations(repo, (payload) => {
@@ -155,7 +151,7 @@ export function useChecksPanelCommentsLoading(context: useChecksPanelChecksLoadi
       }
       void fetchComments({ force: true })
     })
-  }, [activeGitLabReview, fetchComments, isPanelVisible, prNumber, repo])
+  }, [fetchComments, isPanelVisible, prNumber, repo])
 
   return { ...context, fetchComments, handleLoadCheckDetails }
 }

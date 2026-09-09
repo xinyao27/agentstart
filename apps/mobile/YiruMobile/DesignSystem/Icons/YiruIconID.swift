@@ -61,7 +61,6 @@ nonisolated struct YiruIconID: Sendable, Hashable {
     static let gauge = Self(Hugeicons.gauge)
     static let gitBranch = Self(Hugeicons.gitBranch)
     static let githubLogo = Self(Hugeicons.github)
-    static let gitlabLogo = Self(Hugeicons.gitlab)
     static let gitMerge = Self(Hugeicons.gitMerge)
     static let gitPullRequest = Self(Hugeicons.gitPullRequest)
     static let globe = Self(Hugeicons.globe02)

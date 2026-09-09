@@ -1,5 +1,5 @@
-import { resolveHookCommandSourcePolicy } from '@yiru/runtime-protocol/workbench/hook-command-source-policy'
-import type { Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import { resolveHookCommandSourcePolicy } from '@yiru/protocol/setup/command-source-policy'
 import type { HookCheckResult } from '~renderer/runtime/hooks-client'
 
 export function hasEffectiveSetupCommand(repo: Repo, hooksResult: HookCheckResult): boolean {

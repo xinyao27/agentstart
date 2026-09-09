@@ -1,10 +1,6 @@
-import { isValidTerminalTabId } from '@yiru/runtime-protocol/workbench/terminal/tab-id'
-import type {
-  Tab,
-  TabGroup,
-  TabGroupLayoutNode,
-  WorkspaceSessionState
-} from '@yiru/runtime-protocol/workbench/types'
+import { isValidTerminalTabId } from '@yiru/protocol/terminal/tab-identity'
+import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { Tab, TabGroup, TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 
 import {

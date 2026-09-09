@@ -1,8 +1,8 @@
-import type { AgentType } from '@yiru/runtime-protocol/model/agent'
+import type { AgentType } from '@yiru/protocol/agent/status-records'
 import {
   normalizeCompatibleAgentTitleForOwner,
   resolveCompatibleAgentTypeForOwner
-} from '@yiru/runtime-protocol/workbench/agent/title-owner'
+} from '~renderer/agent/title/owner'
 import { resolveTitleActivityLabel } from '~renderer/terminal-pane/agent/evidence'
 
 const TITLE_AGENT_LABEL_TO_TYPE: Record<string, AgentType> = {

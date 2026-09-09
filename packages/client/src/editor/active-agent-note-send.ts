@@ -1,6 +1,6 @@
 import { POST_PASTE_SUBMIT_DELAY_MS } from '~renderer/agent/paste-submit-delay'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
+import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import {
   BRACKETED_PASTE_END,
   BRACKETED_PASTE_START,
@@ -92,9 +92,9 @@ export async function sendNotesToActiveAgentSession({
   }
 
   try {
-    const { wait } = await callRuntimeOrpc(
-      runtimeTarget,
-      (client) => client.terminal.wait,
+    const { wait } = await (
+      await openRuntimeTerminalClient(runtimeTarget)
+    ).wait(
       { terminal: terminal.handle, for: 'tui-idle', timeoutMs: effectiveTimeoutMs },
       { timeoutMs: effectiveTimeoutMs + 5000 }
     )
@@ -142,9 +142,9 @@ async function sendPromptWithLegacyCombinedSend(
   prompt: string
 ): Promise<ActiveAgentNotesSendResult> {
   try {
-    const { send } = await callRuntimeOrpc(
-      runtimeTarget,
-      (client) => client.terminal.send,
+    const { send } = await (
+      await openRuntimeTerminalClient(runtimeTarget)
+    ).send(
       {
         terminal: terminalHandle,
         text: prompt,
@@ -180,9 +180,9 @@ async function sendPromptWithGuardedPasteAndEnter(
 
   const pastePayload = `${BRACKETED_PASTE_START}${sanitizeTerminalPasteText(prompt)}${BRACKETED_PASTE_END}`
   try {
-    const { send } = await callRuntimeOrpc(
-      runtimeTarget,
-      (client) => client.terminal.send,
+    const { send } = await (
+      await openRuntimeTerminalClient(runtimeTarget)
+    ).send(
       {
         terminal: terminalHandle,
         text: pastePayload,
@@ -227,9 +227,9 @@ async function sendPromptWithGuardedPasteAndEnter(
   }
 
   try {
-    const { send } = await callRuntimeOrpc(
-      runtimeTarget,
-      (client) => client.terminal.send,
+    const { send } = await (
+      await openRuntimeTerminalClient(runtimeTarget)
+    ).send(
       {
         terminal: terminalHandle,
         enter: true,

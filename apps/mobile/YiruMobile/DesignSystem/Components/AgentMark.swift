@@ -32,7 +32,7 @@ struct AgentMark: View {
 
     private var assetName: String? {
         switch agentID {
-        case "claude", "claude-agent-teams": "agent-claude"
+        case "claude": "agent-claude"
         case "codex": "agent-openai"
         case "pi": "agent-pi"
         case "omp": "agent-omp"

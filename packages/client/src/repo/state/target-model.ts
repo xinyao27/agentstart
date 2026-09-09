@@ -1,18 +1,18 @@
 import {
+  PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
+  PROJECT_CONTEXT_PROTOCOL_CAPABILITY
+} from '@yiru/protocol'
+import {
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import {
-  PROJECT_HOST_SETUP_RUNTIME_CAPABILITY,
-  WORKSPACE_RUN_CONTEXT_RUNTIME_CAPABILITY
-} from '@yiru/runtime-protocol/protocol-version'
+} from '@yiru/protocol/host/identity'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
 import type {
-  Repo,
-  ProjectGroup,
   ProjectHostSetup,
   ProjectHostSetupExistingFolderArgs
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { translate } from '~renderer/i18n/i18n'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 import {
@@ -141,8 +141,11 @@ export async function assertProjectHostSetupRuntimeCapability(
   }
   await assertRuntimeEnvironmentCapability(
     target.environmentId,
-    PROJECT_HOST_SETUP_RUNTIME_CAPABILITY,
-    'The selected runtime host does not support project host setup yet. Update Yiru on the host and try again.',
+    PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
+    translate(
+      'runtime.projectSetup.unsupported',
+      'The selected runtime host does not support project host setup yet. Update Yiru on the host and try again.'
+    ),
     15_000
   )
 }
@@ -156,8 +159,11 @@ export async function assertProjectHostSetupMutationRuntimeCapabilities(
   await assertProjectHostSetupRuntimeCapability(target)
   await assertRuntimeEnvironmentCapability(
     target.environmentId,
-    WORKSPACE_RUN_CONTEXT_RUNTIME_CAPABILITY,
-    'The selected runtime host does not support explicit workspace run hosts yet. Update Yiru on the host and try again.',
+    PROJECT_CONTEXT_PROTOCOL_CAPABILITY,
+    translate(
+      'runtime.projectContext.unsupported',
+      'The selected runtime host does not support explicit workspace run hosts yet. Update Yiru on the host and try again.'
+    ),
     15_000
   )
 }

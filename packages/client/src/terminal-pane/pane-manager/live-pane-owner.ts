@@ -1,4 +1,4 @@
-import type { TerminalLeafId } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import type { TerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
 
 import { applyDividerStyles, applyPaneOpacity, applyRootBackground } from './pane-divider'
 import { PaneIdentityRegistry } from './pane-identity-registry'

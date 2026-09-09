@@ -1,4 +1,4 @@
-import { fileUriToFilesystemPath } from '@yiru/runtime-protocol/model/platform'
+import { fileUriToFilesystemPath } from '@yiru/protocol/host/file-uri-path'
 
 export type TerminalFileUrlTarget = {
   filePath: string

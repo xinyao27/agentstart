@@ -1,5 +1,4 @@
-import type { AiVaultSession } from '@yiru/runtime-protocol/model/agent'
-import { folderWorkspaceKey } from '@yiru/runtime-protocol/workbench/workspace/scope'
+import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import { toast } from 'sonner'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { translate } from '~renderer/i18n/i18n'
@@ -10,7 +9,10 @@ import { findWorktreeById } from '~renderer/worktree/state/types'
 
 import { canOpenAiVaultSessionLogInYiru } from './session-path-actions'
 
-type AiVaultLogSession = Pick<AiVaultSession, 'filePath' | 'executionHostId'>
+type AiVaultLogSession = {
+  executionHostId: string | null | undefined
+  filePath: string | null | undefined
+}
 
 // Why: rapid double-clicks of View Log during the authorize await must share one
 // in-flight open (and toast-once on failure) so a slow FS grant can't spawn

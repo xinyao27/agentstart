@@ -1,6 +1,8 @@
-import type { LocalhostWorktreeLabelRoute } from '@yiru/runtime-protocol/workbench/localhost-worktree-labels'
-import type { GlobalSettings, Project, Repo } from '@yiru/runtime-protocol/workbench/types'
-import type { WorkspacePort } from '@yiru/runtime-protocol/workbench/workspace/ports'
+import type { WorkspacePort } from '@yiru/protocol'
+import type { Project } from '@yiru/protocol/project/model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { LocalhostWorktreeLabelRoute } from '~renderer/ports/loopback-url'
 import { useAppStore } from '~renderer/store/state'
 
 import { localhostWorktreeLabelRouteForPort } from './localhost-label'

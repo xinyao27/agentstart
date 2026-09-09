@@ -1,9 +1,8 @@
 import type {
-  Worktree,
-  WorktreeMeta,
   WorkspaceStatus,
   WorkspaceStatusDefinition
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/status/model'
+import type { Worktree, WorktreeMeta } from '@yiru/protocol/worktree/model'
 import { useAppStore } from '~renderer/store/state'
 
 import { getWorkspaceStatus, getWorkspaceStatusGroupKey } from '../workspace-status'

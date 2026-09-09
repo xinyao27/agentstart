@@ -33,13 +33,11 @@ export function ChecksPanelEmptyStateView({
     handlePublishBranch,
     handleRefresh,
     hasAmbiguousGitHubHostedReview,
-    hostedReviewCreateProvider,
     hostedReviewCreation,
     isCreatingPr,
     isFolder,
     isPublishingBranch,
     isRemoteOperationActive,
-    linkedGitLabMR,
     prAiGenerationEnabled,
     prBase,
     prBaseQuery,
@@ -109,10 +107,6 @@ export function ChecksPanelEmptyStateView({
           : conflictOperation === 'cherry-pick'
             ? 'Cherry-pick'
             : null
-    const emptyReviewIsGitLab =
-      linkedGitLabMR !== null || hostedReviewCreation?.provider === 'gitlab'
-    const emptyReviewLabel = emptyReviewIsGitLab ? 'merge request' : 'pull request'
-    const emptyReviewShortLabel = emptyReviewIsGitLab ? 'MR' : 'PR'
     const canPushCreate = hostedReviewCreation?.blockedReason === 'needs_push'
     const shouldPushBeforeCreateReview = createPrPushFirst || canPushCreate
     const canPublishBranch =
@@ -125,12 +119,10 @@ export function ChecksPanelEmptyStateView({
         }))
     const emptyStateCopy = getChecksPanelEmptyStateCopy({
       operationLabel,
-      prRefreshStatus: emptyReviewIsGitLab ? undefined : prRefreshState?.status,
+      prRefreshStatus: prRefreshState?.status,
       hostedReviewBlockedReason: hostedReviewCreation?.blockedReason,
       hasUpstream: publishActionRemoteStatus?.hasUpstream,
       hasCurrentBranch: Boolean(branch),
-      reviewLabel: emptyReviewLabel,
-      reviewShortLabel: emptyReviewShortLabel,
       hasAmbiguousGitHubHostedReview
     })
     return (
@@ -146,7 +138,6 @@ export function ChecksPanelEmptyStateView({
           <div className="border-border mt-4 border-t pt-3">
             <CreateHostedReviewComposer
               className="p-0"
-              provider={hostedReviewCreateProvider}
               branch={branch}
               base={prBase}
               setBase={handlePrBaseChange}
@@ -175,12 +166,12 @@ export function ChecksPanelEmptyStateView({
                   ? translate(
                       'auto.components.right.sidebar.ChecksPanel.98f4c37b33',
                       'Push & Create {{value0}}',
-                      { value0: emptyReviewShortLabel }
+                      { value0: 'PR' }
                     )
                   : translate(
                       'auto.components.right.sidebar.ChecksPanel.889cdfba04',
                       'Create {{value0}}',
-                      { value0: emptyReviewShortLabel }
+                      { value0: 'PR' }
                     )
               }}
               onGenerate={() => void handleGeneratePullRequestFields()}

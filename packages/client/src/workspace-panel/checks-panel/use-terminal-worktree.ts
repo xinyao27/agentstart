@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 type ChecksPanelTerminalWorktree = {
   worktree: Worktree | null

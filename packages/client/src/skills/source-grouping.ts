@@ -1,4 +1,5 @@
-import { skillDirectoryName, type DiscoveredSkill } from '@yiru/runtime-protocol/workbench/skills'
+import type { DiscoveredSkill } from '@yiru/protocol'
+import { skillDirectoryName } from '~renderer/skills/installation'
 
 export type SkillSourceGroupKind = 'repository' | 'skill'
 

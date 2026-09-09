@@ -1,9 +1,6 @@
 import type { IDisposable } from '@xterm/xterm'
-import type {
-  KeybindingOverrides,
-  TerminalShortcutPolicy
-} from '@yiru/runtime-protocol/workbench/keybindings'
-import type { TerminalKittyKeyboardModeTracker } from '@yiru/runtime-protocol/workbench/terminal/kitty-keyboard-mode-tracker'
+import type { KeybindingOverrides, TerminalShortcutPolicy } from '@yiru/protocol/keybindings'
+import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 import type { ManagedPane, PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
 
 import type { PtyTransport } from './pty/transport-types'

@@ -1,21 +1,19 @@
-import {
-  getContextualTour,
-  type ContextualTourId,
-  type ContextualTourStepAction
-} from '@yiru/runtime-protocol/workbench/contextual-tours'
-import type { ContextualTourOutcome } from '@yiru/runtime-protocol/workbench/feature-education-telemetry'
+import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
+import type { ContextualTourOutcome } from '@yiru/protocol/telemetry/education'
 import type { JSX } from 'react'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import {
   trackContextualTourOutcome,
   trackContextualTourShown
 } from '~renderer/feature-tips/telemetry'
+import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { isContextualTourAllowedForModal } from '~renderer/runtime/contextual-tour-gate'
 import { useAppStore } from '~renderer/store/state'
 import { requestActiveTerminalPaneSplit } from '~renderer/tab-bar/request-active-terminal-pane-split'
 
+import { getContextualTour, type ContextualTourStepAction } from './catalog'
 import {
   getContextualTourCleanupOutcome,
   measureContextualTourOverlayRenderState
@@ -30,6 +28,7 @@ import { performContextualTourStepAction } from './contextual-tour-step-actions'
 import { openWorkspaceCreationComposerWithTourHandoff } from './workspace-creation-tour-handoff'
 
 export function ContextualTourOverlay(): JSX.Element | null {
+  useUiLocale()
   const activeTourId = useAppStore((s) => s.activeContextualTourId)
   const activeStepIndex = useAppStore((s) => s.activeContextualTourStepIndex)
   const activeTourSource = useAppStore((s) => s.activeContextualTourSource)

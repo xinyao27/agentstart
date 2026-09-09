@@ -1,10 +1,10 @@
+import { RuntimePeer, TerminalClient, runtimeEnvironmentTransport } from '@yiru/protocol'
 import {
-  decodeRuntimeOrpcBinaryFrame,
-  decodeRuntimeOrpcSideChannelBinaryFrame,
-  decodeRuntimeOrpcTextFrame,
-  encodeRuntimeOrpcBinaryFrame,
-  encodeRuntimeOrpcTextFrame
-} from '@yiru/runtime-protocol/orpc-peer-frame'
+  TerminalMultiplexClient,
+  type TerminalMultiplexConnection
+} from '@yiru/protocol/terminal-multiplex'
+import { TERMINAL_MULTIPLEX_DEFAULT_MAX_FRAME_BYTES } from '@yiru/protocol/terminal-multiplex/frame'
+import { translate } from '~renderer/i18n/i18n'
 import type {
   BrowserHostTerminalMultiplexHandle,
   BrowserHostTerminalMultiplexOptions
@@ -12,10 +12,6 @@ import type {
 
 import type { ExtensionRuntimeBootstrap } from './session'
 import { extensionRuntimeSocketUrl, waitForExtensionRuntimeSocket } from './socket-endpoint'
-import {
-  openExtensionTerminalMultiplexSubscription,
-  type ExtensionTerminalMultiplexSubscription
-} from './terminal-multiplex-subscription'
 
 export async function openExtensionTerminalMultiplex(
   bootstrap: ExtensionRuntimeBootstrap,
@@ -23,82 +19,108 @@ export async function openExtensionTerminalMultiplex(
 ): Promise<BrowserHostTerminalMultiplexHandle> {
   const socket = new WebSocket(extensionRuntimeSocketUrl(bootstrap))
   socket.binaryType = 'arraybuffer'
-  await waitForExtensionRuntimeSocket(socket)
-  const requestId = crypto.randomUUID()
-  let subscription: ExtensionTerminalMultiplexSubscription | null = null
-  let intentionallyClosed = false
-  const handleMessage = (event: MessageEvent<unknown>): void => {
-    if (typeof event.data === 'string') {
-      if (!subscription?.receiveText(encodeRuntimeOrpcTextFrame(event.data))) {
-        socket.close(1003, 'Invalid terminal multiplex response')
-      }
+  let closed = false
+  let connection: TerminalMultiplexConnection | undefined
+  const close = (): void => {
+    if (closed) {
       return
     }
-    if (!(event.data instanceof ArrayBuffer)) {
-      socket.close(1003, 'Invalid terminal multiplex response')
+    closed = true
+    socket.removeEventListener('message', receive)
+    socket.removeEventListener('close', disconnected)
+    void connection?.close().catch(() => {})
+    peer.close()
+    socket.close()
+  }
+  const fail = (error: unknown): void => {
+    if (closed) {
       return
     }
-    const bytes = new Uint8Array(event.data)
-    const frame = decodeRuntimeOrpcSideChannelBinaryFrame(bytes)
-      ? bytes
-      : encodeRuntimeOrpcBinaryFrame(bytes)
-    if (!subscription?.receiveBinary(frame)) {
-      socket.close(1003, 'Invalid terminal multiplex response')
+    close()
+    options.onError(error instanceof Error ? error : new Error(String(error)))
+  }
+  const peer = new RuntimePeer(async (payload) => {
+    if (socket.readyState !== WebSocket.OPEN) {
+      throw new Error(translate('terminal.connection.closed', 'Terminal connection closed'))
+    }
+    socket.send(new Uint8Array(payload))
+  }, fail)
+  const receive = (event: MessageEvent<unknown>): void => {
+    if (!(event.data instanceof ArrayBuffer) || !peer.receive(new Uint8Array(event.data))) {
+      fail(
+        new Error(
+          translate('terminal.multiplex.invalidResponse', 'Invalid terminal multiplex response')
+        )
+      )
     }
   }
-  socket.addEventListener('message', handleMessage)
-  socket.addEventListener(
-    'close',
-    () => {
-      socket.removeEventListener('message', handleMessage)
-      if (!intentionallyClosed) {
-        subscription?.transportClosed()
+  const disconnected = (): void => {
+    if (closed) {
+      return
+    }
+    close()
+    options.onClose()
+  }
+  socket.addEventListener('message', receive)
+  socket.addEventListener('close', disconnected)
+  try {
+    await waitForExtensionRuntimeSocket(socket)
+    await peer.hello({
+      kind: 'chrome-extension',
+      name: 'yiru-extension',
+      version: String(bootstrap.protocolVersion),
+      instanceId: options.clientInstanceId
+    })
+    const transport =
+      options.environmentIdentity === 'local'
+        ? peer
+        : runtimeEnvironmentTransport(peer, options.environmentIdentity)
+    // Why: issue and redeem on the same authenticated target connection, including routed runtimes.
+    const ticket = await new TerminalClient(transport).openMultiplex({
+      clientInstanceId: options.clientInstanceId,
+      environmentId: options.environmentIdentity
+    })
+    if (
+      !ticket.bulkTicket ||
+      ticket.expiresAt <= Date.now() ||
+      ticket.maxFrameBytes !== TERMINAL_MULTIPLEX_DEFAULT_MAX_FRAME_BYTES
+    ) {
+      throw new Error(
+        translate(
+          'terminal.multiplex.invalidTicket',
+          'Runtime host returned an invalid terminal bulk ticket.'
+        )
+      )
+    }
+    connection = await new TerminalMultiplexClient(transport).open(ticket.bulkTicket)
+    const active = connection
+    void (async () => {
+      try {
+        for await (const event of active.events) {
+          if (closed) {
+            return
+          }
+          if (event.type === 'ready') {
+            options.onReady()
+          } else {
+            options.onBinary(event.bytes)
+          }
+        }
+        disconnected()
+      } catch (error) {
+        fail(error)
       }
-    },
-    { once: true }
-  )
-  subscription = await openExtensionTerminalMultiplexSubscription({
-    callbacks: {
-      onBinary: options.onBinary,
-      onClose: options.onClose,
-      onError: (error) => options.onError(new Error(error.message)),
-      onResponse: options.onResponse
-    },
-    onCreated: (created) => {
-      subscription = created
-    },
-    params: { bulkTicket: options.ticket.bulkTicket },
-    requestId,
-    runtimeId: options.environmentIdentity,
-    sendBinary: (frame) => {
-      const orpcPayload = decodeRuntimeOrpcBinaryFrame(frame)
-      return sendSocketFrame(socket, orpcPayload ?? frame)
-    },
-    sendText: (frame) => {
-      const payload = decodeRuntimeOrpcTextFrame(frame)
-      return payload !== null && sendSocketFrame(socket, payload)
+    })()
+    return {
+      sendBinary: (bytes) => {
+        if (!closed) {
+          void active.sendBinary(bytes).catch(fail)
+        }
+      },
+      unsubscribe: close
     }
-  })
-  return {
-    sendBinary: (bytes) => subscription?.sendBinary(bytes),
-    unsubscribe: () => {
-      intentionallyClosed = true
-      subscription?.close()
-      socket.close(1000, 'Terminal multiplex closed')
-    }
+  } catch (error) {
+    close()
+    throw error
   }
-}
-
-function sendSocketFrame(socket: WebSocket, frame: string | Uint8Array<ArrayBufferLike>): boolean {
-  if (socket.readyState !== WebSocket.OPEN) {
-    return false
-  }
-  if (typeof frame === 'string') {
-    socket.send(frame)
-  } else {
-    const copy = new Uint8Array(frame.byteLength)
-    copy.set(frame)
-    socket.send(copy.buffer)
-  }
-  return true
 }

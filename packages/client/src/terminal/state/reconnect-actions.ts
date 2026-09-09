@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'

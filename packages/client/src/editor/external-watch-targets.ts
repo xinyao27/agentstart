@@ -1,4 +1,4 @@
-import { isGitRepoKind } from '@yiru/runtime-protocol/workbench/repo-kind'
+import { isGitRepoKind } from '@yiru/protocol/project/repository'
 import type { AppState } from '~renderer/store/state'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
 import { findWorktreeById } from '~renderer/worktree/state/types'

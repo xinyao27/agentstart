@@ -1,5 +1,5 @@
 import type { StateCreator } from 'zustand'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
+import { getRuntimeFolderPathStatus } from '~renderer/runtime/folder-workspace-target'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 import type { AppState } from '../../store/types'
@@ -49,11 +49,7 @@ export function createRepoPathStatusActions(
         const target = getActiveRuntimeTarget(
           getFolderWorkspacePathStatusRouteSettings(options, get().settings)
         )
-        const status = (
-          await callRuntimeOrpc(target, (client) => client.folderWorkspace.getPathStatus, request, {
-            timeoutMs: 15_000
-          })
-        ).status
+        const status = (await getRuntimeFolderPathStatus(target, request)).status
         set((state) => ({
           folderWorkspacePathStatuses:
             requestSnapshot !== null &&

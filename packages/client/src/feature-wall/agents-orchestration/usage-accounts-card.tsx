@@ -1,7 +1,7 @@
 import type {
   ClaudeRateLimitAccountsState,
   CodexRateLimitAccountsState
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/settings/managed-accounts'
 import { useEffect, useState } from 'react'
 import type { JSX, ReactNode } from 'react'
 import { toast } from 'sonner'

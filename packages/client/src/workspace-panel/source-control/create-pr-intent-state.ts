@@ -1,3 +1,3 @@
-import { resolveCreateReviewIntentEligibility } from '@yiru/runtime-protocol/model/review'
+import { resolveCreateReviewIntentEligibility } from '~renderer/source-control/workflow/review'
 
 export const resolveCreatePrIntentEligibility = resolveCreateReviewIntentEligibility

@@ -1,14 +1,11 @@
-import type { AiVaultSession } from '@yiru/runtime-protocol/model/agent'
-import {
-  parseLegacyNumericPaneKey,
-  parsePaneKey
-} from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { parseLegacyNumericPaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/workspace/session'
 import type { AppState } from '~renderer/store/types'
 import { resolveRuntimePaneTitleLeafId } from '~renderer/terminal-pane/title-leaf-id'
+import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
 export type AiVaultOriginalPaneTarget = {
   paneKey: string

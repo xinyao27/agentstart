@@ -16,7 +16,7 @@ Describe the user-visible change.
 ## AI Review Report
 
 Summarize the code review you ran with your AI coding agent. Include the main risks it checked, what it flagged, and what you changed or verified as a result.
-Confirm that the review explicitly checked cross-platform compatibility for macOS, Linux, and Windows, including Bun daemon behavior, Chrome shortcuts, labels, paths, and shell behavior touched by this PR.
+Confirm that the review explicitly checked cross-platform compatibility for macOS, Linux, and Windows, including daemon behavior, Chrome shortcuts, labels, paths, and shell behavior touched by this PR.
 
 ## Security Audit
 

@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 
 import { normalizeMatchQuery, tokenizeMatchValue } from './query-token-match'

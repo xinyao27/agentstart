@@ -1,19 +1,19 @@
-import { CUSTOM_AGENT_ID } from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import {
   SOURCE_CONTROL_ACTION_IDS,
-  SOURCE_CONTROL_ACTION_LABELS,
   type SourceControlActionId
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
+} from '@yiru/protocol/source-control/ai-actions'
 import type {
   RepoSourceControlAiOverrides,
   SourceControlAiSettings
-} from '@yiru/runtime-protocol/workbench/source-control/ai-types'
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-types'
+import { CUSTOM_AGENT_ID } from '@yiru/protocol/source-control/custom-agent'
 import type React from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
 import { Terminal } from '~renderer/icons/hugeicons'
 import { SourceControlActionVariableChips } from '~renderer/source-control/action-variable-chips'
+import { getSourceControlActionLabels } from '~renderer/source-control/ai/action-copy'
 import { Button } from '~renderer/ui/button'
 import { Input } from '~renderer/ui/input'
 import { Label } from '~renderer/ui/label'
@@ -118,7 +118,7 @@ export function RepositorySourceControlAiActionRows({
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0 space-y-0.5">
                 <p className="text-foreground text-xs font-medium">
-                  {SOURCE_CONTROL_ACTION_LABELS[actionId]}
+                  {getSourceControlActionLabels()[actionId]}
                 </p>
                 <p className="text-muted-foreground text-[11px]">
                   {getActionDescriptions()[actionId]}

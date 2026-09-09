@@ -1,4 +1,4 @@
-import type { Tab, TabGroup, WorkspaceVisibleTabType } from '@yiru/runtime-protocol/workbench/types'
+import type { Tab, TabGroup, WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
 import type { StoreApi } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 

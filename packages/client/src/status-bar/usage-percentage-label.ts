@@ -1,8 +1,7 @@
-import {
-  getDisplayedUsagePercentage,
-  type UsagePercentageDisplay
-} from '@yiru/runtime-protocol/workbench/usage-percentage-display'
+import type { UsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
 import { translate } from '~renderer/i18n/i18n'
+
+import { getDisplayedUsagePercentage } from './usage-percentage'
 
 export function formatUsagePercentageLabel(
   usedPercent: number,

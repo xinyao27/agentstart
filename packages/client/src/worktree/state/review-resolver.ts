@@ -1,10 +1,14 @@
-import { isPositiveHostedReviewNumber } from '@yiru/runtime-protocol/model/review'
-import type { Worktree, GitPushTarget, WorktreeMeta } from '@yiru/runtime-protocol/workbench/types'
+import type { WorktreeSetPatch } from '@yiru/protocol'
+import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import { isPositiveHostedReviewNumber } from '@yiru/protocol/hosted-review/types'
+import type { Worktree, WorktreeMeta } from '@yiru/protocol/worktree/model'
 import { readWorktreeMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterWorktreeMutation } from '~renderer/project-catalog/mutation-refresh'
-import { callRuntimeOrpc } from '~renderer/runtime/orpc-client'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
-import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
+import {
+  resolveRuntimeWorktreePrBase,
+  setRuntimeWorktree
+} from '~renderer/runtime/worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 
 import type { AppState } from '../../store/types'
@@ -19,25 +23,13 @@ export async function persistWorktreeMeta(
   const target = getActiveRuntimeTarget(settings)
   const repoId = getRepoIdFromWorktreeId(worktreeId)
   const expectedRevision = readWorktreeMutationRevision(target, repoId)
-  if (target.kind === 'local') {
-    const result = await workspaceHostClient.worktrees.updateMeta({
-      expectedRevision,
-      worktreeId,
-      updates
-    })
-    await refreshAfterWorktreeMutation(target, repoId, result.revision)
-    return
-  }
-  const result = await callRuntimeOrpc(
-    target,
-    (client) => client.worktree.set,
-    {
-      expectedRevision,
-      worktree: toRuntimeWorktreeSelector(worktreeId),
-      ...encodePushTargetClearForRuntimeRpc(updates)
-    },
-    { timeoutMs: 15_000 }
-  )
+  // Why: `WorktreeMeta` (workbench domain model) and `WorktreeSetPatch`
+  // (protobuf wire patch) describe the same patchable field set one-for-one.
+  const result = await setRuntimeWorktree(target, {
+    expectedRevision,
+    worktree: toRuntimeWorktreeSelector(worktreeId),
+    patch: encodePushTargetClearForRuntimeRpc(updates) as WorktreeSetPatch
+  })
   await refreshAfterWorktreeMutation(target, repoId, result.revision)
 }
 
@@ -48,15 +40,7 @@ export async function resolveGitHubReviewPushTarget(
 ): Promise<GitPushTarget | undefined> {
   try {
     const target = getActiveRuntimeTarget(settings)
-    const result =
-      target.kind === 'local'
-        ? await workspaceHostClient.worktrees.resolvePrBase({ repoId, prNumber })
-        : await callRuntimeOrpc(
-            target,
-            (client) => client.worktree.resolvePrBase,
-            { repo: repoId, prNumber },
-            { timeoutMs: 30_000 }
-          )
+    const result = await resolveRuntimeWorktreePrBase(target, { repo: repoId, prNumber })
     if ('error' in result) {
       console.warn(`Failed to resolve push target for PR #${prNumber}: ${result.error}`)
       return undefined
@@ -65,36 +49,6 @@ export async function resolveGitHubReviewPushTarget(
   } catch (error) {
     console.warn(
       `Failed to resolve push target for PR #${prNumber}:`,
-      error instanceof Error ? error.message : error
-    )
-    return undefined
-  }
-}
-
-export async function resolveGitLabReviewPushTarget(
-  settings: AppState['settings'],
-  repoId: string,
-  mrIid: number
-): Promise<GitPushTarget | undefined> {
-  try {
-    const target = getActiveRuntimeTarget(settings)
-    const result =
-      target.kind === 'local'
-        ? await workspaceHostClient.worktrees.resolveMrBase({ repoId, mrIid })
-        : await callRuntimeOrpc(
-            target,
-            (client) => client.worktree.resolveMrBase,
-            { repo: repoId, mrIid },
-            { timeoutMs: 30_000 }
-          )
-    if ('error' in result) {
-      console.warn(`Failed to resolve push target for MR !${mrIid}: ${result.error}`)
-      return undefined
-    }
-    return result.pushTarget
-  } catch (error) {
-    console.warn(
-      `Failed to resolve push target for MR !${mrIid}:`,
       error instanceof Error ? error.message : error
     )
     return undefined
@@ -111,13 +65,6 @@ export function getHostedReviewPushTargetLookup(worktree: Worktree): {
     return {
       key: `${worktree.id}:${hostScope}:github:${prNumber}`,
       resolve: (settings) => resolveGitHubReviewPushTarget(settings, worktree.repoId, prNumber)
-    }
-  }
-  if (isPositiveHostedReviewNumber(worktree.linkedGitLabMR)) {
-    const mrIid = worktree.linkedGitLabMR
-    return {
-      key: `${worktree.id}:${hostScope}:gitlab:${mrIid}`,
-      resolve: (settings) => resolveGitLabReviewPushTarget(settings, worktree.repoId, mrIid)
     }
   }
   return null

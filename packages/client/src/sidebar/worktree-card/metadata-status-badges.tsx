@@ -37,11 +37,9 @@ function MetadataStatusBadge({
 }
 
 export function ReviewStateBadge({
-  state,
-  label
+  state
 }: {
   state: WorktreeCardPrDisplay['state']
-  label: 'MR' | 'PR'
 }): React.JSX.Element | null {
   if (!state) {
     return null
@@ -80,8 +78,7 @@ export function ReviewStateBadge({
       <MetadataStatusBadge
         label={translate(
           'auto.components.sidebar.WorktreeCardMetadataStatusBadges.2931b42b09',
-          'State: Draft {{value0}}',
-          { value0: label }
+          'State: Draft PR'
         )}
         className="border-border bg-muted/30 text-muted-foreground"
       >
@@ -98,7 +95,7 @@ export function ReviewStateBadge({
       )}
       className="border-emerald-500/25 bg-emerald-500/5 text-emerald-600 dark:text-emerald-300"
     >
-      {label === 'MR' ? <GitMerge /> : <PullRequestIcon />}
+      <PullRequestIcon />
     </MetadataStatusBadge>
   )
 }

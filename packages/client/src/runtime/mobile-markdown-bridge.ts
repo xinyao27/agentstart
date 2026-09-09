@@ -1,16 +1,16 @@
 import {
-  hashMarkdownContent,
-  isMarkdownContentByteLengthOverLimit,
-  MOBILE_MARKDOWN_EDIT_MAX_BYTES,
-  type RuntimeMarkdownReadTabResult,
-  type RuntimeMarkdownSaveTabResult
-} from '@yiru/runtime-protocol/workbench/mobile-markdown-document'
-import {
   YIRU_EDITOR_FILE_SAVED_EVENT,
   requestEditorFileSave,
   requestEditorSaveQuiesce,
   type EditorFileSavedDetail
 } from '~renderer/editor/autosave'
+import {
+  hashMarkdownContent,
+  isMarkdownContentByteLengthOverLimit,
+  MOBILE_MARKDOWN_EDIT_MAX_BYTES,
+  type RuntimeMarkdownReadTabResult,
+  type RuntimeMarkdownSaveTabResult
+} from '~renderer/editor/mobile-document'
 import { flushPendingEditorChange } from '~renderer/editor/pending-flush'
 import type { OpenFile } from '~renderer/editor/state'
 import { getConnectionIdForFile } from '~renderer/runtime/connection-context'
@@ -30,7 +30,7 @@ type FileContent = {
 
 // Why: Phase 5 slice S4a — these two used to be reached only through
 // `ui.onMobileMarkdownRequest`'s IPC listener (attachMobileMarkdownBridge,
-// removed). They are now called directly by shell-services-handler.ts's
+// removed). They are now called directly by shell-host/handler.ts's
 // `mobileMarkdown.read`/`.save` procedures, so this module's public surface
 // is the two operations themselves rather than an IPC-mounting function.
 export async function readMobileMarkdownTab(

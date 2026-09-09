@@ -1,3 +1,4 @@
+import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
 /**
  * Parked terminal side-effect watcher.
  *
@@ -7,13 +8,12 @@
  * first parking attempt.) The multiplex subscription remains fact-driven
  * while output delivery is gated; reveal restores the authoritative snapshot.
  */
-import { isClaudeAgent } from '@yiru/runtime-protocol/workbench/agent/detection'
-import { makePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
+import { isClaudeAgent } from '~renderer/agent/title/identity'
+import { useAppStore } from '~renderer/store/state'
 import {
   mode2031SequenceFor,
   resolveTerminalColorSchemeMode
-} from '@yiru/runtime-protocol/workbench/terminal/color-scheme-protocol'
-import { useAppStore } from '~renderer/store/state'
+} from '~renderer/terminal-pane/emulator/color-scheme'
 import { getSystemPrefersDark } from '~renderer/terminal/theme'
 
 import {
@@ -61,7 +61,6 @@ export type ParkedTerminalByteWatcherOptions = {
   initialTitle?: string
   /** Pull main's title-only snapshot when a watcher starts before its pane
    *  has ever mounted. Ordinary park cycles already have a current title. */
-  restoreTitleOnRegister?: boolean
   /** Out-of-band reply channel to the PTY (mode-2031 color-scheme answers). */
   sendInput: (data: string) => void
 }
@@ -233,8 +232,7 @@ export function startParkedTerminalByteWatcher(
       onPrLink: (link) =>
         useAppStore.getState().observeTerminalGitHubPullRequestLink(worktreeId, link),
       onMode2031Subscribe: sendMode2031Reply
-    },
-    restoreTitleOnRegister: options.restoreTitleOnRegister === true
+    }
   })
   // Why: the parked subscription carries side-effect batches while its
   // output delivery stays gated; the byte callback intentionally does nothing.

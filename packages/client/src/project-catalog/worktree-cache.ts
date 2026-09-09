@@ -1,10 +1,10 @@
-import type { RuntimeDetectedWorktreeListResult } from '@yiru/runtime-protocol/contract'
-import { getRuntimeTargetOrpc } from '~renderer/runtime/query-target'
+import type { WorktreeDetectedListResult } from '@yiru/protocol'
+import { worktreeDetectedListQuery } from '~renderer/runtime/worktree-catalog-query'
 
 import { readProjectCatalogQueryClient, readProjectCatalogSnapshot } from './catalog-snapshot'
 import { projectCatalogRepoKey, projectCatalogTargetForRepo } from './query'
 
-type CachedWorktree = RuntimeDetectedWorktreeListResult['worktrees'][number]
+type CachedWorktree = WorktreeDetectedListResult['worktrees'][number]
 
 export function readProjectCatalogWorktree(worktreeId: string): CachedWorktree | undefined {
   const owner = findWorktreeOwner(worktreeId)
@@ -12,20 +12,20 @@ export function readProjectCatalogWorktree(worktreeId: string): CachedWorktree |
     return undefined
   }
   return readProjectCatalogQueryClient()
-    .getQueryData<RuntimeDetectedWorktreeListResult>(owner.queryKey)
+    .getQueryData<WorktreeDetectedListResult>(owner.queryKey)
     ?.worktrees.find((worktree) => worktree.id === worktreeId)
 }
 
 export function updateProjectCatalogWorktree(
   worktreeId: string,
-  updates: Partial<RuntimeDetectedWorktreeListResult['worktrees'][number]>
+  updates: Partial<CachedWorktree>
 ): boolean {
   const owner = findWorktreeOwner(worktreeId)
   if (!owner) {
     return false
   }
   let changed = false
-  readProjectCatalogQueryClient().setQueryData<RuntimeDetectedWorktreeListResult>(
+  readProjectCatalogQueryClient().setQueryData<WorktreeDetectedListResult>(
     owner.queryKey,
     (current) => {
       if (!current) {
@@ -55,9 +55,5 @@ function findWorktreeOwner(worktreeId: string): { queryKey: readonly unknown[] }
     return null
   }
   const target = projectCatalogTargetForRepo(repo)
-  return {
-    queryKey: getRuntimeTargetOrpc(target).worktree.detectedList.queryKey({
-      input: { repo: repo.id }
-    })
-  }
+  return { queryKey: worktreeDetectedListQuery(target, repo.id).queryKey }
 }

@@ -1,6 +1,6 @@
-import { normalizeBrowserPageZoomLevel } from '@yiru/runtime-protocol/workbench/browser/page-zoom'
-import { normalizeKagiSessionLink } from '@yiru/runtime-protocol/workbench/browser/url'
 import type { StateCreator } from 'zustand'
+import { normalizeKagiSessionLink } from '~renderer/browser/session/kagi-link'
+import { normalizeBrowserPageZoomLevel } from '~renderer/browser/zoom'
 import { setRuntimeUIState } from '~renderer/runtime/ui-client'
 
 import type { AppState } from '../../store/types'

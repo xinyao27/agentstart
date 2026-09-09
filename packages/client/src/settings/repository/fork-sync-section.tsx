@@ -1,4 +1,5 @@
-import type { ForkSyncMode, GitForkSyncResult, Repo } from '@yiru/runtime-protocol/workbench/types'
+import type { ForkSyncMode, GitForkSyncResult } from '@yiru/protocol/git/fork-sync-types'
+import type { Repo } from '@yiru/protocol/project/repository'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

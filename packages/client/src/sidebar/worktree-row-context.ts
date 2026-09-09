@@ -1,17 +1,12 @@
-import {
-  LOCAL_EXECUTION_HOST_ID,
-  type ExecutionHostId
-} from '@yiru/runtime-protocol/model/workspace'
-import type {
-  FolderWorkspace,
-  ProjectGroup,
-  ProjectOrderBy,
-  Repo,
-  Worktree,
-  WorktreeLineage,
-  WorkspaceStatusDefinition
-} from '@yiru/runtime-protocol/workbench/types'
-import { cloneDefaultWorkspaceStatuses } from '@yiru/runtime-protocol/workbench/workspace/statuses'
+import { LOCAL_EXECUTION_HOST_ID, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectOrderBy } from '@yiru/protocol/settings/ui-state'
+import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
+import { cloneDefaultWorkspaceStatuses } from '@yiru/protocol/workspace/status/normalize'
+import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 
 import { ALL_GROUP_KEY, ALL_GROUP_META } from './worktree-group-metadata'
 import { getHostWorktreeMetadata, getRenderedNaturalAnchorRepoIds } from './worktree-host-context'

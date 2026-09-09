@@ -1,14 +1,14 @@
-import { isCustomAgentId } from '@yiru/runtime-protocol/workbench/commit-message/agent-spec'
-import {
-  normalizeRepoSourceControlAiOverrides,
-  resolveSourceControlActionRecipe
-} from '@yiru/runtime-protocol/workbench/source-control/ai'
+import { filterEnabledTuiAgents } from '@yiru/protocol/agent/selection'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { Repo } from '@yiru/protocol/project/repository'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type {
   SourceControlActionId,
   SourceControlActionRecipe
-} from '@yiru/runtime-protocol/workbench/source-control/ai-actions'
-import { filterEnabledTuiAgents } from '@yiru/runtime-protocol/workbench/tui-agent/selection'
-import type { GlobalSettings, Repo, TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/source-control/ai-actions'
+import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import { normalizeRepoSourceControlAiOverrides } from '@yiru/protocol/source-control/repo-overrides'
+import { resolveSourceControlActionRecipe } from '@yiru/protocol/source-control/resolution'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 
 export function readSourceControlLaunchRecipeAgentId(

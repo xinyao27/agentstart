@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { isLocalPathOpenBlocked } from '~renderer/editor/local-path-open-guard'
 import { settingsForRuntimeOwner } from '~renderer/runtime/rpc-client'
 

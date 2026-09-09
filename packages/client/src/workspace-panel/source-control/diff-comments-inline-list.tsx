@@ -1,4 +1,5 @@
-import type { DiffComment, GitStatusEntry } from '@yiru/runtime-protocol/workbench/types'
+import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
 import React from 'react'
 import { getDiffCommentLineLabel, getDiffCommentSource } from '~renderer/editor/diff-comment-compat'
 import { formatDiffComment } from '~renderer/editor/diff-comments-format'

@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/runtime-protocol/workbench/types'
+import type { Worktree } from '@yiru/protocol/worktree/model'
 import type { JSX } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { FlowArrow as Workflow } from '~renderer/icons/hugeicons'

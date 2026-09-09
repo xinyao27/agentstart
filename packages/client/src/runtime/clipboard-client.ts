@@ -1,36 +1,27 @@
-import { CLIPBOARD_IMAGE_UPLOAD_CHUNK_BASE64_CHARS } from '@yiru/runtime-protocol/clipboard'
+import { CLIPBOARD_IMAGE_UPLOAD_CHUNK_BASE64_CHARS } from '~renderer/clipboard/image-limits'
 
-import { createLocalRuntimeOrpcClient } from './orpc-client'
+import { requireClipboardClient } from './clipboard-target'
 import { shellClient } from './shell-client'
 
 const CLIPBOARD_IMAGE_SAVE_TIMEOUT_MS = 30_000
 
-export async function saveLocalClipboardImageAsTempFile(
-  connectionId?: string | null
-): Promise<string | null> {
+export async function saveLocalClipboardImageAsTempFile(): Promise<string | null> {
   const contentBase64 = await shellClient.ui.readClipboardImageBase64()
   if (!contentBase64) {
     return null
   }
 
-  const connection = await createLocalRuntimeOrpcClient()
+  const clipboard = await requireClipboardClient({ kind: 'local' })
   const signal = AbortSignal.timeout(CLIPBOARD_IMAGE_SAVE_TIMEOUT_MS)
   let uploadId: string | null = null
   try {
-    const started = await connection.client.clipboard.startImageUpload(
-      {
-        expectedBase64Length: contentBase64.length,
-        connectionId
-      },
-      { signal }
-    )
-    uploadId = started.uploadId
+    uploadId = await clipboard.startImageUpload(contentBase64.length, { signal })
     for (
       let offset = 0;
       offset < contentBase64.length;
       offset += CLIPBOARD_IMAGE_UPLOAD_CHUNK_BASE64_CHARS
     ) {
-      await connection.client.clipboard.appendImageUploadChunk(
+      await clipboard.appendImageUploadChunk(
         {
           uploadId,
           offset,
@@ -42,15 +33,13 @@ export async function saveLocalClipboardImageAsTempFile(
         { signal }
       )
     }
-    return await connection.client.clipboard.commitImageUpload({ uploadId }, { signal })
+    return await clipboard.commitImageUpload(uploadId, { signal })
   } catch (error) {
     if (uploadId) {
-      await connection.client.clipboard
-        .abortImageUpload({ uploadId }, { signal: AbortSignal.timeout(1_000) })
+      await clipboard
+        .abortImageUpload(uploadId, { signal: AbortSignal.timeout(1_000) })
         .catch(() => {})
     }
     throw error
-  } finally {
-    connection.close()
   }
 }

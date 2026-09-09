@@ -1,4 +1,4 @@
-import type { SkillFileReadResult } from '@yiru/runtime-protocol/workbench/skills'
+import type { SkillFileReadResult } from '@yiru/protocol'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { LoadingIndicator } from '~renderer/loading/indicator'
@@ -51,11 +51,6 @@ function describeReadFailure(
       return translate(
         'auto.components.skills.SkillFileView.binary',
         'This looks like a binary file, so there is nothing to show here.'
-      )
-    case 'unsupported-host':
-      return translate(
-        'auto.components.skills.SkillFileView.unsupportedHost',
-        'Reading skill files is only available on the local host.'
       )
     case 'unreadable':
       return translate(

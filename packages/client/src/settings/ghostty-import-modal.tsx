@@ -1,5 +1,5 @@
-import type { GhosttyImportPreview } from '@yiru/runtime-protocol/workbench/types'
 import { translate } from '~renderer/i18n/i18n'
+import type { GhosttyImportPreview } from '~renderer/settings/import-preview'
 
 import { Button } from '../ui/button'
 import {

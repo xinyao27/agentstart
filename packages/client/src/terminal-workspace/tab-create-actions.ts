@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { buildDuplicatedBrowserTabOptions } from '~renderer/browser-tab-projection/duplicate-options'
@@ -98,7 +98,7 @@ export function useTabCreateActions(): TabCreateActions {
     focusTerminalTabSurface(newTab.id)
   }
 
-  const handleNewAgentTab = (agent: TuiAgent) => {
+  const handleNewAgentTab = async (agent: TuiAgent) => {
     if (!activeWorktreeId) {
       return
     }
@@ -106,7 +106,7 @@ export function useTabCreateActions(): TabCreateActions {
     const targetGroupId =
       state.activeGroupIdByWorktree[activeWorktreeId] ??
       state.groupsByWorktree[activeWorktreeId]?.[0]?.id
-    const result = launchAgentInNewTab({
+    const result = await launchAgentInNewTab({
       agent,
       worktreeId: activeWorktreeId,
       groupId: targetGroupId,

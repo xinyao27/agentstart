@@ -1,10 +1,7 @@
-import { parsePaneKey } from '@yiru/runtime-protocol/workbench/stable-pane-id'
-import type {
-  AgentActivityDisplayMode,
-  Tab,
-  TerminalTab,
-  TuiAgent
-} from '@yiru/runtime-protocol/workbench/types'
+import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { AgentActivityDisplayMode } from '@yiru/protocol/settings/ui-state'
+import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
 import React from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import DashboardAgentRow from '~renderer/dashboard/agent-row'

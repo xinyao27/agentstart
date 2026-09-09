@@ -1,4 +1,4 @@
-import type { TerminalTab, WorkspaceVisibleTabType } from '@yiru/runtime-protocol/workbench/types'
+import type { TerminalTab, WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
 
 export function shouldRepairActiveTerminalTab(args: {
   activeTabType: WorkspaceVisibleTabType

@@ -2,8 +2,8 @@ import {
   DEFAULT_EDITOR_AUTO_SAVE_DELAY_MS,
   MAX_EDITOR_AUTO_SAVE_DELAY_MS,
   MIN_EDITOR_AUTO_SAVE_DELAY_MS
-} from '@yiru/runtime-protocol/workbench/constants'
-import type { GlobalSettings } from '@yiru/runtime-protocol/workbench/types'
+} from '@yiru/protocol/settings/editor'
+import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import type React from 'react'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
