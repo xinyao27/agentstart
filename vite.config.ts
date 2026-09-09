@@ -15,9 +15,16 @@ const lintIgnorePatterns = [
 ]
 
 const yiruRootToolingConfig = defineConfig({
+  // Why: a commit can stage only files the fmt/lint ignore lists exclude — a generated protobuf
+  // binding, runtime-metadata.json — and both commands exit non-zero on an empty selection, which
+  // would fail the pre-commit hook for a legitimate change. The flag tolerates only that case; a
+  // real format or lint violation still fails.
   staged: {
-    '*.{ts,tsx,js,jsx,mjs,mts,cts}': ['vp lint', 'vp fmt --write'],
-    '*.{json,css}': ['vp fmt --write']
+    '*.{ts,tsx,js,jsx,mjs,mts,cts}': [
+      'vp lint --no-error-on-unmatched-pattern',
+      'vp fmt --write --no-error-on-unmatched-pattern'
+    ],
+    '*.{json,css}': ['vp fmt --write --no-error-on-unmatched-pattern']
   },
   fmt: {
     // Why: Markdown includes generated skill guides whose formatting is part of
