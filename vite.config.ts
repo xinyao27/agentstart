@@ -25,12 +25,15 @@ const yiruRootToolingConfig = defineConfig({
     // worker-configuration.d.ts must stay byte-identical to `wrangler types`
     // output because the APNs gateway CI gate diffs the regenerated file.
     // SwiftPM's .build contains read-only dependency checkouts, not project source. Protobuf's
-    // TypeScript filenames and formatting are generator-owned and must stay reproducible.
+    // TypeScript filenames and formatting are generator-owned and must stay reproducible, and so is
+    // runtime-metadata.json: formatting it makes every `@yiru/protocol#build` rewrite the file, so
+    // `pnpm check` followed by CI's `git diff --exit-code` can never both pass.
     ignorePatterns: [
       '**/*.md',
       '**/.build',
       '**/build',
       '**/worker-configuration.d.ts',
+      'packages/protocol/generated/**',
       'packages/protocol/typescript/generated/**'
     ],
     singleQuote: true,
