@@ -256,7 +256,7 @@ pub(super) fn prepare_local(
     let source_handle = same_file::Handle::from_file(source_guard.try_clone()?)?;
     let temporary_handle = same_file::Handle::from_file(temporary_guard.try_clone()?)?;
     let held_temporary_handle = same_file::Handle::from_file(temporary.try_clone()?)?;
-    if &source_handle != &original.handle || &temporary_handle != &held_temporary_handle {
+    if source_handle != original.handle || temporary_handle != held_temporary_handle {
         return Err(CodexRuntimeError::InvalidConfig);
     }
     verify_destination(source_path, Some(&original.handle))?;
@@ -331,7 +331,7 @@ pub(super) fn finish_local(
     let source_handle = same_file::Handle::from_file(source_guard.try_clone()?)?;
     let temporary_handle = same_file::Handle::from_file(temporary_guard.try_clone()?)?;
     let held_temporary_handle = same_file::Handle::from_file(temporary.try_clone()?)?;
-    if &source_handle != &original.handle || &temporary_handle != &held_temporary_handle {
+    if source_handle != original.handle || temporary_handle != held_temporary_handle {
         return Err(CodexRuntimeError::InvalidConfig);
     }
     verify_destination(source_path, Some(&original.handle))?;

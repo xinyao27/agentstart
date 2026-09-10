@@ -800,7 +800,7 @@ fn configure_private_create(options: &mut fs::OpenOptions) {
     options.mode(0o600);
 }
 
-#[cfg(not(unix))]
+#[cfg(not(any(unix, windows)))]
 fn configure_private_create(_options: &mut fs::OpenOptions) {}
 
 fn temporary_path(path: &Path) -> Result<PathBuf, CodexRuntimeError> {
