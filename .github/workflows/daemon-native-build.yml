@@ -43,7 +43,7 @@ jobs:
   native:
     name: ${{ matrix.platform }} native runtime
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 25
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:

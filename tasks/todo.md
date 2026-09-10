@@ -9,6 +9,8 @@
 - [x] Inspect the complete committed diff and verify release workflow/ref behavior and remote
       GitHub Actions state after the push.
 - [ ] Fix the in-scope CI defects, push the follow-up, and confirm its remote checks are green.
+  - [ ] Raise the Rust-native CI job budget to cover the post-rewrite release build on macOS and
+        Windows, then confirm all three platforms complete.
 - [x] Record final evidence and distinguish completed repository work from unperformed external
       publishing steps.
 
