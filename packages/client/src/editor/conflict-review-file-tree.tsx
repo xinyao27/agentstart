@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import React from 'react'
 import type { ConflictReviewEntry } from '~renderer/editor/state'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
@@ -194,7 +194,7 @@ function ConflictReviewFileTreeRow({
       </span>
       <span
         className={cn(
-          'ml-1 shrink-0 px-1.5 py-0.5 text-[10px] font-semibold',
+          'ml-1 shrink-0 px-1.5 py-0.5 text-[10px] font-semibold rounded-full',
           isStillUnresolved
             ? 'bg-destructive/12 text-destructive'
             : 'bg-muted text-muted-foreground'

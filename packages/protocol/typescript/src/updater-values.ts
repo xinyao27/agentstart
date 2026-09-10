@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   UpdaterInstallMode as ProtocolUpdaterInstallMode,
   UpdaterSupportReason as ProtocolUpdaterSupportReason,
@@ -6,7 +6,7 @@ import {
   type UpdaterSnapshot as ProtocolUpdaterSnapshot,
   type UpdaterStatus as ProtocolUpdaterStatus,
   type UpdaterSupport as ProtocolUpdaterSupport
-} from '../generated/yiru/runtime/v1/updater_pb.js'
+} from '../generated/agent_start/runtime/v1/updater_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const UPDATER_PROTOCOL_CAPABILITY = 'updater.protobuf.v1' as const

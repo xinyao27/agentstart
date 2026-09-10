@@ -2,10 +2,10 @@ import {
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { projectHostSetupProjectionFromRepos } from '@yiru/protocol/project/setup-projection'
+} from '@agentstart/protocol/host/identity'
+import type { Project, ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { projectHostSetupProjectionFromRepos } from '@agentstart/protocol/project/setup-projection'
 
 export type SettingsProject = {
   projectId: string
@@ -20,9 +20,7 @@ export type SettingsProject = {
  * `local` host (the user's own machine) and otherwise the lowest repoId, so the
  * id is stable unless that exact repo row is removed.
  */
-export function getSettingsProjectRepresentativeRepoId(
-  setups: readonly ProjectHostSetup[]
-): string {
+function getSettingsProjectRepresentativeRepoId(setups: readonly ProjectHostSetup[]): string {
   const localSetup = setups.find(
     (setup) => setup.hostId === LOCAL_EXECUTION_HOST_ID && setup.repoId.trim().length > 0
   )
@@ -74,7 +72,7 @@ export function buildSettingsProjectList(repos: readonly Repo[]): SettingsProjec
  * the pane rendering off a dangling hostId: falls back to local, then the first
  * ready setup, then the first setup.
  */
-export function resolveEffectiveProjectHost(
+function resolveEffectiveProjectHost(
   setups: readonly ProjectHostSetup[],
   selectedHostId: ExecutionHostId | undefined
 ): ExecutionHostId | undefined {

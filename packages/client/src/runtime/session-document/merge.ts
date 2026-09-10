@@ -1,4 +1,4 @@
-import type { ShellSessionDocumentValue, ShellSessionJsonValue } from '@yiru/protocol'
+import type { ShellSessionDocumentValue, ShellSessionJsonValue } from '@agentstart/protocol'
 
 type Entry = ShellSessionJsonValue | undefined
 export type SessionMergeResult =
@@ -61,15 +61,20 @@ function merge(
     conflicts.push(path.join('.'))
     return current
   }
-  if (isRecord(base) && isRecord(desired) && isRecord(current)) {
+  const recordBase = isRecord(base)
+    ? base
+    : base === undefined && isTerminalTabPath(path)
+      ? {}
+      : null
+  if (recordBase && isRecord(desired) && isRecord(current)) {
     const entries: [string, ShellSessionJsonValue][] = []
     for (const key of new Set([
-      ...Object.keys(base),
+      ...Object.keys(recordBase),
       ...Object.keys(desired),
       ...Object.keys(current)
     ])) {
       const value = merge(
-        Object.hasOwn(base, key) ? base[key] : undefined,
+        Object.hasOwn(recordBase, key) ? recordBase[key] : undefined,
         Object.hasOwn(desired, key) ? desired[key] : undefined,
         Object.hasOwn(current, key) ? current[key] : undefined,
         [...path, key],
@@ -82,8 +87,12 @@ function merge(
     }
     return Object.fromEntries(entries)
   }
-  if (Array.isArray(base) && Array.isArray(desired) && Array.isArray(current)) {
-    const oldItems = keyed(base)
+  if (
+    (Array.isArray(base) || (base === undefined && isTerminalTabCollectionPath(path))) &&
+    Array.isArray(desired) &&
+    Array.isArray(current)
+  ) {
+    const oldItems = Array.isArray(base) ? keyed(base) : new Map()
     const nextItems = keyed(desired)
     const liveItems = keyed(current)
     if (oldItems && nextItems && liveItems) {
@@ -95,6 +104,14 @@ function merge(
   }
   conflicts.push(path.join('.'))
   return current
+}
+
+function isTerminalTabCollectionPath(path: string[]): boolean {
+  return path.length === 2 && path[0] === 'tabsByWorktree'
+}
+
+function isTerminalTabPath(path: string[]): boolean {
+  return path.length === 3 && path[0] === 'tabsByWorktree'
 }
 
 function keyed(values: ShellSessionJsonValue[]): Map<string, ShellSessionDocumentValue> | null {

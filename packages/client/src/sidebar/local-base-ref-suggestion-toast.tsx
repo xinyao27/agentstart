@@ -1,4 +1,4 @@
-import type { LocalBaseRefUpdateSuggestion } from '@yiru/protocol/worktree/create-result'
+import type { LocalBaseRefUpdateSuggestion } from '@agentstart/protocol/worktree/create-result'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import type { AppState } from '~renderer/store/types'
@@ -92,7 +92,7 @@ function SuggestionToastBody({
       <p className="text-popover-foreground/80 text-sm leading-5">
         {translate(
           'auto.components.sidebar.local.base.ref.suggestion.toast.f15fd80989',
-          'Your new worktree is current, but local {{value0}} is {{value1}} {{value2}} behind, so AI diffs may compare to stale history. Let Yiru keep it up to date automatically. Change this anytime in',
+          'Your new worktree is current, but local {{value0}} is {{value1}} {{value2}} behind, so AI diffs may compare to stale history. Let AgentStart keep it up to date automatically. Change this anytime in',
           {
             value0: suggestion.localBranch,
             value1: suggestion.behind,

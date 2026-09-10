@@ -1,4 +1,7 @@
-import { isPushHookFailure, sanitizePushFailureDetails } from '@yiru/protocol/git/push-hook-failure'
+import {
+  isPushHookFailure,
+  sanitizePushFailureDetails
+} from '@agentstart/protocol/git/push-hook-failure'
 import {
   buildFixPushFailurePrompt,
   hasExpandedPushFailureDetails,

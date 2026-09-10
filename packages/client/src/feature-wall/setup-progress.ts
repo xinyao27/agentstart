@@ -1,8 +1,8 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { FeatureInteractionState } from '@yiru/protocol/telemetry/interactions/state'
-import { hasFeatureInteraction } from '@yiru/protocol/telemetry/interactions/state'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { FeatureWallSetupStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { FeatureInteractionState } from '@agentstart/protocol/telemetry/interactions/state'
+import { hasFeatureInteraction } from '@agentstart/protocol/telemetry/interactions/state'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import { getFeatureWallSetupSteps } from './content/setup-steps'
 
@@ -57,7 +57,7 @@ export function getFeatureWallSetupProgress(
       input.settings.notifications.agentTaskComplete === true,
     'two-worktrees': countAvailableNonMainWorktrees(input.worktreesByRepo) >= 1,
     // Why: the 'browser' interaction fires when a non-blank page is viewed, so
-    // opening any real page in Yiru's browser durably completes this milestone.
+    // opening any real page in AgentStart's browser durably completes this milestone.
     browser: hasFeatureInteraction(input.featureInteractions, 'browser'),
     'agent-capabilities': agentCapabilitiesDone,
     'setup-script': input.hasSetupScript

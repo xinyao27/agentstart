@@ -10,7 +10,7 @@ import {
   WorkspaceCleanupServiceScanRequestSchema,
   WorkspaceCleanupServiceScanResponseSchema,
   WorkspaceCleanupServiceSubscribeEventsRequestSchema
-} from '../generated/yiru/runtime/v1/workspace_cleanup_pb.js'
+} from '../generated/agent_start/runtime/v1/workspace_cleanup_pb.js'
 import type { RuntimeCallOptions, RuntimeStream, RuntimeTransport } from './transport.js'
 import {
   decodeWorkspaceCleanupDismissals,

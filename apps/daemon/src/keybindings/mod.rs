@@ -52,11 +52,11 @@ pub(crate) enum KeybindingsError {
 
 impl KeybindingsAuthority {
     pub(crate) async fn open(
-        home_path: &Path,
+        user_data_path: &Path,
         definitions: Vec<KeybindingDescriptor>,
         legacy_overrides: Option<Value>,
     ) -> Result<Self, KeybindingsError> {
-        let path = home_path.join(".yiru").join("keybindings.json");
+        let path = user_data_path.join("keybindings.json");
         let platform = KeybindingPlatform::current();
         let migration_path = path.clone();
         tokio::task::spawn_blocking(move || {

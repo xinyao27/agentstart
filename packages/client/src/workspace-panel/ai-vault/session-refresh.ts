@@ -1,4 +1,4 @@
-import type { ExecutionHostScope } from '@yiru/protocol/host/identity'
+import type { ExecutionHostScope } from '@agentstart/protocol/host/identity'
 import { useEffect, useRef, useState } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { listAiVaultSessions } from '~renderer/runtime/ai-vault-client'
@@ -204,7 +204,7 @@ export function useAiVaultSessionRefresh(
     }
   }, [requestForcedRescan])
 
-  // Sessions started inside Yiru never blur the window, so refocus alone
+  // Sessions started inside AgentStart never blur the window, so refocus alone
   // can't surface them. Agent hooks already report provider sessions; re-scan
   // only when a session id we haven't seen appears — state transitions are
   // deliberately ignored, they fire constantly while agents work.

@@ -1,5 +1,5 @@
-import { isWindowsAbsolutePathLike, relativePathInsideRoot } from '@yiru/protocol/host/path'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { isWindowsAbsolutePathLike, relativePathInsideRoot } from '@agentstart/protocol/host/path'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 import { getActiveRuntimeTarget } from '../rpc-client'
 import type { RuntimeClientTarget } from '../runtime-target'

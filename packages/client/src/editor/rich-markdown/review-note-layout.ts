@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 
 import { getCommentBodyLayoutLineCount } from '../comment-body-line-count'
 
@@ -22,7 +22,7 @@ function getReviewNoteStartLine(comment: Pick<DiffComment, 'lineNumber' | 'start
   return comment.startLine ?? comment.lineNumber
 }
 
-export function compareRichMarkdownReviewNotePositions(
+function compareRichMarkdownReviewNotePositions(
   left: RichMarkdownReviewNotePosition,
   right: RichMarkdownReviewNotePosition
 ): number {

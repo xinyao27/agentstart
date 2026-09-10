@@ -14,7 +14,7 @@ import {
   TerminalServiceIsRunningAgentResponseSchema,
   TerminalServiceSetDisplayModeRequestSchema,
   TerminalServiceSetDisplayModeResponseSchema
-} from '../../generated/yiru/runtime/v1/terminal_pb.js'
+} from '../../generated/agent_start/runtime/v1/terminal_pb.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { clientIdentity, required, safeInteger, viewport } from './request-values.js'
 import type { TerminalClientIdentity, TerminalViewport } from './types.js'

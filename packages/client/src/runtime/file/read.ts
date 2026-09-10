@@ -1,6 +1,6 @@
-import { RuntimeProtocolError, StatusCode } from '@yiru/protocol'
-import type { FilePreviewResult, FileReadResult } from '@yiru/protocol'
-import type { DirectoryEntry as DirEntry } from '@yiru/protocol/files/values'
+import { RuntimeProtocolError, StatusCode } from '@agentstart/protocol'
+import type { FilePreviewResult, FileReadResult } from '@agentstart/protocol'
+import type { DirectoryEntry as DirEntry } from '@agentstart/protocol/files/values'
 import { translate } from '~renderer/i18n/i18n'
 
 import { requireFilesTarget } from '../files-target'

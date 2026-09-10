@@ -8,12 +8,12 @@ import {
   ShellRuntimeJsonValueSchema,
   ShellRuntimeService,
   ShellRuntimeServiceSyncWindowGraphRequestSchema
-} from '../generated/yiru/runtime/v1/shell_runtime_pb.js'
-import type { ShellRuntimeJsonValue } from '../generated/yiru/runtime/v1/shell_runtime_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_runtime_pb.js'
+import type { ShellRuntimeJsonValue } from '../generated/agent_start/runtime/v1/shell_runtime_pb.js'
 import {
   GetStatusResponseSchema,
   type GetStatusResponse
-} from '../generated/yiru/runtime/v1/status_pb.js'
+} from '../generated/agent_start/runtime/v1/status_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 
 export const SHELL_RUNTIME_PROTOCOL_CAPABILITY = 'shell.runtime.protobuf.v1' as const

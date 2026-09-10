@@ -3,8 +3,8 @@ use std::path::{Path, PathBuf};
 
 use super::model::{CliInstallMethod, CliInstallerError};
 
-pub(super) const DEVELOPMENT_COMMAND_NAME: &str = "yiru-dev";
-pub(super) const PRODUCTION_COMMAND_NAME: &str = "yiru";
+pub(super) const DEVELOPMENT_COMMAND_NAME: &str = "agentstart-dev";
+pub(super) const PRODUCTION_COMMAND_NAME: &str = "agentstart";
 
 #[derive(Clone, Copy, Eq, PartialEq)]
 pub(super) enum HostPlatform {
@@ -40,7 +40,8 @@ impl InstallContext {
     pub(super) fn local() -> Result<Self, CliInstallerError> {
         let platform = HostPlatform::current();
         let environment = CliEnvironment::current();
-        let command_path_override = trimmed_environment("YIRU_CLI_INSTALL_PATH").map(PathBuf::from);
+        let command_path_override =
+            trimmed_environment("AGENTSTART_CLI_INSTALL_PATH").map(PathBuf::from);
         let home_path = trimmed_environment("HOME")
             .or_else(|| trimmed_environment("USERPROFILE"))
             .map(PathBuf::from);
@@ -119,9 +120,9 @@ impl InstallContext {
                     .as_ref()
                     .ok_or(CliInstallerError::PathUnavailable("LOCALAPPDATA"))?
                     .join("Programs")
-                    .join("Yiru Dev")
+                    .join("AgentStart Dev")
                     .join("bin")
-                    .join("yiru-dev.cmd"),
+                    .join("agentstart-dev.cmd"),
                 install_method: CliInstallMethod::Wrapper,
             })),
             HostPlatform::Unsupported(_) => Ok(None),
@@ -172,7 +173,7 @@ impl HostPlatform {
 
 impl CliEnvironment {
     fn current() -> Self {
-        match trimmed_environment("YIRU_CLI_ENVIRONMENT").as_deref() {
+        match trimmed_environment("AGENTSTART_CLI_ENVIRONMENT").as_deref() {
             Some("development") => Self::Development,
             Some("production") => Self::Production,
             _ if cfg!(debug_assertions) => Self::Development,
@@ -186,15 +187,15 @@ fn resolve_user_data_path(
     environment: CliEnvironment,
     home_path: Option<&Path>,
 ) -> Option<PathBuf> {
-    if let Some(path) = trimmed_environment("YIRU_APP_USER_DATA_PATH")
-        .or_else(|| trimmed_environment("YIRU_USER_DATA_PATH"))
+    if let Some(path) = trimmed_environment("AGENTSTART_APP_USER_DATA_PATH")
+        .or_else(|| trimmed_environment("AGENTSTART_USER_DATA_PATH"))
     {
         return Some(PathBuf::from(path));
     }
     let directory = if environment == CliEnvironment::Development {
-        "yiru-dev"
+        "agentstart-dev"
     } else {
-        "yiru"
+        "agentstart"
     };
     match platform {
         HostPlatform::Darwin => Some(

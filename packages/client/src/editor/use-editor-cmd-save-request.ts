@@ -4,7 +4,10 @@ import type { OpenFile } from '~renderer/editor/state'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useAppStore } from '~renderer/store/state'
 
-import { type EditorCmdSaveRequestDetail, YIRU_EDITOR_REQUEST_CMD_SAVE_EVENT } from './autosave'
+import {
+  type EditorCmdSaveRequestDetail,
+  AGENTSTART_EDITOR_REQUEST_CMD_SAVE_EVENT
+} from './autosave'
 import type { FileContent } from './panel-content-types'
 import { flushPendingEditorChange } from './pending-flush'
 import { editorShortcutMatches } from './shortcuts'
@@ -73,8 +76,8 @@ export function useEditorCmdSaveRequest({
       }
       save(detail.fileId)
     }
-    window.addEventListener(YIRU_EDITOR_REQUEST_CMD_SAVE_EVENT, handler)
-    return () => window.removeEventListener(YIRU_EDITOR_REQUEST_CMD_SAVE_EVENT, handler)
+    window.addEventListener(AGENTSTART_EDITOR_REQUEST_CMD_SAVE_EVENT, handler)
+    return () => window.removeEventListener(AGENTSTART_EDITOR_REQUEST_CMD_SAVE_EVENT, handler)
   }, [activeFile, activeViewStateId, save])
 
   useEffect(() => {

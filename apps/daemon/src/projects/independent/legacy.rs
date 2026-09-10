@@ -45,8 +45,8 @@ pub(in crate::projects) fn import(
     if done {
         return Ok(());
     }
-    let mut document = read_recoverable(&root.join("yiru-data.json"))?.unwrap_or_default();
-    if let Some(region) = read_recoverable(&root.join("yiru-data-projects.json"))? {
+    let mut document = read_recoverable(&root.join("agentstart-data.json"))?.unwrap_or_default();
+    if let Some(region) = read_recoverable(&root.join("agentstart-data-projects.json"))? {
         document.extend(region);
     }
     let mut projects: Vec<RuntimeProject> = decode_array(&mut document, "projects")?;

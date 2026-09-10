@@ -1,5 +1,5 @@
-import { relativePathInsideRoot, resolveRuntimePath } from '@yiru/protocol/host/path'
-import type { PRCheckAnnotation } from '@yiru/protocol/hosted-review/review-types'
+import { relativePathInsideRoot, resolveRuntimePath } from '@agentstart/protocol/host/path'
+import type { PRCheckAnnotation } from '@agentstart/protocol/hosted-review/review-types'
 
 const WORKFLOW_PSEUDO_ANNOTATION_PATH = '.github'
 

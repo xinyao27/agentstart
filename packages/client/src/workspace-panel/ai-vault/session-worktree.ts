@@ -3,16 +3,16 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   normalizeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
+} from '@agentstart/protocol/host/identity'
 import {
   createNormalizedPathInsideOrEqualMatcher,
   isRuntimePathAbsolute,
   normalizeRuntimePathForComparison
-} from '@yiru/protocol/host/path'
-import { parseWslUncPath } from '@yiru/protocol/host/wsl-paths'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/host/path'
+import { parseWslUncPath } from '@agentstart/protocol/host/wsl-paths'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { splitWorktreeIdForFilesystem } from '@agentstart/protocol/worktree/identity'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
 import { aiVaultWorktreeCompactPath } from './session-worktree-affordances'
@@ -88,7 +88,7 @@ function resolveWorktreeInfoFromCandidates(
   }
 }
 
-export function extractWorktreePathFromSessionTitle(title: string): string | null {
+function extractWorktreePathFromSessionTitle(title: string): string | null {
   const trimmed = title.trim()
   if (!trimmed) {
     return null

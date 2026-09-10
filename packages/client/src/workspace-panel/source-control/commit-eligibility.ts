@@ -1,4 +1,4 @@
-export const COMMIT_MESSAGE_REQUIRED_REASON = 'Enter a commit message to commit' as const
+const COMMIT_MESSAGE_REQUIRED_REASON = 'Enter a commit message to commit' as const
 
 export type CommitEligibilityInputs = {
   stagedCount: number

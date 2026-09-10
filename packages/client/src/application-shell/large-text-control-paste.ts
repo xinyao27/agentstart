@@ -10,7 +10,7 @@ import {
   type TextControlPasteResult
 } from '../keyboard-input/paste/write'
 
-export type LargeTextControlPasteResult =
+type LargeTextControlPasteResult =
   | { status: 'ignored'; reason: 'not-text-control' | 'empty' | 'small' | 'already-handled' }
   | { status: 'handled' }
   | { status: 'rejected'; reason: 'empty' | 'target-unavailable' | 'too-large' }
@@ -36,7 +36,7 @@ function getPlainTextFromPasteEvent(event: ClipboardEvent): string {
   return event.clipboardData?.getData('text/plain') ?? ''
 }
 
-export function findLargeTextControlPasteTarget(
+function findLargeTextControlPasteTarget(
   eventTarget: EventTarget | null,
   activeElement: Element | null = document.activeElement
 ): HTMLInputElement | HTMLTextAreaElement | null {
@@ -46,7 +46,7 @@ export function findLargeTextControlPasteTarget(
   return findOwnedPasteEventTextControlTarget(eventTarget, activeElement)
 }
 
-export function handleLargeTextControlPasteEvent(
+function handleLargeTextControlPasteEvent(
   event: ClipboardEvent,
   options: LargeTextControlPasteOptions = {}
 ): LargeTextControlPasteResult {
@@ -89,7 +89,7 @@ export function handleLargeTextControlPasteEvent(
     return { status: 'rejected', reason: 'too-large' }
   }
   // Why: browser-native insertion is one synchronous value mutation; large
-  // text controls need Yiru-owned chunking so the renderer can keep yielding.
+  // text controls need AgentStart-owned chunking so the renderer can keep yielding.
   void pasteTextIntoTextControl(target, text, {
     source: 'clipboard',
     chunkMaxBytes: options.chunkMaxBytes,

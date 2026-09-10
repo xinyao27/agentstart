@@ -1,5 +1,5 @@
-import type { GitHubPrStartPoint } from '@yiru/protocol/git/worktree-source'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GitHubPrStartPoint } from '@agentstart/protocol/git/worktree-source'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { resolveRuntimeWorktreePrBase } from '~renderer/runtime/worktree-lifecycle-target'
 

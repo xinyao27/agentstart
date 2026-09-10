@@ -45,7 +45,7 @@ pub(super) async fn authenticate(
                 {
                     let user = keychain_user();
                     restore_keychain(
-                        "Yiru Claude Code Managed Credentials",
+                        "AgentStart Claude Code Managed Credentials",
                         &location.account_id,
                         Some(&bytes),
                     )
@@ -88,7 +88,7 @@ async fn harden_managed_files(location: &ManagedLocation) -> Result<(), Accounts
             "sh",
             "-c",
             "set -eu; chmod 700 -- \"$1\"; chmod 600 -- \"$1/.credentials.json\" \"$1/oauth-account.json\"",
-            "yiru-claude-permissions",
+            "agentstart-claude-permissions",
             linux_path,
         ])
         .stdin(Stdio::null())
@@ -169,7 +169,7 @@ async fn create_staging_location(
                     "--",
                     "sh",
                     "-lc",
-                    "umask 077; mktemp -d /tmp/yiru-claude-login.XXXXXXXX",
+                    "umask 077; mktemp -d /tmp/agentstart-claude-login.XXXXXXXX",
                 ])
                 .stdin(Stdio::null())
                 .stderr(Stdio::null())
@@ -185,7 +185,7 @@ async fn create_staging_location(
         let linux_path = std::str::from_utf8(&output.stdout)
             .map_err(|_| AccountsError::InvalidState)?
             .trim();
-        if !linux_path.starts_with("/tmp/yiru-claude-login.")
+        if !linux_path.starts_with("/tmp/agentstart-claude-login.")
             || linux_path.chars().any(|character| character.is_control())
         {
             return Err(AccountsError::InvalidState);
@@ -224,8 +224,8 @@ async fn cleanup_staging_location(staging: &ManagedLocation) {
                 "--",
                 "sh",
                 "-c",
-                "case \"$1\" in /tmp/yiru-claude-login.*) rm -rf -- \"$1\" ;; *) exit 2 ;; esac",
-                "yiru-claude-cleanup",
+                "case \"$1\" in /tmp/agentstart-claude-login.*) rm -rf -- \"$1\" ;; *) exit 2 ;; esac",
+                "agentstart-claude-cleanup",
                 linux_path,
             ])
             .stdin(Stdio::null())
@@ -365,7 +365,7 @@ async fn read_claude_credentials(location: &ManagedLocation) -> Result<Value, Ac
         let scoped = scoped_keychain_service(&location.host_path);
         for (service, account) in [
             (
-                "Yiru Claude Code Managed Credentials",
+                "AgentStart Claude Code Managed Credentials",
                 location.account_id.as_str(),
             ),
             (scoped.as_str(), user.as_str()),

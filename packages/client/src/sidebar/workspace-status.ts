@@ -1,19 +1,14 @@
-import { DEFAULT_WORKSPACE_STATUSES } from '@yiru/protocol/workspace/status/defaults'
 import type {
   WorkspaceStatus,
   WorkspaceStatusDefinition
-} from '@yiru/protocol/workspace/status/model'
+} from '@agentstart/protocol/workspace/status/model'
 import {
   DEFAULT_WORKSPACE_STATUS_COLOR_ID,
   DEFAULT_WORKSPACE_STATUS_ICON_ID,
-  DEFAULT_WORKSPACE_STATUS_ID,
-  WORKSPACE_STATUS_COLOR_IDS,
-  WORKSPACE_STATUS_ICON_IDS,
   getWorkspaceStatus,
   getWorkspaceStatusFromGroupKey,
-  getWorkspaceStatusGroupKey,
-  isWorkspaceStatusId
-} from '@yiru/protocol/workspace/status/normalize'
+  getWorkspaceStatusGroupKey
+} from '@agentstart/protocol/workspace/status/normalize'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
@@ -24,29 +19,11 @@ import {
   type WorkspaceStatusIconOption
 } from './workspace-status-icon-options'
 
-export { getWorkspaceStatusIconOptions }
-
-export {
-  DEFAULT_WORKSPACE_STATUS_COLOR_ID,
-  DEFAULT_WORKSPACE_STATUS_ICON_ID,
-  DEFAULT_WORKSPACE_STATUS_ID,
-  DEFAULT_WORKSPACE_STATUSES,
-  WORKSPACE_STATUS_COLOR_IDS,
-  WORKSPACE_STATUS_ICON_IDS,
-  getWorkspaceStatus,
-  getWorkspaceStatusFromGroupKey,
-  getWorkspaceStatusGroupKey,
-  isWorkspaceStatusId
-}
+export { getWorkspaceStatus, getWorkspaceStatusFromGroupKey, getWorkspaceStatusGroupKey }
 
 export {
   hasWorkspaceDragData,
-  readWorkspaceDragData,
   readWorkspaceDragDataIds,
-  WORKSPACE_STATUS_DRAG_ID_MAX_COUNT,
-  WORKSPACE_STATUS_DRAG_IDS_TYPE,
-  WORKSPACE_STATUS_DRAG_PAYLOAD_MAX_BYTES,
-  WORKSPACE_STATUS_DRAG_TYPE,
   writeWorkspaceDragData
 } from './workspace-status-drag-data'
 
@@ -59,7 +36,7 @@ type WorkspaceStatusColorOption = {
   laneTint: string
 }
 
-export const getWorkspaceStatusColorOptions = createLocalizedCatalog(() => [
+const getWorkspaceStatusColorOptions = createLocalizedCatalog(() => [
   {
     id: 'neutral',
     label: translate('auto.components.sidebar.workspace.status.52e3c6e2a4', 'Neutral'),

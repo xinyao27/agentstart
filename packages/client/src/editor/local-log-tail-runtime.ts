@@ -1,4 +1,4 @@
-import type { LogTailReadResult, LogTailWatchMessage } from '@yiru/protocol'
+import type { LogTailReadResult, LogTailWatchMessage } from '@agentstart/protocol'
 import { requireFilesTarget } from '~renderer/runtime/files-target'
 import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 

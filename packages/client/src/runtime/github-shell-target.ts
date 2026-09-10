@@ -5,7 +5,7 @@ import {
   type GitHubPrRefreshEnqueueResult,
   type GitHubPrRefreshReason,
   type GitHubViewer
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 
 import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'
 
@@ -20,8 +20,8 @@ export type ShellGitHubApi = {
     candidates: GitHubPrRefreshCandidate[]
     generation: number
   }) => Promise<boolean>
-  checkYiruStarred: () => Promise<boolean | null>
-  starYiru: (source: AppStarSource) => Promise<boolean>
+  checkAgentStartStarred: () => Promise<boolean | null>
+  starAgentStart: (source: AppStarSource) => Promise<boolean>
 }
 
 export const shellGitHubApi: ShellGitHubApi = {
@@ -29,8 +29,8 @@ export const shellGitHubApi: ShellGitHubApi = {
   enqueuePRRefresh: async (input) => (await openGitHubShellTarget()).enqueuePrRefresh(input),
   reportVisiblePRRefreshCandidates: async (input) =>
     (await openGitHubShellTarget()).reportVisiblePrRefreshCandidates(input),
-  checkYiruStarred: async () => (await openGitHubShellTarget()).checkYiruStarred(),
-  starYiru: async (input) => (await openGitHubShellTarget()).starYiru(input)
+  checkAgentStartStarred: async () => (await openGitHubShellTarget()).checkAgentStartStarred(),
+  starAgentStart: async (input) => (await openGitHubShellTarget()).starAgentStart(input)
 }
 
 async function openGitHubShellTarget(): Promise<GitHubShellClient> {

@@ -1,6 +1,6 @@
 import type { FocusEvent } from 'react'
 
-export const WORKSPACE_COMPOSER_ROOT_SELECTOR = '[data-workspace-composer-root="true"]'
+const WORKSPACE_COMPOSER_ROOT_SELECTOR = '[data-workspace-composer-root="true"]'
 
 export function isComposerFieldToFieldFocus(
   event: Pick<FocusEvent<HTMLElement>, 'currentTarget' | 'relatedTarget'>

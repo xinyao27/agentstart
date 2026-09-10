@@ -1,5 +1,5 @@
-import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
-import { normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
+import type { FsChangedPayload } from '@agentstart/protocol/files/watch-values'
+import { normalizeRuntimePathForComparison } from '@agentstart/protocol/host/path'
 import { basename } from '~renderer/path'
 import { useAppStore } from '~renderer/store/state'
 

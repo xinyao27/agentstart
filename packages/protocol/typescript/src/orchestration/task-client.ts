@@ -5,7 +5,7 @@ import {
   OrchestrationServiceTaskListResponseSchema,
   OrchestrationServiceTaskUpdateRequestSchema,
   OrchestrationServiceTaskUpdateResponseSchema
-} from '../../generated/yiru/runtime/v1/orchestration_pb.js'
+} from '../../generated/agent_start/runtime/v1/orchestration_pb.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { taskStatusValue } from './enum-values.js'
 import { orchestrationMutation, orchestrationTask } from './response-values.js'

@@ -1,8 +1,8 @@
-# Managed by Yiru. Do not edit; changes may be overwritten.
-name: yiru-status
+# Managed by AgentStart. Do not edit; changes may be overwritten.
+name: agentstart-status
 version: 1.0.0
-description: 'Reports Hermes Agent lifecycle events to Yiru.'
-author: 'Yiru'
+description: 'Reports Hermes Agent lifecycle events to AgentStart.'
+author: 'AgentStart'
 kind: standalone
 provides_hooks:
   - on_session_start

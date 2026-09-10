@@ -1,4 +1,4 @@
-import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
+import { isWindowsAbsolutePathLike } from '@agentstart/protocol/host/path'
 import { resolveTerminalFileLinkText } from '~renderer/terminal/links/provider'
 
 import { openDetectedFilePath } from './terminal-file-open-routing'
@@ -31,7 +31,7 @@ export function handleOscLink(
   if (!isDesktopOscLinkActivation(event)) {
     return false
   }
-  // Why: xterm renders OSC 8 links as clickable anchors. Yiru must suppress
+  // Why: xterm renders OSC 8 links as clickable anchors. AgentStart must suppress
   // default anchor navigation so the desktop activation shortcut can route it.
   // Note: we intentionally do NOT stopPropagation here — xterm's
   // SelectionService listens for mouseup on ownerDocument to clear the
@@ -87,7 +87,7 @@ export function handleOscLink(
   }
 
   if (parsed.protocol === 'file:') {
-    // Why: file:// URIs should open inside Yiru, not via the OS default editor
+    // Why: file:// URIs should open inside AgentStart, not via the OS default editor
     // (shell.openPath). We extract the path from the URI and route it through
     // the same openDetectedFilePath logic used for detected file-path links.
     // Remote file hosts stay rejected; Windows local network shares are the

@@ -33,7 +33,7 @@ export function ModelUsageChart({ metric, models }: ModelUsageChartProps): React
             {metric === 'tokens'
               ? translate(
                   'auto.components.home.modelChart.tokenDescription',
-                  'Token usage attributed to Yiru worktrees, grouped by model.'
+                  'Token usage attributed to AgentStart worktrees, grouped by model.'
                 )
               : translate(
                   'auto.components.home.modelChart.valueDescription',

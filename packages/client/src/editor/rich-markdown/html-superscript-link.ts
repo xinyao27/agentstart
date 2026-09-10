@@ -15,7 +15,7 @@ import type { RichMarkdownSourceTransport } from './source-transport'
 
 const CLIPBOARD_VERSION = '1'
 const MARKER_ATTRIBUTE = 'data-rich-markdown-html-superscript-link'
-const SOURCE_ATTRIBUTE = 'data-yiru-superscript-link-source'
+const SOURCE_ATTRIBUTE = 'data-agentstart-superscript-link-source'
 const clipboardEncoder = new TextEncoder()
 
 export function createRichMarkdownHtmlSuperscriptLink(

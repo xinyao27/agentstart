@@ -1,8 +1,8 @@
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, AtomicU64, AtomicUsize, Ordering};
 
+use agentstart_protocol::protocol::v1::PeerKind;
 use tokio::sync::{mpsc, watch};
-use yiru_protocol::protocol::v1::PeerKind;
 
 use crate::mobile::{
     MobileAuthenticatedChannel, MobileAuthorization, MobileOutbound, MobileRpcMessage,

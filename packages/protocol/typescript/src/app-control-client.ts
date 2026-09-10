@@ -1,13 +1,13 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   AppControlService,
   AppControlServiceRecordStartupDiagnosticRequestSchema,
   AppControlServiceRecordStartupDiagnosticResponseSchema,
   AppControlServiceRestartRequestSchema,
   AppControlServiceRestartResponseSchema
-} from '../generated/yiru/runtime/v1/app_control_pb.js'
+} from '../generated/agent_start/runtime/v1/app_control_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 

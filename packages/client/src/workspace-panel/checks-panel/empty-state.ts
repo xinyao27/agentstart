@@ -1,4 +1,4 @@
-import type { HostedReviewCreationBlockedReason } from '@yiru/protocol/hosted-review/types'
+import type { HostedReviewCreationBlockedReason } from '@agentstart/protocol/hosted-review/types'
 import { translate } from '~renderer/i18n/i18n'
 
 type PRRefreshStatus = 'queued' | 'in-flight' | 'paused' | 'error' | 'skipped' | undefined

@@ -1,4 +1,4 @@
-import type { BrowserWorkspacePreferences } from '@yiru/client/extension-bootstrap'
+import type { BrowserWorkspacePreferences } from '@agentstart/client/extension-bootstrap'
 
 const FAVORITES_KEY = 'favoriteProjectIds'
 const LAYOUT_KEY = 'workspaceWindowLayout'

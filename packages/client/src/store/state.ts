@@ -3,10 +3,11 @@ import {
   registerRendererMemoryProfileContributor,
   summarizeStateCollectionSizes
 } from '~renderer/crash-report/memory-profile'
-import { registerHttpLinkStoreAccessor } from '~renderer/editor/http-link-routing'
+import { registerHttpLinkStoreAccessor } from '~renderer/editor/http-link-store-access'
 
 import { createDetectedAgentsSlice } from '../agent/detected-state'
 import { createAgentStatusSlice } from '../agent/status-state/slice'
+import { createAgentStartProfilesSlice } from '../agentstart-profiles/state'
 import { createUISlice } from '../application-shell/state/slice'
 import { createBrowserSlice } from '../browser-tab-projection/state'
 import { createDiffCommentsSlice } from '../diff-comments/state'
@@ -43,7 +44,6 @@ import { createSourceControlPanelViewSlice } from '../workspace-panel/source-con
 import { createWorkspaceSpaceSlice } from '../workspace-space/state'
 import { createWorktreeNavHistorySlice } from '../worktree/state/nav-history'
 import { createWorktreeSlice } from '../worktree/state/slice'
-import { createYiruProfilesSlice } from '../yiru-profiles/state'
 import type { AppState } from './types'
 
 export const useAppStore = create<AppState>()((...a) => ({
@@ -85,7 +85,7 @@ export const useAppStore = create<AppState>()((...a) => ({
   ...createGitGraphSlice(...a),
   ...createPinnedTabCloseConfirmSlice(...a),
   ...createRecentlyClosedTabsSlice(...a),
-  ...createYiruProfilesSlice(...a)
+  ...createAgentStartProfilesSlice(...a)
 }))
 
 registerHttpLinkStoreAccessor(() => useAppStore.getState())

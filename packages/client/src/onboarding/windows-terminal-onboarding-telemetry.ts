@@ -1,6 +1,6 @@
-import { WINDOWS_GIT_BASH_SHELL } from '@yiru/protocol/host/windows-terminal-shell'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
+import { WINDOWS_GIT_BASH_SHELL } from '@agentstart/protocol/host/windows-terminal-shell'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { EventProps } from '@agentstart/protocol/telemetry/events/catalog'
 
 type WindowsTerminalSnapshot = EventProps<'onboarding_windows_terminal_snapshot'>
 
@@ -11,7 +11,7 @@ type WindowsTerminalSnapshotArgs = {
   advancedVia: NonNullable<WindowsTerminalSnapshot['advanced_via']>
 }
 
-export function bucketWindowsTerminalShell(
+function bucketWindowsTerminalShell(
   shell: string | null | undefined
 ): WindowsTerminalSnapshot['default_shell'] {
   // Why: shell values may become explicit paths; telemetry keeps only a

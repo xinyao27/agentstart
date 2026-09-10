@@ -1,4 +1,4 @@
-import { agentPhaseFromStatus } from '@yiru/protocol/agent/phase'
+import { agentPhaseFromStatus } from '@agentstart/protocol/agent/phase'
 import type { AgentDotState } from '~renderer/agent/status-dot'
 import type { DashboardAgentRow as DashboardAgentRowData } from '~renderer/dashboard/use-dashboard-data'
 

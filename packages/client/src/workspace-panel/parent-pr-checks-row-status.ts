@@ -1,5 +1,5 @@
-import type { CheckStatus } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
+import type { CheckStatus } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { HostedReviewInfo } from '@agentstart/protocol/hosted-review/types'
 import { translate } from '~renderer/i18n/i18n'
 
 import type {
@@ -45,7 +45,7 @@ export function classifyParentPrChecksRowStatus({
   return hasCacheEntry ? 'notFetched' : 'notFetched'
 }
 
-export function classifyKnownReviewStatus(review: HostedReviewInfo): ParentPrChecksRowStatus {
+function classifyKnownReviewStatus(review: HostedReviewInfo): ParentPrChecksRowStatus {
   if (review.provider === 'unsupported') {
     return 'unsupported'
   }

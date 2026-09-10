@@ -1,4 +1,4 @@
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
 import { buildOwnedEditorFileId } from '~renderer/editor/file-identity'
 import type { OpenFile } from '~renderer/editor/file-model'
 import type { AppState } from '~renderer/store/types'

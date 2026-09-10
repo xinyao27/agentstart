@@ -1,10 +1,10 @@
 "computer-use.accessibility.description" = "Read app interface trees and perform requested actions.";
-"computer-use.app-name" = "Yiru Computer Use";
+"computer-use.app-name" = "AgentStart Computer Use";
 "computer-use.screenshots.description" = "Capture app windows so agents can inspect visual state.";
 "computer-use.screenshots.title" = "Screenshots";
-"computer-use.window.enable-description" = "Yiru Computer Use needs these permissions to use apps on your Mac.\nThese permissions are only used when you ask Yiru to perform tasks.";
-"computer-use.window.enable-title" = "Enable Yiru Computer Use";
-"computer-use.window.ready-description" = "Yiru can use local apps when you ask.";
+"computer-use.window.enable-description" = "AgentStart Computer Use needs these permissions to use apps on your Mac.\nThese permissions are only used when you ask AgentStart to perform tasks.";
+"computer-use.window.enable-title" = "Enable AgentStart Computer Use";
+"computer-use.window.ready-description" = "AgentStart can use local apps when you ask.";
 "computer-use.window.ready-title" = "Computer Use is Ready";
 "permission.accessibility.title" = "Accessibility";
 "permission.action.allow" = "Allow";

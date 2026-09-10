@@ -18,7 +18,9 @@ export function usePierreFileTreeFlash({
       return
     }
     const clearMarker = (): void => {
-      shadowRoot.querySelector('[data-yiru-flashing="true"]')?.removeAttribute('data-yiru-flashing')
+      shadowRoot
+        .querySelector('[data-agentstart-flashing="true"]')
+        ?.removeAttribute('data-agentstart-flashing')
     }
     clearMarker()
     const canonicalPath = flashingPath
@@ -35,7 +37,7 @@ export function usePierreFileTreeFlash({
       clearMarker()
       for (const row of shadowRoot.querySelectorAll<HTMLElement>('[data-type="item"]')) {
         if (row.dataset.itemPath === canonicalPath) {
-          row.dataset.yiruFlashing = 'true'
+          row.dataset.agentstartFlashing = 'true'
           break
         }
       }

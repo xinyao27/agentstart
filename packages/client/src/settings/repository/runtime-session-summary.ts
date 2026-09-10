@@ -1,4 +1,4 @@
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 import type { AppState } from '~renderer/store/types'
 
 export type ProjectRuntimeSessionSummary = {

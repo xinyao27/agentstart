@@ -2,20 +2,19 @@ import {
   getAgentResumeArgv,
   isResumableTuiAgent,
   type SleepingAgentSessionRecord
-} from '@yiru/protocol/agent/session-resume'
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/agent/session-resume'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { parseRuntimePtyId } from '@agentstart/protocol/terminal-identity'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 import { isCompletedAgentWithLiveRecoveryRecord } from '../completed-agent-live-recovery-record'
 import { getEffectiveAgentHibernationIdleMs } from './hibernation-idle-threshold'
 import { lastInputBlocksHibernation } from './hibernation-input-guard'
 
 export {
-  DEFAULT_AGENT_HIBERNATION_IDLE_MS,
   getEffectiveAgentHibernationIdleMs,
   MAX_AGENT_HIBERNATION_IDLE_MS,
   MIN_AGENT_HIBERNATION_IDLE_MS

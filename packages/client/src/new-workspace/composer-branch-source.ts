@@ -1,6 +1,6 @@
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { Dispatch, RefObject, SetStateAction } from 'react'
 
 import {

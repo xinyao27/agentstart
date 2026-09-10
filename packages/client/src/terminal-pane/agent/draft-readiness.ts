@@ -1,6 +1,6 @@
-import type { DraftPasteReadySignal } from '@yiru/protocol/agent/launch/config'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import type { DraftPasteReadySignal } from '@agentstart/protocol/agent/launch/config'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { isRuntimePtyId } from '@agentstart/protocol/terminal-identity'
 import { subscribeToRuntimeTerminalData } from '~renderer/runtime/terminal-stream'
 
 import { subscribeToPtyData } from '../pty/data-sidecar-subscriptions'

@@ -1,27 +1,27 @@
 {
   "appName": {
-    "message": "Yiru"
+    "message": "AgentStart"
   },
   "appDescription": {
     "message": "在 Chrome 中跨项目运行编程 agent。"
   },
   "openSidePanel": {
-    "message": "打开 Yiru"
+    "message": "打开 AgentStart"
   },
-  "openYiruCommand": {
-    "message": "打开 Yiru"
+  "openAgentStartCommand": {
+    "message": "打开 AgentStart"
   },
   "forgeAction": {
-    "message": "交给 Yiru 处理"
+    "message": "交给 AgentStart 处理"
   },
   "previewAction": {
-    "message": "用 Yiru 检查"
+    "message": "用 AgentStart 检查"
   },
   "useAsContext": {
-    "message": "用作 Yiru 上下文"
+    "message": "用作 AgentStart 上下文"
   },
   "agentActive": {
-    "message": "Yiru agent 正在操作"
+    "message": "AgentStart agent 正在操作"
   },
   "takeOver": {
     "message": "接管"
@@ -33,6 +33,6 @@
     "message": "个 agent 正在等你决定"
   },
   "attentionRequired": {
-    "message": "Yiru 需要你决定"
+    "message": "AgentStart 需要你决定"
   }
 }

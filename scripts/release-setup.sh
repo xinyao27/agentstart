@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Why: release publishing spans npm, Chrome Web Store, Apple, and Cloudflare credentials that
+# Why: release publishing spans npm, Chrome Web Store, and Apple credentials that
 # require one-time browser setup and must be stored in GitHub rather than a developer checkout.
 #
 # A wizard — walks a human through a manual procedure step by step.
@@ -82,14 +82,6 @@ pause() {
   read -r _ || true
 }
 
-# confirm "question" — y/N gate; returns success on yes.
-confirm() {
-  local reply=""
-  printf '  %s? %s [y/N] ' "$YELLOW" "$1"
-  read -r reply || true
-  [[ "$reply" =~ ^[Yy] ]]
-}
-
 # _existing KEY — current value of KEY in ENV_FILE, if any.
 _existing() {
   [[ -f "$ENV_FILE" ]] || return 1
@@ -155,19 +147,6 @@ set_secret() {
   warn "skipped GitHub secret $name — gh not ready; set it later"
 }
 
-# set_var NAME VALUE — set a GitHub Actions repo variable (non-secret).
-set_var() {
-  local name="$1" value="$2"
-  if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
-    if gh variable set "$name" --body "$value" >/dev/null 2>&1; then
-      printf '  %s✓ set%s GitHub variable %s\n' "$GREEN" "$RESET" "$name"
-      return
-    fi
-  fi
-  SKIPPED+=("GitHub variable $name")
-  warn "skipped GitHub variable $name — gh not ready; set it later"
-}
-
 # finish — clear, then a closing summary of everything configured.
 finish() {
   _clear
@@ -188,8 +167,30 @@ finish() {
 
 TOTAL_STAGES=6
 
-REPOSITORY="xinyao27/yiru"
+REPOSITORY="xinyao27/agentstart"
 CHROME_ENVIRONMENT="chrome-web-store"
+EXPECTED_APPLE_TEAM_ID="8H6Q2YA365"
+IOS_APP_STORE_APP_ID="6810343597"
+IOS_BUNDLE_ID="com.xinyao27.agentstart.mobile"
+MACOS_BUNDLE_ID="com.xinyao27.agentstart.macos"
+MACOS_APP_STORE_APP_ID="6810480610"
+EXTENSION_ID="mfgmfiabfncmdekmikepemddejoeihbf"
+
+require_nonempty() {
+  local name="$1" value="$2"
+  if [[ -z "$value" ]]; then
+    warn "$name cannot be empty."
+    exit 1
+  fi
+}
+
+require_nonempty_file() {
+  local label="$1" path="$2"
+  if [[ ! -s "$path" ]]; then
+    warn "No non-empty $label file exists at that path."
+    exit 1
+  fi
+}
 
 has_repo_secret() {
   gh secret list --repo "$REPOSITORY" --json name --jq '.[].name' 2>/dev/null |
@@ -213,10 +214,10 @@ set_environment_secret() {
   warn "could not set $CHROME_ENVIRONMENT/$name"
 }
 
-banner "Yiru release setup"
+banner "AgentStart release setup"
 
 stage "GitHub release environment"
-say "We'll verify GitHub CLI access and create the protected Chrome publishing environment."
+say "We'll verify GitHub CLI access and restrict Chrome publishing to extension-v* tags."
 if ! command -v gh >/dev/null 2>&1 || ! gh auth status >/dev/null 2>&1; then
   warn "GitHub CLI is not authenticated. Run: gh auth login"
   exit 1
@@ -226,20 +227,75 @@ if [[ "$resolved_repo" != "$REPOSITORY" ]]; then
   warn "This directory resolves to $resolved_repo, expected $REPOSITORY."
   exit 1
 fi
-gh api --method PUT "repos/$REPOSITORY/environments/$CHROME_ENVIRONMENT" >/dev/null
-say "GitHub environment $CHROME_ENVIRONMENT is ready."
-note "Add required reviewers later in GitHub Settings → Environments if releases need approval."
+environment_endpoint="repos/$REPOSITORY/environments/$CHROME_ENVIRONMENT"
+environment_json=$(gh api "$environment_endpoint" 2>/dev/null || true)
+if [[ -z "$environment_json" ]]; then
+  gh api --method PUT "$environment_endpoint" \
+    -F 'deployment_branch_policy[protected_branches]=false' \
+    -F 'deployment_branch_policy[custom_branch_policies]=true' >/dev/null
+else
+  branch_policy_state=$(gh api "$environment_endpoint" --jq \
+    'if .deployment_branch_policy == null then "none" elif .deployment_branch_policy.custom_branch_policies == true and .deployment_branch_policy.protected_branches == false then "custom" else "other" end')
+  if [[ "$branch_policy_state" == "none" ]]; then
+    protection_rule_count=$(gh api "$environment_endpoint" --jq '.protection_rules | length')
+    if [[ "$protection_rule_count" == 0 ]]; then
+      gh api --method PUT "$environment_endpoint" \
+        -F 'deployment_branch_policy[protected_branches]=false' \
+        -F 'deployment_branch_policy[custom_branch_policies]=true' >/dev/null
+    else
+      SKIPPED+=("deployment tag policy for $CHROME_ENVIRONMENT")
+      warn "$CHROME_ENVIRONMENT already has protection rules; enable custom deployment branches and tags in GitHub Settings without replacing them."
+    fi
+  elif [[ "$branch_policy_state" != "custom" ]]; then
+    SKIPPED+=("deployment tag policy for $CHROME_ENVIRONMENT")
+    warn "$CHROME_ENVIRONMENT uses a different deployment policy; reconcile it manually in GitHub Settings."
+  fi
+fi
+
+branch_policy_state=$(gh api "$environment_endpoint" --jq \
+  'if .deployment_branch_policy.custom_branch_policies == true and .deployment_branch_policy.protected_branches == false then "custom" else "other" end')
+if [[ "$branch_policy_state" == "custom" ]]; then
+  policy_endpoint="$environment_endpoint/deployment-branch-policies"
+  policy_count=$(gh api "$policy_endpoint" --jq '.branch_policies | length')
+  matching_policy_count=$(gh api "$policy_endpoint" --jq \
+    '[.branch_policies[] | select(.name == "extension-v*" and .type == "tag")] | length')
+  if [[ "$policy_count" == 0 ]]; then
+    gh api --method POST "$policy_endpoint" -f name='extension-v*' -f type=tag >/dev/null
+    policy_count=1
+    matching_policy_count=1
+  fi
+  if [[ "$policy_count" == 1 && "$matching_policy_count" == 1 ]]; then
+    say "GitHub environment $CHROME_ENVIRONMENT accepts only extension-v* tags."
+  else
+    SKIPPED+=("exclusive extension-v* tag policy for $CHROME_ENVIRONMENT")
+    warn "$CHROME_ENVIRONMENT has additional deployment policies; remove them manually so only the extension-v* tag policy remains."
+  fi
+fi
+repository_visibility=$(gh repo view --repo "$REPOSITORY" --json visibility --jq '.visibility')
+if [[ "$repository_visibility" == "PUBLIC" ]]; then
+  note "Required reviewers are available for this public repository, but no reviewer is selected automatically."
+else
+  note "Required-reviewer availability for this $repository_visibility repository depends on its GitHub plan."
+fi
+note "Add a required reviewer in GitHub Settings → Environments for a human approval gate; the tag policy alone is not reviewer approval."
 pause "Continue to registry credentials?"
 
 stage "npm first publication"
-if has_repo_secret NPM_TOKEN; then
+if npm view @agentstart/cli version >/dev/null 2>&1; then
+  say "@agentstart/cli already exists; use npm Trusted Publishing instead of a long-lived token."
+  open_url "https://www.npmjs.com/package/@agentstart/cli"
+  step "Open Package Settings → Trusted publishing and add a GitHub Actions publisher."
+  step "Set organization/user to xinyao27, repository to agentstart, and workflow filename to daemon-release.yml."
+  step "Leave environment empty and allow the npm publish action."
+  note "Remove NPM_TOKEN after Trusted Publishing is configured and one release succeeds through it."
+elif has_repo_secret NPM_TOKEN; then
   say "NPM_TOKEN already exists; leaving it unchanged."
 else
-  say "The @yiru/cli package does not exist yet, so its first CI publication needs a token."
+  say "The @agentstart/cli package does not exist yet, so its first CI publication needs a token."
   open_url "https://www.npmjs.com/"
-  step "Sign in and confirm your account can publish public packages under the @yiru scope."
+  step "Sign in and confirm your account can publish public packages under the @agentstart scope."
   step "Open your avatar → Access Tokens → Generate New Token → Granular Access Token."
-  step "Grant read/write package access for @yiru, enable publishing 2FA bypass, and generate it."
+  step "Grant read/write package access for @agentstart, enable publishing 2FA bypass, and generate it."
   step "Copy the token now; npm will not display the complete value again."
   ask_secret NPM_TOKEN "Paste the npm token:"
   if [[ -z "$NPM_TOKEN" ]]; then
@@ -249,6 +305,131 @@ else
   set_secret NPM_TOKEN "$NPM_TOKEN"
 fi
 note "After the first release, replace this token with npm Trusted Publishing as documented."
+pause "Continue to product telemetry?"
+
+stage "Product telemetry"
+if has_repo_secret POSTHOG_WRITE_KEY; then
+  say "POSTHOG_WRITE_KEY already exists; leaving it unchanged."
+else
+  say "Stable daemon builds require the PostHog project API key at compile time."
+  open_url "https://us.posthog.com/"
+  step "Create or select the US project that will receive AgentStart product events and support reports."
+  step "Open Project settings and copy the Project API Key, not a personal API key."
+  step "Review the project's event retention and deletion settings for the published privacy policy."
+  ask_secret POSTHOG_WRITE_KEY "Paste the PostHog Project API Key:"
+  require_nonempty POSTHOG_WRITE_KEY "$POSTHOG_WRITE_KEY"
+  set_secret POSTHOG_WRITE_KEY "$POSTHOG_WRITE_KEY"
+fi
+pause "Continue to Apple distribution credentials?"
+
+stage "Apple distribution"
+say "AgentStart releases use Apple team $EXPECTED_APPLE_TEAM_ID."
+open_url "https://developer.apple.com/account/resources/identifiers/list"
+step "Confirm the two App IDs and shared App Group in apps/mobile/RELEASE.md exist with their listed capabilities."
+step "Confirm the registered explicit App ID AgentStart macOS uses bundle ID $MACOS_BUNDLE_ID."
+open_url "https://appstoreconnect.apple.com/apps"
+step "Confirm App Store Connect app $IOS_APP_STORE_APP_ID uses bundle ID $IOS_BUNDLE_ID."
+step "Do not add macOS to that iOS record: Apple would require its macOS target to use $IOS_BUNDLE_ID."
+step "Confirm macOS-only app $MACOS_APP_STORE_APP_ID is named AgentStart for Mac, uses bundle ID $MACOS_BUNDLE_ID, and uses SKU agentstart-macos."
+step "Confirm macOS App Store version 1.0 exists only as the reserved store version and has no current Developer ID build attached."
+note "The current Developer ID DMG needs no App Store Connect record and must not be uploaded as a store build."
+note "apps/macos/APP-STORE.md records the sandbox blockers and the target split required before upload."
+APPLE_RELEASE_SECRETS=(
+  APPLE_APP_SPECIFIC_PASSWORD
+  APPLE_ID
+  APPLE_TEAM_ID
+  APP_STORE_APP_ID
+  ASC_API_KEY_P8
+  ASC_ISSUER_ID
+  ASC_KEY_ID
+  IOS_DIST_CERT_P12
+  IOS_DIST_CERT_PASSWORD
+  MAC_CERTS
+  MAC_CERTS_PASSWORD
+)
+missing_apple_release_secret=0
+for name in "${APPLE_RELEASE_SECRETS[@]}"; do
+  if ! has_repo_secret "$name"; then
+    missing_apple_release_secret=1
+    break
+  fi
+done
+if [[ "$missing_apple_release_secret" == 0 ]]; then
+  say "All iOS, macOS, and notarization credentials already exist; leaving them unchanged."
+else
+  open_url "https://appstoreconnect.apple.com/access/integrations/api"
+  step "Use an App Store Connect Admin API key, then copy its Key ID and Issuer ID."
+  step "Download its .p8 file now; Apple only allows the private key to be downloaded once."
+  if ! has_repo_secret ASC_KEY_ID; then
+    ask ASC_KEY_ID "Paste the App Store Connect API Key ID:"
+    require_nonempty ASC_KEY_ID "$ASC_KEY_ID"
+    set_secret ASC_KEY_ID "$ASC_KEY_ID"
+  fi
+  if ! has_repo_secret ASC_ISSUER_ID; then
+    ask ASC_ISSUER_ID "Paste the App Store Connect API Issuer ID:"
+    require_nonempty ASC_ISSUER_ID "$ASC_ISSUER_ID"
+    set_secret ASC_ISSUER_ID "$ASC_ISSUER_ID"
+  fi
+  if ! has_repo_secret ASC_API_KEY_P8; then
+    ask ASC_API_KEY_P8_PATH "Paste the path to the downloaded App Store Connect .p8 file:"
+    require_nonempty_file "App Store Connect key" "$ASC_API_KEY_P8_PATH"
+    ASC_API_KEY_P8=$(base64 < "$ASC_API_KEY_P8_PATH" | tr -d '\n')
+    set_secret ASC_API_KEY_P8 "$ASC_API_KEY_P8"
+  fi
+
+  if ! has_repo_secret APPLE_TEAM_ID; then
+    set_secret APPLE_TEAM_ID "$EXPECTED_APPLE_TEAM_ID"
+  fi
+  if ! has_repo_secret APP_STORE_APP_ID; then
+    set_secret APP_STORE_APP_ID "$IOS_APP_STORE_APP_ID"
+  fi
+
+  if ! has_repo_secret IOS_DIST_CERT_P12; then
+    open_url "https://developer.apple.com/account/resources/certificates/list"
+    step "Create or select an Apple Distribution certificate for the AgentStart team."
+    step "Export the certificate and its private key from Keychain Access as a password-protected .p12."
+    ask IOS_DIST_CERT_P12_PATH "Paste the path to the Apple Distribution .p12 file:"
+    require_nonempty_file "Apple Distribution certificate" "$IOS_DIST_CERT_P12_PATH"
+    IOS_DIST_CERT_P12=$(base64 < "$IOS_DIST_CERT_P12_PATH" | tr -d '\n')
+    set_secret IOS_DIST_CERT_P12 "$IOS_DIST_CERT_P12"
+  fi
+  if ! has_repo_secret IOS_DIST_CERT_PASSWORD; then
+    ask_secret IOS_DIST_CERT_PASSWORD "Paste the Apple Distribution .p12 password:"
+    require_nonempty IOS_DIST_CERT_PASSWORD "$IOS_DIST_CERT_PASSWORD"
+    set_secret IOS_DIST_CERT_PASSWORD "$IOS_DIST_CERT_PASSWORD"
+  fi
+
+  if ! has_repo_secret MAC_CERTS; then
+    open_url "https://developer.apple.com/account/resources/certificates/list"
+    step "Create or select a Developer ID Application certificate for the AgentStart team."
+    step "Export the certificate and its private key from Keychain Access as a password-protected .p12."
+    ask MAC_CERTS_PATH "Paste the path to the Developer ID Application .p12 file:"
+    require_nonempty_file "Developer ID Application certificate" "$MAC_CERTS_PATH"
+    MAC_CERTS=$(base64 < "$MAC_CERTS_PATH" | tr -d '\n')
+    set_secret MAC_CERTS "$MAC_CERTS"
+  fi
+  if ! has_repo_secret MAC_CERTS_PASSWORD; then
+    ask_secret MAC_CERTS_PASSWORD "Paste the Developer ID Application .p12 password:"
+    require_nonempty MAC_CERTS_PASSWORD "$MAC_CERTS_PASSWORD"
+    set_secret MAC_CERTS_PASSWORD "$MAC_CERTS_PASSWORD"
+  fi
+
+  if ! has_repo_secret APPLE_ID || ! has_repo_secret APPLE_APP_SPECIFIC_PASSWORD; then
+    open_url "https://account.apple.com/account/manage"
+    step "Generate an app-specific password for notarytool under Sign-In and Security."
+  fi
+  if ! has_repo_secret APPLE_ID; then
+    ask APPLE_ID "Paste the Apple Account email used for notarization:"
+    require_nonempty APPLE_ID "$APPLE_ID"
+    set_secret APPLE_ID "$APPLE_ID"
+  fi
+  if ! has_repo_secret APPLE_APP_SPECIFIC_PASSWORD; then
+    ask_secret APPLE_APP_SPECIFIC_PASSWORD "Paste the app-specific password:"
+    require_nonempty APPLE_APP_SPECIFIC_PASSWORD "$APPLE_APP_SPECIFIC_PASSWORD"
+    set_secret APPLE_APP_SPECIFIC_PASSWORD "$APPLE_APP_SPECIFIC_PASSWORD"
+  fi
+fi
+note "Fastlane rejects any APP_STORE_APP_ID other than iOS AgentStart record $IOS_APP_STORE_APP_ID."
 pause "Continue to Chrome Web Store OAuth?"
 
 stage "Chrome Web Store OAuth client"
@@ -258,12 +439,16 @@ else
   say "We'll enable Chrome Web Store API v2 and create the OAuth client used by GitHub Actions."
   open_url "https://console.cloud.google.com/apis/library/chromewebstore.googleapis.com"
   step "Select the Google Cloud project that owns the publishing integration, then enable the API."
-  step "Open APIs & Services → OAuth consent screen and complete its required app details."
+  step "Open APIs & Services → OAuth consent screen, choose External, and complete its required app details."
+  step "Add the Web Store owner email as a test user."
+  step "Set publishing status to In production before minting the CI token; Testing tokens expire after seven days."
   step "Open Credentials → Create Credentials → OAuth client ID → Web application."
   step "Add https://developers.google.com/oauthplayground as an authorized redirect URI."
   step "Create the client, then copy its client ID and client secret."
   ask CWS_CLIENT_ID "Paste the OAuth client ID:"
   ask_secret CWS_CLIENT_SECRET "Paste the OAuth client secret:"
+  require_nonempty CWS_CLIENT_ID "$CWS_CLIENT_ID"
+  require_nonempty CWS_CLIENT_SECRET "$CWS_CLIENT_SECRET"
   set_environment_secret CWS_CLIENT_ID "$CWS_CLIENT_ID"
   set_environment_secret CWS_CLIENT_SECRET "$CWS_CLIENT_SECRET"
 fi
@@ -274,83 +459,21 @@ if has_environment_secret CWS_PUBLISHER_ID && has_environment_secret CWS_REFRESH
   say "Chrome publisher and refresh token secrets already exist; leaving them unchanged."
 else
   open_url "https://developers.google.com/oauthplayground"
-  step "Open settings, enable Use your own OAuth credentials, and enter the client from Stage 3."
+  step "Open settings, enable Use your own OAuth credentials, and enter the client from the previous stage."
   step "Use scope https://www.googleapis.com/auth/chromewebstore and click Authorize APIs."
   step "Sign in as the Web Store item owner, then click Exchange authorization code for tokens."
   step "Copy the refresh token, not the short-lived access token."
   ask_secret CWS_REFRESH_TOKEN "Paste the refresh token:"
   open_url "https://chrome.google.com/webstore/devconsole"
-  step "Switch to the publisher that owns Yiru, then open Publisher → Settings."
+  step "Switch to the publisher that owns item $EXTENSION_ID and confirm the item already exists."
+  step "Complete its Store listing and Privacy tabs before the first API submission."
+  step "If you changed visibility, publish that visibility once in the dashboard before using the API."
+  step "Open Publisher → Settings."
   step "Copy the Publisher ID shown on that page."
   ask CWS_PUBLISHER_ID "Paste the publisher ID:"
+  require_nonempty CWS_REFRESH_TOKEN "$CWS_REFRESH_TOKEN"
+  require_nonempty CWS_PUBLISHER_ID "$CWS_PUBLISHER_ID"
   set_environment_secret CWS_REFRESH_TOKEN "$CWS_REFRESH_TOKEN"
   set_environment_secret CWS_PUBLISHER_ID "$CWS_PUBLISHER_ID"
 fi
-pause "Continue to optional iPhone background notifications?"
-
-stage "Optional APNs gateway"
-if has_repo_secret CLOUDFLARE_ACCOUNT_ID && has_repo_secret CLOUDFLARE_API_TOKEN &&
-  has_repo_secret APNS_KEY_ID && has_repo_secret APNS_KEY_P8 &&
-  has_repo_secret APNS_TEAM_ID && has_repo_secret GATEWAY_SHARED_SECRET; then
-  say "All APNs gateway credentials already exist; leaving them unchanged."
-  set_var APNS_GATEWAY_ENABLED true
-elif ! confirm "Configure optional iPhone background notifications now?"; then
-  SKIPPED+=("optional APNs gateway credentials")
-  set_var APNS_GATEWAY_ENABLED false
-  say "Skipped. Chrome, the required daemon runtime, and foreground iOS remain available."
-else
-  open_url "https://dash.cloudflare.com/"
-  if has_repo_secret CLOUDFLARE_ACCOUNT_ID; then
-    say "CLOUDFLARE_ACCOUNT_ID already exists; leaving it unchanged."
-  else
-    step "Select the account that will host the APNs gateway Worker."
-    step "Copy the Account ID shown in the account overview URL or account details."
-    ask CLOUDFLARE_ACCOUNT_ID "Paste the Cloudflare account ID:"
-    set_secret CLOUDFLARE_ACCOUNT_ID "$CLOUDFLARE_ACCOUNT_ID"
-  fi
-  if has_repo_secret CLOUDFLARE_API_TOKEN; then
-    say "CLOUDFLARE_API_TOKEN already exists; leaving it unchanged."
-  else
-    open_url "https://dash.cloudflare.com/profile/api-tokens"
-    step "Create a token with Workers Scripts write access, scoped to the Yiru account."
-    step "Copy the token after Cloudflare creates it."
-    ask_secret CLOUDFLARE_API_TOKEN "Paste the Cloudflare API token:"
-    set_secret CLOUDFLARE_API_TOKEN "$CLOUDFLARE_API_TOKEN"
-  fi
-
-  open_url "https://developer.apple.com/account/resources/authkeys/list"
-  if has_repo_secret APNS_KEY_ID && has_repo_secret APNS_KEY_P8 &&
-    has_repo_secret APNS_TEAM_ID; then
-    say "Apple APNs credentials already exist; leaving them unchanged."
-  else
-    step "As Account Holder or Admin, create a production APNs key for Yiru if one is unavailable."
-    step "Download its .p8 file now; Apple only allows the private key to be downloaded once."
-    ask APNS_KEY_ID "Paste the APNs Key ID:"
-    ask APNS_TEAM_ID "Paste the 10-character Apple Team ID:"
-    ask APNS_KEY_P8_PATH "Paste the path to the downloaded .p8 file:"
-    if [[ ! -f "$APNS_KEY_P8_PATH" ]]; then
-      warn "No APNs key file exists at that path."
-      exit 1
-    fi
-    APNS_KEY_P8=$(<"$APNS_KEY_P8_PATH")
-    set_secret APNS_KEY_ID "$APNS_KEY_ID"
-    set_secret APNS_TEAM_ID "$APNS_TEAM_ID"
-    set_secret APNS_KEY_P8 "$APNS_KEY_P8"
-  fi
-
-  if has_repo_secret GATEWAY_SHARED_SECRET; then
-    say "GATEWAY_SHARED_SECRET already exists; leaving it unchanged."
-  else
-    GATEWAY_SHARED_SECRET=$(openssl rand -hex 32)
-    set_secret GATEWAY_SHARED_SECRET "$GATEWAY_SHARED_SECRET"
-    if command -v pbcopy >/dev/null 2>&1; then
-      printf '%s' "$GATEWAY_SHARED_SECRET" | pbcopy
-      note "The gateway token was copied to the clipboard; save it in your password manager now."
-    else
-      warn "The generated gateway token is stored in GitHub only; rotate it if the daemon needs a copy."
-    fi
-  fi
-  set_var APNS_GATEWAY_ENABLED true
-fi
-
 finish

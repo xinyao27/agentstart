@@ -3,14 +3,14 @@ import {
   decodeTerminalMultiplexHeartbeatRecord,
   encodeTerminalMultiplexEpochRecord,
   encodeTerminalMultiplexHeartbeatRecord
-} from '@yiru/protocol/terminal-multiplex/connection-records'
+} from '@agentstart/protocol/terminal-multiplex/connection-records'
 import {
   decodeTerminalMultiplexFrame,
   encodeTerminalMultiplexFrame,
   TerminalMultiplexOpcode,
   type TerminalMultiplexFrame,
   type TerminalMultiplexOpcode as TerminalMultiplexOpcodeValue
-} from '@yiru/protocol/terminal-multiplex/frame'
+} from '@agentstart/protocol/terminal-multiplex/frame'
 
 const HEARTBEAT_MS = 15_000
 const HEARTBEAT_TIMEOUT_MS = HEARTBEAT_MS * 2

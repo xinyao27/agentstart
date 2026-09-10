@@ -1,7 +1,7 @@
-import { SHELL_KEYBINDINGS_PROTOCOL_CAPABILITY, ShellKeybindingsClient } from '@yiru/protocol'
-import type { ShellKeybindingsSnapshotValue } from '@yiru/protocol'
-import { isKeybindingActionId } from '@yiru/protocol/keybindings'
-import type { KeybindingFileSnapshot, KeybindingOverrides } from '@yiru/protocol/keybindings'
+import { SHELL_KEYBINDINGS_PROTOCOL_CAPABILITY, ShellKeybindingsClient } from '@agentstart/protocol'
+import type { ShellKeybindingsSnapshotValue } from '@agentstart/protocol'
+import { isKeybindingActionId } from '@agentstart/protocol/keybindings'
+import type { KeybindingFileSnapshot, KeybindingOverrides } from '@agentstart/protocol/keybindings'
 import { translate } from '~renderer/i18n/i18n'
 
 import {
@@ -9,7 +9,7 @@ import {
   readConfiguredBrowserHostStatus
 } from './browser-host-runtime'
 
-export async function openShellKeybindingsTarget(): Promise<ShellKeybindingsClient | null> {
+async function openShellKeybindingsTarget(): Promise<ShellKeybindingsClient | null> {
   const status = await readConfiguredBrowserHostStatus()
   if (!status.capabilities?.includes(SHELL_KEYBINDINGS_PROTOCOL_CAPABILITY)) {
     return null
@@ -25,7 +25,7 @@ export async function requireShellKeybindingsClient(): Promise<ShellKeybindingsC
     throw new Error(
       translate(
         'runtime.shellKeybindingsTarget.unavailable',
-        'Keyboard shortcuts need a current Yiru daemon connection.'
+        'Keyboard shortcuts need a current AgentStart daemon connection.'
       )
     )
   }

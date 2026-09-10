@@ -1,6 +1,6 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { ProjectOrderBy } from '@yiru/protocol/settings/ui-state'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { ProjectOrderBy } from '@agentstart/protocol/settings/ui-state'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { getEffectiveProjectGroupManualRank } from '~renderer/project-catalog/group-order'
 import { getRepoDisplayLabelKey, getRepoDisplayLabelsByPath } from '~renderer/repo/display-labels'
 
@@ -34,9 +34,9 @@ export function withRepoSectionDisplayLabels(
   ])
 }
 
-export type RecentRank = { hasActivity: boolean; ts: number }
+type RecentRank = { hasActivity: boolean; ts: number }
 
-export function recentRankForEntry(entry: OrderedGroupEntry): RecentRank {
+function recentRankForEntry(entry: OrderedGroupEntry): RecentRank {
   let latestActivity = Number.NEGATIVE_INFINITY
   for (const worktree of entry[1].items) {
     if (worktree.lastActivityAt > latestActivity) {
@@ -53,7 +53,7 @@ export function recentRankForEntry(entry: OrderedGroupEntry): RecentRank {
   }
 }
 
-export function compareRecentRank(left: RecentRank, right: RecentRank): number {
+function compareRecentRank(left: RecentRank, right: RecentRank): number {
   if (left.hasActivity !== right.hasActivity) {
     return left.hasActivity ? -1 : 1
   }

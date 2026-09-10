@@ -85,13 +85,13 @@ export function createCompactCommentMarkdownComponents(
     // Why: compact comment previews live in dense cards; keep diagram fences as
     // bounded source blocks so async SVG renders do not reshape sidebar lists.
     code: ({ children }) => (
-      <code className="bg-accent px-1 py-px font-mono text-[10px] [overflow-wrap:anywhere]">
+      <code className="bg-accent rounded px-1 py-px font-mono text-[10px] [overflow-wrap:anywhere]">
         {children}
       </code>
     ),
     // Compact pre blocks — no syntax highlighting needed for short comments.
     pre: ({ children }) => (
-      <pre className="bg-accent my-1 max-h-32 max-w-full overflow-x-auto p-1.5 font-mono text-[10px]">
+      <pre className="bg-accent my-1 max-h-32 max-w-full overflow-x-auto rounded p-1.5 font-mono text-[10px]">
         {children}
       </pre>
     ),
@@ -143,7 +143,11 @@ export function createCompactCommentMarkdownComponents(
       }
 
       const image = (
-        <img src={src} alt={alt ?? ''} className="my-1 max-h-32 max-w-full object-contain" />
+        <img
+          src={src}
+          alt={alt ?? ''}
+          className="my-1 max-h-32 max-w-full rounded-sm object-contain"
+        />
       )
       return src ? (
         <a
@@ -197,10 +201,10 @@ export function createDocumentCommentMarkdownComponents(
       isMermaidFence(className) ? (
         renderMermaidFence(
           children,
-          'my-3 min-w-0 max-w-full overflow-x-auto border border-border/60 p-3 [&_.mermaid-block]:min-w-0 [&_.mermaid-block_pre]:my-0 [&_.mermaid-block_pre]:max-h-80 [&_.mermaid-block_pre]:max-w-full [&_.mermaid-block_pre]:overflow-x-auto [&_.mermaid-block_pre]: [&_.mermaid-block_pre]:bg-accent [&_.mermaid-block_pre]:p-3 [&_.mermaid-block_pre]:font-mono [&_.mermaid-block_pre]:text-[12px]'
+          'my-3 min-w-0 max-w-full overflow-x-auto rounded-md border border-border/60 p-3 [&_.mermaid-block]:min-w-0 [&_.mermaid-block_pre]:my-0 [&_.mermaid-block_pre]:max-h-80 [&_.mermaid-block_pre]:max-w-full [&_.mermaid-block_pre]:overflow-x-auto [&_.mermaid-block_pre]:rounded-md [&_.mermaid-block_pre]:bg-accent [&_.mermaid-block_pre]:p-3 [&_.mermaid-block_pre]:font-mono [&_.mermaid-block_pre]:text-[12px]'
         )
       ) : (
-        <code className="bg-accent px-1.5 py-0.5 font-mono text-[0.92em] [overflow-wrap:anywhere]">
+        <code className="bg-accent rounded px-1.5 py-0.5 font-mono text-[0.92em] [overflow-wrap:anywhere]">
           {children}
         </code>
       ),
@@ -209,7 +213,7 @@ export function createDocumentCommentMarkdownComponents(
       isMermaidPre(children) ? (
         <>{children}</>
       ) : (
-        <pre className="bg-accent my-3 max-h-80 max-w-full overflow-x-auto p-3 font-mono text-[12px]">
+        <pre className="bg-accent my-3 max-h-80 max-w-full overflow-x-auto rounded-md p-3 font-mono text-[12px]">
           {children}
         </pre>
       ),
@@ -244,7 +248,7 @@ export function createDocumentCommentMarkdownComponents(
         return <GitHubUserAttachmentImage src={src} alt={alt} />
       }
       const imageClassName = cn(
-        'my-3 max-h-96 max-w-full  object-contain',
+        'my-3 max-h-96 max-w-full object-contain',
         onLinkClick && 'cursor-pointer'
       )
 
@@ -260,7 +264,7 @@ export function createDocumentCommentMarkdownComponents(
     // Why: pull request bodies commonly contain GFM tables. The dashboard
     // dialog is wide enough to show them, but still needs overflow containment.
     table: ({ children }) => (
-      <div className="border-border/60 my-3 max-w-full overflow-x-auto border">
+      <div className="border-border/60 my-3 max-w-full overflow-x-auto rounded-md border">
         <table className="[&_td]:border-border/50 [&_th]:border-border/50 [&_th]:bg-muted/60 min-w-full border-collapse text-[13px] [&_td]:border [&_td]:px-2 [&_td]:py-1.5 [&_th]:border [&_th]:px-2 [&_th]:py-1.5 [&_th]:text-left [&_th]:font-semibold">
           {children}
         </table>

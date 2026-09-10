@@ -2,8 +2,8 @@ import {
   flattenTerminalQuickCommand,
   isTerminalAgentQuickCommand,
   supportsTerminalAgentQuickCommand
-} from '@yiru/protocol/terminal/quick-commands'
-import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
+} from '@agentstart/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@agentstart/protocol/terminal/quick-commands'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { useAppStore } from '~renderer/store/state'
 import { reconcileTabOrder } from '~renderer/tab-bar/reconcile-order'

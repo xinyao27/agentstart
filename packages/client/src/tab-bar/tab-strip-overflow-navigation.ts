@@ -13,7 +13,7 @@ import {
 const TAB_STRIP_SCROLL_FRACTION = 0.75
 const TAB_STRIP_MIN_SCROLL_STEP_PX = 120
 
-export function scrollTabStripByStep(
+function scrollTabStripByStep(
   el: HTMLElement,
   direction: 'start' | 'end',
   behavior: ScrollBehavior = 'smooth'

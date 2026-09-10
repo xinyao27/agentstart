@@ -1,4 +1,4 @@
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { readProjectCatalogSnapshot } from '~renderer/project-catalog/catalog-snapshot'

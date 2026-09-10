@@ -1,5 +1,5 @@
-import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { SleepingAgentLaunchConfig } from '@agentstart/protocol/agent/session-resume'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 
 type TerminalLaunch = {
   launchConfig?: SleepingAgentLaunchConfig

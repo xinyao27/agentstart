@@ -1,11 +1,11 @@
-import { parseExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { TERMINAL_SCROLLBACK_SESSION_BUFFER_BYTE_LIMIT } from '@yiru/protocol/terminal/scrollback-limits'
-import { isEphemeralSetupTerminalWorktreeId } from '@yiru/protocol/terminal/setup-identity'
-import { measureUtf8ByteLength } from '@yiru/protocol/text/utf8-length'
-import { clampUtf8TextTail } from '@yiru/protocol/text/utf8-tail'
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+import { parseExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { TERMINAL_SCROLLBACK_SESSION_BUFFER_BYTE_LIMIT } from '@agentstart/protocol/terminal/scrollback-limits'
+import { isEphemeralSetupTerminalWorktreeId } from '@agentstart/protocol/terminal/setup-identity'
+import { measureUtf8ByteLength } from '@agentstart/protocol/text/utf8-length'
+import { clampUtf8TextTail } from '@agentstart/protocol/text/utf8-tail'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 
 export type RepoConnection = Pick<Repo, 'id' | 'connectionId' | 'executionHostId'>
 
@@ -50,7 +50,7 @@ export function shouldPreserveTerminalScrollbackBuffers(
   )
 }
 
-export function capTerminalScrollbackSessionBuffer(buffer: string): string {
+function capTerminalScrollbackSessionBuffer(buffer: string): string {
   if (
     buffer.length <= TERMINAL_SCROLLBACK_SESSION_BUFFER_BYTE_LIMIT &&
     !measureUtf8ByteLength(buffer, {

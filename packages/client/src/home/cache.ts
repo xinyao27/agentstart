@@ -1,14 +1,14 @@
-import { isStatsUsageBoundedRange } from '@yiru/protocol/stats/range'
-import type { ProjectUsageValue, UsageProvider } from '@yiru/protocol/stats/usage-breakdown'
-import type { StatsSummary } from '@yiru/protocol/stats/values'
+import { isStatsUsageBoundedRange } from '@agentstart/protocol/stats/range'
+import type { ProjectUsageValue, UsageProvider } from '@agentstart/protocol/stats/usage-breakdown'
+import type { StatsSummary } from '@agentstart/protocol/stats/values'
 import type { ContributionPoint } from '~renderer/contribution-heatmap/calendar'
 
 import type { ModelUsageValue, UsageValue } from './usage-value'
 
-const HOME_DATA_CACHE_KEY = 'yiru.home.data-cache.v1'
+const HOME_DATA_CACHE_KEY = 'agentstart.home.data-cache.v1'
 const HOME_DATA_CACHE_SCHEMA_VERSION = 4
 
-export type HomeCachedUsageValue = Pick<
+type HomeCachedUsageValue = Pick<
   UsageValue,
   | 'dailyTokens'
   | 'dailyValues'

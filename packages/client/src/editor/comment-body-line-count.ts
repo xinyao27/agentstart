@@ -1,5 +1,5 @@
-export const COMMENT_BODY_LAYOUT_MAX_LINES = 80
-export const COMMENT_BODY_LINE_COUNT_SCAN_CODE_UNITS = 64 * 1024
+const COMMENT_BODY_LAYOUT_MAX_LINES = 80
+const COMMENT_BODY_LINE_COUNT_SCAN_CODE_UNITS = 64 * 1024
 
 export function getCommentBodyLayoutLineCount(body: string): number {
   if (body.length === 0) {

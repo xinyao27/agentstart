@@ -1,4 +1,4 @@
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import { useAppStore } from '~renderer/store/state'
 
 import {

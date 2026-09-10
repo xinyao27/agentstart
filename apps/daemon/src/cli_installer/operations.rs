@@ -24,7 +24,7 @@ pub(super) async fn install(
         .ok_or(CliInstallerError::PathUnavailable("CLI install method"))?;
     if status.state == CliInstallState::Conflict {
         return Err(CliInstallerError::Refused(format!(
-            "Refusing to replace non-Yiru command at {}.",
+            "Refusing to replace non-AgentStart command at {}.",
             display_path(&command_path)
         )));
     }
@@ -67,13 +67,13 @@ pub(super) async fn remove(
         }
         CliInstallState::Conflict => {
             return Err(CliInstallerError::Refused(format!(
-                "Refusing to remove non-Yiru command at {}.",
+                "Refusing to remove non-AgentStart command at {}.",
                 display_path(&command_path)
             )));
         }
         CliInstallState::Stale => {
             return Err(CliInstallerError::Refused(format!(
-                "Refusing to remove a command not owned by Yiru at {}.",
+                "Refusing to remove a command not owned by AgentStart at {}.",
                 display_path(&command_path)
             )));
         }

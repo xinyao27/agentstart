@@ -7,7 +7,7 @@ import {
   TerminalSurface,
   type TerminalCreate as ProtocolCreate,
   type TerminalSummary as ProtocolSummary
-} from '../../generated/yiru/runtime/v1/terminal_pb.js'
+} from '../../generated/agent_start/runtime/v1/terminal_pb.js'
 import { safeInteger } from './request-values.js'
 import type {
   TerminalAgentPhase,

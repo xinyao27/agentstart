@@ -1,8 +1,8 @@
-import { StatusCode } from '../../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../../generated/agent_start/protocol/v1/errors_pb.js'
 import type {
   GitHubPrSummary as ProtocolPrSummary,
   GitHubRefreshOutcome as ProtocolRefreshOutcome
-} from '../../generated/yiru/runtime/v1/github_pb.js'
+} from '../../generated/agent_start/runtime/v1/github_pb.js'
 import { RuntimeProtocolError } from '../error.js'
 import {
   checksStatus,

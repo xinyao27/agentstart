@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { ProtocolSender } from './frame-sender.js'
 import { MAX_PENDING_SEND_BATCHES, MAX_PENDING_SEND_BYTES } from './peer-values.js'

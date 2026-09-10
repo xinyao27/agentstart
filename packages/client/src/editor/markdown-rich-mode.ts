@@ -3,11 +3,7 @@ import { translate } from '~renderer/i18n/i18n'
 import { extractFrontMatter } from './markdown-frontmatter'
 import { getRichMarkdownRoundTripOutput } from './markdown-round-trip'
 
-export type MarkdownRichModeUnsupportedReason =
-  | 'html-or-jsx'
-  | 'reference-links'
-  | 'footnotes'
-  | 'other'
+type MarkdownRichModeUnsupportedReason = 'html-or-jsx' | 'reference-links' | 'footnotes' | 'other'
 
 type UnsupportedMatch = {
   reason: MarkdownRichModeUnsupportedReason

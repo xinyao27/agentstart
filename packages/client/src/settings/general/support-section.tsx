@@ -1,4 +1,4 @@
-import { YIRU_GITHUB_STARGAZERS_URL } from '@yiru/protocol/hosted-review/yiru-repository'
+import { AGENTSTART_GITHUB_STARGAZERS_URL } from '@agentstart/protocol/hosted-review/agentstart-repository'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
@@ -7,9 +7,9 @@ import { Star, ArrowSquareOut as ExternalLink } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import {
-  checkShellYiruStarred,
+  checkShellAgentStartStarred,
   completeShellStarNag,
-  starYiruFromShell
+  starAgentStartFromShell
 } from '~renderer/runtime/github-shell-client'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
@@ -48,7 +48,7 @@ export function GeneralSupportSection({
 
   useEffect(() => {
     let cancelled = false
-    void checkShellYiruStarred().then((result) => {
+    void checkShellAgentStartStarred().then((result) => {
       if (cancelled) {
         return
       }
@@ -66,7 +66,7 @@ export function GeneralSupportSection({
   const handleStarClick = async (event: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
     if (starState === 'web-fallback') {
       setStarState('opening-github')
-      openHttpLink(YIRU_GITHUB_STARGAZERS_URL, { event })
+      openHttpLink(AGENTSTART_GITHUB_STARGAZERS_URL, { event })
       if (mountedRef.current) {
         setStarState('web-fallback')
       }
@@ -76,7 +76,7 @@ export function GeneralSupportSection({
       return
     }
     setStarState('starring')
-    const ok = await starYiruFromShell('settings')
+    const ok = await starAgentStartFromShell('settings')
     if (!ok) {
       if (mountedRef.current) {
         setStarState('web-fallback')
@@ -131,7 +131,7 @@ function SupportSection({
             <SettingsSubsectionHeader
               title={translate(
                 'auto.components.settings.GeneralSupportSection.55a87e5fd1',
-                'Support Yiru'
+                'Support AgentStart'
               )}
             />
             {state === 'loading' ? <SupportRowSkeleton /> : null}
@@ -148,8 +148,8 @@ function SupportSection({
 function SupportRowSkeleton(): React.JSX.Element {
   return (
     <div className="flex items-center justify-between gap-4 py-2" aria-hidden="true">
-      <div className="bg-muted/50 h-4 w-36 animate-pulse" />
-      <div className="bg-muted/50 h-8 w-24 animate-pulse" />
+      <div className="bg-muted/50 h-4 w-36 animate-pulse rounded" />
+      <div className="bg-muted/50 h-8 w-24 animate-pulse rounded-md" />
     </div>
   )
 }
@@ -168,7 +168,7 @@ function SupportRow({
     <SearchableSetting
       title={translate(
         'auto.components.settings.GeneralSupportSection.6922c1fa2b',
-        'Star Yiru on GitHub'
+        'Star AgentStart on GitHub'
       )}
       description={translate(
         'auto.components.settings.GeneralSupportSection.511782265b',
@@ -180,7 +180,7 @@ function SupportRow({
       <Label>
         {translate(
           'auto.components.settings.GeneralSupportSection.6922c1fa2b',
-          'Star Yiru on GitHub'
+          'Star AgentStart on GitHub'
         )}
       </Label>
       {state === 'starred' ? (

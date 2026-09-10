@@ -1,4 +1,4 @@
-import type { DiscoveredSkill } from '@yiru/protocol'
+import type { DiscoveredSkill } from '@agentstart/protocol'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { useDetectedAgents } from '~renderer/agent/use-detected'
 import { translate } from '~renderer/i18n/i18n'
@@ -39,7 +39,7 @@ function AgentCoverageChip({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 border px-2.5 py-1 text-xs',
+        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs',
         status.installed
           ? 'border-green-700/25 bg-green-700/10 text-foreground dark:border-green-300/25 dark:bg-green-300/10'
           : 'border-border/60 bg-muted/20 text-muted-foreground'

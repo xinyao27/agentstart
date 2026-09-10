@@ -1,7 +1,7 @@
-import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { FeatureWallWorkflowId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { AgentsStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { FeatureWallWorkflowId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import type { JSX, KeyboardEvent } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'
@@ -113,7 +113,7 @@ export function FeatureWallRail(props: {
               >
                 <span
                   className={cn(
-                    'flex size-7 shrink-0 items-center justify-center border font-mono text-xs',
+                    'flex size-7 shrink-0 items-center justify-center rounded-sm border font-mono text-xs',
                     isDone
                       ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
                       : 'border-border bg-card text-muted-foreground'
@@ -161,7 +161,7 @@ export function FeatureWallRail(props: {
                           >
                             <span
                               className={cn(
-                                'flex size-5 shrink-0 items-center justify-center border font-mono text-[10px]',
+                                'flex size-5 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]',
                                 isStepDone
                                   ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
                                   : 'border-border bg-card text-muted-foreground'

@@ -1,9 +1,9 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::shell_runtime_json_value::Kind as JsonKind;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::shell_runtime_json_value::Kind as JsonKind;
+use agentstart_protocol::runtime::v1::{
     ShellRuntimeJsonValue, ShellRuntimeServiceSyncWindowGraphRequest,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::protocol::CallerClass;
 use crate::rpc::status::protocol_status_response;

@@ -1,4 +1,4 @@
-import { EMULATOR_PROTOCOL_CAPABILITY, EmulatorClient } from '@yiru/protocol'
+import { EMULATOR_PROTOCOL_CAPABILITY, EmulatorClient } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import {
@@ -6,7 +6,7 @@ import {
   readConfiguredBrowserHostStatus
 } from './browser-host-runtime'
 
-export async function openEmulatorTarget(): Promise<EmulatorClient | null> {
+async function openEmulatorTarget(): Promise<EmulatorClient | null> {
   const status = await readConfiguredBrowserHostStatus()
   if (!status.capabilities?.includes(EMULATOR_PROTOCOL_CAPABILITY)) {
     return null
@@ -22,7 +22,7 @@ export async function requireEmulatorClient(): Promise<EmulatorClient> {
     throw new Error(
       translate(
         'runtime.emulatorTarget.unavailable',
-        'The emulator requires a current Yiru daemon connection.'
+        'The emulator requires a current AgentStart daemon connection.'
       )
     )
   }

@@ -1,4 +1,4 @@
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, CaretUpDown as ChevronsUpDown } from '~renderer/icons/hugeicons'
@@ -58,7 +58,7 @@ function renderTriggerLabel(repos: Repo[], selected: ReadonlySet<string>): React
   )
 }
 
-export function getRepoMultiComboboxDetail(repo: Repo, hostLabel?: string | null): string {
+function getRepoMultiComboboxDetail(repo: Repo, hostLabel?: string | null): string {
   const trimmedHostLabel = hostLabel?.trim()
   return trimmedHostLabel ? `${trimmedHostLabel} · ${repo.path}` : repo.path
 }

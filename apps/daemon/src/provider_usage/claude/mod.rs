@@ -5,7 +5,9 @@ mod model_pricing;
 mod parser;
 pub(super) mod pricing;
 
+use std::cmp::Ordering;
 use std::collections::{BTreeMap, HashSet};
+use std::path::PathBuf;
 
 use serde_json::Value;
 
@@ -16,7 +18,15 @@ use super::worktrees::{Attribution, UsageWorktree};
 use aggregation::Aggregation;
 use model::{ProcessedFile, ScanOutput};
 
-pub(super) const SCHEMA_VERSION: u64 = 7;
+pub(super) const SCHEMA_VERSION: u64 = 8;
+const PREVIOUS_SCHEMA_VERSION: u64 = 7;
+
+struct PendingFile {
+    path: PathBuf,
+    mtime_ms: f64,
+    size: u64,
+    previous: Option<ProcessedFile>,
+}
 
 pub(super) fn scan(
     previous: Value,
@@ -27,7 +37,13 @@ pub(super) fn scan(
         "schemaVersion": SCHEMA_VERSION,
         "processedFiles": result.processed_files,
         "sessions": result.sessions,
-        "dailyAggregates": result.daily_aggregates
+        "dailyAggregates": result.daily_aggregates,
+        "scanWarnings": {
+            "deferredFiles": result.deferred_files,
+            "failedFiles": result.failed_files,
+            "oversizedFiles": result.oversized_files,
+            "skippedLines": 0
+        }
     }))
 }
 
@@ -37,10 +53,10 @@ pub(super) fn scan_files(
     files: Vec<std::path::PathBuf>,
 ) -> Result<ScanOutput, ProviderUsageError> {
     let fingerprint = serde_json::to_string(&worktrees)?;
-    let previous_files = if previous.get("schemaVersion").and_then(Value::as_u64)
-        == Some(SCHEMA_VERSION)
-        && previous.get("worktreeFingerprint").and_then(Value::as_str) == Some(fingerprint.as_str())
-    {
+    let previous_files = if matches!(
+        previous.get("schemaVersion").and_then(Value::as_u64),
+        Some(PREVIOUS_SCHEMA_VERSION | SCHEMA_VERSION)
+    ) {
         previous
             .get("processedFiles")
             .and_then(|value| serde_json::from_value::<Vec<ProcessedFile>>(value.clone()).ok())
@@ -64,12 +80,85 @@ pub(super) fn scan_files(
     for path in &files {
         let key = path.to_string_lossy().into_owned();
         let (mtime, size) = discovery::stat(path)?;
-        if let Some(file) = previous.remove(&key).filter(|file| {
-            file.mtime_ms == mtime && file.size == size && !(lost_owner && file.has_deferred_claims)
-        }) {
-            reused.insert(key, file);
+        match previous.remove(&key) {
+            Some(file)
+                if file.mtime_ms == mtime
+                    && file.size == size
+                    && file.attribution_fingerprint == fingerprint
+                    && !(lost_owner && file.has_deferred_claims) =>
+            {
+                reused.insert(key, file);
+            }
+            prior => {
+                changed.push(PendingFile {
+                    path: path.clone(),
+                    mtime_ms: mtime,
+                    size,
+                    previous: prior,
+                });
+            }
+        }
+    }
+    changed.sort_by(|left, right| {
+        right
+            .previous
+            .is_none()
+            .cmp(&left.previous.is_none())
+            .then_with(|| {
+                right
+                    .mtime_ms
+                    .partial_cmp(&left.mtime_ms)
+                    .unwrap_or(Ordering::Equal)
+            })
+    });
+    let mut refresh_bytes = 0_u64;
+    let mut selected = Vec::new();
+    let mut deferred_files = 0_u64;
+    let mut oversized_files = reused
+        .values()
+        .filter(|file| file.ignored_oversized)
+        .count() as u64;
+    let mut failed_files = reused.values().filter(|file| file.ignored_failed).count() as u64;
+    for pending in changed {
+        if pending.size > discovery::MAX_REFRESH_BYTES {
+            oversized_files = oversized_files.saturating_add(1);
+            let key = pending.path.to_string_lossy().into_owned();
+            let file = match pending.previous {
+                Some(mut file) => {
+                    file.path = key.clone();
+                    file.mtime_ms = pending.mtime_ms;
+                    file.size = pending.size;
+                    file.attribution_fingerprint = fingerprint.clone();
+                    file.ignored_oversized = true;
+                    file.ignored_failed = false;
+                    file
+                }
+                None => ProcessedFile {
+                    path: key,
+                    mtime_ms: pending.mtime_ms,
+                    size: pending.size,
+                    line_count: 0,
+                    sessions: Vec::new(),
+                    daily_aggregates: Vec::new(),
+                    owned_dedupe_keys: Vec::new(),
+                    has_deferred_claims: false,
+                    attribution_fingerprint: fingerprint.clone(),
+                    ignored_oversized: true,
+                    ignored_failed: false,
+                },
+            };
+            reused.insert(file.path.clone(), file);
+            continue;
+        }
+        let next_bytes = refresh_bytes.checked_add(pending.size);
+        if next_bytes.is_some_and(|bytes| bytes <= discovery::MAX_REFRESH_BYTES) {
+            refresh_bytes = next_bytes.unwrap_or(refresh_bytes);
+            selected.push(pending);
         } else {
-            changed.push(path);
+            deferred_files = deferred_files.saturating_add(1);
+            if let Some(file) = pending.previous {
+                reused.insert(file.path.clone(), file);
+            }
         }
     }
     let mut owners = reused
@@ -78,9 +167,37 @@ pub(super) fn scan_files(
         .collect::<HashSet<_>>();
     let mut attribution = Attribution::new(worktrees);
     let catalog = Catalog::load();
-    for path in changed {
-        let (mtime_ms, size) = discovery::stat(path)?;
-        let (line_count, turns) = parser::read(path)?;
+    for pending in selected {
+        let path = pending.path;
+        let (line_count, turns) = match parser::read(&path) {
+            Ok(parsed) => parsed,
+            Err(error @ ProviderUsageError::Read(_)) | Err(error @ ProviderUsageError::Scan(_)) => {
+                eprintln!(
+                    "Skipping Claude usage transcript {}: {error}",
+                    path.display()
+                );
+                failed_files = failed_files.saturating_add(1);
+                let key = path.to_string_lossy().into_owned();
+                reused.insert(
+                    key.clone(),
+                    ProcessedFile {
+                        path: key,
+                        mtime_ms: pending.mtime_ms,
+                        size: pending.size,
+                        line_count: 0,
+                        sessions: Vec::new(),
+                        daily_aggregates: Vec::new(),
+                        owned_dedupe_keys: Vec::new(),
+                        has_deferred_claims: false,
+                        attribution_fingerprint: fingerprint.clone(),
+                        ignored_oversized: false,
+                        ignored_failed: true,
+                    },
+                );
+                continue;
+            }
+            Err(error) => return Err(error),
+        };
         let mut aggregation = Aggregation::default();
         let mut owned_dedupe_keys = Vec::new();
         let mut has_deferred_claims = false;
@@ -105,13 +222,16 @@ pub(super) fn scan_files(
             key.clone(),
             ProcessedFile {
                 path: key,
-                mtime_ms,
-                size,
+                mtime_ms: pending.mtime_ms,
+                size: pending.size,
                 line_count,
                 sessions,
                 daily_aggregates,
                 owned_dedupe_keys,
                 has_deferred_claims,
+                attribution_fingerprint: fingerprint.clone(),
+                ignored_oversized: false,
+                ignored_failed: false,
             },
         );
     }
@@ -129,5 +249,8 @@ pub(super) fn scan_files(
         processed_files,
         sessions,
         daily_aggregates,
+        deferred_files,
+        failed_files,
+        oversized_files,
     })
 }

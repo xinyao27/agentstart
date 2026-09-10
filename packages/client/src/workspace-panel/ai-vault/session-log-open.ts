@@ -1,4 +1,4 @@
-import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import { toast } from 'sonner'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { translate } from '~renderer/i18n/i18n'
@@ -7,7 +7,7 @@ import { useAppStore } from '~renderer/store/state'
 import type { AppState } from '~renderer/store/types'
 import { findWorktreeById } from '~renderer/worktree/state/types'
 
-import { canOpenAiVaultSessionLogInYiru } from './session-path-actions'
+import { canOpenAiVaultSessionLogInAgentStart } from './session-path-actions'
 
 type AiVaultLogSession = {
   executionHostId: string | null | undefined
@@ -46,16 +46,16 @@ function focusEditorContent(): void {
 }
 
 /**
- * Open a local AI Vault session log inside Yiru as a permanent, read-only editor
+ * Open a local AI Vault session log inside AgentStart as a permanent, read-only editor
  * tab (or activate an existing tab without reducing its authority). Reuses
- * Yiru's external-file authorize + `openFile` pipeline; it never grants write
+ * AgentStart's external-file authorize + `openFile` pipeline; it never grants write
  * capability by itself and never redirects the open to a remote host.
  */
-export async function openAiVaultSessionLogInYiru(session: AiVaultLogSession): Promise<void> {
+export async function openAiVaultSessionLogInAgentStart(session: AiVaultLogSession): Promise<void> {
   const filePath = session.filePath?.trim()
   // Defensive: UI availability should already withhold blank/remote/synthetic
   // paths. Bail silently rather than toast — there is no user-actionable error.
-  if (!filePath || !canOpenAiVaultSessionLogInYiru(session)) {
+  if (!filePath || !canOpenAiVaultSessionLogInAgentStart(session)) {
     return
   }
   if (inFlightOpenPaths.has(filePath)) {
@@ -91,7 +91,7 @@ export async function openAiVaultSessionLogInYiru(session: AiVaultLogSession): P
 
     try {
       // The exact scanned path is the authorization oracle; the user click is the
-      // trust gesture. Reuses Yiru's existing external R/W open grant.
+      // trust gesture. Reuses AgentStart's existing external R/W open grant.
       await workspaceHostClient.fileHost.authorizeExternalPath({ targetPath: filePath })
     } catch {
       toast.error(

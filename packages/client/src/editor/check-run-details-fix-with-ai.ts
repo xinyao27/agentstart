@@ -1,9 +1,12 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
+import type {
+  PRCheckDetail,
+  PRCheckRunDetails
+} from '@agentstart/protocol/hosted-review/review-types'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/protocol/source-control/ai-actions'
-import { resolveSourceControlActionRecipe } from '@yiru/protocol/source-control/resolution'
+} from '@agentstart/protocol/source-control/ai-actions'
+import { resolveSourceControlActionRecipe } from '@agentstart/protocol/source-control/resolution'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { startFixChecksAgent } from '~renderer/editor/fix-checks-agent-launch'
@@ -29,15 +32,7 @@ import {
   resolveCheckRunDetailsFixRepo
 } from './check-run-details-fix-context'
 
-export {
-  buildCheckRunDetailsFixBasePrompt,
-  getCheckRunDetailsFixDisabledReason,
-  isCheckRunDetailsFixCandidate,
-  resolveCheckRunDetailsFixCheck,
-  resolveHostedReviewForCheckRunDetailsFix
-} from './check-run-details-fix-context'
-
-export async function startCheckRunDetailsFixWithAI(args: {
+async function startCheckRunDetailsFixWithAI(args: {
   worktreeId: string
   check: PRCheckDetail
   details: PRCheckRunDetails | null

@@ -1,5 +1,5 @@
-import { EXTERNAL_EDITOR_PROTOCOL_CAPABILITY } from '@yiru/protocol'
-import type { ShellPlatformOutcomeValue } from '@yiru/protocol'
+import { EXTERNAL_EDITOR_PROTOCOL_CAPABILITY } from '@agentstart/protocol'
+import type { ShellPlatformOutcomeValue } from '@agentstart/protocol'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { openRemoteSshInExternalEditor } from '~renderer/runtime/external-editor-target'
@@ -100,7 +100,7 @@ function showOpenFailureToast(
       {
         description: translate(
           'auto.components.sidebar.WorktreeOpenInMenu.0bed8727db',
-          'It may have been moved or deleted. Refresh workspaces or remove it from Yiru.'
+          'It may have been moved or deleted. Refresh workspaces or remove it from AgentStart.'
         )
       }
     )

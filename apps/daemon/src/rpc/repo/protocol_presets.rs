@@ -1,16 +1,17 @@
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
-    RepoHooksCheckStatus, RepoHooksSource, RepoServiceHooksCheckRequest,
-    RepoServiceHooksCheckResponse, RepoServiceHooksRequest, RepoServiceHooksResponse,
-    RepoServiceRemoveSparsePresetRequest, RepoServiceRemoveSparsePresetResponse,
-    RepoServiceSaveSparsePresetRequest, RepoServiceSaveSparsePresetResponse,
-    RepoServiceSetupScriptImportsRequest, RepoServiceSetupScriptImportsResponse,
-    RepoServiceSparsePresetsRequest, RepoServiceSparsePresetsResponse, RepoSetupRunPolicy,
-    RepoSetupScriptImportCandidate, RepoSetupTrust, RepoSparsePreset, RepoYiruHooks,
-    RepoYiruHooksDefaultTab, RepoYiruHooksScripts, RepoYiruHooksWorktree,
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
+    RepoAgentStartHooks, RepoAgentStartHooksDefaultTab, RepoAgentStartHooksScripts,
+    RepoAgentStartHooksWorktree, RepoHooksCheckStatus, RepoHooksSource,
+    RepoServiceHooksCheckRequest, RepoServiceHooksCheckResponse, RepoServiceHooksRequest,
+    RepoServiceHooksResponse, RepoServiceRemoveSparsePresetRequest,
+    RepoServiceRemoveSparsePresetResponse, RepoServiceSaveSparsePresetRequest,
+    RepoServiceSaveSparsePresetResponse, RepoServiceSetupScriptImportsRequest,
+    RepoServiceSetupScriptImportsResponse, RepoServiceSparsePresetsRequest,
+    RepoServiceSparsePresetsResponse, RepoSetupRunPolicy, RepoSetupScriptImportCandidate,
+    RepoSetupTrust, RepoSparsePreset,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::Value;
 
 use crate::repositories::SparsePresetSaveInput;
 
@@ -33,7 +34,7 @@ pub(in crate::rpc) async fn hooks(rpc: &RepoRpc, payload: &[u8]) -> Result<Vec<u
             .unwrap_or(false),
         hooks: object
             .and_then(|object| object.get("hooks"))
-            .and_then(yiru_hooks_message),
+            .and_then(agentstart_hooks_message),
         setup_run_policy: object
             .and_then(|object| object.get("setupRunPolicy"))
             .and_then(Value::as_str)
@@ -73,7 +74,7 @@ pub(in crate::rpc) async fn hooks_check(rpc: &RepoRpc, payload: &[u8]) -> Result
             .unwrap_or(false),
         hooks: object
             .and_then(|object| object.get("hooks"))
-            .and_then(yiru_hooks_message),
+            .and_then(agentstart_hooks_message),
         may_need_update: object
             .and_then(|object| object.get("mayNeedUpdate"))
             .and_then(Value::as_bool)
@@ -159,7 +160,7 @@ pub(in crate::rpc) async fn remove_sparse_preset(
     }))
 }
 
-fn yiru_hooks_message(value: &Value) -> Option<RepoYiruHooks> {
+fn agentstart_hooks_message(value: &Value) -> Option<RepoAgentStartHooks> {
     if value.is_null() {
         return None;
     }
@@ -172,7 +173,7 @@ fn yiru_hooks_message(value: &Value) -> Option<RepoYiruHooks> {
         .flatten()
         .filter_map(|tab| {
             let tab = tab.as_object()?;
-            Some(RepoYiruHooksDefaultTab {
+            Some(RepoAgentStartHooksDefaultTab {
                 title: tab.get("title").and_then(Value::as_str).map(str::to_owned),
                 color: tab.get("color").and_then(Value::as_str).map(str::to_owned),
                 command: tab
@@ -187,15 +188,15 @@ fn yiru_hooks_message(value: &Value) -> Option<RepoYiruHooks> {
         .and_then(Value::as_object)
         .and_then(|worktree| worktree.get("sharedDirectories"))
         .and_then(Value::as_array)
-        .map(|directories| RepoYiruHooksWorktree {
+        .map(|directories| RepoAgentStartHooksWorktree {
             shared_directories: directories
                 .iter()
                 .filter_map(Value::as_str)
                 .map(str::to_owned)
                 .collect(),
         });
-    Some(RepoYiruHooks {
-        scripts: Some(RepoYiruHooksScripts {
+    Some(RepoAgentStartHooks {
+        scripts: Some(RepoAgentStartHooksScripts {
             setup: scripts
                 .and_then(|scripts| scripts.get("setup"))
                 .and_then(Value::as_str)
@@ -280,7 +281,7 @@ fn setup_run_policy(value: &str) -> Result<RepoSetupRunPolicy, Status> {
 
 fn hooks_source(value: &str) -> Result<RepoHooksSource, Status> {
     match value {
-        "yiru.yaml" => Ok(RepoHooksSource::YiruYaml),
+        "agentstart.yaml" => Ok(RepoHooksSource::AgentStartYaml),
         "legacy" => Ok(RepoHooksSource::Legacy),
         _ => Err(status(
             StatusCode::DataLoss,

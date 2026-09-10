@@ -1,5 +1,5 @@
-import type { FolderWorkspacePathStatus } from '@yiru/protocol/workspace/folder-path'
-import { blocksFolderWorkspaceActivation } from '@yiru/protocol/workspace/folder-path'
+import type { FolderWorkspacePathStatus } from '@agentstart/protocol/workspace/folder-path'
+import { blocksFolderWorkspaceActivation } from '@agentstart/protocol/workspace/folder-path'
 import { translate } from '~renderer/i18n/i18n'
 
 export function getFolderWorkspacePathStatusTitle(
@@ -35,7 +35,7 @@ export function getFolderWorkspacePathStatusDescription(
     case 'missing':
       return translate(
         'auto.lib.folderWorkspacePathStatus.description.missing',
-        'Yiru cannot find {{path}}. Remove and re-import this folder workspace.',
+        'AgentStart cannot find {{path}}. Remove and re-import this folder workspace.',
         { path: status.path }
       )
     case 'not-directory':
@@ -48,7 +48,7 @@ export function getFolderWorkspacePathStatusDescription(
     case 'unavailable':
       return translate(
         'auto.lib.folderWorkspacePathStatus.description.unavailable',
-        'Yiru cannot verify this folder right now. Check the runtime and try again.'
+        'AgentStart cannot verify this folder right now. Check the runtime and try again.'
       )
   }
 }
@@ -67,7 +67,7 @@ export function formatFolderWorkspaceCreateError(error: unknown): {
       ),
       description: translate(
         'auto.lib.folderWorkspacePathStatus.createError.description.missing',
-        'Yiru cannot find {{path}}. Remove and re-import the folder.',
+        'AgentStart cannot find {{path}}. Remove and re-import the folder.',
         { path }
       )
     }
@@ -93,7 +93,7 @@ export function formatFolderWorkspaceCreateError(error: unknown): {
       ),
       description: translate(
         'auto.lib.folderWorkspacePathStatus.createError.description.unavailable',
-        'Yiru cannot verify this folder right now. Check the runtime and try again.'
+        'AgentStart cannot verify this folder right now. Check the runtime and try again.'
       )
     }
   }

@@ -2,7 +2,7 @@ import type {
   SearchFileResult,
   SearchMatch,
   FileSearchResult as SearchResult
-} from '@yiru/protocol/files/values'
+} from '@agentstart/protocol/files/values'
 
 export type SearchRow =
   | {

@@ -1,13 +1,13 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import {
   SOURCE_CONTROL_ACTION_IDS,
   type SourceControlActionId
-} from '@yiru/protocol/source-control/ai-actions'
+} from '@agentstart/protocol/source-control/ai-actions'
 import type {
   RepoSourceControlAiOverrides,
   SourceControlAiSettings
-} from '@yiru/protocol/source-control/ai-types'
-import { CUSTOM_AGENT_ID } from '@yiru/protocol/source-control/custom-agent'
+} from '@agentstart/protocol/source-control/ai-types'
+import { CUSTOM_AGENT_ID } from '@agentstart/protocol/source-control/custom-agent'
 import type React from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
@@ -113,7 +113,7 @@ export function RepositorySourceControlAiActionRows({
               repoId,
               actionId
             )}
-            className="border-border scroll-mt-8 space-y-3 border px-3 py-3"
+            className="border-border scroll-mt-8 space-y-3 rounded-md border px-3 py-3"
           >
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0 space-y-0.5">
@@ -241,7 +241,7 @@ export function RepositorySourceControlAiActionRows({
                   disabled={!hasOverride}
                   placeholder={inheritedTemplate}
                   spellCheck={false}
-                  className="border-border bg-background text-foreground placeholder:text-muted-foreground/70 disabled:bg-muted/40 w-full resize-y border px-2.5 py-2 font-mono text-xs outline-none disabled:cursor-not-allowed"
+                  className="border-border bg-background text-foreground placeholder:text-muted-foreground/70 disabled:bg-muted/40 w-full resize-y rounded-md border px-2.5 py-2 font-mono text-xs outline-none disabled:cursor-not-allowed"
                 />
                 <SourceControlActionVariableChips
                   actionId={actionId}

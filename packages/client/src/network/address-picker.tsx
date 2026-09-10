@@ -15,7 +15,7 @@ import {
   type CustomAddressValidator
 } from './custom-address-dialog'
 
-export type AddressOption = {
+type AddressOption = {
   value: string
   label: string
 }

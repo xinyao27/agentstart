@@ -1,8 +1,8 @@
 import type {
   MarkdownDocument,
   FileSearchResult as SearchResult
-} from '@yiru/protocol/files/values'
-import type { FileSearchInput } from '@yiru/protocol/files/values'
+} from '@agentstart/protocol/files/values'
+import type { FileSearchInput } from '@agentstart/protocol/files/values'
 
 import {
   createEmptyRuntimeFileSearchResult,

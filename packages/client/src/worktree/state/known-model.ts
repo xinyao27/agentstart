@@ -1,39 +1,15 @@
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
-import { folderWorkspaceToWorktree } from '@yiru/protocol/workspace/folder'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
+import { folderWorkspaceToWorktree } from '@agentstart/protocol/workspace/folder'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import type {
   DetectedWorktreeListResult,
   Worktree,
   WorktreeMeta
-} from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/worktree/model'
 
 import type { AppState } from '../../store/types'
 import { folderWorkspaceWorktreeCache } from './refresh-model'
-import { findWorktreeById, getRepoIdFromWorktreeId } from './types'
-
-export function applyDetectedWorktreeUpdates(
-  detectedWorktreesByRepo: AppState['detectedWorktreesByRepo'],
-  worktreeId: string,
-  updates: Partial<WorktreeMeta>
-): AppState['detectedWorktreesByRepo'] {
-  let changed = false
-  const nextByRepo: AppState['detectedWorktreesByRepo'] = {}
-
-  for (const [repoId, result] of Object.entries(detectedWorktreesByRepo)) {
-    let repoChanged = false
-    const nextWorktrees = result.worktrees.map((worktree) => {
-      if (worktree.id !== worktreeId) {
-        return worktree
-      }
-      repoChanged = true
-      changed = true
-      return { ...worktree, ...updates }
-    })
-    nextByRepo[repoId] = repoChanged ? { ...result, worktrees: nextWorktrees } : result
-  }
-
-  return changed ? nextByRepo : detectedWorktreesByRepo
-}
+import { findWorktreeById } from './types'
 
 export function findKnownWorktreeById(
   state: Pick<AppState, 'worktreesByRepo' | 'detectedWorktreesByRepo' | 'folderWorkspaces'>,
@@ -187,21 +163,4 @@ export function isRuntimeSelectorNotFoundError(error: unknown): boolean {
     responseMessage === 'selector_not_found' ||
     String(error).includes('selector_not_found')
   )
-}
-
-export function replaceWorktreeInRepoLists(
-  worktreesByRepo: Record<string, Worktree[]>,
-  updatedWorktree: Worktree
-): Record<string, Worktree[]> {
-  const repoId = getRepoIdFromWorktreeId(updatedWorktree.id)
-  const current = worktreesByRepo[repoId]
-  if (!current) {
-    return worktreesByRepo
-  }
-  return {
-    ...worktreesByRepo,
-    [repoId]: current.map((worktree) =>
-      worktree.id === updatedWorktree.id ? updatedWorktree : worktree
-    )
-  }
 }

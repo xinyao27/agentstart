@@ -1,4 +1,4 @@
-import { isTuiAgent } from '@yiru/protocol/agent/identity'
+import { isTuiAgent } from '@agentstart/protocol/agent/identity'
 
 import type { TuiAgent } from './types'
 

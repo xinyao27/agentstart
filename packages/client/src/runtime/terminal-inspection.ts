@@ -1,10 +1,11 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { runtimePtyEnvironmentId, runtimePtyHandle } from '@yiru/protocol/terminal-identity'
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { runtimePtyEnvironmentId, runtimePtyHandle } from '@agentstart/protocol/terminal-identity'
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import { isTerminalInputTooLargeWithDeferredMeasurement } from '~renderer/terminal-pane/pty/input-chunks'
 
 import { useAppStore } from '../store/state'
 import { getActiveRuntimeTarget, type RuntimeClientTarget } from './rpc-client'
+import { isRuntimeTerminalGoneError } from './terminal-gone-error'
 import { openRuntimeTerminalClient } from './terminal-protocol'
 
 export type RuntimeTerminalProcessInspection = {
@@ -14,20 +15,10 @@ export type RuntimeTerminalProcessInspection = {
 
 type TerminalTarget = RuntimeClientTarget
 
-const DESKTOP_RUNTIME_CLIENT = { id: 'yiru-desktop', type: 'desktop' } as const
+const DESKTOP_RUNTIME_CLIENT = { id: 'agentstart-desktop', type: 'desktop' } as const
 
 function isRuntimePtyInputTooLarge(data: string): boolean | Promise<boolean> {
   return isTerminalInputTooLargeWithDeferredMeasurement(data)
-}
-
-function isTerminalGoneError(error: unknown): boolean {
-  const message = error instanceof Error ? error.message : String(error)
-  return (
-    message.includes('terminal_handle_stale') ||
-    message.includes('terminal_exited') ||
-    message.includes('terminal_gone') ||
-    message.includes('no_connected_pty')
-  )
 }
 
 function targetForRuntimePty(
@@ -50,7 +41,7 @@ export async function hasRuntimeTerminal(ptyId: string): Promise<boolean> {
     await (await openRuntimeTerminalClient(targetForRuntimePty(ptyId))).show(terminal)
     return true
   } catch (error) {
-    if (isTerminalGoneError(error)) {
+    if (isRuntimeTerminalGoneError(error)) {
       return false
     }
     throw error
@@ -82,7 +73,7 @@ export async function killRuntimeTerminalSession(sessionId: string): Promise<boo
   return result.success
 }
 
-export function recordRuntimeTerminalInputForPtyId(ptyId: string, timestamp = Date.now()): void {
+function recordRuntimeTerminalInputForPtyId(ptyId: string, timestamp = Date.now()): void {
   const state = useAppStore.getState()
   for (const [tabId, layout] of Object.entries(state.terminalLayoutsByTabId)) {
     for (const [leafId, leafPtyId] of Object.entries(layout?.ptyIdsByLeafId ?? {})) {
@@ -118,7 +109,7 @@ export async function inspectRuntimeTerminalProcess(
     ).inspectProcess(terminal, { timeoutMs: 15_000 })
     return result.process
   } catch (error) {
-    if (isTerminalGoneError(error)) {
+    if (isRuntimeTerminalGoneError(error)) {
       return { foregroundProcess: null, hasChildProcesses: false }
     }
     throw error
@@ -201,7 +192,7 @@ export async function sendRuntimePtyInputVerified(
     }
     return false
   } catch (error) {
-    if (isTerminalGoneError(error)) {
+    if (isRuntimeTerminalGoneError(error)) {
       return false
     }
     throw error

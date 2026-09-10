@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { yieldToEventLoop } from '~renderer/event-loop-yield'
 import { sendRuntimePtyInputVerified } from '~renderer/runtime/terminal-inspection'
 import {
@@ -10,9 +10,9 @@ import {
 
 // Why: bracketed paste markers let supported TUIs treat generated prompt text
 // as one paste instead of echoing character-by-character or triggering edits.
-export const AGENT_DRAFT_PASTE_DIRECT_MAX_BYTES = 64 * 1024
-export const AGENT_DRAFT_PASTE_CHUNK_MAX_BYTES = 16 * 1024
-export const AGENT_DRAFT_PASTE_MAX_BYTES = 16 * 1024 * 1024
+const AGENT_DRAFT_PASTE_DIRECT_MAX_BYTES = 64 * 1024
+const AGENT_DRAFT_PASTE_CHUNK_MAX_BYTES = 16 * 1024
+const AGENT_DRAFT_PASTE_MAX_BYTES = 16 * 1024 * 1024
 const AGENT_DRAFT_PASTE_PREFLIGHT_YIELD_CODE_UNITS = 256 * 1024
 const AGENT_DRAFT_PASTE_ESCAPE_CODE_POINT = 0x1b
 const AGENT_DRAFT_PASTE_INERT_ESCAPE_CODE_POINT = 0x241b
@@ -75,14 +75,7 @@ export async function sendAgentDraftPasteContent(
   return true
 }
 
-export function chunkAgentDraftPasteContent(
-  content: string,
-  maxChunkBytes = AGENT_DRAFT_PASTE_CHUNK_MAX_BYTES
-): string[] {
-  return [...iterateAgentDraftPasteContentChunks(content, maxChunkBytes)]
-}
-
-export function* iterateAgentDraftPasteContentChunks(
+function* iterateAgentDraftPasteContentChunks(
   content: string,
   maxChunkBytes = AGENT_DRAFT_PASTE_CHUNK_MAX_BYTES
 ): Generator<string> {

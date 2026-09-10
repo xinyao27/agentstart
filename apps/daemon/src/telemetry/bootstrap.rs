@@ -14,7 +14,7 @@ pub(super) async fn common_properties(
         (
             "app_version".to_owned(),
             json!(
-                std::env::var("YIRU_APP_VERSION")
+                std::env::var("AGENTSTART_APP_VERSION")
                     .unwrap_or_else(|_| env!("CARGO_PKG_VERSION").to_owned())
             ),
         ),
@@ -23,7 +23,7 @@ pub(super) async fn common_properties(
         ("os_release".to_owned(), json!(os_release().await)),
         ("install_id".to_owned(), json!(settings.install_id)),
         ("session_id".to_owned(), json!(session_id)),
-        ("yiru_channel".to_owned(), json!(channel)),
+        ("agentstart_channel".to_owned(), json!(channel)),
     ]);
     let valid = values.iter().all(|(key, value)| {
         value.as_str().is_some_and(|value| {
@@ -38,11 +38,11 @@ pub(super) async fn common_properties(
 }
 
 pub(super) fn official_build() -> Option<(String, String)> {
-    let channel = option_env!("YIRU_BUILD_IDENTITY")?;
+    let channel = option_env!("AGENTSTART_BUILD_IDENTITY")?;
     if !matches!(channel, "stable" | "rc") {
         return None;
     }
-    let key = option_env!("YIRU_POSTHOG_WRITE_KEY")?.trim();
+    let key = option_env!("AGENTSTART_POSTHOG_WRITE_KEY")?.trim();
     (!key.is_empty()).then(|| (channel.to_owned(), key.to_owned()))
 }
 

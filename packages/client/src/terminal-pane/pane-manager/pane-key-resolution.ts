@@ -1,8 +1,8 @@
-import { isTerminalLeafId, type TerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
+import { isTerminalLeafId, type TerminalLeafId } from '@agentstart/protocol/terminal/pane-identity'
 
 import type { ManagedPane } from './types'
 
-export type PaneKeyUnresolvedReason = 'confirmed-missing' | 'ownership-mismatch' | 'invalid'
+type PaneKeyUnresolvedReason = 'confirmed-missing' | 'ownership-mismatch' | 'invalid'
 
 export type PaneKeyResolution =
   | {

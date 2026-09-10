@@ -1,4 +1,4 @@
-import type { WorkspacePortScanResult } from '@yiru/protocol'
+import type { WorkspacePortScanResult } from '@agentstart/protocol'
 
 import { projectDisplayName } from './project-display-name'
 

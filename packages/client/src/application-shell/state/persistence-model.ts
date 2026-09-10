@@ -1,18 +1,18 @@
-import type { WorkspaceCleanupDismissal } from '@yiru/protocol'
+import type { WorkspaceCleanupDismissal } from '@agentstart/protocol'
 import {
   normalizeExecutionHostScope,
   normalizeVisibleExecutionHostIds
-} from '@yiru/protocol/host/identity'
-import { persistedUIValuesEqual } from '@yiru/protocol/settings/ui-equality'
+} from '@agentstart/protocol/host/identity'
+import { persistedUIValuesEqual } from '@agentstart/protocol/settings/ui-equality'
 import type {
   PersistedUIState,
   StatusBarItem,
   VisibleWorkspaceHostIds,
   TopLevelView
-} from '@yiru/protocol/settings/ui-state'
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import { WORKSPACE_CLEANUP_CLASSIFIER_VERSION } from '@yiru/protocol/workspace/cleanup-policy'
-import type { PersistedTrustedYiruHooks } from '@yiru/protocol/worktree/hooks'
+} from '@agentstart/protocol/settings/ui-state'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import { WORKSPACE_CLEANUP_CLASSIFIER_VERSION } from '@agentstart/protocol/workspace/cleanup-policy'
+import type { PersistedTrustedAgentStartHooks } from '@agentstart/protocol/worktree/hooks'
 import { buildAgentNotificationId } from '~renderer/agent/notification-id'
 
 import type { AppState } from '../../store/types'
@@ -31,7 +31,7 @@ export function normalizeHydratedVisibleWorkspaceHostIds(
   return legacyScope === 'all' ? null : [legacyScope]
 }
 
-export const MIN_SIDEBAR_WIDTH = 240
+const MIN_SIDEBAR_WIDTH = 240
 export const MAX_LEFT_SIDEBAR_WIDTH = 500
 // Why: the right sidebar drag-resize is window-relative (see right-sidebar
 // component), so persisted widths can legitimately be well above the old 500px
@@ -43,7 +43,7 @@ export const MAX_RIGHT_SIDEBAR_WIDTH = 4000
 // forced-kill paths leave entries pinned. Mirrors HYDRATE_MAX_AGE_MS in
 // src/main/agent-hooks/server.ts for parallel reasoning with the sibling
 // hook-status entries these acks pair with.
-export const HYDRATE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000
+const HYDRATE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000
 export function resolvePaneKeyWorktreeIdFromTabs(state: AppState, paneKey: string): string | null {
   const parsed = parsePaneKey(paneKey)
   if (!parsed) {
@@ -79,7 +79,7 @@ export function collectAcknowledgedAgentNotificationId({
   }
 }
 
-export function isPlainPersistedRecord(value: unknown): value is Record<string, unknown> {
+function isPlainPersistedRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value)
 }
 
@@ -90,26 +90,26 @@ export function sanitizePersistedRepoIds(value: unknown): string[] {
   return value.filter((repoId): repoId is string => typeof repoId === 'string')
 }
 
-export function sanitizeTrustedYiruHooks(trust: unknown): PersistedTrustedYiruHooks {
+function sanitizeTrustedAgentStartHooks(trust: unknown): PersistedTrustedAgentStartHooks {
   if (!isPlainPersistedRecord(trust)) {
     return {}
   }
-  const next: PersistedTrustedYiruHooks = {}
+  const next: PersistedTrustedAgentStartHooks = {}
   for (const [repoId, entry] of Object.entries(trust)) {
     if (!isSafePersistedRecordKey(repoId) || !isPlainPersistedRecord(entry)) {
       continue
     }
-    next[repoId] = entry as PersistedTrustedYiruHooks[string]
+    next[repoId] = entry as PersistedTrustedAgentStartHooks[string]
   }
   return next
 }
 
-export function filterTrustedYiruHooksToValidRepos(
+function filterTrustedAgentStartHooksToValidRepos(
   trust: unknown,
   validRepoIds: Set<string>
-): PersistedTrustedYiruHooks {
-  const sanitized = sanitizeTrustedYiruHooks(trust)
-  const next: PersistedTrustedYiruHooks = {}
+): PersistedTrustedAgentStartHooks {
+  const sanitized = sanitizeTrustedAgentStartHooks(trust)
+  const next: PersistedTrustedAgentStartHooks = {}
   for (const [repoId, entry] of Object.entries(sanitized)) {
     if (validRepoIds.has(repoId)) {
       next[repoId] = entry
@@ -118,18 +118,18 @@ export function filterTrustedYiruHooksToValidRepos(
   return next
 }
 
-export function hydrateTrustedYiruHooks(
+export function hydrateTrustedAgentStartHooks(
   trust: unknown,
   validRepoIds: Set<string>
-): PersistedTrustedYiruHooks {
-  const sanitized = sanitizeTrustedYiruHooks(trust)
+): PersistedTrustedAgentStartHooks {
+  const sanitized = sanitizeTrustedAgentStartHooks(trust)
   if (validRepoIds.size === 0) {
     return sanitized
   }
-  return filterTrustedYiruHooksToValidRepos(sanitized, validRepoIds)
+  return filterTrustedAgentStartHooksToValidRepos(sanitized, validRepoIds)
 }
 
-export function isSafePersistedRecordKey(key: string): boolean {
+function isSafePersistedRecordKey(key: string): boolean {
   return key !== '__proto__' && key !== 'constructor' && key !== 'prototype'
 }
 
@@ -227,7 +227,7 @@ export function hydratedUIPartialMatchesState(
 }
 
 // Record keys are exhaustive over TopLevelView, so a new view can't be silently missed.
-export const TOP_LEVEL_VIEW_LOOKUP: Record<TopLevelView, true> = {
+const TOP_LEVEL_VIEW_LOOKUP: Record<TopLevelView, true> = {
   home: true,
   terminal: true,
   settings: true,

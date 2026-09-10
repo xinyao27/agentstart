@@ -2,13 +2,16 @@
 // Why: one guarded command keeps the Chrome, iOS, and required runtime release workflows aligned
 // without moving signing keys onto a developer machine.
 import { spawnSync } from 'node:child_process'
-import { readFileSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 import { createInterface } from 'node:readline/promises'
 
-const REPOSITORY = 'xinyao27/yiru'
+import { assertReleaseNotes, releaseNotesRelativePath } from './release-notes.mjs'
+
+const REPOSITORY = 'xinyao27/agentstart'
 const ROOT = join(import.meta.dirname, '..')
-const FORMULA_PATH = join(ROOT, 'Formula', 'yiru.rb')
+const FORMULA_TEMPLATE_PATH = join(ROOT, 'Formula', 'agentstart.rb.template')
+const MOBILE_PROJECT_PATH = join(ROOT, 'apps', 'mobile', 'project.yml')
 const RUST_DAEMON_ROOT = join(ROOT, 'apps', 'daemon')
 const RUST_MANIFEST_PATH = join(RUST_DAEMON_ROOT, 'Cargo.toml')
 // Why: the macOS bundle reports its own version to Finder and Gatekeeper from Info.plist, so it is
@@ -20,19 +23,16 @@ const PACKAGE_PATHS = [
   join(ROOT, 'apps', 'computer-use-macos', 'package.json'),
   join(ROOT, 'apps', 'extension', 'package.json'),
   join(ROOT, 'apps', 'macos', 'package.json'),
+  join(ROOT, 'apps', 'mobile', 'package.json'),
   join(ROOT, 'packages', 'cli', 'package.json')
 ]
-// Why: the release workflow pins these Homebrew checksums from its signed artifacts because Rust
-// release bytes exist only after CI signs and notarizes them and cannot be built locally; prepare
-// keeps the formula URLs aligned with the version instead.
-const RELEASE_ARTIFACTS = [
-  'yiru-rust-darwin-arm64',
-  'yiru-rust-darwin-x64',
-  'yiru-rust-linux-arm64',
-  'yiru-rust-linux-x64'
+const FORMULA_CHECKSUM_MARKERS = [
+  '__SHA256_AGENTSTART_RUST_DARWIN_ARM64__',
+  '__SHA256_AGENTSTART_RUST_DARWIN_X64__',
+  '__SHA256_AGENTSTART_RUST_LINUX_ARM64__',
+  '__SHA256_AGENTSTART_RUST_LINUX_X64__'
 ]
 const DEFAULT_RELEASE_TARGETS = ['daemon', 'extension', 'ios']
-const OPTIONAL_RELEASE_TARGETS = ['apns']
 
 function fail(message) {
   throw new Error(message)
@@ -94,7 +94,7 @@ function currentVersion() {
 function parseVersion(version) {
   const match = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.exec(version)
   if (!match) {
-    fail(`Expected a stable semantic version such as 0.0.37, received: ${version}`)
+    fail(`Expected a stable semantic version such as 0.1.0, received: ${version}`)
   }
   return match.slice(1).map(Number)
 }
@@ -142,9 +142,10 @@ function assertMainIsPublished() {
   if (branch !== 'main') {
     fail(`Releases must run from main; current branch is ${branch || 'detached'}`)
   }
-  execute('git', ['fetch', 'origin', 'main', '--tags'])
+  // Why: unrelated local tag conflicts must not prevent checking the live release branch.
+  execute('git', ['fetch', '--no-tags', 'origin', 'main'])
   const head = captureRequired('git', ['rev-parse', 'HEAD'])
-  const remoteMain = captureRequired('git', ['rev-parse', 'origin/main'])
+  const remoteMain = captureRequired('git', ['rev-parse', 'FETCH_HEAD'])
   if (head !== remoteMain) {
     fail('Local main must exactly match origin/main before releasing.')
   }
@@ -192,23 +193,43 @@ function updateVersionSources(version) {
       'macOS bundle short version'
     )
   )
-
-  const formula = readFileSync(FORMULA_PATH, 'utf8')
-    .replace(/version "\d+\.\d+\.\d+"/, `version "${version}"`)
-    .replace(/\/releases\/download\/v\d+\.\d+\.\d+\//g, `/releases/download/v${version}/`)
-  writeFileSync(FORMULA_PATH, formula)
 }
 
-function verifyFormula(version) {
-  const formula = readFileSync(FORMULA_PATH, 'utf8')
-  if (!formula.includes(`version "${version}"`)) {
-    fail(`Homebrew formula is not set to ${version}`)
+function verifyFormulaTemplate() {
+  const template = readFileSync(FORMULA_TEMPLATE_PATH, 'utf8')
+  const versionMarkers = template.match(/__AGENTSTART_VERSION__/g) ?? []
+  if (versionMarkers.length !== 5) {
+    fail(`Homebrew formula template needs five version markers; found ${versionMarkers.length}`)
   }
-  for (const artifact of RELEASE_ARTIFACTS) {
-    if (!formula.includes(`/v${version}/${artifact}`)) {
-      fail(`Homebrew formula is missing ${artifact} for ${version}`)
+  for (const marker of FORMULA_CHECKSUM_MARKERS) {
+    const occurrences = template.split(marker).length - 1
+    if (occurrences !== 1) {
+      fail(`Homebrew formula template needs one ${marker} marker; found ${occurrences}`)
     }
   }
+  if (/sha256 "[0-9a-f]{64}"/.test(template)) {
+    fail('Homebrew formula template must not contain a release checksum')
+  }
+}
+
+function currentIosVersion() {
+  const project = readFileSync(MOBILE_PROJECT_PATH, 'utf8')
+  const match = /^\s*MARKETING_VERSION:\s*['"]?(\d+\.\d+\.\d+)['"]?\s*$/m.exec(project)
+  if (!match) {
+    fail('apps/mobile/project.yml does not declare MARKETING_VERSION')
+  }
+  parseVersion(match[1])
+  return match[1]
+}
+
+function prepareReleaseNotes(version) {
+  const relativePath = releaseNotesRelativePath(version)
+  const path = join(ROOT, relativePath)
+  if (!existsSync(path)) {
+    mkdirSync(dirname(path), { recursive: true })
+    writeFileSync(path, `# AgentStart ${version}\n\n`)
+  }
+  return relativePath
 }
 
 function parseOptions(args) {
@@ -237,11 +258,6 @@ function parseOptions(args) {
 
 function selectedTargets(options) {
   const targets = DEFAULT_RELEASE_TARGETS.filter((target) => !options.flags.has(`skip-${target}`))
-  for (const target of OPTIONAL_RELEASE_TARGETS) {
-    if (options.flags.has(`with-${target}`)) {
-      targets.push(target)
-    }
-  }
   if (targets.length === 0) {
     fail('At least one release target must be selected.')
   }
@@ -285,11 +301,12 @@ function assertGitHubCredentials(targets) {
       'APPLE_ID',
       'APPLE_TEAM_ID',
       'MAC_CERTS',
-      'MAC_CERTS_PASSWORD'
+      'MAC_CERTS_PASSWORD',
+      'POSTHOG_WRITE_KEY'
     ]) {
       required.add(name)
     }
-    const npmPackage = capture('npm', ['view', '@yiru/cli', 'version'])
+    const npmPackage = capture('npm', ['view', '@agentstart/cli', 'version'])
     if (!npmPackage.ok) {
       required.add('NPM_TOKEN')
     }
@@ -297,6 +314,7 @@ function assertGitHubCredentials(targets) {
   if (targets.includes('ios')) {
     for (const name of [
       'APPLE_TEAM_ID',
+      'APP_STORE_APP_ID',
       'ASC_API_KEY_P8',
       'ASC_ISSUER_ID',
       'ASC_KEY_ID',
@@ -306,33 +324,6 @@ function assertGitHubCredentials(targets) {
       required.add(name)
     }
   }
-  if (targets.includes('apns')) {
-    for (const name of [
-      'APNS_KEY_ID',
-      'APNS_KEY_P8',
-      'APNS_TEAM_ID',
-      'CLOUDFLARE_ACCOUNT_ID',
-      'CLOUDFLARE_API_TOKEN',
-      'GATEWAY_SHARED_SECRET'
-    ]) {
-      required.add(name)
-    }
-    const enabled = capture('gh', [
-      'variable',
-      'get',
-      'APNS_GATEWAY_ENABLED',
-      '--repo',
-      REPOSITORY,
-      '--json',
-      'value',
-      '--jq',
-      '.value'
-    ])
-    if (!enabled.ok || enabled.output !== 'true') {
-      required.add('GitHub variable APNS_GATEWAY_ENABLED=true')
-    }
-  }
-
   const missing = [...required].filter((name) => !repositorySecrets.has(name))
   if (targets.includes('extension')) {
     const environment = capture('gh', [
@@ -367,11 +358,21 @@ function tagCommit(tag) {
   return result.ok ? result.output : null
 }
 
-function remoteTagExists(tag) {
-  return capture('git', ['ls-remote', '--exit-code', '--tags', 'origin', `refs/tags/${tag}`]).ok
+function remoteTagCommit(tag) {
+  const ref = `refs/tags/${tag}`
+  const output = captureRequired('git', ['ls-remote', '--tags', 'origin', ref, `${ref}^{}`])
+  if (!output) {
+    return null
+  }
+  const refs = new Map(output.split('\n').map((line) => line.split(/\s+/).toReversed()))
+  const commit = refs.get(`${ref}^{}`) ?? refs.get(ref)
+  if (!commit || !/^[0-9a-f]{40,64}$/.test(commit)) {
+    fail(`Remote tag ${tag} did not resolve to a commit`)
+  }
+  return commit
 }
 
-function prepareTags(version, targets) {
+function prepareTags(version, targets, iosVersion) {
   const requested = []
   if (targets.includes('daemon')) {
     requested.push(`v${version}`)
@@ -379,26 +380,36 @@ function prepareTags(version, targets) {
   if (targets.includes('extension')) {
     requested.push(`extension-v${version}`)
   }
+  if (targets.includes('ios')) {
+    requested.push(`mobile-v${iosVersion}`)
+  }
 
   const head = captureRequired('git', ['rev-parse', 'HEAD'])
   const toPush = []
   const created = []
   const existing = []
   for (const tag of requested) {
+    const remoteCommit = remoteTagCommit(tag)
+    if (remoteCommit) {
+      if (remoteCommit !== head) {
+        fail(
+          `Remote tag ${tag} already points to ${remoteCommit}, not the current release commit ${head}`
+        )
+      }
+      existing.push(tag)
+      continue
+    }
     const commit = tagCommit(tag)
     if (commit && commit !== head) {
-      fail(`Tag ${tag} already points to ${commit}, not the current release commit ${head}`)
+      fail(`Local tag ${tag} already points to ${commit}, not the current release commit ${head}`)
     }
-    if (remoteTagExists(tag)) {
-      existing.push(tag)
-    } else {
-      toPush.push(tag)
-    }
+    toPush.push(tag)
   }
 
   for (const tag of toPush) {
     if (!tagCommit(tag)) {
-      execute('git', ['tag', '-a', tag, '-m', `Yiru ${version}`])
+      const tagVersion = tag.startsWith('mobile-v') ? iosVersion : version
+      execute('git', ['tag', '-a', tag, '-m', `AgentStart ${tagVersion}`])
       created.push(tag)
     }
   }
@@ -444,29 +455,24 @@ function dispatchWorkflow(workflow, ref, fields = []) {
   execute('gh', args)
 }
 
-function ensureMainWorkflow(workflow) {
-  const head = captureRequired('git', ['rev-parse', 'HEAD'])
-  const existing = capture('gh', [
-    'run',
-    'list',
-    '--repo',
-    REPOSITORY,
-    '--workflow',
-    workflow,
-    '--commit',
-    head,
-    '--limit',
-    '1',
-    '--json',
-    'url',
-    '--jq',
-    '.[0].url // ""'
-  ])
-  if (existing.ok && existing.output) {
-    console.log(`${workflow} already started for the release commit: ${existing.output}`)
-  } else {
-    dispatchWorkflow(workflow, 'main')
+function workflowForReleaseTag(tag, version, iosVersion, distribution, changelog) {
+  if (tag === `v${version}`) {
+    return { fields: [], startsOnTagPush: true, workflow: 'daemon-release.yml' }
   }
+  if (tag === `extension-v${version}`) {
+    return { fields: [], startsOnTagPush: true, workflow: 'extension-package.yml' }
+  }
+  if (iosVersion && tag === `mobile-v${iosVersion}`) {
+    const fields = [
+      ['release_version', iosVersion],
+      ['testflight_distribution', distribution]
+    ]
+    if (changelog) {
+      fields.push(['testflight_changelog', changelog])
+    }
+    return { fields, startsOnTagPush: false, workflow: 'mobile-release.yml' }
+  }
+  fail(`Release tag ${tag} has no workflow route`)
 }
 
 async function prepare(version) {
@@ -478,14 +484,16 @@ async function prepare(version) {
     fail(`Release version ${version} must be newer than ${previousVersion}`)
   }
 
-  console.log(`Preparing Yiru ${previousVersion} → ${version}`)
+  console.log(`Preparing AgentStart daemon and desktop release ${previousVersion} → ${version}`)
   updateVersionSources(version)
-  execute('pnpm', ['exec', 'vp', 'run', '@yiru/daemon#build'])
-  execute('pnpm', ['exec', 'vp', 'run', '@yiru/extension#package:web-store'])
+  const releaseNotesPath = prepareReleaseNotes(version)
+  execute('pnpm', ['exec', 'vp', 'run', '@agentstart/daemon#build'])
+  execute('pnpm', ['exec', 'vp', 'run', '@agentstart/extension#package:web-store'])
   execute('pnpm', ['check'])
-  verifyFormula(version)
+  verifyFormulaTemplate()
 
-  console.log('\nRelease files are ready. Review them, then commit and push:')
+  console.log('\nDaemon and desktop release files are ready. Review them, then commit and push:')
+  console.log(`  Finish the user-facing release notes in ${releaseNotesPath}`)
   const releaseFiles = [
     'package.json',
     'apps/daemon/package.json',
@@ -494,22 +502,31 @@ async function prepare(version) {
     'apps/daemon/Cargo.lock',
     'apps/extension/package.json',
     'apps/macos/package.json',
+    'apps/mobile/package.json',
     'apps/macos/Info.plist',
     'packages/cli/package.json',
-    'Formula/yiru.rb'
+    'Formula/agentstart.rb.template',
+    releaseNotesPath
   ]
   console.log(`  git add ${releaseFiles.join(' ')}`)
   console.log(`  git commit -m "chore: prepare ${version} release"`)
   console.log('  git push origin main')
-  console.log(`  pnpm release -- publish ${version}`)
+  console.log(`  pnpm release -- publish ${version} --ios-version x.y.z`)
 }
 
 async function publish(version, args) {
   const options = parseOptions(args)
   const targets = selectedTargets(options)
   const distribution = options.values.get('ios-distribution') ?? 'internal'
+  const iosVersion = options.values.get('ios-version')
   if (distribution !== 'internal' && distribution !== 'external') {
     fail('--ios-distribution must be internal or external')
+  }
+  if (targets.includes('ios')) {
+    if (!iosVersion) {
+      fail('iOS releases require --ios-version x.y.z')
+    }
+    parseVersion(iosVersion)
   }
   assertToolchain()
   assertCleanWorktree()
@@ -517,74 +534,92 @@ async function publish(version, args) {
   if (currentVersion() !== version) {
     fail(`Package version is ${currentVersion()}, not ${version}`)
   }
-  verifyFormula(version)
+  verifyFormulaTemplate()
+  if (targets.includes('daemon')) {
+    assertReleaseNotes(ROOT, version)
+  }
   assertGitHubCredentials(targets)
   await confirmPublish(version, targets, options)
 
-  const tags = prepareTags(version, targets)
+  const tags = prepareTags(version, targets, iosVersion)
+  const changelog = options.values.get('ios-changelog')
   for (const tag of tags.existing) {
-    const workflow = tag.startsWith('extension-') ? 'extension-package.yml' : 'daemon-release.yml'
-    dispatchWorkflow(workflow, tag)
+    const route = workflowForReleaseTag(tag, version, iosVersion, distribution, changelog)
+    dispatchWorkflow(route.workflow, tag, route.fields)
   }
-
-  if (targets.includes('ios')) {
-    const fields = [
-      ['release_version', version],
-      ['bump_patch_version', 'false'],
-      ['testflight_distribution', distribution]
-    ]
-    const changelog = options.values.get('ios-changelog')
-    if (changelog) {
-      fields.push(['testflight_changelog', changelog])
+  for (const tag of tags.pushed) {
+    const route = workflowForReleaseTag(tag, version, iosVersion, distribution, changelog)
+    if (!route.startsOnTagPush) {
+      dispatchWorkflow(route.workflow, tag, route.fields)
     }
-    dispatchWorkflow('mobile-release.yml', 'main', fields)
   }
-  if (targets.includes('apns')) {
-    ensureMainWorkflow('apns-gateway.yml')
-  }
-
   console.log('\nRelease workflows started:')
   console.log(`  https://github.com/${REPOSITORY}/actions`)
-  console.log(`  pnpm release -- status ${version}`)
+  console.log(
+    `  pnpm release -- status ${version} --ios-version ${iosVersion ?? currentIosVersion()}`
+  )
 }
 
-function status(version) {
-  execute('gh', [
-    'run',
-    'list',
-    '--repo',
-    REPOSITORY,
-    '--limit',
-    '15',
-    '--json',
-    'workflowName,displayTitle,status,conclusion,headBranch,url',
-    '--template',
-    '{{tablerow "WORKFLOW" "REF" "STATUS" "URL"}}{{range .}}{{tablerow .workflowName .headBranch (or .conclusion .status) .url}}{{end}}'
-  ])
-  console.log(`\nExpected release tags: v${version}, extension-v${version}`)
+function status(version, args) {
+  const options = parseOptions(args)
+  const unexpectedValues = [...options.values.keys()].filter((name) => name !== 'ios-version')
+  if (options.flags.size > 0 || unexpectedValues.length > 0) {
+    fail('status only accepts --ios-version x.y.z')
+  }
+  parseVersion(version)
+  const iosVersion = options.values.get('ios-version') ?? currentIosVersion()
+  parseVersion(iosVersion)
+  const targets = [
+    { ref: `v${version}`, workflow: 'daemon-release.yml' },
+    { ref: `extension-v${version}`, workflow: 'extension-package.yml' },
+    { ref: `mobile-v${iosVersion}`, workflow: 'mobile-release.yml' }
+  ]
+  console.log('WORKFLOW\tREF\tSTATUS\tURL')
+  for (const target of targets) {
+    const output = captureRequired('gh', [
+      'run',
+      'list',
+      '--repo',
+      REPOSITORY,
+      '--workflow',
+      target.workflow,
+      '--limit',
+      '50',
+      '--json',
+      'status,conclusion,headBranch,url,createdAt'
+    ])
+    const runs = JSON.parse(output)
+    const run = runs.find((candidate) => candidate.headBranch === target.ref)
+    console.log(
+      `${target.workflow}\t${target.ref}\t${run?.conclusion || run?.status || 'not started'}\t${run?.url ?? ''}`
+    )
+  }
 }
 
 function help() {
-  console.log(`Yiru release conductor
+  console.log(`AgentStart release conductor
 
 Usage:
-  pnpm release -- prepare <version>
-  pnpm release -- publish <version> [options]
-  pnpm release -- status [version]
+  pnpm release -- prepare <daemon-version>
+  pnpm release -- publish <daemon-version> [options]
+  pnpm release -- status [daemon-version] [--ios-version x.y.z]
 
 Publish options:
   Default targets: Chrome extension, iOS TestFlight, and their required daemon runtime
+  Daemon publishing requires POSTHOG_WRITE_KEY and reviewed docs/releases/<version>.md
   --skip-daemon       Do not publish the daemon, GitHub release, Homebrew, or npm CLI
   --skip-extension    Do not submit the Chrome extension
   --skip-ios          Do not upload an iOS build to TestFlight
-  --with-apns         Also redeploy the APNs gateway
+  --ios-version       Required exact iOS marketing version unless --skip-ios is used
   --ios-distribution  internal (default) or external
   --ios-changelog     TestFlight changelog used for an external release
   --yes               Skip the typed release confirmation
 `)
 }
 
-const [command = 'help', versionArgument, ...args] = process.argv.slice(2)
+const rawArguments = process.argv.slice(2)
+const releaseArguments = rawArguments[0] === '--' ? rawArguments.slice(1) : rawArguments
+const [command = 'help', versionArgument, ...args] = releaseArguments
 
 try {
   if (command === 'prepare') {
@@ -599,7 +634,7 @@ try {
     parseVersion(versionArgument)
     await publish(versionArgument, args)
   } else if (command === 'status') {
-    status(versionArgument ?? currentVersion())
+    status(versionArgument ?? currentVersion(), args)
   } else {
     help()
   }

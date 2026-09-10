@@ -9,7 +9,7 @@ import { Label } from '../ui/label'
 // affordance without another round of styling decisions.
 export function HiddenExperimentalGroup(): React.JSX.Element {
   return (
-    <section className="space-y-3 border border-orange-500/40 bg-orange-500/5 p-3">
+    <section className="space-y-3 rounded-lg border border-orange-500/40 bg-orange-500/5 p-3">
       <div className="space-y-0.5">
         <h4 className="text-sm font-semibold text-orange-500 dark:text-orange-300">
           {translate(
@@ -25,7 +25,7 @@ export function HiddenExperimentalGroup(): React.JSX.Element {
         </p>
       </div>
 
-      <div className="flex items-start justify-between gap-4 border border-orange-500/30 bg-orange-500/10 px-3 py-2.5">
+      <div className="flex items-start justify-between gap-4 rounded-md border border-orange-500/30 bg-orange-500/10 px-3 py-2.5">
         <div className="min-w-0 shrink space-y-0.5">
           <Label className="text-orange-600 dark:text-orange-300">
             {translate(
@@ -51,7 +51,7 @@ export function HiddenExperimentalGroup(): React.JSX.Element {
           className="focus-visible:bg-accent relative h-5 w-9 cursor-not-allowed border-orange-500/40 bg-orange-500/20 p-0 opacity-70"
           disabled
         >
-          <span className="inline-block h-3.5 w-3.5 translate-x-0.5 transform bg-orange-200 dark:bg-orange-100" />
+          <span className="inline-block h-3.5 w-3.5 translate-x-0.5 transform rounded-full bg-orange-200 dark:bg-orange-100" />
         </Button>
       </div>
     </section>

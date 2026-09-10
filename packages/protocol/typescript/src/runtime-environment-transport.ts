@@ -1,6 +1,6 @@
+import { RuntimeRoutePolicy } from '../generated/agent_start/protocol/v1/annotations_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import { METHOD_TRANSPORT_METADATA_BY_PROCEDURE } from '../generated/method-metadata.generated.js'
-import { RuntimeRoutePolicy } from '../generated/yiru/protocol/v1/annotations_pb.js'
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeCall, RuntimeTransport, RuntimeDuplexTransport } from './transport.js'
 

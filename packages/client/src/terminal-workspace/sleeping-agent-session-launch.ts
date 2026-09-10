@@ -1,10 +1,10 @@
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/protocol/agent/launch-defaults'
-import { buildAgentResumeStartupPlan } from '@yiru/protocol/agent/resume-startup'
-import type { SleepingAgentSessionRecord } from '@yiru/protocol/agent/session-resume'
-import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
+} from '@agentstart/protocol/agent/launch-defaults'
+import { buildAgentResumeStartupPlan } from '@agentstart/protocol/agent/resume-startup'
+import type { SleepingAgentSessionRecord } from '@agentstart/protocol/agent/session-resume'
+import { isWslUncPath } from '@agentstart/protocol/host/wsl-paths'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { CLIENT_PLATFORM } from '~renderer/new-workspace/workspace-creation'

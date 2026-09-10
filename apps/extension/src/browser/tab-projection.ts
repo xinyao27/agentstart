@@ -1,4 +1,4 @@
-import type { BrowserTabProjectionEvent } from '@yiru/client/extension-bootstrap'
+import type { BrowserTabProjectionEvent } from '@agentstart/client/extension-bootstrap'
 
 const BROWSER_PAGE_PREFIX = 'chrome-tab:'
 const TAB_WORKTREE_KEY_PREFIX = 'browserUseTabWorktree:'

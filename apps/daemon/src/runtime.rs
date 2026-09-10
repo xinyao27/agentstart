@@ -346,13 +346,18 @@ impl Runtime {
         let telemetry_preferences = settings.telemetry_preferences();
         let workspace_projects = database.project_catalog();
         let workspace_path = user_data_path.clone();
+        let keybindings_path = user_data_path.clone();
         let telemetry_path = user_data_path.clone();
         let (artifacts_result, keybindings_result, telemetry_result, workspace_session_result) = tokio::join!(
             async { artifacts.initialize().await.map_err(RuntimeFault::new) },
             async move {
-                KeybindingsAuthority::open(&home_path, keybindings_definitions, legacy_keybindings)
-                    .await
-                    .map_err(RuntimeFault::new)
+                KeybindingsAuthority::open(
+                    &keybindings_path,
+                    keybindings_definitions,
+                    legacy_keybindings,
+                )
+                .await
+                .map_err(RuntimeFault::new)
             },
             async move {
                 TelemetryAuthority::open(&telemetry_path, telemetry_projects, telemetry_preferences)
@@ -665,36 +670,6 @@ impl Runtime {
                 return Err(RuntimeFault::new(error));
             }
         };
-        if let Err(error) = installation_database.notifications().configure_apns(
-            installation_database.mobile_devices(),
-            mobile.presence(),
-            database.workspace_journal(),
-            std::env::var("YIRU_APNS_GATEWAY_URL").ok(),
-            std::env::var("YIRU_APNS_GATEWAY_TOKEN").ok(),
-        ) {
-            terminal_sessions.shutdown().await;
-            workspace_ports.close();
-            match tokio::task::spawn_blocking(move || orchestration_database.close()).await {
-                Ok(Ok(())) => {}
-                Ok(Err(close_error)) => {
-                    eprintln!("[daemon] Orchestration startup cleanup failed: {close_error}")
-                }
-                Err(close_error) => {
-                    eprintln!("[daemon] Orchestration cleanup worker failed: {close_error}")
-                }
-            }
-            cleanup_failed_startup(
-                Some(database),
-                Some(installation_database),
-                Some(artifacts),
-                Some(ui),
-                Some(settings),
-                Some(telemetry),
-                Some(workspace_session),
-            )
-            .await;
-            return Err(RuntimeFault::new(error));
-        }
         let orchestration = OrchestrationAuthority::new(
             orchestration_database.store(),
             terminal_sessions.clone(),
@@ -863,7 +838,6 @@ impl Runtime {
             local_downloads: self.local_downloads.clone(),
             journal: self.workspace_journal.clone(),
             mobile_pairing: self.mobile.pairing(),
-            mobile_devices: self.installation_database.mobile_devices(),
             notebook: self.notebook.clone(),
             notifications: self.installation_database.notifications(),
             orchestration: self.orchestration.clone(),
@@ -997,7 +971,6 @@ impl Runtime {
         repositories.shutdown().await;
         project_host_setups.shutdown().await;
         agent_phase_worker.shutdown().await;
-        installation_database.notifications().shutdown_apns().await;
         shell_events.close();
         let (
             ui_flush,

@@ -1,20 +1,16 @@
 import {
   ALL_EXECUTION_HOSTS_SCOPE,
-  getSettingsFocusedExecutionHostId,
   getWorktreeExecutionHostId,
   type ExecutionHostId,
   type ExecutionHostScope
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '@yiru/protocol/settings/workspace-preferences'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
-import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
-import type { Worktree } from '@yiru/protocol/worktree/model'
-import { getAllWorktreesFromState, getRepoMapFromState } from '~renderer/store/selectors'
-import { useAppStore } from '~renderer/store/state'
-import { getWorktreeIdsWithLiveAgent, isInactiveWorkspace } from '~renderer/worktree/activity-state'
-
-import { buildWorktreeComparator, sortWorktreesSmart } from './smart-sort'
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '@agentstart/protocol/settings/workspace-preferences'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
+import type { WorktreeLineage } from '@agentstart/protocol/worktree/lineage'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
+import { getAllWorktreesFromState } from '~renderer/store/selectors'
+import { isInactiveWorkspace } from '~renderer/worktree/activity-state'
 
 /**
  * Whether a worktree represents the repo's default-branch row that the
@@ -224,89 +220,4 @@ function addVisibleLineageAncestors(
     addWithAncestors(id)
   }
   return result
-}
-
-/**
- * Module-level cache of the visible worktree IDs as last computed by
- * WorktreeList's render pipeline.
- *
- * Why: WorktreeList freezes its sort order behind its sort-epoch cache. If
- * getVisibleWorktreeIds()
- * recomputes sort order from a live Zustand snapshot, the Cmd+1–9 shortcut
- * could target a different worktree than what's rendered at that sidebar
- * position. By caching the IDs that WorktreeList actually rendered, the
- * shortcut numbering always matches the sidebar card order.
- */
-let _cachedVisibleIds: string[] = []
-
-/**
- * Called by WorktreeList after computing visible worktrees so the Cmd+1–9
- * handler can read the exact same ordering the user sees on screen.
- */
-export function setVisibleWorktreeIds(ids: string[]): void {
-  _cachedVisibleIds = ids
-}
-
-/**
- * Compute the visible worktree IDs on-demand from the current Zustand store
- * state. Called by the App-level Cmd+1–9 handler (not a React hook — reads
- * store snapshot at call time).
- *
- * If WorktreeList has rendered at least once, returns the cached IDs so the
- * shortcut numbering matches the sidebar. Falls back to a live recomputation
- * only before WorktreeList's first render (e.g. app startup).
- */
-export function getVisibleWorktreeIds(): string[] {
-  // Prefer the cached IDs that mirror the rendered sidebar order.
-  if (_cachedVisibleIds.length > 0) {
-    return _cachedVisibleIds
-  }
-
-  // Fallback: live recomputation for the window before WorktreeList renders.
-  const state = useAppStore.getState()
-  const allWorktrees = getAllWorktreesFromState(state).filter((w) => !w.isArchived)
-
-  // Hoist repoMap so it's built once and reused across all branches below.
-  const repoMap = getRepoMapFromState(state)
-
-  let sortedIds: string[]
-
-  if (state.sortBy === 'smart') {
-    sortedIds = sortWorktreesSmart(
-      allWorktrees,
-      state.tabsByWorktree,
-      repoMap,
-      state.agentStatusByPaneKey,
-      state.runtimePaneTitlesByTabId,
-      state.ptyIdsByTabId,
-      state.migrationUnsupportedByPtyId,
-      state.terminalLayoutsByTabId
-    ).map((w) => w.id)
-  } else {
-    // Why empty map: non-smart branches don't read attentionByWorktree, but
-    // the param is required to keep smart-mode callers honest at the type level.
-    const sorted = [...allWorktrees].sort(
-      buildWorktreeComparator(state.sortBy, repoMap, Date.now(), new Map())
-    )
-    sortedIds = sorted.map((w) => w.id)
-  }
-
-  return computeVisibleWorktreeIds(state.worktreesByRepo, sortedIds, {
-    filterRepoIds: state.filterRepoIds,
-    showSleepingWorkspaces: state.showSleepingWorkspaces,
-    tabsByWorktree: state.tabsByWorktree,
-    ptyIdsByTabId: state.ptyIdsByTabId,
-    browserTabsByWorktree: state.browserTabsByWorktree,
-    worktreeIdsWithLiveAgent: getWorktreeIdsWithLiveAgent(
-      state.agentStatusByPaneKey,
-      state.tabsByWorktree,
-      Date.now()
-    ),
-    hideDefaultBranchWorkspace: state.hideDefaultBranchWorkspace,
-    repoMap,
-    workspaceHostScope: state.workspaceHostScope,
-    visibleWorkspaceHostIds: state.visibleWorkspaceHostIds,
-    defaultHostId: getSettingsFocusedExecutionHostId(state.settings),
-    worktreeLineageById: state.worktreeLineageById
-  })
 }

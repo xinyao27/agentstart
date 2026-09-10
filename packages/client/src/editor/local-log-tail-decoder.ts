@@ -1,6 +1,6 @@
-import type { LogTailReadResult as LocalLogTailReadResult } from '@yiru/protocol/files/watch-values'
+import type { LogTailReadResult as LocalLogTailReadResult } from '@agentstart/protocol/files/watch-values'
 
-export const LOCAL_LOG_TAIL_MAX_BYTES = 50 * 1024 * 1024
+const LOCAL_LOG_TAIL_MAX_BYTES = 50 * 1024 * 1024
 
 export type LocalLogTailDecodeResult =
   | { kind: 'append'; content: string; hasMore: boolean }

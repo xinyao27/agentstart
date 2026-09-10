@@ -2,10 +2,10 @@ use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use std::time::Duration;
 
+use agentstart_protocol::method_metadata::methods::AgentStartRuntimeV1MobilePairingServiceCreateDevelopmentOffer as CreateDevelopmentOfferMethod;
+use agentstart_protocol::runtime::v1::MobilePairingServiceCreateDevelopmentOfferRequest;
 use serde::Serialize;
 use thiserror::Error;
-use yiru_protocol::method_metadata::methods::YiruRuntimeV1MobilePairingServiceCreateDevelopmentOffer as CreateDevelopmentOfferMethod;
-use yiru_protocol::runtime::v1::MobilePairingServiceCreateDevelopmentOfferRequest;
 
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 
@@ -97,7 +97,7 @@ async fn create_pairing_offer(
         println!("{}", serde_json::to_string(&output)?);
     } else {
         println!(
-            "Open this pairing link on Yiru Mobile: {}",
+            "Open this pairing link on AgentStart Mobile: {}",
             output.pairing_url
         );
     }

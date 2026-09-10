@@ -65,7 +65,7 @@ the feature. Transport admits only methods listed in generated protocol policy.
 - Local-substitutable effects use narrow private filesystem, process, PTY, and path-dialect Seams.
   Local, WSL, and SSH are the production Adapters. Git is one Module built over those effects, so
   Git 2.25 fallback and host-scoped capability caching do not fork three times.
-- Remote-owned Adapters are Chrome WebSocket, Chrome reverse calls, iOS encrypted WebSocket, APNS,
+- Remote-owned Adapters are Chrome WebSocket, Chrome reverse calls, iOS encrypted WebSocket,
   and Native Messaging bootstrap.
 - True external Adapters are GitHub, agent CLIs, PostHog, and release feeds.
 - SQLite and profile JSON are concrete hidden stores, not interchangeable repository Interfaces.
@@ -82,8 +82,8 @@ frame limit → transport authentication/E2EE → protocol route → access auth
 
 - One state aggregate has one authoritative writer for its database, PTY session, revision scope,
   or pairing registry.
-- Profile state and installation state use separate SQLite actors. `profiles/<id>/yiru.sqlite`
-  contains project/worktree/session state; `yiru-installation.sqlite` contains only mobile devices,
+- Profile state and installation state use separate SQLite actors. `profiles/<id>/agentstart.sqlite`
+  contains project/worktree/session state; `agentstart-installation.sqlite` contains only mobile devices,
   mobile notification replay, and the dangerous-approval credential. Runtime Environment grants
   and keys are installation-scoped secure-file state, while the active selection remains in each
   profile's settings.

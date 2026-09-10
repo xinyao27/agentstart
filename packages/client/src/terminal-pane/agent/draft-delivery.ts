@@ -1,7 +1,7 @@
-import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
-import { isExpectedAgentProcess } from '@yiru/protocol/agent/process/recognition'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { TUI_AGENT_CONFIG } from '@agentstart/protocol/agent/launch/config'
+import { isExpectedAgentProcess } from '@agentstart/protocol/agent/process/recognition'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { agentDeliversDraftViaNativePrefill } from '~renderer/agent/native-draft-prefill'
 import { POST_PASTE_SUBMIT_DELAY_MS } from '~renderer/agent/paste-submit-delay'
 import {
@@ -9,29 +9,11 @@ import {
   sendRuntimePtyInputVerified
 } from '~renderer/runtime/terminal-inspection'
 import { useAppStore } from '~renderer/store/state'
-import { BRACKETED_PASTE_END, BRACKETED_PASTE_START } from '~renderer/terminal/bracketed-paste'
 import { getSettingsForWorktreeRuntimeOwner } from '~renderer/worktree/runtime-owner'
 
 import { sendAgentDraftPasteContent } from './draft-paste-content'
 import { waitForAgentDraftInputReady } from './draft-readiness'
 import { waitForAgentReady } from './ready-wait'
-export {
-  AGENT_DRAFT_PASTE_CHUNK_MAX_BYTES,
-  AGENT_DRAFT_PASTE_DIRECT_MAX_BYTES,
-  AGENT_DRAFT_PASTE_MAX_BYTES,
-  chunkAgentDraftPasteContent,
-  iterateAgentDraftPasteContentChunks,
-  sendAgentDraftPasteContent
-} from './draft-paste-content'
-
-// Why: bracketed paste markers let modern TUIs (Claude Code / Codex / Pi /
-// OpenCode / Gemini / cursor-agent / copilot) treat the inserted text as a
-// single atomic paste instead of echoing character-by-character or triggering
-// line-edit shortcuts. Callers choose whether to append Enter after the paste.
-export const BRACKETED_PASTE_BEGIN = BRACKETED_PASTE_START
-export { BRACKETED_PASTE_END }
-export { POST_PASTE_SUBMIT_DELAY_MS }
-
 // Why: deterministic signal can fail in two ways: (1) the agent never
 // emits DECSET 2004 (no shipped agent does this — guarded as a fallback),
 // or (2) the launch fails outright. The hard timeout caps the wait so a

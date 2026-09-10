@@ -1,4 +1,4 @@
-import type { SkillDirectoryEntry } from '@yiru/protocol'
+import type { SkillDirectoryEntry } from '@agentstart/protocol'
 
 export const SKILL_FILE_NAME = 'SKILL.md'
 

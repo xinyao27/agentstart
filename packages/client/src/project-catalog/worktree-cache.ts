@@ -1,4 +1,4 @@
-import type { WorktreeDetectedListResult } from '@yiru/protocol'
+import type { WorktreeDetectedListResult } from '@agentstart/protocol'
 import { worktreeDetectedListQuery } from '~renderer/runtime/worktree-catalog-query'
 
 import { readProjectCatalogQueryClient, readProjectCatalogSnapshot } from './catalog-snapshot'

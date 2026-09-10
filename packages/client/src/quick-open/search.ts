@@ -1,7 +1,7 @@
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 
-export const QUICK_OPEN_RESULT_LIMIT = 50
-export const QUICK_OPEN_QUERY_MAX_BYTES = 2 * 1024
+const QUICK_OPEN_RESULT_LIMIT = 50
+const QUICK_OPEN_QUERY_MAX_BYTES = 2 * 1024
 
 export type QuickOpenIndexedFile = {
   path: string

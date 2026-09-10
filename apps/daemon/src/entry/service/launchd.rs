@@ -7,7 +7,7 @@ use std::process::Command;
 
 use super::{ServiceError, ServiceState, run_allow_failure, run_output_required, run_required};
 
-const SERVICE_LABEL: &str = "com.yiru.daemon";
+const SERVICE_LABEL: &str = "com.agentstart.daemon";
 
 pub(super) fn install() -> Result<ServiceState, ServiceError> {
     let path = launch_agent_path()?;
@@ -45,6 +45,46 @@ pub(super) fn state() -> Result<ServiceState, ServiceError> {
             ServiceState::Stopped
         }
     })
+}
+
+pub(super) fn configured_executable() -> Result<Option<PathBuf>, ServiceError> {
+    let path = launch_agent_path()?;
+    if !path.is_file() {
+        return Ok(None);
+    }
+    let output = run_output_required(
+        Command::new("/usr/bin/plutil")
+            .args(["-extract", "ProgramArguments.0", "raw", "-o", "-"])
+            .arg(path),
+    )?;
+    let executable = String::from_utf8_lossy(&output.stdout).trim().to_owned();
+    if executable.is_empty() {
+        return Err(ServiceError::InvalidValue("executable"));
+    }
+    Ok(Some(PathBuf::from(executable)))
+}
+
+pub(super) fn running_pid() -> Result<Option<u32>, ServiceError> {
+    if !launch_agent_path()?.is_file() {
+        return Ok(None);
+    }
+    let program = "/bin/launchctl";
+    let output = Command::new(program)
+        .args(["print", &format!("{}/{SERVICE_LABEL}", launch_domain()?)])
+        .output()
+        .map_err(|source| ServiceError::CommandUnavailable {
+            program: program.to_owned(),
+            source,
+        })?;
+    if !output.status.success() {
+        return Ok(None);
+    }
+    let text = String::from_utf8_lossy(&output.stdout);
+    Ok(text.lines().find_map(|line| {
+        line.trim()
+            .strip_prefix("pid = ")
+            .and_then(|value| value.parse().ok())
+    }))
 }
 
 pub(super) fn start() -> Result<ServiceState, ServiceError> {
@@ -121,7 +161,7 @@ fn launch_agent_path() -> Result<PathBuf, ServiceError> {
 }
 
 fn launch_log_directory() -> Result<PathBuf, ServiceError> {
-    Ok(home_path()?.join("Library").join("Logs").join("Yiru"))
+    Ok(home_path()?.join("Library").join("Logs").join("AgentStart"))
 }
 
 fn home_path() -> Result<PathBuf, ServiceError> {

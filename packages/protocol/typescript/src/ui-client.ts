@@ -7,7 +7,7 @@ import {
   UiServiceRecordFeatureInteractionRequestSchema,
   UiServiceSetRequestSchema,
   UiServiceSetResponseSchema
-} from '../generated/yiru/runtime/v1/ui_pb.js'
+} from '../generated/agent_start/runtime/v1/ui_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 import { decodeUiDocument, encodeUiEntries, type UiDocumentValue } from './ui-values.js'
 

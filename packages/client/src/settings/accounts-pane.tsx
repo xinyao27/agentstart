@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useAppStore } from '~renderer/store/state'
 import { Separator } from '~renderer/ui/separator'
 
@@ -11,8 +11,7 @@ import {
   getAccountsGrokSearchEntries,
   getAccountsLocationSearchEntries,
   getAccountsMiniMaxSearchEntries,
-  getAccountsOpencodeSearchEntries,
-  getAccountsPaneSearchEntries
+  getAccountsOpencodeSearchEntries
 } from './accounts-search'
 import { ClaudeAccountsSection } from './claude-accounts-section'
 import { CodexAccountsSection } from './codex-accounts-section'
@@ -21,8 +20,6 @@ import { GrokAccountsSection } from './grok-accounts-section'
 import { MiniMaxAccountsSection } from './minimax-accounts-section'
 import { matchesSettingsSearch } from './search'
 import { useProviderAccounts } from './use-provider-accounts'
-
-export { getAccountsPaneSearchEntries }
 
 const EMPTY_WSL_DISTROS: string[] = []
 

@@ -5,10 +5,23 @@ use std::process::{Command, Stdio};
 
 use super::{ServiceError, ServiceState, exit_code, run_allow_failure, run_required, run_status};
 
-const WINDOWS_TASK: &str = "Yiru Daemon";
+const WINDOWS_TASK: &str = "AgentStart Daemon";
 
 pub(super) fn install() -> Result<ServiceState, ServiceError> {
-    let command_line = command_line(&[env::current_exe()?, OsString::from("daemon")])?;
+    let instance_token = format!(
+        "{}-{}",
+        std::process::id(),
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_nanos()
+    );
+    let command_line = command_line(&[
+        env::current_exe()?,
+        OsString::from("daemon"),
+        OsString::from("--service-instance-token"),
+        OsString::from(instance_token),
+    ])?;
     let mut create = Command::new(system_executable("schtasks.exe"));
     create.args([
         "/Create",
@@ -43,6 +56,78 @@ pub(super) fn state() -> Result<ServiceState, ServiceError> {
     } else {
         ServiceState::Stopped
     })
+}
+
+pub(super) fn configured_executable() -> Result<Option<PathBuf>, ServiceError> {
+    if !task_exists()? {
+        return Ok(None);
+    }
+    let script = "[Console]::OutputEncoding = [Text.UTF8Encoding]::new(); $task = Get-ScheduledTask -TaskName $args[0] -ErrorAction Stop; [Console]::Out.Write(@($task.Actions)[0].Execute)";
+    let mut command = Command::new(powershell_executable());
+    command.args([
+        "-NoLogo",
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        script,
+        WINDOWS_TASK,
+    ]);
+    let program = command.get_program().to_string_lossy().into_owned();
+    let output = command
+        .stdin(Stdio::null())
+        .stderr(Stdio::null())
+        .output()
+        .map_err(|source| ServiceError::CommandUnavailable {
+            program: program.clone(),
+            source,
+        })?;
+    if !output.status.success() {
+        return Err(ServiceError::CommandFailed {
+            program,
+            code: exit_code(output.status),
+        });
+    }
+    let executable = String::from_utf8_lossy(&output.stdout).trim().to_owned();
+    if executable.is_empty() {
+        return Err(ServiceError::InvalidValue("executable"));
+    }
+    Ok(Some(PathBuf::from(executable)))
+}
+
+pub(super) fn running_pid() -> Result<Option<u32>, ServiceError> {
+    if !task_exists()? {
+        return Ok(None);
+    }
+    let script = r#"$task = Get-ScheduledTask -TaskName $args[0] -ErrorAction Stop; $action = @($task.Actions)[0]; $tokenMatch = [regex]::Match($action.Arguments, '--service-instance-token(?:=|\s+)(?:"([^"]+)"|(\S+))'); if (-not $tokenMatch.Success) { exit 4 }; $token = if ($tokenMatch.Groups[1].Success) { $tokenMatch.Groups[1].Value } else { $tokenMatch.Groups[2].Value }; $matches = @(Get-CimInstance Win32_Process | Where-Object { $_.ExecutablePath -eq $action.Execute -and $_.CommandLine -like ('*--service-instance-token*' + $token + '*') }); if ($matches.Count -gt 1) { exit 5 }; if ($matches.Count -eq 1) { [Console]::Out.Write($matches[0].ProcessId) }"#;
+    let mut command = Command::new(powershell_executable());
+    command.args([
+        "-NoLogo",
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        script,
+        WINDOWS_TASK,
+    ]);
+    let program = command.get_program().to_string_lossy().into_owned();
+    let output = command
+        .stdin(Stdio::null())
+        .stderr(Stdio::null())
+        .output()
+        .map_err(|source| ServiceError::CommandUnavailable {
+            program: program.clone(),
+            source,
+        })?;
+    if !output.status.success() {
+        return Err(ServiceError::CommandFailed {
+            program,
+            code: exit_code(output.status),
+        });
+    }
+    Ok(String::from_utf8_lossy(&output.stdout)
+        .trim()
+        .parse::<u32>()
+        .ok()
+        .filter(|pid| *pid > 0))
 }
 
 pub(super) fn start() -> Result<ServiceState, ServiceError> {

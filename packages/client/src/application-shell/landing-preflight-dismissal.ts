@@ -1,5 +1,8 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { getProjectIdentityKey, isGitHubBackedRepo } from '@yiru/protocol/project/setup-projection'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import {
+  getProjectIdentityKey,
+  isGitHubBackedRepo
+} from '@agentstart/protocol/project/setup-projection'
 
 // Why: GitHub-CLI setup nudges are dismissible, but the dismissal must lapse
 // when the user adds a NEW GitHub-backed project — that's the moment the CLI
@@ -7,7 +10,7 @@ import { getProjectIdentityKey, isGitHubBackedRepo } from '@yiru/protocol/projec
 // present at dismiss time; a later set that contains a key not in the snapshot
 // means a genuinely new GitHub project appeared and the nudge should return.
 
-const STORAGE_PREFIX = 'yiru.preflightBanner.dismissed.'
+const STORAGE_PREFIX = 'agentstart.preflightBanner.dismissed.'
 
 type DismissalRecord = {
   /** GitHub project identity keys present when the user dismissed. */

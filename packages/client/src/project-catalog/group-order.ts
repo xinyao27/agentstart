@@ -1,6 +1,6 @@
-import type { RepoValue } from '@yiru/protocol'
-import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
-import { normalizeManualRepoOrder } from '@yiru/protocol/project/manual-order'
+import type { RepoValue } from '@agentstart/protocol'
+import { getRepoExecutionHostId } from '@agentstart/protocol/host/identity'
+import { normalizeManualRepoOrder } from '@agentstart/protocol/project/manual-order'
 
 export const UNGROUPED_PROJECT_GROUP_KEY = 'project-group:ungrouped'
 

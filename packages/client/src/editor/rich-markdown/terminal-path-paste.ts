@@ -41,7 +41,7 @@ function hrefPointsAtPathBasename(href: string, basename: string): boolean {
   }
 }
 
-export function shouldPasteTerminalWindowsPathAsPlainText({
+function shouldPasteTerminalWindowsPathAsPlainText({
   plainText,
   htmlText
 }: {

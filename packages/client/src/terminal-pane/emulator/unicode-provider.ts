@@ -9,7 +9,7 @@ type XtermTerminalWithUnicodeCore = {
   }
 }
 
-const YIRU_UNICODE_VERSION = 'yiru-11-zwj'
+const AGENTSTART_UNICODE_VERSION = 'agentstart-11-zwj'
 const UNICODE11_VERSION = '11'
 const ZERO_WIDTH_JOINER = 0x200d
 
@@ -25,8 +25,8 @@ function createProperties(charKind: number, width: 0 | 1 | 2, shouldJoin: boolea
   return ((charKind & 0xffffff) << 3) | ((width & 3) << 1) | (shouldJoin ? 1 : 0)
 }
 
-class YiruUnicodeProvider implements IUnicodeVersionProvider {
-  public readonly version = YIRU_UNICODE_VERSION
+class AgentStartUnicodeProvider implements IUnicodeVersionProvider {
+  public readonly version = AGENTSTART_UNICODE_VERSION
   private readonly baseProvider: IUnicodeVersionProvider
 
   public constructor(baseProvider: IUnicodeVersionProvider) {
@@ -55,9 +55,11 @@ class YiruUnicodeProvider implements IUnicodeVersionProvider {
   }
 }
 
-export function activateYiruTerminalUnicodeProvider(terminal: XtermTerminalWithUnicodeCore): void {
+export function activateAgentStartTerminalUnicodeProvider(
+  terminal: XtermTerminalWithUnicodeCore
+): void {
   const { unicode } = terminal
-  if (unicode.activeVersion === YIRU_UNICODE_VERSION) {
+  if (unicode.activeVersion === AGENTSTART_UNICODE_VERSION) {
     return
   }
 
@@ -67,8 +69,8 @@ export function activateYiruTerminalUnicodeProvider(terminal: XtermTerminalWithU
     return
   }
 
-  if (!unicode.versions.includes(YIRU_UNICODE_VERSION)) {
-    unicode.register(new YiruUnicodeProvider(baseProvider))
+  if (!unicode.versions.includes(AGENTSTART_UNICODE_VERSION)) {
+    unicode.register(new AgentStartUnicodeProvider(baseProvider))
   }
-  unicode.activeVersion = YIRU_UNICODE_VERSION
+  unicode.activeVersion = AGENTSTART_UNICODE_VERSION
 }

@@ -2,13 +2,14 @@ import {
   SHELL_PLATFORM_PROTOCOL_CAPABILITY,
   ShellPlatformClient,
   type ShellPlatformOpenExternalEditorInput
-} from '@yiru/protocol'
-import type { ShellPlatformOutcomeValue } from '@yiru/protocol'
+} from '@agentstart/protocol'
+import type { ShellPlatformOutcomeValue } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 import type { RenderingHostBootstrap as ShellRenderingHost } from '~renderer/rendering-host-bootstrap'
 import { parseRenderingHostBootstrap } from '~renderer/rendering-host-bootstrap'
 
 import {
+  isConfiguredBrowserHostLocalDevice,
   openConfiguredBrowserHostProtocol,
   readConfiguredBrowserHostStatus
 } from './browser-host-runtime'
@@ -58,11 +59,18 @@ async function openShellPlatformTarget(): Promise<ShellPlatformClient> {
     throw new Error(
       translate(
         'runtime.shellPlatformTarget.unavailable',
-        'This action needs a current Yiru daemon connection.'
+        'This action needs a current AgentStart daemon connection.'
       )
     )
   }
   return new ShellPlatformClient(await openConfiguredBrowserHostProtocol())
+}
+
+export async function readSystemAccentColor(signal: AbortSignal): Promise<string | null> {
+  if (!isConfiguredBrowserHostLocalDevice()) {
+    return null
+  }
+  return (await openShellPlatformTarget()).getSystemAccentColor({ signal, timeoutMs: 5_000 })
 }
 
 const renderingHostSnapshot = resolveRenderingHost()

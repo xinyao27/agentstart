@@ -13,7 +13,7 @@ import {
   HostRegistryServiceListWslDistrosResponseSchema,
   HostRegistryServiceMarkAgentTrustedRequestSchema,
   HostRegistryServiceMarkAgentTrustedResponseSchema
-} from '../generated/yiru/runtime/v1/host_registry_pb.js'
+} from '../generated/agent_start/runtime/v1/host_registry_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 
 export const HOST_REGISTRY_PROTOCOL_CAPABILITY = 'hostRegistry.protobuf.v1' as const

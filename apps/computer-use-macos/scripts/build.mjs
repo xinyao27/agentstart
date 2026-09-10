@@ -15,13 +15,14 @@ const PACKAGE_ROOT = join(import.meta.dirname, '..')
 const packageMetadata = JSON.parse(readFileSync(join(PACKAGE_ROOT, 'package.json'), 'utf8'))
 const appVersion = packageMetadata.version
 const releaseRoot = join(PACKAGE_ROOT, '.build', 'release')
-const binaryPath = join(releaseRoot, 'yiru-computer-use-macos')
-const appPath = join(releaseRoot, 'Yiru Computer Use.app')
-const appExecutablePath = join(appPath, 'Contents', 'MacOS', 'yiru-computer-use-macos')
+const binaryPath = join(releaseRoot, 'agentstart-computer-use-macos')
+const appPath = join(releaseRoot, 'AgentStart Computer Use.app')
+const appExecutablePath = join(appPath, 'Contents', 'MacOS', 'agentstart-computer-use-macos')
 const appResourcesPath = join(appPath, 'Contents', 'Resources')
 const localizationPath = join(PACKAGE_ROOT, 'resources', 'localization')
 const iconPath = join(PACKAGE_ROOT, 'resources', 'app-icon.icns')
-const bundleId = process.env.YIRU_COMPUTER_MACOS_BUNDLE_ID ?? 'com.xinyao27.yiru.computer-use'
+const bundleId =
+  process.env.AGENTSTART_COMPUTER_MACOS_BUNDLE_ID ?? 'com.xinyao27.agentstart.computer-use'
 const universalTriples = ['arm64-apple-macosx', 'x86_64-apple-macosx']
 
 if (process.platform !== 'darwin') {
@@ -60,7 +61,7 @@ function buildBinary(triple) {
   ]
   run(['swift', ...argumentsList])
   const productDirectory = output(['swift', ...argumentsList, '--show-bin-path'])
-  return join(productDirectory, 'yiru-computer-use-macos')
+  return join(productDirectory, 'agentstart-computer-use-macos')
 }
 
 function createHelperApp() {
@@ -85,7 +86,7 @@ function createHelperApp() {
 
 function codesignArguments(identity, targetPath) {
   const args = ['--force', '--deep', '--sign', identity]
-  if (process.env.YIRU_MAC_RELEASE === '1' && identity !== '-') {
+  if (process.env.AGENTSTART_MAC_RELEASE === '1' && identity !== '-') {
     args.push(
       '--options',
       'runtime',
@@ -99,7 +100,7 @@ function codesignArguments(identity, targetPath) {
 }
 
 function resolveSigningIdentity() {
-  const explicit = process.env.YIRU_COMPUTER_MACOS_SIGN_IDENTITY ?? process.env.CSC_NAME
+  const explicit = process.env.AGENTSTART_COMPUTER_MACOS_SIGN_IDENTITY ?? process.env.CSC_NAME
   if (explicit) {
     return explicit
   }
@@ -115,7 +116,7 @@ function resolveSigningIdentity() {
   const distribution =
     identities.match(/"([^"]*Developer ID Application:[^"]+)"/)?.[1] ??
     identities.match(/"([^"]*Apple Distribution:[^"]+)"/)?.[1]
-  return process.env.YIRU_MAC_RELEASE === '1'
+  return process.env.AGENTSTART_MAC_RELEASE === '1'
     ? (distribution ?? development ?? '-')
     : (development ?? distribution ?? '-')
 }
@@ -149,15 +150,15 @@ function infoPlist() {
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
   <key>CFBundleExecutable</key>
-  <string>yiru-computer-use-macos</string>
+  <string>agentstart-computer-use-macos</string>
   <key>CFBundleIdentifier</key>
   <string>${bundleId}</string>
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
 ${icon}  <key>CFBundleName</key>
-  <string>Yiru Computer Use</string>
+  <string>AgentStart Computer Use</string>
   <key>CFBundleDisplayName</key>
-  <string>Yiru Computer Use</string>
+  <string>AgentStart Computer Use</string>
   <key>CFBundlePackageType</key>
   <string>APPL</string>
   <key>CFBundleShortVersionString</key>
@@ -169,9 +170,9 @@ ${icon}  <key>CFBundleName</key>
   <key>LSUIElement</key>
   <true/>
   <key>NSAccessibilityUsageDescription</key>
-  <string>Yiru Computer Use needs Accessibility permission to read and interact with app interfaces when you ask Yiru to use apps.</string>
+  <string>AgentStart Computer Use needs Accessibility permission to read and interact with app interfaces when you ask AgentStart to use apps.</string>
   <key>NSScreenCaptureUsageDescription</key>
-  <string>Yiru Computer Use needs Screen Recording permission to capture app windows when you ask Yiru to inspect your screen.</string>
+  <string>AgentStart Computer Use needs Screen Recording permission to capture app windows when you ask AgentStart to inspect your screen.</string>
 </dict>
 </plist>
 `

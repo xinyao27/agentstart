@@ -46,7 +46,7 @@ export default function SuppressExternalWorktreeInboxDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="border-border bg-muted/30 text-muted-foreground border px-3 py-2 text-sm">
+        <div className="border-border bg-muted/30 text-muted-foreground rounded-lg border px-3 py-2 text-sm">
           {translate(
             'auto.components.sidebar.SuppressExternalWorktreeInboxDialog.1f8a5d9e73',
             'You can turn this back on later from project settings.'
@@ -60,7 +60,7 @@ export default function SuppressExternalWorktreeInboxDialog({
           >
             {translate(
               'auto.components.sidebar.SuppressExternalWorktreeInboxDialog.8c0b2e7a41',
-              'Open Non-Yiru worktrees settings'
+              'Open Non-AgentStart worktrees settings'
             )}
           </Button>
         </div>

@@ -1,4 +1,4 @@
-import type { DiscoveredSkill, SkillPlacement } from '@yiru/protocol'
+import type { DiscoveredSkill, SkillPlacement } from '@agentstart/protocol'
 
 export function skillPlacements(skill: DiscoveredSkill): SkillPlacement[] {
   if (skill.placements?.length) {

@@ -1,7 +1,7 @@
 // Why: the ritual authority answers with typed schedule and run structs; this
 // is the single place that renders those structs into the protobuf wire
 // messages, mirroring the legacy serde camelCase projection.
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::{
     RitualKind, RitualProjectResult, RitualScheduleStatus as ProtocolScheduleStatus,
     RitualServiceRunResponse,
 };

@@ -7,17 +7,15 @@ import {
   type GitHubPullRequestLink,
   parseGitHubPullRequestLink,
   parseGitHubPullRequestNumber
-} from '@yiru/protocol/hosted-review/links/pull-request'
+} from '@agentstart/protocol/hosted-review/links/pull-request'
 
 import { isWorkItemLinkQueryTooLarge } from '../source-control/work-item-query-bounds'
 
 export {
-  buildGitHubRepoUrl,
   parseGitHubPullRequestLink,
   parseGitHubPullRequestNumber,
-  type GitHubPullRequestLink,
   type RepoSlug
-} from '@yiru/protocol/hosted-review/links/pull-request'
+} from '@agentstart/protocol/hosted-review/links/pull-request'
 
 const HTTP_URL_PREFIX_RE = /^https?:\/\//i
 

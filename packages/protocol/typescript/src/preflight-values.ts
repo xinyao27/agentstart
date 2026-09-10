@@ -1,10 +1,10 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   PreflightPathSource as ProtocolPathSource,
   PreflightShellHydrationFailureReason as ProtocolShellHydrationFailureReason,
   type PreflightServiceCheckResponse,
   type PreflightServiceRefreshAgentsResponse
-} from '../generated/yiru/runtime/v1/preflight_pb.js'
+} from '../generated/agent_start/runtime/v1/preflight_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const PREFLIGHT_PROTOCOL_CAPABILITY = 'preflight.protobuf.v1' as const
@@ -18,12 +18,12 @@ export type PreflightStatusValue = {
 // distro, and the repair reason; the renderer's project-runtime resolution
 // carries renderer bookkeeping the authority never reads, so the wire context
 // keeps only what changes behavior.
-export type PreflightResolvedRuntimeValue =
+type PreflightResolvedRuntimeValue =
   | { kind: 'local-host' }
   | { kind: 'windows-host' }
   | { kind: 'wsl'; distro: string }
 
-export type PreflightRepairRequiredValue = {
+type PreflightRepairRequiredValue = {
   reason: 'wsl-unavailable' | 'wsl-distro-required' | 'wsl-distro-missing'
 }
 

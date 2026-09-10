@@ -1,4 +1,4 @@
-import type { DiscoveredSkill, SkillSourceKind } from '@yiru/protocol'
+import type { DiscoveredSkill, SkillSourceKind } from '@agentstart/protocol'
 import { ORCHESTRATION_SKILL_NAME } from '~renderer/agent/feature-install-commands'
 
 type InstalledAgentSkillMatchOptions = {
@@ -15,14 +15,6 @@ export function isOrchestrationSkillName(skillName: string): boolean {
 
 function basenameFromPath(pathValue: string): string {
   return pathValue.split(/[\\/]/).findLast(Boolean) ?? pathValue
-}
-
-export function hasInstalledAgentSkill(
-  skills: readonly DiscoveredSkill[],
-  skillName: string,
-  options: InstalledAgentSkillMatchOptions = {}
-): boolean {
-  return hasInstalledAgentSkillNamed(skills, [skillName], options)
 }
 
 export function hasInstalledAgentSkillNamed(

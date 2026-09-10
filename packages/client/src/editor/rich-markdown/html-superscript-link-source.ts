@@ -5,8 +5,8 @@ import {
 } from '../html-character-reference-decoder'
 
 export const HTML_SUPERSCRIPT_LINK_SOURCE_LIMIT = 16 * 1024
-export const HTML_SUPERSCRIPT_LINK_HREF_LIMIT = 8 * 1024
-export const HTML_SUPERSCRIPT_LINK_TEXT_LIMIT = 2 * 1024
+const HTML_SUPERSCRIPT_LINK_HREF_LIMIT = 8 * 1024
+const HTML_SUPERSCRIPT_LINK_TEXT_LIMIT = 2 * 1024
 
 export type HtmlSuperscriptLinkSource = {
   source: string

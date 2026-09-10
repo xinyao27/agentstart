@@ -5,7 +5,7 @@ import {
   SkillsService,
   SkillsServiceDiscoverRequestSchema,
   SkillsServiceDiscoverResponseSchema
-} from '../../generated/yiru/runtime/v1/skills_pb.js'
+} from '../../generated/agent_start/runtime/v1/skills_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from '../transport.js'
 import { decodeDiscovery, type SkillDiscoveryResult } from './discovery-values.js'
 import { SkillsManageClient } from './manage-client.js'

@@ -8,7 +8,7 @@ use crate::agent_status_hooks::command::managed_command;
 use crate::agent_status_hooks::command::managed_command_with_env;
 use crate::agent_status_hooks::{config, scripts, storage};
 
-const BUNDLE: &str = "yiru-status";
+const BUNDLE: &str = "agentstart-status";
 const EVENTS: &[(&str, bool, &str)] = &[
     ("PreInvocation", false, "antigravity-pre-invocation.cmd"),
     ("PostInvocation", false, "antigravity-post-invocation.cmd"),
@@ -83,7 +83,7 @@ fn event_command(
     managed_command_with_env(
         script_path,
         "antigravity",
-        &[("YIRU_ANTIGRAVITY_EVENT", event)],
+        &[("AGENTSTART_ANTIGRAVITY_EVENT", event)],
     )
 }
 

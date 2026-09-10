@@ -317,7 +317,7 @@ fn build_breakdown(
 }
 
 fn row_matches(row: &Value, scope: &str, cutoff: Option<&str>) -> bool {
-    (scope != "yiru" || row.get("worktreeId").is_some_and(|value| !value.is_null()))
+    (scope != "agentstart" || row.get("worktreeId").is_some_and(|value| !value.is_null()))
         && cutoff
             .is_none_or(|cutoff| string_field(Some(row), "day").is_some_and(|day| day >= cutoff))
 }

@@ -1,4 +1,7 @@
-import type { GitHubCommentResult, PRComment } from '@yiru/protocol/hosted-review/review-types'
+import type {
+  GitHubCommentResult,
+  PRComment
+} from '@agentstart/protocol/hosted-review/review-types'
 import type { StateCreator } from 'zustand'
 import { translate } from '~renderer/i18n/i18n'
 import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'

@@ -21,13 +21,13 @@ import type {
   MemorySnapshot,
   SessionMemory,
   WorktreeMemory
-} from '@yiru/protocol/diagnostics/memory-values'
-import { parsePaneKey as parseStablePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import { parsePtySessionId } from '@yiru/protocol/terminal/session-identity'
+} from '@agentstart/protocol/diagnostics/memory-values'
+import { parsePaneKey as parseStablePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import { parsePtySessionId } from '@agentstart/protocol/terminal/session-identity'
 import {
   getRepoIdFromWorktreeId,
   getWorktreePathBasenameFromId
-} from '@yiru/protocol/worktree/identity'
+} from '@agentstart/protocol/worktree/identity'
 
 import { buildResourceSessionBindingIndex } from './resource-session-bindings'
 import type {
@@ -133,7 +133,7 @@ function resolveDaemonSessionLabel(
 // ─── Public merge function ─────────────────────────────────────────
 
 export const UNATTRIBUTED_REPO_ID = '__unattributed__'
-export const UNATTRIBUTED_REPO_NAME = 'Unattributed'
+const UNATTRIBUTED_REPO_NAME = 'Unattributed'
 
 export function mergeSnapshotAndSessions(
   snapshot: MemorySnapshot | null,

@@ -4,7 +4,7 @@ import type {
   ComputerPermissionId,
   ComputerPermissionState,
   ComputerPermissionStatus
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
@@ -25,8 +25,6 @@ import { cn } from '~renderer/ui/class-names'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { ComputerUseSkillSetupPanel } from './computer-use-skill-setup-panel'
-export { getComputerUsePaneSearchEntries } from './computer-use-search'
-
 type PermissionDefinition = {
   id: ComputerPermissionId
   labelKey: string
@@ -81,7 +79,7 @@ async function requireComputerClient(): Promise<ComputerClient> {
     throw new Error(
       translate(
         'settings.computerUsePane.unavailable',
-        'Computer Use requires a local Yiru daemon connection'
+        'Computer Use requires a local AgentStart daemon connection'
       )
     )
   }
@@ -117,7 +115,7 @@ export function ComputerUsePane(): React.JSX.Element {
         ? 'Computer Use is ready.'
         : 'Finish setup to use local apps.'
   const summaryDescription = checking
-    ? 'Yiru is checking macOS privacy permissions for the Computer Use helper.'
+    ? 'AgentStart is checking macOS privacy permissions for the Computer Use helper.'
     : setupUnavailable
       ? `Computer Use permissions are unavailable because ${helperUnavailableReason}.`
       : allGranted
@@ -286,7 +284,7 @@ export function ComputerUsePane(): React.JSX.Element {
     <div className="space-y-5">
       {isMac ? (
         <>
-          <div className="border-border/60 bg-muted/25 flex flex-wrap items-start justify-between gap-4 border px-4 py-3">
+          <div className="border-border/60 bg-muted/25 flex flex-wrap items-start justify-between gap-4 rounded-lg border px-4 py-3">
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-sm font-medium">
                 <ShieldCheck className="size-4" />
@@ -319,7 +317,7 @@ export function ComputerUsePane(): React.JSX.Element {
           </div>
 
           <div className="space-y-2">
-            <div className="divide-border/60 border-border/60 divide-y border">
+            <div className="divide-border/60 border-border/60 divide-y rounded-lg border">
               {PERMISSIONS.map((permission) => {
                 const status = stateById.get(permission.id)
                 const pending = pendingId === permission.id
@@ -338,7 +336,7 @@ export function ComputerUsePane(): React.JSX.Element {
                           </span>
                           <span
                             className={cn(
-                              'border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider',
+                              'rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider',
                               statusClass(status)
                             )}
                           >

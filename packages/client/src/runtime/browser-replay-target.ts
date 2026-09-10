@@ -1,4 +1,4 @@
-import { BROWSER_REPLAY_PROTOCOL_CAPABILITY, BrowserReplayClient } from '@yiru/protocol'
+import { BROWSER_REPLAY_PROTOCOL_CAPABILITY, BrowserReplayClient } from '@agentstart/protocol'
 
 import {
   openConfiguredBrowserHostProtocol,

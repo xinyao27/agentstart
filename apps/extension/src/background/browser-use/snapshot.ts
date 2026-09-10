@@ -49,7 +49,7 @@ export async function captureBrowserSnapshot(tabId: number): Promise<
 }
 
 function collectBrowserSnapshot(): SnapshotPayload {
-  const referenceAttribute = 'data-yiru-browser-ref'
+  const referenceAttribute = 'data-agentstart-browser-ref'
   const interactiveTags = new Set(['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'SUMMARY'])
   const semanticTags = new Set([
     'ARTICLE',

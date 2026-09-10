@@ -1,11 +1,11 @@
-import { getRepoExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import { getRepoExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
 import type {
   CreateHostedReviewInput,
   CreateHostedReviewResult,
   HostedReviewCreationEligibility,
   HostedReviewCreationEligibilityArgs,
   HostedReviewInfo
-} from '@yiru/protocol/hosted-review/types'
+} from '@agentstart/protocol/hosted-review/types'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'

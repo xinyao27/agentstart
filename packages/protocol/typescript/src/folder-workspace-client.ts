@@ -15,7 +15,7 @@ import {
   FolderWorkspaceServiceUpdateFields_NullableLinkedReviewSchema,
   FolderWorkspaceServiceUpdateRequestSchema,
   FolderWorkspaceNullableTextSchema
-} from '../generated/yiru/runtime/v1/folder_workspace_pb.js'
+} from '../generated/agent_start/runtime/v1/folder_workspace_pb.js'
 import {
   folderWorkspacePathStatus,
   folderWorkspaceValue,

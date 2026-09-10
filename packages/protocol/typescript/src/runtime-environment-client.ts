@@ -12,7 +12,7 @@ import {
   RuntimeEnvironmentServiceRemoveResponseSchema,
   type RuntimeEnvironment,
   type RuntimeEnvironmentServiceGetStatusResponse
-} from '../generated/yiru/runtime/v1/runtime_environment_pb.js'
+} from '../generated/agent_start/runtime/v1/runtime_environment_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 
 const DISCONNECT_PROCEDURE = `/${RuntimeEnvironmentService.typeName}/${RuntimeEnvironmentService.method.disconnect.name}`

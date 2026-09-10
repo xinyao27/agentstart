@@ -6,7 +6,6 @@ use std::error::Error;
 use std::sync::Arc;
 use std::time::SystemTimeError;
 
-use serde::Serialize;
 use thiserror::Error;
 use tokio::sync::{Mutex, oneshot};
 
@@ -16,27 +15,12 @@ pub(crate) use actor::{
     MobileDeviceMailbox, MobileDeviceMailboxClosed, MobileDeviceRequest, MobileDeviceWorker,
 };
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
-#[serde(rename_all = "lowercase")]
-pub enum ApnsEnvironment {
-    Production,
-    Sandbox,
-}
-
-#[derive(Clone, Debug, Serialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Clone, Debug)]
 pub struct MobileDevice {
-    pub(crate) apns_environment: Option<ApnsEnvironment>,
-    pub(crate) apns_token: Option<String>,
     pub(crate) id: String,
     pub(crate) last_seen_at: i64,
     pub(crate) name: String,
     pub(crate) paired_at: i64,
-    pub(crate) token: String,
-}
-
-pub struct PushRegistration {
-    pub(crate) environment: ApnsEnvironment,
     pub(crate) token: String,
 }
 
@@ -149,42 +133,11 @@ impl MobileDeviceStore {
             .map(|device| self.authorizations.issue(device.id)))
     }
 
-    pub async fn register_push(
-        &self,
-        device_id: String,
-        registration: Option<PushRegistration>,
-    ) -> Result<bool, MobileDeviceStoreError> {
-        let (response, result) = oneshot::channel();
-        self.submit(MobileDeviceCommand::RegisterPush {
-            device_id,
-            registration,
-            response,
-        })
-        .await?;
-        receive(result).await
-    }
-
-    pub async fn push_devices(&self) -> Result<Vec<MobileDevice>, MobileDeviceStoreError> {
-        let (response, result) = oneshot::channel();
-        self.submit(MobileDeviceCommand::PushDevices { response })
-            .await?;
-        receive(result).await
-    }
-
     async fn submit(&self, command: MobileDeviceCommand) -> Result<(), MobileDeviceStoreError> {
         self.mailbox
             .submit(MobileDeviceRequest::new(command))
             .await
             .map_err(|_| MobileDeviceStoreError::WorkerUnavailable)
-    }
-}
-
-impl ApnsEnvironment {
-    fn as_str(self) -> &'static str {
-        match self {
-            Self::Production => "production",
-            Self::Sandbox => "sandbox",
-        }
     }
 }
 

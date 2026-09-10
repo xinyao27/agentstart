@@ -1,5 +1,5 @@
-import type { ForkSyncMode, GitForkSyncResult } from '@yiru/protocol/git/fork-sync-types'
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { ForkSyncMode, GitForkSyncResult } from '@agentstart/protocol/git/fork-sync-types'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -90,7 +90,7 @@ function formatForkSyncResult(result: GitForkSyncResult): { title: string; descr
       blockedDescription ??
       translate(
         'auto.components.settings.RepositoryForkSyncSection.blockedFallback',
-        'Yiru could not fast-forward this fork safely.'
+        'AgentStart could not fast-forward this fork safely.'
       )
   }
 }
@@ -204,7 +204,7 @@ export function RepositoryForkSyncSection({
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.settings.RepositoryForkSyncSection.longDescription',
-              'When this fork is behind upstream, Yiru can safely fast-forward its default branch. Yiru skips the update if the branch has local-only commits or conflicts.'
+              'When this fork is behind upstream, AgentStart can safely fast-forward its default branch. AgentStart skips the update if the branch has local-only commits or conflicts.'
             )}
           </p>
           <p className="text-muted-foreground text-xs">

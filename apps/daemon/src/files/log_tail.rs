@@ -51,7 +51,7 @@ impl FilesAuthority {
                 "Local log tail target is not a file",
             ));
         }
-        let file_identity = local_log_identity(&initial);
+        let file_identity = local_log_identity(&file, &initial).await?;
         if from_byte_offset > initial.len()
             || expected_identity.is_some_and(|expected| expected != file_identity)
         {
@@ -230,27 +230,34 @@ fn reset_result(file_size: u64, file_identity: String) -> LogTailReadResult {
     }
 }
 
-fn local_log_identity(metadata: &std::fs::Metadata) -> String {
-    let (device, inode) = local_identity_fields(metadata);
+async fn local_log_identity(
+    file: &tokio::fs::File,
+    metadata: &std::fs::Metadata,
+) -> Result<String, std::io::Error> {
+    let (device, inode) = local_identity_fields(file, metadata).await?;
     let birthtime_ms = metadata
         .created()
         .ok()
         .and_then(|value| value.duration_since(UNIX_EPOCH).ok())
         .map_or(0.0, |value| value.as_secs_f64() * 1_000.0);
-    format!("{device}:{inode}:{birthtime_ms}")
+    Ok(format!("{device}:{inode}:{birthtime_ms}"))
 }
 
 #[cfg(unix)]
-fn local_identity_fields(metadata: &std::fs::Metadata) -> (u64, u64) {
+async fn local_identity_fields(
+    _file: &tokio::fs::File,
+    metadata: &std::fs::Metadata,
+) -> Result<(u64, u64), std::io::Error> {
     use std::os::unix::fs::MetadataExt;
-    (metadata.dev(), metadata.ino())
+    Ok((metadata.dev(), metadata.ino()))
 }
 
 #[cfg(windows)]
-fn local_identity_fields(metadata: &std::fs::Metadata) -> (u64, u64) {
-    use std::os::windows::fs::MetadataExt;
-    (
-        metadata.volume_serial_number().map_or(0, u64::from),
-        metadata.file_index().unwrap_or(metadata.file_size()),
-    )
+async fn local_identity_fields(
+    file: &tokio::fs::File,
+    _metadata: &std::fs::Metadata,
+) -> Result<(u64, u64), std::io::Error> {
+    let file = file.try_clone().await?.into_std().await;
+    let identity = crate::file_identity::FileIdentity::from_file(&file)?;
+    Ok((identity.fingerprint(), 0))
 }

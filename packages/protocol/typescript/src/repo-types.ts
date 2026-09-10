@@ -192,23 +192,23 @@ export type RepoSaveSparsePresetInput = {
   directories: string[]
 }
 export type RepoSparsePresetResult = { preset: RepoSparsePresetValue }
-export type RepoYiruHooksValue = {
+export type RepoAgentStartHooksValue = {
   scripts: { setup?: string; archive?: string }
   defaultTabs?: { title?: string; color?: string; command?: string }[]
   worktree?: { sharedDirectories: string[] }
 }
-export type RepoSetupTrustValue = { contentHash: string; scriptContent: string }
+type RepoSetupTrustValue = { contentHash: string; scriptContent: string }
 export type RepoHooksValue = {
   hasHooksFile: boolean
-  hooks: RepoYiruHooksValue | null
+  hooks: RepoAgentStartHooksValue | null
   setupRunPolicy: 'ask' | 'run-by-default' | 'skip-by-default'
-  source: 'yiru.yaml' | 'legacy' | null
+  source: 'agentstart.yaml' | 'legacy' | null
   setupTrust?: RepoSetupTrustValue
 }
 export type RepoHooksCheckResult = {
   status: 'ok' | 'error'
   hasHooks: boolean
-  hooks: RepoYiruHooksValue | null
+  hooks: RepoAgentStartHooksValue | null
   mayNeedUpdate: boolean
 }
 export type RepoSetupImportCandidateValue = {

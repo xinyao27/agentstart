@@ -1,7 +1,7 @@
 import { buildAgentRowLineageTree } from './agent-row-lineage-model'
 import type { DashboardAgentRow } from './use-dashboard-data'
 
-export type AgentRowLineagePresentation = {
+type AgentRowLineagePresentation = {
   depth: 0 | 1
   isFirstSibling: boolean
   isLastSibling: boolean

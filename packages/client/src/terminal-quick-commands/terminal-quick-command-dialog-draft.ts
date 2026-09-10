@@ -1,9 +1,9 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import {
   getTerminalQuickCommandScope,
   isTerminalAgentQuickCommand
-} from '@yiru/protocol/terminal/quick-commands'
-import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
+} from '@agentstart/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@agentstart/protocol/terminal/quick-commands'
 
 export type TerminalQuickCommandDialogAction = 'terminal-command' | 'agent-prompt'
 
@@ -34,7 +34,7 @@ export function createTerminalQuickCommandDialogDraftMemory(
   }
 }
 
-export function rememberTerminalQuickCommandDialogDraft(
+function rememberTerminalQuickCommandDialogDraft(
   memory: TerminalQuickCommandDialogDraftMemory,
   draft: TerminalQuickCommand
 ): TerminalQuickCommandDialogDraftMemory {

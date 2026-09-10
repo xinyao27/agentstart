@@ -1,4 +1,4 @@
-import type { MemorySnapshot } from '@yiru/protocol/diagnostics/memory-values'
+import type { MemorySnapshot } from '@agentstart/protocol/diagnostics/memory-values'
 import type { StateCreator } from 'zustand'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import type { AppState } from '~renderer/store/types'

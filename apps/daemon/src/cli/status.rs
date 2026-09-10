@@ -56,9 +56,9 @@ pub(super) fn run(args: &[OsString]) -> Result<(), CliError> {
     if has_flag(args, "--json") {
         println!("{}", serde_json::to_string(&output)?);
     } else if let Some(endpoint) = output.endpoint {
-        println!("Yiru daemon is running at {endpoint}");
+        println!("AgentStart daemon is running at {endpoint}");
     } else {
-        println!("Yiru daemon is not running");
+        println!("AgentStart daemon is not running");
     }
     Ok(())
 }

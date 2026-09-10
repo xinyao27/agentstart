@@ -2,10 +2,10 @@ import type {
   LocalDownloadClient,
   NotificationSoundLoadResult,
   RuntimeTransport
-} from '@yiru/protocol'
-import type { MemorySnapshot } from '@yiru/protocol/diagnostics/memory-values'
-import type { StatsSummaryInput } from '@yiru/protocol/stats/client'
-import type { StatsSummaryResult } from '@yiru/protocol/stats/values'
+} from '@agentstart/protocol'
+import type { MemorySnapshot } from '@agentstart/protocol/diagnostics/memory-values'
+import type { StatsSummaryInput } from '@agentstart/protocol/stats/client'
+import type { StatsSummaryResult } from '@agentstart/protocol/stats/values'
 import type { RuntimeStatusResult } from '~renderer/runtime/status/model'
 
 type BrowserHostAppControl = {
@@ -48,6 +48,7 @@ let readBrowserHostDiagnostics: BrowserHostDiagnosticsReader | null = null
 let openBrowserHostLocalDownloads: BrowserHostLocalDownloadConnection | null = null
 let readBrowserHostNotificationSound: BrowserHostNotificationSoundReader | null = null
 let openBrowserHostProtocol: BrowserHostProtocolConnection | null = null
+let isBrowserHostLocalDevice: (() => boolean) | null = null
 let readBrowserHostStats: BrowserHostStatsReader | null = null
 let readBrowserHostStatus: BrowserHostStatusReader | null = null
 let openBrowserHostTerminalMultiplex: BrowserHostTerminalMultiplex | null = null
@@ -113,8 +114,16 @@ export function readConfiguredBrowserHostNotificationSound(
   return readBrowserHostNotificationSound(cachedAssetId)
 }
 
-export function configureBrowserHostProtocol(openConnection: BrowserHostProtocolConnection): void {
+export function configureBrowserHostProtocol(
+  openConnection: BrowserHostProtocolConnection,
+  isLocalDevice: () => boolean
+): void {
   openBrowserHostProtocol = openConnection
+  isBrowserHostLocalDevice = isLocalDevice
+}
+
+export function isConfiguredBrowserHostLocalDevice(): boolean {
+  return isBrowserHostLocalDevice?.() ?? false
 }
 
 export function openConfiguredBrowserHostProtocol(): Promise<RuntimeTransport> {

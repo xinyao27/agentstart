@@ -1,9 +1,9 @@
 import {
   TerminalMultiplexOpcode,
   type TerminalMultiplexFrame
-} from '@yiru/protocol/terminal-multiplex/frame'
-import { decodeTerminalMultiplexJson } from '@yiru/protocol/terminal-multiplex/json'
-import { decodeTerminalMultiplexSideEffectBatch } from '@yiru/protocol/terminal-multiplex/side-effects'
+} from '@agentstart/protocol/terminal-multiplex/frame'
+import { decodeTerminalMultiplexJson } from '@agentstart/protocol/terminal-multiplex/json'
+import { decodeTerminalMultiplexSideEffectBatch } from '@agentstart/protocol/terminal-multiplex/side-effects'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { RemoteRuntimeMultiplexedTerminalCallbacks } from '../types'

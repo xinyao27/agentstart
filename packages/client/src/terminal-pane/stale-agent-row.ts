@@ -1,9 +1,9 @@
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'
 
-export function dismissStaleAgentRowByKey(paneKey: string): void {
+function dismissStaleAgentRowByKey(paneKey: string): void {
   const store = useAppStore.getState()
   const liveExisted = paneKey in store.agentStatusByPaneKey
   const retainedExisted = paneKey in store.retainedAgentsByPaneKey

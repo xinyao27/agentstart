@@ -66,13 +66,13 @@ const RemoveFolderDialog = function RemoveFolderDialog() {
             <span className="text-foreground font-medium break-all">{displayName}</span>{' '}
             {sshHostLabel
               ? translate(
-                  'auto.components.sidebar.RemoveFolderDialog.fromYiruSsh',
-                  'from Yiru. Its files stay on {{value0}} — re-add that SSH host to recover it.',
+                  'auto.components.sidebar.RemoveFolderDialog.fromAgentStartSsh',
+                  'from AgentStart. Its files stay on {{value0}} — re-add that SSH host to recover it.',
                   { value0: sshHostLabel }
                 )
               : translate(
                   'auto.components.sidebar.RemoveFolderDialog.8c097ef04e',
-                  'from Yiru. It is still on your disk.'
+                  'from AgentStart. It is still on your disk.'
                 )}
           </DialogDescription>
         </DialogHeader>

@@ -2,8 +2,8 @@ import type {
   LocalBaseRefRefreshResult,
   LocalBaseRefUpdateSuggestion,
   RemoveWorktreeResult
-} from '@yiru/protocol/worktree/create-result'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/worktree/create-result'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { RemoteOperationErrorOptions } from '~renderer/source-control/remote-error'
 
 export type RendererCommandResult =
@@ -16,7 +16,7 @@ export type RendererCommandResult =
     }
   | { type: 'runtime-environment-switch-failed'; error: string }
   | {
-      type: 'yiru-profile'
+      type: 'agentstart-profile'
       operation: 'create-local' | 'switch' | 'transfer'
       outcome: 'succeeded' | 'failed' | 'duplicate-target'
       error?: string

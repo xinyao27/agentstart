@@ -1,10 +1,10 @@
 use std::sync::Arc;
 use std::time::Duration;
 
+use agentstart_protocol::method_metadata::methods::AgentStartRuntimeV1ShellHostServiceExecute;
+use agentstart_protocol::protocol::v1::StatusCode;
 use serde_json::Value;
 use tokio::sync::{Mutex, Semaphore};
-use yiru_protocol::method_metadata::methods::YiruRuntimeV1ShellHostServiceExecute;
-use yiru_protocol::protocol::v1::StatusCode;
 
 use crate::reverse_protocol::{ReverseProtocolError, ReverseProtocolRegistry};
 
@@ -124,7 +124,11 @@ impl ShellServicesRegistry {
         std::mem::drop(tokio::spawn(async move {
             let _permit = permit;
             let _ = protocol
-                .unary_on::<YiruRuntimeV1ShellHostServiceExecute>(&id, &request, REQUEST_TIMEOUT)
+                .unary_on::<AgentStartRuntimeV1ShellHostServiceExecute>(
+                    &id,
+                    &request,
+                    REQUEST_TIMEOUT,
+                )
                 .await;
         }));
         true
@@ -155,7 +159,7 @@ impl ShellServicesRegistry {
         let request = super::request::encode(path, &body)?;
         let result = self
             .protocol
-            .unary_on::<YiruRuntimeV1ShellHostServiceExecute>(id, &request, timeout)
+            .unary_on::<AgentStartRuntimeV1ShellHostServiceExecute>(id, &request, timeout)
             .await
             .map_err(ShellServicesError::from)?;
         super::request::decode(path, result)

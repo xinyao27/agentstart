@@ -114,7 +114,7 @@ export default function PdfFind({
 
   return (
     <div
-      className="focus-within:border-ring absolute top-2 right-2 z-50 flex items-center gap-1 border border-zinc-700 bg-zinc-800 px-2 py-1"
+      className="focus-within:border-ring absolute top-2 right-2 z-50 flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1"
       style={{ width: 300 }}
       onKeyDown={handleKeyDown}
     >
@@ -144,7 +144,7 @@ export default function PdfFind({
         variant="ghost"
         size="icon-xs"
         onClick={findPrevious}
-        className="flex size-6 shrink-0 items-center justify-center text-zinc-400 hover:text-zinc-200"
+        className="flex size-6 shrink-0 items-center justify-center rounded text-zinc-400 hover:text-zinc-200"
         title={translate('auto.components.editor.PdfFind.30de726ad0', 'Previous match')}
       >
         <ChevronUp size={14} />
@@ -154,7 +154,7 @@ export default function PdfFind({
         variant="ghost"
         size="icon-xs"
         onClick={findNext}
-        className="flex size-6 shrink-0 items-center justify-center text-zinc-400 hover:text-zinc-200"
+        className="flex size-6 shrink-0 items-center justify-center rounded text-zinc-400 hover:text-zinc-200"
         title={translate('auto.components.editor.PdfFind.eeba2547a1', 'Next match')}
       >
         <ChevronDown size={14} />
@@ -165,7 +165,7 @@ export default function PdfFind({
         variant="ghost"
         size="icon-xs"
         onClick={onClose}
-        className="flex size-6 shrink-0 items-center justify-center text-zinc-400 hover:text-zinc-200"
+        className="flex size-6 shrink-0 items-center justify-center rounded text-zinc-400 hover:text-zinc-200"
         title={translate('auto.components.editor.PdfFind.cd65b1d6b0', 'Close')}
       >
         <X size={14} />

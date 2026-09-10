@@ -267,7 +267,7 @@ export function PierreFileExplorerTree({
         return
       }
       // Why: Trees derives the rename value from the required placeholder path,
-      // while Yiru's new-file flow intentionally starts with an empty field.
+      // while AgentStart's new-file flow intentionally starts with an empty field.
       clearPierreRenameInput(input)
     })
   }, [inlineInput, model, treeData.canonicalPathByAbsolutePath, worktreePath])
@@ -299,7 +299,7 @@ export function PierreFileExplorerTree({
   return (
     <FileTree
       model={model}
-      className="yiru-pierre-file-tree bg-sidebar block h-full min-h-0 w-full"
+      className="agentstart-pierre-file-tree bg-sidebar block h-full min-h-0 w-full"
       style={PIERRE_FILE_TREE_STYLE}
       onClickCapture={(event) => {
         const eventPath = event.nativeEvent.composedPath()

@@ -1,3 +1,5 @@
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { TerminalLeafId } from '@agentstart/protocol/terminal/pane-identity'
 import type { FitAddon } from '@xterm/addon-fit'
 import type { LigaturesAddon } from '@xterm/addon-ligatures'
 import type { SearchAddon } from '@xterm/addon-search'
@@ -7,8 +9,6 @@ import type { WebLinksAddon } from '@xterm/addon-web-links'
 import type { WebglAddon } from '@xterm/addon-webgl'
 import type { IDisposable, IMarker, Terminal } from '@xterm/xterm'
 import type { ITerminalOptions } from '@xterm/xterm'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { TerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
 
 import type { TerminalWebglAutoDecision } from './terminal-webgl-auto-policy'
 
@@ -20,12 +20,12 @@ import type { TerminalWebglAutoDecision } from './terminal-webgl-auto-policy'
  *  Carries one-shot PTY spawn/adoption data for the new pane.
  *  Kept as a separate parameter (rather than extending ManagedPane) so the
  *  hint is scoped to pane creation and does not live on the pane afterwards. */
-export type PaneSpawnHints = {
+type PaneSpawnHints = {
   cwd?: string
   ptyId?: string
 }
 
-export type ClosedPaneInfo = {
+type ClosedPaneInfo = {
   paneId: number
   leafId: TerminalLeafId
   reason?: 'close' | 'detach'
@@ -88,7 +88,7 @@ export type PaneStyleOptions = {
 
 export type ManagedPane = {
   id: number
-  /** Durable terminal layout leaf UUID. Use this for paneKey/YIRU_PANE_KEY and
+  /** Durable terminal layout leaf UUID. Use this for paneKey/AGENTSTART_PANE_KEY and
    *  persisted leaf-keyed state; `id` is only the live renderer handle. */
   leafId: TerminalLeafId
   /** Compatibility alias while callers migrate from the older stablePaneId name. */

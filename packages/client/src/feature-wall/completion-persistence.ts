@@ -1,25 +1,25 @@
-import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { AgentsStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import {
   FEATURE_WALL_WORKFLOW_IDS,
   type FeatureWallWorkflowId
-} from '@yiru/protocol/telemetry/feature-wall/types'
-import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+} from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 
 const PERSISTED_WORKFLOW_IDS = new Set<FeatureWallWorkflowId>(FEATURE_WALL_WORKFLOW_IDS)
-const VISITED_WORKFLOWS_STORAGE_KEY = 'yiru.featureWall.visitedWorkflows.v1'
-const COMPLETED_WORKFLOWS_STORAGE_KEY = 'yiru.featureWall.completedWorkflows.v1'
+const VISITED_WORKFLOWS_STORAGE_KEY = 'agentstart.featureWall.visitedWorkflows.v1'
+const COMPLETED_WORKFLOWS_STORAGE_KEY = 'agentstart.featureWall.completedWorkflows.v1'
 const PERSISTED_AGENT_STEP_IDS = new Set<AgentsStepId>(['statuses', 'usage', 'orchestration'])
-const VISITED_AGENT_STEPS_STORAGE_KEY = 'yiru.featureWall.visitedAgentSteps.v1'
-const COMPLETED_AGENT_STEPS_STORAGE_KEY = 'yiru.featureWall.completedAgentSteps.v1'
+const VISITED_AGENT_STEPS_STORAGE_KEY = 'agentstart.featureWall.visitedAgentSteps.v1'
+const COMPLETED_AGENT_STEPS_STORAGE_KEY = 'agentstart.featureWall.completedAgentSteps.v1'
 const PERSISTED_WORKBENCH_STEP_IDS = new Set<WorkbenchStepId>(['terminal', 'editor', 'browser'])
-const VISITED_WORKBENCH_STEPS_STORAGE_KEY = 'yiru.featureWall.visitedWorkbenchSteps.v1'
-const COMPLETED_WORKBENCH_STEPS_STORAGE_KEY = 'yiru.featureWall.completedWorkbenchSteps.v1'
+const VISITED_WORKBENCH_STEPS_STORAGE_KEY = 'agentstart.featureWall.visitedWorkbenchSteps.v1'
+const COMPLETED_WORKBENCH_STEPS_STORAGE_KEY = 'agentstart.featureWall.completedWorkbenchSteps.v1'
 const PERSISTED_REVIEW_STEP_IDS = new Set<ReviewStepId>(['notes', 'pr-view', 'ship'])
-const VISITED_REVIEW_STEPS_STORAGE_KEY = 'yiru.featureWall.visitedReviewSteps.v1'
-const COMPLETED_REVIEW_STEPS_STORAGE_KEY = 'yiru.featureWall.completedReviewSteps.v1'
+const VISITED_REVIEW_STEPS_STORAGE_KEY = 'agentstart.featureWall.visitedReviewSteps.v1'
+const COMPLETED_REVIEW_STEPS_STORAGE_KEY = 'agentstart.featureWall.completedReviewSteps.v1'
 
-export function normalizeFeatureWallVisitedWorkflows(value: unknown): FeatureWallWorkflowId[] {
+function normalizeFeatureWallVisitedWorkflows(value: unknown): FeatureWallWorkflowId[] {
   if (!Array.isArray(value)) {
     return []
   }
@@ -32,7 +32,7 @@ export function normalizeFeatureWallVisitedWorkflows(value: unknown): FeatureWal
   return [...seen]
 }
 
-export function normalizeFeatureWallVisitedAgentSteps(value: unknown): AgentsStepId[] {
+function normalizeFeatureWallVisitedAgentSteps(value: unknown): AgentsStepId[] {
   if (!Array.isArray(value)) {
     return []
   }
@@ -45,7 +45,7 @@ export function normalizeFeatureWallVisitedAgentSteps(value: unknown): AgentsSte
   return [...seen]
 }
 
-export function normalizeFeatureWallVisitedWorkbenchSteps(value: unknown): WorkbenchStepId[] {
+function normalizeFeatureWallVisitedWorkbenchSteps(value: unknown): WorkbenchStepId[] {
   if (!Array.isArray(value)) {
     return []
   }
@@ -58,7 +58,7 @@ export function normalizeFeatureWallVisitedWorkbenchSteps(value: unknown): Workb
   return [...seen]
 }
 
-export function normalizeFeatureWallVisitedReviewSteps(value: unknown): ReviewStepId[] {
+function normalizeFeatureWallVisitedReviewSteps(value: unknown): ReviewStepId[] {
   if (!Array.isArray(value)) {
     return []
   }

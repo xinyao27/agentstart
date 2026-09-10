@@ -5,14 +5,14 @@ import {
   type WorkspaceCleanupScanArgs,
   type WorkspaceCleanupScanProgress,
   type WorkspaceCleanupScanResult
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { useAppStore } from '~renderer/store/state'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import { getActiveRuntimeTarget, type RuntimeClientTarget } from './rpc-client'
 import { readRuntimeStatus } from './status-client'
 
-export async function openWorkspaceCleanupTarget(
+async function openWorkspaceCleanupTarget(
   target: RuntimeClientTarget
 ): Promise<WorkspaceCleanupClient | null> {
   const status = await readRuntimeStatus(target)

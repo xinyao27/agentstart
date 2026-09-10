@@ -1,6 +1,6 @@
-import type { GitStatusResult, GitUpstreamStatus } from '@yiru/protocol/git/status-types'
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GitStatusResult, GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 const AUTOMATIC_PUSH_TARGET_UPSTREAM_REFRESH_TTL_MS = 60_000
 const MAX_AUTOMATIC_PUSH_TARGET_UPSTREAM_CACHE_ENTRIES = 1024

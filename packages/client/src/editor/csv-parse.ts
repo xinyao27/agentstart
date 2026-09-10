@@ -3,7 +3,7 @@ export type CsvParseResult = {
   maxColumns: number
 }
 
-export const CSV_DELIMITER_SNIFF_SCAN_CODE_UNITS = 64 * 1024
+const CSV_DELIMITER_SNIFF_SCAN_CODE_UNITS = 64 * 1024
 
 const LINE_FEED_CODE_UNIT = 10
 const CARRIAGE_RETURN_CODE_UNIT = 13

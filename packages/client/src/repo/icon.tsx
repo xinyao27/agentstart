@@ -1,4 +1,4 @@
-import type { RepoIcon } from '@yiru/protocol/project/icon'
+import type { RepoIcon } from '@agentstart/protocol/project/icon'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
@@ -126,7 +126,7 @@ export const getRepoIconOptions = createLocalizedCatalog(() => [
   { name: 'Box', label: translate('auto.components.repo.repo.icon.0ad395d475', 'Box'), icon: Box }
 ])
 
-export function getRepoIcon(name: string | null | undefined): Icon {
+function getRepoIcon(name: string | null | undefined): Icon {
   return getRepoIconOptions().find((option) => option.name === name)?.icon ?? Folder
 }
 

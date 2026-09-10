@@ -1,5 +1,5 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { SourceControlAiSettingsPatch } from '@yiru/protocol/source-control/ai-types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { SourceControlAiSettingsPatch } from '@agentstart/protocol/source-control/ai-types'
 import type { ComponentProps } from 'react'
 import type { WindowsTerminalCapabilities } from '~renderer/terminal/windows/capabilities'
 
@@ -168,7 +168,7 @@ export function WorkflowSections({
         title={translate('auto.components.settings.Settings.f75daf1002', 'Mobile Emulator')}
         description={translate(
           'auto.components.settings.Settings.01f9d36292',
-          'Configure mobile emulator support for Yiru and coding agents.'
+          'Configure mobile emulator support for AgentStart and coding agents.'
         )}
         searchEntries={getSearchEntries('mobile-emulator')}
       >

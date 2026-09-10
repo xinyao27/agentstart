@@ -1,16 +1,16 @@
 [package]
-name = "yiru-daemon"
-version = "0.0.36"
+name = "agentstart-daemon"
+version = "0.1.0"
 edition = "2024"
 rust-version = "1.95"
 publish = false
-default-run = "yiru"
+default-run = "agentstart"
 
 [lints.rust]
 unsafe_code = "forbid"
 
 [[bin]]
-name = "yiru"
+name = "agentstart"
 path = "src/main.rs"
 
 [dependencies]
@@ -47,7 +47,7 @@ ring = "0.17.14"
 rustls = { version = "0.23.43", default-features = false, features = ["ring", "std", "tls12"] }
 rusqlite = { version = "0.40.2", default-features = false, features = ["bundled"] }
 regex = "1.12.3"
-same-file = "1.0.6"
+same-file = "=1.0.6"
 salsa20 = { version = "0.10.2", default-features = false }
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = { version = "1.0.151", features = ["preserve_order"] }
@@ -79,7 +79,7 @@ tokio-tungstenite = { version = "0.29.0", default-features = false, features = [
 ] }
 url = { version = "2.5.8", default-features = false, features = ["std"] }
 x25519-dalek = { version = "3.0.0", default-features = false }
-yiru-protocol = { path = "../../packages/protocol/rust" }
+agentstart-protocol = { path = "../../packages/protocol/rust" }
 
 [target.'cfg(unix)'.dependencies]
 nix = { version = "0.31.3", default-features = false, features = ["process", "signal", "user"] }

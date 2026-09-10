@@ -19,7 +19,7 @@ import {
   PreflightWslRuntimeSchema,
   type PreflightContext,
   type PreflightProjectRuntime
-} from '../generated/yiru/runtime/v1/preflight_pb.js'
+} from '../generated/agent_start/runtime/v1/preflight_pb.js'
 import {
   decodePreflightRefresh,
   decodePreflightStatus,

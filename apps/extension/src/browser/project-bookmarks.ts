@@ -1,9 +1,9 @@
 import type {
   BrowserProjectBookmark,
   BrowserProjectBookmarkKind
-} from '@yiru/client/extension-bootstrap'
+} from '@agentstart/client/extension-bootstrap'
 
-const ROOT_TITLE = 'Yiru'
+const ROOT_TITLE = 'AgentStart'
 const MANAGED_TITLES = {
   dashboard: 'Dashboard',
   docs: 'Documentation',
@@ -150,7 +150,7 @@ function validateIdentity(input: ProjectBookmarkInput): void {
 }
 
 function projectFolderPrefix(projectId: string): string {
-  return `Yiru · ${projectId} · `
+  return `AgentStart · ${projectId} · `
 }
 
 function sanitizeTitle(value: string): string {

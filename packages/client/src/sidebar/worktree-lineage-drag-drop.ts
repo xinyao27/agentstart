@@ -6,10 +6,7 @@ const LINEAGE_DROP_ZONE_MAX_HEIGHT_PX = 44
 
 type VerticalRect = Pick<DOMRect, 'top' | 'bottom'>
 
-export function isWorktreeLineageDropZoneHit(args: {
-  pointerY: number
-  rect: VerticalRect
-}): boolean {
+function isWorktreeLineageDropZoneHit(args: { pointerY: number; rect: VerticalRect }): boolean {
   const height = Math.max(0, args.rect.bottom - args.rect.top)
   if (height <= 0) {
     return false

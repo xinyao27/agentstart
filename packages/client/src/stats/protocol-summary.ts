@@ -13,8 +13,8 @@ import {
   type StatsProviderUsage,
   type StatsSupplementalDailyUsage,
   type StatsSupplementalUsage
-} from '@yiru/protocol'
-import type { StatsSummary } from '@yiru/protocol/stats/values'
+} from '@agentstart/protocol'
+import type { StatsSummary } from '@agentstart/protocol/stats/values'
 
 export function mapProtocolStatsSummary(
   summary: GetSummaryResponse,

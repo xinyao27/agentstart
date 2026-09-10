@@ -2,13 +2,13 @@ export const GUEST_ARM_BASE_SCRIPT = `(function() {
   'use strict';
 
   // Why: page-owned lookalike state must never substitute its extractor for ours.
-  if (window.__yiruGrab) {
+  if (window.__agentstartGrab) {
     try {
-      if (typeof window.__yiruGrab.cleanup === 'function') {
-        window.__yiruGrab.cleanup();
+      if (typeof window.__agentstartGrab.cleanup === 'function') {
+        window.__agentstartGrab.cleanup();
       }
     } catch(e) {}
-    delete window.__yiruGrab;
+    delete window.__agentstartGrab;
   }
 
   var BUDGET = {

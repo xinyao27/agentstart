@@ -1,4 +1,4 @@
-import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
+import type { GitConflictOperation } from '@agentstart/protocol/git/status-types'
 import { translate } from '~renderer/i18n/i18n'
 
 import { resolveDropdownCommitItems } from './dropdown-commit-items'
@@ -39,7 +39,7 @@ export type DropdownItem = {
   variant?: 'default' | 'destructive'
 }
 
-export type DropdownSeparator = { kind: 'separator' }
+type DropdownSeparator = { kind: 'separator' }
 export type DropdownEntry = DropdownItem | DropdownSeparator
 
 /** Keep every row mounted so disabled reasons and menu ordering stay stable. */

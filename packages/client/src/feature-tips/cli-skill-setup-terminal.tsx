@@ -1,5 +1,5 @@
 import { toast } from 'sonner'
-import { YIRU_CLI_ORCHESTRATION_DEBUG_SKILL_INSTALL_COMMAND } from '~renderer/agent/feature-install-commands'
+import { AGENTSTART_CLI_ORCHESTRATION_DEBUG_SKILL_INSTALL_COMMAND } from '~renderer/agent/feature-install-commands'
 import { translate } from '~renderer/i18n/i18n'
 import { Copy } from '~renderer/icons/hugeicons'
 import { OnboardingInlineCommandTerminal } from '~renderer/onboarding/inline-command-terminal'
@@ -10,7 +10,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 export function CliSkillSetupTerminal(): React.JSX.Element {
   const handleCopySkillCommand = async (): Promise<void> => {
     try {
-      await shellClient.ui.writeClipboardText(YIRU_CLI_ORCHESTRATION_DEBUG_SKILL_INSTALL_COMMAND)
+      await shellClient.ui.writeClipboardText(
+        AGENTSTART_CLI_ORCHESTRATION_DEBUG_SKILL_INSTALL_COMMAND
+      )
       toast.success(
         translate(
           'auto.components.feature.tips.CliSkillSetupTerminal.b8ad063571',
@@ -31,9 +33,9 @@ export function CliSkillSetupTerminal(): React.JSX.Element {
 
   return (
     <div className="min-w-0">
-      <div className="border-border bg-muted/35 flex min-w-0 items-center gap-2 border px-3 py-2">
+      <div className="border-border bg-muted/35 flex min-w-0 items-center gap-2 rounded-md border px-3 py-2">
         <code className="scrollbar-sleek text-muted-foreground min-w-0 flex-1 overflow-x-auto font-mono text-xs whitespace-nowrap">
-          {YIRU_CLI_ORCHESTRATION_DEBUG_SKILL_INSTALL_COMMAND}
+          {AGENTSTART_CLI_ORCHESTRATION_DEBUG_SKILL_INSTALL_COMMAND}
         </code>
         <Tooltip>
           <TooltipTrigger
@@ -61,18 +63,18 @@ export function CliSkillSetupTerminal(): React.JSX.Element {
         </Tooltip>
       </div>
       <OnboardingInlineCommandTerminal
-        command={YIRU_CLI_ORCHESTRATION_DEBUG_SKILL_INSTALL_COMMAND}
+        command={AGENTSTART_CLI_ORCHESTRATION_DEBUG_SKILL_INSTALL_COMMAND}
         title={translate(
           'auto.components.feature.tips.CliSkillSetupTerminal.84e9576dac',
           'Skill setup'
         )}
         ariaLabel={translate(
           'auto.components.feature.tips.CliSkillSetupTerminal.43b60ec5c3',
-          'Yiru CLI and orchestration skill install terminal'
+          'AgentStart CLI and orchestration skill install terminal'
         )}
         description={translate(
           'auto.components.feature.tips.CliSkillSetupTerminal.1953e90447',
-          'Press Enter to install the Yiru CLI orchestration skill for your agents.'
+          'Press Enter to install the AgentStart CLI orchestration skill for your agents.'
         )}
         terminalHeightPx={280}
         terminalTopMarginPx={8}

@@ -1,10 +1,10 @@
-import { DEFAULT_REPO_BADGE_COLOR, REPO_COLORS } from '@yiru/protocol/project/appearance'
-import { normalizeRepoBadgeColor } from '@yiru/protocol/project/appearance'
+import { DEFAULT_REPO_BADGE_COLOR, REPO_COLORS } from '@agentstart/protocol/project/appearance'
+import { normalizeRepoBadgeColor } from '@agentstart/protocol/project/appearance'
 
 const PROJECT_GROUP_HEADER_KEY_PREFIX = 'repo:'
 const PROVIDER_PROJECT_HEADER_KEY_PREFIX = 'project:'
 
-export function resolveRepoHeaderColor(badgeColor: string | null | undefined): string {
+function resolveRepoHeaderColor(badgeColor: string | null | undefined): string {
   const normalizedBadgeColor = normalizeRepoBadgeColor(badgeColor)
   if (!normalizedBadgeColor) {
     return DEFAULT_REPO_BADGE_COLOR

@@ -1,6 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   DangerousApprovalCeremonyResponseSchema,
   type DangerousApprovalCeremonyResponse,
@@ -8,7 +8,7 @@ import {
   type DangerousApprovalServiceBeginRegistrationResponse,
   type DangerousApprovalServiceFinishApprovalResponse,
   type DangerousApprovalServiceStatusResponse
-} from '../generated/yiru/runtime/v1/dangerous_approval_pb.js'
+} from '../generated/agent_start/runtime/v1/dangerous_approval_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const DANGEROUS_APPROVAL_PROTOCOL_CAPABILITY = 'dangerousApproval.protobuf.v1' as const

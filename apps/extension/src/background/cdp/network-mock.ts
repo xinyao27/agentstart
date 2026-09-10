@@ -95,7 +95,7 @@ async function handlePausedRequest(
     await sendCdp(tabId, 'Fetch.continueRequest', { requestId }).catch(() => {})
     return
   }
-  const body = rule.mode === 'empty' ? '[]' : '{"error":"Simulated by Yiru"}'
+  const body = rule.mode === 'empty' ? '[]' : '{"error":"Simulated by AgentStart"}'
   await sendCdp(tabId, 'Fetch.fulfillRequest', {
     body: btoa(body),
     responseCode: rule.mode === 'empty' ? 200 : 500,

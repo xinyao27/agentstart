@@ -1,4 +1,4 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
 import { useAppStore } from '~renderer/store/state'
 
 export function dropCommandFinishedStatusIfSameTurn(
@@ -8,7 +8,7 @@ export function dropCommandFinishedStatusIfSameTurn(
 ): void {
   const state = useAppStore.getState()
   if (!entry) {
-    // Why: a Yiru-started agent can exit before its first hook status. The
+    // Why: a AgentStart-started agent can exit before its first hook status. The
     // launch registry was still created up front, so clear it on command exit.
     state.clearAgentLaunchConfig(paneKey)
     return

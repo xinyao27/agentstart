@@ -2,28 +2,28 @@ use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use std::time::Duration;
 
-use serde::Serialize;
-use thiserror::Error;
-use yiru_protocol::method_metadata::UnaryMethod;
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1HostRegistryServiceAdd as AddMethod,
-    YiruRuntimeV1HostRegistryServiceList as ListMethod,
-    YiruRuntimeV1HostRegistryServiceProbe as ProbeMethod,
-    YiruRuntimeV1HostRegistryServiceRemove as RemoveMethod,
+use agentstart_protocol::method_metadata::UnaryMethod;
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1HostRegistryServiceAdd as AddMethod,
+    AgentStartRuntimeV1HostRegistryServiceList as ListMethod,
+    AgentStartRuntimeV1HostRegistryServiceProbe as ProbeMethod,
+    AgentStartRuntimeV1HostRegistryServiceRemove as RemoveMethod,
 };
-use yiru_protocol::protocol::v1::StatusCode;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::StatusCode;
+use agentstart_protocol::runtime::v1::{
     HostCapability, HostCapabilityKind, HostKind, HostPlatform, HostRegistryServiceAddRequest,
     HostRegistryServiceAddResponse, HostRegistryServiceListRequest,
     HostRegistryServiceListResponse, HostRegistryServiceProbeRequest,
     HostRegistryServiceProbeResponse, HostRegistryServiceRemoveRequest,
     HostRegistryServiceRemoveResponse, HostRevisionConflict, RegisteredHost,
 };
-use yiru_protocol::transport::decode;
+use agentstart_protocol::transport::decode;
+use serde::Serialize;
+use thiserror::Error;
 
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 
-const REVISION_CONFLICT_TYPE: &str = "yiru.runtime.v1.HostRevisionConflict";
+const REVISION_CONFLICT_TYPE: &str = "agentstart.runtime.v1.HostRevisionConflict";
 const HOST_CALL_TIMEOUT: Duration = Duration::from_secs(10);
 const HOST_PROBE_TIMEOUT: Duration = Duration::from_secs(30);
 

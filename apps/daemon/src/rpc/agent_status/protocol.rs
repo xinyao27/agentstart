@@ -1,7 +1,6 @@
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::agent_status_service_subscribe_response::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::agent_status_service_subscribe_response::Event;
+use agentstart_protocol::runtime::v1::{
     AgentInterruptIntent as ProtocolInterruptIntent, AgentMigrationUnsupportedPtyEntry,
     AgentMigrationUnsupportedReason, AgentMigrationUnsupportedSource, AgentProviderSession,
     AgentProviderSessionKey, AgentStatusNullableString, AgentStatusPaneKey, AgentStatusPtyKey,
@@ -18,7 +17,8 @@ use yiru_protocol::runtime::v1::{
     AgentStatusSubagent, AgentStatusSubscribeReady, AgentStatusSubscribeSnapshot,
     AgentSubagentState, agent_status_nullable_string,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::Value;
 
 use crate::rpc::protocol_call::ProtocolCallContext;
 

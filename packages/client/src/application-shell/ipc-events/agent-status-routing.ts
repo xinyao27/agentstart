@@ -1,5 +1,5 @@
-import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { ParsedAgentStatusPayload } from '@agentstart/protocol/agent/status-records'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import { titleHasAgentName } from '~renderer/agent/title/tokens'
 import { getRepoMapFromState, getWorktreeMapFromState } from '~renderer/store/selectors'
 import type { AppState } from '~renderer/store/types'

@@ -1,5 +1,5 @@
-import type { GitHubRepositoryIdentity } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { RepoIcon } from '@yiru/protocol/project/icon'
+import type { GitHubRepositoryIdentity } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { RepoIcon } from '@agentstart/protocol/project/icon'
 import type { CSSProperties, RefObject } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { MagnifyingGlass as Search, ArrowLeft } from '~renderer/icons/hugeicons'
@@ -139,7 +139,7 @@ export function SettingsSidebar({
   const searchShortcutCombos = useShortcutKeyComboDetails('settings.search')
   const navItemClassName = (isActive: boolean): string =>
     cn(
-      'flex w-full items-center justify-start px-3 py-1.5 text-left text-[13px] outline-none transition-colors duration-150',
+      'flex w-full items-center justify-start gap-2 px-3 py-1.5 text-left text-[13px] outline-none transition-colors duration-150 rounded-lg',
       isActive
         ? 'bg-accent text-accent-foreground font-medium'
         : 'text-sidebar-foreground/60 hover:bg-accent hover:text-sidebar-foreground'
@@ -166,7 +166,7 @@ export function SettingsSidebar({
   }
   const installStatusClassName = (status: SettingsNavInstallStatus): string =>
     cn(
-      'ml-auto shrink-0 border px-1.5 py-0.5 text-[10px] font-medium leading-none',
+      'ml-auto shrink-0 rounded-full border px-1.5 py-0.5 text-[10px] font-medium leading-none',
       status === 'installed' || status === 'up-to-date'
         ? 'border-green-700/25 bg-green-700/10 text-green-700 dark:border-green-300/25 dark:bg-green-300/10 dark:text-green-300'
         : status === 'update-available'
@@ -284,7 +284,7 @@ export function SettingsSidebar({
                             {installStatusLabel(section.installStatus)}
                           </span>
                         ) : section.badge ? (
-                          <span className="bg-muted text-muted-foreground ml-auto px-1.5 py-0.5 text-[9px] font-medium tracking-wider uppercase">
+                          <span className="bg-muted text-muted-foreground ml-auto rounded-full px-1.5 py-0.5 text-[9px] font-medium tracking-wider uppercase">
                             {section.badge}
                           </span>
                         ) : null}

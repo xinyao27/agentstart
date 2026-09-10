@@ -1,4 +1,4 @@
-import type { GrokAccountStatus } from '@yiru/protocol/accounts-values'
+import type { GrokAccountStatus } from '@agentstart/protocol/accounts-values'
 import { useEffect, useState } from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
@@ -99,7 +99,7 @@ export function GrokAccountsSection(): React.JSX.Element {
 
       <div
         className={cn(
-          'flex items-start gap-3 border bg-muted/20 p-3',
+          'flex items-start gap-3 rounded-lg border bg-muted/20 p-3',
           signedIn && tokenFresh ? 'border-border/60' : 'border-border/40'
         )}
       >
@@ -124,11 +124,11 @@ export function GrokAccountsSection(): React.JSX.Element {
                 {tokenFresh
                   ? translate(
                       'auto.components.settings.GrokAccountsSection.b36fa2c908',
-                      'Signed in. Yiru reads the Grok CLI session stored on disk.'
+                      'Signed in. AgentStart reads the Grok CLI session stored on disk.'
                     )
                   : translate(
                       'auto.components.settings.GrokAccountsSection.f08c41de73',
-                      'Session expired — run grok on the computer running Yiru and wait for it to start. If prompted, complete sign-in, then click Refresh usage. No chat message is needed.'
+                      'Session expired — run grok on the computer running AgentStart and wait for it to start. If prompted, complete sign-in, then click Refresh usage. No chat message is needed.'
                     )}
               </p>
             </>

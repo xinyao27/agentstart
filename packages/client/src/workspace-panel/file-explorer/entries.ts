@@ -1,4 +1,4 @@
-import type { DirectoryEntry as DirEntry } from '@yiru/protocol/files/values'
+import type { DirectoryEntry as DirEntry } from '@agentstart/protocol/files/values'
 
 export function shouldIncludeFileExplorerEntry(entry: DirEntry): boolean {
   return entry.name !== '.git' && entry.name !== 'node_modules'

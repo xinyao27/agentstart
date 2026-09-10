@@ -16,7 +16,9 @@ pub(in crate::worktrees) async fn known_links(
     if let Some(paths) = repo.get("symlinkPaths").and_then(Value::as_array) {
         configured.extend(paths.iter().filter_map(Value::as_str).map(str::to_owned));
     }
-    let config_path = filesystem.paths().join(&[&worktree.repo_path, "yiru.yaml"]);
+    let config_path = filesystem
+        .paths()
+        .join(&[&worktree.repo_path, "agentstart.yaml"]);
     if let Some(text) = filesystem.read_text(&config_path, 1_024 * 1_024).await?
         && let Ok(value) = serde_saphyr::from_str::<Value>(&text)
         && let Some(paths) = value

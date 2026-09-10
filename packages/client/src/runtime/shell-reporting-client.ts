@@ -1,21 +1,25 @@
-import type { DiagnosticsBundle, DiagnosticsStatus, DiagnosticsUploadResult } from '@yiru/protocol'
-import { SHELL_TELEMETRY_PROTOCOL_CAPABILITY, ShellTelemetryClient } from '@yiru/protocol'
-import { CrashReportsClient } from '@yiru/protocol/crash-reports'
+import type {
+  DiagnosticsBundle,
+  DiagnosticsStatus,
+  DiagnosticsUploadResult
+} from '@agentstart/protocol'
+import { SHELL_TELEMETRY_PROTOCOL_CAPABILITY, ShellTelemetryClient } from '@agentstart/protocol'
+import { CrashReportsClient } from '@agentstart/protocol/crash-reports'
 import type {
   CrashReportCopyDiagnosticsArgs,
   CrashReportCopyDiagnosticsResult
-} from '@yiru/protocol/crash-reports/copy-values'
-import type { RendererErrorReportArgs } from '@yiru/protocol/crash-reports/renderer-error'
+} from '@agentstart/protocol/crash-reports/copy-values'
+import type { RendererErrorReportArgs } from '@agentstart/protocol/crash-reports/renderer-error'
 import type {
   CrashReportBreadcrumbData,
   CrashReportRecord,
   CrashReportSubmitArgs,
   CrashReportSubmitResult,
   RendererErrorReportResult
-} from '@yiru/protocol/crash-reports/values'
-import { FeedbackClient } from '@yiru/protocol/feedback'
-import type { FeedbackSubmitArgs, FeedbackSubmitResult } from '@yiru/protocol/feedback/values'
-import type { TelemetryConsentState } from '@yiru/protocol/telemetry/consent'
+} from '@agentstart/protocol/crash-reports/values'
+import { FeedbackClient } from '@agentstart/protocol/feedback'
+import type { FeedbackSubmitArgs, FeedbackSubmitResult } from '@agentstart/protocol/feedback/values'
+import type { TelemetryConsentState } from '@agentstart/protocol/telemetry/consent'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'

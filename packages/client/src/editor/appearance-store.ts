@@ -1,7 +1,7 @@
 import type {
   ActiveRightSidebarTab,
   RightSidebarExplorerView
-} from '@yiru/protocol/settings/ui-state'
+} from '@agentstart/protocol/settings/ui-state'
 
 import type { ActivityBarPosition, EditorViewMode, MarkdownViewMode } from './file-model'
 

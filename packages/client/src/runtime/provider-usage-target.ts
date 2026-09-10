@@ -1,4 +1,4 @@
-import { PROVIDER_USAGE_PROTOCOL_CAPABILITY, ProviderUsageClient } from '@yiru/protocol'
+import { PROVIDER_USAGE_PROTOCOL_CAPABILITY, ProviderUsageClient } from '@agentstart/protocol'
 
 import {
   openConfiguredBrowserHostProtocol,

@@ -1,4 +1,4 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
 import type { PointerEvent } from 'react'
 
 import {

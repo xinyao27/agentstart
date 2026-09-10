@@ -8,7 +8,7 @@ import {
   AgentSessionServiceListResponseSchema,
   AgentSessionServiceFollowupRequestSchema,
   AgentSessionServiceFollowupResponseSchema
-} from '../../generated/yiru/runtime/v1/agent_session_pb.js'
+} from '../../generated/agent_start/runtime/v1/agent_session_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from '../transport.js'
 
 export class AgentSessionClient {
@@ -64,6 +64,6 @@ export class AgentSessionClient {
   }
 }
 
-export type { AgentSession } from '../../generated/yiru/runtime/v1/agent_session_pb.js'
+export type { AgentSession } from '../../generated/agent_start/runtime/v1/agent_session_pb.js'
 
-export { AgentSessionStatus } from '../../generated/yiru/runtime/v1/agent_session_pb.js'
+export { AgentSessionStatus } from '../../generated/agent_start/runtime/v1/agent_session_pb.js'

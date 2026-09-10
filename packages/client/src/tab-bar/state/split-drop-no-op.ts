@@ -1,4 +1,4 @@
-import type { TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
+import type { TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
 import type { TabSplitDirection } from '~renderer/tab-bar/split-direction'
 
 function getDirectLayoutSiblingOnSplitSide(
@@ -29,7 +29,7 @@ function getDirectLayoutSiblingOnSplitSide(
   return null
 }
 
-export function findLayoutSiblingOnSplitSide(
+function findLayoutSiblingOnSplitSide(
   root: TabGroupLayoutNode,
   targetGroupId: string,
   splitDirection: TabSplitDirection

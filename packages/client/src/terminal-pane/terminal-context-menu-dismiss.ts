@@ -1,6 +1,6 @@
 import type { ContextMenu as ContextMenuPrimitive } from '@base-ui/react/context-menu'
 
-export function shouldIgnoreTerminalMenuPointerDownOutside(args: {
+function shouldIgnoreTerminalMenuPointerDownOutside(args: {
   openedAtMs: number
   nowMs: number
 }): boolean {

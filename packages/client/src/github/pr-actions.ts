@@ -1,5 +1,5 @@
-import { LOCAL_EXECUTION_HOST_ID, getRepoExecutionHostId } from '@yiru/protocol/host/identity'
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import { LOCAL_EXECUTION_HOST_ID, getRepoExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
 import type { StateCreator } from 'zustand'
 import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
 import { openGitHubTarget } from '~renderer/runtime/github-target'

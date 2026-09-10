@@ -1,5 +1,5 @@
-import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitBranchChangeEntry } from '@agentstart/protocol/git/branch-compare-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 
 export type CombinedDiffMode = 'all' | 'uncommitted' | 'branch' | 'commit'
 export type CombinedDiffEntry = GitStatusEntry | GitBranchChangeEntry
@@ -7,7 +7,7 @@ export type CombinedDiffEntry = GitStatusEntry | GitBranchChangeEntry
 // Why: the combined diff viewer is mounted by the editor surface, so outside
 // panels ask it to reveal a section through a window event instead of reaching
 // into its virtualizer state.
-export const COMBINED_DIFF_REVEAL_SECTION_EVENT = 'yiru:combined-diff-reveal-section'
+export const COMBINED_DIFF_REVEAL_SECTION_EVENT = 'agentstart:combined-diff-reveal-section'
 
 export type CombinedDiffRevealSectionRequest = {
   worktreeId: string
@@ -30,7 +30,7 @@ export function createCombinedDiffSectionIndexMap(
   return new Map(sections.map((section, index) => [section.key, index]))
 }
 
-export function getCombinedDiffSectionNavigationIndex({
+function getCombinedDiffSectionNavigationIndex({
   mode,
   entry,
   sectionIndexByKey

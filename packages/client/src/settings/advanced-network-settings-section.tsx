@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type React from 'react'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
@@ -16,7 +16,7 @@ import { matchesSettingsSearch, normalizeSettingsSearchQuery } from './search'
 import { SearchableSetting } from './searchable-setting'
 
 /** Open the proxy fields automatically when a search matches this section. */
-export function shouldOpenNetworkProxyConfig(searchQuery: string): boolean {
+function shouldOpenNetworkProxyConfig(searchQuery: string): boolean {
   return (
     normalizeSettingsSearchQuery(searchQuery) !== '' &&
     matchesSettingsSearch(searchQuery, getAdvancedNetworkSearchEntries())
@@ -24,19 +24,17 @@ export function shouldOpenNetworkProxyConfig(searchQuery: string): boolean {
 }
 
 /** A configured proxy should also reveal the fields, so users see the value. */
-export function hasConfiguredNetworkProxy(settings: GlobalSettings): boolean {
+function hasConfiguredNetworkProxy(settings: GlobalSettings): boolean {
   return Boolean(settings.httpProxyUrl?.trim() || settings.httpProxyBypassRules?.trim())
 }
 
-export type HttpProxyUrlDraftState = {
+type HttpProxyUrlDraftState = {
   sourceValue: string
   draft: string
   error: string | null
 }
 
-export function createHttpProxyUrlDraftState(
-  httpProxyUrl: string | undefined
-): HttpProxyUrlDraftState {
+function createHttpProxyUrlDraftState(httpProxyUrl: string | undefined): HttpProxyUrlDraftState {
   const sourceValue = httpProxyUrl ?? ''
   return {
     sourceValue,
@@ -53,7 +51,7 @@ function resolveHttpProxyUrlDraftState(
   return state.sourceValue === sourceValue ? state : createHttpProxyUrlDraftState(httpProxyUrl)
 }
 
-export function updateHttpProxyUrlDraftState(
+function updateHttpProxyUrlDraftState(
   state: HttpProxyUrlDraftState,
   httpProxyUrl: string | undefined,
   draft: string
@@ -67,7 +65,7 @@ export function updateHttpProxyUrlDraftState(
   }
 }
 
-export function setHttpProxyUrlDraftErrorState(
+function setHttpProxyUrlDraftErrorState(
   state: HttpProxyUrlDraftState,
   httpProxyUrl: string | undefined,
   error: string
@@ -78,12 +76,12 @@ export function setHttpProxyUrlDraftErrorState(
   }
 }
 
-export type HttpProxyBypassRulesDraftState = {
+type HttpProxyBypassRulesDraftState = {
   sourceValue: string
   draft: string
 }
 
-export function createHttpProxyBypassRulesDraftState(
+function createHttpProxyBypassRulesDraftState(
   httpProxyBypassRules: string | undefined
 ): HttpProxyBypassRulesDraftState {
   const sourceValue = httpProxyBypassRules ?? ''
@@ -103,7 +101,7 @@ function resolveHttpProxyBypassRulesDraftState(
     : createHttpProxyBypassRulesDraftState(httpProxyBypassRules)
 }
 
-export function updateHttpProxyBypassRulesDraftState(
+function updateHttpProxyBypassRulesDraftState(
   state: HttpProxyBypassRulesDraftState,
   httpProxyBypassRules: string | undefined,
   draft: string
@@ -207,7 +205,7 @@ export function AdvancedNetworkSettingsSection({
       )}
       description={translate(
         'auto.components.settings.AdvancedNetworkSettingsSection.823e0f15b1',
-        'Proxy URL for Yiru network requests and local terminal children.'
+        'Proxy URL for AgentStart network requests and local terminal children.'
       )}
       keywords={[
         'proxy',
@@ -252,7 +250,7 @@ export function AdvancedNetworkSettingsSection({
           }
         />
         <CollapsibleContent>
-          <div className="border-border/60 bg-muted/20 mt-2 space-y-4 border px-3 py-3">
+          <div className="border-border/60 bg-muted/20 mt-2 space-y-4 rounded-md border px-3 py-3">
             <div className="space-y-2">
               <Label htmlFor="settings-http-proxy-url">
                 {translate(

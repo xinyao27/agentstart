@@ -1,6 +1,10 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
-import { isTerminalLeafId, makePaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
+import {
+  isTerminalLeafId,
+  makePaneKey,
+  parsePaneKey
+} from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
 import { useEffect } from 'react'
 import type { RetainedAgentEntry } from '~renderer/agent/status-state/slice'
 import { useAppStore } from '~renderer/store/state'
@@ -53,7 +57,7 @@ function computeAutoAckTargets(
   return targets
 }
 
-export function computeViewedAgentCompletionPaneKey(
+function computeViewedAgentCompletionPaneKey(
   state: {
     unreadAgentCompletionPanes: Record<string, true>
   },
@@ -68,7 +72,7 @@ export function computeViewedAgentCompletionPaneKey(
   return state.unreadAgentCompletionPanes[targetKey] ? targetKey : null
 }
 
-export function shouldClearViewedAgentWorktreeUnread(
+function shouldClearViewedAgentWorktreeUnread(
   state: {
     tabsByWorktree: Record<string, { id: string }[]>
     unreadAgentCompletionPanes: Record<string, true>
@@ -117,7 +121,7 @@ type ViewedAgentAttentionActions = {
   clearTerminalPaneUnread: (paneKey: string) => void
 }
 
-export function acknowledgeViewedAgentAttention(
+function acknowledgeViewedAgentAttention(
   state: ViewedAgentAttentionActions,
   args: {
     activeWorktreeId: string | null

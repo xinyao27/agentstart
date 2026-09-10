@@ -1,9 +1,9 @@
 use std::sync::Arc;
 use std::time::Duration;
 
+use agentstart_protocol::method_metadata::MethodMetadata;
 use tokio::sync::{Semaphore, oneshot, watch};
 use tokio::time::{Instant, timeout_at};
-use yiru_protocol::method_metadata::MethodMetadata;
 
 use super::connection::ClientCommand;
 use super::{ProtocolClient, ProtocolPeerError, RawProtocolStream, call_deadline, deadline_error};
@@ -140,7 +140,7 @@ async fn send_payload(
 
 fn cancelled() -> ProtocolPeerError {
     ProtocolPeerError::Remote(super::StatusDisplay(super::protocol_status(
-        yiru_protocol::protocol::v1::StatusCode::Cancelled,
+        agentstart_protocol::protocol::v1::StatusCode::Cancelled,
         "Duplex call ended",
     )))
 }

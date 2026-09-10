@@ -1,4 +1,4 @@
-// Why: Prost does not emit Yiru method-policy metadata needed by the daemon dispatcher.
+// Why: Prost does not emit AgentStart method-policy metadata needed by the daemon dispatcher.
 #![forbid(unsafe_code)]
 
 use std::collections::HashSet;
@@ -12,9 +12,9 @@ use std::path::{Path, PathBuf};
 use heck::{ToSnakeCase, ToUpperCamelCase};
 use prost_reflect::{DescriptorPool, DynamicMessage, Kind, MessageDescriptor, ReflectMessage};
 
-const METHOD_METADATA_FILE: &str = "yiru.method_metadata.rs";
-const METHOD_POLICY_EXTENSION: &str = "yiru.protocol.v1.method_policy";
-const METHOD_TRANSPORT_POLICY_EXTENSION: &str = "yiru.protocol.v1.method_transport_policy";
+const METHOD_METADATA_FILE: &str = "agent_start.method_metadata.rs";
+const METHOD_POLICY_EXTENSION: &str = "agent_start.protocol.v1.method_policy";
+const METHOD_TRANSPORT_POLICY_EXTENSION: &str = "agent_start.protocol.v1.method_transport_policy";
 const STREAM_RECONNECT_RESTART_FROM_REQUEST: i32 = 2;
 
 struct MethodRecord {
@@ -44,7 +44,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     println!("cargo:rerun-if-changed={}", proto_root.display());
-    let descriptor_path = output_root.join("yiru.file_descriptor_set.bin");
+    let descriptor_path = output_root.join("agent_start.file_descriptor_set.bin");
     let protoc = protoc_bin_vendored::protoc_bin_path()?;
     let mut config = prost_build::Config::new();
     config.protoc_executable(protoc);
@@ -95,13 +95,13 @@ fn generate_method_metadata(pool: &DescriptorPool) -> Result<String, Box<dyn Err
     let mut records = Vec::new();
     for service in pool
         .services()
-        .filter(|service| service.package_name().starts_with("yiru."))
+        .filter(|service| service.package_name().starts_with("agent_start."))
     {
         for method in service.methods() {
             let options = method.options();
             if !options.has_extension(&policy_extension) {
                 return Err(invalid_data(&format!(
-                    "{} has no Yiru method policy",
+                    "{} has no AgentStart method policy",
                     method.full_name()
                 ))
                 .into());
@@ -109,13 +109,13 @@ fn generate_method_metadata(pool: &DescriptorPool) -> Result<String, Box<dyn Err
             let policy_value = options.get_extension(&policy_extension);
             let policy = policy_value.as_message().ok_or_else(|| {
                 invalid_data(&format!(
-                    "{} has a malformed Yiru method policy",
+                    "{} has a malformed AgentStart method policy",
                     method.full_name()
                 ))
             })?;
             if !options.has_extension(&transport_policy_extension) {
                 return Err(invalid_data(&format!(
-                    "{} has no Yiru method transport policy",
+                    "{} has no AgentStart method transport policy",
                     method.full_name()
                 ))
                 .into());
@@ -123,7 +123,7 @@ fn generate_method_metadata(pool: &DescriptorPool) -> Result<String, Box<dyn Err
             let transport_policy_value = options.get_extension(&transport_policy_extension);
             let transport_policy = transport_policy_value.as_message().ok_or_else(|| {
                 invalid_data(&format!(
-                    "{} has a malformed Yiru method transport policy",
+                    "{} has a malformed AgentStart method transport policy",
                     method.full_name()
                 ))
             })?;
@@ -155,7 +155,9 @@ fn generate_method_metadata(pool: &DescriptorPool) -> Result<String, Box<dyn Err
         }
     }
     if records.is_empty() {
-        return Err(invalid_data("Protocol descriptors contain no Yiru service methods").into());
+        return Err(
+            invalid_data("Protocol descriptors contain no AgentStart service methods").into(),
+        );
     }
     records.sort_by(|left, right| left.procedure.cmp(&right.procedure));
     validate_unique_methods(&records)?;
@@ -241,9 +243,9 @@ fn validate_unique_methods(records: &[MethodRecord]) -> io::Result<()> {
 
 fn rust_message_path(message: MessageDescriptor) -> io::Result<String> {
     let package = message.package_name().to_owned();
-    let Some(package) = package.strip_prefix("yiru.") else {
+    let Some(package) = package.strip_prefix("agent_start.") else {
         return Err(invalid_data(&format!(
-            "{} is outside the yiru package tree",
+            "{} is outside the agent_start package tree",
             message.full_name()
         )));
     };

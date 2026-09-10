@@ -1,7 +1,7 @@
-import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
-import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
-import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { StartupCommandDelivery } from '@agentstart/protocol/agent/launch/startup-delivery'
+import type { SleepingAgentLaunchConfig } from '@agentstart/protocol/agent/session-resume'
+import type { ParsedAgentStatusPayload } from '@agentstart/protocol/agent/status-records'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import type { PtyDataMeta } from '~renderer/runtime/pty-data-meta'
 
 export type PtyBufferSnapshot = {
@@ -29,7 +29,7 @@ export type PtyBufferSnapshot = {
   pendingEscapeTailAnsi?: string
 }
 
-export type LocalPtySessionMetadata = {
+type LocalPtySessionMetadata = {
   cwd?: string
   shellOverride?: string
 }

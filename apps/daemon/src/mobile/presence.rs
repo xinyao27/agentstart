@@ -19,12 +19,6 @@ impl MobilePresence {
             presence: self.clone(),
         }
     }
-
-    pub(crate) fn is_connected(&self, device_id: &str) -> bool {
-        lock(&self.connections)
-            .values()
-            .any(|connected| connected == device_id)
-    }
 }
 
 impl Drop for MobilePresenceLease {

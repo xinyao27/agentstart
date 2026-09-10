@@ -1,6 +1,6 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ProjectHostSetupKind,
   ProjectHostSetupMethod,
@@ -15,7 +15,7 @@ import {
   ProjectHostSetupServiceUpdateRequestSchema,
   ProjectHostSetupState,
   ProjectHostSetupUpdatesSchema
-} from '../generated/yiru/runtime/v1/project_host_setup_pb.js'
+} from '../generated/agent_start/runtime/v1/project_host_setup_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import {
   projectHostSetupList,

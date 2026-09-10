@@ -19,7 +19,7 @@ pub(super) fn clear_active_runtime_environments(
 ) -> Result<(), ProfileError> {
     let profile_index = index::load(root)?;
     for directory in index::profile_directories(root, &profile_index)? {
-        for file_name in ["yiru-data-settings.json", "yiru-data.json"] {
+        for file_name in ["agentstart-data-settings.json", "agentstart-data.json"] {
             let primary = directory.join(file_name);
             clear_settings_file(&primary, environment_ids)?;
             for index in 0..5 {

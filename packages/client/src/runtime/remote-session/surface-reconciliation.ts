@@ -1,5 +1,5 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { encodeRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { encodeRuntimePtyId } from '@agentstart/protocol/terminal-identity'
 
 import { toRemoteTerminalSurfaceTabId } from '../remote-terminal-surface-id'
 import { buildHostGroupIdByTabId, chooseTargetGroupId } from './group-mirror'

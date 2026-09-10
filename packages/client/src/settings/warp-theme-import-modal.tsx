@@ -1,4 +1,4 @@
-import type { WarpThemeImportPreviewTheme } from '@yiru/protocol/terminal/theme-types'
+import type { WarpThemeImportPreviewTheme } from '@agentstart/protocol/terminal/theme-types'
 import { translate } from '~renderer/i18n/i18n'
 import { FolderOpen, FileArrowUp as FileUp } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
@@ -45,7 +45,7 @@ function ThemeSwatches({ theme }: { theme: WarpThemeImportPreviewTheme }): React
     theme.terminal.white
   ]
   return (
-    <span className="border-border/60 flex shrink-0 overflow-hidden border">
+    <span className="border-border/60 flex shrink-0 overflow-hidden rounded-sm border">
       {colors.map((color, index) => (
         <span
           key={index}
@@ -95,11 +95,11 @@ export function WarpThemeImportModal({
             {mode === 'yaml'
               ? translate(
                   'auto.components.settings.WarpThemeImportModal.yaml_description',
-                  'Import theme YAML files (Warp format) as Yiru terminal themes.'
+                  'Import theme YAML files (Warp format) as AgentStart terminal themes.'
                 )
               : translate(
                   'auto.components.settings.WarpThemeImportModal.description',
-                  'Import Warp themes as Yiru terminal themes.'
+                  'Import Warp themes as AgentStart terminal themes.'
                 )}
           </DialogDescription>
         </DialogHeader>
@@ -185,7 +185,7 @@ export function WarpThemeImportModal({
                 </Button>
               </div>
 
-              <div className="border-border/50 border">
+              <div className="border-border/50 rounded-lg border">
                 <ScrollArea className="h-72">
                   <div className="space-y-1 p-2">
                     {themes.map((theme) => {
@@ -207,7 +207,7 @@ export function WarpThemeImportModal({
                           <span
                             aria-hidden="true"
                             className={cn(
-                              'flex size-4 shrink-0 items-center justify-center border text-[10px] leading-none',
+                              'flex size-4 shrink-0 items-center justify-center rounded-sm border text-[10px] leading-none',
                               selected
                                 ? 'border-accent-foreground bg-accent-foreground text-accent'
                                 : 'border-border bg-background'
@@ -261,7 +261,7 @@ export function WarpThemeImportModal({
                 <p>
                   {translate(
                     'auto.components.settings.WarpThemeImportModal.builtin_themes_hint',
-                    "Warp's preloaded themes are part of the Warp app and can't be read from disk. Yiru already includes most of them, like Dracula, Gruvbox, Solarized, and Tokyo Night."
+                    "Warp's preloaded themes are part of the Warp app and can't be read from disk. AgentStart already includes most of them, like Dracula, Gruvbox, Solarized, and Tokyo Night."
                   )}
                 </p>
               ) : null}
@@ -285,7 +285,7 @@ export function WarpThemeImportModal({
           )}
 
           {!loading && preview && skippedCount > 0 ? (
-            <div className="border-border/50 border p-3">
+            <div className="border-border/50 rounded-lg border p-3">
               <p className="mb-2 text-xs font-medium">
                 {translate(
                   'auto.components.settings.WarpThemeImportModal.skipped_files',

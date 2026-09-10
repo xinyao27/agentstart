@@ -1,4 +1,4 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
 import { getExecutionHostLabel } from '~renderer/execution-host/labels'
 
 import type { NewWorkspaceProjectOption } from './new-workspace-project-options'

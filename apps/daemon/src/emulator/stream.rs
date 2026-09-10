@@ -25,7 +25,7 @@ pub(crate) fn stream_url(stream_url: &str, stream_key: Option<&str>) -> Result<U
     }
     url.query_pairs_mut().append_pair("raw", "1");
     if let Some(stream_key) = stream_key {
-        url.query_pairs_mut().append_pair("_yiru", stream_key);
+        url.query_pairs_mut().append_pair("_agentstart", stream_key);
     }
     Ok(url)
 }

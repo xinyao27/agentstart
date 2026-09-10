@@ -146,7 +146,7 @@ export default function RecentTabSwitcher(): React.JSX.Element | null {
   return createPortal(
     <div className="pointer-events-none fixed inset-0 z-[100] flex items-start justify-center pt-[12vh]">
       <div
-        className="border-border bg-popover text-popover-foreground w-[min(520px,calc(100vw-48px))] overflow-hidden border"
+        className="border-border bg-popover text-popover-foreground w-[min(520px,calc(100vw-48px))] overflow-hidden rounded-lg border"
         role="listbox"
         aria-label={translate(
           'auto.components.tab.bar.RecentTabSwitcher.07ad4cd0b7',
@@ -171,7 +171,9 @@ export default function RecentTabSwitcher(): React.JSX.Element | null {
               >
                 <TabIcon item={item} />
                 <span className="min-w-0 flex-1 truncate">{item.label}</span>
-                {item.isDirty ? <span className="bg-muted-foreground size-1.5 shrink-0" /> : null}
+                {item.isDirty ? (
+                  <span className="bg-muted-foreground size-1.5 shrink-0 rounded-full" />
+                ) : null}
               </div>
             )
           })}

@@ -1,29 +1,28 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
-import type { WorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
-import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
+import type { WorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@agentstart/protocol/workspace/source'
+import type { WorkspaceStatus } from '@agentstart/protocol/workspace/status/model'
 import type {
   CreateWorktreeResult,
   ForceDeleteWorktreeBranchResult,
   RemoveWorktreeResult,
   WorktreeBaseStatusEvent
-} from '@yiru/protocol/worktree/create-result'
-import type { SetupDecision } from '@yiru/protocol/worktree/hooks'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
-import type { WorkspaceLineage, WorktreeLineage } from '@yiru/protocol/worktree/lineage'
+} from '@agentstart/protocol/worktree/create-result'
+import type { SetupDecision } from '@agentstart/protocol/worktree/hooks'
+import type { WorkspaceLineage, WorktreeLineage } from '@agentstart/protocol/worktree/lineage'
 import type {
   DetectedWorktreeListResult,
   DetectedWorktree,
   Worktree,
   WorktreeMeta
-} from '@yiru/protocol/worktree/model'
-import type { CreateSparseCheckoutRequest } from '@yiru/protocol/worktree/sparse'
+} from '@agentstart/protocol/worktree/model'
+import type { CreateSparseCheckoutRequest } from '@agentstart/protocol/worktree/sparse'
 import type { TerminalGitHubPRLink } from '~renderer/runtime/terminal-side-effect-client'
 import type { PendingWorktreeCreation } from '~renderer/worktree-creation/pending'
 import type { WorktreeStartupLaunch } from '~renderer/worktree/create-model'
 import type { WorktreeForceDeleteReason } from '~renderer/worktree/removal-policy'
-export { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+export { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 
 export type WorktreeDeleteState = {
   isDeleting: boolean
@@ -34,15 +33,15 @@ export type WorktreeDeleteState = {
   lockReason?: string | null
 }
 
-export type WorktreeMetaUpdateGuard = (worktree: Worktree | DetectedWorktree | undefined) => boolean
+type WorktreeMetaUpdateGuard = (worktree: Worktree | DetectedWorktree | undefined) => boolean
 
-export type WorktreeMetaUpdateOptions = {
+type WorktreeMetaUpdateOptions = {
   shouldApply?: WorktreeMetaUpdateGuard
   /** Skip the automatic review refetch when the caller owns an equivalent refresh. */
   suppressHostedReviewRefresh?: boolean
 }
 
-export type WorktreeRenameRequest = {
+type WorktreeRenameRequest = {
   worktreeId: string
   rowKey?: string
 }
@@ -265,31 +264,4 @@ export function findWorktreeById(
   }
 
   return undefined
-}
-
-export function applyWorktreeUpdates(
-  worktreesByRepo: Record<string, Worktree[]>,
-  worktreeId: string,
-  updates: Partial<WorktreeMeta>
-): Record<string, Worktree[]> {
-  const repoId = getRepoIdFromWorktreeId(worktreeId)
-  const worktrees = worktreesByRepo[repoId]
-  if (!worktrees) {
-    return worktreesByRepo
-  }
-
-  let changed = false
-  const nextWorktrees = worktrees.map((worktree) => {
-    if (worktree.id !== worktreeId) {
-      return worktree
-    }
-
-    changed = true
-    return { ...worktree, ...updates }
-  })
-  if (!changed) {
-    return worktreesByRepo
-  }
-
-  return { ...worktreesByRepo, [repoId]: nextWorktrees }
 }

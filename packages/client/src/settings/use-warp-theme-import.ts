@@ -1,9 +1,9 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type {
   TerminalCustomTheme,
   WarpThemeImportPreview,
   WarpThemeImportSource
-} from '@yiru/protocol/terminal/theme-types'
+} from '@agentstart/protocol/terminal/theme-types'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -15,7 +15,7 @@ import {
 } from '~renderer/terminal/themes/custom'
 
 /** Which entry point opened the import flow; only affects modal copy. */
-export type ThemeImportMode = 'warp' | 'yaml'
+type ThemeImportMode = 'warp' | 'yaml'
 
 export type UseWarpThemeImportReturn = {
   open: boolean

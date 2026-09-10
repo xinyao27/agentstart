@@ -1,8 +1,8 @@
-import { encodeTerminalMultiplexAckRecord } from '@yiru/protocol/terminal-multiplex/flow-records'
+import { encodeTerminalMultiplexAckRecord } from '@agentstart/protocol/terminal-multiplex/flow-records'
 import {
   TerminalMultiplexOpcode,
   type TerminalMultiplexOpcode as TerminalMultiplexOpcodeValue
-} from '@yiru/protocol/terminal-multiplex/frame'
+} from '@agentstart/protocol/terminal-multiplex/frame'
 
 type SendFrame = (
   opcode: TerminalMultiplexOpcodeValue,

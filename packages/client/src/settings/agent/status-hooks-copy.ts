@@ -13,7 +13,7 @@ export function getAgentStatusHooksTitle(): string {
 export function getAgentStatusHooksDescription(): string {
   return translate(
     AGENT_STATUS_HOOKS_DESCRIPTION_KEY,
-    'Shows working, waiting, and done states in Yiru. Turn off to remove Yiru-managed hooks and stop reinstalling them.'
+    'Shows working, waiting, and done states in AgentStart. Turn off to remove AgentStart-managed hooks and stop reinstalling them.'
   )
 }
 

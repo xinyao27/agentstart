@@ -1,4 +1,4 @@
-import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import type { NestedRepoScanResult } from '@agentstart/protocol/project/group-model'
 
 export function getSelectedNestedRepoPathsInScanOrder(
   scan: Pick<NestedRepoScanResult, 'repos'>,

@@ -5,7 +5,7 @@ import type {
   WorktreeMobileDiffReview as ProtocolMobileDiffReview,
   WorktreeMobileDiffReviewFile as ProtocolMobileDiffReviewFile,
   WorktreeWorkspaceLineage as ProtocolWorkspaceLineage
-} from '../generated/yiru/runtime/v1/worktree_pb.js'
+} from '../generated/agent_start/runtime/v1/worktree_pb.js'
 import { nullableString } from './worktree-record-values.js'
 import type {
   WorktreeDiffComment,

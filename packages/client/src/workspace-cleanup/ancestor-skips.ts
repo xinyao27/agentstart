@@ -1,5 +1,8 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
-import { isPathInsideOrEqual, normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
+import type { WorkspaceCleanupCandidate } from '@agentstart/protocol'
+import {
+  isPathInsideOrEqual,
+  normalizeRuntimePathForComparison
+} from '@agentstart/protocol/host/path'
 import { translate } from '~renderer/i18n/i18n'
 import type { WorkspaceCleanupFailure } from '~renderer/workspace-cleanup/state'
 

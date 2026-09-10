@@ -2,7 +2,7 @@ import type {
   DeveloperPermissionId,
   DeveloperPermissionState,
   DeveloperPermissionStatus
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -28,13 +28,11 @@ type FullDiskAccessButtonState = {
 
 const FULL_DISK_ACCESS_PERMISSION_ID: DeveloperPermissionId = 'full-disk-access'
 
-export function isFullDiskAccessSetupVisible(
-  status: DeveloperPermissionStatus | undefined
-): boolean {
+function isFullDiskAccessSetupVisible(status: DeveloperPermissionStatus | undefined): boolean {
   return status !== undefined && status !== 'unsupported'
 }
 
-export function isFullDiskAccessReady(status: DeveloperPermissionStatus | undefined): boolean {
+function isFullDiskAccessReady(status: DeveloperPermissionStatus | undefined): boolean {
   return status === 'granted' || status === 'ready'
 }
 
@@ -137,7 +135,7 @@ function useFullDiskAccessStatus(): FullDiskAccessStatusState & { refresh: () =>
     if (!isMac) {
       return
     }
-    // Why: users grant Full Disk Access outside Yiru, so focus is the first
+    // Why: users grant Full Disk Access outside AgentStart, so focus is the first
     // cheap signal that System Settings may have changed the permission state.
     window.addEventListener('focus', refreshIfLive)
     return () => {
@@ -196,7 +194,7 @@ export function FullDiskAccessSetupPrompt(): React.JSX.Element | null {
   }
 
   return (
-    <div className="border-border/60 bg-muted/20 mt-5 flex items-center justify-between gap-4 border px-4 py-3">
+    <div className="border-border/60 bg-muted/20 mt-5 flex items-center justify-between gap-4 rounded-lg border px-4 py-3">
       <div className="flex min-w-0 items-start gap-3">
         <div className="text-muted-foreground mt-0.5">
           <HardDrive className="size-4" />

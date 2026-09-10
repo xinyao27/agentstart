@@ -1,5 +1,3 @@
-export type RepoKind = 'git' | 'folder'
-
 export type GitAvailability = 'checking' | 'available' | 'unavailable' | 'unknown'
 
 function pathSeparatorFor(pathValue: string): '/' | '\\' {
@@ -35,7 +33,7 @@ export function getDefaultCreateProjectParent(homeDir: string): string {
   if (!trimmedHomeDir) {
     return ''
   }
-  return joinCreateProjectPath(joinCreateProjectPath(trimmedHomeDir, 'yiru'), 'projects')
+  return joinCreateProjectPath(joinCreateProjectPath(trimmedHomeDir, 'agentstart'), 'projects')
 }
 
 export function formatCreateProjectParentSummary({
@@ -58,7 +56,7 @@ export function formatCreateProjectParentSummary({
     return runtimeEnvironmentId || isRemoteHost ? missingServerLocationLabel : missingLocationLabel
   }
   if (defaultParent && trimmedParent === defaultParent && !runtimeEnvironmentId && !isRemoteHost) {
-    return '~/yiru/projects'
+    return '~/agentstart/projects'
   }
   return trimmedParent
 }

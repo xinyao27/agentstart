@@ -1,5 +1,5 @@
-import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
-import type { ExecutionHostScope } from '@yiru/protocol/host/identity'
+import type { AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
+import type { ExecutionHostScope } from '@agentstart/protocol/host/identity'
 import { translate } from '~renderer/i18n/i18n'
 import {
   MagnifyingGlass as Search,
@@ -163,7 +163,7 @@ export function AiVaultPanelHeader({
         />
       </div>
 
-      <div className="border-sidebar-border bg-input/50 focus-within:border-sidebar-ring mt-2 flex h-8 items-center gap-1.5 border px-2">
+      <div className="border-sidebar-border bg-input/50 focus-within:border-sidebar-ring mt-2 flex h-8 items-center gap-1.5 rounded-md border px-2">
         <Search className="text-muted-foreground size-3.5 shrink-0" />
         <Input
           value={query}
@@ -183,7 +183,7 @@ export function AiVaultPanelHeader({
             type="button"
             variant="ghost"
             size="icon-xs"
-            className={cn(RIGHT_SIDEBAR_INPUT_BUTTON_SURFACE_CLASS_NAME, 'size-5')}
+            className={cn(RIGHT_SIDEBAR_INPUT_BUTTON_SURFACE_CLASS_NAME, 'size-5 rounded-sm')}
             onClick={() => onQueryChange('')}
             aria-label={translate(
               'auto.components.right.sidebar.AiVaultPanel.clearSearch',

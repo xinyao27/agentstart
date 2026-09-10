@@ -36,7 +36,7 @@ export default function TerminalSearch({
   const requestQuery = getFindRequestQuery(query)
 
   // Why: the default xterm SearchAddon highlights blend into common
-  // terminal backgrounds (see yiru#612). Providing explicit decoration
+  // terminal backgrounds (see agentstart#612). Providing explicit decoration
   // colors gives all matches a visible yellow background and the
   // current match a brighter orange, matching the contrast VS Code and
   // iTerm2 use for terminal search. xterm requires #RRGGBB format for
@@ -120,7 +120,7 @@ export default function TerminalSearch({
   return (
     <div
       data-terminal-search-root
-      className="focus-within:border-ring absolute top-2 right-2 z-50 flex items-center gap-1 border border-zinc-700 bg-zinc-800 px-2 py-1"
+      className="focus-within:border-ring absolute top-2 right-2 z-50 flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1"
       style={{ width: 300 }}
       onKeyDown={handleKeyDown}
     >
@@ -141,7 +141,7 @@ export default function TerminalSearch({
         size="icon-xs"
         onClick={() => setCaseSensitive((v) => !v)}
         className={cn(
-          'flex size-6 shrink-0 items-center justify-center',
+          'flex size-6 shrink-0 items-center justify-center rounded',
           caseSensitive ? 'bg-zinc-700/50 text-blue-400' : 'text-zinc-400 hover:text-zinc-200'
         )}
         title={translate('auto.components.TerminalSearch.90c61387d9', 'Case sensitive')}
@@ -155,7 +155,7 @@ export default function TerminalSearch({
         size="icon-xs"
         onClick={() => setRegex((v) => !v)}
         className={cn(
-          'flex size-6 shrink-0 items-center justify-center',
+          'flex size-6 shrink-0 items-center justify-center rounded',
           regex ? 'bg-zinc-700/50 text-blue-400' : 'text-zinc-400 hover:text-zinc-200'
         )}
         title={translate('auto.components.TerminalSearch.42e466b9f1', 'Regex')}
@@ -170,7 +170,7 @@ export default function TerminalSearch({
         variant="ghost"
         size="icon-xs"
         onClick={findPrevious}
-        className="flex size-6 shrink-0 items-center justify-center text-zinc-400 hover:text-zinc-200"
+        className="flex size-6 shrink-0 items-center justify-center rounded text-zinc-400 hover:text-zinc-200"
         title={translate('auto.components.TerminalSearch.0f3066256e', 'Previous match')}
       >
         <ChevronUp size={14} />
@@ -181,7 +181,7 @@ export default function TerminalSearch({
         variant="ghost"
         size="icon-xs"
         onClick={findNext}
-        className="flex size-6 shrink-0 items-center justify-center text-zinc-400 hover:text-zinc-200"
+        className="flex size-6 shrink-0 items-center justify-center rounded text-zinc-400 hover:text-zinc-200"
         title={translate('auto.components.TerminalSearch.7cb40c04eb', 'Next match')}
       >
         <ChevronDown size={14} />
@@ -194,7 +194,7 @@ export default function TerminalSearch({
         variant="ghost"
         size="icon-xs"
         onClick={onClose}
-        className="flex size-6 shrink-0 items-center justify-center text-zinc-400 hover:text-zinc-200"
+        className="flex size-6 shrink-0 items-center justify-center rounded text-zinc-400 hover:text-zinc-200"
         title={translate('auto.components.TerminalSearch.db234b7519', 'Close')}
       >
         <X size={14} />

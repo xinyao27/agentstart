@@ -1,15 +1,15 @@
 import type {
   WorkspaceSpaceItemValue as WorkspaceSpaceItem,
   WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry,
   type MigrationUnsupportedPtyEntry
-} from '@yiru/protocol/agent/status-records'
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/agent/status-records'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
 import {
   classifyTitleActivity,
@@ -18,9 +18,9 @@ import {
 
 export type WorkspaceSpaceSortKey = 'size' | 'name' | 'repo' | 'activity'
 export type WorkspaceSpaceSortDirection = 'asc' | 'desc'
-export const WORKSPACE_SPACE_FILTER_QUERY_MAX_BYTES = 2 * 1024
+const WORKSPACE_SPACE_FILTER_QUERY_MAX_BYTES = 2 * 1024
 
-export function isWorkspaceSpaceFilterQueryTooLarge(
+function isWorkspaceSpaceFilterQueryTooLarge(
   query: string,
   maxBytes = WORKSPACE_SPACE_FILTER_QUERY_MAX_BYTES
 ): boolean {
@@ -141,7 +141,7 @@ export function countWorkspaceSpaceActiveAgents({
   return count
 }
 
-export function getWorkspaceSpaceSearchText(worktree: WorkspaceSpaceWorktree): string {
+function getWorkspaceSpaceSearchText(worktree: WorkspaceSpaceWorktree): string {
   return [
     worktree.displayName,
     worktree.repoDisplayName,

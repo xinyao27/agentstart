@@ -1,4 +1,4 @@
-import type { TerminalShortcutPolicy } from '@yiru/protocol/keybindings'
+import type { TerminalShortcutPolicy } from '@agentstart/protocol/keybindings'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~renderer/ui/select'
@@ -26,7 +26,7 @@ export function ShortcutTerminalPolicyControl({
       )}
       description={translate(
         'auto.components.settings.ShortcutTerminalPolicyControl.0f55c6f15c',
-        'Choose whether Yiru or the focused terminal wins when shortcuts overlap.'
+        'Choose whether AgentStart or the focused terminal wins when shortcuts overlap.'
       )}
       keywords={keywords}
       className="max-w-none"
@@ -53,10 +53,10 @@ export function ShortcutTerminalPolicyControl({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="yiru-first">
+              <SelectItem value="agentstart-first">
                 {translate(
                   'auto.components.settings.ShortcutTerminalPolicyControl.63308571d8',
-                  'Yiru first'
+                  'AgentStart first'
                 )}
               </SelectItem>
               <SelectItem value="terminal-first">

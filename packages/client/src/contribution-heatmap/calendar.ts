@@ -1,5 +1,3 @@
-export type ContributionMetric = 'activity' | 'tokens'
-
 export type ContributionPoint = {
   day: string
   value: number
@@ -11,12 +9,12 @@ export type ContributionCalendarDay = ContributionPoint & {
   date: Date
 }
 
-export type ContributionCalendarWeek = {
+type ContributionCalendarWeek = {
   startDay: string
   days: ContributionCalendarDay[]
 }
 
-export type ContributionMonthLabel = {
+type ContributionMonthLabel = {
   date: Date
   weekIndex: number
 }
@@ -25,13 +23,6 @@ export type ContributionCalendar = {
   weeks: ContributionCalendarWeek[]
   monthLabels: ContributionMonthLabel[]
   maxValue: number
-}
-
-export type ContributionTotals = {
-  today: number
-  currentStreak: number
-  longestStreak: number
-  visibleTotal: number
 }
 
 const CALENDAR_WEEK_COUNT = 53
@@ -77,41 +68,6 @@ export function buildContributionCalendar(
     monthLabels: buildMonthLabels(weeks),
     maxValue
   }
-}
-
-export function getContributionTotals(
-  points: readonly ContributionPoint[],
-  anchorDate = new Date()
-): ContributionTotals {
-  const valuesByDay = mergeContributionPoints(points)
-  const anchor = startOfLocalDay(anchorDate)
-  const today = valuesByDay.get(localCalendarDayKey(anchor)) ?? 0
-  let currentStreak = 0
-  let longestStreak = 0
-  let runningStreak = 0
-  let visibleTotal = 0
-
-  for (let offset = 365; offset >= 0; offset--) {
-    const value = valuesByDay.get(localCalendarDayKey(addLocalDays(anchor, -offset))) ?? 0
-    visibleTotal += value
-    if (value > 0) {
-      runningStreak++
-      longestStreak = Math.max(longestStreak, runningStreak)
-    } else {
-      runningStreak = 0
-    }
-  }
-
-  const streakAnchor = today > 0 ? anchor : addLocalDays(anchor, -1)
-  for (let offset = 0; offset <= 365; offset++) {
-    const value = valuesByDay.get(localCalendarDayKey(addLocalDays(streakAnchor, -offset))) ?? 0
-    if (value <= 0) {
-      break
-    }
-    currentStreak++
-  }
-
-  return { today, currentStreak, longestStreak, visibleTotal }
 }
 
 function buildMonthLabels(weeks: ContributionCalendarWeek[]): ContributionMonthLabel[] {

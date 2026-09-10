@@ -1,5 +1,5 @@
-import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { ProjectExecutionRuntimeResolution } from '@agentstart/protocol/project/runtime-preference'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 import type { SkillDiscoveryTarget } from '~renderer/skills/discovery-target'
 

@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import { isDefaultBranchWorkspace } from '../visible-worktrees'
 

@@ -4,7 +4,7 @@ import {
   NotebookService,
   NotebookServiceRunPythonCellRequestSchema,
   NotebookServiceRunPythonCellResponseSchema
-} from '../generated/yiru/runtime/v1/notebook_pb.js'
+} from '../generated/agent_start/runtime/v1/notebook_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 
 export const NOTEBOOK_PROTOCOL_CAPABILITY = 'notebook.protobuf.v1' as const

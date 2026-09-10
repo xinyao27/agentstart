@@ -1,6 +1,6 @@
+import type { BrowserWritebackCssChange as BrowserCssChange } from '@agentstart/protocol'
+import { AgentSessionClient } from '@agentstart/protocol/agent-session'
 import { useMutation } from '@tanstack/react-query'
-import type { BrowserWritebackCssChange as BrowserCssChange } from '@yiru/protocol'
-import { AgentSessionClient } from '@yiru/protocol/agent-session'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Bug, CheckCircle, Code, FloppyDisk } from '~renderer/icons/hugeicons'
@@ -159,7 +159,7 @@ export function DevToolsPage({
     <main className="bg-background text-foreground min-h-dvh p-4">
       <h1 className="flex items-center gap-2 text-base font-semibold">
         <Code />
-        {translate('extension.devtools.title', 'Yiru DevTools writeback')}
+        {translate('extension.devtools.title', 'AgentStart DevTools writeback')}
       </h1>
       <p className="text-muted-foreground mt-1 max-w-xl text-sm">
         {translate(

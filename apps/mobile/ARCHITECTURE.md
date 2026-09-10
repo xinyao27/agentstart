@@ -1,13 +1,13 @@
 # Architecture
 
 目标是在保持协议和业务行为一致的前提下，维护一个长期演进的原生客户端。
-组织原则与 Yiru 仓库一致：从功能名可以一次猜中代码位置，
+组织原则与 AgentStart 仓库一致：从功能名可以一次猜中代码位置，
 一个小功能变更通常只触碰同一 feature 的一到三个文件。
 
 ## 目录
 
 ```text
-YiruMobile/
+AgentStartMobile/
   App/                    composition root、全局路由、scene 生命周期
   DesignSystem/
     Foundations/          token、背景和环境值
@@ -89,7 +89,7 @@ RuntimeTerminalMultiplexer actor (one per host)
       → SwiftTermSurface
 ```
 
-当前实现 pin SwiftTerm 1.18.0，并由 Yiru 自己维护正式的 `UIViewRepresentable` adapter 与
+当前实现 pin SwiftTerm 1.18.0，并由 AgentStart 自己维护正式的 `UIViewRepresentable` adapter 与
 renderer-neutral `TerminalSurface`。默认使用 Core Text/Core Graphics renderer；只有性能数据
 证明有收益且视觉与能耗验收通过后才启用 Metal。
 

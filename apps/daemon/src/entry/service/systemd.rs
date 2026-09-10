@@ -6,7 +6,7 @@ use std::process::Command;
 
 use super::{ServiceError, ServiceState, run_allow_failure, run_required};
 
-const SYSTEMD_UNIT: &str = "yiru.service";
+const SYSTEMD_UNIT: &str = "agentstart.service";
 
 pub(super) fn install() -> Result<ServiceState, ServiceError> {
     crate::transport::secure_file::write_bytes(&unit_path()?, document()?.as_bytes())?;
@@ -39,6 +39,52 @@ pub(super) fn state() -> Result<ServiceState, ServiceError> {
             ServiceState::Stopped
         }
     })
+}
+
+pub(super) fn configured_executable() -> Result<Option<PathBuf>, ServiceError> {
+    let path = unit_path()?;
+    if !path.is_file() {
+        return Ok(None);
+    }
+    let contents = fs::read_to_string(path)?;
+    let command = contents
+        .lines()
+        .find_map(|line| line.strip_prefix("ExecStart="))
+        .ok_or(ServiceError::InvalidValue("executable"))?;
+    let executable = parse_quoted_argument(command)
+        .ok_or(ServiceError::InvalidValue("executable"))?
+        .replace("%%", "%");
+    Ok(Some(PathBuf::from(executable)))
+}
+
+pub(super) fn running_pid() -> Result<Option<u32>, ServiceError> {
+    if !unit_path()?.is_file() {
+        return Ok(None);
+    }
+    let program = "systemctl";
+    let output = Command::new(program)
+        .args([
+            "--user",
+            "show",
+            "--property",
+            "MainPID",
+            "--value",
+            SYSTEMD_UNIT,
+        ])
+        .output()
+        .map_err(|source| ServiceError::CommandUnavailable {
+            program: program.to_owned(),
+            source,
+        })?;
+    if !output.status.success() {
+        return Ok(None);
+    }
+    let pid = String::from_utf8_lossy(&output.stdout)
+        .trim()
+        .parse::<u32>()
+        .ok()
+        .filter(|pid| *pid > 0);
+    Ok(pid)
 }
 
 pub(super) fn start() -> Result<ServiceState, ServiceError> {
@@ -92,7 +138,7 @@ fn document() -> Result<String, ServiceError> {
         return Err(ServiceError::InvalidValue("executable"));
     }
     Ok(format!(
-        "[Unit]\nDescription=Yiru daemon\n\n[Service]\nType=simple\nExecStart={} {}\nRestart=on-failure\nRestartSec=2\n\n[Install]\nWantedBy=default.target\n",
+        "[Unit]\nDescription=AgentStart daemon\n\n[Service]\nType=simple\nExecStart={} {}\nRestart=on-failure\nRestartSec=2\n\n[Install]\nWantedBy=default.target\n",
         quote(executable),
         quote("daemon")
     ))
@@ -129,6 +175,22 @@ fn quote(value: &str) -> String {
             .replace('"', "\\\"")
             .replace('%', "%%")
     )
+}
+
+fn parse_quoted_argument(value: &str) -> Option<String> {
+    let mut characters = value.chars();
+    if characters.next()? != '"' {
+        return None;
+    }
+    let mut output = String::new();
+    while let Some(character) = characters.next() {
+        match character {
+            '"' => return Some(output),
+            '\\' => output.push(characters.next()?),
+            _ => output.push(character),
+        }
+    }
+    None
 }
 
 fn remove_file_if_present(path: &Path) -> Result<(), ServiceError> {

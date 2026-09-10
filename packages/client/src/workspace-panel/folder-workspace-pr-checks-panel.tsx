@@ -1,4 +1,7 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
+import type {
+  PRCheckDetail,
+  PRCheckRunDetails
+} from '@agentstart/protocol/hosted-review/review-types'
 import { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { ArrowClockwise as RefreshCw } from '~renderer/icons/hugeicons'

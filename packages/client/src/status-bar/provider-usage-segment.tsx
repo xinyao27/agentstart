@@ -1,6 +1,6 @@
-import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
-import type { StatusBarUsageMode } from '@yiru/protocol/settings/usage-display'
-import type { UsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
+import type { ProviderRateLimits } from '@agentstart/protocol/account-rate-types'
+import type { StatusBarUsageMode } from '@agentstart/protocol/settings/usage-display'
+import type { UsagePercentageDisplay } from '@agentstart/protocol/settings/usage-display'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle } from '~renderer/icons/hugeicons'
@@ -25,18 +25,6 @@ const STATUS_BAR_BUCKET_NAMES: Partial<
   cursor: new Set(['Included', 'Auto', 'API']),
   gemini: new Set(['Flash', 'Pro', '1.5 Pro'])
 }
-const PROVIDER_LETTERS: Record<ProviderRateLimits['provider'], string> = {
-  claude: 'C',
-  codex: 'X',
-  cursor: 'U',
-  gemini: 'G',
-  'opencode-go': 'O',
-  kimi: 'K',
-  minimax: 'M',
-  grok: 'R',
-  antigravity: 'A'
-}
-
 export function UsageWindowMeter({
   label,
   usedPercent,
@@ -180,18 +168,6 @@ export function ProviderUsageSegment({
         ))}
       </span>
       {isStale ? <AlertTriangle size={11} className="text-muted-foreground/80" /> : null}
-    </span>
-  )
-}
-
-export function ProviderLetterBadge({ limits }: { limits: ProviderRateLimits }): React.JSX.Element {
-  const hasData = getTightestUsageSection(limits) !== null
-  return (
-    <span className="text-muted-foreground inline-flex items-center gap-1">
-      <span
-        className={hasData ? 'bg-muted-foreground/60 size-2' : 'bg-muted-foreground/30 size-2'}
-      />
-      {PROVIDER_LETTERS[limits.provider]}
     </span>
   )
 }

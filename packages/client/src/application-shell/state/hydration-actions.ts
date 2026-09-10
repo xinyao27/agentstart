@@ -1,26 +1,26 @@
 import {
   normalizeExecutionHostOrder,
   normalizeExecutionHostScope
-} from '@yiru/protocol/host/identity'
-import { normalizeManualRepoOrder } from '@yiru/protocol/project/manual-order'
-import { normalizeContextualTourIds } from '@yiru/protocol/settings/contextual-tours'
-import { normalizeFeatureTipIds } from '@yiru/protocol/settings/feature-tips'
-import { clampMarkdownTocPanelWidth } from '@yiru/protocol/settings/markdown-toc'
-import { normalizeWorkspacePanelTitlebarPinnedIds } from '@yiru/protocol/settings/panel-titlebar-pins'
-import { normalizeStatusBarItems } from '@yiru/protocol/settings/status-bar'
+} from '@agentstart/protocol/host/identity'
+import { normalizeManualRepoOrder } from '@agentstart/protocol/project/manual-order'
+import { normalizeContextualTourIds } from '@agentstart/protocol/settings/contextual-tours'
+import { normalizeFeatureTipIds } from '@agentstart/protocol/settings/feature-tips'
+import { clampMarkdownTocPanelWidth } from '@agentstart/protocol/settings/markdown-toc'
+import { normalizeWorkspacePanelTitlebarPinnedIds } from '@agentstart/protocol/settings/panel-titlebar-pins'
+import { normalizeStatusBarItems } from '@agentstart/protocol/settings/status-bar'
 import {
   normalizeThemeGradient,
   normalizeThemeGradientsByWorkspace
-} from '@yiru/protocol/settings/theme-gradient'
-import { normalizeStatusBarUsageMode } from '@yiru/protocol/settings/usage-display'
-import { normalizeUsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
+} from '@agentstart/protocol/settings/theme-gradient'
+import { normalizeStatusBarUsageMode } from '@agentstart/protocol/settings/usage-display'
+import { normalizeUsagePercentageDisplay } from '@agentstart/protocol/settings/usage-display'
 import {
   DEFAULT_HIDE_SLEEPING_WORKSPACES,
   normalizeAgentActivityDisplayMode
-} from '@yiru/protocol/settings/workspace-preferences'
-import { normalizeWorktreeCardProperties } from '@yiru/protocol/settings/worktree-card-properties'
-import { normalizeFeatureInteractions } from '@yiru/protocol/telemetry/interactions/state'
-import { normalizeWorkspaceStatuses } from '@yiru/protocol/workspace/status/normalize'
+} from '@agentstart/protocol/settings/workspace-preferences'
+import { normalizeWorktreeCardProperties } from '@agentstart/protocol/settings/worktree-card-properties'
+import { normalizeFeatureInteractions } from '@agentstart/protocol/telemetry/interactions/state'
+import { normalizeWorkspaceStatuses } from '@agentstart/protocol/workspace/status/normalize'
 import type { StateCreator } from 'zustand'
 import { normalizeKagiSessionLink } from '~renderer/browser/session/kagi-link'
 import { normalizeBrowserPageZoomLevel } from '~renderer/browser/zoom'
@@ -39,7 +39,7 @@ import {
   MAX_LEFT_SIDEBAR_WIDTH,
   MAX_RIGHT_SIDEBAR_WIDTH,
   sanitizePersistedRepoIds,
-  hydrateTrustedYiruHooks,
+  hydrateTrustedAgentStartHooks,
   sanitizeShowDotfilesByWorktree,
   sanitizePersistedSidebarWidth,
   sanitizeAcknowledgedAgentsByPaneKey,
@@ -183,7 +183,10 @@ export function createUIHydrationActions(
             typeof ui.contextualToursAutoEligible === 'boolean'
               ? ui.contextualToursAutoEligible
               : null,
-          trustedYiruHooks: hydrateTrustedYiruHooks(ui.trustedYiruHooks, validRepoIds),
+          trustedAgentStartHooks: hydrateTrustedAgentStartHooks(
+            ui.trustedAgentStartHooks,
+            validRepoIds
+          ),
           setupScriptPromptDismissedRepoIds:
             validRepoIds.size === 0
               ? sanitizeSetupScriptPromptDismissals(ui.setupScriptPromptDismissedRepoIds)

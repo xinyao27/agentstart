@@ -1,5 +1,5 @@
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
 import { useQueryClient } from '@tanstack/react-query'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
 import { useEffect, useRef } from 'react'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import {

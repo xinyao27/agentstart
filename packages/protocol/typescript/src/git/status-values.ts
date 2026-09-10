@@ -9,8 +9,8 @@ import {
   type GitPushTarget as ProtocolPushTarget,
   type GitStatusEntry as ProtocolStatusEntry,
   type GitUpstreamStatus as ProtocolUpstreamStatus
-} from '../../generated/yiru/runtime/v1/git_common_pb.js'
-import type { GitWorkingStatus as ProtocolWorkingStatus } from '../../generated/yiru/runtime/v1/git_status_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_common_pb.js'
+import type { GitWorkingStatus as ProtocolWorkingStatus } from '../../generated/agent_start/runtime/v1/git_status_pb.js'
 
 export type GitFileStatus = 'modified' | 'added' | 'deleted' | 'renamed' | 'untracked' | 'copied'
 export type GitStagingArea = 'staged' | 'unstaged' | 'untracked'

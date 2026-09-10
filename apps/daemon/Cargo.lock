@@ -19,6 +19,74 @@ dependencies = [
 ]
 
 [[package]]
+name = "agentstart-daemon"
+version = "0.1.0"
+dependencies = [
+ "agentstart-protocol",
+ "async-trait",
+ "atomicwrites",
+ "axum",
+ "base64",
+ "bytes",
+ "chrono",
+ "chrono-tz",
+ "crypto_secretbox",
+ "futures-util",
+ "getrandom 0.3.4",
+ "http",
+ "http-body-util",
+ "hyper",
+ "hyper-util",
+ "iana-time-zone",
+ "icu_collator",
+ "icu_locale_core",
+ "if-addrs",
+ "nix 0.31.3",
+ "notify",
+ "p256",
+ "png",
+ "portable-pty",
+ "process-wrap",
+ "prost",
+ "qrcode",
+ "qwertty-term-vt",
+ "regex",
+ "reqwest",
+ "ring",
+ "rusqlite",
+ "rustix 1.1.4",
+ "rustls",
+ "salsa20",
+ "same-file",
+ "serde",
+ "serde-saphyr",
+ "serde_json",
+ "sha1",
+ "sha2",
+ "subtle",
+ "sys-locale",
+ "sysinfo",
+ "thiserror 2.0.20",
+ "tokio",
+ "tokio-tungstenite",
+ "tokio-util",
+ "url",
+ "windows-sys 0.61.2",
+ "x25519-dalek",
+]
+
+[[package]]
+name = "agentstart-protocol"
+version = "0.1.0"
+dependencies = [
+ "heck",
+ "prost",
+ "prost-build",
+ "prost-reflect",
+ "protoc-bin-vendored",
+]
+
+[[package]]
 name = "aho-corasick"
 version = "1.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3066,74 +3134,6 @@ checksum = "e7e8131a03190127fb2263afc72b322ecadae46b6ff8c6f399ff5d02f5559af6"
 dependencies = [
  "curve25519-dalek",
  "rand_core 0.10.1",
-]
-
-[[package]]
-name = "yiru-daemon"
-version = "0.0.36"
-dependencies = [
- "async-trait",
- "atomicwrites",
- "axum",
- "base64",
- "bytes",
- "chrono",
- "chrono-tz",
- "crypto_secretbox",
- "futures-util",
- "getrandom 0.3.4",
- "http",
- "http-body-util",
- "hyper",
- "hyper-util",
- "iana-time-zone",
- "icu_collator",
- "icu_locale_core",
- "if-addrs",
- "nix 0.31.3",
- "notify",
- "p256",
- "png",
- "portable-pty",
- "process-wrap",
- "prost",
- "qrcode",
- "qwertty-term-vt",
- "regex",
- "reqwest",
- "ring",
- "rusqlite",
- "rustix 1.1.4",
- "rustls",
- "salsa20",
- "same-file",
- "serde",
- "serde-saphyr",
- "serde_json",
- "sha1",
- "sha2",
- "subtle",
- "sys-locale",
- "sysinfo",
- "thiserror 2.0.20",
- "tokio",
- "tokio-tungstenite",
- "tokio-util",
- "url",
- "windows-sys 0.61.2",
- "x25519-dalek",
- "yiru-protocol",
-]
-
-[[package]]
-name = "yiru-protocol"
-version = "0.1.0"
-dependencies = [
- "heck",
- "prost",
- "prost-build",
- "prost-reflect",
- "protoc-bin-vendored",
 ]
 
 [[package]]

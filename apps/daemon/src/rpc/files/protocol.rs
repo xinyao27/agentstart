@@ -2,8 +2,8 @@
 // typed request, calls straight into `FilesAuthority` (the same authority the retired
 // legacy JSON dispatch called), and encodes a typed response — the authority is the one
 // shared implementation, so there is nothing left here to duplicate or drift.
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     FileWatchChanged, FileWatchEnd, FileWatchError, FileWatchReady, FileWatchStarting,
     FilesServiceBrowseServerDirectoryRequest, FilesServiceBrowseServerDirectoryResponse,
     FilesServiceCommitUploadRequest, FilesServiceCommitUploadResponse, FilesServiceCopyRequest,
@@ -33,7 +33,7 @@ use yiru_protocol::runtime::v1::{
     FilesServiceWriteTerminalArtifactResponse, LogTailWatchChanged, LogTailWatchEnd,
     LogTailWatchReady, files_service_watch_log_tail_response, files_service_watch_response,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::files::{FileWatchEvent, LogTailWatchEvent, SearchOptions};
 use crate::rpc::protocol_call::ProtocolCallContext;

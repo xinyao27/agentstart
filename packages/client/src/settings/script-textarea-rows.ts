@@ -1,4 +1,4 @@
-export const SCRIPT_TEXTAREA_ROW_SCAN_CODE_UNITS = 64 * 1024
+const SCRIPT_TEXTAREA_ROW_SCAN_CODE_UNITS = 64 * 1024
 
 export function getDetectedSetupScriptTextareaRows(setup: string): number {
   return clampRows(countScriptTextareaLines(setup, 6), 2, 6)

@@ -1,4 +1,4 @@
-import type { SkillPlacement } from '@yiru/protocol'
+import type { SkillPlacement } from '@agentstart/protocol'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { ArrowRight, FolderOpen } from '~renderer/icons/hugeicons'

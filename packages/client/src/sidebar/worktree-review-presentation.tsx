@@ -7,10 +7,6 @@ export function getReviewLabel(): 'PR' {
   return 'PR'
 }
 
-export function getProviderName(): string {
-  return 'GitHub'
-}
-
 export function ReviewIcon({
   review,
   className

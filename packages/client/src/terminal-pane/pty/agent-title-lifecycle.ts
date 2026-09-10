@@ -1,4 +1,4 @@
-import type { AgentType } from '@yiru/protocol/agent/status-records'
+import type { AgentType } from '@agentstart/protocol/agent/status-records'
 import { isClaudeAgent } from '~renderer/agent/title/provider'
 import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 import { useAppStore } from '~renderer/store/state'

@@ -22,23 +22,11 @@ import { createEditorSessionHydrationActions } from './session-hydration-actions
 import { createEditorStatusActions } from './status-actions'
 import type { EditorSlice } from './store-contract'
 
+export type { ActiveRightSidebarTab } from '@agentstart/protocol/settings/ui-state'
 export type {
-  ActiveRightSidebarTab,
-  RightSidebarExplorerView,
-  RightSidebarTab
-} from '@yiru/protocol/settings/ui-state'
-export type {
-  ActivityBarPosition,
-  BranchCompareSnapshot,
-  ClosedEditorTabSnapshot,
-  CombinedDiffSkippedConflict,
-  CommitCompareSnapshot,
   ConflictReviewEntry,
-  ConflictReviewState,
   DiffSource,
-  EditorViewMode,
   MarkdownViewMode,
-  OpenConflictMetadata,
   OpenFile,
   PendingEditorReveal
 } from './file-model'

@@ -84,16 +84,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Typecheck daemon
-        run: pnpm exec vp run @yiru/daemon#typecheck
+        run: pnpm exec vp run @agentstart/daemon#typecheck
 
       - name: Check daemon
-        run: pnpm exec vp run @yiru/daemon#lint
+        run: pnpm exec vp run @agentstart/daemon#lint
 
       # Why: pull requests cannot access release signing credentials; this compile-only binary is
       # never uploaded or presented as a signed release artifact.
       - name: Build unsigned Rust daemon for CI
-        run: pnpm exec vp run @yiru/daemon#build
+        run: pnpm exec vp run @agentstart/daemon#build
 
       - name: Build macOS computer-use helper
         if: runner.os == 'macOS'
-        run: pnpm exec vp run @yiru/computer-use-macos#build -- --universal
+        run: pnpm exec vp run @agentstart/computer-use-macos#build -- --universal

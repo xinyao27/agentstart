@@ -1,4 +1,4 @@
-import type { CreateWorktreeResult } from '@yiru/protocol/worktree/create-result'
+import type { CreateWorktreeResult } from '@agentstart/protocol/worktree/create-result'
 import { toast } from 'sonner'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import {
@@ -12,10 +12,6 @@ import type {
 } from '~renderer/worktree-creation/pending'
 
 import { completeWorktreeCreationHandoff } from './handoff'
-
-type ContinueBackgroundWorktreeCreationOptions = {
-  revealCreationSurface?: boolean
-}
 
 function getWorktreeCreationIndeterminate(request: WorktreeCreationRequest): boolean {
   if (request.worktreeCreateProgressMode) {
@@ -117,41 +113,6 @@ export function runBackgroundWorktreeCreation(request: WorktreeCreationRequest):
   const creationId = createBrowserUuid()
   revealPendingCreation(creationId, request, 'preparing')
   void executeWorktreeCreation(creationId, request)
-}
-
-/** Stage a pending entry before async preflight so the UI shows immediate progress. */
-export function beginBackgroundWorktreePreparation(request: WorktreeCreationRequest): string {
-  const creationId = createBrowserUuid()
-  revealPendingCreation(creationId, request, 'preparing')
-  return creationId
-}
-
-/** Continue a staged pending entry once async preflight has produced a final request. */
-export function continueBackgroundWorktreeCreation(
-  creationId: string,
-  request: WorktreeCreationRequest,
-  options: ContinueBackgroundWorktreeCreationOptions = {}
-): boolean {
-  const store = useAppStore.getState()
-  if (!store.pendingWorktreeCreations[creationId]) {
-    return false
-  }
-  store.updatePendingWorktreeCreation(creationId, {
-    phase: 'preparing',
-    status: 'creating',
-    startedAt: Date.now(),
-    error: undefined,
-    request
-  })
-  // Why: background work-item preflight can finish after the user moved on; keep
-  // the pending row alive without reselecting the creation panel in that case.
-  if (options.revealCreationSurface !== false) {
-    store.setActivePendingWorktreeCreation(creationId)
-    store.setActiveView('terminal')
-    store.setSidebarOpen(true)
-  }
-  void executeWorktreeCreation(creationId, request)
-  return true
 }
 
 /** Re-run a failed creation from its panel, reusing the captured request. */

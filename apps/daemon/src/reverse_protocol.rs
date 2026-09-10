@@ -2,10 +2,10 @@ use std::marker::PhantomData;
 use std::sync::{Arc, RwLock};
 use std::time::Duration;
 
+use agentstart_protocol::method_metadata::{ServerStreamMethod, UnaryMethod};
 use prost::Message;
 use tokio::sync::{mpsc, oneshot};
 use tokio::time::{Instant, timeout_at};
-use yiru_protocol::method_metadata::{ServerStreamMethod, UnaryMethod};
 
 use crate::rpc::protocol_reverse::{ReverseCommand, ReverseControl};
 

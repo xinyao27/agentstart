@@ -19,7 +19,7 @@ import { handleInternalTerminalFileDrop } from './drop/handler'
 import { carriesWorkspaceFilePaths } from './drop/workspace-file-payload'
 import type { PtyTransport } from './pty/transport-types'
 
-export type PaneTitleOverlayRect = {
+type PaneTitleOverlayRect = {
   left: number
   top: number
   width: number
@@ -109,7 +109,7 @@ export default function TerminalPaneHeaderOverlay({
       data-pane-title-surface={titleUsesLightSurface ? 'light' : 'dark'}
       style={{
         display: terminalContentVisible ? undefined : 'none',
-        ['--yiru-pane-title-bg' as string]: paneTitleBackground,
+        ['--agentstart-pane-title-bg' as string]: paneTitleBackground,
         ...hiddenStartupStyle
       }}
     >

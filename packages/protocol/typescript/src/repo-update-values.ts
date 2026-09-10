@@ -21,7 +21,7 @@ import {
   type RepoNullableIcon,
   type RepoNullableUpstream,
   type RepoUpdateFields
-} from '../generated/yiru/runtime/v1/repo_pb.js'
+} from '../generated/agent_start/runtime/v1/repo_pb.js'
 import type { RepoIconValue, RepoUpdateInput, RepoValue } from './repo-types.js'
 import { nullableSourceControlAiInit, nullableStringInit } from './repo-update-ai-values.js'
 

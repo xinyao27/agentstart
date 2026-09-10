@@ -1,5 +1,5 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
-import { parseSshPtyId } from '@yiru/protocol/terminal-identity'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
+import { parseSshPtyId } from '@agentstart/protocol/terminal-identity'
 import { getConnectionIdFromState } from '~renderer/runtime/connection-context'
 import { useAppStore } from '~renderer/store/state'
 import { dispatchTerminalCommandFinishedEvent } from '~renderer/terminal/command-finished-event'
@@ -9,14 +9,6 @@ import {
   openCommandCodeDoneSettle,
   setCommandCodeDoneSettleExecutor
 } from './command-code-done-settle'
-
-export function readInFlightCommandCodeTurn(paneKey: string): { prompt: string } | null {
-  const entry = useAppStore.getState().agentStatusByPaneKey[paneKey]
-  if (entry?.agentType !== 'command-code' || entry.state !== 'working') {
-    return null
-  }
-  return { prompt: entry.prompt }
-}
 
 export function createParkedTerminalCommandStatusPolicy(options: {
   ptyId: string

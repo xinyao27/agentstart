@@ -2,8 +2,8 @@ import type {
   RendererErrorReportArgs,
   RendererErrorReportKind,
   RendererErrorSurface
-} from '@yiru/protocol/crash-reports/renderer-error'
-import type { CrashReportRecord } from '@yiru/protocol/crash-reports/values'
+} from '@agentstart/protocol/crash-reports/renderer-error'
+import type { CrashReportRecord } from '@agentstart/protocol/crash-reports/values'
 
 import { getChromeVersion } from './browser-version'
 
@@ -25,7 +25,7 @@ const reportedRendererErrorKeySet = new Set<string>()
 const MAX_REPORTED_RENDERER_ERROR_KEYS = 50
 let pendingRendererErrorReport: CrashReportRecord | null = null
 
-export const RENDERER_ERROR_REPORT_AVAILABLE_EVENT = 'yiru:renderer-error-report-available'
+export const RENDERER_ERROR_REPORT_AVAILABLE_EVENT = 'agentstart:renderer-error-report-available'
 
 function stringFromThrown(value: unknown): { name: string; message: string; stack?: string } {
   if (value instanceof Error) {

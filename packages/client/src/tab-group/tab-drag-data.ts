@@ -1,11 +1,11 @@
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { TabGroup } from '@agentstart/protocol/workspace/tabs'
 import {
   closestCenter,
   pointerWithin,
   type CollisionDetection,
   type UniqueIdentifier
 } from '@dnd-kit/core'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { TabGroup } from '@yiru/protocol/workspace/tabs'
 import type { TabSplitDirection } from '~renderer/tab-bar/split-direction'
 
 export type TabDropZone = 'center' | TabSplitDirection

@@ -1,11 +1,11 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ShellOnboardingOutcome,
   type ShellCacheGitHubCache,
   type ShellCacheJsonValue,
   type ShellOnboardingChecklist,
   type ShellOnboardingState
-} from '../generated/yiru/runtime/v1/shell_state_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_state_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const SHELL_CACHE_PROTOCOL_CAPABILITY = 'shell.cache.protobuf.v1' as const
@@ -25,7 +25,7 @@ export type ShellCacheGitHubCacheValue = {
 
 export type ShellOnboardingOutcomeName = 'completed' | 'dismissed'
 
-export type ShellOnboardingChecklistValue = {
+type ShellOnboardingChecklistValue = {
   addedRepo: boolean
   choseAgent: boolean
   ranFirstAgent: boolean

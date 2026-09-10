@@ -1,4 +1,7 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
+import type {
+  PRCheckDetail,
+  PRCheckRunDetails
+} from '@agentstart/protocol/hosted-review/review-types'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'

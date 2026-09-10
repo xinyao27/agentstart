@@ -40,7 +40,7 @@ impl ClipboardImageFiles {
             return Err(ClipboardImageFileError::TooLarge);
         }
         let path = std::env::temp_dir().join(format!(
-            "yiru-paste-{}-{}.png",
+            "agentstart-paste-{}-{}.png",
             now_millis()?,
             random_uuid()?
         ));

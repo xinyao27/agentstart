@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 
 import { getDiffCommentLineLabel } from './diff-comment-compat'
 
@@ -27,7 +27,7 @@ export function sortMarkdownReviewNotes(
   })
 }
 
-export function getMarkdownReviewExcerpt(
+function getMarkdownReviewExcerpt(
   content: string,
   note: Pick<DiffComment, 'lineNumber' | 'startLine'>
 ): string {
@@ -107,7 +107,7 @@ function forEachMarkdownReviewLine(
   }
 }
 
-export function getMarkdownReviewHighlightedText(
+function getMarkdownReviewHighlightedText(
   content: string,
   note: Pick<DiffComment, 'lineNumber' | 'selectedText' | 'startLine'>
 ): string {

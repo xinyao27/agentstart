@@ -1,6 +1,6 @@
 import type { ContributionDisplayMetric } from './metric'
 
-const CONTRIBUTION_METRIC_STORAGE_KEY = 'yiru:contribution-metric:v1'
+const CONTRIBUTION_METRIC_STORAGE_KEY = 'agentstart:contribution-metric:v1'
 
 export function loadContributionMetric(): ContributionDisplayMetric {
   try {

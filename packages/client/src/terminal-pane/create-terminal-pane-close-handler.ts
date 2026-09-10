@@ -1,5 +1,5 @@
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import type { IDisposable } from '@xterm/xterm'
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
 import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 
 import { scheduleRuntimeGraphSync } from '../runtime/sync-runtime-graph'

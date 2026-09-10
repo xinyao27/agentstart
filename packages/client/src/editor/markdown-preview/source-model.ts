@@ -1,5 +1,5 @@
-import { relativePathInsideRoot } from '@yiru/protocol/host/path'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import { relativePathInsideRoot } from '@agentstart/protocol/host/path'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { HttpLinkSourceOwner } from '~renderer/editor/http-link-routing'
 import { dirname } from '~renderer/path'
 import { getConnectionIdForFile } from '~renderer/runtime/connection-context'

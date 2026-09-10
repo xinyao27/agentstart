@@ -10,7 +10,7 @@ import {
   MobilePairingServiceListNetworkInterfacesResponseSchema,
   MobilePairingServiceRevokeDeviceRequestSchema,
   MobilePairingServiceRevokeDeviceResponseSchema
-} from '../generated/yiru/runtime/v1/mobile_pairing_pb.js'
+} from '../generated/agent_start/runtime/v1/mobile_pairing_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 
 const GET_PAIRING_QR_PROCEDURE = `/${MobilePairingService.typeName}/${MobilePairingService.method.getPairingQr.name}`

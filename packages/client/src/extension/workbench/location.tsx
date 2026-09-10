@@ -1,5 +1,5 @@
-import type { WorkspacePanelTabContentType } from '@yiru/protocol/workspace/tabs'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { WorkspacePanelTabContentType } from '@agentstart/protocol/workspace/tabs'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { useEffect, useRef } from 'react'
 
 import { useProjectCatalog } from '../../project-catalog/provider'
@@ -77,7 +77,7 @@ function parseSearchValue(value: unknown): string | null {
 function parseWorkbenchPage(value: unknown): WorkbenchPage | null {
   switch (value) {
     case 'activity':
-    case 'automations':
+    case 'browser':
     case 'mobile':
     case 'search':
     case 'settings':
@@ -107,7 +107,9 @@ export function ExtensionWorkbenchLocationBridge({
 }: {
   location: WorkbenchLocation
 }): null {
+  const persistedUIReady = useAppStore((state) => state.persistedUIReady)
   const workspaceSessionReady = useAppStore((state) => state.workspaceSessionReady)
+  const activeView = useAppStore((state) => state.activeView)
   const catalog = useProjectCatalog()
   const routeRepo =
     location.kind === 'project'
@@ -120,14 +122,48 @@ export function ExtensionWorkbenchLocationBridge({
   const locationKey = workbenchLocationKey(location)
   const appliedLocationKeyRef = useRef<string | null>(null)
   useEffect(() => {
-    if (!workspaceSessionReady || appliedLocationKeyRef.current === locationKey) {
+    if (
+      !persistedUIReady ||
+      !workspaceSessionReady ||
+      (appliedLocationKeyRef.current === locationKey && isWorkbenchPageActive(location, activeView))
+    ) {
       return
     }
     if (applyWorkbenchLocation(location, worktrees)) {
       appliedLocationKeyRef.current = locationKey
     }
-  }, [location, locationKey, unifiedTabsByWorktree, workspaceSessionReady, worktrees])
+  }, [
+    location,
+    locationKey,
+    activeView,
+    persistedUIReady,
+    unifiedTabsByWorktree,
+    workspaceSessionReady,
+    worktrees
+  ])
   return null
+}
+
+function isWorkbenchPageActive(
+  location: WorkbenchLocation,
+  activeView: ReturnType<typeof useAppStore.getState>['activeView']
+): boolean {
+  if (location.kind !== 'page') {
+    return true
+  }
+  switch (location.page) {
+    case 'activity':
+      return activeView === 'home'
+    case 'browser':
+    case 'settings':
+      return activeView === 'settings'
+    case 'mobile':
+      return activeView === 'mobile'
+    case 'skills':
+      return activeView === 'skills'
+    case 'search':
+      return true
+  }
 }
 
 function workbenchLocationKey(location: WorkbenchLocation): string {
@@ -171,7 +207,8 @@ function applyWorkbenchLocation(
       case 'skills':
         state.openSkillsPage()
         return true
-      case 'automations':
+      case 'browser':
+        state.openSettingsPage()
         return true
     }
   }
@@ -179,9 +216,6 @@ function applyWorkbenchLocation(
   const requestedWorktree = location.worktreeId
     ? projectWorktrees.find((worktree) => worktree.id === location.worktreeId)
     : undefined
-  if (location.worktreeId && !requestedWorktree) {
-    return false
-  }
   const currentWorktree = projectWorktrees.find(
     (worktree) => worktree.id === state.activeWorktreeId
   )

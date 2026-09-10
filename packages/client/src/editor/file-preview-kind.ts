@@ -1,4 +1,4 @@
-export type FilePreviewKind = 'audio' | 'image' | 'pdf' | 'video'
+type FilePreviewKind = 'audio' | 'image' | 'pdf' | 'video'
 
 export type FilePreview = {
   kind: FilePreviewKind

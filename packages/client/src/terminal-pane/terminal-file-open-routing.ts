@@ -132,7 +132,7 @@ export function openDetectedFilePath(
     }
 
     if (openWithSystemDefault && canOpenWithSystemDefault) {
-      // Why: Shift+Cmd/Ctrl mirrors URL links by escaping Yiru and honoring the
+      // Why: Shift+Cmd/Ctrl mirrors URL links by escaping AgentStart and honoring the
       // user's OS file associations without adding editor-specific settings.
       const openedWithSystemDefault = await shellClient.shell.openFilePath(filePath)
       if (openedWithSystemDefault || statResult.isDirectory) {
@@ -147,7 +147,7 @@ export function openDetectedFilePath(
       return
     }
 
-    // Why: local HTML files render in Yiru's browser for ordinary Cmd/Ctrl-click,
+    // Why: local HTML files render in AgentStart's browser for ordinary Cmd/Ctrl-click,
     // and remain the fallback if Shift+Cmd/Ctrl cannot launch the OS default.
     if (
       isHtmlFilePath(filePath) &&

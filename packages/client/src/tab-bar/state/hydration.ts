@@ -1,6 +1,6 @@
-import { isValidTerminalTabId } from '@yiru/protocol/terminal/tab-identity'
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
-import type { Tab, TabGroup, TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
+import { isValidTerminalTabId } from '@agentstart/protocol/terminal/tab-identity'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
+import type { Tab, TabGroup, TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 
 import {

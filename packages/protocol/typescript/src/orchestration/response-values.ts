@@ -11,7 +11,7 @@ import {
   type OrchestrationRun as ProtocolRun,
   type OrchestrationRunBinding as ProtocolRunBinding,
   type OrchestrationTask as ProtocolTask
-} from '../../generated/yiru/runtime/v1/orchestration_pb.js'
+} from '../../generated/agent_start/runtime/v1/orchestration_pb.js'
 import {
   dispatchStatusName,
   gateStatusName,

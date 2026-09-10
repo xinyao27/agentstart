@@ -20,7 +20,7 @@ import {
   type KillAllTerminalSurfacesSummary
 } from './kill-all-terminal-surfaces'
 
-export type DaemonActionKind = 'restart' | 'killAll'
+type DaemonActionKind = 'restart' | 'killAll'
 
 export type DaemonActionCallbacks = {
   // Why: ManageSessionsSection owns an optimistic setSessions([]) + rollback

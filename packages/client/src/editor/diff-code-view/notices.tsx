@@ -1,4 +1,4 @@
-import type { LargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
+import type { LargeDiffRenderLimit } from '@agentstart/protocol/git/render-limit'
 import { Suspense } from 'react'
 import { lazyWithRetry as lazy } from '~renderer/application-shell/lazy-with-retry'
 import { translate } from '~renderer/i18n/i18n'
@@ -59,7 +59,7 @@ export function DiffCodeViewNoticeContent({
     return (
       <NoticeShell>
         <span className="flex items-center gap-2">
-          <span className="bg-muted-foreground/50 h-1.5 w-1.5" />
+          <span className="bg-muted-foreground/50 h-1.5 w-1.5 rounded-full" />
           {translate('auto.components.editor.DiffSectionBody.f5cf81cec2', 'Loading diff...')}
         </span>
       </NoticeShell>

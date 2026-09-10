@@ -1,6 +1,6 @@
-import { filterEnabledTuiAgents } from '@yiru/protocol/agent/selection'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
+import { filterEnabledTuiAgents } from '@agentstart/protocol/agent/selection'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { LaunchSource } from '@agentstart/protocol/telemetry/events/foundations'
 import React from 'react'
 import { toast } from 'sonner'
 import { getAgentCatalog } from '~renderer/agent/catalog'
@@ -16,7 +16,7 @@ import { DropdownMenuItem } from '~renderer/ui/dropdown-menu'
 import { AgentLaunchMenuItems } from './agent-launch-menu-items'
 import { buildTabAgentLaunchOptions, orderTabLaunchAgents } from './tab-agent-launch-options'
 
-export type QuickLaunchAgentMenuItemsProps = {
+type QuickLaunchAgentMenuItemsProps = {
   worktreeId: string
   groupId: string
   /** Called after the tab is created so keyboard focus lands in the new xterm.
@@ -41,7 +41,7 @@ function getCatalogEntry(agent: TuiAgent): { id: TuiAgent; label: string } | nul
   return getAgentCatalog().find((a) => a.id === agent) ?? null
 }
 
-export function shouldShowLaunchWatchdogTimeout({ hasPty }: { hasPty: boolean }): boolean {
+function shouldShowLaunchWatchdogTimeout({ hasPty }: { hasPty: boolean }): boolean {
   return !hasPty
 }
 
@@ -175,7 +175,7 @@ function QuickLaunchAgentMenuItemsInner({
       />
       <DropdownMenuItem
         onClick={openAgentSettings}
-        className="text-muted-foreground gap-2 px-2 py-1.5 text-[12px] leading-5 font-medium"
+        className="text-muted-foreground gap-2 rounded-[7px] px-2 py-1.5 text-[12px] leading-5 font-medium"
       >
         <SettingsIcon className="size-4" />
         {translate('auto.components.tab.bar.QuickLaunchButton.348a04c1ad', 'Agent settings…')}

@@ -1,4 +1,4 @@
-import type { AgentStatusState, AgentType } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusState, AgentType } from '@agentstart/protocol/agent/status-records'
 
 export type SyntheticAgentTitleProfile = {
   workingLabel: string
@@ -77,15 +77,4 @@ export function getSyntheticAgentTerminalTitle(
     return null
   }
   return state === 'blocked' || state === 'waiting' ? profile.permissionLabel : profile.idleLabel
-}
-
-export function shouldDriveSyntheticAgentTitleFromHook(
-  agentType: AgentType | null | undefined,
-  state: AgentStatusState
-): boolean {
-  const profile = getSyntheticAgentTitleProfile(agentType)
-  if (!profile || profile.synthesizeTerminalTitle === false) {
-    return false
-  }
-  return state !== 'working' || profile.synthesizeWorkingTitle !== false
 }

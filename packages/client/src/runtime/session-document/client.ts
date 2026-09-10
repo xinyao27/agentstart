@@ -4,7 +4,7 @@ import {
   type ShellSessionClient,
   type ShellSessionDocumentValue,
   type ShellSessionSnapshot
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 
@@ -25,6 +25,7 @@ type HostState = {
   snapshot: ShellSessionSnapshot
   input: ShellSessionDocumentValue
   pending: Edit | null
+  failedPending: Edit | null
   tail: Promise<void>
   projected?: { epoch: string; revision: bigint }
 }
@@ -72,6 +73,7 @@ export class SessionDocumentClient {
         snapshot,
         input: structuredClone(snapshot.session),
         pending: null,
+        failedPending: null,
         tail: Promise.resolve()
       })
     }
@@ -140,12 +142,16 @@ export class SessionDocumentClient {
           return
         }
         if (state.snapshot.version.epoch !== snapshot.version.epoch && state.pending) {
-          toast.error(
-            translate(
-              'session.ownerChanged',
-              'The workspace session was replaced. Your pending edits have not been saved.'
+          if (state.failedPending !== state.pending) {
+            state.failedPending = state.pending
+            toast.error(
+              translate(
+                'session.ownerChanged',
+                'The workspace session was replaced. Your pending edits have not been saved.'
+              ),
+              { id: this.toastId(hostId), duration: Infinity }
             )
-          )
+          }
           return
         }
         state.snapshot = snapshot
@@ -153,6 +159,10 @@ export class SessionDocumentClient {
           ? mergeSessionEdit(state.pending.base, state.pending.desired, snapshot.session)
           : { ok: true as const, document: snapshot.session }
         if (!merged.ok) {
+          if (state.failedPending === state.pending) {
+            return
+          }
+          state.failedPending = state.pending
           void this.enqueue(state, hostId).catch(() => {})
           return
         }
@@ -244,6 +254,9 @@ export class SessionDocumentClient {
           } else if (state.pending) {
             state.pending = { base: edit.desired, desired: state.pending.desired }
           }
+          if (state.failedPending === edit) {
+            state.failedPending = null
+          }
           toast.dismiss(this.toastId(hostId))
           if (state.pending) {
             void this.enqueue(state, hostId).catch(() => {})
@@ -266,6 +279,7 @@ export class SessionDocumentClient {
         )
       )
     } catch (error) {
+      state.failedPending = edit
       toast.error(translate('session.saveFailed', 'Workspace changes could not be saved'), {
         id: this.toastId(hostId),
         description:
@@ -278,6 +292,9 @@ export class SessionDocumentClient {
             ? translate('session.replaceConflicts', 'Replace conflicting values')
             : translate('session.retrySave', 'Retry saving'),
           onClick: () => {
+            if (state.failedPending === edit) {
+              state.failedPending = null
+            }
             void this.enqueue(state, hostId, confirmation).catch(() => {})
           }
         }

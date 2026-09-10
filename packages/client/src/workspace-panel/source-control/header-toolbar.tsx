@@ -1,5 +1,5 @@
-import type { GitBranchCompareSummary } from '@yiru/protocol/git/branch-compare-types'
-import type { SourceControlViewMode } from '@yiru/protocol/settings/workspace-preferences'
+import type { GitBranchCompareSummary } from '@agentstart/protocol/git/branch-compare-types'
+import type { SourceControlViewMode } from '@agentstart/protocol/settings/workspace-preferences'
 import React, { useEffect, useRef } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { GitBranch, MagnifyingGlass as Search, X } from '~renderer/icons/hugeicons'
@@ -172,7 +172,7 @@ export function SourceControlHeaderToolbar({
                   >
                     <Search className="size-3.5" />
                     {normalizedFilter ? (
-                      <span className="bg-foreground absolute top-1 right-1 size-1.5" />
+                      <span className="bg-foreground absolute top-1 right-1 size-1.5 rounded-full" />
                     ) : null}
                   </Button>
                 }

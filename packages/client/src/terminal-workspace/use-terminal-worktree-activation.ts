@@ -1,4 +1,4 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
 import { useLayoutEffect } from 'react'
 import type { RefObject } from 'react'
 import { hasRegisteredRuntimeTerminalTab } from '~renderer/runtime/sync-runtime-graph'

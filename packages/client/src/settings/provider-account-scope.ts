@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { getLocalExecutionHostLabel } from '~renderer/execution-host/labels'
 import { translate } from '~renderer/i18n/i18n'
 

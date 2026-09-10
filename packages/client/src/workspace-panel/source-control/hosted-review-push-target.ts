@@ -1,9 +1,9 @@
-import { getPublishTargetDisplayName } from '@yiru/protocol/git/publish-target'
-import { gitRefTargetsBranchName } from '@yiru/protocol/git/remote-branch-name'
-import type { GitUpstreamStatus } from '@yiru/protocol/git/status-types'
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
-import type { HostedReviewState } from '@yiru/protocol/hosted-review/types'
-import { isPositiveHostedReviewNumber } from '@yiru/protocol/hosted-review/types'
+import { getPublishTargetDisplayName } from '@agentstart/protocol/git/publish-target'
+import { gitRefTargetsBranchName } from '@agentstart/protocol/git/remote-branch-name'
+import type { GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
+import type { HostedReviewState } from '@agentstart/protocol/hosted-review/types'
+import { isPositiveHostedReviewNumber } from '@agentstart/protocol/hosted-review/types'
 
 export function hasUsableHostedReviewPushTarget(args: {
   pushTarget?: GitPushTarget

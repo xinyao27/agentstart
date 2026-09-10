@@ -69,7 +69,7 @@ export const repoAddedSchema = z
   })
   .strict()
 
-export const appStarredYiruSchema = z
+export const appStarredAgentStartSchema = z
   .object({
     source: appStarSourceSchema,
     nth_repo_added: nthRepoAddedSchema
@@ -165,22 +165,22 @@ export const settingsChangedSchema = z
 export const telemetryOptedInSchema = z.object({ via: optInViaSchema }).strict()
 export const telemetryOptedOutSchema = z.object({ via: optInViaSchema }).strict()
 
-export const yiruCliFeatureTipSourceSchema = z.enum(['app_open', 'manual'])
-export const yiruCliFeatureTipShownSchema = z
+export const agentstartCliFeatureTipSourceSchema = z.enum(['app_open', 'manual'])
+export const agentstartCliFeatureTipShownSchema = z
   .object({
-    source: yiruCliFeatureTipSourceSchema,
+    source: agentstartCliFeatureTipSourceSchema,
     nth_repo_added: nthRepoAddedSchema
   })
   .strict()
-export const yiruCliFeatureTipSetupClickedSchema = z
+export const agentstartCliFeatureTipSetupClickedSchema = z
   .object({
-    source: yiruCliFeatureTipSourceSchema,
+    source: agentstartCliFeatureTipSourceSchema,
     nth_repo_added: nthRepoAddedSchema
   })
   .strict()
-export const yiruCliFeatureTipSetupResultSchema = z
+export const agentstartCliFeatureTipSetupResultSchema = z
   .object({
-    source: yiruCliFeatureTipSourceSchema,
+    source: agentstartCliFeatureTipSourceSchema,
     result: z.enum(['installed', 'needs_attention', 'dev_preview', 'failed']),
     nth_repo_added: nthRepoAddedSchema
   })
@@ -188,13 +188,13 @@ export const yiruCliFeatureTipSetupResultSchema = z
 
 export const commandPaletteFeatureTipShownSchema = z
   .object({
-    source: yiruCliFeatureTipSourceSchema,
+    source: agentstartCliFeatureTipSourceSchema,
     nth_repo_added: nthRepoAddedSchema
   })
   .strict()
 export const commandPaletteFeatureTipAcknowledgedSchema = z
   .object({
-    source: yiruCliFeatureTipSourceSchema,
+    source: agentstartCliFeatureTipSourceSchema,
     nth_repo_added: nthRepoAddedSchema
   })
   .strict()
@@ -238,7 +238,7 @@ export const featureWallFeatureSelectedSchema = z
 
 export const coreTelemetryEventSchemas = {
   app_opened: appOpenedSchema,
-  app_starred_yiru: appStarredYiruSchema,
+  app_starred_agentstart: appStarredAgentStartSchema,
   star_nag_outcome: starNagOutcomeEventSchema,
   feature_interaction_usage_bucket_reached: featureInteractionUsageBucketReachedSchema,
   repo_added: repoAddedSchema,
@@ -250,9 +250,9 @@ export const coreTelemetryEventSchemas = {
   settings_changed: settingsChangedSchema,
   telemetry_opted_in: telemetryOptedInSchema,
   telemetry_opted_out: telemetryOptedOutSchema,
-  yiru_cli_feature_tip_shown: yiruCliFeatureTipShownSchema,
-  yiru_cli_feature_tip_setup_clicked: yiruCliFeatureTipSetupClickedSchema,
-  yiru_cli_feature_tip_setup_result: yiruCliFeatureTipSetupResultSchema,
+  agentstart_cli_feature_tip_shown: agentstartCliFeatureTipShownSchema,
+  agentstart_cli_feature_tip_setup_clicked: agentstartCliFeatureTipSetupClickedSchema,
+  agentstart_cli_feature_tip_setup_result: agentstartCliFeatureTipSetupResultSchema,
   command_palette_feature_tip_shown: commandPaletteFeatureTipShownSchema,
   command_palette_feature_tip_acknowledged: commandPaletteFeatureTipAcknowledgedSchema,
   feature_wall_opened: featureWallOpenedSchema,

@@ -1,4 +1,4 @@
-import type { GitConflictKind, GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitConflictKind, GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import React from 'react'
 import type { ConflictReviewEntry, OpenFile } from '~renderer/editor/state'
 import { translate } from '~renderer/i18n/i18n'
@@ -18,7 +18,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
 import { ConflictReviewFileTree } from './conflict-review-file-tree'
 
-export const CONFLICT_KIND_LABELS: Record<GitConflictKind, string> = {
+const CONFLICT_KIND_LABELS: Record<GitConflictKind, string> = {
   both_modified: 'Both modified',
   both_added: 'Both added',
   deleted_by_us: 'Deleted by us',
@@ -28,7 +28,7 @@ export const CONFLICT_KIND_LABELS: Record<GitConflictKind, string> = {
   both_deleted: 'Both deleted'
 }
 
-export const CONFLICT_HINT_MAP: Record<GitConflictKind, string> = {
+const CONFLICT_HINT_MAP: Record<GitConflictKind, string> = {
   both_modified: 'Resolve the conflict markers',
   both_added: 'Choose which version to keep, or combine them',
   deleted_by_us: 'Decide whether to restore the file',

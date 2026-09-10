@@ -617,7 +617,7 @@ async fn create_operation_directory() -> Result<PathBuf, ComputerError> {
         .into_iter()
         .map(|byte| format!("{byte:02x}"))
         .collect::<String>();
-    let path = std::env::temp_dir().join(format!("yiru-computer-use-{suffix}"));
+    let path = std::env::temp_dir().join(format!("agentstart-computer-use-{suffix}"));
     create_private_directory(&path)?;
     Ok(path)
 }

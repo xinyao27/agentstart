@@ -1,10 +1,10 @@
 import {
   PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
   PROJECT_CONTEXT_PROTOCOL_CAPABILITY
-} from '@yiru/protocol'
-import { LOCAL_EXECUTION_HOST_ID, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
+} from '@agentstart/protocol'
+import { LOCAL_EXECUTION_HOST_ID, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import type { ExecutionHostRegistryEntry } from '~renderer/execution-host-registry'
 import { getExecutionHostLabel } from '~renderer/execution-host/labels'
 import { translate } from '~renderer/i18n/i18n'
@@ -32,7 +32,7 @@ export type ProjectHostSetupOption =
 
 export type ReadyProjectHostSetupOption = Extract<ProjectHostSetupOption, { kind: 'ready' }>
 
-export type NeedsSetupProjectHostOption = Extract<ProjectHostSetupOption, { kind: 'needs-setup' }>
+type NeedsSetupProjectHostOption = Extract<ProjectHostSetupOption, { kind: 'needs-setup' }>
 
 type BuildReadySetupOptionsInput = {
   projectId: string
@@ -178,7 +178,7 @@ function getHostSetupAvailability(host: ExecutionHostRegistryEntry): {
         isAvailable: false,
         detail: translate(
           'project.hostSetup.upgrade',
-          'Update Yiru on this host to set up projects'
+          'Update AgentStart on this host to set up projects'
         )
       }
     }

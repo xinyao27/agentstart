@@ -2,12 +2,12 @@ import {
   getTerminalQuickCommandScope,
   isTerminalQuickCommandComplete,
   terminalQuickCommandMatchesRepo
-} from '@yiru/protocol/terminal/quick-commands'
+} from '@agentstart/protocol/terminal/quick-commands'
 import type {
   TerminalQuickCommand,
   TerminalQuickCommandScope
-} from '@yiru/protocol/terminal/quick-commands'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+} from '@agentstart/protocol/terminal/quick-commands'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 import { useState } from 'react'
 
 import { translate } from '../i18n/i18n'

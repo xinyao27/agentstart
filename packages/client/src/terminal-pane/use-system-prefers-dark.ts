@@ -33,7 +33,7 @@ export function getSystemPrefersDarkSnapshot(): boolean {
   return snapshot
 }
 
-export function subscribeToSystemPrefersDarkChange(onChange: () => void): () => void {
+function subscribeToSystemPrefersDarkChange(onChange: () => void): () => void {
   subscribers.add(onChange)
   if (!unsubscribeMediaQuery) {
     const media = readMediaQueryList()

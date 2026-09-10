@@ -4,8 +4,8 @@ use base64::engine::DecodePaddingMode;
 use base64::engine::general_purpose::STANDARD;
 use base64::engine::general_purpose::{GeneralPurpose, GeneralPurposeConfig};
 
-pub(super) const MANAGED_MARKER: &str = "# Yiru managed WSL CLI launcher";
-pub(super) const BRIDGE_MANAGED_MARKER: &str = "# Yiru managed WSL CLI PowerShell bridge";
+pub(super) const MANAGED_MARKER: &str = "# AgentStart managed WSL CLI launcher";
+pub(super) const BRIDGE_MANAGED_MARKER: &str = "# AgentStart managed WSL CLI PowerShell bridge";
 
 pub(super) fn build_launcher(windows_launcher_path: &str, bridge_path: &str) -> String {
     let encoded_target = STANDARD.encode(windows_launcher_path);
@@ -13,37 +13,37 @@ pub(super) fn build_launcher(windows_launcher_path: &str, bridge_path: &str) -> 
         "#!/usr/bin/env bash".to_owned(),
         "set -euo pipefail".to_owned(),
         MANAGED_MARKER.to_owned(),
-        format!("# YIRU_WIN_LAUNCHER_B64={encoded_target}"),
-        format!("YIRU_WIN_LAUNCHER={}", quote_shell(windows_launcher_path)),
-        format!("YIRU_BRIDGE_PS1={}", quote_shell(bridge_path)),
+        format!("# AGENTSTART_WIN_LAUNCHER_B64={encoded_target}"),
+        format!("AGENTSTART_WIN_LAUNCHER={}", quote_shell(windows_launcher_path)),
+        format!("AGENTSTART_BRIDGE_PS1={}", quote_shell(bridge_path)),
         "if command -v powershell.exe >/dev/null 2>&1; then".to_owned(),
-        "  YIRU_POWERSHELL=powershell.exe".to_owned(),
+        "  AGENTSTART_POWERSHELL=powershell.exe".to_owned(),
         "elif [ -x /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe ]; then".to_owned(),
-        "  YIRU_POWERSHELL=/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe".to_owned(),
+        "  AGENTSTART_POWERSHELL=/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe".to_owned(),
         "else".to_owned(),
-        "  echo \"Yiru WSL CLI requires Windows interop and could not find powershell.exe.\" >&2".to_owned(),
+        "  echo \"AgentStart WSL CLI requires Windows interop and could not find powershell.exe.\" >&2".to_owned(),
         "  exit 1".to_owned(),
         "fi".to_owned(),
         "# Why: a shell can outlive a deleted worktree; keep explicit CLI selectors and".to_owned(),
         "# help usable, and repair cwd before any WSL interop tool tries to resolve it.".to_owned(),
-        "YIRU_WSL_CWD=$(pwd -P 2>/dev/null) || {".to_owned(),
-        "  YIRU_WSL_CWD=/".to_owned(),
+        "AGENTSTART_WSL_CWD=$(pwd -P 2>/dev/null) || {".to_owned(),
+        "  AGENTSTART_WSL_CWD=/".to_owned(),
         "  cd /".to_owned(),
         "}".to_owned(),
-        "YIRU_BRIDGE_PS1_WIN=$(wslpath -w \"$YIRU_BRIDGE_PS1\")".to_owned(),
-        "YIRU_WSL_CWD_WIN=$(wslpath -w \"$YIRU_WSL_CWD\")".to_owned(),
-        "exec \"$YIRU_POWERSHELL\" -NoProfile -ExecutionPolicy Bypass -File \"$YIRU_BRIDGE_PS1_WIN\" \"$YIRU_WIN_LAUNCHER\" -WslCwd \"$YIRU_WSL_CWD_WIN\" \"$@\"".to_owned(),
+        "AGENTSTART_BRIDGE_PS1_WIN=$(wslpath -w \"$AGENTSTART_BRIDGE_PS1\")".to_owned(),
+        "AGENTSTART_WSL_CWD_WIN=$(wslpath -w \"$AGENTSTART_WSL_CWD\")".to_owned(),
+        "exec \"$AGENTSTART_POWERSHELL\" -NoProfile -ExecutionPolicy Bypass -File \"$AGENTSTART_BRIDGE_PS1_WIN\" \"$AGENTSTART_WIN_LAUNCHER\" -WslCwd \"$AGENTSTART_WSL_CWD_WIN\" \"$@\"".to_owned(),
         String::new(),
     ]
     .join("\n")
 }
 
 pub(super) fn build_bridge() -> &'static str {
-    r#"# Yiru managed WSL CLI PowerShell bridge
+    r#"# AgentStart managed WSL CLI PowerShell bridge
 [CmdletBinding(PositionalBinding=$false)]
 param(
   [Parameter(Mandatory=$true, Position=0)]
-  [string]$YiruLauncher,
+  [string]$AgentStartLauncher,
 
   [string]$WslCwd,
 
@@ -54,15 +54,15 @@ param(
 $exitCode = 0
 try {
   if ([string]::IsNullOrEmpty($WslCwd)) {
-    Remove-Item Env:YIRU_CLI_CWD -ErrorAction SilentlyContinue
+    Remove-Item Env:AGENTSTART_CLI_CWD -ErrorAction SilentlyContinue
   } else {
-    $env:YIRU_CLI_CWD = $WslCwd
+    $env:AGENTSTART_CLI_CWD = $WslCwd
   }
   # Why: unlike SSH passthrough, WSL paths arrive as Windows paths and are
   # safe for the desktop runtime to resolve through the selected distro.
-  $env:YIRU_CLI_EXECUTION_HOST_KIND = 'wsl'
-  Push-Location -LiteralPath (Split-Path -Parent $YiruLauncher)
-  & $YiruLauncher @ForwardArgs
+  $env:AGENTSTART_CLI_EXECUTION_HOST_KIND = 'wsl'
+  Push-Location -LiteralPath (Split-Path -Parent $AgentStartLauncher)
+  & $AgentStartLauncher @ForwardArgs
   if ($null -eq $LASTEXITCODE) {
     if (-not $?) {
       $exitCode = 1
@@ -117,12 +117,12 @@ pub(super) fn build_registration_command(
         "trap rollback EXIT".to_owned(),
         safe_replace_guard(command_path, MANAGED_MARKER),
         safe_replace_guard(&bridge_path, BRIDGE_MANAGED_MARKER),
-        "cat > \"$command_tmp\" <<'YIRU_WSL_CLI'".to_owned(),
+        "cat > \"$command_tmp\" <<'AGENTSTART_WSL_CLI'".to_owned(),
         build_launcher(launcher_path, &bridge_path),
-        "YIRU_WSL_CLI".to_owned(),
-        "cat > \"$bridge_tmp\" <<'YIRU_WSL_BRIDGE'".to_owned(),
+        "AGENTSTART_WSL_CLI".to_owned(),
+        "cat > \"$bridge_tmp\" <<'AGENTSTART_WSL_BRIDGE'".to_owned(),
         build_bridge().to_owned(),
-        "YIRU_WSL_BRIDGE".to_owned(),
+        "AGENTSTART_WSL_BRIDGE".to_owned(),
         "chmod 755 \"$command_tmp\"".to_owned(),
         "chmod 644 \"$bridge_tmp\"".to_owned(),
         safe_replace_guard(command_path, MANAGED_MARKER),
@@ -159,11 +159,13 @@ pub(super) fn build_safe_remove_command(command_path: &str) -> String {
 }
 
 pub(super) fn bridge_path(command_path: &str) -> String {
-    let root = command_path.strip_suffix("/.local/bin/yiru").map_or_else(
-        || command_path.to_owned(),
-        |prefix| format!("{prefix}/.local/share/yiru"),
-    );
-    format!("{root}/yiru-wsl-bridge.ps1")
+    let root = command_path
+        .strip_suffix("/.local/bin/agentstart")
+        .map_or_else(
+            || command_path.to_owned(),
+            |prefix| format!("{prefix}/.local/share/agentstart"),
+        );
+    format!("{root}/agentstart-wsl-bridge.ps1")
 }
 
 pub(super) fn parse_managed_launcher_target(content: &str) -> Option<String> {
@@ -174,7 +176,7 @@ pub(super) fn parse_managed_launcher_target(content: &str) -> Option<String> {
             .with_decode_padding_mode(DecodePaddingMode::Indifferent),
     );
     for line in content.lines() {
-        if let Some(encoded) = line.strip_prefix("# YIRU_WIN_LAUNCHER_B64=")
+        if let Some(encoded) = line.strip_prefix("# AGENTSTART_WIN_LAUNCHER_B64=")
             && !encoded.is_empty()
             && encoded
                 .bytes()
@@ -186,7 +188,7 @@ pub(super) fn parse_managed_launcher_target(content: &str) -> Option<String> {
     }
     for line in content.lines() {
         let Some(quoted) = line
-            .strip_prefix("YIRU_WIN_LAUNCHER='")
+            .strip_prefix("AGENTSTART_WIN_LAUNCHER='")
             .and_then(|line| line.strip_suffix('\''))
         else {
             continue;
@@ -223,10 +225,10 @@ fn safe_replace_guard(path: &str, marker: &str) -> String {
     let marker = quote_shell(marker);
     [
         format!("if [ -L {path} ]; then"),
-        "  echo \"__YIRU_CONFLICT__\"".to_owned(),
+        "  echo \"__AGENTSTART_CONFLICT__\"".to_owned(),
         "  exit 23".to_owned(),
         format!("elif [ -e {path} ] && {{ [ ! -f {path} ] || ! grep -Fq {marker} {path}; }}; then"),
-        "  echo \"__YIRU_CONFLICT__\"".to_owned(),
+        "  echo \"__AGENTSTART_CONFLICT__\"".to_owned(),
         "  exit 23".to_owned(),
         "fi".to_owned(),
     ]
@@ -242,7 +244,7 @@ fn registration_lock(command_path: &str) -> String {
         ),
         format!(
             "  exec 9>{}",
-            quote_shell(&format!("{lock_directory}/.yiru-wsl-cli.lock"))
+            quote_shell(&format!("{lock_directory}/.agentstart-wsl-cli.lock"))
         ),
         "  flock -x -w 30 9".to_owned(),
         "fi".to_owned(),

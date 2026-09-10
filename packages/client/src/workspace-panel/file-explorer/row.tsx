@@ -1,4 +1,4 @@
-import type { GitFileStatus } from '@yiru/protocol/git/status-types'
+import type { GitFileStatus } from '@agentstart/protocol/git/status-types'
 import { useEffect, useRef } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import type { RuntimeFileOperationArgs } from '~renderer/runtime/file-client'
@@ -10,35 +10,15 @@ import {
   WORKSPACE_FILE_PATHS_MIME
 } from '~renderer/workspace/file-drag'
 
-import { InlineInputRow, type InlineInput } from './inline-input-row'
-import {
-  copyFileToOsClipboard,
-  downloadRemoteEntry,
-  shouldShowCollapseFolderAction,
-  shouldShowCopyFileAction,
-  shouldShowFindInFolderAction,
-  shouldShowOpenInTerminalAction,
-  shouldShowRemoteDownloadAction,
-  shouldShowViewFileAction
-} from './row-actions'
+import type { InlineInput } from './inline-input-row'
+import { copyFileToOsClipboard, downloadRemoteEntry } from './row-actions'
 import { setMultiPathDragPreview } from './row-drag-preview'
 import { FileExplorerRowMenu } from './row-menu'
 import { FileExplorerTreeRowButton } from './tree-row-button'
 import type { TreeNode } from './types'
 import { useFileExplorerRowDrag } from './use-row-drag'
 
-export { InlineInputRow, type InlineInput }
-export {
-  copyFileToOsClipboard,
-  downloadRemoteEntry,
-  shouldShowCollapseFolderAction,
-  shouldShowCopyFileAction,
-  shouldShowFindInFolderAction,
-  shouldShowOpenInTerminalAction,
-  shouldShowRemoteDownloadAction,
-  shouldShowViewFileAction
-}
-
+export { type InlineInput }
 type FileExplorerRowProps = {
   node: TreeNode
   isExpanded: boolean

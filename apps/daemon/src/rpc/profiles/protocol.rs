@@ -1,16 +1,17 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
-    ShellYiruProfilesServiceCreateLocalRequest, ShellYiruProfilesServiceFindProjectProfilesRequest,
-    ShellYiruProfilesServiceListRequest, ShellYiruProfilesServiceSwitchProfileRequest,
-    ShellYiruProfilesServiceTransferProjectRequest, ShellYiruProfilesTransferMode,
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
+    ShellAgentStartProfilesServiceCreateLocalRequest,
+    ShellAgentStartProfilesServiceFindProjectProfilesRequest,
+    ShellAgentStartProfilesServiceListRequest, ShellAgentStartProfilesServiceSwitchProfileRequest,
+    ShellAgentStartProfilesServiceTransferProjectRequest, ShellAgentStartProfilesTransferMode,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use super::ProfilesRpc;
 use super::protocol_values::{create_value, find_value, list_value, switch_value, transfer_value};
 
 pub(in crate::rpc) async fn list(rpc: &ProfilesRpc, payload: &[u8]) -> Result<Vec<u8>, Status> {
-    decode::<ShellYiruProfilesServiceListRequest>(payload)?;
+    decode::<ShellAgentStartProfilesServiceListRequest>(payload)?;
     let profiles = rpc.list_profiles().await.map_err(profiles_status)?;
     Ok(encode(&list_value(&profiles)?))
 }
@@ -19,7 +20,7 @@ pub(in crate::rpc) async fn create_local(
     rpc: &ProfilesRpc,
     payload: &[u8],
 ) -> Result<Vec<u8>, Status> {
-    let request = decode::<ShellYiruProfilesServiceCreateLocalRequest>(payload)?;
+    let request = decode::<ShellAgentStartProfilesServiceCreateLocalRequest>(payload)?;
     let name = request
         .name
         .filter(|name| !name.trim().is_empty())
@@ -32,7 +33,7 @@ pub(in crate::rpc) async fn switch_profile(
     rpc: &ProfilesRpc,
     payload: &[u8],
 ) -> Result<Vec<u8>, Status> {
-    let request = decode::<ShellYiruProfilesServiceSwitchProfileRequest>(payload)?;
+    let request = decode::<ShellAgentStartProfilesServiceSwitchProfileRequest>(payload)?;
     let profile_id = required_trimmed(&request.profile_id, "profileId")?;
     let profiles = rpc
         .switch_profile(profile_id)
@@ -45,11 +46,11 @@ pub(in crate::rpc) async fn transfer_project(
     rpc: &ProfilesRpc,
     payload: &[u8],
 ) -> Result<Vec<u8>, Status> {
-    let request = decode::<ShellYiruProfilesServiceTransferProjectRequest>(payload)?;
+    let request = decode::<ShellAgentStartProfilesServiceTransferProjectRequest>(payload)?;
     let mode = match request.mode() {
-        ShellYiruProfilesTransferMode::Move => "move",
-        ShellYiruProfilesTransferMode::Copy => "copy",
-        ShellYiruProfilesTransferMode::Unspecified => {
+        ShellAgentStartProfilesTransferMode::Move => "move",
+        ShellAgentStartProfilesTransferMode::Copy => "copy",
+        ShellAgentStartProfilesTransferMode::Unspecified => {
             return Err(invalid_argument("Transfer mode is invalid"));
         }
     };
@@ -67,7 +68,7 @@ pub(in crate::rpc) async fn find_project_profiles(
     rpc: &ProfilesRpc,
     payload: &[u8],
 ) -> Result<Vec<u8>, Status> {
-    let request = decode::<ShellYiruProfilesServiceFindProjectProfilesRequest>(payload)?;
+    let request = decode::<ShellAgentStartProfilesServiceFindProjectProfilesRequest>(payload)?;
     let path = required_trimmed(&request.path, "path")?;
     let execution_host_id = optional_trimmed(request.execution_host_id);
     if let Some(host) = execution_host_id.as_deref()

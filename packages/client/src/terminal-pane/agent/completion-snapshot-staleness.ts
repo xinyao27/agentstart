@@ -1,4 +1,4 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
 
 import type { AgentCompletionStatusSnapshot } from './completion-coordinator-types'
 

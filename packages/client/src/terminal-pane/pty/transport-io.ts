@@ -104,9 +104,14 @@ export function createTransportIo(options: TransportIoOptions): TransportIo {
     respondToPixelSizeQueries,
     claimViewport: () => {
       const ptyId = options.transport.getPtyId()
-      if (!ptyId || getFitOverrideForPty(ptyId)?.mode !== 'remote-desktop-fit') {
+      // Why: fit and driver updates are separate ordered events. Preserve the
+      // phone's ownership if mobile-fit arrives just before its input lock.
+      if (!ptyId || getFitOverrideForPty(ptyId)?.mode === 'mobile-fit') {
         return
       }
+      // Why: multiple workbench pages can subscribe to one PTY. A real keypress
+      // makes this pane the authoritative driver; claim before input so a
+      // hidden page cannot leave the visible stream rejected as a spectator.
       let proposed: { cols: number; rows: number } | undefined
       try {
         proposed = options.pane.fitAddon.proposeDimensions()

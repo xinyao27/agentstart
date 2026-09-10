@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use rusqlite::{Connection, OptionalExtension, Transaction};
 use serde_json::{Map, Value};
@@ -38,10 +38,11 @@ pub(super) fn list(
         .collect()
 }
 
-pub(super) fn sync_workbench(
+pub(super) fn merge_workbench(
     connection: &mut Connection,
     entries: &[WorkbenchWorktreeMetadata],
 ) -> Result<(), WorktreeMetadataError> {
+    const IMPORT_KEY: &str = "worktree-metadata";
     let projects = known_projects(connection)?;
     let stored_ids = stored_worktree_ids(connection)?;
     let entries = entries
@@ -62,33 +63,55 @@ pub(super) fn sync_workbench(
     let transaction = connection
         .transaction()
         .map_err(WorktreeMetadataError::storage)?;
-    let ids = entries
-        .iter()
-        .map(|(_, _, storage_id)| storage_id.as_str())
-        .collect::<HashSet<_>>();
-    for (entry, storage_project_id, storage_id) in &entries {
-        upsert(&transaction, entry, storage_project_id, storage_id)?;
+    let completed = transaction
+        .query_row(
+            "SELECT EXISTS(SELECT 1 FROM legacy_import WHERE key = ?1)",
+            [IMPORT_KEY],
+            |row| row.get::<_, bool>(0),
+        )
+        .map_err(WorktreeMetadataError::storage)?;
+    if completed {
+        return Ok(());
     }
-    let mut statement = transaction
-        .prepare("SELECT storage_id FROM worktree_metadata WHERE authority = 'workbench'")
-        .map_err(WorktreeMetadataError::storage)?;
-    let stored = statement
-        .query_map([], |row| row.get::<_, String>(0))
-        .map_err(WorktreeMetadataError::storage)?;
-    let mut removed = Vec::new();
-    for id in stored {
-        let id = id.map_err(WorktreeMetadataError::storage)?;
-        if !ids.contains(id.as_str()) {
-            removed.push(id);
+    let import_entries = stored_ids.is_empty();
+    for (entry, storage_project_id, storage_id) in &entries {
+        if import_entries {
+            insert_legacy(&transaction, entry, storage_project_id, storage_id)?;
         }
     }
-    drop(statement);
-    for id in removed {
-        transaction
-            .execute("DELETE FROM worktree_metadata WHERE storage_id = ?1", [id])
-            .map_err(WorktreeMetadataError::storage)?;
-    }
+    transaction
+        .execute(
+            "INSERT INTO legacy_import(key, completed_at) VALUES (?1, ?2)",
+            rusqlite::params![IMPORT_KEY, unix_millis()],
+        )
+        .map_err(WorktreeMetadataError::storage)?;
     transaction.commit().map_err(WorktreeMetadataError::storage)
+}
+
+fn insert_legacy(
+    transaction: &Transaction<'_>,
+    entry: &WorkbenchWorktreeMetadata,
+    storage_project_id: &str,
+    storage_id: &str,
+) -> Result<(), WorktreeMetadataError> {
+    transaction
+        .execute(
+            "INSERT OR IGNORE INTO worktree_metadata(
+               storage_id, id, project_id, host_id, path, display_name, metadata_json, updated_at, authority
+             ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 'workbench')",
+            rusqlite::params![
+                storage_id,
+                entry.id,
+                storage_project_id,
+                entry.host_id,
+                entry.path,
+                entry.display_name,
+                bounded_json(&entry.metadata)?,
+                entry.updated_at,
+            ],
+        )
+        .map(|_| ())
+        .map_err(WorktreeMetadataError::storage)
 }
 
 fn stored_worktree_ids(
@@ -125,41 +148,6 @@ fn known_projects(
         .map_err(WorktreeMetadataError::storage)?;
     rows.map(|row| row.map_err(WorktreeMetadataError::storage))
         .collect()
-}
-
-fn upsert(
-    transaction: &Transaction<'_>,
-    entry: &WorkbenchWorktreeMetadata,
-    storage_project_id: &str,
-    storage_id: &str,
-) -> Result<(), WorktreeMetadataError> {
-    transaction
-        .execute(
-            "INSERT INTO worktree_metadata(
-               storage_id, id, project_id, host_id, path, display_name, metadata_json, updated_at, authority
-             ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 'workbench')
-             ON CONFLICT(storage_id) DO UPDATE SET
-               id = excluded.id,
-               project_id = excluded.project_id,
-               host_id = excluded.host_id,
-               path = excluded.path,
-               display_name = excluded.display_name,
-               metadata_json = excluded.metadata_json,
-               updated_at = excluded.updated_at,
-               authority = 'workbench'",
-            rusqlite::params![
-                storage_id,
-                entry.id,
-                storage_project_id,
-                entry.host_id,
-                entry.path,
-                entry.display_name,
-                bounded_json(&entry.metadata)?,
-                entry.updated_at,
-            ],
-        )
-        .map(|_| ())
-        .map_err(WorktreeMetadataError::storage)
 }
 
 pub(super) fn patch(

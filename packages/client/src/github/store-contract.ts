@@ -3,7 +3,7 @@ import type {
   GitHubPRRefreshEvent,
   GitHubPRRefreshReason,
   PRInfo
-} from '@yiru/protocol/hosted-review/pull-request-types'
+} from '@agentstart/protocol/hosted-review/pull-request-types'
 import type {
   GitHubCommentResult,
   GitHubOwnerRepo,
@@ -11,8 +11,8 @@ import type {
   PRCheckDetail,
   PRCheckRunDetails,
   PRComment
-} from '@yiru/protocol/hosted-review/review-types'
-import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+} from '@agentstart/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
 
 export type CacheEntry<T> = {
   data: T | null
@@ -20,13 +20,13 @@ export type CacheEntry<T> = {
   headSha?: string
 }
 
-export type GitHubFetchOptions = {
+type GitHubFetchOptions = {
   force?: boolean
   noCache?: boolean
   sourceContext?: ProjectSourceContext | null
 }
 
-export type GitHubRepoFetchOptions = GitHubFetchOptions & {
+type GitHubRepoFetchOptions = GitHubFetchOptions & {
   repoId?: string
   executionHostId?: string
 }

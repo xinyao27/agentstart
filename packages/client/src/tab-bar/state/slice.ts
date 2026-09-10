@@ -1,10 +1,10 @@
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
 import type {
   Tab,
   TabContentType,
   TabGroup,
   TabGroupLayoutNode
-} from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
 import type { TabSplitDirection } from '~renderer/tab-bar/split-direction'
 import type { WorkspaceSessionHydrationOptions } from '~renderer/workspace/session-hydration-keys'
@@ -21,7 +21,6 @@ import { createPinActions } from './pin-actions'
 import { createReconciliationActions } from './reconciliation-actions'
 import { createTabLifecycleActions } from './tab-lifecycle-actions'
 
-export type { TabSplitDirection } from '~renderer/tab-bar/split-direction'
 export { findSiblingGroupId } from './model'
 
 export type TabsSlice = {

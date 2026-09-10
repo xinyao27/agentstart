@@ -29,13 +29,13 @@ export function RichMarkdownAnnotationOverlay({
           variant="ghost"
           size="xs"
           type="button"
-          // Why: `.yiru-diff-comment-add-btn` is unlayered CSS in main.css (owned
+          // Why: `.agentstart-diff-comment-add-btn` is unlayered CSS in main.css (owned
           // by the diff-comments feature, out of scope here) and always wins over
           // layered Tailwind utilities, so the themed always-visible treatment for
           // this selection-triggered button stays the paired
           // `rich-markdown-comment-add-btn` override in rich-markdown-content.css
           // rather than fighting the base rule with Tailwind classNames.
-          className="yiru-diff-comment-add-btn rich-markdown-comment-add-btn focus-visible:bg-accent h-auto border-0 p-0"
+          className="agentstart-diff-comment-add-btn rich-markdown-comment-add-btn focus-visible:bg-accent h-auto border-0 p-0"
           style={{
             top: target.buttonTop ?? 56,
             left: target.buttonLeft ?? 16

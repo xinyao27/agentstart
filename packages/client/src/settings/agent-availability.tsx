@@ -1,6 +1,6 @@
-import { normalizeDisabledTuiAgents } from '@yiru/protocol/agent/selection'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { normalizeDisabledTuiAgents } from '@agentstart/protocol/agent/selection'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 
 import type {
@@ -10,7 +10,7 @@ import type {
 } from './agents-pane-types'
 import { SettingsSegmentedControl } from './form-controls'
 
-export function buildAgentAvailabilitySettingsUpdate(
+function buildAgentAvailabilitySettingsUpdate(
   settings: Pick<GlobalSettings, 'defaultTuiAgent' | 'disabledTuiAgents'>,
   id: TuiAgent,
   enabled: boolean
@@ -28,7 +28,7 @@ export function buildAgentAvailabilitySettingsUpdate(
   }
 }
 
-export function createAgentAvailabilityUpdateQueue(): (
+function createAgentAvailabilityUpdateQueue(): (
   options: AgentAvailabilityUpdateQueueOptions
 ) => Promise<void> {
   let pendingUpdate: Promise<unknown> = Promise.resolve()

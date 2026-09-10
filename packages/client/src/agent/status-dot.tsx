@@ -124,7 +124,7 @@ export const AgentStateDot = function AgentStateDot({
     >
       <span
         className={cn(
-          'block',
+          'block rounded-full',
           inner,
           state === 'interrupted' || state === 'failed' ? 'bg-red-500' : 'bg-neutral-500/40'
         )}

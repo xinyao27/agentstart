@@ -2,7 +2,7 @@ import {
   NotebookClient,
   NOTEBOOK_PROTOCOL_CAPABILITY,
   type NotebookCellRunResult
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'

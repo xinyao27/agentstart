@@ -1,4 +1,4 @@
-export function rectIn(
+function rectIn(
   el: HTMLElement,
   stageRect: DOMRect
 ): { left: number; right: number; top: number; bottom: number; cx: number; cy: number } {

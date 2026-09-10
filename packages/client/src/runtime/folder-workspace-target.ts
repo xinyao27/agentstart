@@ -5,14 +5,14 @@ import {
   type FolderWorkspacePathStatusRequestInput,
   type FolderWorkspaceSelectorInput,
   type FolderWorkspaceUpdateInput
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'
 import { readRuntimeStatus } from './status-client'
 
-export async function openFolderWorkspaceProtocolTarget(
+async function openFolderWorkspaceProtocolTarget(
   target: RuntimeClientTarget
 ): Promise<FolderWorkspaceClient | null> {
   const status = await readRuntimeStatus(target)
@@ -24,7 +24,7 @@ export async function openFolderWorkspaceProtocolTarget(
 
 // Why: the folder workspace namespace is protobuf-only, so a missing capability
 // means the connected daemon predates the cutover — an error, not a legacy retry.
-export async function requireFolderWorkspaceProtocolClient(
+async function requireFolderWorkspaceProtocolClient(
   target: RuntimeClientTarget
 ): Promise<FolderWorkspaceClient> {
   const client = await openFolderWorkspaceProtocolTarget(target)
@@ -32,7 +32,7 @@ export async function requireFolderWorkspaceProtocolClient(
     throw new Error(
       translate(
         'runtime.folderWorkspaceTarget.unavailable',
-        'This action needs a current Yiru daemon connection.'
+        'This action needs a current AgentStart daemon connection.'
       )
     )
   }

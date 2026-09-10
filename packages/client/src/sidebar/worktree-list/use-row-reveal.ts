@@ -1,6 +1,6 @@
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import type { LegendListRef } from '@legendapp/list/react'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import type { PendingSidebarRowReveal } from '~renderer/application-shell/state/slice'

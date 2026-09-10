@@ -44,10 +44,10 @@ impl CredentialSnapshot {
                     read_keychain_bytes("Claude Code-credentials", &user).await?,
                 ),
                 (
-                    "Yiru Claude Code Managed Credentials".to_owned(),
+                    "AgentStart Claude Code Managed Credentials".to_owned(),
                     location.account_id.clone(),
                     read_keychain_bytes(
-                        "Yiru Claude Code Managed Credentials",
+                        "AgentStart Claude Code Managed Credentials",
                         &location.account_id,
                     )
                     .await?,

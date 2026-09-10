@@ -64,7 +64,7 @@ fn find_json(
     connection_id: Option<&str>,
     execution_host_id: Option<&str>,
 ) -> Result<Vec<Presence>, ProfileError> {
-    let file = directory.join("yiru-data.json");
+    let file = directory.join("agentstart-data.json");
     let Some(repos) = read_json(&file)?
         .and_then(|value| value.get("repos").cloned())
         .and_then(|value| value.as_array().cloned())
@@ -93,7 +93,7 @@ fn find_sqlite(
     path: &str,
     execution_host_id: Option<&str>,
 ) -> Result<Vec<Presence>, ProfileError> {
-    let file = directory.join("yiru.sqlite");
+    let file = directory.join("agentstart.sqlite");
     if !super::leaf_file::exists(&file)? {
         return Ok(Vec::new());
     }

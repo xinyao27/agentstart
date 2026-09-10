@@ -1,4 +1,3 @@
-import { queryOptions } from '@tanstack/react-query'
 import {
   RITUAL_PROTOCOL_CAPABILITY,
   RitualClient,
@@ -6,7 +5,8 @@ import {
   type RitualRunResult,
   type RitualSchedule,
   type RitualScheduleStatus
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
+import { queryOptions } from '@tanstack/react-query'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
@@ -30,7 +30,7 @@ export async function requireRitualClient(target: RuntimeClientTarget): Promise<
     throw new Error(
       translate(
         'runtime.ritualTarget.unavailable',
-        'Automations need a current Yiru daemon connection.'
+        'Automations need a current AgentStart daemon connection.'
       )
     )
   }

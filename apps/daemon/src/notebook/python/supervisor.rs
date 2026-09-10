@@ -109,5 +109,5 @@ else:
         "launchError": None,
     }
 
-sys.stdout.write("YIRU_NOTEBOOK_RESULT_V1:" + json.dumps(result, separators=(",", ":")))
+sys.stdout.write("AGENTSTART_NOTEBOOK_RESULT_V1:" + json.dumps(result, separators=(",", ":")))
 "#;

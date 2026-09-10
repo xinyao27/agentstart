@@ -1,9 +1,9 @@
-import type { CliInstallStatus } from '@yiru/protocol/cli-values'
+import type { CliInstallStatus } from '@agentstart/protocol/cli-values'
 import {
   deriveGlobalWindowsRuntimeDefaultFromLegacySettings,
   normalizeGlobalWindowsRuntimeDefault
-} from '@yiru/protocol/project/runtime-preference'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+} from '@agentstart/protocol/project/runtime-preference'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { toast } from 'sonner'
 import { buildAgentFeatureSkillInstallCommand } from '~renderer/agent/feature-install-commands'
 import { translate } from '~renderer/i18n/i18n'
@@ -14,8 +14,8 @@ import {
 import { installWslCliCommand, readWslCliInstallStatus } from '~renderer/runtime/cli-install-client'
 import { getRenderingHostSnapshot } from '~renderer/runtime/shell-platform-client'
 import {
-  isYiruCliAvailableOnPath,
-  showYiruCliRegistrationPromptToast
+  isAgentStartCliAvailableOnPath,
+  showAgentStartCliRegistrationPromptToast
 } from '~renderer/skills/agent-cli-prerequisite'
 
 import { buildWslLoginShellCommand } from './wsl-login-command'
@@ -31,7 +31,7 @@ const LOCAL_HOST_AGENT_RUNTIME: LocalAgentRuntime = {
   label: ''
 }
 
-export function getHostRuntimeLabel(): string {
+function getHostRuntimeLabel(): string {
   return navigator.userAgent.includes('Windows') ? 'Windows' : 'This device'
 }
 
@@ -143,13 +143,6 @@ function getSkillCommandPlatform(): NodeJS.Platform {
   return 'linux'
 }
 
-export function buildSkillInstallCommandForRuntime(
-  command: string,
-  runtime: LocalAgentRuntime
-): string {
-  return buildSkillCommandForRuntime(command, runtime)
-}
-
 export function getSkillDiscoveryTargetForRuntime(
   runtime: LocalAgentRuntime
 ): { runtime: 'wsl'; wslDistro?: string | null } | undefined {
@@ -196,9 +189,9 @@ export async function ensureWslCliAvailableForAgentSkillTerminal(
       return status
     }
     if (status.state !== 'installed' || !status.pathConfigured) {
-      await showYiruCliRegistrationPromptToast()
+      await showAgentStartCliRegistrationPromptToast()
       const next = await installWslCliCommand(args)
-      if (!isYiruCliAvailableOnPath(next)) {
+      if (!isAgentStartCliAvailableOnPath(next)) {
         toast.warning(
           translate(
             'auto.components.settings.CliSkillRuntimeSetup.3728a94fb6',

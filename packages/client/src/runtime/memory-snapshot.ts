@@ -6,7 +6,7 @@ import type {
   SessionMemory as ProtocolSessionMemory,
   UsageValues as ProtocolUsageValues,
   WorktreeMemory as ProtocolWorktreeMemory
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import type {
   AppMemory,
   HostMemory,
@@ -14,7 +14,7 @@ import type {
   SessionMemory,
   UsageValues,
   WorktreeMemory
-} from '@yiru/protocol/diagnostics/memory-values'
+} from '@agentstart/protocol/diagnostics/memory-values'
 import { translate } from '~renderer/i18n/i18n'
 
 export function mapProtocolMemorySnapshot(snapshot: GetMemorySnapshotResponse): MemorySnapshot {

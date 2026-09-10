@@ -1,21 +1,21 @@
-import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { ProjectExecutionRuntimeResolution } from '@agentstart/protocol/project/runtime-preference'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 type LocalWindowsTerminalRuntimeSettings =
   | Partial<Pick<GlobalSettings, 'terminalWindowsShell' | 'terminalWindowsWslDistro'>>
   | undefined
 
-export type LocalWindowsTerminalRuntimeOptions = {
+type LocalWindowsTerminalRuntimeOptions = {
   shellOverride: string | undefined
   terminalWindowsWslDistro: string | null
 }
 
-export function isWslShellName(shellPath: string | undefined): boolean {
+function isWslShellName(shellPath: string | undefined): boolean {
   const shellName = shellPath?.replaceAll('\\', '/').split('/').pop()?.toLowerCase()
   return shellName === 'wsl.exe' || shellName === 'wsl'
 }
 
-export function getHostShellForProjectRuntime(
+function getHostShellForProjectRuntime(
   requestedShell: string | undefined,
   settingsShell: string | undefined,
   fallbackHostShell = 'powershell.exe'
@@ -27,7 +27,7 @@ export function getHostShellForProjectRuntime(
   return fallbackHostShell
 }
 
-export function resolveLocalWindowsTerminalRuntimeOptions(args: {
+function resolveLocalWindowsTerminalRuntimeOptions(args: {
   requestedShellOverride: string | undefined
   settings: LocalWindowsTerminalRuntimeSettings
   projectRuntime: ProjectExecutionRuntimeResolution | undefined

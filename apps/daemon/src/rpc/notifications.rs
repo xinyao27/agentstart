@@ -2,10 +2,8 @@ use std::collections::HashSet;
 
 use serde_json::{Map, Value, json};
 
-use crate::mobile::MobileDeviceStore;
 use crate::notifications::{
-    ApnsNotification, ApnsNotificationPhase, MobileNotificationEvent, NotificationAuthority,
-    NotificationError, NotificationSoundAuthority,
+    MobileNotificationEvent, NotificationAuthority, NotificationError, NotificationSoundAuthority,
 };
 use crate::settings::{NotificationSettings, SettingsAuthority};
 use crate::shell_services::ShellServicesRegistry;
@@ -26,7 +24,6 @@ const DISPLAY_PATH: &str = "/notifications/display";
 #[derive(Clone)]
 pub(super) struct NotificationsRpc {
     authority: NotificationAuthority,
-    devices: MobileDeviceStore,
     settings: SettingsAuthority,
     shells: ShellServicesRegistry,
     sounds: NotificationSoundAuthority,
@@ -35,14 +32,12 @@ pub(super) struct NotificationsRpc {
 impl NotificationsRpc {
     pub(super) fn new(
         authority: NotificationAuthority,
-        devices: MobileDeviceStore,
         settings: SettingsAuthority,
         shells: ShellServicesRegistry,
     ) -> Self {
         let sounds = NotificationSoundAuthority::new(settings.clone());
         Self {
             authority,
-            devices,
             settings,
             shells,
             sounds,
@@ -51,10 +46,6 @@ impl NotificationsRpc {
 
     pub(super) fn authority(&self) -> NotificationAuthority {
         self.authority.clone()
-    }
-
-    pub(super) fn devices(&self) -> MobileDeviceStore {
-        self.devices.clone()
     }
 
     pub(super) fn sounds(&self) -> NotificationSoundAuthority {
@@ -141,9 +132,6 @@ impl NotificationsRpc {
             if let Err(error) = mobile_result {
                 self.authority.rollback_mobile_delivery(&cooldown_key);
                 return Err(error);
-            }
-            if let Some(notification) = apns_notification(&input, &presentation.body) {
-                let _ = self.authority.enqueue_apns(notification);
             }
         }
 
@@ -237,26 +225,6 @@ fn insert_optional_string(body: &mut Map<String, Value>, key: &str, value: Optio
     if let Some(value) = value {
         body.insert(key.to_owned(), Value::String(value.to_owned()));
     }
-}
-
-fn apns_notification(input: &ReportInput, body: &str) -> Option<ApnsNotification> {
-    if !matches!(
-        input.source,
-        crate::notifications::NotificationSource::AgentTaskComplete
-    ) {
-        return None;
-    }
-    let phase = match input.agent_state.as_deref()? {
-        "blocked" | "waiting" => ApnsNotificationPhase::WaitingDecision,
-        "done" => ApnsNotificationPhase::Complete,
-        _ => return None,
-    };
-    Some(ApnsNotification {
-        body: Some(body.to_owned()),
-        phase,
-        terminal: input.notification_id.clone()?,
-        worktree_id: input.worktree_id.clone()?,
-    })
 }
 
 fn parse_display_result(value: Value) -> Option<(bool, Option<String>)> {

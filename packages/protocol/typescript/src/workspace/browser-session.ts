@@ -123,6 +123,6 @@ export type BrowserCookieImportResult =
   | { ok: true; profileId: string; summary: BrowserCookieImportSummary }
   | { ok: false; reason: string }
 
-export const YIRU_BROWSER_PARTITION = 'persist:yiru-browser'
+export const AGENTSTART_BROWSER_PARTITION = 'persist:agentstart-browser'
 export const SKILLS_MARKETPLACE_PARTITION = 'persist:skills-marketplace'
-export const YIRU_BROWSER_BLANK_URL = 'data:text/html,'
+export const AGENTSTART_BROWSER_BLANK_URL = 'data:text/html,'

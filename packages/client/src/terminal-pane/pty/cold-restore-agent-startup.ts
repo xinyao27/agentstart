@@ -1,14 +1,14 @@
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/protocol/agent/launch-defaults'
-import { buildAgentResumeStartupPlan } from '@yiru/protocol/agent/resume-startup'
+} from '@agentstart/protocol/agent/launch-defaults'
+import { buildAgentResumeStartupPlan } from '@agentstart/protocol/agent/resume-startup'
 import {
   agentProviderSessionsEqual,
   isResumableTuiAgent,
   normalizeAgentProviderSession,
   type ResumableTuiAgent
-} from '@yiru/protocol/agent/session-resume'
+} from '@agentstart/protocol/agent/session-resume'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import { useAppStore } from '~renderer/store/state'
 
@@ -102,7 +102,7 @@ export function createColdRestoreAgentStartup(
       command: startupPlan.launchCommand,
       env: {
         ...startupPlan.env,
-        YIRU_AGENT_LAUNCH_TOKEN: launchToken
+        AGENTSTART_AGENT_LAUNCH_TOKEN: launchToken
       },
       launchConfig: startupPlan.launchConfig,
       launchToken,

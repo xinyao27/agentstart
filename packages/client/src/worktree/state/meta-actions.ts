@@ -1,5 +1,5 @@
-import { isPositiveHostedReviewNumber } from '@yiru/protocol/hosted-review/types'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { isPositiveHostedReviewNumber } from '@agentstart/protocol/hosted-review/types'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { updateProjectCatalogWorktree } from '~renderer/project-catalog/worktree-cache'

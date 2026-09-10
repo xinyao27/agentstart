@@ -1,4 +1,4 @@
-import { KEYBINDING_DEFINITIONS } from '@yiru/protocol/keybindings'
+import { KEYBINDING_DEFINITIONS } from '@agentstart/protocol/keybindings'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
 
@@ -13,7 +13,7 @@ export const getTerminalShortcutPolicySearchEntry = createLocalizedCatalog(
     ),
     description: translate(
       'auto.components.settings.shortcuts.search.ebd7d81e1d',
-      'Choose whether Yiru or the focused terminal wins when shortcuts overlap.'
+      'Choose whether AgentStart or the focused terminal wins when shortcuts overlap.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.shortcuts.search.ca6a0c2df7', 'shortcut'),
@@ -25,7 +25,7 @@ export const getTerminalShortcutPolicySearchEntry = createLocalizedCatalog(
       ...translateSearchKeyword('auto.components.settings.shortcuts.search.0ecfc47434', 'conflict'),
       ...translateSearchKeyword(
         'auto.components.settings.shortcuts.search.afda131738',
-        'yiru first'
+        'agentstart first'
       ),
       ...translateSearchKeyword(
         'auto.components.settings.shortcuts.search.4811a8264a',

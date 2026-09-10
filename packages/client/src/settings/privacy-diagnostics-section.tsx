@@ -1,4 +1,4 @@
-import type { DiagnosticsBundle, DiagnosticsStatus } from '@yiru/protocol'
+import type { DiagnosticsBundle, DiagnosticsStatus } from '@agentstart/protocol'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -257,15 +257,15 @@ function DiagnosticsDisabledStateNote({
           'auto.components.settings.PrivacyDiagnosticsRows.5a7cbe069a',
           'DO_NOT_TRACK=1 is set — creating and sending diagnostic files is disabled.'
         )
-      : reason === 'yiru_telemetry_disabled'
+      : reason === 'agentstart_telemetry_disabled'
         ? translate(
             'auto.components.settings.PrivacyDiagnosticsRows.63d03261d1',
-            'YIRU_TELEMETRY_DISABLED=1 is set — creating and sending diagnostic files is disabled.'
+            'AGENT_START_TELEMETRY_DISABLED=1 is set — creating and sending diagnostic files is disabled.'
           )
-        : reason === 'yiru_diagnostics_disabled'
+        : reason === 'agentstart_diagnostics_disabled'
           ? translate(
               'auto.components.settings.PrivacyDiagnosticsRows.d37e92a06b',
-              'YIRU_DIAGNOSTICS_DISABLED=1 is set — app diagnostics are off.'
+              'AGENT_START_DIAGNOSTICS_DISABLED=1 is set — app diagnostics are off.'
             )
           : reason === 'ci'
             ? translate(
@@ -278,7 +278,7 @@ function DiagnosticsDisabledStateNote({
               )
 
   return (
-    <div className="border-border/60 bg-card/30 text-muted-foreground border border-dashed px-3 py-2 text-xs">
+    <div className="border-border/60 bg-card/30 text-muted-foreground rounded border border-dashed px-3 py-2 text-xs">
       {message}
     </div>
   )

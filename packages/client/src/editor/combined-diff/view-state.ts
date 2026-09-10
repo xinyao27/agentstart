@@ -1,7 +1,10 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import { translate } from '~renderer/i18n/i18n'
 
-import { YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, type EditorPathMutationTarget } from '../autosave'
+import {
+  AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
+  type EditorPathMutationTarget
+} from '../autosave'
 import type { DiffCodeViewNotice } from '../diff-code-view/notices'
 import type { DiffSection } from '../diff-section/types'
 import { setWithLRU } from '../scroll-cache'
@@ -57,7 +60,7 @@ function invalidateCombinedDiffCachesForRelativePath(relativePath: string): void
 }
 
 if (typeof window !== 'undefined') {
-  window.addEventListener(YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, (event) => {
+  window.addEventListener(AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, (event) => {
     const detail = (event as CustomEvent<EditorPathMutationTarget>).detail
     if (detail?.relativePath) {
       // Why: inactive combined-diff tabs are unmounted, so only a module-level
@@ -141,30 +144,6 @@ export function resolveCombinedDiffNotice(
           'Text diff is unavailable for this file.'
         )
   }
-}
-
-export function areCombinedDiffNoticesEqual(a: DiffCodeViewNotice, b: DiffCodeViewNotice): boolean {
-  if (a.kind !== b.kind) {
-    return false
-  }
-  if (a.kind === 'error' && b.kind === 'error') {
-    return a.message === b.message
-  }
-  if (a.kind === 'binary' && b.kind === 'binary') {
-    return a.reason === b.reason
-  }
-  if (a.kind === 'image' && b.kind === 'image') {
-    return (
-      a.originalContent === b.originalContent &&
-      a.modifiedContent === b.modifiedContent &&
-      a.mimeType === b.mimeType &&
-      a.sideBySide === b.sideBySide
-    )
-  }
-  if (a.kind === 'large-diff' && b.kind === 'large-diff') {
-    return a.renderLimit === b.renderLimit && a.saveLabel === b.saveLabel
-  }
-  return a.kind === 'loading'
 }
 
 const SECTION_LOAD_TIMEOUT_MS = 30_000

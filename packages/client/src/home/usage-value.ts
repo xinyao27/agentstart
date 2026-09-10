@@ -1,16 +1,19 @@
-import { dayIsInStatsUsageRange, type StatsUsageBoundedRange } from '@yiru/protocol/stats/range'
+import {
+  dayIsInStatsUsageRange,
+  type StatsUsageBoundedRange
+} from '@agentstart/protocol/stats/range'
 import {
   buildDailyProviderUsage,
   buildProjectUsage,
   type DailyProviderUsage,
   type ProjectUsageValue
-} from '@yiru/protocol/stats/usage-breakdown'
+} from '@agentstart/protocol/stats/usage-breakdown'
 import {
   buildUsageValueSnapshot,
   type UsageValueModel,
   type UsageValueSupplementalInput
-} from '@yiru/protocol/stats/usage-value'
-import type { RuntimeStatsSupplementalUsage } from '@yiru/protocol/stats/values'
+} from '@agentstart/protocol/stats/usage-value'
+import type { RuntimeStatsSupplementalUsage } from '@agentstart/protocol/stats/values'
 import { useEffect } from 'react'
 import type { ContributionPoint } from '~renderer/contribution-heatmap/calendar'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
@@ -173,14 +176,14 @@ function prepareUsageSnapshots(range: StatsUsageBoundedRange): Promise<void> {
 async function prepareClaudeUsage(range: StatsUsageBoundedRange): Promise<void> {
   let state = useAppStore.getState()
   if (
-    state.claudeUsageScope === 'yiru' &&
+    state.claudeUsageScope === 'agentstart' &&
     state.claudeUsageRange === range &&
     state.claudeUsageSnapshotReady
   ) {
     return
   }
-  if (state.claudeUsageScope !== 'yiru') {
-    await state.setClaudeUsageScope('yiru')
+  if (state.claudeUsageScope !== 'agentstart') {
+    await state.setClaudeUsageScope('agentstart')
   }
   state = useAppStore.getState()
   if (state.claudeUsageScanState?.enabled === false) {
@@ -200,14 +203,14 @@ async function prepareClaudeUsage(range: StatsUsageBoundedRange): Promise<void> 
 async function prepareCodexUsage(range: StatsUsageBoundedRange): Promise<void> {
   let state = useAppStore.getState()
   if (
-    state.codexUsageScope === 'yiru' &&
+    state.codexUsageScope === 'agentstart' &&
     state.codexUsageRange === range &&
     state.codexUsageSnapshotReady
   ) {
     return
   }
-  if (state.codexUsageScope !== 'yiru') {
-    await state.setCodexUsageScope('yiru')
+  if (state.codexUsageScope !== 'agentstart') {
+    await state.setCodexUsageScope('agentstart')
   }
   state = useAppStore.getState()
   if (state.codexUsageScanState?.enabled === false) {
@@ -227,14 +230,14 @@ async function prepareCodexUsage(range: StatsUsageBoundedRange): Promise<void> {
 async function prepareOpenCodeUsage(range: StatsUsageBoundedRange): Promise<void> {
   let state = useAppStore.getState()
   if (
-    state.openCodeUsageScope === 'yiru' &&
+    state.openCodeUsageScope === 'agentstart' &&
     state.openCodeUsageRange === range &&
     state.openCodeUsageSnapshotReady
   ) {
     return
   }
-  if (state.openCodeUsageScope !== 'yiru') {
-    await state.setOpenCodeUsageScope('yiru')
+  if (state.openCodeUsageScope !== 'agentstart') {
+    await state.setOpenCodeUsageScope('agentstart')
   }
   state = useAppStore.getState()
   if (state.openCodeUsageScanState?.enabled === false) {

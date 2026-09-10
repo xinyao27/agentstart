@@ -4,17 +4,9 @@ export type RenderingHostBootstrap = {
   displayServer: 'wayland' | 'x11' | null
 }
 
-const PLATFORM_PARAM = 'yiru-rendering-platform'
-const OS_RELEASE_PARAM = 'yiru-rendering-os-release'
-const DISPLAY_SERVER_PARAM = 'yiru-rendering-display-server'
-
-export function renderingHostBootstrapQuery(host: RenderingHostBootstrap): Record<string, string> {
-  return {
-    [PLATFORM_PARAM]: host.platform,
-    [OS_RELEASE_PARAM]: host.osRelease,
-    [DISPLAY_SERVER_PARAM]: host.displayServer ?? ''
-  }
-}
+const PLATFORM_PARAM = 'agentstart-rendering-platform'
+const OS_RELEASE_PARAM = 'agentstart-rendering-os-release'
+const DISPLAY_SERVER_PARAM = 'agentstart-rendering-display-server'
 
 export function parseRenderingHostBootstrap(search: string): RenderingHostBootstrap | null {
   const params = new URLSearchParams(search)

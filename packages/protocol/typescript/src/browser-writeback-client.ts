@@ -12,7 +12,7 @@ import {
   BrowserWritebackRecordVerificationResponseSchema,
   BrowserWritebackService,
   BrowserWritebackStyleEntrySchema
-} from '../generated/yiru/runtime/v1/browser_writeback_pb.js'
+} from '../generated/agent_start/runtime/v1/browser_writeback_pb.js'
 import type {
   BrowserWritebackCssChange,
   BrowserWritebackElementEvidence,

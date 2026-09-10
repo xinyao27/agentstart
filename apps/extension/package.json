@@ -1,11 +1,11 @@
 {
-  "name": "@yiru/extension",
-  "version": "0.0.36",
+  "name": "@agentstart/extension",
+  "version": "0.1.0",
   "private": true,
-  "description": "Chrome extension host for Yiru workspaces",
-  "homepage": "https://github.com/xinyao27/yiru#readme",
+  "description": "Chrome extension host for AgentStart workspaces",
+  "homepage": "https://github.com/xinyao27/agentstart#readme",
   "bugs": {
-    "url": "https://github.com/xinyao27/yiru/issues"
+    "url": "https://github.com/xinyao27/agentstart/issues"
   },
   "license": "MIT",
   "author": {
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xinyao27/yiru.git",
+    "url": "git+https://github.com/xinyao27/agentstart.git",
     "directory": "apps/extension"
   },
   "funding": "https://github.com/sponsors/xinyao27",
@@ -29,8 +29,8 @@
     "typecheck": "wxt prepare && tsc --noEmit"
   },
   "dependencies": {
-    "@yiru/client": "workspace:*",
-    "@yiru/protocol": "workspace:*",
+    "@agentstart/client": "workspace:*",
+    "@agentstart/protocol": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:",
     "zod": "catalog:"

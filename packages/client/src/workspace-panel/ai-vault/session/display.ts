@@ -14,7 +14,7 @@ export function latestSessionConversationTurn(
   return recentSessionConversationTurns(session, 1)[0] ?? null
 }
 
-export function recentSessionConversationTurns(
+function recentSessionConversationTurns(
   session: AiVaultSession,
   limit: number
 ): AiVaultSessionDisplayTurn[] {

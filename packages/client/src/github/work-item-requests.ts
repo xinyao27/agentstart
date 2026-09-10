@@ -1,4 +1,4 @@
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
 
 import { matchesRepoCacheKey, repoCacheKeyPrefixes } from './cache-policy'
 import type { GitHubWorkItemRequestTarget } from './work-items-request'

@@ -940,14 +940,14 @@ pub(super) async fn remove_managed_storage(
             root.join("claude-accounts"),
             "managedAuthPath",
             "auth",
-            ".yiru-managed-claude-auth",
+            ".agentstart-managed-claude-auth",
         )
     } else {
         (
             root.join("codex-accounts"),
             "managedHomePath",
             "home",
-            ".yiru-managed-home",
+            ".agentstart-managed-home",
         )
     };
     let Some(candidate) = account
@@ -992,12 +992,12 @@ async fn remove_wsl_managed_storage(
         .filter(|value| !value.trim().is_empty())
         .ok_or(AccountsError::InvalidState)?;
     let (folder, leaf, marker) = if provider == "claude" {
-        ("claude-accounts", "auth", ".yiru-managed-claude-auth")
+        ("claude-accounts", "auth", ".agentstart-managed-claude-auth")
     } else {
-        ("codex-accounts", "home", ".yiru-managed-home")
+        ("codex-accounts", "home", ".agentstart-managed-home")
     };
     let script = format!(
-        "set -eu; base=\"$HOME/.local/share/yiru/{folder}/$1\"; candidate=\"$base/{leaf}\"; marker=\"$candidate/{marker}\"; [ -f \"$marker\" ] || exit 42; [ \"$(cat \"$marker\")\" = \"$1\" ] || exit 43; rm -rf -- \"$base\""
+        "set -eu; base=\"$HOME/.local/share/agentstart/{folder}/$1\"; candidate=\"$base/{leaf}\"; marker=\"$candidate/{marker}\"; [ -f \"$marker\" ] || exit 42; [ \"$(cat \"$marker\")\" = \"$1\" ] || exit 43; rm -rf -- \"$base\""
     );
     let output = tokio::time::timeout(
         std::time::Duration::from_secs(5),
@@ -1009,7 +1009,7 @@ async fn remove_wsl_managed_storage(
                 "sh",
                 "-c",
                 &script,
-                "yiru-remove",
+                "agentstart-remove",
                 account_id,
             ])
             .kill_on_drop(true)
@@ -1041,7 +1041,7 @@ pub(super) async fn delete_managed_claude_keychain(account_id: &str) -> Result<(
             .args([
                 "delete-generic-password",
                 "-s",
-                "Yiru Claude Code Managed Credentials",
+                "AgentStart Claude Code Managed Credentials",
                 "-a",
                 account_id,
             ])

@@ -29,7 +29,7 @@ export function handleTerminalWebLinkClick(
       runtimeEnvironmentId: deps.runtimeEnvironmentId
     })
   ) {
-    // Why: WebLinksAddon only knows the physical row; Yiru's logical hit-test
+    // Why: WebLinksAddon only knows the physical row; AgentStart's logical hit-test
     // preserves the complete URL rendered across hard-wrapped TUI rows.
     event.preventDefault()
     handled = true

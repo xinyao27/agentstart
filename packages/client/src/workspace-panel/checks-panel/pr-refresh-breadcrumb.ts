@@ -1,7 +1,7 @@
 import type {
   CrashReportBreadcrumbData,
   CrashReportDetailValue
-} from '@yiru/protocol/crash-reports/values'
+} from '@agentstart/protocol/crash-reports/values'
 import { recordRendererCrashBreadcrumb } from '~renderer/crash-report/diagnostics'
 import { getGitHubPRRefreshStateExpiryAt, type PRRefreshState } from '~renderer/github/state'
 
@@ -40,7 +40,7 @@ export function recordChecksPanelPRRefreshBreadcrumb(
   )
 }
 
-export function buildChecksPanelPRRefreshBreadcrumbData(
+function buildChecksPanelPRRefreshBreadcrumbData(
   args: ChecksPanelPRRefreshBreadcrumbArgs
 ): CrashReportBreadcrumbData {
   const now = args.now ?? Date.now()

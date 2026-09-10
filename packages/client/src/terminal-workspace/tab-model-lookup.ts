@@ -1,5 +1,5 @@
-import type { KeybindingContext } from '@yiru/protocol/keybindings'
-import type { Tab } from '@yiru/protocol/workspace/tabs'
+import type { KeybindingContext } from '@agentstart/protocol/keybindings'
+import type { Tab } from '@agentstart/protocol/workspace/tabs'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import type { useAppStore } from '~renderer/store/state'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
@@ -21,7 +21,7 @@ export function haveSameWorktreeIds(
   return true
 }
 
-export function findUnifiedTabByVisibleId(
+function findUnifiedTabByVisibleId(
   state: TerminalStoreSnapshot,
   worktreeId: string,
   visibleId: string
@@ -33,7 +33,7 @@ export function findUnifiedTabByVisibleId(
   )
 }
 
-export function findActiveUnifiedTab(state: TerminalStoreSnapshot, worktreeId: string): Tab | null {
+function findActiveUnifiedTab(state: TerminalStoreSnapshot, worktreeId: string): Tab | null {
   const activeGroupId = state.activeGroupIdByWorktree[worktreeId]
   const group =
     (state.groupsByWorktree[worktreeId] ?? []).find(

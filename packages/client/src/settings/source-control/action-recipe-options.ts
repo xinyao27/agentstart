@@ -1,17 +1,17 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import {
   SOURCE_CONTROL_TEXT_ACTION_IDS,
   type SourceControlActionId
-} from '@yiru/protocol/source-control/ai-actions'
+} from '@agentstart/protocol/source-control/ai-actions'
 import {
   getCommitMessageAgentCapability,
   listCommitMessageAgentCapabilities
-} from '@yiru/protocol/source-control/catalog/agents'
+} from '@agentstart/protocol/source-control/catalog/agents'
 import {
   CUSTOM_AGENT_ID,
   type CustomAgentId,
   isCustomAgentId
-} from '@yiru/protocol/source-control/custom-agent'
+} from '@agentstart/protocol/source-control/custom-agent'
 import { getAgentCatalog, type AgentCatalogEntry } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
@@ -33,7 +33,7 @@ export const getActionDescriptions = createLocalizedCatalog(
     ),
     branchName: translate(
       'auto.components.settings.source.control.action.recipe.options.branchName',
-      'Rename Yiru-created branches from the initial agent task.'
+      'Rename AgentStart-created branches from the initial agent task.'
     ),
     fixCommitFailure: translate(
       'auto.components.settings.source.control.action.recipe.options.fixCommitFailure',

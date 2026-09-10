@@ -8,7 +8,7 @@ import {
   GitBranchServiceCheckoutResponseSchema,
   GitBranchServiceCreateBranchRequestSchema,
   GitBranchServiceCreateBranchResponseSchema
-} from '../../generated/yiru/runtime/v1/git_branch_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_branch_pb.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { GitStagingClient } from './staging-client.js'
 import { gitWriteOutcomeFromProto, mustOutcome } from './write-values.js'

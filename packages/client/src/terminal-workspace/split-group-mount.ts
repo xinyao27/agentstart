@@ -1,4 +1,4 @@
-import type { TabGroup, TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
+import type { TabGroup, TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
 
 /**
  * Derive the effective layout for a worktree: either its explicit layout

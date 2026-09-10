@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { useAppStore } from '~renderer/store/state'
@@ -15,17 +15,6 @@ import { getRuntimeEnvironmentsSearchEntry } from './runtime-environments-search
 import { SearchableSetting } from './searchable-setting'
 import { useRuntimeEnvironmentActions } from './use-runtime-environment-actions'
 import { useRuntimeEnvironmentList } from './use-runtime-environment-list'
-
-export {
-  evaluateHostDetails,
-  getActiveServerModeDescription,
-  getHostDetailsDescription,
-  getHostDetailsSummary,
-  getHostModelCapabilitySummary,
-  getRuntimeCapabilitiesSummary,
-  getRuntimeServerConnectionState,
-  type RuntimeHostDetails
-} from './runtime-environment-status'
 
 type RuntimeEnvironmentsPaneProps = {
   settings: GlobalSettings

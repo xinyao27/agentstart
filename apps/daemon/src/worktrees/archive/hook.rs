@@ -44,7 +44,7 @@ async fn run_script(
     repo: Option<&Value>,
     script_name: &str,
 ) -> Result<(), WorktreeArchiveAuthorityError> {
-    let path = filesystem.paths().join(&[worktree_path, "yiru.yaml"]);
+    let path = filesystem.paths().join(&[worktree_path, "agentstart.yaml"]);
     let shared = match filesystem.read_text(&path, MAX_HOOK_BYTES).await? {
         Some(text) => match serde_saphyr::from_str::<Value>(&text) {
             Ok(value) => value
@@ -79,13 +79,19 @@ async fn run_script(
         let root = repo.get("path").and_then(Value::as_str).unwrap_or_default();
         let workspace_name = filesystem.paths().basename(worktree_path);
         request.env = vec![
-            ("YIRU_ROOT_PATH".to_owned(), root.to_owned()),
-            ("YIRU_WORKTREE_PATH".to_owned(), worktree_path.to_owned()),
-            ("YIRU_WORKSPACE_NAME".to_owned(), workspace_name.clone()),
+            ("AGENTSTART_ROOT_PATH".to_owned(), root.to_owned()),
+            (
+                "AGENTSTART_WORKTREE_PATH".to_owned(),
+                worktree_path.to_owned(),
+            ),
+            (
+                "AGENTSTART_WORKSPACE_NAME".to_owned(),
+                workspace_name.clone(),
+            ),
             ("CONDUCTOR_ROOT_PATH".to_owned(), root.to_owned()),
             ("GHOSTX_ROOT_PATH".to_owned(), root.to_owned()),
             (
-                "YIRU_INTERNAL_TERMINAL_GIT_CREDENTIAL_GUARD_POLICY".to_owned(),
+                "AGENTSTART_INTERNAL_TERMINAL_GIT_CREDENTIAL_GUARD_POLICY".to_owned(),
                 "guard".to_owned(),
             ),
         ];

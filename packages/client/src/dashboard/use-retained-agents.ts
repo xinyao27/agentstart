@@ -1,11 +1,11 @@
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry
-} from '@yiru/protocol/agent/status-records'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/agent/status-records'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { useEffect, useRef } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
@@ -71,7 +71,7 @@ function agentStartedAt(entry: AgentStatusEntry): number {
   return entry.stateHistory[0]?.startedAt ?? entry.stateStartedAt
 }
 
-export function buildRetainedAgentsSyncSnapshot(args: RetainedAgentsSyncSnapshotInputs): {
+function buildRetainedAgentsSyncSnapshot(args: RetainedAgentsSyncSnapshotInputs): {
   currentAgents: RetainedAgentSnapshot
   existingWorktreeIds: Set<string>
 } {
@@ -164,7 +164,7 @@ export function useRetainedAgentsSync(): void {
   ])
 }
 
-export function collectRetainedAgentsOnDisappear(args: {
+function collectRetainedAgentsOnDisappear(args: {
   previousAgents: Map<string, { row: DashboardAgentRow; worktreeId: string }>
   currentAgents: Map<string, { row: DashboardAgentRow; worktreeId: string }>
   retainedAgentsByPaneKey: Record<string, RetainedAgentEntry>

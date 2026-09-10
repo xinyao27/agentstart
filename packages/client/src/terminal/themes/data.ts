@@ -14,9 +14,7 @@ const THEME_CATEGORIES: readonly TerminalThemeMap[] = [
   CLASSIC_TERMINAL_THEMES
 ]
 
-export const TERMINAL_THEMES: Record<string, ITheme> = mergeTerminalThemeCatalogs(
-  ...THEME_CATEGORIES
-)
+const TERMINAL_THEMES: Record<string, ITheme> = mergeTerminalThemeCatalogs(...THEME_CATEGORIES)
 
 export function getThemeNames(): string[] {
   return Object.keys(TERMINAL_THEMES).sort()

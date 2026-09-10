@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { JSX } from 'react'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { ScrollArea } from '~renderer/ui/scroll-area'
@@ -25,7 +25,7 @@ export function DeleteWorktreeTargetPreview({
 }): JSX.Element | null {
   if (isBatchDelete) {
     return (
-      <ScrollArea className="border-border/70 bg-muted/35 max-h-48 border text-xs">
+      <ScrollArea className="border-border/70 bg-muted/35 max-h-48 rounded-md border text-xs">
         <div className="space-y-1 px-3 py-2">
           {worktrees.map((item) => {
             const itemDeleteState = deleteStateByWorktreeId[item.id]
@@ -57,7 +57,7 @@ export function DeleteWorktreeTargetPreview({
   }
 
   return worktree ? (
-    <div className="border-border/70 bg-muted/35 border px-3 py-2 text-xs">
+    <div className="border-border/70 bg-muted/35 rounded-md border px-3 py-2 text-xs">
       <div className="text-foreground font-medium break-all">{worktree.displayName}</div>
       <div className="text-muted-foreground mt-1 break-all">{worktree.path}</div>
       <DeleteWorktreeDirtyChangeHint changeCount={dirtyChangeCountsByWorktreeId.get(worktree.id)} />

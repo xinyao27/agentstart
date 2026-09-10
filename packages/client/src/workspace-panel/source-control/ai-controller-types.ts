@@ -1,6 +1,6 @@
-import type { GitConflictOperation, GitStatusEntry } from '@yiru/protocol/git/status-types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GitConflictOperation, GitStatusEntry } from '@agentstart/protocol/git/status-types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type { AppState } from '~renderer/store/state'
 
 export type SourceControlAiStoreSnapshot = Pick<

@@ -20,11 +20,11 @@ type UseSidebarResizeResult<T extends HTMLElement> = {
   renderedWidth: string
 }
 
-export function clampSidebarResizeWidth(width: number, minWidth: number, maxWidth: number): number {
+function clampSidebarResizeWidth(width: number, minWidth: number, maxWidth: number): number {
   return Math.min(maxWidth, Math.max(minWidth, width))
 }
 
-export function getRenderedSidebarWidthCssValue(
+function getRenderedSidebarWidthCssValue(
   isOpen: boolean,
   width: number,
   renderedExtraWidth: number
@@ -32,7 +32,7 @@ export function getRenderedSidebarWidthCssValue(
   return isOpen ? `${width + renderedExtraWidth}px` : '0px'
 }
 
-export function getNextSidebarResizeWidth({
+function getNextSidebarResizeWidth({
   clientX,
   startX,
   startWidth,

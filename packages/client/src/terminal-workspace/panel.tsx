@@ -1,5 +1,5 @@
-import { hasFeatureInteraction } from '@yiru/protocol/telemetry/interactions/state'
-import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { hasFeatureInteraction } from '@agentstart/protocol/telemetry/interactions/state'
+import { folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import React, { useEffect } from 'react'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useAppStore } from '~renderer/store/state'

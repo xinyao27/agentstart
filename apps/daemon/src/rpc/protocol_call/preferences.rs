@@ -24,11 +24,11 @@ pub(super) enum Method {
     ShellKeybindingsServiceOpenFile,
     ShellKeybindingsServiceRevealFile,
     ShellKeybindingsServiceSetAction,
-    ShellYiruProfilesServiceList,
-    ShellYiruProfilesServiceCreateLocal,
-    ShellYiruProfilesServiceSwitchProfile,
-    ShellYiruProfilesServiceTransferProject,
-    ShellYiruProfilesServiceFindProjectProfiles,
+    ShellAgentStartProfilesServiceList,
+    ShellAgentStartProfilesServiceCreateLocal,
+    ShellAgentStartProfilesServiceSwitchProfile,
+    ShellAgentStartProfilesServiceTransferProject,
+    ShellAgentStartProfilesServiceFindProjectProfiles,
     ShellCacheServiceGetGitHub,
     ShellCacheServiceSetGitHub,
     ShellOnboardingServiceGet,
@@ -136,27 +136,27 @@ impl ProtocolRouter {
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }
-            Method::ShellYiruProfilesServiceList => {
+            Method::ShellAgentStartProfilesServiceList => {
                 profiles_protocol::list(&self.profiles, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }
-            Method::ShellYiruProfilesServiceCreateLocal => {
+            Method::ShellAgentStartProfilesServiceCreateLocal => {
                 profiles_protocol::create_local(&self.profiles, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }
-            Method::ShellYiruProfilesServiceSwitchProfile => {
+            Method::ShellAgentStartProfilesServiceSwitchProfile => {
                 profiles_protocol::switch_profile(&self.profiles, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }
-            Method::ShellYiruProfilesServiceTransferProject => {
+            Method::ShellAgentStartProfilesServiceTransferProject => {
                 profiles_protocol::transfer_project(&self.profiles, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }
-            Method::ShellYiruProfilesServiceFindProjectProfiles => {
+            Method::ShellAgentStartProfilesServiceFindProjectProfiles => {
                 profiles_protocol::find_project_profiles(&self.profiles, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)

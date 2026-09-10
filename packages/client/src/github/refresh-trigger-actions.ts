@@ -2,8 +2,8 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   getRepoExecutionHostId,
   normalizeExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { GitHubPRRefreshCandidate } from '@yiru/protocol/hosted-review/pull-request-types'
+} from '@agentstart/protocol/host/identity'
+import type { GitHubPRRefreshCandidate } from '@agentstart/protocol/hosted-review/pull-request-types'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 import { rightSidebarShowsPullRequestData } from '~renderer/workspace-panel/right-sidebar-visibility'

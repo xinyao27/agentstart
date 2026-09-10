@@ -1,4 +1,4 @@
-import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterProjectCatalogMutation } from '~renderer/project-catalog/mutation-refresh'

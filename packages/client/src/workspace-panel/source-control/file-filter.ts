@@ -1,6 +1,6 @@
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 
-export const SOURCE_CONTROL_FILE_FILTER_QUERY_MAX_BYTES = 2 * 1024
+const SOURCE_CONTROL_FILE_FILTER_QUERY_MAX_BYTES = 2 * 1024
 
 export type SourceControlFileFilterState = {
   normalizedFilter: string
@@ -17,7 +17,7 @@ export type SourceControlGroupedPathEntries<T extends SourceControlPathEntry> = 
   untracked: T[]
 }
 
-export function isSourceControlFileFilterQueryTooLarge(
+function isSourceControlFileFilterQueryTooLarge(
   query: string,
   maxBytes = SOURCE_CONTROL_FILE_FILTER_QUERY_MAX_BYTES
 ): boolean {

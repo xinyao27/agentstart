@@ -1,4 +1,4 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
+import type { WorkspaceCleanupCandidate } from '@agentstart/protocol'
 import type { WorkspaceCleanupFailure } from '~renderer/workspace-cleanup/state'
 
 import { getSkippedAncestorMessage, type SkippedWorkspaceCleanupAncestor } from './ancestor-skips'

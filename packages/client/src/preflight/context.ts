@@ -1,12 +1,12 @@
-import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
-import { parseWslUncPath } from '@yiru/protocol/host/wsl-paths'
-import type { Repo } from '@yiru/protocol/project/repository'
+import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@agentstart/protocol/host/identity'
+import { parseWslUncPath } from '@agentstart/protocol/host/wsl-paths'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import {
   deriveGlobalWindowsRuntimeDefaultFromLegacySettings,
   resolveProjectExecutionRuntime,
   type ProjectExecutionRuntimeResolution
-} from '@yiru/protocol/project/runtime-preference'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/project/runtime-preference'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { AppState } from '~renderer/store/types'
 
 import { getProviderRuntimeContextKey } from '../agent/provider-runtime-context'
@@ -34,7 +34,7 @@ type LocalProjectRuntimeWslContext = {
   availableWslDistros?: readonly string[] | null
 }
 
-export function getWslDistroFromPath(path?: string | null): string | null {
+function getWslDistroFromPath(path?: string | null): string | null {
   return path ? (parseWslUncPath(path)?.distro ?? null) : null
 }
 

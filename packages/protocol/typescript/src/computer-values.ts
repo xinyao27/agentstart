@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ComputerPermissionId as ProtocolPermissionId,
   ComputerPermissionStatus as ProtocolPermissionStatus,
@@ -6,8 +6,8 @@ import {
   type ComputerServicePermissionsResetResponse,
   type ComputerServicePermissionsResponse,
   type ComputerServicePermissionsStatusResponse
-} from '../generated/yiru/runtime/v1/computer_pb.js'
-import { HostPlatform } from '../generated/yiru/runtime/v1/host_registry_pb.js'
+} from '../generated/agent_start/runtime/v1/computer_pb.js'
+import { HostPlatform } from '../generated/agent_start/runtime/v1/host_registry_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const COMPUTER_PROTOCOL_CAPABILITY = 'computer.protobuf.v1' as const

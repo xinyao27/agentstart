@@ -8,7 +8,7 @@ export function FeatureWallClickRing(props: { className?: string }): JSX.Element
     <span
       aria-hidden
       className={cn(
-        'feature-wall-click-ring pointer-events-none absolute -left-1.5 -top-1.5 size-7 border-2 border-foreground/50',
+        'feature-wall-click-ring pointer-events-none absolute -left-1.5 -top-1.5 size-7 rounded-full border-2 border-foreground/50',
         props.className
       )}
     />

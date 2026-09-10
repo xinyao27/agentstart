@@ -1,0 +1,256 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+import "agent_start/runtime/v1/git_common.proto";
+
+// Read-only inspection of one worktree's git state: working-tree status, blob
+// diffs, submodule status, gitignore probing and upstream/remote lookups. See
+// apps/daemon/src/rpc/git.rs's METHODS table (git.status, git.diff,
+// git.submoduleStatus, git.checkIgnored, git.findHugeFoldersToIgnore,
+// git.localBranches, git.upstreamStatus, git.remoteCommitUrl) for the legacy
+// JSON procedures this service gives typed protobuf parity to.
+service GitStatusService {
+  rpc Status(GitStatusServiceStatusRequest) returns (GitStatusServiceStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Diff(GitStatusServiceDiffRequest) returns (GitStatusServiceDiffResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SubmoduleStatus(GitStatusServiceSubmoduleStatusRequest) returns (GitStatusServiceSubmoduleStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CheckIgnored(GitStatusServiceCheckIgnoredRequest) returns (GitStatusServiceCheckIgnoredResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc FindHugeFoldersToIgnore(GitStatusServiceFindHugeFoldersToIgnoreRequest) returns (GitStatusServiceFindHugeFoldersToIgnoreResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc LocalBranches(GitStatusServiceLocalBranchesRequest) returns (GitStatusServiceLocalBranchesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc UpstreamStatus(GitStatusServiceUpstreamStatusRequest) returns (GitStatusServiceUpstreamStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RemoteCommitUrl(GitStatusServiceRemoteCommitUrlRequest) returns (GitStatusServiceRemoteCommitUrlResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+// working_status.rs's shared output shape, reused verbatim by git.status and
+// git.submoduleStatus (submodule status is working_status computed at the
+// submodule's own cwd, optionally filtered to the "staged" area).
+message GitWorkingStatus {
+  repeated GitStatusEntry entries = 1;
+  GitConflictOperation conflict_operation = 2;
+  optional GitUpstreamStatus upstream_status = 3;
+  optional string head = 4;
+  optional string branch = 5;
+  repeated string ignored_paths = 6;
+  optional bool did_hit_limit = 7;
+  optional uint64 status_length = 8;
+}
+
+message GitStatusServiceStatusRequest {
+  string worktree = 1;
+  bool include_ignored = 2;
+  bool bypass_negative_cache = 3;
+  bool reuse_line_stats = 4;
+}
+
+message GitStatusServiceStatusResponse {
+  GitWorkingStatus status = 1;
+}
+
+message GitStatusServiceDiffRequest {
+  string worktree = 1;
+  string file_path = 2;
+  bool staged = 3;
+  bool compare_against_head = 4;
+}
+
+message GitStatusServiceDiffResponse {
+  GitDiffResult diff = 1;
+}
+
+message GitStatusServiceSubmoduleStatusRequest {
+  string worktree = 1;
+  string submodule_path = 2;
+  GitStatusArea area = 3;
+}
+
+message GitStatusServiceSubmoduleStatusResponse {
+  GitWorkingStatus status = 1;
+}
+
+message GitStatusServiceCheckIgnoredRequest {
+  string worktree = 1;
+  repeated string paths = 2;
+}
+
+message GitStatusServiceCheckIgnoredResponse {
+  repeated string ignored_paths = 1;
+}
+
+message GitStatusServiceFindHugeFoldersToIgnoreRequest {
+  string worktree = 1;
+}
+
+message GitStatusServiceFindHugeFoldersToIgnoreResponse {
+  repeated string folders = 1;
+}
+
+message GitStatusServiceLocalBranchesRequest {
+  string worktree = 1;
+}
+
+message GitStatusServiceLocalBranchesResponse {
+  optional string current = 1;
+  repeated string branches = 2;
+}
+
+message GitStatusServiceUpstreamStatusRequest {
+  string worktree = 1;
+  optional GitPushTarget push_target = 2;
+}
+
+message GitStatusServiceUpstreamStatusResponse {
+  GitUpstreamStatus upstream_status = 1;
+}
+
+message GitStatusServiceRemoteCommitUrlRequest {
+  string worktree = 1;
+  string sha = 2;
+}
+
+message GitStatusServiceRemoteCommitUrlResponse {
+  optional string url = 1;
+}

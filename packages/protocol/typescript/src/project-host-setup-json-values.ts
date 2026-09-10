@@ -1,9 +1,9 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
-import type { ProjectHostSetupJsonValue } from '../generated/yiru/runtime/v1/project_host_setup_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
+import type { ProjectHostSetupJsonValue } from '../generated/agent_start/runtime/v1/project_host_setup_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RepoIconValue } from './repo-types.js'
 
-export type ProjectHostSetupPlainJsonValue =
+type ProjectHostSetupPlainJsonValue =
   | null
   | boolean
   | number

@@ -7,14 +7,12 @@ import { patchWorkspaceSessionByHost } from '../editor/workspace-session-host-pe
 import { shellClient } from '../runtime/shell-client'
 import { shutdownBufferCaptures } from '../runtime/terminal-shutdown-buffer-captures'
 import { useAppStore } from '../store/state'
-import { registerUpdaterBeforeUnloadBypass } from '../updates/before-unload'
 import { createSessionWriteSubscriber } from './session-write-subscriber'
 
 export function useSessionPersistence(): void {
   const workspaceSessionReady = useAppStore(
     (state) => state.workspaceSessionReady && state.hydrationSucceeded
   )
-  useEffect(() => registerUpdaterBeforeUnloadBypass(), [])
   useEffect(
     () =>
       workspaceSessionReady ? shellClient.session.subscribe(receiveSessionProjection) : undefined,

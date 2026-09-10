@@ -13,7 +13,7 @@ use super::service::{self, ServiceError, ServiceState};
 mod computer_use;
 
 const CHROME_WEB_STORE_URL: &str =
-    "https://chromewebstore.google.com/detail/yiru/mfgmfiabfncmdekmikepemddejoeihbf";
+    "https://chromewebstore.google.com/detail/agentstart/mfgmfiabfncmdekmikepemddejoeihbf";
 
 #[derive(Debug, Error)]
 pub(crate) enum InstallError {
@@ -58,9 +58,9 @@ pub(super) async fn run(args: &[OsString]) -> Result<(), InstallError> {
     if has_flag(args, "--json") {
         println!("{}", serde_json::to_string(&output)?);
     } else if extension_page_opened {
-        println!("Yiru is running. Confirm Add to Chrome in the opened Web Store page.");
+        println!("AgentStart is running. Confirm Add to Chrome in the opened Web Store page.");
     } else {
-        println!("Yiru is running. Install the Chrome extension: {CHROME_WEB_STORE_URL}");
+        println!("AgentStart is running. Install the Chrome extension: {CHROME_WEB_STORE_URL}");
     }
     Ok(())
 }

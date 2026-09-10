@@ -1,7 +1,7 @@
-import { getWorktreeExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import { getWorktreeExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { WorktreeLineage } from '@agentstart/protocol/worktree/lineage'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import { canAssignWorktreeParent } from './worktree-parent-eligibility'
 

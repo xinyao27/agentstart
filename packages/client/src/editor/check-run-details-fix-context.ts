@@ -1,6 +1,9 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
-import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
-import type { Repo } from '@yiru/protocol/project/repository'
+import type {
+  PRCheckDetail,
+  PRCheckRunDetails
+} from '@agentstart/protocol/hosted-review/review-types'
+import type { HostedReviewInfo } from '@agentstart/protocol/hosted-review/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { getGitHubPRCacheKey } from '~renderer/github/cache-key'
 import { translate } from '~renderer/i18n/i18n'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'

@@ -1,4 +1,4 @@
-import { EXTERNAL_EDITOR_PROTOCOL_CAPABILITY } from '@yiru/protocol'
+import { EXTERNAL_EDITOR_PROTOCOL_CAPABILITY } from '@agentstart/protocol'
 import { useEffect, useState } from 'react'
 import { runtimeEnvironmentSupportsCapability } from '~renderer/runtime/rpc-client'
 

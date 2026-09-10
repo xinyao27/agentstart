@@ -99,7 +99,7 @@ export function detectOptionAsAltFromLayoutMap(
  *  conservative fallback for `unknown` to protect non-US users (the bug in
  *  issue #903 was exactly the opposite default — assuming `'true'` for
  *  everyone). */
-export function detectedCategoryToDefault(category: DetectedLayoutCategory): 'true' | 'false' {
+function detectedCategoryToDefault(category: DetectedLayoutCategory): 'true' | 'false' {
   return category === 'us' ? 'true' : 'false'
 }
 

@@ -1,11 +1,11 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { hasExtensionBrowserCapabilities } from '~renderer/extension/browser-capabilities'
+import { BrowserSettingsPane } from '~renderer/extension/browser-settings/pane'
 import { translate } from '~renderer/i18n/i18n'
 
 import { AdvancedNetworkSettingsSection } from './advanced-network-settings-section'
-import { getAdvancedPaneSearchEntries } from './advanced-search'
+import { AutomationsSection } from './automations-section'
 import { SettingsSubsectionHeader } from './form-controls'
-
-export { getAdvancedPaneSearchEntries }
 
 type AdvancedPaneProps = {
   settings: GlobalSettings
@@ -23,6 +23,12 @@ export function AdvancedPane({ settings, updateSettings }: AdvancedPaneProps): R
         )}
       />
       <AdvancedNetworkSettingsSection settings={settings} updateSettings={updateSettings} />
+      {hasExtensionBrowserCapabilities() ? (
+        <>
+          <AutomationsSection />
+          <BrowserSettingsPane />
+        </>
+      ) : null}
     </section>
   )
 }

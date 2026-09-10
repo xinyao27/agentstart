@@ -9,7 +9,7 @@ use crate::settings::TelemetrySettings;
 
 const REPO_COHORT_EVENTS: &[&str] = &[
     "app_opened",
-    "app_starred_yiru",
+    "app_starred_agentstart",
     "star_nag_outcome",
     "feature_interaction_usage_bucket_reached",
     "repo_added",
@@ -26,9 +26,9 @@ const REPO_COHORT_EVENTS: &[&str] = &[
     "agent_started",
     "agent_prompt_sent",
     "agent_error",
-    "yiru_cli_feature_tip_shown",
-    "yiru_cli_feature_tip_setup_clicked",
-    "yiru_cli_feature_tip_setup_result",
+    "agentstart_cli_feature_tip_shown",
+    "agentstart_cli_feature_tip_setup_clicked",
+    "agentstart_cli_feature_tip_setup_result",
     "command_palette_feature_tip_shown",
     "command_palette_feature_tip_acknowledged",
 ];
@@ -66,11 +66,11 @@ pub(super) struct CohortSource {
 impl CohortSource {
     pub(super) fn new(user_data_path: &std::path::Path, projects: ProjectCatalog) -> Self {
         Self {
-            legacy_path: user_data_path.join("yiru-data.json"),
+            legacy_path: user_data_path.join("agentstart-data.json"),
             onboarding_warned: Arc::new(AtomicBool::new(false)),
             projects,
             repo_warned: Arc::new(AtomicBool::new(false)),
-            ui_path: user_data_path.join("yiru-data-ui.json"),
+            ui_path: user_data_path.join("agentstart-data-ui.json"),
         }
     }
 

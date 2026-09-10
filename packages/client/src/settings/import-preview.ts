@@ -1,6 +1,6 @@
-import type { GhosttyImportPreviewValue, WarpThemeImportPreviewValue } from '@yiru/protocol'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { WarpThemeImportPreview } from '@yiru/protocol/terminal/theme-types'
+import type { GhosttyImportPreviewValue, WarpThemeImportPreviewValue } from '@agentstart/protocol'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { WarpThemeImportPreview } from '@agentstart/protocol/terminal/theme-types'
 import { translate } from '~renderer/i18n/i18n'
 import { normalizeTerminalColorOverrides } from '~renderer/terminal/themes/custom'
 

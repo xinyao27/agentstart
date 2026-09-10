@@ -133,13 +133,10 @@ fn local_identity(path: &str) -> Option<String> {
 fn local_identity(path: &str) -> Option<String> {
     use std::os::windows::fs::MetadataExt;
 
+    let identity =
+        crate::file_identity::FileIdentity::from_path(std::path::Path::new(path)).ok()?;
     let metadata = std::fs::symlink_metadata(path).ok()?;
-    metadata.is_dir().then(|| {
-        format!(
-            "{}:{}:{}",
-            metadata.volume_serial_number().unwrap_or_default(),
-            metadata.file_index().unwrap_or_default(),
-            metadata.creation_time()
-        )
-    })
+    metadata
+        .is_dir()
+        .then(|| format!("{}:{}", identity.fingerprint(), metadata.creation_time()))
 }

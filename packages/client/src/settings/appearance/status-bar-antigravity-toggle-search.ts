@@ -1,4 +1,4 @@
-import type { StatusBarItem } from '@yiru/protocol/settings/ui-state'
+import type { StatusBarItem } from '@agentstart/protocol/settings/ui-state'
 import { translate } from '~renderer/i18n/i18n'
 
 import { translateSearchKeyword } from '../search-keywords'

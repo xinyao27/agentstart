@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import { getWorktreeSidebarDragRectsForGroup } from '../worktree-sidebar-drag-autoscroll'
 import { isSidebarPointerDragBlocked } from '../worktree-sidebar-pointer-drag-dom'

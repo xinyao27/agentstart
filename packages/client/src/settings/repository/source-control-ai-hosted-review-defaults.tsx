@@ -1,7 +1,7 @@
 import type {
   RepoSourceControlAiOverrides,
   SourceControlAiSettings
-} from '@yiru/protocol/source-control/ai-types'
+} from '@agentstart/protocol/source-control/ai-types'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Label } from '~renderer/ui/label'
@@ -75,7 +75,7 @@ export function RepositorySourceControlAiHostedReviewDefaults({
           return (
             <div
               key={row.key}
-              className="border-border flex items-center justify-between gap-4 border px-3 py-2"
+              className="border-border flex items-center justify-between gap-4 rounded-md border px-3 py-2"
             >
               <span className="min-w-0 space-y-0.5">
                 <span className="text-foreground block text-xs">{row.label}</span>

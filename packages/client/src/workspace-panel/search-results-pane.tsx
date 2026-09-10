@@ -1,9 +1,9 @@
-import { LegendList, type LegendListRenderItemProps } from '@legendapp/list/react'
 import type {
   SearchFileResult,
   SearchMatch,
   FileSearchResult as SearchResult
-} from '@yiru/protocol/files/values'
+} from '@agentstart/protocol/files/values'
+import { LegendList, type LegendListRenderItemProps } from '@legendapp/list/react'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { LEGEND_LIST_SCROLL_AREA_PROPS } from '~renderer/sidebar/list-scroll-area'

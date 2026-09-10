@@ -19,12 +19,12 @@ export function showBlockedNotificationFallbackToast(): void {
   toast.warning(
     translate(
       'auto.lib.blocked.notification.fallback.de50bef680',
-      'macOS is blocking Yiru notifications'
+      'macOS is blocking AgentStart notifications'
     ),
     {
       description: translate(
         'auto.components.onboarding.mac.notification.permission.card.721d2bedb6',
-        'Turn on Allow notifications for Yiru in System Settings.'
+        'Turn on Allow notifications for AgentStart in System Settings.'
       ),
       action: {
         label: translate(

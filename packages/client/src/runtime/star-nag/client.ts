@@ -1,4 +1,4 @@
-import { StarNagClient, StarNagPromptMode } from '@yiru/protocol/star-nag'
+import { StarNagClient, StarNagPromptMode } from '@agentstart/protocol/star-nag'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openConfiguredBrowserHostProtocol } from '../browser-host-runtime'
@@ -12,7 +12,7 @@ export type ShellStarNagApi = {
   later: () => Promise<void>
   complete: () => Promise<void>
   openWeb: () => Promise<void>
-  starYiru: () => Promise<boolean>
+  starAgentStart: () => Promise<boolean>
   agentValueMoment: () => Promise<{ status: 'ready'; mode: 'gh' | 'web' } | { status: 'skipped' }>
   showAgentValueMoment: () => Promise<void>
   onboardingCompleted: () => Promise<void>
@@ -42,7 +42,7 @@ export const shellStarNagApi: ShellStarNagApi = {
   openWeb: async () => {
     await (await starNagClient()).openWeb()
   },
-  starYiru: async () => (await (await starNagClient()).starYiru()).starred,
+  starAgentStart: async () => (await (await starNagClient()).starAgentStart()).starred,
   agentValueMoment: async () => {
     const { mode } = await (await starNagClient()).agentValueMoment()
     if (mode === undefined) {

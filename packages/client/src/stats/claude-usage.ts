@@ -6,7 +6,7 @@ import type {
   ClaudeUsageScope,
   ClaudeUsageSessionRow,
   ClaudeUsageSummary
-} from '@yiru/protocol/provider-usage/models'
+} from '@agentstart/protocol/provider-usage/models'
 import type { StateCreator } from 'zustand'
 import { claudeProviderUsageClient } from '~renderer/runtime/provider-usage-client'
 import type { AppState } from '~renderer/store/types'
@@ -33,7 +33,7 @@ export const createClaudeUsageSlice: StateCreator<AppState, [], [], ClaudeUsageS
   set,
   get
 ) => ({
-  claudeUsageScope: 'yiru',
+  claudeUsageScope: 'agentstart',
   claudeUsageRange: 'all',
   claudeUsageScanState: null,
   claudeUsageSnapshotReady: false,

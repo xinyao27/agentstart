@@ -1,8 +1,8 @@
 import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 
-export const DECORATIVE_AGENT_TITLE_SIGNATURE_SOURCE_SCAN_LIMIT = 1024
+const DECORATIVE_AGENT_TITLE_SIGNATURE_SOURCE_SCAN_LIMIT = 1024
 
-export function getDecorativeAgentTitleSignature(title: string): string | null {
+function getDecorativeAgentTitleSignature(title: string): string | null {
   // Why: this runs on renderer state/session hot paths; oversized titles are
   // treated as ordinary changes instead of synchronously normalized.
   if (title.length > DECORATIVE_AGENT_TITLE_SIGNATURE_SOURCE_SCAN_LIMIT) {

@@ -14,8 +14,8 @@ pub(super) fn build(input: &ReportInput) -> NotificationPresentation {
     match input.source {
         NotificationSource::TerminalBell => terminal_bell(input),
         NotificationSource::Test => NotificationPresentation {
-            body: "This is a test notification from Yiru.".to_owned(),
-            title: "Yiru notifications are on".to_owned(),
+            body: "This is a test notification from AgentStart.".to_owned(),
+            title: "AgentStart notifications are on".to_owned(),
         },
         NotificationSource::AgentTaskComplete => {
             agent_task_complete(input).unwrap_or_else(|| agent_task_fallback(input))

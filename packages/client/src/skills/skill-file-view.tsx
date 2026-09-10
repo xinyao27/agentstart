@@ -1,4 +1,4 @@
-import type { SkillFileReadResult } from '@yiru/protocol'
+import type { SkillFileReadResult } from '@agentstart/protocol'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { LoadingIndicator } from '~renderer/loading/indicator'

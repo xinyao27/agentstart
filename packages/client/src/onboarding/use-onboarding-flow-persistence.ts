@@ -1,9 +1,12 @@
-import { applyAgentPermissionMode } from '@yiru/protocol/agent/launch/permissions'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { ONBOARDING_FINAL_STEP, ONBOARDING_FLOW_VERSION } from '@yiru/protocol/settings/onboarding'
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
-import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
+import { applyAgentPermissionMode } from '@agentstart/protocol/agent/launch/permissions'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import {
+  ONBOARDING_FINAL_STEP,
+  ONBOARDING_FLOW_VERSION
+} from '@agentstart/protocol/settings/onboarding'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
+import type { EventProps } from '@agentstart/protocol/telemetry/events/catalog'
 import { useRef } from 'react'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { useAppStore } from '~renderer/store/state'
@@ -26,7 +29,7 @@ function selectedAgentOrBlank(agent: TuiAgent | null): TuiAgent | 'blank' {
   return agent ?? 'blank'
 }
 
-export function buildCompletedOnboardingNotificationSettings(
+function buildCompletedOnboardingNotificationSettings(
   notifications: GlobalSettings['notifications']
 ): GlobalSettings['notifications'] {
   return {
@@ -49,7 +52,7 @@ export type DismissedExtras = {
   durationMs: number
 }
 
-export function buildOnboardingDismissedPayload(
+function buildOnboardingDismissedPayload(
   lastStepReached: StepNumber,
   dismissedExtras?: DismissedExtras
 ): EventProps<'onboarding_dismissed'> {
@@ -64,7 +67,7 @@ export function buildOnboardingDismissedPayload(
   }
 }
 
-export function trackOnboardingDismissed(
+function trackOnboardingDismissed(
   lastStepReached: StepNumber,
   dismissedExtras?: DismissedExtras
 ): void {

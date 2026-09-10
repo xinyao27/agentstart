@@ -26,7 +26,7 @@ struct GuideCollection {
 }
 
 pub(crate) async fn load() -> Result<Vec<BundledSkillGuide>, String> {
-    let collection = if let Some(root) = std::env::var_os("YIRU_SKILL_RESOURCES_DIR") {
+    let collection = if let Some(root) = std::env::var_os("AGENTSTART_SKILL_RESOURCES_DIR") {
         let path = PathBuf::from(root).join("skill-guides.json");
         let bytes = fs::read(&path)
             .await

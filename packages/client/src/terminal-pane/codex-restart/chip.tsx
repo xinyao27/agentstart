@@ -11,7 +11,7 @@ import { buildCodexRestartNoticeKey } from './notice-key'
 
 const EMPTY_TABS: { id: string }[] = []
 
-export function collectStalePtyIdsForTabs({
+function collectStalePtyIdsForTabs({
   tabs,
   ptyIdsByTabId,
   codexRestartNoticeByPtyId
@@ -122,9 +122,9 @@ function LoudRestartOverlay({
       aria-describedby={bodyId}
       className="pointer-events-none absolute inset-0 z-50 flex items-center justify-center p-6"
     >
-      <div className="border-border bg-card text-card-foreground pointer-events-auto flex w-full max-w-[30rem] flex-col gap-3 border p-6 pb-5">
+      <div className="border-border bg-card text-card-foreground pointer-events-auto flex w-full max-w-[30rem] flex-col gap-3 rounded-lg border p-6 pb-5">
         <div className="flex items-start gap-3">
-          <div className="border-border bg-muted flex size-10 shrink-0 items-center justify-center border">
+          <div className="border-border bg-muted flex size-10 shrink-0 items-center justify-center rounded-full border">
             <RefreshCw className="text-foreground size-5" aria-hidden="true" />
           </div>
           <div className="flex min-w-0 flex-1 flex-col gap-1">

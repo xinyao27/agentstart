@@ -1,4 +1,4 @@
-import type { PRCheckAnnotation } from '@yiru/protocol/hosted-review/review-types'
+import type { PRCheckAnnotation } from '@agentstart/protocol/hosted-review/review-types'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { ArrowSquareOut as ExternalLink } from '~renderer/icons/hugeicons'
@@ -34,7 +34,7 @@ export function CheckRunAnnotations({
   }
 
   return (
-    <section className="border-border bg-background border">
+    <section className="border-border bg-background rounded-md border">
       <div className="border-border border-b px-3 py-2 text-sm font-medium">
         {translate('auto.components.editor.CheckRunDetailsPanel.f2fe8a4e8f', 'Annotations')}
       </div>
@@ -79,7 +79,7 @@ export function CheckRunAnnotations({
               )}
               <div className="text-foreground mt-2 text-sm break-words">{annotation.message}</div>
               {annotation.rawDetails && (
-                <pre className="bg-muted/40 text-muted-foreground scrollbar-sleek mt-2 max-h-60 overflow-auto p-3 font-mono text-xs whitespace-pre-wrap">
+                <pre className="bg-muted/40 text-muted-foreground scrollbar-sleek mt-2 max-h-60 overflow-auto rounded p-3 font-mono text-xs whitespace-pre-wrap">
                   {annotation.rawDetails}
                 </pre>
               )}

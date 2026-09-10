@@ -1,14 +1,14 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import {
   DEFAULT_SOURCE_CONTROL_ACTION_COMMAND_TEMPLATES,
   type SourceControlActionId,
   type SourceControlActionRecipe
-} from '@yiru/protocol/source-control/ai-actions'
-import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
-import { normalizeRepoSourceControlAiOverrides } from '@yiru/protocol/source-control/repo-overrides'
-import { resolveSourceControlActionRecipe } from '@yiru/protocol/source-control/resolution'
-import { normalizeSourceControlAiSettings } from '@yiru/protocol/source-control/settings'
+} from '@agentstart/protocol/source-control/ai-actions'
+import { isCustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
+import { normalizeRepoSourceControlAiOverrides } from '@agentstart/protocol/source-control/repo-overrides'
+import { resolveSourceControlActionRecipe } from '@agentstart/protocol/source-control/resolution'
+import { normalizeSourceControlAiSettings } from '@agentstart/protocol/source-control/settings'
 import type { SourceControlAiWriteTarget } from '~renderer/source-control/ai-recipe-save'
 
 type NormalizedSourceControlActionRecipe = {

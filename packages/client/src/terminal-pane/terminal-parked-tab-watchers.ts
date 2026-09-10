@@ -10,8 +10,8 @@
  * dispose watchers without importing this store-coupled module.
  * See docs/reference/terminal-hidden-view-parking.md.
  */
-import { isTerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import { isTerminalLeafId } from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { discardPreHandlerPtyState } from '~renderer/runtime/pty-pre-handler-buffer'
 import { sendRuntimePtyInput } from '~renderer/runtime/terminal-inspection'
 import {
@@ -41,10 +41,7 @@ import { detachTerminalLayoutLeaf } from './terminal-layout-leaf-detach'
 export {
   captureParkedTerminalPaneCandidates,
   disposeAllParkedTerminalWatchers,
-  disposeRemovedWorktreeParkedTerminalWatchers,
-  disposeParkedTerminalWatchersForPtyIds,
   disposeParkedTerminalWatchersForWorktree,
-  getParkedTerminalWatcherTabIds,
   pruneParkedTerminalWatchers
 } from '~renderer/runtime/terminal-parked-watcher-registry'
 export type { ParkedTerminalPaneCapture } from '~renderer/runtime/terminal-parked-watcher-registry'
@@ -70,7 +67,7 @@ type ParkedPaneFallbackState = {
 // unknown here: reuse the single existing runtime-title slot when unambiguous
 // so a stale "working" title still gets overwritten, otherwise use negative
 // slots that can never collide with real PaneManager ids.
-export function fallbackParkedPaneCandidates(
+function fallbackParkedPaneCandidates(
   tab: ParkableTerminalTabModel,
   state: ParkedPaneFallbackState
 ): ParkedTerminalPaneCapture[] {

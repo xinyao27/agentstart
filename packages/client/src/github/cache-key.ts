@@ -1,5 +1,8 @@
-import { LOCAL_EXECUTION_HOST_ID, normalizeExecutionHostId } from '@yiru/protocol/host/identity'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import {
+  LOCAL_EXECUTION_HOST_ID,
+  normalizeExecutionHostId
+} from '@agentstart/protocol/host/identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 type RuntimeFocusSettings = Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null | undefined
 
@@ -42,7 +45,7 @@ function getGitHubCacheHostScope(
   return null
 }
 
-export function getLegacyGitHubRepoCacheKey(
+function getLegacyGitHubRepoCacheKey(
   repoPath: string,
   repoId: string | undefined,
   suffix: string

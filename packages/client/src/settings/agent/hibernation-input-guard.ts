@@ -1,4 +1,4 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
 
 export function lastInputBlocksHibernation(entry: AgentStatusEntry, inputAt: number): boolean {
   // Why: attribute the last real input to the state segment it landed in —

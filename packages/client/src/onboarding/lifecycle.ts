@@ -1,5 +1,5 @@
-import { ONBOARDING_FINAL_STEP } from '@yiru/protocol/settings/onboarding'
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import { ONBOARDING_FINAL_STEP } from '@agentstart/protocol/settings/onboarding'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

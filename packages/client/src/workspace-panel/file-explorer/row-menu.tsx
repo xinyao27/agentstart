@@ -218,7 +218,7 @@ export function FileExplorerRowMenu({
           <Globe />
           {translate(
             'auto.components.right.sidebar.FileExplorerRow.dd112c81d2',
-            'Open in Yiru Browser'
+            'Open in AgentStart Browser'
           )}
         </ContextMenuItem>
       )}

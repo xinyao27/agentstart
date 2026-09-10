@@ -3,7 +3,7 @@ import {
   type ThemeGradientDotMode,
   type ThemeGradientHarmony,
   type ThemeGradientTheme
-} from '@yiru/protocol/settings/theme-gradient'
+} from '@agentstart/protocol/settings/theme-gradient'
 
 import { applyHarmony } from './pad-geometry'
 

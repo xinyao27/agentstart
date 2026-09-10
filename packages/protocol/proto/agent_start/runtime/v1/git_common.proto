@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+// Shared enums and messages for the git.* protobuf surface (GitStatusService,
+// GitHistoryService, GitStagingService, GitBranchService, GitHistoryRewriteService,
+// GitRemoteService, GitGenerationService). Every git_*.proto file below depends on
+// at least one type defined here.
+
+enum GitChangeStatus {
+  GIT_CHANGE_STATUS_UNSPECIFIED = 0;
+  GIT_CHANGE_STATUS_ADDED = 1;
+  GIT_CHANGE_STATUS_DELETED = 2;
+  GIT_CHANGE_STATUS_RENAMED = 3;
+  GIT_CHANGE_STATUS_COPIED = 4;
+  GIT_CHANGE_STATUS_MODIFIED = 5;
+  GIT_CHANGE_STATUS_UNTRACKED = 6;
+}
+
+enum GitStatusArea {
+  GIT_STATUS_AREA_UNSPECIFIED = 0;
+  GIT_STATUS_AREA_STAGED = 1;
+  GIT_STATUS_AREA_UNSTAGED = 2;
+  GIT_STATUS_AREA_UNTRACKED = 3;
+}
+
+enum GitConflictKind {
+  GIT_CONFLICT_KIND_UNSPECIFIED = 0;
+  GIT_CONFLICT_KIND_BOTH_MODIFIED = 1;
+  GIT_CONFLICT_KIND_BOTH_ADDED = 2;
+  GIT_CONFLICT_KIND_BOTH_DELETED = 3;
+  GIT_CONFLICT_KIND_ADDED_BY_US = 4;
+  GIT_CONFLICT_KIND_ADDED_BY_THEM = 5;
+  GIT_CONFLICT_KIND_DELETED_BY_US = 6;
+  GIT_CONFLICT_KIND_DELETED_BY_THEM = 7;
+}
+
+// Mirrors the bare string GitAuthority::conflict_operation returns, and the
+// "conflictOperation" field embedded in git.status's legacy JSON output.
+enum GitConflictOperation {
+  GIT_CONFLICT_OPERATION_UNSPECIFIED = 0;
+  GIT_CONFLICT_OPERATION_MERGE = 1;
+  GIT_CONFLICT_OPERATION_REBASE = 2;
+  GIT_CONFLICT_OPERATION_CHERRY_PICK = 3;
+  GIT_CONFLICT_OPERATION_REVERT = 4;
+}
+
+enum GitRefCategory {
+  GIT_REF_CATEGORY_UNSPECIFIED = 0;
+  GIT_REF_CATEGORY_BRANCH = 1;
+  GIT_REF_CATEGORY_REMOTE_BRANCH = 2;
+  GIT_REF_CATEGORY_TAG = 3;
+  GIT_REF_CATEGORY_COMMIT = 4;
+  GIT_REF_CATEGORY_HEAD = 5;
+}
+
+// The closed outcome of a git/write.rs write-precondition operation (its
+// blocked()/conflictable()/error_result() helpers). Every history-rewrite and
+// branch-mutation RPC returns one of these four states inside its response
+// instead of surfacing an RPC-level error, matching the legacy "status" field.
+enum GitWriteStatus {
+  GIT_WRITE_STATUS_UNSPECIFIED = 0;
+  GIT_WRITE_STATUS_OK = 1;
+  GIT_WRITE_STATUS_BLOCKED = 2;
+  GIT_WRITE_STATUS_CONFLICTS = 3;
+  GIT_WRITE_STATUS_ERROR = 4;
+}
+
+// The closed set of "reason" values write.rs attaches to a GIT_WRITE_STATUS_BLOCKED
+// outcome across addTag/createBranch/checkoutCommit/cherryPick/revertCommit/
+// mergeCommit/dropCommit/rebaseOntoCommit/resetToCommit.
+enum GitBlockedReason {
+  GIT_BLOCKED_REASON_UNSPECIFIED = 0;
+  GIT_BLOCKED_REASON_INVALID_NAME = 1;
+  GIT_BLOCKED_REASON_NAME_EXISTS = 2;
+  GIT_BLOCKED_REASON_DIRTY_WORKING_TREE = 3;
+  GIT_BLOCKED_REASON_OPERATION_IN_PROGRESS = 4;
+  GIT_BLOCKED_REASON_INVALID_COMMIT = 5;
+  GIT_BLOCKED_REASON_MERGE_COMMIT_NOT_DROPPABLE = 6;
+  GIT_BLOCKED_REASON_UNBORN_HEAD = 7;
+  GIT_BLOCKED_REASON_DETACHED_HEAD = 8;
+  GIT_BLOCKED_REASON_MERGE_COMMIT_REQUIRES_MAINLINE = 9;
+  GIT_BLOCKED_REASON_NOT_A_MERGE_COMMIT = 10;
+}
+
+// GIT_WRITE_STATUS_OK carries no reason/message/paths; GIT_WRITE_STATUS_BLOCKED
+// carries blocked_reason + message; GIT_WRITE_STATUS_CONFLICTS carries
+// conflict_paths; GIT_WRITE_STATUS_ERROR carries message only.
+message GitWriteOutcome {
+  GitWriteStatus status = 1;
+  optional GitBlockedReason blocked_reason = 2;
+  optional string message = 3;
+  repeated string conflict_paths = 4;
+}
+
+message GitChangeEntry {
+  string path = 1;
+  GitChangeStatus status = 2;
+  optional string old_path = 3;
+  optional uint64 added = 4;
+  optional uint64 removed = 5;
+}
+
+message GitSubmoduleChange {
+  bool commit_changed = 1;
+  bool tracked_changes = 2;
+  bool untracked_changes = 3;
+}
+
+// One row of git.status / git.submoduleStatus output (working_status.rs entries).
+message GitStatusEntry {
+  string path = 1;
+  GitChangeStatus status = 2;
+  GitStatusArea area = 3;
+  optional string old_path = 4;
+  optional GitSubmoduleChange submodule = 5;
+  optional GitConflictKind conflict_kind = 6;
+  optional uint64 added = 7;
+  optional uint64 removed = 8;
+}
+
+message GitUpstreamStatus {
+  bool has_upstream = 1;
+  optional string upstream_name = 2;
+  uint64 ahead = 3;
+  uint64 behind = 4;
+  optional bool has_configured_push_target = 5;
+  optional bool behind_commits_are_patch_equivalent = 6;
+}
+
+// Mirrors diff.rs's "kind" union shared by git.diff, git.branchDiff, git.commitDiff.
+enum GitDiffKind {
+  GIT_DIFF_KIND_UNSPECIFIED = 0;
+  GIT_DIFF_KIND_TEXT = 1;
+  GIT_DIFF_KIND_BINARY = 2;
+}
+
+enum GitDiffLimitReason {
+  GIT_DIFF_LIMIT_REASON_UNSPECIFIED = 0;
+  GIT_DIFF_LIMIT_REASON_CHARACTER_COUNT = 1;
+  GIT_DIFF_LIMIT_REASON_LINE_COUNT = 2;
+}
+
+message GitDiffLineCounts {
+  uint64 original = 1;
+  uint64 modified = 2;
+}
+
+message GitDiffLineCountsAreMinimum {
+  bool original = 1;
+  bool modified = 2;
+}
+
+message GitDiffRenderLimits {
+  uint64 max_lines_per_side = 1;
+  uint64 max_combined_characters = 2;
+}
+
+message GitDiffRenderLimit {
+  GitDiffLimitReason reason = 1;
+  optional GitDiffLineCounts line_counts = 2;
+  optional GitDiffLineCountsAreMinimum line_counts_are_minimum = 3;
+  uint64 character_count = 4;
+  GitDiffRenderLimits limits = 5;
+}
+
+message GitDiffResult {
+  GitDiffKind kind = 1;
+  string original_content = 2;
+  string modified_content = 3;
+  bool original_is_binary = 4;
+  bool modified_is_binary = 5;
+  optional bool is_image = 6;
+  optional string mime_type = 7;
+  optional bool modified_deleted = 8;
+  optional GitDiffRenderLimit large_diff_render_limit = 9;
+}
+
+// git.rs's PushTargetInput / crate::git::GitPushTarget, shared by upstreamStatus,
+// fetch, pull, fastForward and push.
+message GitPushTarget {
+  string remote_name = 1;
+  string branch_name = 2;
+  optional string remote_url = 3;
+}

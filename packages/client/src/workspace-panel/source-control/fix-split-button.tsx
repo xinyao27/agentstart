@@ -1,9 +1,9 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/protocol/source-control/ai-actions'
-import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
+} from '@agentstart/protocol/source-control/ai-actions'
+import type { LaunchSource } from '@agentstart/protocol/telemetry/events/foundations'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { SlidersHorizontal, Sparkle, CaretDown as ChevronDown } from '~renderer/icons/hugeicons'
@@ -120,7 +120,7 @@ export function SourceControlFixSplitButton({
                 type="button"
                 variant={variant}
                 size={size}
-                className={cn(' border-l', dividerClass, chevronClassName)}
+                className={cn('rounded-l-none border-l', dividerClass, chevronClassName)}
                 disabled={isLaunching || !canLaunch}
                 title={chevronTitle}
                 aria-label={chevronAriaLabel}
@@ -134,7 +134,7 @@ export function SourceControlFixSplitButton({
           {worktreeId && groupId && prompt && !disabledReason ? (
             <DropdownMenuItem
               onClick={() => setComposerOpen(true)}
-              className="gap-2 px-2 py-1.5 text-[12px] leading-5 font-medium"
+              className="gap-2 rounded-[7px] px-2 py-1.5 text-[12px] leading-5 font-medium"
             >
               <SlidersHorizontal className="text-muted-foreground size-4" />
               {translate(

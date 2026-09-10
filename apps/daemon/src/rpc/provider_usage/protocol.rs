@@ -1,7 +1,7 @@
 use serde_json::Value;
 
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     ProviderUsageBreakdown as ProtocolBreakdown, ProviderUsageDailyData as ProtocolDailyData,
     ProviderUsageGetScanStateResponse as ProtocolScanStateResponse,
     ProviderUsageGetSnapshotResponse as ProtocolSnapshotResponse,
@@ -10,7 +10,7 @@ use yiru_protocol::runtime::v1::{
     ProviderUsageScanState as ProtocolScanState, ProviderUsageScope as ProtocolScope,
     ProviderUsageSession as ProtocolSession, ProviderUsageSummary as ProtocolSummary,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::provider_usage::{Provider, ProviderUsageError};
 
@@ -22,7 +22,7 @@ impl ProviderUsageRpc {
         payload: &[u8],
     ) -> Result<Vec<u8>, Status> {
         let request =
-            decode::<yiru_protocol::runtime::v1::ProviderUsageGetScanStateRequest>(payload)?;
+            decode::<agentstart_protocol::runtime::v1::ProviderUsageGetScanStateRequest>(payload)?;
         let provider = parse_provider(request.provider)?;
         let state = self
             .authority
@@ -40,7 +40,7 @@ impl ProviderUsageRpc {
         payload: &[u8],
     ) -> Result<Vec<u8>, Status> {
         let request =
-            decode::<yiru_protocol::runtime::v1::ProviderUsageSetEnabledRequest>(payload)?;
+            decode::<agentstart_protocol::runtime::v1::ProviderUsageSetEnabledRequest>(payload)?;
         let provider = parse_provider(request.provider)?;
         let state = self
             .authority
@@ -54,7 +54,8 @@ impl ProviderUsageRpc {
     }
 
     pub(in crate::rpc) async fn protocol_refresh(&self, payload: &[u8]) -> Result<Vec<u8>, Status> {
-        let request = decode::<yiru_protocol::runtime::v1::ProviderUsageRefreshRequest>(payload)?;
+        let request =
+            decode::<agentstart_protocol::runtime::v1::ProviderUsageRefreshRequest>(payload)?;
         let provider = parse_provider(request.provider)?;
         let state = self
             .authority
@@ -72,7 +73,7 @@ impl ProviderUsageRpc {
         payload: &[u8],
     ) -> Result<Vec<u8>, Status> {
         let request =
-            decode::<yiru_protocol::runtime::v1::ProviderUsageGetSnapshotRequest>(payload)?;
+            decode::<agentstart_protocol::runtime::v1::ProviderUsageGetSnapshotRequest>(payload)?;
         let provider = parse_provider(request.provider)?;
         let scope = parse_scope(request.scope)?;
         let range = parse_range(request.range)?;
@@ -100,7 +101,7 @@ fn parse_provider(provider: i32) -> Result<Provider, Status> {
 
 fn parse_scope(scope: i32) -> Result<String, Status> {
     match ProtocolScope::try_from(scope) {
-        Ok(ProtocolScope::Yiru) => Ok("yiru".to_string()),
+        Ok(ProtocolScope::AgentStart) => Ok("agentstart".to_string()),
         Ok(ProtocolScope::All) => Ok("all".to_string()),
         Ok(ProtocolScope::Unspecified) | Err(_) => Err(status(
             StatusCode::InvalidArgument,
@@ -110,7 +111,7 @@ fn parse_scope(scope: i32) -> Result<String, Status> {
 }
 
 fn parse_range(range: i32) -> Result<String, Status> {
-    use yiru_protocol::runtime::v1::ProviderUsageRange;
+    use agentstart_protocol::runtime::v1::ProviderUsageRange;
     match ProviderUsageRange::try_from(range) {
         Ok(ProviderUsageRange::SevenDays) => Ok("7d".to_string()),
         Ok(ProviderUsageRange::ThirtyDays) => Ok("30d".to_string()),

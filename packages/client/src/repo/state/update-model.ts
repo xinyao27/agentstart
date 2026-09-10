@@ -1,10 +1,13 @@
-import { LOCAL_EXECUTION_HOST_ID, toRuntimeExecutionHostId } from '@yiru/protocol/host/identity'
-import { normalizeRepoBadgeColor } from '@yiru/protocol/project/appearance'
-import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
-import { sanitizeRepoIcon } from '@yiru/protocol/project/icon'
-import type { ProjectUpdateArgs } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { FolderWorkspacePathStatus } from '@yiru/protocol/workspace/folder-path'
+import {
+  LOCAL_EXECUTION_HOST_ID,
+  toRuntimeExecutionHostId
+} from '@agentstart/protocol/host/identity'
+import { normalizeRepoBadgeColor } from '@agentstart/protocol/project/appearance'
+import type { NestedRepoScanResult } from '@agentstart/protocol/project/group-model'
+import { sanitizeRepoIcon } from '@agentstart/protocol/project/icon'
+import type { ProjectUpdateArgs } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { FolderWorkspacePathStatus } from '@agentstart/protocol/workspace/folder-path'
 import type { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 import type { AppState } from '../../store/types'
@@ -116,7 +119,7 @@ export function sanitizeRepoUpdate(updates: RepoUpdate): RepoUpdate {
   return sanitized
 }
 
-export const updateRepoChainsByStore = new WeakMap<() => AppState, Map<string, Promise<boolean>>>()
+const updateRepoChainsByStore = new WeakMap<() => AppState, Map<string, Promise<boolean>>>()
 
 export function getRepoUpdateChains(get: () => AppState): Map<string, Promise<boolean>> {
   let chains = updateRepoChainsByStore.get(get)
@@ -127,7 +130,7 @@ export function getRepoUpdateChains(get: () => AppState): Map<string, Promise<bo
   return chains
 }
 
-export function worktreeBelongsToHost(worktree: { hostId?: string }, hostId: string): boolean {
+function worktreeBelongsToHost(worktree: { hostId?: string }, hostId: string): boolean {
   return (worktree.hostId ?? LOCAL_EXECUTION_HOST_ID) === hostId
 }
 

@@ -1,6 +1,6 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::workspace_events_service_watch_response::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::workspace_events_service_watch_response::Event;
+use agentstart_protocol::runtime::v1::{
     WorkspaceConsoleSource, WorkspaceEventsServiceAppendConsoleRequest,
     WorkspaceEventsServiceAppendConsoleResponse, WorkspaceEventsServiceAppendPerformanceRequest,
     WorkspaceEventsServiceAppendPerformanceResponse,
@@ -9,7 +9,7 @@ use yiru_protocol::runtime::v1::{
     WorkspaceEventsServiceListResponse, WorkspaceEventsServiceWatchRequest,
     WorkspaceEventsServiceWatchResponse, WorkspaceWatchReady,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::persistence::WorkspaceJournalError;
 use crate::projects::ProjectCatalogError;

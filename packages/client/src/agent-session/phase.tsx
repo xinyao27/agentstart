@@ -1,4 +1,4 @@
-import type { AgentPhase } from '@yiru/protocol/agent/phase'
+import type { AgentPhase } from '@agentstart/protocol/agent/phase'
 import { translate } from '~renderer/i18n/i18n'
 import { cn } from '~renderer/ui/class-names'
 

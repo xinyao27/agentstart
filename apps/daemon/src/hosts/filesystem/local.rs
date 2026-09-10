@@ -218,10 +218,7 @@ pub(super) async fn which(command: &str) -> Result<Option<String>, HostFilesyste
     if command.contains(std::path::MAIN_SEPARATOR) {
         return Ok(exists(command).await?.then(|| command.to_owned()));
     }
-    let Some(paths) = std::env::var_os("PATH") else {
-        return Ok(None);
-    };
-    for directory in std::env::split_paths(&paths) {
+    for directory in executable_directories().await {
         for candidate in executable_candidates(&directory.join(command)) {
             if is_executable(&candidate).await? {
                 return Ok(Some(candidate.to_string_lossy().into_owned()));
@@ -229,6 +226,44 @@ pub(super) async fn which(command: &str) -> Result<Option<String>, HostFilesyste
         }
     }
     Ok(None)
+}
+
+async fn executable_directories() -> Vec<std::path::PathBuf> {
+    let mut directories = std::env::var_os("PATH")
+        .map(|paths| std::env::split_paths(&paths).collect())
+        .unwrap_or_default();
+    let Some(home) = home_directory().map(std::path::PathBuf::from) else {
+        return directories;
+    };
+    directories.extend([
+        home.join(".volta/bin"),
+        home.join(".asdf/shims"),
+        home.join(".fnm/aliases/default/bin"),
+        home.join(".local/share/mise/shims"),
+        home.join(".local/bin"),
+        home.join("Library/pnpm"),
+        home.join(".local/share/pnpm"),
+        home.join(".yarn/bin"),
+        home.join(".bun/bin"),
+    ]);
+    directories.extend(nvm_executable_directories(&home).await);
+    directories
+}
+
+async fn nvm_executable_directories(home: &Path) -> Vec<std::path::PathBuf> {
+    let mut versions = match fs::read_dir(home.join(".nvm/versions/node")).await {
+        Ok(versions) => versions,
+        Err(_) => return Vec::new(),
+    };
+    let mut directories = Vec::new();
+    while let Ok(Some(version)) = versions.next_entry().await {
+        let path = version.path();
+        if path.is_dir() {
+            directories.push(path.join("bin"));
+        }
+    }
+    directories.sort_unstable_by(|left, right| right.cmp(left));
+    directories
 }
 
 pub(super) async fn write(path: &str, content: &[u8]) -> Result<(), HostFilesystemError> {

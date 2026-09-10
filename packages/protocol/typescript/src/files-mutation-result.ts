@@ -1,5 +1,5 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
-import type { MutationResult } from '../generated/yiru/runtime/v1/files_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
+import type { MutationResult } from '../generated/agent_start/runtime/v1/files_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 // Why: MutationResult.ok is the only success signal these RPCs return; a void-returning

@@ -11,7 +11,7 @@ export {
   safeFitAndThen,
   type SafeFitContinuationHandle
 } from './pane-fit'
-export { captureScrollState, restoreScrollState } from './pane-scroll'
+export { captureScrollState } from './pane-scroll'
 
 // ---------------------------------------------------------------------------
 // Split-tree manipulation: detach, insert, promote sibling
@@ -212,7 +212,7 @@ export function promoteSibling(
 }
 
 /** Apply standard flex styles to a pane container inside a split. */
-export function applyPaneFlexStyle(el: HTMLElement): void {
+function applyPaneFlexStyle(el: HTMLElement): void {
   el.style.flex = '1 1 0%'
   el.style.minWidth = '0'
   el.style.minHeight = '0'

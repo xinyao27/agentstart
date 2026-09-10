@@ -18,7 +18,7 @@ use validate::TargetAuthority;
 pub(crate) use validate::TargetValidationError;
 
 // Why: The dedicated DNS suffix distinguishes worktree labels from unrelated localhost traffic.
-pub(super) const YIRU_LOCALHOST_SUFFIX: &str = ".yiru.localhost";
+pub(super) const AGENTSTART_LOCALHOST_SUFFIX: &str = ".agentstart.localhost";
 
 #[derive(Clone)]
 pub(crate) struct WorktreeLabelAuthority {
@@ -144,7 +144,7 @@ impl WorktreeLabelAuthority {
         };
 
         let mut labeled = target;
-        let _ = labeled.set_host(Some(&format!("{label}{YIRU_LOCALHOST_SUFFIX}")));
+        let _ = labeled.set_host(Some(&format!("{label}{AGENTSTART_LOCALHOST_SUFFIX}")));
         let _ = labeled.set_port(Some(listener_port));
         Ok(RegisterRouteResult {
             url: labeled.to_string(),

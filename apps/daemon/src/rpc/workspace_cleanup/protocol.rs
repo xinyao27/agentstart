@@ -1,12 +1,12 @@
-use serde_json::{Map, Value, json};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::workspace_cleanup_service_event::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::workspace_cleanup_service_event::Event;
+use agentstart_protocol::runtime::v1::{
     WorkspaceCleanupServiceClearDismissalsRequest, WorkspaceCleanupServiceDismissRequest,
     WorkspaceCleanupServiceEvent, WorkspaceCleanupServiceScanRequest,
     WorkspaceCleanupServiceSubscribeEventsRequest, WorkspaceCleanupSubscribeReady,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::{Map, Value, json};
 
 use crate::rpc::protocol_call::ProtocolCallContext;
 
@@ -105,7 +105,7 @@ fn scan_input(request: &WorkspaceCleanupServiceScanRequest) -> Value {
 }
 
 fn dismissal_value(
-    dismissal: &yiru_protocol::runtime::v1::WorkspaceCleanupDismissal,
+    dismissal: &agentstart_protocol::runtime::v1::WorkspaceCleanupDismissal,
 ) -> Result<Value, Status> {
     if dismissal.worktree_id.is_empty() || dismissal.fingerprint.is_empty() {
         return Err(invalid_argument(

@@ -1,4 +1,4 @@
-import { normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
+import { normalizeRuntimePathForComparison } from '@agentstart/protocol/host/path'
 import React, { useState } from 'react'
 import { getExternalWorktreeParentPath } from '~renderer/external-worktree-visibility'
 import { translate } from '~renderer/i18n/i18n'
@@ -7,9 +7,9 @@ import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
-export type ImportedWorktreesVisibilityPlacement = 'repo-group' | 'pinned-fallback'
+type ImportedWorktreesVisibilityPlacement = 'repo-group' | 'pinned-fallback'
 
-export type ImportedWorktreeVisibilityPreview = {
+type ImportedWorktreeVisibilityPreview = {
   id?: string
   displayName: string
   path?: string
@@ -52,7 +52,7 @@ function getParentPath(path: string | undefined): string {
   return getExternalWorktreeParentPath(path)
 }
 
-export function groupWorktreesByParentPath(
+function groupWorktreesByParentPath(
   worktrees: readonly ImportedWorktreeVisibilityPreview[]
 ): ImportedWorktreePathGroup[] {
   const groups: ImportedWorktreePathGroup[] = []
@@ -119,7 +119,7 @@ export default function ImportedWorktreesVisibilityLine({
     >
       <div
         className={cn(
-          'flex min-h-7 min-w-0 items-center gap-1.5 px-1.5 text-[11px] leading-none text-muted-foreground transition-colors',
+          'flex min-h-7 min-w-0 items-center gap-1.5 px-1.5 text-[11px] leading-none text-muted-foreground transition-colors rounded-md',
           'hover:bg-accent hover:text-accent-foreground'
         )}
       >
@@ -176,7 +176,7 @@ export default function ImportedWorktreesVisibilityLine({
           )}
         >
           {visibleWorktreeGroups.map((group) => (
-            <div key={group.path} className="grid min-w-0 gap-0.5 px-1.5 py-1">
+            <div key={group.path} className="grid min-w-0 gap-0.5 rounded-md px-1.5 py-1">
               <div className="flex min-h-7 min-w-0 items-center gap-1.5">
                 <Tooltip>
                   <TooltipTrigger
@@ -193,7 +193,7 @@ export default function ImportedWorktreesVisibilityLine({
                     {group.path}
                   </TooltipContent>
                 </Tooltip>
-                <span className="border-sidebar-border text-muted-foreground shrink-0 border px-1.5 py-0.5 text-[10px] leading-none">
+                <span className="border-sidebar-border text-muted-foreground shrink-0 rounded-full border px-1.5 py-0.5 text-[10px] leading-none">
                   {group.worktrees.length}
                 </span>
               </div>
@@ -258,7 +258,7 @@ export default function ImportedWorktreesVisibilityLine({
             </div>
           ) : null}
           <div className="grid gap-1 px-1.5 pt-1 pb-1">
-            <p className="bg-sidebar-accent text-sidebar-accent-foreground px-2 py-1 text-[10px] leading-4 font-medium">
+            <p className="bg-sidebar-accent text-sidebar-accent-foreground rounded-md px-2 py-1 text-[10px] leading-4 font-medium">
               {translate(
                 'auto.components.sidebar.ImportedWorktreesVisibilityLine.9f4f14e821',
                 'Change this later from the project menu.'

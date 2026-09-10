@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 

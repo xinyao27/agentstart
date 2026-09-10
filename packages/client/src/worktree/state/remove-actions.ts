@@ -7,7 +7,7 @@ import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { disposeRemovedWorktreeParkedTerminalWatchers } from '~renderer/runtime/terminal-parked-watcher-registry'
 import { removeRuntimeWorktree } from '~renderer/runtime/worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
-import { ensureHooksConfirmed } from '~renderer/sidebar/yiru-hook-confirmation'
+import { ensureHooksConfirmed } from '~renderer/sidebar/agentstart-hook-confirmation'
 import { clearSessionCommitDraftForWorktree } from '~renderer/workspace-panel/source-control/commit-draft-session'
 import { forgetHugeRepoWarningDismissalsForWorktrees } from '~renderer/workspace-panel/source-control/huge-repo-warning-dismissals'
 import {

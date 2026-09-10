@@ -1,7 +1,7 @@
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
-import { folderWorkspaceKey, parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
+import { folderWorkspaceKey, parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { WorktreeLineage, WorkspaceLineage } from '@agentstart/protocol/worktree/lineage'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 export type AttachedWorktreeResolution = {
   folderWorkspace: FolderWorkspace | null
@@ -19,7 +19,7 @@ type AttachedWorktreeResolverArgs = {
   worktreesByRepo: Record<string, readonly Worktree[]>
 }
 
-export function getWorktreeActivityTime(worktree: Worktree): number {
+function getWorktreeActivityTime(worktree: Worktree): number {
   return Math.max(worktree.lastActivityAt ?? 0, worktree.createdAt ?? 0, worktree.sortOrder ?? 0)
 }
 
@@ -81,7 +81,7 @@ export function getAttachedWorktreesForFolderWorkspace({
   }
 }
 
-export function getLineageChildrenByParentId(
+function getLineageChildrenByParentId(
   lineageById: Record<string, WorktreeLineage>,
   worktreeById: Map<string, Worktree>,
   rootWorktreeIds: ReadonlySet<string>

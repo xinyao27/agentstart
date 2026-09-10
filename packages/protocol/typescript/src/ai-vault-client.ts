@@ -6,7 +6,7 @@ import {
   AiVaultServiceListSessionsResponseSchema,
   AiVaultServiceListSubagentSessionsRequestSchema,
   AiVaultServiceListSubagentSessionsResponseSchema
-} from '../generated/yiru/runtime/v1/ai_vault_pb.js'
+} from '../generated/agent_start/runtime/v1/ai_vault_pb.js'
 import {
   aiVaultScanIssue,
   aiVaultSession,

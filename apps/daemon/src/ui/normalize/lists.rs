@@ -85,7 +85,7 @@ pub(super) fn show_dotfiles(value: Option<&Value>) -> Value {
 }
 
 pub(super) fn feature_tip_ids(value: Option<&Value>) -> Value {
-    unique_known(value, &["yiru-cli", "command-palette"], |id| {
+    unique_known(value, &["agentstart-cli", "command-palette"], |id| {
         if id == "cmd-j-palette" {
             "command-palette"
         } else {

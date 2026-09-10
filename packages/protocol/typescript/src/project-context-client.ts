@@ -4,7 +4,7 @@ import {
   ProjectContextService,
   ProjectContextServiceResolveRequestSchema,
   ProjectContextServiceResolveResponseSchema
-} from '../generated/yiru/runtime/v1/project_context_pb.js'
+} from '../generated/agent_start/runtime/v1/project_context_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 
 export const PROJECT_CONTEXT_PROTOCOL_CAPABILITY = 'projectContext.protobuf.v1' as const

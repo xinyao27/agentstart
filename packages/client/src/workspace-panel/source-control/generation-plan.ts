@@ -1,7 +1,7 @@
-import { renderSourceControlActionCommandTemplate } from '@yiru/protocol/source-control/action-recipes'
-import type { SourceControlTextActionId } from '@yiru/protocol/source-control/ai-actions'
-import { planCommitMessageGeneration } from '@yiru/protocol/source-control/command/plan'
-import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
+import { renderSourceControlActionCommandTemplate } from '@agentstart/protocol/source-control/action-recipes'
+import type { SourceControlTextActionId } from '@agentstart/protocol/source-control/ai-actions'
+import { planCommitMessageGeneration } from '@agentstart/protocol/source-control/command/plan'
+import type { ResolvedSourceControlAiGenerationParams } from '@agentstart/protocol/source-control/resolution'
 import { translate } from '~renderer/i18n/i18n'
 import { localizeGenerationFailure } from '~renderer/source-control/ai/failure-copy'
 
@@ -87,7 +87,7 @@ export function planSourceControlTextGeneration(
     delivery,
     caveat: translate(
       'sourceControl.generationPreview.caveat',
-      'This checks Yiru’s planner only. It does not invoke the CLI, prove PATH or binary availability, or reproduce main-process Windows .cmd resolution.'
+      'This checks AgentStart’s planner only. It does not invoke the CLI, prove PATH or binary availability, or reproduce main-process Windows .cmd resolution.'
     )
   }
 }

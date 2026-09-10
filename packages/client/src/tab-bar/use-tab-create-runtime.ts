@@ -1,10 +1,10 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import {
   type BuiltInWindowsTerminalShell,
   WINDOWS_GIT_BASH_SHELL
-} from '@yiru/protocol/host/windows-terminal-shell'
-import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
-import type { Tab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/host/windows-terminal-shell'
+import type { ProjectExecutionRuntimeResolution } from '@agentstart/protocol/project/runtime-preference'
+import type { Tab } from '@agentstart/protocol/workspace/tabs'
 import { type AgentDetectionTarget, useDetectedAgents } from '~renderer/agent/use-detected'
 import { translate } from '~renderer/i18n/i18n'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'

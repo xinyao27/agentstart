@@ -270,13 +270,13 @@ fn inotify_command(root: &str) -> HostCommand {
 
 fn fswatch_command(root: &str) -> HostCommand {
     let script = r#"
-probe=$(mktemp -d "${TMPDIR:-/tmp}/yiru-watch.XXXXXX") || exit 1
+probe=$(mktemp -d "${TMPDIR:-/tmp}/agentstart-watch.XXXXXX") || exit 1
 cleanup() {
   if [ -n "${pulse_pid:-}" ]; then kill "$pulse_pid" 2>/dev/null || :; fi
   rm -rf -- "$probe"
 }
 trap cleanup EXIT HUP INT TERM
-printf 'YIRU_PROBE\000%s\000' "$probe"
+printf 'AGENTSTART_PROBE\000%s\000' "$probe"
 (
   while :; do
     : > "$probe/ready"
@@ -292,7 +292,7 @@ fswatch --recursive --numeric --allow-overflow --format '%p%0%f%0' --latency 0.1
         [
             "-c".to_owned(),
             script.to_owned(),
-            "yiru-fswatch".to_owned(),
+            "agentstart-fswatch".to_owned(),
             root.to_owned(),
             ignored_path_regex(root),
         ],
@@ -567,7 +567,7 @@ impl NulDecoder {
         let [path, value] = record else {
             return NulRecord::Setup;
         };
-        if path == b"YIRU_PROBE" {
+        if path == b"AGENTSTART_PROBE" {
             self.probe_path = Some(String::from_utf8_lossy(value).into_owned());
             return NulRecord::Setup;
         }

@@ -1,4 +1,4 @@
-import type { Tab } from '@yiru/protocol/workspace/tabs'
+import type { Tab } from '@agentstart/protocol/workspace/tabs'
 import type { AppState } from '~renderer/store/types'
 
 import type { RuntimeMobileSessionBrowserTab } from './remote-session/session-model'

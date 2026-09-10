@@ -1,7 +1,7 @@
 import type {
   WorktreeDefaultTabsLaunch,
   WorktreeSetupLaunch
-} from '@yiru/protocol/worktree/create-result'
+} from '@agentstart/protocol/worktree/create-result'
 import type { WorktreeStartupLaunch } from '~renderer/worktree/create-model'
 
 type SessionTabMove =

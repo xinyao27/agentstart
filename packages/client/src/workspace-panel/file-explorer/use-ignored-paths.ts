@@ -5,15 +5,15 @@ import { getRuntimeGitIgnoredPaths } from '~renderer/runtime/git-client'
 import { getRightSidebarWorktreeRuntimeSettings } from './runtime-owner'
 
 const EMPTY_IGNORED_PATHS: readonly string[] = []
-export const FILE_EXPLORER_IGNORED_QUERY_DEBOUNCE_MS = 300
+const FILE_EXPLORER_IGNORED_QUERY_DEBOUNCE_MS = 300
 
-export type IgnoredPathResult = {
+type IgnoredPathResult = {
   activeWorktreeId: string
   paths: string[]
   worktreePath: string
 }
 
-export function getEffectiveFileExplorerIgnoredPaths({
+function getEffectiveFileExplorerIgnoredPaths({
   activeWorktreeId,
   canLoadIgnoredPaths,
   ignoredPathResult,

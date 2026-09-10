@@ -21,11 +21,12 @@ use model::{CachedRelease, GitHubRelease, ReleaseDownload};
 pub(crate) use model::{PreparedUpdate, UpdateInstallResult, UpdateStatus};
 
 const CACHE_TTL_MS: i128 = 6 * 60 * 60 * 1_000;
-const CHECKSUM_ASSET_NAME: &str = "yiru-checksums.txt";
-const RELEASE_ENDPOINT: &str = "https://api.github.com/repos/xinyao27/yiru/releases/latest";
+const CHECKSUM_ASSET_NAME: &str = "agentstart-checksums.txt";
+const RELEASE_ENDPOINT: &str = "https://api.github.com/repos/xinyao27/agentstart/releases/latest";
 const CHECK_REQUEST_TIMEOUT: Duration = Duration::from_secs(8);
 const MAX_RELEASE_RESPONSE_BYTES: u64 = 8 * 1024 * 1024;
-const RELEASES_ENDPOINT: &str = "https://api.github.com/repos/xinyao27/yiru/releases?per_page=100";
+const RELEASES_ENDPOINT: &str =
+    "https://api.github.com/repos/xinyao27/agentstart/releases?per_page=100";
 pub(super) const CHECKSUM_TIMEOUT: Duration = Duration::from_secs(10);
 pub(super) const DOWNLOAD_TIMEOUT: Duration = Duration::from_secs(60);
 
@@ -114,7 +115,7 @@ pub(crate) enum UpdateError {
     DevelopmentBuild,
     #[error("daemon_update_use_npm")]
     UseNpm,
-    #[error("daemon_update_requires_app_update: update the complete Yiru app")]
+    #[error("daemon_update_requires_app_update: update the complete AgentStart app")]
     AppUpdateRequired,
     #[error("daemon_update_use_homebrew")]
     UseHomebrew,
@@ -181,7 +182,7 @@ impl UpdateError {
 impl UpdateChecker {
     pub(crate) fn new() -> Result<Self, UpdateError> {
         let executable = std::env::current_exe().map_err(UpdateError::CurrentExecutable)?;
-        let current_version = std::env::var("YIRU_APP_VERSION")
+        let current_version = std::env::var("AGENTSTART_APP_VERSION")
             .unwrap_or_else(|_| env!("CARGO_PKG_VERSION").to_owned());
         Ok(Self {
             state: Arc::new(UpdateState {
@@ -420,7 +421,7 @@ impl UpdateChecker {
                     ACCEPT,
                     HeaderValue::from_static("application/vnd.github+json"),
                 );
-                headers.insert(USER_AGENT, HeaderValue::from_static("yiru-daemon"));
+                headers.insert(USER_AGENT, HeaderValue::from_static("agentstart-daemon"));
                 reqwest::Client::builder()
                     .default_headers(headers)
                     .redirect(Policy::custom(|attempt| {

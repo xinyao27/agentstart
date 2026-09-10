@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import type React from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
@@ -26,7 +26,7 @@ export function AgentLaunchMenuItems({
     return (
       <DropdownMenuItem
         disabled
-        className="text-muted-foreground gap-2 px-2 py-1.5 text-[12px] leading-5"
+        className="text-muted-foreground gap-2 rounded-[7px] px-2 py-1.5 text-[12px] leading-5"
       >
         {emptyLabel}
       </DropdownMenuItem>
@@ -39,7 +39,7 @@ export function AgentLaunchMenuItems({
         <DropdownMenuItem
           key={agent}
           onClick={() => onLaunch(agent)}
-          className="gap-2 px-2 py-1.5 text-[12px] leading-5 font-medium"
+          className="gap-2 rounded-[7px] px-2 py-1.5 text-[12px] leading-5 font-medium"
           title={translate(
             'auto.components.tab.bar.QuickLaunchButton.ec2adf093e',
             'Launch {{value0}} in a new terminal',

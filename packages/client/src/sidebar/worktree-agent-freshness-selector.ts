@@ -1,4 +1,4 @@
-import { AGENT_STATUS_STALE_AFTER_MS } from '@yiru/protocol/agent/status-records'
+import { AGENT_STATUS_STALE_AFTER_MS } from '@agentstart/protocol/agent/status-records'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
 import type { AppState } from '~renderer/store/types'
 

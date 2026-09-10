@@ -323,7 +323,4 @@ export function useRepoHeaderDrag({
   return { state, onHandlePointerDown }
 }
 
-export {
-  isRepoHeaderActionTarget,
-  isProjectHeaderDragHandleTarget
-} from './project-header-drag-contract'
+export { isRepoHeaderActionTarget } from './project-header-drag-contract'

@@ -1,13 +1,13 @@
 import Foundation
-import YiruComputerUseIcons
+import AgentStartComputerUseIcons
 
 @available(macOS 13.0, *)
 public struct PermissionFlowButtonState: Equatable, Sendable {
   public let titleKey: String
-  public let icon: YiruComputerUseIconID
+  public let icon: AgentStartComputerUseIconID
   public let isGranted: Bool
 
-  public init(titleKey: String, icon: YiruComputerUseIconID, isGranted: Bool) {
+  public init(titleKey: String, icon: AgentStartComputerUseIconID, isGranted: Bool) {
     self.titleKey = titleKey
     self.icon = icon
     self.isGranted = isGranted

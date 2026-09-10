@@ -115,7 +115,7 @@ pub fn generate_auth_token() -> Result<String, ExtensionRpcServerError> {
 
 pub fn read_allowed_extension_origins(primary_origin: &str) -> HashSet<String> {
     let mut origins = HashSet::from([primary_origin.to_owned()]);
-    if let Ok(configured) = std::env::var("YIRU_EXTENSION_ORIGINS") {
+    if let Ok(configured) = std::env::var("AGENTSTART_EXTENSION_ORIGINS") {
         origins.extend(
             configured
                 .split(',')

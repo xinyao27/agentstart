@@ -1,8 +1,8 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { SourceControlActionId } from '@yiru/protocol/source-control/ai-actions'
-import type { RepoSourceControlAiOverrides } from '@yiru/protocol/source-control/ai-types'
-import { normalizeRepoSourceControlAiOverrides } from '@yiru/protocol/source-control/repo-overrides'
-import { resolveSourceControlActionRecipe } from '@yiru/protocol/source-control/resolution'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { SourceControlActionId } from '@agentstart/protocol/source-control/ai-actions'
+import type { RepoSourceControlAiOverrides } from '@agentstart/protocol/source-control/ai-types'
+import { normalizeRepoSourceControlAiOverrides } from '@agentstart/protocol/source-control/repo-overrides'
+import { resolveSourceControlActionRecipe } from '@agentstart/protocol/source-control/resolution'
 
 import { SOURCE_CONTROL_TEXT_ACTION_ID_SET } from '../source-control/action-recipe-options'
 import { completeRepoActionRecipe } from './source-control-ai-labels'

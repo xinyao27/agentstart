@@ -1,9 +1,9 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import {
   isTerminalAgentQuickCommand,
   supportsTerminalAgentQuickCommand
-} from '@yiru/protocol/terminal/quick-commands'
-import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
+} from '@agentstart/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@agentstart/protocol/terminal/quick-commands'
 import type { Dispatch, MutableRefObject, SetStateAction } from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
@@ -157,7 +157,7 @@ export function TerminalQuickCommandContentSection({
           }
           rows={4}
           className={cn(
-            'min-h-24 w-full resize-y border border-input bg-transparent px-3 py-2 text-sm outline-none transition-[color] focus-visible:border-ring',
+            'min-h-24 w-full resize-y rounded-md border border-input bg-transparent px-3 py-2 text-sm outline-none transition-[color] focus-visible:border-ring',
             !isAgentAction && 'font-mono'
           )}
         />
@@ -183,7 +183,7 @@ export function TerminalQuickCommandContentSection({
               'auto.components.terminal.quick.commands.TerminalQuickCommandDialog.e604bd40d6',
               'Supports skills, file paths, and built-in commands like'
             )}{' '}
-            <code className="bg-muted px-1 font-mono text-[11px]">
+            <code className="bg-muted rounded px-1 font-mono text-[11px]">
               {translate(
                 'auto.components.terminal.quick.commands.TerminalQuickCommandDialog.97e96cc027',
                 '/goal'

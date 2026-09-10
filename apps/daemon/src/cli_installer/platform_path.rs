@@ -69,7 +69,7 @@ pub(super) fn quote_shell(value: &Path) -> String {
 
 pub(super) fn build_windows_forwarder(launcher_path: &Path) -> String {
     format!(
-        "@echo off\nsetlocal\nset \"YIRU_LAUNCHER={}\"\n\"%YIRU_LAUNCHER%\" %*\n",
+        "@echo off\nsetlocal\nset \"AGENTSTART_LAUNCHER={}\"\n\"%AGENTSTART_LAUNCHER%\" %*\n",
         display_path(launcher_path).replace('"', "\"\"")
     )
 }

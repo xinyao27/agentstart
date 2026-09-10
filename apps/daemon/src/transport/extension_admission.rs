@@ -1,6 +1,8 @@
 use std::collections::HashSet;
 use std::sync::Arc;
 
+use agentstart_protocol::CURRENT_PROTOCOL_VERSION;
+use agentstart_protocol::protocol::v1::PeerKind;
 use axum::Json;
 use axum::body::Body;
 use axum::extract::State;
@@ -18,8 +20,6 @@ use subtle::ConstantTimeEq;
 use tokio::fs::File;
 use tokio::sync::{mpsc, watch};
 use tokio_util::io::ReaderStream;
-use yiru_protocol::CURRENT_PROTOCOL_VERSION;
-use yiru_protocol::protocol::v1::PeerKind;
 
 use super::extension_socket::{
     MAX_INBOUND_MESSAGE_BYTES, MAX_OUTBOUND_BACKPRESSURE_BYTES, run_socket,

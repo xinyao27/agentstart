@@ -1,4 +1,4 @@
-import type { NotificationSettings } from '@yiru/protocol/settings/notifications'
+import type { NotificationSettings } from '@agentstart/protocol/settings/notifications'
 import { shellClient } from '~renderer/runtime/shell-client'
 
 export async function playNotificationSound(

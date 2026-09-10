@@ -1,4 +1,4 @@
-import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallSetupStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import { useEffect } from 'react'
 import { useAppStore } from '~renderer/store/state'
 
@@ -40,7 +40,7 @@ export function useSetupGuideBrowserMilestoneProgress(
   return (() => getSetupGuideBrowserMilestoneAwareProgress(rawProgress, effectiveLegacyComplete))()
 }
 
-export function shouldMarkBrowserMilestoneLegacyComplete(input: {
+function shouldMarkBrowserMilestoneLegacyComplete(input: {
   stepDone: Partial<Record<FeatureWallSetupStepId, boolean>>
   historicalSplitTerminalDone: boolean
   setupGuideSidebarDismissed: boolean
@@ -56,7 +56,7 @@ export function shouldMarkBrowserMilestoneLegacyComplete(input: {
   )
 }
 
-export function getSetupGuideBrowserMilestoneAwareProgress(
+function getSetupGuideBrowserMilestoneAwareProgress(
   progress: FeatureWallSetupProgress,
   browserMilestoneLegacyComplete: boolean
 ): FeatureWallSetupProgress {

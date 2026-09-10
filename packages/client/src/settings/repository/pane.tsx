@@ -1,9 +1,9 @@
-import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
-import { getRepoExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Project, ProjectUpdateArgs } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
-import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@agentstart/protocol'
+import { getRepoExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Project, ProjectUpdateArgs } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
+import type { AgentStartHooks } from '@agentstart/protocol/worktree/hooks'
 import { useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { translate } from '~renderer/i18n/i18n'
@@ -33,9 +33,6 @@ import { getRepositoryIconSectionId } from './settings-targets'
 import { RepositorySourceControlAiSection } from './source-control-ai-section'
 import { RepositoryWindowsRuntimeSection } from './windows-runtime-section'
 import { RepositoryWorktreeDefaultsSection } from './worktree-defaults-section'
-export { getRepositoryPaneSearchEntries }
-export { matchesRepositoryIdentitySearch } from './identity-search'
-
 type RepositoryPaneRepoUpdate = Omit<Partial<Repo>, 'sourceControlAi'> & {
   sourceControlAi?: Repo['sourceControlAi'] | null
 }
@@ -44,7 +41,7 @@ const EMPTY_WSL_DISTROS: string[] = []
 
 type RepositoryPaneProps = {
   repo: Repo
-  yamlHooks: YiruHooks | null
+  yamlHooks: AgentStartHooks | null
   hasHooksFile: boolean
   hooksInspectionReady: boolean
   mayNeedUpdate: boolean
@@ -134,7 +131,7 @@ export function RepositoryPane({
   }
 
   const handleCopyTemplate = async () => {
-    // Why: the missing-`yiru.yaml` state is a migration aid, so copying the shared-template
+    // Why: the missing-`agentstart.yaml` state is a migration aid, so copying the shared-template
     // snippet should be one click rather than forcing users to reconstruct the expected shape.
     await shellClient.ui.writeClipboardText(`scripts:
   setup: |
@@ -233,7 +230,7 @@ export function RepositoryPane({
             )}
             description={translate(
               'auto.components.settings.RepositoryPane.removeProjectAllHosts',
-              'Remove this project from Yiru on all configured hosts.'
+              'Remove this project from AgentStart on all configured hosts.'
             )}
             keywords={[repo.displayName, 'delete', 'project', 'repository']}
             className="absolute top-0 right-0 z-10 w-auto max-w-none"

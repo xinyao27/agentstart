@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 import type { EmulatorPaneSession, SimulatorDeviceRow } from './types'
 
-export const EMULATOR_LOCAL_SHUTDOWN_EVENT = 'yiru:emulator-shutdown'
+export const EMULATOR_LOCAL_SHUTDOWN_EVENT = 'agentstart:emulator-shutdown'
 
 type UseEmulatorPaneSessionEventsArgs = {
   worktreeId: string
@@ -32,8 +32,8 @@ export function useEmulatorPaneSessionEvents({
       applySession(detail.info, true)
       void refreshDevices(detail.info.deviceUdid || detail.info.device)
     }
-    window.addEventListener('yiru:emulator-auto-attach', onAuto)
-    return () => window.removeEventListener('yiru:emulator-auto-attach', onAuto)
+    window.addEventListener('agentstart:emulator-auto-attach', onAuto)
+    return () => window.removeEventListener('agentstart:emulator-auto-attach', onAuto)
   }, [applySession, refreshDevices, worktreeId])
 
   useEffect(() => {

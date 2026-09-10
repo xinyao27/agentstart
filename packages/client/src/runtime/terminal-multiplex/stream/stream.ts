@@ -2,11 +2,11 @@ import {
   TerminalMultiplexOpcode,
   type TerminalMultiplexFrame,
   type TerminalMultiplexOpcode as TerminalMultiplexOpcodeValue
-} from '@yiru/protocol/terminal-multiplex/frame'
+} from '@agentstart/protocol/terminal-multiplex/frame'
 import {
   decodeTerminalMultiplexJson,
   encodeTerminalMultiplexJson
-} from '@yiru/protocol/terminal-multiplex/json'
+} from '@agentstart/protocol/terminal-multiplex/json'
 
 import { RemoteTerminalDelivery } from '../delivery/delivery'
 import type {

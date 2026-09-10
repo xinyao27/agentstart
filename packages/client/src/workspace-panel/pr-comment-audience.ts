@@ -1,8 +1,8 @@
 import {
   createBotAuthorOverrideSet,
   normalizePRCommentAuthorLogin
-} from '@yiru/protocol/hosted-review/bot-overrides'
-import type { PRComment } from '@yiru/protocol/hosted-review/review-types'
+} from '@agentstart/protocol/hosted-review/bot-overrides'
+import type { PRComment } from '@agentstart/protocol/hosted-review/review-types'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
 

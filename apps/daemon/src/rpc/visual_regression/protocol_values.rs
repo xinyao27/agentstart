@@ -1,9 +1,11 @@
 // Why: the capture record is persisted as a `serde_json`-shaped row shared
 // with the legacy JSON surface; this is the single place that reads it into
 // the typed protobuf wire message.
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
+    VisualRegressionCapture, VisualRegressionServiceCaptureResponse,
+};
 use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{VisualRegressionCapture, VisualRegressionServiceCaptureResponse};
 
 pub(super) fn capture_response(
     capture: &Value,

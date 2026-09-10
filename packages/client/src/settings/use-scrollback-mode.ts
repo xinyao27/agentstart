@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useState } from 'react'
 
 import { SCROLLBACK_PRESETS_ROWS } from './constants'

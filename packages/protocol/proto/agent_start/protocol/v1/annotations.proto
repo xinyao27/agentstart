@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package agent_start.protocol.v1;
+
+import "google/protobuf/descriptor.proto";
+import "agent_start/protocol/v1/frame.proto";
+
+// Identifies the authenticated peer classes allowed to invoke a method.
+enum CallerClass {
+  CALLER_CLASS_UNSPECIFIED = 0;
+  CALLER_CLASS_LOCAL = 1;
+  CALLER_CLASS_MOBILE = 2;
+  CALLER_CLASS_RUNTIME = 3;
+}
+
+// Identifies the authority boundary containing the resource addressed by a method.
+enum AccessScope {
+  ACCESS_SCOPE_UNSPECIFIED = 0;
+  ACCESS_SCOPE_WORKTREE = 1;
+  ACCESS_SCOPE_PROJECT = 2;
+  ACCESS_SCOPE_HOST = 3;
+}
+
+// Identifies the minimum permission needed to invoke a method.
+enum AccessTier {
+  ACCESS_TIER_UNSPECIFIED = 0;
+  ACCESS_TIER_READ = 1;
+  ACCESS_TIER_CONTROL = 2;
+  ACCESS_TIER_HOST = 3;
+}
+
+// Carries authorization policy beside the method whose handler enforces it.
+message MethodPolicy {
+  AccessScope scope = 1;
+  AccessTier tier = 2;
+  repeated CallerClass callers = 3;
+  repeated PeerKind peer_kinds = 4;
+}
+
+// Controls whether a call may cross a runtime-environment boundary.
+enum RuntimeRoutePolicy {
+  RUNTIME_ROUTE_POLICY_UNSPECIFIED = 0;
+  RUNTIME_ROUTE_POLICY_LOCAL_ONLY = 1;
+  RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED = 2;
+}
+
+// Controls whether a stream may be recreated after its routed transport is replaced.
+enum StreamReconnectPolicy {
+  STREAM_RECONNECT_POLICY_UNSPECIFIED = 0;
+  STREAM_RECONNECT_POLICY_FAIL = 1;
+  STREAM_RECONNECT_POLICY_RESTART_FROM_REQUEST = 2;
+}
+
+// Carries routing and reconnect policy beside the method whose transport enforces it.
+message MethodTransportPolicy {
+  RuntimeRoutePolicy route = 1;
+  StreamReconnectPolicy stream_reconnect = 2;
+}
+
+extend google.protobuf.MethodOptions {
+  MethodPolicy method_policy = 51001;
+  MethodTransportPolicy method_transport_policy = 51002;
+}

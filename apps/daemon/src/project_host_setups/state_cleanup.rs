@@ -12,9 +12,9 @@ use super::CleanupTombstone;
 
 const BACKUP_COUNT: usize = 5;
 const LOCAL_HOST_ID: &str = "local";
-const PROJECTS_FILE: &str = "yiru-data-projects.json";
-const WORKTREES_FILE: &str = "yiru-data-worktrees.json";
-const LEGACY_FILE: &str = "yiru-data.json";
+const PROJECTS_FILE: &str = "agentstart-data-projects.json";
+const WORKTREES_FILE: &str = "agentstart-data-worktrees.json";
+const LEGACY_FILE: &str = "agentstart-data.json";
 
 #[derive(Clone)]
 pub(super) struct StateCleanup {

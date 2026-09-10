@@ -1,9 +1,8 @@
 // Why: one place translates the files authority's plain Rust value shapes into the
 // protobuf wire messages, so every handler in `protocol.rs` shares the same mapping
 // instead of re-deriving it per method.
-use base64::Engine;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     DirectoryEntry as ProtocolDirectoryEntry, FileChangeEvent as ProtocolFileChangeEvent,
     FileChangeKind, FileKind, FileListEntry as ProtocolFileListEntry,
     FileListResult as ProtocolFileListResult, FileOpenResult as ProtocolFileOpenResult,
@@ -15,6 +14,7 @@ use yiru_protocol::runtime::v1::{
     TerminalPathResolution as ProtocolTerminalPathResolution,
     terminal_open_target::Target as ProtocolTerminalTarget,
 };
+use base64::Engine;
 
 use crate::files::{
     DirectoryEntry, FileChangeEvent, FileListEntry, FileListResult, FileOpenResult,
@@ -246,20 +246,24 @@ pub(super) fn protocol_terminal_open_target(
             absolute_path,
             provider,
             relative_path,
-        } => ProtocolTerminalTarget::WorktreeFile(yiru_protocol::runtime::v1::WorktreeFileTarget {
-            absolute_path,
-            relative_path,
-            provider: protocol_terminal_provider(provider) as i32,
-        }),
+        } => ProtocolTerminalTarget::WorktreeFile(
+            agentstart_protocol::runtime::v1::WorktreeFileTarget {
+                absolute_path,
+                relative_path,
+                provider: protocol_terminal_provider(provider) as i32,
+            },
+        ),
         TerminalOpenTarget::AbsoluteFile {
             absolute_path,
             grant_id,
             provider,
-        } => ProtocolTerminalTarget::AbsoluteFile(yiru_protocol::runtime::v1::AbsoluteFileTarget {
-            absolute_path,
-            grant_id,
-            provider: protocol_terminal_provider(provider) as i32,
-        }),
+        } => ProtocolTerminalTarget::AbsoluteFile(
+            agentstart_protocol::runtime::v1::AbsoluteFileTarget {
+                absolute_path,
+                grant_id,
+                provider: protocol_terminal_provider(provider) as i32,
+            },
+        ),
     };
     ProtocolTerminalOpenTarget {
         target: Some(target),

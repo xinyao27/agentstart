@@ -7,7 +7,7 @@ use crate::hosts::HostPlatform;
 use super::target::{ProbeTarget, shell_quote};
 
 const DETECTION_TIMEOUT_MS: u64 = 10_000;
-const PREFIX: &str = "__YIRU_AGENT_PATH__";
+const PREFIX: &str = "__AGENTSTART_AGENT_PATH__";
 
 struct AgentProbe {
     id: &'static str,
@@ -171,7 +171,7 @@ fn fallback_script(platform: HostPlatform) -> &'static str {
     if [ -x "$candidate" ] && [ ! -d "$candidate" ]; then resolved=$candidate; break; fi
   done
 fi
-if [ -n "$resolved" ]; then printf '__YIRU_AGENT_PATH__%s\t%s\n' "$cmd" "$resolved"; fi"#
+if [ -n "$resolved" ]; then printf '__AGENTSTART_AGENT_PATH__%s\t%s\n' "$cmd" "$resolved"; fi"#
     } else {
         r#"if [ -z "$resolved" ]; then
   for candidate in \
@@ -183,7 +183,7 @@ if [ -n "$resolved" ]; then printf '__YIRU_AGENT_PATH__%s\t%s\n' "$cmd" "$resolv
     if [ -x "$candidate" ] && [ ! -d "$candidate" ]; then resolved=$candidate; break; fi
   done
 fi
-if [ -n "$resolved" ]; then printf '__YIRU_AGENT_PATH__%s\t%s\n' "$cmd" "$resolved"; fi"#
+if [ -n "$resolved" ]; then printf '__AGENTSTART_AGENT_PATH__%s\t%s\n' "$cmd" "$resolved"; fi"#
     }
 }
 

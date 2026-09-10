@@ -1,5 +1,5 @@
-import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
-import type { AgentType } from '@yiru/protocol/agent/status-records'
+import { TUI_AGENT_CONFIG } from '@agentstart/protocol/agent/launch/config'
+import type { AgentType } from '@agentstart/protocol/agent/status-records'
 import type { PaneForegroundAgentEntry } from '~renderer/terminal-pane/pane-foreground-agent-state'
 
 export type WindowsShiftEnterEncoding = 'alt-enter' | 'csi-u'
@@ -16,7 +16,7 @@ type WindowsShiftEnterPaneState = {
 
 /** Resolve without key-path PTY I/O; current process/shell evidence overrides
  * launch ownership. Hook status is excluded because PTY output can forge it. */
-export function resolveWindowsShiftEnterEncoding(
+function resolveWindowsShiftEnterEncoding(
   signals: WindowsShiftEnterAgentSignals
 ): WindowsShiftEnterEncoding {
   if (signals.foreground?.shellForeground) {

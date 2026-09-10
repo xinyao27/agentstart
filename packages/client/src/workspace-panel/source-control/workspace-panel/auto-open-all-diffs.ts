@@ -1,4 +1,4 @@
-import { isFolderRepo } from '@yiru/protocol/project/repository'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
 import { useEffect, useRef } from 'react'
 import { useActiveWorktree, useRepoById } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'

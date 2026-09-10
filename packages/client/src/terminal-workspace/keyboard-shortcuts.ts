@@ -1,5 +1,5 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { keybindingMatchesAction, type KeybindingActionId } from '@yiru/protocol/keybindings'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { keybindingMatchesAction, type KeybindingActionId } from '@agentstart/protocol/keybindings'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -41,7 +41,7 @@ export function useTerminalWorkspaceKeyboardShortcuts({
   const activeWorktreeId = useAppStore((s) => s.activeWorktreeId)
   const keybindings = useAppStore((s) => s.keybindings)
   const terminalShortcutPolicy = useAppStore(
-    (s) => s.settings?.terminalShortcutPolicy ?? 'yiru-first'
+    (s) => s.settings?.terminalShortcutPolicy ?? 'agentstart-first'
   )
   const mobileEmulatorEnabled = useAppStore((s) => s.settings?.mobileEmulatorEnabled !== false)
 
@@ -64,7 +64,7 @@ export function useTerminalWorkspaceKeyboardShortcuts({
           terminalShortcutPolicy
         })
       const notifyTerminalCapture = (actionId: KeybindingActionId): void => {
-        if (context !== 'terminal' || terminalShortcutPolicy !== 'yiru-first') {
+        if (context !== 'terminal' || terminalShortcutPolicy !== 'agentstart-first') {
           return
         }
         showTerminalShortcutCaptureNotification({

@@ -1,8 +1,8 @@
-import type { RepoSetupImportCandidateValue } from '@yiru/protocol'
+import type { RepoSetupImportCandidateValue } from '@agentstart/protocol'
 import {
   SETUP_SCRIPT_IMPORT_PROVIDERS,
   type SetupScriptImportProvider
-} from '@yiru/protocol/setup/import-providers'
+} from '@agentstart/protocol/setup/import-providers'
 import { translate } from '~renderer/i18n/i18n'
 
 export type SetupScriptImportCandidate = Omit<RepoSetupImportCandidateValue, 'provider'> & {

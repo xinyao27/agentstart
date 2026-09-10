@@ -1,0 +1,204 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service NotificationsService {
+  rpc LoadCustomSound(LoadCustomSoundRequest) returns (stream LoadCustomSoundResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Subscribe(SubscribeRequest) returns (stream SubscribeResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_RESTART_FROM_REQUEST
+    };
+  }
+
+  rpc GetMissedSince(GetMissedSinceRequest) returns (GetMissedSinceResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Dismiss(DismissRequest) returns (DismissResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Report(ReportRequest) returns (ReportResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message LoadCustomSoundRequest {
+  optional string cached_asset_id = 1;
+}
+
+message LoadCustomSoundResponse {
+  oneof event {
+    NotificationSoundAssetStart start = 1;
+    NotificationSoundAssetChunk chunk = 2;
+    NotificationSoundNotModified not_modified = 3;
+    NotificationSoundUnavailable unavailable = 4;
+  }
+}
+
+message NotificationSoundAssetStart {
+  string asset_id = 1;
+  string mime_type = 2;
+  int64 byte_length = 3;
+}
+
+message NotificationSoundAssetChunk {
+  bytes data = 1;
+}
+
+message NotificationSoundNotModified {}
+
+message NotificationSoundUnavailable {
+  NotificationSoundUnavailableReason reason = 1;
+}
+
+enum NotificationSoundUnavailableReason {
+  NOTIFICATION_SOUND_UNAVAILABLE_REASON_UNSPECIFIED = 0;
+  NOTIFICATION_SOUND_UNAVAILABLE_REASON_MISSING_PATH = 1;
+  NOTIFICATION_SOUND_UNAVAILABLE_REASON_INVALID_PATH = 2;
+  NOTIFICATION_SOUND_UNAVAILABLE_REASON_UNSUPPORTED_TYPE = 3;
+  NOTIFICATION_SOUND_UNAVAILABLE_REASON_TOO_LARGE = 4;
+  NOTIFICATION_SOUND_UNAVAILABLE_REASON_READ_FAILED = 5;
+}
+
+message SubscribeRequest {}
+
+message SubscribeResponse {
+  oneof event {
+    SubscriptionReady ready = 1;
+    ReplayNotificationEvent notification = 2;
+  }
+}
+
+message SubscriptionReady {}
+
+message GetMissedSinceRequest {
+  int64 last_seen_sequence = 1;
+}
+
+message DismissRequest {
+  repeated string notification_ids = 1;
+}
+
+message DismissResponse {
+  uint32 dismissed = 1;
+}
+
+message ReportRequest {
+  NotificationSource source = 1;
+  optional string notification_id = 2;
+  optional bool require_display_confirmation = 3;
+  optional string worktree_id = 4;
+  optional string pane_key = 5;
+  optional string repo_label = 6;
+  optional string worktree_label = 7;
+  optional bool has_multiple_active_repos = 8;
+  optional string terminal_title = 9;
+  optional bool is_active_worktree = 10;
+  optional string agent_type = 11;
+  optional string agent_state = 12;
+  optional string agent_prompt = 13;
+  optional string agent_tool_name = 14;
+  optional string agent_tool_input = 15;
+  optional string agent_last_assistant_message = 16;
+  optional bool agent_interrupted = 17;
+}
+
+enum NotificationReportReason {
+  NOTIFICATION_REPORT_REASON_UNSPECIFIED = 0;
+  NOTIFICATION_REPORT_REASON_DISABLED = 1;
+  NOTIFICATION_REPORT_REASON_SOURCE_DISABLED = 2;
+  NOTIFICATION_REPORT_REASON_COOLDOWN = 3;
+  NOTIFICATION_REPORT_REASON_SHELL_UNAVAILABLE = 4;
+  NOTIFICATION_REPORT_REASON_SUPPRESSED_FOCUS = 5;
+  NOTIFICATION_REPORT_REASON_NOT_SUPPORTED = 6;
+  NOTIFICATION_REPORT_REASON_NOT_DISPLAYED = 7;
+  NOTIFICATION_REPORT_REASON_BLOCKED_BY_SYSTEM = 8;
+}
+
+message ReportResponse {
+  bool delivered = 1;
+  optional NotificationReportReason reason = 2;
+}
+
+message GetMissedSinceResponse {
+  repeated ReplayNotificationEvent notifications = 1;
+}
+
+message ReplayNotificationEvent {
+  int64 sequence = 1;
+  oneof event {
+    NotificationDispatch notification = 2;
+    NotificationDismiss dismiss = 3;
+  }
+}
+
+message NotificationDispatch {
+  NotificationSource source = 1;
+  string title = 2;
+  string body = 3;
+  optional string worktree_id = 4;
+  optional string notification_id = 5;
+}
+
+message NotificationDismiss {
+  string notification_id = 1;
+}
+
+enum NotificationSource {
+  NOTIFICATION_SOURCE_UNSPECIFIED = 0;
+  NOTIFICATION_SOURCE_AGENT_TASK_COMPLETE = 1;
+  NOTIFICATION_SOURCE_TERMINAL_BELL = 2;
+  NOTIFICATION_SOURCE_TEST = 3;
+}

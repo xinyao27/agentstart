@@ -1,5 +1,5 @@
-import { isExpectedAgentProcess } from '@yiru/protocol/agent/process/recognition'
-import { isShellProcess } from '@yiru/protocol/agent/process/shell-process'
+import { isExpectedAgentProcess } from '@agentstart/protocol/agent/process/recognition'
+import { isShellProcess } from '@agentstart/protocol/agent/process/shell-process'
 import { inspectRuntimeTerminalProcess } from '~renderer/runtime/terminal-inspection'
 import { useAppStore } from '~renderer/store/state'
 import { classifyTitleActivity } from '~renderer/terminal-pane/agent/evidence'
@@ -11,7 +11,7 @@ import { classifyTitleActivity } from '~renderer/terminal-pane/agent/evidence'
 // foreground-process equality (the launched binary is alive and owns the fg
 // job), then finally to the presence of any non-shell child process. A hard
 // timeout prevents the Use-button flow from hanging on a missing binary.
-export type AgentReadyReason = 'title-idle' | 'foreground-match' | 'child-process' | 'timeout'
+type AgentReadyReason = 'title-idle' | 'foreground-match' | 'child-process' | 'timeout'
 
 export type AgentReadyResult = {
   ready: boolean

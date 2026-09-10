@@ -1,4 +1,4 @@
-import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
+import type { SparsePreset } from '@agentstart/protocol/worktree/create-result'
 import React, { useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -286,7 +286,7 @@ export default function SparseCheckoutPresetSelect({
                   {visiblePresets.map((preset) => (
                     <div
                       key={preset.id}
-                      className="hover:bg-accent hover:text-accent-foreground mx-1 flex items-center"
+                      className="hover:bg-accent hover:text-accent-foreground mx-1 flex items-center rounded-md"
                     >
                       <Button
                         variant="ghost"

@@ -4,7 +4,7 @@ import type {
   UpdaterSnapshot,
   UpdaterStatusSubscription,
   UpdaterSupport
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import type { RuntimeStatus } from '~renderer/runtime/status/model'
 

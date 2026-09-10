@@ -1,5 +1,5 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import type { AppState } from '../store/types'
 

@@ -1,10 +1,10 @@
-import { queryOptions } from '@tanstack/react-query'
 import {
   WORKSPACE_PORTS_PROTOCOL_CAPABILITY,
   WorkspacePortsClient,
   type WorkspacePortKillResult,
   type WorkspacePortScanResult
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
+import { queryOptions } from '@tanstack/react-query'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
@@ -24,7 +24,7 @@ export async function openWorkspacePortsTarget(
 
 // Why: the ports namespace is protobuf-only, so a missing capability means the
 // connected daemon predates the cutover — an error, not a legacy retry.
-export async function requireWorkspacePortsClient(
+async function requireWorkspacePortsClient(
   target: RuntimeClientTarget
 ): Promise<WorkspacePortsClient> {
   const client = await openWorkspacePortsTarget(target)
@@ -32,7 +32,7 @@ export async function requireWorkspacePortsClient(
     throw new Error(
       translate(
         'runtime.workspacePortsTarget.unavailable',
-        'Workspace ports need a current Yiru daemon connection.'
+        'Workspace ports need a current AgentStart daemon connection.'
       )
     )
   }

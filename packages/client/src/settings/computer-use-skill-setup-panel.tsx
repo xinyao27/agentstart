@@ -8,7 +8,7 @@ import { Monitor as MonitorCog } from '~renderer/icons/hugeicons'
 import { readCliInstallStatus, readWslCliInstallStatus } from '~renderer/runtime/cli-install-client'
 import {
   AGENT_SKILL_CLI_PREREQUISITE_NOTICE,
-  ensureYiruCliAvailableForAgentSkillTerminal
+  ensureAgentStartCliAvailableForAgentSkillTerminal
 } from '~renderer/skills/agent-cli-prerequisite'
 import { useActiveProjectSkillRuntime } from '~renderer/skills/use-active-project-runtime'
 import {
@@ -76,7 +76,7 @@ export function ComputerUseSkillSetupPanel(): React.JSX.Element {
         useAppStore.getState().recordFeatureInteraction('computer-use-setup')
         await (activeSkillRuntime.agentRuntime?.runtime === 'wsl'
           ? ensureWslCliAvailableForAgentSkillTerminal(activeSkillRuntime.agentRuntime)
-          : ensureYiruCliAvailableForAgentSkillTerminal())
+          : ensureAgentStartCliAvailableForAgentSkillTerminal())
       }}
       onRecheck={refreshComputerUseSkill}
       freshnessSkillName={

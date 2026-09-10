@@ -1,8 +1,8 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/protocol/source-control/ai-actions'
+} from '@agentstart/protocol/source-control/ai-actions'
 import { useState } from 'react'
 
 import { summarizeCommitFailure } from '../commit-failure-summary'

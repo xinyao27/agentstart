@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 
 import {
   CLAUDE_IDLE,
@@ -16,19 +16,6 @@ import {
   HERMES_AGENT_NAME_RE,
   titleHasAgentName
 } from './tokens'
-
-export {
-  CLAUDE_IDLE,
-  containsBrailleSpinner,
-  GEMINI_IDLE,
-  GEMINI_PERMISSION,
-  GEMINI_SILENT_WORKING,
-  GEMINI_WORKING,
-  isClaudeManagementTitle,
-  isGeminiTerminalTitle,
-  isPiAgentTitle,
-  isPiTerminalTitle
-} from './core'
 
 // Why: Grok Build's working OSC titles use a fixed frame shape —
 // "spinner - <rotating phrase> - grok" — so every frame is a distinct title

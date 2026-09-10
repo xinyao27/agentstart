@@ -1,9 +1,9 @@
-import { type StatsUsageBoundedRange, statsUsageRangeDays } from '@yiru/protocol/stats/range'
+import { type StatsUsageBoundedRange, statsUsageRangeDays } from '@agentstart/protocol/stats/range'
 import type {
   DailyProviderUsage,
   ProviderUsageValue,
   UsageProvider
-} from '@yiru/protocol/stats/usage-breakdown'
+} from '@agentstart/protocol/stats/usage-breakdown'
 import { useEffect, useRef, useState } from 'react'
 import { localCalendarDayKey } from '~renderer/contribution-heatmap/calendar'
 import type { TokenValueMetric } from '~renderer/contribution-heatmap/metric'

@@ -1,5 +1,5 @@
+import { parseRuntimePtyId } from '@agentstart/protocol/terminal-identity'
 import type { ILink, ILinkProvider, Terminal } from '@xterm/xterm'
-import { parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import type { AppState } from '~renderer/store/state'
 import { useAppStore } from '~renderer/store/state'
@@ -13,22 +13,19 @@ import {
 } from './terminal-orchestration-task-links'
 import { buildWrappedLogicalLine, rangeForParsedFileLink } from './wrapped-terminal-link-ranges'
 
-export { extractOrchestrationTaskLinks } from './terminal-orchestration-task-links'
-export type { ParsedOrchestrationTaskLink } from './terminal-orchestration-task-links'
-
-export type ParsedTerminalHandleLink = {
+type ParsedTerminalHandleLink = {
   handle: string
   startIndex: number
   endIndex: number
 }
 
-export type TerminalHandleTarget = {
+type TerminalHandleTarget = {
   worktreeId: string
   tabId: string
   leafId: string | null
 }
 
-export type TerminalHandleFocusState = Pick<
+type TerminalHandleFocusState = Pick<
   AppState,
   'tabsByWorktree' | 'ptyIdsByTabId' | 'terminalLayoutsByTabId'
 >
@@ -43,7 +40,7 @@ const TERMINAL_HANDLE_PREFIX = 'term_'
 const MAX_TERMINAL_HANDLE_BODY_LENGTH = 128
 const TERMINAL_HANDLE_BOUNDARY_CHAR = /[A-Za-z0-9_-]/
 
-export function extractTerminalHandleLinks(lineText: string): ParsedTerminalHandleLink[] {
+function extractTerminalHandleLinks(lineText: string): ParsedTerminalHandleLink[] {
   return extractPrefixedTokenLinks(lineText, TERMINAL_HANDLE_PREFIX).map((link) => ({
     handle: link.token,
     startIndex: link.startIndex,
@@ -95,7 +92,7 @@ function findPrefixedTokenEnd(lineText: string, startIndex: number): number {
   return index
 }
 
-export function findTerminalHandleTarget(
+function findTerminalHandleTarget(
   handle: string,
   state: TerminalHandleFocusState,
   runtimeEnvironmentId?: string | null
@@ -122,7 +119,7 @@ export function findTerminalHandleTarget(
   return null
 }
 
-export function focusRendererTerminalHandle(
+function focusRendererTerminalHandle(
   handle: string,
   runtimeEnvironmentId?: string | null
 ): boolean {

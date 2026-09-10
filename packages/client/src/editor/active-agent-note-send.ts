@@ -23,20 +23,16 @@ import {
 } from './active-agent-terminal-send-readiness'
 
 export {
-  getActiveAgentNoteTarget,
-  getActiveAgentRuntimeProbeDescriptor,
   getActiveTerminalNoteTarget,
-  probeActiveAgentNoteTarget,
   type ActiveTerminalNoteTarget
 } from './active-agent-note-target'
 export {
   activeAgentNotesSendFailureMessage,
-  type ActiveAgentNotesSendResult,
-  type ActiveAgentNotesSendStatus
+  type ActiveAgentNotesSendResult
 } from './active-agent-note-send-result'
 
 const ACTIVE_AGENT_SEND_TIMEOUT_MS = 8000
-const YIRU_DESKTOP_TERMINAL_CLIENT = { id: 'yiru-desktop', type: 'desktop' as const }
+const AGENTSTART_DESKTOP_TERMINAL_CLIENT = { id: 'agentstart-desktop', type: 'desktop' as const }
 
 export async function sendNotesToActiveAgentSession({
   state,
@@ -149,7 +145,7 @@ async function sendPromptWithLegacyCombinedSend(
         terminal: terminalHandle,
         text: prompt,
         enter: true,
-        client: YIRU_DESKTOP_TERMINAL_CLIENT
+        client: AGENTSTART_DESKTOP_TERMINAL_CLIENT
       },
       { timeoutMs: ACTIVE_AGENT_SEND_RPC_TIMEOUT_MS }
     )
@@ -187,7 +183,7 @@ async function sendPromptWithGuardedPasteAndEnter(
         terminal: terminalHandle,
         text: pastePayload,
         requireAgentStatus: 'sendable',
-        client: YIRU_DESKTOP_TERMINAL_CLIENT
+        client: AGENTSTART_DESKTOP_TERMINAL_CLIENT
       },
       { timeoutMs: ACTIVE_AGENT_SEND_RPC_TIMEOUT_MS }
     )
@@ -234,7 +230,7 @@ async function sendPromptWithGuardedPasteAndEnter(
         terminal: terminalHandle,
         enter: true,
         requireAgentStatus: 'sendable',
-        client: YIRU_DESKTOP_TERMINAL_CLIENT
+        client: AGENTSTART_DESKTOP_TERMINAL_CLIENT
       },
       { timeoutMs: ACTIVE_AGENT_SEND_RPC_TIMEOUT_MS }
     )

@@ -1,6 +1,6 @@
-import type { GitDiffResult } from '@yiru/protocol/git/diff-values'
-import type { LargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitDiffResult } from '@agentstart/protocol/git/diff-values'
+import type { LargeDiffRenderLimit } from '@agentstart/protocol/git/render-limit'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 
 export type DiffSection = {
   key: string

@@ -1,5 +1,5 @@
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import type { Terminal } from '@xterm/xterm'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
 import { inspectRuntimeTerminalProcess } from '~renderer/runtime/terminal-inspection'
 import { useAppStore } from '~renderer/store/state'
 import { dispatchTerminalCommandFinishedEvent } from '~renderer/terminal/command-finished-event'

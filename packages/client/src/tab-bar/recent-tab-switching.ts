@@ -1,4 +1,9 @@
-import type { CtrlTabOrderMode, Tab, TabContentType, TabGroup } from '@yiru/protocol/workspace/tabs'
+import type {
+  CtrlTabOrderMode,
+  Tab,
+  TabContentType,
+  TabGroup
+} from '@agentstart/protocol/workspace/tabs'
 import type { AppState } from '~renderer/store/types'
 import { sanitizeRecentTabIds } from '~renderer/tab-bar/state/group-state'
 import { resolveUnifiedTabLabel } from '~renderer/tab-title-resolution'

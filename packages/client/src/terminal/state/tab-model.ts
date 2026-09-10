@@ -1,10 +1,10 @@
-import { parseExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import { DEFAULT_REPO_BADGE_COLOR } from '@yiru/protocol/project/appearance'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
-import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import { parseExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import { DEFAULT_REPO_BADGE_COLOR } from '@agentstart/protocol/project/appearance'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { Tab, TerminalTab } from '@agentstart/protocol/workspace/tabs'
+import { splitWorktreeIdForFilesystem } from '@agentstart/protocol/worktree/identity'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 export function getNextTerminalOrdinal(tabs: TerminalTab[]): number {
   const usedOrdinals = new Set<number>()
@@ -50,7 +50,7 @@ export function getFallbackTabTitle(tab: TerminalTab, index?: number): string {
   )
 }
 
-export function getPathDisplayName(path: string, fallback: string): string {
+function getPathDisplayName(path: string, fallback: string): string {
   const normalized = path.trim().replace(/[\\/]+$/g, '')
   const basename = normalized.split(/[\\/]/).findLast(Boolean)?.trim()
   return basename || fallback
@@ -133,8 +133,8 @@ export function buildRuntimeSessionPlaceholders({
   return { repos: nextRepos, worktreesByRepo: nextWorktreesByRepo }
 }
 
-export let terminalTabOwnerCacheSource: Record<string, TerminalTab[]> | null = null
-export let terminalTabOwnerCache = new Map<string, string>()
+let terminalTabOwnerCacheSource: Record<string, TerminalTab[]> | null = null
+let terminalTabOwnerCache = new Map<string, string>()
 
 export function getTerminalTabOwnerWorktreeId(
   tabsByWorktree: Record<string, TerminalTab[]>,

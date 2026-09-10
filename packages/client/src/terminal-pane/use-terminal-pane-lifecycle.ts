@@ -1,4 +1,4 @@
-import { normalizeDesktopTerminalScrollbackRows } from '@yiru/protocol/terminal/scrollback-policy'
+import { normalizeDesktopTerminalScrollbackRows } from '@agentstart/protocol/terminal/scrollback-policy'
 import { useEffect } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import {
@@ -17,36 +17,13 @@ import { normalizeTerminalLayoutSnapshot } from './layout-serialization'
 import { resolveTerminalPaneLaunchContext } from './resolve-terminal-pane-launch-context'
 import { restoreTerminalPaneLayout } from './restore-terminal-pane-layout'
 import { getTerminalFileOpenHint, getTerminalUrlOpenHint } from './terminal-link-open-hints'
-import {
-  applyTerminalScrollbackRowsToMountedPanes,
-  clearQueuedInitialCwdAfterFirstPane,
-  mapRestoredPaneTitlesByPaneId,
-  recordRuntimeCreatedTerminalPaneSplit,
-  resetTerminalKeyboardProtocolAfterInterrupt,
-  resolvePaneLinkCwd,
-  resolvePaneSeedCwd,
-  resolveQueuedInitialCwd,
-  splitPaneWithOneShotStartup,
-  suppressIntentionalPaneCloseExit
-} from './terminal-pane-lifecycle-decisions'
+import { splitPaneWithOneShotStartup } from './terminal-pane-lifecycle-decisions'
 import type { UseTerminalPaneLifecycleDeps } from './terminal-pane-lifecycle-types'
 import { useTerminalCodexRestart } from './use-terminal-codex-restart'
 import { useTerminalPaneAppearance } from './use-terminal-pane-appearance'
 import { useTerminalPaneResources } from './use-terminal-pane-resources'
 import { useTerminalPaneVisibility } from './use-terminal-pane-visibility'
 
-export {
-  applyTerminalScrollbackRowsToMountedPanes,
-  clearQueuedInitialCwdAfterFirstPane,
-  mapRestoredPaneTitlesByPaneId,
-  recordRuntimeCreatedTerminalPaneSplit,
-  resetTerminalKeyboardProtocolAfterInterrupt,
-  resolvePaneLinkCwd,
-  resolvePaneSeedCwd,
-  resolveQueuedInitialCwd,
-  splitPaneWithOneShotStartup,
-  suppressIntentionalPaneCloseExit
-}
 /** Wires mounted terminal panes to renderer state and terminal event handling. */
 export function useTerminalPaneLifecycle(deps: UseTerminalPaneLifecycleDeps): void {
   useTerminalCodexRestart(deps)

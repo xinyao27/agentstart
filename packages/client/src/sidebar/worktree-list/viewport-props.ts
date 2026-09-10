@@ -1,14 +1,14 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { ProjectOrderBy } from '@yiru/protocol/settings/ui-state'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { ProjectOrderBy } from '@agentstart/protocol/settings/ui-state'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
 import type {
   WorkspaceStatus,
   WorkspaceStatusDefinition
-} from '@yiru/protocol/workspace/status/model'
-import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/workspace/status/model'
+import type { WorktreeLineage, WorkspaceLineage } from '@agentstart/protocol/worktree/lineage'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type React from 'react'
 import type {
   PendingSidebarRowReveal,

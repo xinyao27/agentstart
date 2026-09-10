@@ -1,9 +1,9 @@
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     WorkspaceSpaceServiceAnalyzeRequest, WorkspaceSpaceServiceCancelRequest,
     WorkspaceSpaceServiceCancelResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use super::WorkspaceSpaceRpc;
 use super::protocol_values::{analyze_response, internal_status};

@@ -1,4 +1,4 @@
-import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallSetupStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 
 import {
   getFeatureWallSetupSteps,
@@ -14,7 +14,7 @@ export type SettingsSetupGuideProgress = {
   firstIncompleteStepId: FeatureWallSetupStepId | null
 }
 
-export function getSettingsSetupGuideProgress(progress: {
+function getSettingsSetupGuideProgress(progress: {
   ready: boolean
   stepDone: Partial<Record<FeatureWallSetupStepId, boolean>>
 }): SettingsSetupGuideProgress {

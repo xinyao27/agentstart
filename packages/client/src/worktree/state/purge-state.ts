@@ -1,4 +1,4 @@
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import { forgetForegroundTerminalTabs } from '~renderer/tab-bar/foreground-terminals'
 import { forgetAgentHibernationTabOutput } from '~renderer/terminal-pane/agent/hibernation-output-activity'
 import { forgetAgentStartupDeliveriesForTabs } from '~renderer/terminal-pane/agent/startup-delivery-guards'

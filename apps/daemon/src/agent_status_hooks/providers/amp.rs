@@ -3,7 +3,7 @@ use std::fs;
 use super::{ProviderContext, ProviderResult};
 use crate::agent_status_hooks::storage;
 
-const MARKER: &str = "Managed by Yiru. Do not edit; changes may be overwritten.";
+const MARKER: &str = "Managed by AgentStart. Do not edit; changes may be overwritten.";
 const PLUGIN: &str = include_str!("../assets/amp-plugin.ts");
 
 pub(super) fn apply(context: &ProviderContext, enabled: bool) -> ProviderResult {
@@ -12,7 +12,7 @@ pub(super) fn apply(context: &ProviderContext, enabled: bool) -> ProviderResult 
         .join(".config")
         .join("amp")
         .join("plugins")
-        .join("yiru-agent-status.ts");
+        .join("agentstart-agent-status.ts");
     let current = match fs::read_to_string(&path) {
         Ok(content) => Some(content),
         Err(error) if error.kind() == std::io::ErrorKind::NotFound => None,

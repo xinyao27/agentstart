@@ -1,14 +1,14 @@
-Yiru is a workspace for running coding agents in parallel.
+AgentStart is a workspace for running coding agents in parallel.
 
-Pair the app directly with a Yiru daemon to keep agent sessions, isolated Git worktrees, terminals, files, diffs, pull requests, and notifications together on your iPhone or iPad.
+Pair the app directly with an AgentStart daemon to keep agent sessions, isolated Git worktrees, terminals, files, diffs, pull requests, and live activity together on your iPhone or iPad.
 
-Use Yiru Mobile to:
+Use AgentStart Mobile to:
 
 - Open and switch between workspaces and agent sessions.
 - Read and interact with persistent terminals, files, and browser previews.
 - Review diffs, stage changes, commit work, and manage pull requests.
 - Resume agent history and inspect activity and provider usage.
-- Receive daemon notifications and open the relevant workspace directly.
-- Add widgets for provider usage, token usage, and running workspace status.
+- Review daemon notifications while connected and open the relevant workspace directly.
+- Add widgets for ChatGPT, Claude, and token usage.
 
-Yiru does not provide or sell agent-provider accounts. Authentication, model access, and usage limits remain under the control of each provider configured on your paired daemon host.
+AgentStart does not provide or sell agent-provider accounts. Authentication, model access, and usage limits remain under the control of each provider configured on your paired daemon host.

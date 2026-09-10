@@ -1,4 +1,4 @@
-import type { GitStatusEntry, GitStagingArea } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry, GitStagingArea } from '@agentstart/protocol/git/status-types'
 import { normalizeRelativePath } from '~renderer/path'
 
 import { splitPathSegments } from '../path-tree'
@@ -11,7 +11,7 @@ export type SourceControlTreeEntry = {
   path: string
 }
 
-export type SourceControlTreeFileNode<
+type SourceControlTreeFileNode<
   Entry extends SourceControlTreeEntry = GitStatusEntry,
   Area extends string = SourceControlTreeArea
 > = {
@@ -24,7 +24,7 @@ export type SourceControlTreeFileNode<
   depth: number
 }
 
-export type SourceControlTreeDirectoryNode<
+type SourceControlTreeDirectoryNode<
   Entry extends SourceControlTreeEntry = GitStatusEntry,
   Area extends string = SourceControlTreeArea
 > = {

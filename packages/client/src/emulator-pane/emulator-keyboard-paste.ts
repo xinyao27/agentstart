@@ -1,12 +1,12 @@
-import { measureUtf8ByteLength } from '@yiru/protocol/text/utf8-length'
+import { measureUtf8ByteLength } from '@agentstart/protocol/text/utf8-length'
 import {
   buildServeSimKeyboardFramesForKey,
   type ServeSimKeyboardFrame
 } from '~renderer/emulator-keyboard-frame'
 
-export const EMULATOR_KEYBOARD_PASTE_MAX_BYTES = 4 * 1024
-export const EMULATOR_KEYBOARD_PASTE_MAX_FRAMES_PER_CHUNK = 48
-export const EMULATOR_KEYBOARD_PASTE_FRAME_DELAY_MS = 4
+const EMULATOR_KEYBOARD_PASTE_MAX_BYTES = 4 * 1024
+const EMULATOR_KEYBOARD_PASTE_MAX_FRAMES_PER_CHUNK = 48
+const EMULATOR_KEYBOARD_PASTE_FRAME_DELAY_MS = 4
 
 export type EmulatorKeyboardPasteResult =
   | {
@@ -76,7 +76,7 @@ function validateEmulatorKeyboardPasteText(
     : { byteLength, reason: 'empty', status: 'rejected' }
 }
 
-export function* iterateEmulatorKeyboardPasteChunks(
+function* iterateEmulatorKeyboardPasteChunks(
   text: string,
   maxFramesPerChunk = EMULATOR_KEYBOARD_PASTE_MAX_FRAMES_PER_CHUNK
 ): Generator<ServeSimKeyboardFrame[]> {

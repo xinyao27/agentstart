@@ -297,21 +297,21 @@ function base64Bytes(value: string): number {
 }
 
 const HIDE_OVERLAYS_SCRIPT = `(function(){
-  var grab = window.__yiruGrab;
+  var grab = window.__agentstartGrab;
   if (grab && grab.host) grab.host.style.display = 'none';
-  var element = document.querySelector('[data-yiru-browser-annotation-overlay]');
+  var element = document.querySelector('[data-agentstart-browser-annotation-overlay]');
   if (element) {
-    element.setAttribute('data-yiru-previous-display', element.style.display || '');
+    element.setAttribute('data-agentstart-previous-display', element.style.display || '');
     element.style.display = 'none';
   }
 })()`
 
 const RESTORE_OVERLAYS_SCRIPT = `(function(){
-  var grab = window.__yiruGrab;
+  var grab = window.__agentstartGrab;
   if (grab && grab.host) grab.host.style.display = '';
-  var element = document.querySelector('[data-yiru-browser-annotation-overlay]');
+  var element = document.querySelector('[data-agentstart-browser-annotation-overlay]');
   if (element) {
-    element.style.display = element.getAttribute('data-yiru-previous-display') || '';
-    element.removeAttribute('data-yiru-previous-display');
+    element.style.display = element.getAttribute('data-agentstart-previous-display') || '';
+    element.removeAttribute('data-agentstart-previous-display');
   }
 })()`

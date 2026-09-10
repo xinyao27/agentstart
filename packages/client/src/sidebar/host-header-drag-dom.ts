@@ -1,4 +1,4 @@
-import { normalizeExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import { normalizeExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
 
 export type HostHeaderRect = {
   hostId: ExecutionHostId

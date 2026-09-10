@@ -1,5 +1,5 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { DiscoveryStatusEmitted } from '@yiru/protocol/telemetry/events/onboarding-product'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { DiscoveryStatusEmitted } from '@agentstart/protocol/telemetry/events/onboarding-product'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -20,7 +20,7 @@ type ThemeStepProps = {
   updateSettings: (updates: Partial<GlobalSettings>) => Promise<void>
 }
 
-export function applyOnboardingThemeSelection(
+function applyOnboardingThemeSelection(
   id: GlobalSettings['theme'],
   onThemeChange: (theme: GlobalSettings['theme']) => void,
   updateSettings: (updates: Partial<GlobalSettings>) => Promise<void>
@@ -226,7 +226,7 @@ export function ThemeStep({ theme, onThemeChange, settings, updateSettings }: Th
               aria-pressed={selected}
               onClick={() => applyOnboardingThemeSelection(id, onThemeChange, updateSettings)}
             >
-              <div className="border-border relative mb-3 h-24 w-full overflow-hidden border">
+              <div className="border-border relative mb-3 h-24 w-full overflow-hidden rounded-lg border">
                 <ChromePreview variant={id} />
                 {selected && (
                   <div className="bg-primary text-primary-foreground absolute top-1.5 right-1.5 grid size-5 place-items-center">

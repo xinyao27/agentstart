@@ -1,6 +1,6 @@
+import { ALL_TUI_AGENTS, TUI_AGENT_DISPLAY_NAMES } from '@agentstart/protocol/agent/display-names'
+import { keybindingMatchesAction } from '@agentstart/protocol/keybindings'
 import { useQueries, useQuery } from '@tanstack/react-query'
-import { ALL_TUI_AGENTS, TUI_AGENT_DISPLAY_NAMES } from '@yiru/protocol/agent/display-names'
-import { keybindingMatchesAction } from '@yiru/protocol/keybindings'
 import { useDeferredValue, useEffect, useRef, useState } from 'react'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
@@ -21,6 +21,7 @@ import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { projectCatalogRepoKey, projectCatalogTargetForRepo } from '~renderer/project-catalog/query'
 import { targetKey } from '~renderer/runtime/query-target'
 import { terminalListQuery } from '~renderer/runtime/terminal-query'
+import { openSidebarPage } from '~renderer/sidebar/host-navigation'
 import { useActiveWorktree } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
 import {
@@ -48,8 +49,7 @@ const GLOBAL_COMMANDS: readonly {
 }[] = [
   { icon: MagnifyingGlass, label: 'Search', page: 'search' },
   { icon: ActivityIcon, label: 'Activity', page: 'activity' },
-  { icon: GearSix, label: 'Automations', page: 'automations' },
-  { icon: DeviceMobile, label: 'Yiru Mobile', page: 'mobile' },
+  { icon: DeviceMobile, label: 'AgentStart Mobile', page: 'mobile' },
   { icon: BookOpen, label: 'Skills', page: 'skills' },
   { icon: GearSix, label: 'Settings', page: 'settings' }
 ]
@@ -163,16 +163,16 @@ export function CommandPalette({
         open={isOpen}
         onOpenChange={setIsOpen}
         initialFocus={inputRef}
-        title={translate('extension.commandPalette.title', 'Yiru commands')}
+        title={translate('extension.commandPalette.title', 'AgentStart commands')}
         description={translate(
           'extension.commandPalette.description',
-          'Open a project, worktree, session, or Yiru page.'
+          'Open a project, worktree, session, or AgentStart page.'
         )}
       >
         <CommandInput
           ref={inputRef}
           autoFocus
-          placeholder={translate('extension.commandPalette.placeholder', 'Search Yiru…')}
+          placeholder={translate('extension.commandPalette.placeholder', 'Search AgentStart…')}
           value={query}
           onValueChange={setQuery}
         />
@@ -185,7 +185,14 @@ export function CommandPalette({
               <CommandItem
                 key={command.page}
                 value={`${command.label} ${command.page}`}
-                onSelect={() => run(() => navigation.openPage(command.page))}
+                onSelect={() =>
+                  run(() => {
+                    if (command.page === 'settings' && openSidebarPage('settings')) {
+                      return
+                    }
+                    navigation.openPage(command.page)
+                  })
+                }
               >
                 <command.icon />
                 {translate(`extension.navigation.${command.page}`, command.label)}

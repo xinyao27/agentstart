@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import type React from 'react'
 import openClaudeLogoUrl from '~renderer/assets/brand/openclaude-logo.png?url'
 import { translate } from '~renderer/i18n/i18n'
@@ -40,7 +40,7 @@ export const getAgentCatalog = createLocalizedCatalog((): AgentCatalogEntry[] =>
     id: 'openclaude',
     label: translate('auto.lib.agent.catalog.a5fc0cb622', 'OpenClaude'),
     cmd: 'openclaude',
-    // Why: OpenClaude's published favicon has a padded 500px canvas; Yiru
+    // Why: OpenClaude's published favicon has a padded 500px canvas; AgentStart
     // uses a cropped derivative of that official asset so 12px tab icons stay legible.
     iconUrl: openClaudeLogoUrl,
     homepageUrl: 'https://openclaude.gitlawb.com/'
@@ -151,7 +151,7 @@ export const getAgentCatalog = createLocalizedCatalog((): AgentCatalogEntry[] =>
     label: translate('auto.lib.agent.catalog.e0247254f2', 'Kiro'),
     // Why: the Kiro installer (https://cli.kiro.dev/install) ships a binary
     // named `kiro-cli`, not `kiro`. Match TUI_AGENT_CONFIG.kiro.detectCmd so
-    // the settings pane's "default command" hint aligns with what Yiru
+    // the settings pane's "default command" hint aligns with what AgentStart
     // actually looks for on PATH.
     cmd: 'kiro-cli',
     faviconDomain: 'kiro.dev',
@@ -198,7 +198,7 @@ export const getAgentCatalog = createLocalizedCatalog((): AgentCatalogEntry[] =>
     // Why: `npm i -g command-code` installs both `command-code` and the
     // shorter alias `cmd`. Show the full name in the settings hint so it
     // matches TUI_AGENT_CONFIG['command-code'].detectCmd and avoids any
-    // suggestion that Yiru is looking for Windows' built-in `cmd.exe`.
+    // suggestion that AgentStart is looking for Windows' built-in `cmd.exe`.
     cmd: 'command-code',
     faviconDomain: 'commandcode.ai',
     homepageUrl: 'https://commandcode.ai/docs/quickstart'

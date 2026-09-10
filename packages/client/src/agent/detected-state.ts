@@ -1,5 +1,8 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { PathSource, ShellHydrationFailureReason } from '@yiru/protocol/host/shell-environment'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type {
+  PathSource,
+  ShellHydrationFailureReason
+} from '@agentstart/protocol/host/shell-environment'
 import type { StateCreator } from 'zustand'
 import {
   getLocalAgentPreflightContext,

@@ -1,11 +1,11 @@
-import { StatusCode } from '../../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   GitHubCommentDraftKind,
   GitHubFileStatus,
   GitHubMergeMethod,
   GitHubPrOpenState,
   type GitHubMutationResult as ProtocolMutationResult
-} from '../../generated/yiru/runtime/v1/github_pb.js'
+} from '../../generated/agent_start/runtime/v1/github_pb.js'
 import { RuntimeProtocolError } from '../error.js'
 import type { GitHubPRFile } from './pr-file-values.js'
 import type { GitHubPRMergeMethod } from './values.js'

@@ -3,7 +3,7 @@ import {
   SkillFileErrorReason,
   type SkillDirectoryListing as ProtocolDirectoryListing,
   type SkillFileReadResult as ProtocolFileReadResult
-} from '../../generated/yiru/runtime/v1/skills_pb.js'
+} from '../../generated/agent_start/runtime/v1/skills_pb.js'
 import { invalidResponse } from './discovery-values.js'
 
 export type SkillDirectoryEntry = { relativePath: string; size: number }

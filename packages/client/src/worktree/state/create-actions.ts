@@ -1,4 +1,4 @@
-import { folderWorkspaceKey, parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { folderWorkspaceKey, parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 import { readWorktreeMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterWorktreeMutation } from '~renderer/project-catalog/mutation-refresh'

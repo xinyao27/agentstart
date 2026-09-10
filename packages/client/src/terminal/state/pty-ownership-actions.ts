@@ -1,4 +1,4 @@
-import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { isRuntimePtyId } from '@agentstart/protocol/terminal-identity'
 import type { StateCreator } from 'zustand'
 import { hasWorktreeSleepIntent } from '~renderer/sidebar/worktree-sleep-intent'
 

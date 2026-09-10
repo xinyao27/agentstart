@@ -1,5 +1,5 @@
-import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { isRuntimePtyId } from '@agentstart/protocol/terminal-identity'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import type { StateCreator } from 'zustand'
 import { closeRuntimeTerminal } from '~renderer/runtime/terminal-inspection'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'

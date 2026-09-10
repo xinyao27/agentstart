@@ -2,13 +2,13 @@ import type {
   ComputerClient,
   ComputerPermissionSetupResult,
   ComputerPermissionStatusResult
-} from '@yiru/protocol'
-import type { CliInstallStatus } from '@yiru/protocol/cli-values'
-import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
+} from '@agentstart/protocol'
+import type { CliInstallStatus } from '@agentstart/protocol/cli-values'
+import type { EventProps } from '@agentstart/protocol/telemetry/events/catalog'
 import {
   COMPUTER_USE_SKILL_NAME,
-  YIRU_CLI_SKILL_NAME,
-  YIRU_DEBUG_SKILL_NAME,
+  AGENTSTART_CLI_SKILL_NAME,
+  AGENTSTART_DEBUG_SKILL_NAME,
   ORCHESTRATION_SKILL_NAME,
   buildAgentFeatureSkillInstallCommand
 } from '~renderer/agent/feature-install-commands'
@@ -17,7 +17,7 @@ import { translate } from '~renderer/i18n/i18n'
 import { installCliCommand, readCliInstallStatus } from '~renderer/runtime/cli-install-client'
 import { openComputerTarget } from '~renderer/runtime/computer-target'
 import { shellClient } from '~renderer/runtime/shell-client'
-import { showYiruCliRegistrationPromptToast } from '~renderer/skills/agent-cli-prerequisite'
+import { showAgentStartCliRegistrationPromptToast } from '~renderer/skills/agent-cli-prerequisite'
 import {
   ORCHESTRATION_ENABLED_STORAGE_KEY,
   ORCHESTRATION_SETUP_DISMISSED_STORAGE_KEY,
@@ -34,7 +34,7 @@ export const DEFAULT_ONBOARDING_FEATURE_SETUP_SELECTION: OnboardingFeatureSetupS
   orchestration: true
 }
 
-export const ONBOARDING_FEATURE_SETUP_IDS: readonly OnboardingFeatureSetupId[] = [
+const ONBOARDING_FEATURE_SETUP_IDS: readonly OnboardingFeatureSetupId[] = [
   'browserUse',
   'computerUse',
   'orchestration'
@@ -47,21 +47,12 @@ const ONBOARDING_PROGRESS_FEATURE_SETUP_IDS: readonly OnboardingFeatureSetupId[]
 ]
 
 const FEATURE_SKILL_NAMES: Record<OnboardingFeatureSetupId, string> = {
-  browserUse: YIRU_CLI_SKILL_NAME,
+  browserUse: AGENTSTART_CLI_SKILL_NAME,
   computerUse: COMPUTER_USE_SKILL_NAME,
   orchestration: ORCHESTRATION_SKILL_NAME
 }
 
-const FEATURE_TELEMETRY_IDS: Record<
-  OnboardingFeatureSetupId,
-  EventProps<'onboarding_feature_setup_toggled'>['feature']
-> = {
-  browserUse: 'browser_use',
-  computerUse: 'computer_use',
-  orchestration: 'orchestration'
-}
-
-export type OnboardingFeatureSetupWarning = {
+type OnboardingFeatureSetupWarning = {
   featureId: OnboardingFeatureSetupId | 'cli' | 'skills'
   message: string
 }
@@ -93,19 +84,19 @@ export function hasSelectedOnboardingFeatureSetup(
   return ONBOARDING_FEATURE_SETUP_IDS.some((id) => selection[id])
 }
 
-export function selectedOnboardingFeatureSetupIds(
+function selectedOnboardingFeatureSetupIds(
   selection: OnboardingFeatureSetupSelection
 ): OnboardingFeatureSetupId[] {
   return ONBOARDING_FEATURE_SETUP_IDS.filter((id) => selection[id])
 }
 
-export function buildOnboardingFeatureSetupClipboardText(
+function buildOnboardingFeatureSetupClipboardText(
   selection: OnboardingFeatureSetupSelection
 ): string | null {
   return buildOnboardingFeatureSetupSkillCommand(selection)
 }
 
-export function buildOnboardingFeatureSetupSkillCommand(
+function buildOnboardingFeatureSetupSkillCommand(
   selection: OnboardingFeatureSetupSelection
 ): string | null {
   const skillNames = selectedOnboardingFeatureSetupIds(selection).map(
@@ -116,13 +107,7 @@ export function buildOnboardingFeatureSetupSkillCommand(
   }
   // Why: debug mode has no feature toggle of its own — it applies to every
   // agent, so it rides along with whichever skills the user chose to install.
-  return buildAgentFeatureSkillInstallCommand([...skillNames, YIRU_DEBUG_SKILL_NAME])
-}
-
-export function onboardingFeatureSetupTelemetryFeature(
-  id: OnboardingFeatureSetupId
-): EventProps<'onboarding_feature_setup_toggled'>['feature'] {
-  return FEATURE_TELEMETRY_IDS[id]
+  return buildAgentFeatureSkillInstallCommand([...skillNames, AGENTSTART_DEBUG_SKILL_NAME])
 }
 
 export function onboardingFeatureSetupTelemetrySelection(
@@ -142,20 +127,6 @@ function selectedOnboardingProgressFeatureSetupIds(
   return ONBOARDING_PROGRESS_FEATURE_SETUP_IDS.filter((id) => selection[id])
 }
 
-export function onboardingFeatureSetupRunTelemetry(
-  selection: OnboardingFeatureSetupSelection,
-  result: OnboardingFeatureSetupResult
-): EventProps<'onboarding_feature_setup_run'> {
-  return {
-    ...onboardingFeatureSetupTelemetrySelection(selection),
-    cli_touched: result.cliTouched,
-    skill_commands_copied: result.skillCommandsCopied,
-    skill_install_command_prepared: result.skillInstallCommand !== null,
-    computer_use_permissions_opened: result.computerUsePermissionsOpened,
-    warning_count: result.warnings.length
-  }
-}
-
 // Why: Computer Use permissions belong to the local browser host.
 async function requireComputerClient(): Promise<ComputerClient> {
   const client = await openComputerTarget()
@@ -163,17 +134,17 @@ async function requireComputerClient(): Promise<ComputerClient> {
     throw new Error(
       translate(
         'onboarding.featureSetup.computerUseUnavailable',
-        'Computer Use requires a local Yiru daemon connection'
+        'Computer Use requires a local AgentStart daemon connection'
       )
     )
   }
   return client
 }
 
-export function createOnboardingFeatureSetupDeps(): OnboardingFeatureSetupDeps {
+function createOnboardingFeatureSetupDeps(): OnboardingFeatureSetupDeps {
   return {
     getCliStatus: () => readCliInstallStatus(),
-    showCliRegistrationPrompt: showYiruCliRegistrationPromptToast,
+    showCliRegistrationPrompt: showAgentStartCliRegistrationPromptToast,
     installCli: () => installCliCommand(),
     writeClipboardText: (text) => shellClient.ui.writeClipboardText(text),
     getComputerUsePermissionStatus: () =>
@@ -220,7 +191,7 @@ export async function runOnboardingFeatureSetup(
     if (!status.supported) {
       warnings.push({
         featureId: 'cli',
-        message: status.detail ?? 'Yiru CLI registration is not available on this platform.'
+        message: status.detail ?? 'AgentStart CLI registration is not available on this platform.'
       })
     } else if (status.state !== 'installed' || !status.pathConfigured) {
       await deps.showCliRegistrationPrompt?.()
@@ -229,7 +200,7 @@ export async function runOnboardingFeatureSetup(
       if (next.state !== 'installed') {
         warnings.push({
           featureId: 'cli',
-          message: next.detail ?? 'Yiru CLI registration needs attention.'
+          message: next.detail ?? 'AgentStart CLI registration needs attention.'
         })
       } else if (!next.pathConfigured && next.detail) {
         warnings.push({ featureId: 'cli', message: next.detail })

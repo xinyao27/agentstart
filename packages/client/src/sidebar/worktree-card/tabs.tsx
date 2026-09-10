@@ -1,5 +1,5 @@
-import type { AgentActivityDisplayMode } from '@yiru/protocol/settings/ui-state'
-import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { AgentActivityDisplayMode } from '@agentstart/protocol/settings/ui-state'
+import type { Tab, TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'

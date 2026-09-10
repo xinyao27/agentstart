@@ -1,10 +1,10 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import {
   DEFAULT_LEFT_SIDEBAR_TINT_COLOR,
   DEFAULT_LEFT_SIDEBAR_TINT_OPACITY,
   MAX_LEFT_SIDEBAR_TINT_OPACITY
-} from '@yiru/protocol/settings/sidebar-appearance'
-import type { LeftSidebarAppearanceMode } from '@yiru/protocol/settings/workspace-preferences'
+} from '@agentstart/protocol/settings/sidebar-appearance'
+import type { LeftSidebarAppearanceMode } from '@agentstart/protocol/settings/workspace-preferences'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 

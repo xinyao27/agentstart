@@ -22,7 +22,7 @@ export function IntegrationStatusPill({
   const mapped = TONE_TO_BADGE[tone]
   return (
     <Badge variant={mapped.variant} size="xs" className="gap-1.5">
-      <span className={cn('size-1.5', mapped.dot)} />
+      <span className={cn('size-1.5 rounded-full', mapped.dot)} />
       {children}
     </Badge>
   )

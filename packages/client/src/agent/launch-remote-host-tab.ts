@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { toast } from 'sonner'
 import type { AgentStartupPlan } from '~renderer/agent/tui-startup'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,5 +1,5 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { AddRepoExistingWorkspaceSource } from '@yiru/protocol/telemetry/events/foundations'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { AddRepoExistingWorkspaceSource } from '@agentstart/protocol/telemetry/events/foundations'
 import type { Dispatch, SetStateAction } from 'react'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'

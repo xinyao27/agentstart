@@ -1,6 +1,6 @@
-import type { MarkdownDocument } from '@yiru/protocol/files/values'
-import { relativePathInsideRoot } from '@yiru/protocol/host/path'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { MarkdownDocument } from '@agentstart/protocol/files/values'
+import { relativePathInsideRoot } from '@agentstart/protocol/host/path'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { MutableRefObject } from 'react'
 import type { Components } from 'react-markdown'
 import { toast } from 'sonner'
@@ -254,7 +254,7 @@ export function createMarkdownPreviewLink(
       if (!targetWorktree) {
         if (sourceRoutingWorktreeId && worktreeRoot) {
           // Why: floating markdown files are owned by a synthetic workspace,
-          // so there may be no repo worktree even though Yiru can stat/open
+          // so there may be no repo worktree even though AgentStart can stat/open
           // links relative to the source file root.
           void activateMarkdownLink(href, {
             sourceFilePath: filePath,

@@ -4,26 +4,26 @@ use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use std::time::Duration;
 
-use thiserror::Error;
-use yiru_protocol::method_metadata::UnaryMethod;
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1WorktreeServiceArchive as ArchiveMethod,
-    YiruRuntimeV1WorktreeServiceCreate as CreateMethod,
-    YiruRuntimeV1WorktreeServiceList as ListMethod,
-    YiruRuntimeV1WorktreeServiceListArchives as ListArchivesMethod,
-    YiruRuntimeV1WorktreeServiceRestore as RestoreMethod,
+use agentstart_protocol::method_metadata::UnaryMethod;
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1WorktreeServiceArchive as ArchiveMethod,
+    AgentStartRuntimeV1WorktreeServiceCreate as CreateMethod,
+    AgentStartRuntimeV1WorktreeServiceList as ListMethod,
+    AgentStartRuntimeV1WorktreeServiceListArchives as ListArchivesMethod,
+    AgentStartRuntimeV1WorktreeServiceRestore as RestoreMethod,
 };
-use yiru_protocol::protocol::v1::StatusCode;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::StatusCode;
+use agentstart_protocol::runtime::v1::{
     WorktreeRevisionConflict, WorktreeServiceArchiveRequest, WorktreeServiceCreateRequest,
     WorktreeServiceListArchivesRequest, WorktreeServiceListRequest, WorktreeServiceRestoreRequest,
 };
-use yiru_protocol::transport::decode;
+use agentstart_protocol::transport::decode;
+use thiserror::Error;
 
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 
 const CALL_TIMEOUT: Duration = Duration::from_secs(600);
-const REVISION_CONFLICT_TYPE: &str = "yiru.runtime.v1.WorktreeRevisionConflict";
+const REVISION_CONFLICT_TYPE: &str = "agentstart.runtime.v1.WorktreeRevisionConflict";
 
 #[derive(Debug, Error)]
 pub(super) enum WorktreeCommandError {

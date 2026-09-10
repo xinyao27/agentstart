@@ -14,7 +14,7 @@ use tokio::io::copy_bidirectional;
 use tokio::net::TcpStream;
 
 use super::super::label::connectable_loopback_host;
-use super::super::{RegisteredRoute, RouteRegistry, YIRU_LOCALHOST_SUFFIX};
+use super::super::{AGENTSTART_LOCALHOST_SUFFIX, RegisteredRoute, RouteRegistry};
 use super::ProxyBody;
 
 pub(super) async fn handle(
@@ -24,13 +24,13 @@ pub(super) async fn handle(
     let Some(label) = label_from_host(request.headers()) else {
         return Ok(text_response(
             StatusCode::NOT_FOUND,
-            "Unknown Yiru localhost label.",
+            "Unknown AgentStart localhost label.",
         ));
     };
     let Some(route) = routes.lookup(&label) else {
         return Ok(text_response(
             StatusCode::NOT_FOUND,
-            "Unknown Yiru localhost label.",
+            "Unknown AgentStart localhost label.",
         ));
     };
     Ok(if is_upgrade_request(request.headers()) {
@@ -217,13 +217,13 @@ fn is_upgrade_request(headers: &HeaderMap) -> bool {
 }
 
 // Why: matches the Bun proxy's own simplification (`headers.host.split(':')[0]`)
-// — the Host header this proxy itself hands out is always a `*.yiru.localhost`
+// — the Host header this proxy itself hands out is always a `*.agentstart.localhost`
 // DNS name, never an IPv6 literal, so splitting on the first colon is safe here.
 fn label_from_host(headers: &HeaderMap) -> Option<String> {
     let host = headers.get(HOST)?.to_str().ok()?;
     let host_only = host.split(':').next()?.to_ascii_lowercase();
     host_only
-        .strip_suffix(YIRU_LOCALHOST_SUFFIX)
+        .strip_suffix(AGENTSTART_LOCALHOST_SUFFIX)
         .map(str::to_owned)
 }
 

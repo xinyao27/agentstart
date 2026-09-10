@@ -4,8 +4,8 @@ import type { useAppStore } from '~renderer/store/state'
 
 import {
   getOpenFilesForExternalFileChange,
-  YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
-  YIRU_EDITOR_FILE_SAVED_EVENT,
+  AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
+  AGENTSTART_EDITOR_FILE_SAVED_EVENT,
   type EditorFileSavedDetail,
   type EditorPathMutationTarget
 } from './autosave'
@@ -64,9 +64,12 @@ export function useEditorPanelExternalContentEvents({
         }
       }
     }
-    window.addEventListener(YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, handler as EventListener)
+    window.addEventListener(AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, handler as EventListener)
     return () =>
-      window.removeEventListener(YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, handler as EventListener)
+      window.removeEventListener(
+        AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
+        handler as EventListener
+      )
   }, [editorViewModeRef, loadDiffContent, loadFileContent, openFilesRef])
 
   useEffect(() => {
@@ -97,8 +100,9 @@ export function useEditorPanelExternalContentEvents({
         return { ...prev, [file.id]: { ...existing, modifiedContent: detail.content } }
       })
     }
-    window.addEventListener(YIRU_EDITOR_FILE_SAVED_EVENT, handler as EventListener)
-    return () => window.removeEventListener(YIRU_EDITOR_FILE_SAVED_EVENT, handler as EventListener)
+    window.addEventListener(AGENTSTART_EDITOR_FILE_SAVED_EVENT, handler as EventListener)
+    return () =>
+      window.removeEventListener(AGENTSTART_EDITOR_FILE_SAVED_EVENT, handler as EventListener)
   }, [openFilesRef, setDiffContents, setFileContents])
 }
 

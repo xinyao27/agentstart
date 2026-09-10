@@ -1,4 +1,4 @@
-import type { DirectoryEntry as DirEntry } from '@yiru/protocol/files/values'
+import type { DirectoryEntry as DirEntry } from '@agentstart/protocol/files/values'
 import { joinPath, normalizeRelativePath } from '~renderer/path'
 import { readRuntimeDirectory } from '~renderer/runtime/file-client'
 

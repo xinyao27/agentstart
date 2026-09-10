@@ -1,4 +1,4 @@
-import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import type { NestedRepoScanResult } from '@agentstart/protocol/project/group-model'
 import type { Dispatch, SetStateAction } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { GitMerge } from '~renderer/icons/hugeicons'
@@ -64,7 +64,7 @@ export function NestedRepoChecklist({
   return (
     <div
       className={cn(
-        'flex max-h-64 min-h-0 min-w-0 max-w-full flex-col overflow-hidden border border-border bg-background/60',
+        'flex max-h-64 min-h-0 min-w-0 max-w-full flex-col overflow-hidden rounded-md border border-border bg-background/60',
         className
       )}
     >

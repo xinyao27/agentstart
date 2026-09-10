@@ -1,4 +1,4 @@
-import type { WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree } from '@yiru/protocol'
+import type { WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree } from '@agentstart/protocol'
 import { useEffect, useState } from 'react'
 import { installWindowVisibilityInterval } from '~renderer/application-shell/window-visibility-interval'
 import { translate } from '~renderer/i18n/i18n'

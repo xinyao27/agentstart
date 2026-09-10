@@ -1,4 +1,4 @@
-import type { PRCheckJob, PRCheckStep } from '@yiru/protocol/hosted-review/review-types'
+import type { PRCheckJob, PRCheckStep } from '@agentstart/protocol/hosted-review/review-types'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -96,7 +96,7 @@ function JobCard({ job, index }: { job: PRCheckJob; index: number }): React.JSX.
           {job.name}
         </span>
         {breakdown.failed.length > 0 && (
-          <span className="bg-destructive/15 text-destructive shrink-0 px-2 py-0.5 text-[11px] font-medium">
+          <span className="bg-destructive/15 text-destructive shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium">
             {breakdown.failed.length}
             {' / '}
             {breakdown.total}{' '}
@@ -158,7 +158,7 @@ export function CheckRunJobs({
   hasFailedJobs: boolean
 }): React.JSX.Element {
   return (
-    <section className="border-border bg-background border">
+    <section className="border-border bg-background rounded-md border">
       <div className="border-border border-b px-3 py-2 text-sm font-medium">
         {hasFailedJobs
           ? translate('auto.components.editor.CheckRunDetailsPanel.066fedd446', 'Failed jobs')

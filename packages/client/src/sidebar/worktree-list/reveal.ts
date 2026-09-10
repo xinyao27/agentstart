@@ -1,10 +1,10 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import {
   effectiveExternalWorktreeVisibility,
   isLegacyRepoForExternalWorktreeVisibility
-} from '@yiru/protocol/worktree/external/ownership'
+} from '@agentstart/protocol/worktree/external/ownership'
 import type React from 'react'
 
 import { isRepoHeaderActionTarget } from '../project-header-drag'
@@ -231,5 +231,5 @@ export function getWorktreeVisibilityMenuLabel(repo: Repo): string {
     repo,
     isLegacyRepoForExternalWorktreeVisibility(repo)
   )
-  return visibility === 'show' ? 'Hide non-Yiru worktrees' : 'Show hidden worktrees'
+  return visibility === 'show' ? 'Hide non-AgentStart worktrees' : 'Show hidden worktrees'
 }

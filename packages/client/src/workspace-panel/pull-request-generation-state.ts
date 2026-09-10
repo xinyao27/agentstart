@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 
@@ -12,10 +12,7 @@ export type PullRequestGenerationFields = {
   draft: boolean
 }
 
-export type PullRequestGenerationRuntimeTargetSettings = Pick<
-  GlobalSettings,
-  'activeRuntimeEnvironmentId'
->
+type PullRequestGenerationRuntimeTargetSettings = Pick<GlobalSettings, 'activeRuntimeEnvironmentId'>
 
 export type PullRequestGenerationContext = {
   worktreeId: string | null
@@ -27,7 +24,7 @@ export type PullRequestGenerationContext = {
   runtimeTargetSettings?: PullRequestGenerationRuntimeTargetSettings | null
 }
 
-export type PullRequestGenerationStatus = 'idle' | 'running' | 'canceled' | 'failed' | 'succeeded'
+type PullRequestGenerationStatus = 'idle' | 'running' | 'canceled' | 'failed' | 'succeeded'
 
 export type PullRequestGenerationRecord = {
   context: PullRequestGenerationContext
@@ -40,7 +37,7 @@ export type PullRequestGenerationRecord = {
   hydrated: boolean
 }
 
-export type PullRequestGenerationRecords = Record<string, PullRequestGenerationRecord>
+type PullRequestGenerationRecords = Record<string, PullRequestGenerationRecord>
 
 export type PullRequestGenerationSlice = {
   pullRequestGenerationRequestSeq: number
@@ -54,7 +51,7 @@ export type PullRequestGenerationSlice = {
   prunePullRequestGenerationRecords: (liveWorktreeKeys: ReadonlySet<string>) => void
 }
 
-export function getPullRequestGenerationWorktreeKey(
+function getPullRequestGenerationWorktreeKey(
   worktreeId: string | null | undefined,
   worktreePath: string | null | undefined
 ): string | null {

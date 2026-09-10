@@ -1,17 +1,17 @@
-import { useQueries, useQuery } from '@tanstack/react-query'
 import {
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId,
   toRuntimeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
-import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
-import type { DetectedWorktreeListResult, Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/host/identity'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Project, ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
+import type { WorktreeLineage, WorkspaceLineage } from '@agentstart/protocol/worktree/lineage'
+import type { DetectedWorktreeListResult, Worktree } from '@agentstart/protocol/worktree/model'
+import { useQueries, useQuery } from '@tanstack/react-query'
 import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { projectCatalogProjectsQuery } from '~renderer/runtime/project-target'
 import { targetKey } from '~renderer/runtime/query-target'
@@ -273,10 +273,6 @@ function projectGroupForTarget(
   const projected = { ...projectGroup, executionHostId }
   projectedByHost.set(executionHostId, projected)
   return projected
-}
-
-export function projectCatalogTargetKey(target: RuntimeClientTarget): string {
-  return targetKey(target)
 }
 
 export function projectCatalogWorktreeRevisionKey(

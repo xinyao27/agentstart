@@ -27,14 +27,14 @@ type TerminalWithThirdLevelShift = {
  * (crbug 762557), so a chord still reporting Ctrl+Alt without AltGraph
  * cannot compose text.
  */
-export function isGenuineWindowsCtrlAltChord(event: ThirdLevelShiftKeyboardEvent): boolean {
+function isGenuineWindowsCtrlAltChord(event: ThirdLevelShiftKeyboardEvent): boolean {
   return (
     event.ctrlKey && event.altKey && !event.metaKey && event.getModifierState?.('AltGraph') !== true
   )
 }
 
 /** Returns whether this client's AltGraph modifier state is trustworthy. */
-export function shouldRepairWindowsCtrlAltChords(userAgent: string): boolean {
+function shouldRepairWindowsCtrlAltChords(userAgent: string): boolean {
   // Why: only Chromium rewrites composing Ctrl+Alt presses to AltGraph. Paired
   // web clients on Firefox keep stock classification so Ctrl+Alt-alias AltGr
   // typing there is never misread as a chord.

@@ -1,8 +1,11 @@
-import { LOCAL_EXECUTION_HOST_ID, normalizeExecutionHostId } from '@yiru/protocol/host/identity'
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import {
+  LOCAL_EXECUTION_HOST_ID,
+  normalizeExecutionHostId
+} from '@agentstart/protocol/host/identity'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { HostedReviewInfo } from '@agentstart/protocol/hosted-review/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { getGitHubPRCacheKey, getLegacyGitHubPRCacheKey } from '~renderer/github/cache-key'
 import type { AppState } from '~renderer/store/types'
 

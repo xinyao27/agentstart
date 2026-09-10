@@ -1,4 +1,3 @@
-import { TOGGLE_TERMINAL_PANE_EXPAND_EVENT } from '~renderer/constants/terminal'
 import {
   closeRemoteRuntimeSessionTab,
   isRemoteRuntimeSessionActive,
@@ -190,15 +189,4 @@ export function closeTerminalTab(
       : {})
   })
   options?.onClosed?.()
-}
-
-export function toggleTerminalPaneExpand(tabId: string): void {
-  useAppStore.getState().setActiveTab(tabId)
-  requestAnimationFrame(() => {
-    window.dispatchEvent(
-      new CustomEvent(TOGGLE_TERMINAL_PANE_EXPAND_EVENT, {
-        detail: { tabId }
-      })
-    )
-  })
 }

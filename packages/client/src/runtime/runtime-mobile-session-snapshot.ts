@@ -1,4 +1,4 @@
-import type { TabGroup } from '@yiru/protocol/workspace/tabs'
+import type { TabGroup } from '@agentstart/protocol/workspace/tabs'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import type { AppState } from '~renderer/store/types'
 import { getSystemPrefersDark } from '~renderer/terminal/theme'

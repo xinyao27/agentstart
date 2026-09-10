@@ -1,4 +1,4 @@
-import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@agentstart/protocol/host/identity'
 import type { StateCreator } from 'zustand'
 import {
   readProjectCatalogMutationRevision,

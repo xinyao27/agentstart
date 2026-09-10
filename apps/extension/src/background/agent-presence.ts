@@ -11,8 +11,8 @@ import {
 import { updateProjectGroupActivity } from './project-groups'
 import { focusOrCreatePage, focusOrCreateWorkspace } from './workspace-navigation'
 
-const AGENT_NOTIFICATION_PREFIX = 'yiru-agent:'
-const AWAY_DIGEST_NOTIFICATION_ID = 'yiru-away-digest'
+const AGENT_NOTIFICATION_PREFIX = 'agentstart-agent:'
+const AWAY_DIGEST_NOTIFICATION_ID = 'agentstart-away-digest'
 let hasRegisteredIdleListener = false
 let hasRegisteredNotificationListeners = false
 let hasRegisteredTabListener = false
@@ -151,12 +151,12 @@ async function applyPresence(input: AgentPresenceInput): Promise<void> {
           { title: translate('allowAgentOnce', 'Allow once') },
           { title: translate('viewAgent', 'View') }
         ],
-        iconUrl: chrome.runtime.getURL('icon.svg'),
+        iconUrl: chrome.runtime.getURL('icon.png'),
         message: translate('agentsWaitingInProject', '{{count}} agent(s) waiting in this project', {
           count: targets.length
         }),
         priority: 2,
-        title: translate('attentionRequired', 'Yiru needs your decision'),
+        title: translate('attentionRequired', 'AgentStart needs your decision'),
         type: 'basic'
       })
     )
@@ -211,8 +211,8 @@ async function publishProgress(input: {
   if (!(await chrome.permissions.contains({ permissions: ['notifications'] }))) {
     return
   }
-  await chrome.notifications.create(`yiru-progress:${input.id}`, {
-    iconUrl: chrome.runtime.getURL('icon.svg'),
+  await chrome.notifications.create(`agentstart-progress:${input.id}`, {
+    iconUrl: chrome.runtime.getURL('icon.png'),
     message: input.detail,
     progress: input.progress,
     title: input.title,
@@ -220,7 +220,7 @@ async function publishProgress(input: {
   })
   if (input.progress === 100) {
     setTimeout(() => {
-      void chrome.notifications.clear(`yiru-progress:${input.id}`)
+      void chrome.notifications.clear(`agentstart-progress:${input.id}`)
     }, 4_000)
   }
 }
@@ -249,7 +249,7 @@ async function publishAwayDigest(): Promise<void> {
   await chrome.storage.session.remove('awayAgentTargets')
   await chrome.notifications.create(AWAY_DIGEST_NOTIFICATION_ID, {
     buttons: [{ title: translate('viewActivity', 'View Activity') }],
-    iconUrl: chrome.runtime.getURL('icon.svg'),
+    iconUrl: chrome.runtime.getURL('icon.png'),
     message: translate(
       'awayDigestMessage',
       '{{count}} agent(s) need your attention after you left',

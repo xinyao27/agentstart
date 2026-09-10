@@ -1,4 +1,4 @@
-const SIDE_PANEL_PRESENCE_CHANNEL = 'yiru-side-panel-presence-v1'
+const SIDE_PANEL_PRESENCE_CHANNEL = 'agentstart-side-panel-presence-v1'
 const SIDE_PANEL_HEARTBEAT_INTERVAL_MS = 1_000
 const SIDE_PANEL_HEARTBEAT_TIMEOUT_MS = 2_500
 
@@ -172,6 +172,6 @@ function parsePresenceMessage(value: unknown): SidePanelPresenceMessage | null {
 }
 
 function readBrowserWindowId(): number | null {
-  const value = Reflect.get(globalThis, '__YIRU_BROWSER_WINDOW_ID__')
+  const value = Reflect.get(globalThis, '__AGENTSTART_BROWSER_WINDOW_ID__')
   return Number.isInteger(value) ? Number(value) : null
 }

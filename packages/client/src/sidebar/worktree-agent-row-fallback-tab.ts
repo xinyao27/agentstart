@@ -1,6 +1,6 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 export function effectiveWorktreeAgentRowStartedAt(entry: AgentStatusEntry): number {
   return entry.stateHistory[0]?.startedAt ?? entry.stateStartedAt

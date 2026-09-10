@@ -1,5 +1,5 @@
+import type { FileListResult } from '@agentstart/protocol'
 import { queryOptions, skipToken } from '@tanstack/react-query'
-import type { FileListResult } from '@yiru/protocol'
 import { projectCatalogRepoQuery } from '~renderer/project-catalog/repo-query'
 import { openFilesTarget } from '~renderer/runtime/files-target'
 import { targetKey } from '~renderer/runtime/query-target'

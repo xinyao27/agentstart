@@ -18,7 +18,7 @@ import {
   type WorktreeResolvePrBaseInput,
   type WorktreeSetInput,
   type WorktreeShowResult
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'

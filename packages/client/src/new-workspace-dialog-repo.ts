@@ -2,10 +2,8 @@ import {
   ALL_EXECUTION_HOSTS_SCOPE,
   getRepoExecutionHostId,
   type ExecutionHostScope
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
-
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
 type NewWorkspaceDialogRepo = Pick<
   Repo,
   'id' | 'path' | 'kind' | 'connectionId' | 'executionHostId'
@@ -45,16 +43,4 @@ export function resolveNewWorkspaceDialogRepoId({
     eligibleRepos[0]
 
   return resolvedRepo?.id ?? ''
-}
-
-export function resolveNewWorkspaceDialogGitRepoId(args: {
-  eligibleRepos: readonly NewWorkspaceDialogRepo[]
-  draftRepoId?: string | null
-  initialRepoId?: string | null
-  activeRepoId?: string | null
-  focusedHostScope?: ExecutionHostScope | null
-}): string | null {
-  const repoId = resolveNewWorkspaceDialogRepoId(args)
-  const repo = repoId ? args.eligibleRepos.find((entry) => entry.id === repoId) : null
-  return repo && isGitRepoKind(repo) ? repo.id : null
 }

@@ -1,6 +1,6 @@
-import type { ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { getProjectHostSetupForRepo } from '@yiru/protocol/project/setup-projection'
+import type { ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { getProjectHostSetupForRepo } from '@agentstart/protocol/project/setup-projection'
 import type { SetupScriptPromptInspection } from '~renderer/sidebar/setup-script-prompt'
 
 export type SetupScriptPromptState = SetupScriptPromptInspection
@@ -10,7 +10,7 @@ export type LastVisibleSetupScriptPrompt = {
   projectId: string | null
 }
 
-export function getRepoProjectId(
+function getRepoProjectId(
   repoId: string,
   repos: readonly Repo[],
   projectHostSetups: readonly ProjectHostSetup[],

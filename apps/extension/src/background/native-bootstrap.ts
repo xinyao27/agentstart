@@ -1,4 +1,4 @@
-const NATIVE_HOST_NAME = 'com.yiru.daemon'
+const NATIVE_HOST_NAME = 'com.agentstart.daemon'
 const NATIVE_BOOTSTRAP_TIMEOUT_MS = 12_000
 
 export type NativeBootstrapResult = {
@@ -6,7 +6,7 @@ export type NativeBootstrapResult = {
   endpoint: string
   expectedRuntimeId: string | null
   protocolVersion: number
-  rpcProtocol: 'yiru-protobuf-v2'
+  rpcProtocol: 'agentstart-protobuf-v2'
 }
 
 let nativeBootstrapInFlight: Promise<NativeBootstrapResult> | null = null
@@ -144,7 +144,7 @@ type NativeBootstrapResponse =
         authToken: string
         endpoint: string
         protocolVersion: number
-        rpcProtocol: 'yiru-protobuf-v2'
+        rpcProtocol: 'agentstart-protobuf-v2'
         runtimeId: string
       }
     }
@@ -175,7 +175,7 @@ function isNativeBootstrapResponse(value: unknown): value is NativeBootstrapResp
     typeof Reflect.get(result, 'authToken') === 'string' &&
     typeof Reflect.get(result, 'endpoint') === 'string' &&
     typeof Reflect.get(result, 'protocolVersion') === 'number' &&
-    rpcProtocol === 'yiru-protobuf-v2' &&
+    rpcProtocol === 'agentstart-protobuf-v2' &&
     typeof Reflect.get(result, 'runtimeId') === 'string'
   )
 }

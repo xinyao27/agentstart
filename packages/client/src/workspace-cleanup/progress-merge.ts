@@ -1,4 +1,4 @@
-import type { WorkspaceCleanupCandidate, WorkspaceCleanupScanProgress } from '@yiru/protocol'
+import type { WorkspaceCleanupCandidate, WorkspaceCleanupScanProgress } from '@agentstart/protocol'
 
 let progressCandidateIndex: {
   scanToken: number

@@ -6,10 +6,10 @@ use serde::Serialize;
 use serde_json::Value;
 use thiserror::Error;
 
-use crate::process_liveness::is_process_running;
+use crate::hosts::is_process_running;
 use crate::transport::secure_file::{self, SecureFileError};
 
-const RUNTIME_METADATA_FILE_NAME: &str = "yiru-runtime.json";
+const RUNTIME_METADATA_FILE_NAME: &str = "agentstart-runtime.json";
 
 pub(crate) struct RuntimeMetadata {
     pub pid: u32,

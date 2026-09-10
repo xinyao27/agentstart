@@ -1,5 +1,5 @@
-use yiru_protocol::runtime::v1::AgentTrustPreset as ProtocolAgentTrustPreset;
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::runtime::v1::AgentTrustPreset as ProtocolAgentTrustPreset;
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::agent_trust::{AgentTrustInput, AgentTrustPreset, AgentTrustService};
 
@@ -27,8 +27,8 @@ impl AgentTrustRpc {
     pub(in crate::rpc) async fn protocol_mark_trusted(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
-        use yiru_protocol::runtime::v1::{
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
+        use agentstart_protocol::runtime::v1::{
             HostRegistryServiceMarkAgentTrustedRequest, HostRegistryServiceMarkAgentTrustedResponse,
         };
 

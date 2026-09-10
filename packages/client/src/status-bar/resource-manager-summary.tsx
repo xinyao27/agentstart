@@ -1,4 +1,4 @@
-import type { MemorySnapshot } from '@yiru/protocol/diagnostics/memory-values'
+import type { MemorySnapshot } from '@agentstart/protocol/diagnostics/memory-values'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -129,7 +129,7 @@ export function ResourceManagerSummary({
               value={formatMemory(totalMemory)}
               description={translate(
                 'auto.components.status.bar.ResourceUsageStatusSegment.9e2525c89f',
-                "Resident memory held by Yiru plus the processes under each worktree's terminals."
+                "Resident memory held by AgentStart plus the processes under each worktree's terminals."
               )}
             />
             <span className="text-muted-foreground/50">·</span>
@@ -141,7 +141,7 @@ export function ResourceManagerSummary({
               )}`}
               description={translate(
                 'auto.components.status.bar.ResourceUsageStatusSegment.6449a95c78',
-                "How much of this machine's physical RAM the Yiru-tracked processes are sitting on."
+                "How much of this machine's physical RAM the AgentStart-tracked processes are sitting on."
               )}
             />
           </div>

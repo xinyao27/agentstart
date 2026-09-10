@@ -1,6 +1,6 @@
 import type { OpenFile } from '~renderer/editor/state'
 
-export function isAbsolutePathLike(value: string): boolean {
+function isAbsolutePathLike(value: string): boolean {
   return value.startsWith('/') || value.startsWith('\\\\') || /^[A-Za-z]:[\\/]/.test(value)
 }
 

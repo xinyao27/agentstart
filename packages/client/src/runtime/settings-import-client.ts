@@ -1,7 +1,7 @@
 import type {
   WarpThemeImportPreview,
   WarpThemeImportSource
-} from '@yiru/protocol/terminal/theme-types'
+} from '@agentstart/protocol/terminal/theme-types'
 import { ghosttyImportPreview, warpImportPreview } from '~renderer/settings/import-preview'
 import type { GhosttyImportPreview } from '~renderer/settings/import-preview'
 import { useAppStore } from '~renderer/store/state'

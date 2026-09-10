@@ -1,4 +1,7 @@
-import { compactDispatchPromptForStatus, isYiruDispatchStatusPrompt } from './dispatch-prompt.js'
+import {
+  compactDispatchPromptForStatus,
+  isAgentStartDispatchStatusPrompt
+} from './dispatch-prompt.js'
 
 /** Maximum character length for the prompt field. Truncated on parse. */
 export const AGENT_STATUS_MAX_FIELD_LENGTH = 200
@@ -31,12 +34,12 @@ function normalizeField(value: unknown, maxLength: number = AGENT_STATUS_MAX_FIE
   return normalizeSingleLinePreview(value, maxLength)
 }
 
-/** Normalize the agent prompt field, compacting Yiru dispatch preambles. */
+/** Normalize the agent prompt field, compacting AgentStart dispatch preambles. */
 export function normalizePromptField(value: unknown): string {
   if (typeof value !== 'string') {
     return ''
   }
-  if (isYiruDispatchStatusPrompt(value)) {
+  if (isAgentStartDispatchStatusPrompt(value)) {
     return compactDispatchPromptForStatus(
       value,
       AGENT_STATUS_MAX_FIELD_LENGTH,

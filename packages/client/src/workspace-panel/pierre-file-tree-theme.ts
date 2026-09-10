@@ -8,7 +8,6 @@ export const PIERRE_FILE_TREE_STYLE = {
   '--trees-selected-bg-override': 'var(--sidebar-accent)',
   '--trees-selected-fg-override': 'var(--sidebar-accent-foreground)',
   '--trees-border-color-override': 'var(--sidebar-border)',
-  '--trees-border-radius-override': '0px',
   '--trees-font-family-override': 'var(--app-font-family)',
   '--trees-font-size-override': '12px',
   '--trees-item-margin-x-override': '0px',
@@ -22,18 +21,17 @@ export const PIERRE_FILE_TREE_STYLE = {
   '--trees-git-ignored-color-override': 'var(--git-decoration-ignored)'
 } as CSSProperties
 
-// Why: rows and native rename fields live inside Pierre's Shadow DOM, so
-// app-level radius and state rules need a narrow library-side bridge.
+// Why: rows live inside Pierre's Shadow DOM, so app-level state rules need
+// a narrow library-side bridge.
 export const PIERRE_FILE_TREE_UNSAFE_CSS = `
-  * { border-radius: 0 !important; }
   [data-item-git-status] > [data-item-section="icon"],
   [data-item-git-status] > [data-item-section="icon"] > :not([data-icon-name="file-tree-icon-chevron"]) {
     color: var(--trees-fg-muted) !important;
   }
-  [data-yiru-native-drop-target="true"] {
+  [data-agentstart-native-drop-target="true"] {
     background-color: var(--trees-selected-bg) !important;
   }
-  [data-yiru-flashing="true"] {
+  [data-agentstart-flashing="true"] {
     background-color: var(--trees-selected-bg) !important;
 
   }

@@ -1,5 +1,5 @@
 import type { ExecutionHostId } from '../../host/identity.js'
-import type { YiruWorkspaceLayout } from '../../workspace/layout.js'
+import type { AgentStartWorkspaceLayout } from '../../workspace/layout.js'
 import type { LoaderStyle } from '../loader.js'
 import type { UiLanguage } from '../ui-language.js'
 import type { HostSettingOverrides, LeftSidebarAppearanceMode } from '../workspace-preferences.js'
@@ -10,12 +10,12 @@ export type GlobalWorkspaceSettings = {
    *  host-varying setting is `host override ?? client default`. */
   hostSettingOverrides?: Partial<Record<ExecutionHostId, HostSettingOverrides>>
   nestWorkspaces: boolean
-  workspaceDirHistory?: YiruWorkspaceLayout[]
+  workspaceDirHistory?: AgentStartWorkspaceLayout[]
   refreshLocalBaseRefOnWorktreeCreate: boolean
   /** Set once the user dismisses the "local main is behind" suggestion toast, so
    *  the nudge to enable refreshLocalBaseRefOnWorktreeCreate never shows again. */
   localBaseRefSuggestionDismissed: boolean
-  /** When enabled, Yiru renames a workspace's auto-generated creature branch to
+  /** When enabled, AgentStart renames a workspace's auto-generated creature branch to
    *  a short name derived from the first prompt once work begins. Users can
    *  still turn this off from global Git settings. */
   autoRenameBranchFromWork: boolean

@@ -5,13 +5,13 @@ import {
   isKeybindingPotentialTerminalConflict,
   type KeybindingActionId,
   type KeybindingOverrides
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { Keyboard } from '~renderer/icons/hugeicons'
 import { useAppStore } from '~renderer/store/state'
 
-const STORAGE_PREFIX = 'yiru.terminalShortcutCapturedNotice.'
+const STORAGE_PREFIX = 'agentstart.terminalShortcutCapturedNotice.'
 const NOTICE_DURATION_MS = 20_000
 
 function hasShownNotice(actionId: KeybindingActionId): boolean {

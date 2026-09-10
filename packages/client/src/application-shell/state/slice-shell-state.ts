@@ -1,11 +1,11 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
-import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
-import type { FeatureTipId } from '@yiru/protocol/settings/feature-tips'
-import type { TopLevelView } from '@yiru/protocol/settings/ui-state'
-import type { FeatureInteractionId } from '@yiru/protocol/telemetry/interactions/catalog'
-import type { FeatureInteractionState } from '@yiru/protocol/telemetry/interactions/state'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
+import type { ContextualTourId } from '@agentstart/protocol/settings/contextual-tours'
+import type { FeatureTipId } from '@agentstart/protocol/settings/feature-tips'
+import type { TopLevelView } from '@agentstart/protocol/settings/ui-state'
+import type { FeatureInteractionId } from '@agentstart/protocol/telemetry/interactions/catalog'
+import type { FeatureInteractionState } from '@agentstart/protocol/telemetry/interactions/state'
 import type { SettingsNavTarget } from '~renderer/settings/navigation-types'
 
 import type { AgentSendPopoverTargetMode, OpenAgentSendPopoverTargetModeArgs } from './slice'
@@ -122,7 +122,7 @@ export type UIShellState = {
     | 'feature-wall'
     | 'feature-tips'
     | 'new-workspace-composer'
-    | 'confirm-yiru-yaml-hooks'
+    | 'confirm-agentstart-yaml-hooks'
   modalData: Record<string, unknown>
   openModal: (modal: UIShellState['activeModal'], data?: Record<string, unknown>) => void
   closeModal: () => void

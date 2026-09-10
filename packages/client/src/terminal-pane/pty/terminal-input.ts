@@ -1,5 +1,5 @@
+import { isTerminalQueryReply } from '@agentstart/protocol/terminal/query-reply'
 import type { Terminal } from '@xterm/xterm'
-import { isTerminalQueryReply } from '@yiru/protocol/terminal/query-reply'
 import { useAppStore } from '~renderer/store/state'
 import { isPtyLocked } from '~renderer/terminal-pane/pane-manager/mobile-driver-state'
 
@@ -37,10 +37,17 @@ export type TerminalInput = {
 
 export function createTerminalInput(options: TerminalInputOptions): TerminalInput {
   let lastInputAt = Number.NEGATIVE_INFINITY
+  let hasPendingUserInput = false
   const recordActivity = (): void => {
     useAppStore.getState().recordTerminalInput(options.paneKey)
   }
-  const userActivity = subscribeToTerminalUserInput(options.terminal, recordActivity)
+  const userActivity = subscribeToTerminalUserInput(options.terminal, () => {
+    // Why: xterm fires this private classification signal synchronously before
+    // the matching onData event. It lets real keystrokes cross a slow replay
+    // guard while parser-generated query replies remain suppressed.
+    hasPendingUserInput = true
+    recordActivity()
+  })
   const recordFallbackActivity = (): void => {
     if (userActivity === null) {
       recordActivity()
@@ -52,7 +59,9 @@ export function createTerminalInput(options: TerminalInputOptions): TerminalInpu
   }
 
   const onData = options.terminal.onData((data) => {
-    if (options.isReplaying()) {
+    const isUserInput = hasPendingUserInput
+    hasPendingUserInput = false
+    if (options.isReplaying() && !isUserInput) {
       return
     }
     const currentPtyId = options.transport.getPtyId()

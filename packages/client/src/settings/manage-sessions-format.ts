@@ -1,7 +1,7 @@
-import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
+import { splitWorktreeIdForFilesystem } from '@agentstart/protocol/worktree/identity'
 import type { RuntimeDaemonSession } from '~renderer/runtime/daemon-sessions-client'
 
-export function shortCwd(cwd: string): string {
+function shortCwd(cwd: string): string {
   if (!cwd) {
     return 'unknown'
   }

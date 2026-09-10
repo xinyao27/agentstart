@@ -1,13 +1,11 @@
-import { CLIPBOARD_PROTOCOL_CAPABILITY, ClipboardClient } from '@yiru/protocol'
+import { CLIPBOARD_PROTOCOL_CAPABILITY, ClipboardClient } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'
 import { readRuntimeStatus } from './status-client'
 
-export async function openClipboardTarget(
-  target: RuntimeClientTarget
-): Promise<ClipboardClient | null> {
+async function openClipboardTarget(target: RuntimeClientTarget): Promise<ClipboardClient | null> {
   const status = await readRuntimeStatus(target)
   if (!status.capabilities?.includes(CLIPBOARD_PROTOCOL_CAPABILITY)) {
     return null
@@ -25,7 +23,7 @@ export async function requireClipboardClient(
     throw new Error(
       translate(
         'runtime.clipboardTarget.unavailable',
-        'Saving the clipboard image needs a current Yiru daemon connection.'
+        'Saving the clipboard image needs a current AgentStart daemon connection.'
       )
     )
   }

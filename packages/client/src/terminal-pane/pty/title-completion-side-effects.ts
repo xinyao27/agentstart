@@ -1,4 +1,4 @@
-import type { AgentStatusEntry, AgentType } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusEntry, AgentType } from '@agentstart/protocol/agent/status-records'
 import { resolveCompatibleAgentTypeForOwner } from '~renderer/agent/title/owner'
 import { isClaudeAgent } from '~renderer/agent/title/provider'
 import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'

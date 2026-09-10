@@ -1,5 +1,3 @@
-import { browserPageId, parseBrowserPageId } from './target'
-
 const PAGE_REGISTRATIONS_KEY = 'browserUsePageRegistrations'
 
 export type PageRegistration = {
@@ -15,15 +13,6 @@ const pages = new Map<number, PageRegistration>()
 const revocationVersions = new Map<number, number>()
 export const pageRegistryReady = restorePages()
 let mutationOperation = pageRegistryReady
-
-export function registeredPageId(tabId: number): string | null {
-  return pages.has(tabId) ? browserPageId(tabId) : null
-}
-
-export function registeredPageAuthority(pageId: string): string | null {
-  const registration = pages.get(parseBrowserPageId(pageId))
-  return registration?.authorityId ?? null
-}
 
 export function registrationForTab(tabId: number): PageRegistration | null {
   return pages.get(tabId) ?? null
@@ -41,10 +30,6 @@ export function authorizedRegistrationGeneration(
   return authorityId !== null && registration?.authorityId === authorityId
     ? registration.generation
     : null
-}
-
-export function registeredTabIds(): ReadonlySet<number> {
-  return new Set(pages.keys())
 }
 
 export async function replacePageRegistration(

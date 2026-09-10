@@ -3,7 +3,7 @@ use std::time::{Duration, Instant};
 
 use thiserror::Error;
 
-use crate::process_liveness::is_process_running;
+use crate::hosts::is_process_running;
 
 const RESTART_PARENT_TIMEOUT: Duration = Duration::from_secs(30);
 const RESTART_POLL_INTERVAL: Duration = Duration::from_millis(50);

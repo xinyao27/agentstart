@@ -1,7 +1,7 @@
 import {
   isFreshNonDoneAgentStatus,
   type AgentStatusEntry
-} from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/status-records'
 import { resolveCompatibleAgentTypeForOwner } from '~renderer/agent/title/owner'
 import { useAppStore } from '~renderer/store/state'
 

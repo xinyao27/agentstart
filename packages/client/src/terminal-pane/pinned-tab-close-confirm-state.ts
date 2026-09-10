@@ -3,7 +3,7 @@ import type { AppState } from '~renderer/store/types'
 
 /** A pending request to confirm closing a pinned tab. `onConfirm` runs the
  *  original close once the user accepts; the label is shown in the dialog. */
-export type PinnedTabCloseConfirmRequest = {
+type PinnedTabCloseConfirmRequest = {
   tabLabel: string
   onConfirm: () => void
   onCancel?: () => void

@@ -1,4 +1,4 @@
-import type { ActiveRightSidebarTab } from '@yiru/protocol/settings/ui-state'
+import type { ActiveRightSidebarTab } from '@agentstart/protocol/settings/ui-state'
 import { getWorkbenchLocation, navigateWorkbench } from '~renderer/runtime/workbench-location'
 import { useAppStore } from '~renderer/store/state'
 import { normalizeRightSidebarRoute } from '~renderer/workspace-panel/right-sidebar-route'

@@ -1,4 +1,8 @@
-import type { LatticeVariant, MorphVariant, RingVariant } from '@yiru/protocol/settings/loader'
+import type {
+  LatticeVariant,
+  MorphVariant,
+  RingVariant
+} from '@agentstart/protocol/settings/loader'
 
 const LATTICE_SIZE = 3
 const LATTICE_MIDDLE = (LATTICE_SIZE - 1) / 2
@@ -76,7 +80,7 @@ export type RingDot = {
   delayMs: number
 }
 
-export function getRingDurationMs(variant: RingVariant): number {
+function getRingDurationMs(variant: RingVariant): number {
   switch (variant) {
     case 'C1':
       return 1600
@@ -89,10 +93,6 @@ export function getRingDurationMs(variant: RingVariant): number {
     case 'C5':
       return 2200
   }
-}
-
-export function getRingAnimationDurationMs(variant: RingVariant): number {
-  return variant === 'C5' ? 1800 : getRingDurationMs(variant)
 }
 
 function getRingDelayMs(variant: RingVariant, index: number): number {

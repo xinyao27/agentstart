@@ -1,4 +1,4 @@
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import { useLayoutEffect, useState } from 'react'
 import { useAppStore } from '~renderer/store/state'
 import type { AppState } from '~renderer/store/types'
@@ -9,7 +9,7 @@ import type { HttpLinkSourceOwner } from '../http-link-routing'
 import { createRichMarkdownHtmlSuperscriptLinkContext } from './html-superscript-link-context'
 import { createRichMarkdownEditorCodec } from './source-transport'
 
-export function resolveRichMarkdownWorktreeRoot(
+function resolveRichMarkdownWorktreeRoot(
   state: Pick<AppState, 'folderWorkspaces' | 'worktreesByRepo'>,
   worktreeId: string
 ): string | null {

@@ -1,5 +1,4 @@
 import {
-  BRAILLE_SPINNER_RE,
   CLAUDE_IDLE,
   CURSOR_NATIVE_TITLE_LOWER,
   GEMINI_IDLE,
@@ -8,8 +7,6 @@ import {
   GEMINI_WORKING,
   STRONG_IDLE_KEYWORDS_RE,
   STRONG_WORKING_KEYWORDS_RE,
-  STRONG_WORKING_KEYWORDS_RE_GLOBAL,
-  containsAgentName,
   containsAny,
   containsBrailleSpinner,
   containsLegacyAgentName,
@@ -22,72 +19,6 @@ import type { AgentStatus } from './core'
 import { getPiCompatibleSyntheticAgentStatus } from './pi-compatible'
 import { isGrokRotatingWorkingTitle } from './provider'
 import { AGY_AGENT_NAME_RE, DROID_AGENT_NAME_RE, HERMES_AGENT_NAME_RE } from './tokens'
-
-/**
- * Strip working-status indicators so stale exit titles stop reporting working.
- */
-export function clearWorkingIndicators(title: string): string {
-  let cleaned = title
-
-  cleaned = cleaned.replace(GEMINI_WORKING, '')
-  cleaned = cleaned.replace(GEMINI_SILENT_WORKING, '')
-  cleaned = cleaned.replace(BRAILLE_SPINNER_RE, '')
-  if (cleaned.startsWith('. ')) {
-    cleaned = cleaned.slice(2)
-  }
-  if (containsAgentName(cleaned)) {
-    cleaned = cleaned.replace(STRONG_WORKING_KEYWORDS_RE_GLOBAL, '')
-  }
-
-  cleaned = cleaned.replace(/\s{2,}/g, ' ').trim()
-  return cleaned || title
-}
-
-/**
- * Tracks agent status transitions from terminal title changes.
- */
-export function createAgentStatusTracker(
-  onBecameIdle: (title: string) => void,
-  onBecameWorking?: () => void,
-  onAgentExited?: () => void,
-  initialTitle?: string
-): {
-  handleTitle: (title: string) => void
-  seedTitle: (title: string) => void
-  reset: () => void
-} {
-  // Why: trackers restored mid-session need a last-known status without firing
-  // callbacks, or a hidden working agent can miss its later idle transition.
-  let lastStatus: AgentStatus | null =
-    initialTitle !== undefined ? detectAgentStatusFromTitle(initialTitle) : null
-
-  return {
-    handleTitle(title: string): void {
-      const newStatus = detectAgentStatusFromTitle(title)
-      if (lastStatus === 'working' && newStatus !== null && newStatus !== 'working') {
-        onBecameIdle(title)
-      }
-      if (lastStatus !== 'working' && newStatus === 'working') {
-        onBecameWorking?.()
-      }
-      // Why: reverting to a plain shell prompt after idle/permission means the
-      // agent exited; while working it can just be a transient internal title.
-      if (lastStatus !== null && lastStatus !== 'working' && newStatus === null) {
-        lastStatus = null
-        onAgentExited?.()
-      }
-      if (newStatus !== null) {
-        lastStatus = newStatus
-      }
-    },
-    seedTitle(title: string): void {
-      lastStatus = detectAgentStatusFromTitle(title)
-    },
-    reset(): void {
-      lastStatus = null
-    }
-  }
-}
 
 /**
  * Normalize high-churn agent titles into stable display labels before storage.

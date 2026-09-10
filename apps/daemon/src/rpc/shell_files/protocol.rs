@@ -3,8 +3,8 @@
 // same authority the retired legacy JSON dispatch called), and encodes a
 // typed response — the authority is the one shared implementation, so there
 // is nothing left here to duplicate or drift.
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     ShellFilesServiceAuthorizeExternalPathRequest, ShellFilesServiceAuthorizeExternalPathResponse,
     ShellFilesServiceCopyRequest, ShellFilesServiceCopyResponse,
     ShellFilesServiceCreateDirectoryRequest, ShellFilesServiceCreateDirectoryResponse,
@@ -19,7 +19,7 @@ use yiru_protocol::runtime::v1::{
     ShellFilesServiceStageExternalPathsForRuntimeUploadResponse, ShellFilesServiceStatRequest,
     ShellFilesServiceStatResponse, ShellFilesServiceWriteRequest, ShellFilesServiceWriteResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use super::ShellFilesRpc;
 use super::protocol_values::{

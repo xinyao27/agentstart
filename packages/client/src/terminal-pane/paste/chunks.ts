@@ -11,10 +11,6 @@ const TERMINAL_PASTE_ESCAPE_CODE_POINT = 0x1b
 const TERMINAL_PASTE_INERT_ESCAPE_CODE_POINT = 0x241b
 const TERMINAL_PASTE_INERT_ESCAPE = '\u241b'
 
-export function chunkTerminalPastePlan(plan: TerminalPastePlan): string[] {
-  return [...iterateTerminalPastePlanChunks(plan)]
-}
-
 export function* iterateTerminalPastePlanChunks(plan: TerminalPastePlan): Generator<string> {
   const maxChunkBytes = Math.max(4, plan.maxChunkBytes ?? TERMINAL_PASTE_CHUNK_MAX_BYTES)
   // Why: normalize before chunking — a per-chunk pass could split a CRLF pair

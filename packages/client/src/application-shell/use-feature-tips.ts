@@ -1,4 +1,4 @@
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
 import { useEffect, useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -8,7 +8,7 @@ import {
 } from '../feature-tips/feature-tip-startup-gate'
 import {
   trackCommandPaletteFeatureTipShown,
-  trackYiruCliFeatureTipShown
+  trackAgentStartCliFeatureTipShown
 } from '../feature-tips/feature-tip-telemetry'
 import { shouldShowOnboarding } from '../onboarding/should-show-onboarding'
 import { readCliInstallStatus } from '../runtime/cli-install-client'
@@ -91,8 +91,8 @@ export function useFeatureTips({
       return
     }
     promptedThisSessionRef.current = true
-    if (decision.tipId === 'yiru-cli') {
-      trackYiruCliFeatureTipShown('app_open')
+    if (decision.tipId === 'agentstart-cli') {
+      trackAgentStartCliFeatureTipShown('app_open')
     } else if (decision.tipId === 'command-palette') {
       trackCommandPaletteFeatureTipShown('app_open')
     }

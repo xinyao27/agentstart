@@ -1,12 +1,12 @@
 import { fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
-import { FrameSchema } from '../generated/yiru/protocol/v1/frame_pb.js'
-import type { Frame } from '../generated/yiru/protocol/v1/frame_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
+import { FrameSchema } from '../generated/agent_start/protocol/v1/frame_pb.js'
+import type { Frame } from '../generated/agent_start/protocol/v1/frame_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import { PROTOCOL_VERSION } from './peer-values.js'
 
-const WIRE_MAGIC = Uint8Array.of(0x59, 0x49, 0x52, 0x55)
+const WIRE_MAGIC = Uint8Array.of(0x41, 0x47, 0x53, 0x54)
 export const WIRE_PREAMBLE_BYTES = WIRE_MAGIC.byteLength + 1
 
 export function encodeProtocolFrame(frame: Frame): Uint8Array {

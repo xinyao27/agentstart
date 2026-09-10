@@ -36,7 +36,7 @@ export function HostSetupStartActions({
         <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
           {translate('auto.components.settings.RepositoryPane.otherWaysToAdd', 'Other ways to add')}
         </p>
-        <div className="border-input bg-background overflow-hidden border">
+        <div className="border-input bg-background overflow-hidden rounded-md border">
           <HostSetupActionButton
             icon={Download}
             title={translate(
@@ -63,7 +63,7 @@ export function HostSetupStartActions({
             )}
             disabled={planDisabled}
             onClick={onPlan}
-            className="border-border/70 border-t"
+            className="border-border/70 rounded-b-md border-t"
           />
         </div>
       </div>
@@ -91,7 +91,7 @@ export function HostSetupExistingFolderStep({
   onSubmit: () => void
 }): React.JSX.Element {
   return (
-    <div className="border-border bg-muted/20 space-y-3 border p-3">
+    <div className="border-border bg-muted/20 space-y-3 rounded-md border p-3">
       <StepBackButton
         onBack={onBack}
         label={translate(
@@ -162,7 +162,7 @@ export function HostSetupCloneStep({
   onSubmit: () => void
 }): React.JSX.Element {
   return (
-    <div className="border-border bg-muted/20 space-y-3 border p-3">
+    <div className="border-border bg-muted/20 space-y-3 rounded-md border p-3">
       <StepBackButton
         onBack={onBack}
         label={translate('auto.components.settings.RepositoryPane.cloneFromUrl', 'Clone from URL')}
@@ -223,7 +223,7 @@ export function HostSetupPlannedStep({
   )
 
   return (
-    <div className="border-border bg-muted/20 space-y-3 border p-3">
+    <div className="border-border bg-muted/20 space-y-3 rounded-md border p-3">
       <StepBackButton
         onBack={onBack}
         label={translate(
@@ -302,7 +302,7 @@ function HostSetupActionButton({
     >
       <span
         className={cn(
-          'grid size-7 shrink-0 place-items-center',
+          'grid size-7 shrink-0 place-items-center rounded-md',
           selected ? 'bg-background/70 text-accent-foreground' : 'text-muted-foreground'
         )}
       >

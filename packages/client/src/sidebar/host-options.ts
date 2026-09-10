@@ -3,11 +3,11 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   type ExecutionHostId,
   type ExecutionHostKind
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { RuntimeCompatVerdict } from '@yiru/protocol/runtime-compatibility'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { WorkspaceHostScope } from '@yiru/protocol/settings/ui-state'
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { RuntimeCompatVerdict } from '@agentstart/protocol/runtime-compatibility'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { WorkspaceHostScope } from '@agentstart/protocol/settings/ui-state'
 import {
   buildExecutionHostRegistry,
   type ExecutionHostHealth

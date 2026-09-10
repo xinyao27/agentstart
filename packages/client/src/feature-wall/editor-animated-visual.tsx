@@ -24,7 +24,7 @@ const MENU_HOLD_MS = 900
 const CLICK_RIPPLE_MS = 220
 const FINAL_HOLD_MS = 2200
 const KBD_CLASS_DOC =
-  ' border border-border bg-card px-1.5 py-0.5 font-mono text-[10.5px] text-muted-foreground'
+  'border border-border bg-card px-1.5 py-0.5 font-mono text-[10.5px] text-muted-foreground'
 
 type EditorPhase =
   | 'idle'
@@ -137,7 +137,7 @@ function EditorToolbar(): JSX.Element {
         <span
           key={id}
           className={cn(
-            'text-muted-foreground inline-flex size-[22px] items-center justify-center',
+            'text-muted-foreground inline-flex size-[22px] items-center justify-center rounded',
             (index === 4 || index === 6) && 'border-border ml-1 border-l pl-1'
           )}
         >
@@ -145,7 +145,7 @@ function EditorToolbar(): JSX.Element {
         </span>
       ))}
       <span className="text-muted-foreground ml-auto inline-flex items-center gap-1.5 font-mono text-[10px]">
-        <span className="size-1.5 bg-emerald-500" />
+        <span className="size-1.5 rounded-full bg-emerald-500" />
         {translate('auto.components.feature.wall.EditorAnimatedVisual.218503f9f3', 'autosaved')}
       </span>
     </div>
@@ -182,7 +182,7 @@ function SlashRow({
   return (
     <div
       className={cn(
-        'relative grid h-6 grid-cols-[18px_1fr_auto] items-center gap-2 px-2 py-1 pl-1.5',
+        'relative grid h-6 grid-cols-[18px_1fr_auto] items-center gap-2 px-2 py-1 pl-1.5 rounded-[5px]',
         active && 'bg-foreground/[0.07]'
       )}
     >
@@ -193,7 +193,7 @@ function SlashRow({
         <span className="pointer-events-none absolute top-1.5 left-3">
           <CursorIcon />
           {clicking ? (
-            <span className="border-foreground/50 absolute -top-1.5 -left-1.5 size-7 animate-[editor-cursor-ripple_460ms_ease-out_forwards] border-2" />
+            <span className="border-foreground/50 absolute -top-1.5 -left-1.5 size-7 animate-[editor-cursor-ripple_460ms_ease-out_forwards] rounded-full border-2" />
           ) : null}
         </span>
       ) : null}
@@ -321,11 +321,11 @@ function EditorVisualFrame({ storyboard }: { storyboard: EditorStoryboard }): JS
       : null
 
   return (
-    <div className="border-border bg-card text-foreground relative overflow-visible border">
+    <div className="border-border bg-card text-foreground relative overflow-visible rounded-xl border">
       <div className="border-border bg-muted/40 flex h-7 items-center gap-1.5 border-b px-3">
-        <span className="size-2.5 bg-rose-400/70" />
-        <span className="size-2.5 bg-amber-400/70" />
-        <span className="size-2.5 bg-emerald-400/70" />
+        <span className="size-2.5 rounded-full bg-rose-400/70" />
+        <span className="size-2.5 rounded-full bg-amber-400/70" />
+        <span className="size-2.5 rounded-full bg-emerald-400/70" />
         <span className="text-muted-foreground ml-2 font-mono text-[11px]">
           {translate(
             'auto.components.feature.wall.EditorAnimatedVisual.cda56c5915',

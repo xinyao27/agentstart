@@ -1,4 +1,4 @@
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { SettingsSearchEntry } from '../search'
@@ -30,7 +30,7 @@ export function getRepositoryGitHooksSearchEntries(repo: Repo): SettingsSearchEn
         ),
         ...translateSearchKeyword(
           'auto.components.settings.repository.search.9cad92fe77',
-          'yiru.yaml hooks'
+          'agentstart.yaml hooks'
         ),
         ...translateSearchKeyword('auto.components.settings.repository.search.bf460fded8', 'yaml')
       ]
@@ -62,7 +62,7 @@ export function getRepositoryGitHooksSearchEntries(repo: Repo): SettingsSearchEn
         ),
         ...translateSearchKeyword(
           'auto.components.settings.repository.search.9cad92fe77',
-          'yiru.yaml hooks'
+          'agentstart.yaml hooks'
         ),
         ...translateSearchKeyword('auto.components.settings.repository.search.bf460fded8', 'yaml')
       ]
@@ -71,7 +71,7 @@ export function getRepositoryGitHooksSearchEntries(repo: Repo): SettingsSearchEn
       title: translate('auto.components.settings.repository.search.cc11699c3d', 'Advanced'),
       description: translate(
         'auto.components.settings.repository.search.d141897c90',
-        'Command source and yiru.yaml details.'
+        'Command source and agentstart.yaml details.'
       ),
       keywords: [
         repo.displayName,
@@ -86,7 +86,7 @@ export function getRepositoryGitHooksSearchEntries(repo: Repo): SettingsSearchEn
         ...translateSearchKeyword('auto.components.settings.repository.search.0432d2fb7c', 'local'),
         ...translateSearchKeyword(
           'auto.components.settings.repository.search.603c68b68c',
-          'yiru.yaml'
+          'agentstart.yaml'
         ),
         ...translateSearchKeyword(
           'auto.components.settings.repository.search.fcb8fa8144',

@@ -2,7 +2,7 @@ import type {
   DeveloperPermissionId,
   DeveloperPermissionState,
   DeveloperPermissionStatus
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import type { ReactNode } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
@@ -27,8 +27,6 @@ import { shellClient } from '~renderer/runtime/shell-client'
 import { cn } from '~renderer/ui/class-names'
 
 import { Button } from '../ui/button'
-export { getDeveloperPermissionsPaneSearchEntries } from './developer-permissions-search'
-
 type PermissionDefinition = {
   id: DeveloperPermissionId
   label: string
@@ -258,7 +256,7 @@ export function DeveloperPermissionsPane(): React.JSX.Element {
   }, [refresh])
 
   // Why: after the user flips a permission in System Settings and switches
-  // back to Yiru, the chip should reflect the new status without a manual
+  // back to AgentStart, the chip should reflect the new status without a manual
   // Refresh click. Tied to window focus rather than a polling interval so
   // we don't keep hammering `systemPreferences` while the pane is idle.
   useEffect(() => {
@@ -320,19 +318,19 @@ export function DeveloperPermissionsPane(): React.JSX.Element {
 
   return (
     <div className="space-y-5">
-      <div className="border-border/60 bg-muted/25 flex items-start justify-between gap-4 border px-4 py-3">
+      <div className="border-border/60 bg-muted/25 flex items-start justify-between gap-4 rounded-lg border px-4 py-3">
         <div className="space-y-1">
           <div className="flex items-center gap-2 text-sm font-medium">
             <ShieldCheck className="size-4" />
             {translate(
               'auto.components.settings.DeveloperPermissionsPane.6f011b9bf6',
-              "Terminal tools inherit Yiru's macOS privacy envelope."
+              "Terminal tools inherit AgentStart's macOS privacy envelope."
             )}
           </div>
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.settings.DeveloperPermissionsPane.6326a4c5cc',
-              'Use these controls when a CLI, local app, or automation tool needs macOS privacy access. Yiru does not ask at startup.'
+              'Use these controls when a CLI, local app, or automation tool needs macOS privacy access. AgentStart does not ask at startup.'
             )}
           </p>
         </div>
@@ -342,7 +340,7 @@ export function DeveloperPermissionsPane(): React.JSX.Element {
         </Button>
       </div>
 
-      <div className="divide-border/60 border-border/60 divide-y border">
+      <div className="divide-border/60 border-border/60 divide-y rounded-lg border">
         {PERMISSIONS.map((permission) => {
           const status = stateById.get(permission.id)
           const pending = pendingId === permission.id
@@ -356,7 +354,7 @@ export function DeveloperPermissionsPane(): React.JSX.Element {
                     <span className="text-sm font-medium">{permission.label}</span>
                     <span
                       className={cn(
-                        'border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider',
+                        'rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider',
                         statusClass(status)
                       )}
                     >

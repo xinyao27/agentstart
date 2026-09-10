@@ -1,4 +1,4 @@
-import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@agentstart/protocol/terminal/quick-commands'
 import type { Dispatch, SetStateAction } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Input } from '~renderer/ui/input'

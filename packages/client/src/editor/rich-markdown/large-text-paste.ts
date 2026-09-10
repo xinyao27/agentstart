@@ -7,9 +7,9 @@ import {
   measureTextControlPasteByteLengthWithYield
 } from '~renderer/keyboard-input/paste/write'
 
-export const RICH_MARKDOWN_PASTE_DIRECT_MAX_BYTES = 64 * 1024
-export const RICH_MARKDOWN_PASTE_CHUNK_MAX_BYTES = 16 * 1024
-export const RICH_MARKDOWN_PASTE_MAX_BYTES = 16 * 1024 * 1024
+const RICH_MARKDOWN_PASTE_DIRECT_MAX_BYTES = 64 * 1024
+const RICH_MARKDOWN_PASTE_CHUNK_MAX_BYTES = 16 * 1024
+const RICH_MARKDOWN_PASTE_MAX_BYTES = 16 * 1024 * 1024
 
 type RichMarkdownLargeTextPasteOptions = {
   directMaxBytes?: number
@@ -22,7 +22,7 @@ type RichMarkdownLargeTextPasteOptions = {
   htmlTextOverride?: string
 }
 
-export type RichMarkdownLargeTextPasteResult =
+type RichMarkdownLargeTextPasteResult =
   | { status: 'ignored'; reason: 'no-editor' | 'empty' | 'small' | 'already-handled' }
   | { status: 'handled'; chunksWritten: number; byteLength: number }
   | { status: 'rejected'; reason: 'target-unavailable' | 'too-large'; byteLength: number }

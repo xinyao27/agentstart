@@ -1,1 +1,1 @@
-export { isWorkItemLookupText } from '@yiru/protocol/hosted-review/links/lookup-text'
+export { isWorkItemLookupText } from '@agentstart/protocol/hosted-review/links/lookup-text'

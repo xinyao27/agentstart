@@ -1,6 +1,6 @@
-import { TerminalMultiplexOpcode } from '@yiru/protocol/terminal-multiplex/frame'
-import { encodeTerminalMultiplexJson } from '@yiru/protocol/terminal-multiplex/json'
-import type { TerminalMultiplexRecoveryEffect } from '@yiru/protocol/terminal-multiplex/recovery'
+import { TerminalMultiplexOpcode } from '@agentstart/protocol/terminal-multiplex/frame'
+import { encodeTerminalMultiplexJson } from '@agentstart/protocol/terminal-multiplex/json'
+import type { TerminalMultiplexRecoveryEffect } from '@agentstart/protocol/terminal-multiplex/recovery'
 
 import type { RemoteTerminalDeliveryOptions } from './types'
 

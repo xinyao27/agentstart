@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+// Why: writeback launches an agent on the worktree's own host (local, WSL, or SSH), so every rpc
+// is environment-allowed rather than local-only.
+service BrowserWritebackService {
+  rpc ApplyColor(BrowserWritebackApplyColorRequest) returns (BrowserWritebackApplyColorResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ApplyCss(BrowserWritebackApplyCssRequest) returns (BrowserWritebackApplyCssResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc LocateElement(BrowserWritebackLocateElementRequest)
+      returns (BrowserWritebackLocateElementResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RecordVerification(BrowserWritebackRecordVerificationRequest)
+      returns (BrowserWritebackRecordVerificationResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message BrowserWritebackTarget {
+  string project_id = 1;
+  string worktree_id = 2;
+}
+
+message BrowserWritebackApplyColorRequest {
+  BrowserWritebackTarget target = 1;
+  string color = 2;
+  optional string intent = 3;
+}
+message BrowserWritebackApplyColorResponse { string terminal_handle = 1; }
+
+message BrowserWritebackCssChange {
+  string after = 1;
+  string before = 2;
+  string style_sheet_url = 3;
+}
+message BrowserWritebackApplyCssRequest {
+  BrowserWritebackTarget target = 1;
+  // Why: bounded at 32 entries, matching the legacy per-request CSS-change cap.
+  repeated BrowserWritebackCssChange changes = 2;
+  string page_url = 3;
+}
+message BrowserWritebackApplyCssResponse { string terminal_handle = 1; }
+
+message BrowserWritebackElementEvidence {
+  optional int64 column = 1;
+  optional string component_name = 2;
+  optional string file_name = 3;
+  optional int64 line = 4;
+}
+message BrowserWritebackStyleEntry {
+  string name = 1;
+  string value = 2;
+}
+message BrowserWritebackLocateElementRequest {
+  BrowserWritebackTarget target = 1;
+  BrowserWritebackElementEvidence evidence = 2;
+  string outer_html = 3;
+  string page_url = 4;
+  string selector = 5;
+  // Why: bounded at 64 entries, matching the legacy computed-style property cap.
+  repeated BrowserWritebackStyleEntry styles = 6;
+}
+message BrowserWritebackLocateElementResponse { string terminal_handle = 1; }
+
+message BrowserWritebackRecordVerificationRequest {
+  BrowserWritebackTarget target = 1;
+  string detail = 2;
+  string page_url = 3;
+  bool success = 4;
+  string terminal_handle = 5;
+}
+message BrowserWritebackRecordVerificationResponse { int64 event_id = 1; }

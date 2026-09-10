@@ -23,7 +23,7 @@ export async function prepareReleaseCandidate(options) {
     ),
     abortPeersOnFailure(
       downloadBoundedBytes(
-        `${options.releaseBase}/yiru-checksums.txt`,
+        `${options.releaseBase}/agentstart-checksums.txt`,
         MAX_CHECKSUM_BYTES,
         CHECKSUM_DEADLINE_MS,
         options.control

@@ -34,7 +34,7 @@ export type TuiAgentConfig = {
   /** Why: most TUIs need both bracketed-paste enablement and a quiet render
    * window before pasted bytes reliably land in the composer. Codex can use
    * a stronger signal from its own renderer: chat_composer.rs writes the
-   * `›` prompt only when the composer row exists, so Yiru can paste as soon
+   * `›` prompt only when the composer row exists, so AgentStart can paste as soon
    * as that prompt appears after bracketed paste is enabled. */
   draftPasteReadySignal?: DraftPasteReadySignal
   /** Windows Shift+Enter override. Omitted agents keep the legacy Esc+CR path
@@ -80,7 +80,7 @@ export const TUI_AGENT_CONFIG: Record<TuiAgent, TuiAgentConfig> = {
     launchCmd: 'ante',
     expectedProcess: 'ante',
     // Why: `ante --prompt` is Ante's documented headless mode (runs the task
-    // once and exits), so Yiru launches the bare interactive TUI and injects
+    // once and exits), so AgentStart launches the bare interactive TUI and injects
     // the composed prompt after startup to keep the hosted session alive.
     promptInjectionMode: 'stdin-after-start'
   },
@@ -119,14 +119,14 @@ export const TUI_AGENT_CONFIG: Record<TuiAgent, TuiAgentConfig> = {
     expectedProcess: 'pi',
     promptInjectionMode: 'argv',
     // Why: the installed Pi overlay reads this on session_start and seeds the editor.
-    draftPromptEnvVar: 'YIRU_PI_PREFILL'
+    draftPromptEnvVar: 'AGENTSTART_PI_PREFILL'
   },
   omp: {
     detectCmd: 'omp',
     launchCmd: 'omp',
     expectedProcess: 'omp',
     promptInjectionMode: 'argv',
-    draftPromptEnvVar: 'YIRU_OMP_PREFILL'
+    draftPromptEnvVar: 'AGENTSTART_OMP_PREFILL'
   },
   gemini: {
     detectCmd: 'gemini',
@@ -212,7 +212,7 @@ export const TUI_AGENT_CONFIG: Record<TuiAgent, TuiAgentConfig> = {
     detectCmd: 'command-code',
     // Why: Command Code's documented positional prompt starts the turn, while
     // paste-after-start can leave the prompt sitting in the composer. `--trust`
-    // mirrors the preflight trust behavior Yiru applies to other first-run
+    // mirrors the preflight trust behavior AgentStart applies to other first-run
     // TUIs so launch prompts do not consume the task text.
     launchCmd: 'command-code --trust',
     expectedProcess: 'command-code',
@@ -244,7 +244,7 @@ export const TUI_AGENT_CONFIG: Record<TuiAgent, TuiAgentConfig> = {
     launchCmd: 'droid',
     expectedProcess: 'droid',
     promptInjectionMode: 'argv',
-    // Why: Droid decodes CSI-u on Windows and treats Yiru's legacy Esc+CR
+    // Why: Droid decodes CSI-u on Windows and treats AgentStart's legacy Esc+CR
     // fallback as plain Enter, which submits instead of inserting a newline.
     windowsShiftEnterEncoding: 'csi-u'
   },
@@ -281,7 +281,7 @@ export const TUI_AGENT_CONFIG: Record<TuiAgent, TuiAgentConfig> = {
   hermes: {
     detectCmd: 'hermes',
     // Why: bare `hermes` opens the classic REPL in recent Hermes releases;
-    // `--tui` starts the full-screen agent UI Yiru is designed to host.
+    // `--tui` starts the full-screen agent UI AgentStart is designed to host.
     launchCmd: 'hermes --tui',
     expectedProcess: 'hermes',
     // Why: Hermes owns prompt delivery through its startup-query contract,
@@ -299,9 +299,9 @@ export const TUI_AGENT_CONFIG: Record<TuiAgent, TuiAgentConfig> = {
     launchCmd: 'copilot',
     expectedProcess: 'copilot',
     // Why: `copilot --prompt <text>` runs non-interactively and exits on
-    // completion, which would kill the TUI session Yiru is hosting.
+    // completion, which would kill the TUI session AgentStart is hosting.
     // `-i/--interactive <prompt>` starts an interactive session with the
-    // initial prompt pre-executed — the behavior Yiru needs.
+    // initial prompt pre-executed — the behavior AgentStart needs.
     promptInjectionMode: 'flag-interactive',
     // Why: Copilot's first-launch trust menu used to swallow our bracketed
     // paste. Pre-appending the workspace path to `trustedFolders` in
@@ -328,7 +328,7 @@ export const TUI_AGENT_CONFIG: Record<TuiAgent, TuiAgentConfig> = {
     launchCmd: 'devin',
     expectedProcess: 'devin',
     // Why: `devin -- <prompt>` auto-submits immediately (docs.devin.ai/cli).
-    // `stdin-after-start` starts the REPL with no argv prompt; Yiru then sends
+    // `stdin-after-start` starts the REPL with no argv prompt; AgentStart then sends
     // `followupPrompt` to the PTY as plain input + Enter after startup (not
     // bracketed paste). Use `draftPrompt` / agent-paste-draft for review-before-send.
     promptInjectionMode: 'stdin-after-start'

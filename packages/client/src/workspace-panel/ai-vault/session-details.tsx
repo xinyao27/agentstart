@@ -62,7 +62,7 @@ export function SessionInlineDetails({
   return (
     <div
       id={id}
-      className="border-sidebar-border/80 bg-background/50 mt-2 overflow-hidden border"
+      className="border-sidebar-border/80 bg-background/50 mt-2 overflow-hidden rounded-lg border"
       onPointerDown={(event) => event.stopPropagation()}
       onClick={(event) => event.stopPropagation()}
       onDoubleClick={(event) => event.stopPropagation()}
@@ -237,7 +237,7 @@ function ConversationTurnCard({
   return (
     <div
       className={cn(
-        'border px-2.5 py-2',
+        'rounded-md border px-2.5 py-2',
         isUserTurn
           ? 'border-border/70 bg-foreground/[0.04]'
           : 'border-sidebar-border/70 bg-sidebar-accent/25'
@@ -314,7 +314,7 @@ function WorktreePathHint({
 
 function SessionDetailEmptyState({ message }: { message: string }): React.JSX.Element {
   return (
-    <div className="border-sidebar-border/80 text-muted-foreground border border-dashed px-2.5 py-2 text-[11px] leading-4">
+    <div className="border-sidebar-border/80 text-muted-foreground rounded-md border border-dashed px-2.5 py-2 text-[11px] leading-4">
       {message}
     </div>
   )

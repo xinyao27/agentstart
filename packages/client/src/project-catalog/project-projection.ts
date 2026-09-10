@@ -1,7 +1,10 @@
-import { LOCAL_EXECUTION_HOST_ID, toRuntimeExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { projectHostSetupProjectionFromRepos } from '@yiru/protocol/project/setup-projection'
+import {
+  LOCAL_EXECUTION_HOST_ID,
+  toRuntimeExecutionHostId
+} from '@agentstart/protocol/host/identity'
+import type { Project, ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { projectHostSetupProjectionFromRepos } from '@agentstart/protocol/project/setup-projection'
 import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 
 export type ProjectProjection = {

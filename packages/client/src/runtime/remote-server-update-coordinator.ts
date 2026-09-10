@@ -4,7 +4,7 @@ import {
   UPDATER_PROTOCOL_CAPABILITY,
   type UpdaterCheckOptions,
   type UpdaterSnapshot
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import {
   compareAppVersions,
   isPerfPrereleaseAppVersion,
@@ -24,12 +24,11 @@ import {
 } from './remote-server-update-model'
 import { nextRemoteServerUpdaterSnapshot } from './remote-server-updater-stream'
 
-export { checkingRemoteServerUpdateEntry, DEFAULT_REMOTE_SERVER_UPDATE_TIMING }
+export { checkingRemoteServerUpdateEntry }
 export type {
   RemoteServerUpdateEntry,
   RemoteServerUpdatePhase,
   RemoteServerUpdateRunOptions,
-  RemoteServerUpdateTiming,
   RemoteServerUpdateTransport
 } from './remote-server-update-model'
 

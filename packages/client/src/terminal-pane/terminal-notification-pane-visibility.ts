@@ -1,5 +1,5 @@
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
 
 type NotificationPaneVisibilityState = {
   activeWorktreeId: string | null
@@ -7,7 +7,7 @@ type NotificationPaneVisibilityState = {
   terminalLayoutsByTabId?: Record<string, TerminalLayoutSnapshot>
 }
 
-export function isYiruWindowForegroundFocused(): boolean {
+export function isAgentStartWindowForegroundFocused(): boolean {
   if (typeof document === 'undefined') {
     return true
   }
@@ -19,7 +19,7 @@ export function isVisibleForegroundPaneKey(
   worktreeId: string,
   paneKey: string
 ): boolean {
-  if (!isYiruWindowForegroundFocused() || state.activeWorktreeId !== worktreeId) {
+  if (!isAgentStartWindowForegroundFocused() || state.activeWorktreeId !== worktreeId) {
     return false
   }
 

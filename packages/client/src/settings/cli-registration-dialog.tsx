@@ -54,11 +54,11 @@ export function CliRegistrationDialog({
             {isEnabled
               ? translate(
                   'auto.components.settings.CliSection.a030816e3e',
-                  'This removes the shell command symlink. Yiru itself remains installed.'
+                  'This removes the shell command symlink. AgentStart itself remains installed.'
                 )
               : translate(
                   'auto.components.settings.CliSection.aa6536977e',
-                  'Yiru will register {{value0}} so the command works from your terminal.',
+                  'AgentStart will register {{value0}} so the command works from your terminal.',
                   { value0: commandPath ?? commandName }
                 )}
           </DialogDescription>
@@ -66,7 +66,7 @@ export function CliRegistrationDialog({
         {commandPath ? (
           <p className="text-muted-foreground text-xs">
             {translate('auto.components.settings.CliSection.a4aafe46e3', 'Target path:')}{' '}
-            <code className="bg-muted px-1 py-0.5 text-[11px]">{commandPath}</code>
+            <code className="bg-muted rounded px-1 py-0.5 text-[11px]">{commandPath}</code>
           </p>
         ) : null}
         <DialogFooter>

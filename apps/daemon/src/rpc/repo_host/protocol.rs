@@ -1,5 +1,5 @@
-use yiru_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     ShellRepoHostReorderStatus, ShellRepoHostRevisionConflict,
     ShellRepoHostServiceCloneAbortRequest, ShellRepoHostServiceCloneAbortedResponse,
     ShellRepoHostServiceDefaultCreateProjectParentResponse,
@@ -8,7 +8,7 @@ use yiru_protocol::runtime::v1::{
     ShellRepoHostServiceRemoveForHostRequest, ShellRepoHostServiceRemovedForHostResponse,
     ShellRepoHostServiceReorderForHostRequest, ShellRepoHostServiceReorderedForHostResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::projects::ProjectCatalogError;
 use crate::repo_host::RepoHostError;
@@ -153,7 +153,7 @@ fn repo_host_status(error: RepoHostError) -> Status {
             code: StatusCode::Aborted as i32,
             message: "workspaceRevisionConflict".to_owned(),
             details: vec![ErrorDetail {
-                type_name: "yiru.runtime.v1.ShellRepoHostRevisionConflict".to_owned(),
+                type_name: "agentstart.runtime.v1.ShellRepoHostRevisionConflict".to_owned(),
                 value: encode(&ShellRepoHostRevisionConflict {
                     expected_revision: *expected_revision,
                     actual_revision: *actual_revision,

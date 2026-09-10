@@ -186,6 +186,27 @@ impl TerminalState {
         removed.into_iter().map(|(handle, _)| handle).collect()
     }
 
+    pub(super) fn remove_worktree(&self, host_id: Option<&str>, worktree_id: &str) -> Vec<String> {
+        let mut data = lock(&self.data);
+        let removed = data
+            .records
+            .iter()
+            .filter(|(_, record)| {
+                record.host_id.as_deref() == host_id && record.worktree_id == worktree_id
+            })
+            .map(|(handle, record)| (handle.clone(), record.pty_id.clone()))
+            .collect::<Vec<_>>();
+        for (handle, pty_id) in &removed {
+            data.records.remove(handle);
+            if data.handles_by_pty.get(pty_id) == Some(handle) {
+                data.handles_by_pty.remove(pty_id);
+            }
+        }
+        data.disconnected_order
+            .retain(|handle| !removed.iter().any(|(removed, _)| removed == handle));
+        removed.into_iter().map(|(handle, _)| handle).collect()
+    }
+
     pub(super) fn with<T>(
         &self,
         handle: &str,

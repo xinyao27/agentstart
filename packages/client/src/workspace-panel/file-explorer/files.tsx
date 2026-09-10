@@ -52,7 +52,7 @@ function FileExplorerFiles({
       {/* Why: all tree states keep one drop surface so empty/error views accept imports. */}
       <div
         ref={setExplorerShellElement}
-        data-yiru-explorer-shell
+        data-agentstart-explorer-shell
         data-selected-folder-relative-path={
           interactions.selection.selectedNode?.isDirectory
             ? interactions.selection.selectedNode.relativePath

@@ -3,17 +3,17 @@ import {
   type AgentType,
   type AgentStatusEntry,
   type AgentStatusOrchestrationContext
-} from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/status-records'
 import {
   makePaneKey,
   parseLegacyNumericPaneKey,
   parsePaneKey
-} from '@yiru/protocol/terminal/pane-identity'
+} from '@agentstart/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/protocol/workspace/session'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/workspace/session'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
 import type { RetainedAgentEntry } from '~renderer/agent/status-state/slice'
 import { resolveCompatibleAgentTypeForOwner } from '~renderer/agent/title/owner'

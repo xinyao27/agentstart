@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import React from 'react'
 import { lazyWithRetry as lazy } from '~renderer/application-shell/lazy-with-retry'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'

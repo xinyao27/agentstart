@@ -51,7 +51,7 @@ export function getRichMarkdownPlaceholder({
   return variant ? toggleHeadingPlaceholder(variant) : TOGGLE_TEXT_PLACEHOLDER
 }
 
-export function moveDetailsSummarySelectionToContent(editor: Editor): boolean {
+function moveDetailsSummarySelectionToContent(editor: Editor): boolean {
   const { state, view } = editor
   const { selection } = state
   const { $from, empty } = selection
@@ -90,7 +90,7 @@ export function moveDetailsSummarySelectionToContent(editor: Editor): boolean {
   return true
 }
 
-export function moveFromEmptyDetailsBodyToSummary(editor: Editor): boolean {
+function moveFromEmptyDetailsBodyToSummary(editor: Editor): boolean {
   const { state, view } = editor
   const { selection } = state
   const { $from, empty } = selection
@@ -141,7 +141,7 @@ export function moveFromEmptyDetailsBodyToSummary(editor: Editor): boolean {
   return true
 }
 
-export function exitEmptyDetailsBody(editor: Editor): boolean {
+function exitEmptyDetailsBody(editor: Editor): boolean {
   const { state, view } = editor
   const { selection } = state
   const { $from, empty } = selection
@@ -198,7 +198,7 @@ export function exitEmptyDetailsBody(editor: Editor): boolean {
   return true
 }
 
-const YiruDetails = Details.extend({
+const AgentStartDetails = Details.extend({
   // Why: details summary Enter must run before StarterKit's generic paragraph
   // splitting so typing a toggle title then pressing Enter moves into the body.
   priority: 1000,
@@ -208,10 +208,11 @@ const YiruDetails = Details.extend({
       ...this.parent?.(),
       variant: {
         default: null,
-        parseHTML: (element) => parseToggleHeadingVariant(element.getAttribute('data-yiru-toggle')),
+        parseHTML: (element) =>
+          parseToggleHeadingVariant(element.getAttribute('data-agentstart-toggle')),
         renderHTML: ({ variant }) => {
           const parsed = parseToggleHeadingVariant(variant)
-          return parsed ? { 'data-yiru-toggle': parsed } : {}
+          return parsed ? { 'data-agentstart-toggle': parsed } : {}
         }
       }
     }
@@ -286,7 +287,7 @@ const YiruDetails = Details.extend({
   }
 })
 
-const YiruDetailsContent = DetailsContent.extend({
+const AgentStartDetailsContent = DetailsContent.extend({
   // Why: detailsContent's double-Enter escape must run before StarterKit's
   // generic paragraph split, otherwise users can get stuck inside a toggle.
   priority: 1000,
@@ -306,15 +307,15 @@ const YiruDetailsContent = DetailsContent.extend({
   }
 })
 
-export function createYiruDetailsExtensions(): AnyExtension[] {
+export function createAgentStartDetailsExtensions(): AnyExtension[] {
   return [
-    YiruDetails.configure({
+    AgentStartDetails.configure({
       persist: true,
       HTMLAttributes: {
-        class: 'yiru-details'
+        class: 'agentstart-details'
       }
     }),
     DetailsSummary,
-    YiruDetailsContent
+    AgentStartDetailsContent
   ]
 }

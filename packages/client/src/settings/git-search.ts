@@ -24,7 +24,7 @@ export const getGitPaneSearchEntries = createLocalizedCatalog(() => [
     ),
     description: translate(
       'auto.components.settings.git.search.0e993bf00f',
-      'When you create a workspace, Yiru refreshes the remote base and safely fast-forwards your matching local branch, such as main or master. This keeps commands like git diff main...HEAD from comparing against stale history. Yiru skips the update if that branch has uncommitted changes or local-only commits.'
+      'When you create a workspace, AgentStart refreshes the remote base and safely fast-forwards your matching local branch, such as main or master. This keeps commands like git diff main...HEAD from comparing against stale history. AgentStart skips the update if that branch has uncommitted changes or local-only commits.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.git.search.e3e9adde59', 'main'),
@@ -124,10 +124,10 @@ export const getGitPaneSearchEntries = createLocalizedCatalog(() => [
   },
   ...getAutoRenameBranchSearchEntries(),
   {
-    title: translate('auto.components.settings.git.search.bc7d9f69ce', 'Yiru Attribution'),
+    title: translate('auto.components.settings.git.search.bc7d9f69ce', 'AgentStart Attribution'),
     description: translate(
       'auto.components.settings.git.search.118c23484b',
-      'Add Yiru attribution to commits and PRs.'
+      'Add AgentStart attribution to commits and PRs.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.git.search.d088806071', 'github'),
@@ -136,7 +136,7 @@ export const getGitPaneSearchEntries = createLocalizedCatalog(() => [
       ...translateSearchKeyword('auto.components.settings.git.search.61f9f5d1fc', 'co-author'),
       ...translateSearchKeyword('auto.components.settings.git.search.8461c908ae', 'coauthored'),
       ...translateSearchKeyword('auto.components.settings.git.search.1b93c1143c', 'attribution'),
-      ...translateSearchKeyword('auto.components.settings.git.search.61eab13403', 'yiru')
+      ...translateSearchKeyword('auto.components.settings.git.search.61eab13403', 'agentstart')
     ]
   }
 ])

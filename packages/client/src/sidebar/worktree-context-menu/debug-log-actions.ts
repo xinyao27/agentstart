@@ -14,9 +14,9 @@ import { activateAndRevealWorktree } from '~renderer/worktree/activation'
 
 import type { WorktreeContextMenuState } from './state'
 
-// Why: the yiru-debug skill instructs agents to write NDJSON logs under this
-// Yiru-reserved worktree directory; the menu reads and clears the same place.
-const WORKTREE_DEBUG_LOG_DIR = '.yiru/debug'
+// Why: the agentstart-debug skill instructs agents to write NDJSON logs under this
+// AgentStart-reserved worktree directory; the menu reads and clears the same place.
+const WORKTREE_DEBUG_LOG_DIR = '.agentstart/debug'
 const MAX_OPENED_DEBUG_LOG_FILES = 10
 
 type OpenDebugLogFile = (file: {

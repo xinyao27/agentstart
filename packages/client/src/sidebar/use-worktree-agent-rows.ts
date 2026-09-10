@@ -22,14 +22,6 @@ import {
   selectRuntimePaneTitlesForWorktree
 } from './worktree-card/status-inputs'
 
-export { buildWorktreeAgentRows } from './worktree-agent-rows'
-export {
-  selectLiveAgentStatusEntriesForWorktree,
-  selectMigrationUnsupportedEntriesForWorktree,
-  selectRuntimeAgentOrchestrationForWorktree,
-  selectRetainedAgentEntriesForWorktree
-} from './worktree-agent-row-selectors'
-
 /**
  * Narrow per-worktree agent row hook used by the WorktreeCard inline agents
  * list. Produces live hook-reported agents plus retained "done" snapshots,

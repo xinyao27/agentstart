@@ -1,17 +1,17 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { setSourceControlActionDefault } from '@yiru/protocol/source-control/action-recipes'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { setSourceControlActionDefault } from '@agentstart/protocol/source-control/action-recipes'
 import {
   SOURCE_CONTROL_ACTION_IDS,
   type SourceControlActionId
-} from '@yiru/protocol/source-control/ai-actions'
+} from '@agentstart/protocol/source-control/ai-actions'
 import type {
   SourceControlAiSettings,
   SourceControlAiSettingsPatch
-} from '@yiru/protocol/source-control/ai-types'
-import { CUSTOM_AGENT_ID } from '@yiru/protocol/source-control/custom-agent'
-import type { CustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+} from '@agentstart/protocol/source-control/ai-types'
+import { CUSTOM_AGENT_ID } from '@agentstart/protocol/source-control/custom-agent'
+import type { CustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
 import type React from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -186,7 +186,7 @@ export function SourceControlAiActionRecipeDefaults({
         <p className="text-muted-foreground text-xs">
           {translate(
             'auto.components.settings.SourceControlAiActionRecipeDefaults.bf84dea6af',
-            'Use variables only when you want Yiru to inject context. Leave the agent as default to follow your normal agent preference.'
+            'Use variables only when you want AgentStart to inject context. Leave the agent as default to follow your normal agent preference.'
           )}
         </p>
       </div>

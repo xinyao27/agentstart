@@ -7,7 +7,7 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use portable_pty::{ChildKiller, CommandBuilder, MasterPty, PtySize, native_pty_system};
 use tokio::sync::{OwnedSemaphorePermit, Semaphore, mpsc, oneshot};
 
-use super::launch::TerminalLaunch;
+use super::launch::{TERMINAL_ENVIRONMENT, TerminalLaunch};
 use super::model::TerminalProcessInspection;
 use super::snapshot::{TerminalSnapshotProvider, run_model};
 use super::{TerminalSessionError, identity};
@@ -127,7 +127,7 @@ pub(super) async fn spawn(
     // Why: parsing and snapshot serialization are CPU work, so a bounded dedicated lane applies
     // reader backpressure without putting a mutex or blocking work on a Tokio runtime thread.
     spawn_process_thread(
-        &format!("yiru-pty-model-{}", short_id(&pty_id)),
+        &format!("agentstart-pty-model-{}", short_id(&pty_id)),
         move || {
             if model_ready.blocking_recv().is_ok() {
                 run_model(
@@ -144,7 +144,7 @@ pub(super) async fn spawn(
     let (reader_start, reader_ready) = oneshot::channel();
     let reader_snapshot_provider = snapshot_provider.clone();
     spawn_process_thread(
-        &format!("yiru-pty-reader-{}", short_id(&pty_id)),
+        &format!("agentstart-pty-reader-{}", short_id(&pty_id)),
         move || {
             if reader_ready.blocking_recv().is_ok() {
                 run_reader(reader, reader_snapshot_provider.clone());
@@ -155,7 +155,7 @@ pub(super) async fn spawn(
     let (control_start, control_ready) = oneshot::channel();
     let control_snapshot_provider = snapshot_provider.clone();
     spawn_process_thread(
-        &format!("yiru-pty-control-{}", short_id(&pty_id)),
+        &format!("agentstart-pty-control-{}", short_id(&pty_id)),
         move || {
             if control_ready.blocking_recv().is_ok() {
                 run_process_control(ProcessLoop {
@@ -172,7 +172,7 @@ pub(super) async fn spawn(
     let (waiter_start, waiter_ready) = oneshot::channel();
     let waiter_live = live.clone();
     spawn_process_thread(
-        &format!("yiru-pty-waiter-{}", short_id(&pty_id)),
+        &format!("agentstart-pty-waiter-{}", short_id(&pty_id)),
         move || {
             if waiter_ready.blocking_recv().is_ok() {
                 let mut child = child;
@@ -370,7 +370,19 @@ fn open(
     if let Some(cwd) = launch.cwd {
         command.cwd(cwd);
     }
-    command.env("TERM", "xterm-256color");
+    // Why: daemon launchers can suppress color for their own logs, but an interactive terminal
+    // must advertise its own capabilities. Login startup files can still opt out explicitly.
+    command.env_remove("NO_COLOR");
+    for name in ["FORCE_COLOR", "CLICOLOR"] {
+        if std::env::var(name).is_ok_and(|value| value == "0") {
+            command.env_remove(name);
+        }
+    }
+    // Why: these capabilities existed on the original PTY host. Agent CLIs
+    // use them to enable true-color rendering and terminal hyperlinks.
+    for (name, value) in TERMINAL_ENVIRONMENT {
+        command.env(name, value);
+    }
     for (name, value) in launch.env {
         command.env(name, value);
     }

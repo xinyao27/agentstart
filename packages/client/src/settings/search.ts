@@ -1,4 +1,4 @@
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 
 export type SettingsSearchEntry = {
   title: string
@@ -8,7 +8,7 @@ export type SettingsSearchEntry = {
   targetSectionId?: string
 }
 
-export const SETTINGS_SEARCH_QUERY_MAX_BYTES = 2 * 1024
+const SETTINGS_SEARCH_QUERY_MAX_BYTES = 2 * 1024
 const SETTINGS_SEARCH_NO_MATCH_SCORE = 0
 const SETTINGS_SEARCH_EMPTY_QUERY_SCORE = 1
 
@@ -53,7 +53,7 @@ const KEYWORD_SCORE: SettingsSearchScoreTier = {
   substring: 200
 }
 
-export function isSettingsSearchQueryTooLarge(
+function isSettingsSearchQueryTooLarge(
   query: string,
   maxBytes = SETTINGS_SEARCH_QUERY_MAX_BYTES
 ): boolean {

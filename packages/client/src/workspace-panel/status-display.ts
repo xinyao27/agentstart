@@ -1,4 +1,4 @@
-import type { GitFileStatus, GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitFileStatus, GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import { joinPath, normalizeRelativePath } from '~renderer/path'
 
 import { splitPathSegments } from './path-tree'
@@ -30,7 +30,7 @@ const STATUS_PRIORITY: Record<GitFileStatus, number> = {
   copied: 1
 }
 
-export function getDominantStatus(statuses: Iterable<GitFileStatus>): GitFileStatus | null {
+function getDominantStatus(statuses: Iterable<GitFileStatus>): GitFileStatus | null {
   let dominantStatus: GitFileStatus | null = null
   let dominantPriority = -1
 
@@ -93,7 +93,7 @@ export function buildFolderStatusMap(entries: GitStatusEntry[]): Map<string, Git
   )
 }
 
-export function shouldPropagateStatus(status: GitFileStatus): boolean {
+function shouldPropagateStatus(status: GitFileStatus): boolean {
   return status !== 'deleted'
 }
 

@@ -1,5 +1,5 @@
 import {
-  YIRU_EDITOR_FILE_SAVED_EVENT,
+  AGENTSTART_EDITOR_FILE_SAVED_EVENT,
   requestEditorFileSave,
   requestEditorSaveQuiesce,
   type EditorFileSavedDetail
@@ -246,7 +246,7 @@ async function waitForPositiveSave(file: OpenFile, content: string): Promise<voi
       timeout = null
     }
     if (onSaved) {
-      window.removeEventListener(YIRU_EDITOR_FILE_SAVED_EVENT, onSaved as EventListener)
+      window.removeEventListener(AGENTSTART_EDITOR_FILE_SAVED_EVENT, onSaved as EventListener)
       onSaved = null
     }
   }
@@ -263,7 +263,7 @@ async function waitForPositiveSave(file: OpenFile, content: string): Promise<voi
       cleanup()
       resolve()
     }
-    window.addEventListener(YIRU_EDITOR_FILE_SAVED_EVENT, onSaved as EventListener)
+    window.addEventListener(AGENTSTART_EDITOR_FILE_SAVED_EVENT, onSaved as EventListener)
   })
 
   try {

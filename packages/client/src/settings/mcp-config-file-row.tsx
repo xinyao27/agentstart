@@ -73,7 +73,7 @@ export function McpConfigFileRow({ config, onOpen }: McpConfigFileRowProps): Rea
         </div>
         <span
           className={cn(
-            'shrink-0 border px-1.5 py-0.5 text-[10px] font-medium',
+            'shrink-0 rounded-full border px-1.5 py-0.5 text-[10px] font-medium',
             statusClassName(config)
           )}
         >
@@ -95,12 +95,12 @@ export function McpConfigFileRow({ config, onOpen }: McpConfigFileRowProps): Rea
           {config.servers.map((server) => (
             <div
               key={server.name}
-              className="border-border/40 bg-background/50 grid grid-cols-[minmax(0,1fr)_auto] gap-2 border px-2.5 py-1.5"
+              className="border-border/40 bg-background/50 grid grid-cols-[minmax(0,1fr)_auto] gap-2 rounded-md border px-2.5 py-1.5"
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="truncate text-xs font-medium">{server.name}</span>
-                  <span className="bg-muted text-muted-foreground px-1.5 py-0.5 text-[9px] font-medium tracking-wider uppercase">
+                  <span className="bg-muted text-muted-foreground rounded-full px-1.5 py-0.5 text-[9px] font-medium tracking-wider uppercase">
                     {server.transport}
                   </span>
                 </div>

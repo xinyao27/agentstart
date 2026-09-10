@@ -28,7 +28,7 @@ import {
   FilesServiceSearchResponseSchema,
   FilesServiceStatRequestSchema,
   FilesServiceStatResponseSchema
-} from '../../generated/yiru/runtime/v1/files_pb.js'
+} from '../../generated/agent_start/runtime/v1/files_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from '../transport.js'
 import { bytesToBase64 } from './base64.js'
 import {

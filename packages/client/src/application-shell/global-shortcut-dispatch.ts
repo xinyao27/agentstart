@@ -3,7 +3,7 @@ import {
   type KeybindingActionId,
   type KeybindingContext,
   type PhysicalModifierToken
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 
 import { getSelectedTextForFileSearch } from '../editor/file-search-selection'
 import { isEditableTarget } from '../keyboard-input/editable-target'
@@ -70,7 +70,10 @@ export function dispatchGlobalShortcut(
       terminalShortcutPolicy: state.terminalShortcutPolicy
     })
   const notifyTerminalCapture = (actionId: KeybindingActionId): void => {
-    if (context === 'terminal' && (state.terminalShortcutPolicy ?? 'yiru-first') === 'yiru-first') {
+    if (
+      context === 'terminal' &&
+      (state.terminalShortcutPolicy ?? 'agentstart-first') === 'agentstart-first'
+    ) {
       showTerminalShortcutCaptureNotification({
         actionId,
         platform: shortcutPlatform,

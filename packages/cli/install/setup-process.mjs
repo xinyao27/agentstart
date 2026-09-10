@@ -21,7 +21,7 @@ export function createInstallControl() {
       }
       control.receivedSignal = signal
       for (const controller of control.controllers) {
-        controller.abort(new Error(`Yiru installation interrupted by ${signal}.`))
+        controller.abort(new Error(`AgentStart installation interrupted by ${signal}.`))
       }
       if (control.setupChild) {
         terminateSetupProcess(control.setupChild, signal, control)
@@ -68,13 +68,13 @@ export async function runRequiredSetup(executablePath, argumentsList, control) {
     child.once('exit', (code, signal) =>
       settle(() => {
         if (control.receivedSignal) {
-          reject(new Error(`Yiru setup interrupted by ${control.receivedSignal}.`))
+          reject(new Error(`AgentStart setup interrupted by ${control.receivedSignal}.`))
         } else if (control.setupTimedOut) {
-          reject(new Error(`Yiru setup exceeded ${SETUP_DEADLINE_MS} milliseconds.`))
+          reject(new Error(`AgentStart setup exceeded ${SETUP_DEADLINE_MS} milliseconds.`))
         } else if (code === 0) {
           resolvePromise()
         } else {
-          reject(new Error(`Yiru setup failed with ${signal || `exit ${code}`}.`))
+          reject(new Error(`AgentStart setup failed with ${signal || `exit ${code}`}.`))
         }
       })
     )

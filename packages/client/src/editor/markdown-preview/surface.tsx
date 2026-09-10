@@ -18,7 +18,7 @@ import type { selectMarkdownTableOfContents } from '../markdown-toc-visibility-g
 const SEARCH_BUTTON_CLASS_NAME = 'size-[22px] text-muted-foreground hover:text-foreground'
 const REVIEW_ICON_BUTTON_CLASS_NAME =
   'inline-flex size-[26px] items-center justify-center border border-transparent hover:border-border/82 aria-expanded:border-border/82 aria-expanded:bg-accent aria-expanded:text-foreground'
-export type MarkdownPreviewSearchSurface = {
+type MarkdownPreviewSearchSurface = {
   activeMatchIndex: number
   close: () => void
   focusPreview: () => void
@@ -30,7 +30,7 @@ export type MarkdownPreviewSearchSurface = {
   setQuery: (query: string) => void
 }
 
-export type MarkdownPreviewReviewSurface = {
+type MarkdownPreviewReviewSurface = {
   count: number
   isCopied: boolean
   isVisible: boolean

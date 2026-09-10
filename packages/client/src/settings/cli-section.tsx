@@ -1,11 +1,11 @@
-import type { CliInstallStatus } from '@yiru/protocol/cli-values'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { CliInstallStatus } from '@agentstart/protocol/cli-values'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import {
-  YIRU_CLI_SKILL_INSTALL_COMMAND,
-  YIRU_CLI_SKILL_NAME,
-  YIRU_CLI_SKILL_UPDATE_COMMAND
+  AGENTSTART_CLI_SKILL_INSTALL_COMMAND,
+  AGENTSTART_CLI_SKILL_NAME,
+  AGENTSTART_CLI_SKILL_UPDATE_COMMAND
 } from '~renderer/agent/feature-install-commands'
 import { translate } from '~renderer/i18n/i18n'
 import { FolderOpen, ArrowClockwise as RefreshCw } from '~renderer/icons/hugeicons'
@@ -20,8 +20,8 @@ import {
 import { shellClient } from '~renderer/runtime/shell-client'
 import {
   AGENT_SKILL_CLI_PREREQUISITE_NOTICE,
-  ensureYiruCliAvailableForAgentSkillTerminal,
-  isYiruCliAvailableOnPath
+  ensureAgentStartCliAvailableForAgentSkillTerminal,
+  isAgentStartCliAvailableOnPath
 } from '~renderer/skills/agent-cli-prerequisite'
 import {
   GLOBAL_AGENT_SKILL_SOURCE_KINDS,
@@ -62,19 +62,19 @@ function getRevealLabel(platform: string): string {
 
 function getInstallDescription(platform: string): string {
   if (platform === 'darwin') {
-    return 'Register `yiru` in /usr/local/bin.'
+    return 'Register `agentstart` in /usr/local/bin.'
   }
   if (platform === 'linux') {
-    return 'Register `yiru` in ~/.local/bin.'
+    return 'Register `agentstart` in ~/.local/bin.'
   }
   if (platform === 'win32') {
-    return 'Register `yiru` in your user PATH.'
+    return 'Register `agentstart` in your user PATH.'
   }
   return 'CLI registration is not yet available on this platform.'
 }
 
 function getFallbackCommandName(): string {
-  return 'yiru'
+  return 'agentstart'
 }
 
 export function CliSection({
@@ -97,16 +97,16 @@ export function CliSection({
     loading: cliSkillLoading,
     error: cliSkillError,
     refresh: refreshCliSkill
-  } = useInstalledAgentSkill(YIRU_CLI_SKILL_NAME, {
+  } = useInstalledAgentSkill(AGENTSTART_CLI_SKILL_NAME, {
     discoveryTarget: cliSkillDiscoveryTarget,
     sourceKinds: GLOBAL_AGENT_SKILL_SOURCE_KINDS
   })
   const cliSkillInstallCommand = buildSkillCommandForRuntime(
-    YIRU_CLI_SKILL_INSTALL_COMMAND,
+    AGENTSTART_CLI_SKILL_INSTALL_COMMAND,
     agentRuntime
   )
   const cliSkillUpdateCommand = buildSkillCommandForRuntime(
-    YIRU_CLI_SKILL_UPDATE_COMMAND,
+    AGENTSTART_CLI_SKILL_UPDATE_COMMAND,
     agentRuntime
   )
   const cliSkillTerminalShellOverride = getAgentSkillTerminalShellOverride(
@@ -229,17 +229,17 @@ export function CliSection({
     <section className="space-y-4" data-settings-section="cli">
       <div className="space-y-1">
         <h2 className="text-sm font-semibold">
-          {translate('auto.components.settings.CliSection.c5c0f2641d', 'Yiru CLI')}
+          {translate('auto.components.settings.CliSection.c5c0f2641d', 'AgentStart CLI')}
         </h2>
         <p className="text-muted-foreground text-xs">
           {translate(
             'auto.components.settings.CliSection.6930feda9e',
-            'Use Yiru from your terminal to open the app, manage worktrees, and interact with Yiru terminals.'
+            'Use AgentStart from your terminal to open the app, manage worktrees, and interact with AgentStart terminals.'
           )}
         </p>
       </div>
 
-      <div className="border-border/60 bg-card/50 space-y-3 border p-4">
+      <div className="border-border/60 bg-card/50 space-y-3 rounded-xl border p-4">
         <div className="flex items-center justify-between gap-4">
           <div className="space-y-0.5">
             <Label>
@@ -291,7 +291,7 @@ export function CliSection({
         {status?.commandPath ? (
           <p className="text-muted-foreground text-xs">
             {translate('auto.components.settings.CliSection.15eaad0d31', 'Command path:')}{' '}
-            <code className="bg-muted px-1 py-0.5 text-[11px]">{status.commandPath}</code>
+            <code className="bg-muted rounded px-1 py-0.5 text-[11px]">{status.commandPath}</code>
           </p>
         ) : null}
 
@@ -343,7 +343,7 @@ export function CliSection({
               <p className="text-muted-foreground text-xs">
                 {translate(
                   'auto.components.settings.CliSection.36a6f919ba',
-                  'Give agents Yiru-aware workspace, terminal, and progress workflows.'
+                  'Give agents AgentStart-aware workspace, terminal, and progress workflows.'
                 )}
               </p>
             </div>
@@ -354,7 +354,7 @@ export function CliSection({
               title={translate('auto.components.settings.CliSection.6053cf736c', 'CLI skill')}
               description={translate(
                 'auto.components.settings.CliSection.e8012c03a1',
-                'Enables agents to use Yiru workspace, terminal, and progress commands.'
+                'Enables agents to use AgentStart workspace, terminal, and progress commands.'
               )}
               command={cliSkillInstallCommand}
               installedCommand={cliSkillUpdateCommand}
@@ -367,16 +367,18 @@ export function CliSection({
               error={cliSkillError}
               preInstallNotice={AGENT_SKILL_CLI_PREREQUISITE_NOTICE}
               getPrerequisiteStatus={getCliSkillPrerequisiteStatus}
-              isPrerequisiteAvailable={isYiruCliAvailableOnPath}
+              isPrerequisiteAvailable={isAgentStartCliAvailableOnPath}
               onBeforeOpenTerminal={async () => {
                 await (agentRuntime.runtime === 'wsl'
                   ? ensureWslCliAvailableForAgentSkillTerminal(agentRuntime)
-                  : ensureYiruCliAvailableForAgentSkillTerminal({
+                  : ensureAgentStartCliAvailableForAgentSkillTerminal({
                       onStatusChange: handleStatusChange
                     }))
               }}
               onRecheck={refreshCliSkill}
-              freshnessSkillName={agentRuntime.runtime === 'host' ? YIRU_CLI_SKILL_NAME : undefined}
+              freshnessSkillName={
+                agentRuntime.runtime === 'host' ? AGENTSTART_CLI_SKILL_NAME : undefined
+              }
             />
           </div>
         ) : null}

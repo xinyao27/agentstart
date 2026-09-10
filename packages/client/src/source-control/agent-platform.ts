@@ -1,6 +1,6 @@
-import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
-import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
-import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
+import { isWindowsAbsolutePathLike } from '@agentstart/protocol/host/path'
+import { isWslUncPath } from '@agentstart/protocol/host/wsl-paths'
+import type { ProjectExecutionRuntimeResolution } from '@agentstart/protocol/project/runtime-preference'
 
 import { CLIENT_PLATFORM } from '../new-workspace/workspace-creation'
 

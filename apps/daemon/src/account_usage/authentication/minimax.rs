@@ -8,8 +8,8 @@ use crate::transport::secure_file;
 use super::AccountsError;
 
 const COOKIE_BYTE_LIMIT: usize = 64 * 1024;
-const COOKIE_ENVELOPE_PREFIX: &str = "yiru-minimax-cookie:v1:";
-const COOKIE_PLAINTEXT_PREFIX: &str = "yiru-minimax-cookie:v1:plaintext:";
+const COOKIE_ENVELOPE_PREFIX: &str = "agentstart-minimax-cookie:v1:";
+const COOKIE_PLAINTEXT_PREFIX: &str = "agentstart-minimax-cookie:v1:plaintext:";
 
 pub(crate) fn status() -> Result<bool, AccountsError> {
     let path = cookie_path()?;
@@ -81,9 +81,9 @@ pub(crate) fn clear() -> Result<bool, AccountsError> {
 }
 
 fn cookie_path() -> Result<PathBuf, AccountsError> {
-    crate::paths::resolve_local_home_path()
-        .map(|home| home.join(".yiru").join("minimax-session-cookie.enc"))
-        .ok_or(AccountsError::InvalidState)
+    crate::paths::resolve_default_user_data_path()
+        .map(|root| root.join("minimax-session-cookie.enc"))
+        .map_err(|_| AccountsError::InvalidState)
 }
 
 fn looks_like_cookie_header(value: &str) -> bool {

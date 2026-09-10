@@ -1,5 +1,5 @@
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
-import type { Tab, TabContentType, TabGroup } from '@yiru/protocol/workspace/tabs'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
+import type { Tab, TabContentType, TabGroup } from '@agentstart/protocol/workspace/tabs'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 
 export function findTabAndWorktree(
@@ -81,7 +81,7 @@ export function ensureGroup(
 }
 
 /** Pick the nearest neighbor in visual order (right first, then left). */
-export function pickNeighbor(tabOrder: string[], closingTabId: string): string | null {
+function pickNeighbor(tabOrder: string[], closingTabId: string): string | null {
   const idx = tabOrder.indexOf(closingTabId)
   if (idx === -1) {
     return null

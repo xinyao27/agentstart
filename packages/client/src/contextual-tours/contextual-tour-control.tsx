@@ -17,7 +17,7 @@ export function ContextualTourControl({
   }
 }
 
-export function toggleAutoRenameBranchFromWork(args: {
+function toggleAutoRenameBranchFromWork(args: {
   enabled: boolean
   updateSettings: (settings: { autoRenameBranchFromWork: boolean }) => void | Promise<unknown>
   dispatchEvent: (event: Event) => void
@@ -34,7 +34,7 @@ function AutoRenameBranchFromWorkControl(): JSX.Element {
   const updateSettings = useAppStore((s) => s.updateSettings)
 
   return (
-    <div className="border-border/70 bg-muted/35 mt-3 border px-3 py-2.5">
+    <div className="border-border/70 bg-muted/35 mt-3 rounded-md border px-3 py-2.5">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
           <div className="text-foreground text-xs font-medium">

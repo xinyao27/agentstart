@@ -1,5 +1,5 @@
-import { clamp01 } from '@yiru/protocol/settings/color-values'
-import { THEME_GRADIENT_OPACITY_RANGE } from '@yiru/protocol/settings/theme-gradient'
+import { clamp01 } from '@agentstart/protocol/settings/color-values'
+import { THEME_GRADIENT_OPACITY_RANGE } from '@agentstart/protocol/settings/theme-gradient'
 import type React from 'react'
 import { useId } from 'react'
 import { translate } from '~renderer/i18n/i18n'

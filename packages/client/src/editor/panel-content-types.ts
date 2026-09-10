@@ -1,4 +1,4 @@
-import type { GitDiffResult } from '@yiru/protocol/git/diff-values'
+import type { GitDiffResult } from '@agentstart/protocol/git/diff-values'
 
 import type { FilePreview } from './file-preview-kind'
 

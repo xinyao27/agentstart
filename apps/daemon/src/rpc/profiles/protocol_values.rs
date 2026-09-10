@@ -1,19 +1,21 @@
 // Why: the profiles authority answers as `serde_json::Value` trees shared with
 // the legacy JSON surface; this is the single place that reads those trees into
 // the typed protobuf wire messages.
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
-    ShellYiruProfilesAvatar, ShellYiruProfilesAvatarKind, ShellYiruProfilesKind,
-    ShellYiruProfilesProfile, ShellYiruProfilesProjectPresence,
-    ShellYiruProfilesServiceCreateResponse, ShellYiruProfilesServiceFindResponse,
-    ShellYiruProfilesServiceListResponse, ShellYiruProfilesServiceSwitchResponse,
-    ShellYiruProfilesServiceTransferResponse, ShellYiruProfilesSwitchStatus,
-    ShellYiruProfilesTransferMode, ShellYiruProfilesTransferStatus,
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
+    ShellAgentStartProfilesAvatar, ShellAgentStartProfilesAvatarKind, ShellAgentStartProfilesKind,
+    ShellAgentStartProfilesProfile, ShellAgentStartProfilesProjectPresence,
+    ShellAgentStartProfilesServiceCreateResponse, ShellAgentStartProfilesServiceFindResponse,
+    ShellAgentStartProfilesServiceListResponse, ShellAgentStartProfilesServiceSwitchResponse,
+    ShellAgentStartProfilesServiceTransferResponse, ShellAgentStartProfilesSwitchStatus,
+    ShellAgentStartProfilesTransferMode, ShellAgentStartProfilesTransferStatus,
 };
+use serde_json::Value;
 
-pub(super) fn list_value(document: &Value) -> Result<ShellYiruProfilesServiceListResponse, Status> {
-    Ok(ShellYiruProfilesServiceListResponse {
+pub(super) fn list_value(
+    document: &Value,
+) -> Result<ShellAgentStartProfilesServiceListResponse, Status> {
+    Ok(ShellAgentStartProfilesServiceListResponse {
         active_profile_id: text(document.get("activeProfileId")),
         profiles: profile_list(document.get("profiles"))?,
         multi_profile_ui: document.get("multiProfileUi").and_then(Value::as_bool) == Some(true),
@@ -22,8 +24,8 @@ pub(super) fn list_value(document: &Value) -> Result<ShellYiruProfilesServiceLis
 
 pub(super) fn create_value(
     document: &Value,
-) -> Result<ShellYiruProfilesServiceCreateResponse, Status> {
-    Ok(ShellYiruProfilesServiceCreateResponse {
+) -> Result<ShellAgentStartProfilesServiceCreateResponse, Status> {
+    Ok(ShellAgentStartProfilesServiceCreateResponse {
         active_profile_id: text(document.get("activeProfileId")),
         profiles: profile_list(document.get("profiles"))?,
         profile: Some(profile_value(document.get("profile"))?),
@@ -32,11 +34,11 @@ pub(super) fn create_value(
 
 pub(super) fn switch_value(
     document: &Value,
-) -> Result<ShellYiruProfilesServiceSwitchResponse, Status> {
-    Ok(ShellYiruProfilesServiceSwitchResponse {
+) -> Result<ShellAgentStartProfilesServiceSwitchResponse, Status> {
+    Ok(ShellAgentStartProfilesServiceSwitchResponse {
         status: match document.get("status").and_then(Value::as_str) {
-            Some("already-active") => ShellYiruProfilesSwitchStatus::AlreadyActive,
-            Some("relaunching") => ShellYiruProfilesSwitchStatus::Relaunching,
+            Some("already-active") => ShellAgentStartProfilesSwitchStatus::AlreadyActive,
+            Some("relaunching") => ShellAgentStartProfilesSwitchStatus::Relaunching,
             _ => return Err(data_loss("Profile switch answered an unknown status")),
         } as i32,
     })
@@ -44,20 +46,20 @@ pub(super) fn switch_value(
 
 pub(super) fn transfer_value(
     document: &Value,
-) -> Result<ShellYiruProfilesServiceTransferResponse, Status> {
+) -> Result<ShellAgentStartProfilesServiceTransferResponse, Status> {
     let status = match document.get("status").and_then(Value::as_str) {
-        Some("transferred") => ShellYiruProfilesTransferStatus::Transferred,
-        Some("duplicate-target") => ShellYiruProfilesTransferStatus::DuplicateTarget,
+        Some("transferred") => ShellAgentStartProfilesTransferStatus::Transferred,
+        Some("duplicate-target") => ShellAgentStartProfilesTransferStatus::DuplicateTarget,
         _ => return Err(data_loss("Profile transfer answered an unknown status")),
     } as i32;
     let mode = match document.get("mode").and_then(Value::as_str) {
-        Some("move") => ShellYiruProfilesTransferMode::Move,
-        Some("copy") => ShellYiruProfilesTransferMode::Copy,
-        _ => ShellYiruProfilesTransferMode::Unspecified,
+        Some("move") => ShellAgentStartProfilesTransferMode::Move,
+        Some("copy") => ShellAgentStartProfilesTransferMode::Copy,
+        _ => ShellAgentStartProfilesTransferMode::Unspecified,
     } as i32;
-    Ok(ShellYiruProfilesServiceTransferResponse {
+    Ok(ShellAgentStartProfilesServiceTransferResponse {
         status,
-        mode: (mode != ShellYiruProfilesTransferMode::Unspecified as i32).then_some(mode),
+        mode: (mode != ShellAgentStartProfilesTransferMode::Unspecified as i32).then_some(mode),
         source_profile_id: text(document.get("sourceProfileId")),
         target_profile_id: text(document.get("targetProfileId")),
         source_repo_id: text(document.get("sourceRepoId")),
@@ -77,30 +79,32 @@ pub(super) fn transfer_value(
     })
 }
 
-pub(super) fn find_value(document: &Value) -> Result<ShellYiruProfilesServiceFindResponse, Status> {
+pub(super) fn find_value(
+    document: &Value,
+) -> Result<ShellAgentStartProfilesServiceFindResponse, Status> {
     let projects = document
         .get("projects")
         .and_then(Value::as_array)
         .ok_or_else(|| data_loss("Profile search answered without a project list"))?;
     let mut presences = Vec::with_capacity(projects.len());
     for project in projects {
-        presences.push(ShellYiruProfilesProjectPresence {
+        presences.push(ShellAgentStartProfilesProjectPresence {
             profile_id: text(project.get("profileId")),
             profile_name: text(project.get("profileName")),
             profile_kind: match project.get("profileKind").and_then(Value::as_str) {
-                Some("local") => ShellYiruProfilesKind::Local,
-                _ => ShellYiruProfilesKind::Unspecified,
+                Some("local") => ShellAgentStartProfilesKind::Local,
+                _ => ShellAgentStartProfilesKind::Unspecified,
             } as i32,
             repo_id: text(project.get("repoId")),
             repo_name: text(project.get("repoName")),
         });
     }
-    Ok(ShellYiruProfilesServiceFindResponse {
+    Ok(ShellAgentStartProfilesServiceFindResponse {
         projects: presences,
     })
 }
 
-fn profile_list(value: Option<&Value>) -> Result<Vec<ShellYiruProfilesProfile>, Status> {
+fn profile_list(value: Option<&Value>) -> Result<Vec<ShellAgentStartProfilesProfile>, Status> {
     let profiles = value
         .and_then(Value::as_array)
         .ok_or_else(|| data_loss("Profile index answered without a profile list"))?;
@@ -110,21 +114,21 @@ fn profile_list(value: Option<&Value>) -> Result<Vec<ShellYiruProfilesProfile>, 
         .collect()
 }
 
-fn profile_value(value: Option<&Value>) -> Result<ShellYiruProfilesProfile, Status> {
+fn profile_value(value: Option<&Value>) -> Result<ShellAgentStartProfilesProfile, Status> {
     let Some(profile) = value else {
         return Err(data_loss("Profile index answered with a missing profile"));
     };
     let avatar = profile.get("avatar");
-    Ok(ShellYiruProfilesProfile {
+    Ok(ShellAgentStartProfilesProfile {
         id: text(profile.get("id")),
         name: text(profile.get("name")),
-        avatar: Some(ShellYiruProfilesAvatar {
+        avatar: Some(ShellAgentStartProfilesAvatar {
             kind: match avatar
                 .and_then(|avatar| avatar.get("kind"))
                 .and_then(Value::as_str)
             {
-                Some("initials") => ShellYiruProfilesAvatarKind::Initials,
-                _ => ShellYiruProfilesAvatarKind::Unspecified,
+                Some("initials") => ShellAgentStartProfilesAvatarKind::Initials,
+                _ => ShellAgentStartProfilesAvatarKind::Unspecified,
             } as i32,
             initials: avatar
                 .and_then(|avatar| avatar.get("initials"))
@@ -138,8 +142,8 @@ fn profile_value(value: Option<&Value>) -> Result<ShellYiruProfilesProfile, Stat
                 .to_owned(),
         }),
         kind: match profile.get("kind").and_then(Value::as_str) {
-            Some("local") => ShellYiruProfilesKind::Local,
-            _ => ShellYiruProfilesKind::Unspecified,
+            Some("local") => ShellAgentStartProfilesKind::Local,
+            _ => ShellAgentStartProfilesKind::Unspecified,
         } as i32,
         created_at: integer(profile.get("createdAt")),
         updated_at: integer(profile.get("updatedAt")),

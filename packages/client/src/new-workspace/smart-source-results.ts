@@ -1,12 +1,12 @@
-import type { BaseRefSearchResult } from '@yiru/protocol/git/worktree-source'
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import type { BaseRefSearchResult } from '@agentstart/protocol/git/worktree-source'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 import { translate } from '~renderer/i18n/i18n'
 import { legacyBaseRefSearchResult } from '~renderer/new-workspace/base-ref-result'
 
 export type SmartNameMode = 'smart' | 'github' | 'branches' | 'text'
 
-export const SMART_WORKSPACE_SOURCE_QUERY_MAX_BYTES = 2048
+const SMART_WORKSPACE_SOURCE_QUERY_MAX_BYTES = 2048
 
 export type SmartWorkspaceSourceRow =
   | { kind: 'use-name'; value: string; name: string }

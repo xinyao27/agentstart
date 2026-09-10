@@ -1,9 +1,9 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::visual_regression_diff_ratio::Value as DiffRatio;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::visual_regression_diff_ratio::Value as DiffRatio;
+use agentstart_protocol::runtime::v1::{
     VisualRegressionServiceLatestRequest, VisualRegressionServiceSaveRequest,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::persistence::visual_regression::VisualRegressionSave;
 use crate::rpc::zod_input::{is_uuid, normalize_url};

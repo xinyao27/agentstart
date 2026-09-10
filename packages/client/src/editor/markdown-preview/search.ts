@@ -1,7 +1,7 @@
-import { keybindingMatchesAction, type KeybindingOverrides } from '@yiru/protocol/keybindings'
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { keybindingMatchesAction, type KeybindingOverrides } from '@agentstart/protocol/keybindings'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 
-export const MARKDOWN_PREVIEW_SEARCH_QUERY_MAX_BYTES = 2 * 1024
+const MARKDOWN_PREVIEW_SEARCH_QUERY_MAX_BYTES = 2 * 1024
 
 export function isMarkdownPreviewSearchQueryTooLarge(
   query: string,

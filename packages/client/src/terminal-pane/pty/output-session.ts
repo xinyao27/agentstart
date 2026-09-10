@@ -131,6 +131,14 @@ export function createOutputSession(options: OutputSessionOptions): OutputSessio
   ) {
     const onVisibilityChange = (): void => {
       if (shouldWritePtyOutputForeground(options.getIsVisible())) {
+        // Why: a focused macOS window can keep a stale hidden delivery gate
+        // after occlusion recovery. Reasserting the visible stream before the
+        // snapshot request restores output credit, including local input echo.
+        options.transport.setDeliveryState?.({
+          visible: true,
+          interested: true,
+          priority: options.getIsActiveSplitPane() ? 'active' : 'visible'
+        })
         hiddenRestore.request()
       }
     }

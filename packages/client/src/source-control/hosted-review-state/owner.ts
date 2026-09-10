@@ -1,6 +1,6 @@
-import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 type RuntimeFocusSettings = Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null | undefined
 

@@ -1,4 +1,4 @@
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::{
     ShellKeybindingsDiagnostic, ShellKeybindingsOverrideEntry, ShellKeybindingsOverrideMap,
     ShellKeybindingsPlatform, ShellKeybindingsPlatformOverrides, ShellKeybindingsSeverity,
     ShellKeybindingsSnapshot,

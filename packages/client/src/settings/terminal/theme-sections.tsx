@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -105,7 +105,7 @@ export function TerminalThemeCatalogSection({
   const pickerDescription = isLightTarget
     ? translate(
         'auto.components.settings.TerminalThemeSections.d56af60e6f',
-        'Choose the theme used when Yiru is in light mode.'
+        'Choose the theme used when AgentStart is in light mode.'
       )
     : translate(
         'auto.components.settings.TerminalThemeSections.7add204bd5',

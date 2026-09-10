@@ -1,10 +1,10 @@
-import { parseExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
-import { DEFAULT_AGENT_ACTIVITY_DISPLAY_MODE } from '@yiru/protocol/settings/workspace-preferences'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import { parseExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
+import { DEFAULT_AGENT_ACTIVITY_DISPLAY_MODE } from '@agentstart/protocol/settings/workspace-preferences'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { Tab, TerminalTab } from '@agentstart/protocol/workspace/tabs'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { useState } from 'react'
 
 import { AgentPhaseLabel } from '../agent-session/phase'
@@ -86,7 +86,7 @@ type WorktreeCardProps = {
 const EMPTY_OPEN_TABS: readonly Tab[] = []
 const EMPTY_TERMINAL_TABS: readonly TerminalTab[] = []
 
-export function shouldBeginWorktreeRename(
+function shouldBeginWorktreeRename(
   request: WorktreeRenameRequest | null,
   worktreeId: string,
   rowKey: string | undefined
@@ -101,7 +101,7 @@ function reviewNumber(worktree: Worktree): number | null {
   return worktree.linkedPR ?? null
 }
 
-export function WorktreeCard({
+function WorktreeCard({
   worktree,
   repo,
   isActive,

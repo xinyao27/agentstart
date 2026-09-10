@@ -1,4 +1,4 @@
-export type ExtensionPage = 'activity' | 'automations' | 'mobile' | 'search' | 'settings' | 'skills'
+export type ExtensionPage = 'activity' | 'browser' | 'mobile' | 'search' | 'settings' | 'skills'
 
 export type ExtensionWorkspaceTarget = {
   dedicated?: boolean

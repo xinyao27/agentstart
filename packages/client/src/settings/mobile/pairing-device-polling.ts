@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
 
-export const MOBILE_PAIRING_DEVICE_POLL_MS = 3000
+const MOBILE_PAIRING_DEVICE_POLL_MS = 3000
 
-export type MobilePairingDevicePollState = {
+type MobilePairingDevicePollState = {
   deviceCountAtQr: number | null
   currentDeviceCount: number
   visibilityState: Document['visibilityState']
   focused: boolean
 }
 
-export function shouldPollMobilePairingDevices({
+function shouldPollMobilePairingDevices({
   deviceCountAtQr,
   currentDeviceCount,
   visibilityState,

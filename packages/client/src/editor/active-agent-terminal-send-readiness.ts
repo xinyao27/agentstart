@@ -1,17 +1,18 @@
-import { RuntimeProtocolError, StatusCode } from '@yiru/protocol'
+import { RuntimeProtocolError, StatusCode } from '@agentstart/protocol'
 import type { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
+import { isRuntimeTerminalGoneError } from '~renderer/runtime/terminal-gone-error'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 
 export const ACTIVE_AGENT_SEND_RPC_TIMEOUT_MS = 15000
 
-export type TerminalAgentSendReadiness =
+type TerminalAgentSendReadiness =
   | 'sendable'
   | 'no-active-terminal'
   | 'no-agent'
   | 'permission'
   | 'status-unavailable'
 
-export type TerminalAgentSendReadinessResult = {
+type TerminalAgentSendReadinessResult = {
   status: TerminalAgentSendReadiness
   supportsGuardedSend: boolean
 }
@@ -76,13 +77,7 @@ export function isRuntimeTimeout(error: unknown): boolean {
 }
 
 export function isRuntimeTerminalUnavailable(error: unknown): boolean {
-  const message = error instanceof Error ? error.message : String(error)
-  return (
-    message.includes('terminal_handle_stale') ||
-    message.includes('terminal_exited') ||
-    message.includes('terminal_gone') ||
-    message.includes('no_active_terminal')
-  )
+  return isRuntimeTerminalGoneError(error)
 }
 
 export function isRuntimeTerminalNotWritable(error: unknown): boolean {

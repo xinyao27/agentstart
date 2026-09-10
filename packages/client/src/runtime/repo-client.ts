@@ -1,6 +1,6 @@
-import type { BaseRefSearchResult } from '@yiru/protocol/git/worktree-source'
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { BaseRefSearchResult } from '@agentstart/protocol/git/worktree-source'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 import { legacyBaseRefSearchResult } from '../new-workspace/base-ref-result'
 import { requireRepoRefsProtocolClient } from './repo-catalog-target'

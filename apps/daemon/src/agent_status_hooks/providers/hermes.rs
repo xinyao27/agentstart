@@ -6,8 +6,8 @@ use serde_json::{Map, Value};
 use super::{ProviderContext, ProviderResult};
 use crate::agent_status_hooks::storage;
 
-const MARKER: &str = "Managed by Yiru. Do not edit; changes may be overwritten.";
-const PLUGIN_NAME: &str = "yiru-status";
+const MARKER: &str = "Managed by AgentStart. Do not edit; changes may be overwritten.";
+const PLUGIN_NAME: &str = "agentstart-status";
 const MANIFEST: &str = include_str!("../assets/hermes-plugin.yaml");
 const PLUGIN: &str = include_str!("../assets/hermes-plugin.py");
 

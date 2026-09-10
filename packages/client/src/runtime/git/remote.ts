@@ -1,9 +1,9 @@
 import type {
   GitForkSyncExpectedUpstream,
   GitForkSyncResult
-} from '@yiru/protocol/git/fork-sync-types'
-import type { GitUpstreamStatus } from '@yiru/protocol/git/status-types'
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+} from '@agentstart/protocol/git/fork-sync-types'
+import type { GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
 
 import { openRuntimeGitClient } from './client'
 import { getRuntimeGitWorktree, type RuntimeGitContext } from './context'

@@ -74,7 +74,7 @@ fn encode_pairing_offer(
     Ok(MobilePairingOffer {
         device_id: device.id,
         endpoint,
-        pairing_url: format!("yiru://pair?code={}", URL_SAFE_NO_PAD.encode(payload)),
+        pairing_url: format!("agentstart://pair?code={}", URL_SAFE_NO_PAD.encode(payload)),
     })
 }
 

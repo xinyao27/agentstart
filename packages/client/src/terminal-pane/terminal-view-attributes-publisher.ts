@@ -1,3 +1,5 @@
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { TerminalViewAttributesInput as TerminalViewAttributes } from '@agentstart/protocol/terminal/types'
 /**
  * Phase 5 slice 2 (docs/reference/terminal-query-authority.md §View-attribute
  * bridge): renderer→main `pty:terminalViewAttributes` publication. Composes
@@ -9,8 +11,6 @@
  * are app-global, so identical snapshots publish once.
  */
 import type { ITheme } from '@xterm/xterm'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { TerminalViewAttributesInput as TerminalViewAttributes } from '@yiru/protocol/terminal/types'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import type { TerminalColorSchemeMode } from '~renderer/terminal-pane/emulator/color-scheme'
 
@@ -91,7 +91,7 @@ const DEFAULT_ANSI_PALETTE: readonly TerminalViewRgb[] = buildDefaultAnsiPalette
  *  css.toColor also resolves named/modern CSS via a canvas litmus, so a
  *  hand-edited settings value like `background: 'darkslategray'` renders on
  *  a visible pane but falls back to the slot default in the hidden reply. */
-export function parseCssColor(css: string): ParsedCssColor | null {
+function parseCssColor(css: string): ParsedCssColor | null {
   if (/^#[\da-f]{3,8}$/i.test(css)) {
     switch (css.length) {
       case 4:
@@ -175,7 +175,7 @@ function blendOverBackground(background: TerminalViewRgb, color: ParsedCssColor)
   ]
 }
 
-export function composeTerminalViewAttributes(
+function composeTerminalViewAttributes(
   theme: ITheme | null,
   mode: TerminalColorSchemeMode,
   settings: Pick<GlobalSettings, 'terminalCursorStyle' | 'terminalCursorBlink'>

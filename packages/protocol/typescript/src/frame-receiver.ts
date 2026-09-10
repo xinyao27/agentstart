@@ -1,5 +1,5 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
-import type { Frame, Welcome } from '../generated/yiru/protocol/v1/frame_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
+import type { Frame, Welcome } from '../generated/agent_start/protocol/v1/frame_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import { decodeProtocolFrame, hasProtocolMagic } from './frame-codec.js'
 import { MAX_FRAME_BYTES } from './peer-values.js'

@@ -55,4 +55,4 @@ jobs:
         run: xcodebuild -downloadComponent MetalToolchain
 
       - name: Verify iOS package
-        run: pnpm exec vp run yiru-mobile#check
+        run: pnpm exec vp run agentstart-mobile#check

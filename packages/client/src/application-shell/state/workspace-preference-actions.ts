@@ -2,14 +2,14 @@ import {
   normalizeExecutionHostOrder,
   normalizeExecutionHostScope,
   normalizeVisibleExecutionHostIds
-} from '@yiru/protocol/host/identity'
-import { normalizeWorkspacePanelTitlebarPinnedIds } from '@yiru/protocol/settings/panel-titlebar-pins'
-import { DEFAULT_STATUS_BAR_ITEMS } from '@yiru/protocol/settings/status-bar'
-import type { WorkspaceHostScope } from '@yiru/protocol/settings/ui-state'
-import { normalizeStatusBarUsageMode } from '@yiru/protocol/settings/usage-display'
-import { normalizeUsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
-import { normalizeWorktreeCardProperties } from '@yiru/protocol/settings/worktree-card-properties'
-import { normalizeWorkspaceStatuses } from '@yiru/protocol/workspace/status/normalize'
+} from '@agentstart/protocol/host/identity'
+import { normalizeWorkspacePanelTitlebarPinnedIds } from '@agentstart/protocol/settings/panel-titlebar-pins'
+import { DEFAULT_STATUS_BAR_ITEMS } from '@agentstart/protocol/settings/status-bar'
+import type { WorkspaceHostScope } from '@agentstart/protocol/settings/ui-state'
+import { normalizeStatusBarUsageMode } from '@agentstart/protocol/settings/usage-display'
+import { normalizeUsagePercentageDisplay } from '@agentstart/protocol/settings/usage-display'
+import { normalizeWorktreeCardProperties } from '@agentstart/protocol/settings/worktree-card-properties'
+import { normalizeWorkspaceStatuses } from '@agentstart/protocol/workspace/status/normalize'
 import type { StateCreator } from 'zustand'
 import { setRuntimeUIState } from '~renderer/runtime/ui-client'
 

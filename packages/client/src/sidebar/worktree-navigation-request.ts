@@ -2,7 +2,7 @@ import { useSyncExternalStore } from 'react'
 
 export type WorktreeNavigationDirection = 'down' | 'up'
 
-const WORKTREE_NAVIGATION_REQUEST_EVENT = 'yiru:worktree-navigation-request'
+const WORKTREE_NAVIGATION_REQUEST_EVENT = 'agentstart:worktree-navigation-request'
 const navigationTargetSubscribers = new Set<() => void>()
 let hasNavigationTargets = false
 

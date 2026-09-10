@@ -1,4 +1,4 @@
-// Why: this stylesheet targets the *exported* PDF document, not the live Yiru
+// Why: this stylesheet targets the *exported* PDF document, not the live AgentStart
 // pane. In-app CSS assumes sticky UI chrome, hover affordances, and app-shell
 // spacing that would look wrong when flattened to paper. Keeping export CSS
 // separate also means a future UI refactor can move live classes without
@@ -17,62 +17,62 @@ html, body {
   line-height: 1.6;
 }
 
-.yiru-export-root {
+.agentstart-export-root {
   padding: 0;
   max-width: 100%;
 }
 
-.yiru-export-root h1,
-.yiru-export-root h2,
-.yiru-export-root h3,
-.yiru-export-root h4,
-.yiru-export-root h5,
-.yiru-export-root h6 {
+.agentstart-export-root h1,
+.agentstart-export-root h2,
+.agentstart-export-root h3,
+.agentstart-export-root h4,
+.agentstart-export-root h5,
+.agentstart-export-root h6 {
   font-weight: 600;
   line-height: 1.25;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
 }
 
-.yiru-export-root h1 { font-size: 1.9em; }
-.yiru-export-root h2 { font-size: 1.5em; }
-.yiru-export-root h3 { font-size: 1.25em; }
-.yiru-export-root h4 { font-size: 1em; }
+.agentstart-export-root h1 { font-size: 1.9em; }
+.agentstart-export-root h2 { font-size: 1.5em; }
+.agentstart-export-root h3 { font-size: 1.25em; }
+.agentstart-export-root h4 { font-size: 1em; }
 
-.yiru-export-root p,
-.yiru-export-root blockquote,
-.yiru-export-root ul,
-.yiru-export-root ol,
-.yiru-export-root pre,
-.yiru-export-root table {
+.agentstart-export-root p,
+.agentstart-export-root blockquote,
+.agentstart-export-root ul,
+.agentstart-export-root ol,
+.agentstart-export-root pre,
+.agentstart-export-root table {
   margin-top: 0;
   margin-bottom: 1em;
 }
 
-.yiru-export-root a {
+.agentstart-export-root a {
   color: #0969da;
   text-decoration: underline;
 }
 
-.yiru-export-root blockquote {
+.agentstart-export-root blockquote {
   padding: 0 1em;
   color: #57606a;
   border-left: 0.25em solid #d0d7de;
 }
 
-.yiru-export-root code,
-.yiru-export-root pre {
+.agentstart-export-root code,
+.agentstart-export-root pre {
   font-family: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   font-size: 0.9em;
 }
 
-.yiru-export-root code {
+.agentstart-export-root code {
   background: #f6f8fa;
   padding: 0.2em 0.4em;
   border-radius: 4px;
 }
 
-.yiru-export-root pre {
+.agentstart-export-root pre {
   background: #f6f8fa;
   padding: 12px 16px;
   border-radius: 6px;
@@ -81,43 +81,43 @@ html, body {
   word-break: break-word;
 }
 
-.yiru-export-root pre code {
+.agentstart-export-root pre code {
   background: transparent;
   padding: 0;
   border-radius: 0;
   font-size: inherit;
 }
 
-.yiru-export-root table {
+.agentstart-export-root table {
   border-collapse: collapse;
   width: 100%;
 }
 
-.yiru-export-root th,
-.yiru-export-root td {
+.agentstart-export-root th,
+.agentstart-export-root td {
   border: 1px solid #d0d7de;
   padding: 6px 12px;
   text-align: left;
 }
 
-.yiru-export-root th { background: #f6f8fa; }
+.agentstart-export-root th { background: #f6f8fa; }
 
-.yiru-export-root img,
-.yiru-export-root svg {
+.agentstart-export-root img,
+.agentstart-export-root svg {
   max-width: 100%;
   height: auto;
 }
 
-.yiru-export-root ul,
-.yiru-export-root ol { padding-left: 2em; }
+.agentstart-export-root ul,
+.agentstart-export-root ol { padding-left: 2em; }
 
-.yiru-export-root li { margin: 0.25em 0; }
+.agentstart-export-root li { margin: 0.25em 0; }
 
-.yiru-export-root input[type="checkbox"] {
+.agentstart-export-root input[type="checkbox"] {
   margin-right: 0.4em;
 }
 
-.yiru-export-root hr {
+.agentstart-export-root hr {
   border: 0;
   border-top: 1px solid #d0d7de;
   margin: 1.5em 0;
@@ -130,7 +130,7 @@ html, body {
 .code-block-copy-btn,
 .markdown-preview-search,
 .rich-markdown-toolbar,
-[data-yiru-export-hide="true"] {
+[data-agentstart-export-hide="true"] {
   display: none !important;
 }
 

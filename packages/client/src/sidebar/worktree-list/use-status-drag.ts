@@ -1,4 +1,4 @@
-import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
+import type { WorkspaceStatus } from '@agentstart/protocol/workspace/status/model'
 import { useEffect } from 'react'
 
 import type { HostSectionRow } from '../host-section-rows'

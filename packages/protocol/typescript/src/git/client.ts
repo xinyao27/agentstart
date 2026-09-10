@@ -1,4 +1,4 @@
-import { GitGenerationParamsSchema } from '../../generated/yiru/runtime/v1/git_generation_pb.js'
+import { GitGenerationParamsSchema } from '../../generated/agent_start/runtime/v1/git_generation_pb.js'
 import type { RuntimeTransport } from '../transport.js'
 import { GitGenerationClient } from './generation-client.js'
 

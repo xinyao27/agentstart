@@ -27,7 +27,7 @@ export function ExtensionInstallPage({ onContinue }: ExtensionInstallPageProps):
       <div className="mx-auto max-w-3xl">
         <header className="border-border border-b pb-6">
           <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-            {translate('extension.install.eyebrow', 'Yiru for Chrome')}
+            {translate('extension.install.eyebrow', 'AgentStart for Chrome')}
           </p>
           <h1 className="mt-2 text-2xl font-semibold tracking-tight">
             {translate('extension.install.title', 'Your browser workbench is ready.')}
@@ -35,7 +35,7 @@ export function ExtensionInstallPage({ onContinue }: ExtensionInstallPageProps):
           <p className="text-muted-foreground mt-3 max-w-2xl text-sm leading-6">
             {translate(
               'extension.install.introduction',
-              'Yiru brings the complete coding workspace into Chrome and connects it to the daemon that owns your agents, terminals, files, and worktrees.'
+              'AgentStart brings the complete coding workspace into Chrome and connects it to the daemon that owns your agents, terminals, files, and worktrees.'
             )}
           </p>
         </header>
@@ -56,7 +56,7 @@ export function ExtensionInstallPage({ onContinue }: ExtensionInstallPageProps):
               <p>
                 {translate(
                   'extension.install.debuggerBoundary',
-                  'Yiru attaches only while an action or sensor needs it, then detaches when that work stops or fails.'
+                  'AgentStart attaches only while an action or sensor needs it, then detaches when that work stops or fails.'
                 )}
               </p>
             </div>
@@ -86,11 +86,11 @@ export function ExtensionInstallPage({ onContinue }: ExtensionInstallPageProps):
           <p className="text-muted-foreground max-w-xl text-xs leading-5">
             {translate(
               'extension.install.privacy',
-              'Page context is treated as untrusted data and is sent only to the daemon and agent you explicitly choose. Yiru has no advertising, analytics, or developer-operated stateful backend.'
+              'Page context is treated as untrusted data and is sent only to the daemon and agent you explicitly choose. AgentStart has no advertising or developer-operated stateful backend. Anonymous product telemetry starts enabled on new installations and can be turned off in Privacy & Telemetry.'
             )}
           </p>
           <Button type="button" className="sm:self-end" onClick={onContinue}>
-            {translate('extension.install.continue', 'Continue to Yiru')}
+            {translate('extension.install.continue', 'Continue to AgentStart')}
           </Button>
         </footer>
       </div>

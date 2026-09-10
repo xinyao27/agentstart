@@ -5,11 +5,7 @@ import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'
 import type { TerminalSlice } from './slice-state'
-export type {
-  AutomaticAgentResumeClaim,
-  HydrateWorkspaceSessionOptions,
-  TerminalSlice
-} from './slice-state'
+export type { TerminalSlice } from './slice-state'
 import { createTerminalCloseActions } from './close-actions'
 import { createTerminalCreateActions } from './create-actions'
 import { createTerminalHibernateActions } from './hibernate-actions'

@@ -15,11 +15,14 @@ use crate::transport::secure_file::{self, SecureFileError};
 use super::install::EXTENSION_ORIGIN;
 
 const EXTENSION_BOOTSTRAP_FILE_NAME: &str = "extension-bootstrap.json";
-pub(crate) const RPC_PROTOCOL: &str = "yiru-protobuf-v2";
+const DEV_SUPERVISOR_DIRECTORY_NAME: &str = "dev-daemon-supervisor";
+const DEV_SUPERVISOR_LEASE_FILE_NAME: &str = "lease.json";
+pub(crate) const RPC_PROTOCOL: &str = "agentstart-protobuf-v2";
 const DAEMON_START_TIMEOUT: Duration = Duration::from_secs(10);
 const DAEMON_FAST_POLL_DURATION: Duration = Duration::from_secs(1);
 const DAEMON_FAST_POLL_INTERVAL: Duration = Duration::from_millis(10);
 const DAEMON_START_POLL_INTERVAL: Duration = Duration::from_millis(50);
+const DEV_SUPERVISOR_HANDSHAKE_TIMEOUT: Duration = Duration::from_secs(5);
 
 #[derive(Debug)]
 pub(super) struct ExtensionBootstrap {
@@ -68,7 +71,7 @@ pub(crate) enum BootstrapError {
     DaemonStartTimeout,
     #[cfg(target_os = "macos")]
     #[error(
-        "bundled_daemon_custom_data_requires_app_start: start Yiru with the same data directory first"
+        "bundled_daemon_custom_data_requires_app_start: start AgentStart with the same data directory first"
     )]
     CustomDataRequiresAppStart,
 }
@@ -132,6 +135,9 @@ pub(super) fn read_or_start() -> Result<LiveBootstrap, BootstrapError> {
     let user_data_path = crate::paths::resolve_default_user_data_path()?;
     let (metadata, daemon_started) = match runtime_metadata::read_live(&user_data_path) {
         Some(metadata) => (metadata, false),
+        None if dev_supervisor_is_live(&user_data_path) => {
+            (wait_for_daemon(&user_data_path)?, false)
+        }
         None => (start_daemon_and_wait(&user_data_path)?, true),
     };
     let bootstrap = read_extension_bootstrap(&user_data_path, &metadata)?;
@@ -154,7 +160,7 @@ fn start_daemon_and_wait(user_data_path: &Path) -> Result<RuntimeMetadata, Boots
     #[cfg(target_os = "macos")]
     if let Some(bundle) = crate::paths::containing_app(&executable) {
         // Why: Launch Services does not inherit this native host's profile environment.
-        if ["YIRU_APP_USER_DATA_PATH", "YIRU_USER_DATA_PATH"]
+        if ["AGENTSTART_APP_USER_DATA_PATH", "AGENTSTART_USER_DATA_PATH"]
             .iter()
             .any(|name| std::env::var(name).is_ok_and(|value| !value.trim().is_empty()))
         {
@@ -169,15 +175,18 @@ fn start_daemon_and_wait(user_data_path: &Path) -> Result<RuntimeMetadata, Boots
             .stdout(Stdio::null())
             .stderr(Stdio::null());
     }
-    let mut child = spawn_detached(command)?;
+    let _child = spawn_detached(command)?;
 
+    wait_for_daemon(user_data_path)
+}
+
+fn wait_for_daemon(user_data_path: &Path) -> Result<RuntimeMetadata, BootstrapError> {
     let started_at = Instant::now();
     let deadline = started_at + DAEMON_START_TIMEOUT;
     loop {
         if let Some(metadata) = runtime_metadata::read_live(user_data_path) {
             return Ok(metadata);
         }
-        let _ = child.try_wait();
         let now = Instant::now();
         if now >= deadline {
             return Err(BootstrapError::DaemonStartTimeout);
@@ -189,6 +198,76 @@ fn start_daemon_and_wait(user_data_path: &Path) -> Result<RuntimeMetadata, Boots
         };
         thread::sleep(poll_interval.min(deadline.duration_since(now)));
     }
+}
+
+fn dev_supervisor_is_live(user_data_path: &Path) -> bool {
+    let Ok(contents) = fs::read_to_string(
+        user_data_path
+            .join(DEV_SUPERVISOR_DIRECTORY_NAME)
+            .join(DEV_SUPERVISOR_LEASE_FILE_NAME),
+    ) else {
+        return false;
+    };
+    let Ok(value) = serde_json::from_str::<serde_json::Value>(&contents) else {
+        return false;
+    };
+    if value
+        .get("schemaVersion")
+        .and_then(serde_json::Value::as_u64)
+        != Some(1)
+    {
+        return false;
+    }
+    let Some(lease_id) = value.get("leaseId").and_then(serde_json::Value::as_str) else {
+        return false;
+    };
+    if let Some(guardian) = value.get("guardian").filter(|value| !value.is_null()) {
+        return supervisor_owner_is_live(guardian, Some(lease_id));
+    }
+    let Some(created_at_ms) = value.get("createdAtMs").and_then(serde_json::Value::as_u64) else {
+        return false;
+    };
+    let Ok(now) = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH) else {
+        return false;
+    };
+    let Some(age_ms) = now.as_millis().checked_sub(u128::from(created_at_ms)) else {
+        return false;
+    };
+    if age_ms > DEV_SUPERVISOR_HANDSHAKE_TIMEOUT.as_millis() {
+        return false;
+    }
+    value
+        .get("parent")
+        .and_then(supervisor_owner_fields)
+        .is_some_and(|(pid, _, token)| token.is_some() && crate::hosts::is_process_running(pid))
+}
+
+fn supervisor_owner_is_live(owner: &serde_json::Value, required_token: Option<&str>) -> bool {
+    let Some((pid, birth_identity, ownership_token)) = supervisor_owner_fields(owner) else {
+        return false;
+    };
+    if required_token.is_some_and(|required| ownership_token != Some(required)) {
+        return false;
+    }
+    crate::hosts::matches_dev_supervisor(pid, birth_identity, ownership_token)
+}
+
+fn supervisor_owner_fields(owner: &serde_json::Value) -> Option<(u32, &str, Option<&str>)> {
+    let pid = owner
+        .get("pid")
+        .and_then(serde_json::Value::as_u64)
+        .and_then(|pid| u32::try_from(pid).ok())
+        .filter(|pid| *pid > 0)?;
+    let birth_identity = owner
+        .get("birthIdentity")
+        .and_then(serde_json::Value::as_str)
+        .filter(|value| !value.is_empty())?;
+    let ownership_token = match owner.get("ownershipToken") {
+        Some(serde_json::Value::String(value)) if !value.is_empty() => Some(value.as_str()),
+        Some(serde_json::Value::Null) => None,
+        _ => return None,
+    };
+    Some((pid, birth_identity, ownership_token))
 }
 
 #[cfg(unix)]

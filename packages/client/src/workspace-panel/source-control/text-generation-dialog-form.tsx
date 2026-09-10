@@ -1,10 +1,10 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { SourceControlTextActionId } from '@yiru/protocol/source-control/ai-actions'
-import { listCommitMessageAgentCapabilities } from '@yiru/protocol/source-control/catalog/agents'
-import { CUSTOM_AGENT_ID, isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
-import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { SourceControlTextActionId } from '@agentstart/protocol/source-control/ai-actions'
+import { listCommitMessageAgentCapabilities } from '@agentstart/protocol/source-control/catalog/agents'
+import { CUSTOM_AGENT_ID, isCustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
+import type { ResolvedSourceControlAiGenerationParams } from '@agentstart/protocol/source-control/resolution'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 import { getAgentCatalog, AgentIcon } from '~renderer/agent/catalog'
@@ -56,13 +56,11 @@ type SourceControlTextGenerationDialogFormProps = {
   ) => Promise<void> | void
 }
 
-export function sourceControlTextGenerationSaveTargetKey(
-  target: SourceControlAiWriteTarget
-): string {
+function sourceControlTextGenerationSaveTargetKey(target: SourceControlAiWriteTarget): string {
   return target.type === 'repo' ? `repo:${target.repoId}` : 'global'
 }
 
-export function getDefaultSourceControlTextGenerationSaveTargetKey(
+function getDefaultSourceControlTextGenerationSaveTargetKey(
   saveTargets: SourceControlTextGenerationSaveTarget[]
 ): string {
   const defaultTarget =
@@ -281,7 +279,7 @@ export function SourceControlTextGenerationDialogForm({
               setCommandTemplate(event.target.value)
               setGenerationError(null)
             }}
-            className="border-border bg-background text-foreground placeholder:text-muted-foreground/70 box-border w-full max-w-full min-w-0 resize-y border px-2.5 py-2 font-mono text-xs outline-none"
+            className="border-border bg-background text-foreground placeholder:text-muted-foreground/70 box-border w-full max-w-full min-w-0 resize-y rounded-md border px-2.5 py-2 font-mono text-xs outline-none"
           />
           <SourceControlActionVariableChips
             actionId={actionId}
@@ -325,7 +323,7 @@ export function SourceControlTextGenerationDialogForm({
         ) : null}
 
         {generationError ? (
-          <p className="border-destructive/30 bg-destructive/5 text-destructive flex items-start gap-1.5 border px-3 py-2 text-xs">
+          <p className="border-destructive/30 bg-destructive/5 text-destructive flex items-start gap-1.5 rounded-md border px-3 py-2 text-xs">
             <TriangleAlert className="mt-px size-3.5 shrink-0" />
             {generationError}
           </p>

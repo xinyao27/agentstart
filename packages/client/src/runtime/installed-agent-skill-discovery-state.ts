@@ -1,6 +1,6 @@
-import type { SkillDiscoveryResult } from '@yiru/protocol'
+import type { SkillDiscoveryResult } from '@agentstart/protocol'
 
-export const INSTALLED_AGENT_SKILLS_CHANGED_EVENT = 'yiru:installed-agent-skills-changed'
+export const INSTALLED_AGENT_SKILLS_CHANGED_EVENT = 'agentstart:installed-agent-skills-changed'
 
 const INSTALLED_AGENT_SKILL_DISCOVERY_CACHE_MAX = 256
 

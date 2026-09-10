@@ -1,7 +1,7 @@
 import type {
   CrashReportBreadcrumbData,
   CrashReportDetailValue
-} from '@yiru/protocol/crash-reports/values'
+} from '@agentstart/protocol/crash-reports/values'
 
 import { recordRendererCrashBreadcrumb } from './breadcrumb-recorder'
 import { collectRendererMemoryProfileCounts } from './memory-profile'
@@ -31,7 +31,7 @@ export function installRendererCrashDiagnostics(): void {
   }
 
   rendererCrashDiagnosticsInstalled = true
-  window.addEventListener('error', recordRendererError)
+  window.addEventListener('error', recordRendererError, { capture: true })
   window.addEventListener('unhandledrejection', recordRendererUnhandledRejection)
 
   if (getPerformanceMemory()) {
@@ -48,7 +48,7 @@ function disposeRendererCrashDiagnostics(): void {
     return
   }
   rendererCrashDiagnosticsInstalled = false
-  window.removeEventListener('error', recordRendererError)
+  window.removeEventListener('error', recordRendererError, { capture: true })
   window.removeEventListener('unhandledrejection', recordRendererUnhandledRejection)
   if (rendererMemoryInterval !== null) {
     window.clearInterval(rendererMemoryInterval)
@@ -64,15 +64,15 @@ if (typeof import.meta !== 'undefined' && import.meta.hot) {
 }
 
 function recordRendererError(event: ErrorEvent): void {
-  // Why: "ResizeObserver loop completed" is a benign, self-resolving Chromium
-  // quirk. Recording it fills the breadcrumb buffer and inflates the error
-  // count without diagnostic value, contributing to renderer heap growth (#8260).
+  // Why: this benign Chromium notification reaches Vite's later window listener and
+  // can replace the workbench with its error overlay unless propagation stops here.
   if (
     /^ResizeObserver loop (?:limit exceeded|completed with undelivered notifications)\.?$/i.test(
       event.message
     )
   ) {
     event.preventDefault()
+    event.stopImmediatePropagation()
     return
   }
   recordRendererCrashBreadcrumb(

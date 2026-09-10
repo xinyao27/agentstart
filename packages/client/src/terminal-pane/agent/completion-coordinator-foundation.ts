@@ -1,4 +1,4 @@
-import type { RecognizedAgentProcess } from '@yiru/protocol/agent/process/recognition'
+import type { RecognizedAgentProcess } from '@agentstart/protocol/agent/process/recognition'
 import type { AgentStatus } from '~renderer/agent/title/core'
 import type { RuntimeTerminalProcessInspection } from '~renderer/runtime/terminal-inspection'
 

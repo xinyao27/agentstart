@@ -18,7 +18,7 @@ import {
   TerminalServiceResizeForClientResponseSchema,
   TerminalServiceSendRequestSchema,
   TerminalServiceSendResponseSchema
-} from '../../generated/yiru/runtime/v1/terminal_pb.js'
+} from '../../generated/agent_start/runtime/v1/terminal_pb.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { TerminalPaneClient } from './pane-client.js'
 import {

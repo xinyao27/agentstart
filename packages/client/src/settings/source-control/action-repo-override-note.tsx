@@ -73,7 +73,7 @@ export function SourceControlActionRepoOverrideNote({
           { count: summary.count }
         )
   return (
-    <div className="bg-muted/40 text-muted-foreground flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-2 py-1.5 text-[11px] leading-4">
+    <div className="bg-muted/40 text-muted-foreground flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-md px-2 py-1.5 text-[11px] leading-4">
       <Tooltip>
         <TooltipTrigger
           render={

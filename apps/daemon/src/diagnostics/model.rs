@@ -57,8 +57,8 @@ pub(crate) struct MemorySnapshot {
 #[derive(Clone, Copy)]
 pub(crate) enum DiagnosticsDisabledReason {
     DoNotTrack,
-    YiruTelemetryDisabled,
-    YiruDiagnosticsDisabled,
+    AgentStartTelemetryDisabled,
+    AgentStartDiagnosticsDisabled,
     Ci,
 }
 

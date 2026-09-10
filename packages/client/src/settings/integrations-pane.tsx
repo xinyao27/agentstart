@@ -2,8 +2,6 @@ import { translate } from '~renderer/i18n/i18n'
 
 import { GitHubIntegrationCard } from './source-control/integration-cards'
 import { useIntegrationProviderStatusRefresh } from './use-integration-provider-status-refresh'
-export { getIntegrationsPaneSearchEntries } from './integrations-search'
-
 export function IntegrationsPane(): React.JSX.Element {
   useIntegrationProviderStatusRefresh()
 

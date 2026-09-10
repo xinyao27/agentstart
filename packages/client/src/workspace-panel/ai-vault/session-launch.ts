@@ -1,5 +1,5 @@
-import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
-import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+import type { SleepingAgentLaunchConfig } from '@agentstart/protocol/agent/session-resume'
+import type { AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
 import {
   createRemoteRuntimeSessionTerminal,
   isRemoteRuntimeSessionActive

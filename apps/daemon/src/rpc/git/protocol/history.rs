@@ -1,10 +1,10 @@
 // Read-only commit history and ref-to-ref / commit-to-parent comparison. See
-// packages/protocol/proto/yiru/runtime/v1/git_history.proto (GitHistoryService).
+// packages/protocol/proto/agentstart/runtime/v1/git_history.proto (GitHistoryService).
 
 use serde_json::Value;
 
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     GitChangeEntry, GitChangeStatus, GitCommitHistoryItem, GitCompareResult, GitCompareStatus,
     GitCompareSummary, GitHistoryRefScope, GitHistoryServiceBranchCompareRequest,
     GitHistoryServiceBranchCompareResponse, GitHistoryServiceBranchDiffRequest,
@@ -13,7 +13,7 @@ use yiru_protocol::runtime::v1::{
     GitHistoryServiceCommitDiffResponse, GitHistoryServiceHistoryRequest,
     GitHistoryServiceHistoryResponse, GitRefCategory, GitRefEntry,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use super::super::GitRpc;
 use super::support::{authority_status, diff_result, status, string_field};

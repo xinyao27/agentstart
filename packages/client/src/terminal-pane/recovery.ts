@@ -13,7 +13,7 @@ import { useAppStore } from '~renderer/store/state'
 // detach() preserves the live PTY, and the remounted pane builds a fresh
 // xterm that reattaches and replays the daemon snapshot. No shell restart.
 
-export type TerminalPaneRecoveryReason =
+type TerminalPaneRecoveryReason =
   | 'write-stalled'
   | 'replay-wedged'
   | 'input-undeliverable'

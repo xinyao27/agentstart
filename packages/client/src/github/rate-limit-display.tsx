@@ -1,4 +1,4 @@
-import type { GitHubRateLimitSnapshot } from '@yiru/protocol/hosted-review/query-types'
+import type { GitHubRateLimitSnapshot } from '@agentstart/protocol/hosted-review/query-types'
 import React, { useEffect, useRef, useState } from 'react'
 import { installWindowVisibilityInterval } from '~renderer/application-shell/window-visibility-interval'
 import { translate } from '~renderer/i18n/i18n'
@@ -54,7 +54,7 @@ const BUCKETS: BucketMeta[] = [
   }
 ]
 
-export function formatGitHubRateLimitReset(resetAt: number): string {
+function formatGitHubRateLimitReset(resetAt: number): string {
   const deltaSec = Math.max(0, resetAt - Math.floor(Date.now() / 1000))
   if (deltaSec < 60) {
     return `${deltaSec}s`
@@ -63,7 +63,7 @@ export function formatGitHubRateLimitReset(resetAt: number): string {
   return `${mins}m`
 }
 
-export function toneForGitHubBucket(remaining: number, limit: number): 'ok' | 'warn' | 'crit' {
+function toneForGitHubBucket(remaining: number, limit: number): 'ok' | 'warn' | 'crit' {
   if (limit <= 0) {
     return 'ok'
   }
@@ -77,7 +77,7 @@ export function toneForGitHubBucket(remaining: number, limit: number): 'ok' | 'w
   return 'ok'
 }
 
-export function useGitHubRateLimitSnapshot(options?: { autoRefresh?: boolean }): {
+function useGitHubRateLimitSnapshot(options?: { autoRefresh?: boolean }): {
   snapshot: GitHubRateLimitSnapshot | null
   hasError: boolean
   isFetching: boolean
@@ -178,7 +178,7 @@ export function GitHubRateLimitPanel({ className }: { className?: string }): Rea
   const budgetScope = getProviderRateLimitScope(settings, 'GitHub')
 
   return (
-    <div className={cn('space-y-3 border border-border/60 p-3', className)}>
+    <div className={cn('space-y-3 rounded-md border border-border/60 p-3', className)}>
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-0.5">
           <div className="text-foreground flex items-center gap-1.5 text-sm font-medium">
@@ -191,7 +191,7 @@ export function GitHubRateLimitPanel({ className }: { className?: string }): Rea
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.github.github.rate.limit.display.d5e5de9070',
-              'Yiru uses REST, Search, and GraphQL through the GitHub CLI.'
+              'AgentStart uses REST, Search, and GraphQL through the GitHub CLI.'
             )}
           </p>
           <ProviderHostScopeControl

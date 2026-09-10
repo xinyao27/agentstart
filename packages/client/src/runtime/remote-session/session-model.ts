@@ -3,19 +3,19 @@ import type {
   SessionTabsFileTabValue,
   SessionTabsBrowserTabValue,
   SessionTabsTabGroupValue
-} from '@yiru/protocol'
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { TerminalColorOverrides } from '@yiru/protocol/terminal/theme-types'
+} from '@agentstart/protocol'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { TerminalColorOverrides } from '@agentstart/protocol/terminal/theme-types'
 import type {
   BrowserCertificateFailure,
   BrowserLoadError
-} from '@yiru/protocol/workspace/browser-session'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
-import type { TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/workspace/browser-session'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
+import type { TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
 
-export type RuntimeMobileSessionTerminalTab = {
+type RuntimeMobileSessionTerminalTab = {
   type: 'terminal'
   id: string
   title: string
@@ -66,7 +66,7 @@ export type RuntimeMobileSessionTerminalClientTab =
       worktreeInstanceId?: string | null
     })
 
-export type RuntimeMobileSessionClientTab =
+type RuntimeMobileSessionClientTab =
   | RuntimeMobileSessionTerminalClientTab
   | RuntimeMobileSessionMarkdownTab
   | RuntimeMobileSessionFileTab

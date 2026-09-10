@@ -5,7 +5,7 @@ import { translate } from '../i18n/i18n'
 import { StarNagAgentValueMomentObserver } from '../star-nag/agent-value-moment-observer'
 import { StarNagCard } from '../star-nag/card'
 import { StarNagToastHost } from '../star-nag/toast-host'
-import { YiruRuntimeStatusOnlyFooter } from '../status-bar/runtime-status/segment'
+import { AgentStartRuntimeStatusOnlyFooter } from '../status-bar/runtime-status/segment'
 import type { AppState } from '../store/types'
 import RecentTabSwitcher from '../tab-bar/recent-tab-switcher'
 import { lazyWithRetry as lazy } from './lazy-with-retry'
@@ -33,7 +33,7 @@ type ShellStatusBarProps = {
 
 export function ShellStatusBar({ activeView, isVisible }: ShellStatusBarProps): React.JSX.Element {
   if (!isVisible) {
-    return <YiruRuntimeStatusOnlyFooter />
+    return <AgentStartRuntimeStatusOnlyFooter />
   }
   return (
     <Suspense

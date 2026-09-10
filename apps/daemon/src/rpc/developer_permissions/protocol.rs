@@ -1,12 +1,12 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     DeveloperPermissionId as ProtocolPermissionId,
     DeveloperPermissionState as ProtocolPermissionState,
     DeveloperPermissionStatus as ProtocolPermissionStatus,
     DeveloperPermissionsServiceGetStatusRequest, DeveloperPermissionsServiceGetStatusResponse,
     DeveloperPermissionsServiceRequestRequest, DeveloperPermissionsServiceRequestResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::developer_permissions::{
     DeveloperPermissionId, DeveloperPermissionState, DeveloperPermissionStatus,

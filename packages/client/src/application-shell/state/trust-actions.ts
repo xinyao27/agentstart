@@ -10,9 +10,9 @@ export function createUITrustActions(
   get: Parameters<StateCreator<AppState, [], [], UISlice>>[1]
 ): Pick<
   UISlice,
-  | 'markYiruHookScriptConfirmed'
-  | 'markYiruHookRepoAlwaysTrusted'
-  | 'clearYiruHookTrustForRepo'
+  | 'markAgentStartHookScriptConfirmed'
+  | 'markAgentStartHookRepoAlwaysTrusted'
+  | 'clearAgentStartHookTrustForRepo'
   | 'dismissSetupScriptPrompt'
   | 'setSetupGuideSidebarDismissed'
   | 'markSetupGuideBrowserMilestoneMigrated'
@@ -24,9 +24,9 @@ export function createUITrustActions(
   | 'dismissUsageEmptyState'
 > {
   return {
-    markYiruHookScriptConfirmed: (repoId, kind, contentHash) =>
+    markAgentStartHookScriptConfirmed: (repoId, kind, contentHash) =>
       set((s) => {
-        const existing = s.trustedYiruHooks[repoId]
+        const existing = s.trustedAgentStartHooks[repoId]
         const currentEntry = existing?.[kind]
         if (currentEntry?.contentHash === contentHash) {
           return s
@@ -35,35 +35,35 @@ export function createUITrustActions(
           ...existing,
           [kind]: { contentHash, approvedAt: Date.now() }
         }
-        const next = { ...s.trustedYiruHooks, [repoId]: nextRepo }
-        setRuntimeUIState(get().settings, { trustedYiruHooks: next }).catch(console.error)
-        return { trustedYiruHooks: next }
+        const next = { ...s.trustedAgentStartHooks, [repoId]: nextRepo }
+        setRuntimeUIState(get().settings, { trustedAgentStartHooks: next }).catch(console.error)
+        return { trustedAgentStartHooks: next }
       }),
-    markYiruHookRepoAlwaysTrusted: (repoId) =>
+    markAgentStartHookRepoAlwaysTrusted: (repoId) =>
       set((s) => {
-        const existing = s.trustedYiruHooks[repoId]
+        const existing = s.trustedAgentStartHooks[repoId]
         if (existing?.all) {
           return s
         }
         const next = {
-          ...s.trustedYiruHooks,
+          ...s.trustedAgentStartHooks,
           [repoId]: {
             ...existing,
             all: { approvedAt: Date.now() }
           }
         }
-        setRuntimeUIState(get().settings, { trustedYiruHooks: next }).catch(console.error)
-        return { trustedYiruHooks: next }
+        setRuntimeUIState(get().settings, { trustedAgentStartHooks: next }).catch(console.error)
+        return { trustedAgentStartHooks: next }
       }),
-    clearYiruHookTrustForRepo: (repoId) =>
+    clearAgentStartHookTrustForRepo: (repoId) =>
       set((s) => {
-        if (!(repoId in s.trustedYiruHooks)) {
+        if (!(repoId in s.trustedAgentStartHooks)) {
           return s
         }
-        const next = { ...s.trustedYiruHooks }
+        const next = { ...s.trustedAgentStartHooks }
         delete next[repoId]
-        setRuntimeUIState(get().settings, { trustedYiruHooks: next }).catch(console.error)
-        return { trustedYiruHooks: next }
+        setRuntimeUIState(get().settings, { trustedAgentStartHooks: next }).catch(console.error)
+        return { trustedAgentStartHooks: next }
       }),
     dismissSetupScriptPrompt: (repoId) =>
       set((s) => {

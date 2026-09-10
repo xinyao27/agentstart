@@ -1,11 +1,11 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/protocol/source-control/ai-actions'
-import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
+} from '@agentstart/protocol/source-control/ai-actions'
+import type { LaunchSource } from '@agentstart/protocol/telemetry/events/foundations'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { translate } from '~renderer/i18n/i18n'

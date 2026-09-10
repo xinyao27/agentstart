@@ -1,9 +1,8 @@
-import type { RuntimeEnvironment, RuntimeEnvironmentEndpoint } from '@yiru/protocol'
+import type { RuntimeEnvironment, RuntimeEnvironmentEndpoint } from '@agentstart/protocol'
 
-export type PublicRuntimeAccessEndpoint = Pick<
-  RuntimeEnvironmentEndpoint,
-  'id' | 'label' | 'endpoint'
-> & { kind: 'websocket' }
+type PublicRuntimeAccessEndpoint = Pick<RuntimeEnvironmentEndpoint, 'id' | 'label' | 'endpoint'> & {
+  kind: 'websocket'
+}
 
 export type PublicKnownRuntimeEnvironment = Pick<
   RuntimeEnvironment,

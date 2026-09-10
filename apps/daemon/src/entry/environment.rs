@@ -2,19 +2,17 @@ use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use std::time::Duration;
 
-use serde::Serialize;
-use thiserror::Error;
-use yiru_protocol::method_metadata::UnaryMethod;
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1RuntimeEnvironmentServiceGenerateOffer as GenerateOfferMethod,
-    YiruRuntimeV1RuntimeEnvironmentServiceGetStatus as GetStatusMethod,
-    YiruRuntimeV1RuntimeEnvironmentServiceImport as ImportMethod,
-    YiruRuntimeV1RuntimeEnvironmentServiceList as ListMethod,
-    YiruRuntimeV1RuntimeEnvironmentServiceListPeers as ListPeersMethod,
-    YiruRuntimeV1RuntimeEnvironmentServiceRemove as RemoveMethod,
-    YiruRuntimeV1RuntimeEnvironmentServiceRevokePeer as RevokePeerMethod,
+use agentstart_protocol::method_metadata::UnaryMethod;
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1RuntimeEnvironmentServiceGenerateOffer as GenerateOfferMethod,
+    AgentStartRuntimeV1RuntimeEnvironmentServiceGetStatus as GetStatusMethod,
+    AgentStartRuntimeV1RuntimeEnvironmentServiceImport as ImportMethod,
+    AgentStartRuntimeV1RuntimeEnvironmentServiceList as ListMethod,
+    AgentStartRuntimeV1RuntimeEnvironmentServiceListPeers as ListPeersMethod,
+    AgentStartRuntimeV1RuntimeEnvironmentServiceRemove as RemoveMethod,
+    AgentStartRuntimeV1RuntimeEnvironmentServiceRevokePeer as RevokePeerMethod,
 };
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::{
     GetStatusResponse, RuntimeAuthorizedPeer, RuntimeDeviceScope, RuntimeEnvironment,
     RuntimeEnvironmentEndpointKind, RuntimeEnvironmentServiceGenerateOfferRequest,
     RuntimeEnvironmentServiceGetStatusRequest, RuntimeEnvironmentServiceImportRequest,
@@ -22,6 +20,8 @@ use yiru_protocol::runtime::v1::{
     RuntimeEnvironmentServiceRemoveRequest, RuntimeEnvironmentServiceRevokePeerRequest,
     RuntimeGraphStatus,
 };
+use serde::Serialize;
+use thiserror::Error;
 
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 

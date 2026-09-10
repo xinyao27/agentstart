@@ -3,9 +3,9 @@ import {
   UI_LANGUAGE_ENGLISH,
   UI_LANGUAGE_SYSTEM,
   type UiLanguage
-} from '@yiru/protocol/settings/ui-language'
+} from '@agentstart/protocol/settings/ui-language'
 
-export const SUPPORTED_UI_LOCALES = ['en', 'zh'] as const
+const SUPPORTED_UI_LOCALES = ['en', 'zh'] as const
 export type SupportedUiLocale = (typeof SUPPORTED_UI_LOCALES)[number]
 
 export const DEFAULT_UI_LOCALE: SupportedUiLocale = 'en'
@@ -14,7 +14,7 @@ function normalizeLocaleTag(locale: string | undefined): string {
   return (locale ?? DEFAULT_UI_LOCALE).trim().toLowerCase().replace(/_/g, '-')
 }
 
-export function normalizeSupportedUiLocale(locale: string | undefined): SupportedUiLocale {
+function normalizeSupportedUiLocale(locale: string | undefined): SupportedUiLocale {
   const tag = normalizeLocaleTag(locale)
   const primary = tag.split('-')[0]
   if (primary === 'zh') {
@@ -26,7 +26,7 @@ export function normalizeSupportedUiLocale(locale: string | undefined): Supporte
   return primary === 'en' ? primary : DEFAULT_UI_LOCALE
 }
 
-export function resolveUiLocale(
+function resolveUiLocale(
   language: UiLanguage,
   systemLocale: string | undefined = DEFAULT_UI_LOCALE
 ): SupportedUiLocale {
@@ -39,7 +39,7 @@ export function resolveUiLocale(
   return normalizeSupportedUiLocale(systemLocale)
 }
 
-export function getRendererSystemLocale(): string {
+function getRendererSystemLocale(): string {
   if (typeof navigator !== 'undefined' && navigator.language) {
     return navigator.language
   }

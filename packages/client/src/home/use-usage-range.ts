@@ -1,7 +1,10 @@
-import { isStatsUsageBoundedRange, type StatsUsageBoundedRange } from '@yiru/protocol/stats/range'
+import {
+  isStatsUsageBoundedRange,
+  type StatsUsageBoundedRange
+} from '@agentstart/protocol/stats/range'
 import { useState } from 'react'
 
-const USAGE_RANGE_STORAGE_KEY = 'yiru.home.usage-range.v1'
+const USAGE_RANGE_STORAGE_KEY = 'agentstart.home.usage-range.v1'
 
 type UsageRangePreference = [StatsUsageBoundedRange, (range: StatsUsageBoundedRange) => void]
 

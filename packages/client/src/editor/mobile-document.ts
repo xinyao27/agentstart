@@ -1,9 +1,9 @@
-import type { ShellHostMarkdownSaved } from '@yiru/protocol/shell-host'
-import { getUtf8ByteLength, isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import type { ShellHostMarkdownSaved } from '@agentstart/protocol/shell-host'
+import { getUtf8ByteLength, isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 
 export const MOBILE_MARKDOWN_EDIT_MAX_BYTES = 256 * 1024
 
-export type RuntimeMarkdownReadOnlyReason =
+type RuntimeMarkdownReadOnlyReason =
   | 'unsupported_preview'
   | 'unsupported_tab'
   | 'unsupported_untitled'

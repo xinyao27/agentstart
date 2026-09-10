@@ -45,7 +45,7 @@ const RETIRED_KEYS: &[&str] = &[
 ];
 
 pub(super) fn document(home_path: &Path) -> Map<String, Value> {
-    let workspace_dir = home_path.join("yiru").join("workspaces");
+    let workspace_dir = home_path.join("agentstart").join("workspaces");
     let terminal_font = if cfg!(target_os = "windows") {
         "Cascadia Mono"
     } else if cfg!(target_os = "linux") {
@@ -150,7 +150,7 @@ pub(super) fn document(home_path: &Path) -> Map<String, Value> {
         "showTitlebarAppName": true,
         "showMobileButton": true,
         "ctrlTabOrderMode": "mru",
-        "terminalShortcutPolicy": "yiru-first",
+        "terminalShortcutPolicy": "agentstart-first",
         "notifications": {
             "enabled": true,
             "agentTaskComplete": true,

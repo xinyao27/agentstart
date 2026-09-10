@@ -24,8 +24,6 @@ import {
   type RightSidebarPanelSource
 } from './right-sidebar-panel-source'
 
-export { ChecksPanelReviewHeader } from './checks-panel/review-header'
-
 function LocalChecksPanel({
   isVisible,
   workspacePanelTabId

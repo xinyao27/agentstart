@@ -1,4 +1,4 @@
-import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { Tab, TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { isMeaningfulOpenCodeTerminalTitle } from '~renderer/agent/title/opencode'
 
 export function resolveTerminalTabTitle(

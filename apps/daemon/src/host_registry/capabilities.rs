@@ -93,12 +93,12 @@ async fn probe_pty(host: Arc<dyn ExecutionHost>) -> HostCapability {
                 "-NoProfile",
                 "-NonInteractive",
                 "-Command",
-                "[Console]::Out.Write('yiru-pty-ready')",
+                "[Console]::Out.Write('agentstart-pty-ready')",
             ],
         )
         .await
     } else {
-        probe_command(host, "pty", "sh", ["-lc", "printf yiru-pty-ready"]).await
+        probe_command(host, "pty", "sh", ["-lc", "printf agentstart-pty-ready"]).await
     }
 }
 

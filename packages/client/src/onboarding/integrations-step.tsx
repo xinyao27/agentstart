@@ -39,10 +39,10 @@ export function GitHubRow(props: { compact?: boolean } = {}): React.JSX.Element 
   const [githubTerminalOpen, setGithubTerminalOpen] = useState(false)
 
   return (
-    <div className="border-border bg-muted/20 border">
+    <div className="border-border bg-muted/20 rounded-xl border">
       <div className={cn(compact ? 'flex flex-col gap-3 p-4' : 'flex items-start gap-4 p-5')}>
         <div className={cn('flex items-start gap-3', compact ? '' : 'gap-4 flex-1 min-w-0')}>
-          <div className="border-border bg-background text-foreground flex size-10 shrink-0 items-center justify-center border">
+          <div className="border-border bg-background text-foreground flex size-10 shrink-0 items-center justify-center rounded-lg border">
             <Github className="size-5" />
           </div>
           <div className="min-w-0 flex-1">
@@ -141,7 +141,7 @@ export function GitHubRow(props: { compact?: boolean } = {}): React.JSX.Element 
 }
 
 const CAPABILITIES = [
-  'Review pull requests and check status without leaving Yiru',
+  'Review pull requests and check status without leaving AgentStart',
   'Read, comment on, and merge pull requests from the workspace'
 ] as const
 
@@ -157,7 +157,7 @@ export function IntegrationsStep(): React.JSX.Element {
       <ul className="text-muted-foreground -mt-6 space-y-1.5 text-[14px] leading-relaxed">
         {CAPABILITIES.map((line) => (
           <li key={line} className="flex gap-2.5">
-            <span className="bg-muted-foreground mt-2 size-1 shrink-0" aria-hidden />
+            <span className="bg-muted-foreground mt-2 size-1 shrink-0 rounded-full" aria-hidden />
             <span>{line}</span>
           </li>
         ))}

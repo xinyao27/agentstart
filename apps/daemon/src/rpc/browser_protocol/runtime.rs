@@ -1,6 +1,6 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::TabCreateCommand;
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::TabCreateCommand;
+use agentstart_protocol::transport::{decode, encode};
 
 use super::{
     BrowserProtocolRpc, COMMAND_TIMEOUT, ProtocolCallContext, RequestCommand, ResponseResult,

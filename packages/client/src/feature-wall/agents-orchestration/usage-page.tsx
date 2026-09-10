@@ -86,13 +86,13 @@ function Popover(props: {
   return (
     <div
       className={cn(
-        'absolute z-10 flex flex-col gap-[7px] border bg-card px-3 py-2.5 not-italic',
+        'absolute z-10 flex flex-col gap-[7px] rounded-[10px] border bg-card px-3 py-2.5 not-italic',
         'border-border text-foreground'
       )}
       style={{ left: 40, bottom: 70, width: 320 }}
     >
       <div className="grid grid-cols-[24px_minmax(0,1fr)] items-center gap-2.5">
-        <span className="bg-foreground/[0.06] text-foreground inline-flex size-6 items-center justify-center">
+        <span className="bg-foreground/[0.06] text-foreground inline-flex size-6 items-center justify-center rounded-[5px]">
           <span className="inline-flex" style={{ color: '#111' }}>
             <OpenAIIcon size={14} />
           </span>
@@ -197,7 +197,7 @@ function Popover(props: {
               'Switch to'
             )}
           </div>
-          <div className="border-border bg-foreground/[0.025] flex flex-col gap-0.5 border p-[3px]">
+          <div className="border-border bg-foreground/[0.025] flex flex-col gap-0.5 rounded-lg border p-[3px]">
             <SwitchAccount
               accountWidthClassName="w-24"
               tag="Team"
@@ -224,7 +224,9 @@ function Popover(props: {
 }
 
 function AccountNameSkeleton(props: { widthClassName: string }): JSX.Element {
-  return <span className={cn('block h-2.5 bg-foreground/[0.14]', props.widthClassName)} />
+  return (
+    <span className={cn('block h-2.5 bg-foreground/[0.14] rounded-full', props.widthClassName)} />
+  )
 }
 
 function UsageBar(props: {
@@ -237,10 +239,10 @@ function UsageBar(props: {
   return (
     <div className="flex flex-col gap-1">
       <div className="text-[12px] font-semibold">{props.title}</div>
-      <div className="bg-foreground/[0.08] h-1.5 w-full overflow-hidden">
+      <div className="bg-foreground/[0.08] h-1.5 w-full overflow-hidden rounded-full">
         <span
           className={cn(
-            'block h-full transition-[width,background] duration-[800ms] ease-[cubic-bezier(.2,.8,.2,1)]',
+            'block h-full transition-[width,background] duration-[800ms] ease-[cubic-bezier(.2,.8,.2,1)] rounded-full',
             props.warn ? 'bg-[rgb(239_68_68)]' : 'bg-[rgb(34_197_94)]'
           )}
           style={{ width: props.fillWidth }}
@@ -264,21 +266,24 @@ function SwitchAccount(props: {
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-2.5 px-1.5 py-1 text-[11.5px] transition-colors duration-[160ms]',
+        'flex items-center justify-between gap-2.5 px-1.5 py-1 text-[11.5px] transition-colors duration-[160ms] rounded-md',
         props.highlighted ? 'bg-emerald-500/10' : 'bg-transparent'
       )}
     >
       <div className="flex min-w-0 items-center gap-1.5">
         <AccountNameSkeleton widthClassName={props.accountWidthClassName} />
         {props.tag ? (
-          <span className="bg-foreground/[0.06] text-muted-foreground shrink-0 px-1.5 py-px text-[9.5px] font-semibold tracking-[0.06em] uppercase">
+          <span className="bg-foreground/[0.06] text-muted-foreground shrink-0 rounded-full px-1.5 py-px text-[9.5px] font-semibold tracking-[0.06em] uppercase">
             {props.tag}
           </span>
         ) : null}
       </div>
       <div className="flex shrink-0 items-center gap-1.5">
-        <span className="bg-foreground/[0.10] block h-1 w-11 overflow-hidden">
-          <span className="block h-full bg-emerald-500" style={{ width: `${props.fillPct}%` }} />
+        <span className="bg-foreground/[0.10] block h-1 w-11 overflow-hidden rounded-full">
+          <span
+            className="block h-full rounded-full bg-emerald-500"
+            style={{ width: `${props.fillPct}%` }}
+          />
         </span>
         <span className="text-muted-foreground min-w-7 text-right font-mono text-[10px]">
           {props.metaText}
@@ -298,13 +303,13 @@ function BottomBar(props: { swapped: boolean }): JSX.Element {
   const codexMeta = props.swapped ? '0% used 5h · 4% used wk' : '96% used 47m'
   return (
     <div
-      className="border-border bg-muted/60 absolute bottom-[22px] left-1/2 flex -translate-x-1/2 items-center gap-3.5 border px-3.5 py-1.5 text-[11px]"
+      className="border-border bg-muted/60 absolute bottom-[22px] left-1/2 flex -translate-x-1/2 items-center gap-3.5 rounded-lg border px-3.5 py-1.5 text-[11px]"
       style={{ width: 340 }}
     >
       <div className="text-muted-foreground inline-flex items-center gap-1.5 font-mono text-[10.5px]">
         <ClaudeIcon size={12} />
-        <span className="bg-foreground/[0.12] block h-1 w-9 overflow-hidden">
-          <span className="block h-full bg-emerald-500" style={{ width: '29%' }} />
+        <span className="bg-foreground/[0.12] block h-1 w-9 overflow-hidden rounded-full">
+          <span className="block h-full rounded-full bg-emerald-500" style={{ width: '29%' }} />
         </span>
         <span>
           {translate(
@@ -313,13 +318,13 @@ function BottomBar(props: { swapped: boolean }): JSX.Element {
           )}
         </span>
       </div>
-      <div className="bg-foreground/[0.06] text-foreground -my-0.5 inline-flex items-center gap-1.5 px-1.5 py-0.5 font-mono text-[10.5px]">
+      <div className="bg-foreground/[0.06] text-foreground -my-0.5 inline-flex items-center gap-1.5 rounded-md px-1.5 py-0.5 font-mono text-[10.5px]">
         <span style={{ color: '#111' }}>
           <OpenAIIcon size={12} />
         </span>
-        <span className="bg-foreground/[0.12] block h-1 w-9 overflow-hidden">
+        <span className="bg-foreground/[0.12] block h-1 w-9 overflow-hidden rounded-full">
           <span
-            className="block h-full transition-[width,background] duration-[600ms] ease-out"
+            className="block h-full rounded-full transition-[width,background] duration-[600ms] ease-out"
             style={{ width: codexFillWidth, background: codexFillColor }}
           />
         </span>

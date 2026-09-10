@@ -89,7 +89,7 @@ fn truncate(text: &str, limit: usize) -> String {
 }
 
 fn prompt(value: &Value) -> String {
-    const PREFIX: &str = "You are working inside Yiru, a multi-agent IDE.";
+    const PREFIX: &str = "You are working inside AgentStart, a multi-agent IDE.";
     const ID: &str = "Your task ID is:";
     const TASK: &str = "=== TASK ===";
     let Some(text) = value.get("prompt").and_then(Value::as_str) else {

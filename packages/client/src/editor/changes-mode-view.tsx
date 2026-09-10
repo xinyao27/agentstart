@@ -1,5 +1,5 @@
-import type { GitDiffResult } from '@yiru/protocol/git/diff-values'
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitDiffResult } from '@agentstart/protocol/git/diff-values'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import React from 'react'
 import { lazyWithRetry as lazy } from '~renderer/application-shell/lazy-with-retry'
 import type { OpenFile } from '~renderer/editor/state'

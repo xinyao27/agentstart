@@ -1,5 +1,5 @@
-import type { BrowserTab } from '@yiru/protocol/workspace/browser-session'
-import type { Tab, TabGroup, TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { BrowserTab } from '@agentstart/protocol/workspace/browser-session'
+import type { Tab, TabGroup, TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { useShallow } from 'zustand/react/shallow'
 import type { OpenFile } from '~renderer/editor/state'
 import { useAppStore } from '~renderer/store/state'

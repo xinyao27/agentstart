@@ -10,6 +10,7 @@ import {
   refreshProjectCatalogTargetRepos,
   refreshProjectCatalogWorktrees
 } from './refresh'
+import { isProjectCatalogRefreshCancellation } from './refresh-cancellation'
 
 const WORKTREE_RENAME_PURGE_GRACE_MS = 20_000
 const recentlyRenamedWorktreeIdExpiry = new Map<string, number>()
@@ -39,7 +40,9 @@ export function createProjectCatalogWorktreeEvents(queryClient: QueryClient): {
         try {
           await refreshChangedWorktrees(queryClient, event)
         } catch (error) {
-          console.error('Failed to refresh changed worktrees:', error)
+          if (!isProjectCatalogRefreshCancellation(error)) {
+            console.error('Failed to refresh changed worktrees:', error)
+          }
         }
       }
     } finally {

@@ -1,4 +1,4 @@
-import { supportsHostedReviewCreation } from '@yiru/protocol/hosted-review/creation-provider'
+import { supportsHostedReviewCreation } from '@agentstart/protocol/hosted-review/creation-provider'
 
 import { shouldForcePushWithLeaseForUpstream } from './operation'
 import { resolveCreateReviewIntentEligibility } from './review'
@@ -8,7 +8,7 @@ import type {
   SourceControlPrimaryActionDecisionInputs
 } from './types'
 
-export function resolveSourceControlPrimaryActionDecision(
+function resolveSourceControlPrimaryActionDecision(
   inputs: SourceControlPrimaryActionDecisionInputs
 ): SourceControlPrimaryActionDecision {
   const {

@@ -1,9 +1,9 @@
-import { GitRefCategory } from '../../generated/yiru/runtime/v1/git_common_pb.js'
+import { GitRefCategory } from '../../generated/agent_start/runtime/v1/git_common_pb.js'
 import type {
   GitCommitHistoryItem as ProtocolHistoryItem,
   GitHistoryServiceHistoryResponse as ProtocolHistoryResponse,
   GitRefEntry as ProtocolRefEntry
-} from '../../generated/yiru/runtime/v1/git_history_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_history_pb.js'
 
 export type GitHistoryRefCategory = 'head' | 'branches' | 'remote branches' | 'tags' | 'commits'
 export type GitHistoryItemRef = {

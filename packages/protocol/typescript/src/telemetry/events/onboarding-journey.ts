@@ -140,7 +140,7 @@ export const activationChecklistItemCompletedSchema = z
 
 // Why: see docs/agent-on-path-detection.md. Disambiguates `on_path: false`
 // rows on dashboard 1562016 — distinguishes shell-hydration failure (where
-// `on_path` is misleading because Yiru's view of PATH is incomplete) from
+// `on_path` is misleading because AgentStart's view of PATH is incomplete) from
 // genuinely-not-on-PATH (where the field is reporting accurately). Closed
 // enum kept in lockstep with `ShellHydrationFailureReason` via a compile-time
 // guard below.

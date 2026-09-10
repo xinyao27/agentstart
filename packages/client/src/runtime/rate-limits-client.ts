@@ -4,8 +4,8 @@ import {
   type CursorRateLimitRefreshContext,
   type RateLimitRuntimeTarget,
   type RateLimitState
-} from '@yiru/protocol'
-import { parseExecutionHostId } from '@yiru/protocol/host/identity'
+} from '@agentstart/protocol'
+import { parseExecutionHostId } from '@agentstart/protocol/host/identity'
 import { useAppStore } from '~renderer/store/state'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
@@ -13,7 +13,7 @@ import { getActiveRuntimeTarget, type RuntimeClientTarget } from './rpc-client'
 
 const RATE_LIMIT_SNAPSHOT_TIMEOUT_MS = 15_000
 
-export function getRateLimitsTarget(): RuntimeClientTarget {
+function getRateLimitsTarget(): RuntimeClientTarget {
   return getActiveRuntimeTarget(useAppStore.getState().settings)
 }
 
@@ -63,23 +63,39 @@ export async function fetchRateLimitSnapshot(): Promise<RateLimitState> {
 export async function refreshRateLimitSnapshot(
   cursorContext?: CursorRateLimitRefreshContext
 ): Promise<RateLimitState> {
-  if (!cursorContext) {
-    return (await client()).refreshRateLimits()
-  }
-  const route = cursorRefreshRoute(cursorContext)
-  return (await client(route.target)).refreshRateLimits(route.context)
+  const request = cursorContext
+    ? (() => {
+        const route = cursorRefreshRoute(cursorContext)
+        return client(route.target).then((accounts) => accounts.refreshRateLimits(route.context))
+      })()
+    : client().then((accounts) => accounts.refreshRateLimits())
+  return await withRefreshTimeout(request)
+}
+
+function withRefreshTimeout(request: Promise<RateLimitState>): Promise<RateLimitState> {
+  return new Promise((resolve, reject) => {
+    const timer = window.setTimeout(
+      () => reject(new Error('Rate-limit refresh timed out.')),
+      RATE_LIMIT_SNAPSHOT_TIMEOUT_MS
+    )
+    void request.then(resolve, reject).finally(() => window.clearTimeout(timer))
+  })
 }
 
 export async function refreshClaudeRateLimitTarget(
   target: RateLimitRuntimeTarget
 ): Promise<RateLimitState> {
-  return (await client()).refreshClaudeRateLimits(target)
+  return await withRefreshTimeout(
+    client().then((accounts) => accounts.refreshClaudeRateLimits(target))
+  )
 }
 
 export async function refreshCodexRateLimitTarget(
   target: RateLimitRuntimeTarget
 ): Promise<RateLimitState> {
-  return (await client()).refreshCodexRateLimits(target)
+  return await withRefreshTimeout(
+    client().then((accounts) => accounts.refreshCodexRateLimits(target))
+  )
 }
 
 export async function consumeCodexRateLimitResetCredit(): Promise<CodexRateLimitResetResult> {

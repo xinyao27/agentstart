@@ -44,9 +44,9 @@ pub(super) async fn status(
                 CliInstallUnsupportedReason::LaunchModeUnavailable
             },
             if context.is_production() {
-                "The Yiru CLI executable is missing from this build."
+                "The AgentStart CLI executable is missing from this build."
             } else {
-                "Development mode requires a running Yiru executable."
+                "Development mode requires a running AgentStart executable."
             },
         ));
     };
@@ -150,7 +150,7 @@ async fn with_path_info(
         status.state = CliInstallState::NotInstalled;
         status.current_target = None;
         status.detail = Some(format!(
-            "Register {} to use Yiru from Command Prompt or PowerShell.",
+            "Register {} to use AgentStart from Command Prompt or PowerShell.",
             display_path(&command_path)
         ));
         return Ok(status);

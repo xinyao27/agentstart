@@ -1,9 +1,9 @@
-import type { BrowserReplayEvent } from '@yiru/protocol'
+import type { BrowserReplayEvent } from '@agentstart/protocol'
 
 import { acquireAgentOverlay, releaseAgentOverlay } from '../agent-overlay'
 import { acquireCdp, releaseCdp, sendCdp, subscribeCdp } from './session'
 
-const BINDING_NAME = '__yiruRecordBrowserEvent'
+const BINDING_NAME = '__agentstartRecordBrowserEvent'
 const MAX_RECORDING_EVENTS = 20_000
 
 export type BrowserReplayCapture = {
@@ -78,7 +78,7 @@ export async function stopRecording(tabId: number): Promise<BrowserReplayCapture
   const recording = recordings.get(tabId)
   recordings.delete(tabId)
   await sendCdp(tabId, 'Runtime.evaluate', {
-    expression: 'globalThis.__yiruStopBrowserRecording?.()'
+    expression: 'globalThis.__agentstartStopBrowserRecording?.()'
   }).catch(() => {})
   await releaseAgentOverlay(tabId, 'recorder')
   await releaseCdp(tabId, 'recorder')
@@ -173,7 +173,7 @@ function replayExpression(event: BrowserReplayEvent): string {
 
 function recordingScript(): string {
   return `(() => {
-    if (globalThis.__yiruStopBrowserRecording) return;
+    if (globalThis.__agentstartStopBrowserRecording) return;
     const selector = (element) => {
       if (element.id) return '#' + CSS.escape(element.id);
       const parts = [];
@@ -203,11 +203,11 @@ function recordingScript(): string {
     document.addEventListener('click', click, true);
     document.addEventListener('change', input, true);
     document.addEventListener('keydown', keydown, true);
-    globalThis.__yiruStopBrowserRecording = () => {
+    globalThis.__agentstartStopBrowserRecording = () => {
       document.removeEventListener('click', click, true);
       document.removeEventListener('change', input, true);
       document.removeEventListener('keydown', keydown, true);
-      delete globalThis.__yiruStopBrowserRecording;
+      delete globalThis.__agentstartStopBrowserRecording;
     };
   })()`
 }

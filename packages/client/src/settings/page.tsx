@@ -1,10 +1,11 @@
-import type { ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { applyDocumentTheme } from '~renderer/editor/document-theme'
 import { translate } from '~renderer/i18n/i18n'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { getRepoHostIdentity } from '~renderer/repo/state/host-identity'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
+import { navigateBackFromWorkbenchSettings } from '~renderer/runtime/workbench-location'
 import { useAppStore } from '~renderer/store/state'
 import { isMacUserAgent, isWindowsUserAgent } from '~renderer/terminal-pane/pane-interactions'
 import { useSystemPrefersDark } from '~renderer/terminal-pane/use-system-prefers-dark'
@@ -49,6 +50,11 @@ function Settings(): React.JSX.Element {
   const fetchSettings = useAppStore((s) => s.fetchSettings)
   const fetchKeybindings = useAppStore((s) => s.fetchKeybindings)
   const closeSettingsPage = useAppStore((s) => s.closeSettingsPage)
+  const closeSettingsPageWithLocation = (): void => {
+    if (!navigateBackFromWorkbenchSettings()) {
+      closeSettingsPage()
+    }
+  }
   const { projectHostSetups, projects, repos } = useProjectCatalog()
   const updateProject = useAppStore((s) => s.updateProject)
   const updateRepo = useAppStore((s) => s.updateRepo)
@@ -89,7 +95,11 @@ function Settings(): React.JSX.Element {
     setHasUnsavedBranchPromptChanges,
     setHasUnsavedCommitPromptChanges,
     writeSettings: writeSourceControlAiSettings
-  } = useSourceControlPromptGuard({ closeSettingsPage, settings, updateSettings })
+  } = useSourceControlPromptGuard({
+    closeSettingsPage: closeSettingsPageWithLocation,
+    settings,
+    updateSettings
+  })
   const {
     getSearchEntries: getSectionSearchEntries,
     sections: navSections,
@@ -142,7 +152,7 @@ function Settings(): React.JSX.Element {
         neededSectionIds.has('accounts') ||
         neededSectionIds.has('agents') ||
         needsRepoWindowsRuntimeCapabilities))
-  // Why: General owns the Yiru CLI controls, including WSL skill-location setup.
+  // Why: General owns the AgentStart CLI controls, including WSL skill-location setup.
   const windowsTerminalCapabilities = useWindowsTerminalCapabilities(
     shouldLoadWindowsTerminalCapabilities,
     true,

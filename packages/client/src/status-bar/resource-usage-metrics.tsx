@@ -1,4 +1,4 @@
-import type { AppMemory, UsageValues } from '@yiru/protocol/diagnostics/memory-values'
+import type { AppMemory, UsageValues } from '@agentstart/protocol/diagnostics/memory-values'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretDown as ChevronDown, CaretRight as ChevronRight } from '~renderer/icons/hugeicons'
@@ -167,11 +167,11 @@ export function AppSection({
             isCollapsed
               ? translate(
                   'auto.components.status.bar.ResourceUsageStatusSegment.e419d27083',
-                  'Expand Yiru'
+                  'Expand AgentStart'
                 )
               : translate(
                   'auto.components.status.bar.ResourceUsageStatusSegment.53dd5560ae',
-                  'Collapse Yiru'
+                  'Collapse AgentStart'
                 )
           }
           aria-expanded={!isCollapsed}
@@ -184,7 +184,10 @@ export function AppSection({
         </Button>
         <div className="flex min-w-0 flex-1 items-center justify-between py-2 pr-3">
           <span className="text-muted-foreground truncate text-[11px] font-semibold tracking-wide uppercase">
-            {translate('auto.components.status.bar.ResourceUsageStatusSegment.288a4dd177', 'Yiru')}
+            {translate(
+              'auto.components.status.bar.ResourceUsageStatusSegment.288a4dd177',
+              'AgentStart'
+            )}
           </span>
           <div className="flex shrink-0 items-center gap-2">
             <Sparkline samples={app.history} />

@@ -1,5 +1,5 @@
-import type { EmulatorAvailabilityValue, EmulatorDeviceValue } from '@yiru/protocol'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { EmulatorAvailabilityValue, EmulatorDeviceValue } from '@agentstart/protocol'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { ArrowClockwise as RefreshCw } from '~renderer/icons/hugeicons'
@@ -24,7 +24,7 @@ type MobileEmulatorSettingsPaneProps = {
   updateSettings: (updates: Partial<GlobalSettings>) => void
 }
 
-const AUTOMATIC_DEVICE_VALUE = '__yiru_automatic_emulator_device__'
+const AUTOMATIC_DEVICE_VALUE = '__agentstart_automatic_emulator_device__'
 const AUTOMATIC_DEVICE_LABEL = 'Auto-select device'
 const SIMULATOR_STATE_SUFFIX_RE =
   /\s+\((Booted|Booting|Creating|Shutdown|Shutting Down|Unavailable|Unknown)\)\s*$/i
@@ -146,7 +146,7 @@ export function MobileEmulatorSettingsPane({
     if (devices.length === 0) {
       return translate(
         'auto.components.settings.MobileEmulatorSettingsPane.f62a1bb759',
-        'Yiru will auto-select an emulator device after devices are detected.'
+        'AgentStart will auto-select an emulator device after devices are detected.'
       )
     }
     return translate(
@@ -164,7 +164,7 @@ export function MobileEmulatorSettingsPane({
         )}
         description={translate(
           'auto.components.settings.MobileEmulatorSettingsPane.bc39d0f115',
-          'Configure mobile emulator support for Yiru and coding agents.'
+          'Configure mobile emulator support for AgentStart and coding agents.'
         )}
         keywords={getMobileEmulatorSearchEntries().flatMap((entry) => entry.keywords ?? [])}
         className="divide-border/40 divide-y"
@@ -270,7 +270,7 @@ export function MobileEmulatorSettingsPane({
           )}
           description={translate(
             'auto.components.settings.MobileEmulatorSettingsPane.19d39113b6',
-            'Let coding agents control the active mobile emulator with Yiru CLI commands.'
+            'Let coding agents control the active mobile emulator with AgentStart CLI commands.'
           )}
           keywords={getMobileEmulatorSearchEntries()[3]?.keywords}
         >

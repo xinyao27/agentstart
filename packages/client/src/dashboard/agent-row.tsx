@@ -1,4 +1,4 @@
-import { agentPhaseFromStatus } from '@yiru/protocol/agent/phase'
+import { agentPhaseFromStatus } from '@agentstart/protocol/agent/phase'
 import React, { useState } from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { getAgentRowPrimaryText } from '~renderer/agent/row-primary-text'
@@ -271,7 +271,7 @@ const DashboardAgentRow = function DashboardAgentRow({
         // ancestor groups from workspace cards must not reveal every row's X.
         'group/agent-row relative flex flex-col -ml-2 py-1',
         isLineageChild ? 'pl-5 pr-2' : 'px-2',
-        'cursor-pointer ',
+        'cursor-pointer rounded-sm',
         isFocusedPane
           ? 'bg-accent text-accent-foreground'
           : isLineageChild

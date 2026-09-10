@@ -17,7 +17,7 @@ type SharedNowClock = {
 
 const nowClocks = new Map<number, SharedNowClock>()
 
-export function createSharedNowClock(
+function createSharedNowClock(
   intervalMs: number,
   deps: ClockDeps = {
     now: () => Date.now(),

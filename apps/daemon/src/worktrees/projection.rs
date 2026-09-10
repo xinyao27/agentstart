@@ -356,7 +356,7 @@ pub(crate) fn detected_value(worktree: &ResolvedWorktree) -> Value {
             "ownership".to_owned(),
             Value::String(
                 if worktree.is_managed {
-                    "yiru-managed"
+                    "agentstart-managed"
                 } else if worktree.authoritative {
                     "external"
                 } else {

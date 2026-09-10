@@ -1,4 +1,4 @@
-export type BrowserGrabPageContext = {
+type BrowserGrabPageContext = {
   sanitizedUrl: string
   title: string
   viewportWidth: number
@@ -9,14 +9,14 @@ export type BrowserGrabPageContext = {
   capturedAt: string
 }
 
-export type BrowserGrabAccessibility = {
+type BrowserGrabAccessibility = {
   role: string | null
   accessibleName: string | null
   ariaLabel: string | null
   ariaLabelledBy: string | null
 }
 
-export type BrowserGrabComputedStyles = {
+type BrowserGrabComputedStyles = {
   display: string
   position: string
   width: string
@@ -42,7 +42,7 @@ export type BrowserGrabRect = {
   height: number
 }
 
-export type BrowserGrabTarget = {
+type BrowserGrabTarget = {
   tagName: string
   selector: string
   elementPath?: string
@@ -62,7 +62,7 @@ export type BrowserGrabTarget = {
   computedStyles: BrowserGrabComputedStyles
 }
 
-export type BrowserGrabScreenshot = {
+type BrowserGrabScreenshot = {
   mimeType: 'image/png'
   dataUrl: string
   width: number

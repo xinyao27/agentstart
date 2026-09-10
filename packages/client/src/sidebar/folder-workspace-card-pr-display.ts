@@ -1,7 +1,7 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { folderWorkspaceKey, parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { folderWorkspaceKey, parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { WorktreeLineage, WorkspaceLineage } from '@agentstart/protocol/worktree/lineage'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { AppState } from '~renderer/store/types'
 import {
   buildParentPrChecksRows,

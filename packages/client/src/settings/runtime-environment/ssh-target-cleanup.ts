@@ -1,4 +1,4 @@
-import { parseSshPtyId } from '@yiru/protocol/terminal-identity'
+import { parseSshPtyId } from '@agentstart/protocol/terminal-identity'
 
 import type { AppState } from '../../store/types'
 import type { SshConnectionState, SshTargetMetadata } from './ssh-state'

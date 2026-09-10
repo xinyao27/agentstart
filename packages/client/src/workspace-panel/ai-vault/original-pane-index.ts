@@ -1,4 +1,4 @@
-import type { AgentStatusState } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusState } from '@agentstart/protocol/agent/status-records'
 import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
 import {
@@ -39,7 +39,7 @@ function appendToIndex<T>(index: Map<string, T[]>, key: string, value: T): void 
   }
 }
 
-export function buildAiVaultOriginalPaneIndex(state: OriginalPaneState): AiVaultOriginalPaneIndex {
+function buildAiVaultOriginalPaneIndex(state: OriginalPaneState): AiVaultOriginalPaneIndex {
   const liveByProvider: ProviderIndex<LiveEntry> = new Map()
   const liveWithoutProviderByAgent: AgentIndex<LiveEntry> = new Map()
   const retainedByProvider: ProviderIndex<RetainedEntry> = new Map()

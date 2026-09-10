@@ -284,7 +284,7 @@ function SkippedConflictNotice({
   onOpenConflictReview: () => void
 }): React.JSX.Element {
   return (
-    <div className="border-border/60 bg-muted/20 mx-4 mt-3 border px-3 py-2 text-xs">
+    <div className="border-border/60 bg-muted/20 mx-4 mt-3 rounded-md border px-3 py-2 text-xs">
       <div className="text-foreground font-medium">
         {translate(
           'auto.components.editor.CombinedDiffViewer.820ec01f24',

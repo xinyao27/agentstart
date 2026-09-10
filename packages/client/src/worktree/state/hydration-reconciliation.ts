@@ -1,4 +1,4 @@
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 
 type HydratedWorktree = { id: string }
 

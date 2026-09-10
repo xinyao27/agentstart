@@ -78,11 +78,11 @@ export const getSidebarEntries = createLocalizedCatalog((): SettingsSearchEntry[
   {
     title: translate(
       'auto.components.settings.appearance.search.1de96ec8a6',
-      'Show Yiru Mobile Button'
+      'Show AgentStart Mobile Button'
     ),
     description: translate(
       'auto.components.settings.appearance.search.682293cadf',
-      'Show the Yiru Mobile button at the top of the left sidebar.'
+      'Show the AgentStart Mobile button at the top of the left sidebar.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.appearance.search.74618577c7', 'mobile'),

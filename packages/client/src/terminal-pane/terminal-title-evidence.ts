@@ -1,4 +1,4 @@
-import type { AgentType } from '@yiru/protocol/agent/status-records'
+import type { AgentType } from '@agentstart/protocol/agent/status-records'
 import { normalizeCompatibleAgentTitleForOwner } from '~renderer/agent/title/owner'
 
 import {
@@ -11,7 +11,7 @@ import {
  * Owner-aware display label. Wraps the compatible-owner title normalization so
  * the display label follows the resolved owner rather than raw wrapper text.
  */
-export function resolvePaneDisplayTitle(
+function resolvePaneDisplayTitle(
   title: string,
   ownerAgentType: AgentType | null | undefined
 ): string {

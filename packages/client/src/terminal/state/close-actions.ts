@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
 import { closeRuntimeTerminal } from '~renderer/runtime/terminal-inspection'
 import { retireParkedTerminalTab } from '~renderer/runtime/terminal-parked-watcher-registry'

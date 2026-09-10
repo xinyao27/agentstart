@@ -165,13 +165,13 @@ async fn macos_status(user_data_path: &Path) -> Result<Value, ComputerError> {
     let Some(app_path) = super::macos::resolve_app(user_data_path) else {
         return Ok(unavailable_status(
             None,
-            "Yiru Computer Use.app was not found",
+            "AgentStart Computer Use.app was not found",
         ));
     };
     let executable = app_path
         .join("Contents")
         .join("MacOS")
-        .join("yiru-computer-use-macos");
+        .join("agentstart-computer-use-macos");
     if !executable.is_file() {
         return Ok(unavailable_status(
             Some(&app_path),
@@ -219,7 +219,7 @@ async fn read_status(app_path: &Path) -> Result<Value, ComputerError> {
         .map_err(|error| ComputerError::domain("accessibility_error", error.to_string()))?
         .as_nanos();
     let directory = std::env::temp_dir().join(format!(
-        "yiru-computer-use-permissions-{}-{stamp}",
+        "agentstart-computer-use-permissions-{}-{stamp}",
         std::process::id()
     ));
     tokio::fs::create_dir(&directory)
@@ -278,7 +278,10 @@ async fn macos_open(
     use tokio::process::Command;
 
     let app_path = super::macos::resolve_app(user_data_path).ok_or_else(|| {
-        ComputerError::domain("accessibility_error", "Yiru Computer Use.app was not found")
+        ComputerError::domain(
+            "accessibility_error",
+            "AgentStart Computer Use.app was not found",
+        )
     })?;
     let current = macos_status(user_data_path).await?;
     if let Some(reason) = current
@@ -330,7 +333,10 @@ async fn macos_reset(user_data_path: &Path) -> Result<Value, ComputerError> {
     use tokio::process::Command;
 
     let app_path = super::macos::resolve_app(user_data_path).ok_or_else(|| {
-        ComputerError::domain("accessibility_error", "Yiru Computer Use.app was not found")
+        ComputerError::domain(
+            "accessibility_error",
+            "AgentStart Computer Use.app was not found",
+        )
     })?;
     let bundle_id = match Command::new("/usr/libexec/PlistBuddy")
         .arg("-c")
@@ -342,12 +348,12 @@ async fn macos_reset(user_data_path: &Path) -> Result<Value, ComputerError> {
         Ok(output) if output.status.success() => {
             let value = String::from_utf8_lossy(&output.stdout).trim().to_owned();
             if value.is_empty() {
-                "com.xinyao27.yiru.computer-use".to_owned()
+                "com.xinyao27.agentstart.computer-use".to_owned()
             } else {
                 value
             }
         }
-        _ => "com.xinyao27.yiru.computer-use".to_owned(),
+        _ => "com.xinyao27.agentstart.computer-use".to_owned(),
     };
     close_setup_helpers().await;
     for service in ["Accessibility", "ScreenCapture"] {
@@ -381,8 +387,8 @@ async fn close_setup_helpers() {
     use tokio::process::Command;
 
     for pattern in [
-        "yiru-computer-use-macos[[:space:]]+--permission([[:space:]]|$)",
-        "yiru-computer-use-macos[[:space:]]+--permissions([[:space:]]|$)",
+        "agentstart-computer-use-macos[[:space:]]+--permission([[:space:]]|$)",
+        "agentstart-computer-use-macos[[:space:]]+--permissions([[:space:]]|$)",
     ] {
         let _ = Command::new("/usr/bin/pkill")
             .arg("-f")
@@ -407,7 +413,7 @@ fn next_permission_step(status: &Value) -> Option<String> {
         _ => "Screen Recording",
     };
     Some(format!(
-        "Grant {label} to Yiru Computer Use, then retry get-app-state."
+        "Grant {label} to AgentStart Computer Use, then retry get-app-state."
     ))
 }
 

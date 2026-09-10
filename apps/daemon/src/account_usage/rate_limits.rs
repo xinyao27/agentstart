@@ -531,7 +531,7 @@ impl RateLimitAuthority {
         #[cfg(target_os = "macos")]
         if managed_runtime(account, "claude") == "host" {
             if let Some(credentials) =
-                read_macos_keychain("Yiru Claude Code Managed Credentials", id).await
+                read_macos_keychain("AgentStart Claude Code Managed Credentials", id).await
             {
                 return Some(credentials);
             }
@@ -562,14 +562,14 @@ impl RateLimitAuthority {
                 "managedAuthPath",
                 "claude-accounts",
                 "auth",
-                ".yiru-managed-claude-auth",
+                ".agentstart-managed-claude-auth",
             )
         } else if provider == "codex" {
             (
                 "managedHomePath",
                 "codex-accounts",
                 "home",
-                ".yiru-managed-home",
+                ".agentstart-managed-home",
             )
         } else {
             return None;
@@ -638,7 +638,7 @@ impl RateLimitAuthority {
         if !token_is_fresh {
             return error_result(
                 "kimi",
-                "Kimi session expired — run kimi on the computer running Yiru, then retry usage.",
+                "Kimi session expired — run kimi on the computer running AgentStart, then retry usage.",
                 "delegated-refresh-required",
                 "oauth",
             );
@@ -904,7 +904,7 @@ async fn validate_wsl_managed_path(
         ("wslLinuxHomePath", "codex-accounts", "home")
     };
     let linux_path = account.get(linux_key).and_then(Value::as_str)?;
-    let expected_suffix = format!("/.local/share/yiru/{folder}/{account_id}/{leaf}");
+    let expected_suffix = format!("/.local/share/agentstart/{folder}/{account_id}/{leaf}");
     if !linux_path.ends_with(&expected_suffix)
         || account
             .get("wslDistro")

@@ -1,19 +1,21 @@
-import type { TerminalPaneSplitSource } from '@yiru/protocol/telemetry/education'
+import type { TerminalPaneSplitSource } from '@agentstart/protocol/telemetry/education'
 
-export const TOGGLE_TERMINAL_PANE_EXPAND_EVENT = 'yiru-toggle-terminal-pane-expand'
-export const FOCUS_TERMINAL_PANE_EVENT = 'yiru-focus-terminal-pane'
-export const PASTE_TERMINAL_TEXT_EVENT = 'yiru-paste-terminal-text'
-export const SPLIT_TERMINAL_PANE_EVENT = 'yiru-split-terminal-pane'
-export const REQUEST_ACTIVE_TERMINAL_PANE_SPLIT_EVENT = 'yiru-request-active-terminal-pane-split'
-export const CLOSE_TERMINAL_PANE_EVENT = 'yiru-close-terminal-pane'
-export const BACKGROUND_MOUNT_TERMINAL_WORKTREE_EVENT = 'yiru-background-mount-terminal-worktree'
+export const TOGGLE_TERMINAL_PANE_EXPAND_EVENT = 'agentstart-toggle-terminal-pane-expand'
+export const FOCUS_TERMINAL_PANE_EVENT = 'agentstart-focus-terminal-pane'
+export const PASTE_TERMINAL_TEXT_EVENT = 'agentstart-paste-terminal-text'
+export const SPLIT_TERMINAL_PANE_EVENT = 'agentstart-split-terminal-pane'
+export const REQUEST_ACTIVE_TERMINAL_PANE_SPLIT_EVENT =
+  'agentstart-request-active-terminal-pane-split'
+export const CLOSE_TERMINAL_PANE_EVENT = 'agentstart-close-terminal-pane'
+export const BACKGROUND_MOUNT_TERMINAL_WORKTREE_EVENT =
+  'agentstart-background-mount-terminal-worktree'
 
 // Why: mobile wake (experimental agent sleep) must fire the cold-restore
 // --resume of a worktree's mounted hidden hibernated panes without a desktop
 // hidden→visible reveal. Each mounted TerminalPane self-selects on this event
 // by worktreeId and invokes its own armed hibernation wake — a fanout, since
 // pane bindings are per-instance with no global registry.
-export const WAKE_HIBERNATED_AGENTS_WORKTREE_EVENT = 'yiru-wake-hibernated-agents-worktree'
+export const WAKE_HIBERNATED_AGENTS_WORKTREE_EVENT = 'agentstart-wake-hibernated-agents-worktree'
 
 // Why: sidebar open/close is an instantaneous width change. If we wait for
 // the ResizeObserver rAF (and the 150ms debounced global fit) to catch up,
@@ -24,7 +26,7 @@ export const WAKE_HIBERNATED_AGENTS_WORKTREE_EVENT = 'yiru-wake-hibernated-agent
 //
 // Continuous drags (sidebar-width drag, tab-group split drag) use the
 // per-pane ResizeObserver path instead.
-export const SYNC_FIT_PANES_EVENT = 'yiru-sync-fit-panes'
+export const SYNC_FIT_PANES_EVENT = 'agentstart-sync-fit-panes'
 
 export type FocusTerminalPaneDetail = {
   tabId: string

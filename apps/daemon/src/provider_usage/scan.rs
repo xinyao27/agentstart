@@ -19,13 +19,13 @@ pub(super) async fn run(
     authority: &ProviderUsageAuthority,
     provider: Provider,
     force: bool,
-) -> Result<(), ProviderUsageError> {
+) -> Result<bool, ProviderUsageError> {
     let slot = authority.slot(provider);
     let (previous, enabled_revision) = {
         let _guard = slot.write_gate.lock().await;
         let state = authority.read(provider).await?;
         if !bool_field(state.get("scanState"), "enabled", true) {
-            return Ok(());
+            return Ok(false);
         }
         (state, slot.enabled_revision.load(Ordering::Acquire))
     };
@@ -51,14 +51,16 @@ pub(super) async fn run(
         Provider::OpenCode => opencode::SCHEMA_VERSION,
     };
     let compatible = previous.get("schemaVersion").and_then(Value::as_u64) == Some(expected_schema);
-    if !force && fresh && same_worktrees && compatible {
-        return Ok(());
+    let has_deferred =
+        number_field(previous.get("scanWarnings"), "deferredFiles").is_some_and(|count| count > 0);
+    if !force && fresh && same_worktrees && compatible && !has_deferred {
+        return Ok(false);
     }
     {
         let _guard = slot.write_gate.lock().await;
         let mut state = authority.read(provider).await?;
         if !bool_field(state.get("scanState"), "enabled", true) {
-            return Ok(());
+            return Ok(false);
         }
         state["scanState"]["lastScanStartedAt"] = json!(now_ms());
         state["scanState"]["lastScanError"] = Value::Null;
@@ -100,9 +102,9 @@ pub(super) async fn run(
     if !bool_field(state.get("scanState"), "enabled", true)
         || slot.enabled_revision.load(Ordering::Acquire) != enabled_revision
     {
-        return Ok(());
+        return Ok(false);
     }
-    match scanned {
+    let continue_refresh = match scanned {
         Ok(result) => {
             for key in [
                 "schemaVersion",
@@ -111,6 +113,8 @@ pub(super) async fn run(
                 "sessions",
                 "dailyAggregates",
                 "ownershipGeneration",
+                "rebuildSnapshot",
+                "scanWarnings",
             ] {
                 if let Some(value) = result.get(key) {
                     state[key] = value.clone();
@@ -119,8 +123,13 @@ pub(super) async fn run(
             state["worktreeFingerprint"] = json!(fingerprint);
             state["scanState"]["lastScanCompletedAt"] = json!(now_ms());
             state["scanState"]["lastScanError"] = Value::Null;
+            number_field(result.get("scanWarnings"), "deferredFiles").is_some_and(|count| count > 0)
         }
-        Err(error) => state["scanState"]["lastScanError"] = json!(error.to_string()),
-    }
-    authority.write(provider, &state).await
+        Err(error) => {
+            state["scanState"]["lastScanError"] = json!(error.to_string());
+            false
+        }
+    };
+    authority.write(provider, &state).await?;
+    Ok(continue_refresh)
 }

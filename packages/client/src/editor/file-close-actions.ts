@@ -184,7 +184,7 @@ export function createEditorFileCloseActions(
           activeFileId: newActiveId,
           // Why: if closing the last editor also leaves the worktree without any
           // browser or terminal surface, keep parity with the terminal/browser
-          // close handlers and return to the Yiru landing state instead of
+          // close handlers and return to the AgentStart landing state instead of
           // leaving an active worktree selected with nothing renderable.
           activeWorktreeId: shouldDeactivateWorktree ? null : s.activeWorktreeId,
           activeBrowserTabId: shouldDeactivateWorktree

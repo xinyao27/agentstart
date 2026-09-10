@@ -33,7 +33,7 @@ type TerminalOscTerminatorParseResult =
   | { kind: 'partial' }
   | { kind: 'none' }
 
-export function cssColorToOscRgb(value: string | undefined): string | null {
+function cssColorToOscRgb(value: string | undefined): string | null {
   if (!value) {
     return null
   }
@@ -100,7 +100,7 @@ function clampByte(value: number): number {
   return Math.min(255, Math.max(0, Math.round(value)))
 }
 
-export function terminalOscColorQueryReply(
+function terminalOscColorQueryReply(
   colors: TerminalOscColorQueryReplyColors,
   slot: TerminalOscColorQuerySlot
 ): string | null {

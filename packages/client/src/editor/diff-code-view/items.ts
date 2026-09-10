@@ -1,3 +1,4 @@
+import type { GitFileStatus } from '@agentstart/protocol/git/status-types'
 import {
   parseDiffFromFile,
   type CodeViewDiffItem,
@@ -6,7 +7,6 @@ import {
   type FileContents
 } from '@pierre/diffs'
 import type { DiffLineAnnotation } from '@pierre/diffs/react'
-import type { GitFileStatus } from '@yiru/protocol/git/status-types'
 import { useState } from 'react'
 
 import { resolvePierreDiffLanguage } from '../pierre-diff-language'
@@ -54,7 +54,7 @@ function buildFileContents(
  * with no hunks rather than as errors. Returns null only if parsing genuinely
  * fails, so a single unreadable file cannot take the whole list down.
  */
-export function buildDiffCodeViewFileDiff(
+function buildDiffCodeViewFileDiff(
   source: DiffCodeViewSource,
   generation: number
 ): CodeViewDiffItem['fileDiff'] | null {

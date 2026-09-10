@@ -2,7 +2,7 @@ import type {
   SearchFileResult,
   SearchMatch,
   FileSearchResult as SearchResult
-} from '@yiru/protocol/files/values'
+} from '@agentstart/protocol/files/values'
 import type React from 'react'
 import { useDeferredValue, useEffect, useRef } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'

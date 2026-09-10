@@ -1,7 +1,7 @@
-import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
+import type { FsChangedPayload } from '@agentstart/protocol/files/watch-values'
 import { getExternalFileChangeRelativePath } from '~renderer/workspace-panel/file-explorer/use-watch'
 import {
-  YIRU_WORKTREE_FILE_CHANGE_EVENT,
+  AGENTSTART_WORKTREE_FILE_CHANGE_EVENT,
   type WorktreeFileChangeEventDetail
 } from '~renderer/worktree/file-change-event'
 
@@ -49,7 +49,7 @@ function dispatchWorktreeFileChange(
     return
   }
   window.dispatchEvent(
-    new CustomEvent<WorktreeFileChangeEventDetail>(YIRU_WORKTREE_FILE_CHANGE_EVENT, {
+    new CustomEvent<WorktreeFileChangeEventDetail>(AGENTSTART_WORKTREE_FILE_CHANGE_EVENT, {
       detail: { payload, runtimeEnvironmentId }
     })
   )

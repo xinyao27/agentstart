@@ -3,11 +3,11 @@ import {
   type AgentStateHistoryEntry,
   type AgentStatusEntry,
   type MigrationUnsupportedPtyEntry
-} from '@yiru/protocol/agent/status-records'
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/agent/status-records'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { AgentStatus } from '~renderer/agent/title/core'
 import { migrationUnsupportedToAgentStatusEntry } from '~renderer/agent/unsupported-entry-migration'
 import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
@@ -36,7 +36,7 @@ export type SmartClass = 1 | 2 | 3 | 4
  *   - `title-heuristic`: no fresh hook entry; runtime pane title classified
  *     as `'permission'` by `detectAgentStatusFromTitle`.
  */
-export type AttentionCause = 'blocked' | 'waiting' | 'title-heuristic'
+type AttentionCause = 'blocked' | 'waiting' | 'title-heuristic'
 
 /**
  * Per-worktree resolution computed once before sorting.
@@ -94,7 +94,7 @@ export function hasFreshAttributedAgentStatus(
  * interrupted (the user pressed Ctrl+C — that turn no longer demands
  * attention). Returns `null` when no qualifying row exists.
  */
-export function mostRecentAttentionInHistory(history: AgentStateHistoryEntry[]): number | null {
+function mostRecentAttentionInHistory(history: AgentStateHistoryEntry[]): number | null {
   let max = 0
   for (const h of history) {
     // Why: setAgentStatus preserves `interrupted` on history rows when an
@@ -125,7 +125,7 @@ export function mostRecentAttentionInHistory(history: AgentStateHistoryEntry[]):
  * design doc). Hook authority is per-pane, not per-worktree — a worktree with
  * a fresh hook on pane A and only a title on pane B mixes both branches.
  */
-export type PaneInput =
+type PaneInput =
   | { kind: 'hook'; entry: AgentStatusEntry }
   // Why: TerminalTab has no per-tab lastActivityAt; the worktree-level value
   // is enough since within-class ordering compares across worktrees.
@@ -141,7 +141,7 @@ export type PaneInput =
  *   - `cls` is the **min** (most attention-demanding pane wins).
  *   - `attentionTimestamp` is the **max** within the resolved class.
  */
-export function resolveAttention(panes: PaneInput[], now: number): WorktreeAttention {
+function resolveAttention(panes: PaneInput[], now: number): WorktreeAttention {
   let bestCls: SmartClass = 4
   let bestTs = 0
   let bestCause: AttentionCause | undefined
@@ -236,7 +236,7 @@ export function resolveAttention(panes: PaneInput[], now: number): WorktreeAtten
  * `${tabId}:${paneId}`). Doing this once per sort lets each worktree's
  * resolution pay O(T) lookups instead of scanning the full map.
  */
-export function buildExplicitEntriesByTabId(
+function buildExplicitEntriesByTabId(
   agentStatusByPaneKey: Record<string, AgentStatusEntry> | undefined,
   migrationUnsupportedByPtyId?: Record<string, MigrationUnsupportedPtyEntry>
 ): Map<string, AgentStatusEntry[]> {

@@ -1,4 +1,4 @@
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 
 type TabLookup = Record<string, { id: string }[]>
 

@@ -1,4 +1,4 @@
-import type { AgentStatusEntry, AgentType } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusEntry, AgentType } from '@agentstart/protocol/agent/status-records'
 
 import { getAgentTitleLabel } from './identity'
 import { isLegacyPiCompatibleTitle } from './pi-compatible'
@@ -67,14 +67,6 @@ function getProfileForTitle(title: string): TitleProfileMatch | null {
     fallback ??= match
   }
   return fallback
-}
-
-/**
- * Why: unknown-launch remote sessions need to wait for foreground ownership
- * before publishing title frames whose identity can be re-owned.
- */
-export function hasCompatibleAgentTitleIdentity(title: string): boolean {
-  return Boolean(getProfileForTitle(title)?.profile.titleIdentityGroup)
 }
 
 /**

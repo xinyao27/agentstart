@@ -1,13 +1,13 @@
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/protocol/agent/launch-defaults'
-import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
-import type { SessionOptionValue } from '@yiru/protocol/agent/session-options/types'
-import type { StartupHostPlatform } from '@yiru/protocol/agent/shell-command'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { resolveLocalWindowsAgentStartupShell } from '@yiru/protocol/host/windows-terminal-shell'
-import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
+} from '@agentstart/protocol/agent/launch-defaults'
+import { TUI_AGENT_CONFIG } from '@agentstart/protocol/agent/launch/config'
+import type { SessionOptionValue } from '@agentstart/protocol/agent/session-options/types'
+import type { StartupHostPlatform } from '@agentstart/protocol/agent/shell-command'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { resolveLocalWindowsAgentStartupShell } from '@agentstart/protocol/host/windows-terminal-shell'
+import type { LaunchSource } from '@agentstart/protocol/telemetry/events/foundations'
 import { toast } from 'sonner'
 import { seedCommandCodeSubmittedPromptStatus } from '~renderer/agent/command-code-status-seed'
 import { getAgentLaunchPlatformForRepo } from '~renderer/agent/launch-platform'
@@ -305,7 +305,7 @@ export async function launchAgentInNewTab(
     }).then((delivered) => {
       if (delivered) {
         if (agent === 'command-code' && submitPastedPrompt) {
-          // Why: Command Code has no prompt-submit hook; when Yiru submits a
+          // Why: Command Code has no prompt-submit hook; when AgentStart submits a
           // generated prompt after readiness, seed working at delivery time.
           seedCommandCodeSubmittedPromptStatus(tab.id, trimmedPrompt)
         }

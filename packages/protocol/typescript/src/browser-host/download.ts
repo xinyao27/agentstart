@@ -1,10 +1,10 @@
 import { create } from '@bufbuild/protobuf'
 
-import { DownloadResponseSchema } from '../../generated/yiru/runtime/v1/browser_pb.js'
+import { DownloadResponseSchema } from '../../generated/agent_start/runtime/v1/browser_pb.js'
 import type {
   DownloadRequest,
   DownloadResponse
-} from '../../generated/yiru/runtime/v1/browser_pb.js'
+} from '../../generated/agent_start/runtime/v1/browser_pb.js'
 import type { BrowserCommandExecutor } from './handler.js'
 
 export async function* downloadBrowserFile(

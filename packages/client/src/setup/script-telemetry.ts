@@ -1,4 +1,4 @@
-import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
+import type { EventProps } from '@agentstart/protocol/telemetry/events/catalog'
 import type { SetupScriptImportCandidate } from '~renderer/setup/import-candidate'
 
 type SetupScriptPromptTelemetry = Omit<EventProps<'setup_script_prompt_shown'>, 'nth_repo_added'>

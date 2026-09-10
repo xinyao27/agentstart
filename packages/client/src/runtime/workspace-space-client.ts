@@ -2,7 +2,7 @@ import {
   WORKSPACE_SPACE_PROTOCOL_CAPABILITY,
   WorkspaceSpaceClient,
   type WorkspaceSpaceAnalyzeResultValue
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { useAppStore } from '~renderer/store/state'
 
 import { openRuntimeProtocolTarget } from './protocol-target'

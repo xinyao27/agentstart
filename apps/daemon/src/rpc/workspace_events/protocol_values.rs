@@ -1,8 +1,8 @@
-use serde_json::{Map, Number, Value, json};
-use yiru_protocol::runtime::v1::workspace_event_value::Value as ProtocolValue;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::workspace_event_value::Value as ProtocolValue;
+use agentstart_protocol::runtime::v1::{
     WorkspaceEvent as ProtocolWorkspaceEvent, WorkspaceEventPayloadEntry, WorkspaceEventValue,
 };
+use serde_json::{Map, Number, Value, json};
 
 use crate::persistence::WorkspaceEvent;
 

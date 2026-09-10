@@ -1,8 +1,8 @@
 import {
   getSettingsFocusedExecutionHostId,
   normalizeExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+} from '@agentstart/protocol/host/identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 export type LinkedReviewHints = {
   linkedGitHubPR?: number | null

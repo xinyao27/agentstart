@@ -1,4 +1,4 @@
-import { normalizeHostedReviewHeadRef } from '@yiru/protocol/hosted-review/refs'
+import { normalizeHostedReviewHeadRef } from '@agentstart/protocol/hosted-review/refs'
 import { humanizeBranchSlug } from '~renderer/new-workspace/naming/from-work'
 
 export function resolveCreateReviewDraftTitle({

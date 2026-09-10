@@ -1,6 +1,6 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   TerminalColorSchemeMode,
   TerminalCursorStyle,
@@ -11,7 +11,7 @@ import {
   TerminalServiceUpdateViewAttributesResponseSchema,
   TerminalServiceUpdateViewportRequestSchema,
   TerminalServiceUpdateViewportResponseSchema
-} from '../../generated/yiru/runtime/v1/terminal_pb.js'
+} from '../../generated/agent_start/runtime/v1/terminal_pb.js'
 import { RuntimeProtocolError } from '../error.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { TerminalIoClient } from './io-client.js'

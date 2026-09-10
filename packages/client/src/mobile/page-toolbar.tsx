@@ -22,7 +22,7 @@ export function MobilePageToolbar({ onClose }: MobilePageToolbarProps): React.JS
               onClick={onClose}
               aria-label={translate(
                 'auto.components.mobile.MobilePageToolbar.9883b58693',
-                'Close Yiru Mobile'
+                'Close AgentStart Mobile'
               )}
             >
               <X className="size-4" />

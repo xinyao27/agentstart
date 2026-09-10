@@ -1,13 +1,11 @@
-import { SKILLS_PROTOCOL_CAPABILITY, SkillsClient } from '@yiru/protocol'
+import { SKILLS_PROTOCOL_CAPABILITY, SkillsClient } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'
 import { readRuntimeStatus } from './status-client'
 
-export async function openSkillsProtocolTarget(
-  target: RuntimeClientTarget
-): Promise<SkillsClient | null> {
+async function openSkillsProtocolTarget(target: RuntimeClientTarget): Promise<SkillsClient | null> {
   const status = await readRuntimeStatus(target)
   if (!status.capabilities?.includes(SKILLS_PROTOCOL_CAPABILITY)) {
     return null
@@ -25,7 +23,7 @@ export async function requireSkillsProtocolClient(
     throw new Error(
       translate(
         'runtime.skillsProtocolTarget.unavailable',
-        'Skill management needs a current Yiru daemon connection.'
+        'Skill management needs a current AgentStart daemon connection.'
       )
     )
   }

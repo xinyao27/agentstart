@@ -1,4 +1,4 @@
-use yiru_protocol::method_metadata::MethodId;
+use agentstart_protocol::method_metadata::MethodId;
 
 use super::{
     agents, browser, computer, files, git, github, orchestration, preferences, projects, runtime,
@@ -24,1675 +24,1691 @@ pub(super) enum Method {
 impl From<MethodId> for Method {
     fn from(method: MethodId) -> Self {
         match method {
-            MethodId::YiruRuntimeV1ShellHostServiceRegister => {
+            MethodId::AgentStartRuntimeV1ShellHostServiceRegister => {
                 Self::Runtime(runtime::Method::ShellHostServiceRegister)
             }
-            MethodId::YiruRuntimeV1ShellHostServiceExecute => {
+            MethodId::AgentStartRuntimeV1ShellHostServiceExecute => {
                 Self::Runtime(runtime::Method::ShellHostServiceExecute)
             }
-            MethodId::YiruRuntimeV1AccountsServiceAdd => {
+            MethodId::AgentStartRuntimeV1AccountsServiceAdd => {
                 Self::Agents(agents::Method::AccountsServiceAdd)
             }
-            MethodId::YiruRuntimeV1AccountsServiceCancelPendingLogin => {
+            MethodId::AgentStartRuntimeV1AccountsServiceCancelPendingLogin => {
                 Self::Agents(agents::Method::AccountsServiceCancelPendingLogin)
             }
-            MethodId::YiruRuntimeV1AccountsServiceClearMiniMaxCookie => {
+            MethodId::AgentStartRuntimeV1AccountsServiceClearMiniMaxCookie => {
                 Self::Agents(agents::Method::AccountsServiceClearMiniMaxCookie)
             }
-            MethodId::YiruRuntimeV1AccountsServiceGetMiniMaxCredentials => {
+            MethodId::AgentStartRuntimeV1AccountsServiceGetMiniMaxCredentials => {
                 Self::Agents(agents::Method::AccountsServiceGetMiniMaxCredentials)
             }
-            MethodId::YiruRuntimeV1AgentSessionServiceProviders => {
+            MethodId::AgentStartRuntimeV1AgentSessionServiceProviders => {
                 Self::Agents(agents::Method::AgentSessionServiceProviders)
             }
-            MethodId::YiruRuntimeV1AgentSessionServiceList => {
+            MethodId::AgentStartRuntimeV1AgentSessionServiceList => {
                 Self::Agents(agents::Method::AgentSessionServiceList)
             }
-            MethodId::YiruRuntimeV1AgentSessionServiceStart => {
+            MethodId::AgentStartRuntimeV1AgentSessionServiceStart => {
                 Self::Agents(agents::Method::AgentSessionServiceStart)
             }
-            MethodId::YiruRuntimeV1AgentSessionServiceStop => {
+            MethodId::AgentStartRuntimeV1AgentSessionServiceStop => {
                 Self::Agents(agents::Method::AgentSessionServiceStop)
             }
-            MethodId::YiruRuntimeV1AgentSessionServiceFollowup => {
+            MethodId::AgentStartRuntimeV1AgentSessionServiceFollowup => {
                 Self::Agents(agents::Method::AgentSessionServiceFollowup)
             }
-            MethodId::YiruRuntimeV1AgentStatusServiceInferInterrupt => {
+            MethodId::AgentStartRuntimeV1AgentStatusServiceInferInterrupt => {
                 Self::Agents(agents::Method::AgentStatusServiceInferInterrupt)
             }
-            MethodId::YiruRuntimeV1AgentStatusServiceGetSnapshot => {
+            MethodId::AgentStartRuntimeV1AgentStatusServiceGetSnapshot => {
                 Self::Agents(agents::Method::AgentStatusServiceGetSnapshot)
             }
-            MethodId::YiruRuntimeV1AgentStatusServiceGetMigrationUnsupportedSnapshot => {
+            MethodId::AgentStartRuntimeV1AgentStatusServiceGetMigrationUnsupportedSnapshot => {
                 Self::Agents(agents::Method::AgentStatusServiceGetMigrationUnsupportedSnapshot)
             }
-            MethodId::YiruRuntimeV1AgentStatusServiceSubscribe => {
+            MethodId::AgentStartRuntimeV1AgentStatusServiceSubscribe => {
                 Self::Agents(agents::Method::AgentStatusServiceSubscribe)
             }
-            MethodId::YiruRuntimeV1AgentStatusServiceDrop => {
+            MethodId::AgentStartRuntimeV1AgentStatusServiceDrop => {
                 Self::Agents(agents::Method::AgentStatusServiceDrop)
             }
-            MethodId::YiruRuntimeV1AgentStatusServiceDropByTabPrefix => {
+            MethodId::AgentStartRuntimeV1AgentStatusServiceDropByTabPrefix => {
                 Self::Agents(agents::Method::AgentStatusServiceDropByTabPrefix)
             }
-            MethodId::YiruRuntimeV1AgentStatusServiceRetirePaneAuthority => {
+            MethodId::AgentStartRuntimeV1AgentStatusServiceRetirePaneAuthority => {
                 Self::Agents(agents::Method::AgentStatusServiceRetirePaneAuthority)
             }
-            MethodId::YiruRuntimeV1AgentStatusServiceTransferPaneAuthority => {
+            MethodId::AgentStartRuntimeV1AgentStatusServiceTransferPaneAuthority => {
                 Self::Agents(agents::Method::AgentStatusServiceTransferPaneAuthority)
             }
-            MethodId::YiruRuntimeV1AiVaultServiceListSessions => {
+            MethodId::AgentStartRuntimeV1AiVaultServiceListSessions => {
                 Self::Agents(agents::Method::AiVaultServiceListSessions)
             }
-            MethodId::YiruRuntimeV1AiVaultServiceListSubagentSessions => {
+            MethodId::AgentStartRuntimeV1AiVaultServiceListSubagentSessions => {
                 Self::Agents(agents::Method::AiVaultServiceListSubagentSessions)
             }
-            MethodId::YiruRuntimeV1AccountsServiceList => {
+            MethodId::AgentStartRuntimeV1AccountsServiceList => {
                 Self::Agents(agents::Method::AccountsServiceList)
             }
-            MethodId::YiruRuntimeV1AccountsServiceListCachedClaude => {
+            MethodId::AgentStartRuntimeV1AccountsServiceListCachedClaude => {
                 Self::Agents(agents::Method::AccountsServiceListCachedClaude)
             }
-            MethodId::YiruRuntimeV1AccountsServiceListCachedCodex => {
+            MethodId::AgentStartRuntimeV1AccountsServiceListCachedCodex => {
                 Self::Agents(agents::Method::AccountsServiceListCachedCodex)
             }
-            MethodId::YiruRuntimeV1AccountsServiceRemove => {
+            MethodId::AgentStartRuntimeV1AccountsServiceRemove => {
                 Self::Agents(agents::Method::AccountsServiceRemove)
             }
-            MethodId::YiruRuntimeV1AccountsServiceUnsubscribe => {
+            MethodId::AgentStartRuntimeV1AccountsServiceUnsubscribe => {
                 Self::Agents(agents::Method::AccountsServiceUnsubscribe)
             }
-            MethodId::YiruRuntimeV1AccountsServiceRefreshRateLimits => {
+            MethodId::AgentStartRuntimeV1AccountsServiceRefreshRateLimits => {
                 Self::Agents(agents::Method::AccountsServiceRefreshRateLimits)
             }
-            MethodId::YiruRuntimeV1AccountsServiceRefreshRateLimitsForTarget => {
+            MethodId::AgentStartRuntimeV1AccountsServiceRefreshRateLimitsForTarget => {
                 Self::Agents(agents::Method::AccountsServiceRefreshRateLimitsForTarget)
             }
-            MethodId::YiruRuntimeV1AccountsServiceConsumeCodexResetCredit => {
+            MethodId::AgentStartRuntimeV1AccountsServiceConsumeCodexResetCredit => {
                 Self::Agents(agents::Method::AccountsServiceConsumeCodexResetCredit)
             }
-            MethodId::YiruRuntimeV1AccountsServiceRefreshInactiveAccounts => {
+            MethodId::AgentStartRuntimeV1AccountsServiceRefreshInactiveAccounts => {
                 Self::Agents(agents::Method::AccountsServiceRefreshInactiveAccounts)
             }
-            MethodId::YiruRuntimeV1AccountsServiceRefreshGrokRateLimits => {
+            MethodId::AgentStartRuntimeV1AccountsServiceRefreshGrokRateLimits => {
                 Self::Agents(agents::Method::AccountsServiceRefreshGrokRateLimits)
             }
-            MethodId::YiruRuntimeV1AccountsServiceGetGrokStatus => {
+            MethodId::AgentStartRuntimeV1AccountsServiceGetGrokStatus => {
                 Self::Agents(agents::Method::AccountsServiceGetGrokStatus)
             }
-            MethodId::YiruRuntimeV1AccountsServiceSelect => {
+            MethodId::AgentStartRuntimeV1AccountsServiceSelect => {
                 Self::Agents(agents::Method::AccountsServiceSelect)
             }
-            MethodId::YiruRuntimeV1AccountsServiceReauthenticate => {
+            MethodId::AgentStartRuntimeV1AccountsServiceReauthenticate => {
                 Self::Agents(agents::Method::AccountsServiceReauthenticate)
             }
-            MethodId::YiruRuntimeV1AccountsServiceSaveMiniMaxCookie => {
+            MethodId::AgentStartRuntimeV1AccountsServiceSaveMiniMaxCookie => {
                 Self::Agents(agents::Method::AccountsServiceSaveMiniMaxCookie)
             }
-            MethodId::YiruRuntimeV1AccountsServiceSubscribe => {
+            MethodId::AgentStartRuntimeV1AccountsServiceSubscribe => {
                 Self::Agents(agents::Method::AccountsServiceSubscribe)
             }
-            MethodId::YiruRuntimeV1StatsServiceGetSummary => {
+            MethodId::AgentStartRuntimeV1StatsServiceGetSummary => {
                 Self::Agents(agents::Method::StatsServiceGetSummary)
             }
-            MethodId::YiruRuntimeV1ProviderUsageServiceGetScanState => {
+            MethodId::AgentStartRuntimeV1ProviderUsageServiceGetScanState => {
                 Self::Agents(agents::Method::ProviderUsageServiceGetScanState)
             }
-            MethodId::YiruRuntimeV1ProviderUsageServiceSetEnabled => {
+            MethodId::AgentStartRuntimeV1ProviderUsageServiceSetEnabled => {
                 Self::Agents(agents::Method::ProviderUsageServiceSetEnabled)
             }
-            MethodId::YiruRuntimeV1ProviderUsageServiceRefresh => {
+            MethodId::AgentStartRuntimeV1ProviderUsageServiceRefresh => {
                 Self::Agents(agents::Method::ProviderUsageServiceRefresh)
             }
-            MethodId::YiruRuntimeV1ProviderUsageServiceGetSnapshot => {
+            MethodId::AgentStartRuntimeV1ProviderUsageServiceGetSnapshot => {
                 Self::Agents(agents::Method::ProviderUsageServiceGetSnapshot)
             }
-            MethodId::YiruRuntimeV1RateLimitResumeServiceInspectCodex => {
+            MethodId::AgentStartRuntimeV1RateLimitResumeServiceInspectCodex => {
                 Self::Agents(agents::Method::RateLimitResumeServiceInspectCodex)
             }
-            MethodId::YiruRuntimeV1RateLimitResumeServiceList => {
+            MethodId::AgentStartRuntimeV1RateLimitResumeServiceList => {
                 Self::Agents(agents::Method::RateLimitResumeServiceList)
             }
-            MethodId::YiruRuntimeV1RateLimitResumeServiceSchedule => {
+            MethodId::AgentStartRuntimeV1RateLimitResumeServiceSchedule => {
                 Self::Agents(agents::Method::RateLimitResumeServiceSchedule)
             }
-            MethodId::YiruRuntimeV1RateLimitResumeServiceCancel => {
+            MethodId::AgentStartRuntimeV1RateLimitResumeServiceCancel => {
                 Self::Agents(agents::Method::RateLimitResumeServiceCancel)
             }
-            MethodId::YiruRuntimeV1RateLimitResumeServiceRunNow => {
+            MethodId::AgentStartRuntimeV1RateLimitResumeServiceRunNow => {
                 Self::Agents(agents::Method::RateLimitResumeServiceRunNow)
             }
-            MethodId::YiruRuntimeV1RateLimitResumeServiceMarkFired => {
+            MethodId::AgentStartRuntimeV1RateLimitResumeServiceMarkFired => {
                 Self::Agents(agents::Method::RateLimitResumeServiceMarkFired)
             }
-            MethodId::YiruRuntimeV1RateLimitResumeServiceMarkFailed => {
+            MethodId::AgentStartRuntimeV1RateLimitResumeServiceMarkFailed => {
                 Self::Agents(agents::Method::RateLimitResumeServiceMarkFailed)
             }
-            MethodId::YiruRuntimeV1RateLimitResumeServiceMarkStale => {
+            MethodId::AgentStartRuntimeV1RateLimitResumeServiceMarkStale => {
                 Self::Agents(agents::Method::RateLimitResumeServiceMarkStale)
             }
-            MethodId::YiruRuntimeV1RateLimitResumeServiceRendererReady => {
+            MethodId::AgentStartRuntimeV1RateLimitResumeServiceRendererReady => {
                 Self::Agents(agents::Method::RateLimitResumeServiceRendererReady)
             }
-            MethodId::YiruRuntimeV1SkillsServiceDiscover => {
+            MethodId::AgentStartRuntimeV1SkillsServiceDiscover => {
                 Self::Agents(agents::Method::SkillsServiceDiscover)
             }
-            MethodId::YiruRuntimeV1SkillsServiceManageFreshnessInventory => {
+            MethodId::AgentStartRuntimeV1SkillsServiceManageFreshnessInventory => {
                 Self::Agents(agents::Method::SkillsServiceManageFreshnessInventory)
             }
-            MethodId::YiruRuntimeV1SkillsServiceManageStartUpdateRun => {
+            MethodId::AgentStartRuntimeV1SkillsServiceManageStartUpdateRun => {
                 Self::Agents(agents::Method::SkillsServiceManageStartUpdateRun)
             }
-            MethodId::YiruRuntimeV1SkillsServiceManageStartInstallRun => {
+            MethodId::AgentStartRuntimeV1SkillsServiceManageStartInstallRun => {
                 Self::Agents(agents::Method::SkillsServiceManageStartInstallRun)
             }
-            MethodId::YiruRuntimeV1SkillsServiceManageStartRemoveRun => {
+            MethodId::AgentStartRuntimeV1SkillsServiceManageStartRemoveRun => {
                 Self::Agents(agents::Method::SkillsServiceManageStartRemoveRun)
             }
-            MethodId::YiruRuntimeV1SkillsServiceManageListSkillFiles => {
+            MethodId::AgentStartRuntimeV1SkillsServiceManageListSkillFiles => {
                 Self::Agents(agents::Method::SkillsServiceManageListSkillFiles)
             }
-            MethodId::YiruRuntimeV1SkillsServiceManageReadSkillDirFile => {
+            MethodId::AgentStartRuntimeV1SkillsServiceManageReadSkillDirFile => {
                 Self::Agents(agents::Method::SkillsServiceManageReadSkillDirFile)
             }
-            MethodId::YiruRuntimeV1SkillsServiceManageCancelUpdateRun => {
+            MethodId::AgentStartRuntimeV1SkillsServiceManageCancelUpdateRun => {
                 Self::Agents(agents::Method::SkillsServiceManageCancelUpdateRun)
             }
-            MethodId::YiruRuntimeV1SkillsServiceManageAcknowledgeUpdateRun => {
+            MethodId::AgentStartRuntimeV1SkillsServiceManageAcknowledgeUpdateRun => {
                 Self::Agents(agents::Method::SkillsServiceManageAcknowledgeUpdateRun)
             }
-            MethodId::YiruRuntimeV1SkillsServiceManageGetUpdateRun => {
+            MethodId::AgentStartRuntimeV1SkillsServiceManageGetUpdateRun => {
                 Self::Agents(agents::Method::SkillsServiceManageGetUpdateRun)
             }
-            MethodId::YiruRuntimeV1SkillsServiceManageEventsSubscribe => {
+            MethodId::AgentStartRuntimeV1SkillsServiceManageEventsSubscribe => {
                 Self::Agents(agents::Method::SkillsServiceManageEventsSubscribe)
             }
-            MethodId::YiruRuntimeV1BrowserCliServiceResolveTarget => {
+            MethodId::AgentStartRuntimeV1BrowserCliServiceResolveTarget => {
                 Self::Browser(browser::Method::BrowserCliServiceResolveTarget)
             }
-            MethodId::YiruRuntimeV1BrowserCliServiceResolveUpload => {
+            MethodId::AgentStartRuntimeV1BrowserCliServiceResolveUpload => {
                 Self::Browser(browser::Method::BrowserCliServiceResolveUpload)
             }
-            MethodId::YiruRuntimeV1BrowserRuntimeServiceCreateTab => {
+            MethodId::AgentStartRuntimeV1BrowserRuntimeServiceCreateTab => {
                 Self::Browser(browser::Method::BrowserRuntimeServiceCreateTab)
             }
-            MethodId::YiruRuntimeV1BrowserHostServiceExecute => {
+            MethodId::AgentStartRuntimeV1BrowserHostServiceExecute => {
                 Self::Browser(browser::Method::BrowserHostServiceExecute)
             }
-            MethodId::YiruRuntimeV1BrowserHostServiceDownload => {
+            MethodId::AgentStartRuntimeV1BrowserHostServiceDownload => {
                 Self::Browser(browser::Method::BrowserHostServiceDownload)
             }
-            MethodId::YiruRuntimeV1LocalDownloadServiceAppendFileChunk => {
+            MethodId::AgentStartRuntimeV1LocalDownloadServiceAppendFileChunk => {
                 Self::Browser(browser::Method::LocalDownloadServiceAppendFileChunk)
             }
-            MethodId::YiruRuntimeV1LocalDownloadServiceAppendFolderFileChunk => {
+            MethodId::AgentStartRuntimeV1LocalDownloadServiceAppendFolderFileChunk => {
                 Self::Browser(browser::Method::LocalDownloadServiceAppendFolderFileChunk)
             }
-            MethodId::YiruRuntimeV1LocalDownloadServiceCancelFile => {
+            MethodId::AgentStartRuntimeV1LocalDownloadServiceCancelFile => {
                 Self::Browser(browser::Method::LocalDownloadServiceCancelFile)
             }
-            MethodId::YiruRuntimeV1LocalDownloadServiceCancelFolder => {
+            MethodId::AgentStartRuntimeV1LocalDownloadServiceCancelFolder => {
                 Self::Browser(browser::Method::LocalDownloadServiceCancelFolder)
             }
-            MethodId::YiruRuntimeV1LocalDownloadServiceCreateFolderDirectory => {
+            MethodId::AgentStartRuntimeV1LocalDownloadServiceCreateFolderDirectory => {
                 Self::Browser(browser::Method::LocalDownloadServiceCreateFolderDirectory)
             }
-            MethodId::YiruRuntimeV1LocalDownloadServiceFinishFile => {
+            MethodId::AgentStartRuntimeV1LocalDownloadServiceFinishFile => {
                 Self::Browser(browser::Method::LocalDownloadServiceFinishFile)
             }
-            MethodId::YiruRuntimeV1LocalDownloadServiceFinishFolder => {
+            MethodId::AgentStartRuntimeV1LocalDownloadServiceFinishFolder => {
                 Self::Browser(browser::Method::LocalDownloadServiceFinishFolder)
             }
-            MethodId::YiruRuntimeV1LocalDownloadServiceStartFile => {
+            MethodId::AgentStartRuntimeV1LocalDownloadServiceStartFile => {
                 Self::Browser(browser::Method::LocalDownloadServiceStartFile)
             }
-            MethodId::YiruRuntimeV1LocalDownloadServiceStartFolder => {
+            MethodId::AgentStartRuntimeV1LocalDownloadServiceStartFolder => {
                 Self::Browser(browser::Method::LocalDownloadServiceStartFolder)
             }
-            MethodId::YiruRuntimeV1BrowserHostServiceExecuteMobile => {
+            MethodId::AgentStartRuntimeV1BrowserHostServiceExecuteMobile => {
                 Self::Browser(browser::Method::BrowserHostServiceExecuteMobile)
             }
-            MethodId::YiruRuntimeV1BrowserScreencastServiceSubscribe => {
+            MethodId::AgentStartRuntimeV1BrowserScreencastServiceSubscribe => {
                 Self::Browser(browser::Method::BrowserScreencastServiceSubscribe)
             }
-            MethodId::YiruRuntimeV1BrowserCommandServiceOpen => {
+            MethodId::AgentStartRuntimeV1BrowserCommandServiceOpen => {
                 Self::Browser(browser::Method::BrowserCommandServiceOpen)
             }
-            MethodId::YiruRuntimeV1BrowserReplayServiceList => {
+            MethodId::AgentStartRuntimeV1BrowserReplayServiceList => {
                 Self::Browser(browser::Method::BrowserReplayServiceList)
             }
-            MethodId::YiruRuntimeV1BrowserReplayServiceRecordResult => {
+            MethodId::AgentStartRuntimeV1BrowserReplayServiceRecordResult => {
                 Self::Browser(browser::Method::BrowserReplayServiceRecordResult)
             }
-            MethodId::YiruRuntimeV1BrowserReplayServiceSave => {
+            MethodId::AgentStartRuntimeV1BrowserReplayServiceSave => {
                 Self::Browser(browser::Method::BrowserReplayServiceSave)
             }
-            MethodId::YiruRuntimeV1BrowserWritebackServiceApplyColor => {
+            MethodId::AgentStartRuntimeV1BrowserWritebackServiceApplyColor => {
                 Self::Browser(browser::Method::BrowserWritebackServiceApplyColor)
             }
-            MethodId::YiruRuntimeV1BrowserWritebackServiceApplyCss => {
+            MethodId::AgentStartRuntimeV1BrowserWritebackServiceApplyCss => {
                 Self::Browser(browser::Method::BrowserWritebackServiceApplyCss)
             }
-            MethodId::YiruRuntimeV1BrowserWritebackServiceLocateElement => {
+            MethodId::AgentStartRuntimeV1BrowserWritebackServiceLocateElement => {
                 Self::Browser(browser::Method::BrowserWritebackServiceLocateElement)
             }
-            MethodId::YiruRuntimeV1BrowserWritebackServiceRecordVerification => {
+            MethodId::AgentStartRuntimeV1BrowserWritebackServiceRecordVerification => {
                 Self::Browser(browser::Method::BrowserWritebackServiceRecordVerification)
             }
-            MethodId::YiruRuntimeV1VisualRegressionServiceLatest => {
+            MethodId::AgentStartRuntimeV1VisualRegressionServiceLatest => {
                 Self::Browser(browser::Method::VisualRegressionServiceLatest)
             }
-            MethodId::YiruRuntimeV1VisualRegressionServiceSave => {
+            MethodId::AgentStartRuntimeV1VisualRegressionServiceSave => {
                 Self::Browser(browser::Method::VisualRegressionServiceSave)
             }
-            MethodId::YiruRuntimeV1ComputerServiceCapabilities => {
+            MethodId::AgentStartRuntimeV1ComputerServiceCapabilities => {
                 Self::Computer(computer::Method::ComputerServiceCapabilities)
             }
-            MethodId::YiruRuntimeV1ComputerServiceListApps => {
+            MethodId::AgentStartRuntimeV1ComputerServiceListApps => {
                 Self::Computer(computer::Method::ComputerServiceListApps)
             }
-            MethodId::YiruRuntimeV1ComputerServicePermissions => {
+            MethodId::AgentStartRuntimeV1ComputerServicePermissions => {
                 Self::Computer(computer::Method::ComputerServicePermissions)
             }
-            MethodId::YiruRuntimeV1ComputerServicePermissionsStatus => {
+            MethodId::AgentStartRuntimeV1ComputerServicePermissionsStatus => {
                 Self::Computer(computer::Method::ComputerServicePermissionsStatus)
             }
-            MethodId::YiruRuntimeV1ComputerServicePermissionsReset => {
+            MethodId::AgentStartRuntimeV1ComputerServicePermissionsReset => {
                 Self::Computer(computer::Method::ComputerServicePermissionsReset)
             }
-            MethodId::YiruRuntimeV1ComputerServiceListWindows => {
+            MethodId::AgentStartRuntimeV1ComputerServiceListWindows => {
                 Self::Computer(computer::Method::ComputerServiceListWindows)
             }
-            MethodId::YiruRuntimeV1ComputerServiceGetAppState => {
+            MethodId::AgentStartRuntimeV1ComputerServiceGetAppState => {
                 Self::Computer(computer::Method::ComputerServiceGetAppState)
             }
-            MethodId::YiruRuntimeV1ComputerServiceClick => {
+            MethodId::AgentStartRuntimeV1ComputerServiceClick => {
                 Self::Computer(computer::Method::ComputerServiceClick)
             }
-            MethodId::YiruRuntimeV1ComputerServicePerformSecondaryAction => {
+            MethodId::AgentStartRuntimeV1ComputerServicePerformSecondaryAction => {
                 Self::Computer(computer::Method::ComputerServicePerformSecondaryAction)
             }
-            MethodId::YiruRuntimeV1ComputerServiceScroll => {
+            MethodId::AgentStartRuntimeV1ComputerServiceScroll => {
                 Self::Computer(computer::Method::ComputerServiceScroll)
             }
-            MethodId::YiruRuntimeV1ComputerServiceDrag => {
+            MethodId::AgentStartRuntimeV1ComputerServiceDrag => {
                 Self::Computer(computer::Method::ComputerServiceDrag)
             }
-            MethodId::YiruRuntimeV1ComputerServiceTypeText => {
+            MethodId::AgentStartRuntimeV1ComputerServiceTypeText => {
                 Self::Computer(computer::Method::ComputerServiceTypeText)
             }
-            MethodId::YiruRuntimeV1ComputerServicePressKey => {
+            MethodId::AgentStartRuntimeV1ComputerServicePressKey => {
                 Self::Computer(computer::Method::ComputerServicePressKey)
             }
-            MethodId::YiruRuntimeV1ComputerServiceHotkey => {
+            MethodId::AgentStartRuntimeV1ComputerServiceHotkey => {
                 Self::Computer(computer::Method::ComputerServiceHotkey)
             }
-            MethodId::YiruRuntimeV1ComputerServicePasteText => {
+            MethodId::AgentStartRuntimeV1ComputerServicePasteText => {
                 Self::Computer(computer::Method::ComputerServicePasteText)
             }
-            MethodId::YiruRuntimeV1ComputerServiceSetValue => {
+            MethodId::AgentStartRuntimeV1ComputerServiceSetValue => {
                 Self::Computer(computer::Method::ComputerServiceSetValue)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceList => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceList => {
                 Self::Computer(computer::Method::EmulatorServiceList)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceAttach => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceAttach => {
                 Self::Computer(computer::Method::EmulatorServiceAttach)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceTap => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceTap => {
                 Self::Computer(computer::Method::EmulatorServiceTap)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceGesture => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceGesture => {
                 Self::Computer(computer::Method::EmulatorServiceGesture)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceTypeText => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceTypeText => {
                 Self::Computer(computer::Method::EmulatorServiceTypeText)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceButton => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceButton => {
                 Self::Computer(computer::Method::EmulatorServiceButton)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceRotate => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceRotate => {
                 Self::Computer(computer::Method::EmulatorServiceRotate)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceExec => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceExec => {
                 Self::Computer(computer::Method::EmulatorServiceExec)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceKill => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceKill => {
                 Self::Computer(computer::Method::EmulatorServiceKill)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceShutdown => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceShutdown => {
                 Self::Computer(computer::Method::EmulatorServiceShutdown)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceListSimulators => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceListSimulators => {
                 Self::Computer(computer::Method::EmulatorServiceListSimulators)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceAvailability => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceAvailability => {
                 Self::Computer(computer::Method::EmulatorServiceAvailability)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceUnregisterActive => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceUnregisterActive => {
                 Self::Computer(computer::Method::EmulatorServiceUnregisterActive)
             }
-            MethodId::YiruRuntimeV1EmulatorServiceStreamFrames => {
+            MethodId::AgentStartRuntimeV1EmulatorServiceStreamFrames => {
                 Self::Computer(computer::Method::EmulatorServiceStreamFrames)
             }
-            MethodId::YiruRuntimeV1DangerousApprovalServiceStatus => {
+            MethodId::AgentStartRuntimeV1DangerousApprovalServiceStatus => {
                 Self::Computer(computer::Method::DangerousApprovalServiceStatus)
             }
-            MethodId::YiruRuntimeV1DangerousApprovalServiceBeginRegistration => {
+            MethodId::AgentStartRuntimeV1DangerousApprovalServiceBeginRegistration => {
                 Self::Computer(computer::Method::DangerousApprovalServiceBeginRegistration)
             }
-            MethodId::YiruRuntimeV1DangerousApprovalServiceFinishRegistration => {
+            MethodId::AgentStartRuntimeV1DangerousApprovalServiceFinishRegistration => {
                 Self::Computer(computer::Method::DangerousApprovalServiceFinishRegistration)
             }
-            MethodId::YiruRuntimeV1DangerousApprovalServiceBeginApproval => {
+            MethodId::AgentStartRuntimeV1DangerousApprovalServiceBeginApproval => {
                 Self::Computer(computer::Method::DangerousApprovalServiceBeginApproval)
             }
-            MethodId::YiruRuntimeV1DangerousApprovalServiceFinishApproval => {
+            MethodId::AgentStartRuntimeV1DangerousApprovalServiceFinishApproval => {
                 Self::Computer(computer::Method::DangerousApprovalServiceFinishApproval)
             }
-            MethodId::YiruRuntimeV1DangerousApprovalServiceRemove => {
+            MethodId::AgentStartRuntimeV1DangerousApprovalServiceRemove => {
                 Self::Computer(computer::Method::DangerousApprovalServiceRemove)
             }
-            MethodId::YiruRuntimeV1FilesServiceBrowseServerDirectory => {
+            MethodId::AgentStartRuntimeV1FilesServiceBrowseServerDirectory => {
                 Self::Files(files::Method::FilesServiceBrowseServerDirectory)
             }
-            MethodId::YiruRuntimeV1FilesServiceList => Self::Files(files::Method::FilesServiceList),
-            MethodId::YiruRuntimeV1FilesServiceSearchPaths => {
+            MethodId::AgentStartRuntimeV1FilesServiceList => {
+                Self::Files(files::Method::FilesServiceList)
+            }
+            MethodId::AgentStartRuntimeV1FilesServiceSearchPaths => {
                 Self::Files(files::Method::FilesServiceSearchPaths)
             }
-            MethodId::YiruRuntimeV1FilesServiceListAll => {
+            MethodId::AgentStartRuntimeV1FilesServiceListAll => {
                 Self::Files(files::Method::FilesServiceListAll)
             }
-            MethodId::YiruRuntimeV1FilesServiceListMarkdownDocuments => {
+            MethodId::AgentStartRuntimeV1FilesServiceListMarkdownDocuments => {
                 Self::Files(files::Method::FilesServiceListMarkdownDocuments)
             }
-            MethodId::YiruRuntimeV1FilesServiceOpen => Self::Files(files::Method::FilesServiceOpen),
-            MethodId::YiruRuntimeV1FilesServiceOpenDiff => {
+            MethodId::AgentStartRuntimeV1FilesServiceOpen => {
+                Self::Files(files::Method::FilesServiceOpen)
+            }
+            MethodId::AgentStartRuntimeV1FilesServiceOpenDiff => {
                 Self::Files(files::Method::FilesServiceOpenDiff)
             }
-            MethodId::YiruRuntimeV1FilesServiceRead => Self::Files(files::Method::FilesServiceRead),
-            MethodId::YiruRuntimeV1FilesServiceReadChunk => {
+            MethodId::AgentStartRuntimeV1FilesServiceRead => {
+                Self::Files(files::Method::FilesServiceRead)
+            }
+            MethodId::AgentStartRuntimeV1FilesServiceReadChunk => {
                 Self::Files(files::Method::FilesServiceReadChunk)
             }
-            MethodId::YiruRuntimeV1FilesServiceReadDirectory => {
+            MethodId::AgentStartRuntimeV1FilesServiceReadDirectory => {
                 Self::Files(files::Method::FilesServiceReadDirectory)
             }
-            MethodId::YiruRuntimeV1FilesServiceReadPreview => {
+            MethodId::AgentStartRuntimeV1FilesServiceReadPreview => {
                 Self::Files(files::Method::FilesServiceReadPreview)
             }
-            MethodId::YiruRuntimeV1FilesServiceStat => Self::Files(files::Method::FilesServiceStat),
-            MethodId::YiruRuntimeV1FilesServiceSearch => {
+            MethodId::AgentStartRuntimeV1FilesServiceStat => {
+                Self::Files(files::Method::FilesServiceStat)
+            }
+            MethodId::AgentStartRuntimeV1FilesServiceSearch => {
                 Self::Files(files::Method::FilesServiceSearch)
             }
-            MethodId::YiruRuntimeV1FilesServiceWrite => {
+            MethodId::AgentStartRuntimeV1FilesServiceWrite => {
                 Self::Files(files::Method::FilesServiceWrite)
             }
-            MethodId::YiruRuntimeV1FilesServiceWriteBase64 => {
+            MethodId::AgentStartRuntimeV1FilesServiceWriteBase64 => {
                 Self::Files(files::Method::FilesServiceWriteBase64)
             }
-            MethodId::YiruRuntimeV1FilesServiceWriteBase64Chunk => {
+            MethodId::AgentStartRuntimeV1FilesServiceWriteBase64Chunk => {
                 Self::Files(files::Method::FilesServiceWriteBase64Chunk)
             }
-            MethodId::YiruRuntimeV1FilesServiceCreateFile => {
+            MethodId::AgentStartRuntimeV1FilesServiceCreateFile => {
                 Self::Files(files::Method::FilesServiceCreateFile)
             }
-            MethodId::YiruRuntimeV1FilesServiceCreateDirectory => {
+            MethodId::AgentStartRuntimeV1FilesServiceCreateDirectory => {
                 Self::Files(files::Method::FilesServiceCreateDirectory)
             }
-            MethodId::YiruRuntimeV1FilesServiceCreateDirectoryNoClobber => {
+            MethodId::AgentStartRuntimeV1FilesServiceCreateDirectoryNoClobber => {
                 Self::Files(files::Method::FilesServiceCreateDirectoryNoClobber)
             }
-            MethodId::YiruRuntimeV1FilesServiceCommitUpload => {
+            MethodId::AgentStartRuntimeV1FilesServiceCommitUpload => {
                 Self::Files(files::Method::FilesServiceCommitUpload)
             }
-            MethodId::YiruRuntimeV1FilesServiceRename => {
+            MethodId::AgentStartRuntimeV1FilesServiceRename => {
                 Self::Files(files::Method::FilesServiceRename)
             }
-            MethodId::YiruRuntimeV1FilesServiceCopy => Self::Files(files::Method::FilesServiceCopy),
-            MethodId::YiruRuntimeV1FilesServiceDelete => {
+            MethodId::AgentStartRuntimeV1FilesServiceCopy => {
+                Self::Files(files::Method::FilesServiceCopy)
+            }
+            MethodId::AgentStartRuntimeV1FilesServiceDelete => {
                 Self::Files(files::Method::FilesServiceDelete)
             }
-            MethodId::YiruRuntimeV1FilesServiceReadLogTail => {
+            MethodId::AgentStartRuntimeV1FilesServiceReadLogTail => {
                 Self::Files(files::Method::FilesServiceReadLogTail)
             }
-            MethodId::YiruRuntimeV1FilesServiceResolveTerminalPath => {
+            MethodId::AgentStartRuntimeV1FilesServiceResolveTerminalPath => {
                 Self::Files(files::Method::FilesServiceResolveTerminalPath)
             }
-            MethodId::YiruRuntimeV1FilesServiceReadTerminalArtifact => {
+            MethodId::AgentStartRuntimeV1FilesServiceReadTerminalArtifact => {
                 Self::Files(files::Method::FilesServiceReadTerminalArtifact)
             }
-            MethodId::YiruRuntimeV1FilesServiceReadTerminalArtifactPreview => {
+            MethodId::AgentStartRuntimeV1FilesServiceReadTerminalArtifactPreview => {
                 Self::Files(files::Method::FilesServiceReadTerminalArtifactPreview)
             }
-            MethodId::YiruRuntimeV1FilesServiceWriteTerminalArtifact => {
+            MethodId::AgentStartRuntimeV1FilesServiceWriteTerminalArtifact => {
                 Self::Files(files::Method::FilesServiceWriteTerminalArtifact)
             }
-            MethodId::YiruRuntimeV1FilesServiceWatch => {
+            MethodId::AgentStartRuntimeV1FilesServiceWatch => {
                 Self::Files(files::Method::FilesServiceWatch)
             }
-            MethodId::YiruRuntimeV1FilesServiceWatchLogTail => {
+            MethodId::AgentStartRuntimeV1FilesServiceWatchLogTail => {
                 Self::Files(files::Method::FilesServiceWatchLogTail)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceAuthorizeExternalPath => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceAuthorizeExternalPath => {
                 Self::Files(files::Method::ShellFilesServiceAuthorizeExternalPath)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceCopy => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceCopy => {
                 Self::Files(files::Method::ShellFilesServiceCopy)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceCreateDirectory => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceCreateDirectory => {
                 Self::Files(files::Method::ShellFilesServiceCreateDirectory)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceCreateFile => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceCreateFile => {
                 Self::Files(files::Method::ShellFilesServiceCreateFile)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceDelete => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceDelete => {
                 Self::Files(files::Method::ShellFilesServiceDelete)
             }
-            MethodId::YiruRuntimeV1ShellFilesServicePathExists => {
+            MethodId::AgentStartRuntimeV1ShellFilesServicePathExists => {
                 Self::Files(files::Method::ShellFilesServicePathExists)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceRead => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceRead => {
                 Self::Files(files::Method::ShellFilesServiceRead)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceReadChunk => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceReadChunk => {
                 Self::Files(files::Method::ShellFilesServiceReadChunk)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceRename => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceRename => {
                 Self::Files(files::Method::ShellFilesServiceRename)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceResolveDroppedPathsForAgent => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceResolveDroppedPathsForAgent => {
                 Self::Files(files::Method::ShellFilesServiceResolveDroppedPathsForAgent)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceStageExternalPathsForRuntimeUpload => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceStageExternalPathsForRuntimeUpload => {
                 Self::Files(files::Method::ShellFilesServiceStageExternalPathsForRuntimeUpload)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceStat => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceStat => {
                 Self::Files(files::Method::ShellFilesServiceStat)
             }
-            MethodId::YiruRuntimeV1ShellFilesServiceWrite => {
+            MethodId::AgentStartRuntimeV1ShellFilesServiceWrite => {
                 Self::Files(files::Method::ShellFilesServiceWrite)
             }
-            MethodId::YiruRuntimeV1MarkdownServiceReadTab => {
+            MethodId::AgentStartRuntimeV1MarkdownServiceReadTab => {
                 Self::Files(files::Method::MarkdownServiceReadTab)
             }
-            MethodId::YiruRuntimeV1MarkdownServiceSaveTab => {
+            MethodId::AgentStartRuntimeV1MarkdownServiceSaveTab => {
                 Self::Files(files::Method::MarkdownServiceSaveTab)
             }
-            MethodId::YiruRuntimeV1ArtifactServiceBegin => {
+            MethodId::AgentStartRuntimeV1ArtifactServiceBegin => {
                 Self::Files(files::Method::ArtifactServiceBegin)
             }
-            MethodId::YiruRuntimeV1ArtifactServiceAppend => {
+            MethodId::AgentStartRuntimeV1ArtifactServiceAppend => {
                 Self::Files(files::Method::ArtifactServiceAppend)
             }
-            MethodId::YiruRuntimeV1ArtifactServiceComplete => {
+            MethodId::AgentStartRuntimeV1ArtifactServiceComplete => {
                 Self::Files(files::Method::ArtifactServiceComplete)
             }
-            MethodId::YiruRuntimeV1ArtifactServiceAbort => {
+            MethodId::AgentStartRuntimeV1ArtifactServiceAbort => {
                 Self::Files(files::Method::ArtifactServiceAbort)
             }
-            MethodId::YiruRuntimeV1ArtifactServiceDownloadTicket => {
+            MethodId::AgentStartRuntimeV1ArtifactServiceDownloadTicket => {
                 Self::Files(files::Method::ArtifactServiceDownloadTicket)
             }
-            MethodId::YiruRuntimeV1ArtifactServiceRead => {
+            MethodId::AgentStartRuntimeV1ArtifactServiceRead => {
                 Self::Files(files::Method::ArtifactServiceRead)
             }
-            MethodId::YiruRuntimeV1ClipboardServiceStartImageUpload => {
+            MethodId::AgentStartRuntimeV1ClipboardServiceStartImageUpload => {
                 Self::Files(files::Method::ClipboardServiceStartImageUpload)
             }
-            MethodId::YiruRuntimeV1ClipboardServiceAppendImageUploadChunk => {
+            MethodId::AgentStartRuntimeV1ClipboardServiceAppendImageUploadChunk => {
                 Self::Files(files::Method::ClipboardServiceAppendImageUploadChunk)
             }
-            MethodId::YiruRuntimeV1ClipboardServiceCommitImageUpload => {
+            MethodId::AgentStartRuntimeV1ClipboardServiceCommitImageUpload => {
                 Self::Files(files::Method::ClipboardServiceCommitImageUpload)
             }
-            MethodId::YiruRuntimeV1ClipboardServiceAbortImageUpload => {
+            MethodId::AgentStartRuntimeV1ClipboardServiceAbortImageUpload => {
                 Self::Files(files::Method::ClipboardServiceAbortImageUpload)
             }
-            MethodId::YiruRuntimeV1ClipboardServiceSaveImageAsTempFile => {
+            MethodId::AgentStartRuntimeV1ClipboardServiceSaveImageAsTempFile => {
                 Self::Files(files::Method::ClipboardServiceSaveImageAsTempFile)
             }
-            MethodId::YiruRuntimeV1NotebookServiceRunPythonCell => {
+            MethodId::AgentStartRuntimeV1NotebookServiceRunPythonCell => {
                 Self::Files(files::Method::NotebookServiceRunPythonCell)
             }
-            MethodId::YiruRuntimeV1ExternalEditorServiceOpenRemoteSsh => {
+            MethodId::AgentStartRuntimeV1ExternalEditorServiceOpenRemoteSsh => {
                 Self::Files(files::Method::ExternalEditorServiceOpenRemoteSsh)
             }
-            MethodId::YiruRuntimeV1GitStatusServiceStatus => {
+            MethodId::AgentStartRuntimeV1GitStatusServiceStatus => {
                 Self::Git(git::Method::StatusServiceStatus)
             }
-            MethodId::YiruRuntimeV1GitStatusServiceDiff => {
+            MethodId::AgentStartRuntimeV1GitStatusServiceDiff => {
                 Self::Git(git::Method::StatusServiceDiff)
             }
-            MethodId::YiruRuntimeV1GitStatusServiceSubmoduleStatus => {
+            MethodId::AgentStartRuntimeV1GitStatusServiceSubmoduleStatus => {
                 Self::Git(git::Method::StatusServiceSubmoduleStatus)
             }
-            MethodId::YiruRuntimeV1GitStatusServiceCheckIgnored => {
+            MethodId::AgentStartRuntimeV1GitStatusServiceCheckIgnored => {
                 Self::Git(git::Method::StatusServiceCheckIgnored)
             }
-            MethodId::YiruRuntimeV1GitStatusServiceFindHugeFoldersToIgnore => {
+            MethodId::AgentStartRuntimeV1GitStatusServiceFindHugeFoldersToIgnore => {
                 Self::Git(git::Method::StatusServiceFindHugeFoldersToIgnore)
             }
-            MethodId::YiruRuntimeV1GitStatusServiceLocalBranches => {
+            MethodId::AgentStartRuntimeV1GitStatusServiceLocalBranches => {
                 Self::Git(git::Method::StatusServiceLocalBranches)
             }
-            MethodId::YiruRuntimeV1GitStatusServiceUpstreamStatus => {
+            MethodId::AgentStartRuntimeV1GitStatusServiceUpstreamStatus => {
                 Self::Git(git::Method::StatusServiceUpstreamStatus)
             }
-            MethodId::YiruRuntimeV1GitStatusServiceRemoteCommitUrl => {
+            MethodId::AgentStartRuntimeV1GitStatusServiceRemoteCommitUrl => {
                 Self::Git(git::Method::StatusServiceRemoteCommitUrl)
             }
-            MethodId::YiruRuntimeV1GitStagingServiceStage => {
+            MethodId::AgentStartRuntimeV1GitStagingServiceStage => {
                 Self::Git(git::Method::StagingServiceStage)
             }
-            MethodId::YiruRuntimeV1GitStagingServiceUnstage => {
+            MethodId::AgentStartRuntimeV1GitStagingServiceUnstage => {
                 Self::Git(git::Method::StagingServiceUnstage)
             }
-            MethodId::YiruRuntimeV1GitStagingServiceDiscard => {
+            MethodId::AgentStartRuntimeV1GitStagingServiceDiscard => {
                 Self::Git(git::Method::StagingServiceDiscard)
             }
-            MethodId::YiruRuntimeV1GitStagingServiceBulkStage => {
+            MethodId::AgentStartRuntimeV1GitStagingServiceBulkStage => {
                 Self::Git(git::Method::StagingServiceBulkStage)
             }
-            MethodId::YiruRuntimeV1GitStagingServiceBulkUnstage => {
+            MethodId::AgentStartRuntimeV1GitStagingServiceBulkUnstage => {
                 Self::Git(git::Method::StagingServiceBulkUnstage)
             }
-            MethodId::YiruRuntimeV1GitStagingServiceBulkDiscard => {
+            MethodId::AgentStartRuntimeV1GitStagingServiceBulkDiscard => {
                 Self::Git(git::Method::StagingServiceBulkDiscard)
             }
-            MethodId::YiruRuntimeV1GitStagingServiceCommit => {
+            MethodId::AgentStartRuntimeV1GitStagingServiceCommit => {
                 Self::Git(git::Method::StagingServiceCommit)
             }
-            MethodId::YiruRuntimeV1GitStagingServiceAppendGitignore => {
+            MethodId::AgentStartRuntimeV1GitStagingServiceAppendGitignore => {
                 Self::Git(git::Method::StagingServiceAppendGitignore)
             }
-            MethodId::YiruRuntimeV1GitBranchServiceCheckout => {
+            MethodId::AgentStartRuntimeV1GitBranchServiceCheckout => {
                 Self::Git(git::Method::BranchServiceCheckout)
             }
-            MethodId::YiruRuntimeV1GitBranchServiceCheckoutCommit => {
+            MethodId::AgentStartRuntimeV1GitBranchServiceCheckoutCommit => {
                 Self::Git(git::Method::BranchServiceCheckoutCommit)
             }
-            MethodId::YiruRuntimeV1GitBranchServiceCreateBranch => {
+            MethodId::AgentStartRuntimeV1GitBranchServiceCreateBranch => {
                 Self::Git(git::Method::BranchServiceCreateBranch)
             }
-            MethodId::YiruRuntimeV1GitBranchServiceAddTag => {
+            MethodId::AgentStartRuntimeV1GitBranchServiceAddTag => {
                 Self::Git(git::Method::BranchServiceAddTag)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceConflictOperation => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceConflictOperation => {
                 Self::Git(git::Method::HistoryRewriteServiceConflictOperation)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceAbortMerge => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceAbortMerge => {
                 Self::Git(git::Method::HistoryRewriteServiceAbortMerge)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceAbortRebase => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceAbortRebase => {
                 Self::Git(git::Method::HistoryRewriteServiceAbortRebase)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceAbortRevert => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceAbortRevert => {
                 Self::Git(git::Method::HistoryRewriteServiceAbortRevert)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceCherryPick => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceCherryPick => {
                 Self::Git(git::Method::HistoryRewriteServiceCherryPick)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceRevertCommit => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceRevertCommit => {
                 Self::Git(git::Method::HistoryRewriteServiceRevertCommit)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceDropCommit => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceDropCommit => {
                 Self::Git(git::Method::HistoryRewriteServiceDropCommit)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceResetToCommit => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceResetToCommit => {
                 Self::Git(git::Method::HistoryRewriteServiceResetToCommit)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceRebaseFromBase => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceRebaseFromBase => {
                 Self::Git(git::Method::HistoryRewriteServiceRebaseFromBase)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceRebaseOntoCommit => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceRebaseOntoCommit => {
                 Self::Git(git::Method::HistoryRewriteServiceRebaseOntoCommit)
             }
-            MethodId::YiruRuntimeV1GitHistoryRewriteServiceMergeCommit => {
+            MethodId::AgentStartRuntimeV1GitHistoryRewriteServiceMergeCommit => {
                 Self::Git(git::Method::HistoryRewriteServiceMergeCommit)
             }
-            MethodId::YiruRuntimeV1GitHistoryServiceHistory => {
+            MethodId::AgentStartRuntimeV1GitHistoryServiceHistory => {
                 Self::Git(git::Method::HistoryServiceHistory)
             }
-            MethodId::YiruRuntimeV1GitHistoryServiceBranchCompare => {
+            MethodId::AgentStartRuntimeV1GitHistoryServiceBranchCompare => {
                 Self::Git(git::Method::HistoryServiceBranchCompare)
             }
-            MethodId::YiruRuntimeV1GitHistoryServiceBranchDiff => {
+            MethodId::AgentStartRuntimeV1GitHistoryServiceBranchDiff => {
                 Self::Git(git::Method::HistoryServiceBranchDiff)
             }
-            MethodId::YiruRuntimeV1GitHistoryServiceCommitCompare => {
+            MethodId::AgentStartRuntimeV1GitHistoryServiceCommitCompare => {
                 Self::Git(git::Method::HistoryServiceCommitCompare)
             }
-            MethodId::YiruRuntimeV1GitHistoryServiceCommitDiff => {
+            MethodId::AgentStartRuntimeV1GitHistoryServiceCommitDiff => {
                 Self::Git(git::Method::HistoryServiceCommitDiff)
             }
-            MethodId::YiruRuntimeV1GitRemoteServiceFetch => {
+            MethodId::AgentStartRuntimeV1GitRemoteServiceFetch => {
                 Self::Git(git::Method::RemoteServiceFetch)
             }
-            MethodId::YiruRuntimeV1GitRemoteServicePull => {
+            MethodId::AgentStartRuntimeV1GitRemoteServicePull => {
                 Self::Git(git::Method::RemoteServicePull)
             }
-            MethodId::YiruRuntimeV1GitRemoteServiceFastForward => {
+            MethodId::AgentStartRuntimeV1GitRemoteServiceFastForward => {
                 Self::Git(git::Method::RemoteServiceFastForward)
             }
-            MethodId::YiruRuntimeV1GitRemoteServicePush => {
+            MethodId::AgentStartRuntimeV1GitRemoteServicePush => {
                 Self::Git(git::Method::RemoteServicePush)
             }
-            MethodId::YiruRuntimeV1GitRemoteServiceForkSync => {
+            MethodId::AgentStartRuntimeV1GitRemoteServiceForkSync => {
                 Self::Git(git::Method::RemoteServiceForkSync)
             }
-            MethodId::YiruRuntimeV1GitGenerationServiceGenerateCommitMessage => {
+            MethodId::AgentStartRuntimeV1GitGenerationServiceGenerateCommitMessage => {
                 Self::Git(git::Method::GenerationServiceGenerateCommitMessage)
             }
-            MethodId::YiruRuntimeV1GitGenerationServiceCancelGenerateCommitMessage => {
+            MethodId::AgentStartRuntimeV1GitGenerationServiceCancelGenerateCommitMessage => {
                 Self::Git(git::Method::GenerationServiceCancelGenerateCommitMessage)
             }
-            MethodId::YiruRuntimeV1GitGenerationServiceGeneratePullRequestFields => {
+            MethodId::AgentStartRuntimeV1GitGenerationServiceGeneratePullRequestFields => {
                 Self::Git(git::Method::GenerationServiceGeneratePullRequestFields)
             }
-            MethodId::YiruRuntimeV1GitGenerationServiceCancelGeneratePullRequestFields => {
+            MethodId::AgentStartRuntimeV1GitGenerationServiceCancelGeneratePullRequestFields => {
                 Self::Git(git::Method::GenerationServiceCancelGeneratePullRequestFields)
             }
-            MethodId::YiruRuntimeV1GitHubShellServiceGetViewer => {
+            MethodId::AgentStartRuntimeV1GitHubShellServiceGetViewer => {
                 Self::Github(github::Method::ShellServiceGetViewer)
             }
-            MethodId::YiruRuntimeV1GitHubShellServiceEnqueuePrRefresh => {
+            MethodId::AgentStartRuntimeV1GitHubShellServiceEnqueuePrRefresh => {
                 Self::Github(github::Method::ShellServiceEnqueuePrRefresh)
             }
-            MethodId::YiruRuntimeV1GitHubShellServiceReportVisiblePrRefreshCandidates => {
+            MethodId::AgentStartRuntimeV1GitHubShellServiceReportVisiblePrRefreshCandidates => {
                 Self::Github(github::Method::ShellServiceReportVisiblePrRefreshCandidates)
             }
-            MethodId::YiruRuntimeV1GitHubShellServiceCheckYiruStarred => {
-                Self::Github(github::Method::ShellServiceCheckYiruStarred)
+            MethodId::AgentStartRuntimeV1GitHubShellServiceCheckAgentStartStarred => {
+                Self::Github(github::Method::ShellServiceCheckAgentStartStarred)
             }
-            MethodId::YiruRuntimeV1GitHubShellServiceStarYiru => {
-                Self::Github(github::Method::ShellServiceStarYiru)
+            MethodId::AgentStartRuntimeV1GitHubShellServiceStarAgentStart => {
+                Self::Github(github::Method::ShellServiceStarAgentStart)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetRepoSlug => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetRepoSlug => {
                 Self::Github(github::Method::ServiceGetRepoSlug)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetRepoUpstream => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetRepoUpstream => {
                 Self::Github(github::Method::ServiceGetRepoUpstream)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetRateLimit => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetRateLimit => {
                 Self::Github(github::Method::ServiceGetRateLimit)
             }
-            MethodId::YiruRuntimeV1GitHubServiceListWorkItems => {
+            MethodId::AgentStartRuntimeV1GitHubServiceListWorkItems => {
                 Self::Github(github::Method::ServiceListWorkItems)
             }
-            MethodId::YiruRuntimeV1GitHubServiceListLabels => {
+            MethodId::AgentStartRuntimeV1GitHubServiceListLabels => {
                 Self::Github(github::Method::ServiceListLabels)
             }
-            MethodId::YiruRuntimeV1GitHubServiceListAssignableUsers => {
+            MethodId::AgentStartRuntimeV1GitHubServiceListAssignableUsers => {
                 Self::Github(github::Method::ServiceListAssignableUsers)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetWorkItem => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetWorkItem => {
                 Self::Github(github::Method::ServiceGetWorkItem)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetWorkItemByOwnerRepo => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetWorkItemByOwnerRepo => {
                 Self::Github(github::Method::ServiceGetWorkItemByOwnerRepo)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetWorkItemDetails => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetWorkItemDetails => {
                 Self::Github(github::Method::ServiceGetWorkItemDetails)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetPrForBranch => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetPrForBranch => {
                 Self::Github(github::Method::ServiceGetPrForBranch)
             }
-            MethodId::YiruRuntimeV1GitHubServiceRefreshPrForBranch => {
+            MethodId::AgentStartRuntimeV1GitHubServiceRefreshPrForBranch => {
                 Self::Github(github::Method::ServiceRefreshPrForBranch)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetPrChecks => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetPrChecks => {
                 Self::Github(github::Method::ServiceGetPrChecks)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetPrCheckDetails => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetPrCheckDetails => {
                 Self::Github(github::Method::ServiceGetPrCheckDetails)
             }
-            MethodId::YiruRuntimeV1GitHubServiceRerunPrChecks => {
+            MethodId::AgentStartRuntimeV1GitHubServiceRerunPrChecks => {
                 Self::Github(github::Method::ServiceRerunPrChecks)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetPrComments => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetPrComments => {
                 Self::Github(github::Method::ServiceGetPrComments)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetPrFileContents => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetPrFileContents => {
                 Self::Github(github::Method::ServiceGetPrFileContents)
             }
-            MethodId::YiruRuntimeV1GitHubServiceResolveReviewThread => {
+            MethodId::AgentStartRuntimeV1GitHubServiceResolveReviewThread => {
                 Self::Github(github::Method::ServiceResolveReviewThread)
             }
-            MethodId::YiruRuntimeV1GitHubServiceSetPrFileViewed => {
+            MethodId::AgentStartRuntimeV1GitHubServiceSetPrFileViewed => {
                 Self::Github(github::Method::ServiceSetPrFileViewed)
             }
-            MethodId::YiruRuntimeV1GitHubServiceUpdatePrTitle => {
+            MethodId::AgentStartRuntimeV1GitHubServiceUpdatePrTitle => {
                 Self::Github(github::Method::ServiceUpdatePrTitle)
             }
-            MethodId::YiruRuntimeV1GitHubServiceUpdatePr => {
+            MethodId::AgentStartRuntimeV1GitHubServiceUpdatePr => {
                 Self::Github(github::Method::ServiceUpdatePr)
             }
-            MethodId::YiruRuntimeV1GitHubServiceUpdatePrState => {
+            MethodId::AgentStartRuntimeV1GitHubServiceUpdatePrState => {
                 Self::Github(github::Method::ServiceUpdatePrState)
             }
-            MethodId::YiruRuntimeV1GitHubServiceMergePr => {
+            MethodId::AgentStartRuntimeV1GitHubServiceMergePr => {
                 Self::Github(github::Method::ServiceMergePr)
             }
-            MethodId::YiruRuntimeV1GitHubServiceSetPrAutoMerge => {
+            MethodId::AgentStartRuntimeV1GitHubServiceSetPrAutoMerge => {
                 Self::Github(github::Method::ServiceSetPrAutoMerge)
             }
-            MethodId::YiruRuntimeV1GitHubServiceRequestPrReviewers => {
+            MethodId::AgentStartRuntimeV1GitHubServiceRequestPrReviewers => {
                 Self::Github(github::Method::ServiceRequestPrReviewers)
             }
-            MethodId::YiruRuntimeV1GitHubServiceRemovePrReviewers => {
+            MethodId::AgentStartRuntimeV1GitHubServiceRemovePrReviewers => {
                 Self::Github(github::Method::ServiceRemovePrReviewers)
             }
-            MethodId::YiruRuntimeV1GitHubServiceAddPrComment => {
+            MethodId::AgentStartRuntimeV1GitHubServiceAddPrComment => {
                 Self::Github(github::Method::ServiceAddPrComment)
             }
-            MethodId::YiruRuntimeV1GitHubServiceAddPrReviewComment => {
+            MethodId::AgentStartRuntimeV1GitHubServiceAddPrReviewComment => {
                 Self::Github(github::Method::ServiceAddPrReviewComment)
             }
-            MethodId::YiruRuntimeV1GitHubServiceAddPrReviewCommentReply => {
+            MethodId::AgentStartRuntimeV1GitHubServiceAddPrReviewCommentReply => {
                 Self::Github(github::Method::ServiceAddPrReviewCommentReply)
             }
-            MethodId::YiruRuntimeV1GitHubServiceCreateCommentDraft => {
+            MethodId::AgentStartRuntimeV1GitHubServiceCreateCommentDraft => {
                 Self::Github(github::Method::ServiceCreateCommentDraft)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetHostedReviewForBranch => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetHostedReviewForBranch => {
                 Self::Github(github::Method::ServiceGetHostedReviewForBranch)
             }
-            MethodId::YiruRuntimeV1GitHubServiceGetHostedReviewCreationEligibility => {
+            MethodId::AgentStartRuntimeV1GitHubServiceGetHostedReviewCreationEligibility => {
                 Self::Github(github::Method::ServiceGetHostedReviewCreationEligibility)
             }
-            MethodId::YiruRuntimeV1GitHubServiceCreateHostedReview => {
+            MethodId::AgentStartRuntimeV1GitHubServiceCreateHostedReview => {
                 Self::Github(github::Method::ServiceCreateHostedReview)
             }
-            MethodId::YiruRuntimeV1GitHubServiceSubscribeEvents => {
+            MethodId::AgentStartRuntimeV1GitHubServiceSubscribeEvents => {
                 Self::Github(github::Method::ServiceSubscribeEvents)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceRunCreate => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceRunCreate => {
                 Self::Orchestration(orchestration::Method::RunCreate)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceRunUse => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceRunUse => {
                 Self::Orchestration(orchestration::Method::RunUse)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceRunCurrent => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceRunCurrent => {
                 Self::Orchestration(orchestration::Method::RunCurrent)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceRunList => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceRunList => {
                 Self::Orchestration(orchestration::Method::RunList)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceRunShow => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceRunShow => {
                 Self::Orchestration(orchestration::Method::RunShow)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceTaskCreate => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceTaskCreate => {
                 Self::Orchestration(orchestration::Method::TaskCreate)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceTaskList => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceTaskList => {
                 Self::Orchestration(orchestration::Method::TaskList)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceTaskUpdate => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceTaskUpdate => {
                 Self::Orchestration(orchestration::Method::TaskUpdate)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceDispatch => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceDispatch => {
                 Self::Orchestration(orchestration::Method::Dispatch)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceDispatchShow => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceDispatchShow => {
                 Self::Orchestration(orchestration::Method::DispatchShow)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceSend => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceSend => {
                 Self::Orchestration(orchestration::Method::Send)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceCheck => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceCheck => {
                 Self::Orchestration(orchestration::Method::Check)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceReply => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceReply => {
                 Self::Orchestration(orchestration::Method::Reply)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceInbox => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceInbox => {
                 Self::Orchestration(orchestration::Method::Inbox)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceAsk => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceAsk => {
                 Self::Orchestration(orchestration::Method::Ask)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceRun => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceRun => {
                 Self::Orchestration(orchestration::Method::Run)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceRunStop => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceRunStop => {
                 Self::Orchestration(orchestration::Method::RunStop)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceGateCreate => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceGateCreate => {
                 Self::Orchestration(orchestration::Method::GateCreate)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceGateResolve => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceGateResolve => {
                 Self::Orchestration(orchestration::Method::GateResolve)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceGateList => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceGateList => {
                 Self::Orchestration(orchestration::Method::GateList)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceReset => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceReset => {
                 Self::Orchestration(orchestration::Method::Reset)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceWorkerStart => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceWorkerStart => {
                 Self::Orchestration(orchestration::Method::WorkerStart)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceWorkerShow => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceWorkerShow => {
                 Self::Orchestration(orchestration::Method::WorkerShow)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceWorkerRead => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceWorkerRead => {
                 Self::Orchestration(orchestration::Method::WorkerRead)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceWorkerStop => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceWorkerStop => {
                 Self::Orchestration(orchestration::Method::WorkerStop)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceWorkerAbandon => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceWorkerAbandon => {
                 Self::Orchestration(orchestration::Method::WorkerAbandon)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceFederationAttachStart => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceFederationAttachStart => {
                 Self::Orchestration(orchestration::Method::FederationAttachStart)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceFederationPull => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceFederationPull => {
                 Self::Orchestration(orchestration::Method::FederationPull)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceFederationAck => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceFederationAck => {
                 Self::Orchestration(orchestration::Method::FederationAck)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceFederationImport => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceFederationImport => {
                 Self::Orchestration(orchestration::Method::FederationImport)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceFederationShow => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceFederationShow => {
                 Self::Orchestration(orchestration::Method::FederationShow)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceFederationRead => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceFederationRead => {
                 Self::Orchestration(orchestration::Method::FederationRead)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceFederationReadOutput => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceFederationReadOutput => {
                 Self::Orchestration(orchestration::Method::FederationReadOutput)
             }
-            MethodId::YiruRuntimeV1OrchestrationServiceFederationStop => {
+            MethodId::AgentStartRuntimeV1OrchestrationServiceFederationStop => {
                 Self::Orchestration(orchestration::Method::FederationStop)
             }
-            MethodId::YiruRuntimeV1SettingsServiceGetDocument => {
+            MethodId::AgentStartRuntimeV1SettingsServiceGetDocument => {
                 Self::Preferences(preferences::Method::SettingsServiceGetDocument)
             }
-            MethodId::YiruRuntimeV1SettingsServiceSetDocument => {
+            MethodId::AgentStartRuntimeV1SettingsServiceSetDocument => {
                 Self::Preferences(preferences::Method::SettingsServiceSetDocument)
             }
-            MethodId::YiruRuntimeV1SettingsServiceGet => {
+            MethodId::AgentStartRuntimeV1SettingsServiceGet => {
                 Self::Preferences(preferences::Method::SettingsServiceGet)
             }
-            MethodId::YiruRuntimeV1SettingsServiceUpdate => {
+            MethodId::AgentStartRuntimeV1SettingsServiceUpdate => {
                 Self::Preferences(preferences::Method::SettingsServiceUpdate)
             }
-            MethodId::YiruRuntimeV1SettingsServiceGetTerminalQuickCommands => {
+            MethodId::AgentStartRuntimeV1SettingsServiceGetTerminalQuickCommands => {
                 Self::Preferences(preferences::Method::SettingsServiceGetTerminalQuickCommands)
             }
-            MethodId::YiruRuntimeV1SettingsServiceUpdateTerminalQuickCommands => {
+            MethodId::AgentStartRuntimeV1SettingsServiceUpdateTerminalQuickCommands => {
                 Self::Preferences(preferences::Method::SettingsServiceUpdateTerminalQuickCommands)
             }
-            MethodId::YiruRuntimeV1SettingsServiceUpdatePrBotAuthorOverride => {
+            MethodId::AgentStartRuntimeV1SettingsServiceUpdatePrBotAuthorOverride => {
                 Self::Preferences(preferences::Method::SettingsServiceUpdatePrBotAuthorOverride)
             }
-            MethodId::YiruRuntimeV1SettingsServiceListFonts => {
+            MethodId::AgentStartRuntimeV1SettingsServiceListFonts => {
                 Self::Preferences(preferences::Method::SettingsServiceListFonts)
             }
-            MethodId::YiruRuntimeV1SettingsServicePreviewGhosttyImport => {
+            MethodId::AgentStartRuntimeV1SettingsServicePreviewGhosttyImport => {
                 Self::Preferences(preferences::Method::SettingsServicePreviewGhosttyImport)
             }
-            MethodId::YiruRuntimeV1SettingsServicePreviewWarpThemeImport => {
+            MethodId::AgentStartRuntimeV1SettingsServicePreviewWarpThemeImport => {
                 Self::Preferences(preferences::Method::SettingsServicePreviewWarpThemeImport)
             }
-            MethodId::YiruRuntimeV1UiServiceGet => {
+            MethodId::AgentStartRuntimeV1UiServiceGet => {
                 Self::Preferences(preferences::Method::UiServiceGet)
             }
-            MethodId::YiruRuntimeV1UiServiceSet => {
+            MethodId::AgentStartRuntimeV1UiServiceSet => {
                 Self::Preferences(preferences::Method::UiServiceSet)
             }
-            MethodId::YiruRuntimeV1UiServiceRecordFeatureInteraction => {
+            MethodId::AgentStartRuntimeV1UiServiceRecordFeatureInteraction => {
                 Self::Preferences(preferences::Method::UiServiceRecordFeatureInteraction)
             }
-            MethodId::YiruRuntimeV1ShellKeybindingsServiceGet => {
+            MethodId::AgentStartRuntimeV1ShellKeybindingsServiceGet => {
                 Self::Preferences(preferences::Method::ShellKeybindingsServiceGet)
             }
-            MethodId::YiruRuntimeV1ShellKeybindingsServiceEnsureFile => {
+            MethodId::AgentStartRuntimeV1ShellKeybindingsServiceEnsureFile => {
                 Self::Preferences(preferences::Method::ShellKeybindingsServiceEnsureFile)
             }
-            MethodId::YiruRuntimeV1ShellKeybindingsServiceReload => {
+            MethodId::AgentStartRuntimeV1ShellKeybindingsServiceReload => {
                 Self::Preferences(preferences::Method::ShellKeybindingsServiceReload)
             }
-            MethodId::YiruRuntimeV1ShellKeybindingsServiceOpenFile => {
+            MethodId::AgentStartRuntimeV1ShellKeybindingsServiceOpenFile => {
                 Self::Preferences(preferences::Method::ShellKeybindingsServiceOpenFile)
             }
-            MethodId::YiruRuntimeV1ShellKeybindingsServiceRevealFile => {
+            MethodId::AgentStartRuntimeV1ShellKeybindingsServiceRevealFile => {
                 Self::Preferences(preferences::Method::ShellKeybindingsServiceRevealFile)
             }
-            MethodId::YiruRuntimeV1ShellKeybindingsServiceSetAction => {
+            MethodId::AgentStartRuntimeV1ShellKeybindingsServiceSetAction => {
                 Self::Preferences(preferences::Method::ShellKeybindingsServiceSetAction)
             }
-            MethodId::YiruRuntimeV1ShellYiruProfilesServiceList => {
-                Self::Preferences(preferences::Method::ShellYiruProfilesServiceList)
+            MethodId::AgentStartRuntimeV1ShellAgentStartProfilesServiceList => {
+                Self::Preferences(preferences::Method::ShellAgentStartProfilesServiceList)
             }
-            MethodId::YiruRuntimeV1ShellYiruProfilesServiceCreateLocal => {
-                Self::Preferences(preferences::Method::ShellYiruProfilesServiceCreateLocal)
+            MethodId::AgentStartRuntimeV1ShellAgentStartProfilesServiceCreateLocal => {
+                Self::Preferences(preferences::Method::ShellAgentStartProfilesServiceCreateLocal)
             }
-            MethodId::YiruRuntimeV1ShellYiruProfilesServiceSwitchProfile => {
-                Self::Preferences(preferences::Method::ShellYiruProfilesServiceSwitchProfile)
+            MethodId::AgentStartRuntimeV1ShellAgentStartProfilesServiceSwitchProfile => {
+                Self::Preferences(preferences::Method::ShellAgentStartProfilesServiceSwitchProfile)
             }
-            MethodId::YiruRuntimeV1ShellYiruProfilesServiceTransferProject => {
-                Self::Preferences(preferences::Method::ShellYiruProfilesServiceTransferProject)
+            MethodId::AgentStartRuntimeV1ShellAgentStartProfilesServiceTransferProject => {
+                Self::Preferences(
+                    preferences::Method::ShellAgentStartProfilesServiceTransferProject,
+                )
             }
-            MethodId::YiruRuntimeV1ShellYiruProfilesServiceFindProjectProfiles => {
-                Self::Preferences(preferences::Method::ShellYiruProfilesServiceFindProjectProfiles)
+            MethodId::AgentStartRuntimeV1ShellAgentStartProfilesServiceFindProjectProfiles => {
+                Self::Preferences(
+                    preferences::Method::ShellAgentStartProfilesServiceFindProjectProfiles,
+                )
             }
-            MethodId::YiruRuntimeV1ShellCacheServiceGetGitHub => {
+            MethodId::AgentStartRuntimeV1ShellCacheServiceGetGitHub => {
                 Self::Preferences(preferences::Method::ShellCacheServiceGetGitHub)
             }
-            MethodId::YiruRuntimeV1ShellCacheServiceSetGitHub => {
+            MethodId::AgentStartRuntimeV1ShellCacheServiceSetGitHub => {
                 Self::Preferences(preferences::Method::ShellCacheServiceSetGitHub)
             }
-            MethodId::YiruRuntimeV1ShellOnboardingServiceGet => {
+            MethodId::AgentStartRuntimeV1ShellOnboardingServiceGet => {
                 Self::Preferences(preferences::Method::ShellOnboardingServiceGet)
             }
-            MethodId::YiruRuntimeV1ShellOnboardingServiceUpdate => {
+            MethodId::AgentStartRuntimeV1ShellOnboardingServiceUpdate => {
                 Self::Preferences(preferences::Method::ShellOnboardingServiceUpdate)
             }
-            MethodId::YiruRuntimeV1ClientEventsServiceUnsubscribe => {
+            MethodId::AgentStartRuntimeV1ClientEventsServiceUnsubscribe => {
                 Self::Preferences(preferences::Method::ClientEventsServiceUnsubscribe)
             }
-            MethodId::YiruRuntimeV1ClientEventsServiceSubscribe => {
+            MethodId::AgentStartRuntimeV1ClientEventsServiceSubscribe => {
                 Self::Preferences(preferences::Method::ClientEventsServiceSubscribe)
             }
-            MethodId::YiruRuntimeV1ShellEventsServiceSubscribe => {
+            MethodId::AgentStartRuntimeV1ShellEventsServiceSubscribe => {
                 Self::Preferences(preferences::Method::ShellEventsServiceSubscribe)
             }
-            MethodId::YiruRuntimeV1ProgressEventsServiceSubscribe => {
+            MethodId::AgentStartRuntimeV1ProgressEventsServiceSubscribe => {
                 Self::Preferences(preferences::Method::ProgressEventsServiceSubscribe)
             }
-            MethodId::YiruRuntimeV1RepoServiceGetHooks => {
+            MethodId::AgentStartRuntimeV1RepoServiceGetHooks => {
                 Self::Projects(projects::Method::RepoServiceGetHooks)
             }
-            MethodId::YiruRuntimeV1RepoServiceList => {
+            MethodId::AgentStartRuntimeV1RepoServiceList => {
                 Self::Projects(projects::Method::RepoServiceList)
             }
-            MethodId::YiruRuntimeV1RepoServiceAdd => {
+            MethodId::AgentStartRuntimeV1RepoServiceAdd => {
                 Self::Projects(projects::Method::RepoServiceAdd)
             }
-            MethodId::YiruRuntimeV1RepoServiceBaseRefDefault => {
+            MethodId::AgentStartRuntimeV1RepoServiceBaseRefDefault => {
                 Self::Projects(projects::Method::RepoServiceBaseRefDefault)
             }
-            MethodId::YiruRuntimeV1RepoServiceSearchRefs => {
+            MethodId::AgentStartRuntimeV1RepoServiceSearchRefs => {
                 Self::Projects(projects::Method::RepoServiceSearchRefs)
             }
-            MethodId::YiruRuntimeV1ProjectGroupServiceList => {
+            MethodId::AgentStartRuntimeV1ProjectGroupServiceList => {
                 Self::Projects(projects::Method::ProjectGroupServiceList)
             }
-            MethodId::YiruRuntimeV1ProjectGroupServiceCreate => {
+            MethodId::AgentStartRuntimeV1ProjectGroupServiceCreate => {
                 Self::Projects(projects::Method::ProjectGroupServiceCreate)
             }
-            MethodId::YiruRuntimeV1ProjectGroupServiceUpdate => {
+            MethodId::AgentStartRuntimeV1ProjectGroupServiceUpdate => {
                 Self::Projects(projects::Method::ProjectGroupServiceUpdate)
             }
-            MethodId::YiruRuntimeV1ProjectGroupServiceDelete => {
+            MethodId::AgentStartRuntimeV1ProjectGroupServiceDelete => {
                 Self::Projects(projects::Method::ProjectGroupServiceDelete)
             }
-            MethodId::YiruRuntimeV1ProjectGroupServiceMoveProject => {
+            MethodId::AgentStartRuntimeV1ProjectGroupServiceMoveProject => {
                 Self::Projects(projects::Method::ProjectGroupServiceMoveProject)
             }
-            MethodId::YiruRuntimeV1ProjectGroupServiceScanNested => {
+            MethodId::AgentStartRuntimeV1ProjectGroupServiceScanNested => {
                 Self::Projects(projects::Method::ProjectGroupServiceScanNested)
             }
-            MethodId::YiruRuntimeV1ProjectGroupServiceCancelNestedScan => {
+            MethodId::AgentStartRuntimeV1ProjectGroupServiceCancelNestedScan => {
                 Self::Projects(projects::Method::ProjectGroupServiceCancelNestedScan)
             }
-            MethodId::YiruRuntimeV1ProjectGroupServiceImportNested => {
+            MethodId::AgentStartRuntimeV1ProjectGroupServiceImportNested => {
                 Self::Projects(projects::Method::ProjectGroupServiceImportNested)
             }
-            MethodId::YiruRuntimeV1ProjectGroupServiceSubscribeEvents => {
+            MethodId::AgentStartRuntimeV1ProjectGroupServiceSubscribeEvents => {
                 Self::Projects(projects::Method::ProjectGroupServiceSubscribeEvents)
             }
-            MethodId::YiruRuntimeV1RepoServiceClone => {
+            MethodId::AgentStartRuntimeV1RepoServiceClone => {
                 Self::Projects(projects::Method::RepoServiceClone)
             }
-            MethodId::YiruRuntimeV1RepoServiceCreate => {
+            MethodId::AgentStartRuntimeV1RepoServiceCreate => {
                 Self::Projects(projects::Method::RepoServiceCreate)
             }
-            MethodId::YiruRuntimeV1RepoServiceGitAvailable => {
+            MethodId::AgentStartRuntimeV1RepoServiceGitAvailable => {
                 Self::Projects(projects::Method::RepoServiceGitAvailable)
             }
-            MethodId::YiruRuntimeV1RepoServiceReorder => {
+            MethodId::AgentStartRuntimeV1RepoServiceReorder => {
                 Self::Projects(projects::Method::RepoServiceReorder)
             }
-            MethodId::YiruRuntimeV1RepoServiceRm => Self::Projects(projects::Method::RepoServiceRm),
-            MethodId::YiruRuntimeV1RepoServiceUpdate => {
+            MethodId::AgentStartRuntimeV1RepoServiceRm => {
+                Self::Projects(projects::Method::RepoServiceRm)
+            }
+            MethodId::AgentStartRuntimeV1RepoServiceUpdate => {
                 Self::Projects(projects::Method::RepoServiceUpdate)
             }
-            MethodId::YiruRuntimeV1RepoServiceHooks => {
+            MethodId::AgentStartRuntimeV1RepoServiceHooks => {
                 Self::Projects(projects::Method::RepoServiceHooks)
             }
-            MethodId::YiruRuntimeV1RepoServiceHooksCheck => {
+            MethodId::AgentStartRuntimeV1RepoServiceHooksCheck => {
                 Self::Projects(projects::Method::RepoServiceHooksCheck)
             }
-            MethodId::YiruRuntimeV1RepoServiceSetupScriptImports => {
+            MethodId::AgentStartRuntimeV1RepoServiceSetupScriptImports => {
                 Self::Projects(projects::Method::RepoServiceSetupScriptImports)
             }
-            MethodId::YiruRuntimeV1RepoServiceSparsePresets => {
+            MethodId::AgentStartRuntimeV1RepoServiceSparsePresets => {
                 Self::Projects(projects::Method::RepoServiceSparsePresets)
             }
-            MethodId::YiruRuntimeV1RepoServiceSaveSparsePreset => {
+            MethodId::AgentStartRuntimeV1RepoServiceSaveSparsePreset => {
                 Self::Projects(projects::Method::RepoServiceSaveSparsePreset)
             }
-            MethodId::YiruRuntimeV1RepoServiceRemoveSparsePreset => {
+            MethodId::AgentStartRuntimeV1RepoServiceRemoveSparsePreset => {
                 Self::Projects(projects::Method::RepoServiceRemoveSparsePreset)
             }
-            MethodId::YiruRuntimeV1ShellRepoHostServiceCloneAbort => {
+            MethodId::AgentStartRuntimeV1ShellRepoHostServiceCloneAbort => {
                 Self::Projects(projects::Method::ShellRepoHostServiceCloneAbort)
             }
-            MethodId::YiruRuntimeV1ShellRepoHostServiceGetDefaultCreateProjectParent => {
+            MethodId::AgentStartRuntimeV1ShellRepoHostServiceGetDefaultCreateProjectParent => {
                 Self::Projects(projects::Method::ShellRepoHostServiceGetDefaultCreateProjectParent)
             }
-            MethodId::YiruRuntimeV1ShellRepoHostServicePickDirectory => {
+            MethodId::AgentStartRuntimeV1ShellRepoHostServicePickDirectory => {
                 Self::Projects(projects::Method::ShellRepoHostServicePickDirectory)
             }
-            MethodId::YiruRuntimeV1ShellRepoHostServicePickFolder => {
+            MethodId::AgentStartRuntimeV1ShellRepoHostServicePickFolder => {
                 Self::Projects(projects::Method::ShellRepoHostServicePickFolder)
             }
-            MethodId::YiruRuntimeV1ShellRepoHostServicePickFolders => {
+            MethodId::AgentStartRuntimeV1ShellRepoHostServicePickFolders => {
                 Self::Projects(projects::Method::ShellRepoHostServicePickFolders)
             }
-            MethodId::YiruRuntimeV1ShellRepoHostServiceRemoveForHost => {
+            MethodId::AgentStartRuntimeV1ShellRepoHostServiceRemoveForHost => {
                 Self::Projects(projects::Method::ShellRepoHostServiceRemoveForHost)
             }
-            MethodId::YiruRuntimeV1ShellRepoHostServiceReorderForHost => {
+            MethodId::AgentStartRuntimeV1ShellRepoHostServiceReorderForHost => {
                 Self::Projects(projects::Method::ShellRepoHostServiceReorderForHost)
             }
-            MethodId::YiruRuntimeV1ProjectHostSetupServiceList => {
+            MethodId::AgentStartRuntimeV1ProjectHostSetupServiceList => {
                 Self::Projects(projects::Method::ProjectHostSetupServiceList)
             }
-            MethodId::YiruRuntimeV1ProjectHostSetupServiceCreate => {
+            MethodId::AgentStartRuntimeV1ProjectHostSetupServiceCreate => {
                 Self::Projects(projects::Method::ProjectHostSetupServiceCreate)
             }
-            MethodId::YiruRuntimeV1ProjectHostSetupServiceSetupExistingFolder => {
+            MethodId::AgentStartRuntimeV1ProjectHostSetupServiceSetupExistingFolder => {
                 Self::Projects(projects::Method::ProjectHostSetupServiceSetupExistingFolder)
             }
-            MethodId::YiruRuntimeV1ProjectHostSetupServiceClone => {
+            MethodId::AgentStartRuntimeV1ProjectHostSetupServiceClone => {
                 Self::Projects(projects::Method::ProjectHostSetupServiceClone)
             }
-            MethodId::YiruRuntimeV1ProjectHostSetupServiceUpdate => {
+            MethodId::AgentStartRuntimeV1ProjectHostSetupServiceUpdate => {
                 Self::Projects(projects::Method::ProjectHostSetupServiceUpdate)
             }
-            MethodId::YiruRuntimeV1ProjectHostSetupServiceDelete => {
+            MethodId::AgentStartRuntimeV1ProjectHostSetupServiceDelete => {
                 Self::Projects(projects::Method::ProjectHostSetupServiceDelete)
             }
-            MethodId::YiruRuntimeV1FolderWorkspaceServiceList => {
+            MethodId::AgentStartRuntimeV1FolderWorkspaceServiceList => {
                 Self::Projects(projects::Method::FolderWorkspaceServiceList)
             }
-            MethodId::YiruRuntimeV1FolderWorkspaceServiceCreate => {
+            MethodId::AgentStartRuntimeV1FolderWorkspaceServiceCreate => {
                 Self::Projects(projects::Method::FolderWorkspaceServiceCreate)
             }
-            MethodId::YiruRuntimeV1FolderWorkspaceServiceUpdate => {
+            MethodId::AgentStartRuntimeV1FolderWorkspaceServiceUpdate => {
                 Self::Projects(projects::Method::FolderWorkspaceServiceUpdate)
             }
-            MethodId::YiruRuntimeV1FolderWorkspaceServiceDelete => {
+            MethodId::AgentStartRuntimeV1FolderWorkspaceServiceDelete => {
                 Self::Projects(projects::Method::FolderWorkspaceServiceDelete)
             }
-            MethodId::YiruRuntimeV1FolderWorkspaceServiceGetPathStatus => {
+            MethodId::AgentStartRuntimeV1FolderWorkspaceServiceGetPathStatus => {
                 Self::Projects(projects::Method::FolderWorkspaceServiceGetPathStatus)
             }
-            MethodId::YiruRuntimeV1ProjectServiceList => {
+            MethodId::AgentStartRuntimeV1ProjectServiceList => {
                 Self::Projects(projects::Method::ProjectServiceList)
             }
-            MethodId::YiruRuntimeV1ProjectServiceUpdate => {
+            MethodId::AgentStartRuntimeV1ProjectServiceUpdate => {
                 Self::Projects(projects::Method::ProjectServiceUpdate)
             }
-            MethodId::YiruRuntimeV1ProjectContextServiceResolve => {
+            MethodId::AgentStartRuntimeV1ProjectContextServiceResolve => {
                 Self::Projects(projects::Method::ProjectContextServiceResolve)
             }
-            MethodId::YiruRuntimeV1AppControlServiceRecordStartupDiagnostic => {
+            MethodId::AgentStartRuntimeV1AppControlServiceRecordStartupDiagnostic => {
                 Self::Runtime(runtime::Method::AppControlServiceRecordStartupDiagnostic)
             }
-            MethodId::YiruRuntimeV1AppControlServiceRestart => {
+            MethodId::AgentStartRuntimeV1AppControlServiceRestart => {
                 Self::Runtime(runtime::Method::AppControlServiceRestart)
             }
-            MethodId::YiruRuntimeV1CliServiceGetInstallStatus => {
+            MethodId::AgentStartRuntimeV1CliServiceGetInstallStatus => {
                 Self::Runtime(runtime::Method::CliServiceGetInstallStatus)
             }
-            MethodId::YiruRuntimeV1CliServiceInstall => {
+            MethodId::AgentStartRuntimeV1CliServiceInstall => {
                 Self::Runtime(runtime::Method::CliServiceInstall)
             }
-            MethodId::YiruRuntimeV1CliServiceRemove => {
+            MethodId::AgentStartRuntimeV1CliServiceRemove => {
                 Self::Runtime(runtime::Method::CliServiceRemove)
             }
-            MethodId::YiruRuntimeV1CliServiceGetWslInstallStatus => {
+            MethodId::AgentStartRuntimeV1CliServiceGetWslInstallStatus => {
                 Self::Runtime(runtime::Method::CliServiceGetWslInstallStatus)
             }
-            MethodId::YiruRuntimeV1CliServiceInstallWsl => {
+            MethodId::AgentStartRuntimeV1CliServiceInstallWsl => {
                 Self::Runtime(runtime::Method::CliServiceInstallWsl)
             }
-            MethodId::YiruRuntimeV1CliServiceRemoveWsl => {
+            MethodId::AgentStartRuntimeV1CliServiceRemoveWsl => {
                 Self::Runtime(runtime::Method::CliServiceRemoveWsl)
             }
-            MethodId::YiruRuntimeV1DeveloperPermissionsServiceGetStatus => {
+            MethodId::AgentStartRuntimeV1DeveloperPermissionsServiceGetStatus => {
                 Self::Runtime(runtime::Method::DeveloperPermissionsServiceGetStatus)
             }
-            MethodId::YiruRuntimeV1DeveloperPermissionsServiceRequest => {
+            MethodId::AgentStartRuntimeV1DeveloperPermissionsServiceRequest => {
                 Self::Runtime(runtime::Method::DeveloperPermissionsServiceRequest)
             }
-            MethodId::YiruRuntimeV1WindowsFirewallServiceGetStatus => {
+            MethodId::AgentStartRuntimeV1WindowsFirewallServiceGetStatus => {
                 Self::Runtime(runtime::Method::WindowsFirewallServiceGetStatus)
             }
-            MethodId::YiruRuntimeV1WindowsFirewallServiceRepair => {
+            MethodId::AgentStartRuntimeV1WindowsFirewallServiceRepair => {
                 Self::Runtime(runtime::Method::WindowsFirewallServiceRepair)
             }
-            MethodId::YiruRuntimeV1WindowsFirewallServiceOpenNetworkSettings => {
+            MethodId::AgentStartRuntimeV1WindowsFirewallServiceOpenNetworkSettings => {
                 Self::Runtime(runtime::Method::WindowsFirewallServiceOpenNetworkSettings)
             }
-            MethodId::YiruRuntimeV1HostRegistryServiceIsWslAvailable => {
+            MethodId::AgentStartRuntimeV1HostRegistryServiceIsWslAvailable => {
                 Self::Runtime(runtime::Method::HostRegistryServiceIsWslAvailable)
             }
-            MethodId::YiruRuntimeV1HostRegistryServiceListWslDistros => {
+            MethodId::AgentStartRuntimeV1HostRegistryServiceListWslDistros => {
                 Self::Runtime(runtime::Method::HostRegistryServiceListWslDistros)
             }
-            MethodId::YiruRuntimeV1HostRegistryServiceIsGitBashAvailable => {
+            MethodId::AgentStartRuntimeV1HostRegistryServiceIsGitBashAvailable => {
                 Self::Runtime(runtime::Method::HostRegistryServiceIsGitBashAvailable)
             }
-            MethodId::YiruRuntimeV1HostRegistryServiceIsPwshAvailable => {
+            MethodId::AgentStartRuntimeV1HostRegistryServiceIsPwshAvailable => {
                 Self::Runtime(runtime::Method::HostRegistryServiceIsPwshAvailable)
             }
-            MethodId::YiruRuntimeV1HostRegistryServiceMarkAgentTrusted => {
+            MethodId::AgentStartRuntimeV1HostRegistryServiceMarkAgentTrusted => {
                 Self::Runtime(runtime::Method::HostRegistryServiceMarkAgentTrusted)
             }
-            MethodId::YiruRuntimeV1HostRegistryServiceAdd => {
+            MethodId::AgentStartRuntimeV1HostRegistryServiceAdd => {
                 Self::Runtime(runtime::Method::HostRegistryServiceAdd)
             }
-            MethodId::YiruRuntimeV1HostRegistryServiceList => {
+            MethodId::AgentStartRuntimeV1HostRegistryServiceList => {
                 Self::Runtime(runtime::Method::HostRegistryServiceList)
             }
-            MethodId::YiruRuntimeV1HostRegistryServiceProbe => {
+            MethodId::AgentStartRuntimeV1HostRegistryServiceProbe => {
                 Self::Runtime(runtime::Method::HostRegistryServiceProbe)
             }
-            MethodId::YiruRuntimeV1HostRegistryServiceRemove => {
+            MethodId::AgentStartRuntimeV1HostRegistryServiceRemove => {
                 Self::Runtime(runtime::Method::HostRegistryServiceRemove)
             }
-            MethodId::YiruRuntimeV1MobilePairingServiceCreateDevelopmentOffer => {
+            MethodId::AgentStartRuntimeV1MobilePairingServiceCreateDevelopmentOffer => {
                 Self::Runtime(runtime::Method::MobilePairingServiceCreateDevelopmentOffer)
             }
-            MethodId::YiruRuntimeV1MobilePairingServiceGetPairingQr => {
+            MethodId::AgentStartRuntimeV1MobilePairingServiceGetPairingQr => {
                 Self::Runtime(runtime::Method::MobilePairingServiceGetPairingQr)
             }
-            MethodId::YiruRuntimeV1MobilePairingServiceListDevices => {
+            MethodId::AgentStartRuntimeV1MobilePairingServiceListDevices => {
                 Self::Runtime(runtime::Method::MobilePairingServiceListDevices)
             }
-            MethodId::YiruRuntimeV1MobilePairingServiceListNetworkInterfaces => {
+            MethodId::AgentStartRuntimeV1MobilePairingServiceListNetworkInterfaces => {
                 Self::Runtime(runtime::Method::MobilePairingServiceListNetworkInterfaces)
             }
-            MethodId::YiruRuntimeV1MobilePairingServiceRevokeDevice => {
+            MethodId::AgentStartRuntimeV1MobilePairingServiceRevokeDevice => {
                 Self::Runtime(runtime::Method::MobilePairingServiceRevokeDevice)
             }
-            MethodId::YiruRuntimeV1RuntimeEnvironmentServiceGenerateOffer => {
+            MethodId::AgentStartRuntimeV1RuntimeEnvironmentServiceGenerateOffer => {
                 Self::Runtime(runtime::Method::RuntimeEnvironmentServiceGenerateOffer)
             }
-            MethodId::YiruRuntimeV1RuntimeEnvironmentServiceDisconnect => {
+            MethodId::AgentStartRuntimeV1RuntimeEnvironmentServiceDisconnect => {
                 Self::Runtime(runtime::Method::RuntimeEnvironmentServiceDisconnect)
             }
-            MethodId::YiruRuntimeV1RuntimeEnvironmentServiceGetStatus => {
+            MethodId::AgentStartRuntimeV1RuntimeEnvironmentServiceGetStatus => {
                 Self::Runtime(runtime::Method::RuntimeEnvironmentServiceGetStatus)
             }
-            MethodId::YiruRuntimeV1RuntimeEnvironmentServiceImport => {
+            MethodId::AgentStartRuntimeV1RuntimeEnvironmentServiceImport => {
                 Self::Runtime(runtime::Method::RuntimeEnvironmentServiceImport)
             }
-            MethodId::YiruRuntimeV1RuntimeEnvironmentServiceList => {
+            MethodId::AgentStartRuntimeV1RuntimeEnvironmentServiceList => {
                 Self::Runtime(runtime::Method::RuntimeEnvironmentServiceList)
             }
-            MethodId::YiruRuntimeV1RuntimeEnvironmentServiceListPeers => {
+            MethodId::AgentStartRuntimeV1RuntimeEnvironmentServiceListPeers => {
                 Self::Runtime(runtime::Method::RuntimeEnvironmentServiceListPeers)
             }
-            MethodId::YiruRuntimeV1RuntimeEnvironmentServiceRemove => {
+            MethodId::AgentStartRuntimeV1RuntimeEnvironmentServiceRemove => {
                 Self::Runtime(runtime::Method::RuntimeEnvironmentServiceRemove)
             }
-            MethodId::YiruRuntimeV1RuntimeEnvironmentServiceRevokePeer => {
+            MethodId::AgentStartRuntimeV1RuntimeEnvironmentServiceRevokePeer => {
                 Self::Runtime(runtime::Method::RuntimeEnvironmentServiceRevokePeer)
             }
-            MethodId::YiruRuntimeV1StatusServiceGetStatus => {
+            MethodId::AgentStartRuntimeV1StatusServiceGetStatus => {
                 Self::Runtime(runtime::Method::StatusServiceGetStatus)
             }
-            MethodId::YiruRuntimeV1UpdaterServiceCheck => {
+            MethodId::AgentStartRuntimeV1UpdaterServiceCheck => {
                 Self::Runtime(runtime::Method::UpdaterServiceCheck)
             }
-            MethodId::YiruRuntimeV1UpdaterServiceDownload => {
+            MethodId::AgentStartRuntimeV1UpdaterServiceDownload => {
                 Self::Runtime(runtime::Method::UpdaterServiceDownload)
             }
-            MethodId::YiruRuntimeV1UpdaterServiceGetStatus => {
+            MethodId::AgentStartRuntimeV1UpdaterServiceGetStatus => {
                 Self::Runtime(runtime::Method::UpdaterServiceGetStatus)
             }
-            MethodId::YiruRuntimeV1UpdaterServiceGetVersion => {
+            MethodId::AgentStartRuntimeV1UpdaterServiceGetVersion => {
                 Self::Runtime(runtime::Method::UpdaterServiceGetVersion)
             }
-            MethodId::YiruRuntimeV1UpdaterServiceInstall => {
+            MethodId::AgentStartRuntimeV1UpdaterServiceInstall => {
                 Self::Runtime(runtime::Method::UpdaterServiceInstall)
             }
-            MethodId::YiruRuntimeV1UpdaterServiceSubscribeStatus => {
+            MethodId::AgentStartRuntimeV1UpdaterServiceSubscribeStatus => {
                 Self::Runtime(runtime::Method::UpdaterServiceSubscribeStatus)
             }
-            MethodId::YiruRuntimeV1ShellPlatformServiceOpenPath => {
+            MethodId::AgentStartRuntimeV1ShellPlatformServiceOpenPath => {
                 Self::Runtime(runtime::Method::ShellPlatformServiceOpenPath)
             }
-            MethodId::YiruRuntimeV1ShellPlatformServiceOpenFileUri => {
+            MethodId::AgentStartRuntimeV1ShellPlatformServiceGetSystemAccentColor => {
+                Self::Runtime(runtime::Method::ShellPlatformServiceGetSystemAccentColor)
+            }
+            MethodId::AgentStartRuntimeV1ShellPlatformServiceOpenFileUri => {
                 Self::Runtime(runtime::Method::ShellPlatformServiceOpenFileUri)
             }
-            MethodId::YiruRuntimeV1ShellPlatformServiceOpenInExternalEditor => {
+            MethodId::AgentStartRuntimeV1ShellPlatformServiceOpenInExternalEditor => {
                 Self::Runtime(runtime::Method::ShellPlatformServiceOpenInExternalEditor)
             }
-            MethodId::YiruRuntimeV1ShellPlatformServiceOpenInFileManager => {
+            MethodId::AgentStartRuntimeV1ShellPlatformServiceOpenInFileManager => {
                 Self::Runtime(runtime::Method::ShellPlatformServiceOpenInFileManager)
             }
-            MethodId::YiruRuntimeV1ShellPlatformServiceOpenFilePath => {
+            MethodId::AgentStartRuntimeV1ShellPlatformServiceOpenFilePath => {
                 Self::Runtime(runtime::Method::ShellPlatformServiceOpenFilePath)
             }
-            MethodId::YiruRuntimeV1ShellPlatformServicePathExists => {
+            MethodId::AgentStartRuntimeV1ShellPlatformServicePathExists => {
                 Self::Runtime(runtime::Method::ShellPlatformServicePathExists)
             }
-            MethodId::YiruRuntimeV1ShellPlatformServicePickAttachment => {
+            MethodId::AgentStartRuntimeV1ShellPlatformServicePickAttachment => {
                 Self::Runtime(runtime::Method::ShellPlatformServicePickAttachment)
             }
-            MethodId::YiruRuntimeV1ShellPlatformServicePickImage => {
+            MethodId::AgentStartRuntimeV1ShellPlatformServicePickImage => {
                 Self::Runtime(runtime::Method::ShellPlatformServicePickImage)
             }
-            MethodId::YiruRuntimeV1ShellPlatformServicePickAudio => {
+            MethodId::AgentStartRuntimeV1ShellPlatformServicePickAudio => {
                 Self::Runtime(runtime::Method::ShellPlatformServicePickAudio)
             }
-            MethodId::YiruRuntimeV1ShellPlatformServicePickDirectory => {
+            MethodId::AgentStartRuntimeV1ShellPlatformServicePickDirectory => {
                 Self::Runtime(runtime::Method::ShellPlatformServicePickDirectory)
             }
-            MethodId::YiruRuntimeV1PreflightServiceCheck => {
+            MethodId::AgentStartRuntimeV1PreflightServiceCheck => {
                 Self::Runtime(runtime::Method::PreflightServiceCheck)
             }
-            MethodId::YiruRuntimeV1PreflightServiceDetectAgents => {
+            MethodId::AgentStartRuntimeV1PreflightServiceDetectAgents => {
                 Self::Runtime(runtime::Method::PreflightServiceDetectAgents)
             }
-            MethodId::YiruRuntimeV1PreflightServiceDetectRemoteAgents => {
+            MethodId::AgentStartRuntimeV1PreflightServiceDetectRemoteAgents => {
                 Self::Runtime(runtime::Method::PreflightServiceDetectRemoteAgents)
             }
-            MethodId::YiruRuntimeV1PreflightServiceRefreshAgents => {
+            MethodId::AgentStartRuntimeV1PreflightServiceRefreshAgents => {
                 Self::Runtime(runtime::Method::PreflightServiceRefreshAgents)
             }
-            MethodId::YiruRuntimeV1DiagnosticsServiceGetMemorySnapshot => {
+            MethodId::AgentStartRuntimeV1DiagnosticsServiceGetMemorySnapshot => {
                 Self::Support(support::Method::DiagnosticsServiceGetMemorySnapshot)
             }
-            MethodId::YiruRuntimeV1DiagnosticsServiceGetStatus => {
+            MethodId::AgentStartRuntimeV1DiagnosticsServiceGetStatus => {
                 Self::Support(support::Method::DiagnosticsServiceGetStatus)
             }
-            MethodId::YiruRuntimeV1DiagnosticsServiceCollectBundle => {
+            MethodId::AgentStartRuntimeV1DiagnosticsServiceCollectBundle => {
                 Self::Support(support::Method::DiagnosticsServiceCollectBundle)
             }
-            MethodId::YiruRuntimeV1DiagnosticsServiceOpenBundlePreview => {
+            MethodId::AgentStartRuntimeV1DiagnosticsServiceOpenBundlePreview => {
                 Self::Support(support::Method::DiagnosticsServiceOpenBundlePreview)
             }
-            MethodId::YiruRuntimeV1DiagnosticsServiceDiscardBundlePreview => {
+            MethodId::AgentStartRuntimeV1DiagnosticsServiceDiscardBundlePreview => {
                 Self::Support(support::Method::DiagnosticsServiceDiscardBundlePreview)
             }
-            MethodId::YiruRuntimeV1DiagnosticsServiceUploadBundle => {
+            MethodId::AgentStartRuntimeV1DiagnosticsServiceUploadBundle => {
                 Self::Support(support::Method::DiagnosticsServiceUploadBundle)
             }
-            MethodId::YiruRuntimeV1NotificationsServiceDismiss => {
+            MethodId::AgentStartRuntimeV1NotificationsServiceDismiss => {
                 Self::Support(support::Method::NotificationsServiceDismiss)
             }
-            MethodId::YiruRuntimeV1NotificationsServiceReport => {
+            MethodId::AgentStartRuntimeV1NotificationsServiceReport => {
                 Self::Support(support::Method::NotificationsServiceReport)
             }
-            MethodId::YiruRuntimeV1NotificationsServiceGetMissedSince => {
+            MethodId::AgentStartRuntimeV1NotificationsServiceGetMissedSince => {
                 Self::Support(support::Method::NotificationsServiceGetMissedSince)
             }
-            MethodId::YiruRuntimeV1NotificationsServiceLoadCustomSound => {
+            MethodId::AgentStartRuntimeV1NotificationsServiceLoadCustomSound => {
                 Self::Support(support::Method::NotificationsServiceLoadCustomSound)
             }
-            MethodId::YiruRuntimeV1NotificationsServiceRegisterPush => {
-                Self::Support(support::Method::NotificationsServiceRegisterPush)
-            }
-            MethodId::YiruRuntimeV1NotificationsServiceSubscribe => {
+            MethodId::AgentStartRuntimeV1NotificationsServiceSubscribe => {
                 Self::Support(support::Method::NotificationsServiceSubscribe)
             }
-            MethodId::YiruRuntimeV1StarNagShellServiceDismiss => {
+            MethodId::AgentStartRuntimeV1StarNagShellServiceDismiss => {
                 Self::Support(support::Method::StarNagShellServiceDismiss)
             }
-            MethodId::YiruRuntimeV1StarNagShellServiceLater => {
+            MethodId::AgentStartRuntimeV1StarNagShellServiceLater => {
                 Self::Support(support::Method::StarNagShellServiceLater)
             }
-            MethodId::YiruRuntimeV1StarNagShellServiceComplete => {
+            MethodId::AgentStartRuntimeV1StarNagShellServiceComplete => {
                 Self::Support(support::Method::StarNagShellServiceComplete)
             }
-            MethodId::YiruRuntimeV1StarNagShellServiceOpenWeb => {
+            MethodId::AgentStartRuntimeV1StarNagShellServiceOpenWeb => {
                 Self::Support(support::Method::StarNagShellServiceOpenWeb)
             }
-            MethodId::YiruRuntimeV1StarNagShellServiceStarYiru => {
-                Self::Support(support::Method::StarNagShellServiceStarYiru)
+            MethodId::AgentStartRuntimeV1StarNagShellServiceStarAgentStart => {
+                Self::Support(support::Method::StarNagShellServiceStarAgentStart)
             }
-            MethodId::YiruRuntimeV1StarNagShellServiceAgentValueMoment => {
+            MethodId::AgentStartRuntimeV1StarNagShellServiceAgentValueMoment => {
                 Self::Support(support::Method::StarNagShellServiceAgentValueMoment)
             }
-            MethodId::YiruRuntimeV1StarNagShellServiceShowAgentValueMoment => {
+            MethodId::AgentStartRuntimeV1StarNagShellServiceShowAgentValueMoment => {
                 Self::Support(support::Method::StarNagShellServiceShowAgentValueMoment)
             }
-            MethodId::YiruRuntimeV1StarNagShellServiceOnboardingCompleted => {
+            MethodId::AgentStartRuntimeV1StarNagShellServiceOnboardingCompleted => {
                 Self::Support(support::Method::StarNagShellServiceOnboardingCompleted)
             }
-            MethodId::YiruRuntimeV1FeedbackServiceSubmit => {
+            MethodId::AgentStartRuntimeV1FeedbackServiceSubmit => {
                 Self::Support(support::Method::FeedbackServiceSubmit)
             }
-            MethodId::YiruRuntimeV1CrashReportsServiceGetLatestPending => {
+            MethodId::AgentStartRuntimeV1CrashReportsServiceGetLatestPending => {
                 Self::Support(support::Method::CrashReportsServiceGetLatestPending)
             }
-            MethodId::YiruRuntimeV1CrashReportsServiceGetLatestReport => {
+            MethodId::AgentStartRuntimeV1CrashReportsServiceGetLatestReport => {
                 Self::Support(support::Method::CrashReportsServiceGetLatestReport)
             }
-            MethodId::YiruRuntimeV1CrashReportsServiceDismiss => {
+            MethodId::AgentStartRuntimeV1CrashReportsServiceDismiss => {
                 Self::Support(support::Method::CrashReportsServiceDismiss)
             }
-            MethodId::YiruRuntimeV1CrashReportsServiceRecordRendererError => {
+            MethodId::AgentStartRuntimeV1CrashReportsServiceRecordRendererError => {
                 Self::Support(support::Method::CrashReportsServiceRecordRendererError)
             }
-            MethodId::YiruRuntimeV1CrashReportsServiceSubmit => {
+            MethodId::AgentStartRuntimeV1CrashReportsServiceSubmit => {
                 Self::Support(support::Method::CrashReportsServiceSubmit)
             }
-            MethodId::YiruRuntimeV1CrashReportsServiceCopyLatestDiagnostics => {
+            MethodId::AgentStartRuntimeV1CrashReportsServiceCopyLatestDiagnostics => {
                 Self::Support(support::Method::CrashReportsServiceCopyLatestDiagnostics)
             }
-            MethodId::YiruRuntimeV1CrashReportsServiceRecordBreadcrumb => {
+            MethodId::AgentStartRuntimeV1CrashReportsServiceRecordBreadcrumb => {
                 Self::Support(support::Method::CrashReportsServiceRecordBreadcrumb)
             }
-            MethodId::YiruRuntimeV1ShellTelemetryServiceTrack => {
+            MethodId::AgentStartRuntimeV1ShellTelemetryServiceTrack => {
                 Self::Support(support::Method::ShellTelemetryServiceTrack)
             }
-            MethodId::YiruRuntimeV1ShellTelemetryServiceGetConsentState => {
+            MethodId::AgentStartRuntimeV1ShellTelemetryServiceGetConsentState => {
                 Self::Support(support::Method::ShellTelemetryServiceGetConsentState)
             }
-            MethodId::YiruRuntimeV1ShellTelemetryServiceSetOptIn => {
+            MethodId::AgentStartRuntimeV1ShellTelemetryServiceSetOptIn => {
                 Self::Support(support::Method::ShellTelemetryServiceSetOptIn)
             }
-            MethodId::YiruRuntimeV1ShellTelemetryServiceAcknowledgeBanner => {
+            MethodId::AgentStartRuntimeV1ShellTelemetryServiceAcknowledgeBanner => {
                 Self::Support(support::Method::ShellTelemetryServiceAcknowledgeBanner)
             }
-            MethodId::YiruRuntimeV1TerminalFitServiceGetDrivers => {
+            MethodId::AgentStartRuntimeV1TerminalFitServiceGetDrivers => {
                 Self::Terminal(terminal::Method::TerminalFitServiceGetDrivers)
             }
-            MethodId::YiruRuntimeV1TerminalFitServiceGetOverrides => {
+            MethodId::AgentStartRuntimeV1TerminalFitServiceGetOverrides => {
                 Self::Terminal(terminal::Method::TerminalFitServiceGetOverrides)
             }
-            MethodId::YiruRuntimeV1TerminalFitServiceRestore => {
+            MethodId::AgentStartRuntimeV1TerminalFitServiceRestore => {
                 Self::Terminal(terminal::Method::TerminalFitServiceRestore)
             }
-            MethodId::YiruRuntimeV1TerminalPreferencesServiceGetAutoRestoreFit => {
+            MethodId::AgentStartRuntimeV1TerminalPreferencesServiceGetAutoRestoreFit => {
                 Self::Terminal(terminal::Method::TerminalPreferencesServiceGetAutoRestoreFit)
             }
-            MethodId::YiruRuntimeV1TerminalPreferencesServiceSetAutoRestoreFit => {
+            MethodId::AgentStartRuntimeV1TerminalPreferencesServiceSetAutoRestoreFit => {
                 Self::Terminal(terminal::Method::TerminalPreferencesServiceSetAutoRestoreFit)
             }
-            MethodId::YiruRuntimeV1TerminalServiceList => {
+            MethodId::AgentStartRuntimeV1TerminalServiceList => {
                 Self::Terminal(terminal::Method::TerminalServiceList)
             }
-            MethodId::YiruRuntimeV1TerminalServiceCreate => {
+            MethodId::AgentStartRuntimeV1TerminalServiceCreate => {
                 Self::Terminal(terminal::Method::TerminalServiceCreate)
             }
-            MethodId::YiruRuntimeV1TerminalServiceRead => {
+            MethodId::AgentStartRuntimeV1TerminalServiceRead => {
                 Self::Terminal(terminal::Method::TerminalServiceRead)
             }
-            MethodId::YiruRuntimeV1TerminalServiceSend => {
+            MethodId::AgentStartRuntimeV1TerminalServiceSend => {
                 Self::Terminal(terminal::Method::TerminalServiceSend)
             }
-            MethodId::YiruRuntimeV1TerminalServiceClose => {
+            MethodId::AgentStartRuntimeV1TerminalServiceClose => {
                 Self::Terminal(terminal::Method::TerminalServiceClose)
             }
-            MethodId::YiruRuntimeV1TerminalServiceFocus => {
+            MethodId::AgentStartRuntimeV1TerminalServiceFocus => {
                 Self::Terminal(terminal::Method::TerminalServiceFocus)
             }
-            MethodId::YiruRuntimeV1LayoutServiceList => {
+            MethodId::AgentStartRuntimeV1LayoutServiceList => {
                 Self::Terminal(terminal::Method::LayoutServiceList)
             }
-            MethodId::YiruRuntimeV1LayoutServiceApply => {
+            MethodId::AgentStartRuntimeV1LayoutServiceApply => {
                 Self::Terminal(terminal::Method::LayoutServiceApply)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceActivate => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceActivate => {
                 Self::Terminal(terminal::Method::SessionTabsServiceActivate)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceClose => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceClose => {
                 Self::Terminal(terminal::Method::SessionTabsServiceClose)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceCreateTerminal => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceCreateTerminal => {
                 Self::Terminal(terminal::Method::SessionTabsServiceCreateTerminal)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceList => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceList => {
                 Self::Terminal(terminal::Method::SessionTabsServiceList)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceListAll => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceListAll => {
                 Self::Terminal(terminal::Method::SessionTabsServiceListAll)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceMove => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceMove => {
                 Self::Terminal(terminal::Method::SessionTabsServiceMove)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceSetTabProps => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceSetTabProps => {
                 Self::Terminal(terminal::Method::SessionTabsServiceSetTabProps)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceUpdatePaneLayout => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceUpdatePaneLayout => {
                 Self::Terminal(terminal::Method::SessionTabsServiceUpdatePaneLayout)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceSubscribe => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceSubscribe => {
                 Self::Terminal(terminal::Method::SessionTabsServiceSubscribe)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceSubscribeAll => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceSubscribeAll => {
                 Self::Terminal(terminal::Method::SessionTabsServiceSubscribeAll)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceUnsubscribe => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceUnsubscribe => {
                 Self::Terminal(terminal::Method::SessionTabsServiceUnsubscribe)
             }
-            MethodId::YiruRuntimeV1SessionTabsServiceUnsubscribeAll => {
+            MethodId::AgentStartRuntimeV1SessionTabsServiceUnsubscribeAll => {
                 Self::Terminal(terminal::Method::SessionTabsServiceUnsubscribeAll)
             }
-            MethodId::YiruRuntimeV1TerminalServiceClearBuffer => {
+            MethodId::AgentStartRuntimeV1TerminalServiceClearBuffer => {
                 Self::Terminal(terminal::Method::TerminalServiceClearBuffer)
             }
-            MethodId::YiruRuntimeV1TerminalServiceCloseTab => {
+            MethodId::AgentStartRuntimeV1TerminalServiceCloseTab => {
                 Self::Terminal(terminal::Method::TerminalServiceCloseTab)
             }
-            MethodId::YiruRuntimeV1TerminalServiceGetDisplayMode => {
+            MethodId::AgentStartRuntimeV1TerminalServiceGetDisplayMode => {
                 Self::Terminal(terminal::Method::TerminalServiceGetDisplayMode)
             }
-            MethodId::YiruRuntimeV1TerminalServiceSetDisplayMode => {
+            MethodId::AgentStartRuntimeV1TerminalServiceSetDisplayMode => {
                 Self::Terminal(terminal::Method::TerminalServiceSetDisplayMode)
             }
-            MethodId::YiruRuntimeV1TerminalServiceInspectProcess => {
+            MethodId::AgentStartRuntimeV1TerminalServiceInspectProcess => {
                 Self::Terminal(terminal::Method::TerminalServiceInspectProcess)
             }
-            MethodId::YiruRuntimeV1TerminalServiceIsRunningAgent => {
+            MethodId::AgentStartRuntimeV1TerminalServiceIsRunningAgent => {
                 Self::Terminal(terminal::Method::TerminalServiceIsRunningAgent)
             }
-            MethodId::YiruRuntimeV1TerminalServiceGetAgentStatus => {
+            MethodId::AgentStartRuntimeV1TerminalServiceGetAgentStatus => {
                 Self::Terminal(terminal::Method::TerminalServiceGetAgentStatus)
             }
-            MethodId::YiruRuntimeV1TerminalServiceListManagedSessions => {
+            MethodId::AgentStartRuntimeV1TerminalServiceListManagedSessions => {
                 Self::Terminal(terminal::Method::TerminalServiceListManagedSessions)
             }
-            MethodId::YiruRuntimeV1TerminalServiceKillAllManaged => {
+            MethodId::AgentStartRuntimeV1TerminalServiceKillAllManaged => {
                 Self::Terminal(terminal::Method::TerminalServiceKillAllManaged)
             }
-            MethodId::YiruRuntimeV1TerminalServiceKillManaged => {
+            MethodId::AgentStartRuntimeV1TerminalServiceKillManaged => {
                 Self::Terminal(terminal::Method::TerminalServiceKillManaged)
             }
-            MethodId::YiruRuntimeV1TerminalServiceRestartManaged => {
+            MethodId::AgentStartRuntimeV1TerminalServiceRestartManaged => {
                 Self::Terminal(terminal::Method::TerminalServiceRestartManaged)
             }
-            MethodId::YiruRuntimeV1TerminalServiceRename => {
+            MethodId::AgentStartRuntimeV1TerminalServiceRename => {
                 Self::Terminal(terminal::Method::TerminalServiceRename)
             }
-            MethodId::YiruRuntimeV1TerminalServiceShow => {
+            MethodId::AgentStartRuntimeV1TerminalServiceShow => {
                 Self::Terminal(terminal::Method::TerminalServiceShow)
             }
-            MethodId::YiruRuntimeV1TerminalServiceResizeForClient => {
+            MethodId::AgentStartRuntimeV1TerminalServiceResizeForClient => {
                 Self::Terminal(terminal::Method::TerminalServiceResizeForClient)
             }
-            MethodId::YiruRuntimeV1TerminalServiceResolveActive => {
+            MethodId::AgentStartRuntimeV1TerminalServiceResolveActive => {
                 Self::Terminal(terminal::Method::TerminalServiceResolveActive)
             }
-            MethodId::YiruRuntimeV1TerminalServiceResolvePane => {
+            MethodId::AgentStartRuntimeV1TerminalServiceResolvePane => {
                 Self::Terminal(terminal::Method::TerminalServiceResolvePane)
             }
-            MethodId::YiruRuntimeV1TerminalServiceSplit => {
+            MethodId::AgentStartRuntimeV1TerminalServiceSplit => {
                 Self::Terminal(terminal::Method::TerminalServiceSplit)
             }
-            MethodId::YiruRuntimeV1TerminalServiceStop => {
+            MethodId::AgentStartRuntimeV1TerminalServiceStop => {
                 Self::Terminal(terminal::Method::TerminalServiceStop)
             }
-            MethodId::YiruRuntimeV1TerminalServiceStopExact => {
+            MethodId::AgentStartRuntimeV1TerminalServiceStopExact => {
                 Self::Terminal(terminal::Method::TerminalServiceStopExact)
             }
-            MethodId::YiruRuntimeV1TerminalServiceUnsubscribe => {
+            MethodId::AgentStartRuntimeV1TerminalServiceUnsubscribe => {
                 Self::Terminal(terminal::Method::TerminalServiceUnsubscribe)
             }
-            MethodId::YiruRuntimeV1TerminalServiceUpdateViewAttributes => {
+            MethodId::AgentStartRuntimeV1TerminalServiceUpdateViewAttributes => {
                 Self::Terminal(terminal::Method::TerminalServiceUpdateViewAttributes)
             }
-            MethodId::YiruRuntimeV1TerminalServiceUpdateViewport => {
+            MethodId::AgentStartRuntimeV1TerminalServiceUpdateViewport => {
                 Self::Terminal(terminal::Method::TerminalServiceUpdateViewport)
             }
-            MethodId::YiruRuntimeV1TerminalServiceRestoreDesktopFit => {
+            MethodId::AgentStartRuntimeV1TerminalServiceRestoreDesktopFit => {
                 Self::Terminal(terminal::Method::TerminalServiceRestoreDesktopFit)
             }
-            MethodId::YiruRuntimeV1TerminalServiceWait => {
+            MethodId::AgentStartRuntimeV1TerminalServiceWait => {
                 Self::Terminal(terminal::Method::TerminalServiceWait)
             }
-            MethodId::YiruRuntimeV1TerminalServiceApprove => {
+            MethodId::AgentStartRuntimeV1TerminalServiceApprove => {
                 Self::Terminal(terminal::Method::TerminalServiceApprove)
             }
-            MethodId::YiruRuntimeV1TerminalServiceMultiplex => {
+            MethodId::AgentStartRuntimeV1TerminalServiceMultiplex => {
                 Self::Terminal(terminal::Method::TerminalServiceMultiplex)
             }
-            MethodId::YiruRuntimeV1TerminalServiceOpenMultiplex => {
+            MethodId::AgentStartRuntimeV1TerminalServiceOpenMultiplex => {
                 Self::Terminal(terminal::Method::TerminalServiceOpenMultiplex)
             }
-            MethodId::YiruRuntimeV1DriverEventsServiceSubscribe => {
+            MethodId::AgentStartRuntimeV1DriverEventsServiceSubscribe => {
                 Self::Terminal(terminal::Method::DriverEventsServiceSubscribe)
             }
-            MethodId::YiruRuntimeV1WorktreeLabelsServiceRegister => {
+            MethodId::AgentStartRuntimeV1WorktreeLabelsServiceRegister => {
                 Self::Workspaces(workspaces::Method::WorktreeLabelsServiceRegister)
             }
-            MethodId::YiruRuntimeV1WorktreeServicePs => {
+            MethodId::AgentStartRuntimeV1WorktreeServicePs => {
                 Self::Workspaces(workspaces::Method::WorktreeServicePs)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceShow => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceShow => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceShow)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceSleep => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceSleep => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceSleep)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceActivate => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceActivate => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceActivate)
             }
-            MethodId::YiruRuntimeV1WorktreeServicePrefetchCreateBase => {
+            MethodId::AgentStartRuntimeV1WorktreeServicePrefetchCreateBase => {
                 Self::Workspaces(workspaces::Method::WorktreeServicePrefetchCreateBase)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceResolvePrBase => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceResolvePrBase => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceResolvePrBase)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceRemove => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceRemove => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceRemove)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceForceDeleteBranch => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceForceDeleteBranch => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceForceDeleteBranch)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceSet => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceSet => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceSet)
             }
-            MethodId::YiruRuntimeV1WorktreeServicePersistSortOrder => {
+            MethodId::AgentStartRuntimeV1WorktreeServicePersistSortOrder => {
                 Self::Workspaces(workspaces::Method::WorktreeServicePersistSortOrder)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceDetectedList => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceDetectedList => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceDetectedList)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceLineageList => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceLineageList => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceLineageList)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceBranchRenameFailureOutput => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceBranchRenameFailureOutput => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceBranchRenameFailureOutput)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceSubscribeStateEvents => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceSubscribeStateEvents => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceSubscribeStateEvents)
             }
-            MethodId::YiruRuntimeV1WorkspaceEventsServiceAppendConsole => {
+            MethodId::AgentStartRuntimeV1WorkspaceEventsServiceAppendConsole => {
                 Self::Workspaces(workspaces::Method::WorkspaceEventsServiceAppendConsole)
             }
-            MethodId::YiruRuntimeV1WorkspaceEventsServiceAppendPerformance => {
+            MethodId::AgentStartRuntimeV1WorkspaceEventsServiceAppendPerformance => {
                 Self::Workspaces(workspaces::Method::WorkspaceEventsServiceAppendPerformance)
             }
-            MethodId::YiruRuntimeV1WorkspaceEventsServiceList => {
+            MethodId::AgentStartRuntimeV1WorkspaceEventsServiceList => {
                 Self::Workspaces(workspaces::Method::WorkspaceEventsServiceList)
             }
-            MethodId::YiruRuntimeV1WorkspaceEventsServiceWatch => {
+            MethodId::AgentStartRuntimeV1WorkspaceEventsServiceWatch => {
                 Self::Workspaces(workspaces::Method::WorkspaceEventsServiceWatch)
             }
-            MethodId::YiruRuntimeV1WorkspaceEventsServiceGetProjectRevision => {
+            MethodId::AgentStartRuntimeV1WorkspaceEventsServiceGetProjectRevision => {
                 Self::Workspaces(workspaces::Method::WorkspaceEventsServiceGetProjectRevision)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceArchive => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceArchive => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceArchive)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceList => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceList => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceList)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceCreate => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceCreate => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceCreate)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceListArchives => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceListArchives => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceListArchives)
             }
-            MethodId::YiruRuntimeV1WorktreeServiceRestore => {
+            MethodId::AgentStartRuntimeV1WorktreeServiceRestore => {
                 Self::Workspaces(workspaces::Method::WorktreeServiceRestore)
             }
-            MethodId::YiruRuntimeV1WorkspaceCleanupServiceScan => {
+            MethodId::AgentStartRuntimeV1WorkspaceCleanupServiceScan => {
                 Self::Workspaces(workspaces::Method::WorkspaceCleanupServiceScan)
             }
-            MethodId::YiruRuntimeV1WorkspaceCleanupServiceDismiss => {
+            MethodId::AgentStartRuntimeV1WorkspaceCleanupServiceDismiss => {
                 Self::Workspaces(workspaces::Method::WorkspaceCleanupServiceDismiss)
             }
-            MethodId::YiruRuntimeV1WorkspaceCleanupServiceClearDismissals => {
+            MethodId::AgentStartRuntimeV1WorkspaceCleanupServiceClearDismissals => {
                 Self::Workspaces(workspaces::Method::WorkspaceCleanupServiceClearDismissals)
             }
-            MethodId::YiruRuntimeV1WorkspaceCleanupServiceSubscribeEvents => {
+            MethodId::AgentStartRuntimeV1WorkspaceCleanupServiceSubscribeEvents => {
                 Self::Workspaces(workspaces::Method::WorkspaceCleanupServiceSubscribeEvents)
             }
-            MethodId::YiruRuntimeV1ShellSessionServiceWatch => {
+            MethodId::AgentStartRuntimeV1ShellSessionServiceWatch => {
                 Self::Workspaces(workspaces::Method::ShellSessionServiceWatch)
             }
-            MethodId::YiruRuntimeV1ShellSessionServiceGet => {
+            MethodId::AgentStartRuntimeV1ShellSessionServiceGet => {
                 Self::Workspaces(workspaces::Method::ShellSessionServiceGet)
             }
-            MethodId::YiruRuntimeV1ShellSessionServiceSet => {
+            MethodId::AgentStartRuntimeV1ShellSessionServiceSet => {
                 Self::Workspaces(workspaces::Method::ShellSessionServiceSet)
             }
-            MethodId::YiruRuntimeV1ShellSessionServicePatch => {
+            MethodId::AgentStartRuntimeV1ShellSessionServicePatch => {
                 Self::Workspaces(workspaces::Method::ShellSessionServicePatch)
             }
-            MethodId::YiruRuntimeV1ShellSessionServiceFlush => {
+            MethodId::AgentStartRuntimeV1ShellSessionServiceFlush => {
                 Self::Workspaces(workspaces::Method::ShellSessionServiceFlush)
             }
-            MethodId::YiruRuntimeV1RitualServiceGetSchedule => {
+            MethodId::AgentStartRuntimeV1RitualServiceGetSchedule => {
                 Self::Workspaces(workspaces::Method::RitualServiceGetSchedule)
             }
-            MethodId::YiruRuntimeV1RitualServiceSetSchedule => {
+            MethodId::AgentStartRuntimeV1RitualServiceSetSchedule => {
                 Self::Workspaces(workspaces::Method::RitualServiceSetSchedule)
             }
-            MethodId::YiruRuntimeV1RitualServiceRun => {
+            MethodId::AgentStartRuntimeV1RitualServiceRun => {
                 Self::Workspaces(workspaces::Method::RitualServiceRun)
             }
-            MethodId::YiruRuntimeV1WorkspacePortsServiceScan => {
+            MethodId::AgentStartRuntimeV1WorkspacePortsServiceScan => {
                 Self::Workspaces(workspaces::Method::WorkspacePortsServiceScan)
             }
-            MethodId::YiruRuntimeV1WorkspacePortsServiceKill => {
+            MethodId::AgentStartRuntimeV1WorkspacePortsServiceKill => {
                 Self::Workspaces(workspaces::Method::WorkspacePortsServiceKill)
             }
-            MethodId::YiruRuntimeV1WorkspacePortsServiceSubscribeEvents => {
+            MethodId::AgentStartRuntimeV1WorkspacePortsServiceSubscribeEvents => {
                 Self::Workspaces(workspaces::Method::WorkspacePortsServiceSubscribeEvents)
             }
-            MethodId::YiruRuntimeV1WorkspaceSpaceServiceAnalyze => {
+            MethodId::AgentStartRuntimeV1WorkspaceSpaceServiceAnalyze => {
                 Self::Workspaces(workspaces::Method::WorkspaceSpaceServiceAnalyze)
             }
-            MethodId::YiruRuntimeV1WorkspaceSpaceServiceCancel => {
+            MethodId::AgentStartRuntimeV1WorkspaceSpaceServiceCancel => {
                 Self::Workspaces(workspaces::Method::WorkspaceSpaceServiceCancel)
             }
-            MethodId::YiruRuntimeV1ShellRuntimeServiceSyncWindowGraph => {
+            MethodId::AgentStartRuntimeV1ShellRuntimeServiceSyncWindowGraph => {
                 Self::Workspaces(workspaces::Method::ShellRuntimeServiceSyncWindowGraph)
             }
         }

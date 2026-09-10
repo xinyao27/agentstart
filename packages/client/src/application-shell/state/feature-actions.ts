@@ -1,4 +1,4 @@
-import type { FeatureInteractionState } from '@yiru/protocol/telemetry/interactions/state'
+import type { FeatureInteractionState } from '@agentstart/protocol/telemetry/interactions/state'
 import type { StateCreator } from 'zustand'
 import { recordRuntimeUIFeatureInteraction, setRuntimeUIState } from '~renderer/runtime/ui-client'
 

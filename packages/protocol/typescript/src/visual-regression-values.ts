@@ -1,4 +1,4 @@
-import type { VisualRegressionCapture } from '../generated/yiru/runtime/v1/visual_regression_pb.js'
+import type { VisualRegressionCapture } from '../generated/agent_start/runtime/v1/visual_regression_pb.js'
 import { safeNumber } from './shell-state-values.js'
 
 export const VISUAL_REGRESSION_PROTOCOL_CAPABILITY = 'visualRegression.protobuf.v1' as const

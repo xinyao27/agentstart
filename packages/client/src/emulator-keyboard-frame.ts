@@ -1,4 +1,4 @@
-export type ServeSimKeyboardType = 'down' | 'up'
+type ServeSimKeyboardType = 'down' | 'up'
 
 export type ServeSimKeyboardFrame = {
   type: ServeSimKeyboardType
@@ -14,7 +14,7 @@ type ServeSimKeyboardModifiers = {
   shift?: boolean
 }
 
-export const SERVE_SIM_KEYBOARD_MESSAGE_TAG = 0x06
+const SERVE_SIM_KEYBOARD_MESSAGE_TAG = 0x06
 
 const SHIFT_USAGE = 225
 const ASCII_KEY_USAGES: Record<string, KeyUsage> = buildAsciiKeyUsages()

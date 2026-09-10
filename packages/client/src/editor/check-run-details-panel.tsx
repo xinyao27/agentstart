@@ -1,4 +1,7 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
+import type {
+  PRCheckDetail,
+  PRCheckRunDetails
+} from '@agentstart/protocol/hosted-review/review-types'
 import React from 'react'
 import { toast } from 'sonner'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
@@ -269,7 +272,7 @@ export function CheckRunDetailsPanel({
             {error && <div className="text-muted-foreground text-sm">{error}</div>}
 
             {hasOutput && (
-              <section className="border-border bg-background border">
+              <section className="border-border bg-background rounded-md border">
                 <div className="border-border border-b px-3 py-2 text-sm font-medium">
                   {translate('auto.components.editor.CheckRunDetailsPanel.d098e5529a', 'Output')}
                 </div>

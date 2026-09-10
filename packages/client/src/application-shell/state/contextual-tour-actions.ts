@@ -1,4 +1,4 @@
-import { hasFeatureInteraction } from '@yiru/protocol/telemetry/interactions/state'
+import { hasFeatureInteraction } from '@agentstart/protocol/telemetry/interactions/state'
 import type { StateCreator } from 'zustand'
 import { getContextualTour } from '~renderer/contextual-tours/catalog'
 import {

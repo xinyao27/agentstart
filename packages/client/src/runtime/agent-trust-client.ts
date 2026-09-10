@@ -1,4 +1,4 @@
-import type { HostAgentTrustInput } from '@yiru/protocol'
+import type { HostAgentTrustInput } from '@agentstart/protocol'
 import { useAppStore } from '~renderer/store/state'
 
 import { requireHostRegistryTarget } from './host-registry-target'

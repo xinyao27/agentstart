@@ -21,7 +21,7 @@ export type WriteTerminalOutputOptions = {
   holdForeground?: boolean
 }
 
-export type QueueChunk = {
+type QueueChunk = {
   data: string
   foreground: boolean
   forceForegroundRefresh: boolean

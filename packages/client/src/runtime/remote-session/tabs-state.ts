@@ -2,9 +2,9 @@ import type {
   BrowserCertificateFailure,
   BrowserPage,
   BrowserWorkspace
-} from '@yiru/protocol/workspace/browser-session'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
-import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/workspace/browser-session'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
+import type { Tab, TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 import type { OpenFile } from '../../editor/state'
 import type { AppState } from '../../store/state'

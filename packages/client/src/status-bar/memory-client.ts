@@ -1,5 +1,5 @@
-import { DiagnosticsClient } from '@yiru/protocol'
-import type { MemorySnapshot } from '@yiru/protocol/diagnostics/memory-values'
+import { DiagnosticsClient } from '@agentstart/protocol'
+import type { MemorySnapshot } from '@agentstart/protocol/diagnostics/memory-values'
 import { readConfiguredBrowserHostDiagnostics } from '~renderer/runtime/browser-host-runtime'
 import { mapProtocolMemorySnapshot } from '~renderer/runtime/memory-snapshot'
 import { openRuntimeProtocolTarget } from '~renderer/runtime/protocol-target'

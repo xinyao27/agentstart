@@ -1,8 +1,8 @@
-import type { TerminalMultiplexOpcode as TerminalMultiplexOpcodeValue } from '@yiru/protocol/terminal-multiplex/frame'
+import type { TerminalMultiplexOpcode as TerminalMultiplexOpcodeValue } from '@agentstart/protocol/terminal-multiplex/frame'
 
 import type { RemoteRuntimeMultiplexedTerminalCallbacks } from '../types'
 
-export type RemoteTerminalSendFrame = (
+type RemoteTerminalSendFrame = (
   opcode: TerminalMultiplexOpcodeValue,
   routeId: number,
   seq: bigint,

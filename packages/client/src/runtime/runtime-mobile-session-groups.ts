@@ -1,4 +1,4 @@
-import type { Tab, TabGroup, TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
+import type { Tab, TabGroup, TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
 import type { AppState } from '~renderer/store/types'
 
 import {

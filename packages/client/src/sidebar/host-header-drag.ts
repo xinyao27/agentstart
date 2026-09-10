@@ -1,4 +1,4 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
 import type { PointerEvent as ReactPointerEvent } from 'react'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
@@ -14,7 +14,7 @@ import {
   updateSidebarDragPreviewPosition
 } from './worktree-sidebar-pointer-drag-dom'
 
-export type HostDragState = {
+type HostDragState = {
   draggingHostId: ExecutionHostId | null
   dropIndex: number | null
   dropIndicatorY: number | null

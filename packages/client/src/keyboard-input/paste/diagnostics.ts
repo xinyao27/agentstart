@@ -10,7 +10,7 @@ type TextControlPasteDiagnosticMetadata = Pick<
   'byteLength' | 'hasControlSequences' | 'lineCount'
 >
 
-export function createRedactedTextControlPasteDiagnostic({
+function createRedactedTextControlPasteDiagnostic({
   byteLength,
   chunksWritten,
   durationMs,

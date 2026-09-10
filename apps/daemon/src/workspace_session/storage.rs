@@ -18,8 +18,8 @@ mod recovery;
 
 pub(super) const BACKUP_COUNT: usize = 5;
 const BACKUP_MIN_INTERVAL: Duration = Duration::from_secs(60 * 60);
-const LEGACY_FILE_NAME: &str = "yiru-data.json";
-const SESSION_FILE_NAME: &str = "yiru-data-sessions.json";
+const LEGACY_FILE_NAME: &str = "agentstart-data.json";
+const SESSION_FILE_NAME: &str = "agentstart-data-sessions.json";
 const SAVE_DEBOUNCE: Duration = Duration::from_secs(1);
 const SAVE_MAX_WAIT: Duration = Duration::from_secs(5);
 const CONTROL_CAPACITY: usize = 16;

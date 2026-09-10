@@ -12,7 +12,7 @@ const PYTHON_RUN_TIMEOUT_MS: u64 = 60_000;
 const SUPERVISOR_TIMEOUT_MS: u64 = PYTHON_RUN_TIMEOUT_MS + 5_000;
 const MAX_CAPTURE_BYTES: usize = 2 * 1_024 * 1_024;
 const MAX_SUPERVISOR_OUTPUT_BYTES: usize = (MAX_CAPTURE_BYTES * 2).div_ceil(3) * 4 + 64 * 1_024;
-const RESULT_PREFIX: &str = "YIRU_NOTEBOOK_RESULT_V1:";
+const RESULT_PREFIX: &str = "AGENTSTART_NOTEBOOK_RESULT_V1:";
 const TRUNCATION_MARKER: &str = "\n[output truncated]\n";
 
 struct PythonCandidate {
@@ -144,7 +144,7 @@ fn timeout_result() -> NotebookRunResult {
 
 fn python_candidates(platform: HostPlatform) -> Vec<PythonCandidate> {
     let mut candidates = Vec::new();
-    if let Ok(configured) = std::env::var("YIRU_NOTEBOOK_PYTHON") {
+    if let Ok(configured) = std::env::var("AGENTSTART_NOTEBOOK_PYTHON") {
         let configured = configured.trim_matches(super::is_ecmascript_whitespace);
         if !configured.is_empty() {
             candidates.push(PythonCandidate {

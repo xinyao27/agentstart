@@ -1,6 +1,6 @@
-import { YIRU_GITHUB_STARGAZERS_URL } from '@yiru/protocol/hosted-review/yiru-repository'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import { AGENTSTART_GITHUB_STARGAZERS_URL } from '@agentstart/protocol/hosted-review/agentstart-repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
 import { useEffect, useRef, useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
@@ -15,9 +15,9 @@ import {
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import {
-  checkShellYiruStarred,
+  checkShellAgentStartStarred,
   completeShellStarNag,
-  starYiruFromShell
+  starAgentStartFromShell
 } from '~renderer/runtime/github-shell-client'
 import { preflightCheck } from '~renderer/runtime/preflight-target'
 import { Button } from '~renderer/ui/button'
@@ -47,7 +47,7 @@ function GitHubStarButton({ hasRepos }: { hasRepos: boolean }): React.JSX.Elemen
 
   useEffect(() => {
     let cancelled = false
-    void checkShellYiruStarred().then((result) => {
+    void checkShellAgentStartStarred().then((result) => {
       if (cancelled) {
         return
       }
@@ -81,14 +81,14 @@ function GitHubStarButton({ hasRepos }: { hasRepos: boolean }): React.JSX.Elemen
       return
     }
     if (state === 'web-fallback') {
-      openHttpLink(YIRU_GITHUB_STARGAZERS_URL, { event })
+      openHttpLink(AGENTSTART_GITHUB_STARGAZERS_URL, { event })
       return
     }
     if (state !== 'not-starred') {
       return
     }
     setState('starred') // optimistic
-    const ok = await starYiruFromShell('landing')
+    const ok = await starAgentStartFromShell('landing')
     if (!ok) {
       if (mountedRef.current) {
         setState('web-fallback')
@@ -142,7 +142,7 @@ function GitHubStarButton({ hasRepos }: { hasRepos: boolean }): React.JSX.Elemen
             : translate('auto.components.Landing.0d0ace8861', 'Star on GitHub')}
       </Button>
       {state === 'starred' && menuOpen && (
-        <div className="border-border bg-popover absolute top-[calc(100%+4px)] right-0 z-10 min-w-[100px] border py-1">
+        <div className="border-border bg-popover absolute top-[calc(100%+4px)] right-0 z-10 min-w-[100px] rounded-md border py-1">
           <Button
             variant="ghost"
             size="sm"
@@ -198,9 +198,12 @@ function PreflightBanner({
     // centered content stack instead of stretching edge-to-edge. The styleguide
     // reserves color for true error state — these are soft setup nudges, so use
     // the quiet muted/border surface, not an amber frame.
-    <div className="border-border bg-muted/40 w-full max-w-sm space-y-1.5 border p-3">
+    <div className="border-border bg-muted/40 w-full max-w-sm space-y-1.5 rounded-lg border p-3">
       {visibleIssues.map((issue) => (
-        <div key={issue.id} className="flex items-start gap-3 px-1 py-1.5 first:pt-0 last:pb-0">
+        <div
+          key={issue.id}
+          className="flex items-start gap-3 rounded-md px-1 py-1.5 first:pt-0 last:pb-0"
+        >
           <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-500/70" />
           <div className="min-w-0 flex-1 space-y-0.5">
             <p className="text-foreground text-[13px] leading-snug font-medium">{issue.title}</p>
@@ -262,7 +265,7 @@ export default function Landing(): React.JSX.Element {
 
     refreshPreflight()
 
-    // Why: users often install/authenticate gh outside Yiru. Re-check when the
+    // Why: users often install/authenticate gh outside AgentStart. Re-check when the
     // window becomes active again so the landing warning clears without relaunch.
     const handleWindowActive = (): void => {
       if (document.visibilityState === 'visible') {
@@ -286,7 +289,7 @@ export default function Landing(): React.JSX.Element {
     }
 
     let cancelled = false
-    // Why: some users complete `gh auth login` without ever leaving the Yiru
+    // Why: some users complete `gh auth login` without ever leaving the AgentStart
     // window. Poll only while a warning is visible so the banner self-clears.
     const intervalId = window.setInterval(() => {
       void preflightCheck(getActiveRuntimeTarget(useAppStore.getState().settings), {

@@ -1,11 +1,11 @@
-import { WORKSPACE_TITLEBAR_COMMANDS_ACTION_ID } from '@yiru/protocol/settings/panel-titlebar-pins'
+import { WORKSPACE_TITLEBAR_COMMANDS_ACTION_ID } from '@agentstart/protocol/settings/panel-titlebar-pins'
 import {
   getTerminalQuickCommandBody,
   getTerminalQuickCommandScope,
   isTerminalQuickCommandComplete
-} from '@yiru/protocol/terminal/quick-commands'
-import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+} from '@agentstart/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@agentstart/protocol/terminal/quick-commands'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Pencil, Play, Trash as Trash2, Plus } from '~renderer/icons/hugeicons'

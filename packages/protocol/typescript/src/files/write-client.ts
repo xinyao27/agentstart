@@ -22,7 +22,7 @@ import {
   FilesServiceWriteBase64ResponseSchema,
   FilesServiceWriteRequestSchema,
   FilesServiceWriteResponseSchema
-} from '../../generated/yiru/runtime/v1/files_pb.js'
+} from '../../generated/agent_start/runtime/v1/files_pb.js'
 import { assertMutationOk } from '../files-mutation-result.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { base64ToBytes } from './base64.js'

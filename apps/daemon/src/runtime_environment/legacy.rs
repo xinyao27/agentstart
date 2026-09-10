@@ -16,7 +16,7 @@ use std::{
 };
 use url::Url;
 
-const FILE_NAME: &str = "yiru-environments.json";
+const FILE_NAME: &str = "agentstart-environments.json";
 const MAX_FILE_BYTES: u64 = 1024 * 1024;
 const MAX_TOTAL_BYTES: usize = 16 * 1024 * 1024;
 const MAX_RECORDS: usize = 1000;

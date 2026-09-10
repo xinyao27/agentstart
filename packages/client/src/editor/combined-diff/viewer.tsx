@@ -1,12 +1,15 @@
-import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitBranchChangeEntry } from '@agentstart/protocol/git/branch-compare-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
 import { selectWorktreeDiffCommentsOrEmpty } from '~renderer/diff-comments/worktree-selector'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useAppStore } from '~renderer/store/state'
 
-import { YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, type EditorPathMutationTarget } from '../autosave'
+import {
+  AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
+  type EditorPathMutationTarget
+} from '../autosave'
 import type { DiffCodeViewFile, DiffCodeViewHandle } from '../diff-code-view/view'
 import { DiffNotesSendMenu } from '../diff-notes-send-menu'
 import { DIFF_SECTION_HEADER_HEIGHT_PX, DiffSectionHeader } from '../diff-section/header'
@@ -218,9 +221,12 @@ export default function CombinedDiffViewer({
         }
       }
     }
-    window.addEventListener(YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, handler as EventListener)
+    window.addEventListener(AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, handler as EventListener)
     return () =>
-      window.removeEventListener(YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, handler as EventListener)
+      window.removeEventListener(
+        AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
+        handler as EventListener
+      )
   }, [file.runtimeEnvironmentId, file.worktreeId, requestCombinedDiffSectionReload, combinedMode])
 
   const toggleDiffWordWrap = () => {

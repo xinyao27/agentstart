@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use thiserror::Error;
 
-const INDEX_FILE: &str = "yiru-profile-index.json";
+const INDEX_FILE: &str = "agentstart-profile-index.json";
 const DEFAULT_ID: &str = "local-default";
 const DEFAULT_NAME: &str = "Personal";
 const MAX_INDEX_BYTES: u64 = 1024 * 1024;
@@ -40,9 +40,9 @@ pub(crate) struct ProfileIndex {
 
 #[derive(Debug, Error)]
 pub(crate) enum ProfileError {
-    #[error("invalid_yiru_profile_id")]
+    #[error("invalid_agentstart_profile_id")]
     InvalidId,
-    #[error("unknown_yiru_profile")]
+    #[error("unknown_agentstart_profile")]
     Unknown,
     #[error("profile clock failed: {0}")]
     Clock(#[from] SystemTimeError),
@@ -82,7 +82,7 @@ pub(crate) fn list_value(index: &ProfileIndex) -> Value {
     serde_json::json!({
         "activeProfileId": index.active_profile_id,
         "profiles": index.profiles,
-        "multiProfileUi": std::env::var("YIRU_MULTI_PROFILE_UI").as_deref() == Ok("1")
+        "multiProfileUi": std::env::var("AGENTSTART_MULTI_PROFILE_UI").as_deref() == Ok("1")
     })
 }
 

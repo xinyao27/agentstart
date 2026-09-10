@@ -1,4 +1,4 @@
-import type { WindowsMobileFirewallStatus } from '@yiru/protocol'
+import type { WindowsMobileFirewallStatus } from '@agentstart/protocol'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -97,7 +97,7 @@ export function WindowsFirewallNotice({
           toast.success(
             translate(
               'auto.components.mobile.WindowsFirewallNotice.repair-success',
-              'Windows Firewall now allows Yiru Mobile on private networks'
+              'Windows Firewall now allows AgentStart Mobile on private networks'
             )
           )
           return
@@ -138,7 +138,7 @@ export function WindowsFirewallNotice({
   }
 
   return (
-    <div className={cn('border border-border bg-muted/40 p-3', className)}>
+    <div className={cn('rounded-lg border border-border bg-muted/40 p-3', className)}>
       <div className="flex items-start gap-2.5">
         <CircleAlert className="text-muted-foreground mt-0.5 size-4 shrink-0" />
         <div className="min-w-0 flex-1 space-y-2">
@@ -152,7 +152,7 @@ export function WindowsFirewallNotice({
                 : blockingRuleDetected
                   ? translate(
                       'auto.components.mobile.WindowsFirewallNotice.blocked-title',
-                      'Windows may be blocking Yiru Mobile'
+                      'Windows may be blocking AgentStart Mobile'
                     )
                   : translate(
                       'auto.components.mobile.WindowsFirewallNotice.missing-title',
@@ -163,17 +163,17 @@ export function WindowsFirewallNotice({
               {networkIsPublic
                 ? translate(
                     'auto.components.mobile.WindowsFirewallNotice.public-description',
-                    'Change this trusted Wi-Fi network to Private before allowing Yiru Mobile connections.'
+                    'Change this trusted Wi-Fi network to Private before allowing AgentStart Mobile connections.'
                   )
                 : blockingRuleDetected
                   ? translate(
                       'auto.components.mobile.WindowsFirewallNotice.blocked-description',
-                      'An existing inbound Block rule can override the pairing exception. Repair removes conflicting TCP rules for this Yiru app, then allows port {{port}} on Private networks.',
+                      'An existing inbound Block rule can override the pairing exception. Repair removes conflicting TCP rules for this AgentStart app, then allows port {{port}} on Private networks.',
                       { port: firewallStatus.port }
                     )
                   : translate(
                       'auto.components.mobile.WindowsFirewallNotice.missing-description',
-                      'Windows may block the pairing host. Add a rule for this Yiru app and TCP port {{port}} on Private networks.',
+                      'Windows may block the pairing host. Add a rule for this AgentStart app and TCP port {{port}} on Private networks.',
                       { port: firewallStatus.port }
                     )}
             </p>

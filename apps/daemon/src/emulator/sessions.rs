@@ -100,7 +100,7 @@ impl EmulatorAuthority {
     async fn session_reusable(&self, info: &EmulatorSession) -> bool {
         if info
             .pid
-            .is_some_and(|pid| !crate::process_liveness::is_process_running(pid))
+            .is_some_and(|pid| !crate::hosts::is_process_running(pid))
         {
             return false;
         }
@@ -156,7 +156,7 @@ impl EmulatorAuthority {
         }
         Err(EmulatorError::domain(
             "emulator_no_active",
-            "No active emulator for this worktree — use yiru emulator attach or open the pane",
+            "No active emulator for this worktree — use agentstart emulator attach or open the pane",
         ))
     }
 

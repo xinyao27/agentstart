@@ -21,7 +21,7 @@ export function RuntimeEnvironmentRepair({
       </p>
       <code className="block break-all">{environmentId}</code>
       <code className="block break-all">
-        yiru environment import --name NAME --offer OFFER --replace ID
+        agentstart environment import --name NAME --offer OFFER --replace ID
       </code>
     </div>
   )

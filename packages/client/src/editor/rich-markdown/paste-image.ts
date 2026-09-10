@@ -16,7 +16,7 @@ export type RichMarkdownImagePasteArgs = {
   runtimeEnvironmentId?: string | null
 }
 
-export function clipboardHasImage(event: ClipboardEvent): boolean {
+function clipboardHasImage(event: ClipboardEvent): boolean {
   const data = event.clipboardData
   if (!data) {
     return false

@@ -1,5 +1,5 @@
-import type { WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree } from '@yiru/protocol'
-import type { GitStatusResult } from '@yiru/protocol/git/status-types'
+import type { WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree } from '@agentstart/protocol'
+import type { GitStatusResult } from '@agentstart/protocol/git/status-types'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

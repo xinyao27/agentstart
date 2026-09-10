@@ -1,4 +1,8 @@
-import type { DiscoveredSkill, SkillDirectoryEntry, SkillDirectoryListing } from '@yiru/protocol'
+import type {
+  DiscoveredSkill,
+  SkillDirectoryEntry,
+  SkillDirectoryListing
+} from '@agentstart/protocol'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

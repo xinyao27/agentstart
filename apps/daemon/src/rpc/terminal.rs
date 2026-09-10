@@ -35,13 +35,14 @@ impl TerminalRpc {
         payload: &[u8],
         connection_id: &str,
         context: &super::protocol_call::ProtocolCallContext,
-    ) -> Result<(), yiru_protocol::protocol::v1::Status> {
+    ) -> Result<(), agentstart_protocol::protocol::v1::Status> {
         use super::protocol_call::status;
-        use yiru_protocol::protocol::v1::StatusCode;
-        use yiru_protocol::runtime::v1::{
+        use agentstart_protocol::protocol::v1::StatusCode;
+        use agentstart_protocol::runtime::v1::{
             TerminalServiceMultiplexRequest, terminal_service_multiplex_request,
         };
-        let request = yiru_protocol::transport::decode::<TerminalServiceMultiplexRequest>(payload)?;
+        let request =
+            agentstart_protocol::transport::decode::<TerminalServiceMultiplexRequest>(payload)?;
         let Some(terminal_service_multiplex_request::Content::BulkTicket(ticket)) = request.content
         else {
             return Err(status(
@@ -107,56 +108,56 @@ impl TerminalRpc {
     pub(super) fn protocol_auto_restore_fit(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         preferences::protocol_auto_restore_fit(&self.authority, payload)
     }
 
     pub(super) fn protocol_get_terminal_drivers(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         fit::protocol_get_drivers(&self.authority, payload)
     }
 
     pub(super) fn protocol_get_terminal_fit_overrides(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         fit::protocol_get_overrides(&self.authority, payload)
     }
 
     pub(super) async fn protocol_restore_terminal_fit(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         fit::protocol_restore(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_set_auto_restore_fit(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         preferences::protocol_set_auto_restore_fit(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_list(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::list(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_create(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::create(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_read(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::read(&self.authority, payload).await
     }
 
@@ -164,21 +165,21 @@ impl TerminalRpc {
         &self,
         payload: &[u8],
         principal_id: &str,
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::send(&self.authority, payload, principal_id).await
     }
 
     pub(super) async fn protocol_close(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::close(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_focus(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::focus(&self.authority, payload).await
     }
 
@@ -186,7 +187,7 @@ impl TerminalRpc {
         &self,
         payload: &[u8],
         principal_id: &str,
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::open_multiplex(&self.authority, payload, principal_id)
     }
 
@@ -194,7 +195,7 @@ impl TerminalRpc {
         &self,
         payload: &[u8],
         principal_id: &str,
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::approve(
             &self.authority,
             &self.dangerous_approval,
@@ -207,168 +208,168 @@ impl TerminalRpc {
     pub(super) async fn protocol_clear_buffer(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::clear_buffer(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_close_tab(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::close_tab(&self.authority, &self.session_tabs, payload).await
     }
 
     pub(super) async fn protocol_rename(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::rename(&self.authority, payload).await
     }
 
     pub(super) fn protocol_show(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::show(&self.authority, payload)
     }
 
     pub(super) async fn protocol_split(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::split(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_stop(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::stop(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_stop_exact(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::stop_exact(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_resolve_active(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::resolve_active(&self.authority, payload).await
     }
 
     pub(super) fn protocol_resolve_pane(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::resolve_pane(&self.authority, payload)
     }
 
     pub(super) async fn protocol_wait(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::wait(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_restore_desktop_fit(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::restore_desktop_fit(&self.authority, payload).await
     }
 
     pub(super) fn protocol_unsubscribe(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_lifecycle::unsubscribe(payload)
     }
 
     pub(super) fn protocol_get_display_mode(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_view::get_display_mode(&self.authority, payload)
     }
 
     pub(super) async fn protocol_set_display_mode(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_view::set_display_mode(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_resize_for_client(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_view::resize_for_client(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_update_viewport(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_view::update_viewport(&self.authority, payload).await
     }
 
     pub(super) fn protocol_update_view_attributes(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_view::update_view_attributes(&self.authority, payload)
     }
 
     pub(super) async fn protocol_inspect_process(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_management::inspect_process(&self.authority, payload).await
     }
 
     pub(super) fn protocol_is_running_agent(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_management::is_running_agent(&self.authority, payload)
     }
 
     pub(super) fn protocol_get_agent_status(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_management::get_agent_status(&self.authority, payload)
     }
 
     pub(super) fn protocol_list_managed_sessions(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_management::list_managed_sessions(&self.authority, payload)
     }
 
     pub(super) async fn protocol_kill_all_managed(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_management::kill_all_managed(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_kill_managed(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_management::kill_managed(&self.authority, payload).await
     }
 
     pub(super) async fn protocol_restart_managed(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol_management::restart_managed(&self.authority, payload).await
     }
 }

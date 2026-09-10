@@ -21,7 +21,7 @@ export function AgentMonitor(): React.JSX.Element | null {
   const open = (): void => {
     void getExtensionBrowserCapabilities().openAgentMonitor({
       body,
-      title: translate('extension.agent.monitorTitle', 'Yiru agent monitor')
+      title: translate('extension.agent.monitorTitle', 'AgentStart agent monitor')
     })
   }
   return (

@@ -1,10 +1,10 @@
-use yiru_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     RepoHooksSource, RepoKind, RepoRevisionConflict, RepoServiceAddRequest, RepoServiceAddResponse,
     RepoServiceGetHooksRequest, RepoServiceGetHooksResponse, RepoServiceListRequest,
     RepoServiceListResponse, RepoSetupRunPolicy, RepoSetupTrust,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::repositories::RepositoryError;
 use crate::repositories::ecmascript;
@@ -124,7 +124,7 @@ pub(in crate::rpc) async fn get_hooks(rpc: &RepoRpc, payload: &[u8]) -> Result<V
         }
     };
     let source = match inspection.source {
-        Some("yiru.yaml") => RepoHooksSource::YiruYaml,
+        Some("agentstart.yaml") => RepoHooksSource::AgentStartYaml,
         Some("legacy") => RepoHooksSource::Legacy,
         None => RepoHooksSource::Unspecified,
         Some(_) => {
@@ -169,7 +169,7 @@ pub(super) fn repository_status(error: RepositoryError) -> Status {
             code: StatusCode::Aborted as i32,
             message: "workspaceRevisionConflict".to_owned(),
             details: vec![ErrorDetail {
-                type_name: "yiru.runtime.v1.RepoRevisionConflict".to_owned(),
+                type_name: "agentstart.runtime.v1.RepoRevisionConflict".to_owned(),
                 value: encode(&RepoRevisionConflict {
                     expected_revision,
                     actual_revision,

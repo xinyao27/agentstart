@@ -122,7 +122,7 @@ export function CheckJobLogTail({
       <pre
         ref={logPreRef}
         className={cn(
-          'overflow-auto whitespace-pre-wrap bg-muted/40 p-3 font-mono text-xs text-muted-foreground scrollbar-sleek',
+          'overflow-auto whitespace-pre-wrap bg-muted/40 p-3 font-mono text-xs text-muted-foreground scrollbar-sleek rounded',
           expanded ? 'min-h-48 max-h-[min(50vh,32rem)]' : 'max-h-72'
         )}
       >

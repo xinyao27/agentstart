@@ -1,5 +1,5 @@
+import type { DiscoveredSkill, SkillDiscoveryResult, SkillSourceKind } from '@agentstart/protocol'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import type { DiscoveredSkill, SkillDiscoveryResult, SkillSourceKind } from '@yiru/protocol'
 import { useEffect } from 'react'
 import {
   getInstalledAgentSkillDiscoveryGeneration,
@@ -20,8 +20,6 @@ import {
   isOrchestrationSkillName,
   normalizeInstalledSkillName
 } from './installed-agent-skill-match'
-
-export { hasInstalledAgentSkill, hasInstalledAgentSkillNamed } from './installed-agent-skill-match'
 
 export const GLOBAL_AGENT_SKILL_SOURCE_KINDS = [
   'home'
@@ -140,7 +138,7 @@ export function useInstalledAgentSkill(
   return useInstalledAgentSkillNames([skillName], options)
 }
 
-export function useInstalledAgentSkillNames(
+function useInstalledAgentSkillNames(
   skillNames: readonly string[],
   options: InstalledAgentSkillOptions = {}
 ): InstalledAgentSkillState {

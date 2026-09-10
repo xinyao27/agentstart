@@ -2,7 +2,7 @@ import { useRef } from 'react'
 
 const DRAG_EDGE_ZONE_PX = 48
 
-export function getDragEdgeScrollTarget({
+function getDragEdgeScrollTarget({
   scrollTop,
   scrollHeight,
   clientHeight,

@@ -1,5 +1,5 @@
-import { normalizeGlobalWindowsRuntimeDefault } from '@yiru/protocol/project/runtime-preference'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { normalizeGlobalWindowsRuntimeDefault } from '@agentstart/protocol/project/runtime-preference'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Info } from '~renderer/icons/hugeicons'
@@ -130,7 +130,7 @@ export function AgentSessionSourceHomeInput({
           <TooltipContent side="top" sideOffset={6} className="max-w-xs">
             {translate(
               'auto.components.settings.AgentsPane.codexSessionSourceTooltip',
-              'Yiru runs Codex in an isolated home. Point this at your existing Codex home to import that session history. Empty uses ~/.codex.'
+              'AgentStart runs Codex in an isolated home. Point this at your existing Codex home to import that session history. Empty uses ~/.codex.'
             )}
           </TooltipContent>
         </Tooltip>

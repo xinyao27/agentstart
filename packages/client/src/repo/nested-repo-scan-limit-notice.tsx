@@ -1,4 +1,4 @@
-import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import type { NestedRepoScanResult } from '@agentstart/protocol/project/group-model'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Question as CircleHelp } from '~renderer/icons/hugeicons'
@@ -13,7 +13,7 @@ function formatTimeout(timeoutMs: number): string {
   return `${timeoutMs} ms`
 }
 
-export function nestedRepoScanLimitText(scan: NestedRepoScanResult): string {
+function nestedRepoScanLimitText(scan: NestedRepoScanResult): string {
   const automaticStops = [`${scan.maxDepth} folder levels`, `${scan.maxRepos} repositories`]
   if (scan.timeoutMs !== null) {
     automaticStops.push(formatTimeout(scan.timeoutMs))

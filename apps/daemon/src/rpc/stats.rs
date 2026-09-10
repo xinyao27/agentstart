@@ -1,5 +1,5 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     GetSummaryRequest, GetSummaryResponse, StatsDailyActivity as ProtocolDailyActivity,
     StatsDailyProviderUsage as ProtocolDailyProviderUsage, StatsDailyTokens as ProtocolDailyTokens,
     StatsDailyValue as ProtocolDailyValue, StatsModelUsage as ProtocolModelUsage,
@@ -9,7 +9,7 @@ use yiru_protocol::runtime::v1::{
     StatsUnavailableAgent as ProtocolUnavailableAgent, StatsUsageProvider as ProtocolUsageProvider,
     StatsUsageRange as ProtocolUsageRange,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::account_usage::{
     DailyActivity, DailyProviderUsage, DailyTokens, DailyValue, ModelUsage, ProjectUsage,

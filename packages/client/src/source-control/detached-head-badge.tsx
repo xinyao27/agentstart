@@ -29,7 +29,7 @@ export function DetachedHeadBadge({
           <Badge
             variant="outline"
             className={cn(
-              'h-[18px] shrink-0 gap-1 px-1.5 text-[10px] font-medium leading-none',
+              'h-[18px] shrink-0 gap-1 px-1.5 text-[10px] font-medium leading-none rounded',
               'border-[color:color-mix(in_srgb,var(--git-decoration-modified)_30%,transparent)] bg-[color:color-mix(in_srgb,var(--git-decoration-modified)_8%,transparent)] text-[color:var(--git-decoration-modified)]',
               className
             )}

@@ -1,9 +1,9 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import type {
   ClientEventsActivateWorktree,
   ClientEventsJsonValue,
   ClientEventsServiceEvent
-} from '../generated/yiru/runtime/v1/client_events_pb.js'
+} from '../generated/agent_start/runtime/v1/client_events_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const CLIENT_EVENTS_PROTOCOL_CAPABILITY = 'runtime.clientEvents.protobuf.v1' as const

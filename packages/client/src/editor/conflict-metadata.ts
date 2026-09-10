@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { OpenConflictMetadata } from './file-model'

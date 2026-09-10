@@ -1,7 +1,7 @@
 // Why: the proto types alias to a `Proto` prefix because the authority's
 // record types carry the same names and the conversions read best when the
 // Rust side keeps its canonical spelling.
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::{
     Artifact as ProtoArtifact, ArtifactDownloadTicket as ProtoArtifactDownloadTicket,
     ArtifactRead as ProtoArtifactRead, ArtifactStatus as ProtoArtifactStatus,
 };

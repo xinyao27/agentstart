@@ -10,7 +10,7 @@ import {
   isAutosaveSuspendedForFile,
   normalizeAutoSaveDelayMs
 } from './autosave'
-import { YIRU_EDITOR_FILE_SAVED_EVENT } from './autosave'
+import { AGENTSTART_EDITOR_FILE_SAVED_EVENT } from './autosave'
 import type { EditorFileSavedDetail } from './autosave'
 import { getDiskBaselineSignature } from './diff-content-signature'
 import { trackExternalChangeConflictAction } from './external-change-telemetry'
@@ -133,7 +133,7 @@ export function createEditorAutosaveScheduler(store: AppStoreApi): EditorAutosav
           nextState.setExternalMutation(file.id, null)
         }
         window.dispatchEvent(
-          new CustomEvent<EditorFileSavedDetail>(YIRU_EDITOR_FILE_SAVED_EVENT, {
+          new CustomEvent<EditorFileSavedDetail>(AGENTSTART_EDITOR_FILE_SAVED_EVENT, {
             detail: { fileId: file.id, content: contentToSave }
           })
         )

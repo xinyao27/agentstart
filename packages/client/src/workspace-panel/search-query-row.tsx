@@ -44,7 +44,7 @@ export function SearchQueryRow({
 }: SearchQueryRowProps): React.JSX.Element {
   return (
     <div
-      className="border-border bg-input/50 focus-within:border-ring flex h-7 items-center gap-1 border px-1.5"
+      className="border-border bg-input/50 focus-within:border-ring flex h-7 items-center gap-1 rounded-sm border px-1.5"
       data-ignore-file-explorer-keys="true"
     >
       <SearchIcon className="text-muted-foreground size-3.5 shrink-0" />

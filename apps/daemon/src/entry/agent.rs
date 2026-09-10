@@ -2,21 +2,21 @@ use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use std::time::Duration;
 
-use serde_json::{Value, json};
-use thiserror::Error;
-use yiru_protocol::method_metadata::UnaryMethod;
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1AgentSessionServiceFollowup as FollowupMethod,
-    YiruRuntimeV1AgentSessionServiceList as ListMethod,
-    YiruRuntimeV1AgentSessionServiceProviders as ProvidersMethod,
-    YiruRuntimeV1AgentSessionServiceStart as StartMethod,
-    YiruRuntimeV1AgentSessionServiceStop as StopMethod,
+use agentstart_protocol::method_metadata::UnaryMethod;
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1AgentSessionServiceFollowup as FollowupMethod,
+    AgentStartRuntimeV1AgentSessionServiceList as ListMethod,
+    AgentStartRuntimeV1AgentSessionServiceProviders as ProvidersMethod,
+    AgentStartRuntimeV1AgentSessionServiceStart as StartMethod,
+    AgentStartRuntimeV1AgentSessionServiceStop as StopMethod,
 };
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::{
     AgentSession, AgentSessionPhase, AgentSessionProvider, AgentSessionServiceFollowupRequest,
     AgentSessionServiceListRequest, AgentSessionServiceProvidersRequest,
     AgentSessionServiceStartRequest, AgentSessionServiceStopRequest, AgentSessionStatus,
 };
+use serde_json::{Value, json};
+use thiserror::Error;
 
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 

@@ -132,8 +132,8 @@ export function AddRepoServerPathStartStep({
             />
           </div>
 
-          <div className="border-border bg-muted text-muted-foreground flex items-center gap-3 border px-3 py-2.5 text-xs">
-            <span className="bg-background text-foreground grid size-7 shrink-0 place-items-center">
+          <div className="border-border bg-muted text-muted-foreground flex items-center gap-3 rounded-md border px-3 py-2.5 text-xs">
+            <span className="bg-background text-foreground grid size-7 shrink-0 place-items-center rounded-md">
               <Lightbulb className="size-3.5" />
             </span>
             <span className="min-w-0">
@@ -254,7 +254,7 @@ export function AddRepoServerPathStartStep({
           </Button>
         </div>
         {isAddingServerPath && addProjectBusyLabel ? (
-          <div className="border-border bg-muted text-muted-foreground flex items-center gap-2 border px-3 py-2 text-xs">
+          <div className="border-border bg-muted text-muted-foreground flex items-center gap-2 rounded-md border px-3 py-2 text-xs">
             <LoadingIndicator className="size-3.5 shrink-0" />
             <span>{addProjectBusyLabel}</span>
           </div>
@@ -300,7 +300,7 @@ function AddRepoServerStartAction({
       onClick={onClick}
       className="border-border/80 bg-background h-32 min-w-0 flex-col gap-3 px-3 py-4 text-center whitespace-normal"
     >
-      <span className="text-muted-foreground grid size-9 shrink-0 place-items-center">
+      <span className="text-muted-foreground grid size-9 shrink-0 place-items-center rounded-md">
         <Icon className="size-5" />
       </span>
       <span className="min-w-0">

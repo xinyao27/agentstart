@@ -1,10 +1,10 @@
-use serde_json::Value;
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     GitHubRateLimitBucket, GitHubRateLimitSnapshot, GitHubServiceGetRateLimitRequest,
     GitHubServiceGetRateLimitResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::Value;
 
 use crate::rpc::github::GitHubRpc;
 

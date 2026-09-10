@@ -1,5 +1,5 @@
-import { parseAgentStatusPayload } from '@yiru/protocol/agent/status-parse'
-import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
+import { parseAgentStatusPayload } from '@agentstart/protocol/agent/status-parse'
+import type { ParsedAgentStatusPayload } from '@agentstart/protocol/agent/status-records'
 
 type TerminalChunkScanFlags = { hasEsc: boolean }
 

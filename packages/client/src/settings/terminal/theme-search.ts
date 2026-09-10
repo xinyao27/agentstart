@@ -87,7 +87,7 @@ export const getTerminalLightThemeSearchEntries = createLocalizedCatalog(() => [
     title: translate('auto.components.settings.terminal.search.1d89457764', 'Light Theme'),
     description: translate(
       'auto.components.settings.terminal.search.1dee533bd9',
-      'Choose the theme used when Yiru is in light mode.'
+      'Choose the theme used when AgentStart is in light mode.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.terminal.search.f66a7cf715', 'terminal'),
@@ -121,7 +121,7 @@ export const getTerminalYamlImportSearchEntries = createLocalizedCatalog(() => [
     ),
     description: translate(
       'auto.components.settings.terminal.search.yaml_import.description',
-      'Import theme YAML files as Yiru terminal themes.'
+      'Import theme YAML files as AgentStart terminal themes.'
     ),
     keywords: [
       translate('auto.components.settings.terminal.search.yaml_import.keyword_yaml', 'yaml'),
@@ -142,7 +142,7 @@ export const getTerminalWarpImportSearchEntries = createLocalizedCatalog(() => [
     ),
     description: translate(
       'auto.components.settings.terminal.search.warp_import.description',
-      'Import Warp themes as Yiru terminal themes.'
+      'Import Warp themes as AgentStart terminal themes.'
     ),
     keywords: [
       translate('auto.components.settings.terminal.search.warp_import.keyword_warp', 'warp'),

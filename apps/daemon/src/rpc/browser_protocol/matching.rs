@@ -1,6 +1,6 @@
-use yiru_protocol::runtime::v1::execute_request::Command as RequestCommand;
-use yiru_protocol::runtime::v1::execute_response::Result as ResponseResult;
-use yiru_protocol::runtime::v1::{ExecuteRequest, ExecuteResponse};
+use agentstart_protocol::runtime::v1::execute_request::Command as RequestCommand;
+use agentstart_protocol::runtime::v1::execute_response::Result as ResponseResult;
+use agentstart_protocol::runtime::v1::{ExecuteRequest, ExecuteResponse};
 
 pub(super) fn response_matches(request: &ExecuteRequest, response: &ExecuteResponse) -> bool {
     matches!(

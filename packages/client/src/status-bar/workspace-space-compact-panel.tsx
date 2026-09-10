@@ -126,7 +126,7 @@ export function WorkspaceSpaceCompactPanel({
 
       {analysis ? (
         <div className="mt-2 grid grid-cols-3 gap-1 text-[10px] tabular-nums">
-          <div className="border-border/60 bg-background/40 border px-2 py-1">
+          <div className="border-border/60 bg-background/40 rounded border px-2 py-1">
             <div className="text-muted-foreground">
               {translate(
                 'auto.components.status.bar.WorkspaceSpaceCompactPanel.f4d2651498',
@@ -137,7 +137,7 @@ export function WorkspaceSpaceCompactPanel({
               {formatBytes(analysis.totalSizeBytes)}
             </div>
           </div>
-          <div className="border-border/60 bg-background/40 border px-2 py-1">
+          <div className="border-border/60 bg-background/40 rounded border px-2 py-1">
             <div className="text-muted-foreground">
               {translate(
                 'auto.components.status.bar.WorkspaceSpaceCompactPanel.9be86c46a0',
@@ -148,7 +148,7 @@ export function WorkspaceSpaceCompactPanel({
               {formatBytes(analysis.reclaimableBytes)}
             </div>
           </div>
-          <div className="border-border/60 bg-background/40 border px-2 py-1">
+          <div className="border-border/60 bg-background/40 rounded border px-2 py-1">
             <div className="text-muted-foreground">
               {translate(
                 'auto.components.status.bar.WorkspaceSpaceCompactPanel.a471aa9c24',

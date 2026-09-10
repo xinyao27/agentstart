@@ -3,7 +3,7 @@ import { z } from 'zod'
 const BrowserControlIdSchema = z.string().min(1).max(500)
 const BrowserFiniteNumberSchema = z.number().finite()
 
-export const BrowserPageRegisterInputSchema = z
+const BrowserPageRegisterInputSchema = z
   .object({
     backendPageId: BrowserControlIdSchema,
     browserPageId: BrowserControlIdSchema,
@@ -13,7 +13,7 @@ export const BrowserPageRegisterInputSchema = z
   })
   .strict()
 
-export const BrowserPageUnregisterInputSchema = z
+const BrowserPageUnregisterInputSchema = z
   .object({
     browserPageId: BrowserControlIdSchema,
     expectedBackendPageId: BrowserControlIdSchema
@@ -22,7 +22,7 @@ export const BrowserPageUnregisterInputSchema = z
 
 export const BrowserPageIdInputSchema = z.object({ browserPageId: BrowserControlIdSchema }).strict()
 
-export const BrowserViewportOverrideSchema = z
+const BrowserViewportOverrideSchema = z
   .object({
     deviceScaleFactor: BrowserFiniteNumberSchema.min(0.1).max(5),
     height: BrowserFiniteNumberSchema.min(1).max(10_000),
@@ -31,11 +31,11 @@ export const BrowserViewportOverrideSchema = z
   })
   .strict()
 
-export const BrowserViewportOverrideInputSchema = BrowserPageIdInputSchema.extend({
+const BrowserViewportOverrideInputSchema = BrowserPageIdInputSchema.extend({
   override: BrowserViewportOverrideSchema.nullable()
 }).strict()
 
-export const BrowserGrabRectSchema = z
+const BrowserGrabRectSchema = z
   .object({
     height: BrowserFiniteNumberSchema.min(0),
     width: BrowserFiniteNumberSchema.min(0),
@@ -54,7 +54,7 @@ const BrowserAnnotationViewportMarkerSchema = z
   })
   .strict()
 
-export const BrowserAnnotationViewportInputSchema = BrowserPageIdInputSchema.extend({
+const BrowserAnnotationViewportInputSchema = BrowserPageIdInputSchema.extend({
   emitViewport: z.boolean(),
   enabled: z.boolean(),
   markers: z.array(BrowserAnnotationViewportMarkerSchema).max(50),
@@ -76,9 +76,7 @@ export const BrowserGrabCaptureInputSchema = BrowserPageIdInputSchema.extend({
 export type BrowserPageRegisterInput = z.output<typeof BrowserPageRegisterInputSchema>
 export type BrowserPageUnregisterInput = z.output<typeof BrowserPageUnregisterInputSchema>
 export type BrowserPageIdInput = z.output<typeof BrowserPageIdInputSchema>
-export type BrowserViewportOverride = z.output<typeof BrowserViewportOverrideSchema>
 export type BrowserViewportOverrideInput = z.output<typeof BrowserViewportOverrideInputSchema>
-export type BrowserGrabRect = z.output<typeof BrowserGrabRectSchema>
 export type BrowserAnnotationViewportInput = z.output<typeof BrowserAnnotationViewportInputSchema>
 export type BrowserGrabSetModeInput = z.output<typeof BrowserGrabSetModeInputSchema>
 export type BrowserGrabAwaitInput = z.output<typeof BrowserGrabAwaitInputSchema>

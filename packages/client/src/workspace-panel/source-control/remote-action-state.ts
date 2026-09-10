@@ -1,4 +1,4 @@
-import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
+import type { GitConflictOperation } from '@agentstart/protocol/git/status-types'
 import {
   isSyncPushStageError,
   resolveRemoteOperationErrorMessage

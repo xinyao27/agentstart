@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { shellClient } from '~renderer/runtime/shell-client'
 import type { ManagedPane, PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
 
-const CLOSE_ALL_CONTEXT_MENUS_EVENT = 'yiru-close-all-context-menus'
+const CLOSE_ALL_CONTEXT_MENUS_EVENT = 'agentstart-close-all-context-menus'
 
 type TerminalContextMenuTarget = {
   clearMenuPaneTarget: () => void

@@ -1,14 +1,14 @@
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/protocol/agent/launch-defaults'
-import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
-import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
-import type { SetupDecision } from '@yiru/protocol/worktree/hooks'
-import type { WorktreeMeta } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/agent/launch-defaults'
+import { isTuiAgentEnabled } from '@agentstart/protocol/agent/selection'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@agentstart/protocol/workspace/source'
+import type { WorkspaceStatus } from '@agentstart/protocol/workspace/status/model'
+import type { SetupDecision } from '@agentstart/protocol/worktree/hooks'
+import type { WorktreeMeta } from '@agentstart/protocol/worktree/model'
 import type { Dispatch, SetStateAction } from 'react'
 import { toast } from 'sonner'
 import type { AgentStartedTelemetry } from '~renderer/agent/started-telemetry'
@@ -24,8 +24,8 @@ import {
   buildAgentPromptWithContext,
   ensureAgentStartupInTerminal
 } from '~renderer/new-workspace/workspace-creation'
+import { ensureHooksConfirmed } from '~renderer/sidebar/agentstart-hook-confirmation'
 import { getLinkedWorkItemPromptContext } from '~renderer/sidebar/linked-work-item-context'
-import { ensureHooksConfirmed } from '~renderer/sidebar/yiru-hook-confirmation'
 import { useAppStore, type AppState } from '~renderer/store/state'
 import { tuiAgentToAgentKind } from '~renderer/telemetry/client'
 import { queueNewWorkspaceTerminalFocus } from '~renderer/worktree-creation/new-workspace-terminal-focus'

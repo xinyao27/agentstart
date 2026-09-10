@@ -1,5 +1,5 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { KeybindingActionId } from '@yiru/protocol/keybindings'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { KeybindingActionId } from '@agentstart/protocol/keybindings'
 import {
   listBoundAgentTabActions,
   resolveDefaultAgentForNewTab

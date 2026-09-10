@@ -1,9 +1,9 @@
-import { measureUtf8ByteLength } from '@yiru/protocol/text/utf8-length'
+import { measureUtf8ByteLength } from '@agentstart/protocol/text/utf8-length'
 
-export const WORKSPACE_STATUS_DRAG_TYPE = 'application/x-yiru-worktree-id'
-export const WORKSPACE_STATUS_DRAG_IDS_TYPE = 'application/x-yiru-worktree-ids'
-export const WORKSPACE_STATUS_DRAG_PAYLOAD_MAX_BYTES = 16 * 1024
-export const WORKSPACE_STATUS_DRAG_ID_MAX_COUNT = 512
+const WORKSPACE_STATUS_DRAG_TYPE = 'application/x-agentstart-worktree-id'
+const WORKSPACE_STATUS_DRAG_IDS_TYPE = 'application/x-agentstart-worktree-ids'
+const WORKSPACE_STATUS_DRAG_PAYLOAD_MAX_BYTES = 16 * 1024
+const WORKSPACE_STATUS_DRAG_ID_MAX_COUNT = 512
 
 export function writeWorkspaceDragData(
   dataTransfer: DataTransfer,
@@ -22,7 +22,7 @@ export function writeWorkspaceDragData(
   dataTransfer.setData('text/plain', firstWorktreeId)
 }
 
-export function readWorkspaceDragData(dataTransfer: DataTransfer): string | null {
+function readWorkspaceDragData(dataTransfer: DataTransfer): string | null {
   const typed = readWorkspaceStatusDragPayload(dataTransfer, WORKSPACE_STATUS_DRAG_TYPE)
   if (typed.status === 'ok') {
     return typed.value

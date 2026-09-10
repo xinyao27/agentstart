@@ -1,4 +1,4 @@
-import type { SleepingAgentSessionRecord } from '@yiru/protocol/agent/session-resume'
+import type { SleepingAgentSessionRecord } from '@agentstart/protocol/agent/session-resume'
 import type { StateCreator } from 'zustand'
 import { isCompletedAgentWithLiveRecoveryRecord } from '~renderer/settings/completed-agent-live-recovery-record'
 

@@ -11,9 +11,9 @@ import {
   InterceptListResultSchema,
   ValueResultSchema,
   ViewportResultSchema
-} from '../../generated/yiru/runtime/v1/browser_pb.js'
-import type { ExecuteResponse } from '../../generated/yiru/runtime/v1/browser_pb.js'
-import { CookieGetResultSchema } from '../../generated/yiru/runtime/v1/browser_pb.js'
+} from '../../generated/agent_start/runtime/v1/browser_pb.js'
+import type { ExecuteResponse } from '../../generated/agent_start/runtime/v1/browser_pb.js'
+import { CookieGetResultSchema } from '../../generated/agent_start/runtime/v1/browser_pb.js'
 import {
   encodeBrowserValue,
   readArray,

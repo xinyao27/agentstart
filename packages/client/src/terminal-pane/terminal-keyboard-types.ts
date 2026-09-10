@@ -1,5 +1,5 @@
+import type { KeybindingOverrides, TerminalShortcutPolicy } from '@agentstart/protocol/keybindings'
 import type { IDisposable } from '@xterm/xterm'
-import type { KeybindingOverrides, TerminalShortcutPolicy } from '@yiru/protocol/keybindings'
 import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 import type { ManagedPane, PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
 

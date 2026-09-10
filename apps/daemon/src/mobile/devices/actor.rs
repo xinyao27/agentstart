@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use rusqlite::Connection;
 use tokio::sync::oneshot;
 
-use super::{MobileDevice, MobileDeviceStoreError, PushRegistration, records};
+use super::{MobileDevice, MobileDeviceStoreError, records};
 
 pub(super) enum MobileDeviceCommand {
     AuthenticateToken {
@@ -24,14 +24,6 @@ pub(super) enum MobileDeviceCommand {
     MarkSeen {
         device_id: String,
         response: oneshot::Sender<Result<(), MobileDeviceStoreError>>,
-    },
-    PushDevices {
-        response: oneshot::Sender<Result<Vec<MobileDevice>, MobileDeviceStoreError>>,
-    },
-    RegisterPush {
-        device_id: String,
-        registration: Option<PushRegistration>,
-        response: oneshot::Sender<Result<bool, MobileDeviceStoreError>>,
     },
     Remove {
         device_id: String,
@@ -81,16 +73,6 @@ impl MobileDeviceWorker {
                 response,
             } => {
                 let _ = response.send(records::mark_seen(connection, &device_id));
-            }
-            MobileDeviceCommand::PushDevices { response } => {
-                let _ = response.send(records::push_devices(connection));
-            }
-            MobileDeviceCommand::RegisterPush {
-                device_id,
-                registration,
-                response,
-            } => {
-                let _ = response.send(records::register_push(connection, &device_id, registration));
             }
             MobileDeviceCommand::Remove {
                 device_id,

@@ -8,7 +8,7 @@ use thiserror::Error;
 
 use crate::update::restart::{RestartMode, request_runtime_restart, runtime_mode};
 
-const STARTUP_DIAGNOSTICS_ENV: &str = "YIRU_STARTUP_DIAGNOSTICS";
+const STARTUP_DIAGNOSTICS_ENV: &str = "AGENTSTART_STARTUP_DIAGNOSTICS";
 const MAX_STARTUP_EVENT_BYTES: usize = 96;
 const MAX_STARTUP_DIAGNOSTICS: u32 = 128;
 

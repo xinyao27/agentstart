@@ -1,6 +1,6 @@
-import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -191,7 +191,7 @@ function resolveAiVaultTargetWorkspacePath(
   return findWorktreeById(state.worktreesByRepo, worktreeId)?.path ?? null
 }
 
-export type AiVaultSessionLaunchTarget =
+type AiVaultSessionLaunchTarget =
   | { status: 'missing' }
   | {
       status: 'unsupported'
@@ -199,7 +199,7 @@ export type AiVaultSessionLaunchTarget =
     }
   | { status: 'ready'; worktreeId: string }
 
-export function resolveAiVaultSessionLaunchTarget(args: {
+function resolveAiVaultSessionLaunchTarget(args: {
   sessionFilePath: string | null
   sessionExecutionHostId?: AiVaultSession['executionHostId'] | null
   activeWorktreeId: string | null

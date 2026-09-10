@@ -1,5 +1,5 @@
-import type { BrowserWorkspace } from '@yiru/protocol/workspace/browser-session'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { BrowserWorkspace } from '@agentstart/protocol/workspace/browser-session'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 export type TerminalActivityTab = Pick<TerminalTab, 'id'>
 export type BrowserActivityTab = Pick<BrowserWorkspace, 'id'>

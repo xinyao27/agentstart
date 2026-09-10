@@ -1,15 +1,15 @@
 use std::collections::HashMap;
 
-use tokio::sync::{OwnedSemaphorePermit, mpsc, oneshot};
-use tokio::time::{Instant, sleep_until, timeout};
-use yiru_protocol::CURRENT_PROTOCOL_VERSION;
-use yiru_protocol::method_metadata::MethodMetadata;
-use yiru_protocol::protocol::v1::frame::Body;
-use yiru_protocol::protocol::v1::{
+use agentstart_protocol::CURRENT_PROTOCOL_VERSION;
+use agentstart_protocol::method_metadata::MethodMetadata;
+use agentstart_protocol::protocol::v1::frame::Body;
+use agentstart_protocol::protocol::v1::{
     CallEnd, CallStart, Cancel, Frame, Payload, Ping, Pong, Status, StatusCode, Welcome,
     WindowUpdate,
 };
-use yiru_protocol::transport::{decode_frame, encode_frame};
+use agentstart_protocol::transport::{decode_frame, encode_frame};
+use tokio::sync::{OwnedSemaphorePermit, mpsc, oneshot};
+use tokio::time::{Instant, sleep_until, timeout};
 
 use super::duplex::DuplexCredit;
 use super::outbound::{Outbound, TRANSPORT_IO_TIMEOUT};

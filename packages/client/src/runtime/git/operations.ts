@@ -8,7 +8,7 @@ import type {
   GitRebaseOntoCommitResult,
   GitResetToCommitResult,
   GitRevertResult
-} from '@yiru/protocol/git/write-results'
+} from '@agentstart/protocol/git/write-results'
 
 import { openRuntimeGitClient } from './client'
 import { getRuntimeGitWorktree, type RuntimeGitContext } from './context'

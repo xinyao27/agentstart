@@ -1,7 +1,7 @@
-import type { FileSearchInput } from '@yiru/protocol/files/values'
-import type { FileSearchResult as SearchResult } from '@yiru/protocol/files/values'
+import type { FileSearchInput } from '@agentstart/protocol/files/values'
+import type { FileSearchResult as SearchResult } from '@agentstart/protocol/files/values'
 
-export const RUNTIME_FILE_SEARCH_TEXT_MAX_BYTES = 8 * 1024
+const RUNTIME_FILE_SEARCH_TEXT_MAX_BYTES = 8 * 1024
 
 export type RuntimeFileSearchRejectedField = 'query' | 'includePattern' | 'excludePattern'
 
@@ -22,7 +22,7 @@ function getCodePointUtf8ByteLength(codePoint: number): number {
   return 4
 }
 
-export function isRuntimeFileSearchTextWithinLimit(
+function isRuntimeFileSearchTextWithinLimit(
   text: string,
   maxBytes = RUNTIME_FILE_SEARCH_TEXT_MAX_BYTES
 ): boolean {

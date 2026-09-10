@@ -1,5 +1,5 @@
-import type { DraftPasteReadySignal } from '@yiru/protocol/agent/launch/config'
-import { isExpectedAgentProcess } from '@yiru/protocol/agent/process/recognition'
+import type { DraftPasteReadySignal } from '@agentstart/protocol/agent/launch/config'
+import { isExpectedAgentProcess } from '@agentstart/protocol/agent/process/recognition'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { inspectRuntimeTerminalProcess } from '~renderer/runtime/terminal-inspection'
 import { createDraftPasteReadyScanner } from '~renderer/terminal-pane/agent/draft-readiness-scanner'

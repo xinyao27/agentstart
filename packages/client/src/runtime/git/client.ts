@@ -1,4 +1,4 @@
-import type { GitClient } from '@yiru/protocol'
+import type { GitClient } from '@agentstart/protocol'
 
 import { openGitTarget } from '../git-target'
 import { getRuntimeGitTarget, type RuntimeGitContext } from './context'

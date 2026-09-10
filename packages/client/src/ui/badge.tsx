@@ -5,7 +5,7 @@ import * as React from 'react'
 import { cn } from '~renderer/ui/class-names'
 
 const badgeVariants = cva(
-  'inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden border border-transparent font-medium whitespace-nowrap transition-[color] outline-none focus-visible:border-ring aria-invalid:border-destructive [&>svg]:pointer-events-none',
+  'inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color] outline-none focus-visible:border-ring aria-invalid:border-destructive [&>svg]:pointer-events-none',
   {
     variants: {
       variant: {
@@ -60,4 +60,4 @@ function Badge({
   })
 }
 
-export { Badge, badgeVariants }
+export { Badge }

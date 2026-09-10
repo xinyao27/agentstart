@@ -1,6 +1,6 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import * as P from '../generated/yiru/runtime/v1/accounts_pb.js'
+import * as P from '../generated/agent_start/runtime/v1/accounts_pb.js'
 import {
   claudeAccounts,
   codexAccounts,

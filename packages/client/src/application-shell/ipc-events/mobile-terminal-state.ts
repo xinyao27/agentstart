@@ -1,4 +1,4 @@
-import type { TerminalDriverState } from '@yiru/protocol'
+import type { TerminalDriverState } from '@agentstart/protocol'
 import { subscribeRuntimeDriverEvents } from '~renderer/runtime/runtime-driver-events-client'
 import { shellClient } from '~renderer/runtime/shell-client'
 import {

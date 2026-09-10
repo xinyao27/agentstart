@@ -1,12 +1,12 @@
-import type { GitHubPrStartPoint, GitPushTarget } from '@yiru/protocol/git/worktree-source'
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import type { GitHubPrStartPoint, GitPushTarget } from '@agentstart/protocol/git/worktree-source'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
 import {
   buildProjectSourceContextFromRepo,
   type ProjectSourceContext
-} from '@yiru/protocol/project/source-context'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+} from '@agentstart/protocol/project/source-context'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type { Dispatch, RefObject, SetStateAction } from 'react'
 import {
   lookupGitHubWorkItemByOwnerRepoForSource,

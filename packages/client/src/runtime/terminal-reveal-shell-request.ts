@@ -1,5 +1,5 @@
-import { parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { parseRuntimePtyId } from '@agentstart/protocol/terminal-identity'
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import {
   activateTerminalInitiatedWorktree,
   focusTerminalInitiatedTab,

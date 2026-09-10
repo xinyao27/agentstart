@@ -22,13 +22,13 @@ import {
 } from './filesystem-state.mjs'
 
 const COMMAND_DEADLINE_MS = 30_000
-const SERVICE_LABEL = 'com.yiru.daemon'
-const SYSTEMD_UNIT = 'yiru.service'
-const WINDOWS_TASK = 'Yiru Daemon'
+const SERVICE_LABEL = 'com.agentstart.daemon'
+const SYSTEMD_UNIT = 'agentstart.service'
+const WINDOWS_TASK = 'AgentStart Daemon'
 const WINDOWS_NATIVE_HOST_KEY =
-  'HKCU\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.yiru.daemon'
+  'HKCU\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.agentstart.daemon'
 const WINDOWS_NATIVE_HOST_PROVIDER_PATH =
-  'Registry::HKEY_CURRENT_USER\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.yiru.daemon'
+  'Registry::HKEY_CURRENT_USER\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.agentstart.daemon'
 
 export function capturePlatformState(directory) {
   return {
@@ -39,9 +39,9 @@ export function capturePlatformState(directory) {
 }
 
 export function nativeManifestPath() {
-  const configured = trimmedEnvironment('YIRU_NATIVE_MESSAGING_CONFIG_ROOT')
+  const configured = trimmedEnvironment('AGENTSTART_NATIVE_MESSAGING_CONFIG_ROOT')
   if (configured) {
-    return join(resolve(configured), 'com.yiru.daemon.json')
+    return join(resolve(configured), 'com.agentstart.daemon.json')
   }
   if (process.platform === 'darwin') {
     return join(
@@ -51,7 +51,7 @@ export function nativeManifestPath() {
       'Google',
       'Chrome',
       'NativeMessagingHosts',
-      'com.yiru.daemon.json'
+      'com.agentstart.daemon.json'
     )
   }
   if (process.platform === 'win32') {
@@ -59,9 +59,9 @@ export function nativeManifestPath() {
     if (!appData) {
       throw new Error('APPDATA is required to install native messaging.')
     }
-    return join(appData, 'Yiru', 'NativeMessagingHosts', 'com.yiru.daemon.json')
+    return join(appData, 'AgentStart', 'NativeMessagingHosts', 'com.agentstart.daemon.json')
   }
-  return join(configRoot(), 'google-chrome', 'NativeMessagingHosts', 'com.yiru.daemon.json')
+  return join(configRoot(), 'google-chrome', 'NativeMessagingHosts', 'com.agentstart.daemon.json')
 }
 
 export function quiesceService(service) {
@@ -70,7 +70,7 @@ export function quiesceService(service) {
     runStatus('/bin/launchctl', ['bootout', domain, service.definition.path])
     runStatus('/bin/launchctl', ['bootout', `${domain}/${SERVICE_LABEL}`])
     if (launchdServiceStatus(domain) === 'running') {
-      throw new Error('The existing Yiru launch agent could not be stopped.')
+      throw new Error('The existing AgentStart launch agent could not be stopped.')
     }
     return
   }
@@ -80,7 +80,7 @@ export function quiesceService(service) {
       runRequired('systemctl', ['--user', 'stop', SYSTEMD_UNIT])
     }
     if (readCurrentSystemdServiceState() === 'running') {
-      throw new Error('The existing Yiru systemd service could not be stopped.')
+      throw new Error('The existing AgentStart systemd service could not be stopped.')
     }
     return
   }
@@ -109,7 +109,7 @@ export function restoreMacHelperState(state) {
   }
   const parentPath = dirname(state.path)
   mkdirSync(parentPath, { recursive: true })
-  const staging = mkdtempSync(join(parentPath, '.yiru-helper-restore-'))
+  const staging = mkdtempSync(join(parentPath, '.agentstart-helper-restore-'))
   const current = join(staging, 'current')
   let preserve = false
   const errors = []
@@ -120,10 +120,10 @@ export function restoreMacHelperState(state) {
       candidate = join(staging, 'computer-use')
       const executable = join(
         candidate,
-        'Yiru Computer Use.app',
+        'AgentStart Computer Use.app',
         'Contents',
         'MacOS',
-        'yiru-computer-use-macos'
+        'agentstart-computer-use-macos'
       )
       if (!statSync(executable).isFile() || statSync(executable).size === 0) {
         throw new Error('The macOS helper recovery archive is invalid.')
@@ -228,14 +228,17 @@ function captureMacHelperState(directory) {
   if (process.platform !== 'darwin') {
     return null
   }
-  const override = trimmedEnvironment('YIRU_COMPUTER_MACOS_HELPER_APP_PATH')
-  if (override && existsSync(join(override, 'Contents', 'MacOS', 'yiru-computer-use-macos'))) {
+  const override = trimmedEnvironment('AGENTSTART_COMPUTER_MACOS_HELPER_APP_PATH')
+  if (
+    override &&
+    existsSync(join(override, 'Contents', 'MacOS', 'agentstart-computer-use-macos'))
+  ) {
     return null
   }
   const root =
-    trimmedEnvironment('YIRU_APP_USER_DATA_PATH') ||
-    trimmedEnvironment('YIRU_USER_DATA_PATH') ||
-    join(homedir(), 'Library', 'Application Support', 'yiru')
+    trimmedEnvironment('AGENTSTART_APP_USER_DATA_PATH') ||
+    trimmedEnvironment('AGENTSTART_USER_DATA_PATH') ||
+    join(homedir(), 'Library', 'Application Support', 'agentstart')
   const path = join(resolve(root), 'native', 'computer-use')
   const parent = captureManagedDirectory(dirname(path))
   if (!pathExists(path)) {
@@ -276,7 +279,9 @@ function captureLaunchdState(directory) {
     true
   )
   if (!definition.existed && serviceState === 'running') {
-    throw new Error('A running Yiru launch agent without a managed definition cannot be restored.')
+    throw new Error(
+      'A running AgentStart launch agent without a managed definition cannot be restored.'
+    )
   }
   return {
     definition,
@@ -315,7 +320,7 @@ function readSystemdEnabledState(hasDefinition) {
     return false
   }
   throw new Error(
-    `Cannot safely preserve Yiru's systemd enabled state '${state || 'unknown'}' (exit ${result.status ?? result.signal ?? 'unknown'}).`
+    `Cannot safely preserve AgentStart's systemd enabled state '${state || 'unknown'}' (exit ${result.status ?? result.signal ?? 'unknown'}).`
   )
 }
 
@@ -325,7 +330,7 @@ function readSystemdServiceState(hasDefinition) {
   if (result.status === 0 && state === 'active') {
     if (!hasDefinition) {
       throw new Error(
-        'An active Yiru systemd unit without a managed definition cannot be restored.'
+        'An active AgentStart systemd unit without a managed definition cannot be restored.'
       )
     }
     return 'running'
@@ -333,7 +338,7 @@ function readSystemdServiceState(hasDefinition) {
   if (result.status === 3 && (state === 'inactive' || state === 'failed')) {
     if (!hasDefinition) {
       throw new Error(
-        `A loaded Yiru systemd unit without a managed definition cannot be restored from '${state}'.`
+        `A loaded AgentStart systemd unit without a managed definition cannot be restored from '${state}'.`
       )
     }
     return 'stopped'
@@ -342,7 +347,7 @@ function readSystemdServiceState(hasDefinition) {
     return 'not_installed'
   }
   throw new Error(
-    `Cannot safely preserve Yiru's systemd running state '${state || 'unknown'}' (exit ${result.status ?? result.signal ?? 'unknown'}).`
+    `Cannot safely preserve AgentStart's systemd running state '${state || 'unknown'}' (exit ${result.status ?? result.signal ?? 'unknown'}).`
   )
 }
 
@@ -359,7 +364,7 @@ function readCurrentSystemdServiceState() {
     return 'not_installed'
   }
   throw new Error(
-    `Cannot safely inspect Yiru's current systemd state '${state || 'unknown'}' (exit ${result.status ?? result.signal ?? 'unknown'}).`
+    `Cannot safely inspect AgentStart's current systemd state '${state || 'unknown'}' (exit ${result.status ?? result.signal ?? 'unknown'}).`
   )
 }
 
@@ -390,7 +395,7 @@ function captureWindowsRegistryState(directory) {
   const queryStatus = windowsRegistryState()
   if (queryStatus !== 0 && queryStatus !== 3) {
     throw new Error(
-      `Could not inspect the Yiru Native Messaging registry key: exit ${queryStatus}.`
+      `Could not inspect the AgentStart Native Messaging registry key: exit ${queryStatus}.`
     )
   }
   if (queryStatus === 3) {
@@ -451,7 +456,7 @@ function restoreSystemdState(service) {
   } else {
     const disableStatus = runStatus('systemctl', ['--user', 'disable', SYSTEMD_UNIT])
     if (disableStatus !== 0 && service.definition.existed) {
-      throw new Error('Could not restore the disabled Yiru systemd state.')
+      throw new Error('Could not restore the disabled AgentStart systemd state.')
     }
   }
   if (service.state === 'running') {
@@ -467,7 +472,7 @@ function launchdServiceStatus(domain) {
   if (status === 113) {
     return 'not_installed'
   }
-  throw new Error(`Could not safely inspect the Yiru launch agent: exit ${status}.`)
+  throw new Error(`Could not safely inspect the AgentStart launch agent: exit ${status}.`)
 }
 
 function waitForWindowsTaskToStop() {

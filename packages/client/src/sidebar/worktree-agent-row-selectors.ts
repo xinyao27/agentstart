@@ -2,9 +2,9 @@ import type {
   AgentStatusEntry,
   AgentStatusOrchestrationContext,
   MigrationUnsupportedPtyEntry
-} from '@yiru/protocol/agent/status-records'
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+} from '@agentstart/protocol/agent/status-records'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
 import type { RetainedAgentEntry } from '~renderer/agent/status-state/slice'
 import type { AppState } from '~renderer/store/types'
 

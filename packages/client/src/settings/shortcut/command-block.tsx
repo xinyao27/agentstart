@@ -3,7 +3,7 @@ import {
   type KeybindingActionId,
   type KeybindingDefinition,
   type KeybindingInput
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -126,7 +126,7 @@ export function ShortcutCommandBlock({
       forceVisible
       className="group/shortcut flex max-w-none flex-col"
     >
-      <div className="hover:bg-accent/40 focus-within:bg-accent/40 flex min-h-9 items-center gap-3 px-2 py-1 transition-colors">
+      <div className="hover:bg-accent/40 focus-within:bg-accent/40 flex min-h-9 items-center gap-3 rounded-md px-2 py-1 transition-colors">
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <span
             className={cn(

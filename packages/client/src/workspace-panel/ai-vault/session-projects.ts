@@ -3,16 +3,16 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   normalizeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
+} from '@agentstart/protocol/host/identity'
 import {
   createNormalizedPathInsideOrEqualMatcher,
   normalizeRuntimePathForComparison,
   normalizeRuntimePathSeparators
-} from '@yiru/protocol/host/path'
-import type { ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { ProjectHostSetupProjection } from '@yiru/protocol/project/setup-projection'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/host/path'
+import type { ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { ProjectHostSetupProjection } from '@agentstart/protocol/project/setup-projection'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { AiVaultSessionProject } from '~renderer/workspace-panel/ai-vault/session/filter'
 import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
@@ -88,7 +88,7 @@ export function buildAiVaultSessionProjectById({
   return sessionProjectById
 }
 
-export function toAiVaultProjectKey(
+function toAiVaultProjectKey(
   projectId: string | null | undefined,
   repoId?: string | null
 ): string | null {

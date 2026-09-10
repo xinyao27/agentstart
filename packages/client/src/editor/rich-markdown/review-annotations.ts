@@ -1,6 +1,6 @@
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 import type { JSONContent } from '@tiptap/core'
 import type { Editor } from '@tiptap/react'
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import type { Dispatch, SetStateAction } from 'react'
 
 import type { RichMarkdownAnnotationHighlightRange } from './annotation-highlight'
@@ -9,8 +9,6 @@ import { countRichMarkdownReviewMarkdownLines } from './review-line-count'
 import type { RichMarkdownReviewNotePosition } from './review-note-layout'
 import { findRichMarkdownSelectedTextRanges } from './review-text-ranges'
 import { getRichMarkdownSelectionVisibleText } from './visible-text-map'
-export { countRichMarkdownReviewMarkdownLines } from './review-line-count'
-
 const RICH_MARKDOWN_ANNOTATION_BUTTON_SIZE_PX = 24
 const RICH_MARKDOWN_ANNOTATION_EDGE_PADDING_PX = 8
 const RICH_MARKDOWN_ANNOTATION_SELECTION_GAP_PX = 8
@@ -28,7 +26,7 @@ export type RichMarkdownCommentBlock = {
   to: number
 }
 
-export type RichMarkdownComposerState = {
+type RichMarkdownComposerState = {
   lineNumber: number
   startLine?: number
 }
@@ -238,7 +236,7 @@ function getCurrentRichMarkdownSelectionRect(root: HTMLElement): DOMRect | null 
   return Array.from(range.getClientRects()).find((candidate) => candidate.width > 0) ?? null
 }
 
-export function getRichMarkdownAnnotationButtonTop(
+function getRichMarkdownAnnotationButtonTop(
   selectionBottomInRoot: number,
   rootHeight: number
 ): number {
@@ -250,7 +248,7 @@ export function getRichMarkdownAnnotationButtonTop(
   return Math.max(RICH_MARKDOWN_ANNOTATION_EDGE_PADDING_PX, Math.min(preferredTop, maxTop))
 }
 
-export function getRichMarkdownAnnotationButtonLeft(rootWidth: number): number {
+function getRichMarkdownAnnotationButtonLeft(rootWidth: number): number {
   const preferredLeft = Math.max(
     RICH_MARKDOWN_ANNOTATION_MIN_LEFT_PX,
     rootWidth - RICH_MARKDOWN_ANNOTATION_RIGHT_OFFSET_PX

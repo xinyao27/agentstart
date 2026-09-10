@@ -1,16 +1,16 @@
 // Why: the client-events authority emits typed subscription events shared
 // with the legacy JSON stream; this is the single place that renders those
 // events into the typed protobuf wire messages.
-use serde_json::Value;
-use yiru_protocol::runtime::v1::client_events_json_value::Kind as JsonKind;
-use yiru_protocol::runtime::v1::client_events_service_event::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::client_events_json_value::Kind as JsonKind;
+use agentstart_protocol::runtime::v1::client_events_service_event::Event;
+use agentstart_protocol::runtime::v1::{
     ClientEventsActivateWorktree, ClientEventsJsonNull, ClientEventsJsonValue,
     ClientEventsJsonValueEntry, ClientEventsJsonValueList, ClientEventsJsonValueObject,
     ClientEventsServiceEvent, ClientEventsSubscribeReady,
     ClientEventsWorktreeHeadIdentitiesChanged, ClientEventsWorktreeHeadIdentity,
     ClientEventsWorktreeRename, ClientEventsWorktreesChanged,
 };
+use serde_json::Value;
 
 use crate::client_events::ClientSubscriptionEvent;
 

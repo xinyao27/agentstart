@@ -1,5 +1,5 @@
-import { formatKeybindingList, type KeybindingDefinition } from '@yiru/protocol/keybindings'
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { formatKeybindingList, type KeybindingDefinition } from '@agentstart/protocol/keybindings'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { MagnifyingGlass as Search, X } from '~renderer/icons/hugeicons'
@@ -33,9 +33,9 @@ const SHORTCUT_FILTER_LABELS: Record<ShortcutFilter, string> = {
   conflicts: 'Conflicts'
 }
 
-export const SHORTCUT_LOCAL_SEARCH_QUERY_MAX_BYTES = 2 * 1024
+const SHORTCUT_LOCAL_SEARCH_QUERY_MAX_BYTES = 2 * 1024
 
-export function isShortcutLocalSearchQueryTooLarge(
+function isShortcutLocalSearchQueryTooLarge(
   query: string,
   maxBytes = SHORTCUT_LOCAL_SEARCH_QUERY_MAX_BYTES
 ): boolean {
@@ -49,7 +49,7 @@ export function normalizeShortcutLocalSearchQuery(query: string): string | null 
   return query.trim().toLowerCase()
 }
 
-export function getShortcutSearchEntry(row: ShortcutRowModel): SettingsSearchEntry {
+function getShortcutSearchEntry(row: ShortcutRowModel): SettingsSearchEntry {
   return {
     title: row.item.title,
     description: translate(

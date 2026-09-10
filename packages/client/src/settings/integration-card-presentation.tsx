@@ -5,7 +5,7 @@ type IntegrationCardPresentation = 'default' | 'setup-guide'
 
 const IntegrationCardPresentationContext = createContext<IntegrationCardPresentation>('default')
 
-export function useIntegrationCardPresentation(): IntegrationCardPresentation {
+function useIntegrationCardPresentation(): IntegrationCardPresentation {
   return useContext(IntegrationCardPresentationContext)
 }
 
@@ -14,7 +14,7 @@ export function useIntegrationCardShellClass(className?: string): string {
   return cn(
     presentation === 'setup-guide'
       ? 'bg-transparent px-4 py-3'
-      : 'border border-border bg-card px-4 py-3.5',
+      : 'rounded-xl border border-border bg-card px-4 py-3.5',
     className
   )
 }
@@ -24,7 +24,7 @@ export function useIntegrationSubordinateRowClass(className?: string): string {
   return cn(
     presentation === 'setup-guide'
       ? 'border-t border-border/40 px-0 py-2 first:border-t-0'
-      : 'border border-border/50 bg-muted/50 px-3 py-2',
+      : 'rounded-md border border-border/50 bg-muted/50 px-3 py-2',
     className
   )
 }
@@ -35,6 +35,6 @@ export function useIntegrationCommandRowClass(): string {
     'flex items-center gap-2 font-mono text-xs',
     presentation === 'setup-guide'
       ? 'border-t border-border/40 px-0 py-2'
-      : 'border border-border/50 bg-muted/50 px-3 py-2'
+      : 'rounded-md border border-border/50 bg-muted/50 px-3 py-2'
   )
 }

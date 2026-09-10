@@ -32,7 +32,7 @@ pub(super) fn homes(root: &Path) -> Vec<PathBuf> {
             {
                 continue;
             }
-            let marker = canonical.join(".yiru-managed-home");
+            let marker = canonical.join(".agentstart-managed-home");
             if !std::fs::symlink_metadata(&marker).is_ok_and(|m| m.is_file())
                 || !std::fs::read_to_string(marker)
                     .is_ok_and(|text| text.trim() == entry.file_name().to_string_lossy())
@@ -90,7 +90,7 @@ pub(super) fn files(root: &Path, homes: &[PathBuf]) -> Result<Files, ProviderUsa
             continue;
         };
         let marker = runtime
-            .join(".yiru-session-copies")
+            .join(".agentstart-session-copies")
             .join(format!("{}.json", relative.to_string_lossy()));
         let Some(marker) = std::fs::read(marker)
             .ok()

@@ -1,6 +1,9 @@
-import type { PreflightStatusValue as PreflightStatus } from '@yiru/protocol'
-import { ONBOARDING_FINAL_STEP, ONBOARDING_FLOW_VERSION } from '@yiru/protocol/settings/onboarding'
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import type { PreflightStatusValue as PreflightStatus } from '@agentstart/protocol'
+import {
+  ONBOARDING_FINAL_STEP,
+  ONBOARDING_FLOW_VERSION
+} from '@agentstart/protocol/settings/onboarding'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
 
 import { STEPS } from './use-onboarding-flow-types'
 

@@ -1,6 +1,8 @@
 export type WebLinkMouseEvent = Pick<MouseEvent, 'button' | 'ctrlKey' | 'metaKey'>
 
-export function shouldOpenWebLinkInYiruBrowser(event: WebLinkMouseEvent | undefined): boolean {
+export function shouldOpenWebLinkInAgentStartBrowser(
+  event: WebLinkMouseEvent | undefined
+): boolean {
   if (!event || event.button !== 0) {
     return false
   }

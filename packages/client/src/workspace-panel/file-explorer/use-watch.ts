@@ -1,9 +1,9 @@
-import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
+import type { FsChangedPayload } from '@agentstart/protocol/files/watch-values'
 import {
   isPathInsideOrEqual,
   normalizeRuntimePathForComparison,
   relativePathInsideRoot
-} from '@yiru/protocol/host/path'
+} from '@agentstart/protocol/host/path'
 import { useEffect, useRef } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { joinPath, normalizeRelativePath, dirname } from '~renderer/path'
@@ -48,14 +48,14 @@ export function getExternalFileChangeRelativePath(
   }
 
   // Why: EditorPanel only reloads open tabs after the renderer emits
-  // `yiru:editor-external-file-change` with a worktree-relative path. The
+  // `agentstart:editor-external-file-change` with a worktree-relative path. The
   // filesystem watcher reports absolute paths, so normalize them here before
   // the explorer refresh path returns; otherwise terminal edits refresh the
   // tree but leave the editor's cached file contents stale.
   return normalizeRelativePath(relativePath)
 }
 
-export function canonicalizeFileExplorerWatchPath(
+function canonicalizeFileExplorerWatchPath(
   worktreePath: string,
   absolutePath: string
 ): string | null {
@@ -75,7 +75,7 @@ function normalizeExplorerAbsolutePath(path: string): string {
   return path.replace(/[\\/]+$/, '')
 }
 
-export function getFileExplorerWatchRuntimeEnvironmentId(
+function getFileExplorerWatchRuntimeEnvironmentId(
   state: Pick<AppState, 'repos' | 'settings' | 'worktreesByRepo'>,
   activeWorktreeId: string | null
 ): string | null {

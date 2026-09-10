@@ -1,6 +1,6 @@
-import type { SkillFreshnessInstallation } from '@yiru/protocol'
+import type { SkillFreshnessInstallation } from '@agentstart/protocol'
 
-export type SkillGroupStatus = 'update-available' | 'cannot-update'
+type SkillGroupStatus = 'update-available' | 'cannot-update'
 
 export type SkillLocationChip =
   | 'current'

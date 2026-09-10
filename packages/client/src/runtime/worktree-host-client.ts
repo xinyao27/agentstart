@@ -1,4 +1,4 @@
-import type { WorktreeSetPatch, ClientEventsSubscriptionEventValue } from '@yiru/protocol'
+import type { WorktreeSetPatch, ClientEventsSubscriptionEventValue } from '@agentstart/protocol'
 
 import { requireClientEventsClient } from './client-events-target'
 import { createRuntimeStreamFanOut } from './stream-fan-out'

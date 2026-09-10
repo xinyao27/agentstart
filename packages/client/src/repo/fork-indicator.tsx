@@ -1,4 +1,4 @@
-import type { GitHubRepositoryIdentity } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { GitHubRepositoryIdentity } from '@agentstart/protocol/hosted-review/pull-request-types'
 import React from 'react'
 import { GitFork } from '~renderer/icons/hugeicons'
 import { cn } from '~renderer/ui/class-names'

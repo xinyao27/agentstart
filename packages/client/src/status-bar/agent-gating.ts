@@ -1,5 +1,5 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { StatusBarItem } from '@yiru/protocol/settings/ui-state'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { StatusBarItem } from '@agentstart/protocol/settings/ui-state'
 
 // Why: CLI-backed usage bars are surface noise when the underlying
 // CLI isn't installed (e.g. a fresh Ubuntu install showing "Gemini Usage"

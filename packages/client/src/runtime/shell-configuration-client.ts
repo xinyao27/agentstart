@@ -1,19 +1,19 @@
-import type { KeybindingActionId, KeybindingFileSnapshot } from '@yiru/protocol/keybindings'
+import type { KeybindingActionId, KeybindingFileSnapshot } from '@agentstart/protocol/keybindings'
 import type {
-  CreateLocalYiruProfileArgs,
-  CreateLocalYiruProfileResult,
-  FindYiruProfileProjectsByPathArgs,
-  FindYiruProfileProjectsByPathResult,
-  SwitchYiruProfileArgs,
-  SwitchYiruProfileResult,
-  TransferYiruProfileProjectArgs,
-  TransferYiruProfileProjectResult,
-  YiruProfileListResult
-} from '~renderer/yiru-profiles/profile-model'
+  CreateLocalAgentStartProfileArgs,
+  CreateLocalAgentStartProfileResult,
+  FindAgentStartProfileProjectsByPathArgs,
+  FindAgentStartProfileProjectsByPathResult,
+  SwitchAgentStartProfileArgs,
+  SwitchAgentStartProfileResult,
+  TransferAgentStartProfileProjectArgs,
+  TransferAgentStartProfileProjectResult,
+  AgentStartProfileListResult
+} from '~renderer/agentstart-profiles/profile-model'
 
+import { requireShellAgentStartProfilesClient } from './shell-agentstart-profiles-target'
 import { subscribeShellEvent } from './shell-events-client'
 import { keybindingFileSnapshot, requireShellKeybindingsClient } from './shell-keybindings-target'
-import { requireShellYiruProfilesClient } from './shell-yiru-profiles-target'
 
 export type ShellKeybindingsApi = {
   get: () => Promise<KeybindingFileSnapshot>
@@ -28,16 +28,18 @@ export type ShellKeybindingsApi = {
   onChanged: (callback: (snapshot: KeybindingFileSnapshot) => void) => () => void
 }
 
-export type ShellYiruProfilesApi = {
-  list: () => Promise<YiruProfileListResult>
-  createLocal: (args?: CreateLocalYiruProfileArgs) => Promise<CreateLocalYiruProfileResult>
-  switchProfile: (args: SwitchYiruProfileArgs) => Promise<SwitchYiruProfileResult>
+export type ShellAgentStartProfilesApi = {
+  list: () => Promise<AgentStartProfileListResult>
+  createLocal: (
+    args?: CreateLocalAgentStartProfileArgs
+  ) => Promise<CreateLocalAgentStartProfileResult>
+  switchProfile: (args: SwitchAgentStartProfileArgs) => Promise<SwitchAgentStartProfileResult>
   transferProject: (
-    args: TransferYiruProfileProjectArgs
-  ) => Promise<TransferYiruProfileProjectResult>
+    args: TransferAgentStartProfileProjectArgs
+  ) => Promise<TransferAgentStartProfileProjectResult>
   findProjectProfiles: (
-    args: FindYiruProfileProjectsByPathArgs
-  ) => Promise<FindYiruProfileProjectsByPathResult>
+    args: FindAgentStartProfileProjectsByPathArgs
+  ) => Promise<FindAgentStartProfileProjectsByPathResult>
 }
 
 export const shellKeybindingsApi: ShellKeybindingsApi = {
@@ -67,11 +69,12 @@ export const shellKeybindingsApi: ShellKeybindingsApi = {
     })
 }
 
-export const shellYiruProfilesApi: ShellYiruProfilesApi = {
-  list: async () => (await requireShellYiruProfilesClient()).list(),
-  createLocal: async (args) => (await requireShellYiruProfilesClient()).createLocal(args),
-  switchProfile: async (args) => (await requireShellYiruProfilesClient()).switchProfile(args),
-  transferProject: async (args) => (await requireShellYiruProfilesClient()).transferProject(args),
+export const shellAgentStartProfilesApi: ShellAgentStartProfilesApi = {
+  list: async () => (await requireShellAgentStartProfilesClient()).list(),
+  createLocal: async (args) => (await requireShellAgentStartProfilesClient()).createLocal(args),
+  switchProfile: async (args) => (await requireShellAgentStartProfilesClient()).switchProfile(args),
+  transferProject: async (args) =>
+    (await requireShellAgentStartProfilesClient()).transferProject(args),
   findProjectProfiles: async (args) =>
-    (await requireShellYiruProfilesClient()).findProjectProfiles(args)
+    (await requireShellAgentStartProfilesClient()).findProjectProfiles(args)
 }

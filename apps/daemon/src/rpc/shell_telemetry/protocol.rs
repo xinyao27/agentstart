@@ -1,13 +1,13 @@
-use serde_json::{Map, Value, json};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::shell_telemetry_json_value::Kind as JsonKind;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::shell_telemetry_json_value::Kind as JsonKind;
+use agentstart_protocol::runtime::v1::{
     ShellTelemetryConsentState, ShellTelemetryJsonValue,
     ShellTelemetryServiceAcknowledgeBannerRequest, ShellTelemetryServiceConsentStateResponse,
     ShellTelemetryServiceGetConsentStateRequest, ShellTelemetryServiceMutatedResponse,
     ShellTelemetryServiceSetOptInRequest, ShellTelemetryServiceTrackRequest,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::{Map, Value, json};
 
 use crate::telemetry::{ConsentDisabledReason, ConsentState, TelemetryError};
 
@@ -82,7 +82,9 @@ fn protocol_consent(consent: ConsentState) -> ShellTelemetryConsentState {
         ConsentState::PendingBanner => ShellTelemetryConsentState::PendingBanner,
         ConsentState::Disabled { reason } => match reason {
             ConsentDisabledReason::DoNotTrack => ShellTelemetryConsentState::DisabledDoNotTrack,
-            ConsentDisabledReason::YiruDisabled => ShellTelemetryConsentState::DisabledYiruDisabled,
+            ConsentDisabledReason::AgentStartDisabled => {
+                ShellTelemetryConsentState::DisabledAgentStartDisabled
+            }
             ConsentDisabledReason::Ci => ShellTelemetryConsentState::DisabledCi,
             ConsentDisabledReason::UserOptOut => ShellTelemetryConsentState::DisabledUserOptOut,
         },

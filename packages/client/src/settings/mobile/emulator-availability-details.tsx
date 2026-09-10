@@ -61,7 +61,7 @@ export function MobileEmulatorAvailabilityDetails({
 
   return (
     <div className="mt-3">
-      <div className="divide-border/40 border-border/50 divide-y border px-3">
+      <div className="divide-border/40 border-border/50 divide-y rounded-md border px-3">
         <ToolchainStatusRow
           ok={iosOk}
           title={translate(

@@ -1,0 +1,192 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service DiagnosticsService {
+  rpc GetMemorySnapshot(GetMemorySnapshotRequest) returns (GetMemorySnapshotResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetStatus(DiagnosticsServiceGetStatusRequest) returns (DiagnosticsServiceGetStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CollectBundle(DiagnosticsServiceCollectBundleRequest) returns (DiagnosticsServiceCollectBundleResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc OpenBundlePreview(DiagnosticsServiceOpenBundlePreviewRequest) returns (DiagnosticsServiceOpenBundlePreviewResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc DiscardBundlePreview(DiagnosticsServiceDiscardBundlePreviewRequest) returns (DiagnosticsServiceDiscardBundlePreviewResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc UploadBundle(DiagnosticsServiceUploadBundleRequest) returns (DiagnosticsServiceUploadBundleResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message GetMemorySnapshotRequest {}
+
+message DiagnosticsServiceGetStatusRequest {}
+
+message DiagnosticsServiceGetStatusResponse {
+  bool local_file_enabled = 1;
+  bool bundle_enabled = 2;
+  string trace_file_path = 3;
+  uint64 trace_family_size = 4;
+  optional DiagnosticsDisabledReason disabled_reason = 5;
+}
+
+enum DiagnosticsDisabledReason {
+  DIAGNOSTICS_DISABLED_REASON_UNSPECIFIED = 0;
+  DIAGNOSTICS_DISABLED_REASON_DO_NOT_TRACK = 1;
+  DIAGNOSTICS_DISABLED_REASON_AGENT_START_TELEMETRY_DISABLED = 2;
+  DIAGNOSTICS_DISABLED_REASON_AGENT_START_DIAGNOSTICS_DISABLED = 3;
+  DIAGNOSTICS_DISABLED_REASON_CI = 4;
+}
+
+message DiagnosticsServiceCollectBundleRequest {
+  optional uint32 lookback_minutes = 1;
+}
+
+message DiagnosticsServiceCollectBundleResponse {
+  string bundle_submission_id = 1;
+  uint64 bytes = 2;
+  uint32 span_count = 3;
+}
+
+message DiagnosticsServiceOpenBundlePreviewRequest {
+  string bundle_submission_id = 1;
+}
+
+message DiagnosticsServiceOpenBundlePreviewResponse {}
+
+message DiagnosticsServiceDiscardBundlePreviewRequest {
+  string bundle_submission_id = 1;
+}
+
+message DiagnosticsServiceDiscardBundlePreviewResponse {}
+
+message DiagnosticsServiceUploadBundleRequest {
+  string bundle_submission_id = 1;
+}
+
+message DiagnosticsServiceUploadBundleResponse {
+  oneof result {
+    string ticket_id = 1;
+    DiagnosticsBundleUploadCanceled canceled = 2;
+  }
+}
+
+message DiagnosticsBundleUploadCanceled {}
+
+message GetMemorySnapshotResponse {
+  AppMemory app = 1;
+  repeated WorktreeMemory worktrees = 2;
+  HostMemory host = 3;
+  double total_cpu = 4;
+  uint64 total_memory = 5;
+  uint64 collected_at = 6;
+}
+
+message UsageValues {
+  double cpu = 1;
+  uint64 memory = 2;
+}
+
+message AppMemory {
+  double cpu = 1;
+  uint64 memory = 2;
+  UsageValues daemon = 3;
+  UsageValues other = 4;
+  repeated uint64 history = 5;
+}
+
+message SessionMemory {
+  double cpu = 1;
+  uint64 memory = 2;
+  string session_id = 3;
+  optional string pane_key = 4;
+  uint32 pid = 5;
+}
+
+message WorktreeMemory {
+  double cpu = 1;
+  uint64 memory = 2;
+  string worktree_id = 3;
+  string worktree_name = 4;
+  string repo_id = 5;
+  string repo_name = 6;
+  repeated SessionMemory sessions = 7;
+  repeated uint64 history = 8;
+}
+
+message HostMemory {
+  uint64 total_memory = 1;
+  uint64 free_memory = 2;
+  uint64 used_memory = 3;
+  double memory_usage_percent = 4;
+  uint32 cpu_core_count = 5;
+  double load_average_1m = 6;
+}

@@ -1,15 +1,3 @@
-function hasPathSeparator(query: string): boolean {
-  return /[\\/]/.test(query)
-}
-
-function hasFilenameExtension(query: string): boolean {
-  return /(?:^|[\\/])[^\\/]+\.[^\\/]+$/.test(query.trim())
-}
-
-export function isLikelyNewFileIntent(query: string): boolean {
-  return hasPathSeparator(query) || hasFilenameExtension(query)
-}
-
 export function validateNewTabEntryRelativePath(query: string): string {
   // Keep tab-created paths workspace-relative and unambiguous across platforms.
   // Absolute, home-relative, traversal, and UNC variants are handled elsewhere.

@@ -1,4 +1,4 @@
-import { resolveSourceControlActionRecipe } from '@yiru/protocol/source-control/resolution'
+import { resolveSourceControlActionRecipe } from '@agentstart/protocol/source-control/resolution'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, Pencil, X } from '~renderer/icons/hugeicons'

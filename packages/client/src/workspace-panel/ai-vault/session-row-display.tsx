@@ -1,6 +1,6 @@
-import type { AgentStatusState } from '@yiru/protocol/agent/status-records'
-import { resolveRepoBadgeColor } from '@yiru/protocol/project/appearance'
-import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
+import type { AgentStatusState } from '@agentstart/protocol/agent/status-records'
+import { resolveRepoBadgeColor } from '@agentstart/protocol/project/appearance'
+import { splitWorktreeIdForFilesystem } from '@agentstart/protocol/worktree/identity'
 import type React from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { AgentStateDot } from '~renderer/agent/status-dot'
@@ -77,7 +77,7 @@ export function SessionMetadata({
         {isAiVaultSessionRecoverableEmpty(session) ? (
           <>
             <span className="text-muted-foreground/55 shrink-0">·</span>
-            <span className="border-border/70 text-muted-foreground shrink-0 border border-dashed px-1 py-0 text-[10px] leading-4 font-medium">
+            <span className="border-border/70 text-muted-foreground shrink-0 rounded-sm border border-dashed px-1 py-0 text-[10px] leading-4 font-medium">
               {translate(
                 'auto.components.right.sidebar.AiVaultSessionRow.recoverableBadge',
                 'Not saved'
@@ -120,7 +120,7 @@ export function SessionWorktreeLine({
   return (
     <div className="flex min-w-0 flex-wrap items-center gap-1.5 pl-5">
       {shouldShowAiVaultWorktreeStatusBadge(worktreeInfo.status, { vaultScope }) ? (
-        <span className="border-sidebar-border bg-sidebar-accent/45 text-muted-foreground shrink-0 border px-1.5 py-0.5 text-[10px] leading-none">
+        <span className="border-sidebar-border bg-sidebar-accent/45 text-muted-foreground shrink-0 rounded-sm border px-1.5 py-0.5 text-[10px] leading-none">
           {worktreeStatusLabel(worktreeInfo.status)}
         </span>
       ) : null}

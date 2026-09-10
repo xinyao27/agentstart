@@ -6,40 +6,9 @@ import { Tooltip, TooltipTrigger, TooltipContent } from '~renderer/ui/tooltip'
 
 import { usePromptCacheCountdownNow } from './prompt-cache-countdown-clock'
 import {
-  getMostUrgentPromptCacheStartedAt,
   getPromptCacheCountdownForPane,
   type PromptCacheCountdownSelection
 } from './prompt-cache-timer-selection'
-
-/**
- * The most-urgent cache start time when a countdown should show, else null.
- * The worktree card uses it to both gate its metadata row and feed CacheTimer,
- * so neither the card nor the timer subscribes twice to the same store slices.
- *
- * When a worktree has multiple Claude tabs, this resolves the *most urgent*
- * (shortest remaining) start time — if any tab's cache is about to expire, the
- * user should know.
- */
-export function usePromptCacheCountdownStartedAt(worktreeId: string, active = true): number | null {
-  const [enabled, ttlMs, startedAt] = useAppStore(
-    useShallow((s) => {
-      if (!active) {
-        return [false, 0, null] as const
-      }
-      const enabled = s.settings?.promptCacheTimerEnabled ?? false
-      const ttlMs = s.settings?.promptCacheTtlMs ?? 0
-      if (!enabled || ttlMs <= 0) {
-        return [enabled, ttlMs, null] as const
-      }
-      return [
-        enabled,
-        ttlMs,
-        getMostUrgentPromptCacheStartedAt(s.tabsByWorktree[worktreeId], s.cacheTimerByKey)
-      ] as const
-    })
-  )
-  return enabled && ttlMs > 0 && startedAt != null ? startedAt : null
-}
 
 export function usePromptCacheCountdownForPane(
   paneKey: string,

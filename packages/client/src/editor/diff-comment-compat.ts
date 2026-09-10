@@ -1,4 +1,4 @@
-import type { DiffComment, DiffCommentSource } from '@yiru/protocol/git/diff-review'
+import type { DiffComment, DiffCommentSource } from '@agentstart/protocol/git/diff-review'
 
 export function getDiffCommentSource(comment: Pick<DiffComment, 'source'>): DiffCommentSource {
   return comment.source === 'markdown' ? 'markdown' : 'diff'

@@ -1,5 +1,5 @@
-import { normalizeHostedReviewHeadRef } from '@yiru/protocol/hosted-review/refs'
-import type { HostedReviewCreationEligibility } from '@yiru/protocol/hosted-review/types'
+import { normalizeHostedReviewHeadRef } from '@agentstart/protocol/hosted-review/refs'
+import type { HostedReviewCreationEligibility } from '@agentstart/protocol/hosted-review/types'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
 import { generateRuntimePullRequestFields } from '~renderer/runtime/git-client'

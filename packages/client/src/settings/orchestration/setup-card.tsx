@@ -4,7 +4,7 @@ import { translate } from '~renderer/i18n/i18n'
 import { readCliInstallStatus, readWslCliInstallStatus } from '~renderer/runtime/cli-install-client'
 import {
   AGENT_SKILL_CLI_PREREQUISITE_NOTICE,
-  ensureYiruCliAvailableForAgentSkillTerminal
+  ensureAgentStartCliAvailableForAgentSkillTerminal
 } from '~renderer/skills/agent-cli-prerequisite'
 import {
   ORCHESTRATION_SKILL_INSTALL_COMMAND,
@@ -50,7 +50,7 @@ export function OrchestrationSetupCard(props: {
       )}
       description={translate(
         'auto.components.settings.OrchestrationSetupCard.e7d2a5146c',
-        'Enables agents to hand off context and coordinate work through Yiru.'
+        'Enables agents to hand off context and coordinate work through AgentStart.'
       )}
       command={installCommand}
       installedCommand={updateCommand}
@@ -73,7 +73,7 @@ export function OrchestrationSetupCard(props: {
         useAppStore.getState().recordFeatureInteraction('agent-orchestration-setup')
         await (activeSkillRuntime.agentRuntime?.runtime === 'wsl'
           ? ensureWslCliAvailableForAgentSkillTerminal(activeSkillRuntime.agentRuntime)
-          : ensureYiruCliAvailableForAgentSkillTerminal())
+          : ensureAgentStartCliAvailableForAgentSkillTerminal())
       }}
       onRecheck={skill.refresh}
       freshnessSkillName={

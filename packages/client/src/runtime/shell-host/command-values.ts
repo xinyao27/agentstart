@@ -1,4 +1,4 @@
-import { isTuiAgent } from '@yiru/protocol/agent/identity'
+import { isTuiAgent } from '@agentstart/protocol/agent/identity'
 import { translate } from '~renderer/i18n/i18n'
 
 export function choice<const T extends string>(value: string, values: readonly T[]): T {

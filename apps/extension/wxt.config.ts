@@ -1,17 +1,28 @@
-import { createClientVitePreset } from '@yiru/client/vite'
-import type { Plugin } from 'vite'
+import { createClientVitePreset } from '@agentstart/client/vite'
+import { createLogger, type Plugin } from 'vite'
 import { defineConfig } from 'wxt'
 
 const EXTENSION_ORIGIN = 'chrome-extension://mfgmfiabfncmdekmikepemddejoeihbf'
 
 const extensionDevOriginPlugin: Plugin = {
-  name: 'yiru-extension-dev-origin',
+  name: 'agentstart-extension-dev-origin',
   configureServer(server) {
     server.middlewares.use((_request, response, next) => {
       response.setHeader('Access-Control-Allow-Origin', EXTENSION_ORIGIN)
       next()
     })
   }
+}
+
+const viteLogger = createLogger()
+const reportViteError = viteLogger.error
+viteLogger.error = (message, options) => {
+  // Why: Chromium reports this self-resolving layout notification through window.onerror.
+  // Keep every actionable Vite error while removing this one standard browser diagnostic.
+  if (message.includes('ResizeObserver loop completed with undelivered notifications')) {
+    return
+  }
+  reportViteError(message, options)
 }
 
 export default defineConfig({
@@ -37,6 +48,19 @@ export default defineConfig({
         throw new Error('wxt_optional_permissions_missing')
       }
       if (wxt.config.command === 'serve') {
+        manifest.action = {
+          ...manifest.action,
+          default_icon: {
+            16: 'icons/dev-16.png',
+            32: 'icons/dev-32.png'
+          }
+        }
+        manifest.icons = {
+          16: 'icons/dev-16.png',
+          32: 'icons/dev-32.png',
+          48: 'icons/dev-48.png',
+          128: 'icons/dev-128.png'
+        }
         // Why: WXT promotes these permissions during development; Chrome must not see duplicates.
         for (const permission of ['scripting']) {
           const index = optionalPermissions.indexOf(permission)
@@ -57,8 +81,8 @@ export default defineConfig({
       default_title: '__MSG_openSidePanel__'
     },
     commands: {
-      'open-yiru': {
-        description: '__MSG_openYiruCommand__',
+      'open-agentstart': {
+        description: '__MSG_openAgentStartCommand__',
         suggested_key: { default: 'Ctrl+Shift+Y', mac: 'Command+Shift+Y' }
       }
     },
@@ -78,7 +102,7 @@ export default defineConfig({
     key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu9Mn4TblyzESw2t/T/jRik7eEIdoBuSrwfPXCaA7v15bU0UBjoVR2jYercVGtNnkD1zlS2A6SvDKLGT2JwHK5Tbwoz7TLyylOE1kNCckj+Yeb9rTUFKKEC7EtvHnkeqj07TiPWZ7IA+OtCFP9FfNh9oBvpT1MfMl/2UNiPgwgsnOeZGCfc2YzThViNgCnp+12tFDfERtF9vys9xsk8CQDqfFWHI4ff9NuvMXiIubl5tl54NUHTUlqOe+KvSgAoaEpPzS0oaYcyCAg3Lrj98r7pDYza4hpg7KcmkBGzGAGyb64ZWlYeb5jsTheR95uy9ThUSo8DnS9PcBM6ZBAHGRmQIDAQAB',
     minimum_chrome_version: '120',
     name: '__MSG_appName__',
-    omnibox: { keyword: 'yiru' },
+    omnibox: { keyword: 'agentstart' },
     optional_host_permissions: [
       'http://*/*',
       'http://127.0.0.1/*',
@@ -98,7 +122,6 @@ export default defineConfig({
       'tabCapture',
       'userScripts'
     ],
-    options_page: 'settings.html',
     permissions: [
       'contextMenus',
       'debugger',
@@ -119,6 +142,7 @@ export default defineConfig({
     const clientPreset = createClientVitePreset({ featureWallEnabled: false })
     return {
       ...clientPreset,
+      customLogger: viteLogger,
       // Why: Chrome 151–152 rejects extension-page module preloads across isolated worlds.
       build: { modulePreload: false },
       // Why: extension pages load Vite across origins, while Vite's default CORS policy only

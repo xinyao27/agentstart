@@ -1,5 +1,5 @@
-import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitBranchChangeEntry } from '@agentstart/protocol/git/branch-compare-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 
 import type { OpenFile } from '../state'
 import {

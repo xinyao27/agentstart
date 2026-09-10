@@ -1,5 +1,5 @@
-import { hostedReviewInfoFromGitHubPRInfo } from '@yiru/protocol/hosted-review/github-mapping'
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import { hostedReviewInfoFromGitHubPRInfo } from '@agentstart/protocol/hosted-review/github-mapping'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
 import {
   getHostedReviewCacheKey,
   linkedReviewHintKey

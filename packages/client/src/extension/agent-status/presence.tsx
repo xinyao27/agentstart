@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { agentPhaseLabel } from '~renderer/agent-session/phase'
 import { useAgentPresence } from '~renderer/agent-session/presence'
 import { translate } from '~renderer/i18n/i18n'
+import faviconImage from '~renderer/public/favicon.png?inline'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
@@ -52,8 +53,8 @@ export function AgentPresence(): null {
     publishPresence()
     const heartbeat = window.setInterval(publishPresence, 15_000)
     document.title = phase
-      ? `${agentPhaseLabel(phase)} · ${translate('extension.productName', 'Yiru')}`
-      : translate('extension.productName', 'Yiru')
+      ? `${agentPhaseLabel(phase)} · ${translate('extension.productName', 'AgentStart')}`
+      : translate('extension.productName', 'AgentStart')
     const existingFavicon = document.head.querySelector<HTMLLinkElement>('link[rel="icon"]')
     const favicon =
       phase === 'waiting-decision' ? (existingFavicon ?? createFavicon()) : existingFavicon
@@ -94,7 +95,9 @@ function createFavicon(): HTMLLinkElement {
 }
 
 function attentionFaviconDataUrl(): string {
-  const svg =
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="#d97706"/></svg>'
+  const attentionColor =
+    getComputedStyle(document.documentElement).getPropertyValue('--color-amber-500').trim() ||
+    'currentColor'
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><image href="${faviconImage}" width="32" height="32"/><circle cx="26" cy="6" r="6" fill="${attentionColor}"/></svg>`
   return `data:image/svg+xml,${encodeURIComponent(svg)}`
 }

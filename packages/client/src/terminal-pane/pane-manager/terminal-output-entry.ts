@@ -1,7 +1,7 @@
 import {
   TERMINAL_OUTPUT_BACKLOG_MIN_CAP_CHARS,
   terminalOutputBacklogCapChars
-} from '@yiru/protocol/terminal/scrollback-policy'
+} from '@agentstart/protocol/terminal/scrollback-policy'
 import { recordRendererCrashBreadcrumb } from '~renderer/crash-report/breadcrumb-recorder'
 
 import {
@@ -16,9 +16,9 @@ import {
 import { fireQueuedAckCredits } from './terminal-output-write-batch'
 
 const BACKGROUND_BACKLOG_WARNING =
-  '\x18\x1b[0m\r\n[Yiru skipped hidden terminal output because the backlog grew too large.]\r\n'
+  '\x18\x1b[0m\r\n[AgentStart skipped hidden terminal output because the backlog grew too large.]\r\n'
 const FOREGROUND_BACKLOG_WARNING =
-  '\x18\x1b[0m\r\n[Yiru skipped a burst of terminal output because the backlog grew too large.]\r\n'
+  '\x18\x1b[0m\r\n[AgentStart skipped a burst of terminal output because the backlog grew too large.]\r\n'
 
 let maxQueueChars = TERMINAL_OUTPUT_BACKLOG_MIN_CAP_CHARS
 

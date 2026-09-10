@@ -11,8 +11,35 @@ pub(super) fn prune_repo(
     repo_id: &str,
     host_id: Option<&str>,
 ) -> bool {
+    prune_document(
+        document,
+        host_id,
+        &|owner| owner_belongs_to_repo(owner, repo_id),
+        Some(repo_id),
+    )
+}
+
+pub(super) fn prune_worktree(
+    document: &mut Map<String, Value>,
+    worktree_id: &str,
+    host_id: Option<&str>,
+) -> bool {
+    prune_document(
+        document,
+        host_id,
+        &|owner| owner_identity(owner) == worktree_id,
+        None,
+    )
+}
+
+fn prune_document(
+    document: &mut Map<String, Value>,
+    host_id: Option<&str>,
+    owns: &impl Fn(&str) -> bool,
+    active_repo_id: Option<&str>,
+) -> bool {
     let prune_local = host_id.is_none_or(|host_id| host_id == LOCAL_HOST_ID);
-    let mut changed = prune_local && prune_local_session(document, repo_id);
+    let mut changed = prune_local && prune_local_session(document, owns, active_repo_id);
     if host_id == Some(LOCAL_HOST_ID) {
         return changed;
     }
@@ -25,26 +52,34 @@ pub(super) fn prune_repo(
     match host_id {
         None => {
             for session in sessions.values_mut() {
-                changed |= prune_session(session, repo_id);
+                changed |= prune_session(session, owns, active_repo_id);
             }
         }
         Some(host_id) => {
             if let Some(session) = sessions.get_mut(host_id) {
-                changed |= prune_session(session, repo_id);
+                changed |= prune_session(session, owns, active_repo_id);
             }
         }
     }
     changed
 }
 
-fn prune_local_session(document: &mut Map<String, Value>, repo_id: &str) -> bool {
+fn prune_local_session(
+    document: &mut Map<String, Value>,
+    owns: &impl Fn(&str) -> bool,
+    active_repo_id: Option<&str>,
+) -> bool {
     let session = document
         .entry("workspaceSession".to_owned())
         .or_insert_with(default_session);
-    prune_session(session, repo_id)
+    prune_session(session, owns, active_repo_id)
 }
 
-fn prune_session(session: &mut Value, repo_id: &str) -> bool {
+fn prune_session(
+    session: &mut Value,
+    owns: &impl Fn(&str) -> bool,
+    active_repo_id: Option<&str>,
+) -> bool {
     let prior = session.clone();
     if !session.is_object() {
         *session = default_session();
@@ -53,7 +88,7 @@ fn prune_session(session: &mut Value, repo_id: &str) -> bool {
         .as_object_mut()
         .expect("workspace session was normalized to an object");
 
-    let terminal_ids = remove_owner_entries(session, "tabsByWorktree", repo_id)
+    let terminal_ids = remove_owner_entries(session, "tabsByWorktree", owns)
         .into_iter()
         .flat_map(|tabs| tabs.as_array().cloned().unwrap_or_default())
         .filter_map(|tab| tab.get("id").and_then(Value::as_str).map(str::to_owned))
@@ -77,10 +112,10 @@ fn prune_session(session: &mut Value, repo_id: &str) -> bool {
         "lastVisitedAtByWorktreeId",
         "defaultTerminalTabsAppliedByWorktreeId",
     ] {
-        remove_owner_entries(session, field, repo_id);
+        remove_owner_entries(session, field, owns);
     }
 
-    let workspace_ids = remove_owner_entries(session, "browserTabsByWorktree", repo_id)
+    let workspace_ids = remove_owner_entries(session, "browserTabsByWorktree", owns)
         .into_iter()
         .flat_map(|workspaces| workspaces.as_array().cloned().unwrap_or_default())
         .filter_map(|workspace| {
@@ -101,7 +136,7 @@ fn prune_session(session: &mut Value, repo_id: &str) -> bool {
                 record
                     .get("worktreeId")
                     .and_then(Value::as_str)
-                    .is_some_and(|owner| owner_belongs_to_repo(owner, repo_id))
+                    .is_some_and(owns)
             })
             .map(|(key, _)| key.clone())
             .collect::<Vec<_>>();
@@ -110,18 +145,16 @@ fn prune_session(session: &mut Value, repo_id: &str) -> bool {
         }
     }
 
-    null_if_owner(session, "activeWorkspaceKey", repo_id);
-    null_if_owner(session, "activeWorktreeId", repo_id);
-    null_if_equal(session, "activeRepoId", repo_id);
+    null_if_owner(session, "activeWorkspaceKey", owns);
+    null_if_owner(session, "activeWorktreeId", owns);
+    if let Some(repo_id) = active_repo_id {
+        null_if_equal(session, "activeRepoId", repo_id);
+    }
     if let Some(worktree_ids) = session
         .get_mut("activeWorktreeIdsOnShutdown")
         .and_then(Value::as_array_mut)
     {
-        worktree_ids.retain(|value| {
-            value
-                .as_str()
-                .is_none_or(|owner| !owner_belongs_to_repo(owner, repo_id))
-        });
+        worktree_ids.retain(|value| value.as_str().is_none_or(|owner| !owns(owner)));
     }
 
     prior != Value::Object(session.clone())
@@ -130,14 +163,14 @@ fn prune_session(session: &mut Value, repo_id: &str) -> bool {
 fn remove_owner_entries(
     session: &mut Map<String, Value>,
     field: &str,
-    repo_id: &str,
+    owns: &impl Fn(&str) -> bool,
 ) -> Vec<Value> {
     let Some(record) = object_field_mut(session, field) else {
         return Vec::new();
     };
     let keys = record
         .keys()
-        .filter(|key| owner_belongs_to_repo(key, repo_id))
+        .filter(|key| owns(key))
         .cloned()
         .collect::<Vec<_>>();
     keys.into_iter()
@@ -158,11 +191,8 @@ fn object_field_mut<'a>(
     session.get_mut(field).and_then(Value::as_object_mut)
 }
 
-fn null_if_owner(session: &mut Map<String, Value>, field: &str, repo_id: &str) {
-    let is_owner = session
-        .get(field)
-        .and_then(Value::as_str)
-        .is_some_and(|owner| owner_belongs_to_repo(owner, repo_id));
+fn null_if_owner(session: &mut Map<String, Value>, field: &str, owns: &impl Fn(&str) -> bool) {
+    let is_owner = session.get(field).and_then(Value::as_str).is_some_and(owns);
     if is_owner {
         session.insert(field.to_owned(), Value::Null);
     }
@@ -175,12 +205,16 @@ fn null_if_equal(session: &mut Map<String, Value>, field: &str, expected: &str) 
 }
 
 fn owner_belongs_to_repo(owner_key: &str, repo_id: &str) -> bool {
-    let owner = owner_key
-        .strip_prefix(WORKTREE_PREFIX)
-        .filter(|worktree_id| !worktree_id.is_empty())
-        .unwrap_or(owner_key);
+    let owner = owner_identity(owner_key);
     owner == repo_id
         || owner
             .strip_prefix(repo_id)
             .is_some_and(|suffix| suffix.starts_with(WORKTREE_SEPARATOR))
+}
+
+fn owner_identity(owner_key: &str) -> &str {
+    owner_key
+        .strip_prefix(WORKTREE_PREFIX)
+        .filter(|worktree_id| !worktree_id.is_empty())
+        .unwrap_or(owner_key)
 }

@@ -1,9 +1,9 @@
-import type { BrowserReplayCapture } from '@yiru/client/extension-bootstrap'
-import type { BrowserPerformanceCapture } from '@yiru/client/extension-bootstrap'
+import type { BrowserReplayCapture } from '@agentstart/client/extension-bootstrap'
+import type { BrowserPerformanceCapture } from '@agentstart/client/extension-bootstrap'
 import type {
   BrowserReplayEvent,
   WorkspaceConsoleSensorEntry as ConsoleSensorEntry
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 
 export async function sendActiveTabMessage(
   type: string,

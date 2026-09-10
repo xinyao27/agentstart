@@ -4,7 +4,7 @@ function comparableNumber(value: number | undefined, fallback = 0): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : fallback
 }
 
-export function comparePaneKeysOrdinal(a: string, b: string): number {
+function comparePaneKeysOrdinal(a: string, b: string): number {
   if (a < b) {
     return -1
   }

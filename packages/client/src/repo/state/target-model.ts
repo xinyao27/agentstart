@@ -1,18 +1,18 @@
 import {
   PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
   PROJECT_CONTEXT_PROTOCOL_CAPABILITY
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import {
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+} from '@agentstart/protocol/host/identity'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
 import type {
   ProjectHostSetup,
   ProjectHostSetupExistingFolderArgs
-} from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
+} from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { translate } from '~renderer/i18n/i18n'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 import {
@@ -49,7 +49,7 @@ export function getProjectUpdateRuntimeTarget(
     : { kind: 'local' }
 }
 
-export function formatProjectPresenceProfileNames(profileNames: readonly string[]): string {
+function formatProjectPresenceProfileNames(profileNames: readonly string[]): string {
   const names = [...new Set(profileNames.map((name) => name.trim()).filter(Boolean))]
   if (names.length <= 3) {
     return names.join(', ')
@@ -63,12 +63,12 @@ export function formatProjectPresenceProfileNames(profileNames: readonly string[
 
 export async function warnIfProjectKnownInAnotherProfile(
   repo: Repo,
-  activeYiruProfileId: string | null
+  activeAgentStartProfileId: string | null
 ): Promise<void> {
-  const findProjectProfiles = shellClient.yiruProfiles?.findProjectProfiles
+  const findProjectProfiles = shellClient.agentstartProfiles?.findProjectProfiles
   // Why: without a loaded active profile ID the scan cannot exclude the
   // current profile and would false-positive on the project just added.
-  if (!findProjectProfiles || !activeYiruProfileId) {
+  if (!findProjectProfiles || !activeAgentStartProfileId) {
     return
   }
   try {
@@ -78,7 +78,7 @@ export async function warnIfProjectKnownInAnotherProfile(
       path: repo.path,
       connectionId: null,
       executionHostId: getRepoExecutionHostId(repo),
-      excludeProfileId: activeYiruProfileId
+      excludeProfileId: activeAgentStartProfileId
     })
     const description = formatProjectPresenceProfileNames(
       result.projects.map((project) => project.profileName)
@@ -133,7 +133,7 @@ export function setupWithFetchedOwner(
   }
 }
 
-export async function assertProjectHostSetupRuntimeCapability(
+async function assertProjectHostSetupRuntimeCapability(
   target: ReturnType<typeof getActiveRuntimeTarget>
 ): Promise<void> {
   if (target.kind !== 'environment') {
@@ -144,7 +144,7 @@ export async function assertProjectHostSetupRuntimeCapability(
     PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
     translate(
       'runtime.projectSetup.unsupported',
-      'The selected runtime host does not support project host setup yet. Update Yiru on the host and try again.'
+      'The selected runtime host does not support project host setup yet. Update AgentStart on the host and try again.'
     ),
     15_000
   )
@@ -162,7 +162,7 @@ export async function assertProjectHostSetupMutationRuntimeCapabilities(
     PROJECT_CONTEXT_PROTOCOL_CAPABILITY,
     translate(
       'runtime.projectContext.unsupported',
-      'The selected runtime host does not support explicit workspace run hosts yet. Update Yiru on the host and try again.'
+      'The selected runtime host does not support explicit workspace run hosts yet. Update AgentStart on the host and try again.'
     ),
     15_000
   )

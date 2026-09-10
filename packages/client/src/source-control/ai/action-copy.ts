@@ -1,4 +1,4 @@
-import type { SourceControlActionId } from '@yiru/protocol/source-control/ai-actions'
+import type { SourceControlActionId } from '@agentstart/protocol/source-control/ai-actions'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
 
@@ -28,7 +28,7 @@ export const getSourceControlActionVariableInfo = createLocalizedCatalog(
     basePrompt: {
       description: translate(
         'sourceControl.aiVariable.6d7d7022f2',
-        'Yiru’s built-in prompt for this action, including the context Yiru knows how to gather safely.'
+        'AgentStart’s built-in prompt for this action, including the context AgentStart knows how to gather safely.'
       ),
       example: translate(
         'sourceControl.aiVariable.822bb26f9d',
@@ -122,14 +122,14 @@ export const getSourceControlActionVariableInfo = createLocalizedCatalog(
     firstPrompt: {
       description: translate(
         'sourceControl.aiVariable.9573cb82d1',
-        'The first user request that created the Yiru workspace.'
+        'The first user request that created the AgentStart workspace.'
       ),
       example: translate('sourceControl.aiVariable.7ed02f2afb', 'Fix CI and commit the result')
     },
     assistantMessage: {
       description: translate(
         'sourceControl.aiVariable.cce3690a92',
-        'The initial agent response, when Yiru has one available.'
+        'The initial agent response, when AgentStart has one available.'
       ),
       example: translate(
         'sourceControl.aiVariable.a83b20fcc9',

@@ -4,7 +4,7 @@ import {
   TerminalService,
   TerminalServiceOpenMultiplexRequestSchema,
   TerminalServiceOpenMultiplexResponseSchema
-} from '../../generated/yiru/runtime/v1/terminal_pb.js'
+} from '../../generated/agent_start/runtime/v1/terminal_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from '../transport.js'
 import { TerminalManagedClient } from './managed-client.js'
 import { required, safeInteger } from './request-values.js'

@@ -3,28 +3,28 @@
 import PackageDescription
 
 let package = Package(
-  name: "YiruComputerUseMacOS",
+  name: "AgentStartComputerUseMacOS",
   platforms: [
     .macOS(.v14)
   ],
   products: [
     .library(
-      name: "YiruComputerUseMacOSCore",
-      targets: ["YiruComputerUseMacOSCore"]
+      name: "AgentStartComputerUseMacOSCore",
+      targets: ["AgentStartComputerUseMacOSCore"]
     ),
     .executable(
-      name: "yiru-computer-use-macos",
-      targets: ["YiruComputerUseMacOS"]
+      name: "agentstart-computer-use-macos",
+      targets: ["AgentStartComputerUseMacOS"]
     ),
   ],
   targets: [
     .target(
-      name: "YiruComputerUseMacOSCore",
-      path: "Sources/YiruComputerUseMacOSCore"
+      name: "AgentStartComputerUseMacOSCore",
+      path: "Sources/AgentStartComputerUseMacOSCore"
     ),
     .target(
-      name: "YiruComputerUseIcons",
-      path: "Sources/YiruComputerUseIcons"
+      name: "AgentStartComputerUseIcons",
+      path: "Sources/AgentStartComputerUseIcons"
     ),
     .target(
       name: "SystemSettingsKit",
@@ -35,7 +35,7 @@ let package = Package(
     ),
     .target(
       name: "PermissionFlow",
-      dependencies: ["SystemSettingsKit", "YiruComputerUseIcons"],
+      dependencies: ["SystemSettingsKit", "AgentStartComputerUseIcons"],
       path: "vendor/permission-flow/Sources/PermissionFlow",
       swiftSettings: [
         // Why: upstream main requires Swift 6.2, while the release runner uses Swift 6.
@@ -51,14 +51,14 @@ let package = Package(
       ]
     ),
     .executableTarget(
-      name: "YiruComputerUseMacOS",
+      name: "AgentStartComputerUseMacOS",
       dependencies: [
-        "YiruComputerUseMacOSCore",
-        "YiruComputerUseIcons",
+        "AgentStartComputerUseMacOSCore",
+        "AgentStartComputerUseIcons",
         "PermissionFlow",
         "PermissionFlowScreenRecordingStatus",
       ],
-      path: "Sources/YiruComputerUseMacOS"
+      path: "Sources/AgentStartComputerUseMacOS"
     ),
   ]
 )

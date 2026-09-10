@@ -1,6 +1,6 @@
 import type { RuntimeClientEvent } from '~renderer/runtime/client-event-model'
 
-export type RuntimeClientEventSubscriptionHandle = {
+type RuntimeClientEventSubscriptionHandle = {
   unsubscribe: () => void
 }
 

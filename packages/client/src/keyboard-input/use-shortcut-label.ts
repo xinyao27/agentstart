@@ -5,7 +5,7 @@ import {
   isDoubleTapBinding,
   type KeybindingActionId,
   type KeybindingOverrides
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 
 import { useAppStore } from '../store/state'
 import { getShortcutPlatform } from './shortcut-platform'
@@ -45,7 +45,7 @@ export function useShortcutLabel(actionId: KeybindingActionId): string {
 // Why: returns null for unbound actions instead of the display sentinel
 // 'Unassigned', so callers decide whether to render a hint without coupling
 // UI logic to formatter copy (which may change or become localized).
-export function formatOptionalShortcutLabel(
+function formatOptionalShortcutLabel(
   actionId: KeybindingActionId,
   overrides?: KeybindingOverrides
 ): string | null {

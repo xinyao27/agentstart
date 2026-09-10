@@ -31,7 +31,7 @@ export function SessionUnsavedConversationNotice({
           )}
         </span>
       </div>
-      <div className="border-border/70 bg-foreground/[0.04] text-muted-foreground border border-dashed px-2.5 py-2 text-[11px] leading-4">
+      <div className="border-border/70 bg-foreground/[0.04] text-muted-foreground rounded-md border border-dashed px-2.5 py-2 text-[11px] leading-4">
         {recoverable
           ? translate(
               'auto.components.right.sidebar.AiVaultSessionDetails.recoverableEmptyDetail',

@@ -10,7 +10,7 @@ import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { readCliInstallStatus } from '~renderer/runtime/cli-install-client'
 import { notifyInstalledAgentSkillsChanged } from '~renderer/runtime/installed-agent-skill-discovery-state'
 import { shellClient } from '~renderer/runtime/shell-client'
-import { isYiruCliAvailableOnPath } from '~renderer/skills/agent-cli-prerequisite'
+import { isAgentStartCliAvailableOnPath } from '~renderer/skills/agent-cli-prerequisite'
 import { SkillFreshnessStatusPill } from '~renderer/skills/skill-freshness-status-pill'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
@@ -80,7 +80,7 @@ export function AgentSkillSetupPanel({
   hideHeader = false,
   preInstallNotice,
   getPrerequisiteStatus,
-  isPrerequisiteAvailable = isYiruCliAvailableOnPath,
+  isPrerequisiteAvailable = isAgentStartCliAvailableOnPath,
   onBeforeOpenTerminal,
   showInstallWhenInstalled = true,
   showRecheckWhenInstalled = true,
@@ -248,7 +248,7 @@ export function AgentSkillSetupPanel({
     <div
       className={cn(
         'min-w-0',
-        variant === 'card' ? 'border border-border bg-muted/20' : null,
+        variant === 'card' ? 'rounded-xl border border-border bg-muted/20' : null,
         className
       )}
     >
@@ -263,7 +263,7 @@ export function AgentSkillSetupPanel({
           <div className="flex items-center gap-4">
             {leading}
             {icon ? (
-              <div className="border-border bg-background text-foreground flex size-10 shrink-0 items-center justify-center border">
+              <div className="border-border bg-background text-foreground flex size-10 shrink-0 items-center justify-center rounded-lg border">
                 {icon}
               </div>
             ) : null}
@@ -326,7 +326,7 @@ export function AgentSkillSetupPanel({
             variant === 'card' ? 'px-5 pb-5' : 'mt-2'
           )}
         >
-          <div className="border-border bg-muted/35 flex max-w-full min-w-0 items-center gap-2 overflow-hidden border px-3 py-2">
+          <div className="border-border bg-muted/35 flex max-w-full min-w-0 items-center gap-2 overflow-hidden rounded-md border px-3 py-2">
             <code className="scrollbar-sleek text-muted-foreground min-w-0 flex-1 overflow-x-auto font-mono text-xs whitespace-nowrap">
               {openTerminalCommand}
             </code>

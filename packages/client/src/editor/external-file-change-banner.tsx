@@ -21,10 +21,7 @@ import { ExternalFileChangeCompareDialog } from './external-file-change-compare-
 
 const RELOAD_UNDO_TOAST_DURATION_MS = 8_000
 
-export function reloadTabContentFromDisk(
-  file: OpenFile,
-  reloadContent: (file: OpenFile) => void
-): void {
+function reloadTabContentFromDisk(file: OpenFile, reloadContent: (file: OpenFile) => void): void {
   const state = useAppStore.getState()
   const discardedDraft = state.editorDrafts[file.id]
   const discardedDiskSignature = state.openFiles.find(
@@ -79,7 +76,7 @@ export function reloadTabContentFromDisk(
   )
 }
 
-export function keepTabEditsOverExternalChange(file: OpenFile): void {
+function keepTabEditsOverExternalChange(file: OpenFile): void {
   const state = useAppStore.getState()
   state.setExternalMutation(file.id, null)
   // Why: the dismissal must survive restart — without advancing the baseline

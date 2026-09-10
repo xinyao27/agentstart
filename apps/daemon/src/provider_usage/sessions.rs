@@ -11,11 +11,11 @@ pub(super) fn session_matches(
     scope: &str,
     cutoff: Option<&str>,
 ) -> bool {
-    let belongs = scope != "yiru"
+    let belongs = scope != "agentstart"
         || if matches!(provider, Provider::OpenCode) {
             string_field(Some(row), "primaryWorktreeId").is_some_and(|id| !id.is_empty())
         } else {
-            rows(row, "locationBreakdown").any(is_yiru_location)
+            rows(row, "locationBreakdown").any(is_agentstart_location)
         };
     if !belongs {
         return false;
@@ -131,7 +131,7 @@ pub(super) fn session_breakdown_keys(
             .collect();
     }
     rows(session, "locationBreakdown")
-        .filter(|row| scope != "yiru" || is_yiru_location(row))
+        .filter(|row| scope != "agentstart" || is_agentstart_location(row))
         .map(|row| {
             string_field(Some(row), "locationKey")
                 .unwrap_or("unknown")
@@ -145,17 +145,17 @@ fn scoped_locations<'a>(row: &'a Value, scope: &str) -> Vec<&'a Value> {
     let matching = all
         .iter()
         .copied()
-        .filter(|row| scope != "yiru" || is_yiru_location(row))
+        .filter(|row| scope != "agentstart" || is_agentstart_location(row))
         .collect::<Vec<_>>();
     if matching.is_empty() { all } else { matching }
 }
 
 fn scoped_models<'a>(row: &'a Value, provider: Provider, scope: &str) -> Vec<&'a Value> {
     let locations = rows(row, "locationModelBreakdown").collect::<Vec<_>>();
-    if scope == "yiru" && matches!(provider, Provider::Codex) && !locations.is_empty() {
+    if scope == "agentstart" && matches!(provider, Provider::Codex) && !locations.is_empty() {
         locations
             .into_iter()
-            .filter(|row| is_yiru_location(row))
+            .filter(|row| is_agentstart_location(row))
             .collect()
     } else {
         rows(row, "modelBreakdown").collect()
@@ -177,7 +177,7 @@ fn codex_primary_model<'a>(row: &'a Value, scope: &str) -> Option<&'a str> {
     }
 }
 
-fn is_yiru_location(row: &Value) -> bool {
+fn is_agentstart_location(row: &Value) -> bool {
     row.get("worktreeId").is_some_and(|id| !id.is_null())
 }
 

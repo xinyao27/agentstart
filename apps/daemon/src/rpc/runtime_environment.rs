@@ -1,8 +1,8 @@
 use std::time::Duration;
 
-use yiru_protocol::method_metadata::methods::YiruRuntimeV1StatusServiceGetStatus as GetStatusMethod;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::method_metadata::methods::AgentStartRuntimeV1StatusServiceGetStatus as GetStatusMethod;
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     GetStatusRequest, RuntimeAuthorizedPeer, RuntimeDeviceScope, RuntimeEnvironment,
     RuntimeEnvironmentEndpoint, RuntimeEnvironmentEndpointKind,
     RuntimeEnvironmentServiceDisconnectRequest, RuntimeEnvironmentServiceDisconnectResponse,
@@ -14,7 +14,7 @@ use yiru_protocol::runtime::v1::{
     RuntimeEnvironmentServiceRemoveRequest, RuntimeEnvironmentServiceRemoveResponse,
     RuntimeEnvironmentServiceRevokePeerRequest, RuntimeEnvironmentServiceRevokePeerResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::profiles::ProfilesAuthority;
 use crate::runtime_environment::{

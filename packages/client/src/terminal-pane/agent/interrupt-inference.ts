@@ -1,7 +1,7 @@
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry
-} from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/status-records'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
 
 import {

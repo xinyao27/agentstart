@@ -2,9 +2,9 @@ import type {
   GitConflictKind,
   GitConflictOperation,
   GitStatusEntry
-} from '@yiru/protocol/git/status-types'
+} from '@agentstart/protocol/git/status-types'
 
-export const CONFLICT_KIND_LABELS: Record<GitConflictKind, string> = {
+const CONFLICT_KIND_LABELS: Record<GitConflictKind, string> = {
   both_modified: 'Both modified',
   both_added: 'Both added',
   deleted_by_us: 'Deleted by us',

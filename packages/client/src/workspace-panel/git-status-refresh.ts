@@ -1,6 +1,6 @@
-import type { GitStatusResult, GitUpstreamStatus } from '@yiru/protocol/git/status-types'
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GitStatusResult, GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { getRuntimeGitStatus, getRuntimeGitUpstreamStatus } from '~renderer/runtime/git-client'
 import {
   clearAutomaticPushTargetUpstreamStatusCache,
@@ -143,7 +143,7 @@ export async function refreshGitStatusForWorktree({
     })
     if (pushTarget) {
       // Why: porcelain status reports Git's configured upstream. Source Control
-      // actions for PR-created worktrees must instead reconcile with Yiru's
+      // actions for PR-created worktrees must instead reconcile with AgentStart's
       // explicit publish target.
       const cachedUpstreamStatus = getCachedAutomaticPushTargetUpstreamStatus({
         settings,
@@ -262,7 +262,7 @@ export async function refreshGitStatusForWorktreeStrict({
   })
   if (pushTarget) {
     // Why: porcelain status reports Git's configured upstream. Source Control
-    // actions for PR-created worktrees must instead reconcile with Yiru's
+    // actions for PR-created worktrees must instead reconcile with AgentStart's
     // explicit publish target.
     const upstreamStatus = await getRuntimeGitUpstreamStatus(
       { settings, worktreeId, worktreePath, connectionId },

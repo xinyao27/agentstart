@@ -1,6 +1,6 @@
-import { hostedReviewInfoFromGitHubPRInfo } from '@yiru/protocol/hosted-review/github-mapping'
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
+import { hostedReviewInfoFromGitHubPRInfo } from '@agentstart/protocol/hosted-review/github-mapping'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { HostedReviewInfo } from '@agentstart/protocol/hosted-review/types'
 
 export type ChecksPanelReview = HostedReviewInfo
 

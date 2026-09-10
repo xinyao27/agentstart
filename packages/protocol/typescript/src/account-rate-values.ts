@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   AccountProvider,
   AccountUsageStatus,
@@ -12,7 +12,7 @@ import {
   type RateLimitRuntimeTarget as ProtocolRateLimitRuntimeTarget,
   type RateLimitWindow as ProtocolRateLimitWindow,
   type UsageRateLimitMetadata as ProtocolMetadata
-} from '../generated/yiru/runtime/v1/accounts_pb.js'
+} from '../generated/agent_start/runtime/v1/accounts_pb.js'
 import type {
   CodexRateLimitResetOutcome,
   CodexRateLimitResetResult,

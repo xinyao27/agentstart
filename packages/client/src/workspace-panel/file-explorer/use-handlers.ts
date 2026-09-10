@@ -48,7 +48,7 @@ type UseFileExplorerHandlersReturn = {
 type OpenFileParams = Parameters<UseFileExplorerHandlersParams['openFile']>[0]
 type OpenFileOptions = Parameters<UseFileExplorerHandlersParams['openFile']>[1]
 
-export async function activateFileExplorerNode(args: {
+async function activateFileExplorerNode(args: {
   node: TreeNode
   activeWorktreeId: string | null
   runtimeEnvironmentId?: string | null

@@ -1,5 +1,5 @@
-import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
-import { normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
+import type { FsChangedPayload } from '@agentstart/protocol/files/watch-values'
+import { normalizeRuntimePathForComparison } from '@agentstart/protocol/host/path'
 import { useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
 import { subscribeRuntimeFileChanges } from '~renderer/runtime/file-client'
@@ -8,11 +8,6 @@ import { useAppStore } from '~renderer/store/state'
 import { createExternalWatchEventHandler } from './external-watch-handler'
 import { getEditorExternalWatchTargets, getWatchedTargetKey } from './external-watch-targets'
 import type { WatchedTarget } from './external-watch-types'
-
-export { createExternalWatchEventHandler } from './external-watch-handler'
-export { getOverflowExternalReloadTargets } from './external-watch-reload'
-export { getEditorExternalWatchTargets, getWatchedTargetKey } from './external-watch-targets'
-export type { EditorExternalWatchTargetState } from './external-watch-targets'
 
 export function useEditorExternalWatch(): void {
   const { targets, targetsKey } = useAppStore(getEditorExternalWatchTargets)

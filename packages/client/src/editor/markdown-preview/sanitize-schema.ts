@@ -21,8 +21,8 @@ export const markdownPreviewSanitizeSchema = {
     details: [
       ...(defaultSchema.attributes?.details ?? []),
       'open',
-      ['className', 'yiru-details'],
-      ['dataYiruToggle', 'heading-1', 'heading-2', 'heading-3', 'heading-4']
+      ['className', 'agentstart-details'],
+      ['dataAgentStartToggle', 'heading-1', 'heading-2', 'heading-3', 'heading-4']
     ],
     h1: [...(defaultSchema.attributes?.h1 ?? []), 'id'],
     h2: [...(defaultSchema.attributes?.h2 ?? []), 'id'],

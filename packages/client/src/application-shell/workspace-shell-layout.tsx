@@ -151,7 +151,7 @@ function WorkspacePage({
         title={translate('auto.App.b7a714db1e', 'This page hit an error.')}
         description={translate(
           'auto.App.03a14f6b5b',
-          'Retry the page or navigate to another Yiru surface.'
+          'Retry the page or navigate to another AgentStart surface.'
         )}
       >
         {activeView === 'settings' ? <Settings /> : null}

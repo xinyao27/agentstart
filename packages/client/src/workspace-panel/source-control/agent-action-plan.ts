@@ -1,9 +1,9 @@
-import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
-import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
-import type { SessionOptionValue } from '@yiru/protocol/agent/session-options/types'
-import { planAgentCliArgsSuffix } from '@yiru/protocol/agent/shell-command'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { resolveLocalWindowsAgentStartupShell } from '@yiru/protocol/host/windows-terminal-shell'
+import { TUI_AGENT_CONFIG } from '@agentstart/protocol/agent/launch/config'
+import { isTuiAgentEnabled } from '@agentstart/protocol/agent/selection'
+import type { SessionOptionValue } from '@agentstart/protocol/agent/session-options/types'
+import { planAgentCliArgsSuffix } from '@agentstart/protocol/agent/shell-command'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { resolveLocalWindowsAgentStartupShell } from '@agentstart/protocol/host/windows-terminal-shell'
 import { startupCommandErrorMessage } from '~renderer/agent/startup-error'
 import {
   buildAgentDraftLaunchPlan,
@@ -13,11 +13,7 @@ import {
 import { translate } from '~renderer/i18n/i18n'
 import { CLIENT_PLATFORM } from '~renderer/new-workspace/workspace-creation'
 
-export type SourceControlLaunchPlanDelivery =
-  | 'argv'
-  | 'draft-native'
-  | 'draft-paste'
-  | 'paste-submit'
+type SourceControlLaunchPlanDelivery = 'argv' | 'draft-native' | 'draft-paste' | 'paste-submit'
 
 export type SourceControlLaunchPlanResult =
   | {
@@ -194,11 +190,11 @@ export function planSourceControlAgentActionLaunch(args: {
 
   const summary =
     delivery === 'paste-submit'
-      ? 'The agent starts with no prompt, then Yiru pastes and submits the command input after the TUI is ready.'
+      ? 'The agent starts with no prompt, then AgentStart pastes and submits the command input after the TUI is ready.'
       : delivery === 'draft-native'
         ? 'The command input is prefilled as an editable draft by the agent launch command.'
         : delivery === 'draft-paste'
-          ? 'The agent starts with no prompt, then Yiru pastes the command input as an editable draft after the TUI is ready.'
+          ? 'The agent starts with no prompt, then AgentStart pastes the command input as an editable draft after the TUI is ready.'
           : 'The command input is included in the launch command and submitted as the first turn.'
 
   return {
@@ -208,6 +204,6 @@ export function planSourceControlAgentActionLaunch(args: {
     commandLabel: startupPlan.launchCommand,
     summary,
     caveat:
-      'This check builds Yiru’s launch plan only. PATH, binary availability, account setup, and terminal startup failures are still caught by the real launch watchdog.'
+      'This check builds AgentStart’s launch plan only. PATH, binary availability, account setup, and terminal startup failures are still caught by the real launch watchdog.'
   }
 }

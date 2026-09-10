@@ -1,5 +1,8 @@
-import type { DirectoryEntry as DirEntry } from '@yiru/protocol/files/values'
-import { isWindowsAbsolutePathLike, normalizeRuntimePathSeparators } from '@yiru/protocol/host/path'
+import type { DirectoryEntry as DirEntry } from '@agentstart/protocol/files/values'
+import {
+  isWindowsAbsolutePathLike,
+  normalizeRuntimePathSeparators
+} from '@agentstart/protocol/host/path'
 
 import {
   readRuntimeDirectory,

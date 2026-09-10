@@ -62,7 +62,7 @@ export default function WorkspaceSpacePage(): React.JSX.Element {
           {translate('auto.components.workspace.space.WorkspaceSpacePage.ecf72fdc3b', 'Back')}
         </Button>
         <div className="flex min-w-0 items-center gap-3">
-          <div className="border-border bg-muted/30 flex size-8 shrink-0 items-center justify-center border">
+          <div className="border-border bg-muted/30 flex size-8 shrink-0 items-center justify-center rounded-md border">
             <HardDrive className="text-muted-foreground size-4" />
           </div>
           <div className="min-w-0">

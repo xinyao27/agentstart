@@ -3,16 +3,14 @@ import {
   REPO_REFS_PROTOCOL_CAPABILITY,
   RepoClient,
   type RepoAddInput
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'
 import { readRuntimeStatus } from './status-client'
 
-export async function openRepoProtocolTarget(
-  target: RuntimeClientTarget
-): Promise<RepoClient | null> {
+async function openRepoProtocolTarget(target: RuntimeClientTarget): Promise<RepoClient | null> {
   const status = await readRuntimeStatus(target)
   if (!status.capabilities?.includes(REPO_PROTOCOL_CAPABILITY)) {
     return null
@@ -28,7 +26,7 @@ export async function requireRepoProtocolClient(target: RuntimeClientTarget): Pr
     throw new Error(
       translate(
         'runtime.repoProtocolTarget.unavailable',
-        'This action needs a current Yiru daemon connection.'
+        'This action needs a current AgentStart daemon connection.'
       )
     )
   }
@@ -46,7 +44,7 @@ export async function requireRepoRefsProtocolClient(
     throw new Error(
       translate(
         'runtime.repoProtocolTarget.unavailable',
-        'This action needs a current Yiru daemon connection.'
+        'This action needs a current AgentStart daemon connection.'
       )
     )
   }

@@ -39,7 +39,7 @@ export default function FeatureWallModal(): JSX.Element | null {
           <DialogTitle className="text-lg">
             {translate(
               'auto.components.feature.wall.FeatureWallModal.3567e147c8',
-              'Get to know Yiru'
+              'Get to know AgentStart'
             )}
           </DialogTitle>
           {/* Why: Radix requires a description for the dialog to be a11y-compliant,
@@ -47,7 +47,7 @@ export default function FeatureWallModal(): JSX.Element | null {
           <DialogDescription className="sr-only">
             {translate(
               'auto.components.feature.wall.FeatureWallModal.33dca8bbbe',
-              'A short, workflow-by-workflow tour of Yiru.'
+              'A short, workflow-by-workflow tour of AgentStart.'
             )}
           </DialogDescription>
         </DialogHeader>

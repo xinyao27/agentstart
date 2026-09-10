@@ -20,10 +20,9 @@ import { configureSidebarHostNavigation } from '../../sidebar/host-navigation'
 import { openCommandPalette } from '../command-palette/open'
 import { getExtensionHostNavigation } from '../navigation'
 import { EXTENSION_QUERY_CACHE_KEY, extensionQueryCacheBuster } from '../runtime/query-cache'
-import type { ExtensionRuntimeBootstrap } from '../runtime/session'
 import { ExtensionWorkbenchRouter } from './router'
 
-export function mountExtensionWorkbench(bootstrap: ExtensionRuntimeBootstrap): void {
+export function mountExtensionWorkbench(runtimeQueryCacheBuster: string): void {
   recordRendererCrashBreadcrumb('extension_workbench_bootstrap_started', {
     dev: import.meta.env.DEV
   })
@@ -82,7 +81,7 @@ export function mountExtensionWorkbench(bootstrap: ExtensionRuntimeBootstrap): v
             <PersistQueryClientProvider
               client={queryClient}
               persistOptions={{
-                buster: extensionQueryCacheBuster(bootstrap),
+                buster: extensionQueryCacheBuster(runtimeQueryCacheBuster),
                 maxAge: 24 * 60 * 60 * 1_000,
                 persister: createSyncStoragePersister({
                   key: EXTENSION_QUERY_CACHE_KEY,

@@ -1,6 +1,6 @@
-import type { TerminalTab, WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
+import type { TerminalTab, WorkspaceVisibleTabType } from '@agentstart/protocol/workspace/tabs'
 
-export function shouldRepairActiveTerminalTab(args: {
+function shouldRepairActiveTerminalTab(args: {
   activeTabType: WorkspaceVisibleTabType
   activeTabId: string | null
   tabs: TerminalTab[]

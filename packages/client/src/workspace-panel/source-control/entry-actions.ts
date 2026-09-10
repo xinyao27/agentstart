@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 
 import { isStageableStatusEntry } from '../discard-all-sequence'
 

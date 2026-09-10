@@ -1,7 +1,7 @@
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/protocol/source-control/ai-actions'
+} from '@agentstart/protocol/source-control/ai-actions'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as TriangleAlert } from '~renderer/icons/hugeicons'
@@ -20,7 +20,7 @@ import {
 
 import { SourceControlFixSplitButton } from './fix-split-button'
 
-export type SourceControlRecoveryKind = 'commit' | 'push'
+type SourceControlRecoveryKind = 'commit' | 'push'
 
 type SourceControlRecoveryNoticeProps = {
   id: string
@@ -255,18 +255,18 @@ export function SourceControlRecoveryNotice({
         id={id}
         role="alert"
         aria-live="polite"
-        className="border-destructive/20 bg-card text-card-foreground mt-2 min-w-0 overflow-hidden border"
+        className="border-destructive/20 bg-card text-card-foreground mt-2 min-w-0 overflow-hidden rounded-lg border"
       >
         <div className="bg-destructive/70 h-0.5" aria-hidden="true" />
         <div className="grid min-w-0 gap-2 px-2.5 py-2.5">
           <div className="grid min-w-0 grid-cols-[1rem_minmax(0,1fr)] gap-1.5">
-            <span className="bg-destructive/10 text-destructive mt-px inline-flex size-4 shrink-0 items-center justify-center">
+            <span className="bg-destructive/10 text-destructive mt-px inline-flex size-4 shrink-0 items-center justify-center rounded-full">
               <TriangleAlert className="size-3" aria-hidden="true" />
             </span>
             <div className="flex min-w-0 items-center gap-1.5">
               <span className="text-foreground text-xs font-semibold">{title}</span>
               {kindLabel ? (
-                <span className="bg-destructive/10 text-destructive shrink-0 px-1.5 py-px text-[10px] leading-4 font-semibold">
+                <span className="bg-destructive/10 text-destructive shrink-0 rounded-full px-1.5 py-px text-[10px] leading-4 font-semibold">
                   {kindLabel}
                 </span>
               ) : null}
@@ -311,7 +311,7 @@ export function SourceControlRecoveryNotice({
               <DialogTitle>{detailsTitle}</DialogTitle>
               <DialogDescription>{summary}</DialogDescription>
             </DialogHeader>
-            <pre className="border-border bg-muted/40 text-foreground scrollbar-sleek max-h-[60vh] overflow-auto border p-3 font-mono text-xs whitespace-pre-wrap">
+            <pre className="border-border bg-muted/40 text-foreground scrollbar-sleek max-h-[60vh] overflow-auto rounded-md border p-3 font-mono text-xs whitespace-pre-wrap">
               {detailText}
             </pre>
             <DialogFooter>
@@ -323,7 +323,7 @@ export function SourceControlRecoveryNotice({
                   size="sm"
                   iconClassName="size-4"
                   primaryClassName=""
-                  chevronClassName=" border-l border-primary-foreground/20 px-2"
+                  chevronClassName="rounded-l-none border-l border-primary-foreground/20 px-2"
                 />
               ) : null}
               <DialogClose

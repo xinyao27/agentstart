@@ -71,6 +71,29 @@ impl Ownership {
             .map_err(error)?;
         Ok(self.database.last_insert_rowid())
     }
+    pub fn file_id(&self, path: &str) -> Result<Option<i64>, ProviderUsageError> {
+        self.database
+            .query_row("SELECT id FROM files WHERE path=?", [path], |row| {
+                row.get(0)
+            })
+            .optional()
+            .map_err(error)
+    }
+    pub fn begin_file(&self) -> Result<(), ProviderUsageError> {
+        self.database
+            .execute_batch("SAVEPOINT provider_usage_file")
+            .map_err(error)
+    }
+    pub fn commit_file(&self) -> Result<(), ProviderUsageError> {
+        self.database
+            .execute_batch("RELEASE provider_usage_file")
+            .map_err(error)
+    }
+    pub fn rollback_file(&self) -> Result<(), ProviderUsageError> {
+        self.database
+            .execute_batch("ROLLBACK TO provider_usage_file; RELEASE provider_usage_file")
+            .map_err(error)
+    }
     pub fn claim(&self, file: i64, key: &str) -> Result<bool, ProviderUsageError> {
         let hash = Sha256::digest(key.as_bytes());
         let hash = &hash[..16];

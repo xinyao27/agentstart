@@ -1,5 +1,5 @@
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
-import type { Tab, TabGroup, TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
+import type { Tab, TabGroup, TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
 
 import type { WorkspaceSessionSnapshot } from './workspace-session'
 

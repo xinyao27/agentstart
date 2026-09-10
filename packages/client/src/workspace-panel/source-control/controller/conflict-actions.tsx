@@ -1,4 +1,4 @@
-import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
+import type { GitConflictOperation } from '@agentstart/protocol/git/status-types'
 import { toast } from 'sonner'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { localizedHostedReviewCopy } from '~renderer/i18n/hosted-review-localized-copy'
@@ -185,7 +185,7 @@ export function useSourceControlConflictActions(scope: SourceControlRemoteAction
       toast.warning(
         translate(
           'auto.components.right.sidebar.SourceControl.0453ca3a9a',
-          '{{value0}} created, but Yiru could not refresh it yet.',
+          '{{value0}} created, but AgentStart could not refresh it yet.',
           { value0: copy.titleLabel }
         ),
         {

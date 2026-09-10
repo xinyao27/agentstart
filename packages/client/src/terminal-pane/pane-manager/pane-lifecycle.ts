@@ -1,4 +1,4 @@
-import { activateYiruTerminalUnicodeProvider } from '../emulator/unicode-provider'
+import { activateAgentStartTerminalUnicodeProvider } from '../emulator/unicode-provider'
 import { attachDomRendererFocusClassSync } from './pane-dom-focus-class-sync'
 import {
   attachPaneFitResizeObserver,
@@ -57,7 +57,7 @@ export function openTerminal(pane: ManagedPaneInternal): void {
     pane.leafId
   )
 
-  // Activate Yiru's Unicode 11 width shim *before* any caller-driven write. CJK / emoji /
+  // Activate AgentStart's Unicode 11 width shim *before* any caller-driven write. CJK / emoji /
   // ZWJ codepoints get baked into the buffer at the active unicode version on
   // write — if a restore (snapshot, scrollback, cold-restore) writes bytes
   // through xterm while the default v6 width tables are still active, wide
@@ -66,7 +66,7 @@ export function openTerminal(pane: ManagedPaneInternal): void {
   // (replayTerminalLayout → splitPane/createInitialPane → openTerminal,
   // restoreScrollbackBuffers, handleReattachResult) run after openTerminal,
   // so the activation must stay at this position.
-  activateYiruTerminalUnicodeProvider(terminal)
+  activateAgentStartTerminalUnicodeProvider(terminal)
 
   // Why: any xterm character joiner makes every repaint scan the whole grid.
   // Defer registration until the first RTL write; replay and live paths both
@@ -150,7 +150,7 @@ export function openTerminal(pane: ManagedPaneInternal): void {
   })
 }
 
-export function disposeLigatures(pane: ManagedPaneInternal): void {
+function disposeLigatures(pane: ManagedPaneInternal): void {
   if (pane.ligaturesAddon) {
     try {
       pane.ligaturesAddon.dispose()
@@ -161,7 +161,7 @@ export function disposeLigatures(pane: ManagedPaneInternal): void {
   }
 }
 
-export function attachLigatures(pane: ManagedPaneInternal): void {
+function attachLigatures(pane: ManagedPaneInternal): void {
   if (pane.ligaturesAddon) {
     return
   }

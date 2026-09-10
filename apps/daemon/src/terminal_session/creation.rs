@@ -338,22 +338,25 @@ fn runtime_env(
     worktree_id: &str,
 ) -> Vec<(String, String)> {
     let mut env = vec![
-        ("YIRU_PANE_KEY".to_owned(), format!("{tab_id}:{leaf_id}")),
-        ("YIRU_TAB_ID".to_owned(), tab_id.to_owned()),
-        ("YIRU_WORKTREE_ID".to_owned(), worktree_id.to_owned()),
+        (
+            "AGENTSTART_PANE_KEY".to_owned(),
+            format!("{tab_id}:{leaf_id}"),
+        ),
+        ("AGENTSTART_TAB_ID".to_owned(), tab_id.to_owned()),
+        ("AGENTSTART_WORKTREE_ID".to_owned(), worktree_id.to_owned()),
     ];
     if let Some(token) = &request.launch_token {
-        env.push(("YIRU_AGENT_LAUNCH_TOKEN".to_owned(), token.clone()));
+        env.push(("AGENTSTART_AGENT_LAUNCH_TOKEN".to_owned(), token.clone()));
     }
     env
 }
 
 const HOOK_ENV_KEYS: [&str; 5] = [
-    "YIRU_AGENT_HOOK_PORT",
-    "YIRU_AGENT_HOOK_TOKEN",
-    "YIRU_AGENT_HOOK_ENV",
-    "YIRU_AGENT_HOOK_VERSION",
-    "YIRU_AGENT_HOOK_ENDPOINT",
+    "AGENTSTART_AGENT_HOOK_PORT",
+    "AGENTSTART_AGENT_HOOK_TOKEN",
+    "AGENTSTART_AGENT_HOOK_ENV",
+    "AGENTSTART_AGENT_HOOK_VERSION",
+    "AGENTSTART_AGENT_HOOK_ENDPOINT",
 ];
 
 fn is_hook_env(name: &str) -> bool {
@@ -370,7 +373,10 @@ fn is_runtime_env(name: &str) -> bool {
     is_hook_env(name)
         || matches!(
             name,
-            "YIRU_AGENT_LAUNCH_TOKEN" | "YIRU_PANE_KEY" | "YIRU_TAB_ID" | "YIRU_WORKTREE_ID"
+            "AGENTSTART_AGENT_LAUNCH_TOKEN"
+                | "AGENTSTART_PANE_KEY"
+                | "AGENTSTART_TAB_ID"
+                | "AGENTSTART_WORKTREE_ID"
         )
 }
 

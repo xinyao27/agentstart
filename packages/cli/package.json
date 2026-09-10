@@ -1,10 +1,10 @@
 {
-  "name": "@yiru/cli",
-  "version": "0.0.36",
-  "description": "Install and run the Yiru daemon CLI",
-  "homepage": "https://github.com/xinyao27/yiru#readme",
+  "name": "@agentstart/cli",
+  "version": "0.1.0",
+  "description": "Install and run the AgentStart daemon CLI",
+  "homepage": "https://github.com/xinyao27/agentstart#readme",
   "bugs": {
-    "url": "https://github.com/xinyao27/yiru/issues"
+    "url": "https://github.com/xinyao27/agentstart/issues"
   },
   "license": "MIT",
   "author": {
@@ -13,16 +13,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xinyao27/yiru.git",
+    "url": "git+https://github.com/xinyao27/agentstart.git",
     "directory": "packages/cli"
   },
   "funding": "https://github.com/sponsors/xinyao27",
   "bin": {
-    "yiru": "./yiru.mjs"
+    "agentstart": "./agentstart.mjs"
   },
   "files": [
     "install",
-    "yiru.mjs"
+    "agentstart.mjs"
   ],
   "type": "module",
   "publishConfig": {

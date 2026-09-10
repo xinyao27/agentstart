@@ -168,12 +168,12 @@ impl GitHubAuthority {
         ))
     }
 
-    pub(crate) async fn check_yiru_starred(&self) -> Option<bool> {
+    pub(crate) async fn check_agentstart_starred(&self) -> Option<bool> {
         let context = self.local_context().await.ok()?;
         match self
             .gh(
                 &context,
-                ["api", "--include", "user/starred/xinyao27/yiru"],
+                ["api", "--include", "user/starred/xinyao27/agentstart"],
                 15_000,
             )
             .await
@@ -185,13 +185,13 @@ impl GitHubAuthority {
         }
     }
 
-    pub(crate) async fn star_yiru(&self) -> bool {
+    pub(crate) async fn star_agentstart(&self) -> bool {
         let Ok(context) = self.local_context().await else {
             return false;
         };
         self.gh(
             &context,
-            ["api", "-X", "PUT", "user/starred/xinyao27/yiru"],
+            ["api", "-X", "PUT", "user/starred/xinyao27/agentstart"],
             15_000,
         )
         .await

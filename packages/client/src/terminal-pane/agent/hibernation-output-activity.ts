@@ -7,7 +7,7 @@ export function recordAgentHibernationPaneOutput(paneKey: string): void {
   outputEpochByPaneKey.set(paneKey, getAgentHibernationPaneOutputEpoch(paneKey) + 1)
 }
 
-export function getAgentHibernationPaneOutputEpoch(paneKey: string): number {
+function getAgentHibernationPaneOutputEpoch(paneKey: string): number {
   return outputEpochByPaneKey.get(paneKey) ?? 0
 }
 

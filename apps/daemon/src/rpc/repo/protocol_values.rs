@@ -1,8 +1,7 @@
 use std::collections::HashMap;
 
-use serde_json::{Map, Value, json};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     Repo, RepoCommandSourcePolicy, RepoExternalWorktreeVisibility, RepoForgeRemotePreference,
     RepoForkSyncMode, RepoGitRemoteIdentity, RepoHookSettings, RepoHookSettingsMode,
     RepoHostStringMap, RepoIcon, RepoIconImageSource, RepoImageIcon, RepoKind, RepoNullableBool,
@@ -14,6 +13,7 @@ use yiru_protocol::runtime::v1::{
     repo_nullable_bool, repo_nullable_git_remote_identity, repo_nullable_icon,
     repo_nullable_string, repo_nullable_upstream,
 };
+use serde_json::{Map, Value, json};
 
 pub(super) fn protocol_repo(value: Value) -> Result<Repo, Status> {
     let object = value

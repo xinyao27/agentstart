@@ -1,5 +1,5 @@
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
-import { getProjectSourceCacheScope } from '@yiru/protocol/project/source-context'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import { getProjectSourceCacheScope } from '@agentstart/protocol/project/source-context'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 import {
@@ -91,7 +91,7 @@ export function createGitHubWorkItemActions(
               query: query || undefined,
               ...(options?.noCache ? { noCache: true } : {})
             })
-            // Why: main does not know Yiru's Repo.id, so stamp it at the renderer boundary.
+            // Why: main does not know AgentStart's Repo.id, so stamp it at the renderer boundary.
             const items: GitHubWorkItem[] = envelope.items.map((item) => ({ ...item, repoId }))
             const currentRepo = findRepoForGitHubOwner(get(), repoId, repoPath)
             const currentHostId = getGitHubWorkItemSourceHostId(

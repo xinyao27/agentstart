@@ -68,7 +68,7 @@ impl CrashReportAuthority {
     ) -> Self {
         Self {
             inner: std::sync::Arc::new(Inner {
-                app_version: std::env::var("YIRU_APP_VERSION")
+                app_version: std::env::var("AGENTSTART_APP_VERSION")
                     .unwrap_or_else(|_| env!("CARGO_PKG_VERSION").to_owned()),
                 diagnostics,
                 dedupe: RendererErrorDedupe::new(),

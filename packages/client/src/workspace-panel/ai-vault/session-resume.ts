@@ -1,6 +1,6 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { translate } from '~renderer/i18n/i18n'
 import type { AppState } from '~renderer/store/types'
 import {
@@ -28,7 +28,7 @@ export type AiVaultSessionResumeState = {
   usesSessionWorktree: boolean
 }
 
-export type AiVaultSessionResumeAction = {
+type AiVaultSessionResumeAction = {
   worktreeId: string | null
   disabled: boolean
 }

@@ -1,7 +1,7 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
 import { useEffect } from 'react'
 import type { AppState } from '~renderer/store/state'
 

@@ -43,7 +43,7 @@ export function ManageSessionsTable({
   onRequestKill
 }: ManageSessionsTableProps): React.JSX.Element {
   return (
-    <div className="border-border/60 flex flex-col overflow-hidden border">
+    <div className="border-border/60 flex flex-col overflow-hidden rounded-lg border">
       <div className="border-border/60 flex shrink-0 flex-wrap items-center justify-between gap-2 border-b px-3 py-2">
         <div className="flex items-center gap-2">
           <span className="text-muted-foreground text-xs font-medium">
@@ -154,7 +154,7 @@ export function ManageSessionsTable({
                   >
                     <td className="px-3 py-1.5">
                       <span
-                        className={cn('block size-1.5', dotClass)}
+                        className={cn('block size-1.5 rounded-full', dotClass)}
                         aria-label={formatState(session)}
                         title={formatState(session)}
                       />

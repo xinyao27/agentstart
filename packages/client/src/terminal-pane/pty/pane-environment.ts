@@ -1,4 +1,4 @@
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import { useAppStore } from '~renderer/store/state'
 
 type PaneEnvironmentOptions = {
@@ -18,17 +18,17 @@ export function createPaneEnvironment(options: PaneEnvironmentOptions): Record<s
           (workspace) => workspace.id === parsedWorkspaceKey.folderWorkspaceId
         )
       : null
-  const workspaceEnv: Record<string, string> = { YIRU_WORKSPACE_ID: options.worktreeId }
+  const workspaceEnv: Record<string, string> = { AGENTSTART_WORKSPACE_ID: options.worktreeId }
   if (folderWorkspace) {
-    workspaceEnv.YIRU_PROJECT_GROUP_ID = folderWorkspace.projectGroupId
-    workspaceEnv.YIRU_WORKSPACE_ROOT = folderWorkspace.folderPath
+    workspaceEnv.AGENTSTART_PROJECT_GROUP_ID = folderWorkspace.projectGroupId
+    workspaceEnv.AGENTSTART_WORKSPACE_ROOT = folderWorkspace.folderPath
   }
   return {
     ...options.startupEnv,
     ...workspaceEnv,
-    YIRU_PANE_KEY: options.paneKey,
-    YIRU_TAB_ID: options.tabId,
-    YIRU_WORKTREE_ID: options.worktreeId,
-    ...(options.launchToken ? { YIRU_AGENT_LAUNCH_TOKEN: options.launchToken } : {})
+    AGENTSTART_PANE_KEY: options.paneKey,
+    AGENTSTART_TAB_ID: options.tabId,
+    AGENTSTART_WORKTREE_ID: options.worktreeId,
+    ...(options.launchToken ? { AGENTSTART_AGENT_LAUNCH_TOKEN: options.launchToken } : {})
   }
 }

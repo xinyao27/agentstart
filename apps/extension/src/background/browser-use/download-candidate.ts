@@ -173,7 +173,7 @@ async function describeElement(tabId: number, selector: string): Promise<Element
 function describeDownloadElement(selector: string): ElementProvenance {
   const reference = /^@?(e\d+)$/.exec(selector)?.[1] ?? null
   const element = reference
-    ? document.querySelector(`[data-yiru-browser-ref="${reference}"]`)
+    ? document.querySelector(`[data-agentstart-browser-ref="${reference}"]`)
     : document.querySelector(selector)
   if (!(element instanceof HTMLElement)) {
     throw new Error(`browser_element_not_found:${selector}`)

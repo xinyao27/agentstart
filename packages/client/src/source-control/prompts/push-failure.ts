@@ -1,11 +1,11 @@
-import { sanitizePushFailureDetails as normalizePushFailure } from '@yiru/protocol/git/push-hook-failure'
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import { sanitizePushFailureDetails as normalizePushFailure } from '@agentstart/protocol/git/push-hook-failure'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import { translate } from '~renderer/i18n/i18n'
 
-export const PUSH_FAILURE_SUMMARY_SCAN_CODE_UNITS = 64 * 1024
+const PUSH_FAILURE_SUMMARY_SCAN_CODE_UNITS = 64 * 1024
 
 const PUSH_FAILURE_PROMPT_OUTPUT_LIMIT = 12_000
-export const PUSH_FAILURE_PROMPT_FILE_LIMIT = 40
+const PUSH_FAILURE_PROMPT_FILE_LIMIT = 40
 const PUSH_FAILURE_REPLY_INSTRUCTION =
   'Reply with the root cause, files changed, validation run, final git status, and anything left for the user.'
 
@@ -197,10 +197,7 @@ export function buildFixPushFailurePrompt({
   return appendPushFailureCustomInstruction(prompt, customInstruction ?? '')
 }
 
-export function appendPushFailureCustomInstruction(
-  prompt: string,
-  customInstruction: string
-): string {
+function appendPushFailureCustomInstruction(prompt: string, customInstruction: string): string {
   const trimmedInstruction = customInstruction.trim()
   if (!trimmedInstruction) {
     return prompt

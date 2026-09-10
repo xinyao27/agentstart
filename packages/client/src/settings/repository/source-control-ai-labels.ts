@@ -1,14 +1,14 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { resolveSourceControlActionCommandTemplate } from '@yiru/protocol/source-control/action-recipes'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { resolveSourceControlActionCommandTemplate } from '@agentstart/protocol/source-control/action-recipes'
 import {
   DEFAULT_SOURCE_CONTROL_ACTION_COMMAND_TEMPLATES,
   type SourceControlActionId,
   type SourceControlActionRecipe
-} from '@yiru/protocol/source-control/ai-actions'
-import type { RepoSourceControlAiOverrides } from '@yiru/protocol/source-control/ai-types'
-import type { SourceControlAiSettings } from '@yiru/protocol/source-control/ai-types'
-import type { CustomAgentId } from '@yiru/protocol/source-control/custom-agent'
-import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+} from '@agentstart/protocol/source-control/ai-actions'
+import type { RepoSourceControlAiOverrides } from '@agentstart/protocol/source-control/ai-types'
+import type { SourceControlAiSettings } from '@agentstart/protocol/source-control/ai-types'
+import type { CustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
+import { isCustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
 
 export const ACTION_MODE_INHERIT = 'inherit'
 export const ACTION_MODE_OVERRIDE = 'override'
@@ -80,7 +80,7 @@ export function commandTemplateStateLabel(args: {
     return 'Repository custom prompt'
   }
   return args.inheritedTemplate === DEFAULT_SOURCE_CONTROL_ACTION_COMMAND_TEMPLATES[args.actionId]
-    ? 'Yiru default prompt'
+    ? 'AgentStart default prompt'
     : 'Global custom prompt'
 }
 

@@ -1,4 +1,7 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
+import type {
+  PRCheckDetail,
+  PRCheckRunDetails
+} from '@agentstart/protocol/hosted-review/review-types'
 
 export type OpenCheckRunDetailsState = {
   contextKey: string
@@ -8,7 +11,7 @@ export type OpenCheckRunDetailsState = {
   error: string | null
 }
 
-export function getCheckRunTabIdentity(check: PRCheckDetail): string {
+function getCheckRunTabIdentity(check: PRCheckDetail): string {
   if (check.checkRunId) {
     return `check-run:${check.checkRunId}`
   }

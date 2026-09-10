@@ -1,7 +1,7 @@
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
 import { shellClient } from '~renderer/runtime/shell-client'
 
-const ONBOARDING_REOPENED_EVENT = 'yiru:onboarding-reopened'
+const ONBOARDING_REOPENED_EVENT = 'agentstart:onboarding-reopened'
 
 export async function showOnboardingFromRenderer(): Promise<void> {
   const nextOnboarding = await shellClient.onboarding.update({

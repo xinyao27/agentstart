@@ -20,7 +20,7 @@ use super::posthog::{PosthogQueue, PosthogSender};
 use super::validator::EventValidator;
 
 const MAIN_OWNED_EVENTS: &[&str] = &[
-    "app_starred_yiru",
+    "app_starred_agentstart",
     "star_nag_outcome",
     "feature_interaction_usage_bucket_reached",
 ];
@@ -224,14 +224,17 @@ impl TelemetryAuthority {
             (
                 "app_version".to_owned(),
                 Value::String(
-                    std::env::var("YIRU_APP_VERSION")
+                    std::env::var("AGENTSTART_APP_VERSION")
                         .unwrap_or_else(|_| env!("CARGO_PKG_VERSION").to_owned()),
                 ),
             ),
             ("platform".to_owned(), Value::String(platform().to_owned())),
             ("arch".to_owned(), Value::String(architecture().to_owned())),
             ("os_release".to_owned(), Value::String(os_release().await)),
-            ("yiru_channel".to_owned(), Value::String(channel.clone())),
+            (
+                "agentstart_channel".to_owned(),
+                Value::String(channel.clone()),
+            ),
         ]);
         if let Some(text) = submission.report_text {
             properties.insert("report_text".to_owned(), Value::String(text));

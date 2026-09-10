@@ -1,7 +1,7 @@
-import { normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
-import { measureUtf8ByteLength } from '@yiru/protocol/text/utf8-length'
-export const WORKSPACE_FILE_PATH_MIME = 'text/x-yiru-file-path'
-export const WORKSPACE_FILE_PATHS_MIME = 'text/x-yiru-file-paths'
+import { normalizeRuntimePathForComparison } from '@agentstart/protocol/host/path'
+import { measureUtf8ByteLength } from '@agentstart/protocol/text/utf8-length'
+export const WORKSPACE_FILE_PATH_MIME = 'text/x-agentstart-file-path'
+export const WORKSPACE_FILE_PATHS_MIME = 'text/x-agentstart-file-paths'
 const WORKSPACE_FILE_DRAG_MAX_PATHS = 256
 const WORKSPACE_FILE_DRAG_MAX_PATH_BYTES = 256 * 1024
 

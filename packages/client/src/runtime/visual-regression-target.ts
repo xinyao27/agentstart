@@ -1,11 +1,11 @@
-import { queryOptions } from '@tanstack/react-query'
 import {
   VisualRegressionClient,
   VISUAL_REGRESSION_PROTOCOL_CAPABILITY,
   type VisualRegressionCaptureValue,
   type VisualRegressionLatestResult,
   type VisualRegressionSaveInput
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
+import { queryOptions } from '@tanstack/react-query'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import { targetKey } from './query-target'
@@ -22,7 +22,7 @@ export type VisualRegressionLatestInput = Readonly<{
 // Why: the visual regression namespace is protobuf-only, so a missing
 // capability means the connected daemon predates the cutover — an error, not a
 // legacy retry.
-export async function requireVisualRegressionClient(): Promise<VisualRegressionClient> {
+async function requireVisualRegressionClient(): Promise<VisualRegressionClient> {
   const target = { kind: 'local' } as const
   const status = await readRuntimeStatus(target)
   if (!status.capabilities?.includes(VISUAL_REGRESSION_PROTOCOL_CAPABILITY)) {
@@ -31,7 +31,7 @@ export async function requireVisualRegressionClient(): Promise<VisualRegressionC
   return new VisualRegressionClient(await openRuntimeProtocolTarget(target))
 }
 
-export async function latestVisualRegression(
+async function latestVisualRegression(
   input: VisualRegressionLatestInput
 ): Promise<VisualRegressionLatestResult> {
   return (await requireVisualRegressionClient()).latest(input)

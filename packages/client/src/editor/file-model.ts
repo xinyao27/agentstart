@@ -1,15 +1,15 @@
 import type {
   GitBranchChangeEntry,
   GitBranchCompareSummary
-} from '@yiru/protocol/git/branch-compare-types'
-import type { GitCommitCompareSummary } from '@yiru/protocol/git/compare-values'
+} from '@agentstart/protocol/git/branch-compare-types'
+import type { GitCommitCompareSummary } from '@agentstart/protocol/git/compare-values'
 import type {
   GitConflictKind,
   GitConflictResolutionStatus,
   GitConflictStatusSource,
   GitStatusEntry
-} from '@yiru/protocol/git/status-types'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+} from '@agentstart/protocol/git/status-types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 import type { OpenCheckRunDetailsState } from './check-run-details-tab'
 
@@ -78,7 +78,7 @@ export type ConflictReviewState = {
   selectedFileId?: string
 }
 
-export type CombinedDiffSkippedConflict = {
+type CombinedDiffSkippedConflict = {
   path: string
   conflictKind: GitConflictKind
 }

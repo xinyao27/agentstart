@@ -5,6 +5,13 @@ use crate::hosts::{ExecutionHost, HostKind, HostPlatform};
 
 use super::model::{TerminalCreateRequest, TerminalStartupCommandDelivery};
 
+pub(super) const TERMINAL_ENVIRONMENT: [(&str, &str); 4] = [
+    ("TERM", "xterm-256color"),
+    ("COLORTERM", "truecolor"),
+    ("TERM_PROGRAM", "AgentStart"),
+    ("FORCE_HYPERLINK", "1"),
+];
+
 pub(super) struct TerminalLaunch {
     pub(super) args: Vec<String>,
     pub(super) cwd: Option<String>,
@@ -108,7 +115,11 @@ fn remote_command(request: &TerminalCreateRequest, cwd: String) -> String {
         .filter(|(name, _)| is_environment_name(name))
         .map(|(name, value)| format!("{name}={}", quote(value)))
         .collect::<Vec<_>>();
-    environment.push("TERM='xterm-256color'".to_owned());
+    environment.extend(
+        TERMINAL_ENVIRONMENT
+            .iter()
+            .map(|(name, value)| format!("{name}={}", quote(value))),
+    );
     let removals = request
         .env_to_delete
         .iter()

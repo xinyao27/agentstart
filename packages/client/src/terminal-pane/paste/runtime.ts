@@ -1,5 +1,5 @@
-import { parseWslUncPath } from '@yiru/protocol/host/wsl-paths'
-import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { parseWslUncPath } from '@agentstart/protocol/host/wsl-paths'
+import { isRuntimePtyId } from '@agentstart/protocol/terminal-identity'
 
 import type { TerminalPasteRuntime } from './model'
 

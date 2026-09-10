@@ -1,15 +1,15 @@
 import {
   TerminalMultiplexOpcode,
   type TerminalMultiplexFrame
-} from '@yiru/protocol/terminal-multiplex/frame'
+} from '@agentstart/protocol/terminal-multiplex/frame'
 import {
   createTerminalMultiplexRecoveryState,
   reduceRecovery,
   type TerminalMultiplexRecoveryEvent,
   type TerminalMultiplexRecoveryState
-} from '@yiru/protocol/terminal-multiplex/recovery'
-import { decodeTerminalMultiplexSnapshotEndRecord } from '@yiru/protocol/terminal-multiplex/snapshot-records'
-import * as streamRecords from '@yiru/protocol/terminal-multiplex/stream-records'
+} from '@agentstart/protocol/terminal-multiplex/recovery'
+import { decodeTerminalMultiplexSnapshotEndRecord } from '@agentstart/protocol/terminal-multiplex/snapshot-records'
+import * as streamRecords from '@agentstart/protocol/terminal-multiplex/stream-records'
 
 import { RemoteTerminalManualSnapshot } from '../snapshot/manual'
 import { publishRemoteTerminalSnapshot } from '../snapshot/publication'
@@ -23,6 +23,7 @@ import {
 import { applyRemoteTerminalOutputCredit } from './credit'
 import { reportTerminalDeliveryFailure } from './failure-message'
 import { RemoteTerminalOrderedEvents } from './ordered-events'
+import { TerminalOutputTextDecoder } from './output-text-decoder'
 import { executeRemoteTerminalRecoveryEffect } from './recovery-effects'
 import type { PendingRemoteTerminalOutput, RemoteTerminalDeliveryOptions } from './types'
 
@@ -33,6 +34,7 @@ export class RemoteTerminalDelivery {
   private readonly orderedEvents: RemoteTerminalOrderedEvents
   private readonly manualSnapshot: RemoteTerminalManualSnapshot
   private readonly acks: RemoteTerminalDeliveryAcks
+  private readonly outputTextDecoder = new TerminalOutputTextDecoder()
   private recovery: TerminalMultiplexRecoveryState = createTerminalMultiplexRecoveryState()
   private expectedSequence = 0n
   private initialSnapshotId = 0
@@ -145,6 +147,7 @@ export class RemoteTerminalDelivery {
     this.dispatch({ type: 'reset' })
     this.snapshot.clear()
     this.pendingOutput.splice(0)
+    this.outputTextDecoder.reset()
     this.acks.resetPending()
     this.orderedEvents.clear()
     this.manualSnapshot.cancel()
@@ -183,20 +186,19 @@ export class RemoteTerminalDelivery {
       this.recover('output sequence gap')
       return
     }
-    let data: string
-    try {
-      data = new TextDecoder('utf-8', { fatal: true }).decode(payload)
-    } catch {
+    const decoded = this.outputTextDecoder.decode(payload)
+    if (!decoded.ok) {
       reportTerminalDeliveryFailure(this.options.callbacks, 'utf8')
+      this.recover('invalid output utf8')
       return
     }
     this.expectedSequence = output.endSeq
     const onParsed = once(() => this.acks.noteParsed(startSeq, output.endSeq, payload.byteLength))
     this.options.callbacks.onData(
-      data,
+      decoded.data,
       {
         seq: safeSequenceNumber(output.endSeq),
-        rawLength: data.length,
+        rawLength: decoded.data.length,
         wireByteLength: payload.byteLength
       },
       onParsed
@@ -251,6 +253,7 @@ export class RemoteTerminalDelivery {
 
   private ackSnapshot(snapshot: RemoteTerminalSnapshot): void {
     this.acks.rebase(snapshot.coverageEndSeq)
+    this.outputTextDecoder.reset()
     this.expectedSequence = snapshot.coverageEndSeq
     sendRemoteTerminalDeliveryAck(
       this.options.send,
@@ -294,6 +297,7 @@ export class RemoteTerminalDelivery {
   private resumeWithoutSnapshot(coverageEndSeq?: bigint): void {
     if (coverageEndSeq !== undefined) {
       this.acks.rebase(coverageEndSeq)
+      this.outputTextDecoder.reset()
       this.expectedSequence = coverageEndSeq
     }
     this.dispatch({ type: 'client-resumed' })

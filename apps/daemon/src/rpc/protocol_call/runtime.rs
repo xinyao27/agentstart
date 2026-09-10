@@ -51,6 +51,7 @@ pub(super) enum Method {
     UpdaterServiceInstall,
     UpdaterServiceSubscribeStatus,
     ShellPlatformServiceOpenPath,
+    ShellPlatformServiceGetSystemAccentColor,
     ShellPlatformServiceOpenFileUri,
     ShellPlatformServiceOpenInExternalEditor,
     ShellPlatformServiceOpenInFileManager,
@@ -75,15 +76,15 @@ impl ProtocolRouter {
     ) -> ProtocolHandlerOutcome {
         let result = match method {
             Method::ShellHostServiceRegister => {
-                match yiru_protocol::transport::decode::<
-                    yiru_protocol::runtime::v1::ShellHostRegisterRequest,
+                match agentstart_protocol::transport::decode::<
+                    agentstart_protocol::runtime::v1::ShellHostRegisterRequest,
                 >(request.payload)
                 {
                     Ok(_) => {
                         let accepted = self.shell_host.register(&self.connection_id).await;
                         Ok(ProtocolHandlerResponse::plain(
-                            yiru_protocol::transport::encode(
-                                &yiru_protocol::runtime::v1::ShellHostAccepted { accepted },
+                            agentstart_protocol::transport::encode(
+                                &agentstart_protocol::runtime::v1::ShellHostAccepted { accepted },
                             ),
                         ))
                     }
@@ -91,7 +92,7 @@ impl ProtocolRouter {
                 }
             }
             Method::ShellHostServiceExecute => Err(super::status(
-                yiru_protocol::protocol::v1::StatusCode::PermissionDenied,
+                agentstart_protocol::protocol::v1::StatusCode::PermissionDenied,
                 "Shell host requests are served only by the browser",
             )),
             Method::AppControlServiceRecordStartupDiagnostic => {
@@ -300,6 +301,14 @@ impl ProtocolRouter {
                 shell_platform_protocol::open_path(&self.shell_platform, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
+            }
+            Method::ShellPlatformServiceGetSystemAccentColor => {
+                shell_platform_protocol::get_system_accent_color(
+                    &self.shell_platform,
+                    request.payload,
+                )
+                .await
+                .map(ProtocolHandlerResponse::plain)
             }
             Method::ShellPlatformServiceOpenFileUri => {
                 shell_platform_protocol::open_file_uri(&self.shell_platform, request.payload)

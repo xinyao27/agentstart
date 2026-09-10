@@ -1,4 +1,4 @@
-import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallSetupStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { EyeSlash as EyeOff } from '~renderer/icons/hugeicons'
@@ -17,17 +17,17 @@ import type { FeatureWallSetupProgress } from '../feature-wall/setup-progress'
 import { SetupGuideProgressRing } from '../setup-guide/progress-ring'
 import { useSetupGuideProgress } from '../setup-guide/use-setup-guide-progress'
 
-export type SetupGuideEntryVisibilityInput = {
+type SetupGuideEntryVisibilityInput = {
   ready: boolean
   setupComplete: boolean
   dismissed: boolean
 }
 
-export function shouldShowSetupGuideEntry(input: SetupGuideEntryVisibilityInput): boolean {
+function shouldShowSetupGuideEntry(input: SetupGuideEntryVisibilityInput): boolean {
   return input.ready && !input.setupComplete && !input.dismissed
 }
 
-export function getSetupGuideSidebarEntryReady(
+function getSetupGuideSidebarEntryReady(
   persistedUIReady: boolean,
   setupProgressReady: boolean
 ): boolean {

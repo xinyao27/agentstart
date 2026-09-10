@@ -67,7 +67,7 @@ export function SegmentedPolicyToggle<P extends string>({
   onSelect: (p: P) => void
 }): React.JSX.Element {
   return (
-    <div className="border-border/60 bg-muted/50 inline-flex gap-0.5 border p-0.5">
+    <div className="border-border/60 bg-muted/50 inline-flex gap-0.5 rounded-lg border p-0.5">
       {options.map(({ policy, label, description }) => {
         const active = selected === policy
         return (
@@ -103,12 +103,15 @@ export function ExampleTemplateCard({
     <div className="space-y-2">
       <p className="text-muted-foreground text-[10px] tracking-[0.18em]">
         {translate('auto.components.settings.RepositoryHooksSection.175daba180', 'Example')}
-        <code className="bg-muted px-1 py-0.5">
-          {translate('auto.components.settings.RepositoryHooksSection.39da2ae12f', 'yiru.yaml')}
+        <code className="bg-muted rounded px-1 py-0.5">
+          {translate(
+            'auto.components.settings.RepositoryHooksSection.39da2ae12f',
+            'agentstart.yaml'
+          )}
         </code>{' '}
         {translate('auto.components.settings.RepositoryHooksSection.95a0411b3e', 'template')}
       </p>
-      <div className="border-border/50 bg-background/70 relative border">
+      <div className="border-border/50 bg-background/70 relative rounded-lg border">
         <Button
           type="button"
           variant={copiedTemplate ? 'secondary' : 'ghost'}
@@ -133,7 +136,7 @@ export function ExampleTemplateCard({
 
 export function YamlScriptBlock({ content }: { content: string }): React.JSX.Element {
   return (
-    <pre className="border-border/50 bg-muted/30 text-foreground overflow-x-auto border p-3 font-mono text-[11.5px] leading-5 break-words whitespace-pre-wrap">
+    <pre className="border-border/50 bg-muted/30 text-foreground overflow-x-auto rounded-lg border p-3 font-mono text-[11.5px] leading-5 break-words whitespace-pre-wrap">
       {content}
     </pre>
   )
@@ -148,7 +151,7 @@ export function LocalCommandSourceNotice({
 }): React.JSX.Element {
   const isChecking = notice.kind === 'checking'
   return (
-    <div className="flex flex-wrap items-start justify-between gap-3 border border-amber-500/20 bg-amber-500/5 p-3">
+    <div className="flex flex-wrap items-start justify-between gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3">
       <div className="flex min-w-0 flex-1 items-start gap-3">
         <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-300" />
         <div className="space-y-1">
@@ -162,11 +165,11 @@ export function LocalCommandSourceNotice({
             {isChecking
               ? translate(
                   'auto.components.settings.RepositoryHooksSection.7f78e5eea6',
-                  'Local scripts are saved. Yiru is still checking yiru.yaml before it can recommend which script source to use.'
+                  'Local scripts are saved. AgentStart is still checking agentstart.yaml before it can recommend which script source to use.'
                 )
               : translate(
                   'auto.components.settings.RepositoryHooksSection.0ce113fd7b',
-                  'Local scripts are saved, but Script Source is set to yiru.yaml only.'
+                  'Local scripts are saved, but Script Source is set to agentstart.yaml only.'
                 )}
           </p>
         </div>
@@ -182,7 +185,7 @@ export function LocalCommandSourceNotice({
           {notice.label}
         </Button>
       ) : (
-        <span className="border-border/60 bg-muted/30 text-muted-foreground shrink-0 border px-2 py-1 text-[11px]">
+        <span className="border-border/60 bg-muted/30 text-muted-foreground shrink-0 rounded-full border px-2 py-1 text-[11px]">
           {translate('auto.components.settings.RepositoryHooksSection.673a7fd10e', 'Checking...')}
         </span>
       )}

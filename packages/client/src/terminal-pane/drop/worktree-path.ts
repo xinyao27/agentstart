@@ -1,7 +1,5 @@
 import { useAppStore } from '~renderer/store/state'
 
-import { isTerminalDropWindowsPathLike } from './shell'
-
 export function resolveTerminalDropWorktreePath(
   worktreeId: string,
   fallbackCwd: string | undefined
@@ -10,11 +8,4 @@ export function resolveTerminalDropWorktreePath(
   const allWorktrees = Object.values(state.worktreesByRepo ?? {}).flat()
   const worktree = allWorktrees.find((w) => w.id === worktreeId)
   return worktree?.path ?? fallbackCwd ?? null
-}
-
-export function joinRuntimeTerminalDropDir(worktreePath: string): string {
-  if (isTerminalDropWindowsPathLike(worktreePath)) {
-    return `${worktreePath.replace(/[\\/]+$/, '').replace(/\//g, '\\')}\\.yiru\\drops`
-  }
-  return `${worktreePath.replace(/[\\/]+$/, '')}/.yiru/drops`
 }

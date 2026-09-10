@@ -1,4 +1,4 @@
-import { GITHUB_PROTOCOL_CAPABILITY, GitHubClient } from '@yiru/protocol'
+import { GITHUB_PROTOCOL_CAPABILITY, GitHubClient } from '@agentstart/protocol'
 
 import {
   openConfiguredBrowserHostProtocol,

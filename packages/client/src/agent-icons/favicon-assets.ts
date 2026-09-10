@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import ampUrl from '~renderer/agent-icons/amp.png?url'
 import anteUrl from '~renderer/agent-icons/ante.png?url'
 import antigravityUrl from '~renderer/agent-icons/antigravity.png?url'

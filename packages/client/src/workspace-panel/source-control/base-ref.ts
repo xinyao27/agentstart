@@ -1,4 +1,4 @@
-import type { GitUpstreamStatus } from '@yiru/protocol/git/status-types'
+import type { GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
 
 export function resolveSourceControlBaseRef(input: {
   worktreeBaseRef?: string | null

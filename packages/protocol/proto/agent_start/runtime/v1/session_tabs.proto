@@ -1,0 +1,605 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+import "agent_start/runtime/v1/agent_status.proto";
+
+service SessionTabsService {
+  rpc Activate(SessionTabsServiceActivateRequest) returns (SessionTabsSnapshot) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Close(SessionTabsServiceTabRequest) returns (SessionTabsServiceClosedResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CreateTerminal(SessionTabsServiceCreateTerminalRequest) returns (SessionTabsServiceCreateTerminalResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc List(SessionTabsServiceListRequest) returns (SessionTabsSnapshot) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListAll(SessionTabsServiceListAllRequest) returns (SessionTabsServiceListAllResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Move(SessionTabsServiceMoveRequest) returns (SessionTabsServiceMovedResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SetTabProps(SessionTabsServiceSetTabPropsRequest) returns (SessionTabsServiceUpdatedResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc UpdatePaneLayout(SessionTabsServiceUpdatePaneLayoutRequest) returns (SessionTabsServiceUpdatedResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Subscribe(SessionTabsServiceListRequest) returns (stream SessionTabsServiceEvent) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_RESTART_FROM_REQUEST
+    };
+  }
+
+  rpc SubscribeAll(SessionTabsServiceListAllRequest) returns (stream SessionTabsServiceAllEvent) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_RESTART_FROM_REQUEST
+    };
+  }
+
+  rpc Unsubscribe(SessionTabsServiceUnsubscribeRequest) returns (SessionTabsServiceUnsubscribedResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc UnsubscribeAll(SessionTabsServiceUnsubscribeAllRequest) returns (SessionTabsServiceUnsubscribedResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+enum SessionTabsTabType {
+  SESSION_TABS_TAB_TYPE_UNSPECIFIED = 0;
+  SESSION_TABS_TAB_TYPE_TERMINAL = 1;
+  SESSION_TABS_TAB_TYPE_MARKDOWN = 2;
+  SESSION_TABS_TAB_TYPE_FILE = 3;
+  SESSION_TABS_TAB_TYPE_BROWSER = 4;
+}
+
+enum SessionTabsTerminalStatus {
+  SESSION_TABS_TERMINAL_STATUS_UNSPECIFIED = 0;
+  SESSION_TABS_TERMINAL_STATUS_PENDING_HANDLE = 1;
+  SESSION_TABS_TERMINAL_STATUS_READY = 2;
+  SESSION_TABS_TERMINAL_STATUS_SLEEPING = 3;
+}
+
+enum SessionTabsMarkdownMode {
+  SESSION_TABS_MARKDOWN_MODE_UNSPECIFIED = 0;
+  SESSION_TABS_MARKDOWN_MODE_EDIT = 1;
+  SESSION_TABS_MARKDOWN_MODE_PREVIEW = 2;
+}
+
+enum SessionTabsFileMode {
+  SESSION_TABS_FILE_MODE_UNSPECIFIED = 0;
+  SESSION_TABS_FILE_MODE_EDIT = 1;
+  SESSION_TABS_FILE_MODE_DIFF = 2;
+}
+
+enum SessionTabsFileDiffSource {
+  SESSION_TABS_FILE_DIFF_SOURCE_UNSPECIFIED = 0;
+  SESSION_TABS_FILE_DIFF_SOURCE_STAGED = 1;
+  SESSION_TABS_FILE_DIFF_SOURCE_UNSTAGED = 2;
+}
+
+enum SessionTabsMoveKind {
+  SESSION_TABS_MOVE_KIND_UNSPECIFIED = 0;
+  SESSION_TABS_MOVE_KIND_REORDER = 1;
+  SESSION_TABS_MOVE_KIND_MOVE_TO_GROUP = 2;
+  SESSION_TABS_MOVE_KIND_SPLIT = 3;
+}
+
+enum SessionTabsSplitDirection {
+  SESSION_TABS_SPLIT_DIRECTION_UNSPECIFIED = 0;
+  SESSION_TABS_SPLIT_DIRECTION_LEFT = 1;
+  SESSION_TABS_SPLIT_DIRECTION_RIGHT = 2;
+  SESSION_TABS_SPLIT_DIRECTION_UP = 3;
+  SESSION_TABS_SPLIT_DIRECTION_DOWN = 4;
+}
+
+enum SessionTabsPaneSplitDirection {
+  SESSION_TABS_PANE_SPLIT_DIRECTION_UNSPECIFIED = 0;
+  SESSION_TABS_PANE_SPLIT_DIRECTION_HORIZONTAL = 1;
+  SESSION_TABS_PANE_SPLIT_DIRECTION_VERTICAL = 2;
+}
+
+message SessionTabsNullableString {
+  oneof value {
+    string text = 1;
+    bool null = 2;
+  }
+}
+
+message SessionTabsAgentStatus {
+  AgentStatusState state = 1;
+  optional string pane_key = 2;
+  optional string prompt = 3;
+  optional double updated_at = 4;
+  optional double state_started_at = 5;
+  optional string agent_type = 6;
+  optional string interactive_prompt = 7;
+  optional string last_assistant_message = 8;
+  optional string tool_name = 9;
+  optional string tool_input = 10;
+  optional bool interrupted = 11;
+  optional AgentProviderSession provider_session = 12;
+}
+
+// A terminal tab as the renderer projected it. `status` plus `terminal`
+// distinguish a pending mobile-bound pane from one with a live PTY handle.
+message SessionTabsTerminalTab {
+  string id = 1;
+  string title = 2;
+  bool is_active = 3;
+  string parent_tab_id = 4;
+  string leaf_id = 5;
+  SessionTabsTerminalStatus status = 6;
+  optional string terminal = 7;
+  optional string pty_id = 8;
+  optional string worktree_instance_id = 9;
+  optional string color = 10;
+  optional bool is_pinned = 11;
+  optional string quick_command_label = 12;
+  optional string launch_agent = 13;
+  optional string resolved_agent_type = 14;
+  optional string startup_cwd = 15;
+  optional SessionTabsAgentStatus agent_status = 16;
+}
+
+message SessionTabsMarkdownTab {
+  string id = 1;
+  string title = 2;
+  bool is_active = 3;
+  string file_path = 4;
+  string relative_path = 5;
+  SessionTabsMarkdownMode mode = 6;
+  bool is_dirty = 7;
+  string source_file_id = 8;
+  string source_file_path = 9;
+  string source_relative_path = 10;
+  string document_version = 11;
+  optional string color = 12;
+  optional bool is_pinned = 13;
+}
+
+message SessionTabsFileTab {
+  string id = 1;
+  string title = 2;
+  bool is_active = 3;
+  string file_path = 4;
+  string relative_path = 5;
+  string language = 6;
+  SessionTabsFileMode mode = 7;
+  SessionTabsFileDiffSource diff_source = 8;
+  bool is_dirty = 9;
+  optional string color = 10;
+  optional bool is_pinned = 11;
+}
+
+message SessionTabsBrowserTab {
+  string id = 1;
+  string title = 2;
+  bool is_active = 3;
+  string browser_workspace_id = 4;
+  optional string browser_page_id = 5;
+  string url = 6;
+  bool loading = 7;
+  bool can_go_back = 8;
+  bool can_go_forward = 9;
+  optional string color = 10;
+  optional bool is_pinned = 11;
+}
+
+message SessionTabsTab {
+  oneof tab {
+    SessionTabsTerminalTab terminal = 1;
+    SessionTabsMarkdownTab markdown = 2;
+    SessionTabsFileTab file = 3;
+    SessionTabsBrowserTab browser = 4;
+  }
+}
+
+message SessionTabsTabGroup {
+  string id = 1;
+  optional string active_tab_id = 2;
+  repeated string tab_order = 3;
+  repeated string recent_tab_ids = 4;
+}
+
+// Pane layout: leaves name terminal layout leaves, splits carry two children
+// and an optional ratio. Depth and node count are bounded by the authority.
+message SessionTabsPaneLayoutNode {
+  oneof node {
+    SessionTabsPaneLeaf leaf = 1;
+    SessionTabsPaneSplit split = 2;
+  }
+}
+
+message SessionTabsPaneLeaf {
+  string leaf_id = 1;
+}
+
+message SessionTabsPaneSplit {
+  SessionTabsPaneSplitDirection direction = 1;
+  SessionTabsPaneLayoutNode first = 2;
+  SessionTabsPaneLayoutNode second = 3;
+  optional double ratio = 4;
+}
+
+// Group layout: the same split tree over tab-group ids.
+message SessionTabsGroupLayoutNode {
+  oneof node {
+    SessionTabsGroupLeaf leaf = 1;
+    SessionTabsGroupSplit split = 2;
+  }
+}
+
+message SessionTabsGroupLeaf {
+  string group_id = 1;
+}
+
+message SessionTabsGroupSplit {
+  SessionTabsPaneSplitDirection direction = 1;
+  SessionTabsGroupLayoutNode first = 2;
+  SessionTabsGroupLayoutNode second = 3;
+  optional double ratio = 4;
+}
+
+message SessionTabsSnapshot {
+  string worktree = 1;
+  string publication_epoch = 2;
+  double snapshot_version = 3;
+  optional string active_group_id = 4;
+  optional string active_tab_id = 5;
+  SessionTabsTabType active_tab_type = 6;
+  repeated SessionTabsTabGroup tab_groups = 7;
+  optional SessionTabsGroupLayoutNode tab_group_layout = 8;
+  repeated SessionTabsTab tabs = 9;
+  // Why: only a removal publication carries this flag, and the legacy JSON
+  // omits it everywhere else, so presence — not value — is the signal.
+  optional bool removed = 10;
+}
+
+message SessionTabsNullableColor {
+  oneof value {
+    string text = 1;
+    bool null = 2;
+  }
+}
+
+message SessionTabsLaunchConfig {
+  string agent_args = 1;
+  map<string, string> agent_env = 2;
+  optional string agent_command = 3;
+  optional string omp_resume_file_path = 4;
+}
+
+message SessionTabsStartupCommandDelivery {
+  oneof delivery {
+    bool fast = 1;
+    bool shell_ready = 2;
+  }
+}
+
+message SessionTabsServiceActivateRequest {
+  string worktree = 1;
+  string tab_id = 2;
+  optional string leaf_id = 3;
+  optional bool notify_clients = 4;
+}
+
+message SessionTabsServiceTabRequest {
+  string worktree = 1;
+  string tab_id = 2;
+}
+
+message SessionTabsServiceClosedResponse {
+  bool closed = 1;
+}
+
+message SessionTabsServiceMovedResponse {
+  bool moved = 1;
+}
+
+message SessionTabsServiceUpdatedResponse {
+  bool updated = 1;
+}
+
+message SessionTabsServiceCreateTerminalRequest {
+  string worktree = 1;
+  optional bool activate = 2;
+  optional string after_tab_id = 3;
+  optional string agent = 4;
+  optional string agent_prompt = 5;
+  optional string client_mutation_id = 6;
+  optional string command = 7;
+  optional string cwd = 8;
+  map<string, string> env = 9;
+  repeated string env_to_delete = 10;
+  optional string launch_agent = 11;
+  optional SessionTabsLaunchConfig launch_config = 12;
+  optional string launch_token = 13;
+  optional SessionTabsStartupCommandDelivery startup_command_delivery = 14;
+  optional string target_group_id = 15;
+}
+
+message SessionTabsServiceCreateTerminalResponse {
+  SessionTabsTab tab = 1;
+  string publication_epoch = 2;
+  double snapshot_version = 3;
+}
+
+message SessionTabsServiceListRequest {
+  string worktree = 1;
+}
+
+message SessionTabsServiceListAllRequest {}
+
+message SessionTabsServiceListAllResponse {
+  repeated SessionTabsSnapshot snapshots = 1;
+}
+
+message SessionTabsServiceMoveReorder {
+  repeated string tab_order = 1;
+}
+
+message SessionTabsServiceMoveToGroup {
+  optional uint32 index = 1;
+}
+
+message SessionTabsServiceMoveSplit {
+  SessionTabsSplitDirection direction = 1;
+}
+
+message SessionTabsServiceMoveRequest {
+  string worktree = 1;
+  string tab_id = 2;
+  string target_group_id = 3;
+  SessionTabsMoveKind kind = 4;
+  oneof detail {
+    SessionTabsServiceMoveReorder reorder = 5;
+    SessionTabsServiceMoveToGroup move_to_group = 6;
+    SessionTabsServiceMoveSplit split = 7;
+  }
+}
+
+message SessionTabsServiceSetTabPropsRequest {
+  string worktree = 1;
+  string tab_id = 2;
+  optional SessionTabsNullableColor color = 3;
+  optional bool is_pinned = 4;
+}
+
+// Why: root and expandedLeafId are required fields in the legacy surface where
+// an explicit JSON null clears them, so the nullable wrappers keep "send null"
+// distinct from "send a value" instead of overloading field absence.
+message SessionTabsPaneLayoutRoot {
+  oneof value {
+    bool null = 1;
+    SessionTabsPaneLayoutNode node = 2;
+  }
+}
+
+message SessionTabsNullableStringField {
+  oneof value {
+    string text = 1;
+    bool null = 2;
+  }
+}
+
+message SessionTabsServiceUpdatePaneLayoutRequest {
+  string worktree = 1;
+  string tab_id = 2;
+  SessionTabsPaneLayoutRoot root = 3;
+  optional SessionTabsNullableStringField expanded_leaf_id = 4;
+  map<string, string> titles_by_leaf_id = 5;
+}
+
+message SessionTabsServiceUnsubscribeRequest {
+  string worktree = 1;
+  optional string subscription_id = 2;
+}
+
+message SessionTabsServiceUnsubscribeAllRequest {
+  optional string subscription_id = 1;
+}
+
+message SessionTabsServiceUnsubscribedResponse {
+  bool unsubscribed = 1;
+}
+
+message SessionTabsServiceSnapshotList {
+  repeated SessionTabsSnapshot snapshots = 1;
+}
+
+message SessionTabsServiceEvent {
+  oneof event {
+    SessionTabsSnapshot snapshot = 1;
+    SessionTabsSnapshot updated = 2;
+    bool end = 3;
+  }
+}
+
+message SessionTabsServiceAllEvent {
+  oneof event {
+    SessionTabsServiceSnapshotList snapshots = 1;
+    SessionTabsSnapshot updated = 2;
+    bool end = 3;
+  }
+}

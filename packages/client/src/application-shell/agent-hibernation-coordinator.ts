@@ -1,4 +1,4 @@
-import type { TerminalSummary } from '@yiru/protocol'
+import type { TerminalSummary } from '@agentstart/protocol'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 import { useAppStore } from '~renderer/store/state'
@@ -22,7 +22,7 @@ import {
   type AgentHibernationConfirmationState
 } from './agent-hibernation-confirmation'
 
-export const AGENT_HIBERNATION_TICK_MS = 60 * 1000
+const AGENT_HIBERNATION_TICK_MS = 60 * 1000
 
 type IntervalHandle = ReturnType<typeof setInterval>
 
@@ -197,7 +197,7 @@ async function hibernatePaneIfStillEligible(
   }
 }
 
-export async function runAgentHibernationTick(): Promise<void> {
+async function runAgentHibernationTick(): Promise<void> {
   if (coordinator.tickInFlight) {
     return
   }
@@ -234,8 +234,4 @@ export function stopAgentHibernationCoordinator(): void {
     coordinator.interval = null
   }
   coordinator.confirmationState = {}
-}
-
-export function isAgentHibernationCoordinatorRunning(): boolean {
-  return coordinator.interval !== null
 }

@@ -1,9 +1,9 @@
-import type { CommunityAdapter } from '@yiru/client/extension-settings'
+import type { CommunityAdapter } from '@agentstart/client/extension-bootstrap'
 
 import { readEnterprisePolicy } from '../enterprise-policy'
 
 const STORAGE_KEY = 'communityAdapters'
-const SCRIPT_PREFIX = 'yiru-community-adapter-'
+const SCRIPT_PREFIX = 'agentstart-community-adapter-'
 const MAX_ADAPTERS = 50
 const MAX_CODE_CHARS = 50_000
 
@@ -82,7 +82,8 @@ export async function restoreCommunityAdapters(): Promise<void> {
       await chrome.userScripts.register(missing)
     }
   } catch {
-    // Why: Chrome disables this API behind a per-extension toggle; settings shows recovery steps.
+    // Why: Chrome disables this API behind a per-extension toggle; restoration failure must not
+    // prevent the background worker from starting.
   }
 }
 

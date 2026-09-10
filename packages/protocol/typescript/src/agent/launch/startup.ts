@@ -48,7 +48,7 @@ export function buildAgentStartupPlan(args: {
   agentArgs?: string | null
   agentEnv?: Record<string, string> | null
   sessionOptions?: Record<string, SessionOptionValue>
-  /** Why: SSH remotes deploy the CLI shim as plain `yiru`, so any local-only
+  /** Why: SSH remotes deploy the CLI shim as plain `agentstart`, so any local-only
    * command rename must be skipped for remote launches. */
   isRemote?: boolean
 }): AgentStartupPlan | null {
@@ -134,7 +134,7 @@ export function buildAgentStartupPlan(args: {
     }
     return {
       agent,
-      // Why: Hermes owns readiness and submission for `chat --query`; Yiru
+      // Why: Hermes owns readiness and submission for `chat --query`; AgentStart
       // only bounds and quotes the native invocation before starting the TUI.
       launchCommand: queryPlan.command,
       expectedProcess: config.expectedProcess,
@@ -199,7 +199,7 @@ export function buildAgentDraftLaunchPlan(args: {
   agentArgs?: string | null
   agentEnv?: Record<string, string> | null
   sessionOptions?: Record<string, SessionOptionValue>
-  /** Why: see buildAgentStartupPlan — remote launches use the plain `yiru` shim. */
+  /** Why: see buildAgentStartupPlan — remote launches use the plain `agentstart` shim. */
   isRemote?: boolean
 }): AgentDraftLaunchPlan | null {
   const { agent, draft, cmdOverrides, platform } = args

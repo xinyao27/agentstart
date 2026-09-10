@@ -1,7 +1,7 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 import type { DescMessage, MessageInitShape, MessageShape } from '@bufbuild/protobuf'
 
-import { GitStatusArea } from '../../generated/yiru/runtime/v1/git_common_pb.js'
+import { GitStatusArea } from '../../generated/agent_start/runtime/v1/git_common_pb.js'
 import {
   GitStatusService,
   GitStatusServiceCheckIgnoredRequestSchema,
@@ -20,7 +20,7 @@ import {
   GitStatusServiceSubmoduleStatusResponseSchema,
   GitStatusServiceUpstreamStatusRequestSchema,
   GitStatusServiceUpstreamStatusResponseSchema
-} from '../../generated/yiru/runtime/v1/git_status_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_status_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from '../transport.js'
 import { gitDiffResultFromProto, type GitDiffResult } from './diff-values.js'
 import {

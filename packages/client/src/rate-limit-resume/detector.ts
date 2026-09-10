@@ -1,5 +1,5 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
-import type { RateLimitHit } from '@yiru/protocol/rate-limit-resume-values'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
+import type { RateLimitHit } from '@agentstart/protocol/rate-limit-resume-values'
 // Uses output only as a wake-up signal, then asks the runtime to inspect the
 // exact Codex turn's structured rollout completion.
 //
@@ -35,7 +35,7 @@ function tabIdForEntry(entry: AgentStatusEntry): string | null {
 }
 
 /** Codex panes with enough structured identity to join a hook turn to its rollout. */
-export function collectRateLimitPaneTargets(
+function collectRateLimitPaneTargets(
   agentStatusByPaneKey: Record<string, AgentStatusEntry>,
   ptyIdsByTabId: Record<string, string[]>
 ): PaneTarget[] {

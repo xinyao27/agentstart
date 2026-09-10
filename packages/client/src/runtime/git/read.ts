@@ -1,12 +1,12 @@
-import type { GitBranchCompareResult } from '@yiru/protocol/git/branch-compare-types'
-import type { GitCommitCompareResult } from '@yiru/protocol/git/compare-values'
-import type { GitDiffResult } from '@yiru/protocol/git/diff-values'
-import type { GitHistoryOptions, GitHistoryResult } from '@yiru/protocol/git/history-types'
+import type { GitBranchCompareResult } from '@agentstart/protocol/git/branch-compare-types'
+import type { GitCommitCompareResult } from '@agentstart/protocol/git/compare-values'
+import type { GitDiffResult } from '@agentstart/protocol/git/diff-values'
+import type { GitHistoryOptions, GitHistoryResult } from '@agentstart/protocol/git/history-types'
 import type {
   GitConflictOperation,
   GitStagingArea,
   GitStatusResult
-} from '@yiru/protocol/git/status-types'
+} from '@agentstart/protocol/git/status-types'
 
 import { openRuntimeGitClient } from './client'
 import { getRuntimeGitWorktree, type RuntimeGitContext } from './context'

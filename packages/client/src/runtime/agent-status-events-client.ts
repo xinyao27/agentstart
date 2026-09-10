@@ -1,8 +1,8 @@
-import type { AgentStatusHostSnapshotValue } from '@yiru/protocol'
+import type { AgentStatusHostSnapshotValue } from '@agentstart/protocol'
 import type {
   AgentStatusIpcPayload,
   MigrationUnsupportedPtyEntry
-} from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/status-records'
 
 import { openAgentStatusProtocolClient } from './agent-status-target'
 

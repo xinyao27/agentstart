@@ -4,7 +4,7 @@ import {
   keybindingIsActiveInContext,
   type KeybindingDefinition,
   type TerminalShortcutPolicy
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 import { translate } from '~renderer/i18n/i18n'
 
 // Describes how a shortcut behaves while a terminal/TUI has keyboard focus,
@@ -51,7 +51,7 @@ export function getShortcutTerminalStatus(
   })
   return activeInTerminal
     ? {
-        label: translate('auto.components.settings.ShortcutsPane.2a0e8aeccf', 'Yiru first'),
+        label: translate('auto.components.settings.ShortcutsPane.2a0e8aeccf', 'AgentStart first'),
         description: translate(
           'auto.components.settings.ShortcutsPane.dfa8ff612f',
           'Also runs while a terminal or TUI has keyboard focus.'

@@ -21,7 +21,7 @@ import {
   RateLimitResumeServiceScheduleResponseSchema,
   type RateLimitHit as ProtoHit,
   type RateLimitResumeSchedule as ProtoSchedule
-} from '../generated/yiru/runtime/v1/rate_limit_resume_pb.js'
+} from '../generated/agent_start/runtime/v1/rate_limit_resume_pb.js'
 import {
   protoProviderToString,
   protoStatusToString,

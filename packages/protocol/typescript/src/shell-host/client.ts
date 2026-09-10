@@ -5,10 +5,10 @@ import {
   ShellHostRegisterRequestSchema,
   ShellHostResponseSchema,
   ShellHostService
-} from '../../generated/yiru/runtime/v1/shell_host_pb.js'
+} from '../../generated/agent_start/runtime/v1/shell_host_pb.js'
 import type { RuntimeTransport } from '../transport.js'
 
-export * from '../../generated/yiru/runtime/v1/shell_host_pb.js'
+export * from '../../generated/agent_start/runtime/v1/shell_host_pb.js'
 export { scheduleFromProto as decodeShellHostResume } from '../rate-limit-resume-client.js'
 
 export function createShellHostResponse(input: MessageInitShape<typeof ShellHostResponseSchema>) {

@@ -1,8 +1,8 @@
 import type {
   WorktreeDefaultTabsLaunch,
   WorktreeSetupLaunch
-} from '@yiru/protocol/worktree/create-result'
-import type { WorktreeHeadIdentity } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/worktree/create-result'
+import type { WorktreeHeadIdentity } from '@agentstart/protocol/worktree/model'
 import type { WorktreeStartupLaunch } from '~renderer/worktree/create-model'
 
 export type RuntimeClientEvent =

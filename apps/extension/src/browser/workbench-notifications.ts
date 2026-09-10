@@ -2,9 +2,9 @@ import type {
   NotificationDismissResult,
   NotificationDisplayInput,
   NotificationDisplayResult
-} from '@yiru/client/notifications'
+} from '@agentstart/client/notifications'
 
-const WORKBENCH_NOTIFICATION_PREFIX = 'yiru-workbench:'
+const WORKBENCH_NOTIFICATION_PREFIX = 'agentstart-workbench:'
 
 export async function displayWorkbenchNotification(
   input: NotificationDisplayInput
@@ -17,7 +17,7 @@ export async function displayWorkbenchNotification(
   }
   const id = `${WORKBENCH_NOTIFICATION_PREFIX}${input.notificationId ?? crypto.randomUUID()}`
   await chrome.notifications.create(id, {
-    iconUrl: chrome.runtime.getURL('icon.svg'),
+    iconUrl: chrome.runtime.getURL('icon.png'),
     message: input.body,
     priority: 1,
     silent: !input.useSystemSound,

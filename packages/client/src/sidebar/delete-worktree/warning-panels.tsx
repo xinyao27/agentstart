@@ -14,7 +14,7 @@ export function DeleteWorktreeWarningPanels({
   return (
     <>
       {isMainWorktree && (
-        <div className="border-border/70 bg-muted/35 text-muted-foreground border px-3 py-2 text-xs">
+        <div className="border-border/70 bg-muted/35 text-muted-foreground rounded-md border px-3 py-2 text-xs">
           <div className="flex items-start gap-2">
             <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
             <div className="min-w-0 flex-1">
@@ -39,7 +39,7 @@ export function DeleteWorktreeWarningPanels({
       )}
 
       {deleteError && !isMainWorktree && (
-        <div className="border-destructive/40 bg-destructive/8 text-destructive border px-3 py-2 text-xs">
+        <div className="border-destructive/40 bg-destructive/8 text-destructive rounded-md border px-3 py-2 text-xs">
           <div className="flex items-start gap-2">
             <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
             <div className="min-w-0 flex-1 break-all whitespace-pre-wrap">{deleteError}</div>

@@ -4,10 +4,10 @@ import {
   normalizeExecutionHostId,
   toRuntimeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 export type SourceControlOperationOwnerTarget = {
   worktreeId: string

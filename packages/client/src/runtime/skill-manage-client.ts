@@ -1,9 +1,9 @@
-import type { SkillManageScope, SkillUpdateStartResult } from '@yiru/protocol'
+import type { SkillManageScope, SkillUpdateStartResult } from '@agentstart/protocol'
 import type {
   SkillDirectoryListing,
   SkillDiscoveryResult,
   SkillFileReadResult
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import type { SkillDiscoveryTarget } from '~renderer/skills/discovery-target'
 import { flattenSkillUpdateRun } from '~renderer/skills/freshness-model'
 import type { SkillFreshnessInventory, SkillUpdateRun } from '~renderer/skills/freshness-model'

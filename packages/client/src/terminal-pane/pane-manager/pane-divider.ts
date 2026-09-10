@@ -2,14 +2,12 @@ import { cn } from '~renderer/ui/class-names'
 
 import { attachDividerDrag, disposeDividerDrag, type DividerCallbacks } from './pane-divider-drag'
 import type { PaneStyleOptions, ManagedPaneInternal } from './types'
-export { createDividerFlexFrameScheduler } from './pane-divider-drag'
-
 // ---------------------------------------------------------------------------
 // Divider creation & drag-to-resize
 // ---------------------------------------------------------------------------
 
 /** Total hit area size = visible thickness + invisible padding on each side */
-export function getDividerHitSize(styleOptions: PaneStyleOptions): number {
+function getDividerHitSize(styleOptions: PaneStyleOptions): number {
   const thickness = styleOptions.dividerThicknessPx ?? 1
   const HIT_PADDING = 3
   // Why: a hairline should not reduce the grab target users had with the old 3px default.

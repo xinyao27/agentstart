@@ -121,18 +121,21 @@ impl AgentStatusAuthority {
         }
         let mut environment = vec![
             (
-                "YIRU_AGENT_HOOK_PORT".to_owned(),
+                "AGENTSTART_AGENT_HOOK_PORT".to_owned(),
                 self.hook_port.to_string(),
             ),
             (
-                "YIRU_AGENT_HOOK_TOKEN".to_owned(),
+                "AGENTSTART_AGENT_HOOK_TOKEN".to_owned(),
                 self.hook_token.to_string(),
             ),
-            ("YIRU_AGENT_HOOK_ENV".to_owned(), "production".to_owned()),
-            ("YIRU_AGENT_HOOK_VERSION".to_owned(), "1".to_owned()),
+            (
+                "AGENTSTART_AGENT_HOOK_ENV".to_owned(),
+                "production".to_owned(),
+            ),
+            ("AGENTSTART_AGENT_HOOK_VERSION".to_owned(), "1".to_owned()),
         ];
         if let Some(path) = self.hook_endpoint.get() {
-            environment.push(("YIRU_AGENT_HOOK_ENDPOINT".to_owned(), path.clone()));
+            environment.push(("AGENTSTART_AGENT_HOOK_ENDPOINT".to_owned(), path.clone()));
         }
         environment
     }
@@ -654,7 +657,7 @@ async fn receive_hook(
     body: Bytes,
 ) -> StatusCode {
     let Some(token) = headers
-        .get("x-yiru-agent-hook-token")
+        .get("x-agentstart-agent-hook-token")
         .and_then(|value| value.to_str().ok())
     else {
         return StatusCode::UNAUTHORIZED;

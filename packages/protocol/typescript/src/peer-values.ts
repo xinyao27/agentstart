@@ -1,10 +1,10 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
-import type { Status } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
+import type { Status } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   PeerKind,
   ProtocolVersion,
   TransportFeature
-} from '../generated/yiru/protocol/v1/frame_pb.js'
+} from '../generated/agent_start/protocol/v1/frame_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimePeerInfo } from './transport.js'
 

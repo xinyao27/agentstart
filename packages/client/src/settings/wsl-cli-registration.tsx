@@ -1,4 +1,4 @@
-import type { CliInstallStatus } from '@yiru/protocol/cli-values'
+import type { CliInstallStatus } from '@agentstart/protocol/cli-values'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -77,7 +77,7 @@ export function WslCliRegistration({
 
   const isEnabled = status?.state === 'installed'
   const isSupported = status?.supported ?? false
-  const commandName = status?.commandName ?? 'yiru'
+  const commandName = status?.commandName ?? 'agentstart'
 
   const handleInstall = async (): Promise<void> => {
     setBusyAction('install')
@@ -151,7 +151,7 @@ export function WslCliRegistration({
 
   return (
     <>
-      <div className="border-border/60 bg-card/50 space-y-3 border p-4">
+      <div className="border-border/60 bg-card/50 space-y-3 rounded-xl border p-4">
         <div className="flex items-center justify-between gap-4">
           <div className="space-y-0.5">
             <Label>
@@ -169,7 +169,7 @@ export function WslCliRegistration({
                 : (status?.detail ??
                   translate(
                     'auto.components.settings.WslCliRegistration.7aa456a460',
-                    'Register `yiru` in ~/.local/bin inside WSL.'
+                    'Register `agentstart` in ~/.local/bin inside WSL.'
                   ))}
             </p>
           </div>
@@ -208,7 +208,7 @@ export function WslCliRegistration({
         {status?.commandPath ? (
           <p className="text-muted-foreground text-xs">
             {translate('auto.components.settings.WslCliRegistration.554305956d', 'Command path:')}{' '}
-            <code className="bg-muted px-1 py-0.5 text-[11px]">{status.commandPath}</code>
+            <code className="bg-muted rounded px-1 py-0.5 text-[11px]">{status.commandPath}</code>
           </p>
         ) : null}
 
@@ -243,11 +243,11 @@ export function WslCliRegistration({
               {isEnabled
                 ? translate(
                     'auto.components.settings.WslCliRegistration.d8216eb22e',
-                    'This removes the WSL shell command. Yiru itself remains installed on Windows.'
+                    'This removes the WSL shell command. AgentStart itself remains installed on Windows.'
                   )
                 : translate(
                     'auto.components.settings.WslCliRegistration.7ee4e52b99',
-                    'Yiru will register {{value0}} so the command works from WSL terminals.',
+                    'AgentStart will register {{value0}} so the command works from WSL terminals.',
                     { value0: status?.commandPath ?? commandName }
                   )}
             </DialogDescription>
@@ -255,7 +255,7 @@ export function WslCliRegistration({
           {status?.commandPath ? (
             <p className="text-muted-foreground text-xs">
               {translate('auto.components.settings.WslCliRegistration.119fef6cd2', 'Target path:')}{' '}
-              <code className="bg-muted px-1 py-0.5 text-[11px]">{status.commandPath}</code>
+              <code className="bg-muted rounded px-1 py-0.5 text-[11px]">{status.commandPath}</code>
             </p>
           ) : null}
           <DialogFooter>

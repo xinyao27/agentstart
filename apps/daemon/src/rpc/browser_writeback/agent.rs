@@ -83,7 +83,7 @@ impl AgentTrustRegistry {
             &home,
             ".local",
             "share",
-            "yiru",
+            "agentstart",
             "codex-runtime-home",
             "home",
         ]);

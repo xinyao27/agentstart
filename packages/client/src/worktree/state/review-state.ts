@@ -1,12 +1,11 @@
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
-import { isPositiveHostedReviewNumber } from '@yiru/protocol/hosted-review/types'
-import type { Worktree, WorktreeMeta } from '@yiru/protocol/worktree/model'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
+import type { Worktree, WorktreeMeta } from '@agentstart/protocol/worktree/model'
 import { updateProjectCatalogWorktree } from '~renderer/project-catalog/worktree-cache'
 import { branchName } from '~renderer/source-control/branch-name'
 
 export type HostedReviewLinkKey = 'linkedPR'
 
-export const HOSTED_REVIEW_LINK_KEYS: readonly HostedReviewLinkKey[] = ['linkedPR']
+const HOSTED_REVIEW_LINK_KEYS: readonly HostedReviewLinkKey[] = ['linkedPR']
 
 export const CLEARED_HOSTED_REVIEW_LINK_UPDATES: Pick<
   WorktreeMeta,
@@ -16,14 +15,14 @@ export const CLEARED_HOSTED_REVIEW_LINK_UPDATES: Pick<
   pushTarget: undefined
 }
 
-export const hostedReviewLinkMutationGenerationByWorktreeId = new Map<string, number>()
+const hostedReviewLinkMutationGenerationByWorktreeId = new Map<string, number>()
 export const hostedReviewLinkClearTombstonesByWorktreeId = new Map<
   string,
   { branch: string; branchIdentity: string; generation: number; head?: string }
 >()
-export const hostedReviewLinkWorktreeIdAliases = new Map<string, string>()
+const hostedReviewLinkWorktreeIdAliases = new Map<string, string>()
 
-export function hasHostedReviewLinks(worktree: Worktree): boolean {
+function hasHostedReviewLinks(worktree: Worktree): boolean {
   return HOSTED_REVIEW_LINK_KEYS.some((key) => worktree[key] != null)
 }
 
@@ -75,7 +74,7 @@ export function resolveHostedReviewLinkWorktreeId(worktreeId: string): string {
   return worktreeId
 }
 
-export function pruneHostedReviewLinkWorktreeAliasesForId(worktreeId: string): void {
+function pruneHostedReviewLinkWorktreeAliasesForId(worktreeId: string): void {
   for (const [alias, target] of Array.from(hostedReviewLinkWorktreeIdAliases)) {
     if (
       alias === worktreeId ||
@@ -149,71 +148,8 @@ export function rememberHostedReviewLinkClear(
   })
 }
 
-export function sanitizeHostedReviewLinksForBranchClear<
-  T extends Pick<Worktree, 'id' | 'branch'> &
-    Partial<Pick<Worktree, HostedReviewLinkKey | 'pushTarget' | 'head'>>
->(worktree: T, currentWorktrees?: readonly T[]): T {
-  const hostedReviewWorktreeId = resolveHostedReviewLinkWorktreeId(worktree.id)
-  const tombstone = hostedReviewLinkClearTombstonesByWorktreeId.get(hostedReviewWorktreeId)
-  const hasBranchScopedContext =
-    HOSTED_REVIEW_LINK_KEYS.some((key) => worktree[key] != null) ||
-    worktree.pushTarget !== undefined
-  if (
-    !tombstone ||
-    tombstone.generation !== getHostedReviewLinkMutationGeneration(hostedReviewWorktreeId) ||
-    !hasBranchScopedContext
-  ) {
-    return worktree
-  }
-  const current = currentWorktrees?.find(
-    (entry) =>
-      entry.id === worktree.id ||
-      resolveHostedReviewLinkWorktreeId(entry.id) === hostedReviewWorktreeId
-  )
-  const currentClean =
-    current &&
-    !HOSTED_REVIEW_LINK_KEYS.some((key) => current[key] != null) &&
-    current.pushTarget === undefined
-      ? current
-      : null
-  const guardBranch = currentClean ? currentClean.branch : tombstone.branch
-  const guardHead = currentClean ? currentClean.head : tombstone.head
-  return {
-    ...worktree,
-    branch: guardBranch,
-    ...(guardHead !== undefined ? { head: guardHead } : {}),
-    ...CLEARED_HOSTED_REVIEW_LINK_UPDATES
-  }
-}
-
-export function sanitizeHostedReviewLinksForBranchClears<
-  T extends Pick<Worktree, 'id' | 'branch'> &
-    Partial<Pick<Worktree, HostedReviewLinkKey | 'pushTarget' | 'head'>>
->(worktrees: readonly T[], currentWorktrees?: readonly T[]): T[] {
-  let changed = false
-  const sanitized = worktrees.map((worktree) => {
-    const next = sanitizeHostedReviewLinksForBranchClear(worktree, currentWorktrees)
-    if (next !== worktree) {
-      changed = true
-    }
-    return next
-  })
-  return changed ? sanitized : [...worktrees]
-}
-
 export function applyHostedReviewLinkClear(worktreeId: string): void {
   updateProjectCatalogWorktree(worktreeId, CLEARED_HOSTED_REVIEW_LINK_UPDATES)
-}
-
-export function getPositiveHostedReviewLinkUpdateKey(
-  updates: Partial<WorktreeMeta>
-): HostedReviewLinkKey | null {
-  for (const key of HOSTED_REVIEW_LINK_KEYS) {
-    if (isPositiveHostedReviewNumber(updates[key])) {
-      return key
-    }
-  }
-  return null
 }
 
 export function clearOlderHostedReviewLinksForReplacement(
@@ -233,7 +169,7 @@ export function getHostedReviewLinkForMetaRefresh(
     : (existingWorktree?.[key] ?? null)
 }
 
-export function hasExplicitPushTargetClear(updates: Partial<WorktreeMeta>): boolean {
+function hasExplicitPushTargetClear(updates: Partial<WorktreeMeta>): boolean {
   return (
     Object.prototype.hasOwnProperty.call(updates, 'pushTarget') && updates.pushTarget === undefined
   )

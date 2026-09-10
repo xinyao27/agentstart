@@ -4,7 +4,7 @@ import {
   WorktreeService,
   WorktreeServiceSubscribeStateEventsRequestSchema,
   WorktreeServiceSubscribeStateEventsResponseSchema
-} from '../generated/yiru/runtime/v1/worktree_pb.js'
+} from '../generated/agent_start/runtime/v1/worktree_pb.js'
 import type { RuntimeCallOptions, RuntimeStream, RuntimeTransport } from './transport.js'
 import type { WorktreeStateSubscriptionEvent } from './worktree-operation-types.js'
 import { worktreeStateSubscriptionEvent } from './worktree-state-values.js'

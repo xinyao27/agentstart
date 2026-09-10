@@ -1,4 +1,4 @@
-import type { WorkspaceSessionPatch } from '@yiru/protocol/workspace/session'
+import type { WorkspaceSessionPatch } from '@agentstart/protocol/workspace/session'
 import { isDecorativeAgentTitleFrameChange } from '~renderer/agent/decorative-title-signature'
 import {
   isApplyingSessionProjection,
@@ -141,7 +141,7 @@ function sessionRelevantFieldChanged(
   return true
 }
 
-export type WorkspaceSessionWrite = {
+type WorkspaceSessionWrite = {
   patch: WorkspaceSessionPatch
 }
 

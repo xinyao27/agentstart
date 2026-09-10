@@ -124,6 +124,6 @@
    title bar occupies the top title-height pixels. Height is reduced by the
    same amount to prevent overflow/clipping. */
 .pane[data-has-title] .xterm-container {
-  margin-top: var(--yiru-pane-title-height);
-  height: calc(100% - var(--yiru-pane-title-height)); /* match margin-top */
+  margin-top: var(--agentstart-pane-title-height);
+  height: calc(100% - var(--agentstart-pane-title-height)); /* match margin-top */
 }

@@ -1,5 +1,5 @@
-import type { GitDiffResult } from '@yiru/protocol/git/diff-values'
-import { getLargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
+import type { GitDiffResult } from '@agentstart/protocol/git/diff-values'
+import { getLargeDiffRenderLimit } from '@agentstart/protocol/git/render-limit'
 import {
   getRuntimeGitBranchDiff,
   getRuntimeGitCommitDiff,

@@ -36,12 +36,6 @@ export function isMacUserAgent(
   return userAgent.includes('Mac')
 }
 
-export function isLinuxUserAgent(
-  userAgent: string = typeof navigator === 'undefined' ? '' : navigator.userAgent
-): boolean {
-  return !isMacUserAgent(userAgent) && !isWindowsUserAgent(userAgent) && userAgent.includes('Linux')
-}
-
 function shouldPreserveEditableFocus(element: Element | null): boolean {
   if (!(element instanceof HTMLElement)) {
     return false

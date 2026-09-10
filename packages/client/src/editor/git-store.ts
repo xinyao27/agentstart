@@ -1,20 +1,20 @@
 import type {
   GitBranchChangeEntry,
   GitBranchCompareSummary
-} from '@yiru/protocol/git/branch-compare-types'
+} from '@agentstart/protocol/git/branch-compare-types'
 import type {
   GitConflictKind,
   GitConflictOperation,
   GitStatusEntry,
   GitStatusResult,
   GitUpstreamStatus
-} from '@yiru/protocol/git/status-types'
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+} from '@agentstart/protocol/git/status-types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
 
 import type { SourceControlRemoteOpKind } from '../source-control/workflow/types'
 import type { GitRuntimeOperationOptions } from './file-model'
 
-export type RemoteOpKind = SourceControlRemoteOpKind
+type RemoteOpKind = SourceControlRemoteOpKind
 
 export type EditorGitSlice = {
   // Cursor line tracking per file

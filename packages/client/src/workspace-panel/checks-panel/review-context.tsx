@@ -1,4 +1,4 @@
-import { resolveHostedReviewCreationProvider } from '@yiru/protocol/hosted-review/creation-provider'
+import { resolveHostedReviewCreationProvider } from '@agentstart/protocol/hosted-review/creation-provider'
 import { getGitHubRepoCacheKey } from '~renderer/github/cache-key'
 import { prChecksCacheSuffix, prCommentsCacheSuffix } from '~renderer/github/state'
 import { localizedHostedReviewCopy } from '~renderer/i18n/hosted-review-localized-copy'

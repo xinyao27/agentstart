@@ -1,4 +1,4 @@
-import { isRecognizedAgentType } from '@yiru/protocol/agent/process/recognition'
+import { isRecognizedAgentType } from '@agentstart/protocol/agent/process/recognition'
 import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 
 import {

@@ -5,17 +5,17 @@ import {
   toRuntimeExecutionHostId,
   type ExecutionHostId,
   type ExecutionHostKind
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import {
   evaluateRuntimeCompat,
   type RuntimeCompatVerdict
-} from '@yiru/protocol/runtime-compatibility'
+} from '@agentstart/protocol/runtime-compatibility'
 import {
   MIN_COMPATIBLE_RUNTIME_SERVER_VERSION,
   RUNTIME_PROTOCOL_VERSION
-} from '@yiru/protocol/runtime-versions'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+} from '@agentstart/protocol/runtime-versions'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { getLocalExecutionHostLabel } from '~renderer/execution-host/labels'
 import type { RuntimeStatus } from '~renderer/runtime/status/model'
 

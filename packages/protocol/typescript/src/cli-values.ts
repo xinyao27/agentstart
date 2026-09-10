@@ -1,11 +1,11 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   CliInstallMethod as ProtocolCliInstallMethod,
   CliInstallState as ProtocolCliInstallState,
   CliInstallUnsupportedReason as ProtocolCliInstallUnsupportedReason,
   type CliInstallStatus as ProtocolCliInstallStatus
-} from '../generated/yiru/runtime/v1/cli_pb.js'
-import { HostPlatform } from '../generated/yiru/runtime/v1/host_registry_pb.js'
+} from '../generated/agent_start/runtime/v1/cli_pb.js'
+import { HostPlatform } from '../generated/agent_start/runtime/v1/host_registry_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const CLI_WSL_PROTOCOL_CAPABILITY = 'cli.wsl.protobuf.v1' as const

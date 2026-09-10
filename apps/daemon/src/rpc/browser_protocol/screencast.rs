@@ -1,16 +1,16 @@
 use std::time::Duration;
 
-use tokio::time::sleep;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::browser_screencast_event::Event as ScreencastEvent;
-use yiru_protocol::runtime::v1::execute_request::Command as RequestCommand;
-use yiru_protocol::runtime::v1::execute_response::Result as ResponseResult;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::browser_screencast_event::Event as ScreencastEvent;
+use agentstart_protocol::runtime::v1::execute_request::Command as RequestCommand;
+use agentstart_protocol::runtime::v1::execute_response::Result as ResponseResult;
+use agentstart_protocol::runtime::v1::{
     BrowserScreencastEvent, BrowserScreencastFrame, BrowserScreencastFrameMetadata,
     BrowserScreencastReady, BrowserScreencastSubscribeRequest, BrowserTarget, EvalCommand,
     ScreenshotCommand, TargetCommand, ViewportCommand,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use tokio::time::sleep;
 
 use super::{BrowserProtocolRpc, execute_command, principal_authority_id, random_uuid, status};
 use crate::rpc::protocol_call::ProtocolCallContext;

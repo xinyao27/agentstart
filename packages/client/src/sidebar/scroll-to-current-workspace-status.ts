@@ -1,5 +1,5 @@
 export const SCROLL_TO_CURRENT_WORKSPACE_REVEAL_REQUEST_EVENT =
-  'yiru-scroll-to-current-workspace-reveal-request'
+  'agentstart-scroll-to-current-workspace-reveal-request'
 
 export type ScrollToCurrentWorkspaceRevealRequestDetail =
   | {

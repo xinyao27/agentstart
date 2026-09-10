@@ -23,8 +23,6 @@ import {
   rememberBrowserTab
 } from './target'
 
-export { registeredPageAuthority, registeredPageId, registrationGeneration } from './page-registry'
-
 export function registerBrowserPageControlListeners(): void {
   void pageRegistryReady
   chrome.tabs.onRemoved.addListener((tabId) => {

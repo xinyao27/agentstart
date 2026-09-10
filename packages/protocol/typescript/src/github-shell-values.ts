@@ -1,6 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   AppStarSource as ProtocolAppStarSource,
   GitHubPrChecksStatus as ProtocolChecksStatus,
@@ -14,7 +14,7 @@ import {
   type GitHubShellServiceEnqueuePrRefreshResponse,
   type GitHubViewer as ProtocolViewer,
   ProjectRepositoryKind as ProtocolRepositoryKind
-} from '../generated/yiru/runtime/v1/github_shell_pb.js'
+} from '../generated/agent_start/runtime/v1/github_shell_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const GITHUB_SHELL_PROTOCOL_CAPABILITY = 'github.shell.protobuf.v1' as const

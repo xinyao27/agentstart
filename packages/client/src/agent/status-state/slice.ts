@@ -3,15 +3,15 @@ import type {
   ResumableTuiAgent,
   SleepingAgentLaunchConfig,
   SleepingAgentSessionRecord
-} from '@yiru/protocol/agent/session-resume'
+} from '@agentstart/protocol/agent/session-resume'
 import type {
   AgentStatusEntry,
   AgentStatusOrchestrationContext,
   AgentType,
   MigrationUnsupportedPtyEntry,
   ParsedAgentStatusPayload
-} from '@yiru/protocol/agent/status-records'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/agent/status-records'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'
@@ -32,11 +32,6 @@ export {
   collectSleepingAgentSessionRecordsForWorktree,
   removeSleepingRecordsReplacedByManualWorktreeSleep
 } from './sleeping-model'
-export {
-  RECENTLY_CLOSED_AGENT_STATUS_TAB_IDS_MAX,
-  RECENTLY_RETIRED_AGENT_STATUS_PANE_KEYS_MAX
-} from './state-model'
-
 /** Snapshot of a finished (or vanished) agent status entry, kept around so
  *  the dashboard + sidebar hover can continue showing the completion until the
  *  user acknowledges it by clicking the worktree. The `worktreeId` is stamped
@@ -58,7 +53,7 @@ export type AgentStatusWorktreeShutdownReason =
   | 'remove-worktree'
   | 'auto-hibernate-completed-agent'
 
-export type AllAgentSessionCaptureMode = 'periodic' | 'quit'
+type AllAgentSessionCaptureMode = 'periodic' | 'quit'
 
 export type DropAgentStatusByWorktreeOptions = {
   shutdownReason?: AgentStatusWorktreeShutdownReason
@@ -66,11 +61,11 @@ export type DropAgentStatusByWorktreeOptions = {
   retainedCompletionEvidence?: readonly RetainedAgentEntry[]
 }
 
-export type DropHibernatedAgentPaneOptions = {
+type DropHibernatedAgentPaneOptions = {
   retainedCompletionEvidence?: readonly RetainedAgentEntry[]
 }
 
-export type DropAgentStatusByTabPrefixOptions = {
+type DropAgentStatusByTabPrefixOptions = {
   worktreeId?: string
 }
 
@@ -126,7 +121,7 @@ export type AgentStatusSlice = {
   sleepingAgentSessionsByPaneKey: Record<string, SleepingAgentSessionRecord>
 
   /** Ephemeral launch snapshots keyed by concrete pane. Hook payloads do not
-   *  carry Yiru launch settings, so the renderer supplies them from startup. */
+   *  carry AgentStart launch settings, so the renderer supplies them from startup. */
   agentLaunchConfigByPaneKey: Record<string, AgentLaunchConfigRegistryEntry>
 
   /** Pane keys explicitly torn down (pane close, tab close, PTY exit, manual

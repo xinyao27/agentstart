@@ -1,5 +1,5 @@
-import type { DirectoryEntry as DirEntry } from '@yiru/protocol/files/values'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { DirectoryEntry as DirEntry } from '@agentstart/protocol/files/values'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { basename, joinPath, normalizeRelativePath } from '~renderer/path'
 import type { RuntimeFileOperationArgs } from '~renderer/runtime/file-client'
 import {
@@ -8,7 +8,7 @@ import {
   runtimePathExists
 } from '~renderer/runtime/file-client'
 
-const MARKDOWN_TEMPLATE_ROOT = '.yiru/templates'
+const MARKDOWN_TEMPLATE_ROOT = '.agentstart/templates'
 const MARKDOWN_TEMPLATE_MAX_DEPTH = 8
 const MARKDOWN_TEMPLATE_MAX_COUNT = 100
 

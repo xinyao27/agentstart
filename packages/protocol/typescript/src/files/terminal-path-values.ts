@@ -1,12 +1,12 @@
-import { StatusCode } from '../../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   TerminalArtifactProvider as ProtocolTerminalArtifactProvider,
   type TerminalOpenTarget as ProtocolTerminalOpenTarget,
   type TerminalPathResolution as ProtocolTerminalPathResolution
-} from '../../generated/yiru/runtime/v1/files_pb.js'
+} from '../../generated/agent_start/runtime/v1/files_pb.js'
 import { RuntimeProtocolError } from '../error.js'
 
-export type TerminalPathOpenTarget =
+type TerminalPathOpenTarget =
   | Readonly<{
       kind: 'worktree-file'
       provider: 'local' | 'ssh'

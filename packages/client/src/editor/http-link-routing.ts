@@ -1,7 +1,6 @@
-import type { WorkspacePort, WorkspacePortScanResult } from '@yiru/protocol'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { WorkspacePort, WorkspacePortScanResult } from '@agentstart/protocol'
 import {
-  shouldOpenWebLinkInYiruBrowser,
+  shouldOpenWebLinkInAgentStartBrowser,
   type WebLinkMouseEvent
 } from '~renderer/browser/link-gesture'
 import {
@@ -10,9 +9,15 @@ import {
 } from '~renderer/ports/loopback-url'
 import { shellClient } from '~renderer/runtime/shell-client'
 
+import {
+  readHttpLinkStore,
+  type HttpLinkStore,
+  type LocalhostLinkWorktree
+} from './http-link-store-access'
+
 export type OpenHttpLinkOptions = {
   event?: WebLinkMouseEvent
-  openInYiruBrowser?: boolean
+  openInAgentStartBrowser?: boolean
   worktreeId?: string | null
   sourceOwner?: HttpLinkSourceOwner
 }
@@ -23,57 +28,19 @@ export type HttpLinkSourceOwner =
   | { kind: 'ssh'; connectionId: string }
   | { kind: 'unknown' }
 
-type StoreAccessor = () => {
-  settings?: Partial<
-    Pick<GlobalSettings, 'activeRuntimeEnvironmentId' | 'localhostWorktreeLabelsEnabled'>
-  > | null
-  setActiveWorktree: (worktreeId: string) => void
-  createBrowserTab: (worktreeId: string, url: string, opts: { activate: boolean }) => unknown
-  activeWorktreeId?: string | null
-  repos?: LocalhostLinkRepo[]
-  projects?: LocalhostLinkProject[]
-  worktreesByRepo?: Record<string, LocalhostLinkWorktree[]>
-  allWorktrees?: () => LocalhostLinkWorktree[]
-  workspacePortScan?: { result: WorkspacePortScanResult } | null
-  workspacePortScansByKey?: Record<string, WorkspacePortScanResult>
-}
-
-type LocalhostLinkRepo = {
-  id: string
-  displayName: string
-}
-
-type LocalhostLinkProject = LocalhostLinkRepo
-
-type LocalhostLinkWorktree = {
-  id: string
-  projectId?: string
-}
-
-// Why: store access is injected via registerHttpLinkStoreAccessor rather than
-// a direct `import '~renderer/store/state'` to avoid a circular import — editor/state.ts
-// imports this module, and '~renderer/store/state' transitively imports editor.ts. Without
-// the break, a cold renderer import can see `createEditorSlice` as undefined
-// during store/state.ts initialization.
-let storeAccessor: StoreAccessor | null = null
-
-export function registerHttpLinkStoreAccessor(fn: StoreAccessor): void {
-  storeAccessor = fn
-}
-
 // Scope: http(s) URLs only. file: URIs and in-worktree markdown targets are
 // owned by resolveMarkdownLinkTarget and must stay on that path — this helper
 // is only invoked on target.kind === 'external' (and for the terminal's http
 // branch). A plain activation always uses the system browser; the host-platform
-// modifier plus a left click opens a Yiru Browser tab.
+// modifier plus a left click opens a AgentStart Browser tab.
 export function openHttpLink(url: string, opts: OpenHttpLinkOptions = {}): void {
   const { sourceOwner } = opts
   if (sourceOwner?.kind === 'unknown') {
     return
   }
-  const state = storeAccessor?.()
-  const wantsYiruBrowser =
-    opts.openInYiruBrowser === true || shouldOpenWebLinkInYiruBrowser(opts.event)
+  const state = readHttpLinkStore()
+  const wantsAgentStartBrowser =
+    opts.openInAgentStartBrowser === true || shouldOpenWebLinkInAgentStartBrowser(opts.event)
   const worktreeId = opts.worktreeId ?? state?.activeWorktreeId ?? null
   const activeRuntimeEnvironmentId = state?.settings?.activeRuntimeEnvironmentId?.trim() || null
   const runtimeEnvironmentId =
@@ -83,14 +50,14 @@ export function openHttpLink(url: string, opts: OpenHttpLinkOptions = {}): void 
         ? null
         : activeRuntimeEnvironmentId
   const sourceIsLocal = sourceOwner ? sourceOwner.kind === 'local' : !activeRuntimeEnvironmentId
-  const routeToYiru = Boolean(worktreeId) && wantsYiruBrowser
+  const routeToAgentStart = Boolean(worktreeId) && wantsAgentStartBrowser
 
-  if (routeToYiru && worktreeId && runtimeEnvironmentId) {
+  if (routeToAgentStart && worktreeId && runtimeEnvironmentId) {
     void openRuntimeBrowserLink(url, worktreeId, runtimeEnvironmentId)
     return
   }
 
-  if (routeToYiru && sourceIsLocal && worktreeId && state) {
+  if (routeToAgentStart && sourceIsLocal && worktreeId && state) {
     // Why: http clicks from inside a worktree should not push a worktree-switch
     // history entry — the user isn't changing worktrees, they're opening a tab
     // in the one they're already in. activateAndRevealWorktree is reserved for
@@ -141,7 +108,7 @@ async function openRuntimeBrowserLink(
 
 function localhostLabelRouteForHttpLink(
   url: string,
-  state: ReturnType<StoreAccessor>,
+  state: HttpLinkStore,
   sourceOwner?: HttpLinkSourceOwner
 ): LocalhostWorktreeLabelRoute | null {
   if (sourceOwner && sourceOwner.kind !== 'local') {
@@ -158,7 +125,7 @@ function localhostLabelRouteForHttpLink(
 }
 
 export async function resolveLocalhostHttpLinkDisplayUrl(url: string): Promise<string | null> {
-  const state = storeAccessor?.()
+  const state = readHttpLinkStore()
   if (!state) {
     return null
   }
@@ -189,7 +156,7 @@ async function openLabeledLocalhostLink(
 
 function localhostLabelRouteForTerminalLink(
   rawUrl: string,
-  state: ReturnType<StoreAccessor>,
+  state: HttpLinkStore,
   ignoreActiveRuntime = false,
   sourceScan?: WorkspacePortScanResult | null
 ): LocalhostWorktreeLabelRoute | null {
@@ -242,10 +209,7 @@ function findWorkspacePortByNumber(
   return port
 }
 
-function findWorktreeById(
-  state: ReturnType<StoreAccessor>,
-  worktreeId: string
-): LocalhostLinkWorktree | null {
+function findWorktreeById(state: HttpLinkStore, worktreeId: string): LocalhostLinkWorktree | null {
   const fromAllWorktrees = state.allWorktrees?.().find((worktree) => worktree.id === worktreeId)
   if (fromAllWorktrees) {
     return fromAllWorktrees

@@ -5,20 +5,20 @@ export type SetupAgentStartupPolicy = NonNullable<RepoHookSettingsValue['setupAg
 export type HookCommandSourcePolicy = NonNullable<RepoHookSettingsValue['commandSourcePolicy']>
 export type SetupDecision = 'inherit' | 'run' | 'skip'
 
-export type PersistedTrustedYiruHookEntry = {
+export type PersistedTrustedAgentStartHookEntry = {
   contentHash: string
   approvedAt: number
 }
 
-export type PersistedTrustedYiruHookRepo = {
+export type PersistedTrustedAgentStartHookRepo = {
   all?: {
     approvedAt: number
   }
-  setup?: PersistedTrustedYiruHookEntry
-  archive?: PersistedTrustedYiruHookEntry
+  setup?: PersistedTrustedAgentStartHookEntry
+  archive?: PersistedTrustedAgentStartHookEntry
 }
 
-export type PersistedTrustedYiruHooks = Record<string, PersistedTrustedYiruHookRepo>
+export type PersistedTrustedAgentStartHooks = Record<string, PersistedTrustedAgentStartHookRepo>
 
 export function getDefaultRepoHookSettings(): RepoHookSettingsValue {
   return {
@@ -29,18 +29,18 @@ export function getDefaultRepoHookSettings(): RepoHookSettingsValue {
   }
 }
 
-export type YiruHooks = {
+export type AgentStartHooks = {
   scripts: {
     setup?: string
     archive?: string
   }
-  defaultTabs?: YiruDefaultTabTemplate[]
+  defaultTabs?: AgentStartDefaultTabTemplate[]
   worktree?: {
     sharedDirectories: string[]
   }
 }
 
-export type YiruDefaultTabTemplate = {
+export type AgentStartDefaultTabTemplate = {
   title?: string
   color?: string
   command?: string

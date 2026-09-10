@@ -2,10 +2,10 @@ import {
   getRepoExecutionHostId,
   getWorktreeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { WorkspaceStatusDefinition } from '@agentstart/protocol/workspace/status/model'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { getExecutionHostLabel } from '~renderer/execution-host/labels'
 import type { AppState } from '~renderer/store/types'
 

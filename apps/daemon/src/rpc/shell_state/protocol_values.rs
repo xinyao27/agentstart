@@ -3,17 +3,17 @@
 // single place that reads those trees into the typed protobuf wire messages
 // and renders protobuf updates back into the patch shapes the authority
 // normalizes.
-use serde_json::{Map, Value};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::shell_cache_json_value::Kind as JsonKind;
-use yiru_protocol::runtime::v1::shell_onboarding_nullable_number::Value as NullableNumber;
-use yiru_protocol::runtime::v1::shell_onboarding_nullable_outcome::Value as NullableOutcome;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::shell_cache_json_value::Kind as JsonKind;
+use agentstart_protocol::runtime::v1::shell_onboarding_nullable_number::Value as NullableNumber;
+use agentstart_protocol::runtime::v1::shell_onboarding_nullable_outcome::Value as NullableOutcome;
+use agentstart_protocol::runtime::v1::{
     ShellCacheGitHubCache, ShellCacheGitHubEntry, ShellCacheGitHubRecord, ShellCacheJsonNull,
     ShellCacheJsonValue, ShellCacheJsonValueEntry, ShellCacheJsonValueList,
     ShellCacheJsonValueObject, ShellCacheServiceSetGitHubRequest, ShellOnboardingChecklist,
     ShellOnboardingOutcome, ShellOnboardingServiceUpdateRequest, ShellOnboardingState,
 };
+use serde_json::{Map, Value};
 
 pub(super) fn github_cache(value: &Value) -> ShellCacheGitHubCache {
     ShellCacheGitHubCache {

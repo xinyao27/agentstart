@@ -1,4 +1,4 @@
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import { useState } from 'react'
 
 import { closeRemoteRuntimeTerminal } from '../runtime/remote-runtime-session'

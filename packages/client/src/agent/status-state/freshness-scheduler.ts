@@ -1,5 +1,5 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
-import { AGENT_STATUS_STALE_AFTER_MS } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
+import { AGENT_STATUS_STALE_AFTER_MS } from '@agentstart/protocol/agent/status-records'
 
 export type FreshnessSchedulerDeps = {
   getEntries: () => AgentStatusEntry[]

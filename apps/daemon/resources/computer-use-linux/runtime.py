@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Yiru Linux computer-use bridge.
+"""AgentStart Linux computer-use bridge.
 
-The Node sidecar owns Yiru's public API. This process is intentionally a small
+The Node sidecar owns AgentStart's public API. This process is intentionally a small
 AT-SPI adapter: read one JSON operation file, execute it in the user's desktop
 session, and print one JSON response.
 """
@@ -701,7 +701,7 @@ def handshake_response():
     has_screenshot = Gdk is not None and GdkPixbuf is not None and not is_wayland
     return {
         "platform": "linux",
-        "provider": "yiru-computer-use-linux",
+        "provider": "agentstart-computer-use-linux",
         "providerVersion": "1.0.0",
         "protocolVersion": 1,
         "supports": {

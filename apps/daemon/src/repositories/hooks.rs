@@ -6,7 +6,7 @@ use thiserror::Error;
 
 use crate::hosts::{HostFilesystem, HostFilesystemError};
 
-const HOOKS_FILE: &str = "yiru.yaml";
+const HOOKS_FILE: &str = "agentstart.yaml";
 const MAX_HOOKS_BYTES: usize = 1024 * 1024;
 
 pub(crate) struct RepoHooksInspection {
@@ -68,7 +68,7 @@ pub(crate) async fn inspect_strict(
     let shared_hooks = content.as_deref().and_then(parse_hooks);
     let hooks = effective_hooks(repo, shared_hooks.as_ref());
     let source = if content.is_some() {
-        Some("yiru.yaml")
+        Some("agentstart.yaml")
     } else if hooks.is_some() {
         Some("legacy")
     } else {
@@ -190,7 +190,7 @@ pub(super) async fn inspect(
     let shared_hooks = content.as_deref().and_then(parse_hooks);
     let hooks = effective_hooks(repo, shared_hooks.as_ref());
     let source = if has_hooks_file {
-        Some("yiru.yaml")
+        Some("agentstart.yaml")
     } else if hooks.is_some() {
         Some("legacy")
     } else {

@@ -1,8 +1,8 @@
-import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
-import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { SetupSplitDirection } from '@yiru/protocol/settings/workspace-preferences'
-import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
+import type { StartupCommandDelivery } from '@agentstart/protocol/agent/launch/startup-delivery'
+import type { SleepingAgentLaunchConfig } from '@agentstart/protocol/agent/session-resume'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { SetupSplitDirection } from '@agentstart/protocol/settings/workspace-preferences'
+import type { EventProps } from '@agentstart/protocol/telemetry/events/catalog'
 import type { TerminalColorSchemeMode } from '~renderer/terminal-pane/emulator/color-scheme'
 import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 

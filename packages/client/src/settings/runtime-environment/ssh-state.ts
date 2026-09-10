@@ -7,7 +7,7 @@ import {
   sshTargetLabelsEqual
 } from './ssh-target-cleanup'
 
-export type SshConnectionStatus =
+type SshConnectionStatus =
   | 'disconnected'
   | 'connecting'
   | 'auth-failed'
@@ -31,7 +31,7 @@ export type SshTargetMetadata = {
   label: string
 }
 
-export type PortForwardEntry = {
+type PortForwardEntry = {
   id: string
   connectionId: string
   localPort: number
@@ -42,7 +42,7 @@ export type PortForwardEntry = {
   advertisedProtocol?: 'http' | 'https'
 }
 
-export type EnrichedDetectedPort = {
+type EnrichedDetectedPort = {
   port: number
   host: string
   pid?: number
@@ -51,7 +51,7 @@ export type EnrichedDetectedPort = {
   advertisedProtocol?: 'http' | 'https'
 }
 
-export type RemoteWorkspaceSyncStatus = {
+type RemoteWorkspaceSyncStatus = {
   phase: 'idle' | 'pulling' | 'pushing' | 'synced' | 'conflict' | 'error' | 'offline'
   direction?: 'pull' | 'push'
   revision?: number
@@ -60,7 +60,7 @@ export type RemoteWorkspaceSyncStatus = {
   message?: string
 }
 
-export type SshCredentialRequest = {
+type SshCredentialRequest = {
   requestId: string
   targetId: string
   kind: 'passphrase' | 'password'

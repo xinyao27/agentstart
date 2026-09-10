@@ -1,4 +1,4 @@
-import type { CheckStatus } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { CheckStatus } from '@agentstart/protocol/hosted-review/pull-request-types'
 import React from 'react'
 import type { ActiveRightSidebarTab } from '~renderer/editor/state'
 import { translate } from '~renderer/i18n/i18n'
@@ -69,7 +69,7 @@ export function TopActivityOverflowMenu({
             {hiddenChecksStatus && (
               <div
                 className={cn(
-                  'absolute top-[4px] right-[4px] size-[7px]',
+                  'absolute top-[4px] right-[4px] size-[7px] rounded-full',
                   STATUS_DOT_COLOR[hiddenChecksStatus] ?? 'bg-muted-foreground'
                 )}
               />
@@ -143,7 +143,7 @@ export function ActivityBarButton({
             {statusIndicator && statusIndicator !== 'neutral' && (
               <div
                 className={cn(
-                  'absolute size-[7px]',
+                  'absolute size-[7px] rounded-full',
                   isTop ? 'top-[4px] right-[5px]' : 'top-[7px] right-[7px]',
                   STATUS_DOT_COLOR[statusIndicator] ?? 'bg-muted-foreground'
                 )}
@@ -151,7 +151,7 @@ export function ActivityBarButton({
             )}
 
             {active && !isTop && (
-              <div className="bg-foreground absolute top-[25%] right-0 bottom-[25%] w-[2px]" />
+              <div className="bg-foreground absolute top-[25%] right-0 bottom-[25%] w-[2px] rounded-l" />
             )}
           </Button>
         }

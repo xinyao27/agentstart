@@ -1,4 +1,4 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, CaretUpDown as ChevronsUpDown } from '~renderer/icons/hugeicons'
 import { describeRuntimeCompatBlock } from '~renderer/runtime/compatibility-message'

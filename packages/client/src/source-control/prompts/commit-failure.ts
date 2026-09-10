@@ -1,7 +1,7 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import { translate } from '~renderer/i18n/i18n'
 
-export const COMMIT_FAILURE_SUMMARY_SCAN_CODE_UNITS = 64 * 1024
+const COMMIT_FAILURE_SUMMARY_SCAN_CODE_UNITS = 64 * 1024
 
 const COMMIT_FAILURE_PROMPT_OUTPUT_LIMIT = 12_000
 const COMMIT_FAILURE_REPLY_INSTRUCTION =
@@ -196,10 +196,7 @@ export function buildFixCommitFailurePrompt({
   return appendCommitFailureCustomInstruction(prompt, customInstruction ?? '')
 }
 
-export function appendCommitFailureCustomInstruction(
-  prompt: string,
-  customInstruction: string
-): string {
+function appendCommitFailureCustomInstruction(prompt: string, customInstruction: string): string {
   const trimmedInstruction = customInstruction.trim()
   if (!trimmedInstruction) {
     return prompt

@@ -1,4 +1,4 @@
-export const SETTINGS_SEARCH_DEBOUNCE_MS = 150
+const SETTINGS_SEARCH_DEBOUNCE_MS = 150
 
 export type SettingsSearchState = {
   settingsSearchInputQuery: string

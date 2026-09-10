@@ -16,11 +16,11 @@ export function SetupCommandPreview({
       <div className="border-border/60 bg-muted/40 border">
         <div className="border-border/60 flex items-center justify-between gap-3 border-b px-4 py-2.5">
           <div className="text-muted-foreground font-mono text-[11px]">
-            {translate('auto.components.NewWorkspaceComposerCard.23bb365554', 'yiru.yaml')}
+            {translate('auto.components.NewWorkspaceComposerCard.23bb365554', 'agentstart.yaml')}
           </div>
           {headerAction}
         </div>
-        {/* Why: long yiru.yaml scripts must not grow the create dialog past the viewport. */}
+        {/* Why: long agentstart.yaml scripts must not grow the create dialog past the viewport. */}
         <pre className="scrollbar-sleek max-h-48 overflow-auto px-4 py-3 font-mono text-[12px] leading-5 break-words whitespace-pre-wrap text-emerald-700 dark:text-emerald-300/95">
           {setupConfig.command}
         </pre>

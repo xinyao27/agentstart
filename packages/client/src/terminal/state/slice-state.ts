@@ -1,16 +1,16 @@
-import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
+import type { StartupCommandDelivery } from '@agentstart/protocol/agent/launch/startup-delivery'
 import type {
   AgentProviderSessionMetadata,
   SleepingAgentLaunchConfig
-} from '@yiru/protocol/agent/session-resume'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { SetupSplitDirection } from '@yiru/protocol/settings/workspace-preferences'
+} from '@agentstart/protocol/agent/session-resume'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { SetupSplitDirection } from '@agentstart/protocol/settings/workspace-preferences'
 import type {
   TerminalLayoutSnapshot,
   WorkspaceSessionState
-} from '@yiru/protocol/workspace/session'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/workspace/session'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import type { AgentStartedTelemetry } from '~renderer/agent/started-telemetry'
 import type { CodexRestartNotice } from '~renderer/terminal/codex-restart-notice'
 import type { WorkspaceSessionHydrationOptions } from '~renderer/workspace/session-hydration-keys'
@@ -18,7 +18,7 @@ import type { WorkspaceSessionHydrationOptions } from '~renderer/workspace/sessi
 import type { AgentStatusWorktreeShutdownReason } from '../../agent/status-state/slice'
 import type { TerminalTabCloseReason, TerminalTabRetirementPlan } from './tab-retirement'
 
-export type AutomaticAgentResumeClaim = {
+type AutomaticAgentResumeClaim = {
   worktreeId: string
   launchAgent: TuiAgent
   providerSession: AgentProviderSessionMetadata
@@ -104,7 +104,7 @@ export type TerminalSlice = {
   defaultTerminalTabsAppliedByWorktreeId: Record<string, true>
   markDefaultTerminalTabsApplied: (worktreeId: string) => void
   /** True only after hydrateWorkspaceSession ran from a real load of
-   *  yiru-data.json. Guards the debounced session writer so that a crash
+   *  agentstart-data.json. Guards the debounced session writer so that a crash
    *  during early startup (catalog query / session.get /
    *  hydrateWorkspaceSession itself) cannot cause an empty in-memory state
    *  to be serialized back over the user's good data on disk.
@@ -310,6 +310,6 @@ export type TerminalSlice = {
   reconnectPersistedTerminals: (signal?: AbortSignal) => Promise<void>
 }
 
-export type HydrateWorkspaceSessionOptions = {
+type HydrateWorkspaceSessionOptions = {
   runtimeHostIdByWorkspaceSessionKey?: Record<string, ExecutionHostId>
 } & WorkspaceSessionHydrationOptions

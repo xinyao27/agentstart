@@ -1,8 +1,8 @@
-import { isTerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
+import { isTerminalLeafId } from '@agentstart/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/protocol/workspace/session'
+} from '@agentstart/protocol/workspace/session'
 import { FIRST_PANE_ID } from '~renderer/terminal-pane/pane-manager/first-pane-id'
 
 export type RuntimePaneTitleLeafResolution = {
@@ -52,20 +52,6 @@ export function resolveRuntimePaneTitleLeafId(
   return resolveRuntimePaneTitleLeafIdFromRoot(tabLayout?.root, runtimePaneId)
 }
 
-/**
- * Resolve the runtime-reported pane title for a specific layout leaf. Pane
- * title maps are keyed by runtime pane id, which only lines up with the leaf id
- * after replay-order resolution — split tabs can carry a sparse title map, so a
- * lone background title must not be attributed to an unrelated leaf.
- */
-export function resolveRuntimePaneTitleForLeaf(
-  tabLayout: { root?: TerminalLayoutSnapshot['root'] } | undefined,
-  paneTitles: Record<number, string> | undefined,
-  leafId: string
-): string | null {
-  return resolveRuntimePaneTitleLeafResolution(tabLayout, paneTitles, leafId).title
-}
-
 export function resolveRuntimePaneTitleLeafResolution(
   tabLayout: { root?: TerminalLayoutSnapshot['root'] } | undefined,
   paneTitles: Record<number, string> | undefined,
@@ -107,7 +93,7 @@ export function resolveRuntimePaneTitleLeafResolution(
   return { title: null, hasAnyPaneTitle: hasOnePaneTitle }
 }
 
-export function resolveRuntimePaneTitleLeafIdFromRoot(
+function resolveRuntimePaneTitleLeafIdFromRoot(
   root: TerminalPaneLayoutNode | null | undefined,
   runtimePaneId: string
 ): string | null {

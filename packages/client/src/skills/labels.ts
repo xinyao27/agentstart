@@ -1,4 +1,4 @@
-import type { SkillProvider, SkillSourceKind } from '@yiru/protocol'
+import type { SkillProvider, SkillSourceKind } from '@agentstart/protocol'
 
 export const providerLabels: Record<SkillProvider, string> = {
   codex: 'Codex',

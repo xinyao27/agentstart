@@ -17,7 +17,7 @@
 // user's clipboard. Callers must gate on the user-opt-in setting
 // `terminalAllowOsc52Clipboard` before invoking the handler.
 
-export type Osc52ParseResult =
+type Osc52ParseResult =
   | { kind: 'write'; selections: string; text: string }
   | { kind: 'query' }
   | { kind: 'invalid'; reason: string }
@@ -50,7 +50,7 @@ export function handleOsc52ClipboardRequest(
   return true
 }
 
-export function parseOsc52(data: string): Osc52ParseResult {
+function parseOsc52(data: string): Osc52ParseResult {
   const semi = data.indexOf(';')
   if (semi === -1) {
     return { kind: 'invalid', reason: 'missing selection/data separator' }

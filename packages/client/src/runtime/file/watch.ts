@@ -1,5 +1,5 @@
-import type { FileWatchMessage } from '@yiru/protocol'
-import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
+import type { FileWatchMessage } from '@agentstart/protocol'
+import type { FsChangedPayload } from '@agentstart/protocol/files/watch-values'
 
 import { requireFilesTarget } from '../files-target'
 import { getActiveRuntimeTarget } from '../rpc-client'

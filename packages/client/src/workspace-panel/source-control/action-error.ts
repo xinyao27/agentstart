@@ -1,12 +1,12 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 
 import type { RemoteOpKind } from './primary-action'
 
-export type AbortActionErrorKind = 'abort_merge' | 'abort_rebase'
-export type SourceControlActionErrorKind = RemoteOpKind | AbortActionErrorKind
+type AbortActionErrorKind = 'abort_merge' | 'abort_rebase'
+type SourceControlActionErrorKind = RemoteOpKind | AbortActionErrorKind
 export type SourceControlRecoveryStatusEntry = Pick<GitStatusEntry, 'path' | 'status' | 'area'>
 
-export const SOURCE_CONTROL_ACTION_ERROR_ENTRY_SNAPSHOT_LIMIT = 120
+const SOURCE_CONTROL_ACTION_ERROR_ENTRY_SNAPSHOT_LIMIT = 120
 
 export type SourceControlActionError = {
   kind: SourceControlActionErrorKind

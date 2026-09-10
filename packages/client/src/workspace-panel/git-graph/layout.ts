@@ -1,4 +1,4 @@
-import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
+import type { GitHistoryItem } from '@agentstart/protocol/git/history-types'
 
 import { makeEdge, makeOffPageEdge, type GitGraphRowGap, type LayoutContext } from './layout-path'
 import { GIT_GRAPH_COLORS } from './palette'
@@ -16,7 +16,7 @@ export type GitGraphGrid = { x: number; y: number; offsetX: number; offsetY: num
 
 export const GIT_GRAPH_DEFAULT_GRID: GitGraphGrid = { x: 16, y: 24, offsetX: 16, offsetY: 12 }
 
-export type GitGraphVertex = {
+type GitGraphVertex = {
   commitId: string
   row: number
   column: number

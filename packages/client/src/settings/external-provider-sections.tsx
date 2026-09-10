@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useRef } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { GeminiIcon, OpenCodeGoIcon } from '~renderer/status-bar/icons'
@@ -46,7 +46,7 @@ export function GeminiAccountsSection({
         )}
         description={translate(
           'auto.components.settings.AccountsPane.d676c41fc6',
-          'Extracts OAuth credentials from your local Gemini CLI installation to authenticate with Google. This uses credentials issued to the Gemini CLI app, not Yiru. May break if Google updates the CLI. Use at your own risk.'
+          'Extracts OAuth credentials from your local Gemini CLI installation to authenticate with Google. This uses credentials issued to the Gemini CLI app, not AgentStart. May break if Google updates the CLI. Use at your own risk.'
         )}
         keywords={[
           'gemini',
@@ -69,7 +69,7 @@ export function GeminiAccountsSection({
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.settings.AccountsPane.c2aee76420',
-              'Extracts OAuth credentials from your local Gemini CLI installation to authenticate with Google for {{value0}}. This uses credentials issued to the Gemini CLI app, not Yiru. May break if Google updates the CLI. Use at your own risk.',
+              'Extracts OAuth credentials from your local Gemini CLI installation to authenticate with Google for {{value0}}. This uses credentials issued to the Gemini CLI app, not AgentStart. May break if Google updates the CLI. Use at your own risk.',
               { value0: localRuntimeSentenceLabel }
             )}
           </p>

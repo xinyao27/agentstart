@@ -17,25 +17,12 @@ import { createGitHubRefreshTriggerActions } from './refresh-trigger-actions'
 import type { GitHubSlice } from './store-contract'
 import { createGitHubWorkItemActions } from './work-item-actions'
 
-export type {
-  CacheEntry,
-  GitHubSlice,
-  PRRefreshState,
-  PRRefreshStateClearToken
-} from './store-contract'
+export type { GitHubSlice, PRRefreshState } from './store-contract'
 export {
   buildGitHubPRRefreshStateClearToken,
-  getEffectiveGitHubPRRefreshState,
   getGitHubPRRefreshStateExpiryAt
 } from './refresh-state'
-export {
-  mergePRCommentIntoList,
-  prChecksCacheSuffix,
-  prCommentsCacheSuffix,
-  workItemsCacheKey
-} from './cache-policy'
-export { shouldClearBranchMismatchedLinkedOpenPR } from './linked-pr-policy'
-
+export { mergePRCommentIntoList, prChecksCacheSuffix, prCommentsCacheSuffix } from './cache-policy'
 export const createGitHubSlice: StateCreator<AppState, [], [], GitHubSlice> = (set, get) => ({
   prCache: {},
   checksCache: {},

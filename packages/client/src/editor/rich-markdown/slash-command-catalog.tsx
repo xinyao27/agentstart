@@ -20,13 +20,7 @@ import {
   type SlashCommand
 } from './slash-command-primitives'
 
-export type {
-  SlashCommand,
-  SlashCommandGroup,
-  SlashCommandIcon,
-  SlashCommandId,
-  SlashMenuState
-} from './slash-command-primitives'
+export type { SlashCommand, SlashMenuState } from './slash-command-primitives'
 
 export const slashCommands: SlashCommand[] = [
   ...headingSlashCommands,

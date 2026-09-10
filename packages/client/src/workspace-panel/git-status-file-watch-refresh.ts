@@ -1,9 +1,12 @@
-import type { FsChangedPayload } from '@yiru/protocol/files/watch-values'
-import { normalizeRuntimePathForComparison, relativePathInsideRoot } from '@yiru/protocol/host/path'
+import type { FsChangedPayload } from '@agentstart/protocol/files/watch-values'
+import {
+  normalizeRuntimePathForComparison,
+  relativePathInsideRoot
+} from '@agentstart/protocol/host/path'
 import type {
   ActiveRightSidebarTab,
   RightSidebarExplorerView
-} from '@yiru/protocol/settings/ui-state'
+} from '@agentstart/protocol/settings/ui-state'
 import { useEffect } from 'react'
 import { isWindowVisible } from '~renderer/application-shell/window-visibility-interval'
 import type { OpenFile } from '~renderer/editor/state'
@@ -11,7 +14,7 @@ import { useEventCallback } from '~renderer/react/use-event-callback'
 import { shouldPollActiveGitStatus } from '~renderer/source-control/macos-data-access'
 import { useAppStore } from '~renderer/store/state'
 import {
-  YIRU_WORKTREE_FILE_CHANGE_EVENT,
+  AGENTSTART_WORKTREE_FILE_CHANGE_EVENT,
   type WorktreeFileChangeEventDetail
 } from '~renderer/worktree/file-change-event'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
@@ -33,7 +36,7 @@ type UseGitStatusFileWatchRefreshParams = {
   worktreePath: string | null
 }
 
-export function shouldRefreshGitStatusForFileChange(
+function shouldRefreshGitStatusForFileChange(
   payload: FsChangedPayload,
   worktreePath: string
 ): boolean {
@@ -126,13 +129,16 @@ export function useGitStatusFileWatchRefresh({
         scheduleRefresh()
       }
     }
-    window.addEventListener(YIRU_WORKTREE_FILE_CHANGE_EVENT, handleFsChanged as EventListener)
+    window.addEventListener(AGENTSTART_WORKTREE_FILE_CHANGE_EVENT, handleFsChanged as EventListener)
 
     return () => {
       if (refreshTimer) {
         clearTimeout(refreshTimer)
       }
-      window.removeEventListener(YIRU_WORKTREE_FILE_CHANGE_EVENT, handleFsChanged as EventListener)
+      window.removeEventListener(
+        AGENTSTART_WORKTREE_FILE_CHANGE_EVENT,
+        handleFsChanged as EventListener
+      )
     }
   }, [activeRuntimeEnvironmentId, refreshStatus, shouldSubscribe, worktreePath])
 }

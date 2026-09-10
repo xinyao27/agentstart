@@ -2,11 +2,11 @@ import type {
   ThemeGradientDot,
   ThemeGradientHarmony,
   ThemeGradientTheme
-} from '@yiru/protocol/settings/theme-gradient'
+} from '@agentstart/protocol/settings/theme-gradient'
 
 import { hslToRgb, type Rgb } from './color-space'
 
-export const THEME_GRADIENT_HARMONY_ANGLES: Record<ThemeGradientHarmony, readonly number[]> = {
+const THEME_GRADIENT_HARMONY_ANGLES: Record<ThemeGradientHarmony, readonly number[]> = {
   floating: [],
   complementary: [180],
   singleAnalogous: [310],

@@ -2,9 +2,9 @@ mod protocol;
 
 use std::collections::BTreeMap;
 
+use agentstart_protocol::protocol::v1::Status;
 use serde_json::{Map, Value, json};
 use sha2::{Digest, Sha256};
-use yiru_protocol::protocol::v1::Status;
 
 use crate::orchestration::{OrchestrationAuthority, OrchestrationError};
 
@@ -466,7 +466,7 @@ fn migration_fence(reason: &'static str) -> OrchestrationError {
             "guide": { "topic": "orchestration", "full": true },
             "nextCommandArgs": ["skills", "get", "orchestration", "--full"],
             "nextSteps": [
-                "Using this same Yiru CLI executable, run: skills get orchestration --full",
+                "Using this same AgentStart CLI executable, run: skills get orchestration --full",
                 "Read the returned guide completely and do not retry the previous command unchanged."
             ],
         }),
@@ -522,8 +522,8 @@ fn attach_mutation(mut result: Value, request_id: &str, replayed: bool) -> Value
 // Why: retargets the legacy JSON dispatch()'s HTTP-shaped error_status table (401/404/409/501/400)
 // onto the protobuf Status codes protocol/*.rs handlers return, so an OrchestrationError domain
 // code keeps mapping to the same class of failure across both transports.
-pub(super) fn protocol_status_code(code: &str) -> yiru_protocol::protocol::v1::StatusCode {
-    use yiru_protocol::protocol::v1::StatusCode;
+pub(super) fn protocol_status_code(code: &str) -> agentstart_protocol::protocol::v1::StatusCode {
+    use agentstart_protocol::protocol::v1::StatusCode;
     match code {
         "authentication_required" => StatusCode::Unauthenticated,
         "method_not_found"

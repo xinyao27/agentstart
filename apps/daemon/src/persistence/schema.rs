@@ -2,7 +2,7 @@ use rusqlite::Connection;
 
 use super::database::DatabaseError;
 
-pub(super) const DATABASE_SCHEMA_VERSION: i64 = 22;
+pub(super) const DATABASE_SCHEMA_VERSION: i64 = 23;
 
 const RUST_OWNED_SCHEMA_SQL: &str = r#"
 CREATE TABLE IF NOT EXISTS worktree_metadata (
@@ -39,6 +39,10 @@ CREATE TABLE IF NOT EXISTS project_repo_state (
   external_worktree_visibility_legacy INTEGER NOT NULL CHECK(
     external_worktree_visibility_legacy IN (0, 1)
   )
+);
+CREATE TABLE IF NOT EXISTS legacy_import (
+  key TEXT PRIMARY KEY,
+  completed_at INTEGER NOT NULL
 );
 "#;
 

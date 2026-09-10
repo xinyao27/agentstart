@@ -14,7 +14,7 @@ import type { OrderedOutputSequence } from './ordered-output-sequence'
 import type { PtyTransport } from './transport-types'
 
 const RESTORE_UNAVAILABLE_WARNING =
-  '\x18\x1b[0m\r\n[Yiru skipped hidden terminal output because main recovery was unavailable.]\r\n'
+  '\x18\x1b[0m\r\n[AgentStart skipped hidden terminal output because main recovery was unavailable.]\r\n'
 
 type HiddenOutputRestoreSetupOptions = {
   pane: ManagedPane

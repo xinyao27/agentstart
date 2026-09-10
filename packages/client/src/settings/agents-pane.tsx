@@ -1,15 +1,18 @@
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/protocol/agent/launch-defaults'
+} from '@agentstart/protocol/agent/launch-defaults'
 import {
   applyAgentPermissionMode,
   resolveAgentPermissionModeSummary,
   type AgentPermissionMode
-} from '@yiru/protocol/agent/launch/permissions'
-import { getTuiAgentDefaultArgs, getTuiAgentDefaultEnv } from '@yiru/protocol/agent/launch/settings'
-import { isTuiAgentEnabled, normalizeDisabledTuiAgents } from '@yiru/protocol/agent/selection'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+} from '@agentstart/protocol/agent/launch/permissions'
+import {
+  getTuiAgentDefaultArgs,
+  getTuiAgentDefaultEnv
+} from '@agentstart/protocol/agent/launch/settings'
+import { isTuiAgentEnabled, normalizeDisabledTuiAgents } from '@agentstart/protocol/agent/selection'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { getAgentCatalog, AgentIcon } from '~renderer/agent/catalog'
 import { useDetectedAgents } from '~renderer/agent/use-detected'
 import { translate } from '~renderer/i18n/i18n'
@@ -30,15 +33,6 @@ import type { AgentsPaneProps } from './agents-pane-types'
 import { buildCodexSessionSourceHomeControl } from './codex-session-source-home-control'
 import { SettingsBadge, SettingsSubsectionHeader } from './form-controls'
 import { getSettingOwnershipSummary } from './setting-ownership'
-
-export { getAgentsPaneSearchEntries } from './agents-search'
-export {
-  buildAgentAvailabilitySettingsUpdate,
-  createAgentAvailabilityUpdateQueue,
-  AgentAvailabilityControl
-} from './agent-availability'
-export { AgentPermissionsSetting } from './agent-permissions-setting'
-export { AgentGeneratedTabTitlesSetting, AgentStatusHooksSetting } from './agent-status-settings'
 
 type DefaultAgentPillProps = {
   active: boolean
@@ -77,7 +71,7 @@ export function AgentsPane({
   const { detectedIds: detectedList, isRefreshing, refresh } = useDetectedAgents()
   // Why: refresh re-spawns the user's login shell to re-capture PATH
   // (preflight:refreshAgents on the main side). This handles the
-  // "installed a new CLI, Yiru doesn't see it yet" case without a restart.
+  // "installed a new CLI, AgentStart doesn't see it yet" case without a restart.
   const handleRefresh = (): void => {
     void refresh()
   }
@@ -345,7 +339,7 @@ export function AgentsPane({
       )}
 
       {detectedIds === null && (
-        <div className="border-border/50 text-muted-foreground flex items-center justify-center border border-dashed py-6 text-sm">
+        <div className="border-border/50 text-muted-foreground flex items-center justify-center rounded-md border border-dashed py-6 text-sm">
           {translate(
             'auto.components.settings.AgentsPane.d83834f5e6',
             'Detecting installed agents…'

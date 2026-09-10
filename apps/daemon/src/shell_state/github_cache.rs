@@ -8,7 +8,7 @@ use thiserror::Error;
 
 use crate::atomic_file_replace;
 
-const FILE_NAME: &str = "yiru-github-cache.json";
+const FILE_NAME: &str = "agentstart-github-cache.json";
 const MAX_FILE_BYTES: u64 = 16 * 1024 * 1024;
 const MAX_ENTRIES: usize = 10_000;
 const MAX_KEY_BYTES: usize = 2_048;

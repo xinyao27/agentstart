@@ -21,10 +21,8 @@ import {
   ShellOnboardingServiceUpdateRequestSchema,
   ShellOnboardingStateSchema,
   type ShellCacheJsonValue
-} from '../generated/yiru/runtime/v1/shell_state_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_state_pb.js'
 import {
-  SHELL_CACHE_PROTOCOL_CAPABILITY,
-  SHELL_ONBOARDING_PROTOCOL_CAPABILITY,
   shellCacheGitHubCache,
   shellOnboardingState,
   type ShellCacheGitHubCacheValue,
@@ -33,8 +31,6 @@ import {
   type ShellOnboardingStateValue
 } from './shell-state-values.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
-
-export { SHELL_CACHE_PROTOCOL_CAPABILITY, SHELL_ONBOARDING_PROTOCOL_CAPABILITY }
 
 const GET_GITHUB_PROCEDURE = `/${ShellCacheService.typeName}/${ShellCacheService.method.getGitHub.name}`
 const SET_GITHUB_PROCEDURE = `/${ShellCacheService.typeName}/${ShellCacheService.method.setGitHub.name}`

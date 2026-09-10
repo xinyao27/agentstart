@@ -1,11 +1,11 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::shell_events_service_event::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::shell_events_service_event::Event;
+use agentstart_protocol::runtime::v1::{
     ShellEventsCursor, ShellEventsKeybindingsChanged, ShellEventsReady, ShellEventsResync,
     ShellEventsServiceEvent, ShellEventsServiceSubscribeRequest, ShellEventsStarNagHide,
     ShellEventsStarNagShow, ShellEventsStarNagSurface,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::rpc::keybindings::protocol_values::protocol_snapshot;
 use crate::rpc::protocol_call::ProtocolCallContext;

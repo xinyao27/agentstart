@@ -1,5 +1,5 @@
-import { agentPhaseFromStatus, type AgentPhase } from '@yiru/protocol/agent/phase'
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import { agentPhaseFromStatus, type AgentPhase } from '@agentstart/protocol/agent/phase'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
 import { useAppStore } from '~renderer/store/state'
 
 const PHASE_PRIORITY: readonly AgentPhase[] = [
@@ -9,7 +9,7 @@ const PHASE_PRIORITY: readonly AgentPhase[] = [
   'complete'
 ]
 
-export type ActiveAgentPresence = {
+type ActiveAgentPresence = {
   phase: AgentPhase
   projectId: string
   terminal: string | null

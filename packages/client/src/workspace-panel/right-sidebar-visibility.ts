@@ -1,4 +1,4 @@
-import { isFolderRepo } from '@yiru/protocol/project/repository'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
 import type { AppState } from '~renderer/store/types'
 
 type ActiveView = AppState['activeView']
@@ -11,7 +11,7 @@ const RIGHT_SIDEBAR_SUPPRESSED_VIEWS = new Set<ActiveView>([
   'mobile'
 ])
 
-export function canShowRightSidebarForView(activeView: ActiveView): boolean {
+function canShowRightSidebarForView(activeView: ActiveView): boolean {
   return !RIGHT_SIDEBAR_SUPPRESSED_VIEWS.has(activeView)
 }
 

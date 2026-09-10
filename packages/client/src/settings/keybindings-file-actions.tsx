@@ -75,7 +75,7 @@ export function KeybindingsFileActions(): React.JSX.Element {
   }
 
   return (
-    <div className="border-border bg-background inline-flex shrink-0 overflow-hidden border">
+    <div className="border-border bg-background inline-flex shrink-0 overflow-hidden rounded-md border">
       <Button
         type="button"
         variant="ghost"

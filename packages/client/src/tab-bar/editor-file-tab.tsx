@@ -1,5 +1,5 @@
+import type { GitFileStatus } from '@agentstart/protocol/git/status-types'
 import { useSortable } from '@dnd-kit/sortable'
-import type { GitFileStatus } from '@yiru/protocol/git/status-types'
 import { createElement, useEffect, useRef, useState } from 'react'
 import { getEditorDisplayLabel } from '~renderer/editor/labels'
 import { canOpenMarkdownPreview } from '~renderer/editor/markdown-preview/controls'

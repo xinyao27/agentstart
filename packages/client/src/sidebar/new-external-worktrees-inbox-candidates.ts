@@ -1,11 +1,11 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
-import { getNewExternalWorktreeInboxWorktrees } from '@yiru/protocol/worktree/external/inbox'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
+import { getNewExternalWorktreeInboxWorktrees } from '@agentstart/protocol/worktree/external/inbox'
 import type {
   DetectedWorktree,
   DetectedWorktreeListResult,
   Worktree
-} from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/worktree/model'
 
 import type { NewExternalWorktreesInboxCandidate } from './worktree-list/groups'
 

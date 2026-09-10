@@ -19,9 +19,9 @@ export function WorktreeSidebarDropIndicator({
       )}
       style={{ top: `${y}px` }}
     >
-      <span className="bg-sidebar-ring size-1.5 shrink-0" />
-      <span className="bg-sidebar-ring h-0.5 flex-1" />
-      <span className="bg-sidebar-ring size-1.5 shrink-0" />
+      <span className="bg-sidebar-ring size-1.5 shrink-0 rounded-full" />
+      <span className="bg-sidebar-ring h-0.5 flex-1 rounded-full" />
+      <span className="bg-sidebar-ring size-1.5 shrink-0 rounded-full" />
     </div>
   )
 }

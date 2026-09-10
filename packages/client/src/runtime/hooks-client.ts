@@ -1,6 +1,6 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { AgentStartHooks } from '@agentstart/protocol/worktree/hooks'
 import { setupImportCandidate } from '~renderer/setup/import-candidate'
 import type { SetupScriptImportCandidate } from '~renderer/setup/import-candidate'
 
@@ -10,7 +10,7 @@ import { getActiveRuntimeTarget } from './rpc-client'
 export type HookCheckResult = {
   status?: 'ok' | 'error'
   hasHooks: boolean
-  hooks: YiruHooks | null
+  hooks: AgentStartHooks | null
   mayNeedUpdate: boolean
 }
 

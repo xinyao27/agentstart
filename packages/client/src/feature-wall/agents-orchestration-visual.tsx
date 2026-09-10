@@ -1,4 +1,4 @@
-import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { AgentsStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import type { JSX } from 'react'
 import { cn } from '~renderer/ui/class-names'
 

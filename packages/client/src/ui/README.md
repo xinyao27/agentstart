@@ -1,6 +1,6 @@
-# Yiru UI Component Library
+# AgentStart UI Component Library
 
-This catalog defines what belongs in Yiru's reusable UI layer and where higher-level UI should live. [`docs/style-guide.md`](../../../../docs/style-guide.md) is the binding browser visual contract.
+This catalog defines what belongs in AgentStart's reusable UI layer and where higher-level UI should live. [`docs/style-guide.md`](../../../../docs/style-guide.md) is the binding browser visual contract.
 
 **First principle (from the style guide):** screens must reuse these primitives before writing native controls or hand-rolled class recipes. If a primitive is close but missing a size or variant, extend the primitive here — do not copy its styles into call sites.
 
@@ -13,7 +13,7 @@ This catalog defines what belongs in Yiru's reusable UI layer and where higher-l
 | Domain UI | The nearest feature folder or domain-named module under `components/` | Product terminology, domain data, composed workflows | New visual foundations that belong in a primitive |
 | Screens | Feature folders in `src/` | Layout, data loading, copy, orchestration | Reimplementations of primitive interaction behavior; restyling primitives via color/size className overrides |
 
-A primitive should remain useful if Yiru's domain types are deleted. A searchable repository picker therefore belongs under `components/repo/`, even though it composes `Popover` and `Command` from the primitive layer.
+A primitive should remain useful if AgentStart's domain types are deleted. A searchable repository picker therefore belongs under `components/repo/`, even though it composes `Popover` and `Command` from the primitive layer.
 
 Decision order for new UI: reuse a primitive → extend that primitive's CVA → domain composite → colocated host CSS. Never invent a generic `helpers` / `shared-styles` dump.
 
@@ -26,7 +26,7 @@ The supported general-purpose vocabulary is the default shadcn set. Use those ro
 - `text-green-700 dark:text-green-300`, not a success token.
 - `border-border` plus an opaque surface, not an elevation variable.
 
-Custom variables are reserved for stable product-domain semantics such as git decorations and embedded editor surfaces. CSS-only variables stay outside `@theme inline`. Nothing in CI catches a promoted exception, a reintroduced native form/action tag, a dead `rounded-*`, a black/white alpha wash, or a private style-module import from feature code: both rules are review-enforced. See `docs/style-guide.md`.
+Custom variables are reserved for stable product-domain semantics such as git decorations and embedded editor surfaces. CSS-only variables stay outside `@theme inline`. Nothing in CI catches a promoted exception, a reintroduced native form/action tag, a black/white alpha wash, or a private style-module import from feature code: these rules are review-enforced. See `docs/style-guide.md`.
 
 ## Primitive catalog
 

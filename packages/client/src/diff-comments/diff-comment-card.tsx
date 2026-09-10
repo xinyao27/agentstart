@@ -142,21 +142,21 @@ export function DiffCommentCard({
   }
 
   return (
-    <div className="yiru-diff-comment-card">
-      <div className="yiru-diff-comment-content-col">
+    <div className="agentstart-diff-comment-card">
+      <div className="agentstart-diff-comment-content-col">
         {/* Header Row */}
-        <div className="yiru-diff-comment-header">
-          <div className="yiru-diff-comment-meta-group">{metaText}</div>
+        <div className="agentstart-diff-comment-header">
+          <div className="agentstart-diff-comment-meta-group">{metaText}</div>
 
           {/* Action buttons pill (only shown if not editing) */}
           {!editing && (
             <div
-              className="yiru-diff-comment-actions-pill"
+              className="agentstart-diff-comment-actions-pill"
               onMouseDown={(ev) => ev.stopPropagation()}
             >
               {headerActions}
               {headerActions && (url || onSubmitEdit || onDelete) && (
-                <span className="yiru-diff-comment-pill-divider" />
+                <span className="agentstart-diff-comment-pill-divider" />
               )}
               {url && (
                 <>
@@ -164,7 +164,7 @@ export function DiffCommentCard({
                     variant="ghost"
                     size="xs"
                     type="button"
-                    className="yiru-diff-comment-pill-btn focus-visible:bg-accent h-auto border-0 p-0"
+                    className="agentstart-diff-comment-pill-btn focus-visible:bg-accent h-auto border-0 p-0"
                     title={translate(
                       'auto.components.diff.comments.DiffCommentCard.508ee678a5',
                       'Open in browser'
@@ -182,7 +182,7 @@ export function DiffCommentCard({
                     {translate('auto.components.diff.comments.DiffCommentCard.6978871a3d', 'Open')}
                   </Button>
                   {(onSubmitEdit || onDelete) && (
-                    <span className="yiru-diff-comment-pill-divider" />
+                    <span className="agentstart-diff-comment-pill-divider" />
                   )}
                 </>
               )}
@@ -192,7 +192,7 @@ export function DiffCommentCard({
                     variant="ghost"
                     size="xs"
                     type="button"
-                    className="yiru-diff-comment-pill-btn focus-visible:bg-accent h-auto border-0 p-0"
+                    className="agentstart-diff-comment-pill-btn focus-visible:bg-accent h-auto border-0 p-0"
                     title={translate(
                       'auto.components.diff.comments.DiffCommentCard.cad3384faa',
                       'Edit note'
@@ -209,7 +209,7 @@ export function DiffCommentCard({
                   >
                     <Pencil className="size-3" />
                   </Button>
-                  {onDelete && <span className="yiru-diff-comment-pill-divider" />}
+                  {onDelete && <span className="agentstart-diff-comment-pill-divider" />}
                 </>
               )}
               {onDelete && (
@@ -217,7 +217,7 @@ export function DiffCommentCard({
                   variant="ghost"
                   size="xs"
                   type="button"
-                  className="yiru-diff-comment-pill-btn yiru-diff-comment-pill-btn-danger focus-visible:bg-accent h-auto border-0 p-0"
+                  className="agentstart-diff-comment-pill-btn agentstart-diff-comment-pill-btn-danger focus-visible:bg-accent h-auto border-0 p-0"
                   title={translate(
                     'auto.components.diff.comments.DiffCommentCard.cce596969e',
                     'Delete note'
@@ -241,8 +241,8 @@ export function DiffCommentCard({
 
         {/* Quote Block */}
         {quote ? (
-          <div className="yiru-diff-comment-quote">
-            <div className="yiru-diff-comment-quote-text">{quote}</div>
+          <div className="agentstart-diff-comment-quote">
+            <div className="agentstart-diff-comment-quote-text">{quote}</div>
           </div>
         ) : null}
 
@@ -251,7 +251,7 @@ export function DiffCommentCard({
           <div className="mt-1 flex flex-col gap-2">
             <Textarea
               ref={textareaRef}
-              className="yiru-diff-comment-popover-textarea focus-visible:border-ring outline-none"
+              className="agentstart-diff-comment-popover-textarea focus-visible:border-ring outline-none"
               value={draft}
               onChange={(e) => {
                 setDraft(e.target.value)
@@ -273,7 +273,7 @@ export function DiffCommentCard({
               }}
               rows={3}
             />
-            <div className="yiru-diff-comment-popover-footer">
+            <div className="agentstart-diff-comment-popover-footer">
               <Button variant="ghost" size="sm" onClick={handleCancel} disabled={submitting}>
                 {translate('auto.components.diff.comments.DiffCommentCard.0203bed775', 'Cancel')}
               </Button>
@@ -296,7 +296,7 @@ export function DiffCommentCard({
             </div>
           </div>
         ) : (
-          <div className="yiru-diff-comment-body">{body}</div>
+          <div className="agentstart-diff-comment-body">{body}</div>
         )}
       </div>
     </div>

@@ -1,10 +1,10 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ShellRepoHostReorderStatus,
   type ShellRepoHostServicePickedResponse,
   type ShellRepoHostServiceRemovedForHostResponse,
   type ShellRepoHostServiceReorderedForHostResponse
-} from '../generated/yiru/runtime/v1/shell_repo_host_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_repo_host_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const SHELL_REPO_HOST_PROTOCOL_CAPABILITY = 'shell.repoHost.protobuf.v1' as const

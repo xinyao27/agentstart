@@ -1,6 +1,6 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
-import { normalizeSourceControlGroupOrder } from '@yiru/protocol/source-control/group-order'
-import type { SourceControlGroupOrder } from '@yiru/protocol/source-control/group-order'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
+import { normalizeSourceControlGroupOrder } from '@agentstart/protocol/source-control/group-order'
+import type { SourceControlGroupOrder } from '@agentstart/protocol/source-control/group-order'
 
 export const SOURCE_CONTROL_AREAS = ['unstaged', 'staged', 'untracked'] as const
 export type SourceControlSectionArea = (typeof SOURCE_CONTROL_AREAS)[number]
@@ -14,7 +14,7 @@ export type SourceControlDisplaySection = {
   items: GitStatusEntry[]
 }
 
-export type SourceControlConflictReviewEntry = {
+type SourceControlConflictReviewEntry = {
   path: string
   conflictKind: NonNullable<GitStatusEntry['conflictKind']>
 }
@@ -35,11 +35,11 @@ export function resolveSourceControlGroupOrder(
   return ORDER_BY_PRESET[normalizeSourceControlGroupOrder(value)]
 }
 
-export function isPinnedConflictEntry(entry: GitStatusEntry): boolean {
+function isPinnedConflictEntry(entry: GitStatusEntry): boolean {
   return entry.conflictStatus === 'unresolved' || entry.conflictStatus === 'resolved_locally'
 }
 
-export function getConflictReviewEntries(
+function getConflictReviewEntries(
   entries: readonly GitStatusEntry[]
 ): SourceControlConflictReviewEntry[] {
   return entries
@@ -72,12 +72,12 @@ export function getSourceControlSectionViewAction(
   return { kind: 'combined-diff', area: section.area, entries: section.items }
 }
 
-export type SplitSourceControlGroups = {
+type SplitSourceControlGroups = {
   pinnedConflicts: GitStatusEntry[]
   normalGroups: SourceControlEntryGroups
 }
 
-export function splitPinnedSourceControlConflicts(
+function splitPinnedSourceControlConflicts(
   groups: SourceControlEntryGroups
 ): SplitSourceControlGroups {
   const pinnedConflicts = SOURCE_CONTROL_AREAS.flatMap((area) =>
@@ -98,7 +98,7 @@ export function splitPinnedSourceControlConflicts(
   }
 }
 
-export function buildSourceControlDisplaySectionsFromSplit(
+function buildSourceControlDisplaySectionsFromSplit(
   split: SplitSourceControlGroups,
   order: readonly SourceControlSectionArea[]
 ): SourceControlDisplaySection[] {

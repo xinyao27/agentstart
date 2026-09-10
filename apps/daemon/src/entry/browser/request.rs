@@ -1,11 +1,11 @@
 use std::time::Duration;
 
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1BrowserCliServiceResolveTarget as ResolveTargetMethod,
-    YiruRuntimeV1BrowserCliServiceResolveUpload as ResolveUploadMethod,
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1BrowserCliServiceResolveTarget as ResolveTargetMethod,
+    AgentStartRuntimeV1BrowserCliServiceResolveUpload as ResolveUploadMethod,
 };
-use yiru_protocol::runtime::v1 as browser;
-use yiru_protocol::runtime::v1::execute_request::Command;
+use agentstart_protocol::runtime::v1 as browser;
+use agentstart_protocol::runtime::v1::execute_request::Command;
 
 use crate::transport::LocalProtocolClient;
 

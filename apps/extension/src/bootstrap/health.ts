@@ -20,7 +20,7 @@ export async function verifyRuntimeHealth(
   } catch {
     throw new Error(
       LOOPBACK_HOSTS.has(health.hostname.toLowerCase())
-        ? 'onboarding:loopback-blocked'
+        ? 'onboarding:loopback-check-failed'
         : 'onboarding:daemon-stopped'
     )
   }

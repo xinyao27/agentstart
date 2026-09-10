@@ -1,8 +1,11 @@
-import { getTuiAgentDetectCommands, TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
+import {
+  getTuiAgentDetectCommands,
+  TUI_AGENT_CONFIG
+} from '@agentstart/protocol/agent/launch/config'
 
 const TERMINAL_STARTUP_COMMAND_EXTENSION_RE = /\.(?:exe|cmd|bat|ps1)$/i
 // Why: startup commands can carry pasted scripts; classifier work should stay bounded.
-export const TERMINAL_STARTUP_COMMAND_TOKEN_MAX_CHARS = 4096
+const TERMINAL_STARTUP_COMMAND_TOKEN_MAX_CHARS = 4096
 
 const KNOWN_TUI_AGENT_EXECUTABLES = new Set<string>()
 
@@ -19,7 +22,7 @@ for (const config of Object.values(TUI_AGENT_CONFIG)) {
   }
 }
 
-export function getTerminalStartupCommandToken(command: string): string {
+function getTerminalStartupCommandToken(command: string): string {
   const scanLimit = Math.min(command.length, TERMINAL_STARTUP_COMMAND_TOKEN_MAX_CHARS)
   let index = 0
 

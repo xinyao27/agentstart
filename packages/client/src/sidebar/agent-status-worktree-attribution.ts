@@ -1,14 +1,15 @@
 import type {
   AgentStatusEntry,
   AgentStatusOrchestrationContext
-} from '@yiru/protocol/agent/status-records'
-import { parseLegacyNumericPaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+} from '@agentstart/protocol/agent/status-records'
+import {
+  parseLegacyNumericPaneKey,
+  parsePaneKey
+} from '@agentstart/protocol/terminal/pane-identity'
 
-export type AgentStatusPaneIdentity = { tabId: string; paneId: string }
+type AgentStatusPaneIdentity = { tabId: string; paneId: string }
 
-export function parseAgentStatusPaneIdentity(
-  paneKey: string | undefined
-): AgentStatusPaneIdentity | null {
+function parseAgentStatusPaneIdentity(paneKey: string | undefined): AgentStatusPaneIdentity | null {
   if (!paneKey) {
     return null
   }

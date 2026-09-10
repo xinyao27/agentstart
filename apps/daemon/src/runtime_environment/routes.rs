@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex, MutexGuard};
 
+use agentstart_protocol::method_metadata::{MethodMetadata, UnaryMethod};
 use tokio::sync::Mutex as AsyncMutex;
-use yiru_protocol::method_metadata::{MethodMetadata, UnaryMethod};
 
 use super::client;
 use super::records::RuntimeEnvironmentProfile;

@@ -1,9 +1,9 @@
-import type { GitHubRepositoryIdentity } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { PRCheckDetail } from '@yiru/protocol/hosted-review/review-types'
-import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { GitHubRepositoryIdentity } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { PRCheckDetail } from '@agentstart/protocol/hosted-review/review-types'
+import type { HostedReviewInfo } from '@agentstart/protocol/hosted-review/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { getWorktreeGitIdentityDisplay } from '~renderer/worktree/git-identity-display'
 
 import {

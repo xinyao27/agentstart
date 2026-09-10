@@ -19,7 +19,7 @@ use crate::ui::UiAuthority;
 
 use session::{PromptMode, PromptSession, PromptSource};
 
-// Why not named `StarNagPromptMode`: the generated wire type `yiru_protocol::runtime::v1::
+// Why not named `StarNagPromptMode`: the generated wire type `agentstart_protocol::runtime::v1::
 // StarNagPromptMode` already carries that name, and `crate::rpc::star_nag::protocol` needs both
 // this domain enum and the wire enum in scope at once. This type is already namespaced under
 // `crate::star_nag::`, so it does not need the prefix.
@@ -58,7 +58,7 @@ struct State {
     pending_onboarding_completed: bool,
     prompt_session: Option<PromptSession>,
     prompt_visible: bool,
-    /// Why: dedups only genuinely concurrent `starYiru()` calls, matching Bun's
+    /// Why: dedups only genuinely concurrent `starAgentStart()` calls, matching Bun's
     /// `session.starAttemptPromise` — cleared right after the attempt resolves so a later,
     /// non-concurrent retry runs a fresh attempt instead of replaying a cached result.
     star_attempt: Option<(u64, Arc<OnceCell<bool>>)>,
@@ -162,7 +162,7 @@ impl StarNagAuthority {
 
     /// Why: dedups concurrent callers onto one `run_star_attempt`, then clears the slot so a later
     /// independent call (e.g. after fixing GitHub auth) runs a fresh attempt — see `State::star_attempt`.
-    pub(crate) async fn star_yiru(&self) -> bool {
+    pub(crate) async fn star_agentstart(&self) -> bool {
         let (session, cell) = {
             let mut state = lock(&self.inner.state);
             let Some(session) = state.prompt_session else {
@@ -280,7 +280,7 @@ impl StarNagAuthority {
         if !self.try_begin_evaluating() {
             return false;
         }
-        let starred = self.inner.github.check_yiru_starred().await;
+        let starred = self.inner.github.check_agentstart_starred().await;
         if ui_state::is_completed(&self.inner.ui.get()) {
             self.finish_evaluating();
             return false;
@@ -374,12 +374,12 @@ impl StarNagAuthority {
     async fn run_star_attempt(&self, session: PromptSession) -> bool {
         self.track_outcome(&session, "star_clicked", Some(PromptMode::Gh), None)
             .await;
-        let starred = self.inner.github.star_yiru().await;
+        let starred = self.inner.github.star_agentstart().await;
         if starred {
             self.inner
                 .telemetry
                 .track_main(
-                    "app_starred_yiru",
+                    "app_starred_agentstart",
                     Map::from_iter([(
                         "source".to_owned(),
                         Value::String(session.source.as_app_star_source().as_str().to_owned()),

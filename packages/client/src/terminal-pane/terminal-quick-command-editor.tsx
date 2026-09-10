@@ -1,4 +1,4 @@
-import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
+import type { TerminalQuickCommand } from '@agentstart/protocol/terminal/quick-commands'
 
 import { useProjectCatalog } from '../project-catalog/provider'
 import { TerminalQuickCommandDialog } from '../terminal-quick-commands/terminal-quick-command-dialog'

@@ -2,7 +2,7 @@ import type { FeatureInteractionState } from '../telemetry/interactions/state.js
 import type { WorkspaceCleanupUIState } from '../workspace/cleanup-policy.js'
 import type { WorkspaceStatusDefinition } from '../workspace/status/model.js'
 import type { WorkspacePanelTabContentType } from '../workspace/tabs.js'
-import type { PersistedTrustedYiruHooks } from '../worktree/hooks.js'
+import type { PersistedTrustedAgentStartHooks } from '../worktree/hooks.js'
 import type { ContextualTourId } from './contextual-tours.js'
 import type { FeatureTipId } from './feature-tips.js'
 import type { ThemeGradientTheme } from './theme-gradient.js'
@@ -142,7 +142,7 @@ export type PersistedUIState = {
   lastUpdateCheckAt: number | null
   pendingUpdateNudgeId?: string | null
   dismissedUpdateNudgeId?: string | null
-  /** Whether Yiru has already attempted to trigger the macOS notification
+  /** Whether AgentStart has already attempted to trigger the macOS notification
    *  permission dialog via a startup notification. Prevents re-firing on
    *  every launch. */
   notificationPermissionRequested?: boolean
@@ -231,7 +231,7 @@ export type PersistedUIState = {
    *  notification should fire. Starts at 35 and doubles each time the user
    *  dismisses the notification without starring. */
   starNagNextThreshold?: number
-  /** Once the user has starred Yiru (from any entry point) we permanently
+  /** Once the user has starred AgentStart (from any entry point) we permanently
    *  suppress the nag — no further thresholds, no notifications. */
   starNagCompleted?: boolean
   /** Timestamp until which nonterminal dismissals suppress threshold prompts.
@@ -240,7 +240,7 @@ export type PersistedUIState = {
   /** App version that already consumed the first successful-agent value-moment ask.
    *  Main-owned so remote/web clients cannot spoof the once-per-version cap. */
   starNagAgentValueMomentAppVersion?: string | null
-  trustedYiruHooks?: PersistedTrustedYiruHooks
+  trustedAgentStartHooks?: PersistedTrustedAgentStartHooks
   /** Workspace theme gradient used by workspaces without their own. `null` is a
    *  deliberate "no theme", distinct from an absent key. */
   themeGradientDefault?: ThemeGradientTheme | null

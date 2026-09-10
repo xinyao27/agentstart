@@ -140,7 +140,7 @@ export function recoverVisibleTerminalWindowWake({
   clearGlyphAtlases
 }: RecoverVisibleTerminalWindowWakeArgs): void {
   // Why: macOS screensaver/display wake can leave xterm visible but with a
-  // stale renderer/input surface; Yiru's own hidden-state resume never runs.
+  // stale renderer/input surface; AgentStart's own hidden-state resume never runs.
   for (const pane of manager.getPanes()) {
     requestTerminalBacklogRecovery(pane.terminal)
     flushTerminalOutput(pane.terminal, { maxChars: WINDOW_WAKE_FLUSH_CHARS })

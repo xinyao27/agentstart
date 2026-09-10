@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   WorkspacePortsAttributionConfidence as ProtocolConfidence,
   WorkspacePortsPlatform as ProtocolPlatform,
@@ -7,7 +7,7 @@ import {
   type WorkspacePortsServiceEvent as ProtocolEvent,
   type WorkspacePortsServiceKillResponse as ProtocolKillResponse,
   type WorkspacePortsServiceScanResponse as ProtocolScanResponse
-} from '../generated/yiru/runtime/v1/workspace_ports_pb.js'
+} from '../generated/agent_start/runtime/v1/workspace_ports_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const WORKSPACE_PORTS_PROTOCOL_CAPABILITY = 'workspacePorts.protobuf.v1' as const

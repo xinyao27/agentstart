@@ -1,7 +1,7 @@
 import type {
   WorkspaceSpaceScanStatusName as WorkspaceSpaceScanStatus,
   WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 const BYTE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'] as const

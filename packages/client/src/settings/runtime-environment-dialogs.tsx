@@ -53,7 +53,7 @@ export function RuntimeEnvironmentDialogs(
             <DialogDescription>
               {translate(
                 'auto.components.settings.RuntimeEnvironmentsPane.b2290ed203',
-                'Yiru will focus this host and load its projects. Existing terminals and browser tabs on other hosts stay alive.'
+                'AgentStart will focus this host and load its projects. Existing terminals and browser tabs on other hosts stay alive.'
               )}
             </DialogDescription>
           </DialogHeader>
@@ -161,13 +161,13 @@ function getRemoveDescription(removingActiveHost: boolean, allowLocalRuntime: bo
   if (!removingActiveHost) {
     return translate(
       'auto.components.settings.RuntimeEnvironmentsPane.ed3e3f069d',
-      'This removes the saved host from Yiru. It does not change the active host.'
+      'This removes the saved host from AgentStart. It does not change the active host.'
     )
   }
   return allowLocalRuntime
     ? translate(
         'auto.components.settings.RuntimeEnvironmentsPane.9f7665a01b',
-        'Removing the active host first switches Yiru back to Local desktop. Existing host sessions are left alone.'
+        'Removing the active host first switches AgentStart back to Local desktop. Existing host sessions are left alone.'
       )
     : translate(
         'auto.components.settings.RuntimeEnvironmentsPane.b2fda48c39',

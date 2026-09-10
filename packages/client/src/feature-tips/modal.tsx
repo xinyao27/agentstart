@@ -32,15 +32,17 @@ import { getFeatureTipForModal } from './feature-tip-modal-state'
 
 import './feature-tips.css'
 import {
-  getYiruCliFeatureTipTelemetrySource,
+  getAgentStartCliFeatureTipTelemetrySource,
   trackCommandPaletteFeatureTipAcknowledged,
-  trackYiruCliFeatureTipSetupClicked,
-  trackYiruCliFeatureTipSetupResult
+  trackAgentStartCliFeatureTipSetupClicked,
+  trackAgentStartCliFeatureTipSetupResult
 } from './feature-tip-telemetry'
 
 function WorktreePromptTerm({ children }: { children: string }): JSX.Element {
   return (
-    <span className="bg-foreground/10 text-foreground px-1 py-0.5 font-medium">{children}</span>
+    <span className="bg-foreground/10 text-foreground rounded-sm px-1 py-0.5 font-medium">
+      {children}
+    </span>
   )
 }
 
@@ -136,7 +138,7 @@ export default function FeatureTipsModal(): JSX.Element | null {
         // Why: passive education tip — acknowledging just dismisses; the rebind
         // path lives in Settings and is reachable from the palette itself.
         trackCommandPaletteFeatureTipAcknowledged(
-          getYiruCliFeatureTipTelemetrySource(modalData.source)
+          getAgentStartCliFeatureTipTelemetrySource(modalData.source)
         )
         closeModal()
         break
@@ -150,13 +152,13 @@ export default function FeatureTipsModal(): JSX.Element | null {
           mountedRef.current &&
           activeModalRef.current === 'feature-tips' &&
           setupRequestIdRef.current === setupRequestId
-        const telemetrySource = getYiruCliFeatureTipTelemetrySource(modalData.source)
-        trackYiruCliFeatureTipSetupClicked(telemetrySource)
+        const telemetrySource = getAgentStartCliFeatureTipTelemetrySource(modalData.source)
+        trackAgentStartCliFeatureTipSetupClicked(telemetrySource)
         setPrimaryBusy(true)
         try {
           const result = await installCliFromFeatureTip(() => installCliCommand())
           if (result.kind === 'installed') {
-            trackYiruCliFeatureTipSetupResult(telemetrySource, 'installed')
+            trackAgentStartCliFeatureTipSetupResult(telemetrySource, 'installed')
             if (!canApplySetupResult()) {
               return
             }
@@ -164,21 +166,21 @@ export default function FeatureTipsModal(): JSX.Element | null {
             toast.success(
               translate(
                 'auto.components.feature.tips.FeatureTipsModal.ce13a742d0',
-                'Registered `yiru` in PATH.'
+                'Registered `agentstart` in PATH.'
               )
             )
             setSkillTerminalOpen(true)
             return
           }
 
-          trackYiruCliFeatureTipSetupResult(telemetrySource, 'needs_attention')
+          trackAgentStartCliFeatureTipSetupResult(telemetrySource, 'needs_attention')
           if (!canApplySetupResult()) {
             return
           }
           toast.warning(
             translate(
               'auto.components.feature.tips.FeatureTipsModal.1da82af45b',
-              'Yiru CLI needs attention'
+              'AgentStart CLI needs attention'
             ),
             {
               description:
@@ -192,12 +194,13 @@ export default function FeatureTipsModal(): JSX.Element | null {
           closeModal()
           openCliSettings()
         } catch (error) {
-          const message = error instanceof Error ? error.message : 'Failed to install Yiru CLI.'
+          const message =
+            error instanceof Error ? error.message : 'Failed to install AgentStart CLI.'
           if (
             import.meta.env.DEV &&
             message.includes('Development mode uses a generated launcher for validation only')
           ) {
-            trackYiruCliFeatureTipSetupResult(telemetrySource, 'dev_preview')
+            trackAgentStartCliFeatureTipSetupResult(telemetrySource, 'dev_preview')
             if (!canApplySetupResult()) {
               return
             }
@@ -212,7 +215,7 @@ export default function FeatureTipsModal(): JSX.Element | null {
             return
           }
 
-          trackYiruCliFeatureTipSetupResult(telemetrySource, 'failed')
+          trackAgentStartCliFeatureTipSetupResult(telemetrySource, 'failed')
           if (canApplySetupResult()) {
             toast.error(message)
           }
@@ -259,7 +262,7 @@ export default function FeatureTipsModal(): JSX.Element | null {
                 <div
                   aria-hidden={skillTerminalOpen}
                   className={cn(
-                    'max-w-sm space-y-2 overflow-hidden border text-sm leading-relaxed text-muted-foreground transition-[max-height,opacity,transform,margin,padding,border-color] duration-300 ease-out motion-reduce:transition-none',
+                    'max-w-sm space-y-2 overflow-hidden rounded-md border text-sm leading-relaxed text-muted-foreground transition-[max-height,opacity,transform,margin,padding,border-color] duration-300 ease-out motion-reduce:transition-none',
                     skillTerminalOpen
                       ? 'pointer-events-none mt-0 max-h-0 -translate-y-2 border-transparent p-0 opacity-0'
                       : 'mt-3 max-h-64 translate-y-0 border-border/70 bg-muted/35 p-3 opacity-100'

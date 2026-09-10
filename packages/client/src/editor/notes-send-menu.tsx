@@ -48,7 +48,7 @@ export type NotesSendMenuProps<TNote> = {
   onDelivered: (notes: readonly TNote[]) => void
 }
 
-export function buildNotesSendTargetModeId(modeIdParts: readonly string[]): string {
+function buildNotesSendTargetModeId(modeIdParts: readonly string[]): string {
   // Why: length-prefixing preserves part boundaries even when paths or ids
   // contain the separator, keeping unrelated note send targets distinct.
   return `note-send:${modeIdParts.map((part) => `${part.length}:${part}`).join('|')}`
@@ -201,7 +201,7 @@ export function NotesSendMenu<TNote>({
                       <Sparkles className="text-primary size-3" />
                       <span className="whitespace-nowrap">{triggerLabel}</span>
                       {triggerCount !== undefined ? (
-                        <span className="bg-background/80 text-muted-foreground px-1 text-[10px] tabular-nums">
+                        <span className="bg-background/80 text-muted-foreground rounded-full px-1 text-[10px] tabular-nums">
                           {triggerCount}
                         </span>
                       ) : null}

@@ -1,4 +1,4 @@
-import { SHELL_REPO_HOST_PROTOCOL_CAPABILITY, ShellRepoHostClient } from '@yiru/protocol'
+import { SHELL_REPO_HOST_PROTOCOL_CAPABILITY, ShellRepoHostClient } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import {
@@ -14,7 +14,7 @@ export async function requireShellRepoHostClient(): Promise<ShellRepoHostClient>
     throw new Error(
       translate(
         'runtime.shellRepoHostTarget.unavailable',
-        'This action needs a current Yiru daemon connection.'
+        'This action needs a current AgentStart daemon connection.'
       )
     )
   }

@@ -1,5 +1,5 @@
+import type { WorkspaceCleanupCandidate } from '@agentstart/protocol'
 import { LegendList, type LegendListRenderItemProps } from '@legendapp/list/react'
-import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
 import type React from 'react'
 import { LEGEND_LIST_SCROLL_AREA_PROPS } from '~renderer/sidebar/list-scroll-area'
 

@@ -25,7 +25,7 @@ export function createClientVitePreset(options: ClientVitePresetOptions) {
       format: 'es' as const
     },
     define: {
-      YIRU_FEATURE_WALL_ENABLED: JSON.stringify(options.featureWallEnabled)
+      AGENTSTART_FEATURE_WALL_ENABLED: JSON.stringify(options.featureWallEnabled)
     }
   }
 }

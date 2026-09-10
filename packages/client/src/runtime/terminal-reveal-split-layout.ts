@@ -1,7 +1,7 @@
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/protocol/workspace/session'
+} from '@agentstart/protocol/workspace/session'
 import { collectLeafIdsInOrder } from '~renderer/terminal-pane/layout-serialization'
 
 // Why: split out of terminal-reveal-shell-request.ts so that file (the

@@ -17,36 +17,40 @@ pub(crate) enum PathResolutionError {
     Io(#[from] io::Error),
 }
 
-pub(crate) fn resolve_default_user_data_path() -> Result<PathBuf, PathResolutionError> {
-    if let Some(configured) = trimmed_environment("YIRU_APP_USER_DATA_PATH")
-        .or_else(|| trimmed_environment("YIRU_USER_DATA_PATH"))
-    {
-        return resolve_user_data_path(Path::new(&configured));
-    }
+pub(crate) const PRODUCT_DATA_DIRECTORY: &str = "agentstart";
+
+/// The uncanonicalized default data root for one product directory name.
+pub(crate) fn product_data_root(product: &str) -> Result<PathBuf, PathResolutionError> {
     #[cfg(target_os = "macos")]
     {
-        resolve_user_data_path(
-            &home_directory()?
-                .join("Library")
-                .join("Application Support")
-                .join("yiru"),
-        )
+        Ok(home_directory()?
+            .join("Library")
+            .join("Application Support")
+            .join(product))
     }
     #[cfg(target_os = "windows")]
     {
         let app_data =
             trimmed_environment("APPDATA").ok_or(PathResolutionError::UserDataUnavailable)?;
-        resolve_user_data_path(&PathBuf::from(app_data).join("yiru"))
+        Ok(PathBuf::from(app_data).join(product))
     }
     #[cfg(not(any(target_os = "macos", target_os = "windows")))]
     {
-        resolve_user_data_path(
-            &trimmed_environment("XDG_CONFIG_HOME")
-                .map(PathBuf::from)
-                .unwrap_or(home_directory()?.join(".config"))
-                .join("yiru"),
-        )
+        Ok(trimmed_environment("XDG_CONFIG_HOME")
+            .map(PathBuf::from)
+            .unwrap_or(home_directory()?.join(".config"))
+            .join(product))
     }
+}
+
+pub(crate) fn resolve_default_user_data_path() -> Result<PathBuf, PathResolutionError> {
+    if let Some(configured) = trimmed_environment("AGENTSTART_APP_USER_DATA_PATH")
+        .or_else(|| trimmed_environment("AGENTSTART_USER_DATA_PATH"))
+    {
+        return resolve_user_data_path(Path::new(&configured));
+    }
+    let current_root = product_data_root(PRODUCT_DATA_DIRECTORY)?;
+    resolve_user_data_path(&current_root)
 }
 
 pub(crate) fn resolve_user_data_path(path: &Path) -> Result<PathBuf, PathResolutionError> {

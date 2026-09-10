@@ -5,15 +5,18 @@ import {
   ShellSessionClient,
   SHELL_ONBOARDING_PROTOCOL_CAPABILITY,
   SHELL_SESSION_PROTOCOL_CAPABILITY
-} from '@yiru/protocol'
-import type { ShellCachePlainJsonValue, ShellSessionDocumentValue } from '@yiru/protocol'
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+} from '@agentstart/protocol'
+import type { ShellCachePlainJsonValue, ShellSessionDocumentValue } from '@agentstart/protocol'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
 
 type ShellGitHubCache = { pr: Record<string, { data: PRInfo | null; fetchedAt: number }> }
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
-import type { WorkspaceSessionPatch, WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
+import type {
+  WorkspaceSessionPatch,
+  WorkspaceSessionState
+} from '@agentstart/protocol/workspace/session'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from './protocol-target'

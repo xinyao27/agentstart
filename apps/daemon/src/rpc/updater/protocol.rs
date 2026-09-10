@@ -1,7 +1,7 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::updater_service_subscribe_status_response::Event;
-use yiru_protocol::runtime::v1::updater_status::State;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::updater_service_subscribe_status_response::Event;
+use agentstart_protocol::runtime::v1::updater_status::State;
+use agentstart_protocol::runtime::v1::{
     UpdaterAvailable, UpdaterChangelog, UpdaterChangelogRelease, UpdaterChecking,
     UpdaterDownloaded, UpdaterDownloading, UpdaterError as ProtocolUpdaterError, UpdaterIdle,
     UpdaterInstallMode, UpdaterNotAvailable, UpdaterServiceCheckRequest,
@@ -12,7 +12,7 @@ use yiru_protocol::runtime::v1::{
     UpdaterServiceSubscribeStatusRequest, UpdaterServiceSubscribeStatusResponse, UpdaterSnapshot,
     UpdaterStatus, UpdaterSubscriptionReady, UpdaterSupport, UpdaterSupportReason,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::update::{UpdateCheckOptions, UpdateError};
 use crate::updater::{

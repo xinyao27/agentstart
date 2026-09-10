@@ -1,4 +1,4 @@
-export const COMMENT_BODY_NONBLANK_SCAN_MAX_BYTES = 64 * 1024
+const COMMENT_BODY_NONBLANK_SCAN_MAX_BYTES = 64 * 1024
 
 export type CommentBodySubmitState =
   | { status: 'empty' }

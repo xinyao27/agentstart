@@ -1,4 +1,4 @@
-import type { ReactErrorBoundaryReportArgs } from '@yiru/protocol/crash-reports/values'
+import type { ReactErrorBoundaryReportArgs } from '@agentstart/protocol/crash-reports/values'
 import React from 'react'
 import { isLazyChunkLoadError } from '~renderer/application-shell/lazy-with-retry'
 import { reportReactErrorBoundaryCrash } from '~renderer/crash-report/react-error-boundary'
@@ -61,6 +61,12 @@ export class RecoverableRenderErrorBoundary extends React.Component<Props, State
   }
 
   handleReset = (): void => {
+    if (isLazyChunkLoadError(this.state.error)) {
+      // Why: React.lazy permanently caches a rejected import, so remounting this
+      // boundary cannot retry it. A user-triggered reload rebuilds the module map.
+      window.location.reload()
+      return
+    }
     this.setState({ error: null })
   }
 
@@ -82,7 +88,7 @@ export class RecoverableRenderErrorBoundary extends React.Component<Props, State
         )}
         role="alert"
       >
-        <div className="border-destructive/25 bg-destructive/10 text-destructive flex size-8 items-center justify-center border">
+        <div className="border-destructive/25 bg-destructive/10 text-destructive flex size-8 items-center justify-center rounded-full border">
           <AlertTriangle className="size-4" />
         </div>
         <div className="space-y-1">
@@ -90,7 +96,7 @@ export class RecoverableRenderErrorBoundary extends React.Component<Props, State
             {this.props.title ??
               translate(
                 'auto.components.error.boundaries.RecoverableRenderErrorBoundary.ab855c11f4',
-                'This part of Yiru hit an error.'
+                'This part of AgentStart hit an error.'
               )}
           </div>
           <div className="max-w-md text-xs">

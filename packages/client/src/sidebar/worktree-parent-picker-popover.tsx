@@ -1,5 +1,5 @@
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { Popover as BasePopover } from '@base-ui/react/popover'
-import type { Worktree } from '@yiru/protocol/worktree/model'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -36,11 +36,11 @@ function getAnchorRect(anchorElement: HTMLElement | null): AnchorRect | null {
   return anchorElement?.getBoundingClientRect() ?? null
 }
 
-export function getWorktreeParentPickerItemValue(candidate: Worktree): string {
+function getWorktreeParentPickerItemValue(candidate: Worktree): string {
   return `${candidate.displayName} ${branchDisplayName(candidate.branch)} ${candidate.path}`
 }
 
-export function selectWorktreeParent({
+function selectWorktreeParent({
   childWorktreeId,
   parentWorktreeId,
   assignWorktreeParent,
@@ -79,14 +79,14 @@ function WorktreeParentPickerRow({
         <div className="flex min-w-0 items-center gap-1.5">
           <span className="truncate text-[13px] font-medium">{candidate.displayName}</span>
           {isCurrent ? (
-            <span className="border-border bg-muted text-muted-foreground shrink-0 border px-1.5 py-px text-[9px] leading-none font-medium">
+            <span className="border-border bg-muted text-muted-foreground shrink-0 rounded border px-1.5 py-px text-[9px] leading-none font-medium">
               {translate('auto.components.sidebar.WorktreeParentPickerPopover.current', 'Current')}
             </span>
           ) : null}
         </div>
         <div className="text-muted-foreground mt-1 flex min-w-0 items-center gap-1.5 text-[11px] leading-none">
           {repo ? (
-            <span className="border-border bg-accent text-foreground inline-flex max-w-[8rem] min-w-0 shrink-0 items-center gap-1 border px-1.5 py-0.5 text-[10px] font-semibold">
+            <span className="border-border bg-accent text-foreground inline-flex max-w-[8rem] min-w-0 shrink-0 items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-semibold">
               <RepoBadgeMark color={repo.badgeColor} />
               <span className="truncate lowercase">{repo.displayName}</span>
             </span>

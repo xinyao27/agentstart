@@ -9,12 +9,3 @@ export type GitHubPRFile = {
   reviewCommentLineNumbers?: number[]
   viewerViewedState?: GitHubPRFileViewedState
 }
-
-export type GitHubPRFileContents = {
-  original: string
-  modified: string
-  originalIsBinary: boolean
-  modifiedIsBinary: boolean
-  originalTooLarge?: boolean
-  modifiedTooLarge?: boolean
-}

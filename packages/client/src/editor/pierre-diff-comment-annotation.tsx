@@ -26,7 +26,7 @@ export function PierreDiffCommentAnnotation({
   )
 
   return (
-    <div data-yiru-diff-comment-id={comment.id}>
+    <div data-agentstart-diff-comment-id={comment.id}>
       <DiffCommentCard
         lineNumber={comment.lineNumber}
         startLine={comment.startLine}
@@ -64,7 +64,7 @@ export function PierreDiffCommentAnnotation({
                 }
               ]}
               targetModeLabel="This note"
-              triggerClassName="yiru-diff-comment-edit"
+              triggerClassName="agentstart-diff-comment-edit"
               disabledTooltip="Note already sent"
               onDelivered={(notes) => void clearDeliveredDiffComments(worktreeId, notes)}
             />

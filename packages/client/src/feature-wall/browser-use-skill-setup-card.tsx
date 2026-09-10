@@ -1,7 +1,7 @@
 import type { JSX } from 'react'
 import {
-  YIRU_CLI_SKILL_INSTALL_COMMAND,
-  YIRU_CLI_SKILL_UPDATE_COMMAND
+  AGENTSTART_CLI_SKILL_INSTALL_COMMAND,
+  AGENTSTART_CLI_SKILL_UPDATE_COMMAND
 } from '~renderer/agent/feature-install-commands'
 import { BROWSER_USE_ENABLED_STORAGE_KEY } from '~renderer/browser/setup-state'
 import { translate } from '~renderer/i18n/i18n'
@@ -13,7 +13,7 @@ import {
 } from '~renderer/settings/cli-skill-runtime-setup'
 import {
   AGENT_SKILL_CLI_PREREQUISITE_NOTICE,
-  ensureYiruCliAvailableForAgentSkillTerminal
+  ensureAgentStartCliAvailableForAgentSkillTerminal
 } from '~renderer/skills/agent-cli-prerequisite'
 import { useActiveProjectSkillRuntime } from '~renderer/skills/use-active-project-runtime'
 import type { InstalledAgentSkillState } from '~renderer/skills/use-installed-agents'
@@ -29,17 +29,23 @@ export function BrowserUseSkillSetupCard(props: {
   const { compact, terminalHeightPx, skill } = props
   const activeSkillRuntime = useActiveProjectSkillRuntime()
   const installCommand = !activeSkillRuntime.installDisabledReason
-    ? buildSkillCommandForRuntime(YIRU_CLI_SKILL_INSTALL_COMMAND, activeSkillRuntime.agentRuntime)
-    : YIRU_CLI_SKILL_INSTALL_COMMAND
+    ? buildSkillCommandForRuntime(
+        AGENTSTART_CLI_SKILL_INSTALL_COMMAND,
+        activeSkillRuntime.agentRuntime
+      )
+    : AGENTSTART_CLI_SKILL_INSTALL_COMMAND
   const updateCommand = !activeSkillRuntime.installDisabledReason
-    ? buildSkillCommandForRuntime(YIRU_CLI_SKILL_UPDATE_COMMAND, activeSkillRuntime.agentRuntime)
-    : YIRU_CLI_SKILL_UPDATE_COMMAND
+    ? buildSkillCommandForRuntime(
+        AGENTSTART_CLI_SKILL_UPDATE_COMMAND,
+        activeSkillRuntime.agentRuntime
+      )
+    : AGENTSTART_CLI_SKILL_UPDATE_COMMAND
 
   const handleBeforeOpenTerminal = async (): Promise<void> => {
     useAppStore.getState().recordFeatureInteraction('agent-browser-setup')
     await (activeSkillRuntime.agentRuntime?.runtime === 'wsl'
       ? ensureWslCliAvailableForAgentSkillTerminal(activeSkillRuntime.agentRuntime)
-      : ensureYiruCliAvailableForAgentSkillTerminal())
+      : ensureAgentStartCliAvailableForAgentSkillTerminal())
     localStorage.setItem(BROWSER_USE_ENABLED_STORAGE_KEY, '1')
   }
 
@@ -52,7 +58,7 @@ export function BrowserUseSkillSetupCard(props: {
       )}
       description={translate(
         'auto.components.feature.wall.BrowserUseSkillSetupCard.cbc45022d4',
-        "Enables agents to navigate and verify pages in Yiru's browser."
+        "Enables agents to navigate and verify pages in AgentStart's browser."
       )}
       command={installCommand}
       installedCommand={updateCommand}

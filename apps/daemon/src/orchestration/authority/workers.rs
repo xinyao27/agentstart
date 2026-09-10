@@ -1669,7 +1669,7 @@ impl OrchestrationAuthority {
             task_id,
             dispatch_id,
             task_spec,
-            "Run home (relayed by Yiru)",
+            "Run home (relayed by AgentStart)",
             &handle,
             Some(&capability),
             input.get("devMode").and_then(Value::as_bool) == Some(true),

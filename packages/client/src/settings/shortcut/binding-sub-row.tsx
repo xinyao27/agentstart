@@ -1,4 +1,4 @@
-import type { KeybindingActionId, KeybindingInput } from '@yiru/protocol/keybindings'
+import type { KeybindingActionId, KeybindingInput } from '@agentstart/protocol/keybindings'
 import React from 'react'
 
 import { ShortcutRecorderButton } from './recorder-button'
@@ -42,7 +42,7 @@ export function ShortcutBindingSubRow({
   onRemove
 }: ShortcutBindingSubRowProps): React.JSX.Element {
   return (
-    <div className="group/binding hover:bg-accent/30 flex min-h-8 items-center gap-1 py-0.5 pr-2 pl-5 transition-colors">
+    <div className="group/binding hover:bg-accent/30 flex min-h-8 items-center gap-1 rounded-md py-0.5 pr-2 pl-5 transition-colors">
       <div className="min-w-0 flex-1" />
       {/* Remove reveals on hover/focus to keep the row calm; keyboard users
           reach it via focus-within. The append slot reserves the column with an

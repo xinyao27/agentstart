@@ -1,8 +1,8 @@
-import type { GitUpstreamStatus } from '@yiru/protocol/git/status-types'
+import type { GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
 import type {
   HostedReviewCreationEligibility,
   HostedReviewState
-} from '@yiru/protocol/hosted-review/types'
+} from '@agentstart/protocol/hosted-review/types'
 
 export type SourceControlPrimaryActionKind =
   | 'commit'
@@ -24,7 +24,7 @@ export type SourceControlRemoteOpKind =
   | 'publish'
   | 'rebase'
 
-export type SourceControlPrimaryActionTitleIntent =
+type SourceControlPrimaryActionTitleIntent =
   | 'commit_in_progress'
   | 'force_push_in_progress'
   | 'action_in_progress'
@@ -62,7 +62,7 @@ export type SourceControlPrimaryActionDecision = {
   requiresForceWithLease?: boolean
 }
 
-export type SourceControlCommitAreaPrimaryActionKind = Exclude<
+type SourceControlCommitAreaPrimaryActionKind = Exclude<
   SourceControlPrimaryActionKind,
   'create_review_intent' | 'create_review'
 >

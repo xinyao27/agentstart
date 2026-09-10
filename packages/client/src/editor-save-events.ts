@@ -1,5 +1,5 @@
-export const YIRU_EDITOR_SAVE_DIRTY_FILES_EVENT = 'yiru:editor-save-dirty-files'
-export const YIRU_EDITOR_PREPARE_HOT_EXIT_EVENT = 'yiru:editor-prepare-hot-exit'
+export const AGENTSTART_EDITOR_SAVE_DIRTY_FILES_EVENT = 'agentstart:editor-save-dirty-files'
+export const AGENTSTART_EDITOR_PREPARE_HOT_EXIT_EVENT = 'agentstart:editor-prepare-hot-exit'
 
 export type EditorSaveDirtyFilesDetail = {
   claim: () => void

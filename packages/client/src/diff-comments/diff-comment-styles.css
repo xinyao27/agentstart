@@ -5,7 +5,7 @@
 /* Why: keep the "+" affordance visually subtle until hovered so it does not
    distract from the diff itself. Left position overlaps the gutter so it reads
    as "add comment on this line". */
-.yiru-diff-comment-add-btn {
+.agentstart-diff-comment-add-btn {
   position: absolute;
   left: 4px;
   width: 18px;
@@ -28,17 +28,17 @@
     border-color 100ms ease;
 }
 
-.yiru-diff-comment-add-btn:hover {
+.agentstart-diff-comment-add-btn:hover {
   color: var(--primary);
   border-color: color-mix(in srgb, var(--primary) 52%, var(--border));
   background: color-mix(in srgb, var(--primary) 12%, var(--background));
 }
 
-.yiru-diff-comment-add-btn:focus-visible {
+.agentstart-diff-comment-add-btn:focus-visible {
   border-color: var(--primary);
 }
 
-.yiru-diff-comment-inline {
+.agentstart-diff-comment-inline {
   width: 100%;
   /* Why: Monaco's view-zone node already starts after the diff gutter. Avoid
      adding a second left inset so saved notes sit flush with the code column. */
@@ -46,7 +46,7 @@
   box-sizing: border-box;
 }
 
-.yiru-diff-comment-inline > .yiru-diff-comment-card {
+.agentstart-diff-comment-inline > .agentstart-diff-comment-card {
   max-width: 420px;
 }
 
@@ -58,7 +58,7 @@
    to produce roughly the same absolute luminance delta above its editor
    surface — the foreground color is different (white vs black) so equal
    percentages would not give equal contrast. Override lives in `.dark`. */
-.yiru-diff-comment-card {
+.agentstart-diff-comment-card {
   position: relative;
   /* Why: Monaco's view-lines overlay (data-mprt=8) is positioned absolutely on
      top of view-zone DOM. Without an explicit z-index here, clicks on
@@ -78,13 +78,13 @@
     background-color 150ms ease;
 }
 
-.dark .yiru-diff-comment-card {
+.dark .agentstart-diff-comment-card {
   border-color: color-mix(in srgb, var(--foreground) 12%, var(--border));
   background: color-mix(in srgb, var(--foreground) 2%, var(--editor-surface));
 }
 
 /* Content Column */
-.yiru-diff-comment-content-col {
+.agentstart-diff-comment-content-col {
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
@@ -93,7 +93,7 @@
 }
 
 /* Header Row */
-.yiru-diff-comment-header {
+.agentstart-diff-comment-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -102,7 +102,7 @@
 }
 
 /* Meta Group (Name, line, timestamp) */
-.yiru-diff-comment-meta-group {
+.agentstart-diff-comment-meta-group {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -115,7 +115,7 @@
 }
 
 /* Action button pill: segmented control like Notion's Resolve / ... */
-.yiru-diff-comment-actions-pill {
+.agentstart-diff-comment-actions-pill {
   display: inline-flex;
   align-items: center;
   gap: 2px;
@@ -126,12 +126,12 @@
   overflow: hidden;
 }
 
-.dark .yiru-diff-comment-actions-pill {
+.dark .agentstart-diff-comment-actions-pill {
   border-color: color-mix(in srgb, var(--foreground) 14%, var(--border));
   background: color-mix(in srgb, var(--foreground) 4%, var(--editor-surface));
 }
 
-.yiru-diff-comment-pill-btn {
+.agentstart-diff-comment-pill-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -149,24 +149,24 @@
     color 100ms ease;
 }
 
-.yiru-diff-comment-edit {
+.agentstart-diff-comment-edit {
   min-width: 28px;
   height: 24px;
   padding: 4px 7px;
   border-radius: 4px;
 }
 
-.yiru-diff-comment-pill-btn:hover {
+.agentstart-diff-comment-pill-btn:hover {
   background: color-mix(in srgb, var(--foreground) 6%, transparent);
   color: var(--foreground);
 }
 
-.yiru-diff-comment-pill-btn-danger:hover {
+.agentstart-diff-comment-pill-btn-danger:hover {
   background: color-mix(in srgb, var(--destructive) 10%, transparent);
   color: var(--destructive);
 }
 
-.yiru-diff-comment-pill-divider {
+.agentstart-diff-comment-pill-divider {
   width: 1px;
   height: 12px;
   background: color-mix(in srgb, var(--foreground) 12%, var(--border));
@@ -174,7 +174,7 @@
 }
 
 /* Quote/Reference block: Warm, gorgeous Notion-like callout */
-.yiru-diff-comment-quote {
+.agentstart-diff-comment-quote {
   display: flex;
   align-items: flex-start;
   gap: 8px;
@@ -186,7 +186,7 @@
   line-height: 1.35;
 }
 
-.yiru-diff-comment-quote-text {
+.agentstart-diff-comment-quote-text {
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -195,7 +195,7 @@
 }
 
 /* Comment Body */
-.yiru-diff-comment-body {
+.agentstart-diff-comment-body {
   font-size: 13.5px;
   line-height: 1.5;
   color: var(--foreground);
@@ -205,7 +205,7 @@
 }
 
 /* Popover for adding new comment */
-.yiru-diff-comment-popover {
+.agentstart-diff-comment-popover {
   position: absolute;
   left: 56px;
   right: 24px;
@@ -218,12 +218,12 @@
   color: var(--foreground);
 }
 
-.dark .yiru-diff-comment-popover {
+.dark .agentstart-diff-comment-popover {
   border-color: color-mix(in srgb, var(--foreground) 14%, var(--border));
   background: color-mix(in srgb, var(--foreground) 2%, var(--editor-surface));
 }
 
-.yiru-diff-comment-popover-label {
+.agentstart-diff-comment-popover-label {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
@@ -232,7 +232,7 @@
   margin-bottom: 2px;
 }
 
-.yiru-diff-comment-popover-textarea {
+.agentstart-diff-comment-popover-textarea {
   field-sizing: content;
   width: 100%;
   min-height: 56px;
@@ -251,34 +251,34 @@
   transition: border-color 150ms ease;
 }
 
-.dark .yiru-diff-comment-popover-textarea {
+.dark .agentstart-diff-comment-popover-textarea {
   border-color: color-mix(in srgb, var(--foreground) 10%, var(--border));
   background: color-mix(in srgb, var(--foreground) 3%, var(--editor-surface));
 }
 
-.yiru-diff-comment-popover-textarea:focus {
+.agentstart-diff-comment-popover-textarea:focus {
   border-color: color-mix(in srgb, var(--ring) 70%, var(--border));
 }
 
-.dark .yiru-diff-comment-popover-textarea:focus {
+.dark .agentstart-diff-comment-popover-textarea:focus {
   border-color: color-mix(in srgb, var(--ring) 70%, var(--border));
 }
 
-.yiru-diff-comment-popover-textarea::-webkit-scrollbar {
+.agentstart-diff-comment-popover-textarea::-webkit-scrollbar {
   width: 12px;
 }
 
-.yiru-diff-comment-popover-textarea::-webkit-scrollbar-track {
+.agentstart-diff-comment-popover-textarea::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.yiru-diff-comment-popover-textarea::-webkit-scrollbar-thumb {
+.agentstart-diff-comment-popover-textarea::-webkit-scrollbar-thumb {
   background: color-mix(in srgb, var(--muted-foreground, #737373) 28%, transparent);
   border: 3px solid transparent;
   background-clip: padding-box;
 }
 
-.yiru-diff-comment-popover-footer {
+.agentstart-diff-comment-popover-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;

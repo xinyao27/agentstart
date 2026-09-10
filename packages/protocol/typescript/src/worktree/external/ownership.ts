@@ -9,7 +9,7 @@ import {
 import { parseWslUncPath } from '../../host/wsl-paths.js'
 import type { ExternalWorktreeVisibility } from '../../project/model.js'
 import type { Repo } from '../../project/repository.js'
-import type { YiruWorkspaceLayout } from '../../workspace/layout.js'
+import type { AgentStartWorkspaceLayout } from '../../workspace/layout.js'
 import type { WorkspaceLayoutSettings } from '../../workspace/layout.js'
 import type { DetectedWorktree, Worktree, WorktreeMeta, WorktreeOwnership } from '../model.js'
 import { isExplicitlyImportedExternalWorktreePath } from './paths.js'
@@ -39,14 +39,14 @@ export function effectiveExternalWorktreeVisibility(
   return isLegacyRepoForVisibility ? 'show' : 'hide'
 }
 
-export function buildKnownYiruWorkspaceLayouts(
+export function buildKnownAgentStartWorkspaceLayouts(
   settings: Pick<
     WorkspaceLayoutSettings,
     'workspaceDir' | 'nestWorkspaces' | 'workspaceDirHistory'
   >,
   repo?: Pick<Repo, 'path' | 'connectionId' | 'worktreeBasePath'>
-): YiruWorkspaceLayout[] {
-  const layouts: YiruWorkspaceLayout[] = []
+): AgentStartWorkspaceLayout[] {
+  const layouts: AgentStartWorkspaceLayout[] = []
   const repoBasePath = getRepoWorktreeBasePath(repo)
   if (repo && repoBasePath) {
     layouts.push({
@@ -87,8 +87,8 @@ export function buildKnownYiruWorkspaceLayouts(
 }
 
 function appendWorkspaceLayouts(
-  target: YiruWorkspaceLayout[],
-  source: readonly YiruWorkspaceLayout[]
+  target: AgentStartWorkspaceLayout[],
+  source: readonly AgentStartWorkspaceLayout[]
 ): void {
   // Why: workspace history is persisted user data and can grow large enough
   // for `push(...source)` to exceed the JavaScript call argument limit.
@@ -128,7 +128,7 @@ function shouldIncludeWorkspaceLayout(
 function buildWslWorkspaceLayouts(
   repoPath: string,
   settings: Pick<WorkspaceLayoutSettings, 'nestWorkspaces' | 'workspaceDirHistory'>
-): YiruWorkspaceLayout[] {
+): AgentStartWorkspaceLayout[] {
   const parsed = parseWslUncPath(repoPath)
   if (!parsed) {
     return []
@@ -138,7 +138,7 @@ function buildWslWorkspaceLayouts(
   if (!linuxHome) {
     return []
   }
-  const root = `//wsl.localhost/${parsed.distro}${linuxHome}/yiru/workspaces`
+  const root = `//wsl.localhost/${parsed.distro}${linuxHome}/agentstart/workspaces`
   const historicalModes = (settings.workspaceDirHistory ?? []).map(
     (layout) => layout.nestWorkspaces
   )
@@ -151,19 +151,19 @@ export function classifyWorktreeOwnership(args: {
   worktree: Pick<Worktree, 'path' | 'isMainWorktree'>
   meta?: WorktreeMeta
   settings: Pick<WorkspaceLayoutSettings, 'workspaceDir' | 'nestWorkspaces' | 'workspaceDirHistory'>
-  knownYiruLayouts: YiruWorkspaceLayout[]
+  knownAgentStartLayouts: AgentStartWorkspaceLayout[]
 }): WorktreeOwnership {
-  if (hasStrongYiruMetadata(args.meta)) {
-    return 'yiru-managed'
+  if (hasStrongAgentStartMetadata(args.meta)) {
+    return 'agentstart-managed'
   }
 
-  if (isUnderFlatOrUntrustedYiruRoot(args.worktree.path, args.knownYiruLayouts)) {
+  if (isUnderFlatOrUntrustedAgentStartRoot(args.worktree.path, args.knownAgentStartLayouts)) {
     return 'unknown-legacy'
   }
 
-  if (canClassifyAsExternal(args.worktree.path, args.knownYiruLayouts)) {
-    // Why: a plain `git worktree add` can target Yiru's nested workspace
-    // folder. Only metadata proves Yiru created it.
+  if (canClassifyAsExternal(args.worktree.path, args.knownAgentStartLayouts)) {
+    // Why: a plain `git worktree add` can target AgentStart's nested workspace
+    // folder. Only metadata proves AgentStart created it.
     return 'external'
   }
 
@@ -175,7 +175,7 @@ export function toDetectedWorktree(args: {
   worktree: Worktree
   meta?: WorktreeMeta
   settings: Pick<WorkspaceLayoutSettings, 'workspaceDir' | 'nestWorkspaces' | 'workspaceDirHistory'>
-  knownYiruLayouts: YiruWorkspaceLayout[]
+  knownAgentStartLayouts: AgentStartWorkspaceLayout[]
   isLegacyRepoForVisibility?: boolean
 }): DetectedWorktree {
   const ownership = classifyWorktreeOwnership(args)
@@ -210,7 +210,7 @@ export function shouldShowWorktree(args: {
   if (args.isSelectedCheckout) {
     return true
   }
-  if (args.ownership === 'yiru-managed') {
+  if (args.ownership === 'agentstart-managed') {
     return true
   }
   if (
@@ -232,10 +232,10 @@ export function areRuntimePathsEqual(leftPath: string, rightPath: string): boole
   )
 }
 
-function hasStrongYiruMetadata(meta: WorktreeMeta | undefined): boolean {
+function hasStrongAgentStartMetadata(meta: WorktreeMeta | undefined): boolean {
   return Boolean(
-    meta?.yiruCreatedAt ||
-    meta?.yiruCreationWorkspaceLayout ||
+    meta?.agentstartCreatedAt ||
+    meta?.agentstartCreationWorkspaceLayout ||
     meta?.createdAt ||
     meta?.createdWithAgent ||
     meta?.pushTarget ||
@@ -245,11 +245,11 @@ function hasStrongYiruMetadata(meta: WorktreeMeta | undefined): boolean {
   )
 }
 
-function isUnderFlatOrUntrustedYiruRoot(
+function isUnderFlatOrUntrustedAgentStartRoot(
   worktreePath: string,
-  knownYiruLayouts: YiruWorkspaceLayout[]
+  knownAgentStartLayouts: AgentStartWorkspaceLayout[]
 ): boolean {
-  for (const layout of knownYiruLayouts) {
+  for (const layout of knownAgentStartLayouts) {
     const relative = relativePathInsideRoot(layout.path, worktreePath)
     if (relative === null) {
       continue
@@ -263,12 +263,12 @@ function isUnderFlatOrUntrustedYiruRoot(
 
 function canClassifyAsExternal(
   worktreePath: string,
-  knownYiruLayouts: YiruWorkspaceLayout[]
+  knownAgentStartLayouts: AgentStartWorkspaceLayout[]
 ): boolean {
-  if (knownYiruLayouts.length === 0) {
+  if (knownAgentStartLayouts.length === 0) {
     return false
   }
-  for (const layout of knownYiruLayouts) {
+  for (const layout of knownAgentStartLayouts) {
     const relative = relativePathInsideRoot(layout.path, worktreePath)
     if (relative === null) {
       continue

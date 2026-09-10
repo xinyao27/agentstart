@@ -6,7 +6,7 @@ import {
   ClientEventsServiceSubscribeRequestSchema,
   ClientEventsServiceUnsubscribeRequestSchema,
   ClientEventsServiceUnsubscribeResponseSchema
-} from '../generated/yiru/runtime/v1/client_events_pb.js'
+} from '../generated/agent_start/runtime/v1/client_events_pb.js'
 import {
   clientEventsSubscriptionEvent,
   type ClientEventsSubscriptionEventValue

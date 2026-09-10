@@ -1,10 +1,4 @@
-export type SidebarGlobalPage =
-  | 'activity'
-  | 'automations'
-  | 'mobile'
-  | 'search'
-  | 'settings'
-  | 'skills'
+export type SidebarGlobalPage = 'activity' | 'browser' | 'mobile' | 'search' | 'settings' | 'skills'
 
 export type SidebarWorkspaceTarget = {
   dedicated?: boolean

@@ -78,7 +78,7 @@ export function OrchestrationExampleDialog(props: {
           <DialogHeader className="gap-3">
             <div className="flex items-start gap-3">
               {Icon ? (
-                <div className="border-border/70 bg-muted/30 text-muted-foreground flex size-9 shrink-0 items-center justify-center border">
+                <div className="border-border/70 bg-muted/30 text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-md border">
                   <Icon className="size-4" />
                 </div>
               ) : null}
@@ -93,7 +93,7 @@ export function OrchestrationExampleDialog(props: {
         </div>
 
         <div className="px-6 py-5">
-          <div className="group border-border/70 relative border bg-[var(--editor-surface)]">
+          <div className="group border-border/70 relative rounded-md border bg-[var(--editor-surface)]">
             <p className="text-foreground px-3 py-3 pr-11 font-mono text-[12px] leading-relaxed">
               <OrchestrationExamplePromptText prompt={example.prompt} />
             </p>

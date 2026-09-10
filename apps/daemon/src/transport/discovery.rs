@@ -8,7 +8,7 @@ use crate::runtime::RuntimeIdentity;
 use crate::runtime_metadata::{
     self, PublishedRuntimeMetadata, PublishedRuntimeTransport, RuntimeMetadataError,
 };
-use yiru_protocol::CURRENT_PROTOCOL_VERSION;
+use agentstart_protocol::CURRENT_PROTOCOL_VERSION;
 
 pub struct ExtensionDiscovery {
     is_published: bool,

@@ -3,7 +3,7 @@ import type {
   WorkspaceCleanupScanArgs,
   WorkspaceCleanupScanProgress,
   WorkspaceCleanupScanResult
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { scanWorkspaceCleanup as scanRuntimeWorkspaceCleanup } from '~renderer/runtime/workspace-cleanup-client'
 import type { AppState } from '~renderer/store/types'
 

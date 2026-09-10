@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { agentDeliversDraftViaNativePrefill } from '~renderer/agent/native-draft-prefill'
 import { pasteDraftWhenAgentReady } from '~renderer/terminal-pane/agent/draft-delivery'
 

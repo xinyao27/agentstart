@@ -1,5 +1,5 @@
-import { LOCAL_EXECUTION_HOST_ID, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import { LOCAL_EXECUTION_HOST_ID, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
 
 /**
  * Split / merge the unified WorkspaceSessionState across per-host partitions.

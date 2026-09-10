@@ -2,7 +2,7 @@ import {
   EXTERNAL_EDITOR_PROTOCOL_CAPABILITY,
   ExternalEditorClient,
   type ExternalEditorOpenRemoteSshResult
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'

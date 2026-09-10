@@ -23,7 +23,7 @@ import {
   GitHistoryRewriteServiceRevertCommitRequestSchema,
   GitHistoryRewriteServiceRevertCommitResponseSchema,
   GitResetMode
-} from '../../generated/yiru/runtime/v1/git_rewrite_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_rewrite_pb.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { GitBranchClient } from './branch-client.js'
 import { gitConflictOperationFromProto } from './status-values.js'

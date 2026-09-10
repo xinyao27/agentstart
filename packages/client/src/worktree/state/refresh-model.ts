@@ -1,10 +1,10 @@
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/protocol/workspace/session'
-import type { LocalBaseRefRefreshResult } from '@yiru/protocol/worktree/create-result'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/workspace/session'
+import type { LocalBaseRefRefreshResult } from '@agentstart/protocol/worktree/create-result'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 
 export const WORKTREE_REMOVAL_AMBIGUOUS_ERROR =
@@ -17,7 +17,7 @@ export const detachedHeadAutoDerivedDisplayNames = new Map<string, string>()
 export const folderWorkspaceWorktreeCache = new WeakMap<FolderWorkspace, Worktree>()
 export const hostedReviewPushTargetLookupsInFlight = new Set<string>()
 
-export function countTerminalLayoutLeaves(node: TerminalPaneLayoutNode | null | undefined): number {
+function countTerminalLayoutLeaves(node: TerminalPaneLayoutNode | null | undefined): number {
   if (!node) {
     return 0
   }

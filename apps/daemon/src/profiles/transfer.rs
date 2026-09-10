@@ -6,7 +6,7 @@ use thiserror::Error;
 
 use super::index::{ProfileError, ensure_profile_directory, validate_known};
 
-const STATE_FILE: &str = "yiru-data.json";
+const STATE_FILE: &str = "agentstart-data.json";
 const MAX_STATE_BYTES: u64 = 128 * 1024 * 1024;
 const OWNER_RECORDS: &[&str] = &[
     "tabsByWorktree",
@@ -28,11 +28,11 @@ const OWNER_RECORDS: &[&str] = &[
 pub(crate) enum TransferError {
     #[error(transparent)]
     Profile(#[from] ProfileError),
-    #[error("matching_yiru_profile_transfer")]
+    #[error("matching_agentstart_profile_transfer")]
     MatchingProfiles,
     #[error("unknown_source_repo")]
     UnknownRepo,
-    #[error("invalid_yiru_profile_project_transfer")]
+    #[error("invalid_agentstart_profile_project_transfer")]
     Invalid,
     #[error("profile transfer I/O failed: {0}")]
     Io(#[from] std::io::Error),

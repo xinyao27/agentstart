@@ -1,5 +1,5 @@
-import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
-import type { SetupAgentStartupPolicy } from '@yiru/protocol/worktree/hooks'
+import type { SparsePreset } from '@agentstart/protocol/worktree/create-result'
+import type { SetupAgentStartupPolicy } from '@agentstart/protocol/worktree/hooks'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretDown as ChevronDown } from '~renderer/icons/hugeicons'

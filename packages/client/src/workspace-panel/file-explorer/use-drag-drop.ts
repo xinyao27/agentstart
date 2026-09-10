@@ -7,10 +7,8 @@ import {
   WORKSPACE_FILE_PATH_MIME
 } from '~renderer/workspace/file-drag'
 
-import { getDragEdgeScrollTarget, useFileExplorerDragEdgeScroll } from './drag-edge-scroll'
+import { useFileExplorerDragEdgeScroll } from './drag-edge-scroll'
 import { useFileExplorerPathMove } from './path-move'
-
-export { getDragEdgeScrollTarget }
 
 type UseFileExplorerDragDropParams = {
   worktreePath: string | null

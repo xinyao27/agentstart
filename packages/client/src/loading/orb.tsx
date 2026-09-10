@@ -3,7 +3,7 @@ import {
   isMorphVariant,
   isRingVariant,
   type AICSSLoaderVariant
-} from '@yiru/protocol/settings/loader'
+} from '@agentstart/protocol/settings/loader'
 import type { CSSProperties } from 'react'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { getLatticeCells, getMorphDots, getRingDots } from '~renderer/loading/geometry'
@@ -59,11 +59,11 @@ function Lattice({
 }): React.JSX.Element {
   const cells = getLatticeCells(variant)
   return (
-    <span className="yiru-loader-orb__lattice" data-variant={variant}>
+    <span className="agentstart-loader-orb__lattice" data-variant={variant}>
       {cells.map((cell) => (
         <span
           key={cell.id}
-          className="yiru-loader-orb__cell"
+          className="agentstart-loader-orb__cell"
           data-mid={cell.middle ? '' : undefined}
           data-still={cell.still ? '' : undefined}
           style={{
@@ -83,12 +83,12 @@ function Lens({
   variant: Extract<AICSSLoaderVariant, `B${number}`>
 }): React.JSX.Element {
   return (
-    <span className="yiru-loader-orb__lens" data-variant={variant}>
-      <span className="yiru-loader-orb__shape yiru-loader-orb__shape-a" />
-      <span className="yiru-loader-orb__shape yiru-loader-orb__shape-b" />
-      <span className="yiru-loader-orb__shape yiru-loader-orb__shape-c" />
+    <span className="agentstart-loader-orb__lens" data-variant={variant}>
+      <span className="agentstart-loader-orb__shape agentstart-loader-orb__shape-a" />
+      <span className="agentstart-loader-orb__shape agentstart-loader-orb__shape-b" />
+      <span className="agentstart-loader-orb__shape agentstart-loader-orb__shape-c" />
       {variant === 'B1' ? (
-        <span className="yiru-loader-orb__shape yiru-loader-orb__shape-d" />
+        <span className="agentstart-loader-orb__shape agentstart-loader-orb__shape-d" />
       ) : null}
     </span>
   )
@@ -101,11 +101,11 @@ function Ring({
 }): React.JSX.Element {
   const dots = getRingDots(variant)
   return (
-    <span className="yiru-loader-orb__ring" data-variant={variant}>
+    <span className="agentstart-loader-orb__ring" data-variant={variant}>
       {dots.map((dot) => (
         <span
           key={dot.id}
-          className="yiru-loader-orb__ring-dot"
+          className="agentstart-loader-orb__ring-dot"
           style={customStyle({
             '--orb-rx': `${dot.x}px`,
             '--orb-ry': `${dot.y}px`,
@@ -124,11 +124,11 @@ function Morph({
 }): React.JSX.Element {
   const dots = getMorphDots(variant)
   return (
-    <span className="yiru-loader-orb__morph" data-variant={variant}>
+    <span className="agentstart-loader-orb__morph" data-variant={variant}>
       {dots.map((dot) => (
         <span
           key={dot.id}
-          className="yiru-loader-orb__morph-dot"
+          className="agentstart-loader-orb__morph-dot"
           style={customStyle({
             '--m-1': `${dot.points[0][0]}px, ${dot.points[0][1]}px`,
             '--m-2': `${dot.points[1][0]}px, ${dot.points[1][1]}px`,
@@ -161,10 +161,10 @@ export function LoaderOrb({ variant }: LoaderOrbProps): React.JSX.Element {
   const scale = useOrbScale(glyphRef)
 
   return (
-    <span className="yiru-loader-orb" aria-hidden="true">
+    <span className="agentstart-loader-orb" aria-hidden="true">
       <span
         ref={glyphRef}
-        className="yiru-loader-orb__glyph"
+        className="agentstart-loader-orb__glyph"
         style={customStyle({ '--orb-k': scale })}
       >
         <OrbGeometry variant={variant} />

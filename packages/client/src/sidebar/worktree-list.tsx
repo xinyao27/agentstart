@@ -1,6 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
 import type React from 'react'
-import { useLayoutEffect } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { XCircle as CircleX } from '~renderer/icons/hugeicons'
 import { Button } from '~renderer/ui/button'
@@ -9,7 +8,6 @@ import { ScrollArea } from '~renderer/ui/scroll-area'
 import { ProjectGroupDeleteDialog } from './project-group-delete-dialog'
 import { ProjectGroupNameDialog } from './project-group-name-dialog'
 import SuppressExternalWorktreeInboxDialog from './suppress-external-worktree-inbox-dialog'
-import { setVisibleWorktreeIds } from './visible-worktrees'
 import { useExternalWorktrees } from './worktree-list/use-external-worktrees'
 import { useListReveal } from './worktree-list/use-list-reveal'
 import { getListScope, useListRows } from './worktree-list/use-list-rows'
@@ -19,29 +17,10 @@ import { useWorktreeSelection } from './worktree-list/use-selection'
 import { useWorkspaceOrderActions } from './worktree-list/use-workspace-order-actions'
 import { LegendWorktreeViewport } from './worktree-list/viewport'
 
-export {
-  getScrollTopToRevealBounds,
-  WORKTREE_SIDEBAR_REVEAL_TOP_INSET
-} from './worktree-sidebar-reveal'
-
-export { resolvePendingSidebarReveal } from './worktree-list/reveal'
-
-export {
-  canKeepImportedWorktreesHidden,
-  getRenderRowKey,
-  getWorktreeDragGroups,
-  renderRowContainsWorktree
-} from './worktree-list/row-model'
-
 type WorktreeListProps = {
   navigationSurface: boolean
   projectId?: string
   scrollOffsetRef: React.MutableRefObject<number>
-}
-
-export function installWorktreeVisibleRefreshVisibilityListener(onChange: () => void): () => void {
-  document.addEventListener('visibilitychange', onChange)
-  return () => document.removeEventListener('visibilitychange', onChange)
 }
 
 function WorktreeList({ navigationSurface, projectId, scrollOffsetRef }: WorktreeListProps) {
@@ -115,17 +94,6 @@ function WorktreeList({ navigationSurface, projectId, scrollOffsetRef }: Worktre
   } = useWorktreeSelection(renderedWorktrees, renderedWorktreeIds)
 
   const selectedSidebarWorktreeId = currentSidebarWorktreeId
-
-  // Why layout effect instead of effect: the global Cmd/Ctrl+1–9 key handler
-  // can fire immediately after React commits the new grouped/collapsed order.
-  // Publishing after paint leaves a brief window where the sidebar shows the
-  // new numbering but the shortcut cache still points at the previous order.
-  useLayoutEffect(() => {
-    setVisibleWorktreeIds(renderedWorktreeIds)
-    // Why: collapsed/full-page sidebar states unmount the list. Clear the
-    // rendered-order cache so shortcuts fall back to the live store snapshot.
-    return () => setVisibleWorktreeIds([])
-  }, [renderedWorktreeIds])
 
   const {
     importedActionState: importedWorktreeCardActionState,

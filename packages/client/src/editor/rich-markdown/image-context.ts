@@ -3,7 +3,7 @@ import { getConnectionId } from '~renderer/runtime/connection-context'
 import type { RuntimeFileOperationArgs } from '~renderer/runtime/file-client'
 import { settingsForRuntimeOwner } from '~renderer/runtime/rpc-client'
 
-export type RichMarkdownImageRuntimeContext = Omit<RuntimeFileOperationArgs, 'connectionId'> & {
+type RichMarkdownImageRuntimeContext = Omit<RuntimeFileOperationArgs, 'connectionId'> & {
   connectionId?: string | null
 }
 

@@ -1,4 +1,4 @@
-import type { BrowserTab as BrowserTabState } from '@yiru/protocol/workspace/browser-session'
+import type { BrowserTab as BrowserTabState } from '@agentstart/protocol/workspace/browser-session'
 import type { OpenFile } from '~renderer/editor/state'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { joinPath } from '~renderer/path'
@@ -21,11 +21,8 @@ import {
   type TabEntryActionClassification
 } from './tab-create-entry-classifier'
 export {
-  classifyTabEntryQuery,
   getTabEntryOptions,
-  validateNewTabEntryRelativePath,
   type TabEntryActionClassification,
-  type TabEntryClassification,
   type TabEntryOption
 } from './tab-create-entry-classifier'
 
@@ -37,7 +34,7 @@ export type TabCreateEntryArgs = {
   fileList: RuntimeFileListState
 }
 
-export type TabEntryOperations = {
+type TabEntryOperations = {
   createBrowserTab: (
     worktreeId: string,
     url: string,
@@ -132,7 +129,7 @@ async function openExistingFile(args: {
   )
 }
 
-export async function openTabEntryWithOperations({
+async function openTabEntryWithOperations({
   activeRuntimeEnvironmentId,
   classification: selectedClassification,
   fileList,

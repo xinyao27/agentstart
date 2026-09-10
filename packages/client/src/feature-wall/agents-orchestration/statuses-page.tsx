@@ -68,9 +68,9 @@ function StatusesAnimation(props: { active: boolean; reducedMotion: boolean }): 
   return (
     <div className="flex h-full flex-col gap-5">
       <SupportedAgentsMarquee reducedMotion={reducedMotion} />
-      <div className="bg-foreground/[0.05] px-2 py-2.5">
+      <div className="bg-foreground/[0.05] rounded-[10px] px-2 py-2.5">
         <div className="grid grid-cols-[14px_minmax(0,1fr)] items-center gap-3 px-1.5">
-          <span className="inline-block size-[9px] bg-emerald-500" />
+          <span className="inline-block size-[9px] rounded-full bg-emerald-500" />
           <div className="truncate text-[15.5px] leading-[1.2] font-semibold">
             {translate(
               'auto.components.feature.wall.agents.orchestration.StatusesPage.79971d1539',
@@ -186,7 +186,7 @@ function ClaudeActivityLine(props: { activity: ClaudeActivity }): JSX.Element {
 
 function CodeChip(props: { children: ReactNode }): JSX.Element {
   return (
-    <code className="bg-foreground/[0.06] text-foreground px-1 py-px font-mono text-[12px]">
+    <code className="bg-foreground/[0.06] text-foreground rounded-[3px] px-1 py-px font-mono text-[12px]">
       {props.children}
     </code>
   )
@@ -195,7 +195,7 @@ function CodeChip(props: { children: ReactNode }): JSX.Element {
 function Skel(props: { widthPct: number }): JSX.Element {
   return (
     <span
-      className="bg-foreground/[0.16] inline-block h-2 align-[-1px]"
+      className="bg-foreground/[0.16] inline-block h-2 rounded-[5px] align-[-1px]"
       style={{ width: `${props.widthPct}%` }}
     />
   )
@@ -238,7 +238,7 @@ function SupportedAgentsMarquee(props: { reducedMotion: boolean }): JSX.Element 
 
 function MarqueePill(props: { agentId: AgentCatalogEntry['id']; label: string }): JSX.Element {
   return (
-    <span className="bg-foreground/[0.05] inline-flex shrink-0 items-center gap-1.5 px-2.5 py-1 text-[11px] leading-none">
+    <span className="bg-foreground/[0.05] inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] leading-none">
       <span className="inline-flex size-3.5 items-center justify-center">
         <AgentIcon agent={props.agentId} size={14} />
       </span>

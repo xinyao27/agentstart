@@ -24,7 +24,3 @@ export type CursorThemeSource = {
 // Why: these are the unmodified default themes bundled with Cursor 3.12.17.
 export const cursorDarkThemeSource: CursorThemeSource = cursorDarkThemeJson
 export const cursorLightThemeSource: CursorThemeSource = cursorLightThemeJson
-
-export function resolveCursorThemeName(isDark: boolean): string {
-  return isDark ? CURSOR_DARK_THEME_NAME : CURSOR_LIGHT_THEME_NAME
-}

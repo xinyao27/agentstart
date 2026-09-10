@@ -1,6 +1,6 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ArtifactDownloadTicketSchema,
   ArtifactReadSchema,
@@ -14,7 +14,7 @@ import {
   ArtifactServiceReadRequestSchema,
   ArtifactServiceTicketRequestSchema,
   type Artifact
-} from '../generated/yiru/runtime/v1/artifact_pb.js'
+} from '../generated/agent_start/runtime/v1/artifact_pb.js'
 import {
   artifact,
   artifactRead,

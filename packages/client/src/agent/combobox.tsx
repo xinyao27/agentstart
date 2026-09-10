@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import React, { useState } from 'react'
 import { AgentIcon, type AgentCatalogEntry } from '~renderer/agent/catalog'
 import {

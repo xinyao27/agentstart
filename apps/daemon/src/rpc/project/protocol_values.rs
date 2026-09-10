@@ -1,15 +1,15 @@
 // Why: the project catalog answers its runtime projection as typed Rust
 // records shared with the legacy JSON surface; this is the single place that
 // renders those records into the typed protobuf wire messages.
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::project_json_value::Kind as JsonKind;
-use yiru_protocol::runtime::v1::project_runtime_preference::Kind as PreferenceKind;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::project_json_value::Kind as JsonKind;
+use agentstart_protocol::runtime::v1::project_runtime_preference::Kind as PreferenceKind;
+use agentstart_protocol::runtime::v1::{
     Project, ProjectJsonNull, ProjectJsonValue, ProjectJsonValueEntry, ProjectJsonValueList,
     ProjectJsonValueObject, ProjectKind, ProjectProviderIdentity, ProjectRuntimePreference,
     ProjectServiceListResponse, ProjectServiceUpdateResponse,
 };
+use serde_json::Value;
 
 use crate::projects::wire::{LocalWindowsRuntimePreference, RuntimeProject, RuntimeProjectList};
 
@@ -40,7 +40,7 @@ fn project(project: &RuntimeProject) -> Project {
             None => ProjectKind::Unspecified,
         } as i32,
         git_remote_identity: project.git_remote_identity.as_ref().map(|identity| {
-            yiru_protocol::runtime::v1::RepoGitRemoteIdentity {
+            agentstart_protocol::runtime::v1::RepoGitRemoteIdentity {
                 canonical_key: identity.canonical_key.clone(),
                 remote_name: identity.remote_name.clone(),
                 remote_url: identity.remote_url.clone(),

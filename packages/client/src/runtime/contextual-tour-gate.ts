@@ -70,7 +70,7 @@ export function hasContextualTourTarget(selector: string, root?: ParentNode): bo
   return getMeasurableContextualTourTarget(selector, root) !== null
 }
 
-export function getContextualTourStartStepIndex(
+function getContextualTourStartStepIndex(
   tour: ContextualTour,
   targetExists: (selector: string) => boolean
 ): number | null {

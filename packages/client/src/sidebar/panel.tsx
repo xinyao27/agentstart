@@ -14,16 +14,16 @@ import WorktreeList from './worktree-list'
 
 const WorktreeMetaDialog = lazyWithRetry(() => import('./worktree-meta-dialog'))
 const RemoveFolderDialog = lazyWithRetry(() => import('./remove-folder-dialog'))
-const YiruYamlTrustDialog = lazyWithRetry(() => import('./yiru-yaml-trust-dialog'))
+const AgentStartYamlTrustDialog = lazyWithRetry(() => import('./agentstart-yaml-trust-dialog'))
 
 const MIN_WIDTH = 240
 const MAX_WIDTH = 500
-export const WORKTREE_SIDEBAR_RESIZE_HANDLE_CLASS_NAME =
+const WORKTREE_SIDEBAR_RESIZE_HANDLE_CLASS_NAME =
   'group absolute -top-[var(--titlebar-height)] bottom-0 z-10 flex w-3 cursor-col-resize items-stretch justify-center'
-export const WORKTREE_SIDEBAR_RESIZE_HANDLE_LINE_CLASS_NAME =
+const WORKTREE_SIDEBAR_RESIZE_HANDLE_LINE_CLASS_NAME =
   'h-full w-px bg-transparent transition-colors group-hover:bg-ring/50 group-active:bg-ring'
 
-export type SidebarProps = {
+type SidebarProps = {
   worktreeScrollOffsetRef: React.MutableRefObject<number>
   appearanceStyle?: React.CSSProperties
   navigationContent?: React.ReactNode
@@ -130,7 +130,7 @@ function Sidebar({
       <React.Suspense fallback={null}>
         {activeModal === 'edit-meta' ? <WorktreeMetaDialog /> : null}
         {activeModal === 'confirm-remove-folder' ? <RemoveFolderDialog /> : null}
-        {activeModal === 'confirm-yiru-yaml-hooks' ? <YiruYamlTrustDialog /> : null}
+        {activeModal === 'confirm-agentstart-yaml-hooks' ? <AgentStartYamlTrustDialog /> : null}
       </React.Suspense>
     </TooltipProvider>
   )

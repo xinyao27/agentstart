@@ -1,5 +1,5 @@
-import type { ShellSessionDocumentValue, TerminalSummary } from '@yiru/protocol'
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { ShellSessionDocumentValue, TerminalSummary } from '@agentstart/protocol'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
 import { useAppStore } from '~renderer/store/state'
 import { canonicalizeSessionTerminalIds } from '~renderer/terminal-identity/session'
 

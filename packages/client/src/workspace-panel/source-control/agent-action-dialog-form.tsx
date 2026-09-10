@@ -1,7 +1,7 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { SourceControlLaunchActionId } from '@yiru/protocol/source-control/ai-actions'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { SourceControlLaunchActionId } from '@agentstart/protocol/source-control/ai-actions'
 import React from 'react'
 import type { AgentCatalogEntry } from '~renderer/agent/catalog'
 import AgentCombobox from '~renderer/agent/combobox'
@@ -162,7 +162,7 @@ export function SourceControlAgentActionDialogForm({
               triggerClassName="w-full"
             />
           ) : (
-            <div className="border-border bg-muted/30 text-muted-foreground flex items-center justify-between gap-3 border px-3 py-2 text-xs">
+            <div className="border-border bg-muted/30 text-muted-foreground flex items-center justify-between gap-3 rounded-md border px-3 py-2 text-xs">
               <span>
                 {detecting
                   ? translate(
@@ -225,7 +225,7 @@ export function SourceControlAgentActionDialogForm({
               <p className="text-muted-foreground mt-1 text-[11px] leading-4">
                 {translate(
                   'auto.components.right.sidebar.SourceControlAgentActionDialogForm.5c75b24735',
-                  'Customize what the agent receives before Yiru starts it.'
+                  'Customize what the agent receives before AgentStart starts it.'
                 )}
               </p>
             </div>
@@ -248,7 +248,7 @@ export function SourceControlAgentActionDialogForm({
             rows={7}
             value={commandTemplate}
             onChange={(event) => onCommandTemplateChange(event.target.value)}
-            className="border-border bg-background text-foreground placeholder:text-muted-foreground/70 box-border min-h-[6.5rem] w-full max-w-full min-w-0 resize-y border px-2.5 py-2 font-mono text-xs outline-none"
+            className="border-border bg-background text-foreground placeholder:text-muted-foreground/70 box-border min-h-[6.5rem] w-full max-w-full min-w-0 resize-y rounded-md border px-2.5 py-2 font-mono text-xs outline-none"
             spellCheck={false}
           />
           <SourceControlActionVariableChips
@@ -261,12 +261,12 @@ export function SourceControlAgentActionDialogForm({
             }}
           />
           {!commandTemplateIncludesBasePrompt ? (
-            <p className="border-destructive/30 bg-destructive/5 text-destructive flex items-start gap-1.5 border px-2.5 py-2 text-[11px] leading-4">
+            <p className="border-destructive/30 bg-destructive/5 text-destructive flex items-start gap-1.5 rounded-md border px-2.5 py-2 text-[11px] leading-4">
               <TriangleAlert className="mt-px size-3 shrink-0" />
               <span>
                 {translate(
                   'auto.components.right.sidebar.SourceControlAgentActionDialogForm.23280cbab1',
-                  "This template does not include {basePrompt}, so the agent will not receive Yiru's default prompt."
+                  "This template does not include {basePrompt}, so the agent will not receive AgentStart's default prompt."
                 )}
               </span>
             </p>
@@ -274,7 +274,7 @@ export function SourceControlAgentActionDialogForm({
         </div>
 
         {showSaveLaunchRecipe && agentScopeNote ? (
-          <div className="border-border bg-muted/30 text-muted-foreground flex items-start gap-1.5 border px-2.5 py-2 text-[11px] leading-4">
+          <div className="border-border bg-muted/30 text-muted-foreground flex items-start gap-1.5 rounded-md border px-2.5 py-2 text-[11px] leading-4">
             <Info className="mt-px size-3 shrink-0" />
             <span>
               {translate(
@@ -292,7 +292,7 @@ export function SourceControlAgentActionDialogForm({
         {showSaveLaunchRecipe ? (
           <div
             className={cn(
-              'space-y-2 border border-border bg-background p-3',
+              'space-y-2 rounded-md border border-border bg-background p-3',
               saveLaunchRecipe && 'border-foreground  '
             )}
           >
@@ -358,7 +358,7 @@ export function SourceControlAgentActionDialogForm({
         {deliveryPlan.status !== 'idle' ? (
           <div
             className={cn(
-              'border px-3 py-2 text-xs',
+              'rounded-md border px-3 py-2 text-xs',
               deliveryPlan.status === 'error'
                 ? 'border-destructive/30 bg-destructive/5 text-destructive'
                 : 'border-border bg-muted/30 text-muted-foreground'

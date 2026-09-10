@@ -1,4 +1,4 @@
-import type { TabGroup } from '@yiru/protocol/workspace/tabs'
+import type { TabGroup } from '@agentstart/protocol/workspace/tabs'
 
 import { buildMirroredHostGroups } from './group-mirror'
 import type { resolveRemoteSessionSnapshotSelection } from './selection-reconciliation'

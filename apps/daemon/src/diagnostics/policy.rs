@@ -25,7 +25,8 @@ impl DiagnosticsPolicy {
         let local_file_enabled = !matches!(
             disabled_reason,
             Some(
-                DiagnosticsDisabledReason::Ci | DiagnosticsDisabledReason::YiruDiagnosticsDisabled
+                DiagnosticsDisabledReason::Ci
+                    | DiagnosticsDisabledReason::AgentStartDiagnosticsDisabled
             )
         );
         Self {
@@ -43,14 +44,14 @@ fn disabled_reason() -> Option<DiagnosticsDisabledReason> {
     {
         return Some(DiagnosticsDisabledReason::Ci);
     }
-    if environment_enabled("YIRU_DIAGNOSTICS_DISABLED") {
-        return Some(DiagnosticsDisabledReason::YiruDiagnosticsDisabled);
+    if environment_enabled("AGENT_START_DIAGNOSTICS_DISABLED") {
+        return Some(DiagnosticsDisabledReason::AgentStartDiagnosticsDisabled);
     }
     if environment_enabled("DO_NOT_TRACK") {
         return Some(DiagnosticsDisabledReason::DoNotTrack);
     }
-    if environment_enabled("YIRU_TELEMETRY_DISABLED") {
-        return Some(DiagnosticsDisabledReason::YiruTelemetryDisabled);
+    if environment_enabled("AGENT_START_TELEMETRY_DISABLED") {
+        return Some(DiagnosticsDisabledReason::AgentStartTelemetryDisabled);
     }
     None
 }

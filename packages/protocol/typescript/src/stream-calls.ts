@@ -1,4 +1,4 @@
-import type { Welcome } from '../generated/yiru/protocol/v1/frame_pb.js'
+import type { Welcome } from '../generated/agent_start/protocol/v1/frame_pb.js'
 import type { CallLifecycle } from './call-state.js'
 import type { DuplexRequests } from './duplex-requests.js'
 import { RuntimeEventStream } from './event-stream.js'

@@ -1,8 +1,8 @@
-import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
-import { getDefaultRepoHookSettings } from '@yiru/protocol/worktree/hooks'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@agentstart/protocol'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
+import { getDefaultRepoHookSettings } from '@agentstart/protocol/worktree/hooks'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -19,17 +19,14 @@ import {
 } from '../contextual-tours/request-contextual-tour-when-ready'
 import { getRepositoryLocalCommandsSectionId } from '../settings/repository/settings-targets'
 
-export const SETUP_GUIDE_PROJECT_PROMPT = "First add a project you'd like to work on."
+const SETUP_GUIDE_PROJECT_PROMPT = "First add a project you'd like to work on."
 
 export function promptForSetupGuideProject(openModal: (modal: 'add-repo') => void): void {
   openModal('add-repo')
   toast.message(SETUP_GUIDE_PROJECT_PROMPT)
 }
 
-export function getSetupGuideGitRepo(
-  repos: readonly Repo[],
-  activeRepoId: string | null
-): Repo | null {
+function getSetupGuideGitRepo(repos: readonly Repo[], activeRepoId: string | null): Repo | null {
   const activeRepo = activeRepoId
     ? repos.find((entry) => entry.id === activeRepoId && isGitRepoKind(entry))
     : undefined
@@ -233,17 +230,17 @@ function createSetupGuideTourRequestId(): string {
   return `setup-guide-tour-${setupGuideTourRequestSequence}`
 }
 
-export function cancelPendingSetupGuideTourRequest(): void {
+function cancelPendingSetupGuideTourRequest(): void {
   pendingSetupGuideTourCancel?.()
   pendingSetupGuideTourCancel = null
 }
 
-export function requestSetupGuideTourWhenReady(args: RequestContextualTourWhenReadyArgs): void {
+function requestSetupGuideTourWhenReady(args: RequestContextualTourWhenReadyArgs): void {
   cancelPendingSetupGuideTourRequest()
   pendingSetupGuideTourCancel = requestContextualTourWhenReady(args)
 }
 
-export function isSetupGuideWorkspaceComposerRequestCurrent(requestId: string): boolean {
+function isSetupGuideWorkspaceComposerRequestCurrent(requestId: string): boolean {
   const state = useAppStore.getState()
   const modalData = state.modalData as { setupGuideTourRequestId?: unknown }
   return (

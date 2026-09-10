@@ -7,9 +7,9 @@ import { cn } from '~renderer/ui/class-names'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~renderer/ui/tooltip'
 
 const EMULATOR_EXAMPLE_PROMPTS = [
-  'Using Yiru CLI, attach to the active iPhone simulator, sign in with the test account, complete onboarding, and tell me where the flow feels confusing.',
-  'With Yiru CLI, run through the mobile checkout flow from product search to confirmation, capture any broken screens, and summarize the exact step that fails.',
-  'Using Yiru CLI, grant camera permission, scan a test QR code or inject a camera fixture, finish the account-linking flow, and report whether the app reaches the success state.'
+  'Using AgentStart CLI, attach to the active iPhone simulator, sign in with the test account, complete onboarding, and tell me where the flow feels confusing.',
+  'With AgentStart CLI, run through the mobile checkout flow from product search to confirmation, capture any broken screens, and summarize the exact step that fails.',
+  'Using AgentStart CLI, grant camera permission, scan a test QR code or inject a camera fixture, finish the account-linking flow, and report whether the app reaches the success state.'
 ] as const
 
 async function copyPrompt(prompt: string): Promise<void> {
@@ -38,7 +38,11 @@ export function MobileEmulatorExamples({
   variant = 'card'
 }: MobileEmulatorExamplesProps): React.JSX.Element {
   return (
-    <div className={cn(variant === 'card' ? 'border border-border/60 bg-card/50 p-4' : 'py-3')}>
+    <div
+      className={cn(
+        variant === 'card' ? 'rounded-xl border border-border/60 bg-card/50 p-4' : 'py-3'
+      )}
+    >
       <div className="flex items-center gap-2">
         <Sparkles className="text-muted-foreground size-3.5" />
         <p className="text-sm font-medium">
@@ -51,14 +55,14 @@ export function MobileEmulatorExamples({
       <p className="text-muted-foreground mt-1 text-xs">
         {translate(
           'auto.components.settings.MobileEmulatorExamples.4daa95f25a',
-          'Paste any of these into Claude Code, Codex, or another agent in a project where the Yiru CLI skill is installed.'
+          'Paste any of these into Claude Code, Codex, or another agent in a project where the AgentStart CLI skill is installed.'
         )}
       </p>
       <ul className="mt-3 space-y-2">
         {EMULATOR_EXAMPLE_PROMPTS.map((prompt) => (
           <li
             key={prompt}
-            className="border-border bg-background flex items-start gap-2 border px-3 py-2"
+            className="border-border bg-background flex items-start gap-2 rounded-lg border px-3 py-2"
           >
             <p className="text-foreground/90 flex-1 text-[11px] leading-relaxed">
               {translate('auto.components.settings.MobileEmulatorExamples.b525ff2b12', '"')}

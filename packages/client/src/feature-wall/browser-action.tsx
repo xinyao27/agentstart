@@ -70,15 +70,15 @@ export function BrowserAction(props: { done: boolean }): React.JSX.Element {
 }
 
 // Scope the shared feature setup to just browser use — the grab→agent flow only
-// needs the Yiru CLI and browser skill, not Computer Use or orchestration.
+// needs the AgentStart CLI and browser skill, not Computer Use or orchestration.
 const BROWSER_ONLY_FEATURE_SETUP: OnboardingFeatureSetupSelection = {
   browserUse: true,
   computerUse: false,
   orchestration: false
 }
 
-// The grab→agent flow relies on the Yiru CLI and browser skill, so offer the same
-// install action the Enable Yiru CLI step uses, scoped to just browser use.
+// The grab→agent flow relies on the AgentStart CLI and browser skill, so offer the same
+// install action the Enable AgentStart CLI step uses, scoped to just browser use.
 function BrowserSkillInstallButton(): React.JSX.Element {
   const recordFeatureInteraction = useAppStore((s) => s.recordFeatureInteraction)
   const [command, setCommand] = useState<string | null>(null)

@@ -1,4 +1,4 @@
-import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
+import type { GitHistoryItem } from '@agentstart/protocol/git/history-types'
 
 export type GitGraphBranchOption = {
   refId: string
@@ -48,7 +48,7 @@ function findRefTipCommitId(items: readonly GitHistoryItem[], refId: string): st
 // A selected tip's real ancestry can extend past the loaded page (skip-based
 // paging), so this only ever walks parent ids that are themselves in `items`
 // — it deliberately under-reports rather than guessing at unloaded history.
-export function computeGitGraphAncestorIds(
+function computeGitGraphAncestorIds(
   items: readonly GitHistoryItem[],
   selectedRefIds: readonly string[]
 ): Set<string> {

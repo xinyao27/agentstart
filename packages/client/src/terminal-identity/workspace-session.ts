@@ -2,8 +2,8 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+} from '@agentstart/protocol/host/identity'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
 import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { useAppStore } from '~renderer/store/state'

@@ -1,4 +1,4 @@
-export type SmartWorkspaceCommandRowKind = 'use-name' | 'create-branch' | 'github' | 'branch'
+type SmartWorkspaceCommandRowKind = 'use-name' | 'create-branch' | 'github' | 'branch'
 
 export type SmartWorkspaceCommandRow = {
   kind: SmartWorkspaceCommandRowKind

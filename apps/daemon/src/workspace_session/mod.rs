@@ -363,6 +363,23 @@ impl WorkspaceSessionAuthority {
         }
         self.inner.persistence.flush().await
     }
+
+    pub(crate) async fn prune_worktree_owner(
+        &self,
+        worktree_id: &str,
+        host_id: Option<&str>,
+    ) -> Result<(), WorkspaceSessionError> {
+        let _mutation = self.inner.mutation.lock().await;
+        {
+            let mut next = lock(&self.inner.state).document.clone();
+            let prior_refs = scrollback::collect_document_refs(&next);
+            if owner_pruning::prune_worktree(&mut next, worktree_id, host_id) {
+                let removed = removed_refs(prior_refs, &next);
+                replace_and_commit(&self.inner, next, removed)?;
+            }
+        }
+        self.inner.persistence.flush().await
+    }
 }
 
 fn collect_terminal_pty_references(session: &Value) -> HashSet<String> {

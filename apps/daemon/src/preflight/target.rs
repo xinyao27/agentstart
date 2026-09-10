@@ -170,13 +170,13 @@ fn escape_wsl_dollars(value: &str) -> String {
 
 fn wsl_login_script(command: &str) -> String {
     format!(
-        "_yiru_wsl_shell=$(getent passwd \"$(id -un)\" 2>/dev/null | cut -d: -f7)\n\
-         if [ -z \"$_yiru_wsl_shell\" ] || [ ! -x \"$_yiru_wsl_shell\" ]; then _yiru_wsl_shell=\"${{SHELL:-/bin/bash}}\"; fi\n\
-         if [ -z \"$_yiru_wsl_shell\" ] || [ ! -x \"$_yiru_wsl_shell\" ]; then _yiru_wsl_shell=/bin/sh; fi\n\
-         _yiru_wsl_shell_name=$(basename \"$_yiru_wsl_shell\" | tr \"[:upper:]\" \"[:lower:]\")\n\
-         case \"$_yiru_wsl_shell_name\" in\n\
-         sh|dash) exec \"$_yiru_wsl_shell\" -lc {} ;;\n\
-         bash|zsh|ksh|mksh|ash) exec \"$_yiru_wsl_shell\" -ilc {} ;;\n\
+        "_agentstart_wsl_shell=$(getent passwd \"$(id -un)\" 2>/dev/null | cut -d: -f7)\n\
+         if [ -z \"$_agentstart_wsl_shell\" ] || [ ! -x \"$_agentstart_wsl_shell\" ]; then _agentstart_wsl_shell=\"${{SHELL:-/bin/bash}}\"; fi\n\
+         if [ -z \"$_agentstart_wsl_shell\" ] || [ ! -x \"$_agentstart_wsl_shell\" ]; then _agentstart_wsl_shell=/bin/sh; fi\n\
+         _agentstart_wsl_shell_name=$(basename \"$_agentstart_wsl_shell\" | tr \"[:upper:]\" \"[:lower:]\")\n\
+         case \"$_agentstart_wsl_shell_name\" in\n\
+         sh|dash) exec \"$_agentstart_wsl_shell\" -lc {} ;;\n\
+         bash|zsh|ksh|mksh|ash) exec \"$_agentstart_wsl_shell\" -ilc {} ;;\n\
          *) exec /bin/sh -lc {} ;;\n\
          esac",
         shell_quote(command),

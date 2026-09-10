@@ -2,7 +2,7 @@ import {
   AccountsClient,
   type ClaudeRateLimitAccountsState,
   type CodexRateLimitAccountsState
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 
 import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'
 

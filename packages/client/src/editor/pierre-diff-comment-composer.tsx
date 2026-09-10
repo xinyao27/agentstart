@@ -59,11 +59,11 @@ export function PierreDiffCommentComposer({
   }
 
   return (
-    <div className="yiru-diff-comment-inline">
-      <div className="yiru-diff-comment-card">
-        <div className="yiru-diff-comment-content-col gap-2">
-          <div className="yiru-diff-comment-header">
-            <div className="yiru-diff-comment-meta-group">
+    <div className="agentstart-diff-comment-inline">
+      <div className="agentstart-diff-comment-card">
+        <div className="agentstart-diff-comment-content-col gap-2">
+          <div className="agentstart-diff-comment-header">
+            <div className="agentstart-diff-comment-meta-group">
               {startLine && startLine !== lineNumber
                 ? translate(
                     'auto.components.diff.comments.DiffCommentPopover.c845170b3b',
@@ -86,7 +86,7 @@ export function PierreDiffCommentComposer({
                 mountedRef.current = false
               }
             }}
-            className="yiru-diff-comment-popover-textarea focus-visible:border-ring outline-none"
+            className="agentstart-diff-comment-popover-textarea focus-visible:border-ring outline-none"
             placeholder={placeholder ?? 'Add note for the AI'}
             value={body}
             rows={3}
@@ -103,7 +103,7 @@ export function PierreDiffCommentComposer({
               }
             }}
           />
-          <div className="yiru-diff-comment-popover-footer">
+          <div className="agentstart-diff-comment-popover-footer">
             <Button variant="ghost" size="sm" onClick={onCancel}>
               {translate('auto.components.diff.comments.DiffCommentPopover.2b3ce6d394', 'Cancel')}
             </Button>

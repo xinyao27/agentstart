@@ -1,4 +1,4 @@
-import { getRepoExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import { getRepoExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
 
 type RepoDisplayLabelItem = {
   path: string

@@ -84,7 +84,7 @@ export function createMarkdownLinkActions(
       }
       if (target.kind === 'external') {
         openHttpLink(target.url, {
-          openInYiruBrowser: ctx.openInYiruBrowser,
+          openInAgentStartBrowser: ctx.openInAgentStartBrowser,
           worktreeId: ctx.worktreeId,
           sourceOwner
         })
@@ -100,7 +100,7 @@ export function createMarkdownLinkActions(
             return
           }
           // Why: terminal file links already authorize clicked external paths
-          // before opening them in Yiru. Markdown file:// links need the same
+          // before opening them in AgentStart. Markdown file:// links need the same
           // user-gesture authorization so /tmp screenshots can use ImageViewer.
           await workspaceHostClient.fileHost.authorizeExternalPath({
             targetPath: target.absolutePath

@@ -2,16 +2,13 @@ use rusqlite::Connection;
 
 use super::InstallationDatabaseError;
 
-const SCHEMA_VERSION: i64 = 2;
+const SCHEMA_VERSION: i64 = 3;
 
 const SCHEMA: &str = r#"
 CREATE TABLE IF NOT EXISTS mobile_device (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL UNIQUE,
   token TEXT NOT NULL UNIQUE,
-  apns_token TEXT,
-  apns_environment TEXT CHECK(apns_environment IN ('production', 'sandbox')),
-  push_updated_at INTEGER,
   paired_at INTEGER NOT NULL,
   last_seen_at INTEGER NOT NULL
 );
@@ -48,9 +45,37 @@ pub(super) fn migrate(connection: &mut Connection) -> Result<(), InstallationDat
     if version > SCHEMA_VERSION {
         return Err(InstallationDatabaseError::SchemaUnsupported);
     }
+    let has_retired_delivery_columns = has_column(connection, "apns_token")?;
     let transaction = connection.transaction()?;
     transaction.execute_batch(SCHEMA)?;
+    if has_retired_delivery_columns {
+        transaction.execute_batch(
+            "ALTER TABLE mobile_device RENAME TO mobile_device_with_retired_delivery;
+             CREATE TABLE mobile_device (
+               id TEXT PRIMARY KEY,
+               name TEXT NOT NULL UNIQUE,
+               token TEXT NOT NULL UNIQUE,
+               paired_at INTEGER NOT NULL,
+               last_seen_at INTEGER NOT NULL
+             );
+             INSERT INTO mobile_device(id, name, token, paired_at, last_seen_at)
+               SELECT id, name, token, paired_at, last_seen_at
+               FROM mobile_device_with_retired_delivery;
+             DROP TABLE mobile_device_with_retired_delivery;",
+        )?;
+    }
     transaction.pragma_update(None, "user_version", SCHEMA_VERSION)?;
     transaction.commit()?;
     Ok(())
+}
+
+fn has_column(connection: &Connection, column: &str) -> Result<bool, rusqlite::Error> {
+    let mut statement = connection.prepare("PRAGMA table_info(mobile_device)")?;
+    let mut rows = statement.query([])?;
+    while let Some(row) = rows.next()? {
+        if row.get::<_, String>(1)? == column {
+            return Ok(true);
+        }
+    }
+    Ok(false)
 }

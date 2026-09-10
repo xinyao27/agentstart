@@ -1,4 +1,4 @@
-import type { ActiveRightSidebarTab } from '@yiru/protocol/settings/ui-state'
+import type { ActiveRightSidebarTab } from '@agentstart/protocol/settings/ui-state'
 
 const TOP_ACTIVITY_BUTTON_WIDTH = 36
 const TOP_ACTIVITY_MORE_BUTTON_WIDTH = 36

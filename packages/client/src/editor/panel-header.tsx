@@ -189,7 +189,7 @@ export function EditorPanelHeader({
           showFileScope
           triggerLabel="AI notes"
           triggerCount={fileDiffComments.length}
-          triggerClassName="h-6 shrink-0 gap-1 border border-border bg-muted px-2 text-[11px] font-medium leading-none text-foreground/80 hover:bg-accent hover:text-foreground"
+          triggerClassName="h-6 shrink-0 gap-1 border border-border bg-muted px-2 text-[11px] font-medium leading-none text-foreground/80 hover:bg-accent hover:text-foreground rounded-full"
           iconClassName="size-3"
         />
       )}

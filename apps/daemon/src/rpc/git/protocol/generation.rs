@@ -1,5 +1,5 @@
 // AI-assisted commit message and pull-request field generation, plus
-// cancellation. See packages/protocol/proto/yiru/runtime/v1/git_generation.proto
+// cancellation. See packages/protocol/proto/agentstart/runtime/v1/git_generation.proto
 // (GitGenerationService). The typed GitGenerationParams path is what a
 // protobuf caller should send; commit_message_ai/source_control_ai exist only
 // to carry the same "commitMessageAi"/"sourceControlAi" settings snapshot
@@ -11,8 +11,8 @@ use std::collections::HashMap;
 
 use serde_json::{Map, Value, json};
 
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     GitAiActionOverride, GitAiCapability, GitAiCapabilityList, GitAiCapabilityListByHost,
     GitAiModelOverride, GitAiPrCreationDefaults, GitAiStringMap, GitCommitMessageAiSettings,
     GitGenerationOverrides, GitGenerationParams,
@@ -26,7 +26,7 @@ use yiru_protocol::runtime::v1::{
     GitGenerationServiceGeneratePullRequestFieldsResponse, GitPullRequestFields,
     GitSourceControlAiSettings,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::git::{GenerationOverrides, GenerationParams, PullRequestGenerationInput};
 

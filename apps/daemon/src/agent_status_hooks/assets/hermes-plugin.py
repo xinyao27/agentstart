@@ -1,4 +1,4 @@
-# Managed by Yiru. Do not edit; changes may be overwritten.
+# Managed by AgentStart. Do not edit; changes may be overwritten.
 from __future__ import annotations
 
 import json
@@ -68,7 +68,7 @@ def _jsonable(value: Any, depth: int = 0, budget: Optional[list[int]] = None) ->
 
 def _endpoint_env() -> dict[str, str]:
     env = dict(os.environ)
-    endpoint = env.get("YIRU_AGENT_HOOK_ENDPOINT", "")
+    endpoint = env.get("AGENTSTART_AGENT_HOOK_ENDPOINT", "")
     if endpoint and os.path.isfile(endpoint):
         try:
             with open(endpoint, "r", encoding="utf-8") as f:
@@ -86,20 +86,20 @@ def _endpoint_env() -> dict[str, str]:
     return env
 
 
-def _post_to_yiru(payload: dict[str, Any]) -> None:
+def _post_to_agentstart(payload: dict[str, Any]) -> None:
     env = _endpoint_env()
-    port = env.get("YIRU_AGENT_HOOK_PORT", "")
-    token = env.get("YIRU_AGENT_HOOK_TOKEN", "")
-    pane_key = env.get("YIRU_PANE_KEY", "")
+    port = env.get("AGENTSTART_AGENT_HOOK_PORT", "")
+    token = env.get("AGENTSTART_AGENT_HOOK_TOKEN", "")
+    pane_key = env.get("AGENTSTART_PANE_KEY", "")
     if not port or not token or not pane_key:
         return
     body = {
         "paneKey": pane_key,
-        "launchToken": env.get("YIRU_AGENT_LAUNCH_TOKEN", ""),
-        "tabId": env.get("YIRU_TAB_ID", ""),
-        "worktreeId": env.get("YIRU_WORKTREE_ID", ""),
-        "env": env.get("YIRU_AGENT_HOOK_ENV", ""),
-        "version": env.get("YIRU_AGENT_HOOK_VERSION", ""),
+        "launchToken": env.get("AGENTSTART_AGENT_LAUNCH_TOKEN", ""),
+        "tabId": env.get("AGENTSTART_TAB_ID", ""),
+        "worktreeId": env.get("AGENTSTART_WORKTREE_ID", ""),
+        "env": env.get("AGENTSTART_AGENT_HOOK_ENV", ""),
+        "version": env.get("AGENTSTART_AGENT_HOOK_VERSION", ""),
         "payload": payload,
     }
     data = json.dumps(body, separators=(",", ":")).encode("utf-8")
@@ -109,7 +109,7 @@ def _post_to_yiru(payload: dict[str, Any]) -> None:
         method="POST",
         headers={
             "Content-Type": "application/json",
-            "X-Yiru-Agent-Hook-Token": token,
+            "X-AgentStart-Agent-Hook-Token": token,
         },
     )
     try:
@@ -141,7 +141,7 @@ def _payload_for_event(event_name: str, kwargs: dict[str, Any]) -> dict[str, Any
 
 def _make_hook(event_name: str) -> Callable[..., None]:
     def _hook(**kwargs: Any) -> None:
-        _post_to_yiru(_payload_for_event(event_name, kwargs))
+        _post_to_agentstart(_payload_for_event(event_name, kwargs))
 
     return _hook
 

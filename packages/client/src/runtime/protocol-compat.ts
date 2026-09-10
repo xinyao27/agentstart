@@ -1,15 +1,15 @@
-import { evaluateRuntimeCompat } from '@yiru/protocol/runtime-compatibility'
+import { evaluateRuntimeCompat } from '@agentstart/protocol/runtime-compatibility'
 import {
   MIN_COMPATIBLE_RUNTIME_SERVER_VERSION,
   RUNTIME_PROTOCOL_VERSION
-} from '@yiru/protocol/runtime-versions'
+} from '@agentstart/protocol/runtime-versions'
 import { describeRuntimeCompatBlock } from '~renderer/runtime/compatibility-message'
 import type { RuntimeStatus } from '~renderer/runtime/status/model'
 
 /** Marker on the compat-gate block error. Tagged as a `.code` on a plain Error
  *  (not a subclass) so the gate keeps throwing an `Error` — its other consumer,
  *  the runtime-environment switch flow, reads only `.message` and is unaffected. */
-export const RUNTIME_COMPAT_BLOCK_CODE = 'runtime_compat_block'
+const RUNTIME_COMPAT_BLOCK_CODE = 'runtime_compat_block'
 
 /** True when `error` is the protocol-compat block thrown by
  *  `assertRuntimeStatusCompatible` (vs a transient transport/timeout error). */

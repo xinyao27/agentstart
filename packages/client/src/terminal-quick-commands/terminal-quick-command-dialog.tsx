@@ -1,15 +1,15 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import {
   getTerminalQuickCommandAction,
   getTerminalQuickCommandScope,
   isTerminalAgentQuickCommand,
   supportsTerminalAgentQuickCommand
-} from '@yiru/protocol/terminal/quick-commands'
+} from '@agentstart/protocol/terminal/quick-commands'
 import type {
   TerminalQuickCommand,
   TerminalQuickCommandScope
-} from '@yiru/protocol/terminal/quick-commands'
+} from '@agentstart/protocol/terminal/quick-commands'
 import { useRef, useState } from 'react'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 import { createBrowserUuid } from '~renderer/browser/uuid'

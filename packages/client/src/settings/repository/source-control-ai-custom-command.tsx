@@ -1,4 +1,4 @@
-import type { SourceControlAiSettings } from '@yiru/protocol/source-control/ai-types'
+import type { SourceControlAiSettings } from '@agentstart/protocol/source-control/ai-types'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Input } from '~renderer/ui/input'
@@ -24,7 +24,7 @@ export function RepositorySourceControlAiCustomCommand({
   const hasRepoCommand = typeof value === 'string' && value.trim().length > 0
   const mode = hasRepoCommand ? CUSTOM_COMMAND_MODE_REPO : CUSTOM_COMMAND_MODE_INHERIT
   return (
-    <div className="border-border space-y-2 border px-3 py-3">
+    <div className="border-border space-y-2 rounded-md border px-3 py-3">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 space-y-0.5">
           <Label className="text-xs font-medium">

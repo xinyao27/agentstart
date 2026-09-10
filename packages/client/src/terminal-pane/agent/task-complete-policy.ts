@@ -8,15 +8,15 @@
  * deliberately dependency-light — no pane/xterm imports — so pane-less
  * consumers can use it.
  */
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 /** Delay before BEL/completion OS notifications so the richer
  *  agent-task-complete notification can win a same-burst BEL race. */
 export const AGENT_TASK_COMPLETE_NOTIFICATION_GRACE_MS = 250
 /** Hard cap on waiting for hook detail before dispatching a completion. */
 export const AGENT_TASK_COMPLETE_NOTIFICATION_MAX_WAIT_MS = 1500
-export const AGENT_TASK_COMPLETE_NOTIFICATION_DETAIL_MAX_AGE_MS = 10_000
+const AGENT_TASK_COMPLETE_NOTIFICATION_DETAIL_MAX_AGE_MS = 10_000
 
 type NotificationSettingsState = {
   settings: Pick<GlobalSettings, 'notifications' | 'experimentalTerminalAttention'> | null
@@ -29,7 +29,7 @@ export function isAgentTaskCompleteOsNotificationEnabledFromState(
   return notifications?.enabled !== false && notifications?.agentTaskComplete !== false
 }
 
-export function isTerminalAttentionEnabledFromState(state: NotificationSettingsState): boolean {
+function isTerminalAttentionEnabledFromState(state: NotificationSettingsState): boolean {
   return state.settings?.experimentalTerminalAttention === true
 }
 
@@ -44,7 +44,7 @@ export function isAgentTaskCompleteTrackingEnabledFromState(
   )
 }
 
-export function hasAgentNotificationDetail(entry: AgentStatusEntry | undefined): boolean {
+function hasAgentNotificationDetail(entry: AgentStatusEntry | undefined): boolean {
   return Boolean(
     entry &&
     Date.now() - entry.updatedAt <= AGENT_TASK_COMPLETE_NOTIFICATION_DETAIL_MAX_AGE_MS &&

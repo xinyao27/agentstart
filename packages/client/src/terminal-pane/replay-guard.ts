@@ -9,6 +9,7 @@ import {
   notifyUndeliverableWrite,
   recordTerminalParseProgress
 } from '~renderer/terminal-pane/pane-manager/terminal-write-pipeline-health'
+import { isXtermInstanceDisposed } from '~renderer/terminal-pane/pane-manager/xterm-instance-disposed'
 
 // Why: xterm.js auto-responds to terminal query sequences (DA1 `CSI c`,
 // DECRQM `CSI ? Ps $ p`, OSC 10/11 color queries, focus events, CPR) by
@@ -28,11 +29,9 @@ import {
 // handler in pty-connection.ts drops data while the counter is non-zero.
 //
 // The guard window is bounded by xterm's own parse completion, not a
-// wall-clock timer, so only replies generated while parsing the replayed
-// bytes are suppressed. User keystrokes typed after the replay completes
-// are unaffected. In practice replay finishes within milliseconds — before
-// the user could meaningfully type — so the few-ms window where real input
-// would also be dropped is acceptable relative to correctness.
+// wall-clock timer, so replies generated while parsing the replayed bytes are
+// suppressed. The input path uses xterm's synchronous user-input signal to
+// let real keystrokes through even when a slow parse keeps this guard engaged.
 
 export type ReplayingPanesRef = React.RefObject<Map<number, number>>
 
@@ -92,7 +91,7 @@ function engageReplayGuard(
   map.set(paneId, (map.get(paneId) ?? 0) + 1)
   let released = false
   let timer: ReturnType<typeof setTimeout> | null = null
-  const release = (reason: 'parsed' | 'lost-completion' | 'wedged'): void => {
+  const release = (reason: 'parsed' | 'lost-completion' | 'wedged' | 'disposed'): void => {
     if (released) {
       return
     }
@@ -112,20 +111,24 @@ function engageReplayGuard(
         `[terminal] replay guard released for pane ${paneId} — the probe write parsed but the replay completion never arrived (lost write callback)`
       )
       recordRendererCrashBreadcrumb('terminal_replay_guard_lost_completion', { paneId })
-    } else if (reason === 'wedged') {
+    } else if (reason === 'wedged' && notifyUndeliverableWrite(terminal, 'replay-wedged')) {
       console.error(
         `[terminal] replay guard released for pane ${paneId} — xterm rejected the replay write or its probe never parsed (undeliverable write pipeline; pane likely needs recovery)`
       )
       recordRendererCrashBreadcrumb('terminal_replay_guard_wedged_release', { paneId })
-      // Why: a rejected replay or silent probe makes the pipeline
-      // undeliverable — recover instead of leaving a fossil that eats input.
-      notifyUndeliverableWrite(terminal, 'replay-wedged')
     }
     onRelease?.()
   }
   const armWedgeDeadline = (quietSinceGeneration: number): void => {
     timer = setTimeout(() => {
       if (released) {
+        return
+      }
+      // Why: teardown silently drops xterm callbacks. This guard belongs to
+      // the disposed instance, so releasing it is cleanup rather than a
+      // renderer fault or a reason to recover the replacement pane.
+      if (isXtermInstanceDisposed(terminal)) {
+        release('disposed')
         return
       }
       // Why: completions parsed after the probe was queued prove the FIFO is
@@ -144,6 +147,10 @@ function engageReplayGuard(
     if (released) {
       return
     }
+    if (isXtermInstanceDisposed(terminal)) {
+      release('disposed')
+      return
+    }
     const probeQueuedAtGeneration = captureTerminalParseProgressGeneration(terminal)
     try {
       // FIFO certification: this callback can only run after every replay
@@ -155,7 +162,7 @@ function engageReplayGuard(
     } catch {
       // write threw (terminal disposed mid-replay): nothing will ever parse,
       // so no auto-replies can leak.
-      release('wedged')
+      release(isXtermInstanceDisposed(terminal) ? 'disposed' : 'wedged')
       return
     }
     armWedgeDeadline(probeQueuedAtGeneration)
@@ -170,7 +177,7 @@ function engageReplayGuard(
     },
     // A rejected write produced no replay auto-replies, so release immediately
     // and recover without recording fake parser progress.
-    onWriteFailure: () => release('wedged')
+    onWriteFailure: () => release(isXtermInstanceDisposed(terminal) ? 'disposed' : 'wedged')
   }
 }
 
@@ -185,6 +192,9 @@ export function replayIntoTerminal(
   options: ReplayTerminalOptions = {}
 ): void {
   if (!data) {
+    return
+  }
+  if (isXtermInstanceDisposed(pane.terminal)) {
     return
   }
   // Why: a probe-certified dead pipeline can never parse this replay — each
@@ -221,6 +231,9 @@ export function replayIntoTerminalAsync(
   if (!data) {
     return Promise.resolve()
   }
+  if (isXtermInstanceDisposed(pane.terminal)) {
+    return Promise.resolve()
+  }
   // Why: same certified-dead short-circuit as replayIntoTerminal; resolve so
   // awaited restore chains complete instead of hanging on a dead parser.
   if (isTerminalWritePipelineCertifiedDead(pane.terminal)) {
@@ -254,6 +267,9 @@ export function waitForTerminalReplayWritesParsed(
   terminal: ReplayGuardWriteTarget,
   options: Pick<ReplayTerminalOptions, 'stallCheckMs'> = {}
 ): Promise<void> {
+  if (isXtermInstanceDisposed(terminal) || isTerminalWritePipelineCertifiedDead(terminal)) {
+    return Promise.resolve()
+  }
   return new Promise((resolve) => {
     let finished = false
     let stallTimer: ReturnType<typeof setTimeout> | null = null
@@ -272,10 +288,18 @@ export function waitForTerminalReplayWritesParsed(
       if (finished) {
         return
       }
+      if (isXtermInstanceDisposed(terminal) || isTerminalWritePipelineCertifiedDead(terminal)) {
+        finish()
+        return
+      }
       try {
         // Why: an empty write is FIFO with earlier replay bytes. Its callback
         // can recover a lost sentinel callback without changing parser state.
         terminal.write('', finish)
+        // Replay guards certify a silent parser after the same second quiet
+        // window. Recheck their terminal-scoped verdict so this waiter cannot
+        // strand a stale restore chain after recovery begins.
+        stallTimer = setTimeout(queueProbe, options.stallCheckMs ?? REPLAY_GUARD_STALL_CHECK_MS)
       } catch {
         // A disposed terminal cannot parse any remaining replay bytes.
         finish()

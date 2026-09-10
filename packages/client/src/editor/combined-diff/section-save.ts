@@ -1,4 +1,4 @@
-import { getLargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
+import { getLargeDiffRenderLimit } from '@agentstart/protocol/git/render-limit'
 import { joinPath } from '~renderer/path'
 import { getConnectionIdForFile } from '~renderer/runtime/connection-context'
 import { writeRuntimeFile } from '~renderer/runtime/file-client'

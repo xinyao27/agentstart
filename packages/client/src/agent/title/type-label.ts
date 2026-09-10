@@ -1,4 +1,4 @@
-import type { AgentType } from '@yiru/protocol/agent/status-records'
+import type { AgentType } from '@agentstart/protocol/agent/status-records'
 
 // Why: desktop and mobile must show the same agent name from one source of truth.
 const WELL_KNOWN_LABELS: Record<string, string> = {

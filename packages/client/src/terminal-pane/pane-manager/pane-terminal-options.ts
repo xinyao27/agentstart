@@ -1,6 +1,6 @@
+import { DEFAULT_TERMINAL_FONT_SIZE } from '@agentstart/protocol/terminal/font-settings'
+import { DESKTOP_TERMINAL_SCROLLBACK_ROWS_DEFAULT } from '@agentstart/protocol/terminal/scrollback-policy'
 import type { ITerminalOptions } from '@xterm/xterm'
-import { DEFAULT_TERMINAL_FONT_SIZE } from '@yiru/protocol/terminal/font-settings'
-import { DESKTOP_TERMINAL_SCROLLBACK_ROWS_DEFAULT } from '@yiru/protocol/terminal/scrollback-policy'
 
 type TerminalCursorStyle = NonNullable<ITerminalOptions['cursorStyle']>
 type TerminalCursorInactiveStyle = NonNullable<ITerminalOptions['cursorInactiveStyle']>
@@ -43,7 +43,7 @@ export function buildDefaultTerminalOptions(): ITerminalOptions {
     fontWeight: '300',
     fontWeightBold: '500',
     scrollback: DESKTOP_TERMINAL_SCROLLBACK_ROWS_DEFAULT,
-    // Why: Yiru's default terminal cells are taller than many users' baseline
+    // Why: AgentStart's default terminal cells are taller than many users' baseline
     // terminal, so a small multiplier keeps row-per-wheel movement familiar.
     scrollSensitivity: DEFAULT_TERMINAL_SCROLL_SENSITIVITY,
     fastScrollSensitivity: DEFAULT_TERMINAL_FAST_SCROLL_SENSITIVITY,
@@ -66,7 +66,7 @@ export function buildDefaultTerminalOptions(): ITerminalOptions {
       width: 7
     },
     // Why: advertise kitty keyboard protocol support so CLIs that probe
-    // (CSI ? u) know Yiru accepts enhanced key reporting. Yiru still writes
+    // (CSI ? u) know AgentStart accepts enhanced key reporting. AgentStart still writes
     // CSI-u for Shift+Enter on non-Windows platforms; programs that respect
     // the handshake otherwise fall back to legacy encodings and miss it.
     // Matches VS Code's xtermTerminal.ts.

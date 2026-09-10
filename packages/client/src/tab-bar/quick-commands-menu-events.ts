@@ -1,1 +1,1 @@
-export const TOGGLE_QUICK_COMMANDS_MENU_EVENT = 'yiru:toggleQuickCommandsMenu'
+export const TOGGLE_QUICK_COMMANDS_MENU_EVENT = 'agentstart:toggleQuickCommandsMenu'

@@ -1,0 +1,182 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service PreflightService {
+  rpc Check(PreflightServiceCheckRequest) returns (PreflightServiceCheckResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc DetectAgents(PreflightServiceDetectAgentsRequest) returns (PreflightServiceDetectAgentsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc DetectRemoteAgents(PreflightServiceDetectRemoteAgentsRequest) returns (PreflightServiceDetectAgentsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RefreshAgents(PreflightServiceRefreshAgentsRequest) returns (PreflightServiceRefreshAgentsResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message PreflightServiceCheckRequest {
+  bool force = 1;
+  optional PreflightContext context = 2;
+}
+
+message PreflightToolStatus {
+  bool installed = 1;
+}
+
+message PreflightCliStatus {
+  bool installed = 1;
+  bool authenticated = 2;
+}
+
+message PreflightServiceCheckResponse {
+  PreflightToolStatus git = 1;
+  PreflightCliStatus gh = 2;
+}
+
+message PreflightServiceDetectAgentsRequest {
+  optional PreflightContext context = 1;
+}
+
+message PreflightServiceDetectAgentsResponse {
+  repeated string agents = 1;
+}
+
+message PreflightServiceDetectRemoteAgentsRequest {
+  string connection_id = 1;
+}
+
+message PreflightServiceRefreshAgentsRequest {
+  optional PreflightContext context = 1;
+}
+
+enum PreflightPathSource {
+  PREFLIGHT_PATH_SOURCE_UNSPECIFIED = 0;
+  PREFLIGHT_PATH_SOURCE_SHELL_HYDRATE = 1;
+  PREFLIGHT_PATH_SOURCE_SYNC_SEED_ONLY = 2;
+}
+
+enum PreflightShellHydrationFailureReason {
+  PREFLIGHT_SHELL_HYDRATION_FAILURE_REASON_UNSPECIFIED = 0;
+  PREFLIGHT_SHELL_HYDRATION_FAILURE_REASON_NONE = 1;
+  PREFLIGHT_SHELL_HYDRATION_FAILURE_REASON_NO_SHELL = 2;
+  PREFLIGHT_SHELL_HYDRATION_FAILURE_REASON_TIMEOUT = 3;
+  PREFLIGHT_SHELL_HYDRATION_FAILURE_REASON_SPAWN_ERROR = 4;
+  PREFLIGHT_SHELL_HYDRATION_FAILURE_REASON_EMPTY_PATH = 5;
+}
+
+message PreflightServiceRefreshAgentsResponse {
+  repeated string agents = 1;
+  repeated string added_path_segments = 2;
+  bool shell_hydration_ok = 3;
+  PreflightPathSource path_source = 4;
+  PreflightShellHydrationFailureReason path_failure_reason = 5;
+}
+
+// Why: the probe target selection consumes only the runtime kind, the WSL
+// distro, and the repair reason; the legacy JSON envelope's remaining fields
+// are renderer bookkeeping the authority never reads, so the typed context
+// carries only what changes behavior.
+message PreflightContext {
+  optional string wsl_distro = 1;
+  bool wsl_default = 2;
+  optional PreflightProjectRuntime project_runtime = 3;
+}
+
+message PreflightProjectRuntime {
+  oneof runtime {
+    PreflightResolvedRuntime resolved = 1;
+    PreflightRepairRequired repair_required = 2;
+  }
+}
+
+message PreflightResolvedRuntime {
+  oneof kind {
+    PreflightLocalHostRuntime local_host = 1;
+    PreflightWindowsHostRuntime windows_host = 2;
+    PreflightWslRuntime wsl = 3;
+  }
+}
+
+message PreflightLocalHostRuntime {}
+
+message PreflightWindowsHostRuntime {}
+
+message PreflightWslRuntime {
+  string distro = 1;
+}
+
+enum PreflightRepairReason {
+  PREFLIGHT_REPAIR_REASON_UNSPECIFIED = 0;
+  PREFLIGHT_REPAIR_REASON_WSL_UNAVAILABLE = 1;
+  PREFLIGHT_REPAIR_REASON_WSL_DISTRO_REQUIRED = 2;
+  PREFLIGHT_REPAIR_REASON_WSL_DISTRO_MISSING = 3;
+}
+
+message PreflightRepairRequired {
+  PreflightRepairReason reason = 1;
+}

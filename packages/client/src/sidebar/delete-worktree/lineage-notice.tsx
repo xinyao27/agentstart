@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { JSX } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { FlowArrow as Workflow } from '~renderer/icons/hugeicons'
@@ -20,7 +20,7 @@ export function DeleteWorktreeLineageNotice({
   }
 
   return (
-    <div className="border-border/70 bg-muted/35 max-w-full min-w-0 overflow-hidden border px-3 py-2 text-xs">
+    <div className="border-border/70 bg-muted/35 max-w-full min-w-0 overflow-hidden rounded-md border px-3 py-2 text-xs">
       <div className="flex items-start gap-2">
         <Workflow className="text-muted-foreground mt-0.5 size-3.5 shrink-0" />
         <div className="min-w-0 flex-1">
@@ -44,7 +44,7 @@ export function DeleteWorktreeLineageNotice({
           </div>
           {/* Why: long nowrap paths can otherwise give this grid child an
              intrinsic width wider than the modal. */}
-          <div className="border-border/60 bg-background/60 mt-2 max-w-full min-w-0 space-y-1 overflow-hidden border px-2 py-1.5">
+          <div className="border-border/60 bg-background/60 mt-2 max-w-full min-w-0 space-y-1 overflow-hidden rounded-sm border px-2 py-1.5">
             {descendants.slice(0, 4).map((child) => (
               <div key={child.id} className="min-w-0 overflow-hidden">
                 <div className="text-foreground truncate font-medium">{child.displayName}</div>

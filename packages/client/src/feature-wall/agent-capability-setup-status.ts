@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import {
   COMPUTER_USE_SKILL_NAME,
-  YIRU_CLI_SKILL_NAME,
+  AGENTSTART_CLI_SKILL_NAME,
   ORCHESTRATION_SKILL_NAME
 } from '~renderer/agent/feature-install-commands'
 import { translate } from '~renderer/i18n/i18n'
@@ -44,7 +44,7 @@ export type AgentCapabilitySetupStatus = {
 
 export function useAgentCapabilitySetupStatus(): AgentCapabilitySetupStatus {
   const activeSkillRuntime = useActiveProjectSkillRuntime()
-  const browserUseSkill = useInstalledAgentSkill(YIRU_CLI_SKILL_NAME, {
+  const browserUseSkill = useInstalledAgentSkill(AGENTSTART_CLI_SKILL_NAME, {
     discoveryTarget: activeSkillRuntime.discoveryTarget,
     sourceKinds: GLOBAL_AGENT_SKILL_SOURCE_KINDS
   })
@@ -187,7 +187,7 @@ function getComputerUseInstallStatus(
         permissions.unavailableReason === 'web_client'
           ? translate(
               'auto.components.feature.wall.agent.capability.setup.status.4c8e1f92a7',
-              'open Yiru Desktop on this Mac'
+              'open AgentStart Desktop on this Mac'
             )
           : translate(
               'auto.components.feature.wall.agent.capability.setup.status.6d2b0a84e1',
@@ -230,7 +230,7 @@ function useComputerUsePermissionStatus(enabled: boolean): {
         throw new Error(
           translate(
             'feature.wall.agentCapabilitySetupStatus.computerUseUnavailable',
-            'Computer Use requires a local Yiru daemon connection'
+            'Computer Use requires a local AgentStart daemon connection'
           )
         )
       }

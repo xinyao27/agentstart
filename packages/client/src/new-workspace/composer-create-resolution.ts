@@ -1,4 +1,4 @@
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
 import { getLinkedWorkItemWorkspaceName } from '~renderer/new-workspace/naming/name'
 import type { SmartWorkspaceNameSelection } from '~renderer/new-workspace/smart-workspace-name-field'
 import type { SmartNameMode } from '~renderer/new-workspace/smart-workspace-source-results'

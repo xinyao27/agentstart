@@ -1,10 +1,10 @@
-import type { BuiltInWindowsTerminalShell } from '@yiru/protocol/host/windows-terminal-shell'
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import type { BuiltInWindowsTerminalShell } from '@agentstart/protocol/host/windows-terminal-shell'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 import { translate } from '~renderer/i18n/i18n'
 
 import { normalizeMatchQuery, scoreQueryTokens } from './query-token-match'
 
-export type TabCreateMenuOptionKind =
+type TabCreateMenuOptionKind =
   | 'go-to-simulator'
   | 'new-browser'
   | 'new-markdown'
@@ -31,9 +31,9 @@ export type TabCreateMenuOptionsContext = {
   windowsShellEntries?: readonly { label: string; shell: BuiltInWindowsTerminalShell }[]
 }
 
-export const TAB_CREATE_MENU_QUERY_MAX_BYTES = 2 * 1024
+const TAB_CREATE_MENU_QUERY_MAX_BYTES = 2 * 1024
 
-export function isTabCreateMenuQueryTooLarge(
+function isTabCreateMenuQueryTooLarge(
   query: string,
   maxBytes = TAB_CREATE_MENU_QUERY_MAX_BYTES
 ): boolean {

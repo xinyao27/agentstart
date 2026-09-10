@@ -1,1 +1,1 @@
-export const YIRU_IOS_TESTFLIGHT_URL = 'https://testflight.apple.com/join/67PVx1Se'
+export const AGENTSTART_IOS_APP_STORE_URL = 'https://apps.apple.com/app/id6810343597'

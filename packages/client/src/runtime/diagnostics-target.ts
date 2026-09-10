@@ -1,4 +1,4 @@
-import { DiagnosticsClient } from '@yiru/protocol'
+import { DiagnosticsClient } from '@agentstart/protocol'
 
 import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'
 

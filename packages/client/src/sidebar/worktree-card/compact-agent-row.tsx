@@ -311,7 +311,7 @@ export const CompactAgentRow = function CompactAgentRow({
     <div
       draggable={false}
       className={cn(
-        'group/agent-row min-w-0 cursor-pointer px-1 text-[11px] leading-none',
+        'group/agent-row min-w-0 cursor-pointer px-1 text-[11px] leading-none rounded-sm',
         'text-muted-foreground',
         // Why: agent rows sit inside an already-filled workspace card, so hover
         // lifts the row's text instead of stacking a second surface on top.

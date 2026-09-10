@@ -73,7 +73,7 @@ export function OnboardingFooter({
           >
             {primaryBusy ? <LoadingIndicator className="size-4" /> : null}
             {primaryLabel}
-            <span className="border-primary-foreground/20 ml-1 inline-flex items-center gap-0.5 border px-1.5 py-0.5 text-[10px] leading-none font-medium text-current/80">
+            <span className="border-primary-foreground/20 ml-1 inline-flex items-center gap-0.5 rounded border px-1.5 py-0.5 text-[10px] leading-none font-medium text-current/80">
               <span>{shortcutModifierLabel}</span>
               <CornerDownLeft className="size-3" />
             </span>

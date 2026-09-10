@@ -1,8 +1,8 @@
-import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import { isPathInsideOrEqual, normalizeRuntimePathSeparators } from '@yiru/protocol/host/path'
-import { parseWslUncPath } from '@yiru/protocol/host/wsl-paths'
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import type { AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import { isPathInsideOrEqual, normalizeRuntimePathSeparators } from '@agentstart/protocol/host/path'
+import { parseWslUncPath } from '@agentstart/protocol/host/wsl-paths'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 
 import { sessionPreviewSearchText } from './display'
 import type { AiVaultGroup, AiVaultScope, AiVaultSort } from './providers'
@@ -43,9 +43,9 @@ type ParsedQuery = {
   pathTerms: string[]
 }
 
-export const AI_VAULT_SESSION_FILTER_QUERY_MAX_BYTES = 2 * 1024
+const AI_VAULT_SESSION_FILTER_QUERY_MAX_BYTES = 2 * 1024
 
-export function isAiVaultSessionFilterQueryTooLarge(
+function isAiVaultSessionFilterQueryTooLarge(
   query: string,
   maxBytes = AI_VAULT_SESSION_FILTER_QUERY_MAX_BYTES
 ): boolean {
@@ -126,7 +126,7 @@ export function groupAiVaultSessions(
   return [...groups.values()]
 }
 
-export function folderLabel(pathValue: string | null): string {
+function folderLabel(pathValue: string | null): string {
   if (!pathValue) {
     return 'Unknown location'
   }
@@ -141,7 +141,7 @@ export function agentLabel(agent: AiVaultAgent): string {
   return aiVaultAgentLabel(agent)
 }
 
-export function parseVaultQuery(query: string): ParsedQuery {
+function parseVaultQuery(query: string): ParsedQuery {
   const terms: string[] = []
   const repoTerms: string[] = []
   const pathTerms: string[] = []
@@ -257,7 +257,7 @@ function isAiVaultSessionInWorkspacePath(workspacePath: string, sessionCwd: stri
     return false
   }
 
-  // WSL agent transcripts record Linux cwd values even when Yiru stores the
+  // WSL agent transcripts record Linux cwd values even when AgentStart stores the
   // active worktree as a Windows UNC path.
   return isPathInsideOrEqual(workspaceWslPath.linuxPath, sessionCwd)
 }

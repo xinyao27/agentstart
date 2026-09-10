@@ -1,21 +1,21 @@
-# `@yiru/protocol`
+# `@agentstart/protocol`
 
-This package is the single protocol definition shared by the Yiru daemon, Chrome extension, and
+This package is the single protocol definition shared by the AgentStart daemon, Chrome extension, and
 iOS app. Its `proto/` tree is authoritative; generated TypeScript, Rust, and Swift bindings are
 artifacts of that schema rather than independently maintained contracts.
 
 ## Boundaries
 
-- `proto/yiru/protocol/v1/` owns transport frames, canonical statuses, and method policy metadata.
-- `proto/yiru/runtime/v1/` owns typed runtime services and their request and response messages.
+- `proto/agentstart/protocol/v1/` owns transport frames, canonical statuses, and method policy metadata.
+- `proto/agentstart/runtime/v1/` owns typed runtime services and their request and response messages.
 - `typescript/`, `rust/`, and `swift/` contain language bindings and transport-neutral facades.
 - Authentication, WebSocket lifecycle, and mobile E2EE stay in their owning applications.
 
-The primary transport prefixes each serialized `yiru.protocol.v1.Frame` with ASCII `YIRU` and its
+The primary transport prefixes each serialized `agentstart.protocol.v1.Frame` with ASCII `AGENTSTART` and its
 one-byte generated protocol version, then carries it over an authenticated, ordered WebSocket. The
 preamble makes protocol frames deterministic to route while the legacy binary channels are being
 removed. Calls use full protobuf method paths, for example
-`/yiru.runtime.v1.StatusService/GetStatus`. `Payload.data` carries a complete typed protobuf
+`/agent_start.runtime.v1.StatusService/GetStatus`. `Payload.data` carries a complete typed protobuf
 message. Credit is measured only in payload bytes and replenished per call; cancel and timeout
 terminate only their addressed call.
 
@@ -38,7 +38,7 @@ behavior piecemeal.
 ## Migration invariant
 
 A capability is migrated as one complete vertical slice. The same change that moves its final
-caller to `@yiru/protocol` removes the old caller adapter, route, contract, generated binding,
+caller to `@agentstart/protocol` removes the old caller adapter, route, contract, generated binding,
 capability advertisement, and transport-only dependency. A compatibility path may exist only while
 an identified production caller still uses it; it is not a permanent fallback or a place to retain
 dead code. Do not mark a capability migrated until a repository-wide symbol scan finds no remaining
@@ -46,6 +46,6 @@ old entry point.
 
 ## Schema changes
 
-Run `vp run @yiru/protocol#generate` after changing a schema. Run the package `lint`, `build`, and
+Run `vp run @agentstart/protocol#generate` after changing a schema. Run the package `lint`, `build`, and
 `typecheck` tasks before committing generated artifacts. Preserve field numbers and names, reserve
 removed fields, and create a new versioned protobuf package for a breaking change.

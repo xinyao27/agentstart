@@ -5,14 +5,14 @@
 
 mod protocol;
 
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     CrashReportsServiceCopyLatestDiagnosticsRequest, CrashReportsServiceDismissRequest,
     CrashReportsServiceGetLatestPendingRequest, CrashReportsServiceGetLatestReportRequest,
     CrashReportsServiceRecordBreadcrumbRequest, CrashReportsServiceRecordBreadcrumbResponse,
     CrashReportsServiceRecordRendererErrorRequest, CrashReportsServiceSubmitRequest,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::crash_reports::CrashReportAuthority;
 use crate::crash_reports::model::CrashReportBreadcrumbRecordArgs;
@@ -100,7 +100,7 @@ impl CrashReportsRpc {
 }
 
 fn store_error(error: crate::transport::secure_file::SecureFileError) -> Status {
-    use yiru_protocol::protocol::v1::StatusCode;
+    use agentstart_protocol::protocol::v1::StatusCode;
     Status {
         code: StatusCode::Internal as i32,
         message: error.to_string(),

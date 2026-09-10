@@ -4,12 +4,12 @@ export {
   RemoteUpdateReason,
   RuntimeDeviceScope,
   RuntimeGraphStatus
-} from '../generated/yiru/runtime/v1/status_pb.js'
+} from '../generated/agent_start/runtime/v1/status_pb.js'
 export type {
   GetStatusResponse,
   RemoteControlDiagnostics,
   RemoteUpdateSupport
-} from '../generated/yiru/runtime/v1/status_pb.js'
+} from '../generated/agent_start/runtime/v1/status_pb.js'
 
 export { RuntimePeer } from './peer.js'
 export { RuntimeHandlerRegistry } from './handler.js'
@@ -34,7 +34,7 @@ export { BROWSER_REPLAY_PROTOCOL_CAPABILITY } from './browser-replay-values.js'
 export type { BrowserReplayEvent, BrowserReplayRecording } from './browser-replay-values.js'
 
 export { RuntimeProtocolError } from './error.js'
-export { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+export { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 export { RuntimeEnvironmentClient } from './runtime-environment-client.js'
 export { CliClient } from './cli-client.js'
 export type { CliWslInput } from './cli-client.js'
@@ -136,12 +136,12 @@ export type {
 } from './updater-values.js'
 
 export type { RuntimeCallDestination, RuntimeCallOptions, RuntimeTransport } from './transport.js'
-export { RuntimeEnvironmentEndpointKind } from '../generated/yiru/runtime/v1/runtime_environment_pb.js'
+export { RuntimeEnvironmentEndpointKind } from '../generated/agent_start/runtime/v1/runtime_environment_pb.js'
 export type {
   RuntimeEnvironment,
   RuntimeEnvironmentEndpoint,
   RuntimeEnvironmentServiceGetStatusResponse
-} from '../generated/yiru/runtime/v1/runtime_environment_pb.js'
+} from '../generated/agent_start/runtime/v1/runtime_environment_pb.js'
 
 export type {
   AppMemory,
@@ -150,12 +150,12 @@ export type {
   SessionMemory,
   UsageValues,
   WorktreeMemory
-} from '../generated/yiru/runtime/v1/diagnostics_pb.js'
+} from '../generated/agent_start/runtime/v1/diagnostics_pb.js'
 export {
   StatsUnavailableAgent,
   StatsUsageProvider,
   StatsUsageRange
-} from '../generated/yiru/runtime/v1/stats_pb.js'
+} from '../generated/agent_start/runtime/v1/stats_pb.js'
 export type {
   GetSummaryResponse,
   StatsDailyActivity,
@@ -167,9 +167,9 @@ export type {
   StatsProviderUsage,
   StatsSupplementalDailyUsage,
   StatsSupplementalUsage
-} from '../generated/yiru/runtime/v1/stats_pb.js'
+} from '../generated/agent_start/runtime/v1/stats_pb.js'
 
-export type { LocalDownloadSession } from '../generated/yiru/runtime/v1/local_download_pb.js'
+export type { LocalDownloadSession } from '../generated/agent_start/runtime/v1/local_download_pb.js'
 export { GitHubShellClient } from './github-shell-client.js'
 export { GITHUB_SHELL_PROTOCOL_CAPABILITY } from './github-shell-values.js'
 export type {
@@ -322,6 +322,6 @@ export * from './preflight-exports.js'
 export * from './ui-exports.js'
 export * from './clipboard-exports.js'
 export * from './folder-workspace-exports.js'
-export * from './shell-yiru-profiles-exports.js'
+export * from './shell-agentstart-profiles-exports.js'
 export * from './workbench-services-exports.js'
 export * from './runtime-streams-exports.js'

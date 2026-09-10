@@ -67,7 +67,7 @@ export type GlobalTerminalSettings = {
    *  modern choice for an IDE context. Only consulted on Windows. */
   terminalWindowsShell: string
   /** Why: when WSL is the Windows default shell, users with multiple distros
-   *  need Yiru to launch terminals and scan agents in the same chosen distro
+   *  need AgentStart to launch terminals and scan agents in the same chosen distro
    *  instead of whatever WSL currently marks as its global default. */
   terminalWindowsWslDistro?: string | null
   /** Why: account/auth location is independent from the user's preferred

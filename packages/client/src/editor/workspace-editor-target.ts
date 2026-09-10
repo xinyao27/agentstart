@@ -1,4 +1,4 @@
-import type { Tab, TabGroup, WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
+import type { Tab, TabGroup, WorkspaceVisibleTabType } from '@agentstart/protocol/workspace/tabs'
 import type { StoreApi } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 
@@ -70,14 +70,11 @@ export function isEditorTabContentType(contentType: Tab['contentType']): boolean
   )
 }
 
-export function getGroupActiveTab(group: TabGroup, tabsById: Map<string, Tab>): Tab | null {
+function getGroupActiveTab(group: TabGroup, tabsById: Map<string, Tab>): Tab | null {
   return group.activeTabId ? (tabsById.get(group.activeTabId) ?? null) : null
 }
 
-export function getMostRecentEditorTabForGroup(
-  group: TabGroup,
-  tabsById: Map<string, Tab>
-): Tab | null {
+function getMostRecentEditorTabForGroup(group: TabGroup, tabsById: Map<string, Tab>): Tab | null {
   const seen = new Set<string>()
   const candidateIdLists = [group.recentTabIds ?? [], group.tabOrder]
   for (const candidateIds of candidateIdLists) {

@@ -10,8 +10,8 @@ import {
   method_policy as methodPolicyExtension,
   method_transport_policy as methodTransportPolicyExtension,
   RuntimeRoutePolicy
-} from '../generated/yiru/protocol/v1/annotations_pb.js'
-import { PeerKind } from '../generated/yiru/protocol/v1/frame_pb.js'
+} from '../generated/agent_start/protocol/v1/annotations_pb.js'
+import { PeerKind } from '../generated/agent_start/protocol/v1/frame_pb.js'
 
 export type RuntimeHandlerContext = Readonly<{
   signal: AbortSignal

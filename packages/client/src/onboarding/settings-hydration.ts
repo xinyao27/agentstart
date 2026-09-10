@@ -1,5 +1,5 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 export type OnboardingSettingsHydrationUpdate = {
   settingsHydrated: boolean

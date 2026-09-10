@@ -1,4 +1,4 @@
-import { isWorkItemLookupText } from '@yiru/protocol/hosted-review/links/lookup-text'
+import { isWorkItemLookupText } from '@agentstart/protocol/hosted-review/links/lookup-text'
 
 import {
   getLinkedWorkItemSuggestedName,
@@ -8,7 +8,7 @@ import {
 
 export type WorkspaceSourceProvider = 'github'
 
-export type WorkspaceSourceLinkedItem = {
+type WorkspaceSourceLinkedItem = {
   provider: WorkspaceSourceProvider
   type: 'pr'
   number: number
@@ -26,7 +26,7 @@ export type WorkspaceSourceItemLike = Omit<WorkspaceSourceLinkedItem, 'provider'
   provider?: WorkspaceSourceProvider
 }
 
-export type WorkspaceSourceSelectionKind = 'github-pr' | 'branch'
+type WorkspaceSourceSelectionKind = 'github-pr' | 'branch'
 
 export type WorkspaceSourceSelection = {
   kind: WorkspaceSourceSelectionKind

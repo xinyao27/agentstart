@@ -1,5 +1,5 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { projectCatalogRepoKey } from '~renderer/project-catalog/query'
 
@@ -11,24 +11,8 @@ import {
 import { useAppStore } from './state'
 import type { AppState } from './types'
 
-export { getProjectHostSetupProjectionFromState } from '../project-catalog/host-setup-selector'
-
 const EMPTY_WORKTREES: Worktree[] = []
-const hasAnyWorktreesCache = new WeakMap<AppState['worktreesByRepo'], boolean>()
 const catalogWorktreeMapCache = new WeakMap<Worktree[], Map<string, Worktree>>()
-
-function getCachedHasAnyWorktrees(worktreesByRepo: AppState['worktreesByRepo']): boolean {
-  const cached = hasAnyWorktreesCache.get(worktreesByRepo)
-  if (cached !== undefined) {
-    return cached
-  }
-
-  // Why: this selector sits in an always-mounted scanner. Cache by slice
-  // identity so unrelated store writes do not rescan every repo bucket.
-  const hasWorktrees = Object.values(worktreesByRepo).some((worktrees) => worktrees.length > 0)
-  hasAnyWorktreesCache.set(worktreesByRepo, hasWorktrees)
-  return hasWorktrees
-}
 
 function getCachedCatalogWorktreeMap(allWorktrees: Worktree[]): Map<string, Worktree> {
   const cached = catalogWorktreeMapCache.get(allWorktrees)
@@ -48,10 +32,6 @@ export function getWorktreeMapFromState(
   state: Pick<AppState, 'worktreesByRepo'>
 ): Map<string, Worktree> {
   return getCachedWorktreeMap(state.worktreesByRepo)
-}
-
-export function getHasAnyWorktreesFromState(state: Pick<AppState, 'worktreesByRepo'>): boolean {
-  return getCachedHasAnyWorktrees(state.worktreesByRepo)
 }
 
 export function getRepoMapFromState(state: Pick<AppState, 'repos'>): Map<string, Repo> {

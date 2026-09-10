@@ -1,3 +1,4 @@
+import type { TerminalLeafId } from '@agentstart/protocol/terminal/pane-identity'
 import { FitAddon } from '@xterm/addon-fit'
 import { SearchAddon } from '@xterm/addon-search'
 import { SerializeAddon } from '@xterm/addon-serialize'
@@ -5,7 +6,6 @@ import { Unicode11Addon } from '@xterm/addon-unicode11'
 import { WebLinksAddon } from '@xterm/addon-web-links'
 import { Terminal } from '@xterm/xterm'
 import type { ITerminalOptions } from '@xterm/xterm'
-import type { TerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
 import { getTerminalUrlOpenHint } from '~renderer/terminal-pane/terminal-link-open-hints'
 
 import { attachPaneDrag } from './pane-drag-pointer'
@@ -50,7 +50,7 @@ export function createPaneDOM(
   // Why: a synchronous throw inside any link provider's provideLinks (notably
   // xterm web-links' LinkComputer raising RangeError on a pathological wrapped
   // line) escapes to window.onerror and gets the renderer killed. Guard every
-  // provider registered after this point — addon-internal and Yiru's own.
+  // provider registered after this point — addon-internal and AgentStart's own.
   installGuardedLinkProviderRegistration(terminal)
   installWindowsCtrlAltChordRepair(terminal)
   const fitAddon = new FitAddon()

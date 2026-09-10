@@ -1,4 +1,4 @@
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { track } from '~renderer/telemetry/client'
 

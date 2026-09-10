@@ -16,7 +16,7 @@ import {
   CrashReportsServiceSubmitResponseSchema,
   CrashReportsServiceCopyLatestDiagnosticsRequestSchema,
   CrashReportsServiceCopyLatestDiagnosticsResponseSchema
-} from '../../generated/yiru/runtime/v1/crash_reports_pb.js'
+} from '../../generated/agent_start/runtime/v1/crash_reports_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from '../transport.js'
 
 export class CrashReportsClient {
@@ -144,11 +144,11 @@ export type {
   CrashReportDetails,
   CrashReportDiagnosticBundle,
   CrashReportNullableString
-} from '../../generated/yiru/runtime/v1/crash_reports_pb.js'
+} from '../../generated/agent_start/runtime/v1/crash_reports_pb.js'
 
 export {
   CrashReportStatus,
   CrashReportSource,
   RendererErrorReportKind,
   RendererErrorSurface
-} from '../../generated/yiru/runtime/v1/crash_reports_pb.js'
+} from '../../generated/agent_start/runtime/v1/crash_reports_pb.js'

@@ -28,7 +28,7 @@ type ForegroundOutputControllerOptions = {
   protectNativeWindowsSynchronizedOutput: boolean
 }
 
-export type ForegroundOutputDecision = {
+type ForegroundOutputDecision = {
   refresh: boolean
   inPlaceRewrite: boolean
   recoverAtlasAfterParse: boolean

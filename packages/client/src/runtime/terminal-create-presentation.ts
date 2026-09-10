@@ -1,4 +1,4 @@
-import type { TerminalCreateInput } from '@yiru/protocol'
+import type { TerminalCreateInput } from '@agentstart/protocol'
 
 export function resolveTerminalPresentation(data: {
   presentation?: TerminalCreateInput['presentation']

@@ -1,4 +1,4 @@
-import type { AgentStatusState } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusState } from '@agentstart/protocol/agent/status-records'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { cn } from '~renderer/ui/class-names'

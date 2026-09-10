@@ -4,10 +4,10 @@ import {
   normalizeExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 import type { AppState } from '~renderer/store/types'
 import { getIndexedWorktreeMap } from '~renderer/worktree/repo-index'
 
@@ -17,7 +17,7 @@ export type AiVaultResumeTargetStatus = 'local' | 'runtime' | 'unknown'
 
 type AiVaultResumeRepoOwner = Pick<Repo, 'connectionId' | 'executionHostId'>
 
-export function getAiVaultResumeRepoTargetStatus(
+function getAiVaultResumeRepoTargetStatus(
   repo: AiVaultResumeRepoOwner | null | undefined
 ): AiVaultResumeTargetStatus {
   if (!repo) {
@@ -28,7 +28,7 @@ export function getAiVaultResumeRepoTargetStatus(
   return getAiVaultResumeExecutionHostTargetStatus(getRepoExecutionHostId(repo))
 }
 
-export function isSupportedAiVaultResumeTargetStatus(status: AiVaultResumeTargetStatus): boolean {
+function isSupportedAiVaultResumeTargetStatus(status: AiVaultResumeTargetStatus): boolean {
   return status === 'local' || status === 'runtime'
 }
 

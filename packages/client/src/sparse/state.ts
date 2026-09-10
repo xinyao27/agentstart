@@ -1,4 +1,4 @@
-import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
+import type { SparsePreset } from '@agentstart/protocol/worktree/create-result'
 import type { StateCreator } from 'zustand'
 import { publishRendererCommandResult } from '~renderer/runtime/renderer-command-result-channel'
 import { requireRepoProtocolClient } from '~renderer/runtime/repo-catalog-target'
@@ -6,7 +6,7 @@ import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 import type { AppState } from '../store/types'
 
-export type SparsePresetsLoadStatus = 'idle' | 'loading' | 'loaded' | 'error'
+type SparsePresetsLoadStatus = 'idle' | 'loading' | 'loaded' | 'error'
 
 export type SparsePresetsSlice = {
   /** Per-repo preset list. Lazily populated by `fetchSparsePresets`; missing

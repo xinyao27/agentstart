@@ -37,7 +37,7 @@ pub(crate) enum ConsentState {
 #[serde(rename_all = "snake_case")]
 pub(crate) enum ConsentDisabledReason {
     DoNotTrack,
-    YiruDisabled,
+    AgentStartDisabled,
     Ci,
     UserOptOut,
 }

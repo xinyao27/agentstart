@@ -1,9 +1,9 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import {
   isPositiveHostedReviewNumber,
   type HostedReviewProvider
-} from '@yiru/protocol/hosted-review/types'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/hosted-review/types'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import React from 'react'
 import { getGitHubPRCacheKey } from '~renderer/github/cache-key'
 import {

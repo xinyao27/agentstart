@@ -1,8 +1,8 @@
 import type {
   BrowserReplayEvent,
   WorkspaceConsoleSensorEntry as ConsoleSensorEntry
-} from '@yiru/protocol'
-import type { AgentPhase } from '@yiru/protocol/agent/phase'
+} from '@agentstart/protocol'
+import type { AgentPhase } from '@agentstart/protocol/agent/phase'
 import type {
   NotificationDismissResult,
   NotificationDisplayInput,
@@ -21,7 +21,7 @@ export type BrowserReplayCapture = {
 
 export type NetworkMockMode = 'empty' | 'error-500' | 'slow'
 
-export type PickedElementContext = {
+type PickedElementContext = {
   column: number | null
   componentName: string | null
   computedStyles: Record<string, string>
@@ -68,6 +68,18 @@ export type BrowserAiStatus = {
   enabled: boolean
 }
 
+export type CommunityAdapter = {
+  code: string
+  id: string
+  match: string
+  name: string
+}
+
+export type CommunityAdaptersState = {
+  adapters: CommunityAdapter[]
+  disabled: boolean
+}
+
 export type BrowserTabProjectionEvent =
   | { browserPageId: string; kind: 'removed' }
   | {
@@ -88,6 +100,10 @@ export type ExtensionBrowserCapabilities = {
     projectIds: string[]
   }) => Promise<void>
   arrangeStartDay: (projectIds: string[]) => Promise<void>
+  arrangeWorkspaceWindows: (
+    projectIds: string[],
+    mode: BrowserWorkspacePreferences['layoutMode']
+  ) => Promise<void>
   captureVisiblePage: () => Promise<string>
   captureActivePageContext: (grant: 'always-site' | 'once') => Promise<BrowserContextPayload>
   clearPendingPageContext: () => Promise<void>
@@ -147,13 +163,13 @@ export type ExtensionBrowserCapabilities = {
   isRecording: () => Promise<boolean>
   openFocusWorkspace: (projectId: string) => Promise<void>
   openNotificationSettings: () => Promise<void>
+  openUserScriptsSettings: () => Promise<void>
   openDaemonTabCommand: (input: {
     eventId: number
     projectId?: string
     url: string
   }) => Promise<void>
   openAgentMonitor: (input: { body: string; title: string }) => Promise<void>
-  openExtensionSettings: () => Promise<void>
   pickPageElement: () => Promise<PickedElementContext | null>
   pickProjectDirectory: () => Promise<string | null>
   pickColor: () => Promise<string>
@@ -189,8 +205,10 @@ export type ExtensionBrowserCapabilities = {
     projectId: string
   }) => Promise<{ enabled: boolean; links: BrowserProjectBookmark[] }>
   readOnDeviceAiStatus: () => Promise<BrowserAiStatus>
-  readGitHubContext: () => Promise<string>
   readWorkspacePreferences: () => Promise<BrowserWorkspacePreferences>
+  readCommunityAdapters: () => Promise<CommunityAdaptersState>
+  readTrustedSites: () => Promise<string[]>
+  readGitHubContext: () => Promise<string>
   readRecentHistoryContext: (minutes: number) => Promise<BrowserContextPayload>
   replay: (events: BrowserReplayEvent[]) => Promise<void>
   requestDangerousAssertion: (input: { challenge: string; credentialId: string }) => Promise<{
@@ -204,17 +222,18 @@ export type ExtensionBrowserCapabilities = {
   requestGitHubPage: () => Promise<boolean>
   requestPageCapture: () => Promise<boolean>
   runPerformanceAudit: () => Promise<BrowserPerformanceCapture>
-  arrangeWorkspaceWindows: (
-    projectIds: string[],
-    mode: BrowserWorkspacePreferences['layoutMode']
-  ) => Promise<void>
-  setWorkspacePreferences: (preferences: BrowserWorkspacePreferences) => Promise<void>
   saveProjectBookmarks: (input: {
     displayName: string
     links: BrowserProjectBookmark[]
     projectId: string
   }) => Promise<BrowserProjectBookmark[]>
+  setWorkspacePreferences: (preferences: BrowserWorkspacePreferences) => Promise<void>
+  saveCommunityAdapter: (
+    input: Omit<CommunityAdapter, 'id'> & { id?: string }
+  ) => Promise<CommunityAdapter[]>
   setOnDeviceAiEnabled: (enabled: boolean) => Promise<void>
+  removeCommunityAdapter: (id: string) => Promise<CommunityAdapter[]>
+  revokeTrustedSite: (origin: string) => Promise<void>
   startConsoleSensor: () => Promise<void>
   startNetworkMock: (rule: { mode: NetworkMockMode; urlIncludes: string }) => Promise<void>
   startRecording: () => Promise<void>
@@ -240,4 +259,8 @@ export function getExtensionBrowserCapabilities(): ExtensionBrowserCapabilities 
     throw new Error('extension_browser_capabilities_not_configured')
   }
   return activeCapabilities
+}
+
+export function hasExtensionBrowserCapabilities(): boolean {
+  return activeCapabilities !== null
 }

@@ -741,7 +741,7 @@ fn validate_schedule(schedule: &RitualSchedule) -> Result<(), RitualError> {
 }
 
 async fn read_run_command(filesystem: &HostFilesystem, project_path: &str) -> Option<String> {
-    let path = filesystem.paths().join(&[project_path, "yiru.yaml"]);
+    let path = filesystem.paths().join(&[project_path, "agentstart.yaml"]);
     let text = filesystem.read_text(&path, 1_024 * 1_024).await.ok()??;
     let value = serde_saphyr::from_str::<serde_json::Value>(&text).ok()?;
     let scripts = value.get("scripts")?.as_object()?;

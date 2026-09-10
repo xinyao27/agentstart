@@ -1,11 +1,11 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   GitHubService,
   GitHubServiceSubscribeEventsRequestSchema,
   GitHubServiceSubscribeEventsResponseSchema
-} from '../../generated/yiru/runtime/v1/github_pb.js'
+} from '../../generated/agent_start/runtime/v1/github_pb.js'
 import { RuntimeProtocolError } from '../error.js'
 import type { RuntimeCallOptions, RuntimeTransport } from '../transport.js'
 import { githubPrRefreshEvent, githubWorkItemMutatedEvent } from './events-values.js'

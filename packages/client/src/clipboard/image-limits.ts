@@ -9,7 +9,7 @@ export function clipboardImageTooLargeMessage(): string {
 export const CLIPBOARD_IMAGE_MAX_SOURCE_BYTES = Math.floor(
   (CLIPBOARD_IMAGE_MAX_BASE64_CHARS / 4) * 3
 )
-export const CLIPBOARD_IMAGE_MAX_PIXELS = 32 * 1024 * 1024
+const CLIPBOARD_IMAGE_MAX_PIXELS = 32 * 1024 * 1024
 
 export type ClipboardImageDimensions = {
   height: number

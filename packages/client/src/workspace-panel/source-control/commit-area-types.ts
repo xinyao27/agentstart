@@ -1,7 +1,7 @@
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/protocol/source-control/ai-actions'
+} from '@agentstart/protocol/source-control/ai-actions'
 import type { SourceControlAiWriteTarget } from '~renderer/source-control/ai-recipe-save'
 
 import type { DropdownActionKind, DropdownEntry } from './dropdown-items'

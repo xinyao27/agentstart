@@ -3,7 +3,7 @@ import type {
   ClaudeRateLimitAccountsState,
   CodexManagedAccountRuntimeSelection,
   CodexRateLimitAccountsState
-} from '@yiru/protocol/settings/managed-accounts'
+} from '@agentstart/protocol/settings/managed-accounts'
 
 type ProviderAccount =
   | ClaudeRateLimitAccountsState['accounts'][number]
@@ -68,7 +68,7 @@ export function providerAccountMatchesView(
   const accountView = getProviderAccountRuntime(account)
 
   if (options.remoteOwner) {
-    // Why: provider accounts belong to the Yiru runtime, not its client or a
+    // Why: provider accounts belong to the AgentStart runtime, not its client or a
     // downstream SSH host; a Windows runtime owns both host and WSL accounts.
     return options.ownerPlatform === 'win32' || accountView.runtime !== 'wsl'
   }

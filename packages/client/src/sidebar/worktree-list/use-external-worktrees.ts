@@ -1,6 +1,6 @@
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { DetectedWorktreeListResult } from '@agentstart/protocol/worktree/model'
 import type { QueryClient } from '@tanstack/react-query'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { DetectedWorktreeListResult } from '@yiru/protocol/worktree/model'
 import { useState } from 'react'
 import { refreshProjectCatalogWorktrees } from '~renderer/project-catalog/refresh'
 import { useAppStore } from '~renderer/store/state'

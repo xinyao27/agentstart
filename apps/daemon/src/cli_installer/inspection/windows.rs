@@ -28,7 +28,7 @@ pub(super) async fn inspect(
                 CliInstallState::NotInstalled,
                 None,
                 format!(
-                    "Register {} to use Yiru from Command Prompt or PowerShell.",
+                    "Register {} to use AgentStart from Command Prompt or PowerShell.",
                     display_path(command_path)
                 ),
             ));
@@ -75,12 +75,12 @@ pub(crate) fn extract_managed_forwarder(
     if lines.len() != 4
         || lines[0] != "@echo off"
         || lines[1] != "setlocal"
-        || lines[3] != "\"%YIRU_LAUNCHER%\" %*"
+        || lines[3] != "\"%AGENTSTART_LAUNCHER%\" %*"
     {
         return None;
     }
     let target = lines[2]
-        .strip_prefix("set \"YIRU_LAUNCHER=")?
+        .strip_prefix("set \"AGENTSTART_LAUNCHER=")?
         .strip_suffix('"')?
         .replace("\"\"", "\"");
     let target = PathBuf::from(target);
@@ -88,9 +88,9 @@ pub(crate) fn extract_managed_forwarder(
     let launcher_name = launcher_path
         .file_name()
         .map(|value| value.to_string_lossy().to_lowercase());
-    let has_yiru_name = matches!(
+    let has_agentstart_name = matches!(
         name.as_str(),
-        "yiru" | "yiru.exe" | "yiru-dev" | "yiru-dev.cmd"
+        "agentstart" | "agentstart.exe" | "agentstart-dev" | "agentstart-dev.cmd"
     ) || launcher_name.as_deref() == Some(name.as_str());
     let is_owned_path = context.user_data_path.as_ref().is_some_and(|user_data| {
         path_is_inside(
@@ -104,7 +104,7 @@ pub(crate) fn extract_managed_forwarder(
         .to_lowercase()
         .contains("\\resources\\bin\\")
         || same_path(HostPlatform::Windows, &target, launcher_path);
-    (has_yiru_name && is_owned_path).then_some(target)
+    (has_agentstart_name && is_owned_path).then_some(target)
 }
 
 pub(super) fn is_bundled_command(
@@ -146,7 +146,7 @@ fn conflict_status(
         CliInstallState::Conflict,
         None,
         format!(
-            "{} exists but is not a Yiru launcher script.",
+            "{} exists but is not a AgentStart launcher script.",
             display_path(command_path)
         ),
     )

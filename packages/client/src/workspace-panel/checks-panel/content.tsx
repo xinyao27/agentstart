@@ -1,17 +1,10 @@
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
 import { GitPullRequest } from '~renderer/icons/hugeicons'
 
 export { CHECK_COLOR, CHECK_ICON } from '../check-status-presentation'
-export { CheckJobLogTail } from '../check-job-log-tail'
-export {
-  buildMergeabilityRecalculationCommands,
-  ConflictingFilesSection,
-  MergeConflictNotice
-} from './conflict-details'
-export { PRTriageStrip, ConflictTriageStrip } from './triage-strip'
-export { getFailedChecksForDetails } from './check-status'
+export { ConflictingFilesSection, MergeConflictNotice } from './conflict-details'
+export { PRTriageStrip } from './triage-strip'
 export { ChecksList } from './checks-list'
-export { isMutablePRConversationComment } from './comment-actions'
 export { PRCommentsList } from './comments-list'
 
 export const PullRequestIcon = GitPullRequest

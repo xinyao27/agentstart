@@ -5,7 +5,7 @@ const ATLAS_RECOVERY_DELAYS_MS = [120, 500]
 // Why: a streaming TUI requests output atlas recovery every frame; recovering
 // mid-stream clears the shared atlas and repaints every pane, which flickers
 // (STA-1365). Wait for output to go quiet so recovery runs once, on settle.
-export const TERMINAL_OUTPUT_RECOVERY_QUIET_MS = 200
+const TERMINAL_OUTPUT_RECOVERY_QUIET_MS = 200
 
 let terminalOutputRecoveryDebounceTimer: ReturnType<typeof setTimeout> | null = null
 

@@ -1,7 +1,10 @@
-import { getRepoExecutionHostId, normalizeExecutionHostId } from '@yiru/protocol/host/identity'
-import type { GitHubPRRefreshCandidate } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import {
+  getRepoExecutionHostId,
+  normalizeExecutionHostId
+} from '@agentstart/protocol/host/identity'
+import type { GitHubPRRefreshCandidate } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { getHostedReviewCacheKey } from '~renderer/source-control/hosted-review-state/cache-identity'
 import { isMacAppDataPath } from '~renderer/source-control/macos-data-access'
 import type { AppState } from '~renderer/store/types'

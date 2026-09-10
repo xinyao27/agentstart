@@ -1,4 +1,4 @@
-import { resolveSetupAgentSequenceLaunchCommand } from '@yiru/protocol/setup/agent-sequencing'
+import { resolveSetupAgentSequenceLaunchCommand } from '@agentstart/protocol/setup/agent-sequencing'
 import { CLIENT_PLATFORM } from '~renderer/new-workspace/workspace-creation'
 import type { useAppStore } from '~renderer/store/state'
 

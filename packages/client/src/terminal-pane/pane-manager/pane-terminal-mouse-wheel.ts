@@ -10,16 +10,10 @@ import type { TerminalTuiMouseWheelDistanceState } from './pane-terminal-tui-whe
 
 export {
   TERMINAL_TUI_MOUSE_WHEEL_MULTIPLIER,
-  TERMINAL_TUI_MOUSE_WHEEL_MULTIPLIER_MAX,
-  TERMINAL_TUI_MOUSE_WHEEL_MULTIPLIER_MIN,
-  createTerminalTuiMouseWheelDistanceState,
-  normalizeTerminalTuiMouseWheelMultiplier,
-  resolveTerminalTuiMouseWheelReportCount
+  normalizeTerminalTuiMouseWheelMultiplier
 } from './pane-terminal-tui-wheel-reports'
-export type { TerminalTuiMouseWheelDistanceState } from './pane-terminal-tui-wheel-reports'
-
 const XTERM_MOUSE_REPORTING_CLASS = 'enable-mouse-events'
-const REPLAYED_WHEEL_EVENT_PROPERTY = '__yiruReplayedTerminalWheelEvent'
+const REPLAYED_WHEEL_EVENT_PROPERTY = '__agentstartReplayedTerminalWheelEvent'
 const DOM_DELTA_LINE = 1
 
 type TerminalWheelTarget = Pick<Terminal, 'attachCustomWheelEventHandler' | 'element' | 'rows'>
@@ -102,7 +96,7 @@ function resolveTerminalWheelCellHeight(terminal: TerminalWheelTarget): number |
   return rect.height / terminal.rows
 }
 
-export function shouldMultiplyTerminalMouseWheel(
+function shouldMultiplyTerminalMouseWheel(
   event: WheelEvent,
   terminalElement: HTMLElement | null | undefined
 ): boolean {

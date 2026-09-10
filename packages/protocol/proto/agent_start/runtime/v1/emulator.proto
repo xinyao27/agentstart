@@ -1,0 +1,445 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+// Why: drives the iOS Simulator helper (serve-sim) behind the mobile
+// companion pane. The helper and simctl only exist on macOS; every method
+// stays reachable on other platforms so a call returns the same
+// EMULATOR_ERROR_CODE_NOT_MACOS failure the legacy JSON surface returned
+// instead of being rejected earlier by policy.
+service EmulatorService {
+  rpc List(EmulatorServiceListRequest) returns (EmulatorServiceListResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Attach(EmulatorServiceAttachRequest) returns (EmulatorServiceAttachResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Tap(EmulatorServiceTapRequest) returns (EmulatorServiceOkResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Gesture(EmulatorServiceGestureRequest) returns (EmulatorServiceOkResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc TypeText(EmulatorServiceTypeTextRequest) returns (EmulatorServiceOkResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Button(EmulatorServiceButtonRequest) returns (EmulatorServiceOkResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Rotate(EmulatorServiceRotateRequest) returns (EmulatorServiceOkResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Exec(EmulatorServiceExecRequest) returns (EmulatorServiceExecResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Kill(EmulatorServiceKillRequest) returns (EmulatorServiceKillResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Shutdown(EmulatorServiceShutdownRequest) returns (EmulatorServiceShutdownResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListSimulators(EmulatorServiceListSimulatorsRequest) returns (EmulatorServiceListSimulatorsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Availability(EmulatorServiceAvailabilityRequest) returns (EmulatorServiceAvailabilityResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc UnregisterActive(EmulatorServiceUnregisterActiveRequest) returns (EmulatorServiceUnregisterActiveResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  // Why: replaces the legacy binary side-channel with frames carried inline
+  // in each streamed response, so the transport no longer needs an
+  // out-of-band side-channel id to correlate frame bytes with a call.
+  rpc StreamFrames(EmulatorServiceStreamFramesRequest) returns (stream EmulatorServiceStreamFramesResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+// Shared attach/action target: an explicit device udid/name always wins, and
+// worktree resolves to that worktree's active managed session otherwise.
+message EmulatorTarget {
+  optional string worktree = 1;
+  optional string device = 2;
+}
+
+message EmulatorSessionInfo {
+  string device_udid = 1;
+  string ws_url = 2;
+  string stream_url = 3;
+  optional string ax_url = 4;
+  optional uint32 helper_pid = 5;
+}
+
+message EmulatorDeviceInfo {
+  string name = 1;
+  string udid = 2;
+  string state = 3;
+  string runtime = 4;
+  optional bool is_available = 5;
+}
+
+message EmulatorHelperStatus {
+  bool ok = 1;
+  optional string message = 2;
+}
+
+enum EmulatorGesturePointKind {
+  EMULATOR_GESTURE_POINT_KIND_UNSPECIFIED = 0;
+  EMULATOR_GESTURE_POINT_KIND_BEGIN = 1;
+  EMULATOR_GESTURE_POINT_KIND_MOVE = 2;
+  EMULATOR_GESTURE_POINT_KIND_END = 3;
+}
+
+message EmulatorGesturePoint {
+  double x = 1;
+  double y = 2;
+  EmulatorGesturePointKind kind = 3;
+  optional uint32 edge = 4;
+}
+
+enum EmulatorOrientation {
+  EMULATOR_ORIENTATION_UNSPECIFIED = 0;
+  EMULATOR_ORIENTATION_PORTRAIT = 1;
+  EMULATOR_ORIENTATION_PORTRAIT_UPSIDE_DOWN = 2;
+  EMULATOR_ORIENTATION_LANDSCAPE_LEFT = 3;
+  EMULATOR_ORIENTATION_LANDSCAPE_RIGHT = 4;
+}
+
+// Why: `emulator list` and `emulator exec` surface the serve-sim helper's own
+// JSON verbatim; its shape is owned by that external tool, not this daemon,
+// so it is modelled as a typed recursive value instead of assuming a schema
+// we do not control. Mirrors ComputerJsonValue in computer.proto.
+message EmulatorJsonValue {
+  oneof kind {
+    EmulatorJsonNull null_value = 1;
+    bool bool_value = 2;
+    double number_value = 3;
+    string string_value = 4;
+    EmulatorJsonValueList list_value = 5;
+    EmulatorJsonValueObject object_value = 6;
+  }
+}
+
+enum EmulatorJsonNull {
+  EMULATOR_JSON_NULL_UNSPECIFIED = 0;
+  EMULATOR_JSON_NULL_VALUE = 1;
+}
+
+message EmulatorJsonValueList {
+  repeated EmulatorJsonValue values = 1;
+}
+
+message EmulatorJsonValueObject {
+  repeated EmulatorJsonValueEntry entries = 1;
+}
+
+message EmulatorJsonValueEntry {
+  string key = 1;
+  EmulatorJsonValue value = 2;
+}
+
+message EmulatorServiceListRequest {}
+
+message EmulatorServiceListResponse {
+  EmulatorJsonValue sessions = 1;
+}
+
+message EmulatorServiceAttachRequest {
+  EmulatorTarget target = 1;
+}
+
+message EmulatorServiceAttachResponse {
+  bool attached = 1;
+  EmulatorSessionInfo info = 2;
+}
+
+message EmulatorServiceTapRequest {
+  EmulatorTarget target = 1;
+  double x = 2;
+  double y = 3;
+}
+
+message EmulatorServiceOkResponse {
+  bool ok = 1;
+}
+
+message EmulatorServiceGestureRequest {
+  EmulatorTarget target = 1;
+  repeated EmulatorGesturePoint points = 2;
+}
+
+message EmulatorServiceTypeTextRequest {
+  EmulatorTarget target = 1;
+  string text = 2;
+}
+
+message EmulatorServiceButtonRequest {
+  EmulatorTarget target = 1;
+  string name = 2;
+}
+
+message EmulatorServiceRotateRequest {
+  EmulatorTarget target = 1;
+  EmulatorOrientation orientation = 2;
+}
+
+message EmulatorServiceExecRequest {
+  EmulatorTarget target = 1;
+  string command = 2;
+}
+
+message EmulatorServiceExecResponse {
+  EmulatorJsonValue result = 1;
+}
+
+message EmulatorServiceKillRequest {
+  EmulatorTarget target = 1;
+  bool managed_only = 2;
+}
+
+message EmulatorServiceKillResponse {
+  bool ok = 1;
+  optional string device_udid = 2;
+}
+
+message EmulatorServiceShutdownRequest {
+  EmulatorTarget target = 1;
+  bool managed_only = 2;
+}
+
+message EmulatorServiceShutdownResponse {
+  bool ok = 1;
+  optional string device_udid = 2;
+}
+
+message EmulatorServiceListSimulatorsRequest {}
+
+message EmulatorServiceListSimulatorsResponse {
+  repeated EmulatorDeviceInfo devices = 1;
+}
+
+message EmulatorServiceAvailabilityRequest {}
+
+message EmulatorServiceAvailabilityResponse {
+  string platform = 1;
+  bool available = 2;
+  repeated EmulatorDeviceInfo devices = 3;
+  EmulatorHelperStatus simctl = 4;
+  EmulatorHelperStatus serve_sim = 5;
+  string message = 6;
+}
+
+message EmulatorServiceUnregisterActiveRequest {
+  optional string worktree = 1;
+}
+
+message EmulatorServiceUnregisterActiveResponse {
+  bool ok = 1;
+}
+
+message EmulatorServiceStreamFramesRequest {
+  string stream_url = 1;
+  optional string stream_key = 2;
+}
+
+message EmulatorStreamFrame {
+  bytes data = 1;
+}
+
+message EmulatorStreamError {
+  string message = 1;
+}
+
+message EmulatorServiceStreamFramesResponse {
+  oneof event {
+    bool ready = 1;
+    EmulatorStreamFrame frame = 2;
+    EmulatorStreamError error = 3;
+  }
+}

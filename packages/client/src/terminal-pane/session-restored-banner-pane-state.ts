@@ -44,7 +44,7 @@ export function pruneSessionRestoredBannerPaneIds(
   return new Set([...paneIds].filter((paneId) => livePaneIds.has(paneId)))
 }
 
-export function getSessionRestoredBannerDismissPaneId(
+function getSessionRestoredBannerDismissPaneId(
   event: SessionRestoredBannerDismissEvent,
   panes: readonly SessionRestoredBannerPane[]
 ): number | null {

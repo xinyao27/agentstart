@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import type { PendingCall } from './call-state.js'
 import { RuntimeProtocolError } from './error.js'
 import { MAX_PENDING_RESPONSE_BYTES, MAX_PENDING_REQUEST_BYTES } from './peer-values.js'

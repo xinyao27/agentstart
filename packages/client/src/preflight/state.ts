@@ -1,4 +1,4 @@
-import type { PreflightStatusValue as PreflightStatus } from '@yiru/protocol'
+import type { PreflightStatusValue as PreflightStatus } from '@agentstart/protocol'
 import type { StateCreator } from 'zustand'
 import {
   getLocalPreflightContext,

@@ -34,7 +34,7 @@ const getPrivacyPaneBaseSearchEntries = createLocalizedCatalog(() => [
     ),
     description: translate(
       'auto.components.settings.privacy.search.b707cc3981',
-      'Help improve Yiru by sending anonymous feature-usage events.'
+      'Help improve AgentStart by sending anonymous feature-usage events.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.privacy.search.77d3180def', 'telemetry'),
@@ -79,7 +79,7 @@ const getPrivacyPaneBaseSearchEntries = createLocalizedCatalog(() => [
       ),
       ...translateSearchKeyword(
         'auto.components.settings.privacy.search.69637f4dc4',
-        'yiru_telemetry_disabled'
+        'agentstart_telemetry_disabled'
       ),
       ...translateSearchKeyword('auto.components.settings.privacy.search.5854a5c752', 'ci'),
       ...translateSearchKeyword(
@@ -101,7 +101,7 @@ const getBrowserContextSearchEntries = createLocalizedCatalog((): SettingsSearch
     title: translate('extension.context.settingsTitle', 'Browser project context'),
     description: translate(
       'extension.context.settingsDescription',
-      'Show project actions only when the current URL or local development port matches daemon facts exactly. Yiru never guesses.'
+      'Show project actions only when the current URL or local development port matches daemon facts exactly. AgentStart never guesses.'
     ),
     keywords: [
       ...translateSearchKeyword('extension.context.search.browser', 'browser'),

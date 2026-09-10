@@ -11,7 +11,7 @@ export type WorkspaceNavigationTarget = {
   worktreeId?: string
 }
 
-export type GlobalPage = 'activity' | 'automations' | 'mobile' | 'search' | 'settings' | 'skills'
+export type GlobalPage = 'activity' | 'browser' | 'mobile' | 'search' | 'settings' | 'skills'
 
 export async function focusOrCreateWorkspace(target: WorkspaceNavigationTarget): Promise<void> {
   await rememberProject(target.projectId)
@@ -31,10 +31,6 @@ export async function focusOrCreateWorkspace(target: WorkspaceNavigationTarget):
 }
 
 export async function focusOrCreatePage(page: GlobalPage): Promise<void> {
-  if (page === 'settings') {
-    await chrome.runtime.openOptionsPage()
-    return
-  }
   const pageUrl = buildPageUrl(page)
   const tabs = await chrome.tabs.query({ url: `${chrome.runtime.getURL('workspace.html')}*` })
   const matchingTab = tabs.find((tab) => workspaceTabPage(tab.url) === page)

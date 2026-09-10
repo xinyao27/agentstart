@@ -20,7 +20,7 @@ function conflictSurface(file: Pick<OpenFile, 'mode'>): ConflictSurface {
   return file.mode === 'edit' ? 'edit' : 'unstaged-diff'
 }
 
-export function conflictTransport(
+function conflictTransport(
   connectionId: string | undefined,
   runtimeEnvironmentId: string | null | undefined
 ): ConflictTransport {

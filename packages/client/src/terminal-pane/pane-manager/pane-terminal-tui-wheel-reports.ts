@@ -15,8 +15,8 @@ const TUI_WHEEL_COMPRESSED_MAX_DISTANCE_ROWS_PER_EVENT = 6
 const TUI_WHEEL_BURST_MAX_DISTANCE_ROWS_PER_EVENT = 9
 
 export const TERMINAL_TUI_MOUSE_WHEEL_MULTIPLIER = 1
-export const TERMINAL_TUI_MOUSE_WHEEL_MULTIPLIER_MIN = 1
-export const TERMINAL_TUI_MOUSE_WHEEL_MULTIPLIER_MAX = 10
+const TERMINAL_TUI_MOUSE_WHEEL_MULTIPLIER_MIN = 1
+const TERMINAL_TUI_MOUSE_WHEEL_MULTIPLIER_MAX = 10
 
 type WheelEventWithLegacyDelta = WheelEvent & {
   wheelDelta?: number
@@ -72,7 +72,7 @@ function hasDiscreteLegacyWheelDelta(event: TerminalTuiWheelEventInput): boolean
   return legacyDelta !== null && Math.abs(legacyDelta) >= LEGACY_MOUSE_WHEEL_DELTA_MIN
 }
 
-export function isDiscreteTerminalTuiWheelEvent(event: TerminalTuiWheelEventInput): boolean {
+function isDiscreteTerminalTuiWheelEvent(event: TerminalTuiWheelEventInput): boolean {
   if ((event.deltaMode ?? DOM_DELTA_PIXEL) !== DOM_DELTA_PIXEL) {
     return true
   }

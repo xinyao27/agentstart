@@ -6,10 +6,7 @@ use crate::persistence::WorkspaceJournal;
 use crate::settings::SettingsAuthority;
 use crate::shell_services::ShellServicesRegistry;
 
-use super::{
-    ApnsNotification, ApnsNotificationPhase, MobileNotificationEvent, NotificationAuthority,
-    NotificationSource,
-};
+use super::{MobileNotificationEvent, NotificationAuthority, NotificationSource};
 
 const AGENT_PHASE_CAPACITY: usize = 256;
 
@@ -18,6 +15,12 @@ pub(crate) enum AgentPhase {
     Complete,
     Executing,
     Thinking,
+    WaitingDecision,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum NotificationPhase {
+    Complete,
     WaitingDecision,
 }
 
@@ -172,10 +175,10 @@ async fn publish_notification(
         return;
     }
     let (phase, title) = match transition.phase {
-        AgentPhase::Complete => (ApnsNotificationPhase::Complete, "Yiru agent completed"),
+        AgentPhase::Complete => (NotificationPhase::Complete, "AgentStart agent completed"),
         AgentPhase::WaitingDecision => (
-            ApnsNotificationPhase::WaitingDecision,
-            "Yiru needs your decision",
+            NotificationPhase::WaitingDecision,
+            "AgentStart needs your decision",
         ),
         AgentPhase::Executing | AgentPhase::Thinking => return,
     };
@@ -188,19 +191,9 @@ async fn publish_notification(
             title: title.to_owned(),
             worktree_id: Some(transition.worktree_id.clone()),
         };
-        match notifications.dispatch(event).await {
-            Ok(_) => {
-                let _ = notifications.enqueue_apns(ApnsNotification {
-                    body: Some(body.clone()),
-                    phase,
-                    terminal: transition.terminal_handle.clone(),
-                    worktree_id: transition.worktree_id.clone(),
-                });
-            }
-            Err(error) => {
-                notifications.rollback_mobile_delivery(&transition.worktree_id);
-                eprintln!("[daemon] Failed to persist agent phase notification: {error}");
-            }
+        if let Err(error) = notifications.dispatch(event).await {
+            notifications.rollback_mobile_delivery(&transition.worktree_id);
+            eprintln!("[daemon] Failed to persist agent phase notification: {error}");
         }
     }
     if !shells.has_web_connection().await
@@ -239,7 +232,7 @@ fn notification_body(transition: &AgentPhaseTransition) -> String {
         (None, None) if transition.interrupted => {
             format!("{} stopped.", agent_label(&transition.agent_type))
         }
-        (None, None) => "Open Yiru to review the agent session".to_owned(),
+        (None, None) => "Open AgentStart to review the agent session".to_owned(),
     }
 }
 

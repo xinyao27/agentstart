@@ -1,6 +1,6 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { WorktreeLineage } from '@agentstart/protocol/worktree/lineage'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type React from 'react'
 import { getGitHubPRCacheKey, getLegacyGitHubPRCacheKey } from '~renderer/github/cache-key'
 import { translate } from '~renderer/i18n/i18n'
@@ -82,7 +82,7 @@ export const ALL_GROUP_META = {
   icon: List
 } as const
 
-export const LINEAGE_GROUP_PREFIX = 'lineage:'
+const LINEAGE_GROUP_PREFIX = 'lineage:'
 
 export function getLineageGroupKey(worktreeId: string): string {
   return `${LINEAGE_GROUP_PREFIX}${worktreeId}`

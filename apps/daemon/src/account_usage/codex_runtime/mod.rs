@@ -162,7 +162,7 @@ impl CodexRuntimeHome {
                 }
                 Ok(prepared.map(|_| {
                     PathBuf::from(format!(
-                        "//wsl.localhost/{distro}{}/.local/share/yiru/codex-runtime-home/home",
+                        "//wsl.localhost/{distro}{}/.local/share/agentstart/codex-runtime-home/home",
                         home.trim_end_matches('/')
                     ))
                 }))
@@ -291,7 +291,7 @@ impl CodexRuntimeHome {
         wsl_user_home: &str,
     ) -> Result<(Option<PreparedCodexHome>, Option<String>), CodexRuntimeError> {
         let linux_home = format!(
-            "{}/.local/share/yiru/codex-runtime-home/home",
+            "{}/.local/share/agentstart/codex-runtime-home/home",
             wsl_user_home.trim_end_matches('/')
         );
         let host_home = PathBuf::from(format!("//wsl.localhost/{distro}{linux_home}"));
@@ -584,7 +584,7 @@ impl ManagedCodexAccount {
                 .linux_path
                 .as_deref()
                 .ok_or(CodexRuntimeError::InvalidManagedHome)?;
-            let suffix = format!("/.local/share/yiru/codex-accounts/{}/home", self.id);
+            let suffix = format!("/.local/share/agentstart/codex-accounts/{}/home", self.id);
             let expected = format!("//wsl.localhost/{distro}{linux}");
             if !valid_linux_absolute_path(linux)
                 || !linux.ends_with(&suffix)
@@ -603,9 +603,10 @@ impl ManagedCodexAccount {
         } else {
             return Err(CodexRuntimeError::InvalidManagedHome);
         }
-        let marker = managed_files::read_bounded(&self.host_path.join(".yiru-managed-home"), 256)
-            .map_err(|_| CodexRuntimeError::InvalidManagedHome)?
-            .ok_or(CodexRuntimeError::InvalidManagedHome)?;
+        let marker =
+            managed_files::read_bounded(&self.host_path.join(".agentstart-managed-home"), 256)
+                .map_err(|_| CodexRuntimeError::InvalidManagedHome)?
+                .ok_or(CodexRuntimeError::InvalidManagedHome)?;
         let marker =
             String::from_utf8(marker).map_err(|_| CodexRuntimeError::InvalidManagedHome)?;
         if marker.trim() != self.id {

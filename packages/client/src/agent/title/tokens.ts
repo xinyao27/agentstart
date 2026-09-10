@@ -12,8 +12,8 @@
 // Why: for OSC-title detection only. Intentionally narrower than the full set
 // of launchable agents because short names like "amp" would classify ordinary
 // shell titles like "timestamp ready" as agent activity. Product telemetry uses
-// the explicit launch/session facts Yiru owns, not this inference path.
-export const AGENT_NAMES = [
+// the explicit launch/session facts AgentStart owns, not this inference path.
+const AGENT_NAMES = [
   'claude',
   'openclaude',
   'codex',
@@ -33,7 +33,7 @@ export const AGENT_NAMES = [
 // `openclaude.exe`; still reject arbitrary dotted path fragments.
 const WINDOWS_EXECUTABLE_SUFFIX_RE = String.raw`(?:\.(?:exe|cmd|bat|ps1))`
 
-export function buildAgentNameRe(name: string): RegExp {
+function buildAgentNameRe(name: string): RegExp {
   return new RegExp(
     `(?<![\\w./\\\\-])${name}(?:${WINDOWS_EXECUTABLE_SUFFIX_RE})?(?![\\w./\\\\-])`,
     'i'

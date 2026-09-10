@@ -1,4 +1,4 @@
-import type { PRComment } from '@yiru/protocol/hosted-review/review-types'
+import type { PRComment } from '@agentstart/protocol/hosted-review/review-types'
 import { useEffect, useState } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import {
@@ -33,7 +33,7 @@ type PRCommentsListSelectionState = {
 const EMPTY_SELECTED_GROUP_IDS = new Set<string>()
 // Why: queued selections need to survive sidebar remounts, but old PR
 // contexts can disappear without another clear signal in a long renderer run.
-export const MAX_PERSISTED_PR_COMMENTS_LIST_SELECTIONS = 1024
+const MAX_PERSISTED_PR_COMMENTS_LIST_SELECTIONS = 1024
 const persistedSelectionByContextKey = new Map<
   string,
   { isSelectingForAI: boolean; selectedGroupIds: Set<string> }

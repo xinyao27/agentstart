@@ -1,4 +1,4 @@
-import type { AgentStatusState } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusState } from '@agentstart/protocol/agent/status-records'
 import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 import { translate } from '~renderer/i18n/i18n'

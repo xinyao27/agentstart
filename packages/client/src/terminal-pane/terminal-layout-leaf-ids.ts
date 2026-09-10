@@ -1,8 +1,8 @@
-import { isTerminalLeafId, type TerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
+import { isTerminalLeafId, type TerminalLeafId } from '@agentstart/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/protocol/workspace/session'
+} from '@agentstart/protocol/workspace/session'
 import { mintStablePaneId } from '~renderer/terminal-pane/pane-manager/mint-stable-pane-id'
 
 const EMPTY_TERMINAL_LAYOUT: TerminalLayoutSnapshot = {
@@ -237,34 +237,4 @@ export function resolvePtyBoundActiveLeafId(args: {
 
 export function getLeftmostLeafId(node: TerminalPaneLayoutNode): string {
   return node.type === 'leaf' ? node.leafId : getLeftmostLeafId(node.first)
-}
-
-function collectReplayCreatedPaneLeafIds(
-  node: Extract<TerminalPaneLayoutNode, { type: 'split' }>,
-  leafIdsInReplayCreationOrder: string[]
-): void {
-  // Why: replayTerminalLayout() creates one new pane per split and assigns it
-  // to the split's second subtree before recursing, so the new pane maps to
-  // the leftmost leaf reachable within that second subtree.
-  leafIdsInReplayCreationOrder.push(getLeftmostLeafId(node.second))
-
-  if (node.first.type === 'split') {
-    collectReplayCreatedPaneLeafIds(node.first, leafIdsInReplayCreationOrder)
-  }
-  if (node.second.type === 'split') {
-    collectReplayCreatedPaneLeafIds(node.second, leafIdsInReplayCreationOrder)
-  }
-}
-
-export function collectLeafIdsInReplayCreationOrder(
-  node: TerminalPaneLayoutNode | null | undefined
-): string[] {
-  if (!node) {
-    return []
-  }
-  const leafIdsInReplayCreationOrder = [getLeftmostLeafId(node)]
-  if (node.type === 'split') {
-    collectReplayCreatedPaneLeafIds(node, leafIdsInReplayCreationOrder)
-  }
-  return leafIdsInReplayCreationOrder
 }

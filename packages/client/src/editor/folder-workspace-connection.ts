@@ -1,8 +1,8 @@
-import { isPathInsideOrEqual } from '@yiru/protocol/host/path'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import { getProjectGroupSubtreeIds } from '@yiru/protocol/project/group-tree'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import { isPathInsideOrEqual } from '@agentstart/protocol/host/path'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import { getProjectGroupSubtreeIds } from '@agentstart/protocol/project/group-tree'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
 
 export type FolderWorkspaceConnectionState = {
   folderWorkspaces: FolderWorkspace[]

@@ -1,12 +1,12 @@
-import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
-import type { GitCommitCompareResult } from '@yiru/protocol/git/compare-values'
-import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
+import type { GitBranchChangeEntry } from '@agentstart/protocol/git/branch-compare-types'
+import type { GitCommitCompareResult } from '@agentstart/protocol/git/compare-values'
+import type { GitHistoryItem } from '@agentstart/protocol/git/history-types'
 import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { resolveDefaultAgentForNewTab } from '~renderer/agent/tab-shortcuts'
 import {
-  shouldOpenWebLinkInYiruBrowser,
+  shouldOpenWebLinkInAgentStartBrowser,
   type WebLinkMouseEvent
 } from '~renderer/browser/link-gesture'
 import { openHttpLink, type HttpLinkSourceOwner } from '~renderer/editor/http-link-routing'
@@ -205,7 +205,7 @@ export function useGitHistoryCommitActions({
       }
       // Resolve the provider commit URL in the main process, which reads the
       // real origin remote (the renderer has no reliable origin identity).
-      const openInYiruBrowser = shouldOpenWebLinkInYiruBrowser(event)
+      const openInAgentStartBrowser = shouldOpenWebLinkInAgentStartBrowser(event)
       void getRuntimeGitRemoteCommitUrl(
         {
           settings: activeRepoSettings,
@@ -227,7 +227,7 @@ export function useGitHistoryCommitActions({
                   ? undefined
                   : { kind: 'ssh', connectionId }
             openHttpLink(url, {
-              openInYiruBrowser,
+              openInAgentStartBrowser,
               worktreeId: activeWorktreeId,
               sourceOwner
             })

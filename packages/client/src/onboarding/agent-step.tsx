@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { getAgentCatalog, AgentIcon, type AgentCatalogEntry } from '~renderer/agent/catalog'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
@@ -121,7 +121,7 @@ export function AgentStep({
   return (
     <div className={cn(isEmbedded ? 'flex flex-col gap-5' : 'flex min-h-0 flex-1 flex-col gap-5')}>
       {!hasDetected && !isDetecting && (
-        <div className="shrink-0 border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-xs text-amber-700 dark:text-amber-200/90">
+        <div className="shrink-0 rounded-lg border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-xs text-amber-700 dark:text-amber-200/90">
           {translate(
             'auto.components.onboarding.AgentStep.1eee1c7bd8',
             'No agents detected on your PATH. Pick one to install later, or continue with a blank terminal.'
@@ -129,12 +129,12 @@ export function AgentStep({
         </div>
       )}
       {selectedEntry && (
-        <div className="flex shrink-0 items-center justify-between gap-3 border border-amber-400/30 bg-amber-400/10 px-4 py-2.5 text-xs text-amber-700 dark:text-amber-200/90">
+        <div className="flex shrink-0 items-center justify-between gap-3 rounded-lg border border-amber-400/30 bg-amber-400/10 px-4 py-2.5 text-xs text-amber-700 dark:text-amber-200/90">
           <span>
             <span className="font-medium">{selectedEntry.label}</span>{' '}
             {translate(
               'auto.components.onboarding.AgentStep.69af7e9c1c',
-              "isn't on your PATH yet. Yiru will set it as your default and you can install it any time."
+              "isn't on your PATH yet. AgentStart will set it as your default and you can install it any time."
             )}
           </span>
           <Button
@@ -227,7 +227,7 @@ function YoloPermissionsControl({
   onYoloPermissionsChange?: (enabled: boolean) => void
 }): React.JSX.Element {
   return (
-    <label className="border-border bg-muted/25 hover:bg-muted/40 mt-auto flex shrink-0 cursor-pointer items-center justify-between gap-4 border px-4 py-3 transition-colors">
+    <label className="border-border bg-muted/25 hover:bg-muted/40 mt-auto flex shrink-0 cursor-pointer items-center justify-between gap-4 rounded-lg border px-4 py-3 transition-colors">
       <span className="flex min-w-0 items-center gap-3">
         <Checkbox
           checked={yoloPermissions}
@@ -286,7 +286,7 @@ function SectionHeader({
   return (
     <div className="text-muted-foreground flex shrink-0 items-center gap-2 text-[11px] font-medium tracking-[0.14em] uppercase">
       {showDetectedIndicator && (
-        <span className="size-1.5 shrink-0 bg-emerald-500" aria-hidden="true" />
+        <span className="size-1.5 shrink-0 rounded-full bg-emerald-500" aria-hidden="true" />
       )}
       <span>{label}</span>
       <span className="text-muted-foreground/60">·</span>
@@ -320,7 +320,7 @@ function AgentButton({
         </div>
       ) : null}
       <div className="flex min-w-0 items-start gap-2.5 pr-6">
-        <span className="bg-muted text-foreground grid size-7 shrink-0 place-items-center">
+        <span className="bg-muted text-foreground grid size-7 shrink-0 place-items-center rounded-md">
           <AgentIcon agent={agent.id} size={16} />
         </span>
         <div className="min-w-0">

@@ -1,5 +1,5 @@
 {
-  "name": "@yiru/protocol",
+  "name": "@agentstart/protocol",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -29,7 +29,6 @@
     "./agent/dispatch-prompt": "./typescript/src/agent/dispatch-prompt.ts",
     "./agent/session-resume": "./typescript/src/agent/session-resume.ts",
     "./agent/resume-startup": "./typescript/src/agent/resume-startup.ts",
-    "./agent/transcript": "./typescript/src/agent/transcript.ts",
     "./agent/shell-command": "./typescript/src/agent/shell-command.ts",
     "./agent/status-records": "./typescript/src/agent/status-records.ts",
     "./agent/status-parse": "./typescript/src/agent/status-parse.ts",
@@ -77,7 +76,7 @@
   },
   "scripts": {
     "build": "buf build && bun scripts/generate-runtime-metadata.mjs",
-    "generate": "buf generate && bun scripts/generate-method-metadata.mjs",
+    "generate": "buf generate && bun scripts/normalize-typescript-bindings.mjs && bun scripts/generate-method-metadata.mjs",
     "lint": "buf lint",
     "typecheck": "tsc -p typescript/tsconfig.json --noEmit"
   },

@@ -40,7 +40,7 @@ export function MarkdownSingleNoteSendMenu({
       modeIdParts={['markdown-notes', worktreeId, filePath, modeSlot, note.id]}
       scopes={scopes}
       targetModeLabel="This note"
-      triggerClassName="yiru-diff-comment-pill-btn"
+      triggerClassName="agentstart-diff-comment-pill-btn"
       disabledTooltip="Note already sent"
       onDelivered={onDelivered}
     />
@@ -85,12 +85,12 @@ export function MarkdownAnnotationComposer({
       className="mt-0 max-w-none scroll-m-3 border border-[color-mix(in_srgb,var(--foreground)_18%,transparent)] bg-[var(--editor-surface)] p-2 @max-[760px]/markdown-preview:mt-1.5"
       onClick={(event) => event.stopPropagation()}
     >
-      <div className="yiru-diff-comment-popover-label">
+      <div className="agentstart-diff-comment-popover-label">
         {translate('auto.components.editor.MarkdownPreview.b1bfc04034', 'Selected text')}
       </div>
       <Textarea
         ref={(textarea) => textarea?.focus()}
-        className="yiru-diff-comment-popover-textarea focus-visible:border-ring outline-none"
+        className="agentstart-diff-comment-popover-textarea focus-visible:border-ring outline-none"
         placeholder={translate(
           'auto.components.editor.MarkdownPreview.d737791433',
           'Add note for the AI'
@@ -108,7 +108,7 @@ export function MarkdownAnnotationComposer({
         }}
         rows={3}
       />
-      <div className="yiru-diff-comment-popover-footer">
+      <div className="agentstart-diff-comment-popover-footer">
         <Button variant="ghost" size="sm" onClick={onCancel} disabled={isSubmitting}>
           {translate('auto.components.editor.MarkdownPreview.e4683f70c4', 'Cancel')}
         </Button>

@@ -1,4 +1,4 @@
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 
 export type WorktreeSymlinkPathSuggestion = {
   name: string
@@ -12,10 +12,10 @@ export type WorktreeSymlinkPathFilterState<T extends WorktreeSymlinkPathSuggesti
   isQueryTooLarge: boolean
 }
 
-export const WORKTREE_SYMLINK_PATH_QUERY_MAX_BYTES = 2 * 1024
-export const WORKTREE_SYMLINK_PATH_MAX_SUGGESTIONS = 50
+const WORKTREE_SYMLINK_PATH_QUERY_MAX_BYTES = 2 * 1024
+const WORKTREE_SYMLINK_PATH_MAX_SUGGESTIONS = 50
 
-export function isWorktreeSymlinkPathQueryTooLarge(
+function isWorktreeSymlinkPathQueryTooLarge(
   query: string,
   maxBytes = WORKTREE_SYMLINK_PATH_QUERY_MAX_BYTES
 ): boolean {

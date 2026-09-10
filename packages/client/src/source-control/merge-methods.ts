@@ -1,8 +1,8 @@
-import { GITHUB_PR_MERGE_METHODS } from '@yiru/protocol/hosted-review/merge-methods'
+import { GITHUB_PR_MERGE_METHODS } from '@agentstart/protocol/hosted-review/merge-methods'
 import type {
   GitHubPRMergeMethod,
   GitHubPRMergeMethodSettings
-} from '@yiru/protocol/hosted-review/pull-request-types'
+} from '@agentstart/protocol/hosted-review/pull-request-types'
 import { translate } from '~renderer/i18n/i18n'
 
 function getMergeMethodLabels(): Record<GitHubPRMergeMethod, string> {
@@ -13,7 +13,7 @@ function getMergeMethodLabels(): Record<GitHubPRMergeMethod, string> {
   }
 }
 
-export type GitHubPRMergeMethodOption = {
+type GitHubPRMergeMethodOption = {
   method: GitHubPRMergeMethod
   label: string
 }

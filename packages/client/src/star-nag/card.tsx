@@ -1,4 +1,4 @@
-import { YIRU_GITHUB_REPOSITORY_URL } from '@yiru/protocol/hosted-review/yiru-repository'
+import { AGENTSTART_GITHUB_REPOSITORY_URL } from '@agentstart/protocol/hosted-review/agentstart-repository'
 import { useEffect, useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
@@ -13,7 +13,7 @@ import { Card } from '../ui/card'
 type StarNagMode = 'gh' | 'web'
 
 /**
- * Persistent "star Yiru on GitHub" notification card.
+ * Persistent "star AgentStart on GitHub" notification card.
  *
  * Rendered at the bottom-right of the app. It is
  * intentionally non-auto-dismissing: the user must either click Star, defer,
@@ -94,7 +94,7 @@ export function StarNagCard(): React.JSX.Element | null {
     }
     const openGithubFallback = async (): Promise<boolean> => {
       try {
-        openHttpLink(YIRU_GITHUB_REPOSITORY_URL, { event })
+        openHttpLink(AGENTSTART_GITHUB_REPOSITORY_URL, { event })
         await shellClient.starNag.openWeb()
         if (mountedRef.current) {
           setVisible(false)
@@ -120,7 +120,7 @@ export function StarNagCard(): React.JSX.Element | null {
     setBusy(true)
     let ok = false
     try {
-      ok = await shellClient.starNag.starYiru()
+      ok = await shellClient.starNag.starAgentStart()
     } catch {
       ok = false
     }
@@ -151,7 +151,7 @@ export function StarNagCard(): React.JSX.Element | null {
             <div className="flex items-center gap-2">
               <Star className="size-4 fill-amber-400/60 text-amber-400/80" />
               <h3 id="star-nag-heading" className="text-sm font-semibold">
-                {translate('auto.components.StarNagCard.5f6df21046', 'Enjoying Yiru?')}
+                {translate('auto.components.StarNagCard.5f6df21046', 'Enjoying AgentStart?')}
               </h3>
             </div>
             <Button
@@ -169,7 +169,7 @@ export function StarNagCard(): React.JSX.Element | null {
           <p className="text-muted-foreground text-sm">
             {translate(
               'auto.components.StarNagCard.30c36231c1',
-              'Yiru is open source. If it helped today, a GitHub star helps other developers find it.'
+              'AgentStart is open source. If it helped today, a GitHub star helps other developers find it.'
             )}
           </p>
 

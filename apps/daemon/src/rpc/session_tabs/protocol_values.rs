@@ -1,7 +1,6 @@
-use serde_json::{Map, Value, json};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::session_tabs_tab::Tab;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::session_tabs_tab::Tab;
+use agentstart_protocol::runtime::v1::{
     AgentProviderSession, AgentProviderSessionKey, AgentStatusState, SessionTabsAgentStatus,
     SessionTabsBrowserTab, SessionTabsFileDiffSource, SessionTabsFileMode, SessionTabsFileTab,
     SessionTabsGroupLayoutNode, SessionTabsGroupLeaf, SessionTabsGroupSplit,
@@ -10,6 +9,7 @@ use yiru_protocol::runtime::v1::{
     SessionTabsTabType, SessionTabsTerminalStatus, SessionTabsTerminalTab,
     session_tabs_group_layout_node, session_tabs_pane_layout_node,
 };
+use serde_json::{Map, Value, json};
 
 pub(super) fn protocol_snapshot(value: Value) -> Result<SessionTabsSnapshot, Status> {
     let object = value

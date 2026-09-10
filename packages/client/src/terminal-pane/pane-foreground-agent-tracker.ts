@@ -1,9 +1,9 @@
 import {
   isAgentForegroundWrapperProcess,
   recognizeAgentProcess
-} from '@yiru/protocol/agent/process/recognition'
-import { isShellProcess } from '@yiru/protocol/agent/process/shell-process'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+} from '@agentstart/protocol/agent/process/recognition'
+import { isShellProcess } from '@agentstart/protocol/agent/process/shell-process'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import type { PaneForegroundAgentEntry } from '~renderer/terminal-pane/pane-foreground-agent-state'
 
 // Why: settle after exec, then place the final generic retry beyond sequential
@@ -255,7 +255,7 @@ export function createPaneForegroundAgentTracker(deps: PaneForegroundAgentTracke
       // command under a full-screen agent (or a fast real shell command), so on a
       // no-identity pane confirm it rather than trusting the D as a prompt return.
       // ANY in-flight read counts: a command-start read, a prior confirming read
-      // (user shell integrations double up Yiru's OSC 133), or the reattach/visible
+      // (user shell integrations double up AgentStart's OSC 133), or the reattach/visible
       // recovery probe. All three are attempts to establish this pane's identity, so
       // a D that cancels one must re-confirm — never fast-path to shell, which the
       // sampleVisiblePaneForegroundAgent gate would then latch, permanently hiding

@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { resolveTerminalTabTitle } from '~renderer/tab-title-resolution'
 
 export function resolveRuntimeTerminalTitle(

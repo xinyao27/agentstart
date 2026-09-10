@@ -1,4 +1,4 @@
-export type CoalescedPollRunnerTrigger = {
+type CoalescedPollRunnerTrigger = {
   // True when the caller has evidence something changed (file-watch event,
   // repo metadata push signal, finished terminal command) rather than a bare
   // timer tick. Change signals wait out a shorter slow-task backoff.

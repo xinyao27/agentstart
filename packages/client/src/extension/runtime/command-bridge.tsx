@@ -1,4 +1,4 @@
-import type { WorkspaceEventRecord } from '@yiru/protocol'
+import type { WorkspaceEventRecord } from '@agentstart/protocol'
 import { useEffect } from 'react'
 import { listRuntimeRepos } from '~renderer/runtime/repo-catalog-target'
 import { watchWorkspaceEvents } from '~renderer/runtime/workspace-events-target'

@@ -88,7 +88,7 @@ async function systemClipboardStillMatches(state: FileExplorerClipboardState): P
     return (await shellClient.ui.readClipboardText()) === state.systemText
   } catch {
     // Why: web clipboard reads can be denied after the user has already copied
-    // inside Yiru. Keep the in-memory resource clipboard usable in that case.
+    // inside AgentStart. Keep the in-memory resource clipboard usable in that case.
     return true
   }
 }

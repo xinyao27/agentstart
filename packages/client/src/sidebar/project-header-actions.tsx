@@ -3,7 +3,7 @@ import { cn } from '~renderer/ui/class-names'
 
 // Why: desktop hover actions should not permanently reserve project-title width;
 // touch devices keep them in normal flow because there is no hover reveal.
-export const PROJECT_HEADER_ACTIONS_CLASS_NAME = cn(
+const PROJECT_HEADER_ACTIONS_CLASS_NAME = cn(
   'flex shrink-0 items-center gap-0.5',
   'can-hover:absolute can-hover:right-1 can-hover:top-1/2 can-hover:z-10 can-hover:-translate-y-1/2',
   'can-hover: can-hover:bg-sidebar can-hover:pl-1',

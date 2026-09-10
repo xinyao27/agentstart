@@ -2,7 +2,7 @@ import {
   DRIVER_EVENTS_PROTOCOL_CAPABILITY,
   DriverEventsClient,
   type DriverEventsSubscriptionEventValue
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 type RuntimeDriverEvent = Exclude<DriverEventsSubscriptionEventValue, { type: 'ready' | 'end' }>
 
 import { openRuntimeProtocolTarget } from './protocol-target'

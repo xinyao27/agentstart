@@ -3,7 +3,7 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
+} from '@agentstart/protocol/host/identity'
 import { useState } from 'react'
 import { useAppStore } from '~renderer/store/state'
 

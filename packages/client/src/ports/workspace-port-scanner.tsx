@@ -1,4 +1,4 @@
-import type { WorkspacePortScanResult } from '@yiru/protocol'
+import type { WorkspacePortScanResult } from '@agentstart/protocol'
 import { useEffect, useMemo, useRef } from 'react'
 import {
   installWindowVisibilityInterval,

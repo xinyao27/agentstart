@@ -2,7 +2,7 @@ import type {
   KeybindingActionId,
   KeybindingFileSnapshot,
   KeybindingOverrides
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 import type { StateCreator } from 'zustand'
 import { shellClient } from '~renderer/runtime/shell-client'
 

@@ -8,12 +8,12 @@ use std::ffi::OsString;
 use std::path::PathBuf;
 use std::time::Duration;
 
-use thiserror::Error;
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1BrowserHostServiceDownload as DownloadMethod,
-    YiruRuntimeV1BrowserHostServiceExecute as ExecuteMethod,
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1BrowserHostServiceDownload as DownloadMethod,
+    AgentStartRuntimeV1BrowserHostServiceExecute as ExecuteMethod,
 };
-use yiru_protocol::runtime::v1::download_response::Event;
+use agentstart_protocol::runtime::v1::download_response::Event;
+use thiserror::Error;
 
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 

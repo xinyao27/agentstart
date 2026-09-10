@@ -1,5 +1,5 @@
-import type { BrowserPage, BrowserWorkspace } from '@yiru/protocol/workspace/browser-session'
-import type { Tab, TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { BrowserPage, BrowserWorkspace } from '@agentstart/protocol/workspace/browser-session'
+import type { Tab, TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 import type { OpenFile } from '../../editor/state'
 import type {
@@ -38,7 +38,7 @@ export function buildTerminalUnifiedTab(tab: TerminalTab, groupId: string): Tab 
   }
 }
 
-export function buildBrowserUnifiedTab(
+function buildBrowserUnifiedTab(
   tab: BrowserWorkspace,
   hostTab: RuntimeMobileSessionBrowserTab,
   existingUnifiedTab: Tab | null,
@@ -63,7 +63,7 @@ export function buildBrowserUnifiedTab(
   }
 }
 
-export function buildEditorUnifiedTab(
+function buildEditorUnifiedTab(
   file: OpenFile,
   tab: ReadyEditorSurface,
   hostTabId: string,

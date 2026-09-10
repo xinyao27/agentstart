@@ -1,7 +1,7 @@
 import {
   buildSetupRunnerCommand as buildSharedSetupRunnerCommand,
   getSetupRunnerCommandPlatformForPath
-} from '@yiru/protocol/setup/runner-command'
+} from '@agentstart/protocol/setup/runner-command'
 
 export function buildSetupRunnerCommand(runnerScriptPath: string): string {
   // Why: the runner may live on a remote/WSL filesystem, so the shell follows

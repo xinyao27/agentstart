@@ -13,6 +13,7 @@ import {
 } from '~renderer/icons/hugeicons'
 import { getAccountsPaneSearchEntries } from '~renderer/settings/accounts-search'
 import { getAgentsPaneSearchEntries } from '~renderer/settings/agents-search'
+import { AgentStartLogoSettingsIcon } from '~renderer/settings/agentstart-logo-settings-icon'
 import { getComputerUsePaneSearchEntries } from '~renderer/settings/computer-use-search'
 import { getGeneralPaneSearchEntries } from '~renderer/settings/general/search'
 import { getIntegrationsPaneSearchEntries } from '~renderer/settings/integrations-search'
@@ -21,7 +22,6 @@ import type { SettingsNavSection } from '~renderer/settings/navigation-types'
 import { getNotificationsPaneSearchEntries } from '~renderer/settings/notifications-search'
 import { getOrchestrationPaneSearchEntries } from '~renderer/settings/orchestration/search'
 import { getShortcutsPaneSearchEntries } from '~renderer/settings/shortcuts-search'
-import { YiruLogoSettingsIcon } from '~renderer/settings/yiru-logo-settings-icon'
 
 import { getAppearancePaneSearchEntries } from './appearance/search'
 
@@ -97,7 +97,7 @@ export function buildNavigationCoreSections({
       title: translate('auto.hooks.useSettingsNavigationMetadata.58a868e8e4', 'Orchestration'),
       description: translate(
         'auto.hooks.useSettingsNavigationMetadata.cd50cec5d7',
-        'Coordinate multiple coding agents through Yiru.'
+        'Coordinate multiple coding agents through AgentStart.'
       ),
       icon: Network,
       searchEntries: getOrchestrationPaneSearchEntries(),
@@ -122,9 +122,9 @@ export function buildNavigationCoreSections({
       ),
       description: translate(
         'auto.hooks.useSettingsNavigationMetadata.5f32ac08f3',
-        'Finish the onboarding checklist for core Yiru workflows.'
+        'Finish the onboarding checklist for core AgentStart workflows.'
       ),
-      icon: YiruLogoSettingsIcon,
+      icon: AgentStartLogoSettingsIcon,
       searchEntries: [
         {
           title: translate(
@@ -139,7 +139,7 @@ export function buildNavigationCoreSections({
             translate('auto.hooks.useSettingsNavigationMetadata.ea0b1bc7b8', 'setup guide'),
             translate(
               'auto.hooks.useSettingsNavigationMetadata.0505d0df29',
-              'get started with Yiru'
+              'get started with AgentStart'
             ),
             translate('auto.hooks.useSettingsNavigationMetadata.724c440e72', 'getting started')
           ]

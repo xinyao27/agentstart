@@ -17,12 +17,12 @@ import {
   TabProfileResultSchema,
   TabResultSchema,
   TabSwitchResultSchema
-} from '../../generated/yiru/runtime/v1/browser_pb.js'
+} from '../../generated/agent_start/runtime/v1/browser_pb.js'
 import type {
   BrowserProfile,
   BrowserTab,
   ExecuteResponse
-} from '../../generated/yiru/runtime/v1/browser_pb.js'
+} from '../../generated/agent_start/runtime/v1/browser_pb.js'
 import {
   readArray,
   readBoolean,

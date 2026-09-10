@@ -1,4 +1,4 @@
-import { mountExtensionInstall } from '@yiru/client/extension-install'
+import { mountExtensionInstall } from '@agentstart/client/extension-install'
 
 import { mountExtensionSurface } from '../bootstrap'
 

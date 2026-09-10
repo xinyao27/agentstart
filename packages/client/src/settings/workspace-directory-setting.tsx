@@ -1,5 +1,5 @@
-import { LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { LOCAL_EXECUTION_HOST_ID } from '@agentstart/protocol/host/identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import React, { useId, useRef, useState } from 'react'
 import {
   getEffectiveHostSetting,
@@ -265,7 +265,7 @@ export function WorkspaceDirectorySetting({
         <p className="text-muted-foreground text-xs">
           {translate(
             'auto.components.settings.WorkspaceDirectorySetting.6f7a8b9cad',
-            'Use a relative path (e.g. .yiru/worktrees) for a per-project location, or an absolute path for one shared folder.'
+            'Use a relative path (e.g. .agentstart/worktrees) for a per-project location, or an absolute path for one shared folder.'
           )}
         </p>
       )}

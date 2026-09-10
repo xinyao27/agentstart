@@ -1,5 +1,5 @@
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { PRCheckDetail } from '@yiru/protocol/hosted-review/review-types'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { PRCheckDetail } from '@agentstart/protocol/hosted-review/review-types'
 import { useEffect } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { subscribeGitHubWorkItemMutations } from '~renderer/runtime/github-events-client'

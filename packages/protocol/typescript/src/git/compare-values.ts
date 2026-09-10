@@ -1,11 +1,11 @@
 import type {
   GitChangeStatus,
   GitChangeEntry as ProtocolChangeEntry
-} from '../../generated/yiru/runtime/v1/git_common_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_common_pb.js'
 import {
   GitCompareStatus as ProtocolCompareStatus,
   type GitCompareResult as ProtocolCompareResult
-} from '../../generated/yiru/runtime/v1/git_history_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_history_pb.js'
 import { fileStatusFromProto } from './status-values.js'
 
 export type GitBranchChangeStatus = 'modified' | 'added' | 'deleted' | 'renamed' | 'copied'

@@ -2,9 +2,9 @@ import type {
   GitHubPRRefreshCandidate,
   GitHubPRRefreshEnqueueResult,
   GitHubPRRefreshReason
-} from '@yiru/protocol/hosted-review/pull-request-types'
-import type { GitHubViewer } from '@yiru/protocol/hosted-review/review-types'
-import type { AppStarSource } from '@yiru/protocol/telemetry/star-source'
+} from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { GitHubViewer } from '@agentstart/protocol/hosted-review/review-types'
+import type { AppStarSource } from '@agentstart/protocol/telemetry/star-source'
 
 import { shellClient } from './shell-client'
 
@@ -34,12 +34,12 @@ export function reportShellVisibleGitHubPRRefreshCandidates(args: {
   return shellClient.gh.reportVisiblePRRefreshCandidates(args)
 }
 
-export function checkShellYiruStarred(): Promise<boolean | null> {
-  return shellClient.gh.checkYiruStarred()
+export function checkShellAgentStartStarred(): Promise<boolean | null> {
+  return shellClient.gh.checkAgentStartStarred()
 }
 
-export function starYiruFromShell(source: AppStarSource): Promise<boolean> {
-  return shellClient.gh.starYiru(source)
+export function starAgentStartFromShell(source: AppStarSource): Promise<boolean> {
+  return shellClient.gh.starAgentStart(source)
 }
 
 export function completeShellStarNag(): Promise<void> {

@@ -1,4 +1,4 @@
-import type { CtrlTabOrderMode } from '@yiru/protocol/workspace/tabs'
+import type { CtrlTabOrderMode } from '@agentstart/protocol/workspace/tabs'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 

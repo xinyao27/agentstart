@@ -24,7 +24,7 @@ function isAiVaultScopeAvailable(args: {
   return normalizeAiVaultScopeForContext(args) === args.scope
 }
 
-export function shouldRestoreDefaultAiVaultScope(args: {
+function shouldRestoreDefaultAiVaultScope(args: {
   scope: AiVaultScope
   activeProjectKey: string | null
   activeWorktreePath: string | null

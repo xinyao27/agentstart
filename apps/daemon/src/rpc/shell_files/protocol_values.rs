@@ -1,10 +1,10 @@
 // Why: one place translates the shell files authority's plain Rust value
 // shapes into the protobuf wire messages, so every handler in `protocol.rs`
 // shares the same mapping instead of re-deriving it per method.
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::shell_files_staged_import_entry::Kind as ProtocolStagedEntryKind;
-use yiru_protocol::runtime::v1::shell_files_staged_source::Outcome as ProtocolStagedOutcome;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::shell_files_staged_import_entry::Kind as ProtocolStagedEntryKind;
+use agentstart_protocol::runtime::v1::shell_files_staged_source::Outcome as ProtocolStagedOutcome;
+use agentstart_protocol::runtime::v1::{
     ShellFilesDroppedPathFailure as ProtocolDroppedPathFailure,
     ShellFilesDroppedPathSkip as ProtocolDroppedPathSkip, ShellFilesFailedOutcome,
     ShellFilesImportSkipReason, ShellFilesMutationResult, ShellFilesSkippedOutcome,

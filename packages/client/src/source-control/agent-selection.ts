@@ -1,14 +1,14 @@
-import { filterEnabledTuiAgents } from '@yiru/protocol/agent/selection'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { filterEnabledTuiAgents } from '@agentstart/protocol/agent/selection'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type {
   SourceControlActionId,
   SourceControlActionRecipe
-} from '@yiru/protocol/source-control/ai-actions'
-import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
-import { normalizeRepoSourceControlAiOverrides } from '@yiru/protocol/source-control/repo-overrides'
-import { resolveSourceControlActionRecipe } from '@yiru/protocol/source-control/resolution'
+} from '@agentstart/protocol/source-control/ai-actions'
+import { isCustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
+import { normalizeRepoSourceControlAiOverrides } from '@agentstart/protocol/source-control/repo-overrides'
+import { resolveSourceControlActionRecipe } from '@agentstart/protocol/source-control/resolution'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 
 export function readSourceControlLaunchRecipeAgentId(
@@ -91,7 +91,7 @@ export function resolveSourceControlLaunchAgentScope(input: {
 
 export type SourceControlActionRecipeOverrideField = 'agent' | 'commandTemplate' | 'agentArgs'
 
-export type SourceControlActionRecipeOverride = {
+type SourceControlActionRecipeOverride = {
   repoId: string
   repoName: string
   fields: SourceControlActionRecipeOverrideField[]

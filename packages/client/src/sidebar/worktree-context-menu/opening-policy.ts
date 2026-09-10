@@ -1,5 +1,5 @@
-export const CLOSE_ALL_CONTEXT_MENUS_EVENT = 'yiru-close-all-context-menus'
-export const WORKTREE_NATIVE_CONTEXT_MENU_ATTR = 'data-worktree-native-context-menu'
+export const CLOSE_ALL_CONTEXT_MENUS_EVENT = 'agentstart-close-all-context-menus'
+const WORKTREE_NATIVE_CONTEXT_MENU_ATTR = 'data-worktree-native-context-menu'
 
 function getTargetElement(target: EventTarget | null): Element | null {
   if (target instanceof Element) {

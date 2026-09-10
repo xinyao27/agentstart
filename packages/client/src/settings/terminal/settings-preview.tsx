@@ -1,8 +1,8 @@
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { resolveTerminalFontWeights } from '@agentstart/protocol/terminal/font-settings'
+import { normalizeTerminalLineHeight } from '@agentstart/protocol/terminal/line-height'
 import { LigaturesAddon } from '@xterm/addon-ligatures'
 import { Terminal } from '@xterm/xterm'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { resolveTerminalFontWeights } from '@yiru/protocol/terminal/font-settings'
-import { normalizeTerminalLineHeight } from '@yiru/protocol/terminal/line-height'
 
 import '@xterm/xterm/css/xterm.css'
 import { useEffect, useRef, useState } from 'react'
@@ -264,7 +264,7 @@ export function TerminalSettingsPreview({
             {description ? <CardDescription>{description}</CardDescription> : null}
           </div>
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
-            <div className="border-border/50 bg-background/40 flex items-center gap-2 border px-2 py-1">
+            <div className="border-border/50 bg-background/40 flex items-center gap-2 rounded-md border px-2 py-1">
               <span className="text-muted-foreground text-xs font-medium">
                 {translate(
                   'auto.components.settings.TerminalSettingsPreview.50419052fe',
@@ -282,7 +282,7 @@ export function TerminalSettingsPreview({
             </div>
             {showToggle ? (
               <div
-                className="border-border/50 flex gap-0.5 border p-0.5"
+                className="border-border/50 flex gap-0.5 rounded-md border p-0.5"
                 role="group"
                 aria-label={translate(
                   'auto.components.settings.TerminalSettingsPreview.2c248fcc27',
@@ -325,7 +325,7 @@ export function TerminalSettingsPreview({
         {/* Why: flex layout with xterm on the left and a stub pane on the
             right keeps inactive-pane opacity visible. The divider stays
             preview-only and opt-in so the default preview remains clean. */}
-        <div className="border-border/50 flex h-[300px] flex-col overflow-hidden border">
+        <div className="border-border/50 flex h-[300px] flex-col overflow-hidden rounded-md border">
           <div className="flex min-h-0 flex-1 overflow-hidden" aria-hidden="true">
             <div
               ref={containerRef}

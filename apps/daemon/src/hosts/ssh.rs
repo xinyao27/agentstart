@@ -347,7 +347,7 @@ fn cleanup_stale_control_directory(
         recorded_owner_process_id(&owner_marker, installation_id, instance_id, user_id)?;
     // Why: a reused PID is treated as live. Leaking one stale directory until that process exits
     // is safer than disrupting another process whose identity cannot be disproved by kill(2).
-    if crate::process_liveness::is_process_running(process_id) {
+    if super::is_process_running(process_id) {
         return Ok(());
     }
     cleanup_control_directory(&OwnedControlDirectory {

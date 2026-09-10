@@ -265,7 +265,7 @@ pub(super) fn run_model(
                 result,
             } => {
                 let visible = if cursor.is_none() {
-                    model.plain_history()
+                    model.plain_read_view()
                 } else {
                     String::new()
                 };
@@ -344,6 +344,27 @@ pub(super) fn run_model(
 }
 
 impl TerminalModel {
+    fn plain_read_view(&self) -> String {
+        let terminal = &self.stream.handler.inner.terminal;
+        if terminal.screens.active_key() == ScreenKey::Primary {
+            return self.plain_history();
+        }
+        terminal.screens.active().format(
+            &FormatOptions {
+                unwrap: true,
+                ..FormatOptions::plain()
+            },
+            &ScreenExtra::default(),
+            Content::Range {
+                tl: Point::active(0, 0),
+                br: Point::active(
+                    terminal.cols.saturating_sub(1),
+                    u32::from(terminal.rows.saturating_sub(1)),
+                ),
+            },
+        )
+    }
+
     fn plain_history(&self) -> String {
         let terminal = &self.stream.handler.inner.terminal;
         let Some(primary) = terminal.screens.get(ScreenKey::Primary) else {

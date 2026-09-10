@@ -1,6 +1,6 @@
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
 import type { ITerminalOptions } from '@xterm/xterm'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
 
 import {
   isLocalNativeWindowsConpty,
@@ -22,9 +22,7 @@ export type TerminalKeyboardProtocolContext = WindowsPtyCompatibilityContext & {
  * targets CSI-u-blind CLIs (e.g. Antigravity); Grok is not in that set and
  * relies on KKP for interject vs newline (official Grok Build keyboard docs).
  */
-export function prefersKittyKeyboardDespiteWindowsConpty(
-  agent: TuiAgent | null | undefined
-): boolean {
+function prefersKittyKeyboardDespiteWindowsConpty(agent: TuiAgent | null | undefined): boolean {
   return agent === 'grok'
 }
 
@@ -32,7 +30,7 @@ export function prefersKittyKeyboardDespiteWindowsConpty(
  * Whether the Kitty enhanced keyboard protocol (CSI-u) must be withheld from a
  * pane's xterm advertisement.
  *
- * Why: Yiru's default options advertise `vtExtensions.kittyKeyboard` so probing
+ * Why: AgentStart's default options advertise `vtExtensions.kittyKeyboard` so probing
  * CLIs enable enhanced key reporting. But local native Windows shells are backed
  * by ConPTY, and several local Windows CLIs (e.g. the Antigravity `agy` CLI) read
  * the advertisement yet do not decode CSI-u, so once it is on they ignore
@@ -44,9 +42,7 @@ export function prefersKittyKeyboardDespiteWindowsConpty(
  * Exception: when `tuiAgent` is an agent known to need KKP on ConPTY (Grok),
  * keep the advertisement so modified-Enter chords stay usable.
  */
-export function shouldDisableKittyKeyboardForTerminal(
-  context: TerminalKeyboardProtocolContext
-): boolean {
+function shouldDisableKittyKeyboardForTerminal(context: TerminalKeyboardProtocolContext): boolean {
   if (prefersKittyKeyboardDespiteWindowsConpty(context.tuiAgent)) {
     return false
   }

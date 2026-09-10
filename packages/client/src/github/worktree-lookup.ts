@@ -2,8 +2,8 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   getRepoExecutionHostId,
   normalizeExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/host/identity'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { AppState } from '~renderer/store/types'
 
 type WorktreeLookupEntry = {

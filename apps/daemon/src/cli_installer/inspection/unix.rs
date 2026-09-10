@@ -27,7 +27,7 @@ pub(super) async fn inspect(
                 CliInstallState::NotInstalled,
                 None,
                 format!(
-                    "Register {} to use Yiru from the terminal.",
+                    "Register {} to use AgentStart from the terminal.",
                     display_path(command_path)
                 ),
             ));
@@ -47,7 +47,7 @@ pub(super) async fn inspect(
                 CliInstallState::Stale,
                 Some(target),
                 format!(
-                    "{} contains an older Yiru launcher.",
+                    "{} contains an older AgentStart launcher.",
                     display_path(command_path)
                 ),
             ));
@@ -60,7 +60,7 @@ pub(super) async fn inspect(
             CliInstallState::Conflict,
             None,
             format!(
-                "{} exists but is not a Yiru symlink.",
+                "{} exists but is not a AgentStart symlink.",
                 display_path(command_path)
             ),
         ));
@@ -79,11 +79,11 @@ pub(super) async fn inspect(
     let detail = match state {
         CliInstallState::Installed => format!("Registered at {}.", display_path(command_path)),
         CliInstallState::Stale => format!(
-            "{} points to an older Yiru launcher.",
+            "{} points to an older AgentStart launcher.",
             display_path(command_path)
         ),
         CliInstallState::Conflict => format!(
-            "{} points to a non-Yiru launcher.",
+            "{} points to a non-AgentStart launcher.",
             display_path(command_path)
         ),
         CliInstallState::NotInstalled | CliInstallState::Unsupported => unreachable!(),
@@ -160,8 +160,8 @@ fn is_sibling_dev_target(
 }
 
 pub(crate) fn extract_managed_launcher_target(contents: &str) -> Option<String> {
-    if !contents.contains("YIRU_CLI_ENVIRONMENT=development")
-        || !contents.contains("YIRU_NODE_OPTIONS")
+    if !contents.contains("AGENTSTART_CLI_ENVIRONMENT=development")
+        || !contents.contains("AGENTSTART_NODE_OPTIONS")
         || !contents.contains("NODE_REPL_EXTERNAL_MODULE")
     {
         return None;

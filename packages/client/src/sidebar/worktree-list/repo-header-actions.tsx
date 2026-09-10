@@ -1,6 +1,6 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

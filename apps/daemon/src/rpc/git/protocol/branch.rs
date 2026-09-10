@@ -1,15 +1,15 @@
 // Branch/tag pointer mutation: switching branches, checking out a detached
 // commit, creating a branch, and tagging a commit. See
-// packages/protocol/proto/yiru/runtime/v1/git_branch.proto (GitBranchService).
+// packages/protocol/proto/agentstart/runtime/v1/git_branch.proto (GitBranchService).
 
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     GitBranchServiceAddTagRequest, GitBranchServiceAddTagResponse,
     GitBranchServiceCheckoutCommitRequest, GitBranchServiceCheckoutCommitResponse,
     GitBranchServiceCheckoutRequest, GitBranchServiceCheckoutResponse,
     GitBranchServiceCreateBranchRequest, GitBranchServiceCreateBranchResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use super::super::GitRpc;
 use super::support::{authority_status, string_field, write_outcome};

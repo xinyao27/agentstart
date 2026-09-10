@@ -1,7 +1,10 @@
-import { getWorktreeExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import {
+  getWorktreeExecutionHostId,
+  type ExecutionHostId
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { WorktreeLineage } from '@agentstart/protocol/worktree/lineage'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import {
   getLineageGroupKey,
@@ -18,7 +21,7 @@ import type {
   WorktreeRow
 } from './worktree-list/rows'
 
-export function buildImportedWorktreesCardRow(
+function buildImportedWorktreesCardRow(
   candidate: ImportedWorktreesCardCandidate,
   placement: ImportedWorktreesCardRow['placement']
 ): ImportedWorktreesCardRow {

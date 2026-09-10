@@ -1,6 +1,6 @@
-import { toRuntimeExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import { toRuntimeExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
 import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { collectFolderWorkspaceKeysFromSession } from '~renderer/workspace/session-hydration-keys'
 
@@ -24,7 +24,7 @@ export type StartupHydrationActions = Pick<
   | 'completeHydratedWorktreePurge'
   | 'fetchKeybindings'
   | 'fetchSettings'
-  | 'fetchYiruProfiles'
+  | 'fetchAgentStartProfiles'
   | 'hydrateBrowserSession'
   | 'hydrateEditorSession'
   | 'hydratePersistedUI'
@@ -61,7 +61,7 @@ export async function hydrateStartupSession({
 }: StartupHydrationInput): Promise<OnboardingState | null> {
   const startupStartedAt = performance.now()
   logRendererStartupDiagnostic('startup-chain-start')
-  void actions.fetchYiruProfiles()
+  void actions.fetchAgentStartProfiles()
   const keybindingsPromise = timeRendererStartupStep('fetch-keybindings', () =>
     actions.fetchKeybindings()
   )

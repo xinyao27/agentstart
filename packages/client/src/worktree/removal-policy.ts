@@ -1,4 +1,4 @@
-export const LOCKED_WORKTREE_REMOVAL_PREFIX = 'Worktree is locked by Git.'
+const LOCKED_WORKTREE_REMOVAL_PREFIX = 'Worktree is locked by Git.'
 
 export type WorktreeForceDeleteReason = 'dirty'
 
@@ -31,7 +31,7 @@ export function classifyWorktreeForceDeleteReason(
 ): WorktreeForceDeleteReason | null {
   if (isLockedWorktreeRemovalError(error)) {
     // Why: a Git lock can represent an external safety contract. It must be
-    // unlocked explicitly rather than folded into Yiru's dirty-file force path.
+    // unlocked explicitly rather than folded into AgentStart's dirty-file force path.
     return null
   }
   if (force) {

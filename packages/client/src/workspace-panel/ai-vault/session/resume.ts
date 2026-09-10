@@ -2,8 +2,8 @@ import {
   commandSeparator,
   quoteStartupArg,
   type AgentStartupShell
-} from '@yiru/protocol/agent/shell-command'
-import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+} from '@agentstart/protocol/agent/shell-command'
+import type { AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
 
 const AI_VAULT_DEFAULT_COMMANDS: Record<AiVaultAgent, string> = {
   antigravity: 'agy',
@@ -208,5 +208,5 @@ export function realHomeCodexResumeEnvDeletion(session: {
   if (session.agent !== 'codex' || session.codexHome !== null) {
     return {}
   }
-  return { envToDelete: ['CODEX_HOME', 'YIRU_CODEX_HOME'] }
+  return { envToDelete: ['CODEX_HOME', 'AGENTSTART_CODEX_HOME'] }
 }

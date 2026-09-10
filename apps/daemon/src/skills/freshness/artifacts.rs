@@ -112,7 +112,7 @@ pub(crate) async fn global_locks() -> BTreeMap<String, String> {
 
 pub(crate) async fn load_artifacts() -> Result<Artifacts, String> {
     let _ = super::super::guides::load().await?;
-    let artifacts = if let Some(root) = std::env::var_os("YIRU_SKILL_RESOURCES_DIR") {
+    let artifacts = if let Some(root) = std::env::var_os("AGENTSTART_SKILL_RESOURCES_DIR") {
         let root = PathBuf::from(root);
         let manifest = read_json(&root.join("current-manifest.json")).await?;
         let registry = read_json(&root.join("snapshot-registry.json")).await?;

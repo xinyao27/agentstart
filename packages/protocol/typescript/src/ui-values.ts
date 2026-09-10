@@ -1,6 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   UiJsonNull,
   UiJsonValueEntrySchema,
@@ -10,13 +10,13 @@ import {
   type UiDocument as ProtocolUiDocument,
   type UiJsonValue as ProtocolJsonValue,
   type UiJsonValueEntry as ProtocolJsonValueEntry
-} from '../generated/yiru/runtime/v1/ui_pb.js'
+} from '../generated/agent_start/runtime/v1/ui_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const UI_PROTOCOL_CAPABILITY = 'ui.protobuf.v1' as const
 
 // Why: the UI authority's document is normalized at its known keys but keeps
-// unknown top-level keys verbatim (e.g. trustedYiruHooks), so the wire's
+// unknown top-level keys verbatim (e.g. trustedAgentStartHooks), so the wire's
 // recursive JSON value decodes into the equally open recursive union the
 // renderer already models.
 export type UiJsonValue =
@@ -36,7 +36,7 @@ export function decodeUiDocument(document: ProtocolUiDocument | undefined): UiDo
   return jsonEntries(document.fields)
 }
 
-export function decodeJsonValue(value: ProtocolJsonValue | undefined): UiJsonValue {
+function decodeJsonValue(value: ProtocolJsonValue | undefined): UiJsonValue {
   const kind = value?.kind
   if (!kind) {
     throw invalidResponse('UI JSON value is missing')
@@ -64,7 +64,7 @@ export function encodeUiEntries(fields: Record<string, unknown>): ProtocolJsonVa
     .map(([key, value]) => create(UiJsonValueEntrySchema, { key, value: encodeJsonValue(value) }))
 }
 
-export function encodeJsonValue(value: unknown): ProtocolJsonValue {
+function encodeJsonValue(value: unknown): ProtocolJsonValue {
   if (value === null) {
     return create(UiJsonValueSchema, {
       kind: { case: 'nullValue', value: UiJsonNull.VALUE }

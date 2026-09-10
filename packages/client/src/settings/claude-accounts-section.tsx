@@ -1,5 +1,5 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { ClaudeRateLimitAccountsState } from '@yiru/protocol/settings/managed-accounts'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { ClaudeRateLimitAccountsState } from '@agentstart/protocol/settings/managed-accounts'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Plus, ArrowClockwise as RefreshCw, Trash as Trash2, X } from '~renderer/icons/hugeicons'
@@ -91,7 +91,7 @@ export function ClaudeAccountsSection({
             <DialogDescription>
               {translate(
                 'auto.components.settings.AccountsPane.854ebbcc45',
-                'Yiru will delete the managed Claude auth for this saved account. If it is currently active, Yiru falls back to the system default Claude login.'
+                'AgentStart will delete the managed Claude auth for this saved account. If it is currently active, AgentStart falls back to the system default Claude login.'
               )}
             </DialogDescription>
           </DialogHeader>
@@ -128,7 +128,7 @@ export function ClaudeAccountsSection({
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.settings.AccountsPane.72b36ea174',
-              'Optional. Yiru can use your normal Claude login; add accounts only if you want quick switching without moving chat sessions.'
+              'Optional. AgentStart can use your normal Claude login; add accounts only if you want quick switching without moving chat sessions.'
             )}
           </p>
         </div>
@@ -239,7 +239,7 @@ export function ClaudeAccountsSection({
                   {systemClaudeActive ? (
                     <Badge
                       variant="outline"
-                      className="text-foreground/80 h-4 shrink-0 px-1.5 text-[10px] leading-none font-medium"
+                      className="text-foreground/80 h-4 shrink-0 rounded px-1.5 text-[10px] leading-none font-medium"
                     >
                       {translate('auto.components.settings.AccountsPane.e74831fb6b', 'Active')}
                     </Badge>
@@ -255,7 +255,7 @@ export function ClaudeAccountsSection({
               </div>
             </Button>
             {visibleClaudeAccounts.length === 0 ? (
-              <div className="border-border/70 text-muted-foreground border border-dashed px-3 py-4 text-xs">
+              <div className="border-border/70 text-muted-foreground rounded-md border border-dashed px-3 py-4 text-xs">
                 {isRemoteAccountScope
                   ? translate(
                       'auto.components.settings.AccountsPane.remoteEmptyClaudeAccounts',
@@ -264,7 +264,7 @@ export function ClaudeAccountsSection({
                     )
                   : translate(
                       'auto.components.settings.AccountsPane.3fe7862418',
-                      "No managed Claude accounts for {{value0}}. Yiru will use that environment's system default Claude login until you add one here.",
+                      "No managed Claude accounts for {{value0}}. AgentStart will use that environment's system default Claude login until you add one here.",
                       { value0: accountRuntimeSentenceLabel }
                     )}
               </div>
@@ -283,7 +283,7 @@ export function ClaudeAccountsSection({
                   <div
                     key={account.id}
                     className={cn(
-                      'flex w-full items-center justify-between gap-3 border px-3 py-2.5 text-left transition-colors',
+                      'flex w-full items-center justify-between gap-3 rounded-md border px-3 py-2.5 text-left transition-colors',
                       isActive
                         ? 'border-foreground/20 bg-accent/15'
                         : 'border-border/70 hover:border-border hover:bg-accent/8'
@@ -313,14 +313,14 @@ export function ClaudeAccountsSection({
                           <span className="truncate text-sm font-medium">{account.email}</span>
                           <Badge
                             variant="outline"
-                            className="text-foreground/70 h-4 shrink-0 px-1.5 text-[10px] leading-none font-medium"
+                            className="text-foreground/70 h-4 shrink-0 rounded px-1.5 text-[10px] leading-none font-medium"
                           >
                             {getClaudeAccountRuntimeLabel(account, accountRuntime.label)}
                           </Badge>
                           {isActive ? (
                             <Badge
                               variant="outline"
-                              className="text-foreground/80 h-4 shrink-0 px-1.5 text-[10px] leading-none font-medium"
+                              className="text-foreground/80 h-4 shrink-0 rounded px-1.5 text-[10px] leading-none font-medium"
                             >
                               {translate(
                                 'auto.components.settings.AccountsPane.e74831fb6b',

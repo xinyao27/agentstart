@@ -1,5 +1,5 @@
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { useSortable } from '@dnd-kit/sortable'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 import { useEffect, useRef, useState } from 'react'
 import { stripLeadingAgentTitleDecoration } from '~renderer/agent/title/decoration'
 import { translate } from '~renderer/i18n/i18n'
@@ -50,7 +50,7 @@ type SortableTabProps = {
   dropIndicator?: DropIndicator
 }
 
-export const CLOSE_ALL_CONTEXT_MENUS_EVENT = 'yiru-close-all-context-menus'
+export const CLOSE_ALL_CONTEXT_MENUS_EVENT = 'agentstart-close-all-context-menus'
 
 export default function SortableTab({
   tab,

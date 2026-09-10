@@ -84,7 +84,7 @@ export function MobilePairingSetupSection({
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.settings.MobilePairingSetupSection.localAddressDescription',
-              'Choose the LAN or private-network address that Yiru Mobile can use to reach this computer directly.'
+              'Choose the LAN or private-network address that AgentStart Mobile can use to reach this computer directly.'
             )}
           </p>
         </div>

@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import type { OpenFile } from '~renderer/editor/state'
 
 export function isReloadableSingleFileDiffTab(file: OpenFile): boolean {

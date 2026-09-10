@@ -1,4 +1,4 @@
-import { parseExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import { parseExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
 import { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { getRuntimeEnvironmentIdForRepo } from '~renderer/repo/runtime-owner'
@@ -240,7 +240,7 @@ export function BaseRefPicker({
         baseRefResults.length > 0 ? (
           <div
             ref={baseRefResultsListRef}
-            className="border-border/50 scrollbar-sleek max-h-[min(12rem,40vh)] overflow-x-hidden overflow-y-auto border"
+            className="border-border/50 scrollbar-sleek max-h-[min(12rem,40vh)] overflow-x-hidden overflow-y-auto rounded-md border"
           >
             <div className="p-1">
               {baseRefResults.map((ref) => (

@@ -21,9 +21,9 @@ export function WorkspacePortClaimsBridge(): null {
   })
   useEffect(() => {
     if (workspacePorts.data) {
-      void getExtensionBrowserCapabilities().publishWorkspacePortClaims(
-        workspacePortClaims(workspacePorts.data, projects)
-      )
+      void getExtensionBrowserCapabilities()
+        .publishWorkspacePortClaims(workspacePortClaims(workspacePorts.data, projects))
+        .catch((error: unknown) => console.error('Failed to publish workspace port claims:', error))
     }
   }, [projects, workspacePorts.data])
   return null

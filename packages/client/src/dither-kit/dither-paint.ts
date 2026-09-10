@@ -1,7 +1,5 @@
-import { ditherColor, type DitherSeed } from './palette'
-
 // Why: this keeps Dither Kit's MIT-licensed Bayer texture while adapting its canvas engine to
-// Yiru's dependency-free, monochrome chart surface. Source: https://tripwire.sh/dither-kit.
+// AgentStart's dependency-free, monochrome chart surface. Source: https://tripwire.sh/dither-kit.
 const BAYER_MATRIX = [
   [0, 8, 2, 10],
   [12, 4, 14, 6],
@@ -11,46 +9,6 @@ const BAYER_MATRIX = [
 
 export function ditherThreshold(x: number, y: number): number {
   return BAYER_MATRIX[y & 3]?.[x & 3] ?? 0
-}
-
-type DitherVariant = 'gradient' | 'hatched'
-
-type PaintColumnOptions = {
-  variant: DitherVariant
-  intensity: number
-}
-
-export function paintDitherColumn(
-  context: CanvasRenderingContext2D,
-  x: number,
-  top: number,
-  floor: number,
-  seed: DitherSeed,
-  options: PaintColumnOptions
-): void {
-  const firstRow = Math.round(top)
-  const lastRow = Math.round(floor)
-  const depth = lastRow - firstRow
-  if (depth <= 0) {
-    context.fillStyle = ditherColor(seed.fill, 0.72)
-    context.fillRect(x, firstRow, 1, 1)
-    return
-  }
-
-  for (let y = firstRow; y < lastRow; y++) {
-    const density = (y - firstRow) / depth
-    if (options.variant === 'hatched' && ((x + y) & 3) >= 2) {
-      continue
-    }
-    const threshold = ditherThreshold(x, y)
-    const isLit = density > threshold - options.intensity * 0.1
-    const alpha = Math.min(1, (0.3 + density * 0.7) * (isLit ? 1 : 0.4))
-    context.fillStyle = ditherColor(seed.fill, alpha)
-    context.fillRect(x, y, 1, 1)
-  }
-
-  context.fillStyle = ditherColor(seed.fill, 0.72)
-  context.fillRect(x, firstRow, 1, 1)
 }
 
 export function ditherBackingSize(

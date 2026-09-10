@@ -1,6 +1,6 @@
-import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
-import type { StatusBarUsageMode } from '@yiru/protocol/settings/usage-display'
-import type { UsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
+import type { ProviderRateLimits } from '@agentstart/protocol/account-rate-types'
+import type { StatusBarUsageMode } from '@agentstart/protocol/settings/usage-display'
+import type { UsagePercentageDisplay } from '@agentstart/protocol/settings/usage-display'
 import { Fragment, type ReactNode } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretRight, ArrowClockwise as RefreshCw } from '~renderer/icons/hugeicons'
@@ -26,7 +26,7 @@ import { useResetCountdownClock } from './use-reset-countdown-clock'
 
 type ProviderId = ProviderRateLimits['provider']
 
-export function UsageRow({
+function UsageRow({
   provider,
   display,
   state,
@@ -184,7 +184,11 @@ export function UsageRosterPanel({
       </div>
       <DropdownMenuSeparator className="my-0" />
       {sorted.map((provider) => {
-        const state = getUsageRosterRowState(provider, getUsedUsageSections(provider).length > 0)
+        const state = getUsageRosterRowState(
+          provider,
+          getUsedUsageSections(provider).length > 0,
+          isRefreshing
+        )
         const showSignInAction = state.kind === 'sign-in' && canSignIn(provider.provider)
         const row = (
           <UsageRow

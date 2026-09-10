@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   EmulatorGesturePointKind,
   EmulatorOrientation,
@@ -12,7 +12,7 @@ import {
   type EmulatorServiceListResponse,
   type EmulatorServiceShutdownResponse,
   type EmulatorSessionInfo
-} from '../generated/yiru/runtime/v1/emulator_pb.js'
+} from '../generated/agent_start/runtime/v1/emulator_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const EMULATOR_PROTOCOL_CAPABILITY = 'emulator.protobuf.v1' as const
@@ -117,7 +117,7 @@ export function emulatorStopResult(
   }
 }
 
-export function emulatorSessionInfo(value: EmulatorSessionInfo): EmulatorSessionInfoValue {
+function emulatorSessionInfo(value: EmulatorSessionInfo): EmulatorSessionInfoValue {
   return {
     deviceUdid: required(value.deviceUdid, 'Device UDID'),
     wsUrl: required(value.wsUrl, 'Device WebSocket URL'),
@@ -135,7 +135,7 @@ export function emulatorExecResult(value: EmulatorServiceExecResponse): Emulator
   return value.result ? jsonValue(value.result) : null
 }
 
-export function jsonValue(value: EmulatorJsonValue): EmulatorJsonResultValue {
+function jsonValue(value: EmulatorJsonValue): EmulatorJsonResultValue {
   switch (value.kind.case) {
     case 'nullValue':
       return null

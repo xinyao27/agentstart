@@ -1,9 +1,9 @@
-import { createSequencedSetupAgentCommands } from '@yiru/protocol/setup/agent-sequencing'
-import { getSetupRunnerCommandPlatformForPath } from '@yiru/protocol/setup/runner-command'
+import { createSequencedSetupAgentCommands } from '@agentstart/protocol/setup/agent-sequencing'
+import { getSetupRunnerCommandPlatformForPath } from '@agentstart/protocol/setup/runner-command'
 import type {
   WorktreeDefaultTabsLaunch,
   WorktreeSetupLaunch
-} from '@yiru/protocol/worktree/create-result'
+} from '@agentstart/protocol/worktree/create-result'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 
 import { queueHookCommandsForFirstWorktreeTab } from '../agent/hook-command-delivery'

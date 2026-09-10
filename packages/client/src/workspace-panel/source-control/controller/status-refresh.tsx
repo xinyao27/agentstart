@@ -1,5 +1,5 @@
-import { resolveHostedReviewCreationProvider } from '@yiru/protocol/hosted-review/creation-provider'
-import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
+import { resolveHostedReviewCreationProvider } from '@agentstart/protocol/hosted-review/creation-provider'
+import type { HostedReviewInfo } from '@agentstart/protocol/hosted-review/types'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { localizedHostedReviewCopy } from '~renderer/i18n/hosted-review-localized-copy'

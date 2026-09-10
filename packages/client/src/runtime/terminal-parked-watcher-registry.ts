@@ -47,10 +47,6 @@ export type ParkedTabWatcherEntry = {
 
 export const parkedWatchersByTabId = new Map<string, ParkedTabWatcherEntry>()
 
-export function getParkedTerminalWatcherTabIds(): string[] {
-  return Array.from(parkedWatchersByTabId.keys())
-}
-
 export function disposeParkedTabWatchers(tabId: string): void {
   const entry = parkedWatchersByTabId.get(tabId)
   if (!entry) {

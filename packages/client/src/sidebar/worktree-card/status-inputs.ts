@@ -1,14 +1,9 @@
-import type { TerminalPaneLayoutNode } from '@yiru/protocol/workspace/session'
 import type { AppState } from '~renderer/store/types'
 
 // Why: these selectors return fresh maps whose top-level values preserve
 // underlying per-tab references, so callers must compare them shallowly.
 
 type WorktreeCardStatusInputState = Pick<AppState, 'runtimePaneTitlesByTabId' | 'ptyIdsByTabId'> & {
-  tabsByWorktree: Record<string, readonly { id: string }[]>
-}
-
-type WorktreeCardLayoutRootInputState = Pick<AppState, 'terminalLayoutsByTabId'> & {
   tabsByWorktree: Record<string, readonly { id: string }[]>
 }
 
@@ -36,17 +31,6 @@ export function selectLivePtyIdsForWorktree(
     if (ids && ids.length > 0) {
       out[tab.id] = ids
     }
-  }
-  return out
-}
-
-export function selectTerminalLayoutRootsForWorktree(
-  state: WorktreeCardLayoutRootInputState,
-  worktreeId: string
-): Record<string, TerminalPaneLayoutNode | null | undefined> {
-  const out: Record<string, TerminalPaneLayoutNode | null | undefined> = {}
-  for (const tab of state.tabsByWorktree[worktreeId] ?? []) {
-    out[tab.id] = state.terminalLayoutsByTabId[tab.id]?.root
   }
   return out
 }

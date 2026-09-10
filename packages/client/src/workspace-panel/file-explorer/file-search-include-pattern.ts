@@ -27,6 +27,6 @@ export function folderRelativePathToIncludeGlob(relativePath: string): string {
 }
 
 export function selectedExplorerFolderRelativePath(activeElement: Element | null): string | null {
-  const explorerShell = activeElement?.closest('[data-yiru-explorer-shell]')
+  const explorerShell = activeElement?.closest('[data-agentstart-explorer-shell]')
   return explorerShell?.getAttribute('data-selected-folder-relative-path') ?? null
 }

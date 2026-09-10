@@ -10,25 +10,38 @@ import { promisify } from 'node:util'
 
 const execFileAsync = promisify(execFile)
 const iosRoot = path.resolve(import.meta.dirname, '..')
-const projectPath = path.join(iosRoot, 'YiruMobile.xcodeproj')
+const projectPath = path.join(iosRoot, 'AgentStartMobile.xcodeproj')
 const derivedDataPath = path.join(iosRoot, 'build', 'DevelopmentDerivedData')
-const appPath = path.join(derivedDataPath, 'Build', 'Products', 'Debug-iphonesimulator', 'Yiru.app')
-const bundleID = 'com.xinyao27.yiru.mobile'
-const conflictingDevelopmentBundleIDs = ['me.xinyao.yiru.mobile.ios']
-const defaultDevelopmentDaemonCLI = path.join(iosRoot, '..', 'daemon', 'target', 'release', 'yiru')
-const developmentDaemonCLI = process.env.YIRU_CLI || defaultDevelopmentDaemonCLI
+const appPath = path.join(
+  derivedDataPath,
+  'Build',
+  'Products',
+  'Debug-iphonesimulator',
+  'AgentStart.app'
+)
+const bundleID = 'com.xinyao27.agentstart.mobile'
+const conflictingDevelopmentBundleIDs = ['me.xinyao.agentstart.mobile.ios']
+const defaultDevelopmentDaemonCLI = path.join(
+  iosRoot,
+  '..',
+  'daemon',
+  'target',
+  'release',
+  'agentstart'
+)
+const developmentDaemonCLI = process.env.AGENTSTART_CLI || defaultDevelopmentDaemonCLI
 const pairingTimeoutMs = 120_000
 const pairingRetryIntervalMs = 1_000
 
 const options = parseOptions(process.argv.slice(2))
 const shouldAutoPair =
   process.platform === 'darwin' &&
-  process.env.YIRU_MOBILE_AUTO_PAIR !== '0' &&
+  process.env.AGENTSTART_MOBILE_AUTO_PAIR !== '0' &&
   existsSync(developmentDaemonCLI)
 
 function parseOptions(args) {
   const parsed = {
-    deviceName: process.env.YIRU_IOS_SIMULATOR || 'iPhone 17 Pro',
+    deviceName: process.env.AGENTSTART_IOS_SIMULATOR || 'iPhone 17 Pro',
     openXcode: true,
     reuseBuild: false
   }
@@ -110,7 +123,7 @@ async function buildAndInstall(device) {
     '-project',
     projectPath,
     '-scheme',
-    'YiruMobile',
+    'AgentStartMobile',
     '-configuration',
     'Debug',
     '-destination',
@@ -123,7 +136,7 @@ async function buildAndInstall(device) {
     throw new Error(`Built app was not found at ${appPath}`)
   }
   await execFileAsync('xcrun', ['simctl', 'install', device.udid, appPath])
-  logStep('Installed native Yiru Mobile')
+  logStep('Installed native AgentStart Mobile')
 }
 
 async function installExistingBuild(device) {
@@ -134,7 +147,7 @@ async function installExistingBuild(device) {
   }
   logStep('Reusing existing DevelopmentDerivedData build')
   await execFileAsync('xcrun', ['simctl', 'install', device.udid, appPath])
-  logStep('Installed native Yiru Mobile')
+  logStep('Installed native AgentStart Mobile')
 }
 
 async function stopConflictingDevelopmentApps(device) {
@@ -225,10 +238,10 @@ async function launch(device, pairingUrl) {
   }
   const launchEnvironment = { ...process.env }
   if (pairingUrl) {
-    launchEnvironment.SIMCTL_CHILD_YIRU_DEVELOPMENT_PAIRING_URL = pairingUrl
+    launchEnvironment.SIMCTL_CHILD_AGENTSTART_DEVELOPMENT_PAIRING_URL = pairingUrl
   }
   await execFileAsync('xcrun', launchArgs, { env: launchEnvironment })
-  logStep('Launched Yiru Mobile')
+  logStep('Launched AgentStart Mobile')
 
   if (!pairingUrl) {
     return

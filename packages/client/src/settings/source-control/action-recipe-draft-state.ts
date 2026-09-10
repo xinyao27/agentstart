@@ -1,9 +1,9 @@
-import { setSourceControlActionDefault } from '@yiru/protocol/source-control/action-recipes'
-import type { SourceControlActionId } from '@yiru/protocol/source-control/ai-actions'
+import { setSourceControlActionDefault } from '@agentstart/protocol/source-control/action-recipes'
+import type { SourceControlActionId } from '@agentstart/protocol/source-control/ai-actions'
 import type {
   SourceControlAiSettings,
   SourceControlAiSettingsPatch
-} from '@yiru/protocol/source-control/ai-types'
+} from '@agentstart/protocol/source-control/ai-types'
 import { useEffect, useState } from 'react'
 
 import type { ActionRecipeDraftState } from './ai-action-recipe-draft'

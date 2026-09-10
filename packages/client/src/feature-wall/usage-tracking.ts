@@ -1,4 +1,4 @@
-import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
+import type { ProviderRateLimits } from '@agentstart/protocol/account-rate-types'
 import { translate } from '~renderer/i18n/i18n'
 
 export type FeatureWallUsageProviderConnection = {
@@ -6,7 +6,7 @@ export type FeatureWallUsageProviderConnection = {
   label: string
 }
 
-export function hasFeatureWallProviderUsageTracking(provider: ProviderRateLimits | null): boolean {
+function hasFeatureWallProviderUsageTracking(provider: ProviderRateLimits | null): boolean {
   if (!provider) {
     return false
   }

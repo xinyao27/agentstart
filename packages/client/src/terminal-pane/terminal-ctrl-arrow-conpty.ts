@@ -1,6 +1,6 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import { LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
-import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import { LOCAL_EXECUTION_HOST_ID } from '@agentstart/protocol/host/identity'
+import { isRuntimePtyId } from '@agentstart/protocol/terminal-identity'
 import { getConnectionIdFromState } from '~renderer/runtime/connection-context'
 import { isLocalNativeWindowsConpty } from '~renderer/terminal-pane/pane-manager/windows-pty-compatibility'
 import {
@@ -18,7 +18,7 @@ type TerminalTabShellState = {
   >
 }
 
-export type TerminalCtrlArrowConptyState = Parameters<typeof getConnectionIdFromState>[0] &
+type TerminalCtrlArrowConptyState = Parameters<typeof getConnectionIdFromState>[0] &
   WorktreeRuntimeOwnerState &
   TerminalTabShellState
 

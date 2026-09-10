@@ -26,30 +26,30 @@ pub(crate) struct E2eeProfile {
 
 pub(crate) const MOBILE_PROFILE: E2eeProfile = E2eeProfile {
     forward_label: "mobile-to-desktop",
-    info_label: b"yiru-mobile-e2ee/v2/session\0",
+    info_label: b"agentstart-mobile-e2ee/v2/session\0",
     initiator: "mobile",
-    protocol: "yiru-mobile-e2ee",
+    protocol: "agentstart-mobile-e2ee",
     responder: "desktop",
     reverse_label: "desktop-to-mobile",
-    salt_label: b"yiru-mobile-e2ee/v2/salt\0",
+    salt_label: b"agentstart-mobile-e2ee/v2/salt\0",
     server_nonce_label: "desktop-nonce",
     server_public_key_label: "desktop-public-key",
-    transcript_domain: "yiru-mobile-e2ee/v2/transcript",
+    transcript_domain: "agentstart-mobile-e2ee/v2/transcript",
     transport: "direct",
     vocabulary: ReadyVocabulary::Mobile,
 };
 
 pub(crate) const RUNTIME_PROFILE: E2eeProfile = E2eeProfile {
     forward_label: "runtime-client-to-server",
-    info_label: b"yiru-runtime-e2ee/v2/session\0",
+    info_label: b"agentstart-runtime-e2ee/v2/session\0",
     initiator: "runtime-client",
-    protocol: "yiru-runtime-e2ee",
+    protocol: "agentstart-runtime-e2ee",
     responder: "runtime-server",
     reverse_label: "runtime-server-to-client",
-    salt_label: b"yiru-runtime-e2ee/v2/salt\0",
+    salt_label: b"agentstart-runtime-e2ee/v2/salt\0",
     server_nonce_label: "server-nonce",
     server_public_key_label: "server-public-key",
-    transcript_domain: "yiru-runtime-e2ee/v2/transcript",
+    transcript_domain: "agentstart-runtime-e2ee/v2/transcript",
     transport: "direct",
     vocabulary: ReadyVocabulary::Runtime,
 };

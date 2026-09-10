@@ -1,4 +1,4 @@
-import { encodeRuntimePtyId, parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { encodeRuntimePtyId, parseRuntimePtyId } from '@agentstart/protocol/terminal-identity'
 import { translate } from '~renderer/i18n/i18n'
 import { isRemoteTerminalSurfaceTabId } from '~renderer/runtime/remote-terminal-surface-id'
 import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'

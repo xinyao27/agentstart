@@ -19,7 +19,7 @@ export function buildGuestOverlayScript(action: GuestScriptAction): string {
 
 const AWAIT_CLICK_SCRIPT = `new Promise(function(resolve, reject) {
   'use strict';
-  var grab = window.__yiruGrab;
+  var grab = window.__agentstartGrab;
   if (!grab) {
     reject(new Error('Grab not armed'));
     return;
@@ -70,7 +70,7 @@ const AWAIT_CLICK_SCRIPT = `new Promise(function(resolve, reject) {
     var payload = extractSelectedPayload(el);
     if (!payload) return;
     grab.freezeHighlight();
-    resolve({ __yiruContextMenu: true, payload: payload });
+    resolve({ __agentstartContextMenu: true, payload: payload });
   }
 
   grab.host.addEventListener('click', onClick, true);
@@ -81,13 +81,13 @@ const AWAIT_CLICK_SCRIPT = `new Promise(function(resolve, reject) {
     grab.host.removeEventListener('contextmenu', onContext, true);
     grab.cleanup();
     // Why: teardown is a normal cancellation path, so it must not surface as a page error.
-    resolve({ __yiruCancelled: true });
+    resolve({ __agentstartCancelled: true });
   };
 })`
 
 const FINALIZE_SCRIPT = `(function() {
   'use strict';
-  var grab = window.__yiruGrab;
+  var grab = window.__agentstartGrab;
   if (!grab) return null;
   var el = grab.getCurrentElement();
   if (!el) return null;
@@ -104,7 +104,7 @@ const FINALIZE_SCRIPT = `(function() {
 
 const EXTRACT_HOVER_SCRIPT = `(function() {
   'use strict';
-  var grab = window.__yiruGrab;
+  var grab = window.__agentstartGrab;
   if (!grab) return null;
   var el = grab.getCurrentElement();
   if (!el) return null;
@@ -117,7 +117,7 @@ const EXTRACT_HOVER_SCRIPT = `(function() {
 
 const TEARDOWN_SCRIPT = `(function() {
   'use strict';
-  var grab = window.__yiruGrab;
+  var grab = window.__agentstartGrab;
   if (!grab) return true;
   if (grab.cancelAwait) {
     grab.cancelAwait();

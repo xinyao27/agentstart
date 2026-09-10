@@ -3,14 +3,14 @@
 // into the typed protobuf wire messages.
 use std::collections::BTreeMap;
 
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     WorkspaceCleanupCandidate, WorkspaceCleanupCandidateTier, WorkspaceCleanupDismissal,
     WorkspaceCleanupGitEvidence, WorkspaceCleanupLocalContext, WorkspaceCleanupScanError,
     WorkspaceCleanupScanProgress, WorkspaceCleanupServiceDismissalsResponse,
     WorkspaceCleanupServiceScanResponse,
 };
+use serde_json::Value;
 
 pub(super) fn scan_value(result: &Value) -> Result<WorkspaceCleanupServiceScanResponse, Status> {
     let candidates = list(result.get("candidates"))

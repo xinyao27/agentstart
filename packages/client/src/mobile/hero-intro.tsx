@@ -11,7 +11,7 @@ export function HeroIntro({ onStart }: { onStart: () => void }): React.JSX.Eleme
     <div className={mobilePageStyles.introShell}>
       <div className={mobilePageStyles.eyebrowRow}>
         <span className={mobilePageStyles.eyebrow}>
-          {translate('auto.components.mobile.MobileHero.5410d55d79', 'Yiru Mobile')}
+          {translate('auto.components.mobile.MobileHero.5410d55d79', 'AgentStart Mobile')}
         </span>
       </div>
       <h1 className={mobilePageStyles.heading}>
@@ -23,7 +23,7 @@ export function HeroIntro({ onStart }: { onStart: () => void }): React.JSX.Eleme
       <p className={mobilePageStyles.lead}>
         {translate(
           'auto.components.mobile.MobileHero.b4ccce5cb7',
-          "Control Yiru from your phone. Check on agents, review changes, and kick off tasks while you're away from your desk."
+          "Control AgentStart from your phone. Check on agents, review changes, and kick off tasks while you're away from your desk."
         )}
       </p>
       <div

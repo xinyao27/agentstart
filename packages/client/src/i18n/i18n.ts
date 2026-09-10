@@ -1,4 +1,4 @@
-import type { UiLanguage } from '@yiru/protocol/settings/ui-language'
+import type { UiLanguage } from '@agentstart/protocol/settings/ui-language'
 
 import type { SupportedUiLocale } from './locale'
 import zhMessages from './locales/zh.json'

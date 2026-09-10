@@ -1,12 +1,12 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ProgressEventsService,
   ProgressEventsServiceEventSchema,
   ProgressEventsServiceSubscribeRequestSchema,
   type ProgressEventsServiceEvent
-} from '../generated/yiru/runtime/v1/host_progress_pb.js'
+} from '../generated/agent_start/runtime/v1/host_progress_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeCallOptions, RuntimeStream, RuntimeTransport } from './transport.js'
 

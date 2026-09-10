@@ -1,8 +1,8 @@
-import type { AgentStatusClient } from '@yiru/protocol'
+import type { AgentStatusClient } from '@agentstart/protocol'
 import type {
   AgentStatusIpcPayload,
   MigrationUnsupportedPtyEntry
-} from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/status-records'
 import type { AgentInterruptInferenceRequest } from '~renderer/terminal-pane/agent/interrupt-intent'
 
 import { openAgentStatusProtocolClient, requireAgentStatusClient } from './agent-status-target'

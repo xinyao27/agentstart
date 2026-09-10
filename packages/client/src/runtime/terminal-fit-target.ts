@@ -1,4 +1,4 @@
-import { TerminalFitClient } from '@yiru/protocol'
+import { TerminalFitClient } from '@agentstart/protocol'
 
 import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'
 

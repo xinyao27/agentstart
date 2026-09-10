@@ -1,7 +1,7 @@
-import type { AgentType } from '@yiru/protocol/agent/status-records'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { tuiAgentToAgentKind } from '@yiru/protocol/telemetry/agent-kind'
-import type { AgentKind } from '@yiru/protocol/telemetry/events/foundations'
+import type { AgentType } from '@agentstart/protocol/agent/status-records'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { tuiAgentToAgentKind } from '@agentstart/protocol/telemetry/agent-kind'
+import type { AgentKind } from '@agentstart/protocol/telemetry/events/foundations'
 
 // Why: AgentIcon expects a TuiAgent, but AgentType is a broader union
 // (WellKnownAgentType | (string & {})) that includes 'unknown' and arbitrary

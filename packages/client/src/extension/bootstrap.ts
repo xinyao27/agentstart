@@ -4,18 +4,18 @@ import {
 } from './browser-capabilities'
 import type { ExtensionPage, ExtensionWorkspaceTarget } from './navigation'
 import { configureExtensionHostNavigation } from './navigation'
-import type { configureExtensionRuntime, ExtensionRuntimeBootstrap } from './runtime/session'
-import {
-  mountExtensionConnecting,
-  mountExtensionUnavailable,
-  type ExtensionUnavailableActions,
-  type ExtensionUnavailableReason
-} from './unavailable'
+import type { ExtensionRuntimeHostFactory } from './runtime/host'
+import type {
+  configureExtensionRuntime,
+  getExtensionRuntimeQueryCacheBuster
+} from './runtime/session'
+import { mountExtensionConnecting, mountExtensionUnavailable } from './unavailable'
 
 type ExtensionSurface = 'side-panel' | 'workspace'
 
 type RuntimeSessionModule = {
   configureExtensionRuntime: typeof configureExtensionRuntime
+  getExtensionRuntimeQueryCacheBuster: typeof getExtensionRuntimeQueryCacheBuster
 }
 type RuntimeSessionLoad = { module: RuntimeSessionModule; ok: true } | { error: unknown; ok: false }
 
@@ -44,14 +44,12 @@ export type ExtensionClientOptions = {
   openWorkspace: (target: ExtensionWorkspaceTarget) => void
   publishAgentAttention: (count: number) => void
   readActivePageUrl: () => Promise<string | null>
+  runtimeHost: ExtensionRuntimeHostFactory
   surface: ExtensionSurface
 }
 
-export async function mountExtensionClient(
-  bootstrap: ExtensionRuntimeBootstrap,
-  options: ExtensionClientOptions
-): Promise<void> {
-  Reflect.set(globalThis, '__YIRU_EXTENSION_CLIENT__', true)
+export async function mountExtensionClient(options: ExtensionClientOptions): Promise<void> {
+  Reflect.set(globalThis, '__AGENTSTART_EXTENSION_CLIENT__', true)
   configureExtensionBrowserCapabilities(options.browserCapabilities)
   configureExtensionHostNavigation({
     openExternalUrl: options.openExternalUrl,
@@ -65,21 +63,23 @@ export async function mountExtensionClient(
       loadRuntimeSession(),
       import('./workbench/bootstrap')
     ])
-    runtimeSession.configureExtensionRuntime(bootstrap)
-    mountExtensionWorkbench(bootstrap)
+    runtimeSession.configureExtensionRuntime(options.runtimeHost)
+    mountExtensionWorkbench(runtimeSession.getExtensionRuntimeQueryCacheBuster())
     return
   }
   const [runtimeSession, { mountExtensionSidePanel }] = await Promise.all([
     loadRuntimeSession(),
     import('./side-panel/bootstrap')
   ])
-  runtimeSession.configureExtensionRuntime(bootstrap)
-  mountExtensionSidePanel(bootstrap)
+  runtimeSession.configureExtensionRuntime(options.runtimeHost)
+  mountExtensionSidePanel(runtimeSession.getExtensionRuntimeQueryCacheBuster())
 }
 
 export type {
   BrowserAiStatus,
   BrowserContextPayload,
+  CommunityAdapter,
+  CommunityAdaptersState,
   BrowserPerformanceCapture,
   BrowserProjectBookmark,
   BrowserProjectBookmarkKind,
@@ -88,5 +88,19 @@ export type {
   BrowserWorkspacePreferences,
   ExtensionBrowserCapabilities
 } from './browser-capabilities'
+export type {
+  ExtensionConnectionState,
+  ExtensionRuntimeHost,
+  ExtensionRuntimeHostFactory,
+  ExtensionRuntimeHostMessages,
+  ExtensionRuntimeHostSetup,
+  ExtensionRuntimeTerminalHandle,
+  ExtensionRuntimeTerminalOptions
+} from './runtime/host'
 export { mountExtensionConnecting, mountExtensionUnavailable }
-export type { ExtensionUnavailableActions, ExtensionUnavailableReason }
+export type {
+  DaemonConnectionSettings,
+  ExtensionUnavailableActions,
+  ExtensionUnavailableFailure,
+  ExtensionUnavailableReason
+} from './unavailable'

@@ -1,4 +1,4 @@
-import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import type { NestedRepoScanResult } from '@agentstart/protocol/project/group-model'
 import { requireProjectGroupProtocolClient } from '~renderer/runtime/project-group-target'
 import type { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 

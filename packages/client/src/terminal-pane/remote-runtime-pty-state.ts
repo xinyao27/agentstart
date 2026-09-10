@@ -1,6 +1,6 @@
 import { translate } from '~renderer/i18n/i18n'
-import { isRemoteTerminalSurfaceTabId } from '~renderer/runtime/remote-terminal-surface-id'
 import type { RuntimeClientTarget } from '~renderer/runtime/rpc-client'
+import { isRuntimeTerminalGoneError } from '~renderer/runtime/terminal-gone-error'
 import {
   REMOTE_TERMINAL_SNAPSHOT_TOO_LARGE,
   type RemoteRuntimeMultiplexedTerminal
@@ -8,6 +8,7 @@ import {
 import { runtimeTerminalErrorMessage } from '~renderer/runtime/terminal-stream'
 
 import type { PtyTransport, RuntimePtyTransportOptions } from './pty/transport-types'
+import { recordTerminalFreezeBreadcrumb } from './terminal-freeze-breadcrumbs'
 
 export type RemoteRuntimeViewport = { cols: number; rows: number }
 export type RemoteRuntimeDelivery = Parameters<NonNullable<PtyTransport['setDeliveryState']>>[0]
@@ -19,18 +20,6 @@ function remoteTerminalGoneMessage(): string {
   return translate(
     'auto.components.terminal.pane.remoteRuntimePtyTransport.gone',
     'Remote terminal was closed.'
-  )
-}
-
-function isRemoteTerminalGoneMessage(message: string): boolean {
-  const normalized = message.toLowerCase()
-  return (
-    normalized.includes('terminal_handle_stale') ||
-    normalized.includes('terminal handle is stale') ||
-    normalized.includes('terminal_exited') ||
-    normalized.includes('terminal_gone') ||
-    normalized.includes('no_connected_pty') ||
-    normalized.includes('terminal has no connected pty')
   )
 }
 
@@ -53,18 +42,15 @@ export class RemoteRuntimePtyState {
   private pendingClaimInput = ''
   private pendingClaimTimer: ReturnType<typeof setTimeout> | null = null
   private readonly claimWaiters = new Set<(ready: boolean) => void>()
-  private readonly tabId: string | undefined
   private readonly onPtyExit: RuntimePtyTransportOptions['onPtyExit']
   private readonly onPtySpawn: RuntimePtyTransportOptions['onPtySpawn']
 
   constructor(
     runtimeTarget: RuntimeClientTarget,
-    tabId: string | undefined,
     onPtyExit: RuntimePtyTransportOptions['onPtyExit'],
     onPtySpawn: RuntimePtyTransportOptions['onPtySpawn']
   ) {
     this.targetValue = runtimeTarget
-    this.tabId = tabId
     this.onPtyExit = onPtyExit
     this.onPtySpawn = onPtySpawn
   }
@@ -293,18 +279,19 @@ export class RemoteRuntimePtyState {
     if (message === REMOTE_TERMINAL_SNAPSHOT_TOO_LARGE) {
       return
     }
-    if (isRemoteTerminalGoneMessage(message)) {
+    if (isRuntimeTerminalGoneError(error)) {
+      // Why: a terminal the daemon no longer holds is a lifecycle transition, not
+      // a fault. Retiring the pane is the whole response; routing it through
+      // onError files it as a renderer crash on every ordinary terminal close.
+      recordTerminalFreezeBreadcrumb('remote-terminal-gone', { message })
       this.retire()
-      if (!isRemoteTerminalSurfaceTabId(this.tabId ?? '')) {
-        this.callbacksValue.onError?.(remoteTerminalGoneMessage())
-      }
       return
     }
     this.callbacksValue.onError?.(message)
   }
 
   isGoneError(error: unknown): boolean {
-    return isRemoteTerminalGoneMessage(runtimeTerminalErrorMessage(error))
+    return isRuntimeTerminalGoneError(error)
   }
 
   private resolveClaimWaiters(ready: boolean): void {

@@ -1,9 +1,9 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/protocol/source-control/ai-actions'
-import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
+} from '@agentstart/protocol/source-control/ai-actions'
+import type { LaunchSource } from '@agentstart/protocol/telemetry/events/foundations'
 import React from 'react'
 import type { SourceControlAiWriteTarget } from '~renderer/source-control/ai-recipe-save'
 import {

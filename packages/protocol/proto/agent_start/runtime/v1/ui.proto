@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service UiService {
+  rpc Get(UiServiceGetRequest) returns (UiServiceGetResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Set(UiServiceSetRequest) returns (UiServiceSetResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RecordFeatureInteraction(UiServiceRecordFeatureInteractionRequest) returns (UiServiceSetResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message UiServiceGetRequest {}
+
+// Why: the UI authority's document is normalized at its known keys but keeps
+// unknown top-level keys verbatim (e.g. trustedAgentStartHooks), so the wire carries
+// the document as typed recursive JSON entries rather than pretending every
+// key is a closed field.
+message UiDocument {
+  repeated UiJsonValueEntry fields = 1;
+}
+
+message UiServiceGetResponse {
+  UiDocument ui = 1;
+}
+
+message UiServiceSetRequest {
+  repeated UiJsonValueEntry fields = 1;
+}
+
+message UiServiceSetResponse {
+  UiDocument ui = 1;
+}
+
+message UiServiceRecordFeatureInteractionRequest {
+  string feature_id = 1;
+}
+
+// Why: the same open-ended shape rule as SettingsJsonValue — a typed recursive
+// JSON value instead of google.protobuf.Struct or a JSON string.
+message UiJsonValue {
+  oneof kind {
+    UiJsonNull null_value = 1;
+    bool bool_value = 2;
+    double number_value = 3;
+    string string_value = 4;
+    UiJsonValueList list_value = 5;
+    UiJsonValueObject object_value = 6;
+  }
+}
+
+enum UiJsonNull {
+  UI_JSON_NULL_UNSPECIFIED = 0;
+  UI_JSON_NULL_VALUE = 1;
+}
+
+message UiJsonValueList {
+  repeated UiJsonValue values = 1;
+}
+
+message UiJsonValueObject {
+  repeated UiJsonValueEntry entries = 1;
+}
+
+message UiJsonValueEntry {
+  string key = 1;
+  UiJsonValue value = 2;
+}

@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 
 import { SettingsRow, SettingsSegmentedControl } from './form-controls'
@@ -7,7 +7,7 @@ import { SearchableSetting } from './searchable-setting'
 
 type SourceControlCompareBasePolicy = 'repository-default' | 'branch-upstream'
 
-export const COMPARE_AGAINST_UPSTREAM_KEYWORDS = [
+const COMPARE_AGAINST_UPSTREAM_KEYWORDS = [
   'compare base',
   'default compare base',
   'default branch',

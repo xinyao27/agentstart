@@ -1,4 +1,4 @@
-import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
+import type { ProjectExecutionRuntimeResolution } from '@agentstart/protocol/project/runtime-preference'
 import { useShallow } from 'zustand/react/shallow'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'

@@ -1,9 +1,7 @@
 use std::collections::HashMap;
 
-use serde::Deserialize;
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     WorktreeAgentRow, WorktreeArchive, WorktreeBaseStatusEvent, WorktreeBaseStatusKind,
     WorktreeDefaultTab, WorktreeDefaultTabs, WorktreeDetectedRecord, WorktreeDetectedSource,
     WorktreeDiffComment, WorktreeGitInfo, WorktreeLineage, WorktreeLineageCapture,
@@ -18,6 +16,8 @@ use yiru_protocol::runtime::v1::{
     WorktreeStartupTerminal, WorktreeWorkspaceLineage, worktree_nullable_int64,
     worktree_nullable_string, worktree_service_resolve_pr_base_response,
 };
+use serde::Deserialize;
+use serde_json::Value;
 
 use crate::worktrees::{LinkedPullRequest, WorktreePsResult, WorktreePsSummary};
 
@@ -25,6 +25,7 @@ pub(super) struct ListResult {
     pub(super) worktrees: Vec<WorktreeRecord>,
     pub(super) total_count: u32,
     pub(super) truncated: bool,
+    pub(super) revision: Option<i64>,
 }
 
 pub(super) fn list_result(value: Value) -> Result<ListResult, Status> {
@@ -38,6 +39,7 @@ pub(super) fn list_result(value: Value) -> Result<ListResult, Status> {
         total_count: u32::try_from(value.total_count)
             .map_err(|_| data_loss("Worktree result count exceeds uint32"))?,
         truncated: value.truncated,
+        revision: value.revision,
     })
 }
 
@@ -249,7 +251,7 @@ fn detected_source(value: &str) -> Result<WorktreeDetectedSource, Status> {
 
 fn ownership(value: &str) -> Result<WorktreeOwnership, Status> {
     match value {
-        "yiru-managed" => Ok(WorktreeOwnership::YiruManaged),
+        "agentstart-managed" => Ok(WorktreeOwnership::AgentStartManaged),
         "external" => Ok(WorktreeOwnership::External),
         "unknown-legacy" => Ok(WorktreeOwnership::UnknownLegacy),
         _ => Err(data_loss(
@@ -571,6 +573,7 @@ struct ListJson {
     worktrees: Vec<RecordJson>,
     total_count: usize,
     truncated: bool,
+    revision: Option<i64>,
 }
 
 #[derive(Deserialize)]

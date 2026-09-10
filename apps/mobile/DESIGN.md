@@ -3,14 +3,14 @@
 ## Interface icons
 
 All user-interface icons in the new iOS client, including the widget extension, use the free
-Hugeicons Swift package through `DesignSystem/Icons/YiruIconID.swift` and `YiruIcon.swift`.
-Features use semantic IDs (`YiruIcon(.refresh, size: 16)`) and never reference Hugeicons assets,
+Hugeicons Swift package through `DesignSystem/Icons/AgentStartIconID.swift` and `AgentStartIcon.swift`.
+Features use semantic IDs (`AgentStartIcon(.refresh, size: 16)`) and never reference Hugeicons assets,
 SF Symbols, Phosphor assets, or hand-created icon images directly. Product wordmarks and agent
-logos are brand artwork and remain image assets. `YiruIcon` owns the shared resizable, colorable,
+logos are brand artwork and remain image assets. `AgentStartIcon` owns the shared resizable, colorable,
 size-constrained rendering and hides decorative icons from accessibility; interactive controls
 must provide their own localized accessibility label.
 
-Navigation-bar icon actions use `YiruToolbarIcon` inside a native `ToolbarItem`. The Design
+Navigation-bar icon actions use `AgentStartToolbarIcon` inside a native `ToolbarItem`. The Design
 System fixes Hugeicons glyphs at 24pt while SwiftUI owns the circular Liquid Glass surface and hit
 target. Header actions inherit the app's default neutral foreground accent; feature code must not
 add `.font`, `.fontWeight`, `.frame`, `.foregroundStyle`, `.tint`, `.buttonStyle`, or
@@ -21,11 +21,11 @@ for actions that intentionally share one capsule. A feature that must retain a c
 docked-panel header uses `GlassHeaderButton`; it reuses the same 24pt icon entry point, inherited
 color, 36pt visible circle, and 44pt hit target.
 
-`YiruLoader` reads the active loader style from `appLoaderStyle`, which is populated by Settings at
+`AgentStartLoader` reads the active loader style from `appLoaderStyle`, which is populated by Settings at
 the app root. Product features choose only the semantic size and never hardcode an
 `AppLoaderStyle`; the loader picker is the sole exception because it previews the available choices.
 
-Yiru iOS 的设计语言由系统 Liquid Glass、中性纯色背景和清晰的内容层组成。它不是把每张
+AgentStart iOS 的设计语言由系统 Liquid Glass、中性纯色背景和清晰的内容层组成。它不是把每张
 卡片都模糊化；玻璃代表导航、控制和临时浮层，内容仍然保持稳定、可读和高性能。
 
 ## 承重原则
@@ -73,7 +73,7 @@ Liquid Glass remains limited to navigation and controls.
 ## 响应式布局合同
 
 Native 不使用 `horizontalSizeClass` 或设备型号猜测手机/桌面布局。根导航和所有需要宽屏
-行为的 feature 读取 `YiruLayoutMetrics`：实际窗口宽度至少 700pt 且短边至少 600pt 才是
+行为的 feature 读取 `AgentStartLayoutMetrics`：实际窗口宽度至少 700pt 且短边至少 600pt 才是
 `isWideLayout`。因此 iPhone 横屏和窄 iPad 分屏仍保持手机的单列导航、Session header、
 Terminal accessory 和 sheet 密度；只有有足够空间的 iPad 窗口才显示 Workspace master-detail
 分栏、右侧 dock 或 Review 的并排面板。这个判断必须由 Design System 统一提供，feature 不得
@@ -179,7 +179,7 @@ Loader 分为两类，不能用一套近似动画代替：
 
 用户选择的 Loader 样式用于所有不定进度状态，包括 10pt agent state、16pt Workspace working
 status、18pt attachment upload、20pt Chat Working，以及页面请求、保存、搜索和提交。App 根节点
-通过 `YiruProgressViewStyle` 把系统 `ProgressView` 接入同一个 Settings 环境值；页面不选择具体
+通过 `AgentStartProgressViewStyle` 把系统 `ProgressView` 接入同一个 Settings 环境值；页面不选择具体
 动画。可以量化的确定进度继续使用系统 linear progress，不能伪装成无限循环动画。
 
 所有 Loader 使用中性的 `foreground` 灰色，不使用蓝色，

@@ -1,9 +1,5 @@
 import { translate } from '~renderer/i18n/i18n'
 
-export type { LocalizedHostedReviewCopy as CreatePullRequestReviewCopy } from '~renderer/i18n/hosted-review-localized-copy'
-
-export { localizedHostedReviewCopy as reviewCopy } from '~renderer/i18n/hosted-review-localized-copy'
-
 export function formatCreateError(error: string, pushed: boolean, shortLabel: string): string {
   if (pushed) {
     const prefix = new RegExp(`^Create ${shortLabel} failed:\\s*`, 'i')

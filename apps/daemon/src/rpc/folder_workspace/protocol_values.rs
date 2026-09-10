@@ -1,8 +1,8 @@
 // Why: the authority answers with typed catalog rows; this is the single place
 // that renders those rows into the protobuf wire messages shared by every
 // folder-workspace verb.
-use yiru_protocol::runtime::v1::folder_workspace_nullable_text::Value as NullableTextValue;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::folder_workspace_nullable_text::Value as NullableTextValue;
+use agentstart_protocol::runtime::v1::{
     FolderWorkspace as ProtocolFolderWorkspace, FolderWorkspaceLinkedReview,
     FolderWorkspaceNullableText, FolderWorkspaceReviewKind, FolderWorkspaceReviewProvider,
 };

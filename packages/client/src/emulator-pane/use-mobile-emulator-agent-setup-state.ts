@@ -1,14 +1,14 @@
-import type { CliInstallStatus } from '@yiru/protocol/cli-values'
+import type { CliInstallStatus } from '@agentstart/protocol/cli-values'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { YIRU_CLI_SKILL_NAME } from '~renderer/agent/feature-install-commands'
+import { AGENTSTART_CLI_SKILL_NAME } from '~renderer/agent/feature-install-commands'
 import { translate } from '~renderer/i18n/i18n'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { readCliInstallStatus } from '~renderer/runtime/cli-install-client'
 import {
-  ensureYiruCliAvailableForAgentSkillTerminal,
-  isYiruCliAvailableOnPath
+  ensureAgentStartCliAvailableForAgentSkillTerminal,
+  isAgentStartCliAvailableOnPath
 } from '~renderer/skills/agent-cli-prerequisite'
 import {
   GLOBAL_AGENT_SKILL_SOURCE_KINDS,
@@ -24,7 +24,7 @@ function getCliActionLabel(status: CliInstallStatus | null, busy: boolean): stri
       'Registering...'
     )
   }
-  if (isYiruCliAvailableOnPath(status)) {
+  if (isAgentStartCliAvailableOnPath(status)) {
     return translate(
       'auto.components.emulator.pane.use.mobile.emulator.agent.setup.state.69fb2c2289',
       'Enabled'
@@ -72,7 +72,7 @@ export function useMobileEmulatorAgentSetupState(enabled = true): {
     loading: cliSkillLoading,
     error: cliSkillError,
     refresh: refreshCliSkill
-  } = useInstalledAgentSkill(YIRU_CLI_SKILL_NAME, {
+  } = useInstalledAgentSkill(AGENTSTART_CLI_SKILL_NAME, {
     enabled,
     sourceKinds: GLOBAL_AGENT_SKILL_SOURCE_KINDS
   })
@@ -124,7 +124,7 @@ export function useMobileEmulatorAgentSetupState(enabled = true): {
     return () => window.removeEventListener('focus', handleFocus)
   }, [enabled, refreshCliSkill, refreshCliStatus])
 
-  const cliEnabled = isYiruCliAvailableOnPath(cliInstallStatus)
+  const cliEnabled = isAgentStartCliAvailableOnPath(cliInstallStatus)
   const cliPathNeedsAttention = getMobileEmulatorCliPathNeedsAttention(cliInstallStatus)
   const cliSupported = cliInstallStatus?.supported ?? false
   const completedCount = [cliEnabled, cliSkillInstalled].filter(Boolean).length
@@ -145,7 +145,7 @@ export function useMobileEmulatorAgentSetupState(enabled = true): {
       if (mountedRef.current) {
         setCliInstallStatus(cliStatus)
       }
-      const cliReady = isYiruCliAvailableOnPath(cliStatus)
+      const cliReady = isAgentStartCliAvailableOnPath(cliStatus)
       if (!mountedRef.current) {
         return
       }
@@ -162,7 +162,7 @@ export function useMobileEmulatorAgentSetupState(enabled = true): {
         toast.message(
           translate(
             'auto.components.emulator.pane.use.mobile.emulator.agent.setup.state.9dff3a6338',
-            'Skill is installed. Enable the Yiru CLI to finish setup.'
+            'Skill is installed. Enable the AgentStart CLI to finish setup.'
           )
         )
         return
@@ -171,7 +171,7 @@ export function useMobileEmulatorAgentSetupState(enabled = true): {
         toast.message(
           translate(
             'auto.components.emulator.pane.use.mobile.emulator.agent.setup.state.15986a1080',
-            'Yiru CLI is ready. Install the skill to finish setup.'
+            'AgentStart CLI is ready. Install the skill to finish setup.'
           )
         )
         return
@@ -203,14 +203,14 @@ export function useMobileEmulatorAgentSetupState(enabled = true): {
   const handleEnableCli = async (): Promise<void> => {
     setCliBusy(true)
     try {
-      const next = await ensureYiruCliAvailableForAgentSkillTerminal({
+      const next = await ensureAgentStartCliAvailableForAgentSkillTerminal({
         onStatusChange: setCliInstallStatus
       })
-      if (mountedRef.current && isYiruCliAvailableOnPath(next)) {
+      if (mountedRef.current && isAgentStartCliAvailableOnPath(next)) {
         toast.success(
           translate(
             'auto.components.emulator.pane.use.mobile.emulator.agent.setup.state.2b519eed94',
-            'Registered the Yiru CLI in PATH.'
+            'Registered the AgentStart CLI in PATH.'
           )
         )
       }

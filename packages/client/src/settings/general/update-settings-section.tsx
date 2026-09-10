@@ -1,4 +1,4 @@
-import { YIRU_GITHUB_RELEASES_URL } from '@yiru/protocol/hosted-review/yiru-repository'
+import { AGENTSTART_GITHUB_RELEASES_URL } from '@agentstart/protocol/hosted-review/agentstart-repository'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -92,7 +92,7 @@ export function GeneralUpdateSettingsSection(): React.JSX.Element {
         )}
         description={translate(
           'auto.components.settings.GeneralUpdateSettingsSection.ceb579abaf',
-          'Check for app updates and install a newer Yiru version.'
+          'Check for app updates and install a newer AgentStart version.'
         )}
         keywords={['update', 'version', 'release notes', 'download']}
         className="space-y-3"
@@ -182,7 +182,7 @@ export function GeneralUpdateSettingsSection(): React.JSX.Element {
               <a
                 href={
                   updateStatus.releaseUrl ??
-                  `${YIRU_GITHUB_RELEASES_URL}/tag/v${updateStatus.version}`
+                  `${AGENTSTART_GITHUB_RELEASES_URL}/tag/v${updateStatus.version}`
                 }
                 target="_blank"
                 rel="noopener noreferrer"
@@ -190,7 +190,7 @@ export function GeneralUpdateSettingsSection(): React.JSX.Element {
                   event.preventDefault()
                   openHttpLink(
                     updateStatus.releaseUrl ??
-                      `${YIRU_GITHUB_RELEASES_URL}/tag/v${updateStatus.version}`,
+                      `${AGENTSTART_GITHUB_RELEASES_URL}/tag/v${updateStatus.version}`,
                     { event }
                   )
                 }}
@@ -228,7 +228,7 @@ export function GeneralUpdateSettingsSection(): React.JSX.Element {
               <a
                 href={
                   updateStatus.releaseUrl ??
-                  `${YIRU_GITHUB_RELEASES_URL}/tag/v${updateStatus.version}`
+                  `${AGENTSTART_GITHUB_RELEASES_URL}/tag/v${updateStatus.version}`
                 }
                 target="_blank"
                 rel="noopener noreferrer"
@@ -236,7 +236,7 @@ export function GeneralUpdateSettingsSection(): React.JSX.Element {
                   event.preventDefault()
                   openHttpLink(
                     updateStatus.releaseUrl ??
-                      `${YIRU_GITHUB_RELEASES_URL}/tag/v${updateStatus.version}`,
+                      `${AGENTSTART_GITHUB_RELEASES_URL}/tag/v${updateStatus.version}`,
                     { event }
                   )
                 }}

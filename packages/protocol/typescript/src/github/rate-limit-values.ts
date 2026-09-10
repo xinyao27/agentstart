@@ -1,7 +1,7 @@
-import type { GitHubRateLimitBucket as ProtocolRateLimitBucket } from '../../generated/yiru/runtime/v1/github_pb.js'
+import type { GitHubRateLimitBucket as ProtocolRateLimitBucket } from '../../generated/agent_start/runtime/v1/github_pb.js'
 
-export type GitHubRateLimitBucket = { remaining: number; limit: number; resetAt: number }
-export type GitHubRateLimitSnapshot = {
+type GitHubRateLimitBucket = { remaining: number; limit: number; resetAt: number }
+type GitHubRateLimitSnapshot = {
   core: GitHubRateLimitBucket
   search: GitHubRateLimitBucket
   graphql: GitHubRateLimitBucket

@@ -52,7 +52,7 @@ export function SidebarProjectHeader({
       {icon ? (
         <div
           className={cn(
-            'flex size-4 shrink-0 items-center justify-center',
+            'flex size-4 shrink-0 items-center justify-center rounded-[4px]',
             iconClassName,
             iconPropsClassName
           )}

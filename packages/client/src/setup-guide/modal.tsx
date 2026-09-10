@@ -1,5 +1,5 @@
-import { FEATURE_WALL_SETUP_STEP_IDS } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import { FEATURE_WALL_SETUP_STEP_IDS } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { FeatureWallSetupStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import type { JSX } from 'react'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
@@ -168,7 +168,7 @@ export default function SetupGuideModal(): JSX.Element | null {
           <DialogDescription className="text-muted-foreground text-sm">
             {translate(
               'auto.components.setup.guide.SetupGuideModal.3598a3ca0c',
-              'Finish the core workflows that make Yiru useful for parallel agent work.'
+              'Finish the core workflows that make AgentStart useful for parallel agent work.'
             )}
           </DialogDescription>
         </DialogHeader>

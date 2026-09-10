@@ -21,8 +21,6 @@ import { MobilePairedDevicesSection, type PairedDevice } from './paired-devices-
 import { useMobilePairingDevicePolling } from './pairing-device-polling'
 import { MobilePairingQrSection } from './pairing-qr-section'
 import { MobilePairingSetupSection } from './pairing-setup-section'
-export { getMobilePaneSearchEntries } from './pane-search'
-
 export function MobilePane(): React.JSX.Element {
   const autoRestoreFitMs = useAppStore((s) => s.settings?.mobileAutoRestoreFitMs ?? null)
   const activeRuntimeEnvironmentId = useAppStore(

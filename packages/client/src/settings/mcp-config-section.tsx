@@ -1,6 +1,6 @@
-import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -282,7 +282,7 @@ export function McpConfigSection({ repo }: McpConfigSectionProps): React.JSX.Ele
         </div>
       </div>
 
-      <div className="border-border/50 bg-muted/20 border">
+      <div className="border-border/50 bg-muted/20 rounded-md border">
         <div className="border-border/50 text-muted-foreground flex items-center justify-between border-b px-3 py-2 text-xs">
           <span>
             {detectedCount}{' '}

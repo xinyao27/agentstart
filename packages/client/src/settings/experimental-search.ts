@@ -65,7 +65,7 @@ export const getExperimentalPaneSearchEntries = createLocalizedCatalog(
       ),
       description: translate(
         'auto.components.settings.experimental.search.agentHibernation.description',
-        'Stops idle background agent terminals after the configured idle window and resumes supported sessions when opened again. Agent sleep preserves launch options for agents started by Yiru; manually started agents may resume with current Yiru defaults.'
+        'Stops idle background agent terminals after the configured idle window and resumes supported sessions when opened again. Agent sleep preserves launch options for agents started by AgentStart; manually started agents may resume with current AgentStart defaults.'
       ),
       keywords: [
         ...translateSearchKeyword(

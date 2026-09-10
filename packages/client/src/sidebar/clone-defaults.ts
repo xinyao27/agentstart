@@ -1,4 +1,4 @@
-export function getDefaultCloneParent(workspaceDir: string): string {
+function getDefaultCloneParent(workspaceDir: string): string {
   if (!workspaceDir) {
     return ''
   }
@@ -15,7 +15,7 @@ export function getDefaultCloneParent(workspaceDir: string): string {
     return workspaceDir
   }
 
-  // Why: default Yiru worktrees live under "workspaces"; clones should sit beside that tree.
+  // Why: default AgentStart worktrees live under "workspaces"; clones should sit beside that tree.
   const parent = separatorIndex === -1 ? '' : trimmed.slice(0, separatorIndex)
   if (parent === '' && trimmed.startsWith('/')) {
     return '/'

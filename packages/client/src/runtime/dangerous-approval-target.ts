@@ -2,7 +2,7 @@ import {
   DANGEROUS_APPROVAL_PROTOCOL_CAPABILITY,
   DangerousApprovalClient,
   type DangerousApprovalStatusValue
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import {
@@ -16,7 +16,7 @@ export const DANGEROUS_APPROVAL_STATUS_QUERY_KEY = [
   'status'
 ] as const
 
-export async function openDangerousApprovalTarget(): Promise<DangerousApprovalClient | null> {
+async function openDangerousApprovalTarget(): Promise<DangerousApprovalClient | null> {
   const status = await readConfiguredBrowserHostStatus()
   if (!status.capabilities?.includes(DANGEROUS_APPROVAL_PROTOCOL_CAPABILITY)) {
     return null
@@ -33,7 +33,7 @@ export async function requireDangerousApprovalClient(): Promise<DangerousApprova
     throw new Error(
       translate(
         'runtime.dangerousApprovalTarget.unavailable',
-        'Passkey approval needs a current Yiru daemon connection.'
+        'Passkey approval needs a current AgentStart daemon connection.'
       )
     )
   }

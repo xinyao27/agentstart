@@ -7,7 +7,7 @@ export type PastePayloadMetadata = {
   lineCount: number
 }
 
-export const PASTE_PAYLOAD_METADATA_YIELD_CODE_UNITS = 256 * 1024
+const PASTE_PAYLOAD_METADATA_YIELD_CODE_UNITS = 256 * 1024
 
 export function measurePastePayloadMetadata(
   text: string,
@@ -97,10 +97,6 @@ export async function measurePastePayloadMetadataWithYield(
   }
 
   return { byteLength, exceededLimit: false, hasControlSequences, lineCount }
-}
-
-export function getPastePayloadUtf8ByteLength(text: string): number {
-  return measurePastePayloadMetadata(text).byteLength
 }
 
 function createEmptyPastePayloadMetadata(): PastePayloadMetadata {

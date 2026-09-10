@@ -9,6 +9,7 @@ const DEFAULT_MOBILE_PORT: u16 = 6768;
 
 #[derive(Debug)]
 pub(super) struct DaemonOptions {
+    pub dev_supervisor: bool,
     pub json: bool,
     pub listen_address: String,
     pub mobile_pairing: bool,
@@ -35,6 +36,7 @@ pub(super) enum DaemonArgumentError {
 }
 
 pub(super) fn parse(args: &[OsString]) -> Result<DaemonOptions, DaemonArgumentError> {
+    let mut dev_supervisor = false;
     let mut json = false;
     let mut listen_address = "127.0.0.1".to_owned();
     let mut mobile_pairing = false;
@@ -71,6 +73,17 @@ pub(super) fn parse(args: &[OsString]) -> Result<DaemonOptions, DaemonArgumentEr
                 user_data_path = Some(option_value(args, index, "--user-data-path")?.to_owned());
                 index += 1;
             }
+            "--dev-supervisor-token" => {
+                // Why: supervisors need incarnation tokens in argv so they can bind a runtime to
+                // the exact process they launched across a crash or a service-manager boundary.
+                let _token = option_value(args, index, "--runtime-ownership-token")?;
+                dev_supervisor = true;
+                index += 1;
+            }
+            "--service-instance-token" => {
+                let _token = option_value(args, index, "--runtime-ownership-token")?;
+                index += 1;
+            }
             value => return Err(DaemonArgumentError::UnknownOption(value.to_owned())),
         }
         index += 1;
@@ -83,6 +96,7 @@ pub(super) fn parse(args: &[OsString]) -> Result<DaemonOptions, DaemonArgumentEr
         None => resolve_default_user_data_path()?,
     };
     Ok(DaemonOptions {
+        dev_supervisor,
         json,
         listen_address,
         mobile_pairing,

@@ -2,9 +2,9 @@ import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId,
   SourceControlTextActionId
-} from '@yiru/protocol/source-control/ai-actions'
-import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
-import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
+} from '@agentstart/protocol/source-control/ai-actions'
+import { isCustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
+import type { ResolvedSourceControlAiGenerationParams } from '@agentstart/protocol/source-control/resolution'
 import {
   saveSourceControlActionRecipe,
   type SourceControlAiWriteTarget

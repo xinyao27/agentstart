@@ -1,13 +1,13 @@
 import {
-  YIRU_EDITOR_PREPARE_HOT_EXIT_EVENT,
-  YIRU_EDITOR_SAVE_DIRTY_FILES_EVENT
+  AGENTSTART_EDITOR_PREPARE_HOT_EXIT_EVENT,
+  AGENTSTART_EDITOR_SAVE_DIRTY_FILES_EVENT
 } from '~renderer/editor-save-events'
 
 import {
-  YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
-  YIRU_EDITOR_QUIESCE_FILE_SAVES_EVENT,
-  YIRU_EDITOR_SAVE_AND_CLOSE_EVENT,
-  YIRU_EDITOR_SAVE_FILE_EVENT
+  AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
+  AGENTSTART_EDITOR_QUIESCE_FILE_SAVES_EVENT,
+  AGENTSTART_EDITOR_SAVE_AND_CLOSE_EVENT,
+  AGENTSTART_EDITOR_SAVE_FILE_EVENT
 } from './autosave'
 import { createEditorAutosaveEventHandlers } from './autosave-event-handlers'
 import { createEditorAutosaveScheduler } from './autosave-scheduler'
@@ -33,51 +33,54 @@ export function attachEditorAutosaveController(store: AppStoreApi): () => void {
   scheduler.syncAutoSave()
 
   window.addEventListener(
-    YIRU_EDITOR_SAVE_DIRTY_FILES_EVENT,
+    AGENTSTART_EDITOR_SAVE_DIRTY_FILES_EVENT,
     handlers.handleSaveDirtyFiles as EventListener
   )
   window.addEventListener(
-    YIRU_EDITOR_PREPARE_HOT_EXIT_EVENT,
+    AGENTSTART_EDITOR_PREPARE_HOT_EXIT_EVENT,
     handlers.handlePrepareHotExit as EventListener
   )
   window.addEventListener(
-    YIRU_EDITOR_SAVE_AND_CLOSE_EVENT,
+    AGENTSTART_EDITOR_SAVE_AND_CLOSE_EVENT,
     handlers.handleSaveAndClose as EventListener
   )
-  window.addEventListener(YIRU_EDITOR_SAVE_FILE_EVENT, handlers.handleSaveFile as EventListener)
   window.addEventListener(
-    YIRU_EDITOR_QUIESCE_FILE_SAVES_EVENT,
+    AGENTSTART_EDITOR_SAVE_FILE_EVENT,
+    handlers.handleSaveFile as EventListener
+  )
+  window.addEventListener(
+    AGENTSTART_EDITOR_QUIESCE_FILE_SAVES_EVENT,
     handlers.handleQuiesce as EventListener
   )
   window.addEventListener(
-    YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
+    AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
     handlers.handleExternalFileChange as EventListener
   )
 
   return () => {
     unsubscribe()
     window.removeEventListener(
-      YIRU_EDITOR_SAVE_DIRTY_FILES_EVENT,
+      AGENTSTART_EDITOR_SAVE_DIRTY_FILES_EVENT,
       handlers.handleSaveDirtyFiles as EventListener
     )
     window.removeEventListener(
-      YIRU_EDITOR_PREPARE_HOT_EXIT_EVENT,
+      AGENTSTART_EDITOR_PREPARE_HOT_EXIT_EVENT,
       handlers.handlePrepareHotExit as EventListener
     )
     window.removeEventListener(
-      YIRU_EDITOR_SAVE_AND_CLOSE_EVENT,
+      AGENTSTART_EDITOR_SAVE_AND_CLOSE_EVENT,
       handlers.handleSaveAndClose as EventListener
     )
     window.removeEventListener(
-      YIRU_EDITOR_SAVE_FILE_EVENT,
+      AGENTSTART_EDITOR_SAVE_FILE_EVENT,
       handlers.handleSaveFile as EventListener
     )
     window.removeEventListener(
-      YIRU_EDITOR_QUIESCE_FILE_SAVES_EVENT,
+      AGENTSTART_EDITOR_QUIESCE_FILE_SAVES_EVENT,
       handlers.handleQuiesce as EventListener
     )
     window.removeEventListener(
-      YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
+      AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT,
       handlers.handleExternalFileChange as EventListener
     )
     scheduler.dispose()

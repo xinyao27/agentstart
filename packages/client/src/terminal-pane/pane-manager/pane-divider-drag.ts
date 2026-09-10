@@ -14,7 +14,7 @@ type DividerFlexFrameScheduler = {
 const MIN_PANE_SIZE = 50
 const dividerDragCleanups = new WeakMap<HTMLElement, () => void>()
 
-export function createDividerFlexFrameScheduler({
+function createDividerFlexFrameScheduler({
   apply,
   requestFrame = requestAnimationFrame,
   cancelFrame = cancelAnimationFrame

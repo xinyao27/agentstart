@@ -1,7 +1,7 @@
-import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
-// Per-step copy for the review tile in the Explore Yiru modal. Mirrors
+// Per-step copy for the review tile in the Explore AgentStart modal. Mirrors
 // agents-orchestration-steps.ts and workbench-steps.ts so the rail / body
 // code can render all three the same way.
 

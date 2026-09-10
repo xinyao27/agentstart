@@ -1,4 +1,4 @@
-import type { EmulatorStreamEvent } from '@yiru/protocol'
+import type { EmulatorStreamEvent } from '@agentstart/protocol'
 
 import { requireEmulatorClient } from './emulator-target'
 

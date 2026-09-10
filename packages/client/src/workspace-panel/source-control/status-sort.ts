@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 
 // Why: resolving a collator for every O(n log n) comparison dominates large
 // changed-file projections.

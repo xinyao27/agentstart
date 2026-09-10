@@ -1,4 +1,7 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
+import type {
+  PRCheckDetail,
+  PRCheckRunDetails
+} from '@agentstart/protocol/hosted-review/review-types'
 
 export const CHECK_SORT_ORDER: Record<string, number> = {
   failure: 0,
@@ -100,10 +103,6 @@ export function formatCheckTimestamp(input: string | null | undefined): string |
     hour: 'numeric',
     minute: '2-digit'
   })
-}
-
-export function getFailedChecksForDetails(checks: PRCheckDetail[]): PRCheckDetail[] {
-  return checks.filter(isFailedCheck)
 }
 
 export type CheckDetailsStickySurface = 'sidebar' | 'card'

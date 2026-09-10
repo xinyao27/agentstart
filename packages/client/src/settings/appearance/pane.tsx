@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type React from 'react'
 import { useLayoutEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
@@ -18,7 +18,6 @@ import type { UseGhosttyImportReturn } from '../use-ghostty-import'
 import type { UseWarpThemeImportReturn } from '../use-warp-theme-import'
 import { AppearanceInterfaceSection } from './interface-section'
 import {
-  getAppearancePaneSearchEntries,
   getLanguageEntries,
   getLayoutEntries,
   getLoaderStyleEntries,
@@ -34,8 +33,6 @@ import { getThemeColorEntries } from './theme-color-search'
 import { AppearanceThemeColorSection } from './theme-color-section'
 import { USAGE_PERCENTAGE_DISPLAY_SETTING_ID } from './usage-percentage-search'
 import { AppearanceWindowSidebarSection } from './window-sidebar-section'
-export { getAppearancePaneSearchEntries }
-
 type AppearancePaneProps = {
   settings: GlobalSettings
   updateSettings: (updates: Partial<GlobalSettings>) => void
@@ -230,7 +227,7 @@ export function AppearancePane({
         </AppearanceSection>
       ) : null}
 
-      {/* Why: Code & Markdown is intentionally omitted. Yiru has no Appearance-level
+      {/* Why: Code & Markdown is intentionally omitted. AgentStart has no Appearance-level
           code/markdown settings — the code editor reuses the terminal font and
           there is no markdown-style or line-number setting — so a fourth row would
           be empty. We surface only the three sections that hold real controls

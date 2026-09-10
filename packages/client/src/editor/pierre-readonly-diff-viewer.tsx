@@ -1,5 +1,5 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
-import { getLargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
+import { getLargeDiffRenderLimit } from '@agentstart/protocol/git/render-limit'
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { selectWorktreeDiffComments } from '~renderer/diff-comments/worktree-selector'
 import { isDiffComment } from '~renderer/editor/diff-comment-compat'

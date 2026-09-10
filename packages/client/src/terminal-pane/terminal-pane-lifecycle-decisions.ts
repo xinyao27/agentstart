@@ -1,6 +1,6 @@
+import type { TerminalPaneSplitSource } from '@agentstart/protocol/telemetry/education'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import type { Terminal } from '@xterm/xterm'
-import type { TerminalPaneSplitSource } from '@yiru/protocol/telemetry/education'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 
 import { RESET_KITTY_KEYBOARD_PROTOCOL } from './layout-serialization'
 import { writeTerminalOutput } from './pane-manager/pane-terminal-output-scheduler'

@@ -1,4 +1,4 @@
-import type { HostedReviewCreationEligibility } from '@yiru/protocol/hosted-review/types'
+import type { HostedReviewCreationEligibility } from '@agentstart/protocol/hosted-review/types'
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import { getRuntimeGitBranchCompare } from '~renderer/runtime/git-client'
 import { refreshGitStatusForWorktreeStrict } from '~renderer/workspace-panel/git-status-refresh'

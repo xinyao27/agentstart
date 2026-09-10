@@ -1,4 +1,4 @@
-import { brandEphemeralSetupTerminalWorktreeId } from '@yiru/protocol/terminal/setup-identity'
+import { brandEphemeralSetupTerminalWorktreeId } from '@agentstart/protocol/terminal/setup-identity'
 import type { KeyboardEvent } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -18,7 +18,7 @@ const AUTO_INSERT_DELAY_MS = 250
 const READY_RETRY_MS = 100
 // Why: PTY startup can fail before [data-pty-id] appears; cap polling so the
 // setup panel does not leave a hidden retry timer alive forever.
-export const READY_MAX_ATTEMPTS = 50
+const READY_MAX_ATTEMPTS = 50
 const PTY_TEXT_FALLBACK_MS = 750
 
 type OnboardingInlineCommandTerminalProps = {
@@ -267,7 +267,7 @@ export function OnboardingInlineCommandTerminal({
       <section
         ref={terminalSectionRef}
         aria-label={ariaLabel}
-        className="border-border bg-card min-h-0 overflow-hidden border"
+        className="border-border bg-card min-h-0 overflow-hidden rounded-xl border"
       >
         {description ? (
           <div className={cn('border-b border-border', descriptionPaddingClassName)}>
@@ -317,7 +317,7 @@ function findTerminalTabElement(tabId: string): HTMLElement | null {
   return null
 }
 
-export function getNextTerminalReadyRetryAttempt(attempt: number): number | null {
+function getNextTerminalReadyRetryAttempt(attempt: number): number | null {
   return attempt < READY_MAX_ATTEMPTS ? attempt + 1 : null
 }
 

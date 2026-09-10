@@ -16,7 +16,9 @@ export function ProjectGroupCatalogBridge(): null {
 
   useEffect(() => {
     if (!catalog.isPending) {
-      void getExtensionBrowserCapabilities().publishProjectCatalog(projects)
+      void getExtensionBrowserCapabilities()
+        .publishProjectCatalog(projects)
+        .catch((error: unknown) => console.error('Failed to publish project catalog:', error))
     }
   }, [catalog.isPending, projects])
   return null

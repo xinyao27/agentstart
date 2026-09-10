@@ -1,6 +1,6 @@
 import AppKit
 import SwiftUI
-import YiruComputerUseIcons
+import AgentStartComputerUseIcons
 
 @available(macOS 13.0, *)
 public struct PermissionFlowButton: View {
@@ -60,7 +60,7 @@ public struct PermissionFlowButton: View {
               ),
           )
         } icon: {
-          YiruComputerUseIcon(buttonState.icon, size: 18)
+          AgentStartComputerUseIcon(buttonState.icon, size: 18)
             .foregroundColor(buttonState.isGranted ? .green : .primary)
         }
       }

@@ -2,14 +2,14 @@ import {
   ALL_EXECUTION_HOSTS_SCOPE,
   type ExecutionHostId,
   type ExecutionHostScope
-} from '@yiru/protocol/host/identity'
-import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { projectHostSetupProjectionFromRepos } from '@yiru/protocol/project/setup-projection'
+} from '@agentstart/protocol/host/identity'
+import type { Project, ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { projectHostSetupProjectionFromRepos } from '@agentstart/protocol/project/setup-projection'
 
 import { resolveComposerRepoId } from './composer-repo'
 
-export type WorkspaceCreationTarget = {
+type WorkspaceCreationTarget = {
   projectId: string
   hostId: ExecutionHostId
   projectHostSetupId: string

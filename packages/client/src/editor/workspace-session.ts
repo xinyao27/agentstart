@@ -1,6 +1,9 @@
-import type { BrowserPage, BrowserWorkspace } from '@yiru/protocol/workspace/browser-session'
-import type { PersistedOpenFile, WorkspaceSessionState } from '@yiru/protocol/workspace/session'
-import type { WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
+import type { BrowserPage, BrowserWorkspace } from '@agentstart/protocol/workspace/browser-session'
+import type {
+  PersistedOpenFile,
+  WorkspaceSessionState
+} from '@agentstart/protocol/workspace/session'
+import type { WorkspaceVisibleTabType } from '@agentstart/protocol/workspace/tabs'
 import { normalizeBrowserHistoryEntries } from '~renderer/browser/session/history'
 import type { AppState } from '~renderer/store/state'
 import { pruneLocalTerminalScrollbackBuffers } from '~renderer/terminal-workspace/scrollback-buffers'
@@ -19,7 +22,7 @@ export { buildActiveConnectionIdsAtShutdown }
 export { buildSanitizedTabsByWorktree, buildSanitizedTerminalLayoutsByTabId }
 
 /** Why (issue #1158): the debounced + shutdown session writers share this
- *  gate so a hydration failure cannot overwrite yiru-data.json with the
+ *  gate so a hydration failure cannot overwrite agentstart-data.json with the
  *  empty in-memory state the error path leaves behind.
  *
  *  - workspaceSessionReady gates the UI mount; it flips true even in the
@@ -209,7 +212,7 @@ export function buildEditorSessionData(
   }
 }
 
-export function buildBrowserSessionData(
+function buildBrowserSessionData(
   browserTabsByWorktree: Record<string, BrowserWorkspace[]>,
   browserPagesByWorkspace: Record<string, BrowserPage[]>,
   activeBrowserTabIdByWorktree: Record<string, string | null>
@@ -278,7 +281,7 @@ export function buildTerminalSessionData(
   // nothing sets it since remote hosts were removed (#63) — so that lookup
   // could never resolve a worktree as SSH-backed. The main process still
   // populates remoteSessionIdsByTabId from live PTY connection ids
-  // (yiru-runtime.ts), so the field itself stays; the renderer just no longer
+  // (agentstart-runtime.ts), so the field itself stays; the renderer just no longer
   // has a contribution to add here.
   return {
     activeWorktreeIdsOnShutdown,

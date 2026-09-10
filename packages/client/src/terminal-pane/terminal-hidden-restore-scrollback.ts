@@ -1,7 +1,7 @@
 import {
   DESKTOP_TERMINAL_SCROLLBACK_ROWS_DEFAULT,
   normalizeDesktopTerminalSnapshotRows
-} from '@yiru/protocol/terminal/scrollback-policy'
+} from '@agentstart/protocol/terminal/scrollback-policy'
 
 /** Hidden view rebuilds must preserve the same history depth the live xterm
  * retained; otherwise switching tabs silently changes the user's scrollback. */

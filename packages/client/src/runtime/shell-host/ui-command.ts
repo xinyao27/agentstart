@@ -2,7 +2,7 @@ import type {
   ShellHostUiCommand,
   ShellHostStartupLaunch,
   ShellHostLaunchTelemetry
-} from '@yiru/protocol/shell-host'
+} from '@agentstart/protocol/shell-host'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { handleShellServicesUICommand } from '../ui-command-shell-request'

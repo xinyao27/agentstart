@@ -16,7 +16,7 @@ export function decodeHtmlAttributeCharacterReferences(
   // quote and parser-constrained value, so this is not an injection sink.
   const template = document.createElement('template')
   const delimiter = quote ?? ''
-  template.innerHTML = `<span data-yiru-value=${delimiter}${value}${delimiter}></span>`
+  template.innerHTML = `<span data-agentstart-value=${delimiter}${value}${delimiter}></span>`
   const element = template.content.firstElementChild
-  return element?.getAttribute('data-yiru-value') ?? ''
+  return element?.getAttribute('data-agentstart-value') ?? ''
 }

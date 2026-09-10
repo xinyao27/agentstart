@@ -1,24 +1,13 @@
 name: Mobile Release
 
-# Why: preserve the established iOS release inputs, tag pattern, TestFlight audience behavior,
-# and artifact contract while building the sole native mobile client.
+# Why: both supported entry points must resolve one explicit iOS marketing version before the
+# workflow reads App Store state or builds the sole native mobile client.
 on:
-  push:
-    tags:
-      - 'mobile-v*'
   workflow_dispatch:
     inputs:
-      bump_patch_version:
-        description: 'Bump the highest iOS marketing version found on the existing App
-          Store app. Tick this after the current version has shipped (closed
-          trains fail fast).'
-        required: false
-        default: false
-        type: boolean
       release_version:
-        description: 'Optional exact iOS marketing version override, e.g. 0.0.15'
-        required: false
-        default: '0.0.1'
+        description: 'Exact iOS marketing version, e.g. 1.0.0'
+        required: true
         type: string
       testflight_distribution:
         description: 'TestFlight audience. Internal is the safe default; external uses
@@ -72,10 +61,28 @@ jobs:
         with:
           node-version-file: package.json
 
+      - name: Resolve release request
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          REQUESTED_VERSION: ${{ github.event.inputs.release_version }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$RELEASE_TAG" =~ ^mobile-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo 'Mobile releases must run from an immutable mobile-vMAJOR.MINOR.PATCH tag.' >&2
+            exit 1
+          fi
+          version="${RELEASE_TAG#mobile-v}"
+          if [[ "$REQUESTED_VERSION" != "$version" ]]; then
+            echo 'The requested marketing version must match the mobile release tag.' >&2
+            exit 1
+          fi
+          echo "MOBILE_RELEASE_VERSION=$version" >> "$GITHUB_ENV"
+
       - name: Validate TestFlight credentials
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          APP_STORE_APP_ID: ${{ secrets.APP_STORE_APP_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
           IOS_DIST_CERT_P12: ${{ secrets.IOS_DIST_CERT_P12 }}
@@ -83,7 +90,7 @@ jobs:
         run: |
           set -euo pipefail
           missing=()
-          for name in APPLE_TEAM_ID ASC_KEY_ID ASC_ISSUER_ID ASC_API_KEY_P8 \
+          for name in APPLE_TEAM_ID ASC_KEY_ID ASC_ISSUER_ID ASC_API_KEY_P8 APP_STORE_APP_ID \
             IOS_DIST_CERT_P12 IOS_DIST_CERT_PASSWORD; do
             if [[ -z "${!name:-}" ]]; then
               missing+=("$name")
@@ -91,6 +98,14 @@ jobs:
           done
           if (( ${#missing[@]} > 0 )); then
             printf 'Missing iOS TestFlight credentials: %s\n' "${missing[*]}" >&2
+            exit 1
+          fi
+          if [[ "$APPLE_TEAM_ID" != '8H6Q2YA365' ]]; then
+            echo 'APPLE_TEAM_ID does not identify the AgentStart Apple Developer team.' >&2
+            exit 1
+          fi
+          if [[ "$APP_STORE_APP_ID" != '6810343597' ]]; then
+            echo 'APP_STORE_APP_ID does not identify the AgentStart App Store record.' >&2
             exit 1
           fi
           echo 'iOS TestFlight credentials are configured'
@@ -119,10 +134,9 @@ jobs:
       - name: Resolve release version and build number
         env:
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          APP_STORE_APP_ID: ${{ secrets.APP_STORE_APP_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
-          MOBILE_RELEASE_VERSION: ${{ github.event.inputs.release_version }}
-          MOBILE_BUMP_PATCH_VERSION: ${{ github.event.inputs.bump_patch_version }}
           FASTLANE_SKIP_UPDATE_CHECK: '1'
           FASTLANE_HIDE_CHANGELOG: '1'
         run: bundle exec fastlane ios prepare_release_version
@@ -135,9 +149,9 @@ jobs:
           IOS_DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
         run: |
           set -euo pipefail
-          KEYCHAIN_PATH="$RUNNER_TEMP/yiru-ios-release.keychain-db"
+          KEYCHAIN_PATH="$RUNNER_TEMP/agentstart-ios-release.keychain-db"
           KEYCHAIN_PASSWORD="$(openssl rand -base64 24)"
-          CERT_PATH="$RUNNER_TEMP/yiru-ios-release-cert.p12"
+          CERT_PATH="$RUNNER_TEMP/agentstart-ios-release-cert.p12"
 
           echo "$IOS_DIST_CERT_P12" | base64 --decode > "$CERT_PATH"
           security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
@@ -154,10 +168,9 @@ jobs:
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          APP_STORE_APP_ID: ${{ secrets.APP_STORE_APP_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_API_KEY_P8: ${{ secrets.ASC_API_KEY_P8 }}
-          MOBILE_RELEASE_VERSION: ${{ github.event.inputs.release_version }}
-          MOBILE_BUMP_PATCH_VERSION: ${{ github.event.inputs.bump_patch_version }}
           TESTFLIGHT_DISTRIBUTION: ${{ github.event_name == 'workflow_dispatch' &&
             github.event.inputs.testflight_distribution || 'internal' }}
           TESTFLIGHT_CHANGELOG: ${{ github.event.inputs.testflight_changelog }}
@@ -169,6 +182,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: yiru-mobile-ipa
+          name: agentstart-mobile-ipa
           path: apps/mobile/build/*.ipa
           if-no-files-found: ignore

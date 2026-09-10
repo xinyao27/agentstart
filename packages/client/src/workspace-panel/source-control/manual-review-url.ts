@@ -1,5 +1,5 @@
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
-import type { HostedReviewProvider } from '@yiru/protocol/hosted-review/types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
+import type { HostedReviewProvider } from '@agentstart/protocol/hosted-review/types'
 
 import {
   branchFromRef,
@@ -27,7 +27,7 @@ export type SourceControlManualReviewContext = ManualReviewUrlInput & {
   fallbackGitHubPRNumber?: number | null
 }
 
-export function resolveSourceControlManualReviewProvider(input: {
+function resolveSourceControlManualReviewProvider(input: {
   hostedReviewProvider?: HostedReviewProvider | null
   hostedReviewCreationProvider?: HostedReviewProvider | null
   linkedGitHubPR?: number | null
@@ -79,7 +79,7 @@ function encodeCompareRef(ref: string): string {
     .join(':')
 }
 
-export function buildSourceControlManualReviewUrl(input: ManualReviewUrlInput): string | null {
+function buildSourceControlManualReviewUrl(input: ManualReviewUrlInput): string | null {
   const baseBranch = branchFromRef(input.baseRef, input.repoRemoteName)
   const localBranch = input.branchName?.trim()
   if (!baseBranch || !localBranch || localBranch === 'HEAD') {

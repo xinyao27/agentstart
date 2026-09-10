@@ -1,4 +1,4 @@
-import type { DaemonConnectionSettings } from '@yiru/client/extension-settings'
+import type { DaemonConnectionSettings } from '@agentstart/client/extension-bootstrap'
 
 import type { NativeBootstrapResult } from './background/native-bootstrap'
 import { readEnterprisePolicy } from './enterprise-policy'
@@ -7,7 +7,7 @@ const CURRENT_PROTOCOL_VERSION = 2
 const ENDPOINT_KEY = 'daemonEndpoint'
 const TOKEN_KEY = 'daemonAuthToken'
 const PROTOCOL_VERSION_KEY = 'daemonProtocolVersion'
-const RPC_PROTOCOL = 'yiru-protobuf-v2' satisfies NativeBootstrapResult['rpcProtocol']
+const RPC_PROTOCOL = 'agentstart-protobuf-v2' satisfies NativeBootstrapResult['rpcProtocol']
 
 export async function readDaemonConnectionSettings(): Promise<DaemonConnectionSettings> {
   const [synced, session, local, policy] = await Promise.all([
@@ -62,6 +62,24 @@ export async function saveDaemonConnectionSettings(
     chrome.storage.local.set({ [PROTOCOL_VERSION_KEY]: settings.protocolVersion })
   ])
   await chrome.storage.local.remove(TOKEN_KEY)
+}
+
+export async function savePermittedDaemonConnectionSettings(
+  settings: DaemonConnectionSettings
+): Promise<void> {
+  validateSettings(settings)
+  const endpoint = new URL(settings.endpoint)
+  const healthOrigin = `${endpoint.protocol === 'wss:' ? 'https:' : 'http:'}//${endpoint.host}/*`
+  const isBundledLoopback = ['127.0.0.1', 'localhost', '[::1]'].includes(
+    endpoint.hostname.toLowerCase()
+  )
+  if (!isBundledLoopback) {
+    const granted = await chrome.permissions.request({ origins: [healthOrigin] })
+    if (!granted) {
+      throw new Error('custom_daemon_origin_permission_denied')
+    }
+  }
+  await saveDaemonConnectionSettings(settings)
 }
 
 export async function clearDaemonConnectionSettings(): Promise<void> {

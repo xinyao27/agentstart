@@ -1,8 +1,8 @@
-import type { SetupGuideSource } from '@yiru/protocol/telemetry/education'
+import type { SetupGuideSource } from '@agentstart/protocol/telemetry/education'
 import {
   FEATURE_WALL_SETUP_STEP_IDS,
   type FeatureWallSetupStepId
-} from '@yiru/protocol/telemetry/feature-wall/types'
+} from '@agentstart/protocol/telemetry/feature-wall/types'
 import { useEffect, useRef, useState } from 'react'
 import {
   persistEmittedSetupGuideStepId,
@@ -109,7 +109,7 @@ export function useSetupGuideOpenCloseTelemetry(args: {
   }, [closeSession])
 }
 
-export function getSetupGuideTelemetryFirstIncompleteStepId(
+function getSetupGuideTelemetryFirstIncompleteStepId(
   progress: FeatureWallSetupProgress
 ): FeatureWallSetupStepId | 'none' {
   return countCompletedSetupSteps(progress.stepDone) >= FEATURE_WALL_SETUP_STEP_IDS.length
@@ -132,14 +132,14 @@ export function useSetupGuideStepCompletionTelemetry(args: {
   }, [args.progress, args.progress.stepDone, args.setupGuideVisible, state])
 }
 
-export function createSetupGuideStepCompletionTelemetryState(): SetupGuideStepCompletionTelemetryState {
+function createSetupGuideStepCompletionTelemetryState(): SetupGuideStepCompletionTelemetryState {
   return {
     previousDone: null,
     emitted: null
   }
 }
 
-export function recordSetupGuideStepCompletionTelemetry(args: {
+function recordSetupGuideStepCompletionTelemetry(args: {
   state: SetupGuideStepCompletionTelemetryState
   progress: FeatureWallSetupProgress
   setupGuideVisible: boolean

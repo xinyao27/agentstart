@@ -1,5 +1,5 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, CaretUpDown as ChevronsUpDown, FolderPlus } from '~renderer/icons/hugeicons'

@@ -76,7 +76,7 @@ export function DetectedSetupPreview({
         onChange={(event) => onSetupChange(event.target.value)}
         spellCheck={false}
         rows={getDetectedSetupScriptTextareaRows(setup)}
-        className="scrollbar-sleek border-sidebar-border text-foreground max-h-28 w-full resize-y overflow-auto border bg-[color-mix(in_srgb,var(--sidebar-foreground)_2%,var(--sidebar))] px-2 py-1.5 font-mono text-[11px] leading-5 outline-none dark:bg-[color-mix(in_srgb,var(--sidebar-foreground)_8%,var(--sidebar))]"
+        className="scrollbar-sleek border-sidebar-border text-foreground max-h-28 w-full resize-y overflow-auto rounded-md border bg-[color-mix(in_srgb,var(--sidebar-foreground)_2%,var(--sidebar))] px-2 py-1.5 font-mono text-[11px] leading-5 outline-none dark:bg-[color-mix(in_srgb,var(--sidebar-foreground)_8%,var(--sidebar))]"
       />
       {provenance ? (
         <p className="text-muted-foreground mt-1.5 text-[11px]">
@@ -84,7 +84,7 @@ export function DetectedSetupPreview({
             'auto.components.sidebar.SetupScriptPromptCardViews.d02e6a42b1',
             'Detected from'
           )}
-          <code className="bg-muted px-1 py-0.5">{provenance}</code>
+          <code className="bg-muted rounded px-1 py-0.5">{provenance}</code>
         </p>
       ) : null}
     </div>
@@ -167,7 +167,10 @@ export function SetupScriptPromptBody({
           'This repo ignores shared'
         )}
         <code>
-          {translate('auto.components.sidebar.SetupScriptPromptCardViews.8f6be51aa1', 'yiru.yaml')}
+          {translate(
+            'auto.components.sidebar.SetupScriptPromptCardViews.8f6be51aa1',
+            'agentstart.yaml'
+          )}
         </code>{' '}
         {translate(
           'auto.components.sidebar.SetupScriptPromptCardViews.660cdc17f8',
@@ -181,7 +184,7 @@ export function SetupScriptPromptBody({
       <>
         {translate(
           'auto.components.sidebar.SetupScriptPromptCardViews.aef6c0a213',
-          'Save the detected command to run it whenever Yiru creates a worktree.'
+          'Save the detected command to run it whenever AgentStart creates a worktree.'
         )}
       </>
     )
@@ -205,7 +208,7 @@ export function SetupScriptPromptBody({
     <>
       {translate(
         'auto.components.sidebar.SetupScriptPromptCardViews.0a98169776',
-        'Add a setup command to run when Yiru creates new worktrees.'
+        'Add a setup command to run when AgentStart creates new worktrees.'
       )}
     </>
   )

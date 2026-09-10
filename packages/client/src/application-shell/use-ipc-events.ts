@@ -8,7 +8,6 @@ import { subscribeAgentStatusState } from './ipc-events/agent-status'
 import { subscribeMobileTerminalState } from './ipc-events/mobile-terminal-state'
 import { subscribeWorkspaceEvents } from './ipc-events/workspaces'
 
-export { resolveZoomTarget } from './resolve-zoom-target'
 export { isRuntimeEnvironmentActive } from './ipc-events/runtime-projects'
 
 // Why: exported for terminal-create-shell-request.ts and

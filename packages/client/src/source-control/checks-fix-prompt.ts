@@ -1,7 +1,10 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
+import type {
+  PRCheckDetail,
+  PRCheckRunDetails
+} from '@agentstart/protocol/hosted-review/review-types'
 
-export const PROMPT_LOG_TAIL_LINES = 150
-export const PROMPT_LOG_TAIL_SCAN_CODE_UNITS = 256 * 1024
+const PROMPT_LOG_TAIL_LINES = 150
+const PROMPT_LOG_TAIL_SCAN_CODE_UNITS = 256 * 1024
 
 function getCheckConclusion(check: PRCheckDetail): NonNullable<PRCheckDetail['conclusion']> {
   return check.conclusion ?? 'pending'
@@ -42,7 +45,7 @@ export function getBrokenChecks(checks: PRCheckDetail[]): PRCheckDetail[] {
   )
 }
 
-export function truncateLogTailForPrompt(logTail: string): string {
+function truncateLogTailForPrompt(logTail: string): string {
   const start = findPromptLogTailStart(logTail)
   return logTail.slice(start).replace(/\r\n/g, '\n')
 }

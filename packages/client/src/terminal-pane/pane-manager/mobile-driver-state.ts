@@ -8,7 +8,7 @@
 //
 // See docs/mobile-presence-lock.md.
 
-import type { TerminalDriverState } from '@yiru/protocol'
+import type { TerminalDriverState } from '@agentstart/protocol'
 
 export type DriverState = TerminalDriverState
 

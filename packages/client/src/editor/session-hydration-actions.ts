@@ -1,5 +1,5 @@
-import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
+import { folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { WorkspaceVisibleTabType } from '@agentstart/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
@@ -97,7 +97,7 @@ export function createEditorSessionHydrationActions(
               filePath: pf.filePath,
               relativePath: pf.relativePath,
               worktreeId,
-              // Why: sessions can contain language ids from older Yiru builds.
+              // Why: sessions can contain language ids from older AgentStart builds.
               // Re-detect on hydrate so newly-supported extensions like .ipynb
               // stop reopening as raw JSON/plain text after the upgrade.
               language: detectLanguage(pf.relativePath || pf.filePath),

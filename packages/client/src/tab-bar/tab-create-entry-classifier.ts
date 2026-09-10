@@ -6,8 +6,6 @@ import { findExistingFileMatches, isLikelyNewFileIntent } from './tab-create-ent
 import { validateNewTabEntryRelativePath } from './tab-create-entry-path-validation'
 import { classifyExplicitUrl, classifyHostUrl } from './tab-create-entry-url-classification'
 
-export { validateNewTabEntryRelativePath } from './tab-create-entry-path-validation'
-
 export type TabEntryClassification =
   | { kind: 'empty'; message: string }
   | { kind: 'explicit-url'; url: string }

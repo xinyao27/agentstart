@@ -1,5 +1,5 @@
-import type { KeybindingPlatform } from '@yiru/protocol/keybindings'
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { KeybindingPlatform } from '@agentstart/protocol/keybindings'
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import { useEffect } from 'react'
 import { normalizeSelectedTextForFileSearch } from '~renderer/editor/file-search-selection'
 import {
@@ -9,7 +9,6 @@ import {
 import { useAppStore } from '~renderer/store/state'
 import type { ManagedPane } from '~renderer/terminal-pane/pane-manager/pane-manager'
 
-import { recordCreatedTerminalPaneSplit } from './split-completion'
 import { isLocalWindowsConptyPaneForCtrlArrow } from './terminal-ctrl-arrow-conpty'
 import { resolveTerminalInputHostPlatform } from './terminal-input-host-platform'
 import { handleTerminalKeyboardAction } from './terminal-keyboard-action'
@@ -19,19 +18,13 @@ import {
   matchSearchNavigate,
   runTerminalSearchNavigation
 } from './terminal-keyboard-search'
-export {
-  matchFileSearchShortcut,
-  matchSearchNavigate,
-  runTerminalSearchNavigation,
-  type SearchNavigationDirection,
-  type SearchState
-} from './terminal-keyboard-search'
+export { type SearchState } from './terminal-keyboard-search'
 import { keyboardEventBelongsToScope } from './terminal-keyboard-scope'
 import type { KeyboardHandlersDeps } from './terminal-keyboard-types'
 import { resolveTerminalShortcutAction } from './terminal-shortcut-policy'
 import { resolveWindowsShiftEnterEncodingForPane } from './terminal-windows-shift-enter'
 
-export function resolveTerminalKeyboardShortcutAction(
+function resolveTerminalKeyboardShortcutAction(
   event: Parameters<typeof resolveTerminalShortcutAction>[0],
   isMac: Parameters<typeof resolveTerminalShortcutAction>[1],
   macOptionAsAlt: Parameters<typeof resolveTerminalShortcutAction>[2],
@@ -59,18 +52,8 @@ export function resolveTerminalKeyboardShortcutAction(
   )
 }
 
-export function recordKeyboardCreatedTerminalPaneSplit(
-  createdPane: unknown,
-  args: {
-    source: 'contextual_tour' | 'keyboard'
-    direction: 'vertical' | 'horizontal'
-  }
-): boolean {
-  return recordCreatedTerminalPaneSplit(createdPane, args)
-}
-
 export function useTerminalKeyboardShortcuts({
-  terminalShortcutPolicy = 'yiru-first',
+  terminalShortcutPolicy = 'agentstart-first',
   ...deps
 }: KeyboardHandlersDeps): void {
   const {

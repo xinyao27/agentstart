@@ -3,6 +3,8 @@ import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 import {
   ShellPlatformService,
   ShellPlatformServiceExistsResponseSchema,
+  ShellPlatformServiceGetSystemAccentColorRequestSchema,
+  ShellPlatformServiceGetSystemAccentColorResponseSchema,
   ShellPlatformServiceOpenFileUriRequestSchema,
   ShellPlatformServiceOpenInExternalEditorRequestSchema,
   ShellPlatformServiceOpenPathRequestSchema,
@@ -13,7 +15,7 @@ import {
   ShellPlatformServicePickRequestSchema,
   ShellPlatformServicePickedResponseSchema,
   ShellPlatformServiceUnitResponseSchema
-} from '../generated/yiru/runtime/v1/shell_platform_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_platform_pb.js'
 import {
   shellPlatformOutcome,
   type ShellPlatformOpenExternalEditorInput,
@@ -23,6 +25,7 @@ import {
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 
 const OPEN_PATH_PROCEDURE = `/${ShellPlatformService.typeName}/${ShellPlatformService.method.openPath.name}`
+const GET_SYSTEM_ACCENT_COLOR_PROCEDURE = `/${ShellPlatformService.typeName}/${ShellPlatformService.method.getSystemAccentColor.name}`
 const OPEN_FILE_URI_PROCEDURE = `/${ShellPlatformService.typeName}/${ShellPlatformService.method.openFileUri.name}`
 const OPEN_IN_EXTERNAL_EDITOR_PROCEDURE = `/${ShellPlatformService.typeName}/${ShellPlatformService.method.openInExternalEditor.name}`
 const OPEN_IN_FILE_MANAGER_PROCEDURE = `/${ShellPlatformService.typeName}/${ShellPlatformService.method.openInFileManager.name}`
@@ -38,6 +41,20 @@ export class ShellPlatformClient {
 
   constructor(transport: RuntimeTransport) {
     this.transport = transport
+  }
+
+  async getSystemAccentColor(options?: RuntimeCallOptions): Promise<string | null> {
+    const response = await this.transport.unary({
+      method: GET_SYSTEM_ACCENT_COLOR_PROCEDURE,
+      payload: toBinary(
+        ShellPlatformServiceGetSystemAccentColorRequestSchema,
+        create(ShellPlatformServiceGetSystemAccentColorRequestSchema)
+      ),
+      ...(options ? { options } : {})
+    })
+    return (
+      fromBinary(ShellPlatformServiceGetSystemAccentColorResponseSchema, response).color ?? null
+    )
   }
 
   async openPath(path: string, options?: RuntimeCallOptions): Promise<void> {

@@ -1,4 +1,4 @@
-import type { WorkspaceConsoleSensorEntry as ConsoleSensorEntry } from '@yiru/protocol'
+import type { WorkspaceConsoleSensorEntry as ConsoleSensorEntry } from '@agentstart/protocol'
 
 import { acquireCdp, releaseCdp, sendCdp, subscribeCdp } from './session'
 

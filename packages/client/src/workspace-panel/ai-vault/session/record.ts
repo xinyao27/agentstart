@@ -1,5 +1,5 @@
-import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
-import type { ExecutionHostId, ExecutionHostScope } from '@yiru/protocol/host/identity'
+import type { AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
 
 export type AiVaultSessionPreviewMessage = {
   role: 'user' | 'assistant' | 'system' | 'tool' | 'unknown'
@@ -7,12 +7,12 @@ export type AiVaultSessionPreviewMessage = {
   timestamp: string | null
 }
 
-export type AiVaultSessionDayTokens = {
+type AiVaultSessionDayTokens = {
   day: string
   tokens: number
 }
 
-export type AiVaultSessionTokenUsage = {
+type AiVaultSessionTokenUsage = {
   provider: string | null
   model: string | null
   timestamp: string | null
@@ -26,11 +26,11 @@ export type AiVaultSessionTokenUsage = {
 
 // Terminal statuses come from <task-notification> records in the parent
 // transcript; 'running' is inferred from recent transcript activity.
-export type AiVaultSubagentRunStatus = 'running' | 'completed' | 'failed' | 'stopped'
+type AiVaultSubagentRunStatus = 'running' | 'completed' | 'failed' | 'stopped'
 
 // Set only on Task subagent transcript rows (listed on demand under their
 // parent session); null for every top-level scanned session.
-export type AiVaultSessionSubagentInfo = {
+type AiVaultSessionSubagentInfo = {
   parentSessionId: string
   agentType: string | null
   status: AiVaultSubagentRunStatus | null
@@ -81,25 +81,11 @@ export type AiVaultSubagentListArgs = {
   executionHostId?: ExecutionHostId
 }
 
-export type AiVaultSubagentListResult = {
-  sessions: AiVaultSession[]
-  issues: AiVaultScanIssue[]
-}
-
 export type AiVaultScanIssue = {
   executionHostId?: ExecutionHostId
   agent: AiVaultAgent
   path: string
   message: string
-}
-
-export type AiVaultListArgs = {
-  limit?: number
-  force?: boolean
-  // Active workspace/project paths. The global result is recency-capped, so these
-  // guarantee a scoped view still surfaces its own (possibly older) sessions.
-  scopePaths?: readonly string[]
-  executionHostScope?: ExecutionHostScope
 }
 
 export type AiVaultListResult = {

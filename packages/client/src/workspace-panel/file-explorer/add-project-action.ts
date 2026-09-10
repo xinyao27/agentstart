@@ -1,5 +1,5 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
 
 import type { TreeNode } from './types'
 

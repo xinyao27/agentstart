@@ -1,8 +1,8 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
-import { cloneDefaultWorkspaceStatuses } from '@yiru/protocol/workspace/status/normalize'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { WorkspaceStatusDefinition } from '@agentstart/protocol/workspace/status/model'
+import { cloneDefaultWorkspaceStatuses } from '@agentstart/protocol/workspace/status/normalize'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { AppState } from '~renderer/store/types'
 
 import { getWorkspaceStatus, getWorkspaceStatusGroupKey } from './workspace-status'

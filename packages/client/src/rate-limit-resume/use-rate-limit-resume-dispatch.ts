@@ -1,4 +1,4 @@
-import type { RateLimitResumeSchedule } from '@yiru/protocol/rate-limit-resume-values'
+import type { RateLimitResumeSchedule } from '@agentstart/protocol/rate-limit-resume-values'
 import { useEffect } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

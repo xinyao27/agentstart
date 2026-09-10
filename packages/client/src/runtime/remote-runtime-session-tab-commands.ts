@@ -7,38 +7,12 @@ import type { RuntimeMobileSessionTabMove } from './remote-session/session-model
 import { requestRemoteSessionTabsRefresh } from './remote-session/tabs-refresh-requests'
 import { isRemoteTerminalSurfaceTabId, toHostSessionTabId } from './remote-terminal-surface-id'
 import { requireSessionTabsClient } from './session-tabs-target'
-import { activateRuntimeWorktree } from './worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from './worktree-selector'
 
 type RemoteRuntimeSessionTabArgs = {
   worktreeId: string
   tabId: string
   environmentId?: string | null
-}
-
-export async function activateRemoteRuntimeSessionWorktree(args: {
-  worktreeId: string
-  environmentId?: string | null
-  notifyDesktop?: boolean
-}): Promise<boolean> {
-  const environmentId = resolveRemoteRuntimeSessionEnvironmentId(args.environmentId)
-  if (!environmentId) {
-    return false
-  }
-  try {
-    await activateRuntimeWorktree(
-      { kind: 'environment', environmentId },
-      {
-        worktree: toRuntimeWorktreeSelector(args.worktreeId),
-        notifyClients: args.notifyDesktop !== false
-      },
-      15_000
-    )
-    return true
-  } catch (error) {
-    logRemoteRuntimeSessionFailure('activate worktree', error)
-    return false
-  }
 }
 
 export function activateRemoteRuntimeSessionTab(

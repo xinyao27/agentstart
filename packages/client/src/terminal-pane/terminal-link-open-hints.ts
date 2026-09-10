@@ -10,8 +10,8 @@ export function getTerminalFileOpenHint(): string {
     : 'Ctrl+click to open or Shift+Ctrl+click for default app'
 }
 
-export function getTerminalYiruFileOpenHint(): string {
-  return isMacPlatform() ? '⌘+click to open in Yiru' : 'Ctrl+click to open in Yiru'
+export function getTerminalAgentStartFileOpenHint(): string {
+  return isMacPlatform() ? '⌘+click to open in AgentStart' : 'Ctrl+click to open in AgentStart'
 }
 
 // Why: detected local .html/.htm file paths keep the same modifier gate as
@@ -26,11 +26,11 @@ export function getTerminalUrlOpenHint(): string {
   return isMacPlatform()
     ? translate(
         'components.terminalPane.urlLinkHint.mac',
-        '⌘+click for default browser or ⇧⌘+click for Yiru Browser'
+        '⌘+click for default browser or ⇧⌘+click for AgentStart Browser'
       )
     : translate(
         'components.terminalPane.urlLinkHint.other',
-        'Ctrl+click for default browser or Shift+Ctrl+click for Yiru Browser'
+        'Ctrl+click for default browser or Shift+Ctrl+click for AgentStart Browser'
       )
 }
 

@@ -1,5 +1,5 @@
 use crate::mobile::server::channel::MobileRpcMessage;
-use yiru_protocol::transport::has_frame_preamble;
+use agentstart_protocol::transport::has_frame_preamble;
 
 const MAX_BINARY_MESSAGE_BYTES: usize = 4 * 1024 * 1024;
 

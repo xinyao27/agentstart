@@ -1,8 +1,8 @@
 {
-  "name": "@yiru/computer-use-macos",
-  "version": "0.0.36",
+  "name": "@agentstart/computer-use-macos",
+  "version": "0.1.0",
   "private": true,
-  "description": "Signed macOS helper for Yiru computer use",
+  "description": "Signed macOS helper for AgentStart computer use",
   "scripts": {
     "build": "bun scripts/build.mjs",
     "check": "vp check --fix",

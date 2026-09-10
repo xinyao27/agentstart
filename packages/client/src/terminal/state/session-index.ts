@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 function indexFirstById<T extends { id: string }>(rows: readonly T[]): Map<string, T> {
   const index = new Map<string, T>()

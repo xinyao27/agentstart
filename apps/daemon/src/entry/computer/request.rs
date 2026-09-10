@@ -3,7 +3,7 @@
 use std::ffi::{OsStr, OsString};
 use std::io::Read as _;
 
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::{
     ComputerMouseButton, ComputerObserveTarget, ComputerPermissionId, ComputerPoint,
     ComputerScrollDirection, ComputerServiceClickRequest, ComputerServiceDragRequest,
     ComputerServiceGetAppStateRequest, ComputerServiceHotkeyRequest,

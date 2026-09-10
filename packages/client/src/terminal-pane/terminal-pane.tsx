@@ -280,7 +280,7 @@ export default function TerminalPane({
     macOptionAsAltRef,
     paneKittyKeyboardModesRef: local.paneKittyKeyboardModesRef,
     keybindings: paneStore.keybindings,
-    terminalShortcutPolicy: paneStore.settings?.terminalShortcutPolicy ?? 'yiru-first'
+    terminalShortcutPolicy: paneStore.settings?.terminalShortcutPolicy ?? 'agentstart-first'
   })
 
   useTerminalPaneGlobalEffects({

@@ -62,7 +62,7 @@ export function parseExplicitFileLinkTarget(
   return { pathText, line, column }
 }
 
-export function resolveExplicitFileLinkTargetPath(
+function resolveExplicitFileLinkTargetPath(
   pathText: string,
   cwd: string,
   homePath?: string | null

@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service AppControlService {
+  rpc Restart(AppControlServiceRestartRequest) returns (AppControlServiceRestartResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RecordStartupDiagnostic(AppControlServiceRecordStartupDiagnosticRequest) returns (AppControlServiceRecordStartupDiagnosticResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message AppControlServiceRestartRequest {}
+
+message AppControlServiceRestartResponse {
+  bool accepted = 1;
+}
+
+message AppControlServiceRecordStartupDiagnosticRequest {
+  string event = 1;
+  optional uint32 renderer_elapsed_ms = 2;
+  optional uint32 duration_ms = 3;
+}
+
+message AppControlServiceRecordStartupDiagnosticResponse {
+  bool recorded = 1;
+}

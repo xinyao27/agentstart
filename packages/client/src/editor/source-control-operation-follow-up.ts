@@ -1,5 +1,5 @@
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { fetchRuntimeGit } from '~renderer/runtime/git-client'
 import { resolveSourceControlOperationOwner } from '~renderer/source-control/operation-owner'
 import type { AppState } from '~renderer/store/types'

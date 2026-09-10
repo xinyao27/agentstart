@@ -1,4 +1,4 @@
-import type { FileReadChunkResult } from '@yiru/protocol'
+import type { FileReadChunkResult } from '@agentstart/protocol'
 
 import { requireFilesTarget } from '../files-target'
 import { getActiveRuntimeTarget } from '../rpc-client'

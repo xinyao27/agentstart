@@ -1,15 +1,15 @@
-import type { TabContentType, WorkspaceVisibleTabType } from '@yiru/protocol/workspace/tabs'
+import type { TabContentType, WorkspaceVisibleTabType } from '@agentstart/protocol/workspace/tabs'
 
 import type { AppState } from '../../store/types'
 
-export function toVisibleTabType(contentType: TabContentType): WorkspaceVisibleTabType {
+function toVisibleTabType(contentType: TabContentType): WorkspaceVisibleTabType {
   if (contentType === 'browser' || contentType === 'terminal' || contentType === 'simulator') {
     return contentType
   }
   return 'editor'
 }
 
-export function deriveActiveSurfaceForWorktree(
+function deriveActiveSurfaceForWorktree(
   state: Pick<
     AppState,
     | 'activeBrowserTabIdByWorktree'

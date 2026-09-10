@@ -1,5 +1,5 @@
-import { isPushHookFailure } from '@yiru/protocol/git/push-hook-failure'
-import { stripCredentialsFromMessage } from '@yiru/protocol/git/remote-error'
+import { isPushHookFailure } from '@agentstart/protocol/git/push-hook-failure'
+import { stripCredentialsFromMessage } from '@agentstart/protocol/git/remote-error'
 import { translate } from '~renderer/i18n/i18n'
 
 import { summarizePushFailure } from './prompts/push-failure'

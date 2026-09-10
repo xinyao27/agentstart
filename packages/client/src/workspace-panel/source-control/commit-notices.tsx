@@ -1,7 +1,7 @@
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/protocol/source-control/ai-actions'
+} from '@agentstart/protocol/source-control/ai-actions'
 import { translate } from '~renderer/i18n/i18n'
 import type { SourceControlAiWriteTarget } from '~renderer/source-control/ai-recipe-save'
 import { Button } from '~renderer/ui/button'

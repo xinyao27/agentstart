@@ -74,7 +74,7 @@ function parseSelection(rawPayload: unknown, opId: string): BrowserGrabResult {
   if (isGuestCancellationPayload(rawPayload)) {
     return { kind: 'cancelled', opId, reason: 'user' }
   }
-  const isContextMenu = Reflect.get(rawPayload, '__yiruContextMenu') === true
+  const isContextMenu = Reflect.get(rawPayload, '__agentstartContextMenu') === true
   const payloadSource = isContextMenu ? Reflect.get(rawPayload, 'payload') : rawPayload
   const payload = clampGrabPayload(payloadSource)
   if (!payload) {
@@ -84,7 +84,7 @@ function parseSelection(rawPayload: unknown, opId: string): BrowserGrabResult {
 }
 
 function isGuestCancellationPayload(rawPayload: object): boolean {
-  if (Reflect.get(rawPayload, '__yiruCancelled') === true) {
+  if (Reflect.get(rawPayload, '__agentstartCancelled') === true) {
     return true
   }
   if (Reflect.get(rawPayload, 'message') !== 'cancelled') {

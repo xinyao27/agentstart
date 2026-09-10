@@ -1,6 +1,6 @@
-export type FeatureTipId = 'yiru-cli' | 'command-palette'
+export type FeatureTipId = 'agentstart-cli' | 'command-palette'
 
-export const FEATURE_TIP_IDS: readonly FeatureTipId[] = ['yiru-cli', 'command-palette']
+export const FEATURE_TIP_IDS: readonly FeatureTipId[] = ['agentstart-cli', 'command-palette']
 
 export function isFeatureTipId(value: unknown): value is FeatureTipId {
   return typeof value === 'string' && FEATURE_TIP_IDS.some((id) => id === value)

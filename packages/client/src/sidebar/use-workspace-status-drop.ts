@@ -1,4 +1,4 @@
-import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
+import type { WorkspaceStatus } from '@agentstart/protocol/workspace/status/model'
 import { useEffect } from 'react'
 import type React from 'react'
 
@@ -17,7 +17,7 @@ type WorkspaceStatusDocumentDropOptions = {
   onPinWorktrees?: PinWorktrees
 }
 
-export function commitWorkspaceStatusDocumentDrop(params: {
+function commitWorkspaceStatusDocumentDrop(params: {
   worktreeIds: readonly string[]
   status: WorkspaceStatus | null
   isPinDrop: boolean

@@ -2,8 +2,8 @@ use std::io;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     LocalDownloadServiceAppendFileChunkRequest, LocalDownloadServiceAppendFileChunkResponse,
     LocalDownloadServiceAppendFolderFileChunkRequest,
     LocalDownloadServiceAppendFolderFileChunkResponse, LocalDownloadServiceCancelFileRequest,
@@ -15,7 +15,7 @@ use yiru_protocol::runtime::v1::{
     LocalDownloadServiceStartFileResponse, LocalDownloadServiceStartFolderRequest,
     LocalDownloadServiceStartFolderResponse, LocalDownloadSession,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::local_download::{FolderChunk, LocalDownloadAuthority, LocalDownloadError};
 

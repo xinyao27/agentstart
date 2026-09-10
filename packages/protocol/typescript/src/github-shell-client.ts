@@ -1,18 +1,18 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
 import {
-  GitHubShellServiceCheckYiruStarredRequestSchema,
-  GitHubShellServiceCheckYiruStarredResponseSchema,
+  GitHubShellServiceCheckAgentStartStarredRequestSchema,
+  GitHubShellServiceCheckAgentStartStarredResponseSchema,
   GitHubShellServiceEnqueuePrRefreshRequestSchema,
   GitHubShellServiceEnqueuePrRefreshResponseSchema,
   GitHubShellServiceGetViewerRequestSchema,
   GitHubShellServiceGetViewerResponseSchema,
   GitHubShellServiceReportVisiblePrRefreshCandidatesRequestSchema,
   GitHubShellServiceReportVisiblePrRefreshCandidatesResponseSchema,
-  GitHubShellServiceStarYiruRequestSchema,
-  GitHubShellServiceStarYiruResponseSchema,
+  GitHubShellServiceStarAgentStartRequestSchema,
+  GitHubShellServiceStarAgentStartResponseSchema,
   GitHubShellService
-} from '../generated/yiru/runtime/v1/github_shell_pb.js'
+} from '../generated/agent_start/runtime/v1/github_shell_pb.js'
 import {
   type AppStarSource,
   enqueueResult,
@@ -30,8 +30,8 @@ import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 const GET_VIEWER_PROCEDURE = `/${GitHubShellService.typeName}/${GitHubShellService.method.getViewer.name}`
 const ENQUEUE_PROCEDURE = `/${GitHubShellService.typeName}/${GitHubShellService.method.enqueuePrRefresh.name}`
 const REPORT_VISIBLE_PROCEDURE = `/${GitHubShellService.typeName}/${GitHubShellService.method.reportVisiblePrRefreshCandidates.name}`
-const CHECK_STARRED_PROCEDURE = `/${GitHubShellService.typeName}/${GitHubShellService.method.checkYiruStarred.name}`
-const STAR_PROCEDURE = `/${GitHubShellService.typeName}/${GitHubShellService.method.starYiru.name}`
+const CHECK_STARRED_PROCEDURE = `/${GitHubShellService.typeName}/${GitHubShellService.method.checkAgentStartStarred.name}`
+const STAR_PROCEDURE = `/${GitHubShellService.typeName}/${GitHubShellService.method.starAgentStart.name}`
 
 export class GitHubShellClient {
   private readonly transport: RuntimeTransport
@@ -94,30 +94,32 @@ export class GitHubShellClient {
       .accepted
   }
 
-  async checkYiruStarred(options?: RuntimeCallOptions): Promise<boolean | null> {
+  async checkAgentStartStarred(options?: RuntimeCallOptions): Promise<boolean | null> {
     const response = await this.transport.unary({
       method: CHECK_STARRED_PROCEDURE,
       payload: toBinary(
-        GitHubShellServiceCheckYiruStarredRequestSchema,
-        create(GitHubShellServiceCheckYiruStarredRequestSchema)
+        GitHubShellServiceCheckAgentStartStarredRequestSchema,
+        create(GitHubShellServiceCheckAgentStartStarredRequestSchema)
       ),
       ...(options ? { options } : {})
     })
-    return fromBinary(GitHubShellServiceCheckYiruStarredResponseSchema, response).starred ?? null
+    return (
+      fromBinary(GitHubShellServiceCheckAgentStartStarredResponseSchema, response).starred ?? null
+    )
   }
 
-  async starYiru(source: AppStarSource, options?: RuntimeCallOptions): Promise<boolean> {
+  async starAgentStart(source: AppStarSource, options?: RuntimeCallOptions): Promise<boolean> {
     const response = await this.transport.unary({
       method: STAR_PROCEDURE,
       payload: toBinary(
-        GitHubShellServiceStarYiruRequestSchema,
-        create(GitHubShellServiceStarYiruRequestSchema, {
+        GitHubShellServiceStarAgentStartRequestSchema,
+        create(GitHubShellServiceStarAgentStartRequestSchema, {
           source: protocolStarSource(source)
         })
       ),
       ...(options ? { options } : {})
     })
-    return fromBinary(GitHubShellServiceStarYiruResponseSchema, response).starred
+    return fromBinary(GitHubShellServiceStarAgentStartResponseSchema, response).starred
   }
 }
 

@@ -6,9 +6,9 @@ import {
   type ExecutionHostId,
   type ExecutionHostKind,
   type ExecutionHostScope
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { RuntimeCompatVerdict } from '@yiru/protocol/runtime-compatibility'
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { RuntimeCompatVerdict } from '@agentstart/protocol/runtime-compatibility'
 import type { ExecutionHostHealth } from '~renderer/execution-host-registry'
 import { getLocalExecutionHostLabel } from '~renderer/execution-host/labels'
 

@@ -76,7 +76,7 @@ export function SourceControlEntryMenuContent({
     void shellClient.ui.writeClipboardText(absolutePath)
   }
 
-  const handleRevealInYiruExplorer = () => {
+  const handleRevealInAgentStartExplorer = () => {
     if (!absolutePath) {
       return
     }
@@ -170,7 +170,7 @@ export function SourceControlEntryMenuContent({
         </ContextMenuSubContent>
       </ContextMenuSub>
       <ContextMenuSeparator />
-      <ContextMenuItem onClick={handleRevealInYiruExplorer} disabled={!absolutePath}>
+      <ContextMenuItem onClick={handleRevealInAgentStartExplorer} disabled={!absolutePath}>
         <FolderOpen className="size-3.5" />
         {translate(
           'auto.components.right.sidebar.SourceControl.cc05b2d088',

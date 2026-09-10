@@ -11,7 +11,7 @@ export const getMobileEmulatorSearchEntries = createLocalizedCatalog(() => [
     ),
     description: translate(
       'auto.components.settings.mobile.emulator.search.9595354cff',
-      'Configure mobile emulator support for Yiru and coding agents.'
+      'Configure mobile emulator support for AgentStart and coding agents.'
     ),
     keywords: [
       ...translateSearchKeyword(
@@ -48,11 +48,11 @@ export const getMobileEmulatorSearchEntries = createLocalizedCatalog(() => [
       ),
       ...translateSearchKeyword(
         'auto.components.settings.mobile.emulator.search.d4b7833894',
-        'yiru cli'
+        'agentstart cli'
       ),
       ...translateSearchKeyword(
         'auto.components.settings.mobile.emulator.search.9353854ff3',
-        'yiru emulator'
+        'agentstart emulator'
       ),
       ...translateSearchKeyword(
         'auto.components.settings.mobile.emulator.search.ac0a985873',
@@ -75,7 +75,7 @@ export const getMobileEmulatorSearchEntries = createLocalizedCatalog(() => [
     ),
     description: translate(
       'auto.components.settings.mobile.emulator.search.2348045036',
-      'Choose which emulator device Yiru opens by default.'
+      'Choose which emulator device AgentStart opens by default.'
     ),
     keywords: [
       ...translateSearchKeyword(
@@ -139,7 +139,7 @@ export const getMobileEmulatorSearchEntries = createLocalizedCatalog(() => [
     ),
     description: translate(
       'auto.components.settings.mobile.emulator.search.2e0b45b2ba',
-      'Use Yiru CLI commands to list, attach, tap, and type into a mobile emulator.'
+      'Use AgentStart CLI commands to list, attach, tap, and type into a mobile emulator.'
     ),
     keywords: [
       ...translateSearchKeyword(

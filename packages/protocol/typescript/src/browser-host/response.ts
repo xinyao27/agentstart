@@ -13,8 +13,11 @@ import {
   ScrollResultSchema,
   SnapshotRefSchema,
   SnapshotResultSchema
-} from '../../generated/yiru/runtime/v1/browser_pb.js'
-import type { ExecuteRequest, ExecuteResponse } from '../../generated/yiru/runtime/v1/browser_pb.js'
+} from '../../generated/agent_start/runtime/v1/browser_pb.js'
+import type {
+  ExecuteRequest,
+  ExecuteResponse
+} from '../../generated/agent_start/runtime/v1/browser_pb.js'
 import { encodeEnvironmentResponse } from './response-environment.js'
 import { encodeObservationResponse } from './response-observation.js'
 import {

@@ -1,4 +1,4 @@
-import type { ExtensionBrowserCapabilities } from '@yiru/client/extension-bootstrap'
+import type { ExtensionBrowserCapabilities } from '@agentstart/client/extension-bootstrap'
 
 import type { ExtensionBootstrapResult } from '../bootstrap-response'
 import {
@@ -8,6 +8,11 @@ import {
 } from '../browser/agent-interaction'
 import { downloadArtifact } from '../browser/artifact-download'
 import { executeDaemonBrowserCommand } from '../browser/browser-command'
+import {
+  readCommunityAdapters,
+  removeCommunityAdapter,
+  saveCommunityAdapter
+} from '../browser/community-adapters'
 import {
   disableContextAwareness,
   enableContextAwareness,
@@ -49,6 +54,7 @@ import {
   probeWorkbenchNotificationDelivery
 } from '../browser/workbench-notifications'
 import { readWorkspacePreferences, setWorkspacePreferences } from '../browser/workspace-preferences'
+import { readEnterprisePolicy } from '../enterprise-policy'
 import { exportHtmlToPdf } from '../pdf-export/client'
 
 export function createBrowserCapabilities(
@@ -123,13 +129,15 @@ export function createBrowserCapabilities(
         await chrome.runtime.sendMessage({ ...input, type: 'daemon-open-tab' })
       )
     },
+    openNotificationSettings: openWorkbenchNotificationSettings,
     openFocusWorkspace: async (projectId) => {
       await requireSuccessfulResponse(
         await chrome.runtime.sendMessage({ projectId, type: 'focus-workspace-window' })
       )
     },
-    openNotificationSettings: openWorkbenchNotificationSettings,
-    openExtensionSettings: () => chrome.runtime.openOptionsPage(),
+    openUserScriptsSettings: async () => {
+      await chrome.tabs.create({ url: `chrome://extensions/?id=${chrome.runtime.id}` })
+    },
     pickColor,
     pickPageElement,
     pickProjectDirectory,
@@ -146,9 +154,14 @@ export function createBrowserCapabilities(
     readGitHubContext: async () =>
       readStringResponse(await sendActiveTabMessage('github-comment-context'), 'pageContext'),
     readOnDeviceAiStatus,
+    readWorkspacePreferences,
+    readCommunityAdapters: async () => ({
+      adapters: await readCommunityAdapters(),
+      disabled: (await readEnterprisePolicy()).disableCommunityAdapters
+    }),
     readProjectBookmarks,
     readRecentHistoryContext,
-    readWorkspacePreferences,
+    readTrustedSites,
     replay: async (events) => {
       await requireSuccessfulResponse(await sendActiveTabMessage('recording-replay', { events }))
     },
@@ -162,8 +175,13 @@ export function createBrowserCapabilities(
     runPerformanceAudit: async () =>
       parsePerformanceCapture(await sendActiveTabMessage('performance-audit')),
     saveProjectBookmarks,
+    saveCommunityAdapter,
     setOnDeviceAiEnabled,
     setWorkspacePreferences: saveWorkspacePreferences,
+    removeCommunityAdapter,
+    revokeTrustedSite: async (origin) => {
+      await chrome.permissions.remove({ origins: [origin] })
+    },
     startConsoleSensor: async () => {
       await requireSuccessfulResponse(await sendActiveTabMessage('console-sensor-start'))
     },
@@ -181,6 +199,28 @@ export function createBrowserCapabilities(
     subscribeBrowserTabProjections,
     summarizeText
   }
+}
+
+async function saveWorkspacePreferences(
+  preferences: Awaited<ReturnType<typeof readWorkspacePreferences>>
+): Promise<void> {
+  if (
+    preferences.useNewTabLauncher &&
+    !(await chrome.permissions.contains({ permissions: ['tabs'] }))
+  ) {
+    const granted = await requestBrowserPermissions({ permissions: ['tabs'] })
+    if (!granted) {
+      throw new Error('new_tab_launcher_permission_denied')
+    }
+  }
+  await setWorkspacePreferences(preferences)
+}
+
+async function readTrustedSites(): Promise<string[]> {
+  const permissions = await chrome.permissions.getAll()
+  return (permissions.origins ?? [])
+    .filter((origin) => origin.startsWith('http://') || origin.startsWith('https://'))
+    .toSorted()
 }
 
 async function consumePendingAgentApproval(): Promise<string | null> {
@@ -224,21 +264,6 @@ async function pickColor(): Promise<string> {
     throw new Error('eye_dropper_result_invalid')
   }
   return color
-}
-
-async function saveWorkspacePreferences(
-  preferences: Awaited<ReturnType<typeof readWorkspacePreferences>>
-): Promise<void> {
-  if (
-    preferences.useNewTabLauncher &&
-    !(await chrome.permissions.contains({ permissions: ['tabs'] }))
-  ) {
-    const granted = await requestBrowserPermissions({ permissions: ['tabs'] })
-    if (!granted) {
-      throw new Error('new_tab_launcher_permission_denied')
-    }
-  }
-  await setWorkspacePreferences(preferences)
 }
 
 async function startRecording(): Promise<void> {

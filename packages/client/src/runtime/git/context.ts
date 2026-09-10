@@ -1,5 +1,5 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { splitWorktreeIdForFilesystem } from '@agentstart/protocol/worktree/identity'
 
 import { getActiveRuntimeTarget } from '../rpc-client'
 import type { RuntimeClientTarget } from '../runtime-target'

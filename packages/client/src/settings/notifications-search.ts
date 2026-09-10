@@ -11,7 +11,7 @@ export const getNotificationsPaneSearchEntries = createLocalizedCatalog(() => [
     ),
     description: translate(
       'auto.components.settings.notifications.search.0534c76311',
-      'Master switch for Yiru system notifications.'
+      'Master switch for AgentStart system notifications.'
     ),
     keywords: [
       ...translateSearchKeyword(
@@ -87,7 +87,7 @@ export const getNotificationsPaneSearchEntries = createLocalizedCatalog(() => [
     ),
     description: translate(
       'auto.components.settings.notifications.search.7247b97a31',
-      'Avoid notifying when Yiru is focused on the active worktree.'
+      'Avoid notifying when AgentStart is focused on the active worktree.'
     ),
     keywords: [
       ...translateSearchKeyword(
@@ -115,7 +115,7 @@ export const getNotificationsPaneSearchEntries = createLocalizedCatalog(() => [
     ),
     description: translate(
       'auto.components.settings.notifications.search.c718793e95',
-      'Choose the built-in, system, or local audio file Yiru plays for notifications.'
+      'Choose the built-in, system, or local audio file AgentStart plays for notifications.'
     ),
     keywords: [
       ...translateSearchKeyword(

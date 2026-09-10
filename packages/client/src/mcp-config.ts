@@ -1,4 +1,4 @@
-export type McpConfigFormat = 'workspace' | 'cursor' | 'claude'
+type McpConfigFormat = 'workspace' | 'cursor' | 'claude'
 
 export type McpConfigCandidate = {
   format: McpConfigFormat
@@ -12,10 +12,10 @@ export type McpConfigDirectoryEntry = {
   isDirectory: boolean
 }
 
-export type McpServerTransport = 'stdio' | 'http' | 'unknown'
-export type McpServerStatus = 'enabled' | 'disabled' | 'invalid'
+type McpServerTransport = 'stdio' | 'http' | 'unknown'
+type McpServerStatus = 'enabled' | 'disabled' | 'invalid'
 
-export type McpServerSummary = {
+type McpServerSummary = {
   name: string
   transport: McpServerTransport
   status: McpServerStatus
@@ -139,7 +139,7 @@ export function inspectMcpConfigContent(
   }
 }
 
-export function maskMcpEnv(env: unknown): Record<string, string> | undefined {
+function maskMcpEnv(env: unknown): Record<string, string> | undefined {
   if (!env || typeof env !== 'object' || Array.isArray(env)) {
     return undefined
   }

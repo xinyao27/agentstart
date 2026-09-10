@@ -1,4 +1,4 @@
-import type { PdfExportInput, PdfExportResult } from '@yiru/client/pdf-export'
+import type { PdfExportInput, PdfExportResult } from '@agentstart/client/pdf-export'
 
 import { requestBrowserPermissions } from '../browser/permission'
 

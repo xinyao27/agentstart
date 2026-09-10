@@ -1,8 +1,8 @@
-import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
-import { parseWslUncPath } from '@yiru/protocol/host/wsl-paths'
-import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { getPortableProjectIdentityKey } from '@yiru/protocol/project/setup-projection'
+import { isWindowsAbsolutePathLike } from '@agentstart/protocol/host/path'
+import { parseWslUncPath } from '@agentstart/protocol/host/wsl-paths'
+import type { Project, ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { getPortableProjectIdentityKey } from '@agentstart/protocol/project/setup-projection'
 
 import type { ProjectGroupingModel } from './worktree-list/rows'
 
@@ -111,12 +111,4 @@ export function getProjectGroupingForRepo(
     projectId: project.id,
     projectIdentityKey: getPortableProjectIdentityKey(project) ?? undefined
   }
-}
-
-export function getProjectHeaderRevealTarget(
-  repoId: string,
-  repoMap: Map<string, Repo>,
-  projectGrouping?: ProjectGroupingModel
-): ProjectHeaderRevealTarget {
-  return getProjectGroupingForRepo(repoId, repoMap, buildProjectGroupingIndex(projectGrouping))
 }

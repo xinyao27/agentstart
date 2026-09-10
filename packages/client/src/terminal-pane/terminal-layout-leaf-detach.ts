@@ -1,7 +1,7 @@
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/protocol/workspace/session'
+} from '@agentstart/protocol/workspace/session'
 import {
   collectLeafIdsInOrder,
   normalizeTerminalLayoutSnapshot,

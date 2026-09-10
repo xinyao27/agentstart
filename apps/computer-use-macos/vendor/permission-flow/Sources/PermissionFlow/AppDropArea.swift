@@ -1,6 +1,6 @@
 import AppKit
 import SwiftUI
-import YiruComputerUseIcons
+import AgentStartComputerUseIcons
 
 @available(macOS 13.0, *)
 struct AppDragItemView: NSViewRepresentable {
@@ -185,7 +185,7 @@ private struct AppDragCardContent: View {
         .foregroundStyle(.primary)
       Spacer()
       VStack(spacing: 0) {
-        YiruComputerUseIcon(.drag, size: 14)
+        AgentStartComputerUseIcon(.drag, size: 14)
         Text(
           PermissionFlowLocalizer.string(
             "permission_flow.drag.label",

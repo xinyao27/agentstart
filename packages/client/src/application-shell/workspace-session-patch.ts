@@ -1,4 +1,7 @@
-import type { WorkspaceSessionPatch, WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type {
+  WorkspaceSessionPatch,
+  WorkspaceSessionState
+} from '@agentstart/protocol/workspace/session'
 import { normalizeBrowserHistoryEntries } from '~renderer/browser/session/history'
 import { pruneLocalTerminalScrollbackBuffers } from '~renderer/terminal-workspace/scrollback-buffers'
 

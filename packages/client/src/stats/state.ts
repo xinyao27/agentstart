@@ -1,5 +1,5 @@
-import type { StatsSummaryResult } from '@yiru/protocol/stats/values'
-import type { StatsSummary } from '@yiru/protocol/stats/values'
+import type { StatsSummaryResult } from '@agentstart/protocol/stats/values'
+import type { StatsSummary } from '@agentstart/protocol/stats/values'
 import type { StateCreator } from 'zustand'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import type { AppState } from '~renderer/store/types'

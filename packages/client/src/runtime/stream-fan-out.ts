@@ -6,7 +6,7 @@ type RuntimeStreamFanOutOptions<TClient, TEvent> = {
   onConnectionStateChange?: (state: RuntimeStreamConnectionState) => void
 }
 
-export type RuntimeStreamConnectionState = 'idle' | 'connecting' | 'connected' | 'disconnected'
+type RuntimeStreamConnectionState = 'idle' | 'connecting' | 'connected' | 'disconnected'
 
 export type RuntimeStreamFanOut<TEvent> = {
   subscribe: (listener: (event: TEvent) => void) => () => void

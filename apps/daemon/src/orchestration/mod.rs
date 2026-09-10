@@ -105,7 +105,7 @@ impl OrchestrationDatabase {
         harden(&path)?;
         let (requests, mut receiver) = mpsc::channel::<DatabaseRequest>(QUEUE_CAPACITY);
         let worker = thread::Builder::new()
-            .name("yiru-orchestration-database".to_owned())
+            .name("agentstart-orchestration-database".to_owned())
             .spawn(move || {
                 while let Some(request) = receiver.blocking_recv() {
                     let result = (request.operation)(&mut connection);

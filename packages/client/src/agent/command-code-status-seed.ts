@@ -1,8 +1,8 @@
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import { useAppStore } from '~renderer/store/state'
 
 /**
- * Why: Command Code has no prompt-submit hook, so when Yiru submits a generated
+ * Why: Command Code has no prompt-submit hook, so when AgentStart submits a generated
  * prompt after the TUI is ready, seed `working` at delivery time so sidebar and
  * activity surfaces don't stay idle until the first real hook event arrives.
  */

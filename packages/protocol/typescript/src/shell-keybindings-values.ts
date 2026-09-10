@@ -1,9 +1,9 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ShellKeybindingsPlatform,
   ShellKeybindingsSeverity,
   type ShellKeybindingsSnapshot
-} from '../generated/yiru/runtime/v1/shell_keybindings_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_keybindings_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const SHELL_KEYBINDINGS_PROTOCOL_CAPABILITY = 'shell.keybindings.protobuf.v1' as const

@@ -1,11 +1,11 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     BrowserReplayEvent as ProtoReplayEvent, BrowserReplayEventKind as ProtoReplayEventKind,
     BrowserReplayRecording, BrowserReplayServiceListRequest, BrowserReplayServiceListResponse,
     BrowserReplayServiceRecordResultRequest, BrowserReplayServiceRecordResultResponse,
     BrowserReplayServiceSaveRequest, BrowserReplayServiceSaveResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::persistence::{
     BrowserReplay, BrowserReplayEvent, BrowserReplayEventKind, BrowserReplaySave,

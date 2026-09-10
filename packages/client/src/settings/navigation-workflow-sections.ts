@@ -26,6 +26,7 @@ import { getRuntimeEnvironmentsSearchEntry } from '~renderer/settings/runtime-en
 import { getTerminalPaneSearchEntries } from './terminal/search'
 
 type NavigationWorkflowSectionsParams = {
+  hasBrowserCapabilities: boolean
   isDev: boolean
   isMac: boolean
   isWindows: boolean
@@ -58,6 +59,7 @@ function getDevToolsPaneSearchEntries(): SettingsNavSection['searchEntries'] {
 }
 
 export function buildNavigationWorkflowSections({
+  hasBrowserCapabilities,
   isDev,
   isMac,
   isWindows,
@@ -118,7 +120,7 @@ export function buildNavigationWorkflowSections({
       title: translate('auto.hooks.useSettingsNavigationMetadata.1e761cff2b', 'Mobile Emulator'),
       description: translate(
         'auto.hooks.useSettingsNavigationMetadata.3d65d3f1b9',
-        'Configure mobile emulator support for Yiru and coding agents.'
+        'Configure mobile emulator support for AgentStart and coding agents.'
       ),
       icon: TabletSmartphone,
       searchEntries: getMobileEmulatorSearchEntries(),
@@ -132,7 +134,7 @@ export function buildNavigationWorkflowSections({
       ),
       description: translate(
         'auto.hooks.useSettingsNavigationMetadata.runtimeEnvironmentsDescription',
-        'Connect to Yiru daemons on this computer or remote hosts.'
+        'Connect to AgentStart daemons on this computer or remote hosts.'
       ),
       icon: ShareNetwork,
       searchEntries: [runtimeEnvironmentsSearchEntry],
@@ -180,7 +182,9 @@ export function buildNavigationWorkflowSections({
         'Low-level compatibility settings for troubleshooting.'
       ),
       icon: Wrench,
-      searchEntries: getAdvancedPaneSearchEntries(),
+      searchEntries: getAdvancedPaneSearchEntries({
+        includeBrowserSettings: hasBrowserCapabilities
+      }),
       group: 'advanced'
     },
     ...(import.meta.env.DEV && isDev

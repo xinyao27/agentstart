@@ -1,2 +1,2 @@
-app_identifier(ENV["IOS_BUNDLE_IDENTIFIER"] || "com.xinyao27.yiru.mobile")
+app_identifier("com.xinyao27.agentstart.mobile")
 team_id(ENV["APPLE_TEAM_ID"])

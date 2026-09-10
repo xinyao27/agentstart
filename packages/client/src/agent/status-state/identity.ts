@@ -3,7 +3,7 @@ import {
   isFreshNonDoneAgentStatus,
   type AgentStatusState,
   type AgentType
-} from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/status-records'
 
 type ExistingAgentIdentity = {
   agentType?: AgentType
@@ -20,7 +20,7 @@ export function shouldSuppressInheritedTerminalStatus(args: {
   inheritedFromActivePane: boolean
   incomingState: AgentStatusState
 }): boolean {
-  // Why: nested child hooks inherit the parent's YIRU_PANE_KEY. A child
+  // Why: nested child hooks inherit the parent's AGENTSTART_PANE_KEY. A child
   // completion does not prove the active parent turn completed.
   return args.inheritedFromActivePane && args.incomingState === 'done'
 }
@@ -64,7 +64,7 @@ export function resolveAgentStatusIdentity(args: {
   }
   if (isActiveExistingIdentity(args.existing, args.now, staleAfterMs)) {
     return {
-      // Why: child agent CLIs inherit YIRU_PANE_KEY from their parent terminal.
+      // Why: child agent CLIs inherit AGENTSTART_PANE_KEY from their parent terminal.
       // While the parent turn is active, do not let a nested hook steal the
       // pane's visible identity.
       agentType: existingAgentType,

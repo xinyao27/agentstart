@@ -1,9 +1,9 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { SourceControlTextActionId } from '@yiru/protocol/source-control/ai-actions'
-import { buildCommitMessagePrompt } from '@yiru/protocol/source-control/prompts/commit-message'
-import { buildPullRequestFieldsPrompt } from '@yiru/protocol/source-control/prompts/pull-request'
-import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { SourceControlTextActionId } from '@agentstart/protocol/source-control/ai-actions'
+import { buildCommitMessagePrompt } from '@agentstart/protocol/source-control/prompts/commit-message'
+import { buildPullRequestFieldsPrompt } from '@agentstart/protocol/source-control/prompts/pull-request'
+import type { ResolvedSourceControlAiGenerationParams } from '@agentstart/protocol/source-control/resolution'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as TriangleAlert } from '~renderer/icons/hugeicons'
@@ -22,8 +22,6 @@ import {
   SourceControlTextGenerationDialogForm,
   type SourceControlTextGenerationSaveTarget
 } from './text-generation-dialog-form'
-
-export { buildCommitMessageGenerationParams } from './text-generation-params'
 
 type SourceControlTextGenerationBaseDialogProps = {
   open: boolean
@@ -162,7 +160,7 @@ export function SourceControlTextGenerationDialog({
         </DialogHeader>
 
         {!resolved.ok ? (
-          <p className="border-destructive/30 bg-destructive/5 text-destructive flex items-start gap-1.5 border px-3 py-2 text-xs">
+          <p className="border-destructive/30 bg-destructive/5 text-destructive flex items-start gap-1.5 rounded-md border px-3 py-2 text-xs">
             <TriangleAlert className="mt-px size-3.5 shrink-0" />
             {resolved.error}
           </p>

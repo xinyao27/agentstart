@@ -1,5 +1,5 @@
-import type { BrowserPageControlRegisterCommand } from '../../generated/yiru/runtime/v1/browser_page_control_pb.js'
-import type { ExecuteRequest } from '../../generated/yiru/runtime/v1/browser_pb.js'
+import type { BrowserPageControlRegisterCommand } from '../../generated/agent_start/runtime/v1/browser_page_control_pb.js'
+import type { ExecuteRequest } from '../../generated/agent_start/runtime/v1/browser_pb.js'
 import { invocation, type BrowserCommandInvocation } from './command-invocation.js'
 
 type PageControlCommand = Extract<

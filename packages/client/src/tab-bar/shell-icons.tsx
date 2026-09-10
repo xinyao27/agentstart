@@ -1,4 +1,4 @@
-import { WINDOWS_GIT_BASH_SHELL } from '@yiru/protocol/host/windows-terminal-shell'
+import { WINDOWS_GIT_BASH_SHELL } from '@agentstart/protocol/host/windows-terminal-shell'
 import React from 'react'
 import gitForWindowsLogoUrl from '~renderer/assets/brand/git-for-windows-logo.svg?url'
 import { translate } from '~renderer/i18n/i18n'

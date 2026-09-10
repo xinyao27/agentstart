@@ -2,15 +2,15 @@ import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId,
   SourceControlTextActionId
-} from '@yiru/protocol/source-control/ai-actions'
-import { getCommitMessageModelDiscoveryHostKeyForScope } from '@yiru/protocol/source-control/discovery-host'
+} from '@agentstart/protocol/source-control/ai-actions'
+import { getCommitMessageModelDiscoveryHostKeyForScope } from '@agentstart/protocol/source-control/discovery-host'
 import {
   resolveSourceControlActionRecipe,
   resolveSourceControlAiEnabled,
   resolveSourceControlAiPrCreationDefaults,
   type ResolvedSourceControlAiGenerationParams
-} from '@yiru/protocol/source-control/resolution'
-import { DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS } from '@yiru/protocol/source-control/settings'
+} from '@agentstart/protocol/source-control/resolution'
+import { DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS } from '@agentstart/protocol/source-control/settings'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -28,7 +28,7 @@ import {
 import { openSourceControlAiSettingsTarget } from './ai-settings-navigation'
 import { useSourceControlRecoveryAi } from './use-recovery-ai'
 
-export function getSourceControlAiControllerDiscoveryHostKey(
+function getSourceControlAiControllerDiscoveryHostKey(
   settings: SourceControlAiControllerParams['settings'],
   activeConnectionId: string | null | undefined
 ): string {

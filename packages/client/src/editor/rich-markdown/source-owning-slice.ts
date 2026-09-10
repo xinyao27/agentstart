@@ -2,8 +2,8 @@ import type { Slice } from '@tiptap/pm/model'
 
 import { getRichMarkdownLeafVisibleText, isRichMarkdownVisibleBlockStart } from './visible-text-map'
 
-export const RICH_MARKDOWN_SOURCE_OWNING_PASTE_LIMIT = 256 * 1024
-export const RICH_MARKDOWN_SOURCE_OWNING_NODE_LIMIT = 256
+const RICH_MARKDOWN_SOURCE_OWNING_PASTE_LIMIT = 256 * 1024
+const RICH_MARKDOWN_SOURCE_OWNING_NODE_LIMIT = 256
 
 export type RichMarkdownSourceOwningSliceStatus = {
   containsSourceOwningNode: boolean

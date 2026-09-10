@@ -1,9 +1,9 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
 import type {
   ProjectGroup,
   ProjectGroupImportResult,
   NestedRepoScanResult
-} from '@yiru/protocol/project/group-model'
+} from '@agentstart/protocol/project/group-model'
 import type {
   Project,
   ProjectHostSetup,
@@ -16,13 +16,13 @@ import type {
   ProjectHostSetupResult,
   ProjectHostSetupUpdateArgs,
   ProjectHostSetupUpdateResult
-} from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+} from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
 import type {
   FolderWorkspacePathStatus,
   FolderWorkspacePathStatusRequest
-} from '@yiru/protocol/workspace/folder-path'
+} from '@agentstart/protocol/workspace/folder-path'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'
@@ -46,14 +46,6 @@ import type {
   ProjectUpdate,
   RepoUpdate
 } from './update-model'
-export type {
-  RepoUpdate,
-  FolderWorkspacePathStatusCacheEntry,
-  DeleteProjectGroupWithContainedProjectsOptions,
-  ProjectRemovalFailure,
-  DeleteProjectGroupWithContainedProjectsResult
-} from './update-model'
-
 export type RepoSlice = {
   repos: Repo[]
   projects: Project[]

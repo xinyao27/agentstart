@@ -59,7 +59,7 @@ async fn harden_wsl_home(location: &ManagedLocation) -> Result<(), AccountsError
             "sh",
             "-c",
             "set -eu; chmod 700 -- \"$1\"; [ ! -f \"$1/auth.json\" ] || chmod 600 -- \"$1/auth.json\"; [ ! -f \"$1/config.toml\" ] || chmod 600 -- \"$1/config.toml\"",
-            "yiru-codex-permissions",
+            "agentstart-codex-permissions",
             linux_path,
         ])
         .stdin(Stdio::null())
@@ -184,13 +184,13 @@ pub(super) async fn ensure_wsl_cli_available(
 pub(super) fn wsl_login_script(command: &str) -> String {
     let command = shell_quote(command);
     format!(
-        "_yiru_wsl_shell=$(getent passwd \"$(id -un)\" 2>/dev/null | cut -d: -f7)\n\
-         if [ -z \"$_yiru_wsl_shell\" ] || [ ! -x \"$_yiru_wsl_shell\" ]; then _yiru_wsl_shell=\"${{SHELL:-/bin/bash}}\"; fi\n\
-         if [ -z \"$_yiru_wsl_shell\" ] || [ ! -x \"$_yiru_wsl_shell\" ]; then _yiru_wsl_shell=/bin/sh; fi\n\
-         _yiru_wsl_shell_name=$(basename \"$_yiru_wsl_shell\" | tr \"[:upper:]\" \"[:lower:]\")\n\
-         case \"$_yiru_wsl_shell_name\" in\n\
-         sh|dash) exec \"$_yiru_wsl_shell\" -lc {command} ;;\n\
-         bash|zsh|ksh|mksh|ash) exec \"$_yiru_wsl_shell\" -ilc {command} ;;\n\
+        "_agentstart_wsl_shell=$(getent passwd \"$(id -un)\" 2>/dev/null | cut -d: -f7)\n\
+         if [ -z \"$_agentstart_wsl_shell\" ] || [ ! -x \"$_agentstart_wsl_shell\" ]; then _agentstart_wsl_shell=\"${{SHELL:-/bin/bash}}\"; fi\n\
+         if [ -z \"$_agentstart_wsl_shell\" ] || [ ! -x \"$_agentstart_wsl_shell\" ]; then _agentstart_wsl_shell=/bin/sh; fi\n\
+         _agentstart_wsl_shell_name=$(basename \"$_agentstart_wsl_shell\" | tr \"[:upper:]\" \"[:lower:]\")\n\
+         case \"$_agentstart_wsl_shell_name\" in\n\
+         sh|dash) exec \"$_agentstart_wsl_shell\" -lc {command} ;;\n\
+         bash|zsh|ksh|mksh|ash) exec \"$_agentstart_wsl_shell\" -ilc {command} ;;\n\
          *) exec /bin/sh -lc {command} ;;\n\
          esac"
     )

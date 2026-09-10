@@ -1,4 +1,4 @@
-import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+import type { AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
 import { useRef, useState } from 'react'
 import type {
   AiVaultGroup,

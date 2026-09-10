@@ -13,8 +13,8 @@ const FILE_LOAD_RETRY_DELAYS_MS = [250, 1000, 2500]
 // SSH repo hydrates), so poll it at a steady cadence — but cap the wait so a
 // host that never connects ends in a truthful terminal message instead of
 // retrying forever. ~2 min covers any realistic connect; Retry re-arms it (#6648).
-export const OWNER_NOT_READY_RETRY_DELAY_MS = 750
-export const OWNER_NOT_READY_RETRY_LIMIT = 160
+const OWNER_NOT_READY_RETRY_DELAY_MS = 750
+const OWNER_NOT_READY_RETRY_LIMIT = 160
 
 function isOwnerNotReadyError(message: string): boolean {
   return message === WORKTREE_OWNER_NOT_READY_ERROR
@@ -34,7 +34,7 @@ type UseEditorPanelFileLoadRetryParams = {
   setFileContents: Dispatch<SetStateAction<Record<string, FileContent>>>
 }
 
-export function shouldRetryFileLoadError(message: string): boolean {
+function shouldRetryFileLoadError(message: string): boolean {
   // Terminal: the owner-not-ready budget is spent; only an explicit Retry should
   // restart it, never the automatic backoff.
   if (message === WORKTREE_OWNER_UNREACHABLE_ERROR) {

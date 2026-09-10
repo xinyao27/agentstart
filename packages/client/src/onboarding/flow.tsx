@@ -1,4 +1,4 @@
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
 import { useEffect, useRef, useState } from 'react'
 import { applyDocumentTheme } from '~renderer/editor/document-theme'
 import { translate } from '~renderer/i18n/i18n'
@@ -34,7 +34,7 @@ const stepCopy = {
     get subtitle() {
       return translate(
         'auto.components.onboarding.OnboardingFlow.322fc50a18',
-        "Yiru works with every CLI agent. Choose the one you'll reach for most. Switch any time."
+        "AgentStart works with every CLI agent. Choose the one you'll reach for most. Switch any time."
       )
     }
   },
@@ -62,7 +62,7 @@ const stepCopy = {
     get subtitle() {
       return translate(
         'auto.components.onboarding.OnboardingFlow.ff92d15436',
-        'Yiru will notify you when agents are done or need help.'
+        'AgentStart will notify you when agents are done or need help.'
       )
     }
   },
@@ -194,12 +194,12 @@ export default function OnboardingFlow({
           role="dialog"
           aria-label={translate(
             'auto.components.onboarding.OnboardingFlow.277ba45540',
-            'Yiru onboarding'
+            'AgentStart onboarding'
           )}
           aria-modal="true"
           data-onboarding-modal
           className={cn(
-            'relative flex h-[calc(100vh-2rem)] max-h-[960px] min-h-0 w-[calc(100vw-2rem)] flex-col overflow-hidden border border-border bg-card text-card-foreground transition-[max-width] duration-[760ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
+            'relative flex h-[calc(100vh-2rem)] max-h-[960px] min-h-0 w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-xl border border-border bg-card text-card-foreground transition-[max-width] duration-[760ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none',
             'max-w-[1100px]'
           )}
         >
@@ -254,7 +254,7 @@ export default function OnboardingFlow({
                 <div className="text-muted-foreground mb-2 text-xs font-medium tracking-[0.18em] uppercase">
                   {translate(
                     'auto.components.onboarding.OnboardingFlow.1b5e182e9f',
-                    'Welcome to Yiru'
+                    'Welcome to AgentStart'
                   )}
                 </div>
               )}

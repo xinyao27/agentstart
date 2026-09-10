@@ -14,7 +14,7 @@ use crate::mobile::{MobileAuthorization, authenticate};
 
 const INCOMING_CHANNEL_CAPACITY: usize = 16;
 const MAX_ESTABLISHMENT_MESSAGE_BYTES: usize = 8 * 1024;
-const PROTOBUF_RPC_CAPABILITY: &str = "yiru-protobuf-v2";
+const PROTOBUF_RPC_CAPABILITY: &str = "agentstart-protobuf-v2";
 
 pub(super) struct EstablishedConnection {
     pub(super) _admission: MobileConnectionLease,

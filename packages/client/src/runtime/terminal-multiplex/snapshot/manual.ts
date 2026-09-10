@@ -1,10 +1,10 @@
-import { decodeTerminalMultiplexAckRecord } from '@yiru/protocol/terminal-multiplex/flow-records'
+import { decodeTerminalMultiplexAckRecord } from '@agentstart/protocol/terminal-multiplex/flow-records'
 import {
   TerminalMultiplexOpcode,
   type TerminalMultiplexFrame,
   type TerminalMultiplexOpcode as TerminalMultiplexOpcodeValue
-} from '@yiru/protocol/terminal-multiplex/frame'
-import { encodeTerminalMultiplexJson } from '@yiru/protocol/terminal-multiplex/json'
+} from '@agentstart/protocol/terminal-multiplex/frame'
+import { encodeTerminalMultiplexJson } from '@agentstart/protocol/terminal-multiplex/json'
 
 import type { RemoteTerminalSnapshot } from './snapshot'
 

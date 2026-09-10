@@ -1,19 +1,11 @@
 import { isLegacyPiCompatibleTitle } from './pi-compatible'
-import {
-  AGY_AGENT_NAME_RE,
-  DROID_AGENT_NAME_RE,
-  HERMES_AGENT_NAME_RE,
-  titleHasAgentName,
-  titleHasAnyLegacyAgentName
-} from './tokens'
-
-export { AGY_AGENT_NAME_RE, DROID_AGENT_NAME_RE, HERMES_AGENT_NAME_RE, titleHasAgentName }
+import { titleHasAgentName, titleHasAnyLegacyAgentName } from './tokens'
 
 export type AgentStatus = 'working' | 'permission' | 'idle'
 
 export const CLAUDE_IDLE = '\u2733' // ✳
 const CLAUDE_COMMAND_RE = String.raw`(?:.*[\\/])?claude(?:\.(?:exe|cmd|bat|ps1))?`
-export const CLAUDE_MANAGEMENT_TITLE_RE = new RegExp(
+const CLAUDE_MANAGEMENT_TITLE_RE = new RegExp(
   String.raw`^\s*(?:"${CLAUDE_COMMAND_RE}"|'${CLAUDE_COMMAND_RE}'|${CLAUDE_COMMAND_RE})\s+agents\s*$`,
   'i'
 )
@@ -40,12 +32,7 @@ export const STRONG_WORKING_KEYWORDS_RE = new RegExp(
   'i'
 )
 
-export const STRONG_WORKING_KEYWORDS_RE_GLOBAL = new RegExp(STRONG_WORKING_KEYWORDS_RE.source, 'gi')
-
 export const CURSOR_NATIVE_TITLE_LOWER = 'cursor agent'
-
-// eslint-disable-next-line no-control-regex -- intentional unicode range
-export const BRAILLE_SPINNER_RE = /[\u2800-\u28ff]/g
 
 export function isGeminiTerminalTitle(title: string): boolean {
   // Why: Gemini OSC glyphs are stronger evidence than any cwd/session text.
@@ -87,15 +74,6 @@ export function containsLegacyAgentName(title: string): boolean {
   return titleHasAnyLegacyAgentName(title)
 }
 
-export function containsAgentName(title: string): boolean {
-  return (
-    containsLegacyAgentName(title) ||
-    AGY_AGENT_NAME_RE.test(title) ||
-    DROID_AGENT_NAME_RE.test(title) ||
-    HERMES_AGENT_NAME_RE.test(title)
-  )
-}
-
 export function containsAny(title: string, words: readonly string[]): boolean {
   const lower = title.toLowerCase()
   return words.some((word) => lower.includes(word))
@@ -105,13 +83,9 @@ export function isClaudeManagementTitle(title: string): boolean {
   return CLAUDE_MANAGEMENT_TITLE_RE.test(title)
 }
 
-export function isCursorNativeAgentTitle(title: string): boolean {
-  return title.trim().toLowerCase() === CURSOR_NATIVE_TITLE_LOWER
-}
-
 // Why: `cursor` is also an ordinary editor noun that other agents type into their own
 // task-summary titles, so a name token is not identity. Cursor's identifying titles are
-// a closed set (the native literal plus the labels Yiru synthesizes from Cursor hooks),
+// a closed set (the native literal plus the labels AgentStart synthesizes from Cursor hooks),
 // so match that vocabulary instead.
 export function isCursorAgentTitle(title: string | null | undefined): boolean {
   if (typeof title !== 'string') {

@@ -131,7 +131,7 @@ async function uploadBrowserFiles(tabId: number, input: Record<string, unknown>)
     throw new Error('browser_dom_root_missing')
   }
   const reference = /^@?(e\d+)$/.exec(element)?.[1] ?? null
-  const selector = reference ? `[data-yiru-browser-ref="${reference}"]` : element
+  const selector = reference ? `[data-agentstart-browser-ref="${reference}"]` : element
   const match = await sendBrowserCdp(tabId, 'DOM.querySelector', { nodeId, selector })
   const matchedNodeId = readNestedNumber(match, 'nodeId')
   if (matchedNodeId === 0) {

@@ -1,5 +1,5 @@
-import type { RemoveWorktreeResult } from '@yiru/protocol/worktree/create-result'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { RemoveWorktreeResult } from '@agentstart/protocol/worktree/create-result'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { Trash as Trash2 } from '~renderer/icons/hugeicons'
@@ -32,19 +32,19 @@ function getPreservedBranchDescription(
   if (!targetName) {
     return translate(
       'auto.store.slices.worktrees.78e08cd877',
-      'Git could not safely delete branch "{{value0}}", so Yiru kept it to avoid losing local commits.',
+      'Git could not safely delete branch "{{value0}}", so AgentStart kept it to avoid losing local commits.',
       { value0: branch }
     )
   }
   return isWorkspace
     ? translate(
         'auto.store.slices.worktrees.3b57982bf6',
-        'Git could not safely delete branch "{{value0}}" after deleting workspace "{{value1}}", so Yiru kept it to avoid losing local commits.',
+        'Git could not safely delete branch "{{value0}}" after deleting workspace "{{value1}}", so AgentStart kept it to avoid losing local commits.',
         { value0: branch, value1: targetName }
       )
     : translate(
         'auto.store.slices.worktrees.81f13f48d2',
-        'Git could not safely delete branch "{{value0}}" after deleting worktree "{{value1}}", so Yiru kept it to avoid losing local commits.',
+        'Git could not safely delete branch "{{value0}}" after deleting worktree "{{value1}}", so AgentStart kept it to avoid losing local commits.',
         { value0: branch, value1: targetName }
       )
 }

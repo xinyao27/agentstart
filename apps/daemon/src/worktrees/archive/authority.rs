@@ -125,6 +125,9 @@ impl WorktreeArchiveAuthority {
         let mut stash_oid = None;
         let operation = async {
             self.close_terminals(&worktree.id).await?;
+            self.terminals
+                .forget_worktree(&worktree.host_id, &worktree.id)
+                .await?;
             run_archive_hook(&filesystem, host.as_ref(), &worktree.path).await?;
             let project_runner = GitCommands::new(host.clone(), project.path.clone());
             let worktree_runner = GitCommands::new(host.clone(), worktree.path.clone());
@@ -136,7 +139,7 @@ impl WorktreeArchiveAuthority {
                         "push".to_owned(),
                         "--include-untracked".to_owned(),
                         "--message".to_owned(),
-                        format!("yiru-archive:{}", archive.id),
+                        format!("agentstart-archive:{}", archive.id),
                     ])
                     .await?;
                 stash_oid = Some(
@@ -153,8 +156,6 @@ impl WorktreeArchiveAuthority {
             project_runner
                 .checked(["worktree", "remove", "--force", &worktree.path])
                 .await?;
-            self.terminals
-                .forget_worktree_ports(&worktree.host_id, &worktree.id);
             if delete_branch && !worktree.branch.is_empty() && worktree.branch != "(detached)" {
                 project_runner
                     .checked(["branch", "-D", &worktree.branch])

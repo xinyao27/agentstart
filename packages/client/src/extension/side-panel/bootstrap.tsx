@@ -30,13 +30,13 @@ import { DaemonCommandBridge } from '../runtime/command-bridge'
 import { ConnectionStatus } from '../runtime/connection-status'
 import { WorkspaceEventBridge } from '../runtime/event-bridge'
 import { EXTENSION_QUERY_CACHE_KEY, extensionQueryCacheBuster } from '../runtime/query-cache'
-import { getExtensionRuntimeLabel, type ExtensionRuntimeBootstrap } from '../runtime/session'
+import { getExtensionRuntimeLabel } from '../runtime/session'
 import { RuntimeSnapshotSurface } from '../runtime/snapshot-surface'
 import { prefetchExtensionWorkspace } from '../runtime/workspace-prefetch'
 import { WorkspacePortClaimsBridge } from '../workspace-port-claims-bridge'
 import { SidePanelSurface } from './surface'
 
-export function mountExtensionSidePanel(bootstrap: ExtensionRuntimeBootstrap): void {
+export function mountExtensionSidePanel(runtimeQueryCacheBuster: string): void {
   recordRendererCrashBreadcrumb('extension_side_panel_bootstrap_started', {
     dev: import.meta.env.DEV
   })
@@ -78,7 +78,7 @@ export function mountExtensionSidePanel(bootstrap: ExtensionRuntimeBootstrap): v
             <PersistQueryClientProvider
               client={queryClient}
               persistOptions={{
-                buster: extensionQueryCacheBuster(bootstrap),
+                buster: extensionQueryCacheBuster(runtimeQueryCacheBuster),
                 maxAge: 24 * 60 * 60 * 1_000,
                 persister: createSyncStoragePersister({
                   key: EXTENSION_QUERY_CACHE_KEY,
@@ -107,10 +107,10 @@ function SidePanelBoundary(): React.JSX.Element {
     <RecoverableRenderErrorBoundary
       boundaryId="extension.side-panel.root"
       surface="app-root"
-      title={translate('extension.sidePanel.errorTitle', 'Yiru side panel hit an error.')}
+      title={translate('extension.sidePanel.errorTitle', 'AgentStart side panel hit an error.')}
       description={translate(
         'extension.sidePanel.errorDescription',
-        'Reconnect the Yiru daemon, then retry this panel.'
+        'Reconnect the AgentStart daemon, then retry this panel.'
       )}
     >
       <ConnectionStatus />

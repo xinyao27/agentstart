@@ -1,4 +1,4 @@
-import type { AddRepoExistingWorkspaceSource } from '@yiru/protocol/telemetry/events/foundations'
+import type { AddRepoExistingWorkspaceSource } from '@agentstart/protocol/telemetry/events/foundations'
 import { useRef } from 'react'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { projectCatalogRepoBuckets } from '~renderer/project-catalog/repo-buckets'

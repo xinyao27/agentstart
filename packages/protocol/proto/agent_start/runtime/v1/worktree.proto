@@ -1,0 +1,1009 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service WorktreeService {
+  rpc Archive(WorktreeServiceArchiveRequest) returns (WorktreeServiceArchiveResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc List(WorktreeServiceListRequest) returns (WorktreeServiceListResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Create(WorktreeServiceCreateRequest) returns (WorktreeServiceCreateResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListArchives(WorktreeServiceListArchivesRequest) returns (WorktreeServiceListArchivesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Restore(WorktreeServiceRestoreRequest) returns (WorktreeServiceRestoreResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Ps(WorktreeServicePsRequest) returns (WorktreeServicePsResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Show(WorktreeServiceShowRequest) returns (WorktreeServiceShowResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Sleep(WorktreeServiceSleepRequest) returns (WorktreeServiceSleepResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Activate(WorktreeServiceActivateRequest) returns (WorktreeServiceActivateResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Remove(WorktreeServiceRemoveRequest) returns (WorktreeServiceRemoveResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ForceDeleteBranch(WorktreeServiceForceDeleteBranchRequest)
+      returns (WorktreeServiceForceDeleteBranchResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Set(WorktreeServiceSetRequest) returns (WorktreeServiceSetResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PersistSortOrder(WorktreeServicePersistSortOrderRequest)
+      returns (WorktreeServicePersistSortOrderResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc DetectedList(WorktreeServiceDetectedListRequest) returns (WorktreeServiceDetectedListResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc LineageList(WorktreeServiceLineageListRequest) returns (WorktreeServiceLineageListResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc PrefetchCreateBase(WorktreeServicePrefetchCreateBaseRequest)
+      returns (WorktreeServicePrefetchCreateBaseResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ResolvePrBase(WorktreeServiceResolvePrBaseRequest) returns (WorktreeServiceResolvePrBaseResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc BranchRenameFailureOutput(WorktreeServiceBranchRenameFailureOutputRequest)
+      returns (WorktreeServiceBranchRenameFailureOutputResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  // Why: base-drift banners must reflect every repo
+  // on the host, so the subscription is host-scoped rather than per-worktree.
+  rpc SubscribeStateEvents(WorktreeServiceSubscribeStateEventsRequest)
+      returns (stream WorktreeServiceSubscribeStateEventsResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_RESTART_FROM_REQUEST
+    };
+  }
+}
+
+message WorktreeServiceArchiveRequest {
+  string worktree = 1;
+  int64 expected_revision = 2;
+  bool delete_branch = 3;
+}
+
+message WorktreeServiceArchiveResponse {
+  WorktreeArchive archive = 1;
+  int64 revision = 2;
+}
+
+message WorktreeServiceListRequest {
+  optional string repo = 1;
+  optional double limit = 2;
+}
+
+message WorktreeServiceListResponse {
+  repeated WorktreeRecord worktrees = 1;
+  uint32 total_count = 2;
+  bool truncated = 3;
+  optional int64 revision = 4;
+}
+
+message WorktreeServiceCreateRequest {
+  string repo = 1;
+  int64 expected_revision = 2;
+  optional string operation_id = 3;
+  optional string name = 4;
+  optional string base_branch = 5;
+  optional string compare_base_ref = 6;
+  optional string branch_name_override = 7;
+  optional WorktreeNullableInt64 linked_pr = 8;
+  optional string comment = 9;
+  optional string display_name = 10;
+  optional string telemetry_source = 11;
+  optional string workspace_status = 12;
+  optional double manual_order = 13;
+  optional WorktreeSparseCheckout sparse_checkout = 14;
+  optional WorktreePushTarget push_target = 15;
+  optional bool run_hooks = 16;
+  optional bool activate = 17;
+  optional string parent_workspace = 18;
+  optional string env_parent_workspace = 19;
+  optional string parent_worktree = 20;
+  optional string cwd_parent_worktree = 21;
+  optional bool no_parent = 22;
+  optional string caller_terminal_handle = 23;
+  optional WorktreeOrchestrationContext orchestration_context = 24;
+  optional string setup_decision = 25;
+  optional string startup_command = 26;
+  map<string, string> startup_env = 27;
+  optional WorktreeAgentLaunchConfig startup_launch_config = 28;
+  optional string startup_command_delivery = 29;
+  optional string startup_agent = 30;
+  optional string startup_prompt = 31;
+  optional string startup_draft = 32;
+  optional string created_with_agent = 33;
+  optional bool pending_first_agent_message_rename = 34;
+}
+
+message WorktreeServiceCreateResponse {
+  optional int64 revision = 1;
+  WorktreeRecord worktree = 2;
+  optional WorktreeLineage lineage = 3;
+  optional WorktreeWorkspaceLineage workspace_lineage = 4;
+  repeated WorktreeCreateWarning warnings = 5;
+  optional WorktreeSetupLaunch setup = 6;
+  optional WorktreeSetupReceipt setup_receipt = 7;
+  optional WorktreeDefaultTabs default_tabs = 8;
+  optional string warning = 9;
+  optional WorktreeBaseStatus initial_base_status = 10;
+  optional WorktreeLocalBaseRefresh local_base_ref_refresh = 11;
+  optional WorktreeLocalBaseSuggestion local_base_ref_update_suggestion = 12;
+  optional WorktreeStartupTerminal startup_terminal = 13;
+  optional WorktreeCreateTiming timing = 14;
+  optional string agent_terminal_handle = 15;
+}
+
+message WorktreeServiceListArchivesRequest {
+  optional string repo = 1;
+}
+
+message WorktreeServiceListArchivesResponse {
+  repeated WorktreeArchive archives = 1;
+}
+
+message WorktreeServiceRestoreRequest {
+  string archive = 1;
+  int64 expected_revision = 2;
+}
+
+message WorktreeServiceRestoreResponse {
+  WorktreeArchive archive = 1;
+  int64 revision = 2;
+}
+
+message WorktreeRevisionConflict {
+  int64 expected_revision = 1;
+  int64 actual_revision = 2;
+  string scope = 3;
+}
+
+message WorktreeNullableInt64 {
+  oneof value {
+    int64 number = 1;
+    bool null = 2;
+  }
+}
+
+message WorktreeNullableString {
+  oneof value {
+    string text = 1;
+    bool null = 2;
+  }
+}
+
+message WorktreeSparseCheckout {
+  repeated string directories = 1;
+  optional string preset_id = 2;
+}
+
+message WorktreePushTarget {
+  string remote_name = 1;
+  string branch_name = 2;
+  optional string remote_url = 3;
+  optional bool remote_created = 4;
+}
+
+message WorktreeOrchestrationContext {
+  optional string parent_worktree_id = 1;
+  optional string orchestration_run_id = 2;
+  optional string task_id = 3;
+  optional string coordinator_handle = 4;
+}
+
+message WorktreeAgentLaunchConfig {
+  optional string agent_command = 1;
+  string agent_args = 2;
+  map<string, string> agent_env = 3;
+  optional string omp_resume_file_path = 4;
+}
+
+message WorktreeGitInfo {
+  string path = 1;
+  string head = 2;
+  string branch = 3;
+  bool is_bare = 4;
+  optional bool is_sparse = 5;
+  optional bool locked = 6;
+  optional string lock_reason = 7;
+  optional bool prunable = 8;
+  optional string prunable_reason = 9;
+  bool is_main_worktree = 10;
+}
+
+message WorktreeRecord {
+  string id = 1;
+  optional string instance_id = 2;
+  string repo_id = 3;
+  optional string project_id = 4;
+  optional string host_id = 5;
+  optional string project_host_setup_id = 6;
+  string path = 7;
+  string head = 8;
+  string branch = 9;
+  bool is_bare = 10;
+  optional bool is_sparse = 11;
+  optional bool locked = 12;
+  optional string lock_reason = 13;
+  optional bool prunable = 14;
+  optional string prunable_reason = 15;
+  bool is_main_worktree = 16;
+  string display_name = 17;
+  string comment = 18;
+  optional WorktreeNullableInt64 linked_pr = 19;
+  bool is_archived = 20;
+  bool is_unread = 21;
+  bool is_pinned = 22;
+  double sort_order = 23;
+  optional double manual_order = 24;
+  double last_activity_at = 25;
+  optional double created_at = 26;
+  optional string created_with_agent = 27;
+  optional bool pending_first_agent_message_rename = 28;
+  optional WorktreeNullableString first_agent_message_rename_error = 29;
+  repeated string sparse_directories = 30;
+  optional string sparse_base_ref = 31;
+  optional string sparse_preset_id = 32;
+  optional string base_ref = 33;
+  optional WorktreePushTarget push_target = 34;
+  repeated string prior_worktree_ids = 35;
+  optional string workspace_status = 36;
+  repeated WorktreeDiffComment diff_comments = 37;
+  optional WorktreeMobileDiffReview mobile_diff_review = 38;
+  optional WorktreeNullableString parent_worktree_id = 39;
+  repeated string child_worktree_ids = 40;
+  optional WorktreeLineage lineage = 41;
+  optional WorktreeWorkspaceLineage workspace_lineage = 42;
+  WorktreeGitInfo git = 43;
+}
+
+message WorktreeLineageCapture {
+  string source = 1;
+  string confidence = 2;
+}
+
+message WorktreeLineage {
+  string worktree_id = 1;
+  string worktree_instance_id = 2;
+  string parent_worktree_id = 3;
+  string parent_worktree_instance_id = 4;
+  string origin = 5;
+  WorktreeLineageCapture capture = 6;
+  optional string orchestration_run_id = 7;
+  optional string task_id = 8;
+  optional string coordinator_handle = 9;
+  optional string created_by_terminal_handle = 10;
+  double created_at = 11;
+}
+
+message WorktreeWorkspaceLineage {
+  string child_workspace_key = 1;
+  optional WorktreeNullableString child_instance_id = 2;
+  string parent_workspace_key = 3;
+  optional WorktreeNullableString parent_instance_id = 4;
+  string origin = 5;
+  WorktreeLineageCapture capture = 6;
+  optional string task_id = 7;
+  optional string orchestration_run_id = 8;
+  optional string coordinator_handle = 9;
+  optional string created_by_terminal_handle = 10;
+  double created_at = 11;
+}
+
+message WorktreeDiffComment {
+  string id = 1;
+  string worktree_id = 2;
+  string file_path = 3;
+  optional string source = 4;
+  optional string selected_text = 5;
+  optional double start_line = 6;
+  optional double line_number = 7;
+  string body = 8;
+  double created_at = 9;
+  optional double updated_at = 10;
+  optional double sent_at = 11;
+  optional string scope = 12;
+  optional string old_path = 13;
+  optional string diff_identity = 14;
+  string side = 15;
+}
+
+message WorktreeMobileDiffReview {
+  double version = 1;
+  optional double updated_at = 2;
+  optional double completed_at = 3;
+  map<string, WorktreeMobileDiffReviewFile> files = 4;
+}
+
+message WorktreeMobileDiffReviewFile {
+  string key = 1;
+  string file_path = 2;
+  optional string old_path = 3;
+  string scope = 4;
+  optional double last_opened_at = 5;
+  optional string last_seen_diff_identity = 6;
+  optional double reviewed_at = 7;
+  optional string review_diff_identity = 8;
+}
+
+message WorktreeCreateWarning {
+  string code = 1;
+  string message = 2;
+  map<string, string> details = 3;
+}
+
+message WorktreeSetupLaunch {
+  string runner_script_path = 1;
+  map<string, string> env_vars = 2;
+  optional string command = 3;
+  optional bool wait_for_agent_startup = 4;
+}
+
+message WorktreeSetupReceipt {
+  string requested = 1;
+  bool hook_found = 2;
+  string startup_policy = 3;
+  string state = 4;
+  optional string terminal_handle = 5;
+}
+
+message WorktreeDefaultTabs {
+  repeated WorktreeDefaultTab tabs = 1;
+  bool run_commands = 2;
+}
+
+message WorktreeDefaultTab {
+  optional string title = 1;
+  optional string color = 2;
+  optional string command = 3;
+}
+
+message WorktreeBaseStatus {
+  string repo_id = 1;
+  string worktree_id = 2;
+  string status = 3;
+  string base = 4;
+  optional string remote = 5;
+  optional double behind = 6;
+  repeated string recent_subjects = 7;
+}
+
+message WorktreeLocalBaseRefresh {
+  string status = 1;
+  string base_ref = 2;
+  string local_branch = 3;
+  optional string owner_worktree_path = 4;
+}
+
+message WorktreeLocalBaseSuggestion {
+  string base_ref = 1;
+  string local_branch = 2;
+  double behind = 3;
+}
+
+message WorktreeStartupTerminal {
+  bool spawned = 1;
+  optional string handle = 2;
+  optional string tab_id = 3;
+  optional WorktreeNullableString pane_key = 4;
+  optional WorktreeNullableString pty_id = 5;
+  optional string surface = 6;
+}
+
+message WorktreeCreateTiming {
+  double total_duration_ms = 1;
+  repeated WorktreeCreateTimingPhase phases = 2;
+}
+
+message WorktreeCreateTimingPhase {
+  string phase = 1;
+  double started_at_ms = 2;
+  double duration_ms = 3;
+}
+
+message WorktreeArchive {
+  string branch = 1;
+  int64 created_at = 2;
+  optional WorktreeNullableString failure_detail = 3;
+  string head = 4;
+  string id = 5;
+  string original_worktree_id = 6;
+  string path = 7;
+  string repo_id = 8;
+  optional int64 restored_at = 9;
+  optional string stash_oid = 10;
+  string status = 11;
+}
+
+message WorktreeServicePsRequest {
+  optional double limit = 1;
+}
+
+message WorktreeServicePsResponse {
+  repeated WorktreePsSummary worktrees = 1;
+  uint32 total_count = 2;
+  bool truncated = 3;
+}
+
+message WorktreeLinkedPullRequest {
+  uint64 number = 1;
+  string state = 2;
+}
+
+message WorktreeAgentRow {
+  string pane_key = 1;
+  optional string parent_pane_key = 2;
+  string state = 3;
+  optional string agent_type = 4;
+  string prompt = 5;
+  optional string task_title = 6;
+  optional string display_name = 7;
+  optional string last_assistant_message = 8;
+  optional string tool_name = 9;
+  optional string tool_input = 10;
+  bool interrupted = 11;
+  int64 state_started_at = 12;
+  int64 updated_at = 13;
+}
+
+message WorktreePsSummary {
+  string workspace_kind = 1;
+  string worktree_id = 2;
+  string repo_id = 3;
+  string host_id = 4;
+  string resume_target_status = 5;
+  string terminal_platform = 6;
+  repeated string prior_worktree_ids = 7;
+  string repo = 8;
+  string path = 9;
+  string branch = 10;
+  string display_name = 11;
+  string workspace_status = 12;
+  bool is_archived = 13;
+  bool is_main_worktree = 14;
+  bool has_host_sidebar_activity = 15;
+  optional string worktree_instance_id = 16;
+  optional string parent_worktree_id = 17;
+  repeated string child_worktree_ids = 18;
+  double sort_order = 19;
+  optional double manual_order = 20;
+  optional int64 last_activity_at = 21;
+  optional int64 created_at = 22;
+  optional WorktreeLinkedPullRequest linked_pr = 23;
+  string comment = 24;
+  bool is_pinned = 25;
+  bool is_active = 26;
+  bool unread = 27;
+  uint32 live_terminal_count = 28;
+  bool has_attached_pty = 29;
+  optional int64 last_output_at = 30;
+  string preview = 31;
+  string status = 32;
+  repeated WorktreeAgentRow agents = 33;
+  optional string lineage_worktree_instance_id = 34;
+  optional string parent_worktree_instance_id = 35;
+}
+
+message WorktreeServiceShowRequest {
+  string worktree = 1;
+}
+
+message WorktreeServiceShowResponse {
+  WorktreeRecord worktree = 1;
+  optional int64 revision = 2;
+}
+
+message WorktreeServiceSleepRequest {
+  string worktree = 1;
+}
+
+message WorktreeServiceSleepResponse {
+  string worktree_id = 1;
+}
+
+enum WorktreeSleepingAgentWake {
+  WORKTREE_SLEEPING_AGENT_WAKE_UNSPECIFIED = 0;
+  WORKTREE_SLEEPING_AGENT_WAKE_REQUESTED = 1;
+  WORKTREE_SLEEPING_AGENT_WAKE_UNSUPPORTED_HEADLESS = 2;
+  WORKTREE_SLEEPING_AGENT_WAKE_NOT_APPLICABLE = 3;
+}
+
+message WorktreeServiceActivateRequest {
+  string worktree = 1;
+  bool notify_clients = 2;
+}
+
+message WorktreeServiceActivateResponse {
+  string repo_id = 1;
+  string worktree_id = 2;
+  bool activated = 3;
+  WorktreeSleepingAgentWake sleeping_agent_wake = 4;
+}
+
+message WorktreePreservedBranch {
+  string branch_name = 1;
+  string head = 2;
+}
+
+message WorktreeServiceRemoveRequest {
+  string worktree = 1;
+  int64 expected_revision = 2;
+  bool force = 3;
+  bool run_hooks = 4;
+}
+
+message WorktreeServiceRemoveResponse {
+  bool removed = 1;
+  optional WorktreePreservedBranch preserved_branch = 2;
+  optional int64 revision = 3;
+}
+
+message WorktreeServiceForceDeleteBranchRequest {
+  string worktree = 1;
+  string branch_name = 2;
+  string expected_head = 3;
+}
+
+message WorktreeServiceForceDeleteBranchResponse {
+  bool deleted = 1;
+}
+
+message WorktreeNullablePushTarget {
+  oneof value {
+    WorktreePushTarget target = 1;
+    bool null = 2;
+  }
+}
+
+message WorktreeStringList {
+  repeated string values = 1;
+}
+
+message WorktreeDiffCommentList {
+  repeated WorktreeDiffComment values = 1;
+}
+
+// Why: presence of each field, not its value, decides whether `set` touches
+// that piece of worktree metadata — mirroring the legacy JSON patch, where an
+// absent key leaves the field untouched instead of clearing it. The two
+// repeated fields are wrapped in a message so "untouched" (field absent) stays
+// distinguishable from "cleared to empty" (field present with zero values),
+// which a bare `repeated` field cannot express.
+message WorktreeSetPatch {
+  optional string display_name = 1;
+  optional string sparse_base_ref = 2;
+  optional string sparse_preset_id = 3;
+  optional string base_ref = 4;
+  optional string workspace_status = 5;
+  optional string comment = 6;
+  optional bool is_archived = 7;
+  optional bool is_unread = 8;
+  optional bool is_pinned = 9;
+  optional bool pending_first_agent_message_rename = 10;
+  optional double sort_order = 11;
+  optional double manual_order = 12;
+  optional double last_activity_at = 13;
+  optional double created_at = 14;
+  optional WorktreeNullableInt64 linked_pr = 15;
+  optional WorktreeStringList sparse_directories = 16;
+  optional WorktreeNullablePushTarget push_target = 17;
+  optional WorktreeDiffCommentList diff_comments = 18;
+  optional WorktreeMobileDiffReview mobile_diff_review = 19;
+}
+
+message WorktreeServiceSetRequest {
+  string worktree = 1;
+  int64 expected_revision = 2;
+  WorktreeSetPatch patch = 3;
+}
+
+message WorktreeServiceSetResponse {
+  WorktreeRecord worktree = 1;
+  int64 revision = 2;
+}
+
+message WorktreeServicePersistSortOrderRequest {
+  repeated string ordered_ids = 1;
+}
+
+message WorktreeServicePersistSortOrderResponse {
+  uint32 updated = 1;
+}
+
+enum WorktreeOwnership {
+  WORKTREE_OWNERSHIP_UNSPECIFIED = 0;
+  WORKTREE_OWNERSHIP_AGENT_START_MANAGED = 1;
+  WORKTREE_OWNERSHIP_EXTERNAL = 2;
+  WORKTREE_OWNERSHIP_UNKNOWN_LEGACY = 3;
+}
+
+message WorktreeDetectedRecord {
+  WorktreeRecord record = 1;
+  WorktreeOwnership ownership = 2;
+  bool selected_checkout = 3;
+  bool visible = 4;
+}
+
+enum WorktreeDetectedSource {
+  WORKTREE_DETECTED_SOURCE_UNSPECIFIED = 0;
+  WORKTREE_DETECTED_SOURCE_GIT = 1;
+  WORKTREE_DETECTED_SOURCE_METADATA_FALLBACK = 2;
+  WORKTREE_DETECTED_SOURCE_SESSION_FALLBACK = 3;
+}
+
+message WorktreeServiceDetectedListRequest {
+  string repo = 1;
+}
+
+message WorktreeServiceDetectedListResponse {
+  string repo_id = 1;
+  optional int64 revision = 2;
+  bool authoritative = 3;
+  WorktreeDetectedSource source = 4;
+  repeated WorktreeDetectedRecord worktrees = 5;
+}
+
+message WorktreeServiceLineageListRequest {}
+
+message WorktreeServiceLineageListResponse {
+  map<string, WorktreeLineage> lineage = 1;
+  map<string, WorktreeWorkspaceLineage> workspace_lineage = 2;
+}
+
+message WorktreeServicePrefetchCreateBaseRequest {
+  string repo = 1;
+  optional string base_branch = 2;
+}
+
+message WorktreeServicePrefetchCreateBaseResponse {}
+
+message WorktreeServiceResolvePrBaseRequest {
+  string repo = 1;
+  int64 pr_number = 2;
+  optional string head_ref_name = 3;
+  optional string base_ref_name = 4;
+  bool is_cross_repository = 5;
+}
+
+message WorktreePrBaseSuccess {
+  string base_branch = 1;
+  string head_sha = 2;
+  optional string branch_name_override = 3;
+  optional string compare_base_ref = 4;
+  optional WorktreePushTarget push_target = 5;
+}
+
+message WorktreeServiceResolvePrBaseResponse {
+  oneof result {
+    WorktreePrBaseSuccess success = 1;
+    string error = 2;
+  }
+}
+
+message WorktreeServiceBranchRenameFailureOutputRequest {
+  string worktree = 1;
+}
+
+message WorktreeServiceBranchRenameFailureOutputResponse {
+  optional string output = 1;
+}
+
+message WorktreeServiceSubscribeStateEventsRequest {}
+
+message WorktreeStateEventsReady {
+  string subscription_id = 1;
+}
+
+enum WorktreeBaseStatusKind {
+  WORKTREE_BASE_STATUS_KIND_UNSPECIFIED = 0;
+  WORKTREE_BASE_STATUS_KIND_CHECKING = 1;
+  WORKTREE_BASE_STATUS_KIND_CURRENT = 2;
+  WORKTREE_BASE_STATUS_KIND_DRIFT = 3;
+  WORKTREE_BASE_STATUS_KIND_BASE_CHANGED = 4;
+  WORKTREE_BASE_STATUS_KIND_UNKNOWN = 5;
+}
+
+message WorktreeBaseStatusEvent {
+  string repo_id = 1;
+  string worktree_id = 2;
+  WorktreeBaseStatusKind status = 3;
+  string base = 4;
+  optional uint64 behind = 5;
+}
+
+message WorktreeServiceSubscribeStateEventsResponse {
+  oneof event {
+    WorktreeStateEventsReady ready = 1;
+    WorktreeBaseStatusEvent base_status = 2;
+  }
+}

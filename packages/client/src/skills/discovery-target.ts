@@ -1,5 +1,5 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { ProjectExecutionRuntimeResolution } from '@agentstart/protocol/project/runtime-preference'
 
 export type SkillDiscoveryTarget = {
   runtime?: 'host' | 'wsl'

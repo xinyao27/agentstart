@@ -1,4 +1,4 @@
-import type { AgentStatusEntry, AgentType } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusEntry, AgentType } from '@agentstart/protocol/agent/status-records'
 
 export type TerminalTabAgentTypeState = Record<string, AgentStatusEntry>
 export type TerminalTabAgentTypesByLeaf = Readonly<Record<string, AgentType>>
@@ -23,7 +23,7 @@ function reuseRecordIfEqual(
   return nextKeys.every((key) => previous[key] === next[key]) ? previous : next
 }
 
-export function createTerminalTabAgentTypeSelector(
+function createTerminalTabAgentTypeSelector(
   dependencies: SelectorDependencies = {}
 ): (state: TerminalTabAgentTypeState, tabId: string) => TerminalTabAgentTypesByLeaf {
   let cachedState: TerminalTabAgentTypeState | null = null

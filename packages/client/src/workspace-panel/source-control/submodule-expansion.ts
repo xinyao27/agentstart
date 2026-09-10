@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import { basename } from '~renderer/path'
 
 import type { SourceControlSectionArea } from './section-order'
@@ -14,7 +14,7 @@ export type SubmoduleSectionTreeNode = SourceControlTreeNode<
  * inner status is fetched on demand. Kept separate from real tree nodes so it
  * is never treated as a file entry.
  */
-export type SubmodulePlaceholderNode = {
+type SubmodulePlaceholderNode = {
   type: 'submodule-placeholder'
   key: string
   submodulePath: string
@@ -89,7 +89,7 @@ export function buildSubmoduleChildEntry(
 /**
  * Build the child file rows for an expanded submodule (tree view).
  */
-export function buildSubmoduleChildNodes(
+function buildSubmoduleChildNodes(
   parent: SubmoduleSectionTreeNode & { type: 'file' },
   innerEntries: GitStatusEntry[]
 ): (SubmoduleSectionTreeNode & { type: 'file' })[] {

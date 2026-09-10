@@ -15,13 +15,12 @@ pub(super) enum Method {
     NotificationsServiceReport,
     NotificationsServiceGetMissedSince,
     NotificationsServiceLoadCustomSound,
-    NotificationsServiceRegisterPush,
     NotificationsServiceSubscribe,
     StarNagShellServiceDismiss,
     StarNagShellServiceLater,
     StarNagShellServiceComplete,
     StarNagShellServiceOpenWeb,
-    StarNagShellServiceStarYiru,
+    StarNagShellServiceStarAgentStart,
     StarNagShellServiceAgentValueMoment,
     StarNagShellServiceShowAgentValueMoment,
     StarNagShellServiceOnboardingCompleted,
@@ -109,13 +108,6 @@ impl ProtocolRouter {
                     Err(error) => ProtocolHandlerOutcome::Failed(error),
                 };
             }
-            Method::NotificationsServiceRegisterPush => notification_protocol::register_push(
-                &self.notifications.devices(),
-                request.payload,
-                context.access(),
-            )
-            .await
-            .map(ProtocolHandlerResponse::plain),
             Method::NotificationsServiceSubscribe => {
                 return match notification_protocol::subscribe(
                     &self.notifications.authority(),
@@ -148,8 +140,8 @@ impl ProtocolRouter {
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }
-            Method::StarNagShellServiceStarYiru => {
-                star_nag_protocol::star_yiru(&self.star_nag, request.payload)
+            Method::StarNagShellServiceStarAgentStart => {
+                star_nag_protocol::star_agentstart(&self.star_nag, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }

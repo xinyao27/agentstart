@@ -62,7 +62,7 @@ export function EmulatorScreenSurface({
 }: EmulatorScreenSurfaceProps) {
   return (
     <div
-      data-yiru-emulator-screen="true"
+      data-agentstart-emulator-screen="true"
       className={cn(
         'outline-none',
         frameLayout

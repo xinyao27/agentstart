@@ -1,4 +1,4 @@
-import { ARTIFACT_PROTOCOL_CAPABILITY, ArtifactClient } from '@yiru/protocol'
+import { ARTIFACT_PROTOCOL_CAPABILITY, ArtifactClient } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import {
@@ -6,7 +6,7 @@ import {
   readConfiguredBrowserHostStatus
 } from './browser-host-runtime'
 
-export async function openArtifactTarget(): Promise<ArtifactClient | null> {
+async function openArtifactTarget(): Promise<ArtifactClient | null> {
   const status = await readConfiguredBrowserHostStatus()
   if (!status.capabilities?.includes(ARTIFACT_PROTOCOL_CAPABILITY)) {
     return null
@@ -22,7 +22,7 @@ export async function requireArtifactClient(): Promise<ArtifactClient> {
     throw new Error(
       translate(
         'runtime.artifactTarget.unavailable',
-        'Artifacts need a current Yiru daemon connection.'
+        'Artifacts need a current AgentStart daemon connection.'
       )
     )
   }

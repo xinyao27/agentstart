@@ -1,7 +1,5 @@
 import type { DropIndicator } from '~renderer/tab-bar/drop-indicator'
 
-import type { WorkspacePanelTitlebarDropTarget } from './titlebar-strip-items'
-
 // Why: titlebar chrome is denser than tabs; a 1px seam reads as an insertion
 // cue without covering neighboring icon buttons.
 export function getDropIndicatorClasses(dropIndicator: DropIndicator): string {
@@ -10,22 +8,6 @@ export function getDropIndicatorClasses(dropIndicator: DropIndicator): string {
   }
   if (dropIndicator === 'right') {
     return "after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-blue-500 after:z-10 after:content-['']"
-  }
-  return ''
-}
-
-export function getTitlebarMoreDropIndicatorClasses({
-  dropTarget,
-  visibleCount
-}: {
-  dropTarget: WorkspacePanelTitlebarDropTarget
-  visibleCount: number
-}): string {
-  if (dropTarget === 'more') {
-    return 'bg-accent'
-  }
-  if (dropTarget === visibleCount) {
-    return getDropIndicatorClasses('left')
   }
   return ''
 }

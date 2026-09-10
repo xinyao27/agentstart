@@ -3,10 +3,10 @@ import {
   normalizeExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
-import type { FolderWorkspacePathStatusRequest } from '@yiru/protocol/workspace/folder-path'
+} from '@agentstart/protocol/host/identity'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
+import type { FolderWorkspacePathStatusRequest } from '@agentstart/protocol/workspace/folder-path'
 
 export function getProjectGroupExecutionHostIdForRows(
   group: Pick<ProjectGroup, 'connectionId' | 'executionHostId'>,
@@ -41,9 +41,7 @@ export function getFolderWorkspaceExecutionHostIdForRows({
   return folderWorkspace.connectionId ? LOCAL_EXECUTION_HOST_ID : defaultHostId
 }
 
-export function getRuntimeEnvironmentIdForFolderPathStatusHost(
-  hostId: ExecutionHostId
-): string | null {
+function getRuntimeEnvironmentIdForFolderPathStatusHost(hostId: ExecutionHostId): string | null {
   const parsed = parseExecutionHostId(hostId)
   return parsed?.kind === 'runtime' ? parsed.environmentId : null
 }

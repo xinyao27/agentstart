@@ -1,4 +1,4 @@
-import type { RuntimeCapability } from '@yiru/protocol/runtime-versions'
+import type { RuntimeCapability } from '@agentstart/protocol/runtime-versions'
 
 export type RuntimeHostPlatformName =
   | 'aix'

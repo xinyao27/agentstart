@@ -1,5 +1,5 @@
-import { AI_VAULT_PROTOCOL_CAPABILITY, AiVaultClient } from '@yiru/protocol'
-import type { AiVaultSessionRecord } from '@yiru/protocol'
+import { AI_VAULT_PROTOCOL_CAPABILITY, AiVaultClient } from '@agentstart/protocol'
+import type { AiVaultSessionRecord } from '@agentstart/protocol'
 import { limitAiVaultScopePaths } from '~renderer/workspace-panel/ai-vault/scope-paths'
 import type {
   AiVaultListResult,

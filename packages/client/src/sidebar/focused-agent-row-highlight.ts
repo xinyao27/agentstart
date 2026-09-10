@@ -1,8 +1,8 @@
-import { isTerminalLeafId, makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { isTerminalLeafId, makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import { useAppStore } from '~renderer/store/state'
 import type { AppState } from '~renderer/store/types'
 
-export type FocusedAgentRowHighlightState = Pick<
+type FocusedAgentRowHighlightState = Pick<
   AppState,
   | 'activeWorktreeId'
   | 'activeTabType'
@@ -14,7 +14,7 @@ export type FocusedAgentRowHighlightState = Pick<
   | 'migrationUnsupportedByPtyId'
 >
 
-export function getFocusedAgentPaneKeyForWorktree(
+function getFocusedAgentPaneKeyForWorktree(
   state: FocusedAgentRowHighlightState,
   worktreeId: string
 ): string | null {

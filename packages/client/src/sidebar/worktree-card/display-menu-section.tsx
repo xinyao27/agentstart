@@ -1,4 +1,4 @@
-import type { WorktreeCardProperty } from '@yiru/protocol/settings/ui-state'
+import type { WorktreeCardProperty } from '@agentstart/protocol/settings/ui-state'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'

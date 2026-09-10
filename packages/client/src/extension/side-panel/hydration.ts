@@ -1,5 +1,5 @@
-import { toRuntimeExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
+import { toRuntimeExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 
 import { fetchWorkspaceSessionWithRuntimeHostOwners } from '../../editor/workspace-session-host-persistence'
@@ -13,7 +13,7 @@ export async function hydrateSidePanelNavigation(
   runtimeEnvironments: readonly PublicKnownRuntimeEnvironment[]
 ): Promise<void> {
   const initial = useAppStore.getState()
-  void initial.fetchYiruProfiles()
+  void initial.fetchAgentStartProfiles()
   const keybindings = initial.fetchKeybindings()
   const runtimeHostIds: ExecutionHostId[] = runtimeEnvironments.map((environment) =>
     toRuntimeExecutionHostId(environment.id)

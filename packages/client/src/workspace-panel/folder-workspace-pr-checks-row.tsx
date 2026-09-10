@@ -1,4 +1,7 @@
-import type { PRCheckDetail, PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
+import type {
+  PRCheckDetail,
+  PRCheckRunDetails
+} from '@agentstart/protocol/hosted-review/review-types'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -56,14 +59,14 @@ export function FolderWorkspacePrChecksRow({
   return (
     <div
       className={cn(
-        'group border border-transparent',
+        'group rounded-md border border-transparent',
         expanded ? 'border-border bg-card' : 'hover:bg-accent'
       )}
     >
       <div
         role="button"
         tabIndex={0}
-        className="flex w-full min-w-0 items-start gap-2 px-2 py-2 text-left focus-visible:outline-none"
+        className="flex w-full min-w-0 items-start gap-2 rounded-md px-2 py-2 text-left focus-visible:outline-none"
         onClick={onToggle}
         onKeyDown={(event) => {
           if (event.key !== 'Enter' && event.key !== ' ') {
@@ -146,14 +149,14 @@ function PrChecksRowHeader({ row }: { row: ParentPrChecksRow }): React.JSX.Eleme
         {row.worktree.displayName}
       </span>
       {row.reviewLabel ? (
-        <span className="border-border text-muted-foreground inline-flex shrink-0 items-center border px-1.5 py-0.5 text-[10px] font-medium">
+        <span className="border-border text-muted-foreground inline-flex shrink-0 items-center rounded border px-1.5 py-0.5 text-[10px] font-medium">
           {row.reviewLabel}
         </span>
       ) : null}
       {row.reviewState ? (
         <span
           className={cn(
-            'shrink-0 border px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide',
+            'shrink-0 rounded border px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide',
             prStateColor(row.reviewState)
           )}
         >

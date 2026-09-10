@@ -1,4 +1,4 @@
-import type { WorkspacePort } from '@yiru/protocol'
+import type { WorkspacePort } from '@agentstart/protocol'
 
 export function getLocalWorkspacePortSections(
   scan: { ports: WorkspacePort[] } | null | undefined,

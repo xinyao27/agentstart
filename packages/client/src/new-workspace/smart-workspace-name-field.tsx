@@ -1,8 +1,8 @@
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
 import {
   buildProjectSourceContextFromRepo,
   type ProjectSourceContext
-} from '@yiru/protocol/project/source-context'
+} from '@agentstart/protocol/project/source-context'
 import React, { useRef, useState } from 'react'
 import type { RepoSlug } from '~renderer/github/links'
 import { lookupGitHubWorkItemByOwnerRepoForSource } from '~renderer/github/work-item-source-lookup'

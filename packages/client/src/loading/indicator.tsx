@@ -1,9 +1,9 @@
-import { isAICSSLoaderVariant } from '@yiru/protocol/settings/loader'
+import { isAICSSLoaderVariant } from '@agentstart/protocol/settings/loader'
 import {
   DEFAULT_LOADER_STYLE,
   normalizeLoaderStyle,
   type LoaderStyle
-} from '@yiru/protocol/settings/loader'
+} from '@agentstart/protocol/settings/loader'
 import { createContext, useContext } from 'react'
 import type React from 'react'
 import { cn } from '~renderer/ui/class-names'

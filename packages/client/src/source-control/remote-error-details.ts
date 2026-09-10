@@ -1,7 +1,7 @@
 import {
   formatSubmodulePushFailureDetail,
   stripCredentialsFromMessage
-} from '@yiru/protocol/git/remote-error'
+} from '@agentstart/protocol/git/remote-error'
 import { translate } from '~renderer/i18n/i18n'
 
 const REMOTE_OPERATION_DETAIL_MAX_LENGTH = 200

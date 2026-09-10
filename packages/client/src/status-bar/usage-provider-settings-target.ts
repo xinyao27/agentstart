@@ -1,4 +1,4 @@
-import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
+import type { ProviderRateLimits } from '@agentstart/protocol/account-rate-types'
 
 export function getUsageProviderAccountsSectionId(
   provider: ProviderRateLimits['provider']
@@ -9,7 +9,7 @@ export function getUsageProviderAccountsSectionId(
     case 'codex':
       return 'accounts-codex'
     case 'cursor':
-      // Why: Cursor owns its CLI sign-in lifecycle; Yiru only reads /usage.
+      // Why: Cursor owns its CLI sign-in lifecycle; AgentStart only reads /usage.
       return null
     case 'gemini':
     case 'antigravity':
@@ -22,7 +22,7 @@ export function getUsageProviderAccountsSectionId(
     case 'grok':
       return 'accounts-grok'
     case 'kimi':
-      // Why: Yiru observes Kimi's CLI-owned credentials but must not mutate their lifecycle.
+      // Why: AgentStart observes Kimi's CLI-owned credentials but must not mutate their lifecycle.
       return null
   }
 }

@@ -99,7 +99,7 @@ export function useComposerAttachments({
     const { results } = await importExternalPathsToRuntime(
       { settings, worktreeId: repoPath, worktreePath: repoPath },
       sourcePaths,
-      joinPath(repoPath, '.yiru/drops'),
+      joinPath(repoPath, '.agentstart/drops'),
       { ensureDestinationDir: true }
     )
     const result = collectComposerDropUploadResult(results)

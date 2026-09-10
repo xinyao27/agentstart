@@ -4,8 +4,8 @@ import {
   CliClient,
   runtimeEnvironmentTransport,
   type CliInstallStatus
-} from '@yiru/protocol'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+} from '@agentstart/protocol'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'
 import { getActiveRuntimeTarget } from './rpc-client'

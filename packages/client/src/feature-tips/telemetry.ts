@@ -1,4 +1,4 @@
-import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
+import type { ContextualTourId } from '@agentstart/protocol/settings/contextual-tours'
 import {
   normalizeFeatureEducationSource,
   normalizeSetupGuideSource,
@@ -6,9 +6,9 @@ import {
   type SetupGuideCloseOutcome,
   type SetupGuideSource,
   type TerminalPaneSplitSource
-} from '@yiru/protocol/telemetry/education'
-import type { EventName, EventProps } from '@yiru/protocol/telemetry/events/catalog'
-import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+} from '@agentstart/protocol/telemetry/education'
+import type { EventName, EventProps } from '@agentstart/protocol/telemetry/events/catalog'
+import type { FeatureWallSetupStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 
 import {
   getFeatureWallSetupSectionId,
@@ -17,8 +17,8 @@ import {
 import { track } from '../telemetry/client'
 
 const SETUP_GUIDE_TELEMETRY_COMPLETED_STEPS_STORAGE_KEY =
-  'yiru.setupGuideTelemetryCompletedSteps.v1'
-const TERMINAL_PANE_SPLIT_TELEMETRY_STORAGE_KEY = 'yiru.terminalPaneSplitTelemetry.v1'
+  'agentstart.setupGuideTelemetryCompletedSteps.v1'
+const TERMINAL_PANE_SPLIT_TELEMETRY_STORAGE_KEY = 'agentstart.terminalPaneSplitTelemetry.v1'
 
 type FeatureEducationTelemetryEventName = Extract<
   EventName,
@@ -167,7 +167,7 @@ export function persistEmittedSetupGuideStepId(id: FeatureWallSetupStepId): void
   }
 }
 
-export function reserveTerminalPaneSplitTelemetry(
+function reserveTerminalPaneSplitTelemetry(
   source: TerminalPaneSplitSource,
   direction: 'vertical' | 'horizontal'
 ): boolean {
@@ -192,7 +192,7 @@ export function reserveTerminalPaneSplitTelemetry(
   }
 }
 
-export function getSetupGuideStepSection(id: FeatureWallSetupStepId): 'parallel-work' | 'setup' {
+function getSetupGuideStepSection(id: FeatureWallSetupStepId): 'parallel-work' | 'setup' {
   return getFeatureWallSetupSectionId(id)
 }
 

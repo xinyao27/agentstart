@@ -1,8 +1,8 @@
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 import type { TerminalThemeOption } from '~renderer/terminal/theme'
 
-export const SETTINGS_FORM_OPTION_QUERY_MAX_BYTES = 2 * 1024
-export const FONT_SUGGESTION_RENDER_LIMIT = 320
+const SETTINGS_FORM_OPTION_QUERY_MAX_BYTES = 2 * 1024
+const FONT_SUGGESTION_RENDER_LIMIT = 320
 
 export type RenderedFontSuggestion = {
   font: string

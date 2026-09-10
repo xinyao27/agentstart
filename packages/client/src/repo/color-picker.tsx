@@ -1,4 +1,7 @@
-import { normalizeRepoBadgeColor, resolveRepoBadgeColor } from '@yiru/protocol/project/appearance'
+import {
+  normalizeRepoBadgeColor,
+  resolveRepoBadgeColor
+} from '@agentstart/protocol/project/appearance'
 import * as React from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { translate } from '~renderer/i18n/i18n'
@@ -75,7 +78,7 @@ export function RepoColorPicker({
           >
             <span
               aria-hidden="true"
-              className="border-border/70 size-4 border"
+              className="border-border/70 size-4 rounded-[4px] border"
               style={{ backgroundColor: currentColor }}
             />
             {triggerLabel ? <span className="text-xs">{triggerLabel}</span> : null}

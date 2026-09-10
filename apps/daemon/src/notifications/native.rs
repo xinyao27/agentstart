@@ -6,7 +6,7 @@ use tokio::process::Command;
 
 use crate::persistence::{WorkspaceEventPayload, WorkspaceJournal};
 
-use super::ApnsNotificationPhase;
+use super::NotificationPhase;
 
 const NOTIFICATION_TIMEOUT: Duration = Duration::from_secs(5);
 
@@ -15,17 +15,17 @@ const POWERSHELL_TOAST: &str = r#"
 $ErrorActionPreference = 'Stop'
 [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] > $null
 [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom, ContentType = WindowsRuntime] > $null
-$title = [Security.SecurityElement]::Escape($env:YIRU_TOAST_TITLE)
-$body = [Security.SecurityElement]::Escape($env:YIRU_TOAST_BODY)
+$title = [Security.SecurityElement]::Escape($env:AGENTSTART_TOAST_TITLE)
+$body = [Security.SecurityElement]::Escape($env:AGENTSTART_TOAST_BODY)
 $xml = New-Object Windows.Data.Xml.Dom.XmlDocument
 $xml.LoadXml("<toast><visual><binding template='ToastGeneric'><text>$title</text><text>$body</text></binding></visual></toast>")
 $toast = [Windows.UI.Notifications.ToastNotification]::new($xml)
-[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('Yiru').Show($toast)
+[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('AgentStart').Show($toast)
 "#;
 
 pub(super) async fn publish(
     journal: &WorkspaceJournal,
-    phase: ApnsNotificationPhase,
+    phase: NotificationPhase,
     title: &str,
     body: &str,
     terminal: &str,
@@ -67,7 +67,7 @@ async fn send(title: &str, body: &str) -> bool {
 #[cfg(target_os = "linux")]
 async fn send(title: &str, body: &str) -> bool {
     let mut command = Command::new("notify-send");
-    command.args(["--app-name=Yiru", title, body]);
+    command.args(["--app-name=AgentStart", title, body]);
     run(command).await
 }
 
@@ -82,8 +82,8 @@ async fn send(title: &str, body: &str) -> bool {
             "-Command",
             POWERSHELL_TOAST,
         ])
-        .env("YIRU_TOAST_BODY", body)
-        .env("YIRU_TOAST_TITLE", title);
+        .env("AGENTSTART_TOAST_BODY", body)
+        .env("AGENTSTART_TOAST_TITLE", title);
     run(command).await
 }
 
@@ -104,10 +104,10 @@ async fn run(mut command: Command) -> bool {
         .is_ok_and(|result| result.is_ok_and(|status| status.success()))
 }
 
-fn phase_name(phase: ApnsNotificationPhase) -> &'static str {
+fn phase_name(phase: NotificationPhase) -> &'static str {
     match phase {
-        ApnsNotificationPhase::Complete => "complete",
-        ApnsNotificationPhase::WaitingDecision => "waiting-decision",
+        NotificationPhase::Complete => "complete",
+        NotificationPhase::WaitingDecision => "waiting-decision",
     }
 }
 

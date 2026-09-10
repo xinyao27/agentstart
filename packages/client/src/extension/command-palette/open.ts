@@ -1,4 +1,4 @@
-const OPEN_COMMAND_PALETTE_EVENT = 'yiru:open-command-palette'
+const OPEN_COMMAND_PALETTE_EVENT = 'agentstart:open-command-palette'
 
 export function openCommandPalette(): void {
   window.dispatchEvent(new CustomEvent(OPEN_COMMAND_PALETTE_EVENT))

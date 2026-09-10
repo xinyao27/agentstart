@@ -1,8 +1,8 @@
-import type { GitStatusEntry, GitUpstreamStatus } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry, GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
 import {
   normalizeHostedReviewBaseRef,
   normalizeHostedReviewHeadRef
-} from '@yiru/protocol/hosted-review/refs'
+} from '@agentstart/protocol/hosted-review/refs'
 import { isBehindOnlyUpstream } from '~renderer/source-control/workflow/operation'
 
 import { summarizeCommitFailure } from '../commit-failure-summary'

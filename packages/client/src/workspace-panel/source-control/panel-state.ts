@@ -1,6 +1,6 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
-import type { SourceControlViewMode } from '@yiru/protocol/settings/workspace-preferences'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GitConflictOperation } from '@agentstart/protocol/git/status-types'
+import type { SourceControlViewMode } from '@agentstart/protocol/settings/workspace-preferences'
 import { pickSourceControlLaunchAgent } from '~renderer/source-control/agent-selection'
 
 export type CommitDraftsByWorktree = Record<string, string>

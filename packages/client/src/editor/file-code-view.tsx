@@ -1,6 +1,6 @@
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 import type { CodeViewFileItem, LineAnnotation } from '@pierre/diffs'
 import { CodeView, type CodeViewHandle, type CodeViewReactOptions } from '@pierre/diffs/react'
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { selectWorktreeDiffComments } from '~renderer/diff-comments/worktree-selector'
 import { useAppStore } from '~renderer/store/state'

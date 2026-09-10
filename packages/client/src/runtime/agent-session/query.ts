@@ -1,5 +1,5 @@
+import { AgentSessionClient } from '@agentstart/protocol/agent-session'
 import { queryOptions } from '@tanstack/react-query'
-import { AgentSessionClient } from '@yiru/protocol/agent-session'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from '../protocol-target'

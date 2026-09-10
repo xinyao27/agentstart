@@ -1,4 +1,4 @@
-import { StatusClient } from '@yiru/protocol'
+import { StatusClient } from '@agentstart/protocol'
 import type { RuntimeStatusResult } from '~renderer/runtime/status/model'
 
 import { readConfiguredBrowserHostStatus } from './browser-host-runtime'

@@ -1,14 +1,14 @@
 import {
   normalizeTuiAgentArgsRecord,
   normalizeTuiAgentEnvRecord
-} from '@yiru/protocol/agent/launch/settings'
-import { normalizeDisabledTuiAgents } from '@yiru/protocol/agent/selection'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { normalizeLoaderStyle } from '@yiru/protocol/settings/loader'
-import { normalizeOpenInApplications } from '@yiru/protocol/settings/open-in'
-import { normalizeUiLanguage } from '@yiru/protocol/settings/ui-language'
-import { normalizeTerminalQuickCommands } from '@yiru/protocol/terminal/quick-commands'
-import { normalizeDesktopTerminalScrollbackRows } from '@yiru/protocol/terminal/scrollback-policy'
+} from '@agentstart/protocol/agent/launch/settings'
+import { normalizeDisabledTuiAgents } from '@agentstart/protocol/agent/selection'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { normalizeLoaderStyle } from '@agentstart/protocol/settings/loader'
+import { normalizeOpenInApplications } from '@agentstart/protocol/settings/open-in'
+import { normalizeUiLanguage } from '@agentstart/protocol/settings/ui-language'
+import { normalizeTerminalQuickCommands } from '@agentstart/protocol/terminal/quick-commands'
+import { normalizeDesktopTerminalScrollbackRows } from '@agentstart/protocol/terminal/scrollback-policy'
 import type { StateCreator } from 'zustand'
 import { bumpProviderRuntimeSessionGeneration } from '~renderer/agent/provider-runtime-context'
 import { readProjectCatalogQueryClient } from '~renderer/project-catalog/catalog-snapshot'

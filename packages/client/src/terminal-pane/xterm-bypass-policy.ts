@@ -1,4 +1,4 @@
-import { keybindingMatchesInput } from '@yiru/protocol/keybindings'
+import { keybindingMatchesInput } from '@agentstart/protocol/keybindings'
 
 import {
   isTerminalImeCandidateDigitKeyEvent,
@@ -227,7 +227,7 @@ export function shouldBypassXtermKeyboardEvent(
     : event.ctrlKey && !event.metaKey
 
   if (event.defaultPrevented && platformModifierHeld) {
-    // Why: window-level Yiru shortcuts may have already handled the chord but
+    // Why: window-level AgentStart shortcuts may have already handled the chord but
     // not stopped propagation. Do not let xterm also send that shortcut to
     // the shell.
     return true

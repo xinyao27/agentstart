@@ -32,7 +32,7 @@ impl TerminalRevealResult {
             return None;
         };
         Some(format!(
-            "Terminal {handle} is running, but Yiru could not make it discoverable. Reason: {reason}. Run `yiru terminal focus --terminal {handle}` to reveal and focus it."
+            "Terminal {handle} is running, but AgentStart could not make it discoverable. Reason: {reason}. Run `agentstart terminal focus --terminal {handle}` to reveal and focus it."
         ))
     }
 }

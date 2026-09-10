@@ -1,6 +1,5 @@
-use serde_json::{Map, Value};
-use yiru_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     WorktreeDiffComment, WorktreeMobileDiffReview, WorktreeMobileDiffReviewFile,
     WorktreePushTarget, WorktreeRevisionConflict, WorktreeServiceActivateRequest,
     WorktreeServiceArchiveRequest, WorktreeServiceArchiveResponse,
@@ -19,7 +18,8 @@ use yiru_protocol::runtime::v1::{
     WorktreeSetPatch, WorktreeStateEventsReady, worktree_nullable_int64,
     worktree_nullable_push_target, worktree_service_subscribe_state_events_response,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::{Map, Value};
 
 use crate::projects::ProjectCatalogError;
 use crate::worktrees::WorktreeAuthorityError;
@@ -79,6 +79,7 @@ pub(in crate::rpc) async fn list(rpc: &WorktreeRpc, payload: &[u8]) -> Result<Ve
         worktrees: result.worktrees,
         total_count: result.total_count,
         truncated: result.truncated,
+        revision: result.revision,
     }))
 }
 
@@ -761,7 +762,7 @@ fn revision_conflict(actual_revision: i64, expected_revision: i64, scope: &str) 
         code: StatusCode::Aborted as i32,
         message: "workspaceRevisionConflict".to_owned(),
         details: vec![ErrorDetail {
-            type_name: "yiru.runtime.v1.WorktreeRevisionConflict".to_owned(),
+            type_name: "agentstart.runtime.v1.WorktreeRevisionConflict".to_owned(),
             value: encode(&WorktreeRevisionConflict {
                 expected_revision,
                 actual_revision,

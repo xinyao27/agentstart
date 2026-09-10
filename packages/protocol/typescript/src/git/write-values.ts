@@ -2,7 +2,7 @@ import {
   GitBlockedReason,
   GitWriteStatus,
   type GitWriteOutcome as ProtocolWriteOutcome
-} from '../../generated/yiru/runtime/v1/git_common_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_common_pb.js'
 
 export type GitWriteBlockedReason =
   | 'dirty_working_tree'

@@ -1,4 +1,4 @@
-import type { AgentPermissionMode } from '@yiru/protocol/agent/launch/permissions'
+import type { AgentPermissionMode } from '@agentstart/protocol/agent/launch/permissions'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { AgentPermissionsSettingProps } from './agents-pane-types'
@@ -20,7 +20,7 @@ export function AgentPermissionsSetting({
           <>
             {translate(
               'auto.components.settings.AgentsPane.agentPermissionsDescription',
-              'Choose whether Yiru launches agents with fewer permission prompts or with manual checks.'
+              'Choose whether AgentStart launches agents with fewer permission prompts or with manual checks.'
             )}{' '}
             {translate(
               'auto.components.settings.AgentsPane.agentPermissionsTooltip',

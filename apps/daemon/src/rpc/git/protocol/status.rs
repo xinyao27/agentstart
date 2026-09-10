@@ -1,9 +1,9 @@
 // Read-only worktree inspection: working-tree status, blob diffs, submodule
 // status, gitignore probing, and upstream/remote lookups. See
-// packages/protocol/proto/yiru/runtime/v1/git_status.proto (GitStatusService).
+// packages/protocol/proto/agentstart/runtime/v1/git_status.proto (GitStatusService).
 
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     GitStatusArea, GitStatusServiceCheckIgnoredRequest, GitStatusServiceCheckIgnoredResponse,
     GitStatusServiceDiffRequest, GitStatusServiceDiffResponse,
     GitStatusServiceFindHugeFoldersToIgnoreRequest,
@@ -14,7 +14,7 @@ use yiru_protocol::runtime::v1::{
     GitStatusServiceSubmoduleStatusResponse, GitStatusServiceUpstreamStatusRequest,
     GitStatusServiceUpstreamStatusResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use super::super::GitRpc;
 use super::support::{authority_status, diff_result, push_target, upstream_status, working_status};

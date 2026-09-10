@@ -1,8 +1,8 @@
-import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
-import { DEFAULT_REPO_BADGE_COLOR } from '@yiru/protocol/project/appearance'
-import { normalizeRepoBadgeColor } from '@yiru/protocol/project/appearance'
-import type { RepoIcon } from '@yiru/protocol/project/icon'
-import type { Repo } from '@yiru/protocol/project/repository'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@agentstart/protocol/host/identity'
+import { DEFAULT_REPO_BADGE_COLOR } from '@agentstart/protocol/project/appearance'
+import { normalizeRepoBadgeColor } from '@agentstart/protocol/project/appearance'
+import type { RepoIcon } from '@agentstart/protocol/project/icon'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -170,7 +170,7 @@ export function RepositoryIconPicker({
         <RepoIconGlyph
           repoIcon={repo.repoIcon}
           color={selectedBadgeColor}
-          className="border-border/70 bg-muted/30 size-10 shrink-0 border"
+          className="border-border/70 bg-muted/30 size-10 shrink-0 rounded-md border"
           iconClassName="size-5"
         />
         <div className="min-w-0 flex-1">

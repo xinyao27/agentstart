@@ -2,11 +2,11 @@ import type {
   WorkspaceCleanupBlocker,
   WorkspaceCleanupCandidate,
   WorkspaceCleanupDismissal
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import {
   applyWorkspaceCleanupPolicy,
   shouldHideWorkspaceCleanupCandidate
-} from '@yiru/protocol/workspace/cleanup-policy'
+} from '@agentstart/protocol/workspace/cleanup-policy'
 import type { AppState } from '~renderer/store/types'
 
 import {

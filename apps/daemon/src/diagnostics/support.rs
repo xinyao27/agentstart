@@ -99,7 +99,7 @@ impl SupportDiagnostics {
         cleanup_abandoned_previews(&preview_directory);
         Self {
             inner: Arc::new(Inner {
-                app_version: std::env::var("YIRU_APP_VERSION")
+                app_version: std::env::var("AGENTSTART_APP_VERSION")
                     .unwrap_or_else(|_| env!("CARGO_PKG_VERSION").to_owned()),
                 collect_admission: Arc::new(Semaphore::new(1)),
                 preview_directory,
@@ -396,7 +396,7 @@ fn preview_directory(user_data_path: &Path) -> PathBuf {
     update_preview_scope(&mut digest, user_data_path);
     let scope = URL_SAFE_NO_PAD.encode(&digest.finalize()[..12]);
     std::env::temp_dir()
-        .join("yiru-diagnostic-bundle-previews")
+        .join("agentstart-diagnostic-bundle-previews")
         .join(scope)
 }
 

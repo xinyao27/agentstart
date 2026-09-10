@@ -1,29 +1,29 @@
-// Why: full Yiru dispatch preambles are multi-KB (CLI instructions before
+// Why: full AgentStart dispatch preambles are multi-KB (CLI instructions before
 // `=== TASK ===`). A naive first-N-char fold of the agent-status prompt keeps
 // only lifecycle boilerplate and drops the task body the UI needs as a
 // fallback label before orchestration metadata arrives. Compact the status
 // prompt so preamble detection, the live task id, and the task body all fit
 // inside AGENT_STATUS_MAX_FIELD_LENGTH.
 
-export const YIRU_DISPATCH_STATUS_PREAMBLE_PREFIX =
-  'You are working inside Yiru, a multi-agent IDE.'
-export const YIRU_DISPATCH_STATUS_TASK_MARKER = '=== TASK ==='
-const YIRU_DISPATCH_STATUS_TASK_ID_MARKER = 'Your task ID is:'
+export const AGENTSTART_DISPATCH_STATUS_PREAMBLE_PREFIX =
+  'You are working inside AgentStart, a multi-agent IDE.'
+export const AGENTSTART_DISPATCH_STATUS_TASK_MARKER = '=== TASK ==='
+const AGENTSTART_DISPATCH_STATUS_TASK_ID_MARKER = 'Your task ID is:'
 // Why: real preambles put === TASK === near the end (~4KB+). Scan past the
 // normal single-line budget so the task body is still reachable for compacting.
-const YIRU_DISPATCH_STATUS_SOURCE_SCAN_LIMIT = 24_576
+const AGENTSTART_DISPATCH_STATUS_SOURCE_SCAN_LIMIT = 24_576
 
-export function isYiruDispatchStatusPrompt(value: string): boolean {
+export function isAgentStartDispatchStatusPrompt(value: string): boolean {
   // Why: status payloads cross a trust boundary. Keep dispatch detection
   // bounded too, or leading whitespace can bypass the normalizer's scan cap.
-  const scanEnd = Math.min(value.length, YIRU_DISPATCH_STATUS_SOURCE_SCAN_LIMIT)
+  const scanEnd = Math.min(value.length, AGENTSTART_DISPATCH_STATUS_SOURCE_SCAN_LIMIT)
   let start = 0
   while (start < scanEnd && isEcmaTrimWhitespace(value.charCodeAt(start))) {
     start++
   }
   return (
-    start + YIRU_DISPATCH_STATUS_PREAMBLE_PREFIX.length <= scanEnd &&
-    value.startsWith(YIRU_DISPATCH_STATUS_PREAMBLE_PREFIX, start)
+    start + AGENTSTART_DISPATCH_STATUS_PREAMBLE_PREFIX.length <= scanEnd &&
+    value.startsWith(AGENTSTART_DISPATCH_STATUS_PREAMBLE_PREFIX, start)
   )
 }
 
@@ -37,7 +37,7 @@ export function compactDispatchPromptForStatus(
   maxLength: number,
   normalizeSingleLine: (value: string, maxLength: number) => string
 ): string {
-  const scanEnd = Math.min(value.length, YIRU_DISPATCH_STATUS_SOURCE_SCAN_LIMIT)
+  const scanEnd = Math.min(value.length, AGENTSTART_DISPATCH_STATUS_SOURCE_SCAN_LIMIT)
   // Bound leading trim to the scan window so a multi-MB paste of pure
   // whitespace cannot walk the entire string before we give up.
   let start = 0
@@ -47,9 +47,9 @@ export function compactDispatchPromptForStatus(
   const scan = value.slice(start, scanEnd)
 
   let taskId = ''
-  const idMarkerIndex = scan.indexOf(YIRU_DISPATCH_STATUS_TASK_ID_MARKER)
+  const idMarkerIndex = scan.indexOf(AGENTSTART_DISPATCH_STATUS_TASK_ID_MARKER)
   if (idMarkerIndex !== -1) {
-    const afterId = scan.slice(idMarkerIndex + YIRU_DISPATCH_STATUS_TASK_ID_MARKER.length)
+    const afterId = scan.slice(idMarkerIndex + AGENTSTART_DISPATCH_STATUS_TASK_ID_MARKER.length)
     let idStart = 0
     while (idStart < afterId.length && isEcmaTrimWhitespace(afterId.charCodeAt(idStart))) {
       idStart++
@@ -60,9 +60,9 @@ export function compactDispatchPromptForStatus(
   }
 
   let taskBody = ''
-  const taskMarkerIndex = findYiruDispatchTaskMarkerIndex(scan)
+  const taskMarkerIndex = findAgentStartDispatchTaskMarkerIndex(scan)
   if (taskMarkerIndex !== -1) {
-    const body = scan.slice(taskMarkerIndex + YIRU_DISPATCH_STATUS_TASK_MARKER.length)
+    const body = scan.slice(taskMarkerIndex + AGENTSTART_DISPATCH_STATUS_TASK_MARKER.length)
     for (const line of body.split(/\r?\n/)) {
       const preview = line.trim().replace(/\s+/g, ' ')
       if (preview) {
@@ -72,33 +72,33 @@ export function compactDispatchPromptForStatus(
     }
   }
 
-  // Why: keep the dispatch prefix (isYiruDispatchPrompt) + task id (label match)
+  // Why: keep the dispatch prefix (isAgentStartDispatchPrompt) + task id (label match)
   // + task body (fallback preview) so UI helpers still work on the 200-char field.
-  let compact = YIRU_DISPATCH_STATUS_PREAMBLE_PREFIX
+  let compact = AGENTSTART_DISPATCH_STATUS_PREAMBLE_PREFIX
   if (taskId) {
-    compact += ` ${YIRU_DISPATCH_STATUS_TASK_ID_MARKER} ${taskId}`
+    compact += ` ${AGENTSTART_DISPATCH_STATUS_TASK_ID_MARKER} ${taskId}`
   }
   if (taskBody) {
-    compact += ` ${YIRU_DISPATCH_STATUS_TASK_MARKER} ${taskBody}`
+    compact += ` ${AGENTSTART_DISPATCH_STATUS_TASK_MARKER} ${taskBody}`
   }
   return normalizeSingleLine(compact, maxLength)
 }
 
 /**
- * Locate the Yiru task separator in a dispatch prompt scan window.
+ * Locate the AgentStart task separator in a dispatch prompt scan window.
  * Why: base-drift commit subjects are repository-controlled and may mention
- * `=== TASK ===`. Raw multi-line preambles must use the standalone line Yiru
+ * `=== TASK ===`. Raw multi-line preambles must use the standalone line AgentStart
  * emits; already-normalized single-line status previews intentionally keep the
  * marker inline so re-normalization and UI helpers stay consistent.
  */
-export function findYiruDispatchTaskMarkerIndex(value: string): number {
+export function findAgentStartDispatchTaskMarkerIndex(value: string): number {
   let searchFrom = 0
   while (searchFrom < value.length) {
-    const markerIndex = value.indexOf(YIRU_DISPATCH_STATUS_TASK_MARKER, searchFrom)
+    const markerIndex = value.indexOf(AGENTSTART_DISPATCH_STATUS_TASK_MARKER, searchFrom)
     if (markerIndex === -1) {
       break
     }
-    const markerEnd = markerIndex + YIRU_DISPATCH_STATUS_TASK_MARKER.length
+    const markerEnd = markerIndex + AGENTSTART_DISPATCH_STATUS_TASK_MARKER.length
     const startsLine = markerIndex === 0 || isLineBreak(value.charCodeAt(markerIndex - 1))
     const endsLine = markerEnd === value.length || isLineBreak(value.charCodeAt(markerEnd))
     if (startsLine && endsLine) {
@@ -111,7 +111,7 @@ export function findYiruDispatchTaskMarkerIndex(value: string): number {
   // carry the marker inline; normalization must stay idempotent across hops.
   return value.includes('\n') || value.includes('\r')
     ? -1
-    : value.indexOf(YIRU_DISPATCH_STATUS_TASK_MARKER)
+    : value.indexOf(AGENTSTART_DISPATCH_STATUS_TASK_MARKER)
 }
 
 function isLineBreak(code: number): boolean {

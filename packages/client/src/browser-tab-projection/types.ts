@@ -4,8 +4,8 @@ import type {
   BrowserLoadError,
   BrowserPage,
   BrowserWorkspace
-} from '@yiru/protocol/workspace/browser-session'
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+} from '@agentstart/protocol/workspace/browser-session'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
 import type { WorkspaceSessionHydrationOptions } from '~renderer/workspace/session-hydration-keys'
 
 export type CreateBrowserTabOptions = {
@@ -29,7 +29,7 @@ export type BrowserTabPageState = {
   loadError?: BrowserLoadError | null
 }
 
-export type RemoteBrowserPageHandle = {
+type RemoteBrowserPageHandle = {
   environmentId: string
   remotePageId: string
 }

@@ -46,7 +46,7 @@ function hasBracketedPasteModeSequence(data: string): boolean {
 // Why: an embedded ESC (e.g. a pasted `\x1b[201~` from scrollback) would close
 // the bracketed-paste frame early and run the tail as keystrokes. Replacing ESC
 // with its printable substitute (\u241b, U+241B) neutralizes every framing escape.
-export function sanitizeBracketedPasteText(text: string): string {
+function sanitizeBracketedPasteText(text: string): string {
   let escapeIndex = text.indexOf(ESCAPE)
   if (escapeIndex === -1) {
     return text

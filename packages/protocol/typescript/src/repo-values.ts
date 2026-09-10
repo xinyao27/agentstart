@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   RepoIconImageSource,
   type Repo as ProtocolRepo,
@@ -8,7 +8,7 @@ import {
   type RepoNullableIcon,
   type RepoNullableString,
   type RepoNullableUpstream
-} from '../generated/yiru/runtime/v1/repo_pb.js'
+} from '../generated/agent_start/runtime/v1/repo_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import {
   externalWorktreeVisibility,

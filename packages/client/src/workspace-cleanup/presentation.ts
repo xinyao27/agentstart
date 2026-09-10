@@ -1,7 +1,10 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
-import type { HostedReviewInfo, HostedReviewProvider } from '@yiru/protocol/hosted-review/types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { WorkspaceCleanupCandidate } from '@agentstart/protocol'
+import type {
+  HostedReviewInfo,
+  HostedReviewProvider
+} from '@agentstart/protocol/hosted-review/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { translate } from '~renderer/i18n/i18n'
 import { getHostedReviewCacheKey } from '~renderer/source-control/hosted-review-state/slice'
 import { getWorktreeMapFromState } from '~renderer/store/selectors'
@@ -43,7 +46,6 @@ export type WorkspaceCleanupRendererStateInputs = Pick<
 export {
   filterWorkspaceCleanupCandidates,
   getWorkspaceCleanupGitLabel,
-  getWorkspaceCleanupSearchText,
   hasWorkspaceCleanupLocalContext,
   sortWorkspaceCleanupCandidates
 } from './filter-sort'

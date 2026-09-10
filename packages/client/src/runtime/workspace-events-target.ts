@@ -3,7 +3,7 @@ import {
   WORKSPACE_EVENTS_PROTOCOL_CAPABILITY,
   WorkspaceEventsClient,
   type WorkspaceEventRecord
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'
@@ -14,7 +14,7 @@ export type WorkspaceEventWatchInput = Readonly<{
   scope: string
 }>
 
-export async function openWorkspaceEventsClient(
+async function openWorkspaceEventsClient(
   target: RuntimeClientTarget
 ): Promise<WorkspaceEventsClient | null> {
   const status = await readRuntimeStatus(target)

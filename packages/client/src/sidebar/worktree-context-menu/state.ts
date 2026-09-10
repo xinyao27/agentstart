@@ -1,7 +1,7 @@
-import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { parseWorkspaceKey, worktreeWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import { getRepoExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { parseWorkspaceKey, worktreeWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { translate } from '~renderer/i18n/i18n'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useAppStore } from '~renderer/store/state'
@@ -134,7 +134,7 @@ function getDeleteAction(args: {
       title,
       label: translate(
         'auto.components.sidebar.WorktreeContextMenu.f5ac91531d',
-        'Remove Project from Yiru'
+        'Remove Project from AgentStart'
       )
     }
   }

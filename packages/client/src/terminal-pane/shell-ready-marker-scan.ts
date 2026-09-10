@@ -1,4 +1,4 @@
-const SHELL_READY_MARKER = '\x1b]777;yiru-shell-ready'
+const SHELL_READY_MARKER = '\x1b]777;agentstart-shell-ready'
 
 export type ShellReadyMarkerScanState = {
   matchPos: number

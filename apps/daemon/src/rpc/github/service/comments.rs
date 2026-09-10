@@ -1,6 +1,5 @@
-use serde_json::Value;
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     GitHubComment, GitHubCommentReaction, GitHubCommentResult, GitHubFileStatus,
     GitHubReactionContent, GitHubServiceAddPrCommentRequest, GitHubServiceAddPrCommentResponse,
     GitHubServiceAddPrReviewCommentReplyRequest, GitHubServiceAddPrReviewCommentReplyResponse,
@@ -10,7 +9,8 @@ use yiru_protocol::runtime::v1::{
     GitHubServiceResolveReviewThreadRequest, GitHubServiceResolveReviewThreadResponse,
     GitHubServiceSetPrFileViewedRequest, GitHubServiceSetPrFileViewedResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::Value;
 
 use crate::github::{ReviewComment, ReviewReply};
 

@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -119,7 +119,7 @@ export function NotificationSoundSection({
         <p className="text-muted-foreground text-xs">
           {translate(
             'auto.components.settings.NotificationsPane.2a2033c388',
-            'Choose the alert Yiru plays when a system notification is delivered.'
+            'Choose the alert AgentStart plays when a system notification is delivered.'
           )}
         </p>
       </div>

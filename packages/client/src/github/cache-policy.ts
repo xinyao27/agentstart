@@ -1,14 +1,17 @@
-import { LOCAL_EXECUTION_HOST_ID, normalizeExecutionHostId } from '@yiru/protocol/host/identity'
+import {
+  LOCAL_EXECUTION_HOST_ID,
+  normalizeExecutionHostId
+} from '@agentstart/protocol/host/identity'
 import type {
   GitHubCommentResult,
   GitHubOwnerRepo,
   PRCheckDetail,
   PRComment
-} from '@yiru/protocol/hosted-review/review-types'
+} from '@agentstart/protocol/hosted-review/review-types'
 import {
   getProjectSourceCacheScope,
   type ProjectSourceContext
-} from '@yiru/protocol/project/source-context'
+} from '@agentstart/protocol/project/source-context'
 import type { AppState } from '~renderer/store/types'
 
 import { getGitHubPRCacheKey, getGitHubRepoCacheKey } from './cache-key'

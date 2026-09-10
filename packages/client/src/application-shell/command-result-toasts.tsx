@@ -7,9 +7,9 @@ import {
 import { resolveRemoteOperationErrorMessage } from '~renderer/source-control/remote-error'
 import { useAppStore } from '~renderer/store/state'
 
+import { presentAgentStartProfileResult } from '../agentstart-profiles/result-toasts'
 import { showLocalBaseRefUpdateSuggestionToast } from '../sidebar/local-base-ref-suggestion-toast'
 import { showPreservedBranchToast } from '../sidebar/preserved-branch-toast'
-import { presentYiruProfileResult } from '../yiru-profiles/result-toasts'
 
 const ERROR_TOAST_DURATION = 60_000
 
@@ -27,8 +27,8 @@ function presentRendererCommandResult(result: RendererCommandResult): void {
         description: result.error
       })
       return
-    case 'yiru-profile':
-      presentYiruProfileResult(result)
+    case 'agentstart-profile':
+      presentAgentStartProfileResult(result)
       return
     case 'worktree-local-base-ref-refresh':
       presentLocalBaseRefRefresh(result.result)
@@ -193,7 +193,7 @@ function presentLocalBaseRefRefresh(
     {
       description: translate(
         'auto.store.slices.worktrees.903b51c2ed',
-        'Workspace created from {{value0}}, but Yiru could not fast-forward local {{value1}} because {{value2}}',
+        'Workspace created from {{value0}}, but AgentStart could not fast-forward local {{value1}} because {{value2}}',
         { value0: result.baseRef, value1: result.localBranch, value2: reason }
       )
     }

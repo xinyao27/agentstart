@@ -1,5 +1,8 @@
-import { isPathInsideOrEqual, normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import {
+  isPathInsideOrEqual,
+  normalizeRuntimePathForComparison
+} from '@agentstart/protocol/host/path'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { getWorktreeMapFromState } from '~renderer/store/selectors'
@@ -121,7 +124,7 @@ export async function runWorktreeDeletesInParallel(
  * concerns into the store slice while still preventing the two delete
  * entry points from drifting apart.
  */
-export function runWorktreeDeleteWithToast(
+function runWorktreeDeleteWithToast(
   worktreeId: string,
   worktreeName: string,
   options: WorktreeDeleteWithToastOptions = {}
@@ -242,7 +245,7 @@ export function runWorktreeDelete(worktreeId: string): void {
   if (target.isMainWorktree) {
     const repo = state.repos.find((entry) => entry.id === target.repoId)
     // Why: git refuses to delete the primary checkout, but users can still
-    // remove the owning project from Yiru without deleting disk contents.
+    // remove the owning project from AgentStart without deleting disk contents.
     state.openModal('confirm-remove-folder', {
       repoId: target.repoId,
       displayName: repo?.displayName ?? target.displayName

@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type React from 'react'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
@@ -6,6 +6,7 @@ import { useActiveWorktree } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
 import { ThemeGradientPicker } from '~renderer/theme-gradient/picker'
 import { resolveThemeGradient, type ThemeGradientScope } from '~renderer/theme-gradient/state'
+import { Button } from '~renderer/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~renderer/ui/select'
 
 import { SettingsRow } from '../form-controls'
@@ -86,6 +87,25 @@ export function AppearanceThemeColorSection({
               </SelectItem>
             </SelectContent>
           </Select>
+        }
+      />
+      <SettingsRow
+        label={translate('themeGradient.system.label', 'Theme color')}
+        description={translate(
+          'themeGradient.system.description',
+          'Without a custom palette, follow this computer’s accent color. Use the app default when unavailable.'
+        )}
+        control={
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={theme === null}
+            onClick={() => setThemeGradient(scope, null)}
+          >
+            {scope.kind === 'default'
+              ? translate('themeGradient.system.follow', 'Follow system')
+              : translate('themeGradient.system.useDefault', 'Use default color')}
+          </Button>
         }
       />
       <ThemeGradientPicker

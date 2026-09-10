@@ -6,24 +6,24 @@
 [data-pane-title-surface] {
   /* Why: title contrast follows the terminal surface, not the app theme, so
      these values stay local to terminal chrome instead of becoming theme tokens. */
-  --yiru-pane-title-height: 24px;
-  --yiru-pane-title-fg: rgb(255 255 255 / 0.52);
-  --yiru-pane-title-input-fg: rgb(255 255 255 / 0.7);
-  --yiru-pane-title-placeholder: rgb(255 255 255 / 0.38);
-  --yiru-pane-title-button-fg: rgb(255 255 255);
-  --yiru-pane-title-button-hover-fg: rgb(255 255 255);
-  --yiru-pane-title-input-bg: rgb(255 255 255 / 0.04);
-  --yiru-pane-title-separator: rgb(255 255 255 / 0.06);
+  --agentstart-pane-title-height: 24px;
+  --agentstart-pane-title-fg: rgb(255 255 255 / 0.52);
+  --agentstart-pane-title-input-fg: rgb(255 255 255 / 0.7);
+  --agentstart-pane-title-placeholder: rgb(255 255 255 / 0.38);
+  --agentstart-pane-title-button-fg: rgb(255 255 255);
+  --agentstart-pane-title-button-hover-fg: rgb(255 255 255);
+  --agentstart-pane-title-input-bg: rgb(255 255 255 / 0.04);
+  --agentstart-pane-title-separator: rgb(255 255 255 / 0.06);
 }
 
 [data-pane-title-surface='light'] {
-  --yiru-pane-title-fg: rgb(24 24 27 / 0.64);
-  --yiru-pane-title-input-fg: rgb(24 24 27 / 0.82);
-  --yiru-pane-title-placeholder: rgb(24 24 27 / 0.48);
-  --yiru-pane-title-button-fg: rgb(24 24 27);
-  --yiru-pane-title-button-hover-fg: rgb(24 24 27);
-  --yiru-pane-title-input-bg: rgb(24 24 27 / 0.05);
-  --yiru-pane-title-separator: rgb(24 24 27 / 0.1);
+  --agentstart-pane-title-fg: rgb(24 24 27 / 0.64);
+  --agentstart-pane-title-input-fg: rgb(24 24 27 / 0.82);
+  --agentstart-pane-title-placeholder: rgb(24 24 27 / 0.48);
+  --agentstart-pane-title-button-fg: rgb(24 24 27);
+  --agentstart-pane-title-button-hover-fg: rgb(24 24 27);
+  --agentstart-pane-title-input-bg: rgb(24 24 27 / 0.05);
+  --agentstart-pane-title-separator: rgb(24 24 27 / 0.1);
 }
 
 /* Floating title overlay. The title owns the top strip of the pane, while titled
@@ -40,16 +40,16 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: var(--yiru-pane-title-height);
+  height: var(--agentstart-pane-title-height);
   box-sizing: border-box;
   display: flex;
   align-items: center;
   padding: 0 8px;
   font-size: 13px;
   font-family: var(--font-mono);
-  color: var(--yiru-pane-title-fg, rgb(255 255 255 / 0.52));
-  background: var(--yiru-pane-title-bg, #000);
-  border-bottom: 1px solid var(--yiru-pane-title-separator, rgb(255 255 255 / 0.06));
+  color: var(--agentstart-pane-title-fg, rgb(255 255 255 / 0.52));
+  background: var(--agentstart-pane-title-bg, #000);
+  border-bottom: 1px solid var(--agentstart-pane-title-separator, rgb(255 255 255 / 0.06));
   pointer-events: auto;
   user-select: none;
 }
@@ -59,14 +59,14 @@
   top: 0;
   left: 50%;
   width: 32px;
-  height: var(--yiru-pane-title-height);
+  height: var(--agentstart-pane-title-height);
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: grab;
   opacity: 0;
-  background: color-mix(in srgb, var(--yiru-pane-title-fg) 36%, transparent);
+  background: color-mix(in srgb, var(--agentstart-pane-title-fg) 36%, transparent);
   transform: translateX(-50%);
   transition: opacity 150ms ease;
 }
@@ -76,7 +76,7 @@
   font-size: 10px;
   line-height: 1;
   letter-spacing: 0;
-  color: var(--yiru-pane-title-button-hover-fg);
+  color: var(--agentstart-pane-title-button-hover-fg);
 }
 
 .pane-title-drag-handle:hover {
@@ -92,12 +92,12 @@
   top: 0;
   left: 8px;
   z-index: 5;
-  height: var(--yiru-pane-title-height);
+  height: var(--agentstart-pane-title-height);
   display: flex;
   align-items: center;
   font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--yiru-pane-title-fg);
+  color: var(--agentstart-pane-title-fg);
   background: transparent;
   user-select: none;
   pointer-events: none;
@@ -119,7 +119,7 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-  line-height: var(--yiru-pane-title-height);
+  line-height: var(--agentstart-pane-title-height);
 }
 
 .pane-title-text:focus-visible {
@@ -142,7 +142,7 @@
   position: relative;
   width: 18px;
   min-width: 18px;
-  height: var(--yiru-pane-title-height);
+  height: var(--agentstart-pane-title-height);
   padding: 0;
 }
 
@@ -153,8 +153,8 @@
 .pane-title-close {
   flex-shrink: 0;
   margin-left: auto;
-  color: var(--yiru-pane-title-button-fg, rgb(255 255 255 / 0.3));
-  background: var(--yiru-pane-title-bg, var(--background));
+  color: var(--agentstart-pane-title-button-fg, rgb(255 255 255 / 0.3));
+  background: var(--agentstart-pane-title-bg, var(--background));
   opacity: 0;
   transition:
     opacity 120ms ease,
@@ -167,8 +167,8 @@
 }
 
 .pane-title-split-trigger {
-  color: var(--yiru-pane-title-button-fg, rgb(255 255 255 / 0.3));
-  background: var(--yiru-pane-title-bg, var(--background));
+  color: var(--agentstart-pane-title-button-fg, rgb(255 255 255 / 0.3));
+  background: var(--agentstart-pane-title-bg, var(--background));
   opacity: 0;
   transition: opacity 120ms ease;
 }
@@ -202,7 +202,7 @@
 .pane-title-split-trigger[data-state='delayed-open'],
 .pane-title-split-trigger[data-state='instant-open'] {
   background: var(--accent);
-  color: var(--yiru-pane-title-button-hover-fg, rgb(255 255 255 / 0.8));
+  color: var(--agentstart-pane-title-button-hover-fg, rgb(255 255 255 / 0.8));
 }
 
 /* Inline edit input — matches the title text styling exactly to prevent
@@ -217,23 +217,23 @@
   flex: 1;
   min-width: 0;
   width: 100%;
-  height: var(--yiru-pane-title-height);
+  height: var(--agentstart-pane-title-height);
   box-sizing: border-box;
   padding: 0 8px;
   margin: 0;
   border: 1px solid transparent;
   border-radius: 0;
-  background: var(--yiru-pane-title-input-bg, rgb(255 255 255 / 0.04));
+  background: var(--agentstart-pane-title-input-bg, rgb(255 255 255 / 0.04));
   outline: none;
   font-size: 13px;
   line-height: 20px;
   font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-  color: var(--yiru-pane-title-input-fg, rgb(255 255 255 / 0.7));
-  caret-color: var(--yiru-pane-title-input-fg, rgb(255 255 255 / 0.7));
+  color: var(--agentstart-pane-title-input-fg, rgb(255 255 255 / 0.7));
+  caret-color: var(--agentstart-pane-title-input-fg, rgb(255 255 255 / 0.7));
 }
 
 .pane-title-input::placeholder {
-  color: var(--yiru-pane-title-placeholder, rgb(255 255 255 / 0.38));
+  color: var(--agentstart-pane-title-placeholder, rgb(255 255 255 / 0.38));
 }
 
 .pane-title-input:focus-visible {

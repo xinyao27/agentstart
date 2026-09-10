@@ -1,4 +1,4 @@
-.yiru-loader-orb {
+.agentstart-loader-orb {
   --orb-ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
   --orb-ease-in-out: cubic-bezier(0.66, 0, 0.34, 1);
   position: absolute;
@@ -9,24 +9,24 @@
   pointer-events: none;
 }
 
-.yiru-loader-orb__glyph {
+.agentstart-loader-orb__glyph {
   position: absolute;
   inset: 0;
   overflow: hidden;
   contain: strict;
 }
 
-.yiru-loader-orb__lattice,
-.yiru-loader-orb__lens,
-.yiru-loader-orb__ring,
-.yiru-loader-orb__morph {
+.agentstart-loader-orb__lattice,
+.agentstart-loader-orb__lens,
+.agentstart-loader-orb__ring,
+.agentstart-loader-orb__morph {
   position: absolute;
   inset: 0;
   transform: scale(var(--orb-k, 0.7142857));
   transform-origin: 0 0;
 }
 
-.yiru-loader-orb__lattice {
+.agentstart-loader-orb__lattice {
   width: 28px;
   height: 28px;
   inset: auto;
@@ -37,9 +37,9 @@
   --orb-dim: 0.1;
 }
 
-.yiru-loader-orb__cell,
-.yiru-loader-orb__ring-dot,
-.yiru-loader-orb__morph-dot {
+.agentstart-loader-orb__cell,
+.agentstart-loader-orb__ring-dot,
+.agentstart-loader-orb__morph-dot {
   position: absolute;
   display: block;
   background: currentColor;
@@ -47,30 +47,30 @@
   border-radius: 50% !important;
 }
 
-.yiru-loader-orb__cell {
+.agentstart-loader-orb__cell {
   width: 3px;
   height: 3px;
   opacity: var(--orb-rest);
-  animation: yiru-orb-wave 1.7s var(--orb-ease-in-out) infinite both;
+  animation: agentstart-orb-wave 1.7s var(--orb-ease-in-out) infinite both;
 }
 
-.yiru-loader-orb__lattice[data-variant='S4'] .yiru-loader-orb__cell {
+.agentstart-loader-orb__lattice[data-variant='S4'] .agentstart-loader-orb__cell {
   animation-duration: 1.6s;
 }
 
-.yiru-loader-orb__lattice[data-variant='S3'] .yiru-loader-orb__cell,
-.yiru-loader-orb__lattice[data-variant='S5'] .yiru-loader-orb__cell {
-  animation-name: yiru-orb-comet;
+.agentstart-loader-orb__lattice[data-variant='S3'] .agentstart-loader-orb__cell,
+.agentstart-loader-orb__lattice[data-variant='S5'] .agentstart-loader-orb__cell {
+  animation-name: agentstart-orb-comet;
   animation-timing-function: var(--orb-ease-smooth);
 }
 
-.yiru-loader-orb__lattice[data-variant='S3'] .yiru-loader-orb__cell[data-still],
-.yiru-loader-orb__lattice[data-variant='S5'] .yiru-loader-orb__cell[data-still] {
+.agentstart-loader-orb__lattice[data-variant='S3'] .agentstart-loader-orb__cell[data-still],
+.agentstart-loader-orb__lattice[data-variant='S5'] .agentstart-loader-orb__cell[data-still] {
   animation: none;
   opacity: var(--orb-dim);
 }
 
-@keyframes yiru-orb-wave {
+@keyframes agentstart-orb-wave {
   0% {
     opacity: var(--orb-rest);
     transform: scale(1);
@@ -88,7 +88,7 @@
   }
 }
 
-@keyframes yiru-orb-comet {
+@keyframes agentstart-orb-comet {
   0% {
     opacity: 1;
     transform: scale(1.2);
@@ -101,7 +101,7 @@
   }
 }
 
-.yiru-loader-orb__lens {
+.agentstart-loader-orb__lens {
   width: 28px;
   height: 28px;
   inset: auto;
@@ -109,7 +109,7 @@
   top: 0;
 }
 
-.yiru-loader-orb__shape {
+.agentstart-loader-orb__shape {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -121,44 +121,44 @@
   border-radius: 50% !important;
 }
 
-.yiru-loader-orb__lens[data-variant='B1'] .yiru-loader-orb__shape {
+.agentstart-loader-orb__lens[data-variant='B1'] .agentstart-loader-orb__shape {
   --orb-d: 6px;
-  animation: yiru-orb-focus 4s var(--orb-ease-smooth) infinite both;
+  animation: agentstart-orb-focus 4s var(--orb-ease-smooth) infinite both;
 }
 
-.yiru-loader-orb__shape-a {
+.agentstart-loader-orb__shape-a {
   --orb-ox: -4.5px;
   --orb-oy: -4.5px;
 }
 
-.yiru-loader-orb__shape-b {
+.agentstart-loader-orb__shape-b {
   --orb-ox: 4.5px;
   --orb-oy: -4.5px;
 }
 
-.yiru-loader-orb__shape-c {
+.agentstart-loader-orb__shape-c {
   --orb-ox: 4.5px;
   --orb-oy: 4.5px;
 }
 
-.yiru-loader-orb__shape-d {
+.agentstart-loader-orb__shape-d {
   --orb-ox: -4.5px;
   --orb-oy: 4.5px;
 }
 
-.yiru-loader-orb__lens[data-variant='B1'] .yiru-loader-orb__shape-b {
+.agentstart-loader-orb__lens[data-variant='B1'] .agentstart-loader-orb__shape-b {
   animation-delay: -3s;
 }
 
-.yiru-loader-orb__lens[data-variant='B1'] .yiru-loader-orb__shape-c {
+.agentstart-loader-orb__lens[data-variant='B1'] .agentstart-loader-orb__shape-c {
   animation-delay: -2s;
 }
 
-.yiru-loader-orb__lens[data-variant='B1'] .yiru-loader-orb__shape-d {
+.agentstart-loader-orb__lens[data-variant='B1'] .agentstart-loader-orb__shape-d {
   animation-delay: -1s;
 }
 
-@keyframes yiru-orb-focus {
+@keyframes agentstart-orb-focus {
   0%,
   100% {
     opacity: 0.05;
@@ -193,19 +193,19 @@
   }
 }
 
-.yiru-loader-orb__lens[data-variant='B2'] .yiru-loader-orb__shape {
-  animation: yiru-orb-revolve 3.3s linear infinite both;
+.agentstart-loader-orb__lens[data-variant='B2'] .agentstart-loader-orb__shape {
+  animation: agentstart-orb-revolve 3.3s linear infinite both;
 }
 
-.yiru-loader-orb__lens[data-variant='B2'] .yiru-loader-orb__shape-b {
+.agentstart-loader-orb__lens[data-variant='B2'] .agentstart-loader-orb__shape-b {
   animation-delay: -1.1s;
 }
 
-.yiru-loader-orb__lens[data-variant='B2'] .yiru-loader-orb__shape-c {
+.agentstart-loader-orb__lens[data-variant='B2'] .agentstart-loader-orb__shape-c {
   animation-delay: -2.2s;
 }
 
-@keyframes yiru-orb-revolve {
+@keyframes agentstart-orb-revolve {
   0%,
   100% {
     opacity: 1;
@@ -229,19 +229,19 @@
   }
 }
 
-.yiru-loader-orb__lens[data-variant='B3'] .yiru-loader-orb__shape {
-  animation: yiru-orb-bloom 4.2s linear infinite both;
+.agentstart-loader-orb__lens[data-variant='B3'] .agentstart-loader-orb__shape {
+  animation: agentstart-orb-bloom 4.2s linear infinite both;
 }
 
-.yiru-loader-orb__lens[data-variant='B3'] .yiru-loader-orb__shape-b {
+.agentstart-loader-orb__lens[data-variant='B3'] .agentstart-loader-orb__shape-b {
   animation-delay: -1.4s;
 }
 
-.yiru-loader-orb__lens[data-variant='B3'] .yiru-loader-orb__shape-c {
+.agentstart-loader-orb__lens[data-variant='B3'] .agentstart-loader-orb__shape-c {
   animation-delay: -2.8s;
 }
 
-@keyframes yiru-orb-bloom {
+@keyframes agentstart-orb-bloom {
   0% {
     opacity: 0;
     filter: blur(0);
@@ -273,19 +273,19 @@
   }
 }
 
-.yiru-loader-orb__lens[data-variant='B4'] .yiru-loader-orb__shape-a {
-  animation: yiru-orb-converge 3.6s linear infinite both;
+.agentstart-loader-orb__lens[data-variant='B4'] .agentstart-loader-orb__shape-a {
+  animation: agentstart-orb-converge 3.6s linear infinite both;
 }
 
-.yiru-loader-orb__lens[data-variant='B4'] .yiru-loader-orb__shape-b {
-  animation: yiru-orb-breathe 3.6s ease-in-out infinite both;
+.agentstart-loader-orb__lens[data-variant='B4'] .agentstart-loader-orb__shape-b {
+  animation: agentstart-orb-breathe 3.6s ease-in-out infinite both;
 }
 
-.yiru-loader-orb__lens[data-variant='B4'] .yiru-loader-orb__shape-c {
+.agentstart-loader-orb__lens[data-variant='B4'] .agentstart-loader-orb__shape-c {
   display: none;
 }
 
-@keyframes yiru-orb-converge {
+@keyframes agentstart-orb-converge {
   0%,
   10% {
     transform: translate(0, -5px) scale(1);
@@ -315,20 +315,20 @@
   }
 }
 
-.yiru-loader-orb__lens[data-variant='B5'] .yiru-loader-orb__shape-a,
-.yiru-loader-orb__lens[data-variant='B5'] .yiru-loader-orb__shape-c {
-  animation: yiru-orb-handoff 2.8s linear infinite both;
+.agentstart-loader-orb__lens[data-variant='B5'] .agentstart-loader-orb__shape-a,
+.agentstart-loader-orb__lens[data-variant='B5'] .agentstart-loader-orb__shape-c {
+  animation: agentstart-orb-handoff 2.8s linear infinite both;
 }
 
-.yiru-loader-orb__lens[data-variant='B5'] .yiru-loader-orb__shape-c {
+.agentstart-loader-orb__lens[data-variant='B5'] .agentstart-loader-orb__shape-c {
   animation-delay: -1.4s;
 }
 
-.yiru-loader-orb__lens[data-variant='B5'] .yiru-loader-orb__shape-b {
-  animation: yiru-orb-breathe 3.6s ease-in-out infinite both;
+.agentstart-loader-orb__lens[data-variant='B5'] .agentstart-loader-orb__shape-b {
+  animation: agentstart-orb-breathe 3.6s ease-in-out infinite both;
 }
 
-@keyframes yiru-orb-handoff {
+@keyframes agentstart-orb-handoff {
   0% {
     opacity: 0;
     filter: blur(2.4px);
@@ -357,7 +357,7 @@
   }
 }
 
-@keyframes yiru-orb-breathe {
+@keyframes agentstart-orb-breathe {
   0%,
   100% {
     opacity: 0.16;
@@ -371,11 +371,11 @@
   }
 }
 
-.yiru-loader-orb__ring {
+.agentstart-loader-orb__ring {
   --orb-ring-rest: 0.3;
 }
 
-.yiru-loader-orb__ring-dot {
+.agentstart-loader-orb__ring-dot {
   left: 50%;
   top: 50%;
   width: 3px;
@@ -384,12 +384,12 @@
   transform: translate(var(--orb-rx), var(--orb-ry));
 }
 
-.yiru-loader-orb__ring[data-variant='C1'] .yiru-loader-orb__ring-dot {
+.agentstart-loader-orb__ring[data-variant='C1'] .agentstart-loader-orb__ring-dot {
   opacity: var(--orb-ring-rest);
-  animation: yiru-orb-ring-chase 1.6s linear infinite both;
+  animation: agentstart-orb-ring-chase 1.6s linear infinite both;
 }
 
-@keyframes yiru-orb-ring-chase {
+@keyframes agentstart-orb-ring-chase {
   0%,
   11% {
     opacity: 1;
@@ -400,11 +400,11 @@
   }
 }
 
-.yiru-loader-orb__ring[data-variant='C2'] .yiru-loader-orb__ring-dot {
-  animation: yiru-orb-ring-pulse 2s ease-in-out infinite both;
+.agentstart-loader-orb__ring[data-variant='C2'] .agentstart-loader-orb__ring-dot {
+  animation: agentstart-orb-ring-pulse 2s ease-in-out infinite both;
 }
 
-@keyframes yiru-orb-ring-pulse {
+@keyframes agentstart-orb-ring-pulse {
   0%,
   100% {
     opacity: 0.18;
@@ -416,12 +416,12 @@
   }
 }
 
-.yiru-loader-orb__ring[data-variant='C3'] .yiru-loader-orb__ring-dot,
-.yiru-loader-orb__ring[data-variant='C5'] .yiru-loader-orb__ring-dot {
-  animation: yiru-orb-ring-comet 1.8s ease-in-out infinite both;
+.agentstart-loader-orb__ring[data-variant='C3'] .agentstart-loader-orb__ring-dot,
+.agentstart-loader-orb__ring[data-variant='C5'] .agentstart-loader-orb__ring-dot {
+  animation: agentstart-orb-ring-comet 1.8s ease-in-out infinite both;
 }
 
-@keyframes yiru-orb-ring-comet {
+@keyframes agentstart-orb-ring-comet {
   0%,
   100% {
     opacity: 0.08;
@@ -440,11 +440,11 @@
   }
 }
 
-.yiru-loader-orb__ring[data-variant='C4'] .yiru-loader-orb__ring-dot {
-  animation: yiru-orb-ring-stagger 1.6s ease-in-out infinite both;
+.agentstart-loader-orb__ring[data-variant='C4'] .agentstart-loader-orb__ring-dot {
+  animation: agentstart-orb-ring-stagger 1.6s ease-in-out infinite both;
 }
 
-@keyframes yiru-orb-ring-stagger {
+@keyframes agentstart-orb-ring-stagger {
   0%,
   100% {
     opacity: 1;
@@ -454,16 +454,16 @@
   }
 }
 
-.yiru-loader-orb__morph-dot {
+.agentstart-loader-orb__morph-dot {
   left: 50%;
   top: 50%;
   width: 3px;
   height: 3px;
   margin: -1.5px 0 0 -1.5px;
-  animation: yiru-orb-morph 4.8s cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+  animation: agentstart-orb-morph 4.8s cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
-@keyframes yiru-orb-morph {
+@keyframes agentstart-orb-morph {
   0%,
   5% {
     transform: translate(var(--m-1));
@@ -485,16 +485,16 @@
   }
 }
 
-.yiru-loader-orb__morph[data-variant='M2'],
-.yiru-loader-orb__morph[data-variant='M4'] {
-  animation: yiru-orb-morph-twist 9.6s linear infinite;
+.agentstart-loader-orb__morph[data-variant='M2'],
+.agentstart-loader-orb__morph[data-variant='M4'] {
+  animation: agentstart-orb-morph-twist 9.6s linear infinite;
 }
 
-.yiru-loader-orb__morph[data-variant='M5'] .yiru-loader-orb__morph-dot {
-  animation: yiru-orb-morph-scatter 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+.agentstart-loader-orb__morph[data-variant='M5'] .agentstart-loader-orb__morph-dot {
+  animation: agentstart-orb-morph-scatter 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
-@keyframes yiru-orb-morph-scatter {
+@keyframes agentstart-orb-morph-scatter {
   0%,
   12% {
     transform: translate(var(--m-1));
@@ -512,7 +512,7 @@
   }
 }
 
-@keyframes yiru-orb-morph-twist {
+@keyframes agentstart-orb-morph-twist {
   from {
     transform: scale(var(--orb-k, 0.7142857)) rotate(0deg);
   }
@@ -522,29 +522,29 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .yiru-loader-orb__cell,
-  .yiru-loader-orb__shape,
-  .yiru-loader-orb__ring-dot,
-  .yiru-loader-orb__morph-dot {
+  .agentstart-loader-orb__cell,
+  .agentstart-loader-orb__shape,
+  .agentstart-loader-orb__ring-dot,
+  .agentstart-loader-orb__morph-dot {
     animation: none !important;
   }
 
-  .yiru-loader-orb__cell[data-mid] {
+  .agentstart-loader-orb__cell[data-mid] {
     opacity: 1 !important;
   }
 
-  .yiru-loader-orb__shape {
+  .agentstart-loader-orb__shape {
     opacity: 0.3 !important;
     filter: blur(1.4px) !important;
     transform: none !important;
   }
 
-  .yiru-loader-orb__shape-a {
+  .agentstart-loader-orb__shape-a {
     opacity: 1 !important;
     filter: blur(0) !important;
   }
 
-  .yiru-loader-orb__ring-dot {
+  .agentstart-loader-orb__ring-dot {
     opacity: 0.7 !important;
   }
 }

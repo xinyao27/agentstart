@@ -1,14 +1,14 @@
-import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
-import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
+import type { AgentStartHooks } from '@agentstart/protocol/worktree/hooks'
 import { useEffect, useRef, useState } from 'react'
 import { getRepoHostIdentity } from '~renderer/repo/state/host-identity'
 import { checkRuntimeHooks } from '~renderer/runtime/hooks-client'
 
 export type ProjectHooksState = {
   hasHooks: boolean
-  hooks: YiruHooks | null
+  hooks: AgentStartHooks | null
   mayNeedUpdate: boolean
 }
 

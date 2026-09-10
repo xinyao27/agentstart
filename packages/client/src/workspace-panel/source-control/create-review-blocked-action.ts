@@ -2,7 +2,7 @@ import type {
   HostedReviewCreationBlockedReason,
   HostedReviewCreationEligibility,
   HostedReviewProvider
-} from '@yiru/protocol/hosted-review/types'
+} from '@agentstart/protocol/hosted-review/types'
 import {
   localizedHostedReviewCopy,
   resolveSupportedHostedReviewCopyProvider

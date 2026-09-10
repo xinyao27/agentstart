@@ -7,8 +7,8 @@ import {
   ExecuteResponseSchema,
   NetworkEntrySchema,
   NetworkResultSchema
-} from '../../generated/yiru/runtime/v1/browser_pb.js'
-import type { ExecuteResponse } from '../../generated/yiru/runtime/v1/browser_pb.js'
+} from '../../generated/agent_start/runtime/v1/browser_pb.js'
+import type { ExecuteResponse } from '../../generated/agent_start/runtime/v1/browser_pb.js'
 import {
   readArray,
   readBoolean,

@@ -1,5 +1,5 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { FolderWorkspacePathStatus } from '@yiru/protocol/workspace/folder-path'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { FolderWorkspacePathStatus } from '@agentstart/protocol/workspace/folder-path'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { DotsThree as Ellipsis, Plus } from '~renderer/icons/hugeicons'

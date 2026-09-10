@@ -1,4 +1,4 @@
-import type { WorktreeCardProperty } from '@yiru/protocol/settings/ui-state'
+import type { WorktreeCardProperty } from '@agentstart/protocol/settings/ui-state'
 import type { AppState } from '~renderer/store/types'
 
 import type { WorktreeGroupBy } from './groups'
@@ -13,12 +13,10 @@ export type WorktreeListReviewCacheInputs = {
   hostedReviewCache: AppState['hostedReviewCache'] | null
 }
 
-export const EMPTY_WORKTREE_LIST_REVIEW_CACHE_INPUTS: WorktreeListReviewCacheInputs = Object.freeze(
-  {
-    prCache: null,
-    hostedReviewCache: null
-  }
-)
+const EMPTY_WORKTREE_LIST_REVIEW_CACHE_INPUTS: WorktreeListReviewCacheInputs = Object.freeze({
+  prCache: null,
+  hostedReviewCache: null
+})
 
 export function selectWorktreeListReviewCacheInputs(
   state: WorktreeListReviewCacheState,

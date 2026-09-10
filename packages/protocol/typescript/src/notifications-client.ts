@@ -1,6 +1,6 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   DismissRequestSchema,
   DismissResponseSchema,
@@ -13,7 +13,7 @@ import {
   NotificationReportReason as ProtocolReportReason,
   NotificationSource as ProtocolNotificationSource,
   type NotificationSource
-} from '../generated/yiru/runtime/v1/notifications_pb.js'
+} from '../generated/agent_start/runtime/v1/notifications_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 

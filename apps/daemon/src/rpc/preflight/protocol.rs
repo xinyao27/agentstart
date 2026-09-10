@@ -1,7 +1,7 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::preflight_project_runtime::Runtime as ProtocolRuntimeKind;
-use yiru_protocol::runtime::v1::preflight_resolved_runtime::Kind as ProtocolResolvedKind;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::preflight_project_runtime::Runtime as ProtocolRuntimeKind;
+use agentstart_protocol::runtime::v1::preflight_resolved_runtime::Kind as ProtocolResolvedKind;
+use agentstart_protocol::runtime::v1::{
     PreflightContext as ProtocolContext, PreflightLocalHostRuntime, PreflightPathSource,
     PreflightRepairReason, PreflightResolvedRuntime, PreflightServiceCheckRequest,
     PreflightServiceCheckResponse, PreflightServiceDetectAgentsRequest,
@@ -9,7 +9,7 @@ use yiru_protocol::runtime::v1::{
     PreflightServiceRefreshAgentsRequest, PreflightServiceRefreshAgentsResponse,
     PreflightShellHydrationFailureReason, PreflightWindowsHostRuntime, PreflightWslRuntime,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::preflight::{
     PreflightContext, PreflightRequest, ProjectRuntime, ResolvedRuntime,
@@ -30,10 +30,10 @@ pub(in crate::rpc) async fn check(rpc: &PreflightRpc, payload: &[u8]) -> Result<
         return Err(data_loss("Preflight check returned an unexpected result"));
     };
     Ok(encode(&PreflightServiceCheckResponse {
-        git: Some(yiru_protocol::runtime::v1::PreflightToolStatus {
+        git: Some(agentstart_protocol::runtime::v1::PreflightToolStatus {
             installed: status.git.installed,
         }),
-        gh: Some(yiru_protocol::runtime::v1::PreflightCliStatus {
+        gh: Some(agentstart_protocol::runtime::v1::PreflightCliStatus {
             installed: status.gh.installed,
             authenticated: status.gh.authenticated,
         }),

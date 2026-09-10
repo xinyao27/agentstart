@@ -10,8 +10,8 @@ use tokio::io::AsyncWriteExt;
 
 use super::ComputerUseInstallError;
 
-const RELEASE_ROOT: &str = "https://github.com/xinyao27/yiru/releases/download";
-pub(super) const HELPER_ASSET_NAME: &str = "yiru-computer-use-macos.zip";
+const RELEASE_ROOT: &str = "https://github.com/xinyao27/agentstart/releases/download";
+pub(super) const HELPER_ASSET_NAME: &str = "agentstart-computer-use-macos.zip";
 const HELPER_DOWNLOAD_TIMEOUT: Duration = Duration::from_secs(60);
 const CHECKSUM_DOWNLOAD_TIMEOUT: Duration = Duration::from_secs(10);
 const MAX_HELPER_ARCHIVE_BYTES: u64 = 256 * 1024 * 1024;
@@ -23,7 +23,7 @@ pub(super) async fn prepare(version: &str) -> Result<PathBuf, ComputerUseInstall
     }
     let release_root = format!("{RELEASE_ROOT}/v{version}");
     let client = reqwest::Client::builder()
-        .user_agent("yiru-daemon")
+        .user_agent("agentstart-daemon")
         .redirect(Policy::custom(|attempt| {
             if attempt.url().scheme() == "https" && attempt.previous().len() < 10 {
                 attempt.follow()
@@ -33,7 +33,7 @@ pub(super) async fn prepare(version: &str) -> Result<PathBuf, ComputerUseInstall
         }))
         .build()?;
     let archive_url = format!("{release_root}/{HELPER_ASSET_NAME}");
-    let checksums_url = format!("{release_root}/yiru-checksums.txt");
+    let checksums_url = format!("{release_root}/agentstart-checksums.txt");
     let (archive_response, checksums_response) = tokio::try_join!(
         send(&client, &archive_url, HELPER_DOWNLOAD_TIMEOUT),
         send(&client, &checksums_url, CHECKSUM_DOWNLOAD_TIMEOUT)
@@ -184,7 +184,7 @@ async fn create_staging_directory() -> Result<PathBuf, ComputerUseInstallError> 
             .into_iter()
             .map(|byte| format!("{byte:02x}"))
             .collect::<String>();
-        let path = env::temp_dir().join(format!("yiru-computer-use-{suffix}"));
+        let path = env::temp_dir().join(format!("agentstart-computer-use-{suffix}"));
         match tokio::fs::create_dir(&path).await {
             Ok(()) => {
                 if let Err(error) =

@@ -1,4 +1,4 @@
-import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { isRuntimePtyId } from '@agentstart/protocol/terminal-identity'
 import type { StateCreator } from 'zustand'
 import { closeRuntimeTerminal } from '~renderer/runtime/terminal-inspection'
 import { disposeParkedTerminalWatchersForPtyIds } from '~renderer/runtime/terminal-parked-watcher-registry'

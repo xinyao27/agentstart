@@ -1,4 +1,4 @@
-import { clamp01 } from '@yiru/protocol/settings/color-values'
+import { clamp01 } from '@agentstart/protocol/settings/color-values'
 import type React from 'react'
 import { useRef } from 'react'
 import { translate } from '~renderer/i18n/i18n'

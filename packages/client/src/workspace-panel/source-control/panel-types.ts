@@ -1,9 +1,9 @@
-import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitConflictOperation } from '@agentstart/protocol/git/status-types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
 import type {
   HostedReviewCreationEligibility,
   HostedReviewProvider
-} from '@yiru/protocol/hosted-review/types'
+} from '@agentstart/protocol/hosted-review/types'
 import type { RuntimeGitContext } from '~renderer/runtime/git-client'
 
 export type AbortConflictOperation = Extract<GitConflictOperation, 'merge' | 'rebase'>

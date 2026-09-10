@@ -89,7 +89,7 @@ async function refreshSkillFreshness(force = true): Promise<void> {
       publishSnapshot({
         inventory: null,
         loading: false,
-        error: cause instanceof Error ? cause.message : 'Could not inspect Yiru skills.'
+        error: cause instanceof Error ? cause.message : 'Could not inspect AgentStart skills.'
       })
     }
   }

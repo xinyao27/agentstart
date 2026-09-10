@@ -1,13 +1,13 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import {
   resolveSourceControlActionCommandTemplate,
   setSourceControlActionDefault
-} from '@yiru/protocol/source-control/action-recipes'
+} from '@agentstart/protocol/source-control/action-recipes'
 import type {
   SourceControlAiSettingsPatch,
   SourceControlAiSettings
-} from '@yiru/protocol/source-control/ai-types'
-import { normalizeSourceControlAiSettings } from '@yiru/protocol/source-control/settings'
+} from '@agentstart/protocol/source-control/ai-types'
+import { normalizeSourceControlAiSettings } from '@agentstart/protocol/source-control/settings'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { CaretDown as ChevronDown } from '~renderer/icons/hugeicons'
@@ -41,7 +41,7 @@ const BUILT_IN_BRANCH_NAME_PROMPT = buildBranchNamePrompt({
   firstPrompt: '{first agent prompt}',
   assistantMessage: '{agent initial response, when available}'
 })
-export function shouldOpenAutoRenameBranchAdvanced(searchQuery: string): boolean {
+function shouldOpenAutoRenameBranchAdvanced(searchQuery: string): boolean {
   return (
     normalizeSettingsSearchQuery(searchQuery) !== '' &&
     matchesSettingsSearch(searchQuery, getAutoRenameBranchAdvancedSearchEntries())
@@ -165,7 +165,7 @@ export function AutoRenameBranchFromWorkSetting({
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.settings.AutoRenameBranchFromWorkSetting.12ea4a408d',
-              'When an agent starts working in a new workspace, Yiru renames its auto-generated branch (e.g.'
+              'When an agent starts working in a new workspace, AgentStart renames its auto-generated branch (e.g.'
             )}
             <code>
               {translate(
@@ -175,7 +175,7 @@ export function AutoRenameBranchFromWorkSetting({
             </code>
             {translate(
               'auto.components.settings.AutoRenameBranchFromWorkSetting.d9b65054ef',
-              ') to a short name summarizing the task. Only branches Yiru named itself are renamed, and never after they have been pushed.'
+              ') to a short name summarizing the task. Only branches AgentStart named itself are renamed, and never after they have been pushed.'
             )}
           </p>
         </div>
@@ -200,7 +200,7 @@ export function AutoRenameBranchFromWorkSetting({
           }
         />
         <CollapsibleContent>
-          <div className="border-border/60 bg-muted/20 mt-2 space-y-3 border px-3 py-3">
+          <div className="border-border/60 bg-muted/20 mt-2 space-y-3 rounded-md border px-3 py-3">
             <div className="space-y-2">
               <div className="space-y-0.5">
                 <Label htmlFor="git-auto-rename-branch-name-template">
@@ -222,7 +222,7 @@ export function AutoRenameBranchFromWorkSetting({
                   </code>{' '}
                   {translate(
                     'auto.components.settings.AutoRenameBranchFromWorkSetting.69bf4830c2',
-                    "to include Yiru's"
+                    "to include AgentStart's"
                   )}{' '}
                   <Popover>
                     <PopoverTrigger
@@ -246,7 +246,7 @@ export function AutoRenameBranchFromWorkSetting({
                       className="w-[520px] max-w-[calc(100vw-2rem)] p-3"
                     >
                       <div>
-                        <pre className="scrollbar-sleek border-border bg-background text-muted-foreground max-h-72 overflow-auto border px-3 py-2 font-mono text-[11px] leading-relaxed whitespace-pre-wrap">
+                        <pre className="scrollbar-sleek border-border bg-background text-muted-foreground max-h-72 overflow-auto rounded-md border px-3 py-2 font-mono text-[11px] leading-relaxed whitespace-pre-wrap">
                           {BUILT_IN_BRANCH_NAME_PROMPT}
                         </pre>
                       </div>
@@ -274,7 +274,7 @@ export function AutoRenameBranchFromWorkSetting({
                   </code>
                   {translate(
                     'auto.components.settings.AutoRenameBranchFromWorkSetting.5d569f5199',
-                    '. Yiru generates only the final segment, like'
+                    '. AgentStart generates only the final segment, like'
                   )}
                   <code className="font-mono">
                     {translate(

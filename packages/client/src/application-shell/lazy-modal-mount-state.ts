@@ -4,7 +4,7 @@ export type LazyModalId = (typeof LAZY_MODAL_IDS)[number]
 
 const LAZY_MODAL_ID_SET = new Set<string>(LAZY_MODAL_IDS)
 
-export function isLazyModalId(value: string): value is LazyModalId {
+function isLazyModalId(value: string): value is LazyModalId {
   return LAZY_MODAL_ID_SET.has(value)
 }
 

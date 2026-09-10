@@ -1,5 +1,5 @@
-import type { GitStatusEntry, GitUpstreamStatus } from '@yiru/protocol/git/status-types'
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitStatusEntry, GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
 
 export type ChecksPanelGitStatusContextInput = {
   repoId: string | null | undefined

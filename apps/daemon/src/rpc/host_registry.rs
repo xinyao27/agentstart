@@ -20,56 +20,56 @@ impl HostRegistryRpc {
     pub(super) async fn protocol_list(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::list(&self.registry, payload).await
     }
 
     pub(super) async fn protocol_add(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::add(&self.registry, payload).await
     }
 
     pub(super) async fn protocol_probe(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::probe(&self.registry, payload).await
     }
 
     pub(super) async fn protocol_remove(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::remove(&self.registry, payload).await
     }
 
     pub(super) async fn protocol_is_wsl_available(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::is_wsl_available(&self.system, payload).await
     }
 
     pub(super) async fn protocol_list_wsl_distros(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::list_wsl_distros(&self.system, payload).await
     }
 
     pub(super) async fn protocol_is_git_bash_available(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::is_git_bash_available(&self.system, payload).await
     }
 
     pub(super) async fn protocol_is_pwsh_available(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::is_pwsh_available(&self.system, payload).await
     }
 }

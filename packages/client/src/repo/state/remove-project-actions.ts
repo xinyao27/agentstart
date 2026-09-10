@@ -1,6 +1,6 @@
-import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
-import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+import { getRepoExecutionHostId } from '@agentstart/protocol/host/identity'
+import { isRuntimePtyId } from '@agentstart/protocol/terminal-identity'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterProjectCatalogMutation } from '~renderer/project-catalog/mutation-refresh'
@@ -55,7 +55,7 @@ export function createRepoRemoveProjectActions(
             ).rm({ expectedRevision, repo: projectId }, { timeoutMs: 15_000 }))
         await refreshAfterProjectCatalogMutation(target, result.revision)
 
-        get().clearYiruHookTrustForRepo(projectId)
+        get().clearAgentStartHookTrustForRepo(projectId)
         get().evictGitHubRepoCaches(projectId, ownerRepo.path)
         const worktreeIds = getKnownRepoWorktreeIds(catalog, projectId, ownerHostId)
         await stopRemovedRuntimeTerminals(target, worktreeIds)

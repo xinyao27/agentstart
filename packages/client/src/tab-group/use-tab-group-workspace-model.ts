@@ -5,9 +5,6 @@ import { useWorkspaceCloseCommands } from './use-workspace-close-commands'
 import { useWorkspaceOpenCommands } from './use-workspace-open-commands'
 import { useTabGroupWorkspaceItems } from './workspace-items'
 
-export { recordTerminalTabGroupSplit } from './use-workspace-open-commands'
-export type { GroupBrowserItem, GroupEditorItem } from './workspace-items'
-
 export function useTabGroupWorkspaceModel({
   groupId,
   worktreeId

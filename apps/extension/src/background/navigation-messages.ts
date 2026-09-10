@@ -89,7 +89,6 @@ function parseExternalTarget(value: object): { projectId?: string; url: string }
 
 function parseGlobalPage(value: unknown): GlobalPage | null {
   return value === 'activity' ||
-    value === 'automations' ||
     value === 'mobile' ||
     value === 'search' ||
     value === 'skills' ||

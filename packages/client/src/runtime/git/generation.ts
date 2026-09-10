@@ -1,8 +1,8 @@
-import type { GitGenerationOverridesInput } from '@yiru/protocol'
-import type { HostedReviewProvider } from '@yiru/protocol/hosted-review/types'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { getCommitMessageModelDiscoveryHostKeyForScope } from '@yiru/protocol/source-control/discovery-host'
-import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
+import type { GitGenerationOverridesInput } from '@agentstart/protocol'
+import type { HostedReviewProvider } from '@agentstart/protocol/hosted-review/types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { getCommitMessageModelDiscoveryHostKeyForScope } from '@agentstart/protocol/source-control/discovery-host'
+import type { ResolvedSourceControlAiGenerationParams } from '@agentstart/protocol/source-control/resolution'
 
 import { openRuntimeGitClient } from './client'
 import {

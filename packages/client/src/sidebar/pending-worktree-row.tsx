@@ -40,7 +40,7 @@ export function PendingWorktreeRow({
   return (
     <div
       className={cn(
-        'group flex w-full items-center gap-1 transition-colors',
+        'group flex w-full items-center gap-1 transition-colors rounded-md',
         active ? 'border-ring/35 bg-accent border' : 'border border-transparent hover:bg-accent'
       )}
     >

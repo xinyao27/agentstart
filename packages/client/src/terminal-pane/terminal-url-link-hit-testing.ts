@@ -27,9 +27,7 @@ type ParsedTerminalHttpLink = {
 }
 
 const HTTP_SCHEME_PREFIXES = ['https://', 'http://'] as const
-export { TERMINAL_HTTP_URL_MAX_LENGTH } from './terminal-http-link-limits'
-
-export function extractTerminalHttpLinks(lineText: string): ParsedTerminalHttpLink[] {
+function extractTerminalHttpLinks(lineText: string): ParsedTerminalHttpLink[] {
   const links: ParsedTerminalHttpLink[] = []
   for (const candidate of iterateTerminalHttpUrlCandidates(lineText)) {
     let parsed: URL
@@ -239,7 +237,7 @@ export function installHttpLinkClickFallback(
   }
 }
 
-export function openHttpLinkAtBufferPosition(
+function openHttpLinkAtBufferPosition(
   buffer: { getLine(y: number): IBufferLine | undefined },
   position: { x: number; y: number },
   terminalColumns: number,
@@ -304,9 +302,9 @@ export function openTerminalHttpLink(
   event?: Partial<Pick<MouseEvent, 'shiftKey'>>
 ): void {
   // Why: the primary modifier safely activates terminal links; Shift is the
-  // explicit opt-in to a Yiru Browser tab instead of the system browser.
+  // explicit opt-in to a AgentStart Browser tab instead of the system browser.
   openHttpLink(url, {
-    openInYiruBrowser: event?.shiftKey === true,
+    openInAgentStartBrowser: event?.shiftKey === true,
     worktreeId: deps.worktreeId,
     sourceOwner: deps.runtimeEnvironmentId
       ? { kind: 'runtime', runtimeEnvironmentId: deps.runtimeEnvironmentId }

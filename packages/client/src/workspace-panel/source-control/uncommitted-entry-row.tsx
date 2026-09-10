@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import React from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import { translate } from '~renderer/i18n/i18n'
@@ -241,7 +241,7 @@ export const UncommittedEntryRow = function UncommittedEntryRow({
   )
 }
 
-export function ConflictBadge({ entry }: { entry: GitStatusEntry }): React.JSX.Element {
+function ConflictBadge({ entry }: { entry: GitStatusEntry }): React.JSX.Element {
   const isUnresolvedConflict = entry.conflictStatus === 'unresolved'
   const label = isUnresolvedConflict
     ? translate('auto.components.right.sidebar.SourceControl.31f6d46278', 'Unresolved')

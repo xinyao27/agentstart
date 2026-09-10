@@ -10,7 +10,7 @@ import {
   type SkillsServiceManageStartInstallRunResponse,
   type SkillsServiceManageStartRemoveRunResponse,
   type SkillsServiceManageStartUpdateRunResponse
-} from '../../generated/yiru/runtime/v1/skills_pb.js'
+} from '../../generated/agent_start/runtime/v1/skills_pb.js'
 import {
   invalidResponse,
   optionalTimestamp,

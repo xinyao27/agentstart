@@ -1,3 +1,3 @@
-"CFBundleDisplayName" = "Yiru 电脑控制";
-"NSAccessibilityUsageDescription" = "当你要求 Yiru 使用应用时，Yiru 电脑控制需要辅助功能权限来读取应用界面并与其交互。";
-"NSScreenCaptureUsageDescription" = "当你要求 Yiru 查看屏幕时，Yiru 电脑控制需要屏幕录制权限来捕获应用窗口。";
+"CFBundleDisplayName" = "AgentStart 电脑控制";
+"NSAccessibilityUsageDescription" = "当你要求 AgentStart 使用应用时，AgentStart 电脑控制需要辅助功能权限来读取应用界面并与其交互。";
+"NSScreenCaptureUsageDescription" = "当你要求 AgentStart 查看屏幕时，AgentStart 电脑控制需要屏幕录制权限来捕获应用窗口。";

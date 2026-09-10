@@ -2,18 +2,18 @@ import {
   DEFAULT_EDITOR_AUTO_SAVE_DELAY_MS,
   MAX_EDITOR_AUTO_SAVE_DELAY_MS,
   MIN_EDITOR_AUTO_SAVE_DELAY_MS
-} from '@yiru/protocol/settings/editor'
+} from '@agentstart/protocol/settings/editor'
 import type { OpenFile } from '~renderer/editor/state'
 import { joinPath } from '~renderer/path'
 import { clampNumber } from '~renderer/terminal/theme'
 
-export const YIRU_EDITOR_QUIESCE_FILE_SAVES_EVENT = 'yiru:editor-quiesce-file-saves'
-export const YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT = 'yiru:editor-external-file-change'
-export const YIRU_EDITOR_SAVE_FILE_EVENT = 'yiru:editor-save-file'
-export const YIRU_EDITOR_SAVE_AND_CLOSE_EVENT = 'yiru:save-and-close'
-export const YIRU_EDITOR_FILE_SAVED_EVENT = 'yiru:editor-file-saved'
-export const YIRU_EDITOR_REQUEST_CMD_SAVE_EVENT = 'yiru:editor-request-cmd-save'
-export const YIRU_EDITOR_REQUEST_FILE_CLOSE_EVENT = 'yiru:editor-request-file-close'
+export const AGENTSTART_EDITOR_QUIESCE_FILE_SAVES_EVENT = 'agentstart:editor-quiesce-file-saves'
+export const AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT = 'agentstart:editor-external-file-change'
+export const AGENTSTART_EDITOR_SAVE_FILE_EVENT = 'agentstart:editor-save-file'
+export const AGENTSTART_EDITOR_SAVE_AND_CLOSE_EVENT = 'agentstart:save-and-close'
+export const AGENTSTART_EDITOR_FILE_SAVED_EVENT = 'agentstart:editor-file-saved'
+export const AGENTSTART_EDITOR_REQUEST_CMD_SAVE_EVENT = 'agentstart:editor-request-cmd-save'
+export const AGENTSTART_EDITOR_REQUEST_FILE_CLOSE_EVENT = 'agentstart:editor-request-file-close'
 
 export type EditorPathMutationTarget = {
   worktreeId: string
@@ -148,7 +148,7 @@ export async function requestEditorSaveQuiesce(target: EditorSaveQuiesceTarget):
   await new Promise<void>((resolve) => {
     let claimed = false
     window.dispatchEvent(
-      new CustomEvent<EditorSaveQuiesceDetail>(YIRU_EDITOR_QUIESCE_FILE_SAVES_EVENT, {
+      new CustomEvent<EditorSaveQuiesceDetail>(AGENTSTART_EDITOR_QUIESCE_FILE_SAVES_EVENT, {
         detail: {
           ...target,
           claim: () => {
@@ -171,7 +171,7 @@ export async function requestEditorFileSave(target: EditorSaveFileTarget): Promi
   await new Promise<void>((resolve, reject) => {
     let claimed = false
     window.dispatchEvent(
-      new CustomEvent<EditorSaveFileDetail>(YIRU_EDITOR_SAVE_FILE_EVENT, {
+      new CustomEvent<EditorSaveFileDetail>(AGENTSTART_EDITOR_SAVE_FILE_EVENT, {
         detail: {
           ...target,
           claim: () => {
@@ -194,7 +194,7 @@ export async function requestEditorFileSave(target: EditorSaveFileTarget): Promi
 
 export function requestEditorFileClose(fileId: string): void {
   window.dispatchEvent(
-    new CustomEvent<EditorRequestFileCloseDetail>(YIRU_EDITOR_REQUEST_FILE_CLOSE_EVENT, {
+    new CustomEvent<EditorRequestFileCloseDetail>(AGENTSTART_EDITOR_REQUEST_FILE_CLOSE_EVENT, {
       detail: { fileId }
     })
   )
@@ -203,7 +203,7 @@ export function requestEditorFileClose(fileId: string): void {
 export function requestEditorCmdSave(target: EditorCmdSaveRequestTarget): void {
   let claimed = false
   window.dispatchEvent(
-    new CustomEvent<EditorCmdSaveRequestDetail>(YIRU_EDITOR_REQUEST_CMD_SAVE_EVENT, {
+    new CustomEvent<EditorCmdSaveRequestDetail>(AGENTSTART_EDITOR_REQUEST_CMD_SAVE_EVENT, {
       detail: {
         ...target,
         claim: () => {
@@ -223,7 +223,7 @@ export function requestEditorCmdSave(target: EditorCmdSaveRequestTarget): void {
 // content destroys its unsaved draft (the data-loss half of issue #7265).
 export function notifyEditorExternalFileChange(target: EditorPathMutationTarget): void {
   window.dispatchEvent(
-    new CustomEvent<EditorPathMutationTarget>(YIRU_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, {
+    new CustomEvent<EditorPathMutationTarget>(AGENTSTART_EDITOR_EXTERNAL_FILE_CHANGE_EVENT, {
       detail: target
     })
   )

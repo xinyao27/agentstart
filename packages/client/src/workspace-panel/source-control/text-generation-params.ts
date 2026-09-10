@@ -1,7 +1,7 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { getCommitMessageAgentCapability } from '@yiru/protocol/source-control/catalog/agents'
-import { CUSTOM_AGENT_ID, isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
-import type { ResolvedSourceControlAiGenerationParams } from '@yiru/protocol/source-control/resolution'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { getCommitMessageAgentCapability } from '@agentstart/protocol/source-control/catalog/agents'
+import { CUSTOM_AGENT_ID, isCustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
+import type { ResolvedSourceControlAiGenerationParams } from '@agentstart/protocol/source-control/resolution'
 
 export type CommitMessageGenerationAgentChoice =
   | ResolvedSourceControlAiGenerationParams['agentId']

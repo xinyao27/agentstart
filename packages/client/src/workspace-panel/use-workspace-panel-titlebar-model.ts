@@ -1,4 +1,4 @@
-import type { WorkspaceTitlebarActionId } from '@yiru/protocol/settings/ui-state'
+import type { WorkspaceTitlebarActionId } from '@agentstart/protocol/settings/ui-state'
 import type { ActiveRightSidebarTab } from '~renderer/editor/state'
 import type { ShortcutKeyComboDetails } from '~renderer/keyboard-input/use-shortcut-label'
 
@@ -8,11 +8,6 @@ import type {
   WorkspaceTitlebarStripItem
 } from './titlebar-strip-items'
 import type { PanelTitlebarDragSource } from './use-workspace-panel-titlebar-pin-drag'
-
-export type {
-  WorkspacePanelTitlebarDropTarget,
-  WorkspaceTitlebarStripItem
-} from './titlebar-strip-items'
 
 export type WorkspacePanelTitlebarModel = {
   worktreeId: string

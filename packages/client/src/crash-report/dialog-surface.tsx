@@ -1,11 +1,11 @@
 import {
   isRecoverableRendererErrorReport,
   isReactErrorBoundaryReport
-} from '@yiru/protocol/crash-reports/classification'
-import type { CrashReportDiagnosticBundle } from '@yiru/protocol/crash-reports/diagnostic-bundle'
-import { formatCrashReportText } from '@yiru/protocol/crash-reports/report-text'
-import type { CrashReportRecord } from '@yiru/protocol/crash-reports/values'
-import type { GitHubViewer } from '@yiru/protocol/hosted-review/review-types'
+} from '@agentstart/protocol/crash-reports/classification'
+import type { CrashReportDiagnosticBundle } from '@agentstart/protocol/crash-reports/diagnostic-bundle'
+import { formatCrashReportText } from '@agentstart/protocol/crash-reports/report-text'
+import type { CrashReportRecord } from '@agentstart/protocol/crash-reports/values'
+import type { GitHubViewer } from '@agentstart/protocol/hosted-review/review-types'
 import { useDeferredValue, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -70,11 +70,11 @@ function getDialogTitle(report: CrashReportRecord | null): string {
   return report && isRecoverableRendererErrorReport(report)
     ? translate(
         'auto.components.crash.report.CrashReportDialog.recoverableError',
-        'Yiru hit a recoverable error'
+        'AgentStart hit a recoverable error'
       )
     : translate(
         'auto.components.crash.report.CrashReportDialog.closedUnexpectedly',
-        'Yiru closed unexpectedly'
+        'AgentStart closed unexpectedly'
       )
 }
 
@@ -110,7 +110,7 @@ function getNotesPlaceholder(report: CrashReportRecord | null): string {
       )
     : translate(
         'auto.components.crash.report.CrashReportDialog.crashNotes',
-        'Optional: what were you doing before Yiru closed?'
+        'Optional: what were you doing before AgentStart closed?'
       )
 }
 
@@ -274,11 +274,14 @@ export function CrashReportDialogSurface({
         <div className="space-y-3">
           {report ? (
             <>
-              <div className="border-border/70 bg-muted/30 border p-3 text-xs">
+              <div className="border-border/70 bg-muted/30 rounded-md border p-3 text-xs">
                 <div className="text-foreground font-medium">{formatSummary(report)}</div>
                 <div className="text-muted-foreground mt-1">
                   {new Date(report.createdAt).toLocaleString()} · {report.platform} {report.arch} ·
-                  {translate('auto.components.crash.report.CrashReportDialog.835037edc9', 'Yiru')}{' '}
+                  {translate(
+                    'auto.components.crash.report.CrashReportDialog.835037edc9',
+                    'AgentStart'
+                  )}{' '}
                   {report.appVersion}
                 </div>
               </div>
@@ -289,13 +292,13 @@ export function CrashReportDialogSurface({
                     'Diagnostic text'
                   )}
                 </div>
-                <pre className="border-border bg-muted/20 text-muted-foreground scrollbar-sleek max-h-44 overflow-auto border p-3 font-mono text-[11px] leading-5 break-words whitespace-pre-wrap">
+                <pre className="border-border bg-muted/20 text-muted-foreground scrollbar-sleek max-h-44 overflow-auto rounded-md border p-3 font-mono text-[11px] leading-5 break-words whitespace-pre-wrap">
                   {diagnosticText}
                 </pre>
               </div>
             </>
           ) : (
-            <div className="border-border/70 bg-muted/30 text-muted-foreground border p-3 text-xs">
+            <div className="border-border/70 bg-muted/30 text-muted-foreground rounded-md border p-3 text-xs">
               {loading
                 ? translate(
                     'auto.components.crash.report.CrashReportDialog.765591798d',
@@ -312,9 +315,9 @@ export function CrashReportDialogSurface({
             onChange={(event) => setNotes(event.target.value)}
             rows={4}
             placeholder={getNotesPlaceholder(report)}
-            className="border-border bg-background placeholder:text-muted-foreground min-h-24 w-full border px-3 py-2 text-sm outline-none"
+            className="border-border bg-background placeholder:text-muted-foreground min-h-24 w-full rounded-md border px-3 py-2 text-sm outline-none"
           />
-          <div className="border-border/70 bg-muted/20 flex items-start gap-2 border p-3">
+          <div className="border-border/70 bg-muted/20 flex items-start gap-2 rounded-md border p-3">
             <Checkbox
               id="crash-report-attach-diagnostics"
               checked={includeDiagnosticLogs}

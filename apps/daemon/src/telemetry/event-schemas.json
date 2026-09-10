@@ -9,7 +9,7 @@
       },
       "additionalProperties": false
     },
-    "app_starred_yiru": {
+    "app_starred_agentstart": {
       "type": "object",
       "properties": {
         "source": {
@@ -422,7 +422,7 @@
       "required": ["via"],
       "additionalProperties": false
     },
-    "yiru_cli_feature_tip_shown": {
+    "agentstart_cli_feature_tip_shown": {
       "type": "object",
       "properties": {
         "source": { "type": "string", "enum": ["app_open", "manual"] },
@@ -431,7 +431,7 @@
       "required": ["source"],
       "additionalProperties": false
     },
-    "yiru_cli_feature_tip_setup_clicked": {
+    "agentstart_cli_feature_tip_setup_clicked": {
       "type": "object",
       "properties": {
         "source": { "type": "string", "enum": ["app_open", "manual"] },
@@ -440,7 +440,7 @@
       "required": ["source"],
       "additionalProperties": false
     },
-    "yiru_cli_feature_tip_setup_result": {
+    "agentstart_cli_feature_tip_setup_result": {
       "type": "object",
       "properties": {
         "source": { "type": "string", "enum": ["app_open", "manual"] },
@@ -1450,7 +1450,7 @@
         "platform": { "type": "string", "maxLength": 64 },
         "arch": { "type": "string", "maxLength": 64 },
         "os_release": { "type": "string", "maxLength": 64 },
-        "yiru_channel": { "type": "string", "enum": ["stable", "rc"] },
+        "agentstart_channel": { "type": "string", "enum": ["stable", "rc"] },
         "diagnostic_bundle_id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{16,64}$" },
         "diagnostic_excerpt": { "type": "string", "minLength": 1, "maxLength": 16000 },
         "diagnostic_bytes": { "type": "integer", "minimum": 0, "maximum": 4194304 },
@@ -1465,7 +1465,7 @@
         "platform",
         "arch",
         "os_release",
-        "yiru_channel"
+        "agentstart_channel"
       ],
       "additionalProperties": false
     },
@@ -1622,7 +1622,7 @@
   },
   "required": [
     "app_opened",
-    "app_starred_yiru",
+    "app_starred_agentstart",
     "star_nag_outcome",
     "feature_interaction_usage_bucket_reached",
     "repo_added",
@@ -1634,9 +1634,9 @@
     "settings_changed",
     "telemetry_opted_in",
     "telemetry_opted_out",
-    "yiru_cli_feature_tip_shown",
-    "yiru_cli_feature_tip_setup_clicked",
-    "yiru_cli_feature_tip_setup_result",
+    "agentstart_cli_feature_tip_shown",
+    "agentstart_cli_feature_tip_setup_clicked",
+    "agentstart_cli_feature_tip_setup_result",
     "command_palette_feature_tip_shown",
     "command_palette_feature_tip_acknowledged",
     "feature_wall_opened",

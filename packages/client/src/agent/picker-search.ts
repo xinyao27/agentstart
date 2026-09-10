@@ -1,4 +1,4 @@
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 import type { AgentCatalogEntry } from '~renderer/agent/catalog'
 
 type RankedAgent = {
@@ -8,9 +8,9 @@ type RankedAgent = {
 }
 
 const NO_MATCH = Number.POSITIVE_INFINITY
-export const AGENT_PICKER_QUERY_MAX_BYTES = 2 * 1024
+const AGENT_PICKER_QUERY_MAX_BYTES = 2 * 1024
 
-export function isAgentPickerQueryTooLarge(
+function isAgentPickerQueryTooLarge(
   query: string,
   maxBytes = AGENT_PICKER_QUERY_MAX_BYTES
 ): boolean {

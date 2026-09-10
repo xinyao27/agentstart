@@ -4,13 +4,7 @@ import type React from 'react'
 import type { SlashCommand, SlashMenuState } from './slash-command-catalog'
 
 export { slashCommands } from './slash-command-catalog'
-export type {
-  SlashCommand,
-  SlashCommandGroup,
-  SlashCommandIcon,
-  SlashCommandId,
-  SlashMenuState
-} from './slash-command-catalog'
+export type { SlashCommand, SlashMenuState } from './slash-command-catalog'
 
 /**
  * Executes a slash command by first deleting the typed slash text, then

@@ -1,18 +1,18 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   DiagnosticsDisabledReason as ProtocolDisabledReason,
   type DiagnosticsServiceCollectBundleResponse,
   type DiagnosticsServiceGetStatusResponse,
   type DiagnosticsServiceUploadBundleResponse
-} from '../generated/yiru/runtime/v1/diagnostics_pb.js'
+} from '../generated/agent_start/runtime/v1/diagnostics_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const DIAGNOSTICS_PROTOCOL_CAPABILITY = 'diagnostics.support.protobuf.v1' as const
 
 export type DiagnosticsDisabledReason =
   | 'do_not_track'
-  | 'yiru_telemetry_disabled'
-  | 'yiru_diagnostics_disabled'
+  | 'agentstart_telemetry_disabled'
+  | 'agentstart_diagnostics_disabled'
   | 'ci'
 
 export type DiagnosticsStatus = {
@@ -106,11 +106,11 @@ function diagnosticsDisabledReason(value: ProtocolDisabledReason): DiagnosticsDi
   if (value === ProtocolDisabledReason.DO_NOT_TRACK) {
     return 'do_not_track'
   }
-  if (value === ProtocolDisabledReason.YIRU_TELEMETRY_DISABLED) {
-    return 'yiru_telemetry_disabled'
+  if (value === ProtocolDisabledReason.AGENT_START_TELEMETRY_DISABLED) {
+    return 'agentstart_telemetry_disabled'
   }
-  if (value === ProtocolDisabledReason.YIRU_DIAGNOSTICS_DISABLED) {
-    return 'yiru_diagnostics_disabled'
+  if (value === ProtocolDisabledReason.AGENT_START_DIAGNOSTICS_DISABLED) {
+    return 'agentstart_diagnostics_disabled'
   }
   if (value === ProtocolDisabledReason.CI) {
     return 'ci'

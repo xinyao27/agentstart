@@ -189,7 +189,7 @@ pub(super) fn feature_tip_ids(value: &Value, path: &[Value], issues: &mut Issues
     for (index, value) in values.iter().enumerate() {
         let item_path = child(path, index);
         match value.as_str() {
-            Some("yiru-cli" | "command-palette") => parsed.push(value.clone()),
+            Some("agentstart-cli" | "command-palette") => parsed.push(value.clone()),
             _ => issues.push(json!({
                 "code": "custom",
                 "path": item_path,

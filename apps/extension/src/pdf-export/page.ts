@@ -1,4 +1,4 @@
-import type { PdfExportInput } from '@yiru/client/pdf-export'
+import type { PdfExportInput } from '@agentstart/client/pdf-export'
 
 const PDF_EXPORT_STORAGE_PREFIX = 'pdfExport:'
 

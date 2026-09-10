@@ -1,4 +1,4 @@
-import type { GitHistoryItem, GitHistoryResult } from '@yiru/protocol/git/history-types'
+import type { GitHistoryItem, GitHistoryResult } from '@agentstart/protocol/git/history-types'
 import type { StateCreator } from 'zustand'
 import { translate } from '~renderer/i18n/i18n'
 import { getRepoOwnerRoutedSettings } from '~renderer/repo/runtime-owner'
@@ -7,7 +7,7 @@ import { getRuntimeGitHistory } from '~renderer/runtime/git-client'
 import { getRepoMapFromState, getWorktreeMapFromState } from '~renderer/store/selectors'
 import type { AppState } from '~renderer/store/types'
 
-import { DEFAULT_GIT_GRAPH_COLUMN_WIDTHS, type GitGraphColumnWidths } from './column-widths'
+import type { GitGraphColumnWidths } from './column-widths'
 
 export type GitGraphState =
   | { status: 'idle' | 'loading'; result?: GitHistoryResult; error?: string }
@@ -232,5 +232,3 @@ export const createGitGraphSlice: StateCreator<AppState, [], [], GitGraphSlice> 
     }
   }
 })
-
-export { DEFAULT_GIT_GRAPH_COLUMN_WIDTHS, type GitGraphColumnWidths }

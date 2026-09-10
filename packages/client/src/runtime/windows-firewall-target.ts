@@ -1,4 +1,4 @@
-import { WindowsFirewallClient } from '@yiru/protocol'
+import { WindowsFirewallClient } from '@agentstart/protocol'
 
 import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'
 

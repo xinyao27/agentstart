@@ -2,8 +2,8 @@ import type {
   WorkspacePort,
   WorkspacePortKillResult,
   WorkspacePortScanResult
-} from '@yiru/protocol'
-import * as executionHost from '@yiru/protocol/host/identity'
+} from '@agentstart/protocol'
+import * as executionHost from '@agentstart/protocol/host/identity'
 import { translate } from '~renderer/i18n/i18n'
 import type { LocalhostWorktreeLabelRoute } from '~renderer/ports/loopback-url'
 import { createRemoteRuntimeSessionBrowserTab } from '~renderer/runtime/remote-runtime-session-create'
@@ -13,7 +13,10 @@ import { killWorkspacePort, scanWorkspacePorts } from '~renderer/runtime/workspa
 import type { useAppStore } from '~renderer/store/state'
 import { activateAndRevealWorktree } from '~renderer/worktree/activation'
 
-import { shouldOpenWebLinkInYiruBrowser, type WebLinkMouseEvent } from '../browser/link-gesture'
+import {
+  shouldOpenWebLinkInAgentStartBrowser,
+  type WebLinkMouseEvent
+} from '../browser/link-gesture'
 import { browserUrlForPort } from './urls'
 
 export { addressForPort } from './urls'
@@ -46,15 +49,15 @@ export function getPortOpenBrowserTooltipLabel(openLabel: string): string {
   return openLabel
 }
 
-export function resolvePortOpenInYiruBrowser({
+export function resolvePortOpenInAgentStartBrowser({
   event
 }: {
   event: WebLinkMouseEvent | undefined
 }): boolean {
-  return shouldOpenWebLinkInYiruBrowser(event)
+  return shouldOpenWebLinkInAgentStartBrowser(event)
 }
 
-export function workspacePortOwnerWorktreeId(port: WorkspacePort): string | null {
+function workspacePortOwnerWorktreeId(port: WorkspacePort): string | null {
   return port.kind === 'workspace' ? port.owner.worktreeId : null
 }
 
@@ -69,7 +72,7 @@ export async function openWorkspacePortInBrowser(args: {
   runtimeTarget: RuntimeClientTarget
   createBrowserTab: BrowserTabCreator
   setRemoteBrowserPageHandle: RemoteBrowserPageHandleSetter
-  openInYiruBrowser?: boolean
+  openInAgentStartBrowser?: boolean
   localhostLabelRoute?: LocalhostWorktreeLabelRoute | null
 }): Promise<{ ok: true } | { ok: false; reason: string }> {
   const rawUrl = browserUrlForPort(args.port)
@@ -81,7 +84,7 @@ export async function openWorkspacePortInBrowser(args: {
       url = rawUrl
     }
   }
-  if (args.openInYiruBrowser === false && args.runtimeTarget.kind === 'local') {
+  if (args.openInAgentStartBrowser === false && args.runtimeTarget.kind === 'local') {
     try {
       await shellClient.shell.openUrl(url)
       return { ok: true }

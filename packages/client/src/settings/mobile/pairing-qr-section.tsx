@@ -65,7 +65,7 @@ export function MobilePairingQrSection({
 
   return (
     <>
-      <div className="border-border/60 flex flex-col items-center gap-3 border py-6">
+      <div className="border-border/60 flex flex-col items-center gap-3 rounded-lg border py-6">
         <Button
           variant="outline"
           size="xs"
@@ -89,7 +89,7 @@ export function MobilePairingQrSection({
         <p className="text-muted-foreground max-w-xs text-center text-xs">
           {translate(
             'auto.components.settings.MobilePane.310924ad2c',
-            'Scan this code with the Yiru mobile app. Each code creates a unique device token.'
+            'Scan this code with the AgentStart mobile app. Each code creates a unique device token.'
           )}
         </p>
         {pairingUrl && (
@@ -122,11 +122,14 @@ export function MobilePairingQrSection({
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
             <DialogTitle>
-              {translate('auto.components.settings.MobilePane.dd3cd78d04', 'Scan with Yiru Mobile')}
+              {translate(
+                'auto.components.settings.MobilePane.dd3cd78d04',
+                'Scan with AgentStart Mobile'
+              )}
             </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center gap-3">
-            <div className="bg-white p-4">
+            <div className="rounded-lg bg-white p-4">
               <img
                 src={qrDataUrl}
                 alt={translate(

@@ -1,5 +1,5 @@
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { AppState } from '~renderer/store/types'
 
 import {

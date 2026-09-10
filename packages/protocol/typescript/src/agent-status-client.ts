@@ -19,7 +19,7 @@ import {
   AgentStatusServiceSubscribeResponseSchema,
   AgentStatusServiceTransferPaneAuthorityRequestSchema,
   AgentStatusServiceTransferPaneAuthorityResponseSchema
-} from '../generated/yiru/runtime/v1/agent_status_pb.js'
+} from '../generated/agent_start/runtime/v1/agent_status_pb.js'
 import {
   agentStatusEntry,
   invalidAgentStatusResponse,

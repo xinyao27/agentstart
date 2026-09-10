@@ -2,11 +2,11 @@
 // results as plain `serde_json::Value` trees shared with the legacy JSON
 // surface; this is the single place that reads those trees into the typed
 // protobuf wire messages, so every handler shares one mapping.
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::skill_directory_listing::Result as DirectoryResult;
-use yiru_protocol::runtime::v1::skill_file_read_result::Result as FileReadResult;
-use yiru_protocol::runtime::v1::skill_update_run::State as RunState;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::skill_directory_listing::Result as DirectoryResult;
+use agentstart_protocol::runtime::v1::skill_file_read_result::Result as FileReadResult;
+use agentstart_protocol::runtime::v1::skill_update_run::State as RunState;
+use agentstart_protocol::runtime::v1::{
     DiscoveredSkill, SkillDirectoryEntry, SkillDirectoryErrorReason, SkillDirectoryListing,
     SkillDirectoryListingOk, SkillDiscoverySkippedReason, SkillDiscoverySource,
     SkillFileErrorReason, SkillFileReadOk, SkillFileReadResult, SkillFreshnessInstallation,

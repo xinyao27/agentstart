@@ -1,8 +1,8 @@
 use serde_json::{Map, Value, json};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::folder_workspace_nullable_text::Value as NullableTextValue;
-use yiru_protocol::runtime::v1::folder_workspace_service_update_fields::nullable_linked_review::Value as LinkedReviewUpdateValue;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::folder_workspace_nullable_text::Value as NullableTextValue;
+use agentstart_protocol::runtime::v1::folder_workspace_service_update_fields::nullable_linked_review::Value as LinkedReviewUpdateValue;
+use agentstart_protocol::runtime::v1::{
     FolderWorkspaceLinkedReview, FolderWorkspacePathScope,
     FolderWorkspacePathStatus as ProtocolPathStatus,
     FolderWorkspacePathStatusReason as ProtocolPathStatusReason,
@@ -14,7 +14,7 @@ use yiru_protocol::runtime::v1::{
     FolderWorkspaceServicePathStatusResponse, FolderWorkspaceServiceResultResponse,
     FolderWorkspaceServiceUpdateRequest,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::folder_workspaces::{
     FolderWorkspaceDeleteResult, FolderWorkspaceError, FolderWorkspaceListResult,

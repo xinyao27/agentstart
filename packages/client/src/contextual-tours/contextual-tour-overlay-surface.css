@@ -1,9 +1,9 @@
-.yiru-contextual-tour-target-rings {
+.agentstart-contextual-tour-target-rings {
   border-radius: 9999px;
   pointer-events: none;
 }
 
-.yiru-contextual-tour-target-rings::before {
+.agentstart-contextual-tour-target-rings::before {
   content: '';
   position: absolute;
   inset: -2px;
@@ -27,14 +27,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .yiru-contextual-tour-target-rings::before {
+  .agentstart-contextual-tour-target-rings::before {
     animation: none;
     opacity: 0.72;
     transform: scale(1.28);
   }
 }
 
-.yiru-contextual-tour-panel {
+.agentstart-contextual-tour-panel {
   background: var(--popover);
   border-color: var(--border);
 }

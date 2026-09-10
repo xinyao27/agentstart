@@ -1,4 +1,4 @@
-import type { Tab, TabGroup } from '@yiru/protocol/workspace/tabs'
+import type { Tab, TabGroup } from '@agentstart/protocol/workspace/tabs'
 import { useShallow } from 'zustand/react/shallow'
 import { useAppStore } from '~renderer/store/state'
 
@@ -40,7 +40,7 @@ const SimulatorOverlaySlot = function SimulatorOverlaySlot({
   return (
     <div
       style={style}
-      className="yiru-emulator-overlay-slot min-h-0 min-w-0 overflow-hidden"
+      className="agentstart-emulator-overlay-slot min-h-0 min-w-0 overflow-hidden"
       onPointerDownCapture={() => {
         if (groupId && onFocusOwningGroup) {
           onFocusOwningGroup(groupId)

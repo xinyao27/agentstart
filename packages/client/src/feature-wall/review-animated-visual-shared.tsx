@@ -24,37 +24,6 @@ export function ReviewAnimatedVisualButton({
   )
 }
 
-export function CursorIcon(): JSX.Element {
-  return (
-    <svg width={16} height={16} viewBox="0 0 16 16" aria-hidden focusable="false">
-      <path
-        d="M2 1.5 L2 12 L5 9 L7.2 14.5 L9.5 13.6 L7.3 8 L11.5 8 Z"
-        fill="#fff"
-        stroke="#18181b"
-        strokeWidth={1}
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-export function PlusIcon(): JSX.Element {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      width={11}
-      height={11}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      aria-hidden
-    >
-      <path d="M8 3v10M3 8h10" />
-    </svg>
-  )
-}
-
 export function MessageIcon(): JSX.Element {
   return (
     <svg

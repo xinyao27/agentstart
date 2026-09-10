@@ -33,7 +33,7 @@ use mailboxes::{
 };
 use worker::run_database_worker;
 
-const DATABASE_FILE_NAME: &str = "yiru.sqlite";
+const DATABASE_FILE_NAME: &str = "agentstart.sqlite";
 const DATABASE_BUSY_TIMEOUT: Duration = Duration::from_secs(5);
 const DATABASE_QUEUE_CAPACITY: usize = 256;
 
@@ -124,7 +124,7 @@ impl DaemonDatabase {
             WorktreeMetadataStore::new(Arc::new(DatabaseWorktreeMetadataMailbox(commands.clone())));
         let workspace_journal = WorkspaceJournal::new(commands.clone());
         let worker = thread::Builder::new()
-            .name("yiru-database".to_owned())
+            .name("agentstart-database".to_owned())
             .spawn(move || run_database_worker(connection, command_receiver))
             .map_err(|source| io_error("start database worker", &database_path, source))?;
         Ok(Self {

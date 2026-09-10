@@ -1,0 +1,156 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+// Why: artifact bytes are written to and read from the daemon host's Artifact
+// Store and downloaded back through the daemon's own `/artifacts/:id` HTTP
+// side channel, so the whole service stays local even though the procedures
+// are project-scoped like the generated legacy contract.
+service ArtifactService {
+  rpc Begin(ArtifactServiceBeginRequest) returns (ArtifactServiceArtifactResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Append(ArtifactServiceAppendRequest) returns (ArtifactServiceArtifactResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Complete(ArtifactServiceCompleteRequest) returns (ArtifactServiceArtifactResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Abort(ArtifactServiceAbortRequest) returns (ArtifactServiceAbortedResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc DownloadTicket(ArtifactServiceTicketRequest) returns (ArtifactDownloadTicket) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Read(ArtifactServiceReadRequest) returns (ArtifactRead) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+enum ArtifactStatus {
+  ARTIFACT_STATUS_UNSPECIFIED = 0;
+  ARTIFACT_STATUS_READY = 1;
+  ARTIFACT_STATUS_WRITING = 2;
+}
+
+message Artifact {
+  int64 byte_length = 1;
+  int64 created_at = 2;
+  string file_name = 3;
+  string id = 4;
+  string mime_type = 5;
+  string project_id = 6;
+  ArtifactStatus status = 7;
+}
+
+message ArtifactRead {
+  string data_base64 = 1;
+  bool eof = 2;
+  string mime_type = 3;
+  int64 next_offset = 4;
+}
+
+message ArtifactDownloadTicket {
+  int64 expires_at = 1;
+  string ticket = 2;
+}
+
+message ArtifactServiceBeginRequest {
+  string file_name = 1;
+  string mime_type = 2;
+  string project_id = 3;
+}
+
+message ArtifactServiceAppendRequest {
+  string id = 1;
+  int64 offset = 2;
+  string data_base64 = 3;
+}
+
+message ArtifactServiceCompleteRequest {
+  string id = 1;
+}
+
+message ArtifactServiceAbortRequest {
+  string id = 1;
+}
+
+message ArtifactServiceTicketRequest {
+  string id = 1;
+}
+
+message ArtifactServiceReadRequest {
+  string id = 1;
+  int64 offset = 2;
+  int64 limit = 3;
+}
+
+message ArtifactServiceArtifactResponse {
+  Artifact artifact = 1;
+}
+
+message ArtifactServiceAbortedResponse {
+  bool removed = 1;
+}

@@ -5,8 +5,8 @@ import { useAppStore } from '~renderer/store/state'
 import { findSiblingGroupId } from '~renderer/tab-bar/state/slice'
 
 export type PreviewableLanguage = 'html'
-export const REMOTE_FILE_BROWSER_UNSUPPORTED_MESSAGE =
-  'Open in Yiru Browser is only available for local files.'
+const REMOTE_FILE_BROWSER_UNSUPPORTED_MESSAGE =
+  'Open in AgentStart Browser is only available for local files.'
 
 export type WorkspaceFileBrowserOpenTarget =
   | {
@@ -20,13 +20,13 @@ export type WorkspaceFileBrowserOpenTarget =
       reason: 'remote-worktree'
     }
 
-export function getWorkspaceFileBrowserOpenTarget(params: {
+function getWorkspaceFileBrowserOpenTarget(params: {
   filePath: string
   worktreeId: string
 }): WorkspaceFileBrowserOpenTarget {
   if (getConnectionId(params.worktreeId)) {
     // Why: Chromium resolves file:// URLs on the local machine. Remote files
-    // need a Yiru-served URL before the browser can render them correctly.
+    // need a AgentStart-served URL before the browser can render them correctly.
     return {
       status: 'unsupported',
       reason: 'remote-worktree',

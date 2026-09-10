@@ -1,5 +1,5 @@
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import type { Editor } from '@tiptap/react'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { dirname, basename } from '~renderer/path'

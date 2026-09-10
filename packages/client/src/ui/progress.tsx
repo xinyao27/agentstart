@@ -2,7 +2,7 @@ import { Progress as ProgressPrimitive } from '@base-ui/react/progress'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '~renderer/ui/class-names'
 
-const progressVariants = cva('relative overflow-hidden', {
+const progressVariants = cva('relative overflow-hidden rounded-full', {
   variants: {
     variant: {
       default: 'bg-primary/20',

@@ -1,4 +1,4 @@
-import type { AgentType } from '@yiru/protocol/agent/status-records'
+import type { AgentType } from '@agentstart/protocol/agent/status-records'
 
 type CommandCodeTurnBoundaryInput = {
   agentType: AgentType | undefined

@@ -1,9 +1,9 @@
-import type { StartupHostPlatform } from '@yiru/protocol/agent/shell-command'
+import type { StartupHostPlatform } from '@agentstart/protocol/agent/shell-command'
 import {
   ALL_EXECUTION_HOSTS_SCOPE,
   parseExecutionHostId,
   type ExecutionHostScope
-} from '@yiru/protocol/host/identity'
+} from '@agentstart/protocol/host/identity'
 import { translate } from '~renderer/i18n/i18n'
 
 function getCurrentLocalPlatform(): StartupHostPlatform | null {

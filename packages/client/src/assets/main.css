@@ -22,7 +22,7 @@
 }
 
 @font-face {
-  font-family: 'Yiru Nerd Font Symbols';
+  font-family: 'AgentStart Nerd Font Symbols';
   src: url('./fonts/symbols-nerd-font-mono-regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
@@ -101,9 +101,9 @@
   --font-mono:
     ui-monospace, 'SF Mono', SFMono-Regular, 'Cascadia Code', Menlo, Consolas, 'Liberation Mono',
     monospace;
-  --radius: 0;
+  --radius: 0.625rem;
   /* Why: project Cursor's core surfaces and semantic opacity ramps onto the
-     existing shadcn roles without expanding Yiru's closed token vocabulary. */
+     existing shadcn roles without expanding AgentStart's closed token vocabulary. */
   /* Why: *-base holds the opaque value so a workspace theme gradient can thin
      the chrome roles without any surface losing its original color. */
   --background-base: #f8f8f8;
@@ -269,9 +269,9 @@
    the sidebar thins out to reveal the wash; every other surface takes an opaque
    tint so dialogs, menus, and editors never turn see-through over content. */
 [data-theme-gradient='on'],
-[data-theme-gradient-portals='on'] {
-  /* Why: aliases declared on :root resolve before a local --brand
-     override, so rebind them in the same scope as the picked workspace hue. */
+[data-theme-accent='on'] {
+  /* Why: aliases declared on :root resolve before a local --brand override,
+     so rebind them with either the system accent or a picked workspace hue. */
   --primary: var(--brand);
   --ring: var(--brand);
   --sidebar-primary: var(--brand);
@@ -336,7 +336,7 @@
 
 [data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-close-button] {
   /* Why: Sonner's dark-theme defaults can resolve the close icon and button
-     background to the same color; keep the X readable on both Yiru themes. */
+     background to the same color; keep the X readable on both AgentStart themes. */
   color: var(--popover-foreground);
   background: var(--popover);
   border-color: rgb(0 0 0 / 0.14);
@@ -366,19 +366,16 @@
   :root:root *::before,
   :root:root *::after {
     @apply border-border;
-    /* Why: the flat, rectilinear design must also cover legacy utilities,
-       inline styles, and third-party components that bypass design tokens. */
-    border-radius: 0 !important;
   }
 
-  /* Why: a hardware preview must preserve the physical device silhouette while
-     the containing workbench pane and controls remain rectilinear. */
-  :root:root [data-yiru-emulator-frame='true'] {
-    border-radius: var(--yiru-emulator-frame-outer-radius, 0) !important;
+  /* Why: a hardware preview preserves the physical device silhouette independently
+     of the workbench radius scale. */
+  :root:root [data-agentstart-emulator-frame='true'] {
+    border-radius: var(--agentstart-emulator-frame-outer-radius, 0) !important;
   }
 
-  :root:root [data-yiru-emulator-screen='true'] {
-    border-radius: var(--yiru-emulator-frame-inner-radius, 0) !important;
+  :root:root [data-agentstart-emulator-screen='true'] {
+    border-radius: var(--agentstart-emulator-frame-inner-radius, 0) !important;
   }
 
   /* Why: the theme picker visualizes color geometry, so its field, samples,
@@ -696,8 +693,7 @@
 .xterm .xterm-viewport::-webkit-scrollbar-thumb {
   background: rgba(121, 121, 121, 0.4);
   border: 3px solid transparent;
-  /* Why: scrollbar pseudo-elements sit outside the global element radius reset. */
-  border-radius: 0;
+  border-radius: 7px;
   background-clip: padding-box;
 }
 

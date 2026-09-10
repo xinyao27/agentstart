@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service WorktreeLabelsService {
+  rpc Register(WorktreeLabelsServiceRegisterRequest) returns (WorktreeLabelsServiceRegisterResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message WorktreeLabelsServiceRegisterRequest {
+  string target_url = 1;
+  string project_name = 2;
+  string worktree_name = 3;
+  optional string worktree_path = 4;
+  optional string repo_id = 5;
+  optional string worktree_id = 6;
+}
+
+message WorktreeLabelsServiceRegisterResponse {
+  string url = 1;
+  string label = 2;
+}

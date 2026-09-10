@@ -1,5 +1,5 @@
-import { isFeatureTipId, type FeatureTipId } from '@yiru/protocol/settings/feature-tips'
-import type { FeatureInteractionState } from '@yiru/protocol/telemetry/interactions/state'
+import { isFeatureTipId, type FeatureTipId } from '@agentstart/protocol/settings/feature-tips'
+import type { FeatureInteractionState } from '@agentstart/protocol/telemetry/interactions/state'
 
 import {
   getFeatureTips,

@@ -1,4 +1,4 @@
-import type { FileSearchResult as SearchResult } from '@yiru/protocol/files/values'
+import type { FileSearchResult as SearchResult } from '@agentstart/protocol/files/values'
 import { useEffect, useRef } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { getConnectionId } from '~renderer/runtime/connection-context'

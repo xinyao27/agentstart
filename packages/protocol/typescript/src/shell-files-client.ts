@@ -1,6 +1,6 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ShellFilesService,
   ShellFilesServiceAuthorizeExternalPathRequestSchema,
@@ -29,7 +29,7 @@ import {
   ShellFilesServiceStatResponseSchema,
   ShellFilesServiceWriteRequestSchema,
   ShellFilesServiceWriteResponseSchema
-} from '../generated/yiru/runtime/v1/shell_files_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_files_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import {
   shellFileReadChunkResult,
@@ -60,17 +60,12 @@ const STAT_PROCEDURE = `/${ShellFilesService.typeName}/${ShellFilesService.metho
 const WRITE_PROCEDURE = `/${ShellFilesService.typeName}/${ShellFilesService.method.write.name}`
 
 export type {
-  ShellFileImportSkipReason,
   ShellFileReadChunkResult,
   ShellFileReadResult,
   ShellFileStatResult,
   ShellResolveDroppedPathsResult,
-  ShellStagedExternalImportEntry,
-  ShellStagedExternalImportSource,
   ShellStageExternalPathsResult
 } from './shell-files-values.js'
-export { SHELL_FILES_PROTOCOL_CAPABILITY } from './shell-files-values.js'
-
 // Why: OS file dialogs address the Chrome host, regardless of the selected runtime environment.
 export class ShellFilesClient {
   private readonly transport: RuntimeTransport

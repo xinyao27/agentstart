@@ -153,7 +153,7 @@ const AGENT_CAPABILITY_SETUP_ROWS: readonly AgentCapabilitySetupRow[] = [
     get description() {
       return translate(
         'auto.components.feature.wall.AgentCapabilitiesSetupAction.c61c91e642',
-        'Let agents coordinate through Yiru to keep large, multi-step tasks moving to completion.'
+        'Let agents coordinate through AgentStart to keep large, multi-step tasks moving to completion.'
       )
     },
     icon: <Workflow className="size-4" />
@@ -169,7 +169,7 @@ const AGENT_CAPABILITY_SETUP_ROWS: readonly AgentCapabilitySetupRow[] = [
     get description() {
       return translate(
         'auto.components.feature.wall.AgentCapabilitiesSetupAction.5e8fe5a72d',
-        "Give agents direct access to Yiru's browser so they can test pages, capture screenshots, and act on what they see."
+        "Give agents direct access to AgentStart's browser so they can test pages, capture screenshots, and act on what they see."
       )
     },
     icon: <Globe2 className="size-4" />
@@ -275,7 +275,7 @@ function AgentCapabilitySetupChecklist(props: {
               <span className="flex items-start justify-between gap-3">
                 <span
                   className={cn(
-                    'flex size-8 items-center justify-center border',
+                    'flex size-8 items-center justify-center rounded-lg border',
                     selected
                       ? 'border-border bg-background text-foreground'
                       : 'border-border bg-muted/40'
@@ -286,7 +286,7 @@ function AgentCapabilitySetupChecklist(props: {
                 <span
                   aria-hidden
                   className={cn(
-                    'flex size-5 items-center justify-center border transition-colors',
+                    'flex size-5 items-center justify-center rounded-full border transition-colors',
                     selected
                       ? 'border-primary bg-primary text-primary-foreground'
                       : 'border-border bg-background'
@@ -314,7 +314,7 @@ function AgentCapabilityStatusNote(props: {
   if (props.status.installed) {
     return (
       <span className="mt-2 flex flex-wrap items-center gap-1.5">
-        <span className="border border-green-500/45 bg-green-500/10 px-2 py-0.5 text-[11px] leading-none font-semibold text-green-700 dark:text-green-300">
+        <span className="rounded-full border border-green-500/45 bg-green-500/10 px-2 py-0.5 text-[11px] leading-none font-semibold text-green-700 dark:text-green-300">
           {translate(
             'auto.components.feature.wall.AgentCapabilitiesSetupAction.b8dc9dd8a2',
             'Installed'

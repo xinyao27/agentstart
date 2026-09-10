@@ -94,7 +94,7 @@ fn cache_path() -> Option<PathBuf> {
             .unwrap_or_else(|| home.join(".cache"))
     };
     Some(
-        base.join("Yiru")
+        base.join("AgentStart")
             .join("model-pricing")
             .join("models-dev-v1.json"),
     )

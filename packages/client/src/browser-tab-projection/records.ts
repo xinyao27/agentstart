@@ -1,4 +1,4 @@
-import type { BrowserPage, BrowserWorkspace } from '@yiru/protocol/workspace/browser-session'
+import type { BrowserPage, BrowserWorkspace } from '@agentstart/protocol/workspace/browser-session'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import type { AppState } from '~renderer/store/types'
 

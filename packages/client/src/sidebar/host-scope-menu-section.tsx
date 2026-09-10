@@ -1,5 +1,8 @@
-import { ALL_EXECUTION_HOSTS_SCOPE, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { VisibleWorkspaceHostIds, WorkspaceHostScope } from '@yiru/protocol/settings/ui-state'
+import { ALL_EXECUTION_HOSTS_SCOPE, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type {
+  VisibleWorkspaceHostIds,
+  WorkspaceHostScope
+} from '@agentstart/protocol/settings/ui-state'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

@@ -1,4 +1,4 @@
-import type { MarkdownDocument } from '@yiru/protocol/files/values'
+import type { MarkdownDocument } from '@agentstart/protocol/files/values'
 import {
   listRuntimeMarkdownDocuments,
   type RuntimeFileOperationArgs
@@ -21,7 +21,7 @@ type InFlightMarkdownDocumentList = {
 const MARKDOWN_DOCUMENT_LIST_JOIN_WINDOW_MS = 30_000
 const inFlightMarkdownDocumentLists = new Map<string, InFlightMarkdownDocumentList>()
 
-export function getMarkdownDocumentListRequestKey(
+function getMarkdownDocumentListRequestKey(
   context: RuntimeFileOperationArgs,
   rootPath: string
 ): string {

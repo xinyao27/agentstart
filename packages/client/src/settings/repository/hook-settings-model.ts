@@ -1,6 +1,6 @@
-import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { HookCommandSourcePolicy, SetupRunPolicy } from '@yiru/protocol/worktree/hooks'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@agentstart/protocol'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { HookCommandSourcePolicy, SetupRunPolicy } from '@agentstart/protocol/worktree/hooks'
 import { translate } from '~renderer/i18n/i18n'
 
 import { DEFAULT_REPO_HOOK_SETTINGS } from '../constants'
@@ -140,7 +140,7 @@ export function getCommandSourcePolicyOptions(): PolicyOption<HookCommandSourceP
       policy: 'shared-only',
       label: translate(
         'auto.components.settings.RepositoryHooksSection.d88b6ff88f',
-        'yiru.yaml only'
+        'agentstart.yaml only'
       ),
       description: translate(
         'auto.components.settings.RepositoryHooksSection.29397e8bbc',
@@ -152,7 +152,7 @@ export function getCommandSourcePolicyOptions(): PolicyOption<HookCommandSourceP
       label: translate('auto.components.settings.RepositoryHooksSection.83dc78202a', 'Local only'),
       description: translate(
         'auto.components.settings.RepositoryHooksSection.0e8b2a520d',
-        'Ignore yiru.yaml; run only your local commands.'
+        'Ignore agentstart.yaml; run only your local commands.'
       )
     },
     {
@@ -160,7 +160,7 @@ export function getCommandSourcePolicyOptions(): PolicyOption<HookCommandSourceP
       label: translate('auto.components.settings.RepositoryHooksSection.8d6c56bff8', 'Run both'),
       description: translate(
         'auto.components.settings.RepositoryHooksSection.8561b0665f',
-        'yiru.yaml first, then your local commands.'
+        'agentstart.yaml first, then your local commands.'
       )
     }
   ]
@@ -171,7 +171,7 @@ export function getCommandSourceLabel(policy: HookCommandSourcePolicy): string {
     case 'shared-only':
       return translate(
         'auto.components.settings.RepositoryHooksSection.d88b6ff88f',
-        'yiru.yaml only'
+        'agentstart.yaml only'
       )
     case 'local-only':
       return translate('auto.components.settings.RepositoryHooksSection.83dc78202a', 'Local only')
@@ -194,7 +194,7 @@ export function getLocalHookFields(): readonly [LocalHookField, LocalHookField] 
       ),
       placeholder: translate(
         'auto.components.settings.RepositoryHooksSection.a3fc966677',
-        '# e.g. pnpm install cp "$YIRU_ROOT_PATH/.env" "$YIRU_WORKTREE_PATH/.env"'
+        '# e.g. pnpm install cp "$AGENTSTART_ROOT_PATH/.env" "$AGENTSTART_WORKTREE_PATH/.env"'
       )
     },
     {
@@ -209,7 +209,7 @@ export function getLocalHookFields(): readonly [LocalHookField, LocalHookField] 
       ),
       placeholder: translate(
         'auto.components.settings.RepositoryHooksSection.9b821fa19d',
-        '# e.g. echo "Cleaning up $YIRU_WORKSPACE_NAME"'
+        '# e.g. echo "Cleaning up $AGENTSTART_WORKSPACE_NAME"'
       )
     }
   ]
@@ -218,21 +218,21 @@ export function getLocalHookFields(): readonly [LocalHookField, LocalHookField] 
 export function getEnvVars(): readonly { name: string; description: string }[] {
   return [
     {
-      name: '$YIRU_ROOT_PATH',
+      name: '$AGENTSTART_ROOT_PATH',
       description: translate(
         'auto.components.settings.RepositoryHooksSection.30952c4aa4',
         'Path to the main repo checkout. Useful for copying shared files, like .env, into a worktree.'
       )
     },
     {
-      name: '$YIRU_WORKTREE_PATH',
+      name: '$AGENTSTART_WORKTREE_PATH',
       description: translate(
         'auto.components.settings.RepositoryHooksSection.54c73d88d0',
         'Path to the worktree being created. Setup commands run from this directory.'
       )
     },
     {
-      name: '$YIRU_WORKSPACE_NAME',
+      name: '$AGENTSTART_WORKSPACE_NAME',
       description: translate(
         'auto.components.settings.RepositoryHooksSection.0fa21e19ec',
         'Name of the workspace, usually based on the branch name.'
@@ -247,7 +247,7 @@ export function getYamlStateCopy(yamlState: string): { heading: string; descript
       return {
         heading: translate(
           'auto.components.settings.RepositoryHooksSection.56f9a4a1d0',
-          'Using `yiru.yaml`'
+          'Using `agentstart.yaml`'
         ),
         description: translate(
           'auto.components.settings.RepositoryHooksSection.ca424ff135',
@@ -258,33 +258,33 @@ export function getYamlStateCopy(yamlState: string): { heading: string; descript
       return {
         heading: translate(
           'auto.components.settings.RepositoryHooksSection.623e0c9f31',
-          '`yiru.yaml` could not be parsed'
+          '`agentstart.yaml` could not be parsed'
         ),
         description: translate(
           'auto.components.settings.RepositoryHooksSection.aba825233f',
-          'The file contains configuration keys that this version of Yiru does not recognize. You may need to update Yiru, or check the file for typos.'
+          'The file contains configuration keys that this version of AgentStart does not recognize. You may need to update AgentStart, or check the file for typos.'
         )
       }
     case 'invalid':
       return {
         heading: translate(
           'auto.components.settings.RepositoryHooksSection.623e0c9f31',
-          '`yiru.yaml` could not be parsed'
+          '`agentstart.yaml` could not be parsed'
         ),
         description: translate(
           'auto.components.settings.RepositoryHooksSection.0cc712b823',
-          'The core configuration file exists in the repo root, but Yiru could not parse the supported hook definitions yet.'
+          'The core configuration file exists in the repo root, but AgentStart could not parse the supported hook definitions yet.'
         )
       }
     default:
       return {
         heading: translate(
           'auto.components.settings.RepositoryHooksSection.5a67e4793d',
-          'No `yiru.yaml` detected'
+          'No `agentstart.yaml` detected'
         ),
         description: translate(
           'auto.components.settings.RepositoryHooksSection.b20c5df6ca',
-          'Add a `yiru.yaml` file to enable shared setup and archive hooks for this repo. Example template:'
+          'Add a `agentstart.yaml` file to enable shared setup and archive hooks for this repo. Example template:'
         )
       }
   }

@@ -1,7 +1,7 @@
 import type {
   ActiveRightSidebarTab,
   RightSidebarExplorerView
-} from '@yiru/protocol/settings/ui-state'
+} from '@agentstart/protocol/settings/ui-state'
 
 export type RightSidebarRoute = {
   rightSidebarTab: ActiveRightSidebarTab

@@ -11,7 +11,7 @@ export type TerminalImeCompositionTracker = IDisposable & {
 // Why: suppressed candidate keys are preventDefault-ed and fire no input
 // event, so a stale tracker (missed compositionend) has no natural unstick
 // path. Expire the guard so Space/digits cannot stay dead indefinitely.
-export const TERMINAL_IME_CANDIDATE_GUARD_STALE_COMPOSITION_EXPIRY_MS = 10_000
+const TERMINAL_IME_CANDIDATE_GUARD_STALE_COMPOSITION_EXPIRY_MS = 10_000
 // Why: Sogou/fcitx can deliver the committing Space/digit as plain keydown and
 // keyup after compositionend; a narrow window absorbs those trailing events
 // without making the keys globally unavailable after IME use.

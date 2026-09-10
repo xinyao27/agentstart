@@ -9,42 +9,6 @@ import {
   type PreflightRefreshProvider
 } from '../integrations-pane-status'
 
-type CliStatus = {
-  installed?: boolean
-  authenticated?: boolean
-}
-
-export type CliProviderCardState =
-  | 'checking'
-  | 'connected'
-  | 'not-installed'
-  | 'not-authenticated'
-  | 'unavailable'
-
-export function deriveCliProviderCardState(input: {
-  cliStatus?: CliStatus
-  preflightStatusAvailable: boolean
-  preflightStatusChecked: boolean
-  preflightStatusCurrent: boolean
-  preflightStatusError: string | null
-  preflightStatusLoading: boolean
-}): CliProviderCardState {
-  if (
-    input.preflightStatusLoading ||
-    !input.preflightStatusChecked ||
-    !input.preflightStatusCurrent
-  ) {
-    return 'checking'
-  }
-  if (input.preflightStatusError !== null || !input.preflightStatusAvailable || !input.cliStatus) {
-    return 'unavailable'
-  }
-  if (!input.cliStatus.installed) {
-    return 'not-installed'
-  }
-  return input.cliStatus.authenticated ? 'connected' : 'not-authenticated'
-}
-
 export type PreflightCardStatuses = {
   statuses: PreflightIntegrationStatuses
   unavailable: boolean

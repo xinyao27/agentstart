@@ -1,7 +1,7 @@
 import {
   WorktreeDetectedSource,
   WorktreeOwnership
-} from '../generated/yiru/runtime/v1/worktree_pb.js'
+} from '../generated/agent_start/runtime/v1/worktree_pb.js'
 import type {
   WorktreeDetectedRecord,
   WorktreeLinkedPullRequest,
@@ -10,7 +10,7 @@ import type {
   WorktreeServiceLineageListResponse,
   WorktreeServicePsResponse,
   WorktreeServiceShowResponse
-} from '../generated/yiru/runtime/v1/worktree_pb.js'
+} from '../generated/agent_start/runtime/v1/worktree_pb.js'
 import { lineageValue, workspaceLineageValue } from './worktree-metadata-values.js'
 import type {
   WorktreeDetectedListResult,
@@ -131,7 +131,7 @@ function detectedRecord(value: WorktreeDetectedRecord): WorktreeDetectedWorktree
     ownership: oneOfEnum(
       value.ownership,
       {
-        [WorktreeOwnership.YIRU_MANAGED]: 'yiru-managed',
+        [WorktreeOwnership.AGENT_START_MANAGED]: 'agentstart-managed',
         [WorktreeOwnership.EXTERNAL]: 'external',
         [WorktreeOwnership.UNKNOWN_LEGACY]: 'unknown-legacy'
       } as const,

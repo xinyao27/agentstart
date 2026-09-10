@@ -1,14 +1,15 @@
 {
-  "name": "@yiru/macos",
-  "version": "0.0.36",
+  "name": "@agentstart/macos",
+  "version": "0.1.0",
   "private": true,
-  "description": "Native macOS menu bar host for the Yiru daemon",
+  "description": "Native macOS menu bar host for the AgentStart daemon",
   "scripts": {
-    "build": "vp run --filter '{.}^...' build && swift build -c release && vp run @yiru/workspace#package:macos",
+    "build": "vp run --filter '{.}^...' build && swift build -c release && vp run @agentstart/workspace#package:macos",
+    "package:dmg": "node scripts/package-dmg.mjs",
     "typecheck": "node -e \"if(process.platform==='darwin'){process.exit(require('node:child_process').spawnSync('swift',['build'],{stdio:'inherit'}).status??1)}else{console.log('Skipping macOS-only Swift build on '+process.platform)}\"",
-    "dev": "vp run build && open dist/Yiru.app"
+    "dev": "vp run build && open dist/AgentStart.app"
   },
   "dependencies": {
-    "@yiru/daemon": "workspace:*"
+    "@agentstart/daemon": "workspace:*"
   }
 }

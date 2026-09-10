@@ -1,6 +1,9 @@
-import { TUI_AGENT_CONFIG, type DraftPasteReadySignal } from '@yiru/protocol/agent/launch/config'
-import { recognizeAgentProcessFromCommandLine } from '@yiru/protocol/agent/process/recognition'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import {
+  TUI_AGENT_CONFIG,
+  type DraftPasteReadySignal
+} from '@agentstart/protocol/agent/launch/config'
+import { recognizeAgentProcessFromCommandLine } from '@agentstart/protocol/agent/process/recognition'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import { useAppStore } from '~renderer/store/state'
 

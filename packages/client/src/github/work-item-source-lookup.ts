@@ -1,5 +1,5 @@
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
-import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
 import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
 import { openGitHubTarget } from '~renderer/runtime/github-target'
 

@@ -1,0 +1,236 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service UpdaterService {
+  rpc GetVersion(UpdaterServiceGetVersionRequest) returns (UpdaterServiceGetVersionResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetStatus(UpdaterServiceGetStatusRequest) returns (UpdaterServiceGetStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Check(UpdaterServiceCheckRequest) returns (UpdaterServiceCheckResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Download(UpdaterServiceDownloadRequest) returns (UpdaterServiceDownloadResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Install(UpdaterServiceInstallRequest) returns (UpdaterServiceInstallResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SubscribeStatus(UpdaterServiceSubscribeStatusRequest) returns (stream UpdaterServiceSubscribeStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_RESTART_FROM_REQUEST
+    };
+  }
+}
+
+message UpdaterServiceGetVersionRequest {}
+
+message UpdaterServiceGetVersionResponse {
+  string version = 1;
+}
+
+message UpdaterServiceGetStatusRequest {}
+
+message UpdaterServiceGetStatusResponse {
+  UpdaterSnapshot snapshot = 1;
+}
+
+message UpdaterServiceCheckRequest {
+  bool include_prerelease = 1;
+  bool include_perf_prerelease = 2;
+}
+
+message UpdaterServiceCheckResponse {
+  UpdaterSnapshot snapshot = 1;
+}
+
+message UpdaterServiceDownloadRequest {}
+
+message UpdaterServiceDownloadResponse {
+  UpdaterSnapshot snapshot = 1;
+}
+
+message UpdaterServiceInstallRequest {}
+
+message UpdaterServiceInstallResponse {
+  bool accepted = 1;
+  string from_version = 2;
+  string target_version = 3;
+  string runtime_id = 4;
+}
+
+message UpdaterServiceSubscribeStatusRequest {}
+
+message UpdaterServiceSubscribeStatusResponse {
+  oneof event {
+    UpdaterSubscriptionReady ready = 1;
+    UpdaterSnapshot snapshot = 2;
+  }
+}
+
+message UpdaterSubscriptionReady {
+  UpdaterSnapshot snapshot = 1;
+}
+
+message UpdaterSnapshot {
+  string app_version = 1;
+  string runtime_id = 2;
+  UpdaterSupport support = 3;
+  UpdaterStatus status = 4;
+}
+
+message UpdaterSupport {
+  UpdaterInstallMode install_mode = 1;
+  bool automatic = 2;
+  UpdaterSupportReason reason = 3;
+}
+
+enum UpdaterInstallMode {
+  UPDATER_INSTALL_MODE_UNSPECIFIED = 0;
+  UPDATER_INSTALL_MODE_INTERACTIVE = 1;
+  UPDATER_INSTALL_MODE_SUPERVISED_HEADLESS_SERVE = 2;
+  UPDATER_INSTALL_MODE_UNSUPPORTED_HEADLESS_SERVE = 3;
+}
+
+enum UpdaterSupportReason {
+  UPDATER_SUPPORT_REASON_UNSPECIFIED = 0;
+  UPDATER_SUPPORT_REASON_AVAILABLE = 1;
+  UPDATER_SUPPORT_REASON_MANUAL_SERVICE_UPDATE_REQUIRED = 2;
+  UPDATER_SUPPORT_REASON_UNPACKAGED_BUILD = 3;
+  UPDATER_SUPPORT_REASON_UPDATER_UNAVAILABLE = 4;
+}
+
+message UpdaterStatus {
+  oneof state {
+    UpdaterIdle idle = 1;
+    UpdaterChecking checking = 2;
+    UpdaterAvailable available = 3;
+    UpdaterNotAvailable not_available = 4;
+    UpdaterDownloading downloading = 5;
+    UpdaterDownloaded downloaded = 6;
+    UpdaterError error = 7;
+  }
+}
+
+message UpdaterIdle {}
+
+message UpdaterChecking {
+  optional bool user_initiated = 1;
+}
+
+message UpdaterAvailable {
+  string version = 1;
+  optional string active_nudge_id = 2;
+  optional string release_url = 3;
+  optional UpdaterChangelog changelog = 4;
+}
+
+message UpdaterNotAvailable {
+  optional bool user_initiated = 1;
+}
+
+message UpdaterDownloading {
+  uint32 percent = 1;
+  string version = 2;
+  optional string active_nudge_id = 3;
+}
+
+message UpdaterDownloaded {
+  string version = 1;
+  optional string release_url = 2;
+  optional string active_nudge_id = 3;
+}
+
+message UpdaterError {
+  string message = 1;
+  optional bool user_initiated = 2;
+  optional string active_nudge_id = 3;
+}
+
+message UpdaterChangelog {
+  UpdaterChangelogRelease release = 1;
+  optional int64 releases_behind = 2;
+}
+
+message UpdaterChangelogRelease {
+  string title = 1;
+  string description = 2;
+  optional string media_url = 3;
+  string release_notes_url = 4;
+}

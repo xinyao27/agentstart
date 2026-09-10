@@ -1,4 +1,4 @@
-import type { ShellSessionClient, ShellSessionSnapshot } from '@yiru/protocol'
+import type { ShellSessionClient, ShellSessionSnapshot } from '@agentstart/protocol'
 
 export function subscribeSessionDocument(
   openClient: () => Promise<ShellSessionClient>,

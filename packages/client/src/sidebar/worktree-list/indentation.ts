@@ -1,32 +1,31 @@
-export const SIDEBAR_TREE_INDENT = 18
+const SIDEBAR_TREE_INDENT = 18
 // Why: project-grouped cards need to read as children even after the card
 // surface inset is subtracted, while lineage rows keep the base tree step.
 const PROJECT_WORKTREE_CARD_EXTRA_INDENT = 2
 // Why: flush surfaces share the row edge with group headers; matching the
 // content pullback to that margin preserves the existing inner anchor.
-export const WORKTREE_CARD_SURFACE_MARGIN = 0
-export const FLUSH_CARD_CONTENT_PULLBACK = WORKTREE_CARD_SURFACE_MARGIN
+const WORKTREE_CARD_SURFACE_MARGIN = 0
+const FLUSH_CARD_CONTENT_PULLBACK = WORKTREE_CARD_SURFACE_MARGIN
 // Why: a trailing workspace status icon should not shift the title away from
 // the leading tree anchor that the former status column established.
 const STATUS_ICON_TITLE_ANCHOR_PULLBACK_PX = 6
 // Why: even at zero indent, flush-card content should not sit against the sidebar edge.
-export const FLUSH_CARD_MIN_CONTENT_INSET = 2
+const FLUSH_CARD_MIN_CONTENT_INSET = 2
 // Why: pre-refactor level-1 lineage used the grouped card content step; keep
 // that anchor while nested levels advance evenly instead of accumulating depth.
-export const LINEAGE_IMMEDIATE_PARENT_STEP =
-  SIDEBAR_TREE_INDENT + PROJECT_WORKTREE_CARD_EXTRA_INDENT
-export const LINEAGE_NESTED_ROW_SURFACE_INSET = 0
+const LINEAGE_IMMEDIATE_PARENT_STEP = SIDEBAR_TREE_INDENT + PROJECT_WORKTREE_CARD_EXTRA_INDENT
+const LINEAGE_NESTED_ROW_SURFACE_INSET = 0
 export const LINEAGE_CHILDREN_INLINE_OFFSET =
   LINEAGE_IMMEDIATE_PARENT_STEP - WORKTREE_CARD_SURFACE_MARGIN - FLUSH_CARD_MIN_CONTENT_INSET
 // Why: grouped workspace cards keep a full-bleed surface like project headers;
 // the tree step lives in the card's content indent instead of the row inset.
 const GROUPED_WORKTREE_CARD_SURFACE_INDENT = 0
-export const PROJECT_GROUP_HEADER_BASE_PADDING = 10
+const PROJECT_GROUP_HEADER_BASE_PADDING = 10
 // Why: workspace/status headers and project headers occupy the same sidebar
 // row role, so their titles should not shift when switching grouping modes.
 export const WORKTREE_SECTION_HEADER_PADDING_LEFT = PROJECT_GROUP_HEADER_BASE_PADDING
-export const PROJECT_GROUP_HEADER_INDENT = 10
-export const MAX_PROJECT_GROUP_HEADER_DEPTH = 6
+const PROJECT_GROUP_HEADER_INDENT = 10
+const MAX_PROJECT_GROUP_HEADER_DEPTH = 6
 
 function clampDepth(depth: number): number {
   return Math.max(0, Math.floor(Number.isFinite(depth) ? depth : 0))
@@ -64,13 +63,6 @@ export function getProjectWorktreeCardContentIndent(args: {
   )
 }
 
-// Why: remote worktrees flatten into the same visual tier as a direct
-// worktree child of a Project, and their session rows share this anchor.
-export const DIRECT_PROJECT_WORKTREE_CONTENT_INDENT = getProjectWorktreeCardContentIndent({
-  groupDepth: 0,
-  lineageDepth: 0
-})
-
 export function getFolderBackedRepoWorktreeCardContentIndent(args: {
   groupDepth: number
   lineageDepth: number
@@ -101,14 +93,14 @@ export function getFolderBackedRepoWorktreeCardSurfaceInset(args: {
   return Math.min(genericSurfaceInset, Math.max(0, maxSurfaceInset))
 }
 
-export function getFolderWorkspaceCardContentIndent(args: { groupDepth: number }): number {
+function getFolderWorkspaceCardContentIndent(args: { groupDepth: number }): number {
   const parentGroupDepth = Math.max(0, clampDepth(args.groupDepth) - 1)
   // Why: folder workspaces are direct children of their owning folder group,
   // so they advance by the same compact header step as group -> repo.
   return getProjectGroupHeaderPaddingLeft(parentGroupDepth) + PROJECT_GROUP_HEADER_INDENT
 }
 
-export function getFolderWorkspaceCardSurfaceInset(args: {
+function getFolderWorkspaceCardSurfaceInset(args: {
   isGrouped: boolean
   groupDepth: number
 }): number {
@@ -226,7 +218,7 @@ export function getWorktreeCardStatusGlyphLeft(contentIndent: number): number {
   )
 }
 
-export function getWorktreeCardLeadingStatusMarginLeft(contentIndent: number): number {
+function getWorktreeCardLeadingStatusMarginLeft(contentIndent: number): number {
   if (contentIndent <= 0) {
     return 0
   }

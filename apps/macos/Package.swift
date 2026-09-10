@@ -2,9 +2,9 @@
 import PackageDescription
 
 let package = Package(
-  name: "YiruMenuBar",
+  name: "AgentStartMenuBar",
   defaultLocalization: "en",
   platforms: [.macOS(.v13)],
-  products: [.executable(name: "YiruMenuBar", targets: ["YiruMenuBar"])],
-  targets: [.executableTarget(name: "YiruMenuBar", resources: [.process("Resources")])]
+  products: [.executable(name: "AgentStartMenuBar", targets: ["AgentStartMenuBar"])],
+  targets: [.executableTarget(name: "AgentStartMenuBar", resources: [.process("Resources")])]
 )

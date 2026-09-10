@@ -1,5 +1,5 @@
-import { DEFAULT_REPO_BADGE_COLOR, REPO_COLORS } from '@yiru/protocol/project/appearance'
-import { normalizeRepoBadgeColor } from '@yiru/protocol/project/appearance'
+import { DEFAULT_REPO_BADGE_COLOR, REPO_COLORS } from '@agentstart/protocol/project/appearance'
+import { normalizeRepoBadgeColor } from '@agentstart/protocol/project/appearance'
 import { translate } from '~renderer/i18n/i18n'
 import { RepoColorPicker } from '~renderer/repo/color-picker'
 import { Button } from '~renderer/ui/button'

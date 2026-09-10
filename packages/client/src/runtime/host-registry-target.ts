@@ -1,4 +1,4 @@
-import { HOST_REGISTRY_PROTOCOL_CAPABILITY, HostRegistryClient } from '@yiru/protocol'
+import { HOST_REGISTRY_PROTOCOL_CAPABILITY, HostRegistryClient } from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'

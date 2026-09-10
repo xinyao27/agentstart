@@ -1,7 +1,7 @@
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 
 // Why: environment overrides are pasteable settings text; reject huge drafts before tokenizing.
-export const AGENT_DEFAULT_ENV_DRAFT_MAX_BYTES = 8 * 1024
+const AGENT_DEFAULT_ENV_DRAFT_MAX_BYTES = 8 * 1024
 
 export type AgentDefaultEnvDraftParseResult = {
   env: Record<string, string>

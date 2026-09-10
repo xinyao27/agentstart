@@ -118,7 +118,7 @@ export function ProjectGroupDeleteDialog({
         {projectCount > 0 && (
           <div className="space-y-2 text-xs">
             {projectNames.length > 0 && (
-              <div className="border-border/70 bg-muted/35 border px-3 py-2">
+              <div className="border-border/70 bg-muted/35 rounded-md border px-3 py-2">
                 <div className="text-muted-foreground mb-1 text-[11px] font-medium tracking-[0.05em] uppercase">
                   {translate(
                     'auto.components.sidebar.ProjectGroupDeleteDialog.0e0e6764af',
@@ -149,7 +149,7 @@ export function ProjectGroupDeleteDialog({
                 </ul>
               </div>
             )}
-            <div className="text-foreground/85 flex w-full items-start gap-2 px-1 py-1">
+            <div className="text-foreground/85 flex w-full items-start gap-2 rounded-sm px-1 py-1">
               <Checkbox
                 id={removeProjectsId}
                 checked={removeContainedProjects}

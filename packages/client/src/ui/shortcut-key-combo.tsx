@@ -6,7 +6,7 @@ import { cn } from '~renderer/ui/class-names'
 // Why: tooltips invert the app surface, so the shortcut component owns the
 // matching palette instead of making each tooltip style its internal parts.
 const shortcutKeyCapVariants = cva(
-  'inline-flex min-w-6 items-center justify-center border px-1.5 py-0.5 text-xs font-medium',
+  'inline-flex min-w-6 items-center justify-center rounded-sm border px-1.5 py-0.5 text-xs font-medium',
   {
     variants: {
       variant: {
@@ -79,7 +79,7 @@ export function ShortcutKeyCombo({
       {keys.map((key, index) => (
         <React.Fragment key={`${key}-${index}`}>
           <KeyCap label={key} className={keyCapClassName} variant={variant} />
-          {/* Why: Yiru renders Mac shortcuts as adjacent glyphs, but Windows/Linux
+          {/* Why: AgentStart renders Mac shortcuts as adjacent glyphs, but Windows/Linux
               shortcuts read more naturally with explicit "+" separators. A
               double-tap reads as the same key twice, so it gets a space, not "+". */}
           {!isMac && !doubleTap && index < keys.length - 1 ? (

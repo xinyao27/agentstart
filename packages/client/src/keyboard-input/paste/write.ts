@@ -24,15 +24,12 @@ import {
 export {
   TEXT_CONTROL_PASTE_CHUNK_MAX_BYTES,
   TEXT_CONTROL_PASTE_DIRECT_MAX_BYTES,
-  TEXT_CONTROL_PASTE_MAX_BYTES,
-  TEXT_CONTROL_PASTE_MEASURE_YIELD_CODE_UNITS
+  TEXT_CONTROL_PASTE_MAX_BYTES
 } from './model'
 export type {
   TextControlPasteByteLengthMeasurement,
   TextControlPasteOptions,
-  TextControlPastePayloadMeasurement,
-  TextControlPasteResult,
-  TextControlPasteSource
+  TextControlPasteResult
 } from './model'
 
 function getCodePointUtf8ByteLength(codePoint: number): number {
@@ -54,10 +51,6 @@ export function measureTextControlPasteByteLength(
 ): TextControlPasteByteLengthMeasurement {
   const { byteLength, exceededLimit } = measurePastePayloadMetadata(text, options)
   return { byteLength, exceededLimit }
-}
-
-export function getTextControlPasteByteLength(text: string): number {
-  return measureTextControlPasteByteLength(text).byteLength
 }
 
 export async function measureTextControlPasteByteLengthWithYield(

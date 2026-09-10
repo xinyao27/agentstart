@@ -1,9 +1,9 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type {
   ThemeGradientDot,
   ThemeGradientHarmony,
   ThemeGradientTheme
-} from '@yiru/protocol/settings/theme-gradient'
+} from '@agentstart/protocol/settings/theme-gradient'
 import type React from 'react'
 import { useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,10 +1,10 @@
 // Commit-graph rewriting and in-progress-operation resolution: cherry-pick,
 // revert, drop, reset, rebase, merge, plus reading and aborting whichever of
 // those is currently in progress. See
-// packages/protocol/proto/yiru/runtime/v1/git_rewrite.proto (GitHistoryRewriteService).
+// packages/protocol/proto/agentstart/runtime/v1/git_rewrite.proto (GitHistoryRewriteService).
 
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     GitHistoryRewriteServiceAbortMergeRequest, GitHistoryRewriteServiceAbortMergeResponse,
     GitHistoryRewriteServiceAbortRebaseRequest, GitHistoryRewriteServiceAbortRebaseResponse,
     GitHistoryRewriteServiceAbortRevertRequest, GitHistoryRewriteServiceAbortRevertResponse,
@@ -19,7 +19,7 @@ use yiru_protocol::runtime::v1::{
     GitHistoryRewriteServiceResetToCommitResponse, GitHistoryRewriteServiceRevertCommitRequest,
     GitHistoryRewriteServiceRevertCommitResponse, GitResetMode,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use super::super::GitRpc;
 use super::support::{authority_status, conflict_operation, status, write_outcome};

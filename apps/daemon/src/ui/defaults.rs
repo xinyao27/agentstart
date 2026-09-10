@@ -91,7 +91,7 @@ pub(super) fn ui() -> Map<String, Value> {
             ("usagePercentageDisplay", json!("used")),
             ("statusBarUsageMode", json!("verbose")),
             ("lastUpdateCheckAt", Value::Null),
-            ("trustedYiruHooks", json!({})),
+            ("trustedAgentStartHooks", json!({})),
             ("setupScriptPromptDismissedRepoIds", json!([])),
             ("acknowledgedAgentsByPaneKey", json!({})),
             ("setupGuideSidebarDismissed", json!(false)),

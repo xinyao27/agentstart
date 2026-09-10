@@ -1,5 +1,5 @@
-import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@agentstart/protocol'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { useEffect, useRef, useState } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 

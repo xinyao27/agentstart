@@ -1,4 +1,4 @@
-import type { RuntimeCompatVerdict } from '@yiru/protocol/runtime-compatibility'
+import type { RuntimeCompatVerdict } from '@agentstart/protocol/runtime-compatibility'
 import { translate } from '~renderer/i18n/i18n'
 
 export function describeRuntimeCompatBlock(verdict: RuntimeCompatVerdict): string {
@@ -8,7 +8,7 @@ export function describeRuntimeCompatBlock(verdict: RuntimeCompatVerdict): strin
   if (verdict.reason === 'client-too-old') {
     return translate(
       'runtime.compatibility.clientTooOld',
-      'This Yiru client is too old for the selected runtime host. Update Yiru on this machine. Client protocol {{clientVersion}}, host requires client protocol {{requiredVersion}}.',
+      'This AgentStart client is too old for the selected runtime host. Update AgentStart on this machine. Client protocol {{clientVersion}}, host requires client protocol {{requiredVersion}}.',
       {
         clientVersion: verdict.clientProtocolVersion,
         requiredVersion: verdict.requiredClientProtocolVersion ?? 0
@@ -17,7 +17,7 @@ export function describeRuntimeCompatBlock(verdict: RuntimeCompatVerdict): strin
   }
   return translate(
     'runtime.compatibility.hostTooOld',
-    'The selected runtime host is too old for this client. Update Yiru on the host. Host protocol {{hostVersion}}, client requires host protocol {{requiredVersion}}.',
+    'The selected runtime host is too old for this client. Update AgentStart on the host. Host protocol {{hostVersion}}, client requires host protocol {{requiredVersion}}.',
     {
       hostVersion: verdict.serverProtocolVersion,
       requiredVersion: verdict.requiredServerProtocolVersion ?? 0

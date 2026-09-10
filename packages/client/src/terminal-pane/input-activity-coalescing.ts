@@ -1,4 +1,4 @@
-export const TERMINAL_INPUT_ACTIVITY_WRITE_INTERVAL_MS = 500
+const TERMINAL_INPUT_ACTIVITY_WRITE_INTERVAL_MS = 500
 
 const GATE_PRUNE_SIZE = 256
 
@@ -69,7 +69,7 @@ export function recordTerminalInputActivity(args: {
   }
 }
 
-export function flushTerminalInputActivity(): void {
+function flushTerminalInputActivity(): void {
   if (flushTimer !== null) {
     clearTimeout(flushTimer)
     flushTimer = null

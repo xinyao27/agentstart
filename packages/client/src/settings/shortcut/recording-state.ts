@@ -1,4 +1,4 @@
-import type { KeybindingActionId } from '@yiru/protocol/keybindings'
+import type { KeybindingActionId } from '@agentstart/protocol/keybindings'
 
 export function clearRecordingActionForShortcutMutation(
   recordingActionId: KeybindingActionId | null,

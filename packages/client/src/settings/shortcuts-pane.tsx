@@ -7,7 +7,7 @@ import {
   normalizeKeybindingListForAction,
   type KeybindingActionId,
   type KeybindingInput
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
@@ -58,7 +58,7 @@ const platform: NodeJS.Platform = isMac
 export function ShortcutsPane(): React.JSX.Element {
   const searchQuery = useAppStore((state) => state.settingsSearchQuery)
   const terminalShortcutPolicy = useAppStore(
-    (state) => state.settings?.terminalShortcutPolicy ?? 'yiru-first'
+    (state) => state.settings?.terminalShortcutPolicy ?? 'agentstart-first'
   )
   const updateSettings = useAppStore((state) => state.updateSettings)
   const keybindings = useAppStore((state) => state.keybindings)
@@ -304,7 +304,7 @@ export function ShortcutsPane(): React.JSX.Element {
                 {keybindingSnapshot?.path ??
                   translate(
                     'auto.components.settings.ShortcutsPane.d8c988dab4',
-                    '~/.yiru/keybindings.json'
+                    '~/.agentstart/keybindings.json'
                   )}
               </span>{' '}
               {translate('auto.components.settings.ShortcutsPane.4b7ae34062', 'directly.')}

@@ -1,10 +1,10 @@
-use serde_json::{Map, Value, json};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::{
     WorktreeArchive, WorktreeDiffComment, WorktreeLineage, WorktreeMobileDiffReview,
     WorktreeNullableInt64, WorktreeNullableString, WorktreeRecord, WorktreeServiceCreateResponse,
     WorktreeServiceListArchivesResponse, WorktreeServiceListResponse, WorktreeWorkspaceLineage,
     worktree_nullable_int64, worktree_nullable_string,
 };
+use serde_json::{Map, Value, json};
 
 pub(super) fn archive_response(archive: WorktreeArchive, revision: i64) -> Value {
     json!({ "archive": archive_value(archive), "revision": revision })
@@ -20,7 +20,8 @@ pub(super) fn list_response(response: WorktreeServiceListResponse) -> Value {
     json!({
         "worktrees": response.worktrees.into_iter().map(record_value).collect::<Vec<_>>(),
         "totalCount": response.total_count,
-        "truncated": response.truncated
+        "truncated": response.truncated,
+        "revision": response.revision
     })
 }
 
@@ -379,7 +380,7 @@ fn record_value(record: WorktreeRecord) -> Value {
     Value::Object(value)
 }
 
-fn git_value(git: yiru_protocol::runtime::v1::WorktreeGitInfo) -> Value {
+fn git_value(git: agentstart_protocol::runtime::v1::WorktreeGitInfo) -> Value {
     let mut value = Map::from_iter([
         ("path".to_owned(), Value::String(git.path)),
         ("head".to_owned(), Value::String(git.head)),

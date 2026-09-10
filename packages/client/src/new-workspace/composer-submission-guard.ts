@@ -1,4 +1,4 @@
-const HOOK_TRUST_MODAL_ID = 'confirm-yiru-yaml-hooks'
+const HOOK_TRUST_MODAL_ID = 'confirm-agentstart-yaml-hooks'
 
 export type ComposerSubmissionGuard = {
   begin: () => number

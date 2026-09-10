@@ -16,7 +16,7 @@ import {
   GitStagingServiceStageResponseSchema,
   GitStagingServiceUnstageRequestSchema,
   GitStagingServiceUnstageResponseSchema
-} from '../../generated/yiru/runtime/v1/git_staging_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_staging_pb.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { GitStatusClient } from './status-client.js'
 

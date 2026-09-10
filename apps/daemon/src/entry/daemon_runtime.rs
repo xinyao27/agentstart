@@ -16,6 +16,8 @@ use super::daemon_options::DaemonOptions;
 
 #[derive(Debug, Error)]
 pub(super) enum DaemonRunError {
+    #[error("daemon_lock_held: another daemon process owns the runtime lock")]
+    DevRuntimeLockHeld,
     #[error(
         "existing_daemon_unreachable: stop the existing daemon before starting another instance"
     )]
@@ -44,6 +46,9 @@ pub(super) async fn run(options: DaemonOptions) -> Result<ExitCode, DaemonRunErr
         .open(options.user_data_path.join("daemon.lock"))?;
     match ownership.try_lock() {
         Ok(()) => {}
+        Err(std::fs::TryLockError::WouldBlock) if options.dev_supervisor => {
+            return Err(DaemonRunError::DevRuntimeLockHeld);
+        }
         Err(std::fs::TryLockError::WouldBlock) => return Ok(ExitCode::SUCCESS),
         Err(std::fs::TryLockError::Error(error)) => return Err(error.into()),
     }
@@ -408,7 +413,7 @@ fn print_readiness(
         );
         return;
     }
-    println!("Yiru daemon ready: {runtime_id}");
+    println!("AgentStart daemon ready: {runtime_id}");
     println!("Extension endpoint: {extension_endpoint}");
     println!("Mobile endpoint: {mobile_endpoint}");
     if let Some(pairing_url) = pairing_url {

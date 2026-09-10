@@ -147,7 +147,7 @@ export function OrchestrationStage(props: {
           style={{ marginLeft: 'var(--feature-wall-child-indent, 28px)' }}
         >
           <span
-            className="border-border bg-card text-muted-foreground inline-flex items-center gap-1 border px-1.5"
+            className="border-border bg-card text-muted-foreground inline-flex items-center gap-1 rounded-md border px-1.5"
             style={{ height: 18, fontSize: 10, fontWeight: 500 }}
             aria-label={translate(
               'auto.components.feature.wall.agents.orchestration.OrchestrationPage.862605d066',

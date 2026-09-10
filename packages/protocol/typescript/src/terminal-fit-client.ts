@@ -8,7 +8,7 @@ import {
   TerminalFitServiceRestoreRequestSchema,
   TerminalFitServiceRestoreResponseSchema,
   TerminalFitService
-} from '../generated/yiru/runtime/v1/terminal_fit_pb.js'
+} from '../generated/agent_start/runtime/v1/terminal_fit_pb.js'
 import {
   terminalDriver,
   type TerminalDriver,

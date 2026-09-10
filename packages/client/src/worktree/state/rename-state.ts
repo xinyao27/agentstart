@@ -1,5 +1,5 @@
-import { worktreeWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
+import { worktreeWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import { splitWorktreeIdForFilesystem } from '@agentstart/protocol/worktree/identity'
 
 import type { AppState } from '../../store/types'
 import {
@@ -7,7 +7,7 @@ import {
   type ClosedTerminalTabSnapshot
 } from '../../tab-bar/state/recently-closed'
 
-export const WORKTREE_ID_KEYED_MAP_KEYS = [
+const WORKTREE_ID_KEYED_MAP_KEYS = [
   'worktreeLineageById',
   'tabsByWorktree',
   'deleteStateByWorktreeId',

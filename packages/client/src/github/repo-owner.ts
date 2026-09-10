@@ -4,13 +4,13 @@ import {
   getSettingsFocusedExecutionHostId,
   normalizeExecutionHostId,
   parseExecutionHostId
-} from '@yiru/protocol/host/identity'
+} from '@agentstart/protocol/host/identity'
 import type {
   GitHubPRRefreshAlias,
   GitHubPRRefreshCandidate,
   GitHubPRRefreshReason
-} from '@yiru/protocol/hosted-review/pull-request-types'
-import type { Repo } from '@yiru/protocol/project/repository'
+} from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { enqueueShellGitHubPRRefresh } from '~renderer/runtime/github-shell-client'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import type { AppState } from '~renderer/store/types'
@@ -29,7 +29,7 @@ export function getRuntimeRepoTarget(
   return repo ? { target, repo } : null
 }
 
-export function getPRRefreshOwnerRuntimeEnvironmentId(
+function getPRRefreshOwnerRuntimeEnvironmentId(
   candidate: Pick<GitHubPRRefreshCandidate, 'cacheKey' | 'executionHostId'>
 ): string | null {
   const parsed = parseExecutionHostId(candidate.executionHostId)

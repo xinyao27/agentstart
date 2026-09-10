@@ -1,4 +1,4 @@
-import { keybindingMatchesAction, type KeybindingOverrides } from '@yiru/protocol/keybindings'
+import { keybindingMatchesAction, type KeybindingOverrides } from '@agentstart/protocol/keybindings'
 
 import type { WindowsShiftEnterEncoding } from './terminal-windows-shift-enter'
 
@@ -66,7 +66,7 @@ function resolveUnshiftedCharacterForCode(code: string | undefined): string | un
 
 /**
  * Resolves terminal keyboard events before xterm receives them.
- * Keeps configurable Yiru shortcuts and terminal byte fallbacks in one
+ * Keeps configurable AgentStart shortcuts and terminal byte fallbacks in one
  * platform-aware policy so renderer handlers do not duplicate key checks.
  */
 export function resolveTerminalShortcutAction(

@@ -1,4 +1,4 @@
-import { AI_VAULT_AGENTS, type AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+import { AI_VAULT_AGENTS, type AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
 import type {
   AiVaultGroup,
   AiVaultSort

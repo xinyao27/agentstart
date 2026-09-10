@@ -1,7 +1,7 @@
-import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { resolveHookCommandSourcePolicy } from '@yiru/protocol/setup/command-source-policy'
-import { getDefaultRepoHookSettings } from '@yiru/protocol/worktree/hooks'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@agentstart/protocol'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { resolveHookCommandSourcePolicy } from '@agentstart/protocol/setup/command-source-policy'
+import { getDefaultRepoHookSettings } from '@agentstart/protocol/worktree/hooks'
 import type { HookCheckResult } from '~renderer/runtime/hooks-client'
 import { isRuntimeScopeForbiddenError } from '~renderer/runtime/rpc-client'
 import type { SetupScriptImportCandidate } from '~renderer/setup/import-candidate'
@@ -70,7 +70,7 @@ export async function inspectSetupScriptPromptState({
   }
 }
 
-export function hasEffectiveSetupCommand(repo: Repo, hooksResult: HookCheckResult): boolean {
+function hasEffectiveSetupCommand(repo: Repo, hooksResult: HookCheckResult): boolean {
   const localSetup = repo.hookSettings?.scripts?.setup?.trim()
   const sharedSetup = hooksResult.hooks?.scripts?.setup?.trim()
   const rawPolicy = repo.hookSettings?.commandSourcePolicy

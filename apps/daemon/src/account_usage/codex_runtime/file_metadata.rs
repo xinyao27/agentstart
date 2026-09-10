@@ -24,7 +24,7 @@ pub(super) fn verify_windows_single_link(
     // would silently detach its other names from future writes.
     const SCRIPT: &str = r#"$ErrorActionPreference = 'Stop'
 $fsutil = Join-Path $env:SystemRoot 'System32\fsutil.exe'
-$links = @(& $fsutil hardlink list $env:YIRU_CODEX_LINK_TARGET 2>$null)
+$links = @(& $fsutil hardlink list $env:AGENTSTART_CODEX_LINK_TARGET 2>$null)
 if ($LASTEXITCODE -ne 0 -or $links.Count -ne 1) { exit 2 }
 "#;
     let guard = open_windows_guard(path)?;
@@ -34,7 +34,7 @@ if ($LASTEXITCODE -ne 0 -or $links.Count -ne 1) { exit 2 }
     }
     let mut command = windows_powershell_command(SCRIPT);
     command
-        .env("YIRU_CODEX_LINK_TARGET", path)
+        .env("AGENTSTART_CODEX_LINK_TARGET", path)
         .stdout(Stdio::null());
     let status = wait_windows_child(command.spawn()?)?;
     let final_handle = same_file::Handle::from_file(guard.try_clone()?)?;
@@ -57,7 +57,7 @@ pub(super) fn windows_security_generation(
     // SDDL gives the snapshot a bounded generation token without moving a potentially large
     // descriptor through an environment variable or localized text.
     const SCRIPT: &str = r#"$ErrorActionPreference = 'Stop'
-$acl = Get-Acl -LiteralPath $env:YIRU_CODEX_SECURITY_TARGET -ErrorAction Stop
+$acl = Get-Acl -LiteralPath $env:AGENTSTART_CODEX_SECURITY_TARGET -ErrorAction Stop
 $bytes = [System.Text.Encoding]::UTF8.GetBytes($acl.Sddl)
 $sha = [System.Security.Cryptography.SHA256]::Create()
 try { $hash = $sha.ComputeHash($bytes) } finally { $sha.Dispose() }
@@ -70,7 +70,7 @@ try { $hash = $sha.ComputeHash($bytes) } finally { $sha.Dispose() }
     }
     let mut command = windows_powershell_command(SCRIPT);
     command
-        .env("YIRU_CODEX_SECURITY_TARGET", path)
+        .env("AGENTSTART_CODEX_SECURITY_TARGET", path)
         .stdout(Stdio::piped());
     let mut child = command.spawn()?;
     let status = wait_windows_child_ref(&mut child)?;
@@ -97,7 +97,7 @@ pub(super) fn windows_file_id(
     // after the atomic operation without retaining a handle that blocks the operation itself.
     const SCRIPT: &str = r#"$ErrorActionPreference = 'Stop'
 $fsutil = Join-Path $env:SystemRoot 'System32\fsutil.exe'
-$output = @(& $fsutil file queryfileid $env:YIRU_CODEX_FILE_ID_TARGET 2>$null)
+$output = @(& $fsutil file queryfileid $env:AGENTSTART_CODEX_FILE_ID_TARGET 2>$null)
 if ($LASTEXITCODE -ne 0) { exit 2 }
 $matches = [regex]::Matches(($output -join "`n"), '0x[0-9A-Fa-f]+')
 if ($matches.Count -ne 1) { exit 3 }
@@ -112,7 +112,7 @@ if ($id.Length -lt 16 -or $id.Length -gt 64 -or ($id.Length % 2) -ne 0) { exit 4
     }
     let mut command = windows_powershell_command(SCRIPT);
     command
-        .env("YIRU_CODEX_FILE_ID_TARGET", path)
+        .env("AGENTSTART_CODEX_FILE_ID_TARGET", path)
         .stdout(Stdio::piped());
     let mut child = command.spawn()?;
     let status = wait_windows_child_ref(&mut child)?;
@@ -154,7 +154,7 @@ $rule = [System.Security.AccessControl.FileSystemAccessRule]::new(
 )
 $security.AddAccessRule($rule)
 $stream = [System.IO.FileStream]::new(
-  $env:YIRU_CODEX_PRIVATE_FILE,
+  $env:AGENTSTART_CODEX_PRIVATE_FILE,
   [System.IO.FileMode]::CreateNew,
   [System.Security.AccessControl.FileSystemRights]::FullControl,
   [System.IO.FileShare]::Read,
@@ -166,7 +166,7 @@ $stream.Dispose()
 "#;
     let mut command = windows_powershell_command(SCRIPT);
     command
-        .env("YIRU_CODEX_PRIVATE_FILE", path)
+        .env("AGENTSTART_CODEX_PRIVATE_FILE", path)
         .stdout(Stdio::null())
         .stderr(Stdio::null());
     let status = wait_windows_child(command.spawn()?)?;
@@ -188,17 +188,17 @@ pub(super) fn exchange_windows_files(
     // rollback possible; MoveFileEx would destroy the file whose generation must be verified.
     const SCRIPT: &str = r#"$ErrorActionPreference = 'Stop'
 [System.IO.File]::Replace(
-  $env:YIRU_CODEX_EXCHANGE_SOURCE,
-  $env:YIRU_CODEX_EXCHANGE_DESTINATION,
-  $env:YIRU_CODEX_EXCHANGE_BACKUP,
+  $env:AGENTSTART_CODEX_EXCHANGE_SOURCE,
+  $env:AGENTSTART_CODEX_EXCHANGE_DESTINATION,
+  $env:AGENTSTART_CODEX_EXCHANGE_BACKUP,
   $false
 )
 "#;
     let mut command = windows_powershell_command(SCRIPT);
     command
-        .env("YIRU_CODEX_EXCHANGE_SOURCE", source)
-        .env("YIRU_CODEX_EXCHANGE_DESTINATION", destination)
-        .env("YIRU_CODEX_EXCHANGE_BACKUP", backup)
+        .env("AGENTSTART_CODEX_EXCHANGE_SOURCE", source)
+        .env("AGENTSTART_CODEX_EXCHANGE_DESTINATION", destination)
+        .env("AGENTSTART_CODEX_EXCHANGE_BACKUP", backup)
         .stdout(Stdio::null());
     let status = wait_windows_child(command.spawn()?)?;
     if status.success() {
@@ -599,7 +599,7 @@ pub(super) fn preserve_wsl(source: &Path, temporary: &Path) -> Result<(), CodexR
             "sh",
             "-c",
             WSL_PRESERVE_METADATA_SCRIPT,
-            "yiru-codex-metadata",
+            "agentstart-codex-metadata",
             &source_path,
             &temporary_path,
         ],
@@ -701,8 +701,8 @@ fn preserve_windows_metadata(source: &Path, temporary: &Path) -> Result<(), Code
     // The same-directory staging file therefore keeps current parent/token integrity policy while
     // CopyFileExW retains EAs and ADS provenance.
     const SCRIPT: &str = r#"$ErrorActionPreference = 'Stop'
-$source = Get-Item -LiteralPath $env:YIRU_CODEX_METADATA_SOURCE -Force
-$temporary = Get-Item -LiteralPath $env:YIRU_CODEX_METADATA_TEMPORARY -Force
+$source = Get-Item -LiteralPath $env:AGENTSTART_CODEX_METADATA_SOURCE -Force
+$temporary = Get-Item -LiteralPath $env:AGENTSTART_CODEX_METADATA_TEMPORARY -Force
 $reparse = [System.IO.FileAttributes]::ReparsePoint
 if (($source.Attributes -band $reparse) -ne 0 -or ($temporary.Attributes -band $reparse) -ne 0) {
   exit 2
@@ -736,8 +736,8 @@ if ([int]$sourceAttributes -ne [int]$finalAttributes) {
 
     let mut command = windows_powershell_command(SCRIPT);
     command
-        .env("YIRU_CODEX_METADATA_SOURCE", source)
-        .env("YIRU_CODEX_METADATA_TEMPORARY", temporary)
+        .env("AGENTSTART_CODEX_METADATA_SOURCE", source)
+        .env("AGENTSTART_CODEX_METADATA_TEMPORARY", temporary)
         .stdout(Stdio::null())
         .stderr(Stdio::null());
     let status = wait_windows_child(command.spawn()?)?;

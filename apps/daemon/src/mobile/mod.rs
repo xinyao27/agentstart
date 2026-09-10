@@ -12,9 +12,7 @@ mod server;
 pub(crate) mod windows_firewall;
 
 pub use authorization::MobileAuthorization;
-pub use devices::{
-    ApnsEnvironment, MobileDevice, MobileDeviceStore, MobileDeviceStoreError, PushRegistration,
-};
+pub use devices::{MobileDevice, MobileDeviceStore, MobileDeviceStoreError};
 pub(crate) use host_pairing::MobilePairingQrResult;
 pub use host_pairing::{
     MobileDevelopmentPairingInput, MobileHostPairingQrInput, MobilePairingManager,

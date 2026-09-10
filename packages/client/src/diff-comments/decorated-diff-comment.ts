@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 
 /** A stored diff comment plus the presentation fields a surface renders with. */
 export type DecoratedDiffComment = DiffComment & {

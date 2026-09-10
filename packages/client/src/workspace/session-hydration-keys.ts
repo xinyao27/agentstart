@@ -1,6 +1,6 @@
-import type { WorkspaceKey } from '@yiru/protocol/workspace/identity'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { WorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
 
 export type WorkspaceSessionHydrationOptions = {
   additionalValidWorkspaceKeys?: readonly WorkspaceKey[]

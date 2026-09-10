@@ -10,8 +10,8 @@ use sha2::{Digest, Sha256};
 use super::InstallationDatabaseError;
 use crate::transport::secure_file;
 
-const LEGACY_DATABASE_FILE: &str = "yiru.sqlite";
-const JOURNAL_FILE: &str = "yiru-installation-migration.json";
+const LEGACY_DATABASE_FILE: &str = "agentstart.sqlite";
+const JOURNAL_FILE: &str = "agentstart-installation-migration.json";
 const KEYPAIR_FILE: &str = "mobile-e2ee-keypair.json";
 const MAX_PROFILE_SOURCES: usize = 100;
 const MAX_DEVICE_ROWS: usize = 4_096;
@@ -25,13 +25,10 @@ const MAX_JOURNAL_BYTES: u64 = 4 * 1024;
 
 #[derive(Clone, Eq, PartialEq)]
 struct MobileDeviceRow {
-    apns_environment: Option<String>,
-    apns_token: Option<String>,
     id: String,
     last_seen_at: i64,
     name: String,
     paired_at: i64,
-    push_updated_at: Option<i64>,
     token: String,
 }
 
@@ -89,11 +86,8 @@ struct NotificationProvenanceRow {
     target_id: Option<i64>,
 }
 
-#[derive(Clone, Copy, Eq, PartialEq)]
-struct DatabaseIdentity {
-    first: u64,
-    second: u64,
-}
+#[derive(Eq, PartialEq)]
+struct DatabaseIdentity(crate::file_identity::FileIdentity);
 
 pub(super) fn merge_legacy_installation_data(
     installation_root: &Path,
@@ -257,61 +251,15 @@ fn is_database_source(path: &Path) -> Result<bool, InstallationDatabaseError> {
     }
 }
 
-#[cfg(unix)]
 fn database_identity(path: &Path) -> Result<DatabaseIdentity, InstallationDatabaseError> {
-    use std::os::unix::fs::MetadataExt as _;
-
+    let identity = crate::file_identity::FileIdentity::from_path(path)
+        .map_err(|source| io_error("identify migration database", path, source))?;
     let metadata = fs::symlink_metadata(path)
         .map_err(|source| io_error("identify migration database", path, source))?;
     if !metadata.file_type().is_file() {
         return conflict(path, "database-path");
     }
-    Ok(DatabaseIdentity {
-        first: metadata.dev(),
-        second: metadata.ino(),
-    })
-}
-
-#[cfg(windows)]
-fn database_identity(path: &Path) -> Result<DatabaseIdentity, InstallationDatabaseError> {
-    use std::os::windows::fs::MetadataExt as _;
-
-    let metadata = fs::symlink_metadata(path)
-        .map_err(|source| io_error("identify migration database", path, source))?;
-    if !metadata.file_type().is_file() {
-        return conflict(path, "database-path");
-    }
-    let Some(volume) = metadata.volume_serial_number() else {
-        return conflict(path, "database-identity");
-    };
-    let Some(file_index) = metadata.file_index() else {
-        return conflict(path, "database-identity");
-    };
-    Ok(DatabaseIdentity {
-        first: u64::from(volume),
-        second: file_index,
-    })
-}
-
-#[cfg(not(any(unix, windows)))]
-fn database_identity(path: &Path) -> Result<DatabaseIdentity, InstallationDatabaseError> {
-    let metadata = fs::symlink_metadata(path)
-        .map_err(|source| io_error("identify migration database", path, source))?;
-    if !metadata.file_type().is_file() {
-        return conflict(path, "database-path");
-    }
-    let modified = metadata
-        .modified()
-        .and_then(|value| {
-            value
-                .duration_since(std::time::UNIX_EPOCH)
-                .map_err(io::Error::other)
-        })
-        .map_err(|source| io_error("identify migration database", path, source))?;
-    Ok(DatabaseIdentity {
-        first: metadata.len(),
-        second: modified.as_secs() ^ u64::from(modified.subsec_nanos()),
-    })
+    Ok(DatabaseIdentity(identity))
 }
 
 fn open_source(path: PathBuf, key: String) -> Result<MigrationSource, InstallationDatabaseError> {
@@ -360,45 +308,23 @@ fn merge_devices(
     if !has_table(source, "mobile_device")? {
         return Ok(BTreeSet::new());
     }
-    let apns_token = optional_column(source, "mobile_device", "apns_token", "apns_token")?;
-    let apns_environment = optional_column(
-        source,
-        "mobile_device",
-        "apns_environment",
-        "apns_environment",
-    )?;
-    let push_updated_at = optional_column(
-        source,
-        "mobile_device",
-        "push_updated_at",
-        "push_updated_at",
-    )?;
     enforce_source_table_budget(
         source,
         "mobile_device",
         MAX_DEVICE_ROWS,
-        &format!(
-            "length(id)+length(name)+length(token)+COALESCE(length({apns_token}),0)
-             +COALESCE(length({apns_environment}),0)"
-        ),
+        "length(id)+length(name)+length(token)",
         source_scan_budget,
     )?;
     check_table_integrity(source_path, source, "mobile_device")?;
-    let sql = format!(
-        "SELECT id,name,token,{apns_token},{apns_environment},{push_updated_at},paired_at,last_seen_at
-         FROM mobile_device ORDER BY id"
-    );
-    let mut statement = source.prepare(&sql)?;
+    let mut statement = source
+        .prepare("SELECT id,name,token,paired_at,last_seen_at FROM mobile_device ORDER BY id")?;
     let rows = statement.query_map([], |row| {
         Ok(MobileDeviceRow {
             id: row.get(0)?,
             name: row.get(1)?,
             token: row.get(2)?,
-            apns_token: row.get(3)?,
-            apns_environment: row.get(4)?,
-            push_updated_at: row.get(5)?,
-            paired_at: row.get(6)?,
-            last_seen_at: row.get(7)?,
+            paired_at: row.get(3)?,
+            last_seen_at: row.get(4)?,
         })
     })?;
     let mut source_ids = BTreeSet::new();
@@ -442,26 +368,11 @@ fn canonical_device(
             current
         }
     };
-    let push = match current.push_updated_at.cmp(&incoming.push_updated_at) {
-        std::cmp::Ordering::Less => incoming,
-        std::cmp::Ordering::Greater => current,
-        std::cmp::Ordering::Equal => {
-            if current.apns_token != incoming.apns_token
-                || current.apns_environment != incoming.apns_environment
-            {
-                return conflict(source_path, "mobile_device");
-            }
-            current
-        }
-    };
     Ok(MobileDeviceRow {
-        apns_environment: push.apns_environment.clone(),
-        apns_token: push.apns_token.clone(),
         id: current.id.clone(),
         last_seen_at: current.last_seen_at.max(incoming.last_seen_at),
         name: identity.name.clone(),
         paired_at: identity.paired_at,
-        push_updated_at: push.push_updated_at,
         token: identity.token.clone(),
     })
 }
@@ -489,19 +400,9 @@ fn store_devices(
     devices.sort_by(|left, right| left.id.cmp(&right.id));
     for row in devices {
         transaction.execute(
-            "INSERT INTO mobile_device(
-               id,name,token,apns_token,apns_environment,push_updated_at,paired_at,last_seen_at
-             ) VALUES (?1,?2,?3,?4,?5,?6,?7,?8)",
-            params![
-                row.id,
-                row.name,
-                row.token,
-                row.apns_token,
-                row.apns_environment,
-                row.push_updated_at,
-                row.paired_at,
-                row.last_seen_at,
-            ],
+            "INSERT INTO mobile_device(id,name,token,paired_at,last_seen_at)
+             VALUES (?1,?2,?3,?4,?5)",
+            params![row.id, row.name, row.token, row.paired_at, row.last_seen_at,],
         )?;
     }
     Ok(())
@@ -687,7 +588,7 @@ fn notification_identity_digest(
     let payload_length = u64::try_from(row.payload.len())
         .map_err(|_| InstallationDatabaseError::MigrationCapacity)?;
     let mut hash = Sha256::new();
-    hash.update(b"yiru-installation-notification-identity-v1\0");
+    hash.update(b"agentstart-installation-notification-identity-v1\0");
     hash.update([1]);
     hash.update(8_u64.to_be_bytes());
     hash.update(local_id.to_be_bytes());
@@ -743,7 +644,7 @@ fn migration_source_key(
 
 fn notification_migration_id(source_key: &str, local_id: i64) -> i64 {
     let mut hash = Sha256::new();
-    hash.update(b"yiru-installation-notification-v1\0");
+    hash.update(b"agentstart-installation-notification-v1\0");
     hash.update(source_key.as_bytes());
     hash.update([0]);
     hash.update(local_id.to_be_bytes());
@@ -1069,23 +970,17 @@ fn load_target_devices(
         connection,
         "mobile_device",
         MAX_DEVICE_ROWS,
-        "length(id)+length(name)+length(token)+COALESCE(length(apns_token),0)
-         +COALESCE(length(apns_environment),0)",
+        "length(id)+length(name)+length(token)",
     )?;
-    let mut statement = connection.prepare(
-        "SELECT id,name,token,apns_token,apns_environment,push_updated_at,paired_at,last_seen_at
-         FROM mobile_device ORDER BY id",
-    )?;
+    let mut statement = connection
+        .prepare("SELECT id,name,token,paired_at,last_seen_at FROM mobile_device ORDER BY id")?;
     let rows = statement.query_map([], |row| {
         Ok(MobileDeviceRow {
             id: row.get(0)?,
             name: row.get(1)?,
             token: row.get(2)?,
-            apns_token: row.get(3)?,
-            apns_environment: row.get(4)?,
-            push_updated_at: row.get(5)?,
-            paired_at: row.get(6)?,
-            last_seen_at: row.get(7)?,
+            paired_at: row.get(3)?,
+            last_seen_at: row.get(4)?,
         })
     })?;
     let mut result = HashMap::new();
@@ -1180,24 +1075,6 @@ fn release_source(source: MigrationSource) -> Result<(), InstallationDatabaseErr
         .map_err(|(_connection, error)| InstallationDatabaseError::Sqlite(error))
 }
 
-fn optional_column(
-    connection: &Connection,
-    table: &str,
-    column: &str,
-    expression: &str,
-) -> Result<&'static str, InstallationDatabaseError> {
-    if has_column(connection, table, column)? {
-        Ok(match expression {
-            "apns_token" => "apns_token",
-            "apns_environment" => "apns_environment",
-            "push_updated_at" => "push_updated_at",
-            _ => "NULL",
-        })
-    } else {
-        Ok("NULL")
-    }
-}
-
 fn has_table(connection: &Connection, table: &str) -> Result<bool, rusqlite::Error> {
     connection.query_row(
         "SELECT EXISTS(
@@ -1232,16 +1109,6 @@ fn check_table_integrity(
         return conflict(source_path, table);
     }
     Ok(())
-}
-
-fn has_column(connection: &Connection, table: &str, column: &str) -> Result<bool, rusqlite::Error> {
-    connection.query_row(
-        "SELECT EXISTS(
-           SELECT 1 FROM pragma_table_info(?1) WHERE name = ?2
-         )",
-        [table, column],
-        |row| row.get(0),
-    )
 }
 
 fn enforce_table_budget(
@@ -1349,15 +1216,9 @@ fn replace_migration_bytes(
 }
 
 fn device_bytes(row: &MobileDeviceRow) -> usize {
-    [
-        row.id.len(),
-        row.name.len(),
-        row.token.len(),
-        row.apns_token.as_ref().map_or(0, String::len),
-        row.apns_environment.as_ref().map_or(0, String::len),
-    ]
-    .into_iter()
-    .fold(0_usize, usize::saturating_add)
+    [row.id.len(), row.name.len(), row.token.len()]
+        .into_iter()
+        .fold(0_usize, usize::saturating_add)
 }
 
 fn notification_bytes(row: &NotificationRow) -> usize {
@@ -1377,13 +1238,7 @@ fn dangerous_bytes(row: &DangerousCredentialRow) -> usize {
 }
 
 fn validate_device(row: &MobileDeviceRow) -> Result<(), InstallationDatabaseError> {
-    let fields = [
-        row.id.as_str(),
-        row.name.as_str(),
-        row.token.as_str(),
-        row.apns_token.as_deref().unwrap_or_default(),
-        row.apns_environment.as_deref().unwrap_or_default(),
-    ];
+    let fields = [row.id.as_str(), row.name.as_str(), row.token.as_str()];
     if fields.iter().any(|value| value.len() > MAX_FIELD_BYTES)
         || row.id.is_empty()
         || row.name.is_empty()

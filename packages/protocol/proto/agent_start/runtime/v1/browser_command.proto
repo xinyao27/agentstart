@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+// Why: browserCommand.open only journals a "please open this URL" workspace event; it never
+// touches a worktree host, so it stays local-only.
+service BrowserCommandService {
+  rpc Open(BrowserCommandServiceOpenRequest) returns (BrowserCommandServiceOpenResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message BrowserCommandServiceOpenRequest {
+  optional string project_id = 1;
+  string url = 2;
+  optional string worktree_id = 3;
+}
+
+message BrowserOpenTabRequestedPayload {
+  string url = 1;
+  optional string project_id = 2;
+  optional string worktree_id = 3;
+}
+
+message BrowserOpenTabRequestedEvent {
+  int64 id = 1;
+  string kind = 2;
+  int64 occurred_at = 3;
+  BrowserOpenTabRequestedPayload payload = 4;
+  int64 revision = 5;
+  string scope = 6;
+}
+
+message BrowserCommandServiceOpenResponse { BrowserOpenTabRequestedEvent event = 1; }

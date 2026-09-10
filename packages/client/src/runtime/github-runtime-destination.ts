@@ -1,4 +1,4 @@
-import type { RuntimeCallOptions } from '@yiru/protocol'
+import type { RuntimeCallOptions } from '@agentstart/protocol'
 
 import type { RuntimeClientTarget } from './runtime-target'
 

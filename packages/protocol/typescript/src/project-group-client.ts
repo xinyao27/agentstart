@@ -16,7 +16,7 @@ import {
   ProjectGroupServiceUpdateFieldsSchema,
   ProjectGroupServiceUpdateFields_NullableColorSchema,
   ProjectGroupServiceUpdateRequestSchema
-} from '../generated/yiru/runtime/v1/project_group_pb.js'
+} from '../generated/agent_start/runtime/v1/project_group_pb.js'
 import { ProjectGroupImportClient, expectedRevision } from './project-group-import-client.js'
 import { nestedScanResult } from './project-group-scan-values.js'
 import {

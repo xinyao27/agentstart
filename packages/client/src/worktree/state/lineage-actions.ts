@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogQueryClient } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshProjectCatalogLineage } from '~renderer/project-catalog/refresh'

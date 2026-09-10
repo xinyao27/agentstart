@@ -1,4 +1,4 @@
-import { runtimeEnvironmentTransport, type RuntimeTransport } from '@yiru/protocol'
+import { runtimeEnvironmentTransport, type RuntimeTransport } from '@agentstart/protocol'
 
 import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'
 import type { RuntimeClientTarget } from './rpc-client'

@@ -1,17 +1,13 @@
-import { DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS } from '@yiru/protocol/source-control/settings'
+import { DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS } from '@agentstart/protocol/source-control/settings'
 import { resolveSourceControlAiForOperation } from '~renderer/source-control/ai/resolution'
 
-import {
-  normalizeCreateReviewBaseSearchResults,
-  resolveCreateReviewDefaultBaseRef,
-  stripBaseRef
-} from './create-review-base-ref'
+import { resolveCreateReviewDefaultBaseRef, stripBaseRef } from './create-review-base-ref'
 import { useCreateReviewBaseSearch } from './create-review-base-search'
 import { useCreateReviewDialogFieldState } from './create-review-dialog-field-state'
 import type { UseCreatePullRequestDialogFieldsOptions } from './create-review-dialog-field-types'
 import { useCreateReviewFieldGeneration } from './create-review-field-generation'
 
-export { normalizeCreateReviewBaseSearchResults, stripBaseRef }
+export { stripBaseRef }
 
 export function useCreatePullRequestDialogFields(options: UseCreatePullRequestDialogFieldsOptions) {
   const {

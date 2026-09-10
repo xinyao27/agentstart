@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import type {
   RepoNullableBool,
   RepoNullableString,
@@ -6,7 +6,7 @@ import type {
   RepoSourceControlAiOverrides as ProtocolSourceControlAi,
   RepoSourceControlModelChoice,
   RepoSourceControlPrCreationDefaults
-} from '../generated/yiru/runtime/v1/repo_pb.js'
+} from '../generated/agent_start/runtime/v1/repo_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type {
   RepoAgentValue,

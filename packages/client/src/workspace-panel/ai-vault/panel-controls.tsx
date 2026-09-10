@@ -1,5 +1,5 @@
-import { AI_VAULT_AGENTS, type AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
-import type { ExecutionHostScope } from '@yiru/protocol/host/identity'
+import { AI_VAULT_AGENTS, type AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
+import type { ExecutionHostScope } from '@agentstart/protocol/host/identity'
 import type React from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { getExecutionHostLabel } from '~renderer/execution-host/labels'
@@ -78,7 +78,7 @@ export function VaultGroupHeader({
         )}
       />
       <span className="min-w-0 flex-1 truncate">{group.label}</span>
-      <span className="border-sidebar-border bg-background text-foreground border px-2 py-0.5 text-[11px] leading-none font-semibold tabular-nums">
+      <span className="border-sidebar-border bg-background text-foreground rounded-md border px-2 py-0.5 text-[11px] leading-none font-semibold tabular-nums">
         {group.sessions.length}
       </span>
     </Button>
@@ -100,11 +100,11 @@ export function SessionLoadingState(): React.JSX.Element {
       <div className="space-y-3">
         {Array.from({ length: 6 }, (_, index) => (
           <div key={index} className="flex items-start gap-2">
-            <div className="bg-sidebar-accent mt-1 size-4" />
+            <div className="bg-sidebar-accent mt-1 size-4 rounded-full" />
             <div className="min-w-0 flex-1 space-y-1.5">
-              <div className="bg-sidebar-accent h-3 w-4/5" />
-              <div className="bg-sidebar-accent/75 h-2.5 w-3/5" />
-              <div className="bg-sidebar-accent/60 h-2.5 w-2/5" />
+              <div className="bg-sidebar-accent h-3 w-4/5 rounded-sm" />
+              <div className="bg-sidebar-accent/75 h-2.5 w-3/5 rounded-sm" />
+              <div className="bg-sidebar-accent/60 h-2.5 w-2/5 rounded-sm" />
             </div>
           </div>
         ))}
@@ -293,7 +293,7 @@ export function VaultViewMenu({
             {adjustmentCount > 0 ? (
               <span
                 aria-hidden
-                className="bg-primary text-primary-foreground absolute -top-1 -right-1 flex h-3.5 min-w-3.5 items-center justify-center px-1 text-[9px] leading-none font-medium"
+                className="bg-primary text-primary-foreground absolute -top-1 -right-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full px-1 text-[9px] leading-none font-medium"
               >
                 {adjustmentCount}
               </span>

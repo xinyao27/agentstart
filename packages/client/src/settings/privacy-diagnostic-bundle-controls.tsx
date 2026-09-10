@@ -1,4 +1,4 @@
-import type { DiagnosticsBundle, DiagnosticsStatus } from '@yiru/protocol/diagnostics-values'
+import type { DiagnosticsBundle, DiagnosticsStatus } from '@agentstart/protocol/diagnostics-values'
 import { translate } from '~renderer/i18n/i18n'
 import {
   Check,

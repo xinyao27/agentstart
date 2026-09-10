@@ -3,7 +3,7 @@ import { AgentStateDot } from '~renderer/agent/status-dot'
 import { cn } from '~renderer/ui/class-names'
 import { getWorktreeStatusLabel, type WorktreeStatus } from '~renderer/worktree/status'
 
-export type Status = WorktreeStatus
+type Status = WorktreeStatus
 
 type StatusIndicatorProps = React.ComponentProps<'span'> & {
   status: Status
@@ -41,7 +41,10 @@ export function StatusIndicator({
       {...rest}
     >
       <span
-        className={cn('block size-2', status === 'active' ? 'bg-emerald-500' : 'bg-neutral-500/40')}
+        className={cn(
+          'block size-2 rounded-full',
+          status === 'active' ? 'bg-emerald-500' : 'bg-neutral-500/40'
+        )}
       />
     </span>
   )

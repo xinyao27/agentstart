@@ -1,4 +1,4 @@
-import { YIRU_GITHUB_REPOSITORY_URL } from '@yiru/protocol/hosted-review/yiru-repository'
+import { AGENTSTART_GITHUB_REPOSITORY_URL } from '@agentstart/protocol/hosted-review/agentstart-repository'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
@@ -52,7 +52,7 @@ function StarNagToast({
     setDismissSuppressed(true)
     if (mode === 'web') {
       try {
-        openHttpLink(YIRU_GITHUB_REPOSITORY_URL, { event })
+        openHttpLink(AGENTSTART_GITHUB_REPOSITORY_URL, { event })
         await shellClient.starNag.openWeb()
         markResolved()
         setStatus('opened')
@@ -64,7 +64,7 @@ function StarNagToast({
     }
     let ok = false
     try {
-      ok = await shellClient.starNag.starYiru()
+      ok = await shellClient.starNag.starAgentStart()
     } catch {
       ok = false
     }
@@ -97,15 +97,15 @@ function StarNagToast({
     : 'min-w-0 flex-1 gap-1.5 border-amber-400/60 bg-amber-400/15 text-amber-800 hover:bg-amber-400/25 dark:text-amber-100'
 
   return (
-    <div className="border-border bg-popover text-popover-foreground relative w-[340px] max-w-[calc(100vw-32px)] overflow-hidden border p-3.5">
+    <div className="border-border bg-popover text-popover-foreground relative w-[340px] max-w-[calc(100vw-32px)] overflow-hidden rounded-lg border p-3.5">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 space-y-1.5">
           <div className="flex items-center gap-2">
             <span
               className={
                 completedStar
-                  ? 'flex size-6 shrink-0 items-center justify-center border border-amber-400/40 bg-amber-400/10 text-amber-500'
-                  : 'flex size-6 shrink-0 items-center justify-center border border-green-700/25 bg-green-700/10 text-green-700 dark:border-green-300/25 dark:bg-green-300/10 dark:text-green-300'
+                  ? 'flex size-6 shrink-0 items-center justify-center rounded-full border border-amber-400/40 bg-amber-400/10 text-amber-500'
+                  : 'flex size-6 shrink-0 items-center justify-center rounded-full border border-green-700/25 bg-green-700/10 text-green-700 dark:border-green-300/25 dark:bg-green-300/10 dark:text-green-300'
               }
               aria-hidden="true"
             >
@@ -125,7 +125,7 @@ function StarNagToast({
           <p className="text-muted-foreground text-sm leading-5">
             {translate(
               'auto.components.star.nag.StarNagToastHost.body',
-              'If you’re enjoying Yiru so far, a GitHub star helps other developers discover it.'
+              'If you’re enjoying AgentStart so far, a GitHub star helps other developers discover it.'
             )}
           </p>
         </div>

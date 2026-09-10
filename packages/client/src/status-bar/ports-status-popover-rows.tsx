@@ -1,4 +1,4 @@
-import type { WorkspacePort } from '@yiru/protocol'
+import type { WorkspacePort } from '@agentstart/protocol'
 import React from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -16,7 +16,7 @@ import {
   killWorkspacePortForTarget,
   openWorkspacePortInBrowser,
   refreshWorkspacePortScanAfterStop,
-  resolvePortOpenInYiruBrowser
+  resolvePortOpenInAgentStartBrowser
 } from '~renderer/ports/actions'
 import type { WorkspacePortGroup } from '~renderer/ports/groups'
 import { useLocalhostLabelRouteForPort } from '~renderer/ports/localhost-label-selector'
@@ -110,7 +110,7 @@ export function PortRow({
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
     recordFeatureInteraction('ports')
-    const openInYiruBrowser = resolvePortOpenInYiruBrowser({
+    const openInAgentStartBrowser = resolvePortOpenInAgentStartBrowser({
       event
     })
     void openWorkspacePortInBrowser({
@@ -119,7 +119,7 @@ export function PortRow({
       runtimeTarget,
       createBrowserTab,
       setRemoteBrowserPageHandle,
-      openInYiruBrowser,
+      openInAgentStartBrowser,
       localhostLabelRoute
     }).then((result) => {
       if (!result.ok) {
@@ -194,7 +194,7 @@ export function PortRow({
   }
 
   return (
-    <div className="group/port hover:bg-accent/50 grid min-w-0 grid-cols-[4.5rem_minmax(0,1fr)] items-start gap-2 px-2 py-1.5">
+    <div className="group/port hover:bg-accent/50 grid min-w-0 grid-cols-[4.5rem_minmax(0,1fr)] items-start gap-2 rounded-md px-2 py-1.5">
       <span className="text-foreground font-mono text-[12px] font-semibold tabular-nums select-text">
         {port.port}
       </span>
@@ -214,7 +214,7 @@ export function PortRow({
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <div className="border-border/40 bg-popover can-hover:opacity-0 absolute inset-y-0 right-0 flex items-center gap-0.5 border px-0.5 transition-opacity group-focus-within/port:opacity-100 group-hover/port:opacity-100">
+          <div className="border-border/40 bg-popover can-hover:opacity-0 absolute inset-y-0 right-0 flex items-center gap-0.5 rounded-md border px-0.5 transition-opacity group-focus-within/port:opacity-100 group-hover/port:opacity-100">
             <PortAction
               label={openBrowserLabel}
               tooltipLabel={getPortOpenBrowserTooltipLabel(openBrowserLabel)}

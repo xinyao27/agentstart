@@ -1,4 +1,4 @@
-import { runtimeEnvironmentTransport, UpdaterClient } from '@yiru/protocol'
+import { runtimeEnvironmentTransport, UpdaterClient } from '@agentstart/protocol'
 
 import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'
 

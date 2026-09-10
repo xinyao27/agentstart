@@ -1,5 +1,5 @@
-import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
-import type { ContextualTourOutcome } from '@yiru/protocol/telemetry/education'
+import type { ContextualTourId } from '@agentstart/protocol/settings/contextual-tours'
+import type { ContextualTourOutcome } from '@agentstart/protocol/telemetry/education'
 import type { JSX } from 'react'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import {

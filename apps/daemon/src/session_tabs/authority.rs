@@ -69,8 +69,6 @@ pub(crate) enum SessionTabsError {
     HostProvenance,
     #[error("session_tabs_state_changed")]
     StateChanged,
-    #[error("renderer_projection_owned_by_another_connection")]
-    RendererOwner,
     #[error("after_tab_not_found")]
     AfterTabNotFound,
     #[error("client_disconnected")]
@@ -152,15 +150,9 @@ impl SessionTabsAuthority {
         let SessionTabsScope::Worktree { host_id, worktree } = scope else {
             return Err(SessionTabsError::HostProvenance);
         };
-        let probe = self
-            .inner
-            .worktrees
-            .resolve_selector(&format!("id:{worktree}"))
-            .await?;
-        let resolved_host = (probe.host_id != "local").then_some(probe.host_id);
-        if &resolved_host != host_id {
-            return Err(WorktreeCatalogError::AmbiguousSelector.into());
-        }
+        // Why: callers obtain this exact host/worktree pair from resolve_scope. Resolving the
+        // selector again before every snapshot serializes multiple full catalog probes into a
+        // single tab mutation and can exceed the mobile request deadline on large repositories.
         self.headless_for_probe(host_id.as_deref(), worktree).await
     }
 

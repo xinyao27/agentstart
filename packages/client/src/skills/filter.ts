@@ -1,5 +1,5 @@
-import type { DiscoveredSkill, SkillProvider, SkillSourceKind } from '@yiru/protocol'
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import type { DiscoveredSkill, SkillProvider, SkillSourceKind } from '@agentstart/protocol'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 import { skillPlacements } from '~renderer/skills/installation'
 
 export type SkillsFilterState = {
@@ -8,9 +8,9 @@ export type SkillsFilterState = {
   provider: SkillProvider | 'all'
 }
 
-export const SKILLS_FILTER_QUERY_MAX_BYTES = 2 * 1024
+const SKILLS_FILTER_QUERY_MAX_BYTES = 2 * 1024
 
-export function isSkillsFilterQueryTooLarge(
+function isSkillsFilterQueryTooLarge(
   query: string,
   maxBytes = SKILLS_FILTER_QUERY_MAX_BYTES
 ): boolean {

@@ -29,7 +29,7 @@ pub(super) struct ProviderContext {
 
 impl ProviderContext {
     pub(super) fn new(home_path: PathBuf, user_data_path: PathBuf) -> Self {
-        let scripts_path = home_path.join(".yiru").join("agent-hooks");
+        let scripts_path = user_data_path.join("agent-hooks");
         Self {
             home_path,
             scripts_path,

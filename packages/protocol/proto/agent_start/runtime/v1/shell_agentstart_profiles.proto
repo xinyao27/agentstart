@@ -1,0 +1,184 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service ShellAgentStartProfilesService {
+  rpc List(ShellAgentStartProfilesServiceListRequest) returns (ShellAgentStartProfilesServiceListResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CreateLocal(ShellAgentStartProfilesServiceCreateLocalRequest) returns (ShellAgentStartProfilesServiceCreateResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc SwitchProfile(ShellAgentStartProfilesServiceSwitchProfileRequest) returns (ShellAgentStartProfilesServiceSwitchResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc TransferProject(ShellAgentStartProfilesServiceTransferProjectRequest) returns (ShellAgentStartProfilesServiceTransferResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc FindProjectProfiles(ShellAgentStartProfilesServiceFindProjectProfilesRequest) returns (ShellAgentStartProfilesServiceFindResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+enum ShellAgentStartProfilesAvatarKind {
+  SHELL_AGENT_START_PROFILES_AVATAR_KIND_UNSPECIFIED = 0;
+  SHELL_AGENT_START_PROFILES_AVATAR_KIND_INITIALS = 1;
+}
+
+message ShellAgentStartProfilesAvatar {
+  ShellAgentStartProfilesAvatarKind kind = 1;
+  string initials = 2;
+  string color = 3;
+}
+
+enum ShellAgentStartProfilesKind {
+  SHELL_AGENT_START_PROFILES_KIND_UNSPECIFIED = 0;
+  SHELL_AGENT_START_PROFILES_KIND_LOCAL = 1;
+}
+
+message ShellAgentStartProfilesProfile {
+  string id = 1;
+  string name = 2;
+  ShellAgentStartProfilesAvatar avatar = 3;
+  ShellAgentStartProfilesKind kind = 4;
+  int64 created_at = 5;
+  int64 updated_at = 6;
+  int64 last_opened_at = 7;
+}
+
+message ShellAgentStartProfilesServiceListRequest {}
+
+message ShellAgentStartProfilesServiceListResponse {
+  string active_profile_id = 1;
+  repeated ShellAgentStartProfilesProfile profiles = 2;
+  bool multi_profile_ui = 3;
+}
+
+message ShellAgentStartProfilesServiceCreateLocalRequest {
+  optional string name = 1;
+}
+
+message ShellAgentStartProfilesServiceCreateResponse {
+  string active_profile_id = 1;
+  repeated ShellAgentStartProfilesProfile profiles = 2;
+  ShellAgentStartProfilesProfile profile = 3;
+}
+
+enum ShellAgentStartProfilesSwitchStatus {
+  SHELL_AGENT_START_PROFILES_SWITCH_STATUS_UNSPECIFIED = 0;
+  SHELL_AGENT_START_PROFILES_SWITCH_STATUS_ALREADY_ACTIVE = 1;
+  SHELL_AGENT_START_PROFILES_SWITCH_STATUS_RELAUNCHING = 2;
+}
+
+message ShellAgentStartProfilesServiceSwitchProfileRequest {
+  string profile_id = 1;
+}
+
+message ShellAgentStartProfilesServiceSwitchResponse {
+  ShellAgentStartProfilesSwitchStatus status = 1;
+}
+
+enum ShellAgentStartProfilesTransferMode {
+  SHELL_AGENT_START_PROFILES_TRANSFER_MODE_UNSPECIFIED = 0;
+  SHELL_AGENT_START_PROFILES_TRANSFER_MODE_MOVE = 1;
+  SHELL_AGENT_START_PROFILES_TRANSFER_MODE_COPY = 2;
+}
+
+enum ShellAgentStartProfilesTransferStatus {
+  SHELL_AGENT_START_PROFILES_TRANSFER_STATUS_UNSPECIFIED = 0;
+  SHELL_AGENT_START_PROFILES_TRANSFER_STATUS_TRANSFERRED = 1;
+  SHELL_AGENT_START_PROFILES_TRANSFER_STATUS_DUPLICATE_TARGET = 2;
+}
+
+message ShellAgentStartProfilesServiceTransferProjectRequest {
+  string source_profile_id = 1;
+  string target_profile_id = 2;
+  string repo_id = 3;
+  ShellAgentStartProfilesTransferMode mode = 4;
+}
+
+message ShellAgentStartProfilesServiceTransferResponse {
+  ShellAgentStartProfilesTransferStatus status = 1;
+  optional ShellAgentStartProfilesTransferMode mode = 2;
+  string source_profile_id = 3;
+  string target_profile_id = 4;
+  string source_repo_id = 5;
+  // Why: a duplicate-target result reports the colliding repo instead of a
+  // new target id, so both stay optional rather than one carrying a placeholder.
+  optional string target_repo_id = 6;
+  optional string duplicate_repo_id = 7;
+  optional string target_project_id = 8;
+  optional bool will_relaunch = 9;
+}
+
+message ShellAgentStartProfilesServiceFindProjectProfilesRequest {
+  string path = 1;
+  optional string connection_id = 2;
+  optional string execution_host_id = 3;
+  optional string exclude_profile_id = 4;
+}
+
+message ShellAgentStartProfilesProjectPresence {
+  string profile_id = 1;
+  string profile_name = 2;
+  ShellAgentStartProfilesKind profile_kind = 3;
+  string repo_id = 4;
+  string repo_name = 5;
+}
+
+message ShellAgentStartProfilesServiceFindResponse {
+  repeated ShellAgentStartProfilesProjectPresence projects = 1;
+}

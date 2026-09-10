@@ -10,7 +10,7 @@ import {
   GitRemoteServicePullResponseSchema,
   GitRemoteServicePushRequestSchema,
   GitRemoteServicePushResponseSchema
-} from '../../generated/yiru/runtime/v1/git_remote_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_remote_pb.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { GitHistoryClient } from './history-client.js'
 import {

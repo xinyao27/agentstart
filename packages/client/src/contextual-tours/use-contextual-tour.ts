@@ -1,8 +1,8 @@
-import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
+import type { ContextualTourId } from '@agentstart/protocol/settings/contextual-tours'
 import {
   hasFeatureInteraction,
   type FeatureInteractionState
-} from '@yiru/protocol/telemetry/interactions/state'
+} from '@agentstart/protocol/telemetry/interactions/state'
 import { useEffect, useRef } from 'react'
 import { useAppStore } from '~renderer/store/state'
 
@@ -18,7 +18,7 @@ export type UseContextualTourOptions = {
   wasFeaturePreviouslyInteracted?: boolean | undefined
 }
 
-export function createContextualTourInteractionSnapshot(args: {
+function createContextualTourInteractionSnapshot(args: {
   id: ContextualTourId
   featureInteractions: FeatureInteractionState
   recordFeatureInteraction: (id: ContextualTourId) => Promise<void>
@@ -36,7 +36,7 @@ export function createContextualTourInteractionSnapshot(args: {
   }
 }
 
-export async function shouldRequestContextualTourAfterInteraction(args: {
+async function shouldRequestContextualTourAfterInteraction(args: {
   id: ContextualTourId
   persisted: Promise<void>
   isCancelled: () => boolean

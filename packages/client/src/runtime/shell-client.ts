@@ -6,9 +6,9 @@ import { getBrowserShellUIApi } from './browser-ui-shell-client'
 import { shellAccountsApi, type ShellAccountsApi } from './shell-accounts-client'
 import {
   shellKeybindingsApi,
-  shellYiruProfilesApi,
+  shellAgentStartProfilesApi,
   type ShellKeybindingsApi,
-  type ShellYiruProfilesApi
+  type ShellAgentStartProfilesApi
 } from './shell-configuration-client'
 import type { ShellNotificationsApi } from './shell-notifications-client'
 import { daemonShellPlatformApi, type ShellPlatformApi } from './shell-platform-client'
@@ -85,7 +85,7 @@ type RendererShellClient = {
   onboarding: ShellOnboardingApi
   cache: ShellCacheApi
   keybindings: ShellKeybindingsApi
-  yiruProfiles: ShellYiruProfilesApi
+  agentstartProfiles: ShellAgentStartProfilesApi
 }
 
 function getShellPlatformApi(): ShellPlatformApi {
@@ -134,5 +134,5 @@ export const shellClient: RendererShellClient = {
   onboarding: shellOnboardingApi,
   cache: shellCacheApi,
   keybindings: shellKeybindingsApi,
-  yiruProfiles: shellYiruProfilesApi
+  agentstartProfiles: shellAgentStartProfilesApi
 }

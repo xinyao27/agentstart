@@ -1,4 +1,4 @@
-import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import type { NestedRepoScanResult } from '@agentstart/protocol/project/group-model'
 import type { Dispatch, ReactNode, SetStateAction } from 'react'
 
 import type { GitAvailability } from '../create-project-defaults'

@@ -1,4 +1,4 @@
-import type { UsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
+import type { UsagePercentageDisplay } from '@agentstart/protocol/settings/usage-display'
 
 // Why: single clamp+round for bar width and label so the status bar and tooltip
 // share one rounding, and feeding it into getDisplayedUsagePercentage stays a

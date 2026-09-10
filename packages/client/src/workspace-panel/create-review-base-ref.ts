@@ -1,5 +1,5 @@
-import type { BaseRefSearchResult } from '@yiru/protocol/git/worktree-source'
-import { normalizeHostedReviewBaseRef } from '@yiru/protocol/hosted-review/refs'
+import type { BaseRefSearchResult } from '@agentstart/protocol/git/worktree-source'
+import { normalizeHostedReviewBaseRef } from '@agentstart/protocol/hosted-review/refs'
 
 export function stripBaseRef(ref: string): string {
   return normalizeHostedReviewBaseRef(ref)

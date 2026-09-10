@@ -1,6 +1,6 @@
+use agentstart_protocol::protocol::v1::frame::Body;
+use agentstart_protocol::protocol::v1::{CallEnd, PeerKind, Status, StatusCode};
 use tokio::time::Instant;
-use yiru_protocol::protocol::v1::frame::Body;
-use yiru_protocol::protocol::v1::{CallEnd, PeerKind, Status, StatusCode};
 
 use super::channel::RpcOutgoing;
 use super::protocol_call::{ProtocolCall, ProtocolCompletion, status};
@@ -233,7 +233,7 @@ impl ProtocolSession {
                 call_id,
                 credit_bytes,
             } => self.connection.send(
-                Body::WindowUpdate(yiru_protocol::protocol::v1::WindowUpdate {
+                Body::WindowUpdate(agentstart_protocol::protocol::v1::WindowUpdate {
                     call_id,
                     credit_bytes,
                 }),

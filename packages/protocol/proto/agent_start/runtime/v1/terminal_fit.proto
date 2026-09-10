@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service TerminalFitService {
+  rpc GetOverrides(TerminalFitServiceGetOverridesRequest) returns (TerminalFitServiceGetOverridesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetDrivers(TerminalFitServiceGetDriversRequest) returns (TerminalFitServiceGetDriversResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Restore(TerminalFitServiceRestoreRequest) returns (TerminalFitServiceRestoreResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message TerminalFitServiceGetOverridesRequest {}
+
+message TerminalFitServiceGetOverridesResponse {
+  repeated TerminalFitOverride overrides = 1;
+}
+
+message TerminalFitOverride {
+  string pty_id = 1;
+  TerminalFitOverrideMode mode = 2;
+  uint32 cols = 3;
+  uint32 rows = 4;
+}
+
+enum TerminalFitOverrideMode {
+  TERMINAL_FIT_OVERRIDE_MODE_UNSPECIFIED = 0;
+  TERMINAL_FIT_OVERRIDE_MODE_MOBILE_FIT = 1;
+  TERMINAL_FIT_OVERRIDE_MODE_REMOTE_DESKTOP_FIT = 2;
+}
+
+message TerminalFitServiceGetDriversRequest {}
+
+message TerminalFitServiceGetDriversResponse {
+  repeated TerminalDriverSnapshot drivers = 1;
+}
+
+message TerminalDriverSnapshot {
+  string pty_id = 1;
+  TerminalDriverKind kind = 2;
+  optional string client_id = 3;
+}
+
+enum TerminalDriverKind {
+  TERMINAL_DRIVER_KIND_UNSPECIFIED = 0;
+  TERMINAL_DRIVER_KIND_IDLE = 1;
+  TERMINAL_DRIVER_KIND_DESKTOP = 2;
+  TERMINAL_DRIVER_KIND_MOBILE = 3;
+}
+
+message TerminalFitServiceRestoreRequest {
+  string pty_id = 1;
+}
+
+message TerminalFitServiceRestoreResponse {
+  bool restored = 1;
+}

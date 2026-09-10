@@ -12,24 +12,13 @@ import type {
 } from './model'
 import { measureTerminalPastePayloadMetadataWithYield } from './payload-metadata'
 
-export {
-  TERMINAL_PASTE_CHUNK_MAX_BYTES,
-  TERMINAL_PASTE_DIRECT_MAX_BYTES,
-  TERMINAL_PASTE_MAX_BYTES,
-  TERMINAL_PASTE_OPERATION_TIMEOUT_MS,
-  TERMINAL_REMOTE_PASTE_OPERATION_TIMEOUT_MS
-} from './limits'
+export { TERMINAL_PASTE_MAX_BYTES } from './limits'
 export { executeTerminalPastePlan } from './executor'
-export { getTerminalPasteOperationTimeoutMs } from './executor'
-export { chunkTerminalPastePlan, iterateTerminalPastePlanChunks } from './chunks'
-export { createRedactedPasteDiagnostic } from './diagnostics'
 export type {
   TerminalPasteExecutionResult,
-  TerminalPastePayload,
   TerminalPastePlan,
   TerminalPasteRuntime,
   TerminalPasteSource,
-  TerminalPasteTarget,
   TerminalPasteTextOptions
 } from './model'
 

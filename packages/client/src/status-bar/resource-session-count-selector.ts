@@ -6,7 +6,7 @@ import {
   type ResourceSessionBindingInputs
 } from './resource-session-bindings'
 
-export type ClosedResourceSessionCountState = Pick<
+type ClosedResourceSessionCountState = Pick<
   AppState,
   'tabsByWorktree' | 'ptyIdsByTabId' | 'terminalLayoutsByTabId' | 'workspaceSessionReady'
 >

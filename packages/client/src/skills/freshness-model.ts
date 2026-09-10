@@ -1,7 +1,7 @@
 import type {
   SkillFreshnessInventory as ProtocolSkillFreshnessInventory,
   SkillUpdateRun as ProtocolSkillUpdateRun
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 
 export type SkillFreshnessInventory = ProtocolSkillFreshnessInventory & { schemaVersion: 1 }
 type FlattenRun<Run> = Run extends { subject: infer Subject; failure: infer Failure }

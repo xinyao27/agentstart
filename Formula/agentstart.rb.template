@@ -1,0 +1,52 @@
+# Why: Homebrew needs platform-specific compiled Rust artifacts that the generic shell installer
+# cannot express through Formula DSL; the AgentStart CLI owns cross-platform service registration.
+# Why: the release workflow renders this non-installable template only after its signed artifacts
+# are public, keeping main from advertising a formula whose download URLs do not exist yet.
+class AgentStart < Formula
+  desc "Chrome workspace daemon for coding agents"
+  homepage "https://github.com/xinyao27/agentstart"
+  version "__AGENTSTART_VERSION__"
+  license "MIT"
+
+  on_macos do
+    if Hardware::CPU.arm?
+      url "https://github.com/xinyao27/agentstart/releases/download/v__AGENTSTART_VERSION__/agentstart-rust-darwin-arm64",
+          using: :nounzip
+      sha256 "__SHA256_AGENTSTART_RUST_DARWIN_ARM64__"
+    else
+      url "https://github.com/xinyao27/agentstart/releases/download/v__AGENTSTART_VERSION__/agentstart-rust-darwin-x64",
+          using: :nounzip
+      sha256 "__SHA256_AGENTSTART_RUST_DARWIN_X64__"
+    end
+  end
+
+  on_linux do
+    if Hardware::CPU.arm?
+      url "https://github.com/xinyao27/agentstart/releases/download/v__AGENTSTART_VERSION__/agentstart-rust-linux-arm64",
+          using: :nounzip
+      sha256 "__SHA256_AGENTSTART_RUST_LINUX_ARM64__"
+    else
+      url "https://github.com/xinyao27/agentstart/releases/download/v__AGENTSTART_VERSION__/agentstart-rust-linux-x64",
+          using: :nounzip
+      sha256 "__SHA256_AGENTSTART_RUST_LINUX_X64__"
+    end
+  end
+
+  def install
+    artifact = Dir["agentstart-rust-*"].first
+    odie "AgentStart release artifact is missing" unless artifact
+
+    bin.install artifact => "agentstart"
+  end
+
+  def post_install
+    system bin/"agentstart", "install", "--no-browser"
+  end
+
+  def caveats
+    <<~EOS
+      Finish installation by adding AgentStart to Chrome:
+        https://chromewebstore.google.com/detail/agentstart/mfgmfiabfncmdekmikepemddejoeihbf
+    EOS
+  end
+end

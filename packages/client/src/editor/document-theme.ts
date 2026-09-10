@@ -1,8 +1,8 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 export type DocumentThemePreference = GlobalSettings['theme']
 
-export const THEME_TRANSITION_DISABLED_CLASS = 'theme-transition-disabled'
+const THEME_TRANSITION_DISABLED_CLASS = 'theme-transition-disabled'
 
 const DARK_MODE_QUERY = '(prefers-color-scheme: dark)'
 

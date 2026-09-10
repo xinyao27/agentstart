@@ -64,7 +64,7 @@ export function BrowserAnimatedVisual(props: {
             gap: storyboard.isSplit ? 10 : 0
           }}
         >
-          <div className="border-border bg-card text-card-foreground relative flex min-w-0 flex-col overflow-hidden border">
+          <div className="border-border bg-card text-card-foreground relative flex min-w-0 flex-col overflow-hidden rounded-xl border">
             <div
               ref={setTitlebarElement}
               className="border-border bg-muted/40 relative flex min-h-[32px] items-end gap-1.5 border-b px-2.5 pt-2"
@@ -91,7 +91,7 @@ export function BrowserAnimatedVisual(props: {
                 <span
                   ref={setNewtabButtonElement}
                   className={cn(
-                    'mb-1 inline-flex size-[22px] items-center justify-center text-muted-foreground transition-colors duration-150',
+                    'mb-1 inline-flex size-[22px] items-center justify-center text-muted-foreground transition-colors duration-150 rounded-md',
                     storyboard.newtabActive ? 'bg-foreground/10 text-foreground' : null
                   )}
                 >
@@ -116,7 +116,7 @@ export function BrowserAnimatedVisual(props: {
                 <div
                   ref={setNewtabRowElement}
                   className={cn(
-                    'grid items-center gap-2 px-2 py-[5px]',
+                    'grid items-center gap-2 px-2 py-[5px] rounded-md',
                     storyboard.newtabRowActive ? 'bg-accent' : null
                   )}
                   style={{ gridTemplateColumns: '18px 1fr' }}
@@ -147,7 +147,7 @@ export function BrowserAnimatedVisual(props: {
                 <BrowserStoryboardNavGlyph>›</BrowserStoryboardNavGlyph>
                 <BrowserStoryboardNavGlyph>↻</BrowserStoryboardNavGlyph>
               </span>
-              <div className="border-border bg-card flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden border px-2 py-[3px] font-mono text-[11px]">
+              <div className="border-border bg-card flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden rounded-md border px-2 py-[3px] font-mono text-[11px]">
                 {storyboard.isSplit ? (
                   <span className="text-muted-foreground truncate transition-colors duration-200">
                     {`...${storyboard.showSignup ? '/signup' : '/pricing'}`}
@@ -203,7 +203,7 @@ export function BrowserAnimatedVisual(props: {
                 <Card
                   aria-hidden={!storyboard.annotateOpen}
                   className={cn(
-                    'bg-popover text-popover-foreground border-border pointer-events-none absolute z-30 flex origin-top-left flex-col gap-1.5 px-[9px] pb-[7px] pt-2 text-[10px] transition-[opacity,transform] duration-200',
+                    'bg-popover text-popover-foreground border-border pointer-events-none absolute z-30 rounded-md flex origin-top-left flex-col gap-1.5 px-[9px] pb-[7px] pt-2 text-[10px] transition-[opacity,transform] duration-200',
                     storyboard.annotateOpen ? 'scale-100 opacity-100' : 'scale-[0.96] opacity-0'
                   )}
                   style={{
@@ -242,7 +242,7 @@ export function BrowserAnimatedVisual(props: {
                         'Send to Claude'
                       )}
                       className={cn(
-                        'inline-flex size-5 shrink-0 items-center justify-center border border-border bg-muted text-foreground transition-[background-color,transform] duration-150',
+                        'inline-flex size-5 shrink-0 items-center justify-center rounded border border-border bg-muted text-foreground transition-[background-color,transform] duration-150',
                         storyboard.sendPressed ? 'scale-[0.92] bg-foreground/[0.12]' : null
                       )}
                     >
@@ -284,7 +284,7 @@ export function BrowserAnimatedVisual(props: {
 
           <div
             className={cn(
-              'flex min-w-0 flex-col overflow-hidden border border-border bg-card font-mono text-[10px] text-card-foreground transition-[opacity,transform] duration-500',
+              'flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card font-mono text-[10px] text-card-foreground transition-[opacity,transform] duration-500',
               storyboard.isSplit ? 'translate-x-0 opacity-100' : 'translate-x-2 opacity-0'
             )}
           >

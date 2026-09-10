@@ -1,7 +1,6 @@
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::project_group_service_event::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::project_group_service_event::Event;
+use agentstart_protocol::runtime::v1::{
     ProjectGroup, ProjectGroupCreatedFrom, ProjectGroupImportMode, ProjectGroupImportStatus,
     ProjectGroupNestedRepoCandidate, ProjectGroupRepo, ProjectGroupScanProgress,
     ProjectGroupServiceCancelNestedScanRequest, ProjectGroupServiceCancelNestedScanResponse,
@@ -16,7 +15,8 @@ use yiru_protocol::runtime::v1::{
     ProjectGroupSubscribeReady, RepoExternalWorktreeVisibility, RepoKind,
     project_group_service_update_fields,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::Value;
 
 use crate::project_groups::{
     CancelNestedRepoScanResult, NestedRepoScan, NestedRepoScanError, ProjectGroupImportError,
@@ -428,8 +428,8 @@ fn protocol_runtime_repo(repo: RuntimeRepo) -> ProjectGroupRepo {
 
 fn protocol_remote_identity(
     identity: GitRemoteIdentity,
-) -> yiru_protocol::runtime::v1::RepoGitRemoteIdentity {
-    yiru_protocol::runtime::v1::RepoGitRemoteIdentity {
+) -> agentstart_protocol::runtime::v1::RepoGitRemoteIdentity {
+    agentstart_protocol::runtime::v1::RepoGitRemoteIdentity {
         canonical_key: identity.canonical_key,
         remote_name: identity.remote_name,
         remote_url: identity.remote_url,

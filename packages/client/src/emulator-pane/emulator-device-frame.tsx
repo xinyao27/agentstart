@@ -60,8 +60,8 @@ type ScreenCoordinateEvent = Pick<
 type StreamGeometryState = { identity: string; size: StreamSize | null; error: boolean }
 
 type EmulatorDeviceFrameStyle = CSSProperties & {
-  '--yiru-emulator-frame-inner-radius': string
-  '--yiru-emulator-frame-outer-radius': string
+  '--agentstart-emulator-frame-inner-radius': string
+  '--agentstart-emulator-frame-outer-radius': string
 }
 
 export function EmulatorDeviceFrame({
@@ -337,8 +337,12 @@ export function EmulatorDeviceFrame({
     width: frameLayout ? `${frameLayout.shellWidth}px` : '100%',
     height: frameLayout ? `${frameLayout.shellHeight}px` : undefined,
     padding: frameLayout ? undefined : '10px',
-    '--yiru-emulator-frame-inner-radius': frameLayout ? `${frameLayout.innerRadius}px` : '44px',
-    '--yiru-emulator-frame-outer-radius': frameLayout ? `${frameLayout.outerRadius}px` : '54px'
+    '--agentstart-emulator-frame-inner-radius': frameLayout
+      ? `${frameLayout.innerRadius}px`
+      : '44px',
+    '--agentstart-emulator-frame-outer-radius': frameLayout
+      ? `${frameLayout.outerRadius}px`
+      : '54px'
   } satisfies EmulatorDeviceFrameStyle
 
   return (
@@ -356,7 +360,7 @@ export function EmulatorDeviceFrame({
       >
         {frameLayout?.kind === 'phone' ? <PhoneHardwareButtons layout={frameLayout} /> : null}
         <div
-          data-yiru-emulator-frame="true"
+          data-agentstart-emulator-frame="true"
           className="relative overflow-hidden bg-black"
           style={frameStyle}
         >

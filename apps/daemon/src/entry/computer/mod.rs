@@ -5,35 +5,35 @@ use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use std::time::Duration;
 
-use thiserror::Error;
-use yiru_protocol::method_metadata::UnaryMethod;
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1ComputerServiceCapabilities as CapabilitiesMethod,
-    YiruRuntimeV1ComputerServiceClick as ClickMethod,
-    YiruRuntimeV1ComputerServiceDrag as DragMethod,
-    YiruRuntimeV1ComputerServiceGetAppState as GetAppStateMethod,
-    YiruRuntimeV1ComputerServiceHotkey as HotkeyMethod,
-    YiruRuntimeV1ComputerServiceListApps as ListAppsMethod,
-    YiruRuntimeV1ComputerServiceListWindows as ListWindowsMethod,
-    YiruRuntimeV1ComputerServicePasteText as PasteTextMethod,
-    YiruRuntimeV1ComputerServicePerformSecondaryAction as PerformSecondaryActionMethod,
-    YiruRuntimeV1ComputerServicePermissions as PermissionsMethod,
-    YiruRuntimeV1ComputerServicePermissionsReset as PermissionsResetMethod,
-    YiruRuntimeV1ComputerServicePermissionsStatus as PermissionsStatusMethod,
-    YiruRuntimeV1ComputerServicePressKey as PressKeyMethod,
-    YiruRuntimeV1ComputerServiceScroll as ScrollMethod,
-    YiruRuntimeV1ComputerServiceSetValue as SetValueMethod,
-    YiruRuntimeV1ComputerServiceTypeText as TypeTextMethod,
+use agentstart_protocol::method_metadata::UnaryMethod;
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1ComputerServiceCapabilities as CapabilitiesMethod,
+    AgentStartRuntimeV1ComputerServiceClick as ClickMethod,
+    AgentStartRuntimeV1ComputerServiceDrag as DragMethod,
+    AgentStartRuntimeV1ComputerServiceGetAppState as GetAppStateMethod,
+    AgentStartRuntimeV1ComputerServiceHotkey as HotkeyMethod,
+    AgentStartRuntimeV1ComputerServiceListApps as ListAppsMethod,
+    AgentStartRuntimeV1ComputerServiceListWindows as ListWindowsMethod,
+    AgentStartRuntimeV1ComputerServicePasteText as PasteTextMethod,
+    AgentStartRuntimeV1ComputerServicePerformSecondaryAction as PerformSecondaryActionMethod,
+    AgentStartRuntimeV1ComputerServicePermissions as PermissionsMethod,
+    AgentStartRuntimeV1ComputerServicePermissionsReset as PermissionsResetMethod,
+    AgentStartRuntimeV1ComputerServicePermissionsStatus as PermissionsStatusMethod,
+    AgentStartRuntimeV1ComputerServicePressKey as PressKeyMethod,
+    AgentStartRuntimeV1ComputerServiceScroll as ScrollMethod,
+    AgentStartRuntimeV1ComputerServiceSetValue as SetValueMethod,
+    AgentStartRuntimeV1ComputerServiceTypeText as TypeTextMethod,
 };
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::{
     ComputerServiceCapabilitiesRequest, ComputerServiceListAppsRequest,
     ComputerServicePermissionsResetRequest, ComputerServicePermissionsStatusRequest,
 };
+use thiserror::Error;
 
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 
 const CALL_TIMEOUT: Duration = Duration::from_secs(30);
-const COMPUTER_USAGE: &str = "Usage: yiru computer <capabilities|list-apps|permissions|permissions-status|permissions-reset|list-windows|get-app-state|click|perform-secondary-action|scroll|drag|type-text|press-key|hotkey|paste-text|set-value> [options]";
+const COMPUTER_USAGE: &str = "Usage: agentstart computer <capabilities|list-apps|permissions|permissions-status|permissions-reset|list-windows|get-app-state|click|perform-secondary-action|scroll|drag|type-text|press-key|hotkey|paste-text|set-value> [options]";
 
 #[derive(Debug, Error)]
 pub(super) enum ComputerCommandError {
@@ -344,7 +344,7 @@ async fn set_value(
 
 fn write_action_output(
     json_mode: bool,
-    response: &yiru_protocol::runtime::v1::ComputerServiceActionResponse,
+    response: &agentstart_protocol::runtime::v1::ComputerServiceActionResponse,
 ) {
     output::write_output(
         json_mode,

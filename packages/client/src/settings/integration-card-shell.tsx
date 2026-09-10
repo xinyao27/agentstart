@@ -29,7 +29,7 @@ export function IntegrationCardShell(props: {
   ) : (
     <span
       className={cn(
-        'shrink-0 border px-2.5 py-1 text-[11px] font-medium',
+        'shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-medium',
         STATUS_TONE_CLASSES[props.statusTone]
       )}
     >

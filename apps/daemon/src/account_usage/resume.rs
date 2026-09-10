@@ -59,7 +59,7 @@ pub(crate) enum RateLimitResumeError {
     NotFound,
     #[error("Cannot schedule a resume without a reset time.")]
     MissingReset,
-    #[error("No Yiru window was available to resume the session.")]
+    #[error("No AgentStart window was available to resume the session.")]
     ShellUnavailable,
     #[error("rate-limit resume storage failed: {0}")]
     Io(#[from] std::io::Error),
@@ -76,7 +76,7 @@ impl RateLimitResumeAuthority {
         root: &Path,
         shell: ShellServicesRegistry,
     ) -> Result<Self, RateLimitResumeError> {
-        let path = root.join("yiru-data-runtime.json");
+        let path = root.join("agentstart-data-runtime.json");
         let schedules = read_schedules(&path).await?;
         let authority = Self {
             path,

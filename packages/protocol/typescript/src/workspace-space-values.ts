@@ -1,9 +1,9 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   WorkspaceSpaceItemKind,
   type WorkspaceSpaceAnalysis,
   type WorkspaceSpaceItem
-} from '../generated/yiru/runtime/v1/workspace_space_pb.js'
+} from '../generated/agent_start/runtime/v1/workspace_space_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import { safeNumber } from './shell-state-values.js'
 

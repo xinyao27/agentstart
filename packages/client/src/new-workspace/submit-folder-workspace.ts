@@ -1,12 +1,12 @@
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/protocol/agent/launch-defaults'
-import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
+} from '@agentstart/protocol/agent/launch-defaults'
+import { isTuiAgentEnabled } from '@agentstart/protocol/agent/selection'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@agentstart/protocol/workspace/source'
 import type { Dispatch, SetStateAction } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,6 +1,6 @@
 import type { MarkdownTocItem, MarkdownTocLevel } from './markdown-table-of-contents'
 
-export function collectMarkdownTocParentIds(items: MarkdownTocItem[]): Set<string> {
+function collectMarkdownTocParentIds(items: MarkdownTocItem[]): Set<string> {
   const parentIds = new Set<string>()
 
   function visit(nodes: MarkdownTocItem[]): void {

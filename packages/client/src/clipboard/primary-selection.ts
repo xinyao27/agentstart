@@ -29,7 +29,7 @@ function getSelectionClipboardApi(): SelectionClipboardApi | null {
   return shellClient.ui
 }
 
-export function shouldUseSystemPrimarySelectionClipboard(userAgent = getUserAgent()): boolean {
+function shouldUseSystemPrimarySelectionClipboard(userAgent = getUserAgent()): boolean {
   return isLinuxUserAgent(userAgent) && getSelectionClipboardApi() !== null
 }
 
@@ -60,10 +60,6 @@ export function shouldSuppressPrimarySelectionNativePaste(now: number = Date.now
 
 export function isPrimarySelectionEnabled(): boolean {
   return enabled
-}
-
-export function getPrimarySelectionText(): string {
-  return enabled ? primarySelectionText : ''
 }
 
 export function setPrimarySelectionText(text: string): boolean {

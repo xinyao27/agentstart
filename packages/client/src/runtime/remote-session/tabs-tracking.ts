@@ -36,15 +36,6 @@ function rememberHostTerminalTabCount(
   lastHostTerminalTabCountByWorktree.set(key, terminalCount)
 }
 
-export function getLastKnownHostTerminalTabCount(
-  environmentId: string,
-  worktreeId: string
-): number {
-  return (
-    lastHostTerminalTabCountByWorktree.get(sessionTabsFreshnessKey(environmentId, worktreeId)) ?? 0
-  )
-}
-
 // Why: a post-reconnect subscription replay re-emits the current snapshot with
 // an unchanged epoch/version; dropping the freshness entry lets the monotonic
 // gate accept that replay as authoritative instead of freezing the mirror

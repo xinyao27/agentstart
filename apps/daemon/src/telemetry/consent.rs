@@ -28,9 +28,9 @@ impl ConsentResolver {
                 reason: ConsentDisabledReason::DoNotTrack,
             };
         }
-        if self.truthy("YIRU_TELEMETRY_DISABLED") {
+        if self.truthy("AGENT_START_TELEMETRY_DISABLED") {
             return ConsentState::Disabled {
-                reason: ConsentDisabledReason::YiruDisabled,
+                reason: ConsentDisabledReason::AgentStartDisabled,
             };
         }
         if CI_ENVIRONMENT

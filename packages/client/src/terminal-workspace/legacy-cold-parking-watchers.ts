@@ -1,4 +1,4 @@
-import type { TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
+import type { TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
 import { useEffect, type RefObject } from 'react'
 import { useAppStore } from '~renderer/store/state'
 

@@ -12,7 +12,7 @@ export const getAdvancedNetworkSearchEntries = createLocalizedCatalog((): Settin
     ),
     description: translate(
       'auto.components.settings.AdvancedNetworkSettingsSection.823e0f15b1',
-      'Proxy URL for Yiru network requests and local terminal children.'
+      'Proxy URL for AgentStart network requests and local terminal children.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.general.search.20b711ac9e', 'proxy'),

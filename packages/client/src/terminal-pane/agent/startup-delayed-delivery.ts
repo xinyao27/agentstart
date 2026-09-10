@@ -1,4 +1,4 @@
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import type { AgentStartupPlan } from '~renderer/agent/tui-startup'
 import { useAppStore } from '~renderer/store/state'
 

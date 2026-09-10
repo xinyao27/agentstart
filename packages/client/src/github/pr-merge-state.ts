@@ -3,8 +3,8 @@ import type {
   PRMergeableState,
   PRReviewDecision,
   PRState
-} from '@yiru/protocol/hosted-review/pull-request-types'
-import type { GitHubPRCheckSummary } from '@yiru/protocol/hosted-review/review-types'
+} from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { GitHubPRCheckSummary } from '@agentstart/protocol/hosted-review/review-types'
 import { canEnableGitHubPRAutoMerge } from '~renderer/github-pr-auto-merge-availability'
 import { translate } from '~renderer/i18n/i18n'
 

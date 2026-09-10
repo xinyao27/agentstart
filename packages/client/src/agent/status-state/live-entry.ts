@@ -2,13 +2,13 @@ import {
   agentProviderSessionsEqual,
   getAgentResumeArgv,
   isResumableTuiAgent
-} from '@yiru/protocol/agent/session-resume'
-import { agentSubagentsEqual } from '@yiru/protocol/agent/status-parse'
+} from '@agentstart/protocol/agent/session-resume'
+import { agentSubagentsEqual } from '@agentstart/protocol/agent/status-parse'
 import {
   AGENT_STATE_HISTORY_MAX,
   type AgentStateHistoryEntry,
   type AgentStatusEntry
-} from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/status-records'
 
 import type { AppState } from '../../store/types'
 import { isCommandCodeNewTurnWhileWorking } from './command-code-turn'
@@ -197,7 +197,7 @@ export function resolveLiveAgentStatusEntry(input: {
       ? existingSleepingRecord.launchConfig
       : undefined
   // Why: pane keys can be reused after a manually-started agent replaces
-  // a Yiru-launched one. Once the provider session changes, the old
+  // a AgentStart-launched one. Once the provider session changes, the old
   // pane-key launch registry must not bleed options into the new session.
   const launchConfigSource =
     (payload.state !== 'done' && !providerSessionChanged && metadata?.launchToken

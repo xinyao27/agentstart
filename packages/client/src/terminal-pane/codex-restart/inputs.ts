@@ -16,7 +16,7 @@ export type CodexRestartInputs = CodexRestartInputsState
 // so idle chips keep the same reference and stop reacting; behavior is identical
 // (no notice -> [] stale ids -> null render). Frozen so the singleton can't be
 // mutated.
-export const EMPTY_CODEX_RESTART_INPUTS: CodexRestartInputs = Object.freeze({
+const EMPTY_CODEX_RESTART_INPUTS: CodexRestartInputs = Object.freeze({
   ptyIdsByTabId: {},
   codexRestartNoticeByPtyId: {}
 })

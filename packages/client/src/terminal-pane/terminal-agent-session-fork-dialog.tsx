@@ -88,7 +88,7 @@ export function TerminalAgentSessionForkDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="border-border/60 bg-muted/20 flex items-start gap-3 border px-3 py-3">
+        <div className="border-border/60 bg-muted/20 flex items-start gap-3 rounded-md border px-3 py-3">
           <GitFork className="text-muted-foreground mt-0.5 size-4 shrink-0" />
           <div className="min-w-0 space-y-1">
             <p className="text-sm font-medium">

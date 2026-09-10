@@ -1,16 +1,16 @@
-# Contributing to Yiru
+# Contributing to AgentStart
 
-Thanks for contributing to Yiru.
+Thanks for contributing to AgentStart.
 
 ## Before You Start
 
 - Keep changes scoped to a clear user-facing improvement, bug fix, or refactor.
-- Yiru targets macOS, Linux, and Windows. Every change must stay compatible with all three platforms unless the code is explicitly guarded by a runtime platform check.
+- AgentStart targets macOS, Linux, and Windows. Every change must stay compatible with all three platforms unless the code is explicitly guarded by a runtime platform check.
 - For keyboard shortcuts, use runtime platform checks in extension pages and Chrome's `mac` command override in the manifest.
 - For shortcut labels, show `⌘` and `⇧` on macOS, and `Ctrl+` and `Shift+` on Linux and Windows.
 - For file paths, use `Path`/`PathBuf` joins in the Rust daemon and `path.join` in Node-side tooling. Never concatenate separators by hand.
 - The daemon can run locally, inside WSL, or on a remote host. Keep process, file, credential, shell, and network facts scoped to that daemon host.
-- Yiru supports many CLI agents, integrations, and git providers. Keep generic behavior provider-neutral; guard integration-specific logic behind explicit checks.
+- AgentStart supports many CLI agents, integrations, and git providers. Keep generic behavior provider-neutral; guard integration-specific logic behind explicit checks.
 - Keep changes well-engineered and performant: follow existing architecture, avoid unnecessary work in hot paths, clean up owned resources, and use concrete module names.
 - For UI work, follow [`docs/style-guide.md`](../docs/style-guide.md), use the tokens and primitives it specifies, and verify polished behavior across Chrome surfaces and light/dark mode.
 
@@ -81,4 +81,4 @@ Version bumps, tags, and releases are maintainer-managed. Do not include release
 Update the daemon, npm CLI, Homebrew Formula, extension package, and workspace versions together,
 then push a matching `v<version>` tag. `.github/workflows/daemon-release.yml` compiles the Rust
 daemon for every supported platform, verifies checksums and installer metadata, uploads and attests
-the binaries, and publishes `@yiru/cli` when `NPM_TOKEN` is configured.
+the binaries, and publishes `@agentstart/cli` with the first-release token or npm Trusted Publishing.

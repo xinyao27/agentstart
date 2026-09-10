@@ -1,6 +1,6 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { OpenInApplication } from '@yiru/protocol/settings/open-in'
-import { OPEN_IN_APPLICATIONS_MAX } from '@yiru/protocol/settings/open-in'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { OpenInApplication } from '@agentstart/protocol/settings/open-in'
+import { OPEN_IN_APPLICATIONS_MAX } from '@agentstart/protocol/settings/open-in'
 import type React from 'react'
 import { useState } from 'react'
 import {
@@ -45,7 +45,7 @@ function createOpenInApplication(): OpenInApplication {
   }
 }
 
-export function createPresetOpenInApplication(preset: OpenInAppPreset): OpenInApplication {
+function createPresetOpenInApplication(preset: OpenInAppPreset): OpenInApplication {
   return {
     id: preset.id,
     label: preset.label,
@@ -71,7 +71,7 @@ function resolveOpenInApplicationsDraftState(
     : createOpenInApplicationsDraftState(openInApplications)
 }
 
-export function shouldCommitOpenInApplicationsDraft(applications: OpenInApplication[]): boolean {
+function shouldCommitOpenInApplicationsDraft(applications: OpenInApplication[]): boolean {
   return applications.every((application) => {
     return application.label.trim() !== '' && application.command.trim() !== ''
   })
@@ -101,7 +101,7 @@ function OpenInMenuRow({
   return (
     <div className="py-3">
       <div className="flex flex-wrap items-start gap-3">
-        <div className="border-border/50 bg-background/50 flex size-7 shrink-0 items-center justify-center border">
+        <div className="border-border/50 bg-background/50 flex size-7 shrink-0 items-center justify-center rounded-md border">
           <OpenInApplicationIcon application={application} size={16} />
         </div>
 

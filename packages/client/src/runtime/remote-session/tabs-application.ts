@@ -106,7 +106,7 @@ export function applyRemoteSessionTabsSnapshot(
   })
 }
 
-export function applyRemoteSessionTabsSnapshots(
+function applyRemoteSessionTabsSnapshots(
   state: RemoteSessionTabsSyncState,
   snapshots: readonly RuntimeMobileSessionTabsResult[],
   environmentId: string,

@@ -1,6 +1,6 @@
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import React from 'react'
 import { presentGitHubPRMergeState } from '~renderer/github/pr-merge-state'
 import { translate } from '~renderer/i18n/i18n'
@@ -119,7 +119,7 @@ export default function HostedReviewActions({
                       type="button"
                       size="xs"
                       className={cn(
-                        ' px-3 text-[11px]',
+                        'px-3 text-[11px] rounded-r-none',
                         RIGHT_SIDEBAR_MERGE_PRIMARY_BUTTON_CLASS,
                         'bg-green-600 text-white hover:bg-green-700',
                         'disabled:opacity-50 disabled:cursor-not-allowed'
@@ -163,7 +163,7 @@ export default function HostedReviewActions({
                     type="button"
                     size="xs"
                     className={cn(
-                      ' border-l border-green-700/50 px-1.5 shrink-0',
+                      'rounded-l-none border-l border-green-700/50 px-1.5 shrink-0',
                       'bg-green-600 text-white hover:bg-green-700',
                       'disabled:opacity-50 disabled:cursor-not-allowed'
                     )}

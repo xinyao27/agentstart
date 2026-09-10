@@ -1,4 +1,4 @@
-import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
+import type { ProjectExecutionRuntimeResolution } from '@agentstart/protocol/project/runtime-preference'
 
 export type LocalPreflightContext =
   | {

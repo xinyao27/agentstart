@@ -49,7 +49,7 @@ pub(super) fn apply(context: &ProviderContext, enabled: bool) -> ProviderResult 
         .filter(|value| !value.is_empty())
         .map(std::path::PathBuf::from)
         .unwrap_or_else(|| context.home_path.join(".grok"));
-    let config_path = grok_home.join("hooks").join("yiru-status.json");
+    let config_path = grok_home.join("hooks").join("agentstart-status.json");
     let script_name = script_file("grok");
     let script_path = context.scripts_path.join(&script_name);
     apply_nested(

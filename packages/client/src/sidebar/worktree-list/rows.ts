@@ -1,12 +1,12 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { ProjectOrderBy } from '@yiru/protocol/settings/ui-state'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
-import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
-import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
-import type { DetectedWorktree, Worktree } from '@yiru/protocol/worktree/model'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Project, ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { ProjectOrderBy } from '@agentstart/protocol/settings/ui-state'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
+import type { WorkspaceStatusDefinition } from '@agentstart/protocol/workspace/status/model'
+import type { WorktreeLineage } from '@agentstart/protocol/worktree/lineage'
+import type { DetectedWorktree, Worktree } from '@agentstart/protocol/worktree/model'
 import type React from 'react'
 import type { AppState } from '~renderer/store/types'
 
@@ -82,7 +82,7 @@ export type PendingCreationRow = {
   repo: Repo | undefined
 }
 
-export type FolderWorkspaceRow = {
+type FolderWorkspaceRow = {
   type: 'folder-workspace'
   key: string
   folderWorkspace: FolderWorkspace

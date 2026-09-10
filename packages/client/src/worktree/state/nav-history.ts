@@ -1,4 +1,4 @@
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'
@@ -10,7 +10,7 @@ import { findWorktreeById } from './types'
 // linear skip-deleted scan in goBack/goForward stays trivially cheap.
 const MAX_HISTORY = 50
 
-export type WorktreeNavHistoryEntry = string
+type WorktreeNavHistoryEntry = string
 
 export type WorktreeNavHistorySlice = {
   // Linear history, oldest -> newest.
@@ -90,7 +90,7 @@ function appendHistoryEntry(
   }
 }
 
-export function findPrevLiveWorktreeHistoryIndex(state: AppState): number | null {
+function findPrevLiveWorktreeHistoryIndex(state: AppState): number | null {
   for (let i = state.worktreeNavHistoryIndex - 1; i >= 0; i--) {
     if (isLiveEntry(state.worktreeNavHistory[i], state)) {
       return i
@@ -99,21 +99,13 @@ export function findPrevLiveWorktreeHistoryIndex(state: AppState): number | null
   return null
 }
 
-export function findNextLiveWorktreeHistoryIndex(state: AppState): number | null {
+function findNextLiveWorktreeHistoryIndex(state: AppState): number | null {
   for (let i = state.worktreeNavHistoryIndex + 1; i < state.worktreeNavHistory.length; i++) {
     if (isLiveEntry(state.worktreeNavHistory[i], state)) {
       return i
     }
   }
   return null
-}
-
-export function canGoBackWorktreeHistory(state: AppState): boolean {
-  return findPrevLiveWorktreeHistoryIndex(state) !== null
-}
-
-export function canGoForwardWorktreeHistory(state: AppState): boolean {
-  return findNextLiveWorktreeHistoryIndex(state) !== null
 }
 
 export const createWorktreeNavHistorySlice: StateCreator<

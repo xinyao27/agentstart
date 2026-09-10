@@ -251,7 +251,7 @@ export default function IpynbViewer({
   if (parsed.error || !parsed.notebook) {
     return (
       <div className="bg-background text-muted-foreground flex h-full items-center justify-center p-6 text-sm">
-        <div className="border-border bg-background flex max-w-md items-start gap-3 border p-4">
+        <div className="border-border bg-background flex max-w-md items-start gap-3 rounded-md border p-4">
           <AlertCircle className="text-destructive mt-0.5 size-4" />
           <div>
             <div className="text-foreground font-medium">

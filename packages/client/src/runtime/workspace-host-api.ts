@@ -1,19 +1,19 @@
-import type { GitHubPrStartPoint } from '@yiru/protocol/git/worktree-source'
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { GitHubPrStartPoint } from '@agentstart/protocol/git/worktree-source'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import type {
   CreateWorktreeResult,
   ForceDeleteWorktreeBranchResult,
   RemoveWorktreeResult,
   WorktreeBaseStatusEvent
-} from '@yiru/protocol/worktree/create-result'
-import type { WorktreeLineage, WorkspaceLineage } from '@yiru/protocol/worktree/lineage'
+} from '@agentstart/protocol/worktree/create-result'
+import type { WorktreeLineage, WorkspaceLineage } from '@agentstart/protocol/worktree/lineage'
 import type {
   DetectedWorktreeListResult,
   Worktree,
   WorktreeHeadIdentity,
   WorktreeMeta
-} from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/worktree/model'
 import type { WorktreeCreateProgressEvent as RuntimeWorktreeCreateProgressEvent } from '~renderer/worktree-creation/progress'
 import type { CreateWorktreeArgs } from '~renderer/worktree/create-model'
 

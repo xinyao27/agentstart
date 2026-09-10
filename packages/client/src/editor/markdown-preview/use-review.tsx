@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 import { useRef, useState } from 'react'
 import type { MutableRefObject } from 'react'
 import { translate } from '~renderer/i18n/i18n'
@@ -268,7 +268,7 @@ export function useMarkdownPreviewReview({
                       variant="ghost"
                       size="xs"
                       type="button"
-                      className="yiru-diff-comment-pill-btn focus-visible:bg-accent h-auto border-0 p-0"
+                      className="agentstart-diff-comment-pill-btn focus-visible:bg-accent h-auto border-0 p-0"
                       title={
                         copiedReviewNoteId === comment.id
                           ? translate(

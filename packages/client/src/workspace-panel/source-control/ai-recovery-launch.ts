@@ -1,9 +1,9 @@
-import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
-import { planAgentCliArgsSuffix } from '@yiru/protocol/agent/shell-command'
+import { isTuiAgentEnabled } from '@agentstart/protocol/agent/selection'
+import { planAgentCliArgsSuffix } from '@agentstart/protocol/agent/shell-command'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/protocol/source-control/ai-actions'
+} from '@agentstart/protocol/source-control/ai-actions'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { startupCommandErrorMessage } from '~renderer/agent/startup-error'

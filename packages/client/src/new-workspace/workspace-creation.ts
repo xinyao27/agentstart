@@ -1,6 +1,6 @@
-import { resolveHookCommandSourcePolicy } from '@yiru/protocol/setup/command-source-policy'
-import type { FolderWorkspaceLinkedReview } from '@yiru/protocol/workspace/folder'
-import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
+import { resolveHookCommandSourcePolicy } from '@agentstart/protocol/setup/command-source-policy'
+import type { FolderWorkspaceLinkedReview } from '@agentstart/protocol/workspace/folder'
+import type { AgentStartHooks } from '@agentstart/protocol/worktree/hooks'
 import { sendFollowupPromptWhenAgentReady } from '~renderer/agent/followup-delivery'
 import { showAgentPromptNotSentToast } from '~renderer/agent/prompt-timeout-toast'
 import type { AgentStartupPlan } from '~renderer/agent/tui-startup'
@@ -18,7 +18,7 @@ import {
   queuePendingAgentStartupDelivery,
   resolveAgentStartupTabId
 } from '../terminal-pane/agent/startup-delayed-delivery'
-export { PER_REPO_FETCH_LIMIT, CROSS_REPO_DISPLAY_LIMIT } from '~renderer/work-items'
+export { PER_REPO_FETCH_LIMIT } from '~renderer/work-items'
 
 export const CLIENT_PLATFORM: 'win32' | 'darwin' | 'linux' = navigator.userAgent.includes('Windows')
   ? 'win32'
@@ -36,7 +36,7 @@ export type SetupConfig = {
   kind: 'setup' | 'default-tabs' | 'setup-and-default-tabs'
 }
 
-function getDefaultTabCommandPreview(yamlHooks: YiruHooks | null): string {
+function getDefaultTabCommandPreview(yamlHooks: AgentStartHooks | null): string {
   return (yamlHooks?.defaultTabs ?? [])
     .map((tab, index) => {
       const command = tab.command?.trim()
@@ -96,7 +96,7 @@ export function getSetupConfig(
         }
       }
     | undefined,
-  yamlHooks: YiruHooks | null
+  yamlHooks: AgentStartHooks | null
 ): SetupConfig | null {
   const yamlSetup = yamlHooks?.scripts?.setup?.trim()
   const yamlDefaultTabCommands = getDefaultTabCommandPreview(yamlHooks)

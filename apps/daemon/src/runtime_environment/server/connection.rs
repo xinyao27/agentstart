@@ -1,17 +1,17 @@
 use std::time::Duration;
 
+use agentstart_protocol::transport::has_frame_preamble;
 use axum::extract::ws::{CloseFrame, Message, WebSocket, close_code};
 use futures_util::stream::SplitSink;
 use futures_util::{SinkExt, StreamExt};
 use tokio::sync::{OwnedSemaphorePermit, watch};
 use tokio::time::timeout;
-use yiru_protocol::transport::has_frame_preamble;
 
 use super::RuntimeAdmissionState;
 use super::channel::OutboundEvent;
 use super::establishment::{EstablishedRuntimeConnection, EstablishmentFailure, establish};
 
-const MAX_YIRU_FRAME_BYTES: usize = 1024 * 1024;
+const MAX_AGENTSTART_FRAME_BYTES: usize = 1024 * 1024;
 const ESTABLISHMENT_TIMEOUT: Duration = Duration::from_secs(15);
 const SOCKET_CLOSE_TIMEOUT: Duration = Duration::from_secs(2);
 const SOCKET_SEND_TIMEOUT: Duration = Duration::from_secs(10);
@@ -156,10 +156,15 @@ async fn handle_incoming(
         Some(Ok(Message::Text(_))) => None,
         Some(Ok(Message::Close(_))) | None | Some(Err(_)) => return false,
     };
-    let Some(plaintext) =
-        plaintext.filter(|bytes| bytes.len() <= MAX_YIRU_FRAME_BYTES && has_frame_preamble(bytes))
+    let Some(plaintext) = plaintext
+        .filter(|bytes| bytes.len() <= MAX_AGENTSTART_FRAME_BYTES && has_frame_preamble(bytes))
     else {
-        close_sink(sink, close_code::UNSUPPORTED, "Binary Yiru frame required").await;
+        close_sink(
+            sink,
+            close_code::UNSUPPORTED,
+            "Binary AgentStart frame required",
+        )
+        .await;
         return false;
     };
     match connection.incoming.try_send(plaintext) {

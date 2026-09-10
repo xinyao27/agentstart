@@ -1,5 +1,5 @@
-import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
+import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { useEffect, useState } from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import { translate } from '~renderer/i18n/i18n'
@@ -186,7 +186,9 @@ export function WorktreeSymlinksSection({
                         'auto.components.settings.WorktreeSymlinksSection.b2429aeb31',
                         'Add'
                       )}{' '}
-                      <code className="bg-muted px-1 py-0.5 text-[11px]">{queryTrimmed}</code>
+                      <code className="bg-muted rounded px-1 py-0.5 text-[11px]">
+                        {queryTrimmed}
+                      </code>
                     </span>
                   </CommandItem>
                 ) : null}
@@ -225,16 +227,16 @@ export function WorktreeSymlinksSection({
       </div>
 
       {paths.length === 0 ? (
-        <div className="border-border/60 bg-background/60 text-muted-foreground border border-dashed px-4 py-6 text-sm">
+        <div className="border-border/60 bg-background/60 text-muted-foreground rounded-xl border border-dashed px-4 py-6 text-sm">
           {translate(
             'auto.components.settings.WorktreeSymlinksSection.31ebab5403',
             'No shared paths configured for this repository.'
           )}
         </div>
       ) : (
-        <div className="border-border/50 bg-background/70 border px-4 py-3">
+        <div className="border-border/50 bg-background/70 rounded-xl border px-4 py-3">
           <div className="flex items-start gap-3">
-            <div className="border-border/50 bg-muted/30 mt-0.5 flex size-8 shrink-0 items-center justify-center border">
+            <div className="border-border/50 bg-muted/30 mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg border">
               <Link2 className="text-muted-foreground size-4" />
             </div>
             <div className="min-w-0 flex-1 space-y-2">
@@ -263,7 +265,7 @@ export function WorktreeSymlinksSection({
                   <span
                     key={path}
                     title={path}
-                    className="border-border/50 bg-muted/35 text-foreground/80 inline-flex max-w-full min-w-0 items-center gap-1 truncate border py-1 pr-1 pl-2 font-mono text-[11px]"
+                    className="border-border/50 bg-muted/35 text-foreground/80 inline-flex max-w-full min-w-0 items-center gap-1 truncate rounded-md border py-1 pr-1 pl-2 font-mono text-[11px]"
                   >
                     <span className="truncate">{path}</span>
                     <Button
@@ -275,7 +277,7 @@ export function WorktreeSymlinksSection({
                         'Remove {{value0}}',
                         { value0: path }
                       )}
-                      className="size-4 shrink-0"
+                      className="size-4 shrink-0 rounded-sm"
                     >
                       <X className="size-3" />
                     </Button>

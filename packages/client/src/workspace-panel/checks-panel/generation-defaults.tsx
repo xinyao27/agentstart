@@ -1,9 +1,9 @@
-import { getCommitMessageModelDiscoveryHostKeyForScope } from '@yiru/protocol/source-control/discovery-host'
+import { getCommitMessageModelDiscoveryHostKeyForScope } from '@agentstart/protocol/source-control/discovery-host'
 import {
   resolveSourceControlAiEnabled,
   resolveSourceControlAiPrCreationDefaults
-} from '@yiru/protocol/source-control/resolution'
-import { DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS } from '@yiru/protocol/source-control/settings'
+} from '@agentstart/protocol/source-control/resolution'
+import { DEFAULT_SOURCE_CONTROL_AI_PR_CREATION_DEFAULTS } from '@agentstart/protocol/source-control/settings'
 import { getRuntimeGitScope } from '~renderer/runtime/git-client'
 import { resolveSourceControlAiForOperation } from '~renderer/source-control/ai/resolution'
 

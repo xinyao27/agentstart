@@ -1,4 +1,4 @@
-import type { OpenInApplication } from '@yiru/protocol/settings/open-in'
+import type { OpenInApplication } from '@agentstart/protocol/settings/open-in'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'

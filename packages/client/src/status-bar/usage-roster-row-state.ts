@@ -1,4 +1,4 @@
-import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
+import type { ProviderRateLimits } from '@agentstart/protocol/account-rate-types'
 import { translate } from '~renderer/i18n/i18n'
 
 import { getProviderUsageStatusLabel } from './usage-error-copy'
@@ -32,17 +32,27 @@ function isConfirmedSignedOut(provider: ProviderRateLimits): boolean {
 
 export function getUsageRosterRowState(
   provider: ProviderRateLimits,
-  hasUsage: boolean
+  hasUsage: boolean,
+  isRefreshing: boolean
 ): UsageRosterRowState {
   if (hasUsage) {
     return { kind: 'usage', statusLabel: null }
   }
-  if (provider.status === 'idle' || provider.status === 'fetching') {
+  if (isRefreshing && (provider.status === 'idle' || provider.status === 'fetching')) {
     return {
       kind: 'loading',
       statusLabel: translate(
         'auto.components.status.bar.UsageRosterPanel.loadingUsage',
         'Loading usage…'
+      )
+    }
+  }
+  if (provider.status === 'idle' || provider.status === 'fetching') {
+    return {
+      kind: 'empty',
+      statusLabel: translate(
+        'auto.components.status.bar.UsageRosterPanel.noUsageData',
+        'No usage data'
       )
     }
   }

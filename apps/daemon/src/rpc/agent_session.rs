@@ -313,7 +313,35 @@ impl AgentSessionAuthority {
                 session: current,
             });
         }
-        let sent = self
+        let prompt_sent = self
+            .terminals
+            .send_guarded(
+                TerminalSendRequest {
+                    claim_viewport: false,
+                    client: Some(TerminalClient {
+                        id: principal_id.to_owned(),
+                        kind: TerminalClientType::Mobile,
+                    }),
+                    enter: false,
+                    input_kind: None,
+                    interrupt: false,
+                    require_agent_sendable: true,
+                    terminal: request.session_id.clone(),
+                    text: Some(request.prompt),
+                    viewport: None,
+                },
+                principal_id,
+            )
+            .await
+            .map_err(|error| error.to_string())?;
+        if !prompt_sent.accepted {
+            return Ok(AgentSessionFollowup {
+                accepted: false,
+                session: self.session(&request.session_id).await?,
+            });
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+        let submitted = self
             .terminals
             .send_guarded(
                 TerminalSendRequest {
@@ -327,7 +355,7 @@ impl AgentSessionAuthority {
                     interrupt: false,
                     require_agent_sendable: true,
                     terminal: request.session_id.clone(),
-                    text: Some(request.prompt),
+                    text: None,
                     viewport: None,
                 },
                 principal_id,
@@ -336,7 +364,7 @@ impl AgentSessionAuthority {
             .map_err(|error| error.to_string())?;
         let session = self.session(&request.session_id).await?;
         Ok(AgentSessionFollowup {
-            accepted: sent.accepted,
+            accepted: submitted.accepted,
             session,
         })
     }
@@ -376,20 +404,34 @@ impl AgentSessionAuthority {
     }
 
     async fn session(&self, session_id: &str) -> Result<Value, String> {
+        if let Some(terminal) = self
+            .terminals
+            .agent_status_snapshot()
+            .into_iter()
+            .find(|entry| entry.handle == session_id)
+        {
+            return Ok(session_value(&terminal));
+        }
         if let Some(row) = self
             .store
             .find(session_id)
             .await
             .map_err(|error| error.to_string())?
         {
+            if row.status == "running" {
+                return self
+                    .store
+                    .update(session_id, "complete", "interrupted")
+                    .await
+                    .map_err(|error| error.to_string())?
+                    .map_or_else(
+                        || Err("agent_session_not_found".to_owned()),
+                        |updated| Ok(row_value(&updated)),
+                    );
+            }
             return Ok(row_value(&row));
         }
-        self.terminals
-            .agent_status_snapshot()
-            .into_iter()
-            .find(|entry| entry.handle == session_id)
-            .map(|entry| session_value(&entry))
-            .ok_or_else(|| "agent_session_not_found".to_owned())
+        Err("agent_session_not_found".to_owned())
     }
 }
 
@@ -401,21 +443,21 @@ impl AgentSessionRpc {
     pub(super) async fn protocol_providers(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::providers(self, payload).await
     }
 
     pub(super) async fn protocol_list(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::list(self, payload).await
     }
 
     pub(super) async fn protocol_start(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::start(self, payload).await
     }
 
@@ -423,14 +465,14 @@ impl AgentSessionRpc {
         &self,
         payload: &[u8],
         principal_id: &str,
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::followup(self, payload, principal_id).await
     }
 
     pub(super) async fn protocol_stop(
         &self,
         payload: &[u8],
-    ) -> Result<Vec<u8>, yiru_protocol::protocol::v1::Status> {
+    ) -> Result<Vec<u8>, agentstart_protocol::protocol::v1::Status> {
         protocol::stop(self, payload).await
     }
 }
@@ -466,11 +508,7 @@ fn session_value(record: &crate::terminal_session::TerminalAgentStatusSnapshot) 
         _ => "thinking",
     };
     let status = if record.is_running_agent {
-        if phase == "complete" {
-            "complete"
-        } else {
-            "running"
-        }
+        "running"
     } else if phase == "complete" {
         "complete"
     } else {

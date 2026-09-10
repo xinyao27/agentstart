@@ -12,16 +12,11 @@ import { useAppStore } from '~renderer/store/state'
 import { mirrorRemoteRuntimeTabMove } from '../tab-bar/remote-runtime-tab-move-mirror'
 import { resolveActivePaneColumnSplitTarget } from './panel-split-target'
 export {
-  canDropTabIntoPaneBody,
-  getTabDragActivationDistance,
   getTabPaneBodyDroppableId,
-  isPaneDropData,
-  isTabDragData,
   TAB_DRAG_ACTIVATION_DISTANCE_PX,
   type HoveredTabDropTarget,
   type TabDragItemData,
-  type TabDropZone,
-  type TabPaneDropData
+  type TabDropZone
 } from './tab-drag-data'
 import {
   isPaneDropData,

@@ -1,5 +1,5 @@
+import type { TerminalListInput } from '@agentstart/protocol'
 import { queryOptions } from '@tanstack/react-query'
-import type { TerminalListInput } from '@yiru/protocol'
 
 import { targetKey } from './query-target'
 import type { RuntimeClientTarget } from './runtime-target'

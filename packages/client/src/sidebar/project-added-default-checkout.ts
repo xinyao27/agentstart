@@ -1,10 +1,10 @@
+import { getRepoExecutionHostId } from '@agentstart/protocol/host/identity'
+import { relativePathInsideRoot } from '@agentstart/protocol/host/path'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { EventProps } from '@agentstart/protocol/telemetry/events/catalog'
+import type { AddRepoDefaultCheckoutHandoffSource } from '@agentstart/protocol/telemetry/events/foundations'
+import type { DetectedWorktreeListResult, Worktree } from '@agentstart/protocol/worktree/model'
 import { useQueryClient } from '@tanstack/react-query'
-import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
-import { relativePathInsideRoot } from '@yiru/protocol/host/path'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
-import type { AddRepoDefaultCheckoutHandoffSource } from '@yiru/protocol/telemetry/events/foundations'
-import type { DetectedWorktreeListResult, Worktree } from '@yiru/protocol/worktree/model'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import {
   refreshProjectCatalogTargetRepos,
@@ -37,7 +37,7 @@ export type FinishProjectAddWithDefaultCheckout = (options: {
   source: AddRepoDefaultCheckoutHandoffSource
 }) => Promise<void>
 
-export function getProjectDefaultCheckout(worktrees: readonly Worktree[]): Worktree | null {
+function getProjectDefaultCheckout(worktrees: readonly Worktree[]): Worktree | null {
   return worktrees.find((worktree) => worktree.isMainWorktree) ?? null
 }
 
@@ -61,7 +61,7 @@ function hasDetectedHiddenLinkedExternalWorktrees(
       !worktree.isMainWorktree &&
       !worktree.selectedCheckout &&
       !worktree.visible &&
-      worktree.ownership !== 'yiru-managed'
+      worktree.ownership !== 'agentstart-managed'
   )
 }
 

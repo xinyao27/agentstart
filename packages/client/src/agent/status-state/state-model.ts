@@ -1,16 +1,16 @@
-import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
+import type { SleepingAgentLaunchConfig } from '@agentstart/protocol/agent/session-resume'
 import type {
   AgentStatusOrchestrationContext,
   MigrationUnsupportedPtyEntry
-} from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/status-records'
 
 import type { AppState } from '../../store/types'
 import { registryEntryMatchesStatus } from './launch-model'
 import { getTabIdFromPaneKey } from './retention-model'
 import type { AgentLaunchConfigStatusMetadata } from './slice'
 
-export const RECENTLY_CLOSED_AGENT_STATUS_TAB_IDS_MAX = 1024
-export const RECENTLY_RETIRED_AGENT_STATUS_PANE_KEYS_MAX = 1024
+const RECENTLY_CLOSED_AGENT_STATUS_TAB_IDS_MAX = 1024
+const RECENTLY_RETIRED_AGENT_STATUS_PANE_KEYS_MAX = 1024
 
 // delete-then-set for LRU recency, then evict the oldest keys past the cap (Record
 // key order is insertion order for non-integer string keys). A status event for a
@@ -123,7 +123,7 @@ export function pruneMigrationUnsupportedEntries(
   return { next: changed ? next : entries, changed }
 }
 
-export function orchestrationContextsEqual(
+function orchestrationContextsEqual(
   a: AgentStatusOrchestrationContext,
   b: AgentStatusOrchestrationContext
 ): boolean {

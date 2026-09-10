@@ -87,7 +87,7 @@ function executeElementAction(payload: ElementActionPayload): unknown {
   const resolveElement = (target: string): HTMLElement => {
     const reference = /^@?(e\d+)$/.exec(target)?.[1] ?? null
     let element: Element | null = reference
-      ? document.querySelector(`[data-yiru-browser-ref="${reference}"]`)
+      ? document.querySelector(`[data-agentstart-browser-ref="${reference}"]`)
       : null
     if (!element) {
       try {
@@ -160,7 +160,7 @@ function executeElementDrag(payload: { from: string; to: string }): void {
   const find = (target: string): Element | null => {
     const reference = /^@?(e\d+)$/.exec(target)?.[1] ?? null
     if (reference) {
-      return document.querySelector(`[data-yiru-browser-ref="${reference}"]`)
+      return document.querySelector(`[data-agentstart-browser-ref="${reference}"]`)
     }
     return document.querySelector(target)
   }

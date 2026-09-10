@@ -1,4 +1,4 @@
-import type { SkillDirectoryEntry } from '@yiru/protocol'
+import type { SkillDirectoryEntry } from '@agentstart/protocol'
 import { createElement, useState } from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import {

@@ -1,4 +1,4 @@
-import type { PdfExportResult } from '@yiru/client/pdf-export'
+import type { PdfExportResult } from '@agentstart/client/pdf-export'
 
 import { acquireCdp, releaseCdp, sendCdp } from '../background/cdp/session'
 

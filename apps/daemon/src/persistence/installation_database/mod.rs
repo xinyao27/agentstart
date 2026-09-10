@@ -24,7 +24,7 @@ use crate::notifications::{
     NotificationAuthority, NotificationMailbox, NotificationMailboxClosed, NotificationRequest,
 };
 
-const DATABASE_FILE_NAME: &str = "yiru-installation.sqlite";
+const DATABASE_FILE_NAME: &str = "agentstart-installation.sqlite";
 const DATABASE_BUSY_TIMEOUT: Duration = Duration::from_secs(5);
 const DATABASE_QUEUE_CAPACITY: usize = 128;
 
@@ -99,7 +99,7 @@ impl InstallationDatabase {
         let mobile_devices = MobileDeviceStore::new(Arc::new(mailbox.clone()));
         let notifications = NotificationAuthority::new(Arc::new(mailbox));
         let worker = thread::Builder::new()
-            .name("yiru-installation-database".to_owned())
+            .name("agentstart-installation-database".to_owned())
             .spawn(move || worker::run(connection, receiver))
             .map_err(|source| io_error("start database worker", &database_path, source))?;
         Ok(Self {

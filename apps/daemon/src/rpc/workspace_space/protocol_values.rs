@@ -1,9 +1,9 @@
 // Why: the workspace-space authority returns typed scan records shared with
 // the legacy JSON surface; this is the single place that renders those
 // records into the typed protobuf wire messages.
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::workspace_space_service_analyze_response::Result as AnalyzeResult;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::workspace_space_service_analyze_response::Result as AnalyzeResult;
+use agentstart_protocol::runtime::v1::{
     WorkspaceSpaceAnalysis, WorkspaceSpaceItem, WorkspaceSpaceItemKind, WorkspaceSpaceRepoSummary,
     WorkspaceSpaceServiceAnalyzeResponse, WorkspaceSpaceWorktree,
 };

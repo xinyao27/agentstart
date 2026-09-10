@@ -15,8 +15,6 @@ import {
   type CommentMarkdownLinkClickHandler
 } from './comment-markdown-element-renderers'
 
-export type { CommentMarkdownLinkClickHandler } from './comment-markdown-element-renderers'
-
 type MarkdownPlugins = NonNullable<React.ComponentProps<typeof Markdown>['rehypePlugins']>
 type UrlTransform = NonNullable<React.ComponentProps<typeof Markdown>['urlTransform']>
 
@@ -150,7 +148,7 @@ function transformGitHubReferenceChildren(
   node.children = nextChildren
 }
 
-export function remarkGitHubReferences(
+function remarkGitHubReferences(
   defaultRepo: GitHubRepoReference
 ): () => (tree: MarkdownNode) => void {
   return () => (tree) => transformGitHubReferenceChildren(tree, defaultRepo)

@@ -1,4 +1,4 @@
-import type { Tab } from '@yiru/protocol/workspace/tabs'
+import type { Tab } from '@agentstart/protocol/workspace/tabs'
 import { translate } from '~renderer/i18n/i18n'
 
 import { EmulatorDeviceFrame } from './emulator-device-frame'

@@ -5,7 +5,7 @@ use crate::repositories::ecmascript;
 
 use super::model::{LayoutPane, LayoutRecipe};
 
-const LAYOUT_CONFIG_FILE: &str = "yiru.yaml";
+const LAYOUT_CONFIG_FILE: &str = "agentstart.yaml";
 const MAX_LAYOUT_CONFIG_BYTES: usize = 1024 * 1024;
 const MAX_LAYOUT_PANES: usize = 12;
 const MAX_LAYOUT_RECIPES: usize = 20;

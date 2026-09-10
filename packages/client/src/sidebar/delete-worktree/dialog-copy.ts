@@ -1,6 +1,6 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 type WorktreeRepoRef = Pick<Worktree, 'repoId'>
 
@@ -51,12 +51,12 @@ export function getDeleteWorktreeDialogCopy(args: {
       : 'break-all font-medium text-foreground',
     descriptionSuffix: args.isBatchDelete
       ? allFolderWorkspaceDeletes
-        ? 'from Yiru. Project folders on disk will not be deleted.'
+        ? 'from AgentStart. Project folders on disk will not be deleted.'
         : mixedFolderWorkspaceDeletes
-          ? 'from Yiru. Git worktrees will also be removed from git and disk; folder workspaces will only remove the Yiru workspace entry.'
+          ? 'from AgentStart. Git worktrees will also be removed from git and disk; folder workspaces will only remove the AgentStart workspace entry.'
           : 'from git and delete their workspace folders.'
       : args.isFolderWorkspaceDelete
-        ? 'from Yiru. The project folder on disk will not be deleted.'
+        ? 'from AgentStart. The project folder on disk will not be deleted.'
         : 'from git and delete its workspace folder.',
     mainWorktreeBlocker: args.isFolderWorkspaceDelete
       ? 'Remove the folder project instead of deleting this workspace.'
@@ -83,9 +83,9 @@ export function getDeleteWorktreeLineageDialogCopy(args: {
         ? '1 child workspace'
         : `${args.childWorkspaceCount} child workspaces`,
     descriptionSuffix: allFolderWorkspaceDeletes
-      ? 'from Yiru. Project folders on disk will not be deleted.'
+      ? 'from AgentStart. Project folders on disk will not be deleted.'
       : mixedFolderWorkspaceDeletes
-        ? 'from Yiru. Git worktrees will also be removed from git and disk; folder workspaces will only remove the Yiru workspace entry.'
+        ? 'from AgentStart. Git worktrees will also be removed from git and disk; folder workspaces will only remove the AgentStart workspace entry.'
         : 'from git and delete their workspace folders.'
   }
 }

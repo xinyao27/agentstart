@@ -7,14 +7,14 @@ import type { RuntimeFileOperationArgs } from '~renderer/runtime/file-client'
 import { getLocalImageCacheKey, loadLocalImageAbsolutePath } from '../use-local-image-src'
 import { resolveImageAbsolutePath } from './links'
 
-export const MARKDOWN_PREVIEW_LOCAL_IMAGE_PREWARM_LIMIT = 64
-export const MARKDOWN_PREVIEW_LOCAL_IMAGE_PREWARM_CONCURRENCY = 4
+const MARKDOWN_PREVIEW_LOCAL_IMAGE_PREWARM_LIMIT = 64
+const MARKDOWN_PREVIEW_LOCAL_IMAGE_PREWARM_CONCURRENCY = 4
 
 type MarkdownImageRuntimeContext = Omit<RuntimeFileOperationArgs, 'connectionId'> & {
   connectionId?: string | null
 }
 
-export type MarkdownPreviewLocalImageCandidate = {
+type MarkdownPreviewLocalImageCandidate = {
   absolutePath: string
   cacheKey: string
   rawSrc: string
@@ -64,7 +64,7 @@ function collectImageDefinitions(
   }
 }
 
-export function extractMarkdownPreviewLocalImageCandidates(
+function extractMarkdownPreviewLocalImageCandidates(
   markdown: string,
   filePath: string,
   options: ExtractLocalImageCandidatesOptions = {}

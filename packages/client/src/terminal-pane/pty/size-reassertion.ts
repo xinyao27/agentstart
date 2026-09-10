@@ -1,4 +1,4 @@
-export type PtySizeReassertionDimensions = { cols: number; rows: number }
+type PtySizeReassertionDimensions = { cols: number; rows: number }
 
 export type PtySizeReassertionOptions = {
   isDisposed: () => boolean

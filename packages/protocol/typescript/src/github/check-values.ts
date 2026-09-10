@@ -6,7 +6,7 @@ import {
   type GitHubCheckEntry,
   type GitHubCheckJob,
   type GitHubCheckJobStep
-} from '../../generated/yiru/runtime/v1/github_pb.js'
+} from '../../generated/agent_start/runtime/v1/github_pb.js'
 
 export type PRCheckDetail = {
   name: string
@@ -26,7 +26,7 @@ export type PRCheckDetail = {
   workflowRunId?: number
 }
 
-export type PRCheckAnnotation = {
+type PRCheckAnnotation = {
   path: string | null
   startLine: number | null
   endLine: number | null
@@ -36,7 +36,7 @@ export type PRCheckAnnotation = {
   rawDetails: string | null
 }
 
-export type PRCheckStep = {
+type PRCheckStep = {
   name: string
   status: string | null
   conclusion: string | null
@@ -44,7 +44,7 @@ export type PRCheckStep = {
   completedAt: string | null
 }
 
-export type PRCheckJob = {
+type PRCheckJob = {
   id: number | null
   name: string
   status: string | null

@@ -1,5 +1,5 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -80,7 +80,7 @@ export function useProjectGroupActions(args: {
         toast.error(
           translate(
             'auto.components.sidebar.WorktreeList.b667b59632',
-            'Some projects could not be removed from Yiru'
+            'Some projects could not be removed from AgentStart'
           ),
           {
             description: translate(

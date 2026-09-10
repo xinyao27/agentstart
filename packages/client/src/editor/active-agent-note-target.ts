@@ -1,25 +1,11 @@
-import type { TerminalListResult } from '@yiru/protocol'
-import {
-  AGENT_STATUS_STALE_AFTER_MS,
-  type AgentStatusEntry
-} from '@yiru/protocol/agent/status-records'
-import { isTerminalLeafId, makePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
-import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
+import type { TerminalListResult } from '@agentstart/protocol'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
+import type { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
-import {
-  classifyTitleActivity,
-  isExplicitAgentStatusFresh,
-  resolveTitleActivityLabel
-} from '~renderer/terminal-pane/agent/evidence'
-import { resolveRuntimePaneTitleForLeaf } from '~renderer/terminal-pane/title-leaf-id'
-import {
-  getSettingsForWorktreeRuntimeOwner,
-  type WorktreeRuntimeOwnerState
-} from '~renderer/worktree/runtime-owner'
+import type { WorktreeRuntimeOwnerState } from '~renderer/worktree/runtime-owner'
 
-const ACTIVE_AGENT_PROBE_RPC_TIMEOUT_MS = 3000
 const ACTIVE_AGENT_TERMINAL_LIST_LIMIT = 200
 
 export type ActiveTerminalNoteTarget = {
@@ -51,13 +37,6 @@ export type ActiveTerminalNoteTargetState = {
   settings: Parameters<typeof getActiveRuntimeTarget>[0]
 } & Pick<WorktreeRuntimeOwnerState, 'repos' | 'worktreesByRepo'>
 
-type ActiveAgentRuntimeProbeDescriptor = {
-  key: string
-  worktreeId: string
-  runtimeTarget: ReturnType<typeof getActiveRuntimeTarget>
-  noteTarget: ActiveTerminalNoteTarget
-}
-
 export function getActiveTerminalNoteTarget(
   state: ActiveTerminalNoteTargetState,
   worktreeId: string
@@ -78,82 +57,6 @@ export function getActiveTerminalNoteTarget(
   return leafId ? { tabId, leafId } : null
 }
 
-export function getActiveAgentNoteTarget(
-  state: ActiveTerminalNoteTargetState,
-  worktreeId: string,
-  now = Date.now()
-): ActiveTerminalNoteTarget | null {
-  const noteTarget = getActiveTerminalNoteTarget(state, worktreeId)
-  if (!noteTarget || !isTerminalLeafId(noteTarget.leafId)) {
-    return null
-  }
-
-  const activePtyId = getActivePanePtyId(state, noteTarget)
-  if (!activePtyId) {
-    return null
-  }
-
-  const entry = state.agentStatusByPaneKey?.[makePaneKey(noteTarget.tabId, noteTarget.leafId)]
-  if (entry && isExplicitAgentStatusFresh(entry, now, AGENT_STATUS_STALE_AFTER_MS)) {
-    return noteTarget
-  }
-  // Why: freshly opened agents can be idle before their first hook event. Use
-  // renderer title/launch hints only to show the option; runtime still verifies
-  // the focused terminal is an idle agent before sending Enter.
-  if (!hasFocusedPaneAgentHint(state, worktreeId, noteTarget)) {
-    return null
-  }
-
-  return noteTarget
-}
-
-export function getActiveAgentRuntimeProbeDescriptor(
-  state: ActiveTerminalNoteTargetState,
-  worktreeId: string
-): ActiveAgentRuntimeProbeDescriptor | null {
-  const noteTarget = getActiveTerminalNoteTarget(state, worktreeId)
-  if (!noteTarget || !isTerminalLeafId(noteTarget.leafId)) {
-    return null
-  }
-  const activePtyId = getActivePanePtyId(state, noteTarget)
-  if (!activePtyId) {
-    return null
-  }
-  // Route by the worktree's owner host so the probe targets the host that runs
-  // this worktree's agent terminal, not the focused runtime.
-  const runtimeTarget = getActiveRuntimeTarget(
-    getSettingsForWorktreeRuntimeOwner(state, worktreeId)
-  )
-  const runtimeKey =
-    runtimeTarget.kind === 'environment' ? `env:${runtimeTarget.environmentId}` : 'local'
-  return {
-    key: `${runtimeKey}:${worktreeId}:${noteTarget.tabId}:${noteTarget.leafId}:${activePtyId}`,
-    worktreeId,
-    runtimeTarget,
-    noteTarget
-  }
-}
-
-export async function probeActiveAgentNoteTarget({
-  worktreeId,
-  runtimeTarget,
-  noteTarget
-}: ActiveAgentRuntimeProbeDescriptor): Promise<boolean> {
-  const terminal = await findActiveRuntimeTerminal(
-    runtimeTarget,
-    worktreeId,
-    noteTarget,
-    ACTIVE_AGENT_PROBE_RPC_TIMEOUT_MS
-  )
-  if (!terminal) {
-    return false
-  }
-  const agentCheck = await (
-    await openRuntimeTerminalClient(runtimeTarget)
-  ).isRunningAgent(terminal.handle, { timeoutMs: ACTIVE_AGENT_PROBE_RPC_TIMEOUT_MS })
-  return agentCheck.isRunningAgent
-}
-
 export async function findActiveRuntimeTerminal(
   runtimeTarget: ReturnType<typeof getActiveRuntimeTarget>,
   worktreeId: string,
@@ -172,57 +75,4 @@ export async function findActiveRuntimeTerminal(
       (terminal) => terminal.tabId === noteTarget.tabId && terminal.leafId === noteTarget.leafId
     ) ?? null
   )
-}
-
-function getActivePanePtyId(
-  state: ActiveTerminalNoteTargetState,
-  noteTarget: ActiveTerminalNoteTarget
-): string | null {
-  const livePtyIds = state.ptyIdsByTabId?.[noteTarget.tabId] ?? []
-  if (livePtyIds.length === 0) {
-    return null
-  }
-
-  const ptyIdsByLeafId = state.terminalLayoutsByTabId[noteTarget.tabId]?.ptyIdsByLeafId
-  if (ptyIdsByLeafId && Object.keys(ptyIdsByLeafId).length > 0) {
-    const activeLeafPtyId = ptyIdsByLeafId[noteTarget.leafId]
-    // Why: layout maps can survive sleep/reconnect; ptyIdsByTabId is the live
-    // PTY source of truth for whether submitting with Enter is currently safe.
-    return activeLeafPtyId && livePtyIds.includes(activeLeafPtyId) ? activeLeafPtyId : null
-  }
-  return livePtyIds[0] ?? null
-}
-
-function hasFocusedPaneAgentHint(
-  state: ActiveTerminalNoteTargetState,
-  worktreeId: string,
-  noteTarget: ActiveTerminalNoteTarget
-): boolean {
-  const tab = (state.tabsByWorktree[worktreeId] ?? []).find(
-    (entry) => entry.id === noteTarget.tabId
-  )
-  const runtimeTitle = getFocusedRuntimePaneTitle(state, noteTarget)
-  if (runtimeTitle !== null) {
-    return isRecognizedAgentTitle(runtimeTitle)
-  }
-  if (tab?.launchAgent) {
-    return true
-  }
-
-  return tab?.title ? isRecognizedAgentTitle(tab.title) : false
-}
-
-function getFocusedRuntimePaneTitle(
-  state: ActiveTerminalNoteTargetState,
-  noteTarget: ActiveTerminalNoteTarget
-): string | null {
-  return resolveRuntimePaneTitleForLeaf(
-    state.terminalLayoutsByTabId[noteTarget.tabId],
-    state.runtimePaneTitlesByTabId?.[noteTarget.tabId],
-    noteTarget.leafId
-  )
-}
-
-function isRecognizedAgentTitle(title: string): boolean {
-  return classifyTitleActivity(title) !== null && resolveTitleActivityLabel(title) !== null
 }

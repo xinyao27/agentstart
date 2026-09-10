@@ -1,11 +1,11 @@
-import type { CrashReportCopySubmissionFailure } from '@yiru/protocol/crash-reports/copy-values'
-import type { CrashReportRecord } from '@yiru/protocol/crash-reports/values'
+import type { CrashReportCopySubmissionFailure } from '@agentstart/protocol/crash-reports/copy-values'
+import type { CrashReportRecord } from '@agentstart/protocol/crash-reports/values'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { shellClient } from '~renderer/runtime/shell-client'
 
-export const CRASH_REPORT_COPY_FAILURE_TOAST_ID = 'crash-report-copy-failure'
+const CRASH_REPORT_COPY_FAILURE_TOAST_ID = 'crash-report-copy-failure'
 
 function showCopyFailure(description?: string): void {
   toast.error(

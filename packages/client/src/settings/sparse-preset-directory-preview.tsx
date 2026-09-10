@@ -13,14 +13,14 @@ export function SparsePresetDirectoryPreview({
       {visibleDirectories.map((directory) => (
         <span
           key={directory}
-          className="border-border/50 bg-muted/35 text-foreground/80 max-w-full min-w-0 truncate border px-2 py-1 font-mono text-[11px]"
+          className="border-border/50 bg-muted/35 text-foreground/80 max-w-full min-w-0 truncate rounded-md border px-2 py-1 font-mono text-[11px]"
           title={directory}
         >
           {directory}
         </span>
       ))}
       {hiddenCount > 0 ? (
-        <span className="border-border/50 bg-muted/35 text-muted-foreground border px-2 py-1 text-[11px]">
+        <span className="border-border/50 bg-muted/35 text-muted-foreground rounded-md border px-2 py-1 text-[11px]">
           {translate(
             'auto.components.settings.SparsePresetSettingsSection.8b64731aaf',
             '+{{value0}} more',

@@ -24,7 +24,7 @@ function AddRepoNestedScanProgressNotice({
   onStopNestedScan
 }: AddRepoNestedScanProgressNoticeProps): React.JSX.Element {
   return (
-    <div className="border-border bg-muted text-muted-foreground flex items-center gap-2 border px-3 py-2 text-xs">
+    <div className="border-border bg-muted text-muted-foreground flex items-center gap-2 rounded-md border px-3 py-2 text-xs">
       <LoadingIndicator className="size-3.5 shrink-0" />
       <span className="min-w-0 flex-1">{busyLabel}</span>
       {nestedScanInProgress && nestedScanId ? (
@@ -152,7 +152,7 @@ export function AddRepoLocalStartStep({
           <DialogDescription>
             {translate(
               'auto.components.sidebar.AddRepoStartSteps.acf895cb42',
-              'Add a project to get started with Yiru.'
+              'Add a project to get started with AgentStart.'
             )}
           </DialogDescription>
         ) : null}
@@ -184,7 +184,7 @@ export function AddRepoLocalStartStep({
           </p>
           {/* Outline uses the `input` token (white-ish in dark mode) to match Browse's visible outline variant;
               primary-foreground is near-black in dark mode and rendered the border invisible. */}
-          <div className="border-input bg-background overflow-hidden border">
+          <div className="border-input bg-background overflow-hidden rounded-md border">
             {secondaryActions.map((action, index) => (
               <AddRepoSecondaryStartAction
                 key={action.kind}
@@ -268,7 +268,7 @@ const AddRepoPrimaryStartAction = ({
   >
     <span
       className={cn(
-        'grid size-7 shrink-0 place-items-center',
+        'grid size-7 shrink-0 place-items-center rounded-md',
         selected ? 'bg-background/70 text-accent-foreground' : 'text-foreground'
       )}
     >
@@ -314,7 +314,7 @@ function AddRepoSecondaryStartAction({
     >
       <span
         className={cn(
-          'grid size-7 shrink-0 place-items-center ',
+          'grid size-7 shrink-0 place-items-center rounded-md ',
           selected ? 'bg-background/70 text-accent-foreground' : 'text-muted-foreground'
         )}
       >

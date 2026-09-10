@@ -14,7 +14,7 @@ export type KeybindingContext = 'app' | 'terminal' | 'browser'
 
 export type KeybindingPlatform = 'darwin' | 'linux' | 'win32'
 
-export type TerminalShortcutPolicy = 'yiru-first' | 'terminal-first'
+export type TerminalShortcutPolicy = 'agentstart-first' | 'terminal-first'
 
 export type KeybindingMatchOptions = {
   context?: KeybindingContext

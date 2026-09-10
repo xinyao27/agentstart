@@ -29,7 +29,7 @@ export function HeroPaired({
     <div>
       <div className={mobilePageStyles.eyebrowRow}>
         <span className={mobilePageStyles.eyebrow}>
-          {translate('auto.components.mobile.MobileHero.5410d55d79', 'Yiru Mobile')}
+          {translate('auto.components.mobile.MobileHero.5410d55d79', 'AgentStart Mobile')}
         </span>
       </div>
       <h1 className={mobilePageStyles.heading}>
@@ -40,7 +40,7 @@ export function HeroPaired({
       <p className={mobilePageStyles.leadSmall}>
         {translate(
           'auto.components.mobile.MobileHero.266c18c105',
-          'Open Yiru Mobile to pick up where you left off, or pair another device.'
+          'Open AgentStart Mobile to pick up where you left off, or pair another device.'
         )}
       </p>
       <ul className={mobilePageStyles.pairedList}>

@@ -1,7 +1,7 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { ProjectOrderBy } from '@yiru/protocol/settings/ui-state'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { ProjectOrderBy } from '@agentstart/protocol/settings/ui-state'
 import { useEffect, type RefObject } from 'react'
 import { useAppStore } from '~renderer/store/state'
 

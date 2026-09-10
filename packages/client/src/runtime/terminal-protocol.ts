@@ -1,4 +1,4 @@
-import { TerminalClient } from '@yiru/protocol'
+import { TerminalClient } from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'

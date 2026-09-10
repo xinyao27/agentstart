@@ -1,6 +1,6 @@
-import type { RecognizedAgentProcess } from '@yiru/protocol/agent/process/recognition'
-import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { RecognizedAgentProcess } from '@agentstart/protocol/agent/process/recognition'
+import type { ParsedAgentStatusPayload } from '@agentstart/protocol/agent/status-records'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type { RuntimeTerminalProcessInspection } from '~renderer/runtime/terminal-inspection'
 
 export type AgentCompletionStatusSnapshot = ParsedAgentStatusPayload & {
@@ -14,7 +14,7 @@ export type AgentCompletionDispatchMeta = {
   agentStatus?: AgentCompletionStatusSnapshot
 }
 
-export type AgentAttentionDispatchMeta = {
+type AgentAttentionDispatchMeta = {
   source: 'hook'
   agentStatus: AgentCompletionStatusSnapshot
 }

@@ -1,4 +1,4 @@
-import type { CliInstallStatus } from '@yiru/protocol/cli-values'
+import type { CliInstallStatus } from '@agentstart/protocol/cli-values'
 
 export type FeatureTipCliInstallResult =
   | { kind: 'installed'; status: CliInstallStatus }

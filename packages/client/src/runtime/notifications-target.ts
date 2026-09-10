@@ -1,10 +1,10 @@
-import { NOTIFICATIONS_PROTOCOL_CAPABILITY, NotificationsClient } from '@yiru/protocol'
+import { NOTIFICATIONS_PROTOCOL_CAPABILITY, NotificationsClient } from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'
 import { readRuntimeStatus } from './status-client'
 
-export async function openNotificationsTarget(
+async function openNotificationsTarget(
   target: RuntimeClientTarget
 ): Promise<NotificationsClient | null> {
   const status = await readRuntimeStatus(target)

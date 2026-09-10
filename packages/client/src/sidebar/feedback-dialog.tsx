@@ -1,6 +1,6 @@
+import { AGENTSTART_GITHUB_ISSUES_URL } from '@agentstart/protocol/hosted-review/agentstart-repository'
+import type { GitHubViewer } from '@agentstart/protocol/hosted-review/review-types'
 import { useQuery } from '@tanstack/react-query'
-import type { GitHubViewer } from '@yiru/protocol/hosted-review/review-types'
-import { YIRU_GITHUB_ISSUES_URL } from '@yiru/protocol/hosted-review/yiru-repository'
 import React, { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
@@ -132,12 +132,12 @@ export function SidebarFeedbackDialog({
           <DialogDescription className="text-xs">
             {translate(
               'auto.components.sidebar.SidebarFeedbackDialog.a828fa4aee',
-              "Share what's working, what's broken, or what Yiru should do next."
+              "Share what's working, what's broken, or what AgentStart should do next."
             )}
           </DialogDescription>
         </DialogHeader>
 
-        <div className="border-border/70 bg-muted/30 space-y-2 border p-3">
+        <div className="border-border/70 bg-muted/30 space-y-2 rounded-md border p-3">
           <div className="text-foreground text-xs font-medium">
             {translate(
               'auto.components.sidebar.SidebarFeedbackDialog.9b33530b3d',
@@ -150,7 +150,7 @@ export function SidebarFeedbackDialog({
               variant="outline"
               size="sm"
               className="h-8 text-xs"
-              onClick={(event) => openExternalUrl(`${YIRU_GITHUB_ISSUES_URL}/`, event)}
+              onClick={(event) => openExternalUrl(`${AGENTSTART_GITHUB_ISSUES_URL}/`, event)}
             >
               <Github className="size-3.5" />
               {translate(
@@ -174,7 +174,7 @@ export function SidebarFeedbackDialog({
           className="min-h-32"
         />
 
-        <div className="border-border/70 bg-muted/30 min-h-9 border px-3 py-2">
+        <div className="border-border/70 bg-muted/30 min-h-9 rounded-md border px-3 py-2">
           {viewer ? (
             <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
               <span>

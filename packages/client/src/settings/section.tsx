@@ -70,7 +70,7 @@ export function SettingsSection({
           <h2 className="text-foreground flex flex-wrap items-center gap-2 text-xl leading-7 font-semibold">
             {title}
             {badge ? (
-              <span className="bg-muted text-muted-foreground px-2 py-0.5 text-[10px] font-medium tracking-[0.05em] uppercase">
+              <span className="bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-[10px] font-medium tracking-[0.05em] uppercase">
                 {badge}
               </span>
             ) : null}

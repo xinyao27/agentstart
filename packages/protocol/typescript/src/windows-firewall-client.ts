@@ -8,7 +8,7 @@ import {
   WindowsFirewallServiceRepairRequestSchema,
   WindowsFirewallServiceRepairResponseSchema,
   WindowsFirewallService
-} from '../generated/yiru/runtime/v1/windows_firewall_pb.js'
+} from '../generated/agent_start/runtime/v1/windows_firewall_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 import {
   windowsFirewallRepairResult,

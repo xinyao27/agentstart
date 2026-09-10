@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 
 import type { AppState } from '../store/types'
 import { getIndexedWorktreeById } from '../worktree/repo-index'

@@ -1,0 +1,247 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+// Why: folder workspaces share the Project Catalog authority (and its single
+// revision counter) with projectGroup, so the five verbs mirror that catalog's
+// expected-revision optimistic concurrency instead of inventing a second one.
+service FolderWorkspaceService {
+  rpc List(FolderWorkspaceServiceListRequest) returns (FolderWorkspaceServiceListResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Create(FolderWorkspaceServiceCreateRequest) returns (FolderWorkspaceServiceResultResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Update(FolderWorkspaceServiceUpdateRequest) returns (FolderWorkspaceServiceNullableResultResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Delete(FolderWorkspaceServiceDeleteRequest) returns (FolderWorkspaceServiceDeleteResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetPathStatus(FolderWorkspaceServiceGetPathStatusRequest) returns (FolderWorkspaceServicePathStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+// Why: the catalog row is a wide projection the renderer reads field-by-field,
+// so the wire mirrors the authority's typed columns instead of an opaque blob.
+message FolderWorkspace {
+  string id = 1;
+  string name = 2;
+  string comment = 3;
+  string folder_path = 4;
+  string project_group_id = 5;
+  optional string connection_id = 6;
+  optional string created_with_agent = 7;
+  optional string workspace_status = 8;
+  optional double manual_order = 9;
+  bool is_archived = 10;
+  bool is_pinned = 11;
+  bool is_unread = 12;
+  double sort_order = 13;
+  double last_activity_at = 14;
+  int64 created_at = 15;
+  int64 updated_at = 16;
+  optional bool pending_first_agent_message_rename = 17;
+  optional FolderWorkspaceLinkedReview linked_review = 18;
+  // Why: the legacy projection serializes this key only once the rename has
+  // been attempted, and an explicit null ("no error") is distinct from the key
+  // being absent, so the nullable wrapper keeps the three states apart.
+  optional FolderWorkspaceNullableText first_agent_message_rename_error = 19;
+}
+
+enum FolderWorkspaceReviewProvider {
+  FOLDER_WORKSPACE_REVIEW_PROVIDER_UNSPECIFIED = 0;
+  FOLDER_WORKSPACE_REVIEW_PROVIDER_GITHUB = 1;
+}
+
+enum FolderWorkspaceReviewKind {
+  FOLDER_WORKSPACE_REVIEW_KIND_UNSPECIFIED = 0;
+  FOLDER_WORKSPACE_REVIEW_KIND_PULL_REQUEST = 1;
+}
+
+message FolderWorkspaceLinkedReview {
+  FolderWorkspaceReviewProvider provider = 1;
+  FolderWorkspaceReviewKind kind = 2;
+  double number = 3;
+  string title = 4;
+  string url = 5;
+  optional string repo_id = 6;
+}
+
+message FolderWorkspaceNullableText {
+  oneof value {
+    bool null = 1;
+    string text = 2;
+  }
+}
+
+message FolderWorkspaceServiceListRequest {}
+
+message FolderWorkspaceServiceListResponse {
+  repeated FolderWorkspace folder_workspaces = 1;
+  int64 revision = 2;
+}
+
+message FolderWorkspaceServiceCreateRequest {
+  int64 expected_revision = 1;
+  string project_group_id = 2;
+  optional string name = 3;
+  optional string folder_path = 4;
+  optional string connection_id = 5;
+  optional string created_with_agent = 6;
+  optional bool pending_first_agent_message_rename = 7;
+  optional FolderWorkspaceLinkedReview linked_review = 8;
+}
+
+message FolderWorkspaceServiceUpdateFields {
+  optional string name = 1;
+  optional string comment = 2;
+  optional string folder_path = 3;
+  optional string workspace_status = 4;
+  optional string created_with_agent = 5;
+  optional double manual_order = 6;
+  optional double sort_order = 7;
+  optional double last_activity_at = 8;
+  optional bool is_archived = 9;
+  optional bool is_pinned = 10;
+  optional bool is_unread = 11;
+  optional bool pending_first_agent_message_rename = 12;
+  // Why: linkedReview clears with an explicit null on the legacy surface, so
+  // the oneof keeps "clear" distinct from "set" and from "leave untouched".
+  message NullableLinkedReview {
+    oneof value {
+      bool null = 1;
+      FolderWorkspaceLinkedReview review = 2;
+    }
+  }
+  optional NullableLinkedReview linked_review = 13;
+  optional FolderWorkspaceNullableText first_agent_message_rename_error = 14;
+}
+
+message FolderWorkspaceServiceUpdateRequest {
+  int64 expected_revision = 1;
+  string folder_workspace_id = 2;
+  FolderWorkspaceServiceUpdateFields updates = 3;
+}
+
+message FolderWorkspaceServiceResultResponse {
+  FolderWorkspace folder_workspace = 1;
+  int64 revision = 2;
+}
+
+message FolderWorkspaceServiceNullableResultResponse {
+  optional FolderWorkspace folder_workspace = 1;
+  int64 revision = 2;
+}
+
+message FolderWorkspaceServiceDeleteRequest {
+  int64 expected_revision = 1;
+  string folder_workspace_id = 2;
+}
+
+message FolderWorkspaceServiceDeleteResponse {
+  bool deleted = 1;
+  int64 revision = 2;
+}
+
+enum FolderWorkspacePathScope {
+  FOLDER_WORKSPACE_PATH_SCOPE_UNSPECIFIED = 0;
+  FOLDER_WORKSPACE_PATH_SCOPE_PATH = 1;
+  FOLDER_WORKSPACE_PATH_SCOPE_PROJECT_GROUP = 2;
+  FOLDER_WORKSPACE_PATH_SCOPE_FOLDER_WORKSPACE = 3;
+}
+
+message FolderWorkspaceServiceGetPathStatusRequest {
+  FolderWorkspacePathScope scope = 1;
+  optional string path = 2;
+  optional string project_group_id = 3;
+  optional string folder_workspace_id = 4;
+}
+
+enum FolderWorkspacePathStatusReason {
+  FOLDER_WORKSPACE_PATH_STATUS_REASON_UNSPECIFIED = 0;
+  FOLDER_WORKSPACE_PATH_STATUS_REASON_MISSING = 1;
+  FOLDER_WORKSPACE_PATH_STATUS_REASON_NOT_DIRECTORY = 2;
+  FOLDER_WORKSPACE_PATH_STATUS_REASON_UNAVAILABLE = 3;
+}
+
+message FolderWorkspaceServicePathStatusResponse {
+  FolderWorkspacePathStatus status = 1;
+}
+
+message FolderWorkspacePathStatus {
+  string path = 1;
+  bool exists = 2;
+  optional FolderWorkspacePathStatusReason reason = 3;
+}

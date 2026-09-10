@@ -5,7 +5,8 @@ import { createRoot } from 'react-dom/client'
 
 import { setRendererUiLanguage } from '../../i18n/i18n'
 import { HugeiconsIconContextProvider } from '../../icons/context-provider'
-import { configureExtensionRuntime, type ExtensionRuntimeBootstrap } from '../runtime/session'
+import type { ExtensionRuntimeHostFactory } from '../runtime/host'
+import { configureExtensionRuntime } from '../runtime/session'
 import { DevToolsPage } from './page'
 
 export type DevToolsCapabilities = {
@@ -21,11 +22,11 @@ export type DevToolsDiagnostic = {
 }
 
 export function mountExtensionDevTools(
-  bootstrap: ExtensionRuntimeBootstrap,
+  runtimeHost: ExtensionRuntimeHostFactory,
   capabilities: DevToolsCapabilities
 ): void {
   setRendererUiLanguage('system')
-  configureExtensionRuntime(bootstrap)
+  configureExtensionRuntime(runtimeHost)
   const rootElement = document.getElementById('root')
   if (!rootElement) {
     throw new Error('extension_devtools_root_missing')

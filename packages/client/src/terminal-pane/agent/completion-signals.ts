@@ -1,9 +1,9 @@
-import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
+import type { ParsedAgentStatusPayload } from '@agentstart/protocol/agent/status-records'
 
 import type { AgentCompletionStatusSnapshot } from './completion-coordinator-types'
 
 export type CompletionSource = 'hook' | 'title' | 'process-exit'
-export type CompletionIdentitySource = 'hook' | 'title' | 'process-exit'
+type CompletionIdentitySource = 'hook' | 'title' | 'process-exit'
 
 export type PollCadenceTier = 'active' | 'idle' | 'hidden' | 'no-evidence'
 
@@ -17,26 +17,26 @@ export type LastCompletionIdentity = {
 // stream stay live, so stale completion replays must outlive one coordinator.
 export const lastCompletionIdentityByPaneKey = new Map<string, LastCompletionIdentity>()
 
-export const IDLE_POLL_INTERVAL_MS = 2_000
-export const ACTIVE_POLL_INTERVAL_MS = 750
+const IDLE_POLL_INTERVAL_MS = 2_000
+const ACTIVE_POLL_INTERVAL_MS = 750
 // Why: a hidden pane only keeps the process-exit backstop alive — hook and title
 // completion signals are push-driven and fire regardless of poll cadence or
 // visibility — so it polls the OS process table far less often to cut idle CPU on
 // shared SSH relays. Follow-up to #6288 / PR #6667, which deduped scans within a
 // tick; this throttles the number of ticks. Visible panes keep full cadence.
-export const HIDDEN_POLL_INTERVAL_MS = 3_000
+const HIDDEN_POLL_INTERVAL_MS = 3_000
 // Why: on hosts where one inspection is a whole-process-table scan (local
 // Windows forks a powershell.exe CIM query, ~10-40x heavier than POSIX `ps`),
 // a visible idle shell with no agent evidence must not pay that every 2s
 // forever. It relaxes to this cadence; output/title/hook activity re-arms the
 // hot cadence (see NO_EVIDENCE_ACTIVITY_HOT_WINDOW_MS), so agent starts are
 // detected event-driven rather than by burning idle scans.
-export const NO_EVIDENCE_POLL_INTERVAL_MS = 15_000
+const NO_EVIDENCE_POLL_INTERVAL_MS = 15_000
 // Why: pane activity (PTY output, title change, hook) means an agent may be
 // starting; poll at the full idle cadence this long after the last activity so
 // agent-start detection stays prompt without keeping idle panes hot.
 export const NO_EVIDENCE_ACTIVITY_HOT_WINDOW_MS = 10_000
-export const INSPECTION_TIMEOUT_MS = 15_000
+const INSPECTION_TIMEOUT_MS = 15_000
 export const PENDING_TITLE_TTL_MS = Math.max(2_000, INSPECTION_TIMEOUT_MS + 500)
 export const PENDING_TITLE_MAX_TTL_MS = Math.max(30_000, PENDING_TITLE_TTL_MS)
 export const COMPLETION_REPLAY_GUARD_MS = 1_000

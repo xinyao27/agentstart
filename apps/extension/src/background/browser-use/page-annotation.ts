@@ -85,7 +85,7 @@ async function annotationContext(tabId: number, frameId: string): Promise<number
   const world = await sendCdp(tabId, 'Page.createIsolatedWorld', {
     frameId,
     grantUniveralAccess: false,
-    worldName: 'yiru-annotation-viewport'
+    worldName: 'agentstart-annotation-viewport'
   })
   return readNumber(world, 'executionContextId')
 }
@@ -139,7 +139,7 @@ function annotationViewportScript(input: BrowserAnnotationViewportInput): string
     const emitViewport = ${JSON.stringify(input.emitViewport)};
     const markers = ${JSON.stringify(input.markers)};
     const token = ${JSON.stringify(input.token)};
-    const key = '__yiruBrowserAnnotationViewportBridge';
+    const key = '__agentstartBrowserAnnotationViewportBridge';
     const old = globalThis[key];
     const cleanup = (state) => {
       if (!state) return;
@@ -156,7 +156,7 @@ function annotationViewportScript(input: BrowserAnnotationViewportInput): string
     }
     cleanup(old);
     const host = document.createElement('div');
-    host.setAttribute('data-yiru-browser-annotation-overlay', '');
+    host.setAttribute('data-agentstart-browser-annotation-overlay', '');
     host.style.cssText = 'position:fixed;inset:0;z-index:2147483646;pointer-events:none;overflow:hidden;';
     const root = host.attachShadow({ mode: 'closed' });
     const style = document.createElement('style');
@@ -181,7 +181,7 @@ function annotationViewportScript(input: BrowserAnnotationViewportInput): string
         elements[index].style.display = visible ? 'flex' : 'none';
         elements[index].style.transform = 'translate3d(' + (x + rect.width / 2 - 12) + 'px,' + (y + rect.height - 12) + 'px,0)';
       });
-      if (emitViewport) console.debug('__yiru_annotation_viewport__:' + token + ':' + JSON.stringify({ scrollX: window.scrollX, scrollY: window.scrollY }));
+      if (emitViewport) console.debug('__agentstart_annotation_viewport__:' + token + ':' + JSON.stringify({ scrollX: window.scrollX, scrollY: window.scrollY }));
     };
     state.update = () => {
       if (!state.frame) state.frame = requestAnimationFrame(render);
@@ -196,7 +196,7 @@ function annotationViewportScript(input: BrowserAnnotationViewportInput): string
 }
 
 const ANNOTATION_CLEANUP_SCRIPT = `(() => {
-  const key = '__yiruBrowserAnnotationViewportBridge';
+  const key = '__agentstartBrowserAnnotationViewportBridge';
   const state = globalThis[key];
   if (!state) return true;
   if (state.frame) cancelAnimationFrame(state.frame);

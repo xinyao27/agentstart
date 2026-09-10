@@ -1,8 +1,8 @@
-import type { Tab } from '@yiru/protocol/workspace/tabs'
+import type { Tab } from '@agentstart/protocol/workspace/tabs'
 
 const terminalTabLookupByUnifiedTabs = new WeakMap<readonly Tab[], Map<string, Tab>>()
 
-export function getCachedUnifiedTerminalTabForWorktree(
+function getCachedUnifiedTerminalTabForWorktree(
   unifiedTabsByWorktree: Record<string, Tab[]>,
   worktreeId: string,
   terminalTabId: string

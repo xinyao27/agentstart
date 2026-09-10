@@ -1,5 +1,5 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { runtimePtyEnvironmentId, runtimePtyHandle } from '@yiru/protocol/terminal-identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { runtimePtyEnvironmentId, runtimePtyHandle } from '@agentstart/protocol/terminal-identity'
 import { mapWithConcurrency } from '~renderer/map-with-concurrency'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'

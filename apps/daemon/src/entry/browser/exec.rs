@@ -1,6 +1,6 @@
+use agentstart_protocol::runtime::v1 as browser;
+use agentstart_protocol::runtime::v1::execute_request::Command;
 use serde_json::Number;
-use yiru_protocol::runtime::v1 as browser;
-use yiru_protocol::runtime::v1::execute_request::Command;
 
 use super::BrowserCommandError;
 

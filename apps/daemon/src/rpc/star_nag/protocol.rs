@@ -1,5 +1,5 @@
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     StarNagPromptMode as ProtocolPromptMode, StarNagShellServiceAgentValueMomentRequest,
     StarNagShellServiceAgentValueMomentResponse, StarNagShellServiceCompleteRequest,
     StarNagShellServiceCompleteResponse, StarNagShellServiceDismissRequest,
@@ -7,10 +7,10 @@ use yiru_protocol::runtime::v1::{
     StarNagShellServiceLaterResponse, StarNagShellServiceOnboardingCompletedRequest,
     StarNagShellServiceOnboardingCompletedResponse, StarNagShellServiceOpenWebRequest,
     StarNagShellServiceOpenWebResponse, StarNagShellServiceShowAgentValueMomentRequest,
-    StarNagShellServiceShowAgentValueMomentResponse, StarNagShellServiceStarYiruRequest,
-    StarNagShellServiceStarYiruResponse,
+    StarNagShellServiceShowAgentValueMomentResponse, StarNagShellServiceStarAgentStartRequest,
+    StarNagShellServiceStarAgentStartResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::star_nag::{AgentValueMomentPreparation, StarNagDomainPromptMode};
 
@@ -40,10 +40,15 @@ pub(in crate::rpc) async fn open_web(rpc: &StarNagRpc, payload: &[u8]) -> Result
     Ok(encode(&StarNagShellServiceOpenWebResponse {}))
 }
 
-pub(in crate::rpc) async fn star_yiru(rpc: &StarNagRpc, payload: &[u8]) -> Result<Vec<u8>, Status> {
-    let _ = decode::<StarNagShellServiceStarYiruRequest>(payload)?;
-    let starred = rpc.authority.star_yiru().await;
-    Ok(encode(&StarNagShellServiceStarYiruResponse { starred }))
+pub(in crate::rpc) async fn star_agentstart(
+    rpc: &StarNagRpc,
+    payload: &[u8],
+) -> Result<Vec<u8>, Status> {
+    let _ = decode::<StarNagShellServiceStarAgentStartRequest>(payload)?;
+    let starred = rpc.authority.star_agentstart().await;
+    Ok(encode(&StarNagShellServiceStarAgentStartResponse {
+        starred,
+    }))
 }
 
 pub(in crate::rpc) async fn agent_value_moment(

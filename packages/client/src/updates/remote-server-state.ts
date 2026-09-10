@@ -1,4 +1,4 @@
-import type { UpdaterCheckOptions, UpdaterClient } from '@yiru/protocol'
+import type { UpdaterCheckOptions, UpdaterClient } from '@agentstart/protocol'
 import type { StateCreator } from 'zustand'
 import { isValidAppVersion } from '~renderer/app-version'
 import { runRemoteServerUpdateBatch } from '~renderer/runtime/remote-server-update-batch'

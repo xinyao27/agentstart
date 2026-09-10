@@ -1,6 +1,4 @@
-import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
-import type { CheckStatus } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import React from 'react'
 import { GitPullRequest } from '~renderer/icons/hugeicons'
 
@@ -8,26 +6,6 @@ import { GitPullRequest } from '~renderer/icons/hugeicons'
 
 export function branchDisplayName(branch: string): string {
   return branch.replace(/^refs\/heads\//, '')
-}
-
-export function checksLabel(status: CheckStatus): string {
-  switch (status) {
-    case 'success':
-      return 'Passing'
-    case 'failure':
-      return 'Failing'
-    case 'pending':
-      return 'Pending'
-    case 'neutral':
-      return ''
-  }
-}
-
-export const CONFLICT_OPERATION_LABELS: Record<Exclude<GitConflictOperation, 'unknown'>, string> = {
-  merge: 'Merging',
-  rebase: 'Rebasing',
-  'cherry-pick': 'Cherry-picking',
-  revert: 'Reverting'
 }
 
 // ── Stable empty arrays for tabs fallback ────────────────────────────

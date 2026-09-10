@@ -160,7 +160,7 @@ export function SkillFreshnessUpdateDialog(): React.JSX.Element {
           <LoadingIndicator className="size-4" />
           {translate(
             'auto.components.skills.SkillFreshnessUpdateDialog.checking',
-            'Checking installed Yiru skills…'
+            'Checking installed AgentStart skills…'
           )}
         </div>
       )
@@ -171,7 +171,7 @@ export function SkillFreshnessUpdateDialog(): React.JSX.Element {
           <CheckCircle2 className="size-4 text-emerald-600 dark:text-emerald-400" />
           {translate(
             'auto.components.skills.SkillFreshnessUpdateDialog.success',
-            'All installed Yiru skills are up to date.'
+            'All installed AgentStart skills are up to date.'
           )}
         </div>
       )

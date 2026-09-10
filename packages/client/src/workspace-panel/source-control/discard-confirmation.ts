@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import { translate } from '~renderer/i18n/i18n'
 import { basename } from '~renderer/path'
 
@@ -16,7 +16,7 @@ export function getDiscardEntryConfirmationCopy(
   const name = basename(entry.path)
 
   // Why: untracked and newly-added paths have no HEAD version to restore.
-  // Yiru's discard path removes the working-tree file in those cases.
+  // AgentStart's discard path removes the working-tree file in those cases.
   if (entry.area === 'untracked' || entry.status === 'untracked' || entry.status === 'added') {
     return {
       title: translate(

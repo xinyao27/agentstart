@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import type { ClientCallIdSequence } from './call-id-sequence.js'
 import { RuntimeProtocolError } from './error.js'
 import type { LocallyCancelledCalls } from './locally-cancelled-calls.js'

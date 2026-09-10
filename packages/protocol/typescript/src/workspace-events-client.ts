@@ -1,6 +1,6 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   WorkspaceConsoleEntrySchema,
   WorkspaceConsoleSource,
@@ -14,7 +14,7 @@ import {
   WorkspaceEventsServiceWatchRequestSchema,
   WorkspaceEventsServiceWatchResponseSchema,
   type WorkspaceConsoleEntry
-} from '../generated/yiru/runtime/v1/workspace_events_pb.js'
+} from '../generated/agent_start/runtime/v1/workspace_events_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeCallOptions, RuntimeStream, RuntimeTransport } from './transport.js'
 import {

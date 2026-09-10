@@ -1,4 +1,4 @@
-import type { Tab, TabGroupLayoutNode, TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { Tab, TabGroupLayoutNode, TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { setRemoteSessionTabPropsCommand } from '~renderer/runtime/remote-session/commands'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
 
@@ -99,7 +99,7 @@ export function updateSplitRatio(
   return root
 }
 
-export function findFirstLeaf(root: TabGroupLayoutNode): string {
+function findFirstLeaf(root: TabGroupLayoutNode): string {
   return root.type === 'leaf' ? root.groupId : findFirstLeaf(root.first)
 }
 
@@ -123,7 +123,7 @@ export function applyTabOrderSortValues(tabs: Tab[], tabOrder: string[]): Tab[] 
   })
 }
 
-export function isReplaceablePreviewContentType(contentType: Tab['contentType']): boolean {
+function isReplaceablePreviewContentType(contentType: Tab['contentType']): boolean {
   return (
     contentType === 'editor' ||
     contentType === 'diff' ||
@@ -157,10 +157,7 @@ export function findSiblingGroupId(root: TabGroupLayoutNode, targetGroupId: stri
   )
 }
 
-export function removeLeaf(
-  root: TabGroupLayoutNode,
-  targetGroupId: string
-): TabGroupLayoutNode | null {
+function removeLeaf(root: TabGroupLayoutNode, targetGroupId: string): TabGroupLayoutNode | null {
   if (root.type === 'leaf') {
     return root.groupId === targetGroupId ? null : root
   }

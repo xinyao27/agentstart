@@ -1,5 +1,5 @@
-import { normalizeSearchFileMatchCount } from '@yiru/protocol/file-match-count'
-import type { SearchFileResult, SearchMatch } from '@yiru/protocol/files/values'
+import { normalizeSearchFileMatchCount } from '@agentstart/protocol/file-match-count'
+import type { SearchFileResult, SearchMatch } from '@agentstart/protocol/files/values'
 import React from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import { translate } from '~renderer/i18n/i18n'
@@ -36,7 +36,7 @@ export function ToggleButton({
       variant="quiet"
       size="icon-xs"
       className={cn(
-        'h-auto w-auto p-0.5 flex-shrink-0',
+        'h-auto w-auto p-0.5 flex-shrink-0 rounded-sm',
         active ? 'bg-accent text-accent-foreground' : ' hover:bg-muted'
       )}
       onClick={onClick}
@@ -101,7 +101,7 @@ export function FileResultRow({
                           )}
                         </span>
                       </div>
-                      <span className="text-muted-foreground bg-muted/80 flex-shrink-0 px-1.5 text-[10px]">
+                      <span className="text-muted-foreground bg-muted/80 flex-shrink-0 rounded-full px-1.5 text-[10px]">
                         {matchCount}
                       </span>
                     </Button>
@@ -195,7 +195,9 @@ export function MatchResultRow({
             <span className="flex min-w-0 items-baseline text-xs whitespace-pre">
               <span className="text-muted-foreground flex-shrink-0">{parts.before}</span>
               {parts.match && (
-                <span className="text-foreground flex-shrink-0 bg-amber-500/30">{parts.match}</span>
+                <span className="text-foreground flex-shrink-0 rounded-sm bg-amber-500/30">
+                  {parts.match}
+                </span>
               )}
               <span className="text-muted-foreground min-w-0 truncate">{parts.after}</span>
             </span>

@@ -1,6 +1,6 @@
 // Why: keep a generous live/recent session working set while guaranteeing a
 // fixed ceiling without trusting visibility-filtered worktree ownership maps.
-export const HUGE_REPO_WARNING_DISMISSAL_MAX_WORKTREES = 1024
+const HUGE_REPO_WARNING_DISMISSAL_MAX_WORKTREES = 1024
 
 export type HugeRepoWarningWorktreeIdentity = {
   id: string

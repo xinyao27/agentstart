@@ -2,7 +2,7 @@ import type {
   SkillUpdateOperation as SkillManageOperation,
   SkillManageScope,
   SkillUpdateStartResult
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { useSyncExternalStore } from 'react'
 import { notifyInstalledAgentSkillsChanged } from '~renderer/runtime/installed-agent-skill-discovery-state'
 import {
@@ -30,7 +30,7 @@ let subscribed = false
 let successTimer: ReturnType<typeof setTimeout> | null = null
 
 /** How long a finished run keeps its green check in the status bar. */
-export const SKILL_UPDATE_SUCCESS_LINGER_MS = 4000
+const SKILL_UPDATE_SUCCESS_LINGER_MS = 4000
 
 function emit(): void {
   for (const listener of listeners) {
@@ -106,13 +106,13 @@ function ensureSubscribed(): void {
   })
 }
 
-export function subscribeSkillUpdateRun(listener: () => void): () => void {
+function subscribeSkillUpdateRun(listener: () => void): () => void {
   ensureSubscribed()
   listeners.add(listener)
   return () => listeners.delete(listener)
 }
 
-export function getSkillUpdateRun(): SkillUpdateRun {
+function getSkillUpdateRun(): SkillUpdateRun {
   return run
 }
 

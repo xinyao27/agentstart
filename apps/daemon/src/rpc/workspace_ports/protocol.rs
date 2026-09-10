@@ -1,12 +1,12 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::workspace_ports_service_event::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::workspace_ports_service_event::Event;
+use agentstart_protocol::runtime::v1::{
     WorkspacePortsAdvertisedUrlChanged, WorkspacePortsServiceEvent,
     WorkspacePortsServiceKillRequest, WorkspacePortsServiceScanRequest,
     WorkspacePortsServiceSubscribeEventsRequest, WorkspacePortsStreamEnd,
     WorkspacePortsSubscribeReady,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::workspace_ports::WorkspacePortKillRequest;
 use crate::workspace_ports::WorkspacePortSubscriptionEvent;

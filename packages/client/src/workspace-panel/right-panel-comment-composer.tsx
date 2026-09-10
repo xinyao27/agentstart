@@ -218,7 +218,10 @@ export function RightPanelCommentComposer({
 
   return (
     <div
-      className={cn('min-w-0 overflow-hidden border border-border bg-background', className)}
+      className={cn(
+        'min-w-0 overflow-hidden rounded-md border border-border bg-background',
+        className
+      )}
       onClick={stopPropagation}
       onMouseDown={stopPropagation}
     >

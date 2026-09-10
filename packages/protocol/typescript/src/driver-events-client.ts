@@ -4,7 +4,7 @@ import {
   DriverEventsService,
   DriverEventsServiceEventSchema,
   DriverEventsServiceSubscribeRequestSchema
-} from '../generated/yiru/runtime/v1/driver_events_pb.js'
+} from '../generated/agent_start/runtime/v1/driver_events_pb.js'
 import {
   driverEventsSubscriptionEvent,
   type DriverEventsSubscriptionEventValue

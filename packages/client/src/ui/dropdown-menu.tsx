@@ -19,10 +19,6 @@ function DropdownMenu({ ...props }: DropdownMenuPrimitive.Root.Props) {
   return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
 }
 
-function DropdownMenuPortal({ ...props }: DropdownMenuPrimitive.Portal.Props) {
-  return <DropdownMenuPrimitive.Portal data-slot="dropdown-menu-portal" {...props} />
-}
-
 function DropdownMenuTrigger({ ...props }: DropdownMenuPrimitive.Trigger.Props) {
   return <DropdownMenuPrimitive.Trigger data-slot="dropdown-menu-trigger" {...props} />
 }
@@ -64,10 +60,6 @@ function DropdownMenuContent({
       </DropdownMenuPrimitive.Positioner>
     </DropdownMenuPrimitive.Portal>
   )
-}
-
-function DropdownMenuGroup({ ...props }: DropdownMenuPrimitive.Group.Props) {
-  return <DropdownMenuPrimitive.Group data-slot="dropdown-menu-group" {...props} />
 }
 
 function DropdownMenuItem({
@@ -242,10 +234,8 @@ function DropdownMenuSubContent({
 
 export {
   DropdownMenu,
-  DropdownMenuPortal,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuItem,
   DropdownMenuCheckboxItem,

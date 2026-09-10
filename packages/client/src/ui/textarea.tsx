@@ -3,7 +3,7 @@ import * as React from 'react'
 import { cn } from '~renderer/ui/class-names'
 
 const textareaVariants = cva(
-  'scrollbar-sleek w-full min-w-0 resize-y border border-input bg-transparent outline-none transition-[color] placeholder:text-muted-foreground/60 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30 focus-visible:border-ring aria-invalid:border-destructive',
+  'scrollbar-sleek w-full min-w-0 resize-y rounded-md border border-input bg-transparent outline-none transition-[color] placeholder:text-muted-foreground/60 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30 focus-visible:border-ring aria-invalid:border-destructive',
   {
     variants: {
       size: {
@@ -38,4 +38,4 @@ function Textarea({ className, ref, size, variant, ...props }: TextareaProps): R
   )
 }
 
-export { Textarea, textareaVariants }
+export { Textarea }

@@ -1,9 +1,9 @@
-import { queryOptions } from '@tanstack/react-query'
 import {
   ProjectContextClient,
   PROJECT_CONTEXT_PROTOCOL_CAPABILITY,
   type ProjectContextMatchValue
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
+import { queryOptions } from '@tanstack/react-query'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import { targetKey } from './query-target'
@@ -18,7 +18,7 @@ export type ProjectContextResolveInput = Readonly<{
 // Why: the project context namespace is protobuf-only, so a missing capability
 // means the connected daemon predates the cutover — an error, not a legacy
 // retry.
-export async function resolveProjectContext(
+async function resolveProjectContext(
   input: ProjectContextResolveInput
 ): Promise<{ matches: ProjectContextMatchValue[] }> {
   const target = { kind: 'local' } as const

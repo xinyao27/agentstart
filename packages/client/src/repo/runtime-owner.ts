@@ -2,9 +2,9 @@ import {
   getRepoExecutionHostId,
   getSettingsFocusedExecutionHostId,
   parseExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 export type RepoRuntimeOwnerState = {
   repos?: readonly Pick<Repo, 'id' | 'connectionId' | 'executionHostId'>[]
@@ -47,27 +47,6 @@ export function getRuntimeEnvironmentIdForRepo(
     return parsed?.kind === 'runtime' ? parsed.environmentId : null
   }
   return state.settings?.activeRuntimeEnvironmentId?.trim() || null
-}
-
-// Why: PR mutations must not fall back to the globally focused runtime — a
-// repo without an explicit owner is a local repo, and routing it to the
-// focused runtime sends the mutation to a host that does not own it (#6957).
-export function getExplicitRuntimeOwnerEnvironmentId(
-  state: RepoRuntimeOwnerState,
-  repoId: string | null | undefined
-): string | null {
-  if (!repoId) {
-    return null
-  }
-  const repo = findRepoOwner(state, repoId)
-  // Why: Repo.connectionId is dead — nothing sets it since remote hosts were
-  // removed (#63) — only executionHostId can still make a repo non-local.
-  const hasExplicitOwner = Boolean(repo?.executionHostId?.trim())
-  if (!repo || !hasExplicitOwner) {
-    return null
-  }
-  const parsed = parseExecutionHostId(getRepoExecutionHostId(repo))
-  return parsed?.kind === 'runtime' ? parsed.environmentId : null
 }
 
 export function getSettingsForRepoRuntimeOwner(

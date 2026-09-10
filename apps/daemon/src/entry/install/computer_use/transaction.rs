@@ -31,7 +31,7 @@ pub(super) async fn resolve(version: &str) -> Result<TargetResolution, ComputerU
     let app_path = crate::paths::resolve_default_user_data_path()?
         .join("native")
         .join("computer-use")
-        .join("Yiru Computer Use.app");
+        .join("AgentStart Computer Use.app");
     let version_path = app_path
         .parent()
         .ok_or_else(|| io::Error::other("computer use helper app path has no parent"))?
@@ -44,7 +44,7 @@ pub(super) async fn resolve(version: &str) -> Result<TargetResolution, ComputerU
     if installed_version == version && executable_has_bytes(&helper_executable(&app_path)).await {
         return Ok(TargetResolution::AlreadyInstalled);
     }
-    if let Some(override_path) = env::var_os("YIRU_COMPUTER_MACOS_HELPER_APP_PATH") {
+    if let Some(override_path) = env::var_os("AGENTSTART_COMPUTER_MACOS_HELPER_APP_PATH") {
         let override_path = PathBuf::from(override_path);
         if helper_executable(&override_path).is_file() {
             return Ok(TargetResolution::AlreadyInstalled);
@@ -63,7 +63,7 @@ pub(super) async fn install(
     version: &str,
 ) -> Result<(), ComputerUseInstallError> {
     let archive_path = staging_directory.join(HELPER_ASSET_NAME);
-    let staged_app_path = staging_directory.join("Yiru Computer Use.app");
+    let staged_app_path = staging_directory.join("AgentStart Computer Use.app");
     run_command(
         "/usr/bin/ditto",
         &["-x", "-k"],
@@ -172,7 +172,7 @@ async fn read_marker(path: &Path) -> Result<Option<Vec<u8>>, io::Error> {
 fn helper_executable(app: &Path) -> PathBuf {
     app.join("Contents")
         .join("MacOS")
-        .join("yiru-computer-use-macos")
+        .join("agentstart-computer-use-macos")
 }
 
 async fn executable_has_bytes(path: &Path) -> bool {

@@ -1,7 +1,7 @@
 import type {
   WorkspaceSpaceAnalysisValue as WorkspaceSpaceAnalysis,
   WorkspaceSpaceWorktreeValue as WorkspaceSpaceWorktree
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

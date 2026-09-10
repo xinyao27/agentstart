@@ -14,7 +14,7 @@ export function getHiddenExternalWorktrees(
   }
   return detected.worktrees.filter(
     (worktree) =>
-      !worktree.visible && !worktree.selectedCheckout && worktree.ownership !== 'yiru-managed'
+      !worktree.visible && !worktree.selectedCheckout && worktree.ownership !== 'agentstart-managed'
   )
 }
 

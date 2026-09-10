@@ -22,7 +22,7 @@ import {
 import { isTerminalLinkActivation } from './terminal-link-activation'
 import {
   getTerminalHtmlFileOpenHint,
-  getTerminalYiruFileOpenHint,
+  getTerminalAgentStartFileOpenHint,
   getTerminalWorktreePathOpenHint
 } from './terminal-link-open-hints'
 import {
@@ -37,11 +37,6 @@ import {
   rangeForParsedFileLink,
   type WrappedLogicalLine
 } from './wrapped-terminal-link-ranges'
-
-export { openDetectedFilePath } from './terminal-file-open-routing'
-export { openFilePathLinkAtBufferPosition } from './terminal-file-link-hit-testing'
-export { getTerminalHtmlFileOpenHint }
-export { isTerminalLinkActivation } from './terminal-link-activation'
 
 export type LinkHandlerDeps = {
   worktreeId: string
@@ -202,7 +197,7 @@ export function createFilePathLinkProvider(
                         ? isHtmlFilePath(resolved.absolutePath)
                           ? getTerminalHtmlFileOpenHint()
                           : openLinkHint
-                        : getTerminalYiruFileOpenHint()
+                        : getTerminalAgentStartFileOpenHint()
                     linkTooltip.textContent = `${resolved.absolutePath} (${hint})`
                     linkTooltip.style.display = ''
                   },

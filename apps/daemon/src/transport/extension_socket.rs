@@ -1,11 +1,11 @@
 use std::time::Duration;
 
+use agentstart_protocol::protocol::v1::PeerKind;
 use axum::extract::ws::{CloseFrame, Message, WebSocket, close_code};
 use futures_util::stream::SplitSink;
 use futures_util::{SinkExt, StreamExt};
 use tokio::sync::{mpsc, watch};
 use tokio::time::timeout;
-use yiru_protocol::protocol::v1::PeerKind;
 
 use crate::rpc::AuthenticatedChannel;
 use crate::rpc::channel::{ExtensionOutboundEvent, RpcMessage, extension_outbound_channel};

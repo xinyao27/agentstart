@@ -1,9 +1,8 @@
-import type { TerminalPaneSplitSource } from '@yiru/protocol/telemetry/education'
-import { parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
-import type { TerminalPaneLayoutNode } from '@yiru/protocol/workspace/session'
+import type { TerminalPaneSplitSource } from '@agentstart/protocol/telemetry/education'
+import { parseRuntimePtyId } from '@agentstart/protocol/terminal-identity'
+import type { TerminalPaneLayoutNode } from '@agentstart/protocol/workspace/session'
 
 import { readProjectCatalogRuntimeState } from '../project-catalog/runtime-state'
-import { useAppStore } from '../store/state'
 import { getRuntimeEnvironmentIdForWorktree } from '../worktree/runtime-owner'
 import { isRemoteRuntimeSessionActive } from './remote-runtime-session-environment'
 import { reserveRemoteRuntimeSplitMirrorTelemetry } from './remote-runtime-split-telemetry'
@@ -91,45 +90,6 @@ export async function updateRemoteRuntimePaneLayout(args: {
     logRemoteRuntimeTerminalFailure('update pane layout', error)
     return false
   }
-}
-
-export function setRemoteRuntimeTabProps(args: {
-  worktreeId: string
-  tabId: string
-  color?: string | null
-  isPinned?: boolean
-}): boolean {
-  const environmentId = getRuntimeEnvironmentIdForWorktree(
-    readProjectCatalogRuntimeState(),
-    args.worktreeId
-  )
-  if (!environmentId || !isRemoteRuntimeSessionActive(environmentId)) {
-    return false
-  }
-  const state = useAppStore.getState()
-  void import('./remote-session/tabs-tracking')
-    .then(({ resolveHostSessionTabIdForRemoteSessionTab }) => {
-      const hostTabId =
-        resolveHostSessionTabIdForRemoteSessionTab(state, {
-          environmentId,
-          worktreeId: args.worktreeId,
-          tabId: args.tabId
-        }) ??
-        (isRemoteTerminalSurfaceTabId(args.tabId) ? toHostSessionTabId(args.tabId) : args.tabId)
-      return requireSessionTabsClient({ kind: 'environment', environmentId }).then((client) =>
-        client.setTabProps(
-          {
-            worktree: toRuntimeWorktreeSelector(args.worktreeId),
-            tabId: hostTabId,
-            ...(args.color !== undefined ? { color: args.color } : {}),
-            ...(args.isPinned !== undefined ? { isPinned: args.isPinned } : {})
-          },
-          { timeoutMs: 15_000 }
-        )
-      )
-    })
-    .catch((error) => logRemoteRuntimeTerminalFailure('set tab props', error))
-  return true
 }
 
 export function clearRemoteRuntimeTerminalBuffer(ptyId: string | null | undefined): boolean {

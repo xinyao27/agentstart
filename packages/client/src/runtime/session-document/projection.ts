@@ -1,4 +1,4 @@
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
 import { shouldPersistWorkspaceSession } from '~renderer/editor/workspace-session'
 import { buildHostIdByWorktreeId } from '~renderer/editor/workspace-session-host-persistence'
 import { useAppStore } from '~renderer/store/state'

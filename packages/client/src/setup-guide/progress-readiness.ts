@@ -1,6 +1,6 @@
-import type { ComputerPermissionStatusResult } from '@yiru/protocol'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { ComputerPermissionStatusResult } from '@agentstart/protocol'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 
 export type SetupScriptProbeState = {

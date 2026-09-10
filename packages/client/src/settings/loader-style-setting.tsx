@@ -2,7 +2,7 @@ import {
   LOADER_STYLES,
   normalizeLoaderStyle,
   type LoaderStyle
-} from '@yiru/protocol/settings/loader'
+} from '@agentstart/protocol/settings/loader'
 import { translate } from '~renderer/i18n/i18n'
 import { LoadingIndicatorPreview } from '~renderer/loading/indicator'
 import { Button } from '~renderer/ui/button'
@@ -112,7 +112,7 @@ export function LoaderStyleSetting({
         <p className="text-muted-foreground text-xs">
           {translate(
             'settings.appearance.loader.description',
-            'Choose the dotted agent-state animation used across Yiru.'
+            'Choose the dotted agent-state animation used across AgentStart.'
           )}
         </p>
       </div>

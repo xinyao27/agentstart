@@ -115,7 +115,7 @@ export function CreateProjectLocationField({
           </Tooltip>
         </div>
       ) : createParent ? (
-        <div className="group border-border bg-background/40 flex h-11 min-w-0 items-center gap-2.5 border px-3 text-sm">
+        <div className="group border-border bg-background/40 flex h-11 min-w-0 items-center gap-2.5 rounded-md border px-3 text-sm">
           <span className="min-w-0 flex-1 truncate font-mono text-[12px]" title={createParent}>
             {createParent}
           </span>
@@ -143,7 +143,7 @@ export function CreateProjectLocationField({
           disabled={isCreating}
           className="text-muted-foreground h-11 w-full justify-start gap-2.5 text-sm font-normal"
         >
-          <span className="border-border/70 bg-background/40 inline-flex size-7 shrink-0 items-center justify-center border">
+          <span className="border-border/70 bg-background/40 inline-flex size-7 shrink-0 items-center justify-center rounded-md border">
             <Folder className="size-3.5" />
           </span>
           {translate(

@@ -1,6 +1,6 @@
+import type { BrowserTab as BrowserTabState } from '@agentstart/protocol/workspace/browser-session'
+import { AGENTSTART_BROWSER_BLANK_URL } from '@agentstart/protocol/workspace/browser-session'
 import { useSortable } from '@dnd-kit/sortable'
-import type { BrowserTab as BrowserTabState } from '@yiru/protocol/workspace/browser-session'
-import { YIRU_BROWSER_BLANK_URL } from '@yiru/protocol/workspace/browser-session'
 import { useEffect, useState } from 'react'
 import { redactKagiSessionToken } from '~renderer/browser/session/kagi-link'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
@@ -40,7 +40,7 @@ import { TAB_CONTAINER_WIDTH_CLASSES } from './tab-width-rules'
 import { TabWorkspaceLayoutMenuSection } from './tab-workspace-layout-menu-section'
 
 function formatBrowserTabUrlLabel(url: string): string {
-  if (url === YIRU_BROWSER_BLANK_URL || url === 'about:blank') {
+  if (url === AGENTSTART_BROWSER_BLANK_URL || url === 'about:blank') {
     return 'New Tab'
   }
   try {
@@ -55,7 +55,7 @@ export function getBrowserTabLabel(tab: BrowserTabState): string {
   if (
     !tab.title ||
     tab.title === tab.url ||
-    tab.title === YIRU_BROWSER_BLANK_URL ||
+    tab.title === AGENTSTART_BROWSER_BLANK_URL ||
     tab.title === 'about:blank'
   ) {
     return formatBrowserTabUrlLabel(tab.url)
@@ -64,7 +64,7 @@ export function getBrowserTabLabel(tab: BrowserTabState): string {
 }
 
 function isBlankBrowserTab(tab: BrowserTabState): boolean {
-  return tab.url === YIRU_BROWSER_BLANK_URL || tab.url === 'about:blank'
+  return tab.url === AGENTSTART_BROWSER_BLANK_URL || tab.url === 'about:blank'
 }
 
 type FailedFavicon = {
@@ -101,7 +101,7 @@ function BrowserTabFavicon({
         alt=""
         aria-hidden
         draggable={false}
-        className={cn(TAB_LEADING_ICON_CLASSES, 'object-contain')}
+        className={cn(TAB_LEADING_ICON_CLASSES, 'object-contain rounded-sm')}
         onError={() => setFailedFavicon({ tabId, faviconUrl: displayFaviconUrl })}
       />
     )
@@ -223,7 +223,7 @@ export default function BrowserTab({
       {isPinned && <Pin className="text-muted-foreground mr-1 size-3.5 shrink-0" aria-hidden />}
       <TabLabel label={tabLabel} showTooltip={!menuOpen} />
       {tab.loading && !tab.loadError && !isBlankBrowserTab(tab) && (
-        <span className="mr-1 size-1.5 shrink-0 bg-sky-500/80" />
+        <span className="mr-1 size-1.5 shrink-0 rounded-full bg-sky-500/80" />
       )}
       {!isPinned && (
         <TabCloseButton
@@ -247,7 +247,7 @@ export default function BrowserTab({
         render={<div className={TAB_CONTAINER_WIDTH_CLASSES}>{tabRoot}</div>}
       />
 
-      <ContextMenuContent className="border-border/80 min-w-[11rem] p-1">
+      <ContextMenuContent className="border-border/80 min-w-[11rem] rounded-[11px] p-1">
         <TabWorkspaceLayoutMenuSection
           unifiedTabId={dragData.unifiedTabId}
           groupId={dragData.groupId}

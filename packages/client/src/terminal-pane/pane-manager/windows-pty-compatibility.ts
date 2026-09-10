@@ -1,6 +1,6 @@
+import { LOCAL_EXECUTION_HOST_ID, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import { isWslUncPath } from '@agentstart/protocol/host/wsl-paths'
 import type { ITerminalOptions } from '@xterm/xterm'
-import { LOCAL_EXECUTION_HOST_ID, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
 
 export type WindowsPtyCompatibilityContext = {
   userAgent?: string
@@ -78,7 +78,7 @@ export function resolveWindowsShellOverride(
  * connection, non-WSL cwd/shell). Necessary but not sufficient: it cannot tell a
  * local pane from a serve pane, so callers gate it with `isLocalNativeWindowsConpty`.
  */
-export function isLocalNativeWindowsPty(context: WindowsPtyCompatibilityContext): boolean {
+function isLocalNativeWindowsPty(context: WindowsPtyCompatibilityContext): boolean {
   if (!isWindowsUserAgent(context.userAgent)) {
     return false
   }

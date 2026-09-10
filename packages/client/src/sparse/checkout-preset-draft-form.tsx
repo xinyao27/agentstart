@@ -86,7 +86,7 @@ export function SparseCheckoutPresetDraftForm({
               'Directories'
             )}
           </label>
-          <div className="border-border/70 bg-muted/20 focus-within:border-ring/70 border px-2.5 py-1.5 transition">
+          <div className="border-border/70 bg-muted/20 focus-within:border-ring/70 rounded-md border px-2.5 py-1.5 transition">
             <Textarea
               id="sparse-preset-directories"
               variant="chrome-free"

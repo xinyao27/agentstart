@@ -1,7 +1,7 @@
 import type {
   WorkspaceEvent,
   WorkspaceEventValue
-} from '../generated/yiru/runtime/v1/workspace_events_pb.js'
+} from '../generated/agent_start/runtime/v1/workspace_events_pb.js'
 
 export const WORKSPACE_EVENTS_PROTOCOL_CAPABILITY = 'workspaceEvents.journal.protobuf.v1' as const
 

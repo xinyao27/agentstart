@@ -1,6 +1,6 @@
-import { normalizeAgentStatusPayload } from '@yiru/protocol/agent/status-parse'
-import type { AgentStatusIpcPayload } from '@yiru/protocol/agent/status-records'
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { normalizeAgentStatusPayload } from '@agentstart/protocol/agent/status-parse'
+import type { AgentStatusIpcPayload } from '@agentstart/protocol/agent/status-records'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import {
   resolveAgentStatusIdentity,
   shouldSuppressInheritedTerminalStatus

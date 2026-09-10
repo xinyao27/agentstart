@@ -29,7 +29,7 @@ import { stripBaseRef } from './use-create-pull-request-dialog-fields'
 
 const EMPTY_DROPDOWN_ITEMS: DropdownEntry[] = []
 
-export type CreateHostedReviewComposerPrimaryAction = {
+type CreateHostedReviewComposerPrimaryAction = {
   disabled: boolean
   title: string
 }
@@ -276,7 +276,7 @@ export function CreateHostedReviewComposer({
                     type="button"
                     size="xs"
                     className={cn(
-                      'h-7  border-l border-primary-foreground/20 px-1.5 shrink-0',
+                      'h-7 rounded-l-none border-l border-primary-foreground/20 px-1.5 shrink-0',
                       createDisabled && 'opacity-50'
                     )}
                     aria-label={translate(

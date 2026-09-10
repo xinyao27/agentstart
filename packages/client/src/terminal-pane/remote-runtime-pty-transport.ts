@@ -17,12 +17,7 @@ export function createRuntimePtyTransport(
   runtimeTarget: RuntimeClientTarget,
   options: RuntimePtyTransportOptions = {}
 ): PtyTransport {
-  const state = new RemoteRuntimePtyState(
-    runtimeTarget,
-    options.tabId,
-    options.onPtyExit,
-    options.onPtySpawn
-  )
+  const state = new RemoteRuntimePtyState(runtimeTarget, options.onPtyExit, options.onPtySpawn)
   // Why: tab/leaf ids identify the mirrored host pane, so paired viewers share
   // them. The UUID keeps one viewer's refresh isolated from peer records.
   const clientId = `desktop:${options.tabId ?? 'tab'}:${options.leafId ?? 'leaf'}:${createBrowserUuid()}`

@@ -1,5 +1,5 @@
-import { FEATURE_WALL_SETUP_STEP_IDS } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import { FEATURE_WALL_SETUP_STEP_IDS } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { FeatureWallSetupStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
 
@@ -10,7 +10,7 @@ export type FeatureWallSetupStep = {
   readonly description: string
 }
 
-export const FEATURE_WALL_SETUP_PARALLEL_WORK_STEP_IDS = [
+const FEATURE_WALL_SETUP_PARALLEL_WORK_STEP_IDS = [
   'two-worktrees',
   'browser'
 ] as const satisfies readonly FeatureWallSetupStepId[]
@@ -30,11 +30,11 @@ export const getFeatureWallSetupSteps = createLocalizedCatalog(
     },
     {
       id: 'browser',
-      name: translate('feature-wall.7e1fbc831b', "Use Yiru's browser"),
-      subtitle: translate('feature-wall.7e1fbc831b', "Use Yiru's browser"),
+      name: translate('feature-wall.7e1fbc831b', "Use AgentStart's browser"),
+      subtitle: translate('feature-wall.7e1fbc831b', "Use AgentStart's browser"),
       description: translate(
         'feature-wall.72a691c081',
-        'Browse your web app without leaving Yiru. Grab any element and send its exact source and styles to an agent with one click.'
+        'Browse your web app without leaving AgentStart. Grab any element and send its exact source and styles to an agent with one click.'
       )
     },
     {
@@ -57,11 +57,11 @@ export const getFeatureWallSetupSteps = createLocalizedCatalog(
     },
     {
       id: 'agent-capabilities',
-      name: translate('feature-wall.c0feda1125', 'Enable Yiru CLI'),
-      subtitle: translate('feature-wall.c0feda1125', 'Enable Yiru CLI'),
+      name: translate('feature-wall.c0feda1125', 'Enable AgentStart CLI'),
+      subtitle: translate('feature-wall.c0feda1125', 'Enable AgentStart CLI'),
       description: translate(
         'feature-wall.b56f64241a',
-        'Register the Yiru shell command and install agent skills for browser, computer, and orchestration workflows.'
+        'Register the AgentStart shell command and install agent skills for browser, computer, and orchestration workflows.'
       )
     },
     {
@@ -79,7 +79,7 @@ export const getFeatureWallSetupSteps = createLocalizedCatalog(
       subtitle: translate('feature-wall.96402c9d0a', 'Start work in multiple repos'),
       description: translate(
         'feature-wall.c88e5adc13',
-        'Bring your key repos into Yiru so you can start agent work without hunting for folders.'
+        'Bring your key repos into AgentStart so you can start agent work without hunting for folders.'
       )
     }
   ]

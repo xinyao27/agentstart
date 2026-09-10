@@ -1,15 +1,15 @@
-import type { TerminalSummary } from '@yiru/protocol'
+import type { TerminalSummary } from '@agentstart/protocol'
 import {
   classifyTerminalId,
   encodeRuntimePtyId,
   persistenceTerminalId,
   type RuntimePtyId,
   type TerminalIdIndex
-} from '@yiru/protocol/terminal-identity'
+} from '@agentstart/protocol/terminal-identity'
 import type {
   TerminalLayoutSnapshot,
   WorkspaceSessionState
-} from '@yiru/protocol/workspace/session'
+} from '@agentstart/protocol/workspace/session'
 
 type LiveTerminalIdentity = Pick<
   TerminalSummary,

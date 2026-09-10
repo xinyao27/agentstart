@@ -1,4 +1,4 @@
-export function canonicalizeSkillUpdateNames(names: readonly string[]): string[] | null {
+function canonicalizeSkillUpdateNames(names: readonly string[]): string[] | null {
   const canonicalNames = [...new Set(names)].sort((left, right) => left.localeCompare(right, 'en'))
   // Why: names become editable shell input. Official manifests use this
   // restricted package-name grammar so no entry can introduce shell syntax.

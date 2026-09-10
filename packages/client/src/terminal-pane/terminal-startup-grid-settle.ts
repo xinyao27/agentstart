@@ -1,4 +1,4 @@
-export type TerminalStartupGridDimensions = {
+type TerminalStartupGridDimensions = {
   cols: number
   rows: number
 }

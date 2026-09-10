@@ -1,24 +1,24 @@
-import { StatusCode } from '../../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ProviderUsageProvider as ProtocolProvider,
   ProviderUsageRange as ProtocolRange,
   ProviderUsageScope as ProtocolScope,
   type ProviderUsageGetSnapshotResponse,
   type ProviderUsageScanState
-} from '../../generated/yiru/runtime/v1/provider_usage_pb.js'
+} from '../../generated/agent_start/runtime/v1/provider_usage_pb.js'
 import { RuntimeProtocolError } from '../error.js'
 
 export const PROVIDER_USAGE_PROTOCOL_CAPABILITY = 'providerUsage.protobuf.v1' as const
 
 export type ProviderUsageProvider = 'claude' | 'codex' | 'openCode'
-export type ProviderUsageScope = 'yiru' | 'all'
+export type ProviderUsageScope = 'agentstart' | 'all'
 export type ProviderUsageRange = '7d' | '30d' | '90d' | 'all'
 
 export type ProviderUsageScanStateValue = ReturnType<typeof scanStateFromProtobuf>
 export type ProviderUsageSnapshot = ReturnType<typeof snapshotFromProtobuf>
 
 function scopeFromProto(value: string | undefined): ProviderUsageScope {
-  return value === 'all' ? 'all' : 'yiru'
+  return value === 'all' ? 'all' : 'agentstart'
 }
 
 function rangeFromProto(value: string | undefined): ProviderUsageRange {
@@ -47,8 +47,8 @@ export function toProtocolProvider(provider: ProviderUsageProvider): ProtocolPro
 
 export function toProtocolScope(scope: string): ProtocolScope {
   switch (scope) {
-    case 'yiru':
-      return ProtocolScope.YIRU
+    case 'agentstart':
+      return ProtocolScope.AGENT_START
     case 'all':
       return ProtocolScope.ALL
     default:

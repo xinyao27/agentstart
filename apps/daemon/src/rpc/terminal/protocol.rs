@@ -1,6 +1,5 @@
-use serde_json::{Map, Value};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     TerminalAgentRequirement as ProtocolAgentRequirement,
     TerminalClientIdentity as ProtocolClientIdentity, TerminalClientKind as ProtocolClientKind,
     TerminalClose as ProtocolClose, TerminalCreate as ProtocolCreate,
@@ -27,7 +26,8 @@ use yiru_protocol::runtime::v1::{
     TerminalVisualTerminal as ProtocolVisualTerminal, terminal_visual_layout_node,
     terminal_visual_pane_node,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::{Map, Value};
 
 use crate::rpc::protocol_call::status;
 use crate::terminal_session::{

@@ -20,7 +20,8 @@ export type UndeliverableWriteReason = 'write-stalled' | 'replay-wedged'
 type UndeliverableWriteHandler = (reason: UndeliverableWriteReason) => void
 
 const handlersByTerminal = new WeakMap<object, UndeliverableWriteHandler>()
-const certifiedDeadTerminals = new WeakSet<object>()
+const certifiedDeadReasonsByTerminal = new WeakMap<object, UndeliverableWriteReason>()
+const deliveredDeadTerminals = new WeakSet<object>()
 // Why: wedge verdicts must distinguish "dead" from "alive but behind". A
 // generation avoids same-millisecond misses and wall-clock adjustments while
 // keeping the completion hot path constant-time and terminal-scoped.
@@ -49,7 +50,7 @@ type StallWatch = {
 
 const stallWatchByTerminal = new WeakMap<object, StallWatch>()
 
-export const WRITE_PIPELINE_STALL_CHECK_MS = 10_000
+const WRITE_PIPELINE_STALL_CHECK_MS = 10_000
 
 function certifyTerminalWritePipelineDead(terminal: object, expectedWatch?: StallWatch): void {
   const watch = stallWatchByTerminal.get(terminal)
@@ -75,6 +76,17 @@ export function registerUndeliverableWriteHandler(
   handler: UndeliverableWriteHandler
 ): () => void {
   handlersByTerminal.set(terminal, handler)
+  const certifiedReason = certifiedDeadReasonsByTerminal.get(terminal)
+  if (certifiedReason !== undefined) {
+    // Why: layout replay can certify a newly-created xterm before its PTY
+    // connection installs recovery. Deliver after connection construction,
+    // while rejecting a handler already replaced or disposed in that gap.
+    queueMicrotask(() => {
+      if (handlersByTerminal.get(terminal) === handler) {
+        deliverUndeliverableWrite(terminal, handler, certifiedReason)
+      }
+    })
+  }
   return () => {
     if (handlersByTerminal.get(terminal) === handler) {
       handlersByTerminal.delete(terminal)
@@ -84,13 +96,32 @@ export function registerUndeliverableWriteHandler(
 
 /** One notification per terminal instance: recovery replaces the xterm, so a
  *  second notification for the same object is always a duplicate. */
-export function notifyUndeliverableWrite(terminal: object, reason: UndeliverableWriteReason): void {
-  if (certifiedDeadTerminals.has(terminal)) {
+export function notifyUndeliverableWrite(
+  terminal: object,
+  reason: UndeliverableWriteReason
+): boolean {
+  if (certifiedDeadReasonsByTerminal.has(terminal)) {
+    return false
+  }
+  certifiedDeadReasonsByTerminal.set(terminal, reason)
+  const handler = handlersByTerminal.get(terminal)
+  if (handler !== undefined) {
+    deliverUndeliverableWrite(terminal, handler, reason)
+  }
+  return true
+}
+
+function deliverUndeliverableWrite(
+  terminal: object,
+  handler: UndeliverableWriteHandler,
+  reason: UndeliverableWriteReason
+): void {
+  if (deliveredDeadTerminals.has(terminal)) {
     return
   }
-  certifiedDeadTerminals.add(terminal)
+  deliveredDeadTerminals.add(terminal)
   try {
-    handlersByTerminal.get(terminal)?.(reason)
+    handler(reason)
   } catch {
     // Why: notify fires from timer and write-callback contexts where a throw
     // becomes an unhandled error; recovery is best-effort by contract (see
@@ -99,7 +130,7 @@ export function notifyUndeliverableWrite(terminal: object, reason: Undeliverable
 }
 
 export function isTerminalWritePipelineCertifiedDead(terminal: object): boolean {
-  return certifiedDeadTerminals.has(terminal)
+  return certifiedDeadReasonsByTerminal.has(terminal)
 }
 
 /**
@@ -114,7 +145,7 @@ export function armTerminalWriteStallWatch(
   terminal: WriteTarget,
   options: { onCertifiedDead?: () => void; stallCheckMs?: number } = {}
 ): void {
-  if (stallWatchByTerminal.has(terminal) || certifiedDeadTerminals.has(terminal)) {
+  if (stallWatchByTerminal.has(terminal) || certifiedDeadReasonsByTerminal.has(terminal)) {
     return
   }
   const stallCheckMs = options.stallCheckMs ?? WRITE_PIPELINE_STALL_CHECK_MS

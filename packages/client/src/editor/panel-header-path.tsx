@@ -89,7 +89,7 @@ export function EditorPanelHeaderPath({
             defaultValue={currentFileName}
             // Why: the header is narrow in floating mode; this keeps the
             // edit field aligned with the path label without growing chrome.
-            className="bg-input/40 text-foreground h-6 w-[16ch] max-w-full min-w-[104px] px-1.5 py-0 font-mono text-xs md:text-xs"
+            className="bg-input/40 text-foreground h-6 w-[16ch] max-w-full min-w-[104px] rounded-sm px-1.5 py-0 font-mono text-xs md:text-xs"
             spellCheck={false}
             onPointerDown={(event) => event.stopPropagation()}
             onMouseDown={(event) => event.stopPropagation()}

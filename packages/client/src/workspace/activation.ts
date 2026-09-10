@@ -1,4 +1,4 @@
-import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import { toast } from 'sonner'
 
 import type { PendingSidebarWorktreeReveal } from '../application-shell/state/slice'

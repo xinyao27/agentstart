@@ -119,7 +119,7 @@ export function AutoRenameFailedDialog({
         <p className="text-muted-foreground text-sm">
           {translate(
             'auto.components.sidebar.AutoRenameFailedDialog.ff62a18580',
-            "Yiru couldn't generate a branch name for"
+            "AgentStart couldn't generate a branch name for"
           )}{' '}
           <span className="text-foreground font-medium">{worktreeName}</span>{' '}
           {translate(
@@ -156,7 +156,7 @@ export function AutoRenameFailedDialog({
             >
               {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
             </Button>
-            <pre className="scrollbar-sleek border-border/60 bg-muted/40 text-foreground max-h-[40vh] overflow-auto border py-3 pr-9 pl-3 font-mono text-[11px] leading-4 break-words whitespace-pre-wrap">
+            <pre className="scrollbar-sleek border-border/60 bg-muted/40 text-foreground max-h-[40vh] overflow-auto rounded-md border py-3 pr-9 pl-3 font-mono text-[11px] leading-4 break-words whitespace-pre-wrap">
               {detailText}
             </pre>
           </div>

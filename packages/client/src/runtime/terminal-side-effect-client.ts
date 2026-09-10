@@ -1,4 +1,4 @@
-import type { TerminalMultiplexSideEffectFact } from '@yiru/protocol/terminal-multiplex/side-effects'
+import type { TerminalMultiplexSideEffectFact } from '@agentstart/protocol/terminal-multiplex/side-effects'
 
 export type TerminalSideEffectFact = TerminalMultiplexSideEffectFact
 export type TerminalGitHubPRLink = Extract<TerminalSideEffectFact, { kind: 'pr-link' }>['link']

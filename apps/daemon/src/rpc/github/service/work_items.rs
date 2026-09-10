@@ -1,6 +1,5 @@
-use serde_json::Value;
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     GitHubPrBranchLookup, GitHubPrSummary, GitHubRefreshNoPr, GitHubRefreshOutcome,
     GitHubRefreshUpstreamError, GitHubServiceGetPrForBranchRequest,
     GitHubServiceGetPrForBranchResponse, GitHubServiceGetRepoSlugRequest,
@@ -13,7 +12,8 @@ use yiru_protocol::runtime::v1::{
     GitHubServiceListWorkItemsResponse, GitHubServiceRefreshPrForBranchRequest,
     GitHubServiceRefreshPrForBranchResponse, GitHubWorkItem, git_hub_refresh_outcome,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::Value;
 
 use crate::github::BranchLookup;
 

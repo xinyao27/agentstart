@@ -19,8 +19,8 @@ use crate::host_progress::HostProgressAuthority;
 use crate::host_registry::HostRegistry;
 use crate::keybindings::KeybindingsAuthority;
 use crate::local_download::LocalDownloadAuthority;
+use crate::mobile::MobilePairingManager;
 use crate::mobile::windows_firewall::WindowsFirewall;
-use crate::mobile::{MobileDeviceStore, MobilePairingManager};
 use crate::notebook::NotebookRunner;
 use crate::notifications::NotificationAuthority;
 use crate::orchestration::OrchestrationAuthority;
@@ -241,7 +241,6 @@ pub(crate) struct SessionServiceInputs {
     pub(crate) local_downloads: LocalDownloadAuthority,
     pub(crate) journal: WorkspaceJournal,
     pub(crate) mobile_pairing: MobilePairingManager,
-    pub(crate) mobile_devices: MobileDeviceStore,
     pub(crate) notebook: NotebookRunner,
     pub(crate) notifications: NotificationAuthority,
     pub(crate) orchestration: OrchestrationAuthority,
@@ -641,7 +640,6 @@ impl SessionServices {
             local_downloads,
             journal,
             mobile_pairing,
-            mobile_devices,
             notebook,
             notifications,
             orchestration,
@@ -763,7 +761,6 @@ impl SessionServices {
             notebook: NotebookRpc::new(notebook),
             notifications: NotificationsRpc::new(
                 notifications,
-                mobile_devices,
                 settings.clone(),
                 shell_services.clone(),
             ),

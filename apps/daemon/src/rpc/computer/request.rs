@@ -3,9 +3,8 @@
 // `ComputerAuthority::invoke` (and every validation rule inside it) instead
 // of re-implementing computer-use validation a second time.
 
-use serde_json::{Map, Value, json};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     ComputerMouseButton, ComputerObserveTarget, ComputerPermissionId, ComputerPoint,
     ComputerScrollDirection, ComputerServiceClickRequest, ComputerServiceDragRequest,
     ComputerServiceGetAppStateRequest, ComputerServiceHotkeyRequest,
@@ -15,6 +14,7 @@ use yiru_protocol::runtime::v1::{
     ComputerServiceTypeTextRequest, computer_observe_target, computer_service_click_request,
     computer_service_drag_request, computer_service_scroll_request,
 };
+use serde_json::{Map, Value, json};
 
 use crate::rpc::protocol_call::status;
 

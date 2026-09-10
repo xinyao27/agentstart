@@ -13,8 +13,8 @@ use crate::latest_snapshot::LatestSnapshot;
 
 const BACKUP_COUNT: usize = 5;
 const BACKUP_MIN_INTERVAL: Duration = Duration::from_secs(60 * 60);
-const LEGACY_FILE_NAME: &str = "yiru-data.json";
-const UI_FILE_NAME: &str = "yiru-data-ui.json";
+const LEGACY_FILE_NAME: &str = "agentstart-data.json";
+const UI_FILE_NAME: &str = "agentstart-data-ui.json";
 const SAVE_DEBOUNCE: Duration = Duration::from_secs(1);
 const SAVE_MAX_WAIT: Duration = Duration::from_secs(5);
 const CONTROL_CAPACITY: usize = 16;

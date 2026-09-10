@@ -1,4 +1,4 @@
-import { FILES_PROTOCOL_CAPABILITY, FilesClient } from '@yiru/protocol'
+import { FILES_PROTOCOL_CAPABILITY, FilesClient } from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'

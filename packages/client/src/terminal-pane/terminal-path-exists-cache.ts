@@ -1,4 +1,4 @@
-export const TERMINAL_PATH_EXISTS_CACHE_MAX_ENTRIES = 1024
+const TERMINAL_PATH_EXISTS_CACHE_MAX_ENTRIES = 1024
 
 // Why: POSIX-looking SSH paths are only meaningful inside their connection;
 // local/runtime keys keep the legacy scope so existing hover probes stay hot.

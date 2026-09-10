@@ -3,14 +3,14 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   normalizeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import { isPathInsideOrEqual } from '@yiru/protocol/host/path'
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import { getProjectGroupSubtreeIds } from '@yiru/protocol/project/group-tree'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+} from '@agentstart/protocol/host/identity'
+import { isPathInsideOrEqual } from '@agentstart/protocol/host/path'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import { getProjectGroupSubtreeIds } from '@agentstart/protocol/project/group-tree'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
 import { translate } from '~renderer/i18n/i18n'
 import {
   buildGitHubWorkspaceSource,

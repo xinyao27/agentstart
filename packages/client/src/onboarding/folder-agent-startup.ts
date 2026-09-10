@@ -1,14 +1,14 @@
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/protocol/agent/launch-defaults'
-import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
-import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
-import type { SessionOptionValue } from '@yiru/protocol/agent/session-options/types'
-import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+} from '@agentstart/protocol/agent/launch-defaults'
+import type { StartupCommandDelivery } from '@agentstart/protocol/agent/launch/startup-delivery'
+import { isTuiAgentEnabled } from '@agentstart/protocol/agent/selection'
+import type { SessionOptionValue } from '@agentstart/protocol/agent/session-options/types'
+import type { SleepingAgentLaunchConfig } from '@agentstart/protocol/agent/session-resume'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
 import type { AgentStartedTelemetry } from '~renderer/agent/started-telemetry'
 import { buildAgentStartupPlan } from '~renderer/agent/tui-startup'
 import { tuiAgentToAgentKind } from '~renderer/telemetry/client'
@@ -73,7 +73,7 @@ export function buildOnboardingFolderAgentStartup(
   }
 }
 
-export function shouldSeedFolderAgentAfterDismissedOnboarding(
+function shouldSeedFolderAgentAfterDismissedOnboarding(
   onboarding: OnboardingState | null,
   hasExistingProject: boolean
 ): boolean {

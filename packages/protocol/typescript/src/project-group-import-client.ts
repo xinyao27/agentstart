@@ -9,7 +9,7 @@ import {
   ProjectGroupServiceScanNestedRequestSchema,
   ProjectGroupServiceScanNestedResponseSchema,
   ProjectGroupScanOptionsSchema
-} from '../generated/yiru/runtime/v1/project_group_pb.js'
+} from '../generated/agent_start/runtime/v1/project_group_pb.js'
 import { nestedScanResult, type NestedRepoScanResultValue } from './project-group-scan-values.js'
 import { importResult, protocolImportMode } from './project-group-values.js'
 import type {

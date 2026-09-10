@@ -36,7 +36,7 @@ export function createEditorRemotePushActions(
         remoteOperationDepth: s.remoteOperationDepth + 1,
         isRemoteOperationActive: true,
         // Why: last-write-wins. The UI disables every action entry while busy,
-        // so a second remote op can't be started from inside Yiru. If a
+        // so a second remote op can't be started from inside AgentStart. If a
         // background caller (future) triggers one, surfacing the most recent
         // kind matches "what the user is currently watching".
         inFlightRemoteOpKind: kind ?? s.inFlightRemoteOpKind

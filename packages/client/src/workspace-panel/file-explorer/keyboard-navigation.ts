@@ -1,7 +1,7 @@
 import type { FileExplorerRowProjection } from './row-projection'
 import type { TreeNode } from './types'
 
-export type NavigationKey =
+type NavigationKey =
   | 'ArrowDown'
   | 'ArrowUp'
   | 'ArrowLeft'
@@ -11,7 +11,7 @@ export type NavigationKey =
   | 'PageUp'
   | 'PageDown'
 
-export type ResolvedNavigation =
+type ResolvedNavigation =
   | { type: 'move'; targetIndex: number }
   | { type: 'toggle-expand'; currentIndex: number; dirPath: string }
   | { type: 'toggle-collapse'; currentIndex: number; dirPath: string }
@@ -26,7 +26,7 @@ export type SelectionMode = 'replace' | 'toggle' | 'range' | 'additive-range'
  * collapse/expand folders or step across parent/child boundaries, and
  * Home/End/PageUp/PageDown jump along the visible list.
  */
-export function resolveFileExplorerNavigationTarget(args: {
+function resolveFileExplorerNavigationTarget(args: {
   key: NavigationKey
   currentIndex: number | null
   rowProjection: FileExplorerRowProjection
@@ -104,11 +104,11 @@ const NAVIGATION_KEY_SET: Record<NavigationKey, true> = {
   PageDown: true
 }
 
-export function isNavigationKey(key: string): key is NavigationKey {
+function isNavigationKey(key: string): key is NavigationKey {
   return key in NAVIGATION_KEY_SET
 }
 
-export type NavigationHandlers = {
+type NavigationHandlers = {
   moveSelection: (targetPath: string, mode: SelectionMode) => void
   toggleDir: (worktreeId: string, dirPath: string) => void
   scrollToIndex: (index: number) => void

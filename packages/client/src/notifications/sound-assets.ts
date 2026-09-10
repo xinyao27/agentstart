@@ -1,4 +1,4 @@
-import type { NotificationSettings } from '@yiru/protocol/settings/notifications'
+import type { NotificationSettings } from '@agentstart/protocol/settings/notifications'
 
 import beepUrl from './assets/beep.mp3?url'
 import blipUrl from './assets/blip.mp3?url'

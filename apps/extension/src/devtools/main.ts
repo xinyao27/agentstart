@@ -1,1 +1,1 @@
-chrome.devtools.panels.create('Yiru', '', 'devtools-panel.html')
+chrome.devtools.panels.create('AgentStart', '', 'devtools-panel.html')

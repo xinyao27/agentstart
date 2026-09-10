@@ -1,4 +1,5 @@
 use super::token_delta::{self, Delta, Tokens};
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 pub(super) struct Event {
@@ -11,6 +12,8 @@ pub(super) struct Event {
     pub tokens: Tokens,
 }
 
+#[derive(Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub(super) struct Parser {
     session_id: String,
     session_cwd: Option<String>,

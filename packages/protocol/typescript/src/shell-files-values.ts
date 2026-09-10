@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ShellFilesImportSkipReason as ProtocolImportSkipReason,
   ShellFilesStagedSourceKind as ProtocolStagedSourceKind,
@@ -11,7 +11,7 @@ import {
   type ShellFilesServiceStatResponse,
   type ShellFilesStagedImportEntry as ProtocolStagedImportEntry,
   type ShellFilesStagedSource as ProtocolStagedSource
-} from '../generated/yiru/runtime/v1/shell_files_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_files_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import { bytesToBase64 } from './files/base64.js'
 
@@ -37,13 +37,13 @@ export type ShellFileStatResult = {
   mtime: number
 }
 
-export type ShellFileImportSkipReason = 'missing' | 'symlink' | 'permission-denied' | 'unsupported'
+type ShellFileImportSkipReason = 'missing' | 'symlink' | 'permission-denied' | 'unsupported'
 
-export type ShellStagedExternalImportEntry =
+type ShellStagedExternalImportEntry =
   | { relativePath: string; kind: 'directory' }
   | { relativePath: string; kind: 'file'; contentBase64: string }
 
-export type ShellStagedExternalImportSource =
+type ShellStagedExternalImportSource =
   | {
       sourcePath: string
       status: 'staged'

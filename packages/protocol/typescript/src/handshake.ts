@@ -1,5 +1,5 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
-import { TransportFeature, type Welcome } from '../generated/yiru/protocol/v1/frame_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
+import { TransportFeature, type Welcome } from '../generated/agent_start/protocol/v1/frame_pb.js'
 import type { PendingHandshake } from './call-state.js'
 import { RuntimeProtocolError } from './error.js'
 import { WIRE_PREAMBLE_BYTES } from './frame-codec.js'

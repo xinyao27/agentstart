@@ -1,4 +1,4 @@
-import type { AppControlClient, StartupDiagnostic } from '@yiru/protocol'
+import type { AppControlClient, StartupDiagnostic } from '@agentstart/protocol'
 type AppControlRequest = {
   deadline: number
   protocolClient: AppControlClient | null

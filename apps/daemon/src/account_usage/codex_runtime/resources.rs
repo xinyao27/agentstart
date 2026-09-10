@@ -226,7 +226,7 @@ fn clear_marker(managed_home: &Path, name: &str) -> Result<(), CodexRuntimeError
 
 fn marker_path(managed_home: &Path, name: &str) -> PathBuf {
     managed_home
-        .join(".yiru-resource-copies")
+        .join(".agentstart-resource-copies")
         .join(format!("{name}.json"))
 }
 

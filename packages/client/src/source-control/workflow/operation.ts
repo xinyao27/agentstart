@@ -1,4 +1,4 @@
-import type { GitUpstreamStatus } from '@yiru/protocol/git/status-types'
+import type { GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
 
 import type { SourceControlRemoteOpKind } from './types'
 
@@ -58,7 +58,7 @@ export function resolveSourceControlSyncAfterPull(
   return status.ahead > 0 ? 'push' : 'complete'
 }
 
-export function isSourceControlNonFastForwardError(error: unknown): boolean {
+function isSourceControlNonFastForwardError(error: unknown): boolean {
   return error instanceof Error && NON_FAST_FORWARD_PATTERN.test(error.message)
 }
 

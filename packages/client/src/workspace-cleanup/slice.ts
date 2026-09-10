@@ -1,10 +1,10 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
+import type { WorkspaceCleanupCandidate } from '@agentstart/protocol'
 import {
   WORKSPACE_CLEANUP_CLASSIFIER_VERSION,
   applyWorkspaceCleanupPolicy,
   canSelectWorkspaceCleanupCandidate,
   shouldForceWorkspaceCleanupRemoval
-} from '@yiru/protocol/workspace/cleanup-policy'
+} from '@agentstart/protocol/workspace/cleanup-policy'
 import type { StateCreator } from 'zustand'
 import { mapWithConcurrency } from '~renderer/map-with-concurrency'
 import {

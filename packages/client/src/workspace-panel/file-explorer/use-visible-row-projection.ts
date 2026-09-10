@@ -31,7 +31,7 @@ type VisibleFileExplorerRowProjectionInput = {
   worktreePath: string | null
 }
 
-export function getFileExplorerIgnoredQueryRelativePaths(
+function getFileExplorerIgnoredQueryRelativePaths(
   input: VisibleFileExplorerRowProjectionInput,
   showDotfiles: boolean
 ): string[] {
@@ -60,7 +60,7 @@ export function getFileExplorerIgnoredQueryRelativePaths(
   return relativePaths
 }
 
-export function createVisibleFileExplorerRowProjection(
+function createVisibleFileExplorerRowProjection(
   input: VisibleFileExplorerRowProjectionInput,
   options: VisibleFileExplorerRowProjectionOptions
 ): FileExplorerRowProjection {

@@ -1,4 +1,4 @@
-import type { Tab, TabGroup } from '@yiru/protocol/workspace/tabs'
+import type { Tab, TabGroup } from '@agentstart/protocol/workspace/tabs'
 import type { StateCreator } from 'zustand'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 

@@ -1,5 +1,5 @@
-import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
-import type { ContextualTourOutcome } from '@yiru/protocol/telemetry/education'
+import type { ContextualTourId } from '@agentstart/protocol/settings/contextual-tours'
+import type { ContextualTourOutcome } from '@agentstart/protocol/telemetry/education'
 import { translate } from '~renderer/i18n/i18n'
 import { formatShortcutLabel } from '~renderer/keyboard-input/use-shortcut-label'
 import {
@@ -15,10 +15,7 @@ import { useAppStore } from '~renderer/store/state'
 import type { ContextualTour } from './catalog'
 import type { ActiveTourRenderState } from './contextual-tour-overlay-surface'
 
-export type ContextualTourMeasurementAction =
-  | { kind: 'wait' }
-  | { kind: 'advance' }
-  | { kind: 'cancel' }
+type ContextualTourMeasurementAction = { kind: 'wait' } | { kind: 'advance' } | { kind: 'cancel' }
 
 export type ContextualTourOverlayMeasurementResult =
   | { kind: 'wait' }
@@ -30,7 +27,7 @@ export type ContextualTourOverlayMeasurementResult =
       telemetryTotalSteps: number
     }
 
-export function getContextualTourDisplayProgress(args: {
+function getContextualTourDisplayProgress(args: {
   tour: ContextualTour
   visibleStepIndexes: readonly number[]
   stepIndex: number
@@ -48,7 +45,7 @@ export function getContextualTourDisplayProgress(args: {
   })
 }
 
-export function getContextualTourMeasurementAction(args: {
+function getContextualTourMeasurementAction(args: {
   tour: ContextualTour
   visibleStepIndexes: readonly number[]
   activeStepIndex: number
@@ -64,7 +61,7 @@ export function getContextualTourMeasurementAction(args: {
   return { kind: 'cancel' }
 }
 
-export function isContextualTourLastDisplayStep(args: {
+function isContextualTourLastDisplayStep(args: {
   tour: ContextualTour
   activeStepIndex: number
   progress: { current: number; total: number }

@@ -7,7 +7,7 @@ use crate::CURRENT_PROTOCOL_VERSION;
 use crate::protocol::v1::{Frame, ProtocolVersion, Status, StatusCode};
 
 pub const FRAME_PREAMBLE_BYTES: usize = 5;
-const FRAME_MAGIC: [u8; 4] = *b"YIRU";
+const FRAME_MAGIC: [u8; 4] = *b"AGST";
 const FRAME_WIRE_VERSION: u8 = ProtocolVersion::V2 as u8;
 
 #[derive(Debug)]
@@ -28,11 +28,15 @@ impl Display for FrameCodecError {
                 "frame envelope version {envelope} does not match wire version {wire}"
             ),
             Self::Malformed(error) => write!(formatter, "malformed protobuf frame: {error}"),
-            Self::LengthOverflow => formatter.write_str("Yiru frame length cannot be represented"),
+            Self::LengthOverflow => {
+                formatter.write_str("AgentStart frame length cannot be represented")
+            }
             Self::MissingBody => formatter.write_str("protobuf frame has no body"),
-            Self::TruncatedPreamble => formatter.write_str("Yiru frame preamble is truncated"),
+            Self::TruncatedPreamble => {
+                formatter.write_str("AgentStart frame preamble is truncated")
+            }
             Self::UnsupportedVersion(version) => {
-                write!(formatter, "unsupported Yiru wire version {version}")
+                write!(formatter, "unsupported AgentStart wire version {version}")
             }
         }
     }

@@ -1,4 +1,4 @@
-import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
+import type { ContextualTourId } from '@agentstart/protocol/settings/contextual-tours'
 import {
   useLayoutEffect,
   useRef,
@@ -65,16 +65,16 @@ type ContextualTourOverlaySurfaceProps = {
 
 if (typeof window !== 'undefined') {
   const guardedWindow = window as Window & {
-    __yiruContextualTourGlobalKeyGuardInstalled?: boolean
+    __agentstartContextualTourGlobalKeyGuardInstalled?: boolean
   }
-  if (!guardedWindow.__yiruContextualTourGlobalKeyGuardInstalled) {
-    guardedWindow.__yiruContextualTourGlobalKeyGuardInstalled = true
+  if (!guardedWindow.__agentstartContextualTourGlobalKeyGuardInstalled) {
+    guardedWindow.__agentstartContextualTourGlobalKeyGuardInstalled = true
     window.addEventListener('keydown', handleContextualTourGlobalKeyDown, true)
   }
 }
 
 const PANEL_BASE_CLASSES =
-  'yiru-contextual-tour-panel  border border-border text-popover-foreground outline-none'
+  'agentstart-contextual-tour-panel rounded-lg border border-border text-popover-foreground outline-none'
 
 const PANEL_ANIMATION_CLASSES = 'animate-in fade-in-0 zoom-in-95 duration-200 ease-out'
 
@@ -262,7 +262,7 @@ export function ContextualTourOverlaySurface({
       {showTargetRings ? (
         <div
           aria-hidden="true"
-          className="yiru-contextual-tour-target-rings fixed z-[75]"
+          className="agentstart-contextual-tour-target-rings fixed z-[75]"
           data-contextual-tour-target-rings=""
           style={targetRingStyle}
         />
@@ -286,7 +286,7 @@ export function handleContextualTourOverlayKeyDown(event: KeyboardEvent<HTMLDivE
   // to tab into the highlighted surface just as pointer users can click it.
 }
 
-export function handleContextualTourGlobalKeyDown(event: globalThis.KeyboardEvent): void {
+function handleContextualTourGlobalKeyDown(event: globalThis.KeyboardEvent): void {
   const activeTourId = useAppStore.getState().activeContextualTourId
   if (!activeTourId || event.key !== 'Escape') {
     return

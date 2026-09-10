@@ -1,4 +1,4 @@
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import { useEffect, useLayoutEffect } from 'react'
 
 import { useEventCallback } from '../react/use-event-callback'

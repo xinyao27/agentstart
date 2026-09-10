@@ -13,9 +13,9 @@ pub(crate) fn pick_project_directories(multiple: bool) -> Result<Vec<String>, &'
     #[cfg(target_os = "macos")]
     {
         let script = if multiple {
-            "set chosenFolders to choose folder with prompt \"Choose a project for Yiru\" with multiple selections allowed\nset resultText to \"\"\nrepeat with chosenFolder in chosenFolders\nset resultText to resultText & POSIX path of chosenFolder & linefeed\nend repeat\nreturn resultText"
+            "set chosenFolders to choose folder with prompt \"Choose a project for AgentStart\" with multiple selections allowed\nset resultText to \"\"\nrepeat with chosenFolder in chosenFolders\nset resultText to resultText & POSIX path of chosenFolder & linefeed\nend repeat\nreturn resultText"
         } else {
-            "POSIX path of (choose folder with prompt \"Choose a project for Yiru\")"
+            "POSIX path of (choose folder with prompt \"Choose a project for AgentStart\")"
         };
         run_directory_picker("osascript", &["-e", script])
     }
@@ -30,7 +30,7 @@ pub(crate) fn pick_project_directories(multiple: bool) -> Result<Vec<String>, &'
                 "-STA",
                 "-NoProfile",
                 "-Command",
-                "Add-Type -AssemblyName System.Windows.Forms; $dialog = New-Object System.Windows.Forms.FolderBrowserDialog; $dialog.Description = 'Choose a project for Yiru'; if ($dialog.ShowDialog() -eq 'OK') { [Console]::Write($dialog.SelectedPath) }",
+                "Add-Type -AssemblyName System.Windows.Forms; $dialog = New-Object System.Windows.Forms.FolderBrowserDialog; $dialog.Description = 'Choose a project for AgentStart'; if ($dialog.ShowDialog() -eq 'OK') { [Console]::Write($dialog.SelectedPath) }",
             ],
         )
     }
@@ -40,7 +40,7 @@ pub(crate) fn pick_project_directories(multiple: bool) -> Result<Vec<String>, &'
             let mut args = vec![
                 "--file-selection",
                 "--directory",
-                "--title=Choose a project for Yiru",
+                "--title=Choose a project for AgentStart",
             ];
             if multiple {
                 args.extend(["--multiple", "--separator=\n"]);

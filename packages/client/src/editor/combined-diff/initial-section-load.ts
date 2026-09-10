@@ -1,4 +1,4 @@
-export const COMBINED_DIFF_INITIAL_SECTION_LOAD_COUNT = 6
+const COMBINED_DIFF_INITIAL_SECTION_LOAD_COUNT = 6
 
 export function getInitialCombinedDiffSectionLoadIndices({
   sectionCount,

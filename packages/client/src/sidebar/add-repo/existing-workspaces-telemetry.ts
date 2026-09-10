@@ -1,6 +1,6 @@
-import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
-import type { AddRepoExistingWorkspaceSource } from '@yiru/protocol/telemetry/events/foundations'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { EventProps } from '@agentstart/protocol/telemetry/events/catalog'
+import type { AddRepoExistingWorkspaceSource } from '@agentstart/protocol/telemetry/events/foundations'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 type ExistingWorkspacesDetectedProps = EventProps<'add_repo_existing_workspaces_detected'>
 

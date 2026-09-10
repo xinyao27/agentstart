@@ -1,12 +1,12 @@
-import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
-import type { AddRepoExistingWorkspaceSource } from '@yiru/protocol/telemetry/events/foundations'
+import type { NestedRepoScanResult } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
+import type { AddRepoExistingWorkspaceSource } from '@agentstart/protocol/telemetry/events/foundations'
 import {
   buildNestedRepoScanTelemetry,
   createNestedRepoTelemetryAttemptId,
   type NestedRepoTelemetryRuntimeKind
-} from '@yiru/protocol/telemetry/nested-repo'
+} from '@agentstart/protocol/telemetry/nested-repo'
 import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

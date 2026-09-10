@@ -13,7 +13,7 @@ import type { AppState } from '../store/types'
 /** Live status for one saved runtime environment, as last observed by the
  * renderer. `status === null` records a probe that failed or timed out so the
  * sidebar can still distinguish "unknown/unreachable" from "never checked". */
-export type RuntimeEnvironmentStatus = {
+type RuntimeEnvironmentStatus = {
   status: RuntimeStatus | null
   appVersion?: string | null
   checkedAt: number

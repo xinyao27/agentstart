@@ -2,10 +2,10 @@ import {
   extractWorkIdentifier,
   formatIdentifierFirst,
   stripWorkIdentifierEcho
-} from '@yiru/protocol/hosted-review/links/reference'
+} from '@agentstart/protocol/hosted-review/links/reference'
 
-export const GENERATED_TAB_TITLE_MAX_LENGTH = 40
-export const GENERATED_TAB_TITLE_SOURCE_SCAN_LIMIT = 512
+const GENERATED_TAB_TITLE_MAX_LENGTH = 40
+const GENERATED_TAB_TITLE_SOURCE_SCAN_LIMIT = 512
 
 const LEADING_FILLER_PATTERNS: RegExp[] = [
   /^(?:can|could|would)\s+you(?:\s+please)?\s+/i,

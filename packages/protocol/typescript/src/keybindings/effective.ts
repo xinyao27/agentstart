@@ -61,7 +61,7 @@ export function getKeybindingDefinition(actionId: KeybindingActionId): Keybindin
 export function normalizeTerminalShortcutPolicy(
   policy: TerminalShortcutPolicy | null | undefined
 ): TerminalShortcutPolicy {
-  return policy === 'terminal-first' ? 'terminal-first' : 'yiru-first'
+  return policy === 'terminal-first' ? 'terminal-first' : 'agentstart-first'
 }
 
 export function isKeybindingAllowedInTerminal(definition: KeybindingDefinition): boolean {
@@ -79,9 +79,9 @@ export function keybindingIsActiveInContext(
   if (options.context !== 'terminal') {
     return true
   }
-  // Why: Yiru-first preserves existing app shortcut behavior inside terminals.
+  // Why: AgentStart-first preserves existing app shortcut behavior inside terminals.
   // Terminal-first is the explicit escape hatch for shells and TUIs.
-  if (normalizeTerminalShortcutPolicy(options.terminalShortcutPolicy) === 'yiru-first') {
+  if (normalizeTerminalShortcutPolicy(options.terminalShortcutPolicy) === 'agentstart-first') {
     return true
   }
   return isKeybindingAllowedInTerminal(definition)

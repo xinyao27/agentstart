@@ -53,7 +53,7 @@ export default function NewExternalWorktreesInboxLine({
     >
       <div
         className={cn(
-          'group flex min-h-7 min-w-0 items-center gap-1.5 px-1.5 text-[11px] leading-none text-muted-foreground transition-colors',
+          'group flex min-h-7 min-w-0 items-center gap-1.5 px-1.5 text-[11px] leading-none text-muted-foreground transition-colors rounded-md',
           'hover:bg-accent hover:text-accent-foreground'
         )}
       >
@@ -93,7 +93,7 @@ export default function NewExternalWorktreesInboxLine({
         <span className="relative inline-grid size-6 shrink-0 place-items-center">
           <span
             className={cn(
-              'inline-flex h-[18px] min-w-[18px] items-center justify-center border border-border px-1.5 text-[10px] font-medium leading-none text-muted-foreground transition-opacity',
+              'inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full border border-border px-1.5 text-[10px] font-medium leading-none text-muted-foreground transition-opacity',
               onSuppress &&
                 'can-hover:group-hover:opacity-0 can-hover:group-focus-within:opacity-0 [@media(hover:none)]:opacity-0'
             )}
@@ -130,7 +130,7 @@ export default function NewExternalWorktreesInboxLine({
           <p className="text-muted-foreground px-1.5 py-1 text-[10px] leading-4">
             {translate(
               'auto.components.sidebar.NewExternalWorktreesInboxLine.4d7a1c9e53',
-              'These worktrees were created outside of Yiru.'
+              'These worktrees were created outside of AgentStart.'
             )}
           </p>
           <ul className="grid gap-0.5">

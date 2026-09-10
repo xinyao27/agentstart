@@ -1,4 +1,4 @@
-import type { GitHubPRRefreshReason } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { GitHubPRRefreshReason } from '@agentstart/protocol/hosted-review/pull-request-types'
 
 type ChecksPanelPRRefreshRequestInput = {
   cachedHasPR: boolean | null
@@ -21,7 +21,7 @@ export function resolveChecksPanelPRRefreshRequest(
     input.cachedFetchedAt < input.panelVisibleSince
 
   if (cachedMissPredatesVisiblePanel) {
-    // Why: external agents can create/merge a PR after Yiru cached "none";
+    // Why: external agents can create/merge a PR after AgentStart cached "none";
     // visible empty-state checks need one foreground lookup to recover.
     return { reason: 'active', priority: 80 }
   }

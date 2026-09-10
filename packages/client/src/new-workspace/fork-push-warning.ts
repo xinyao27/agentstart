@@ -1,7 +1,7 @@
-import type { GitHubPrStartPoint } from '@yiru/protocol/git/worktree-source'
+import type { GitHubPrStartPoint } from '@agentstart/protocol/git/worktree-source'
 import { translate } from '~renderer/i18n/i18n'
 
-// Why: this is the one fork target where Yiru can prepare the workspace but a
+// Why: this is the one fork target where AgentStart can prepare the workspace but a
 // later push may still be rejected by GitHub permissions.
 export function getForkPushWarning(
   result: Pick<GitHubPrStartPoint, 'pushTarget' | 'maintainerCanModify'>

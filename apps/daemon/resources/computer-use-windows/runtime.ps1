@@ -18,7 +18,7 @@ Add-Type -TypeDefinition @"
 using System;
 using System.Runtime.InteropServices;
 
-public static class YiruDesktopWin32 {
+public static class AgentStartDesktopWin32 {
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT {
         public int Left;
@@ -99,32 +99,32 @@ $MouseEvents = @{
     Wheel = 0x0800
 }
 
-function Write-YiruJson($Payload) {
+function Write-AgentStartJson($Payload) {
     $Payload | ConvertTo-Json -Depth 100 -Compress
 }
 
-function New-YiruFrame([double]$X, [double]$Y, [double]$Width, [double]$Height) {
+function New-AgentStartFrame([double]$X, [double]$Y, [double]$Width, [double]$Height) {
     if ($Width -le 0 -or $Height -le 0) { return $null }
     [pscustomobject]@{ x = $X; y = $Y; width = $Width; height = $Height }
 }
 
-function Read-YiruOperation([string]$Path) {
+function Read-AgentStartOperation([string]$Path) {
     Get-Content -Raw -Encoding UTF8 -Path $Path | ConvertFrom-Json
 }
 
-function ConvertTo-YiruLParam([int]$X, [int]$Y) {
+function ConvertTo-AgentStartLParam([int]$X, [int]$Y) {
     [IntPtr]((($Y -band 0xffff) -shl 16) -bor ($X -band 0xffff))
 }
 
-function ConvertTo-YiruWheelParam([int]$Delta) {
+function ConvertTo-AgentStartWheelParam([int]$Delta) {
     [IntPtr](($Delta -band 0xffff) -shl 16)
 }
 
-function Get-YiruWindowProcesses {
+function Get-AgentStartWindowProcesses {
     @(Get-Process | Where-Object { $_.MainWindowHandle -ne 0 } | Sort-Object ProcessName, Id)
 }
 
-function Find-YiruProcess([string]$Query) {
+function Find-AgentStartProcess([string]$Query) {
     $needle = ""
     if ($null -ne $Query) { $needle = $Query.Trim() }
     if ([string]::IsNullOrWhiteSpace($needle)) { throw 'appNotFound("")' }
@@ -133,11 +133,11 @@ function Find-YiruProcess([string]$Query) {
     }
 
     $parsedProcessId = 0
-    $processes = Get-YiruWindowProcesses
+    $processes = Get-AgentStartWindowProcesses
     if ([int]::TryParse($needle, [ref]$parsedProcessId)) {
         $match = $processes | Where-Object { $_.Id -eq $parsedProcessId } | Select-Object -First 1
         if ($null -ne $match) {
-            Assert-YiruProcessAllowed $match
+            Assert-AgentStartProcessAllowed $match
             return $match
         }
     }
@@ -154,14 +154,14 @@ function Find-YiruProcess([string]$Query) {
         $_.MainWindowTitle -ilike "*$needle*"
     } | Select-Object -First 1
     if ($null -ne $match) {
-        Assert-YiruProcessAllowed $match
+        Assert-AgentStartProcessAllowed $match
         return $match
     }
 
     throw "appNotFound(`"$Query`")"
 }
 
-function Assert-YiruProcessAllowed($Process) {
+function Assert-AgentStartProcessAllowed($Process) {
     $values = @($Process.ProcessName, $Process.MainWindowTitle) | ForEach-Object { ([string]$_).ToLowerInvariant() }
     foreach ($fragment in $BlockedAppFragments) {
         foreach ($value in $values) {
@@ -172,7 +172,7 @@ function Assert-YiruProcessAllowed($Process) {
     }
 }
 
-function Test-YiruBrowserProcess($Process) {
+function Test-AgentStartBrowserProcess($Process) {
     $name = ([string]$Process.ProcessName).ToLowerInvariant()
     $browserProcesses = @(
         "arc",
@@ -189,117 +189,117 @@ function Test-YiruBrowserProcess($Process) {
     $browserProcesses -contains $name
 }
 
-function Get-YiruRootElement($Process) {
+function Get-AgentStartRootElement($Process) {
     if ($Process.MainWindowHandle -eq 0) {
         throw "No top-level UI Automation window is available for $($Process.ProcessName)."
     }
     [Windows.Automation.AutomationElement]::FromHandle([IntPtr]$Process.MainWindowHandle)
 }
 
-function Get-YiruWindowFrame($Process, $RootElement) {
-    $rect = New-Object YiruDesktopWin32+RECT
-    if ([YiruDesktopWin32]::GetWindowRect([IntPtr]$Process.MainWindowHandle, [ref]$rect)) {
-        return New-YiruFrame $rect.Left $rect.Top ($rect.Right - $rect.Left) ($rect.Bottom - $rect.Top)
+function Get-AgentStartWindowFrame($Process, $RootElement) {
+    $rect = New-Object AgentStartDesktopWin32+RECT
+    if ([AgentStartDesktopWin32]::GetWindowRect([IntPtr]$Process.MainWindowHandle, [ref]$rect)) {
+        return New-AgentStartFrame $rect.Left $rect.Top ($rect.Right - $rect.Left) ($rect.Bottom - $rect.Top)
     }
 
     try {
         $bounds = $RootElement.Current.BoundingRectangle
         if (-not $bounds.IsEmpty) {
-            return New-YiruFrame $bounds.X $bounds.Y $bounds.Width $bounds.Height
+            return New-AgentStartFrame $bounds.X $bounds.Y $bounds.Width $bounds.Height
         }
     } catch {}
     $null
 }
 
-function Get-YiruWindowId($Process) {
+function Get-AgentStartWindowId($Process) {
     [int64]$Process.MainWindowHandle
 }
 
-function Get-YiruAppName($Process) {
+function Get-AgentStartAppName($Process) {
     if ($Process.ProcessName -eq "ApplicationFrameHost" -and -not [string]::IsNullOrWhiteSpace($Process.MainWindowTitle)) {
         return [string]$Process.MainWindowTitle
     }
     [string]$Process.ProcessName
 }
 
-function New-YiruAppRecord($Process) {
+function New-AgentStartAppRecord($Process) {
     [pscustomobject]@{
-        name = Get-YiruAppName $Process
+        name = Get-AgentStartAppName $Process
         bundleIdentifier = $Process.ProcessName
         bundleId = $Process.ProcessName
         pid = [int]$Process.Id
     }
 }
 
-function Assert-YiruWindowTarget($Process, $WindowId, $WindowIndex) {
+function Assert-AgentStartWindowTarget($Process, $WindowId, $WindowIndex) {
     if ($null -ne $WindowIndex -and [int]$WindowIndex -ne 0) {
         throw "windowNotFound(`"$WindowIndex`")"
     }
-    if ($null -ne $WindowId -and [int64]$WindowId -ne (Get-YiruWindowId $Process)) {
+    if ($null -ne $WindowId -and [int64]$WindowId -ne (Get-AgentStartWindowId $Process)) {
         throw "windowNotFound(`"$WindowId`")"
     }
 }
 
-function Restore-YiruWindow($Process) {
+function Restore-AgentStartWindow($Process) {
     if ($Process.MainWindowHandle -eq 0) { return }
-    [void][YiruDesktopWin32]::ShowWindow([IntPtr]$Process.MainWindowHandle, 9)
-    [void][YiruDesktopWin32]::SetForegroundWindow([IntPtr]$Process.MainWindowHandle)
+    [void][AgentStartDesktopWin32]::ShowWindow([IntPtr]$Process.MainWindowHandle, 9)
+    [void][AgentStartDesktopWin32]::SetForegroundWindow([IntPtr]$Process.MainWindowHandle)
 }
 
-function Test-YiruWindowFocused([IntPtr]$WindowHandle) {
-    [YiruDesktopWin32]::GetForegroundWindow() -eq $WindowHandle
+function Test-AgentStartWindowFocused([IntPtr]$WindowHandle) {
+    [AgentStartDesktopWin32]::GetForegroundWindow() -eq $WindowHandle
 }
 
-function Wait-YiruWindowFocused([IntPtr]$WindowHandle, [int]$TimeoutMilliseconds) {
+function Wait-AgentStartWindowFocused([IntPtr]$WindowHandle, [int]$TimeoutMilliseconds) {
     $stopwatch = [Diagnostics.Stopwatch]::StartNew()
     while ($stopwatch.ElapsedMilliseconds -lt $TimeoutMilliseconds) {
-        if (Test-YiruWindowFocused $WindowHandle) { return $true }
+        if (Test-AgentStartWindowFocused $WindowHandle) { return $true }
         Start-Sleep -Milliseconds 50
     }
-    Test-YiruWindowFocused $WindowHandle
+    Test-AgentStartWindowFocused $WindowHandle
 }
 
-function Assert-YiruKeyboardFocus([IntPtr]$WindowHandle, $Operation) {
-    if (Test-YiruWindowFocused $WindowHandle) { return }
+function Assert-AgentStartKeyboardFocus([IntPtr]$WindowHandle, $Operation) {
+    if (Test-AgentStartWindowFocused $WindowHandle) { return }
     if ([bool]$Operation.restoreWindow) {
-        if (Wait-YiruWindowFocused $WindowHandle 500) { return }
+        if (Wait-AgentStartWindowFocused $WindowHandle 500) { return }
         throw "window_not_focused: keyboard input requires the target window to be focused; restoreWindow was requested but the target window is still not focused; bring it forward manually or check desktop permissions"
     }
     throw "window_not_focused: keyboard input requires the target window to be focused; retry with --restore-window"
 }
 
-function Get-YiruElementFrame($Element, $WindowFrame) {
+function Get-AgentStartElementFrame($Element, $WindowFrame) {
     try {
         $bounds = $Element.Current.BoundingRectangle
         if ($bounds.IsEmpty) { return $null }
         if ($null -eq $WindowFrame) {
-            return New-YiruFrame $bounds.X $bounds.Y $bounds.Width $bounds.Height
+            return New-AgentStartFrame $bounds.X $bounds.Y $bounds.Width $bounds.Height
         }
-        New-YiruFrame ($bounds.X - $WindowFrame.x) ($bounds.Y - $WindowFrame.y) $bounds.Width $bounds.Height
+        New-AgentStartFrame ($bounds.X - $WindowFrame.x) ($bounds.Y - $WindowFrame.y) $bounds.Width $bounds.Height
     } catch {
         $null
     }
 }
 
-function Get-YiruProperty($Element, [string]$Name) {
+function Get-AgentStartProperty($Element, [string]$Name) {
     try { [string]$Element.Current.$Name } catch { "" }
 }
 
-function Get-YiruRuntimeId($Element) {
+function Get-AgentStartRuntimeId($Element) {
     try { @($Element.GetRuntimeId()) } catch { @() }
 }
 
-function Test-YiruSensitiveElement($Element) {
+function Test-AgentStartSensitiveElement($Element) {
     try {
         if ($Element.Current.IsPassword) { return $true }
     } catch {}
     $controlType = try { [string]$Element.Current.ControlType.ProgrammaticName } catch { "" }
     $parts = @(
-        (Get-YiruProperty $Element "LocalizedControlType"),
+        (Get-AgentStartProperty $Element "LocalizedControlType"),
         $controlType,
-        (Get-YiruProperty $Element "Name"),
-        (Get-YiruProperty $Element "AutomationId"),
-        (Get-YiruProperty $Element "ClassName")
+        (Get-AgentStartProperty $Element "Name"),
+        (Get-AgentStartProperty $Element "AutomationId"),
+        (Get-AgentStartProperty $Element "ClassName")
     )
     $haystack = (($parts -join " ") -replace "\s+", " ").ToLowerInvariant()
     foreach ($term in @("password", "passcode", "secret", "one-time code", "verification code")) {
@@ -308,9 +308,9 @@ function Test-YiruSensitiveElement($Element) {
     $haystack -match "(^|[^a-z0-9])pin([^a-z0-9]|$)"
 }
 
-function Get-YiruValueText($Element) {
+function Get-AgentStartValueText($Element) {
     try {
-        if (Test-YiruSensitiveElement $Element) { return "[redacted]" }
+        if (Test-AgentStartSensitiveElement $Element) { return "[redacted]" }
         $pattern = $Element.GetCurrentPattern([Windows.Automation.ValuePattern]::Pattern)
         $rawValue = $pattern.Current.Value
         $text = if ($null -eq $rawValue) { "" } else { [string]$rawValue }
@@ -321,7 +321,7 @@ function Get-YiruValueText($Element) {
     }
 }
 
-function Get-YiruActions($Element) {
+function Get-AgentStartActions($Element) {
     $actions = New-Object System.Collections.Generic.List[string]
     foreach ($pattern in $Element.GetSupportedPatterns()) {
         $name = [string]$pattern.ProgrammaticName
@@ -334,18 +334,18 @@ function Get-YiruActions($Element) {
     @($actions | Select-Object -Unique)
 }
 
-function Get-YiruMeaningfulActions($Actions) {
+function Get-AgentStartMeaningfulActions($Actions) {
     $noisy = @("Invoke", "ScrollToVisible", "ShowMenu")
     @($Actions | Where-Object { $noisy -notcontains $_ })
 }
 
-function Format-YiruSnapshotText([string]$Text) {
+function Format-AgentStartSnapshotText([string]$Text) {
     if ([string]::IsNullOrWhiteSpace($Text)) { return "" }
     (($Text -replace "\s+", " ").Trim())
 }
 
-function Format-YiruValueSegment([string]$RoleKey, [string]$Title, [string]$Value) {
-    $clean = Format-YiruSnapshotText $Value
+function Format-AgentStartValueSegment([string]$RoleKey, [string]$Title, [string]$Value) {
+    $clean = Format-AgentStartSnapshotText $Value
     if ([string]::IsNullOrWhiteSpace($clean) -or $clean -eq $Title) { return "" }
     if ($RoleKey -eq "heading" -and $clean -match "^\d+$") { return "" }
     if ($RoleKey -in @("text", "edit", "document", "scroll bar", "progress bar")) {
@@ -354,8 +354,8 @@ function Format-YiruValueSegment([string]$RoleKey, [string]$Title, [string]$Valu
     ", Value: $clean"
 }
 
-function Test-YiruSuppressChildren([string]$RoleKey, [string]$Title, [string]$Value, [string]$Summary) {
-    $hasCompactLabel = -not [string]::IsNullOrWhiteSpace($Title) -or -not [string]::IsNullOrWhiteSpace((Format-YiruSnapshotText $Value)) -or -not [string]::IsNullOrWhiteSpace((Format-YiruSnapshotText $Summary))
+function Test-AgentStartSuppressChildren([string]$RoleKey, [string]$Title, [string]$Value, [string]$Summary) {
+    $hasCompactLabel = -not [string]::IsNullOrWhiteSpace($Title) -or -not [string]::IsNullOrWhiteSpace((Format-AgentStartSnapshotText $Value)) -or -not [string]::IsNullOrWhiteSpace((Format-AgentStartSnapshotText $Summary))
     $hasCompactLabel -and $RoleKey -in @(
         "button",
         "check box",
@@ -369,15 +369,15 @@ function Test-YiruSuppressChildren([string]$RoleKey, [string]$Title, [string]$Va
     )
 }
 
-function Get-YiruTextSnippets($Element, [int]$Limit = 6, [int]$MaxDepth = 3) {
+function Get-AgentStartTextSnippets($Element, [int]$Limit = 6, [int]$MaxDepth = 3) {
     $values = New-Object System.Collections.Generic.List[string]
     $seen = New-Object System.Collections.Generic.HashSet[string]
 
-    function Visit-YiruText($Node, [int]$Depth) {
+    function Visit-AgentStartText($Node, [int]$Depth) {
         if ($values.Count -ge $Limit -or $Depth -gt $MaxDepth) { return }
         $role = try { [string]$Node.Current.LocalizedControlType } catch { "" }
         if ($role -match "text|link|label") {
-            foreach ($raw in @((Get-YiruProperty $Node "Name"), (Get-YiruValueText $Node))) {
+            foreach ($raw in @((Get-AgentStartProperty $Node "Name"), (Get-AgentStartValueText $Node))) {
                 $value = (($raw -replace "\s+", " ").Trim())
                 if (-not [string]::IsNullOrWhiteSpace($value) -and $seen.Add($value)) {
                     if ($value.Length -gt 80) { $value = $value.Substring(0, 80) + "..." }
@@ -389,59 +389,59 @@ function Get-YiruTextSnippets($Element, [int]$Limit = 6, [int]$MaxDepth = 3) {
         try {
             $children = $Node.FindAll([Windows.Automation.TreeScope]::Children, [Windows.Automation.Condition]::TrueCondition)
             for ($i = 0; $i -lt $children.Count; $i++) {
-                Visit-YiruText $children.Item($i) ($Depth + 1)
+                Visit-AgentStartText $children.Item($i) ($Depth + 1)
                 if ($values.Count -ge $Limit) { return }
             }
         } catch {}
     }
 
-    Visit-YiruText $Element 0
+    Visit-AgentStartText $Element 0
     @($values.ToArray())
 }
 
-function Test-YiruPlainTextSubtree($Element, [int]$MaxDepth = 4) {
-    $script:sawYiruText = $false
+function Test-AgentStartPlainTextSubtree($Element, [int]$MaxDepth = 4) {
+    $script:sawAgentStartText = $false
     $allowed = @("pane", "group", "custom", "unknown", "text", "link", "image")
 
-    function Visit-YiruPlainText($Node, [int]$Depth) {
+    function Visit-AgentStartPlainText($Node, [int]$Depth) {
         if ($Depth -gt $MaxDepth) { return $false }
         $role = try { [string]$Node.Current.LocalizedControlType } catch { "" }
         $roleKey = $role.ToLowerInvariant()
         if ($allowed -notcontains $roleKey) { return $false }
-        if ($roleKey -match "text|link") { $script:sawYiruText = $true }
-        if (@(Get-YiruMeaningfulActions @(Get-YiruActions $Node)).Count -gt 0) { return $false }
+        if ($roleKey -match "text|link") { $script:sawAgentStartText = $true }
+        if (@(Get-AgentStartMeaningfulActions @(Get-AgentStartActions $Node)).Count -gt 0) { return $false }
         try {
             $children = $Node.FindAll([Windows.Automation.TreeScope]::Children, [Windows.Automation.Condition]::TrueCondition)
             for ($i = 0; $i -lt $children.Count; $i++) {
-                if (-not (Visit-YiruPlainText $children.Item($i) ($Depth + 1))) { return $false }
+                if (-not (Visit-AgentStartPlainText $children.Item($i) ($Depth + 1))) { return $false }
             }
         } catch {}
         return $true
     }
 
-    (Visit-YiruPlainText $Element 0) -and $script:sawYiruText
+    (Visit-AgentStartPlainText $Element 0) -and $script:sawAgentStartText
 }
 
-function New-YiruElementRecord($Element, [int]$Index, $WindowFrame) {
+function New-AgentStartElementRecord($Element, [int]$Index, $WindowFrame) {
     $controlType = try { [string]$Element.Current.ControlType.ProgrammaticName } catch { "" }
     $nativeWindowHandle = try { [int64]$Element.Current.NativeWindowHandle } catch { 0 }
     [pscustomobject]@{
         index = $Index
-        runtimeId = @(Get-YiruRuntimeId $Element)
-        automationId = Get-YiruProperty $Element "AutomationId"
-        name = Get-YiruProperty $Element "Name"
+        runtimeId = @(Get-AgentStartRuntimeId $Element)
+        automationId = Get-AgentStartProperty $Element "AutomationId"
+        name = Get-AgentStartProperty $Element "Name"
         controlType = $controlType
-        localizedControlType = Get-YiruProperty $Element "LocalizedControlType"
-        className = Get-YiruProperty $Element "ClassName"
-        value = Get-YiruValueText $Element
-        isSelected = Test-YiruElementSelected $Element
+        localizedControlType = Get-AgentStartProperty $Element "LocalizedControlType"
+        className = Get-AgentStartProperty $Element "ClassName"
+        value = Get-AgentStartValueText $Element
+        isSelected = Test-AgentStartElementSelected $Element
         nativeWindowHandle = $nativeWindowHandle
-        frame = Get-YiruElementFrame $Element $WindowFrame
-        actions = @(Get-YiruActions $Element)
+        frame = Get-AgentStartElementFrame $Element $WindowFrame
+        actions = @(Get-AgentStartActions $Element)
     }
 }
 
-function Test-YiruElementSelected($Element) {
+function Test-AgentStartElementSelected($Element) {
     try {
         $pattern = $Element.GetCurrentPattern([Windows.Automation.SelectionItemPattern]::Pattern)
         return [bool]$pattern.Current.IsSelected
@@ -450,7 +450,7 @@ function Test-YiruElementSelected($Element) {
     }
 }
 
-function Render-YiruTree($RootElement, $WindowFrame, [bool]$CompactBrowserTabs = $false) {
+function Render-AgentStartTree($RootElement, $WindowFrame, [bool]$CompactBrowserTabs = $false) {
     $records = New-Object System.Collections.Generic.List[object]
     $lines = New-Object System.Collections.Generic.List[string]
     $seen = New-Object System.Collections.Generic.HashSet[string]
@@ -461,7 +461,7 @@ function Render-YiruTree($RootElement, $WindowFrame, [bool]$CompactBrowserTabs =
         maxDepthReached = $false
     }
 
-    function Visit-YiruNode($Node, [int]$Depth) {
+    function Visit-AgentStartNode($Node, [int]$Depth) {
         if ($records.Count -ge $MaxNodes -or $Depth -gt $MaxDepth) {
             $truncation.truncated = $true
             if ($Depth -gt $MaxDepth) { $truncation.maxDepthReached = $true }
@@ -470,37 +470,37 @@ function Render-YiruTree($RootElement, $WindowFrame, [bool]$CompactBrowserTabs =
         $identity = try { (@($Node.GetRuntimeId()) -join ".") } catch { [Guid]::NewGuid().ToString() }
         if (-not $seen.Add($identity)) { return }
 
-        $record = New-YiruElementRecord $Node $records.Count $WindowFrame
+        $record = New-AgentStartElementRecord $Node $records.Count $WindowFrame
         $children = @()
         try {
             $children = @($Node.FindAll([Windows.Automation.TreeScope]::Children, [Windows.Automation.Condition]::TrueCondition))
         } catch {}
-        $meaningfulActions = @(Get-YiruMeaningfulActions $record.actions)
+        $meaningfulActions = @(Get-AgentStartMeaningfulActions $record.actions)
         $title = if ([string]::IsNullOrWhiteSpace($record.name)) { $record.automationId } else { $record.name }
         $role = if ([string]::IsNullOrWhiteSpace($record.localizedControlType)) { $record.controlType } else { $record.localizedControlType }
         $roleKey = $role.ToLowerInvariant()
-        $snippets = @(Get-YiruTextSnippets $Node 8 4)
+        $snippets = @(Get-AgentStartTextSnippets $Node 8 4)
         $genericSummary = $null
-        if (($roleKey -in @("pane", "group", "custom", "unknown")) -and [string]::IsNullOrWhiteSpace($title) -and [string]::IsNullOrWhiteSpace($record.value) -and $snippets.Count -ge 2 -and (Test-YiruPlainTextSubtree $Node)) {
+        if (($roleKey -in @("pane", "group", "custom", "unknown")) -and [string]::IsNullOrWhiteSpace($title) -and [string]::IsNullOrWhiteSpace($record.value) -and $snippets.Count -ge 2 -and (Test-AgentStartPlainTextSubtree $Node)) {
             $genericSummary = ($snippets -join " ")
         }
         if (($roleKey -in @("pane", "group", "custom", "unknown")) -and [string]::IsNullOrWhiteSpace($title) -and [string]::IsNullOrWhiteSpace($record.value) -and $meaningfulActions.Count -eq 0 -and $null -eq $genericSummary -and $children.Count -le 1) {
             for ($i = 0; $i -lt $children.Count; $i++) {
-                Visit-YiruNode $children.Item($i) $Depth
+                Visit-AgentStartNode $children.Item($i) $Depth
             }
             return
         }
 
         $records.Add($record)
 
-        $line = "$($record.index) $role $(Format-YiruSnapshotText $title)".TrimEnd()
-        $line += Format-YiruValueSegment $roleKey $title $record.value
+        $line = "$($record.index) $role $(Format-AgentStartSnapshotText $title)".TrimEnd()
+        $line += Format-AgentStartValueSegment $roleKey $title $record.value
         if (-not [string]::IsNullOrWhiteSpace($genericSummary) -and $genericSummary -ne $title) {
-            $line += ", Text: " + (Format-YiruSnapshotText $genericSummary)
+            $line += ", Text: " + (Format-AgentStartSnapshotText $genericSummary)
         } elseif ($roleKey -in @("row", "data item", "list item")) {
-            $rowSummary = @((Get-YiruTextSnippets $Node 6 3)) -join " "
+            $rowSummary = @((Get-AgentStartTextSnippets $Node 6 3)) -join " "
             if (-not [string]::IsNullOrWhiteSpace($rowSummary) -and $rowSummary -ne $title) {
-                $line += ", Text: " + (Format-YiruSnapshotText $rowSummary)
+                $line += ", Text: " + (Format-AgentStartSnapshotText $rowSummary)
             }
         }
         if ($meaningfulActions.Count -gt 0) {
@@ -508,24 +508,24 @@ function Render-YiruTree($RootElement, $WindowFrame, [bool]$CompactBrowserTabs =
         }
         $lines.Add(("`t" * $Depth) + $line)
 
-        if (-not [string]::IsNullOrWhiteSpace($genericSummary) -or (Test-YiruSuppressChildren $roleKey $title $record.value $genericSummary)) { return }
+        if (-not [string]::IsNullOrWhiteSpace($genericSummary) -or (Test-AgentStartSuppressChildren $roleKey $title $record.value $genericSummary)) { return }
         $childLineStart = $lines.Count
         for ($i = 0; $i -lt $children.Count; $i++) {
-            Visit-YiruNode $children.Item($i) ($Depth + 1)
+            Visit-AgentStartNode $children.Item($i) ($Depth + 1)
         }
         if ($CompactBrowserTabs) {
-            Compress-YiruRenderedBrowserTabs $records $lines $childLineStart ($Depth + 1)
+            Compress-AgentStartRenderedBrowserTabs $records $lines $childLineStart ($Depth + 1)
         }
     }
 
-    Visit-YiruNode $RootElement 0
+    Visit-AgentStartNode $RootElement 0
     [pscustomobject]@{ elements = @($records.ToArray()); lines = @($lines.ToArray()); truncation = $truncation }
 }
 
-function Compress-YiruRenderedBrowserTabs($Records, $Lines, [int]$StartLine, [int]$Depth) {
+function Compress-AgentStartRenderedBrowserTabs($Records, $Lines, [int]$StartLine, [int]$Depth) {
     $tabLineIndexes = New-Object System.Collections.Generic.List[int]
     for ($lineIndex = $StartLine; $lineIndex -lt $Lines.Count; $lineIndex++) {
-        if (Test-YiruDirectRenderedBrowserTabLine ([string]$Lines[$lineIndex]) $Depth) {
+        if (Test-AgentStartDirectRenderedBrowserTabLine ([string]$Lines[$lineIndex]) $Depth) {
             $tabLineIndexes.Add($lineIndex)
         }
     }
@@ -537,7 +537,7 @@ function Compress-YiruRenderedBrowserTabs($Records, $Lines, [int]$StartLine, [in
     }
     $activeLineIndexes = New-Object System.Collections.Generic.HashSet[int]
     foreach ($lineIndex in $tabLineIndexes) {
-        if (Test-YiruActiveRenderedBrowserTabLine ([string]$Lines[$lineIndex]) $Depth $recordsByIndex) {
+        if (Test-AgentStartActiveRenderedBrowserTabLine ([string]$Lines[$lineIndex]) $Depth $recordsByIndex) {
             [void]$activeLineIndexes.Add($lineIndex)
         }
     }
@@ -549,7 +549,7 @@ function Compress-YiruRenderedBrowserTabs($Records, $Lines, [int]$StartLine, [in
     for ($i = $tabLineIndexes.Count - 1; $i -ge 0; $i--) {
         $lineIndex = $tabLineIndexes[$i]
         if ($activeLineIndexes.Contains($lineIndex)) { continue }
-        $recordIndex = Get-YiruRenderedElementIndex ([string]$Lines[$lineIndex]) $Depth
+        $recordIndex = Get-AgentStartRenderedElementIndex ([string]$Lines[$lineIndex]) $Depth
         if ($null -ne $recordIndex) {
             [void]$omittedRecordIndexes.Add([int]$recordIndex)
         }
@@ -565,7 +565,7 @@ function Compress-YiruRenderedBrowserTabs($Records, $Lines, [int]$StartLine, [in
     $Lines.Insert($insertionIndex, (("`t" * $Depth) + "... $omittedCount inactive browser tabs omitted"))
 }
 
-function Test-YiruDirectRenderedBrowserTabLine([string]$Line, [int]$Depth) {
+function Test-AgentStartDirectRenderedBrowserTabLine([string]$Line, [int]$Depth) {
     $indent = "`t" * $Depth
     if (-not $Line.StartsWith($indent)) { return $false }
     $text = $Line.Substring($indent.Length)
@@ -573,21 +573,21 @@ function Test-YiruDirectRenderedBrowserTabLine([string]$Line, [int]$Depth) {
     $text -match "^\d+ (page tab|tab item|tab)($|[ \(,])"
 }
 
-function Test-YiruActiveRenderedBrowserTabLine([string]$Line, [int]$Depth, $RecordsByIndex) {
+function Test-AgentStartActiveRenderedBrowserTabLine([string]$Line, [int]$Depth, $RecordsByIndex) {
     if ($Line.Contains("(selected")) { return $true }
-    $recordIndex = Get-YiruRenderedElementIndex $Line $Depth
+    $recordIndex = Get-AgentStartRenderedElementIndex $Line $Depth
     if ($null -eq $recordIndex -or -not $RecordsByIndex.ContainsKey([int]$recordIndex)) { return $false }
     $record = $RecordsByIndex[[int]$recordIndex]
-    [bool]$record.isSelected -or (Format-YiruSnapshotText $record.value) -eq "1"
+    [bool]$record.isSelected -or (Format-AgentStartSnapshotText $record.value) -eq "1"
 }
 
-function Get-YiruRenderedElementIndex([string]$Line, [int]$Depth) {
+function Get-AgentStartRenderedElementIndex([string]$Line, [int]$Depth) {
     $text = $Line.Substring(("`t" * $Depth).Length)
     if ($text -match "^(\d+)") { return [int]$Matches[1] }
     $null
 }
 
-function ConvertTo-YiruPngBytes([System.Drawing.Image]$Image) {
+function ConvertTo-AgentStartPngBytes([System.Drawing.Image]$Image) {
     $stream = $null
     try {
         $stream = New-Object System.IO.MemoryStream
@@ -598,7 +598,7 @@ function ConvertTo-YiruPngBytes([System.Drawing.Image]$Image) {
     }
 }
 
-function New-YiruScreenshotPayload([byte[]]$Bytes, [int]$Width, [int]$Height, [double]$Scale) {
+function New-AgentStartScreenshotPayload([byte[]]$Bytes, [int]$Width, [int]$Height, [double]$Scale) {
     [pscustomobject]@{
         base64 = [Convert]::ToBase64String($Bytes)
         width = $Width
@@ -607,7 +607,7 @@ function New-YiruScreenshotPayload([byte[]]$Bytes, [int]$Width, [int]$Height, [d
     }
 }
 
-function Resize-YiruBitmap([System.Drawing.Bitmap]$Source, [int]$Width, [int]$Height) {
+function Resize-AgentStartBitmap([System.Drawing.Bitmap]$Source, [int]$Width, [int]$Height) {
     $resized = $null
     $graphics = $null
     try {
@@ -624,12 +624,12 @@ function Resize-YiruBitmap([System.Drawing.Bitmap]$Source, [int]$Width, [int]$He
     }
 }
 
-function Get-YiruBoundedScreenshotPayload([System.Drawing.Bitmap]$Bitmap) {
+function Get-AgentStartBoundedScreenshotPayload([System.Drawing.Bitmap]$Bitmap) {
     $originalWidth = [int][Math]::Max(1, $Bitmap.Width)
     $originalHeight = [int][Math]::Max(1, $Bitmap.Height)
-    $pngBytes = ConvertTo-YiruPngBytes $Bitmap
+    $pngBytes = ConvertTo-AgentStartPngBytes $Bitmap
     if ($pngBytes.Length -le $MaxScreenshotPngBytes) {
-        return New-YiruScreenshotPayload $pngBytes $originalWidth $originalHeight 1.0
+        return New-AgentStartScreenshotPayload $pngBytes $originalWidth $originalHeight 1.0
     }
 
     # Why: screenshots cross process boundaries as PNG base64 in JSON; cap noisy
@@ -645,10 +645,10 @@ function Get-YiruBoundedScreenshotPayload([System.Drawing.Bitmap]$Bitmap) {
 
         $resized = $null
         try {
-            $resized = Resize-YiruBitmap $Bitmap $width $height
-            $candidateBytes = ConvertTo-YiruPngBytes $resized
+            $resized = Resize-AgentStartBitmap $Bitmap $width $height
+            $candidateBytes = ConvertTo-AgentStartPngBytes $resized
             if ($candidateBytes.Length -le $MaxScreenshotPngBytes) {
-                return New-YiruScreenshotPayload $candidateBytes $width $height ($width / [double]$originalWidth)
+                return New-AgentStartScreenshotPayload $candidateBytes $width $height ($width / [double]$originalWidth)
             }
         } finally {
             if ($null -ne $resized) { $resized.Dispose() }
@@ -665,7 +665,7 @@ function Get-YiruBoundedScreenshotPayload([System.Drawing.Bitmap]$Bitmap) {
     }
 }
 
-function Get-YiruScreenshot([bool]$IncludeScreenshot, $WindowFrame) {
+function Get-AgentStartScreenshot([bool]$IncludeScreenshot, $WindowFrame) {
     if (-not $IncludeScreenshot -or $null -eq $WindowFrame) { return $null }
     $bitmap = $null
     $graphics = $null
@@ -675,7 +675,7 @@ function Get-YiruScreenshot([bool]$IncludeScreenshot, $WindowFrame) {
         $bitmap = New-Object System.Drawing.Bitmap $width, $height
         $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
         $graphics.CopyFromScreen([int][Math]::Round($WindowFrame.x), [int][Math]::Round($WindowFrame.y), 0, 0, $bitmap.Size)
-        Get-YiruBoundedScreenshotPayload $bitmap
+        Get-AgentStartBoundedScreenshotPayload $bitmap
     } catch {
         $null
     } finally {
@@ -684,20 +684,20 @@ function Get-YiruScreenshot([bool]$IncludeScreenshot, $WindowFrame) {
     }
 }
 
-function New-YiruSnapshot([string]$Query, [bool]$IncludeScreenshot, $WindowId = $null, $WindowIndex = $null, [bool]$RestoreWindow = $false) {
-    $process = Find-YiruProcess $Query
-    if ($RestoreWindow) { Restore-YiruWindow $process }
-    Assert-YiruWindowTarget $process $WindowId $WindowIndex
-    $root = Get-YiruRootElement $process
-    $windowFrame = Get-YiruWindowFrame $process $root
-    $tree = Render-YiruTree $root $windowFrame (Test-YiruBrowserProcess $process)
-    $screenshot = Get-YiruScreenshot $IncludeScreenshot $windowFrame
+function New-AgentStartSnapshot([string]$Query, [bool]$IncludeScreenshot, $WindowId = $null, $WindowIndex = $null, [bool]$RestoreWindow = $false) {
+    $process = Find-AgentStartProcess $Query
+    if ($RestoreWindow) { Restore-AgentStartWindow $process }
+    Assert-AgentStartWindowTarget $process $WindowId $WindowIndex
+    $root = Get-AgentStartRootElement $process
+    $windowFrame = Get-AgentStartWindowFrame $process $root
+    $tree = Render-AgentStartTree $root $windowFrame (Test-AgentStartBrowserProcess $process)
+    $screenshot = Get-AgentStartScreenshot $IncludeScreenshot $windowFrame
 
     [pscustomobject]@{
         snapshotId = [guid]::NewGuid().ToString()
-        app = New-YiruAppRecord $process
+        app = New-AgentStartAppRecord $process
         windowTitle = $process.MainWindowTitle
-        windowId = Get-YiruWindowId $process
+        windowId = Get-AgentStartWindowId $process
         windowBounds = $windowFrame
         screenshotPngBase64 = if ($null -ne $screenshot) { $screenshot.base64 } else { $null }
         screenshotWidth = if ($null -ne $screenshot) { $screenshot.width } else { $null }
@@ -714,16 +714,16 @@ function New-YiruSnapshot([string]$Query, [bool]$IncludeScreenshot, $WindowId = 
     }
 }
 
-function Get-YiruAppList {
-    @(Get-YiruWindowProcesses | ForEach-Object {
-        New-YiruAppRecord $_
+function Get-AgentStartAppList {
+    @(Get-AgentStartWindowProcesses | ForEach-Object {
+        New-AgentStartAppRecord $_
     })
 }
 
-function Get-YiruWindowList([string]$Query) {
-    $process = Find-YiruProcess $Query
-    $root = Get-YiruRootElement $process
-    $windowFrame = Get-YiruWindowFrame $process $root
+function Get-AgentStartWindowList([string]$Query) {
+    $process = Find-AgentStartProcess $Query
+    $root = Get-AgentStartRootElement $process
+    $windowFrame = Get-AgentStartWindowFrame $process $root
     $x = $null
     $y = $null
     $width = 0
@@ -734,13 +734,13 @@ function Get-YiruWindowList([string]$Query) {
         $width = [int][Math]::Max(0, [Math]::Round($windowFrame.width))
         $height = [int][Math]::Max(0, [Math]::Round($windowFrame.height))
     }
-    $app = New-YiruAppRecord $process
+    $app = New-AgentStartAppRecord $process
     [pscustomobject]@{
         app = $app
         windows = @([pscustomobject]@{
             index = 0
             app = $app
-            id = Get-YiruWindowId $process
+            id = Get-AgentStartWindowId $process
             title = $process.MainWindowTitle
             x = $x
             y = $y
@@ -749,15 +749,15 @@ function Get-YiruWindowList([string]$Query) {
             isMinimized = $false
             isOffscreen = $false
             screenIndex = $null
-            platform = [pscustomobject]@{ backend = "uia"; nativeWindowHandle = Get-YiruWindowId $process }
+            platform = [pscustomobject]@{ backend = "uia"; nativeWindowHandle = Get-AgentStartWindowId $process }
         })
     }
 }
 
-function Get-YiruHandshake {
+function Get-AgentStartHandshake {
     [pscustomobject]@{
         platform = "win32"
-        provider = "yiru-computer-use-windows"
+        provider = "agentstart-computer-use-windows"
         providerVersion = "1.0.0"
         protocolVersion = 1
         supports = [pscustomobject]@{
@@ -780,7 +780,7 @@ function Get-YiruHandshake {
     }
 }
 
-function Test-YiruSameRuntimeId($Left, $Right) {
+function Test-AgentStartSameRuntimeId($Left, $Right) {
     if ($null -eq $Left -or $null -eq $Right -or $Left.Count -ne $Right.Count) { return $false }
     for ($i = 0; $i -lt $Left.Count; $i++) {
         if ([int]$Left[$i] -ne [int]$Right[$i]) { return $false }
@@ -788,7 +788,7 @@ function Test-YiruSameRuntimeId($Left, $Right) {
     $true
 }
 
-function Find-YiruElement($RootElement, $Record) {
+function Find-AgentStartElement($RootElement, $Record) {
     if ($null -eq $Record) { return $null }
     if ($Record.index -eq 0) { return $RootElement }
 
@@ -796,7 +796,7 @@ function Find-YiruElement($RootElement, $Record) {
         $descendants = $RootElement.FindAll([Windows.Automation.TreeScope]::Descendants, [Windows.Automation.Condition]::TrueCondition)
         for ($i = 0; $i -lt $descendants.Count; $i++) {
             $candidate = $descendants.Item($i)
-            if (Test-YiruSameRuntimeId @($candidate.GetRuntimeId()) @($Record.runtimeId)) {
+            if (Test-AgentStartSameRuntimeId @($candidate.GetRuntimeId()) @($Record.runtimeId)) {
                 return $candidate
             }
         }
@@ -804,7 +804,7 @@ function Find-YiruElement($RootElement, $Record) {
     $null
 }
 
-function Invoke-YiruPrimaryAction($Element) {
+function Invoke-AgentStartPrimaryAction($Element) {
     foreach ($pattern in @(
         [Windows.Automation.InvokePattern]::Pattern,
         [Windows.Automation.SelectionItemPattern]::Pattern,
@@ -820,7 +820,7 @@ function Invoke-YiruPrimaryAction($Element) {
     $false
 }
 
-function Invoke-YiruNamedAction($Element, [string]$Action) {
+function Invoke-AgentStartNamedAction($Element, [string]$Action) {
     $wanted = ""
     if ($null -ne $Action) { $wanted = $Action.Trim().ToLowerInvariant() }
     switch ($wanted) {
@@ -845,7 +845,7 @@ function Invoke-YiruNamedAction($Element, [string]$Action) {
     }
 }
 
-function Set-YiruElementValue($Element, [string]$Value) {
+function Set-AgentStartElementValue($Element, [string]$Value) {
     try {
         $pattern = $Element.GetCurrentPattern([Windows.Automation.ValuePattern]::Pattern)
         if (-not $pattern.Current.IsReadOnly) {
@@ -856,7 +856,7 @@ function Set-YiruElementValue($Element, [string]$Value) {
     $false
 }
 
-function Get-YiruRequiredNumber($Value, [string]$Name) {
+function Get-AgentStartRequiredNumber($Value, [string]$Name) {
     if ($null -eq $Value) { throw "$Name is required" }
     $number = [double]$Value
     if ([double]::IsNaN($number) -or [double]::IsInfinity($number)) {
@@ -865,40 +865,40 @@ function Get-YiruRequiredNumber($Value, [string]$Name) {
     $number
 }
 
-function Get-YiruPositiveInteger($Value, [string]$Name) {
+function Get-AgentStartPositiveInteger($Value, [string]$Name) {
     if ($null -eq $Value) { $Value = 1 }
     $number = [int]$Value
     if ($number -le 0) { throw "$Name must be a positive integer" }
     $number
 }
 
-function Get-YiruPositiveNumber($Value, [string]$Name) {
+function Get-AgentStartPositiveNumber($Value, [string]$Name) {
     if ($null -eq $Value) { $Value = 1 }
-    $number = Get-YiruRequiredNumber $Value $Name
+    $number = Get-AgentStartRequiredNumber $Value $Name
     if ($number -le 0) { throw "$Name must be a positive number" }
     $number
 }
 
-function Get-YiruRequiredString($Value, [string]$Name) {
+function Get-AgentStartRequiredString($Value, [string]$Name) {
     if ($null -eq $Value) { throw "$Name is required" }
     $text = [string]$Value
     if ($text.Length -eq 0) { throw "$Name is required" }
     $text
 }
 
-function Get-YiruScreenPoint($Operation, $WindowFrame) {
+function Get-AgentStartScreenPoint($Operation, $WindowFrame) {
     if ($null -ne $Operation.element) {
         throw "stale element frame; run get-app-state again and use a fresh element index"
     }
-    $x = Get-YiruRequiredNumber $Operation.x "x"
-    $y = Get-YiruRequiredNumber $Operation.y "y"
+    $x = Get-AgentStartRequiredNumber $Operation.x "x"
+    $y = Get-AgentStartRequiredNumber $Operation.y "y"
     @{
         x = [int][Math]::Round($WindowFrame.x + $x)
         y = [int][Math]::Round($WindowFrame.y + $y)
     }
 }
 
-function Get-YiruElementScreenPoint($Element) {
+function Get-AgentStartElementScreenPoint($Element) {
     if ($null -eq $Element) { return $null }
     try {
         $rect = $Element.Current.BoundingRectangle
@@ -912,9 +912,9 @@ function Get-YiruElementScreenPoint($Element) {
     $null
 }
 
-function Send-YiruMouseClick([IntPtr]$WindowHandle, [int]$ScreenX, [int]$ScreenY, [string]$Button, [int]$Count) {
-    [void][YiruDesktopWin32]::SetForegroundWindow($WindowHandle)
-    [void][YiruDesktopWin32]::SetCursorPos($ScreenX, $ScreenY)
+function Send-AgentStartMouseClick([IntPtr]$WindowHandle, [int]$ScreenX, [int]$ScreenY, [string]$Button, [int]$Count) {
+    [void][AgentStartDesktopWin32]::SetForegroundWindow($WindowHandle)
+    [void][AgentStartDesktopWin32]::SetCursorPos($ScreenX, $ScreenY)
     $buttonName = if ([string]::IsNullOrWhiteSpace($Button)) { "left" } else { $Button.ToLowerInvariant() }
     switch ($buttonName) {
         "left" { $down = $MouseEvents.LeftDown; $up = $MouseEvents.LeftUp }
@@ -923,47 +923,47 @@ function Send-YiruMouseClick([IntPtr]$WindowHandle, [int]$ScreenX, [int]$ScreenY
         default { throw "unsupported mouse button: $Button" }
     }
 
-    for ($i = 0; $i -lt (Get-YiruPositiveInteger $Count "click_count"); $i++) {
-        [YiruDesktopWin32]::mouse_event($down, 0, 0, 0, [UIntPtr]::Zero)
+    for ($i = 0; $i -lt (Get-AgentStartPositiveInteger $Count "click_count"); $i++) {
+        [AgentStartDesktopWin32]::mouse_event($down, 0, 0, 0, [UIntPtr]::Zero)
         Start-Sleep -Milliseconds 35
-        [YiruDesktopWin32]::mouse_event($up, 0, 0, 0, [UIntPtr]::Zero)
+        [AgentStartDesktopWin32]::mouse_event($up, 0, 0, 0, [UIntPtr]::Zero)
     }
 }
 
-function Send-YiruDrag([IntPtr]$WindowHandle, $From, $To) {
-    [void][YiruDesktopWin32]::SetForegroundWindow($WindowHandle)
+function Send-AgentStartDrag([IntPtr]$WindowHandle, $From, $To) {
+    [void][AgentStartDesktopWin32]::SetForegroundWindow($WindowHandle)
     $startX = [int]$From.x
     $startY = [int]$From.y
     $endX = [int]$To.x
     $endY = [int]$To.y
-    [void][YiruDesktopWin32]::SetCursorPos($startX, $startY)
-    [YiruDesktopWin32]::mouse_event($MouseEvents.LeftDown, 0, 0, 0, [UIntPtr]::Zero)
+    [void][AgentStartDesktopWin32]::SetCursorPos($startX, $startY)
+    [AgentStartDesktopWin32]::mouse_event($MouseEvents.LeftDown, 0, 0, 0, [UIntPtr]::Zero)
     for ($step = 1; $step -le 12; $step++) {
         $x = [int][Math]::Round($startX + (($endX - $startX) * $step / 12))
         $y = [int][Math]::Round($startY + (($endY - $startY) * $step / 12))
-        [void][YiruDesktopWin32]::SetCursorPos($x, $y)
+        [void][AgentStartDesktopWin32]::SetCursorPos($x, $y)
         Start-Sleep -Milliseconds 20
     }
-    [YiruDesktopWin32]::mouse_event($MouseEvents.LeftUp, 0, 0, 0, [UIntPtr]::Zero)
+    [AgentStartDesktopWin32]::mouse_event($MouseEvents.LeftUp, 0, 0, 0, [UIntPtr]::Zero)
 }
 
-function Send-YiruText([IntPtr]$WindowHandle, [string]$Text) {
-    [void][YiruDesktopWin32]::SetForegroundWindow($WindowHandle)
+function Send-AgentStartText([IntPtr]$WindowHandle, [string]$Text) {
+    [void][AgentStartDesktopWin32]::SetForegroundWindow($WindowHandle)
     $hasNonAscii = $false
     foreach ($character in $Text.ToCharArray()) {
         if ([int][char]$character -gt 0x7F) { $hasNonAscii = $true; break }
     }
     if ($hasNonAscii) {
         foreach ($character in $Text.ToCharArray()) {
-            [void][YiruDesktopWin32]::PostMessage($WindowHandle, $WindowsMessages.Char, [IntPtr][int][char]$character, [IntPtr]::Zero)
+            [void][AgentStartDesktopWin32]::PostMessage($WindowHandle, $WindowsMessages.Char, [IntPtr][int][char]$character, [IntPtr]::Zero)
             Start-Sleep -Milliseconds 8
         }
         return
     }
-    [System.Windows.Forms.SendKeys]::SendWait((ConvertTo-YiruSendKeysText $Text))
+    [System.Windows.Forms.SendKeys]::SendWait((ConvertTo-AgentStartSendKeysText $Text))
 }
 
-function Get-YiruVirtualKey([string]$Key) {
+function Get-AgentStartVirtualKey([string]$Key) {
     $normalized = $Key.ToLowerInvariant()
     $map = @{
         "return" = 0x0D; "enter" = 0x0D; "tab" = 0x09; "escape" = 0x1B; "esc" = 0x1B
@@ -975,12 +975,12 @@ function Get-YiruVirtualKey([string]$Key) {
     throw "Unsupported key: $Key"
 }
 
-function Send-YiruKey([IntPtr]$WindowHandle, [string]$Key) {
-    [void][YiruDesktopWin32]::SetForegroundWindow($WindowHandle)
-    [System.Windows.Forms.SendKeys]::SendWait((ConvertTo-YiruSendKeysKey $Key))
+function Send-AgentStartKey([IntPtr]$WindowHandle, [string]$Key) {
+    [void][AgentStartDesktopWin32]::SetForegroundWindow($WindowHandle)
+    [System.Windows.Forms.SendKeys]::SendWait((ConvertTo-AgentStartSendKeysKey $Key))
 }
 
-function Get-YiruModifierVirtualKey([string]$Modifier) {
+function Get-AgentStartModifierVirtualKey([string]$Modifier) {
     switch ($Modifier.ToLowerInvariant()) {
         { $_ -in @("ctrl", "control", "cmdorctrl", "commandorcontrol") } { return 0x11 }
         { $_ -in @("shift") } { return 0x10 }
@@ -990,21 +990,21 @@ function Get-YiruModifierVirtualKey([string]$Modifier) {
     }
 }
 
-function Send-YiruHotkey([IntPtr]$WindowHandle, [string]$KeySpec) {
+function Send-AgentStartHotkey([IntPtr]$WindowHandle, [string]$KeySpec) {
     $parts = @($KeySpec.Split("+") | ForEach-Object { $_.Trim() } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
     if ($parts.Count -eq 0) { throw "Unsupported key: $KeySpec" }
     $key = $parts[$parts.Count - 1]
     $prefix = ""
     if ($parts.Count -gt 1) {
         foreach ($modifier in $parts[0..($parts.Count - 2)]) {
-            $prefix += ConvertTo-YiruSendKeysModifier $modifier
+            $prefix += ConvertTo-AgentStartSendKeysModifier $modifier
         }
     }
-    [void][YiruDesktopWin32]::SetForegroundWindow($WindowHandle)
-    [System.Windows.Forms.SendKeys]::SendWait($prefix + (ConvertTo-YiruSendKeysKey $key))
+    [void][AgentStartDesktopWin32]::SetForegroundWindow($WindowHandle)
+    [System.Windows.Forms.SendKeys]::SendWait($prefix + (ConvertTo-AgentStartSendKeysKey $key))
 }
 
-function ConvertTo-YiruSendKeysText([string]$Text) {
+function ConvertTo-AgentStartSendKeysText([string]$Text) {
     $builder = New-Object System.Text.StringBuilder
     foreach ($character in $Text.ToCharArray()) {
         $value = [string]$character
@@ -1019,7 +1019,7 @@ function ConvertTo-YiruSendKeysText([string]$Text) {
     $builder.ToString()
 }
 
-function ConvertTo-YiruSendKeysKey([string]$Key) {
+function ConvertTo-AgentStartSendKeysKey([string]$Key) {
     switch ($Key.ToLowerInvariant()) {
         { $_ -in @("return", "enter") } { return "{ENTER}" }
         "tab" { return "{TAB}" }
@@ -1037,13 +1037,13 @@ function ConvertTo-YiruSendKeysKey([string]$Key) {
         { $_ -in @("pagedown", "page_down") } { return "{PGDN}" }
         "insert" { return "{INSERT}" }
         default {
-            if ($Key.Length -eq 1) { return (ConvertTo-YiruSendKeysText $Key) }
+            if ($Key.Length -eq 1) { return (ConvertTo-AgentStartSendKeysText $Key) }
             throw "Unsupported key: $Key"
         }
     }
 }
 
-function ConvertTo-YiruSendKeysModifier([string]$Modifier) {
+function ConvertTo-AgentStartSendKeysModifier([string]$Modifier) {
     switch ($Modifier.ToLowerInvariant()) {
         { $_ -in @("ctrl", "control", "cmdorctrl", "commandorcontrol") } { return "^" }
         "shift" { return "+" }
@@ -1052,14 +1052,14 @@ function ConvertTo-YiruSendKeysModifier([string]$Modifier) {
     }
 }
 
-function Send-YiruPasteText([IntPtr]$WindowHandle, [string]$Text) {
+function Send-AgentStartPasteText([IntPtr]$WindowHandle, [string]$Text) {
     $previous = $null
     $hadPrevious = $false
     try { $previous = [System.Windows.Forms.Clipboard]::GetDataObject() } catch {}
     $hadPrevious = $null -ne $previous
     try {
         Set-Clipboard -Value $Text
-        Send-YiruHotkey $WindowHandle "Ctrl+v"
+        Send-AgentStartHotkey $WindowHandle "Ctrl+v"
     } finally {
         if ($hadPrevious) {
             try { [System.Windows.Forms.Clipboard]::SetDataObject($previous, $true) } catch {}
@@ -1069,33 +1069,33 @@ function Send-YiruPasteText([IntPtr]$WindowHandle, [string]$Text) {
     }
 }
 
-function Invoke-YiruOperation($Operation) {
+function Invoke-AgentStartOperation($Operation) {
     $includeScreenshot = -not [bool]$Operation.noScreenshot
     if ($Operation.tool -eq "handshake") {
-        return [pscustomobject]@{ ok = $true; capabilities = Get-YiruHandshake }
+        return [pscustomobject]@{ ok = $true; capabilities = Get-AgentStartHandshake }
     }
     if ($Operation.tool -eq "list_apps") {
-        return [pscustomobject]@{ ok = $true; apps = @(Get-YiruAppList) }
+        return [pscustomobject]@{ ok = $true; apps = @(Get-AgentStartAppList) }
     }
     if ($Operation.tool -eq "list_windows") {
-        $list = Get-YiruWindowList $Operation.app
+        $list = Get-AgentStartWindowList $Operation.app
         return [pscustomobject]@{ ok = $true; app = $list.app; windows = @($list.windows) }
     }
     if ($Operation.tool -eq "get_app_state") {
-        return [pscustomobject]@{ ok = $true; snapshot = New-YiruSnapshot $Operation.app $includeScreenshot $Operation.windowId $Operation.windowIndex ([bool]$Operation.restoreWindow) }
+        return [pscustomobject]@{ ok = $true; snapshot = New-AgentStartSnapshot $Operation.app $includeScreenshot $Operation.windowId $Operation.windowIndex ([bool]$Operation.restoreWindow) }
     }
 
-    $process = Find-YiruProcess $Operation.app
-    if ([bool]$Operation.restoreWindow) { Restore-YiruWindow $process }
-    Assert-YiruWindowTarget $process $Operation.windowId $Operation.windowIndex
-    $root = Get-YiruRootElement $process
-    $windowFrame = if ($null -ne $Operation.windowBounds) { $Operation.windowBounds } else { Get-YiruWindowFrame $process $root }
-    $element = Find-YiruElement $root $Operation.element
-    $fromElement = Find-YiruElement $root $Operation.fromElement
-    $toElement = Find-YiruElement $root $Operation.toElement
+    $process = Find-AgentStartProcess $Operation.app
+    if ([bool]$Operation.restoreWindow) { Restore-AgentStartWindow $process }
+    Assert-AgentStartWindowTarget $process $Operation.windowId $Operation.windowIndex
+    $root = Get-AgentStartRootElement $process
+    $windowFrame = if ($null -ne $Operation.windowBounds) { $Operation.windowBounds } else { Get-AgentStartWindowFrame $process $root }
+    $element = Find-AgentStartElement $root $Operation.element
+    $fromElement = Find-AgentStartElement $root $Operation.fromElement
+    $toElement = Find-AgentStartElement $root $Operation.toElement
     $handle = [IntPtr]$process.MainWindowHandle
     if ($Operation.tool -in @("type_text", "press_key", "hotkey", "paste_text")) {
-        Assert-YiruKeyboardFocus $handle $Operation
+        Assert-AgentStartKeyboardFocus $handle $Operation
     }
     $action = $null
 
@@ -1103,16 +1103,16 @@ function Invoke-YiruOperation($Operation) {
         "click" {
             # Why: agents expect a click into a target app to make the next
             # keyboard action safe, even when UI Automation handles the click.
-            Restore-YiruWindow $process
+            Restore-AgentStartWindow $process
             $handledByPattern = $false
-            $clickCount = Get-YiruPositiveInteger $Operation.click_count "click_count"
+            $clickCount = Get-AgentStartPositiveInteger $Operation.click_count "click_count"
             if ($null -ne $element -and $Operation.mouse_button -ne "right" -and $Operation.mouse_button -ne "middle" -and $clickCount -le 1) {
-                $handledByPattern = Invoke-YiruPrimaryAction $element
+                $handledByPattern = Invoke-AgentStartPrimaryAction $element
             }
             if (-not $handledByPattern) {
-                $point = Get-YiruElementScreenPoint $element
-                if ($null -eq $point) { $point = Get-YiruScreenPoint $Operation $windowFrame }
-                Send-YiruMouseClick $handle $point.x $point.y $Operation.mouse_button $clickCount
+                $point = Get-AgentStartElementScreenPoint $element
+                if ($null -eq $point) { $point = Get-AgentStartScreenPoint $Operation $windowFrame }
+                Send-AgentStartMouseClick $handle $point.x $point.y $Operation.mouse_button $clickCount
                 $action = [pscustomobject]@{ path = "synthetic"; actionName = $null; fallbackReason = "actionUnsupported" }
             } else {
                 $action = [pscustomobject]@{ path = "accessibility"; actionName = "primaryAction"; fallbackReason = $null }
@@ -1120,63 +1120,63 @@ function Invoke-YiruOperation($Operation) {
         }
         "perform_secondary_action" {
             if ($null -eq $element) { throw "unknown element_index" }
-            if (-not (Invoke-YiruNamedAction $element $Operation.action)) {
+            if (-not (Invoke-AgentStartNamedAction $element $Operation.action)) {
                 throw "$($Operation.action) is not a valid secondary action"
             }
             $action = [pscustomobject]@{ path = "accessibility"; actionName = $Operation.action; fallbackReason = $null }
         }
         "scroll" {
-            $delta = 120 * [int][Math]::Ceiling((Get-YiruPositiveNumber $Operation.pages "pages"))
+            $delta = 120 * [int][Math]::Ceiling((Get-AgentStartPositiveNumber $Operation.pages "pages"))
             if ($Operation.direction -eq "down" -or $Operation.direction -eq "right") {
                 $delta = -1 * $delta
             } elseif ($Operation.direction -ne "up" -and $Operation.direction -ne "left") {
                 throw "unsupported scroll direction: $($Operation.direction)"
             }
-            $point = Get-YiruElementScreenPoint $element
-            if ($null -eq $point) { $point = Get-YiruScreenPoint $Operation $windowFrame }
-            [void][YiruDesktopWin32]::SetForegroundWindow($handle)
-            [void][YiruDesktopWin32]::SetCursorPos([int]$point.x, [int]$point.y)
-            [YiruDesktopWin32]::mouse_event($MouseEvents.Wheel, 0, 0, $delta, [UIntPtr]::Zero)
+            $point = Get-AgentStartElementScreenPoint $element
+            if ($null -eq $point) { $point = Get-AgentStartScreenPoint $Operation $windowFrame }
+            [void][AgentStartDesktopWin32]::SetForegroundWindow($handle)
+            [void][AgentStartDesktopWin32]::SetCursorPos([int]$point.x, [int]$point.y)
+            [AgentStartDesktopWin32]::mouse_event($MouseEvents.Wheel, 0, 0, $delta, [UIntPtr]::Zero)
             $action = [pscustomobject]@{ path = "synthetic"; actionName = "scroll"; fallbackReason = $null }
         }
         "drag" {
-            $from = Get-YiruElementScreenPoint $fromElement
+            $from = Get-AgentStartElementScreenPoint $fromElement
             if ($null -eq $from -and $null -ne $Operation.fromElement) { throw "stale element frame; run get-app-state again and use a fresh element index" }
             if ($null -eq $from) {
                 $from = @{
-                    x = $windowFrame.x + (Get-YiruRequiredNumber $Operation.from_x "from_x")
-                    y = $windowFrame.y + (Get-YiruRequiredNumber $Operation.from_y "from_y")
+                    x = $windowFrame.x + (Get-AgentStartRequiredNumber $Operation.from_x "from_x")
+                    y = $windowFrame.y + (Get-AgentStartRequiredNumber $Operation.from_y "from_y")
                 }
             }
-            $to = Get-YiruElementScreenPoint $toElement
+            $to = Get-AgentStartElementScreenPoint $toElement
             if ($null -eq $to -and $null -ne $Operation.toElement) { throw "stale element frame; run get-app-state again and use a fresh element index" }
             if ($null -eq $to) {
                 $to = @{
-                    x = $windowFrame.x + (Get-YiruRequiredNumber $Operation.to_x "to_x")
-                    y = $windowFrame.y + (Get-YiruRequiredNumber $Operation.to_y "to_y")
+                    x = $windowFrame.x + (Get-AgentStartRequiredNumber $Operation.to_x "to_x")
+                    y = $windowFrame.y + (Get-AgentStartRequiredNumber $Operation.to_y "to_y")
                 }
             }
-            Send-YiruDrag $handle $from $to
+            Send-AgentStartDrag $handle $from $to
             $action = [pscustomobject]@{ path = "synthetic"; actionName = "drag"; fallbackReason = $null }
         }
         "type_text" {
-            Send-YiruText $handle (Get-YiruRequiredString $Operation.text "text")
+            Send-AgentStartText $handle (Get-AgentStartRequiredString $Operation.text "text")
             $action = [pscustomobject]@{ path = "synthetic"; actionName = "typeText"; fallbackReason = $null; verification = [pscustomobject]@{ state = "unverified"; reason = "synthetic_input" } }
         }
         "press_key" {
-            Send-YiruKey $handle (Get-YiruRequiredString $Operation.key "key")
+            Send-AgentStartKey $handle (Get-AgentStartRequiredString $Operation.key "key")
             $action = [pscustomobject]@{ path = "synthetic"; actionName = "pressKey"; fallbackReason = $null; verification = [pscustomobject]@{ state = "unverified"; reason = "synthetic_input" } }
         }
         "hotkey" {
-            Send-YiruHotkey $handle (Get-YiruRequiredString $Operation.key "key")
+            Send-AgentStartHotkey $handle (Get-AgentStartRequiredString $Operation.key "key")
             $action = [pscustomobject]@{ path = "synthetic"; actionName = "hotkey"; fallbackReason = $null; verification = [pscustomobject]@{ state = "unverified"; reason = "synthetic_input" } }
         }
         "paste_text" {
-            Send-YiruPasteText $handle (Get-YiruRequiredString $Operation.text "text")
+            Send-AgentStartPasteText $handle (Get-AgentStartRequiredString $Operation.text "text")
             $action = [pscustomobject]@{ path = "clipboard"; actionName = "paste"; fallbackReason = $null; verification = [pscustomobject]@{ state = "unverified"; reason = "clipboard_paste" } }
         }
         "set_value" {
-            if ($null -eq $element -or -not (Set-YiruElementValue $element ([string]$Operation.value))) {
+            if ($null -eq $element -or -not (Set-AgentStartElementValue $element ([string]$Operation.value))) {
                 throw "element value is not settable"
             }
             $action = [pscustomobject]@{ path = "accessibility"; actionName = "setValue"; fallbackReason = $null }
@@ -1187,21 +1187,21 @@ function Invoke-YiruOperation($Operation) {
     }
 
     try {
-        $snapshot = New-YiruSnapshot $Operation.app $includeScreenshot $Operation.windowId $Operation.windowIndex
+        $snapshot = New-AgentStartSnapshot $Operation.app $includeScreenshot $Operation.windowId $Operation.windowIndex
     } catch {
         if ($null -eq $Operation.windowId -and $null -eq $Operation.windowIndex) { throw }
         if ($null -eq $action.verification) {
             $action | Add-Member -NotePropertyName verification -NotePropertyValue ([pscustomobject]@{ state = "unverified"; reason = "window_changed" })
         }
-        $snapshot = New-YiruSnapshot $Operation.app $includeScreenshot $null $null
+        $snapshot = New-AgentStartSnapshot $Operation.app $includeScreenshot $null $null
     }
     [pscustomobject]@{ ok = $true; action = $action; snapshot = $snapshot }
 }
 
 try {
-    $operation = Read-YiruOperation $OperationPath
-    Write-YiruJson (Invoke-YiruOperation $operation)
+    $operation = Read-AgentStartOperation $OperationPath
+    Write-AgentStartJson (Invoke-AgentStartOperation $operation)
 } catch {
-    Write-YiruJson ([pscustomobject]@{ ok = $false; error = [string]$_.Exception.Message })
+    Write-AgentStartJson ([pscustomobject]@{ ok = $false; error = [string]$_.Exception.Message })
 }
 

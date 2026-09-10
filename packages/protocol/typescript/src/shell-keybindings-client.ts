@@ -10,7 +10,7 @@ import {
   ShellKeybindingsServiceRevealFileRequestSchema,
   ShellKeybindingsServiceSetActionRequestSchema,
   ShellKeybindingsSnapshotSchema
-} from '../generated/yiru/runtime/v1/shell_keybindings_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_keybindings_pb.js'
 import {
   shellKeybindingsSnapshot,
   type ShellKeybindingsSnapshotValue

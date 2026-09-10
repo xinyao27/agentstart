@@ -1,6 +1,6 @@
-name: YiruMobile
+name: AgentStartMobile
 options:
-  bundleIdPrefix: com.xinyao27.yiru
+  bundleIdPrefix: com.xinyao27.agentstart
   createIntermediateGroups: true
   deploymentTarget:
     iOS: '26.0'
@@ -12,7 +12,7 @@ settings:
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     # Why: release automation uses this as the default marketing version while allowing an exact
     # workflow override or a deliberate patch bump.
-    MARKETING_VERSION: '0.0.1'
+    MARKETING_VERSION: '1.0.0'
     SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
     SWIFT_STRICT_CONCURRENCY: complete
     SWIFT_VERSION: '6.0'
@@ -30,30 +30,28 @@ packages:
   Hugeicons:
     url: https://github.com/iSapozhnik/hugeicons-swift.git
     exactVersion: 4.1.7
-  YiruProtocol:
+  AgentStartProtocol:
     path: ../../packages/protocol/swift
 
 schemes:
-  YiruMobile:
+  AgentStartMobile:
     build:
       targets:
-        YiruMobile: all
-        YiruNotificationService: all
-        YiruWidgets: all
+        AgentStartMobile: all
+        AgentStartWidgets: all
 
 targets:
-  YiruMobile:
+  AgentStartMobile:
     type: application
     platform: iOS
     sources:
-      - path: YiruMobile
+      - path: AgentStartMobile
         type: syncedFolder
         excludes:
           - '**/*.md'
           - 'Resources/agent-icons/**'
       - path: Shared/Widgets
-      - path: Shared/Notifications
-      - path: YiruMobile/Resources/agent-icons
+      - path: AgentStartMobile/Resources/agent-icons
         type: folder
         buildPhase: resources
     dependencies:
@@ -61,28 +59,23 @@ targets:
       - package: SwiftTerm
       - package: Textual
       - package: Hugeicons
-      - package: YiruProtocol
-      - target: YiruWidgets
-      - target: YiruNotificationService
+      - package: AgentStartProtocol
+      - target: AgentStartWidgets
     info:
-      path: YiruMobile/Resources/Info.plist
+      path: AgentStartMobile/Resources/Info.plist
       properties:
         CFBundleDevelopmentRegion: en
-        CFBundleDisplayName: Yiru
+        CFBundleDisplayName: AgentStart
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         CADisableMinimumFrameDurationOnPhone: true
         CFBundleURLTypes:
-          - CFBundleURLName: com.xinyao27.yiru.mobile.pairing
+          - CFBundleURLName: com.xinyao27.agentstart.mobile.pairing
             CFBundleURLSchemes:
-              - yiru
+              - agentstart
         ITSAppUsesNonExemptEncryption: false
-        UIBackgroundModes:
-          - remote-notification
-        YiruKeychainAccessGroup: $(AppIdentifierPrefix)com.xinyao27.yiru.mobile.notifications
-        NSCameraUsageDescription: Allow Yiru to take photos and scan pairing codes.
-        NSLocalNetworkUsageDescription: Yiru connects directly to your daemon on the local network.
-        NSPhotoLibraryUsageDescription: Allow Yiru to attach photos from your library to an agent or terminal session on your paired desktop.
+        NSCameraUsageDescription: Allow AgentStart to scan pairing QR codes.
+        NSLocalNetworkUsageDescription: AgentStart connects directly to your daemon on the local network.
         NSAppTransportSecurity:
           NSAllowsLocalNetworking: true
           NSExceptionDomains:
@@ -107,77 +100,41 @@ targets:
         ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: YES
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_ENTITLEMENTS: AgentStartMobile/Resources/AgentStartMobile.entitlements
         DEVELOPMENT_TEAM: 8H6Q2YA365
         GENERATE_INFOPLIST_FILE: NO
-        PRODUCT_BUNDLE_IDENTIFIER: com.xinyao27.yiru.mobile
-        PRODUCT_NAME: Yiru
+        PRODUCT_BUNDLE_IDENTIFIER: com.xinyao27.agentstart.mobile
+        PRODUCT_NAME: AgentStart
         SUPPORTS_MACCATALYST: NO
         SWIFT_EMIT_LOC_STRINGS: YES
         TARGETED_DEVICE_FAMILY: '1,2'
-      configs:
-        Debug:
-          CODE_SIGN_ENTITLEMENTS: YiruMobile/Resources/YiruMobile.entitlements
-        Release:
-          CODE_SIGN_ENTITLEMENTS: YiruMobile/Resources/YiruMobileRelease.entitlements
-  YiruWidgets:
+  AgentStartWidgets:
     type: app-extension
     platform: iOS
     sources:
-      - path: YiruWidgets
+      - path: AgentStartWidgets
         type: syncedFolder
       - path: Shared/Widgets
-      - path: YiruMobile/DesignSystem/Icons
+      - path: AgentStartMobile/DesignSystem/Icons
     info:
-      path: YiruWidgets/Resources/Info.plist
+      path: AgentStartWidgets/Resources/Info.plist
       properties:
-        CFBundleDisplayName: Yiru Widgets
+        CFBundleDisplayName: AgentStart Widgets
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
     settings:
       base:
-        CODE_SIGN_ENTITLEMENTS: YiruWidgets/Resources/YiruWidgets.entitlements
+        CODE_SIGN_ENTITLEMENTS: AgentStartWidgets/Resources/AgentStartWidgets.entitlements
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: 8H6Q2YA365
         GENERATE_INFOPLIST_FILE: NO
-        # Why: preserve the widget identifier registered on Apple ID 6792278376 so the native
-        # binary upgrades the existing app and its extension instead of introducing a new target.
-        PRODUCT_BUNDLE_IDENTIFIER: com.xinyao27.yiru.mobile.ExpoWidgetsTarget
-        PRODUCT_NAME: YiruWidgets
+        PRODUCT_BUNDLE_IDENTIFIER: com.xinyao27.agentstart.mobile.Widgets
+        PRODUCT_NAME: AgentStartWidgets
         SKIP_INSTALL: YES
         SUPPORTS_MACCATALYST: NO
         SWIFT_EMIT_LOC_STRINGS: YES
         TARGETED_DEVICE_FAMILY: '1,2'
     dependencies:
       - package: Hugeicons
-  YiruNotificationService:
-    type: app-extension
-    platform: iOS
-    sources:
-      - path: YiruNotificationService
-        type: syncedFolder
-      - path: Shared/Notifications
-    info:
-      path: YiruNotificationService/Resources/Info.plist
-      properties:
-        CFBundleDisplayName: Yiru Notification Service
-        CFBundleShortVersionString: $(MARKETING_VERSION)
-        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
-        NSExtension:
-          NSExtensionPointIdentifier: com.apple.usernotifications.service
-          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).NotificationService
-        YiruKeychainAccessGroup: $(AppIdentifierPrefix)com.xinyao27.yiru.mobile.notifications
-    settings:
-      base:
-        CODE_SIGN_ENTITLEMENTS: YiruNotificationService/Resources/YiruNotificationService.entitlements
-        CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: 8H6Q2YA365
-        GENERATE_INFOPLIST_FILE: NO
-        PRODUCT_BUNDLE_IDENTIFIER: com.xinyao27.yiru.mobile.NotificationService
-        PRODUCT_NAME: YiruNotificationService
-        SKIP_INSTALL: YES
-        SUPPORTS_MACCATALYST: NO
-        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
-        SWIFT_EMIT_LOC_STRINGS: YES
-        TARGETED_DEVICE_FAMILY: '1,2'

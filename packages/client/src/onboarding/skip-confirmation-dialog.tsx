@@ -9,7 +9,7 @@ import {
   DialogTitle
 } from '~renderer/ui/dialog'
 
-export const ONBOARDING_SKIP_CONFIRMATION_COPY = {
+const ONBOARDING_SKIP_CONFIRMATION_COPY = {
   get title() {
     return translate(
       'auto.components.onboarding.OnboardingSkipConfirmationDialog.e4726b2d50',

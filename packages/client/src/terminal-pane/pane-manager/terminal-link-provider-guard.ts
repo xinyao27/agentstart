@@ -12,7 +12,7 @@ import { recordRendererCrashBreadcrumb } from '~renderer/crash-report/diagnostic
  * which Chromium then kills (`killed` exit 1). Degrading to "no link this hover"
  * keeps the renderer alive; the user can retry by moving the mouse.
  */
-export function guardLinkProvider(provider: ILinkProvider, label: string): ILinkProvider {
+function guardLinkProvider(provider: ILinkProvider, label: string): ILinkProvider {
   return {
     provideLinks(bufferLineNumber, callback) {
       let callbackInvoked = false

@@ -5,10 +5,7 @@ use std::io;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 
-use base64::Engine as _;
-use chrono::{SecondsFormat, Utc};
-use serde_json::{Map, Value, json};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::{
     ComputerActionMetadata, ComputerActionPath, ComputerActionVerification, ComputerAppInfo,
     ComputerErrorCode, ComputerJsonValue, ComputerListedApp, ComputerPermissionId,
     ComputerPermissionState, ComputerPermissionStatus, ComputerScreenshotData,
@@ -21,11 +18,14 @@ use yiru_protocol::runtime::v1::{
     ComputerVerifiedProperty, ComputerWindowInfo, ComputerWindowListEntry, HostPlatform,
     computer_action_verification, computer_json_value, computer_screenshot_status,
 };
+use base64::Engine as _;
+use chrono::{SecondsFormat, Utc};
+use serde_json::{Map, Value, json};
 
 const SCREENSHOT_TTL: Duration = Duration::from_secs(24 * 60 * 60);
 const SCREENSHOT_CLEANUP_INTERVAL: Duration = Duration::from_secs(60 * 60);
 const SCREENSHOT_CLEANUP_MARKER: &str = ".last-cleanup";
-const SCREENSHOT_TMPDIR_ENV: &str = "YIRU_COMPUTER_SCREENSHOT_TMPDIR";
+const SCREENSHOT_TMPDIR_ENV: &str = "AGENTSTART_COMPUTER_SCREENSHOT_TMPDIR";
 
 pub(super) fn write_output(json_mode: bool, result: Value, summary: &str) {
     if !json_mode {
@@ -513,7 +513,7 @@ fn screenshot_directory() -> PathBuf {
         .map(|value| value.trim().to_owned())
         .filter(|value| !value.is_empty())
         .map(PathBuf::from)
-        .unwrap_or_else(|| std::env::temp_dir().join("yiru-computer-use"))
+        .unwrap_or_else(|| std::env::temp_dir().join("agentstart-computer-use"))
 }
 
 fn cleanup_screenshots(directory: &Path) {

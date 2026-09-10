@@ -1,8 +1,8 @@
-import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
-import { normalizeExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
-import type { SetupAgentStartupPolicy } from '@yiru/protocol/worktree/hooks'
-import { getDefaultRepoHookSettings } from '@yiru/protocol/worktree/hooks'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@agentstart/protocol'
+import { normalizeExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
+import type { SetupAgentStartupPolicy } from '@agentstart/protocol/worktree/hooks'
+import { getDefaultRepoHookSettings } from '@agentstart/protocol/worktree/hooks'
 import {
   getLinkedWorkItemSuggestedName,
   getLinkedWorkItemWorkspaceName

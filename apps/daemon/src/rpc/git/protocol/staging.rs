@@ -1,8 +1,8 @@
 // Index and working-tree mutation that does not touch commit history or refs.
-// See packages/protocol/proto/yiru/runtime/v1/git_staging.proto (GitStagingService).
+// See packages/protocol/proto/agentstart/runtime/v1/git_staging.proto (GitStagingService).
 
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     GitStagingServiceAppendGitignoreRequest, GitStagingServiceAppendGitignoreResponse,
     GitStagingServiceBulkDiscardRequest, GitStagingServiceBulkDiscardResponse,
     GitStagingServiceBulkStageRequest, GitStagingServiceBulkStageResponse,
@@ -12,7 +12,7 @@ use yiru_protocol::runtime::v1::{
     GitStagingServiceStageRequest, GitStagingServiceStageResponse, GitStagingServiceUnstageRequest,
     GitStagingServiceUnstageResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use super::super::GitRpc;
 use super::support::authority_status;

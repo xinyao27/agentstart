@@ -1,9 +1,9 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
 import type { StateCreator } from 'zustand'
 import {
   getAgentRowGeneratedTitleText,
-  getYiruDispatchTaskId,
-  isYiruDispatchPrompt,
+  getAgentStartDispatchTaskId,
+  isAgentStartDispatchPrompt,
   orchestrationLabelsMatchLiveDispatch
 } from '~renderer/agent/row-primary-text'
 
@@ -90,9 +90,9 @@ export function createAgentStatusLiveActions(
             entryForGeneratedTitle.orchestration?.taskTitle?.trim()) &&
           orchestrationLabelsMatchLiveDispatch(entryForGeneratedTitle)
         )
-        const liveIsDispatchPrompt = isYiruDispatchPrompt(entryForGeneratedTitle.prompt)
+        const liveIsDispatchPrompt = isAgentStartDispatchPrompt(entryForGeneratedTitle.prompt)
         const liveDispatchTaskId = liveIsDispatchPrompt
-          ? getYiruDispatchTaskId(entryForGeneratedTitle.prompt)
+          ? getAgentStartDispatchTaskId(entryForGeneratedTitle.prompt)
           : null
         const stickyOrchestrationTaskId =
           entryForGeneratedTitle.orchestration?.taskId?.trim() || null
@@ -130,7 +130,7 @@ export function createAgentStatusLiveActions(
       queueMicrotask(() => scheduleFreshness())
       if (appliedResult.current?.completionRefreshWorktreeId) {
         const worktreeId = appliedResult.current.completionRefreshWorktreeId
-        // Why: agents can create a PR via `gh pr create`, bypassing Yiru's
+        // Why: agents can create a PR via `gh pr create`, bypassing AgentStart's
         // create-PR flow and leaving a fresh "no PR" cache entry in place.
         queueMicrotask(() => get().refreshGitHubForWorktreeIfStale(worktreeId))
       }

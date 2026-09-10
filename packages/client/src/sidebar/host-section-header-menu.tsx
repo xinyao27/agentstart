@@ -1,4 +1,4 @@
-import { parseExecutionHostId } from '@yiru/protocol/host/identity'
+import { parseExecutionHostId } from '@agentstart/protocol/host/identity'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

@@ -2,7 +2,7 @@ import {
   resolveSourceControlAiForOperation as resolveOperation,
   type ResolveSourceControlAiInput,
   type ResolveSourceControlAiResult
-} from '@yiru/protocol/source-control/resolution'
+} from '@agentstart/protocol/source-control/resolution'
 
 import { localizeGenerationFailure } from './failure-copy'
 

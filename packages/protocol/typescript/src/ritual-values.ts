@@ -1,9 +1,9 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   RitualKind as ProtocolKind,
   type RitualScheduleStatus as ProtocolScheduleStatus,
   type RitualServiceRunResponse as ProtocolRunResponse
-} from '../generated/yiru/runtime/v1/ritual_pb.js'
+} from '../generated/agent_start/runtime/v1/ritual_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const RITUAL_PROTOCOL_CAPABILITY = 'ritual.protobuf.v1' as const

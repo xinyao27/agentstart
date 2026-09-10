@@ -2,17 +2,17 @@
 # and service activation; no package-manager one-liner can own that sequence safely.
 set -eu
 
-repository="xinyao27/yiru"
-install_directory="${YIRU_INSTALL_DIR:-${HOME}/.local/bin}"
-release_version="${YIRU_VERSION:-latest}"
-skip_service_install="${YIRU_SKIP_SERVICE_INSTALL:-0}"
+repository="xinyao27/agentstart"
+install_directory="${AGENTSTART_INSTALL_DIR:-${HOME}/.local/bin}"
+release_version="${AGENTSTART_VERSION:-latest}"
+skip_service_install="${AGENTSTART_SKIP_SERVICE_INSTALL:-0}"
 max_binary_bytes=268435456
 max_checksum_bytes=1048576
 
 case "$skip_service_install" in
   0 | 1) ;;
   *)
-    echo "YIRU_SKIP_SERVICE_INSTALL must be 0 or 1." >&2
+    echo "AGENTSTART_SKIP_SERVICE_INSTALL must be 0 or 1." >&2
     exit 1
     ;;
 esac
@@ -21,7 +21,7 @@ case "$(uname -s)" in
   Darwin) platform="darwin" ;;
   Linux) platform="linux" ;;
   *)
-    echo "Yiru's shell installer supports macOS and Linux; use npm on Windows." >&2
+    echo "AgentStart's shell installer supports macOS and Linux; use npm on Windows." >&2
     exit 1
     ;;
 esac
@@ -39,7 +39,7 @@ target="rust-${platform}-${architecture}"
 if [ "$platform" = "linux" ] && { ldd --version 2>&1 || true; } | grep -qi musl; then
   target="${target}-musl"
 fi
-asset="yiru-${target}"
+asset="agentstart-${target}"
 if [ "$release_version" = "latest" ]; then
   release_base="https://github.com/${repository}/releases/latest/download"
 else
@@ -84,7 +84,7 @@ read_platform_service_state() {
       printf '%s\n' "unknown"
       return
     fi
-    if /bin/launchctl print "${launch_domain}/com.yiru.daemon" >/dev/null 2>&1; then
+    if /bin/launchctl print "${launch_domain}/com.agentstart.daemon" >/dev/null 2>&1; then
       if [ "$service_definition_existed" = "1" ]; then
         printf '%s\n' "running"
       else
@@ -99,7 +99,7 @@ read_platform_service_state() {
     fi
     return
   fi
-  if systemd_state="$(systemctl --user is-active yiru.service 2>/dev/null)"; then
+  if systemd_state="$(systemctl --user is-active agentstart.service 2>/dev/null)"; then
     systemd_status=0
   else
     systemd_status=$?
@@ -139,13 +139,13 @@ read_service_enablement() {
     fi
     compact_disabled_services="$(printf '%s' "$disabled_services" | tr -d '[:space:]')"
     case "$compact_disabled_services" in
-      *'"com.yiru.daemon"=>true'*) printf '%s\n' "disabled" ;;
-      *'"com.yiru.daemon"=>false'*) printf '%s\n' "enabled" ;;
+      *'"com.agentstart.daemon"=>true'*) printf '%s\n' "disabled" ;;
+      *'"com.agentstart.daemon"=>false'*) printf '%s\n' "enabled" ;;
       *) printf '%s\n' "unspecified" ;;
     esac
     return
   fi
-  if systemd_enablement="$(systemctl --user is-enabled yiru.service 2>/dev/null)"; then
+  if systemd_enablement="$(systemctl --user is-enabled agentstart.service 2>/dev/null)"; then
     systemd_enablement_status=0
   else
     systemd_enablement_status=$?
@@ -222,7 +222,7 @@ restore_path_state() {
   fi
   restore_parent="$(dirname "$restore_path")"
   mkdir -p "$restore_parent" || return 1
-  restore_staging="$(mktemp -d "${restore_parent}/.yiru-restore.XXXXXX")" || return 1
+  restore_staging="$(mktemp -d "${restore_parent}/.agentstart-restore.XXXXXX")" || return 1
   if ! cp -Pp "$restore_backup" "${restore_staging}/value"; then
     rm -rf "$restore_staging"
     return 1
@@ -251,12 +251,12 @@ restore_path_state() {
 quiesce_service() {
   if [ "$platform" = "darwin" ]; then
     /bin/launchctl bootout "$launch_domain" "$service_definition_path" >/dev/null 2>&1 || true
-    /bin/launchctl bootout "${launch_domain}/com.yiru.daemon" >/dev/null 2>&1 || true
-    ! /bin/launchctl print "${launch_domain}/com.yiru.daemon" >/dev/null 2>&1
+    /bin/launchctl bootout "${launch_domain}/com.agentstart.daemon" >/dev/null 2>&1 || true
+    ! /bin/launchctl print "${launch_domain}/com.agentstart.daemon" >/dev/null 2>&1
     return
   fi
-  systemctl --user stop yiru.service >/dev/null 2>&1 || true
-  if stopped_state="$(systemctl --user is-active yiru.service 2>/dev/null)"; then
+  systemctl --user stop agentstart.service >/dev/null 2>&1 || true
+  if stopped_state="$(systemctl --user is-active agentstart.service 2>/dev/null)"; then
     stopped_status=0
   else
     stopped_status=$?
@@ -275,7 +275,7 @@ restore_service_state() {
     # so rollback restores that behavior without editing launchd's private persistence database.
     if [ "$previous_service_enablement" = "enabled" ] ||
       [ "$previous_service_enablement" = "unspecified" ]; then
-      /bin/launchctl enable "${launch_domain}/com.yiru.daemon" >/dev/null 2>&1 ||
+      /bin/launchctl enable "${launch_domain}/com.agentstart.daemon" >/dev/null 2>&1 ||
         service_restore_status=1
     fi
     if [ "$previous_service_state" = "running" ]; then
@@ -285,7 +285,7 @@ restore_service_state() {
       fi
     fi
     if [ "$previous_service_enablement" = "disabled" ]; then
-      /bin/launchctl disable "${launch_domain}/com.yiru.daemon" >/dev/null 2>&1 ||
+      /bin/launchctl disable "${launch_domain}/com.agentstart.daemon" >/dev/null 2>&1 ||
         service_restore_status=1
     fi
     restore_directory_state "$(dirname "$service_definition_path")" \
@@ -297,18 +297,18 @@ restore_service_state() {
 
   # Why: disable the replacement before restoring a prior symlink-backed unit; systemctl disable
   # may otherwise remove the restored definition itself while cleaning the replacement's wants.
-  systemctl --user disable yiru.service >/dev/null 2>&1 || true
+  systemctl --user disable agentstart.service >/dev/null 2>&1 || true
   restore_path_state "$service_definition_path" "$service_definition_backup_path" \
     "$service_definition_existed" || service_restore_status=1
   systemctl --user daemon-reload >/dev/null 2>&1 || service_restore_status=1
   if [ "$previous_service_enablement" = "enabled" ]; then
-    systemctl --user enable yiru.service >/dev/null 2>&1 || service_restore_status=1
+    systemctl --user enable agentstart.service >/dev/null 2>&1 || service_restore_status=1
   elif [ "$previous_service_enablement" = "enabled-runtime" ]; then
-    systemctl --user enable --runtime yiru.service >/dev/null 2>&1 || service_restore_status=1
+    systemctl --user enable --runtime agentstart.service >/dev/null 2>&1 || service_restore_status=1
   fi
   if [ "$previous_service_state" = "running" ]; then
     if [ "$binary_state_restored" != "1" ] ||
-      ! systemctl --user start yiru.service >/dev/null 2>&1; then
+      ! systemctl --user start agentstart.service >/dev/null 2>&1; then
       service_restore_status=1
     fi
   fi
@@ -333,7 +333,7 @@ restore_helper_state() {
   fi
   helper_state_parent="$(dirname "$helper_state_path")"
   mkdir -p "$helper_state_parent" || return 1
-  helper_restore_staging="$(mktemp -d "${helper_state_parent}/.yiru-helper-restore.XXXXXX")" ||
+  helper_restore_staging="$(mktemp -d "${helper_state_parent}/.agentstart-helper-restore.XXXXXX")" ||
     return 1
   if ! /usr/bin/ditto -x -k "$helper_state_backup_path" "$helper_restore_staging"; then
     rm -rf "$helper_restore_staging"
@@ -377,7 +377,7 @@ rollback_install() {
   binary_state_restored=0
   if [ "$service_setup_attempted" = "1" ]; then
     if ! quiesce_service; then
-      echo "The replacement Yiru service could not be stopped during rollback." >&2
+      echo "The replacement AgentStart service could not be stopped during rollback." >&2
       rollback_status=1
     fi
   fi
@@ -387,9 +387,9 @@ rollback_install() {
     binary_state_restored=1
   else
     if [ "$had_previous_binary" = "1" ]; then
-      echo "Could not restore the previous Yiru binary from ${previous_binary_path}." >&2
+      echo "Could not restore the previous AgentStart binary from ${previous_binary_path}." >&2
     else
-      echo "Could not remove the incomplete Yiru installation at ${executable}." >&2
+      echo "Could not remove the incomplete AgentStart installation at ${executable}." >&2
     fi
     rollback_status=1
   fi
@@ -411,7 +411,7 @@ rollback_install() {
   fi
   if [ "$service_setup_attempted" = "1" ]; then
     if ! restore_service_state; then
-      echo "The previous Yiru service definition or state could not be restored." >&2
+      echo "The previous AgentStart service definition or state could not be restored." >&2
       rollback_status=1
     fi
   fi
@@ -420,9 +420,9 @@ rollback_install() {
     return 1
   fi
   if [ "$had_previous_binary" = "1" ]; then
-    echo "Restored the previous Yiru installation after setup failed." >&2
+    echo "Restored the previous AgentStart installation after setup failed." >&2
   else
-    echo "Removed the incomplete Yiru installation and restored prior setup state." >&2
+    echo "Removed the incomplete AgentStart installation and restored prior setup state." >&2
   fi
 }
 
@@ -559,8 +559,8 @@ run_setup() {
 }
 
 download "${release_base}/${asset}" "${temporary_directory}/${asset}" "$max_binary_bytes" 180
-download "${release_base}/yiru-checksums.txt" \
-  "${temporary_directory}/yiru-checksums.txt" "$max_checksum_bytes" 30
+download "${release_base}/agentstart-checksums.txt" \
+  "${temporary_directory}/agentstart-checksums.txt" "$max_checksum_bytes" 30
 if ! expected_checksum="$(awk -v name="$asset" '
   $2 == name {
     if (found || NF != 2 || length($1) != 64 || $1 !~ /^[0-9a-f]+$/) exit 2
@@ -571,7 +571,7 @@ if ! expected_checksum="$(awk -v name="$asset" '
     if (!found) exit 3
     print checksum
   }
-' "${temporary_directory}/yiru-checksums.txt")"; then
+' "${temporary_directory}/agentstart-checksums.txt")"; then
   echo "The release checksum list must contain one canonical SHA-256 for ${asset}." >&2
   exit 1
 fi
@@ -613,13 +613,13 @@ if [ "$install_directory_existed" = "1" ]; then
   install_directory_existing_ancestor="$install_directory"
 fi
 install_directory_preflight_done=1
-transaction_directory="$(mktemp -d "${install_directory}/.yiru-install.XXXXXX")"
+transaction_directory="$(mktemp -d "${install_directory}/.agentstart-install.XXXXXX")"
 candidate_path="${transaction_directory}/candidate"
 previous_binary_path="${transaction_directory}/previous"
 native_manifest_backup_path="${transaction_directory}/native-manifest"
 service_definition_backup_path="${transaction_directory}/service-definition"
 helper_state_backup_path="${transaction_directory}/computer-use.zip"
-executable="${install_directory}/yiru"
+executable="${install_directory}/agentstart"
 
 raw_xdg_root="${XDG_CONFIG_HOME:-}"
 configured_xdg_root="$(trim_value "$raw_xdg_root")"
@@ -633,7 +633,7 @@ case "$effective_config_root" in
   *) effective_config_root="$(pwd)/${effective_config_root}" ;;
 esac
 
-configured_native_manifest_root="$(trim_value "${YIRU_NATIVE_MESSAGING_CONFIG_ROOT:-}")"
+configured_native_manifest_root="$(trim_value "${AGENTSTART_NATIVE_MESSAGING_CONFIG_ROOT:-}")"
 if [ -n "$configured_native_manifest_root" ]; then
   case "$configured_native_manifest_root" in
     /*) native_manifest_root="$configured_native_manifest_root" ;;
@@ -644,7 +644,7 @@ elif [ "$platform" = "darwin" ]; then
 else
   native_manifest_root="${effective_config_root}/google-chrome/NativeMessagingHosts"
 fi
-native_manifest_path="${native_manifest_root}/com.yiru.daemon.json"
+native_manifest_path="${native_manifest_root}/com.agentstart.daemon.json"
 if [ -d "$native_manifest_root" ]; then
   native_manifest_directory_mode="$(read_directory_mode "$native_manifest_root")"
   native_manifest_directory_existed=1
@@ -672,9 +672,9 @@ fi
 if [ "$skip_service_install" != "1" ]; then
   if [ "$platform" = "darwin" ]; then
     launch_domain="gui/$(/usr/bin/id -u)"
-    service_definition_path="${HOME}/Library/LaunchAgents/com.yiru.daemon.plist"
+    service_definition_path="${HOME}/Library/LaunchAgents/com.agentstart.daemon.plist"
   else
-    service_definition_path="${effective_config_root}/systemd/user/yiru.service"
+    service_definition_path="${effective_config_root}/systemd/user/agentstart.service"
   fi
   service_definition_directory="$(dirname "$service_definition_path")"
   if [ -d "$service_definition_directory" ]; then
@@ -703,13 +703,13 @@ if [ "$skip_service_install" != "1" ]; then
 fi
 
 if [ "$platform" = "darwin" ]; then
-  helper_override="${YIRU_COMPUTER_MACOS_HELPER_APP_PATH:-}"
+  helper_override="${AGENTSTART_COMPUTER_MACOS_HELPER_APP_PATH:-}"
   if [ -z "$helper_override" ] ||
-    [ ! -f "${helper_override}/Contents/MacOS/yiru-computer-use-macos" ]; then
+    [ ! -f "${helper_override}/Contents/MacOS/agentstart-computer-use-macos" ]; then
     helper_state_managed=1
-    configured_user_data_root="$(trim_value "${YIRU_APP_USER_DATA_PATH:-}")"
+    configured_user_data_root="$(trim_value "${AGENTSTART_APP_USER_DATA_PATH:-}")"
     if [ -z "$configured_user_data_root" ]; then
-      configured_user_data_root="$(trim_value "${YIRU_USER_DATA_PATH:-}")"
+      configured_user_data_root="$(trim_value "${AGENTSTART_USER_DATA_PATH:-}")"
     fi
     if [ -n "$configured_user_data_root" ]; then
       case "$configured_user_data_root" in
@@ -717,7 +717,7 @@ if [ "$platform" = "darwin" ]; then
         *) user_data_root="$(pwd)/${configured_user_data_root}" ;;
       esac
     else
-      user_data_root="${HOME}/Library/Application Support/yiru"
+      user_data_root="${HOME}/Library/Application Support/agentstart"
     fi
     helper_state_path="${user_data_root}/native/computer-use"
     helper_state_directory="$(dirname "$helper_state_path")"
@@ -762,13 +762,13 @@ if [ "$skip_service_install" != "1" ]; then
       exit 1
       ;;
     *)
-      echo "Cannot determine the existing Yiru service state." >&2
+      echo "Cannot determine the existing AgentStart service state." >&2
       exit 1
       ;;
   esac
   previous_service_enablement="$(read_service_enablement)"
   if [ "$previous_service_enablement" = "unknown" ]; then
-    echo "Cannot determine the existing Yiru service enablement state." >&2
+    echo "Cannot determine the existing AgentStart service enablement state." >&2
     exit 1
   fi
 fi
@@ -776,20 +776,20 @@ replacement_installed=1
 mv -f "$candidate_path" "$executable"
 
 if [ "$skip_service_install" = "1" ]; then
-  if ! run_setup "${install_directory}/yiru" install --no-browser --no-service; then
-    echo "Yiru setup failed; restoring the previous installation." >&2
+  if ! run_setup "${install_directory}/agentstart" install --no-browser --no-service; then
+    echo "AgentStart setup failed; restoring the previous installation." >&2
     exit 1
   fi
 else
   service_setup_attempted=1
-  if ! run_setup "${install_directory}/yiru" install --no-browser; then
-    echo "Yiru setup failed; restoring the previous installation." >&2
+  if ! run_setup "${install_directory}/agentstart" install --no-browser; then
+    echo "AgentStart setup failed; restoring the previous installation." >&2
     exit 1
   fi
 fi
 
 transaction_committed=1
-echo "Installed Yiru to ${install_directory}/yiru"
+echo "Installed AgentStart to ${install_directory}/agentstart"
 case ":${PATH}:" in
   *":${install_directory}:"*) ;;
   *) echo "Add ${install_directory} to PATH." ;;

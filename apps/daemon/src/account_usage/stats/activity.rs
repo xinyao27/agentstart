@@ -166,7 +166,7 @@ async fn preserve_corrupt(path: PathBuf, bytes: Vec<u8>) -> io::Result<()> {
         let mut random = [0_u8; 8];
         getrandom::fill(&mut random).map_err(io::Error::other)?;
         let backup = path.with_file_name(format!(
-            "yiru-stats.corrupt-{}-{:016x}.json",
+            "agentstart-stats.corrupt-{}-{:016x}.json",
             chrono::Utc::now().timestamp_millis(),
             u64::from_ne_bytes(random)
         ));

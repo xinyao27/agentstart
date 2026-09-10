@@ -31,10 +31,10 @@ pub(crate) use service::{
     ServiceState, restart as restart_daemon_service, state as daemon_service_state,
 };
 
-pub(crate) const RESTART_PARENT_ENV: &str = "YIRU_RESTART_PARENT_PID";
-const CODEX_GRANT_ENTRY_COMMAND: &str = "__yiru-codex-grant-entry";
-const WARP_THEME_PARSE_ENTRY_COMMAND: &str = "__yiru-warp-theme-parse-entry";
-const CLI_USAGE: &str = "Usage: yiru <install|status|service|connection|events|host|environment|repo|worktree|layout|terminal|agent|browser|computer|mobile|skills|update|daemon|native-messaging> [options]";
+pub(crate) const RESTART_PARENT_ENV: &str = "AGENTSTART_RESTART_PARENT_PID";
+const CODEX_GRANT_ENTRY_COMMAND: &str = "__agentstart-codex-grant-entry";
+const WARP_THEME_PARSE_ENTRY_COMMAND: &str = "__agentstart-warp-theme-parse-entry";
+const CLI_USAGE: &str = "Usage: agentstart <install|status|service|connection|events|host|environment|repo|worktree|layout|terminal|agent|browser|computer|mobile|skills|update|daemon|native-messaging> [options]";
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum InternalCommand {
@@ -136,7 +136,7 @@ async fn run_cli(args: &[OsString]) -> ExitCode {
         return match browser::run(args).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         };
@@ -145,91 +145,91 @@ async fn run_cli(args: &[OsString]) -> ExitCode {
         Some("install") => match install::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("service") => match service::run(&args[1..]) {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("skills") => match skills::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("events") => match events::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("host") => match host::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("environment") => match environment::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("mobile") => match mobile::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("repo") => match repo::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("worktree") => match worktree::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("terminal") => match terminal::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("layout") => match layout::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("agent") => match agent::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
         Some("computer") => match computer::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
-                eprintln!("Yiru command failed: {error}");
+                eprintln!("AgentStart command failed: {error}");
                 ExitCode::FAILURE
             }
         },
@@ -254,7 +254,7 @@ pub fn run_immediate(invocation: &Invocation) -> Option<ExitCode> {
             Some(match crate::cli::run_connection(&args[1..]) {
                 Ok(()) => ExitCode::SUCCESS,
                 Err(error) => {
-                    eprintln!("Yiru command failed: {error}");
+                    eprintln!("AgentStart command failed: {error}");
                     ExitCode::FAILURE
                 }
             })
@@ -263,7 +263,7 @@ pub fn run_immediate(invocation: &Invocation) -> Option<ExitCode> {
             Some(match crate::cli::run_status(&args[1..]) {
                 Ok(()) => ExitCode::SUCCESS,
                 Err(error) => {
-                    eprintln!("Yiru command failed: {error}");
+                    eprintln!("AgentStart command failed: {error}");
                     ExitCode::FAILURE
                 }
             })

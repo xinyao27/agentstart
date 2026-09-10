@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type { WindowsTerminalCapabilities } from '~renderer/terminal/windows/capabilities'
 
 import { translate } from '../../i18n/i18n'
@@ -68,7 +68,7 @@ export function CapabilitySections({
         title={translate('auto.components.settings.Settings.ad6c529693', 'AI Provider Accounts')}
         description={translate(
           'auto.components.settings.Settings.21f09426ea',
-          'Optional. Yiru works with your existing provider logins; add accounts only if you want Yiru to help switch between them.'
+          'Optional. AgentStart works with your existing provider logins; add accounts only if you want AgentStart to help switch between them.'
         )}
         badge={translate('auto.hooks.useSettingsNavigationMetadata.7c79d3b7bf', 'Optional')}
         searchEntries={getSearchEntries('accounts')}
@@ -91,7 +91,7 @@ export function CapabilitySections({
         title={translate('auto.components.settings.Settings.00c3a7950d', 'Orchestration')}
         description={translate(
           'auto.components.settings.Settings.475980f53d',
-          'Coordinate multiple coding agents through Yiru.'
+          'Coordinate multiple coding agents through AgentStart.'
         )}
         searchEntries={getSearchEntries('orchestration')}
       >
@@ -115,7 +115,7 @@ export function CapabilitySections({
         title={translate('auto.components.settings.Settings.6d119427ef', 'Onboarding checklist')}
         description={translate(
           'auto.components.settings.Settings.6855b0f77d',
-          'Finish the core workflows that make Yiru useful for parallel agent work.'
+          'Finish the core workflows that make AgentStart useful for parallel agent work.'
         )}
         searchEntries={getSearchEntries('setup-guide')}
         bodyClassName="overflow-hidden border-0 bg-transparent p-0"

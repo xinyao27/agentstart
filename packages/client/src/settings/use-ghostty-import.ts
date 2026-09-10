@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useState } from 'react'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { previewGhosttyImportOnActiveHost } from '~renderer/runtime/settings-import-client'

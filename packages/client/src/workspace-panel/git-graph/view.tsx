@@ -14,7 +14,7 @@ import { useGitGraphView } from './use-git-graph-view'
 // area — control bar, resizable commit columns aligned to the shared
 // GitGraphSvg vertex grid, inline commit details, and the find widget. See
 // use-git-graph-view.ts for the state/selectors this composes.
-export function GitGraphView({
+function GitGraphView({
   worktreeId,
   tabId
 }: {

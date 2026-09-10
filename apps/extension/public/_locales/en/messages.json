@@ -1,27 +1,27 @@
 {
   "appName": {
-    "message": "Yiru"
+    "message": "AgentStart"
   },
   "appDescription": {
     "message": "Run coding agents across projects from Chrome."
   },
   "openSidePanel": {
-    "message": "Open Yiru"
+    "message": "Open AgentStart"
   },
-  "openYiruCommand": {
-    "message": "Open Yiru"
+  "openAgentStartCommand": {
+    "message": "Open AgentStart"
   },
   "forgeAction": {
-    "message": "Handle in Yiru"
+    "message": "Handle in AgentStart"
   },
   "previewAction": {
-    "message": "Inspect with Yiru"
+    "message": "Inspect with AgentStart"
   },
   "useAsContext": {
-    "message": "Use in Yiru"
+    "message": "Use in AgentStart"
   },
   "agentActive": {
-    "message": "Yiru agent is operating"
+    "message": "AgentStart agent is operating"
   },
   "takeOver": {
     "message": "Take over"
@@ -33,6 +33,6 @@
     "message": "agent(s) waiting for you"
   },
   "attentionRequired": {
-    "message": "Yiru needs your decision"
+    "message": "AgentStart needs your decision"
   }
 }

@@ -1,5 +1,5 @@
-import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { GitBranchChangeEntry } from '@agentstart/protocol/git/branch-compare-types'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 import { useEffect } from 'react'
 import { getDiffCommentSource } from '~renderer/editor/diff-comment-compat'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
@@ -42,9 +42,16 @@ export function useSourceControlHistory(scope: SourceControlBranchCompareControl
     worktreePath
   } = scope
   useEffect(() => {
-    // Why: avoid Git subprocesses while the sidebar is hidden; remote operations
-    // already refresh upstream status before it becomes visible again.
-    if (!activeWorktreeId || !worktreePath || isFolder || !isBranchVisible) {
+    // Why: avoid Git subprocesses while the sidebar is hidden or Git has marked
+    // the workspace as removable; remote operations refresh valid workspaces
+    // before the sidebar becomes visible again.
+    if (
+      !activeWorktreeId ||
+      !worktreePath ||
+      activeWorktree?.prunable === true ||
+      isFolder ||
+      !isBranchVisible
+    ) {
       return
     }
     const connectionId = getConnectionId(activeWorktreeId) ?? undefined
@@ -57,6 +64,7 @@ export function useSourceControlHistory(scope: SourceControlBranchCompareControl
     )
   }, [
     activeRepoSettings,
+    activeWorktree?.prunable,
     activeWorktree?.pushTarget,
     activeWorktreeId,
     fetchUpstreamStatus,

@@ -35,7 +35,7 @@ export function SparsePresetDraftEditor({
   onSave
 }: SparsePresetDraftEditorProps): React.JSX.Element {
   return (
-    <div className="border-border/60 bg-background/80 border p-4">
+    <div className="border-border/60 bg-background/80 rounded-xl border p-4">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="space-y-0.5">
           <h5 className="text-sm font-semibold">
@@ -109,7 +109,7 @@ export function SparsePresetDraftEditor({
             )}
             rows={5}
             spellCheck={false}
-            className="border-input placeholder:text-muted-foreground focus-visible:border-ring w-full min-w-0 resize-y border bg-transparent px-3 py-2 font-mono text-xs transition-[color] outline-none"
+            className="border-input placeholder:text-muted-foreground focus-visible:border-ring w-full min-w-0 resize-y rounded-md border bg-transparent px-3 py-2 font-mono text-xs transition-[color] outline-none"
           />
           {parsedDirectories?.error ? (
             <p className="text-destructive text-xs">{parsedDirectories.error}</p>

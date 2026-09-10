@@ -1,4 +1,4 @@
-import { AI_VAULT_AGENTS, type AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+import { AI_VAULT_AGENTS, type AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
 import type {
   AiVaultGroup,
   AiVaultSort
@@ -10,7 +10,7 @@ import {
   DEFAULT_AI_VAULT_SORT
 } from './view-defaults'
 
-export const AI_VAULT_VIEW_OPTIONS_STORAGE_KEY = 'yiru.aiVault.viewOptions.v1'
+const AI_VAULT_VIEW_OPTIONS_STORAGE_KEY = 'agentstart.aiVault.viewOptions.v1'
 
 export type AiVaultViewOptions = {
   disabledAgents: AiVaultAgent[]
@@ -46,7 +46,7 @@ function isAiVaultGroup(value: unknown): value is AiVaultGroup {
   return value === 'project' || value === 'folder' || value === 'agent'
 }
 
-export function normalizeAiVaultViewOptions(value: unknown): AiVaultViewOptions {
+function normalizeAiVaultViewOptions(value: unknown): AiVaultViewOptions {
   const record = value && typeof value === 'object' ? (value as Record<string, unknown>) : {}
   const catalog = new Set<string>(AI_VAULT_AGENTS)
   const normalizedDisabledAgents = Array.isArray(record.disabledAgents)

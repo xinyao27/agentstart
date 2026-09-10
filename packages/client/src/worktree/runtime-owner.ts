@@ -1,12 +1,12 @@
-import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ExecutionHostId, ParsedExecutionHost } from '@yiru/protocol/host/identity'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
-import { folderWorkspaceKey, parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { ExecutionHostId, ParsedExecutionHost } from '@agentstart/protocol/host/identity'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
+import { folderWorkspaceKey, parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import {
   findIndexedFolderWorkspaceOwner,

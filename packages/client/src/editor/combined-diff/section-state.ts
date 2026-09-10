@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 
 import type { DiffSection } from '../diff-section/types'
 import type { CombinedDiffModel } from './model'

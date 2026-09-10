@@ -1,6 +1,6 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::diagnostics_service_upload_bundle_response::Result as UploadResult;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::diagnostics_service_upload_bundle_response::Result as UploadResult;
+use agentstart_protocol::runtime::v1::{
     AppMemory as ProtocolAppMemory, DiagnosticsDisabledReason as ProtocolDisabledReason,
     DiagnosticsServiceCollectBundleRequest, DiagnosticsServiceCollectBundleResponse,
     DiagnosticsServiceDiscardBundlePreviewRequest, DiagnosticsServiceDiscardBundlePreviewResponse,
@@ -11,7 +11,7 @@ use yiru_protocol::runtime::v1::{
     SessionMemory as ProtocolSessionMemory, UsageValues as ProtocolUsageValues,
     WorktreeMemory as ProtocolWorktreeMemory,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::diagnostics::{
     AppMemory, DiagnosticsDisabledReason, HostMemory, MemoryDiagnostics, MemorySnapshot,
@@ -117,11 +117,11 @@ impl DiagnosticsRpc {
 fn protocol_disabled_reason(reason: DiagnosticsDisabledReason) -> i32 {
     (match reason {
         DiagnosticsDisabledReason::DoNotTrack => ProtocolDisabledReason::DoNotTrack,
-        DiagnosticsDisabledReason::YiruTelemetryDisabled => {
-            ProtocolDisabledReason::YiruTelemetryDisabled
+        DiagnosticsDisabledReason::AgentStartTelemetryDisabled => {
+            ProtocolDisabledReason::AgentStartTelemetryDisabled
         }
-        DiagnosticsDisabledReason::YiruDiagnosticsDisabled => {
-            ProtocolDisabledReason::YiruDiagnosticsDisabled
+        DiagnosticsDisabledReason::AgentStartDiagnosticsDisabled => {
+            ProtocolDisabledReason::AgentStartDiagnosticsDisabled
         }
         DiagnosticsDisabledReason::Ci => ProtocolDisabledReason::Ci,
     }) as i32

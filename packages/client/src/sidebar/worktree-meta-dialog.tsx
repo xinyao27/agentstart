@@ -217,7 +217,7 @@ const WorktreeMetaDialog = function WorktreeMetaDialog() {
                 'Notes about this worktree...'
               )}
               rows={3}
-              className="border-input placeholder:text-muted-foreground focus-visible:border-ring scrollbar-sleek [field-sizing:content] max-h-60 w-full min-w-0 resize-none overflow-y-auto border bg-transparent px-3 py-2 text-xs transition-[color] outline-none"
+              className="border-input placeholder:text-muted-foreground focus-visible:border-ring scrollbar-sleek [field-sizing:content] max-h-60 w-full min-w-0 resize-none overflow-y-auto rounded-md border bg-transparent px-3 py-2 text-xs transition-[color] outline-none"
             />
             <p className="text-muted-foreground text-[10px]">
               {translate(

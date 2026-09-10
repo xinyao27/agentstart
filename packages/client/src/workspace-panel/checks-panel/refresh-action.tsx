@@ -1,4 +1,4 @@
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
 import { buildGitHubPRRefreshStateClearToken } from '~renderer/github/state'
 import { getRuntimeGitStatus, getRuntimeGitUpstreamStatus } from '~renderer/runtime/git-client'
 import { refreshHostedReviewCard } from '~renderer/source-control/hosted-review-state/slice'

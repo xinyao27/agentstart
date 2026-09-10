@@ -1,7 +1,7 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::project_runtime_preference::Kind as PreferenceKind;
-use yiru_protocol::runtime::v1::{ProjectServiceListRequest, ProjectServiceUpdateRequest};
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::project_runtime_preference::Kind as PreferenceKind;
+use agentstart_protocol::runtime::v1::{ProjectServiceListRequest, ProjectServiceUpdateRequest};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::projects::ProjectCatalogError;
 use crate::projects::wire::LocalWindowsRuntimePreference;
@@ -47,7 +47,7 @@ pub(in crate::rpc) async fn update(rpc: &ProjectRpc, payload: &[u8]) -> Result<V
 }
 
 fn preference(
-    value: yiru_protocol::runtime::v1::ProjectRuntimePreference,
+    value: agentstart_protocol::runtime::v1::ProjectRuntimePreference,
 ) -> Result<LocalWindowsRuntimePreference, Status> {
     match value.kind {
         Some(PreferenceKind::InheritGlobal(_)) => Ok(LocalWindowsRuntimePreference::InheritGlobal),

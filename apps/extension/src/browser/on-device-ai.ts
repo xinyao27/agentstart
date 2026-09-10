@@ -1,4 +1,4 @@
-import type { BrowserAiStatus } from '@yiru/client/extension-bootstrap'
+import type { BrowserAiStatus } from '@agentstart/client/extension-bootstrap'
 
 import { readEnterprisePolicy } from '../enterprise-policy'
 

@@ -1,8 +1,8 @@
-import type { BaseRefSearchResult } from '@yiru/protocol/git/worktree-source'
+import type { BaseRefSearchResult } from '@agentstart/protocol/git/worktree-source'
 
 const LEGACY_REMOTE_REF_PREFIXES = ['origin/', 'upstream/']
 
-export function deriveLegacyLocalBranchName(refName: string): string {
+function deriveLegacyLocalBranchName(refName: string): string {
   // Why: mixed-version runtimes only return display refs. Keep common remote
   // refs from reintroducing `origin/feature/foo` as the local branch name.
   for (const prefix of LEGACY_REMOTE_REF_PREFIXES) {

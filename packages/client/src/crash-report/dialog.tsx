@@ -1,4 +1,4 @@
-import type { CrashReportRecord } from '@yiru/protocol/crash-reports/values'
+import type { CrashReportRecord } from '@agentstart/protocol/crash-reports/values'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { lazyWithRetry as lazy } from '~renderer/application-shell/lazy-with-retry'
 import {

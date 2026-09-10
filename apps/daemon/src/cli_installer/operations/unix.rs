@@ -74,7 +74,7 @@ async fn remove_stale_privileged(
         )
     } else {
         format!(
-            "if [ -f {path} ] && grep -q 'YIRU_CLI_ENVIRONMENT=development' {path} && grep -q 'YIRU_NODE_OPTIONS' {path} && grep -q 'NODE_REPL_EXTERNAL_MODULE' {path} && grep -Eq 'apps[/\\]daemon[/\\]src[/\\]entry\\.ts' {path}; then rm {path}; else exit 73; fi"
+            "if [ -f {path} ] && grep -q 'AGENTSTART_CLI_ENVIRONMENT=development' {path} && grep -q 'AGENTSTART_NODE_OPTIONS' {path} && grep -q 'NODE_REPL_EXTERNAL_MODULE' {path} && grep -Eq 'apps[/\\]daemon[/\\]src[/\\]entry\\.ts' {path}; then rm {path}; else exit 73; fi"
         )
     };
     run_mac_privileged(&command).await

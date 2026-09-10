@@ -15,7 +15,7 @@ pub(super) struct ProfilesRpc {
 
 #[derive(Debug, Error)]
 pub(super) enum ProfilesRpcError {
-    #[error("invalid_yiru_profile_input")]
+    #[error("invalid_agentstart_profile_input")]
     InvalidInput,
     #[error(transparent)]
     Profile(#[from] ProfilesError),

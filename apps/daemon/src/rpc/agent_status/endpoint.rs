@@ -11,10 +11,10 @@ pub(super) fn write(root: &Path, environment: &[(String, String)]) -> Option<Str
     for (key, value) in environment {
         if !matches!(
             key.as_str(),
-            "YIRU_AGENT_HOOK_PORT"
-                | "YIRU_AGENT_HOOK_TOKEN"
-                | "YIRU_AGENT_HOOK_ENV"
-                | "YIRU_AGENT_HOOK_VERSION"
+            "AGENTSTART_AGENT_HOOK_PORT"
+                | "AGENTSTART_AGENT_HOOK_TOKEN"
+                | "AGENTSTART_AGENT_HOOK_ENV"
+                | "AGENTSTART_AGENT_HOOK_VERSION"
         ) || value.is_empty()
             || !value.bytes().all(|byte| {
                 byte.is_ascii_alphanumeric() || matches!(byte, b'.' | b'_' | b':' | b'/' | b'-')

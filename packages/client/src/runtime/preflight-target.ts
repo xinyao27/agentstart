@@ -7,16 +7,14 @@ import {
   type PreflightRefreshAgentsValue,
   type PreflightStatusValue,
   type RuntimeCallOptions
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'
 import { readRuntimeStatus } from './status-client'
 
-export async function openPreflightTarget(
-  target: RuntimeClientTarget
-): Promise<PreflightClient | null> {
+async function openPreflightTarget(target: RuntimeClientTarget): Promise<PreflightClient | null> {
   const status = await readRuntimeStatus(target)
   if (!status.capabilities?.includes(PREFLIGHT_PROTOCOL_CAPABILITY)) {
     return null
@@ -26,15 +24,13 @@ export async function openPreflightTarget(
 
 // Why: the preflight namespace is protobuf-only, so a missing capability means
 // the connected daemon predates the cutover — an error, not a legacy retry.
-export async function requirePreflightClient(
-  target: RuntimeClientTarget
-): Promise<PreflightClient> {
+async function requirePreflightClient(target: RuntimeClientTarget): Promise<PreflightClient> {
   const client = await openPreflightTarget(target)
   if (!client) {
     throw new Error(
       translate(
         'runtime.preflightTarget.unavailable',
-        'Agent detection needs a current Yiru daemon connection.'
+        'Agent detection needs a current AgentStart daemon connection.'
       )
     )
   }

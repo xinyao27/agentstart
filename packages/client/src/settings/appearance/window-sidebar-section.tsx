@@ -1,6 +1,6 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { StatusBarItem } from '@yiru/protocol/settings/ui-state'
-import type { FeatureInteractionId } from '@yiru/protocol/telemetry/interactions/catalog'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { StatusBarItem } from '@agentstart/protocol/settings/ui-state'
+import type { FeatureInteractionId } from '@agentstart/protocol/telemetry/interactions/catalog'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useAvailableStatusBarToggles } from '~renderer/status-bar/use-available-status-bar-toggles'
@@ -200,7 +200,7 @@ export function AppearanceWindowSidebarSection({
                   <SearchableSetting
                     title={translate(
                       'auto.components.settings.AppearancePane.9da1020447',
-                      'Show Yiru Mobile Button'
+                      'Show AgentStart Mobile Button'
                     )}
                     description={sidebarEntries[0]?.description}
                     keywords={sidebarEntries[0]?.keywords ?? ['mobile', 'phone', 'sidebar']}
@@ -208,13 +208,13 @@ export function AppearanceWindowSidebarSection({
                     <SettingsSwitchRow
                       label={translate(
                         'auto.components.settings.AppearancePane.9da1020447',
-                        'Show Yiru Mobile Button'
+                        'Show AgentStart Mobile Button'
                       )}
                       // Why: clarify where the shortcut still lives after hiding it, so users
                       // don't think the feature is gone.
                       description={translate(
                         'auto.components.settings.AppearancePane.61d842eca0',
-                        'Show the Yiru Mobile shortcut in the sidebar. It remains available from Toolbox.'
+                        'Show the AgentStart Mobile shortcut in the sidebar. It remains available from Toolbox.'
                       )}
                       checked={settings.showMobileButton !== false}
                       onChange={() =>

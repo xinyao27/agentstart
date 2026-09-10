@@ -1,9 +1,9 @@
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     GitHubChecksState, GitHubChecksSummary, GitHubConflictSummary, GitHubMergeMethodSettings,
     GitHubPrMergeable, GitHubPrState, GitHubRepoRef, GitHubReviewDecision, GitHubUser,
 };
+use serde_json::Value;
 
 use crate::github::{GitHubError, GitHubRepository};
 

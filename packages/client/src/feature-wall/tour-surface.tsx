@@ -1,13 +1,13 @@
-import type { FeatureWallOpenSourceTelemetry } from '@yiru/protocol/telemetry/events/foundations'
-import type { FeatureWallTourDepthSummary } from '@yiru/protocol/telemetry/feature-wall/depth'
-import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { FeatureWallWorkflowId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallOpenSourceTelemetry } from '@agentstart/protocol/telemetry/events/foundations'
+import type { FeatureWallTourDepthSummary } from '@agentstart/protocol/telemetry/feature-wall/depth'
+import type { AgentsStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { FeatureWallWorkflowId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import { useEffect, useId, useRef, useState } from 'react'
 import type { JSX, ReactNode } from 'react'
 import {
-  YIRU_CLI_SKILL_NAME,
+  AGENTSTART_CLI_SKILL_NAME,
   ORCHESTRATION_SKILL_NAME
 } from '~renderer/agent/feature-install-commands'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'
@@ -74,7 +74,7 @@ export function FeatureWallTourSurface({
   className,
   panelClassName,
   doneLabel = 'Done',
-  footerText = 'Reopen any time from Help > Explore Yiru.',
+  footerText = 'Reopen any time from Help > Explore AgentStart.',
   enableKeyboardShortcut = true,
   compactRail = false,
   detachedFooter = false,
@@ -129,7 +129,7 @@ export function FeatureWallTourSurface({
     discoveryTarget: activeSkillRuntime.discoveryTarget,
     sourceKinds: GLOBAL_AGENT_SKILL_SOURCE_KINDS
   })
-  const browserUseSkill = useInstalledAgentSkill(YIRU_CLI_SKILL_NAME, {
+  const browserUseSkill = useInstalledAgentSkill(AGENTSTART_CLI_SKILL_NAME, {
     enabled: isOpen,
     discoveryTarget: activeSkillRuntime.discoveryTarget,
     sourceKinds: GLOBAL_AGENT_SKILL_SOURCE_KINDS

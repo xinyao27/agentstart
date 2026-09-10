@@ -14,7 +14,7 @@ import type {
 } from '~renderer/runtime/remote-server-update-coordinator'
 import { Badge } from '~renderer/ui/badge'
 
-export function getRemoteServerUpdatePhaseLabel(phase: RemoteServerUpdatePhase): string {
+function getRemoteServerUpdatePhaseLabel(phase: RemoteServerUpdatePhase): string {
   switch (phase) {
     case 'checking':
       return translate('auto.components.settings.RemoteServerUpdateStatus.checking', 'Checking…')
@@ -102,7 +102,7 @@ export function getRemoteServerManualUpdateHelp(entry: RemoteServerUpdateEntry):
   if (entry.support?.reason === 'manual-service-update-required') {
     return translate(
       'auto.components.settings.RemoteServerUpdateStatus.serviceManagerHelp',
-      'Update Yiru through the service manager that starts this server.'
+      'Update AgentStart through the service manager that starts this server.'
     )
   }
   if (entry.support?.reason === 'unpackaged-build') {

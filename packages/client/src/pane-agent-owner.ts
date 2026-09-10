@@ -1,4 +1,4 @@
-import type { AgentType } from '@yiru/protocol/agent/status-records'
+import type { AgentType } from '@agentstart/protocol/agent/status-records'
 
 /**
  * The owner-evidence signals a terminal pane can carry, strongest launch intent
@@ -6,7 +6,7 @@ import type { AgentType } from '@yiru/protocol/agent/status-records'
  * each call site passes only what it holds; absent signals are skipped.
  */
 export type PaneAgentOwnerSignals = {
-  /** Tab-scoped launch intent — what Yiru launched into this tab. */
+  /** Tab-scoped launch intent — what AgentStart launched into this tab. */
   launchAgent?: AgentType | null
   /** Never-cleared per-connection launch seed (pane connection only). */
   startupLaunchAgent?: AgentType | null

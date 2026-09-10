@@ -1,4 +1,4 @@
-import { WORKSPACE_TITLEBAR_OPEN_IN_ACTION_ID } from '@yiru/protocol/settings/panel-titlebar-pins'
+import { WORKSPACE_TITLEBAR_OPEN_IN_ACTION_ID } from '@agentstart/protocol/settings/panel-titlebar-pins'
 import { OpenInApplicationIcon } from '~renderer/external-editor/application-catalog'
 import { translate } from '~renderer/i18n/i18n'
 import { FolderOpen, CaretDown } from '~renderer/icons/hugeicons'

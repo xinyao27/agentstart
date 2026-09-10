@@ -1,6 +1,6 @@
 import {
-  YIRU_CLI_SKILL_INSTALL_COMMAND,
-  YIRU_CLI_SKILL_UPDATE_COMMAND
+  AGENTSTART_CLI_SKILL_INSTALL_COMMAND,
+  AGENTSTART_CLI_SKILL_UPDATE_COMMAND
 } from '~renderer/agent/feature-install-commands'
 import { useMobileEmulatorAgentSetupState } from '~renderer/emulator-pane/use-mobile-emulator-agent-setup-state'
 import { translate } from '~renderer/i18n/i18n'
@@ -8,7 +8,7 @@ import { DownloadSimple as Import } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import {
   AGENT_SKILL_CLI_PREREQUISITE_NOTICE,
-  ensureYiruCliAvailableForAgentSkillTerminal
+  ensureAgentStartCliAvailableForAgentSkillTerminal
 } from '~renderer/skills/agent-cli-prerequisite'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
@@ -20,23 +20,23 @@ import { buildSkillCommandForRuntime } from '../cli-skill-runtime-setup'
 import { MobileEmulatorExamples } from './emulator-examples'
 
 const EMULATOR_CLI_COMMANDS = [
-  'yiru emulator list --json',
-  'yiru emulator attach "iPhone 16 Pro" --json',
-  'yiru emulator tap 0.5 0.7 --json',
-  'yiru emulator type "hello" --json'
+  'agentstart emulator list --json',
+  'agentstart emulator attach "iPhone 16 Pro" --json',
+  'agentstart emulator tap 0.5 0.7 --json',
+  'agentstart emulator type "hello" --json'
 ] as const
 
 export function MobileEmulatorAgentControlRow(): React.JSX.Element {
   const setup = useMobileEmulatorAgentSetupState(true)
-  const cliSkillInstallCommand = buildSkillCommandForRuntime(YIRU_CLI_SKILL_INSTALL_COMMAND)
-  const cliSkillUpdateCommand = buildSkillCommandForRuntime(YIRU_CLI_SKILL_UPDATE_COMMAND)
+  const cliSkillInstallCommand = buildSkillCommandForRuntime(AGENTSTART_CLI_SKILL_INSTALL_COMMAND)
+  const cliSkillUpdateCommand = buildSkillCommandForRuntime(AGENTSTART_CLI_SKILL_UPDATE_COMMAND)
 
   const handleEnableCli = async (): Promise<void> => {
     await setup.handleEnableCli()
   }
 
   return (
-    <div className="border-border/60 bg-card/30 border p-4">
+    <div className="border-border/60 bg-card/30 rounded-2xl border p-4">
       <div className="flex items-center justify-between gap-3">
         <div className="space-y-0.5">
           <p className="text-sm font-semibold">
@@ -48,13 +48,13 @@ export function MobileEmulatorAgentControlRow(): React.JSX.Element {
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.settings.MobileEmulatorAgentControlRow.ff4b7e65d6',
-              'Let coding agents control the active mobile emulator with Yiru CLI commands.'
+              'Let coding agents control the active mobile emulator with AgentStart CLI commands.'
             )}
           </p>
         </div>
         <span
           className={cn(
-            'shrink-0 px-2 py-0.5 text-[10px] font-medium',
+            'shrink-0 px-2 py-0.5 text-[10px] font-medium rounded-full',
             setup.completedCount === 2
               ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'
               : 'bg-muted text-muted-foreground'
@@ -74,13 +74,13 @@ export function MobileEmulatorAgentControlRow(): React.JSX.Element {
             <p className="text-sm font-medium">
               {translate(
                 'auto.components.settings.MobileEmulatorAgentControlRow.4f2205f3b6',
-                'Enable Yiru CLI'
+                'Enable AgentStart CLI'
               )}
             </p>
             <p className="text-muted-foreground text-xs">
               {translate(
                 'auto.components.settings.MobileEmulatorAgentControlRow.2fef055608',
-                'Registers the Yiru CLI command so agents can control the active emulator from their shell.'
+                'Registers the AgentStart CLI command so agents can control the active emulator from their shell.'
               )}
             </p>
             {setup.cliInstallStatus?.commandPath && setup.cliEnabled ? (
@@ -89,7 +89,9 @@ export function MobileEmulatorAgentControlRow(): React.JSX.Element {
                   'auto.components.settings.MobileEmulatorAgentControlRow.aaf62a3dd2',
                   'Installed at'
                 )}{' '}
-                <code className="bg-muted px-1 py-0.5">{setup.cliInstallStatus.commandPath}</code>
+                <code className="bg-muted rounded px-1 py-0.5">
+                  {setup.cliInstallStatus.commandPath}
+                </code>
               </p>
             ) : null}
             {!setup.cliEnabled && setup.cliInstallStatus?.detail ? (
@@ -99,10 +101,12 @@ export function MobileEmulatorAgentControlRow(): React.JSX.Element {
               <p className="text-muted-foreground text-[11px] leading-snug">
                 {translate(
                   'auto.components.settings.MobileEmulatorAgentControlRow.3d34423e88',
-                  'Registering the Yiru CLI'
+                  'Registering the AgentStart CLI'
                 )}{' '}
                 {setup.cliInstallStatus?.commandPath ? (
-                  <code className="bg-muted px-1 py-0.5">{setup.cliInstallStatus.commandPath}</code>
+                  <code className="bg-muted rounded px-1 py-0.5">
+                    {setup.cliInstallStatus.commandPath}
+                  </code>
                 ) : null}{' '}
                 {translate(
                   'auto.components.settings.MobileEmulatorAgentControlRow.3be27641c9',
@@ -147,17 +151,17 @@ export function MobileEmulatorAgentControlRow(): React.JSX.Element {
             variant="inline"
             title={translate(
               'auto.components.settings.MobileEmulatorAgentControlRow.67e19ee03c',
-              'Yiru CLI skill'
+              'AgentStart CLI skill'
             )}
             description={translate(
               'auto.components.settings.MobileEmulatorAgentControlRow.d94ca6a623',
-              'Enables agents to use Yiru CLI commands, including mobile emulator control.'
+              'Enables agents to use AgentStart CLI commands, including mobile emulator control.'
             )}
             command={cliSkillInstallCommand}
             installedCommand={cliSkillUpdateCommand}
-            terminalTitle="Yiru CLI skill setup"
-            terminalAriaLabel="Yiru CLI skill install terminal"
-            terminalWorktreeId="settings-mobile-emulator-yiru-cli-skill-terminal"
+            terminalTitle="AgentStart CLI skill setup"
+            terminalAriaLabel="AgentStart CLI skill install terminal"
+            terminalWorktreeId="settings-mobile-emulator-agentstart-cli-skill-terminal"
             installed={setup.cliSkillInstalled}
             loading={setup.cliSkillLoading}
             error={setup.cliSkillError}
@@ -166,10 +170,10 @@ export function MobileEmulatorAgentControlRow(): React.JSX.Element {
             preInstallNotice={AGENT_SKILL_CLI_PREREQUISITE_NOTICE}
             openingHint={translate(
               'auto.components.settings.MobileEmulatorAgentControlRow.3941719a56',
-              'Checking Yiru CLI before opening skill setup.'
+              'Checking AgentStart CLI before opening skill setup.'
             )}
             onBeforeOpenTerminal={async () => {
-              await ensureYiruCliAvailableForAgentSkillTerminal()
+              await ensureAgentStartCliAvailableForAgentSkillTerminal()
             }}
             onRecheck={setup.refreshCliSkill}
           />
@@ -195,7 +199,7 @@ export function MobileEmulatorAgentControlRow(): React.JSX.Element {
             {EMULATOR_CLI_COMMANDS.map((command) => (
               <code
                 key={command}
-                className="border-border/60 bg-background/60 text-foreground block border px-2 py-1 font-mono text-[11px] leading-snug break-all"
+                className="border-border/60 bg-background/60 text-foreground block rounded-md border px-2 py-1 font-mono text-[11px] leading-snug break-all"
               >
                 {command}
               </code>

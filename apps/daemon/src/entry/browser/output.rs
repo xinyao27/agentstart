@@ -1,9 +1,9 @@
+use agentstart_protocol::runtime::v1 as browser;
+use agentstart_protocol::runtime::v1::browser_value::Kind;
+use agentstart_protocol::runtime::v1::execute_response::Result as BrowserResult;
 use base64::Engine;
 use base64::engine::general_purpose::STANDARD;
 use serde_json::{Map, Value, json};
-use yiru_protocol::runtime::v1 as browser;
-use yiru_protocol::runtime::v1::browser_value::Kind;
-use yiru_protocol::runtime::v1::execute_response::Result as BrowserResult;
 
 use super::BrowserCommandError;
 use super::input::BrowserArgs;

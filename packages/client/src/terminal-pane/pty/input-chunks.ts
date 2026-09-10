@@ -1,4 +1,4 @@
-import { measureUtf8ByteLength } from '@yiru/protocol/text/utf8-length'
+import { measureUtf8ByteLength } from '@agentstart/protocol/text/utf8-length'
 import {
   CLIPBOARD_TEXT_MEASURE_YIELD_CODE_UNITS,
   isUtf8ByteLengthOverLimitWithYield
@@ -24,17 +24,14 @@ function getUtf8ByteLengthForCodePoint(codePoint: number): number {
   return 4
 }
 
-export function isTerminalInputTooLarge(
-  text: string,
-  maxBytes = TERMINAL_INPUT_MAX_BYTES
-): boolean {
+function isTerminalInputTooLarge(text: string, maxBytes = TERMINAL_INPUT_MAX_BYTES): boolean {
   return (
     text.length > maxBytes ||
     measureUtf8ByteLength(text, { stopAfterBytes: maxBytes }).exceededLimit
   )
 }
 
-export function isTerminalInputTooLargeWithYield(
+function isTerminalInputTooLargeWithYield(
   text: string,
   maxBytes = TERMINAL_INPUT_MAX_BYTES
 ): Promise<boolean> {

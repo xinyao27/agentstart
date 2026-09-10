@@ -3,13 +3,13 @@ import { quoteStartupArg, tokenizeStartupCommand, type AgentStartupShell } from 
 import { buildShellCommandFromArgv } from '../shell-command'
 
 const QUERY_ENV_LIMIT = 24_000
-const QUERY_PLACEHOLDER = '__YIRU_HERMES_STARTUP_QUERY__'
+const QUERY_PLACEHOLDER = '__AGENTSTART_HERMES_STARTUP_QUERY__'
 const QUERY_ARG_PLACEHOLDER = `--query=${QUERY_PLACEHOLDER}`
-const POSIX_QUERY_VARIABLE = '__yiru_hermes_startup_query'
-const POWERSHELL_QUERY_VARIABLE = 'yiruHermesStartupQuery'
-const POWERSHELL_NATIVE_QUERY_VARIABLE = 'yiruHermesNativeQuery'
+const POSIX_QUERY_VARIABLE = '__agentstart_hermes_startup_query'
+const POWERSHELL_QUERY_VARIABLE = 'agentstartHermesStartupQuery'
+const POWERSHELL_NATIVE_QUERY_VARIABLE = 'agentstartHermesNativeQuery'
 
-export const YIRU_HERMES_STARTUP_QUERY_ENV = 'YIRU_HERMES_STARTUP_QUERY'
+export const AGENTSTART_HERMES_STARTUP_QUERY_ENV = 'AGENTSTART_HERMES_STARTUP_QUERY'
 
 function encodePowerShellCommand(command: string): string {
   let bytes = ''
@@ -69,7 +69,7 @@ function findChatSubcommand(args: readonly string[]): number {
   return -1
 }
 
-function stripYiruOwnedHermesArgs(args: readonly string[]): string[] {
+function stripAgentStartOwnedHermesArgs(args: readonly string[]): string[] {
   const normalized: string[] = []
   for (let index = 0; index < args.length; index += 1) {
     const token = args[index]
@@ -137,8 +137,8 @@ function normalizeHermesArgv(
     ...commandPrefix,
     'chat',
     QUERY_ARG_PLACEHOLDER,
-    ...stripYiruOwnedHermesArgs(baseArgsWithoutChat),
-    ...stripYiruOwnedHermesArgs(configuredArgsWithoutChat),
+    ...stripAgentStartOwnedHermesArgs(baseArgsWithoutChat),
+    ...stripAgentStartOwnedHermesArgs(configuredArgsWithoutChat),
     '--tui'
   ]
 }
@@ -152,7 +152,7 @@ function buildQueryCommand(argv: string[], shell: AgentStartupShell): string {
     // Why: startup prompts must not remain exported to Hermes tools; the
     // long-lived parent shell retains the transport env for compatibility.
     // PowerShell 5 needs Windows-native quote escaping before building child argv.
-    const script = `$${POWERSHELL_QUERY_VARIABLE} = $env:${YIRU_HERMES_STARTUP_QUERY_ENV}; $${POWERSHELL_NATIVE_QUERY_VARIABLE} = $${POWERSHELL_QUERY_VARIABLE} -replace '(\\\\*)"', '$1$1\\"'; Remove-Item Env:${YIRU_HERMES_STARTUP_QUERY_ENV} -ErrorAction SilentlyContinue; ${invocation}`
+    const script = `$${POWERSHELL_QUERY_VARIABLE} = $env:${AGENTSTART_HERMES_STARTUP_QUERY_ENV}; $${POWERSHELL_NATIVE_QUERY_VARIABLE} = $${POWERSHELL_QUERY_VARIABLE} -replace '(\\\\*)"', '$1$1\\"'; Remove-Item Env:${AGENTSTART_HERMES_STARTUP_QUERY_ENV} -ErrorAction SilentlyContinue; ${invocation}`
     return `powershell.exe -NoProfile -EncodedCommand ${encodePowerShellCommand(script)}`
   }
   const invocation = buildShellCommandFromArgv(argv, 'posix').replace(
@@ -162,7 +162,7 @@ function buildQueryCommand(argv: string[], shell: AgentStartupShell): string {
   const encodedInvocation = encodePosixEvalScript(invocation)
   // Why: a fixed single-quote-safe wrapper parses in POSIX shells and pwsh;
   // the dynamic argv is decoded only after entering the known `sh` grammar.
-  const script = `${POSIX_QUERY_VARIABLE}="\${${YIRU_HERMES_STARTUP_QUERY_ENV}}"; unset ${YIRU_HERMES_STARTUP_QUERY_ENV}; eval "$(printf %b "${encodedInvocation}")"`
+  const script = `${POSIX_QUERY_VARIABLE}="\${${AGENTSTART_HERMES_STARTUP_QUERY_ENV}}"; unset ${AGENTSTART_HERMES_STARTUP_QUERY_ENV}; eval "$(printf %b "${encodedInvocation}")"`
   return `sh -c ${quoteStartupArg(script, 'posix')}`
 }
 
@@ -185,7 +185,7 @@ export function planHermesStartupQuery(args: {
     return null
   }
   const command = buildQueryCommand(argv, args.shell)
-  const env = { ...args.agentEnv, [YIRU_HERMES_STARTUP_QUERY_ENV]: args.prompt }
+  const env = { ...args.agentEnv, [AGENTSTART_HERMES_STARTUP_QUERY_ENV]: args.prompt }
   const envSize = Object.entries(env).reduce((total, [key, value]) => {
     if (args.platform === 'win32') {
       return total + key.length + value.length + 2

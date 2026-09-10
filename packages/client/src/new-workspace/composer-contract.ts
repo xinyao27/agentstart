@@ -1,11 +1,11 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
-import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
-import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
-import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
-import type { SparsePreset } from '@yiru/protocol/worktree/create-result'
-import type { SetupAgentStartupPolicy } from '@yiru/protocol/worktree/hooks'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@agentstart/protocol/workspace/source'
+import type { WorkspaceStatus } from '@agentstart/protocol/workspace/status/model'
+import type { SparsePreset } from '@agentstart/protocol/worktree/create-result'
+import type { SetupAgentStartupPolicy } from '@agentstart/protocol/worktree/hooks'
 import type { NewWorkspaceProjectOption } from '~renderer/new-workspace-composer-card/new-workspace-project-options'
 import type { ProjectHostSetupOption } from '~renderer/new-workspace-composer-card/project-host-setup-options'
 import type { WorkspaceCreateErrorDisplay } from '~renderer/new-workspace-composer-card/workspace-create-error-format'
@@ -168,14 +168,4 @@ export type UseComposerStateResult = {
   submitQuick: (agent: TuiAgent | null) => Promise<void>
   /** Invoked by the Enter handler to re-check whether submission should fire. */
   createDisabled: boolean
-}
-
-export type InitialWorkspaceRunSeedInput = {
-  draftProjectId?: string | null
-  draftHostId?: string | null
-  draftProjectHostSetupId?: string | null
-  initialProjectSourceContext?: Pick<
-    ProjectSourceContext,
-    'projectId' | 'hostId' | 'projectHostSetupId'
-  > | null
 }

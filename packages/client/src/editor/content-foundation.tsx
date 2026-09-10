@@ -53,7 +53,7 @@ export function FileLoadErrorView({
 }): React.JSX.Element {
   return (
     <div className="bg-background text-muted-foreground flex h-full items-center justify-center p-6 text-sm">
-      <div className="border-border bg-background flex max-w-xl items-start gap-3 border p-4">
+      <div className="border-border bg-background flex max-w-xl items-start gap-3 rounded-md border p-4">
         <AlertCircle className="text-destructive mt-0.5 size-4 flex-shrink-0" />
         <div className="min-w-0">
           <div className="text-foreground font-medium">

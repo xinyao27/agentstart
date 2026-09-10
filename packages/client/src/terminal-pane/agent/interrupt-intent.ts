@@ -1,4 +1,4 @@
-import type { AgentStatusInterruptInput } from '@yiru/protocol'
+import type { AgentStatusInterruptInput } from '@agentstart/protocol'
 
 export type AgentInterruptInferenceRequest = AgentStatusInterruptInput
 export type AgentInterruptInputIntent = AgentStatusInterruptInput['intent']

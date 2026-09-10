@@ -1,6 +1,4 @@
 mod agent_phase;
-mod apns;
-mod apns_queue;
 mod cooldown;
 mod native;
 mod persistence;
@@ -9,22 +7,18 @@ mod subscription;
 
 use std::collections::HashMap;
 use std::error::Error;
-use std::sync::{Arc, Mutex, MutexGuard, OnceLock};
+use std::sync::{Arc, Mutex, MutexGuard};
 
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 use tokio::sync::watch;
 
-use crate::mobile::{MobileDeviceStore, MobilePresence};
-use crate::persistence::WorkspaceJournal;
 use cooldown::NotificationDeliveryPolicy;
 
 pub(crate) use agent_phase::{
-    AgentPhasePublisher, AgentPhaseWorker, agent_phase_channel, start_agent_phase_worker,
-    transition_from_status,
+    AgentPhasePublisher, AgentPhaseWorker, NotificationPhase, agent_phase_channel,
+    start_agent_phase_worker, transition_from_status,
 };
-pub(crate) use apns::{ApnsNotification, ApnsNotificationPhase};
-use apns_queue::{ApnsDelivery, ApnsDeliveryStartError};
 pub(crate) use persistence::{
     NotificationMailbox, NotificationMailboxClosed, NotificationRequest, NotificationWorker,
 };
@@ -89,7 +83,6 @@ pub(crate) struct ReplayableNotification {
 
 #[derive(Clone)]
 pub(crate) struct NotificationAuthority {
-    apns: Arc<OnceLock<ApnsDelivery>>,
     delivery_policy: Arc<NotificationDeliveryPolicy>,
     registry: Arc<SubscriptionRegistry>,
     store: NotificationStore,
@@ -121,39 +114,11 @@ pub(crate) enum NotificationError {
 impl NotificationAuthority {
     pub(crate) fn new(mailbox: Arc<dyn NotificationMailbox>) -> Self {
         Self {
-            apns: Arc::new(OnceLock::new()),
             delivery_policy: Arc::new(NotificationDeliveryPolicy::default()),
             registry: Arc::new(SubscriptionRegistry {
                 subscriptions: Mutex::new(HashMap::new()),
             }),
             store: NotificationStore { mailbox },
-        }
-    }
-
-    pub(crate) fn configure_apns(
-        &self,
-        devices: MobileDeviceStore,
-        presence: MobilePresence,
-        journal: WorkspaceJournal,
-        endpoint: Option<String>,
-        token: Option<String>,
-    ) -> Result<bool, ApnsDeliveryStartError> {
-        if self.apns.get().is_some() {
-            return Ok(false);
-        }
-        let delivery = ApnsDelivery::start(devices, presence, journal, endpoint, token)?;
-        Ok(self.apns.set(delivery).is_ok())
-    }
-
-    pub(crate) fn enqueue_apns(&self, notification: ApnsNotification) -> bool {
-        self.apns
-            .get()
-            .is_some_and(|delivery| delivery.enqueue(notification))
-    }
-
-    pub(crate) async fn shutdown_apns(&self) {
-        if let Some(delivery) = self.apns.get() {
-            delivery.shutdown().await;
         }
     }
 

@@ -1,5 +1,5 @@
-import type { WorktreeLineage } from '@yiru/protocol/worktree/lineage'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { WorktreeLineage } from '@agentstart/protocol/worktree/lineage'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import { getLineageRenderInfo } from './worktree-list/groups'
 

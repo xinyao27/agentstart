@@ -1,7 +1,7 @@
-import type { TerminalPaneLayoutNode } from '@yiru/protocol/workspace/session'
+import type { TerminalPaneLayoutNode } from '@agentstart/protocol/workspace/session'
 import type { RuntimeMobileSessionTabsSnapshot } from '~renderer/runtime/remote-session/session-model'
 
-export type RuntimeSyncedTab = {
+type RuntimeSyncedTab = {
   tabId: string
   worktreeId: string
   title: string | null
@@ -9,7 +9,7 @@ export type RuntimeSyncedTab = {
   layout: TerminalPaneLayoutNode | null
 }
 
-export type RuntimeSyncedLeaf = {
+type RuntimeSyncedLeaf = {
   tabId: string
   worktreeId: string
   leafId: string

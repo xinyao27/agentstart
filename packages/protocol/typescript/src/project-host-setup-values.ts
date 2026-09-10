@@ -4,7 +4,7 @@ import type {
   ProjectHostSetupRepo,
   ProjectHostSetupServiceListResponse,
   ProjectHostSetupServiceMutationResponse
-} from '../generated/yiru/runtime/v1/project_host_setup_pb.js'
+} from '../generated/agent_start/runtime/v1/project_host_setup_pb.js'
 import {
   externalWorktreeVisibility,
   hostId,
@@ -121,7 +121,7 @@ export function projectHostSetupMutation(
   }
 }
 
-export function projectHostSetupRecord(value: ProjectHostSetupRecord): ProjectHostSetupRecordValue {
+function projectHostSetupRecord(value: ProjectHostSetupRecord): ProjectHostSetupRecordValue {
   const recordKind = kind(value.kind)
   return {
     id: value.id,

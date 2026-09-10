@@ -1,4 +1,4 @@
-import type { WorktreeSetPatch } from '@yiru/protocol'
+import type { WorktreeSetPatch } from '@agentstart/protocol'
 import { readWorktreeMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterWorktreeMutation } from '~renderer/project-catalog/mutation-refresh'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'

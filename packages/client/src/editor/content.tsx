@@ -4,14 +4,12 @@ import { useAppStore } from '~renderer/store/state'
 import { getNextConflictNavigationIndex } from './conflict-components'
 import { renderEditorDiffMode } from './content-diff-mode'
 import { renderEditorEditMode } from './content-edit-mode'
-import { getMarkdownSourceLineOffset, noopCloseMarkdownTableOfContents } from './content-foundation'
+import { noopCloseMarkdownTableOfContents } from './content-foundation'
 import { renderEditorSpecialMode } from './content-special-modes'
 import type { ConflictNavigation, EditorContentProps, EditorRenderContext } from './content-types'
 import { findGitConflictBlocks, getGitConflictMarkerLineLength } from './git-conflict-blocks'
 import type { OpenFile } from './state'
 import { useMarkdownDocuments } from './use-markdown-documents'
-
-export { getMarkdownSourceLineOffset }
 
 export function EditorContent(props: EditorContentProps): React.JSX.Element {
   const {

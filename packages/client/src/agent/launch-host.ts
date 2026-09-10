@@ -1,5 +1,8 @@
-import type { AgentStartupShell, StartupHostPlatform } from '@yiru/protocol/agent/shell-command'
-import { resolveWindowsShellStartupFamily } from '@yiru/protocol/host/windows-terminal-shell'
+import type {
+  AgentStartupShell,
+  StartupHostPlatform
+} from '@agentstart/protocol/agent/shell-command'
+import { resolveWindowsShellStartupFamily } from '@agentstart/protocol/host/windows-terminal-shell'
 import type { RuntimeStatusResult } from '~renderer/runtime/status/model'
 
 export type AgentLaunchHost = {

@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'
@@ -16,7 +16,6 @@ import {
   getGeneralCliSearchEntries,
   getGeneralEditorSearchEntries,
   getGeneralNavigationSearchEntries,
-  getGeneralPaneSearchEntries,
   getGeneralSupportSearchEntries,
   getGeneralUpdateSearchEntries,
   getGeneralWorkspaceSearchEntries
@@ -25,16 +24,9 @@ import { GeneralSupportSection } from './support-section'
 import { GeneralUpdateSettingsSection } from './update-settings-section'
 import { GeneralWorkspaceSettingsSection } from './workspace-settings-section'
 
-export {
-  createAutoSaveDelayDraftState,
-  updateAutoSaveDelayDraftState,
-  type AutoSaveDelayDraftState
-} from '../auto-save-delay-draft'
-export { shouldCommitOpenInApplicationsDraft } from '../open-in-menu-setting'
-
 type GeneralSearchEntry = ReturnType<typeof getGeneralNavigationSearchEntries>[number]
 
-export function getDesktopPlatformFromUserAgent(userAgent: string): 'darwin' | 'win32' | 'other' {
+function getDesktopPlatformFromUserAgent(userAgent: string): 'darwin' | 'win32' | 'other' {
   if (userAgent.includes('Mac')) {
     return 'darwin'
   }
@@ -44,15 +36,13 @@ export function getDesktopPlatformFromUserAgent(userAgent: string): 'darwin' | '
   return 'other'
 }
 
-export { getGeneralPaneSearchEntries }
-
 /**
  * The Project Runtime section is Windows-only. Gate on the platform directly:
  * an empty search query makes matchesSettingsSearch return true even for an
  * empty entries array, which would otherwise render an orphaned header (the
  * inner control self-hides) on non-Windows hosts.
  */
-export function shouldShowProjectRuntimeSection(
+function shouldShowProjectRuntimeSection(
   wslSupportedPlatform: boolean | undefined,
   searchQuery: string,
   projectRuntimeSearchEntries: SettingsSearchEntry[]
@@ -62,7 +52,7 @@ export function shouldShowProjectRuntimeSection(
   )
 }
 
-export function getTabOrderControlSearchKeywords(
+function getTabOrderControlSearchKeywords(
   navigationEntries: GeneralSearchEntry[] = getGeneralNavigationSearchEntries()
 ): string[] {
   const tabOrderSearchEntry = navigationEntries[0]

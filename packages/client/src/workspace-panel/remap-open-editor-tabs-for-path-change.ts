@@ -1,4 +1,7 @@
-import { normalizeRuntimePathSeparators, relativePathInsideRoot } from '@yiru/protocol/host/path'
+import {
+  normalizeRuntimePathSeparators,
+  relativePathInsideRoot
+} from '@agentstart/protocol/host/path'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { basename } from '~renderer/path'
 import { useAppStore } from '~renderer/store/state'

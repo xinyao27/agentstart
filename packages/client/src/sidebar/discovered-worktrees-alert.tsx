@@ -37,11 +37,11 @@ function getDescription(count: number): string {
   return count === 1
     ? translate(
         'auto.components.sidebar.DiscoveredWorktreesAlert.descriptionOne',
-        'Git found 1 worktree created outside Yiru. It is currently hidden from the workspace list.'
+        'Git found 1 worktree created outside AgentStart. It is currently hidden from the workspace list.'
       )
     : translate(
         'auto.components.sidebar.DiscoveredWorktreesAlert.descriptionMany',
-        'Git found {{value0}} worktrees created outside Yiru. They are currently hidden from the workspace list.',
+        'Git found {{value0}} worktrees created outside AgentStart. They are currently hidden from the workspace list.',
         { value0: count }
       )
 }

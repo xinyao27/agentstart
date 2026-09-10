@@ -1,4 +1,4 @@
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
 import { useEffect, useRef } from 'react'
 import { isWindowVisible } from '~renderer/application-shell/window-visibility-interval'
 import { useEventCallback } from '~renderer/react/use-event-callback'
@@ -85,6 +85,7 @@ export function useGitStatusPolling(options: { enabled?: boolean } = {}): void {
     enabled &&
     !!activeWorktreeId &&
     !!worktreePath &&
+    activeWorktree?.prunable !== true &&
     activeRepoSupportsGit &&
     shouldPollActiveGitStatus(activeGitStatusPollingArgs) &&
     isActiveConnectionReady

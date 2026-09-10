@@ -305,8 +305,3 @@ export function useProjectGroupHeaderDrag({
 
   return { state, onHandlePointerDown }
 }
-
-export {
-  isProjectGroupHeaderActionTarget,
-  isProjectGroupHeaderDragHandleTarget
-} from './project-group-header-drag-contract'

@@ -31,7 +31,7 @@ import type { TransportIo } from './transport-io'
 import type { PtyTransport } from './transport-types'
 
 const STARTUP_CWD_FALLBACK_NOTICE =
-  '\r\n[Yiru opened this terminal at the workspace root because its saved start folder no longer exists.]\r\n'
+  '\r\n[AgentStart opened this terminal at the workspace root because its saved start folder no longer exists.]\r\n'
 
 type ConnectionStartOptions = {
   pane: ManagedPane

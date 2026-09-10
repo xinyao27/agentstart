@@ -1,4 +1,3 @@
-import { shouldShutdownSimulatorForPaneUnmountFromTabs } from '~renderer/emulator-pane/tab-shutdown'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'
 
@@ -103,5 +102,3 @@ export function ensureSimulatorTab(
   }
   return tab.id
 }
-
-export { shouldShutdownSimulatorForPaneUnmountFromTabs }

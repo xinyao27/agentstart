@@ -9,11 +9,6 @@ import {
 import { useAppStore } from '~renderer/store/state'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
 
-// Why: release the visible panes before the daemon stops their processes, avoiding remount races.
-export async function runSleepWorktree(worktreeId: string): Promise<boolean> {
-  return runSleepWorktrees([worktreeId])
-}
-
 function getSidebarWorktreeOptions(worktreeId: string): HTMLElement[] {
   return Array.from(document.querySelectorAll<HTMLElement>('[data-worktree-id]')).filter(
     (element) => element.dataset.worktreeId === worktreeId

@@ -1,17 +1,29 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     ShellPlatformOpenFailure, ShellPlatformServiceExistsResponse,
-    ShellPlatformServiceOpenFileUriRequest, ShellPlatformServiceOpenInExternalEditorRequest,
-    ShellPlatformServiceOpenPathRequest, ShellPlatformServiceOpenedResponse,
-    ShellPlatformServiceOutcomeResponse, ShellPlatformServicePathRequest,
-    ShellPlatformServicePickDirectoryRequest, ShellPlatformServicePickRequest,
-    ShellPlatformServicePickedResponse, ShellPlatformServiceUnitResponse,
+    ShellPlatformServiceGetSystemAccentColorRequest,
+    ShellPlatformServiceGetSystemAccentColorResponse, ShellPlatformServiceOpenFileUriRequest,
+    ShellPlatformServiceOpenInExternalEditorRequest, ShellPlatformServiceOpenPathRequest,
+    ShellPlatformServiceOpenedResponse, ShellPlatformServiceOutcomeResponse,
+    ShellPlatformServicePathRequest, ShellPlatformServicePickDirectoryRequest,
+    ShellPlatformServicePickRequest, ShellPlatformServicePickedResponse,
+    ShellPlatformServiceUnitResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::shell_platform::FileKind;
 
 use super::ShellPlatformRpc;
+
+pub(in crate::rpc) async fn get_system_accent_color(
+    rpc: &ShellPlatformRpc,
+    payload: &[u8],
+) -> Result<Vec<u8>, Status> {
+    decode::<ShellPlatformServiceGetSystemAccentColorRequest>(payload)?;
+    Ok(encode(&ShellPlatformServiceGetSystemAccentColorResponse {
+        color: rpc.authority.get_system_accent_color().await,
+    }))
+}
 
 pub(in crate::rpc) async fn open_path(
     rpc: &ShellPlatformRpc,

@@ -1,12 +1,12 @@
-import { terminalMultiplexCrc32c } from '@yiru/protocol/terminal-multiplex/crc32c'
-import type { TerminalMultiplexFrame } from '@yiru/protocol/terminal-multiplex/frame'
-import { decodeTerminalMultiplexJson } from '@yiru/protocol/terminal-multiplex/json'
+import { terminalMultiplexCrc32c } from '@agentstart/protocol/terminal-multiplex/crc32c'
+import type { TerminalMultiplexFrame } from '@agentstart/protocol/terminal-multiplex/frame'
+import { decodeTerminalMultiplexJson } from '@agentstart/protocol/terminal-multiplex/json'
 import {
   decodeTerminalMultiplexSnapshotChunkRecord,
   decodeTerminalMultiplexSnapshotEndRecord,
   decodeTerminalMultiplexSnapshotStartRecord,
   TERMINAL_MULTIPLEX_SNAPSHOT_CHUNK_DATA_BYTES
-} from '@yiru/protocol/terminal-multiplex/snapshot-records'
+} from '@agentstart/protocol/terminal-multiplex/snapshot-records'
 
 // Why: docs/reference/terminal-multiplex.md OQ-2 selects one 2 MiB snapshot cap for every lane;
 // telemetry can justify raising it later without creating a decoder fallback.

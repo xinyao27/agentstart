@@ -1,5 +1,6 @@
 import type { DetectedAgentsSlice } from '../agent/detected-state'
 import type { AgentStatusSlice } from '../agent/status-state/slice'
+import type { AgentStartProfilesSlice } from '../agentstart-profiles/state'
 import type { UISlice } from '../application-shell/state/slice'
 import type { BrowserSlice } from '../browser-tab-projection/types'
 import type { DiffCommentsSlice } from '../diff-comments/state'
@@ -36,7 +37,6 @@ import type { SourceControlPanelViewSlice } from '../workspace-panel/source-cont
 import type { WorkspaceSpaceSlice } from '../workspace-space/state'
 import type { WorktreeNavHistorySlice } from '../worktree/state/nav-history'
 import type { WorktreeSlice } from '../worktree/state/types'
-import type { YiruProfilesSlice } from '../yiru-profiles/state'
 
 export type AppState = RepoSlice &
   SparsePresetsSlice &
@@ -76,4 +76,4 @@ export type AppState = RepoSlice &
   GitGraphSlice &
   PinnedTabCloseConfirmSlice &
   RecentlyClosedTabsSlice &
-  YiruProfilesSlice
+  AgentStartProfilesSlice

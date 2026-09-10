@@ -6,7 +6,7 @@ import {
   StatsService,
   StatsUsageRange,
   type GetSummaryResponse
-} from '../../generated/yiru/runtime/v1/stats_pb.js'
+} from '../../generated/agent_start/runtime/v1/stats_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from '../transport.js'
 
 const GET_SUMMARY_PROCEDURE = `/${StatsService.typeName}/${StatsService.method.getSummary.name}`

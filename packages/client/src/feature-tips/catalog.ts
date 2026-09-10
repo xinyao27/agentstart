@@ -1,13 +1,13 @@
-import type { FeatureTipId } from '@yiru/protocol/settings/feature-tips'
-import type { FeatureInteractionId } from '@yiru/protocol/telemetry/interactions/catalog'
+import type { FeatureTipId } from '@agentstart/protocol/settings/feature-tips'
+import type { FeatureInteractionId } from '@agentstart/protocol/telemetry/interactions/catalog'
 import {
   hasFeatureInteraction,
   type FeatureInteractionState
-} from '@yiru/protocol/telemetry/interactions/state'
+} from '@agentstart/protocol/telemetry/interactions/state'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
 
-export type FeatureTipPriority = 'new' | 'unseen'
+type FeatureTipPriority = 'new' | 'unseen'
 
 export type FeatureTipAction = 'setup-cli' | 'learn-command-palette'
 
@@ -30,10 +30,13 @@ export type CompletedFeatureTipState = {
 
 export const getFeatureTips = createLocalizedCatalog((): readonly FeatureTip[] => [
   {
-    id: 'yiru-cli',
+    id: 'agentstart-cli',
     priority: 'new',
     eyebrow: translate('feature-tips.d19ceca501', 'Tip'),
-    title: translate('feature-tips.3fe1fc9a33', 'Let agents drive Yiru with the Yiru CLI'),
+    title: translate(
+      'feature-tips.3fe1fc9a33',
+      'Let agents drive AgentStart with the AgentStart CLI'
+    ),
     description: translate(
       'feature-tips.8d67d7764a',
       'Enable agents to coordinate child worktrees and communicate between worktrees.'
@@ -62,7 +65,7 @@ export const getFeatureTips = createLocalizedCatalog((): readonly FeatureTip[] =
 export function getCompletedFeatureTipIds(state: CompletedFeatureTipState): Set<FeatureTipId> {
   const completedIds = new Set<FeatureTipId>()
   if (state.cliInstalled) {
-    completedIds.add('yiru-cli')
+    completedIds.add('agentstart-cli')
   }
   for (const tip of getFeatureTips()) {
     if (

@@ -41,7 +41,7 @@ export function buildMarkdownExportHtml(args: BuildMarkdownExportHtmlArgs): stri
 <style>${EXPORT_CSS}</style>
 </head>
 <body>
-<div class="yiru-export-root">
+<div class="agentstart-export-root">
 ${args.renderedHtml}
 </div>
 </body>

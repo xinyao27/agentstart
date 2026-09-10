@@ -1,9 +1,9 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ProjectKind,
   type Project,
   type ProjectJsonValue
-} from '../generated/yiru/runtime/v1/project_pb.js'
+} from '../generated/agent_start/runtime/v1/project_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RepoIconValue } from './repo-types.js'
 import { safeNumber } from './shell-state-values.js'
@@ -107,7 +107,7 @@ function runtimePreference(
 // Why: the icon field is open-ended JSON in the catalog row (lucide name,
 // emoji, or image payload), so the decoder rebuilds the discriminated icon
 // union instead of handing callers untyped JSON.
-export function projectRepoIcon(value: ProjectJsonValue | undefined): RepoIconValue | null {
+function projectRepoIcon(value: ProjectJsonValue | undefined): RepoIconValue | null {
   if (value === undefined) {
     return null
   }
@@ -129,7 +129,7 @@ export function projectRepoIcon(value: ProjectJsonValue | undefined): RepoIconVa
   throw invalidResponse('Project repo icon is malformed')
 }
 
-export function projectJson(value: ProjectJsonValue): unknown {
+function projectJson(value: ProjectJsonValue): unknown {
   switch (value.kind.case) {
     case undefined:
     case 'nullValue':

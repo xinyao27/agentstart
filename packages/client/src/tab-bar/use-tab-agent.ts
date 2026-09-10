@@ -1,8 +1,8 @@
-import { isShellProcess } from '@yiru/protocol/agent/process/shell-process'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { parseRuntimePtyId } from '@yiru/protocol/terminal-identity'
-import { isTerminalLeafId, makePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import { isShellProcess } from '@agentstart/protocol/agent/process/shell-process'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { parseRuntimePtyId } from '@agentstart/protocol/terminal-identity'
+import { isTerminalLeafId, makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { useEffect, useState } from 'react'
 import { resolveCompatibleAgentTypeForOwner } from '~renderer/agent/title/owner'
 import { resolveExplicitTerminalTitleAgentType } from '~renderer/agent/title/provider'
@@ -17,7 +17,7 @@ import {
   resolveSiblingTabAgent
 } from './tab-agent'
 
-// A shell name, or the tab's neutral default title — where Yiru's
+// A shell name, or the tab's neutral default title — where AgentStart's
 // inferred-interrupt reset parks it. Blank titles are no evidence either way.
 function titleShowsNoAgent(title: string, defaultTitle?: string): boolean {
   const trimmed = title.trim()
@@ -44,7 +44,7 @@ function resolveSignalAgentForLaunchOwner(
  * local-only: remote rows also drop on transport blips that say nothing about
  * the process.
  */
-export function resolveLaunchedAgentExitEvidence(args: {
+function resolveLaunchedAgentExitEvidence(args: {
   title: string
   defaultTitle?: string
   isRemote: boolean
@@ -71,7 +71,7 @@ export function resolveLaunchedAgentExitEvidence(args: {
   return args.hasCompletedHook || (!args.isRemote && args.hasObservedAgentSignal)
 }
 
-export function resolveTabAgentFromSignals(args: {
+function resolveTabAgentFromSignals(args: {
   hasObservedAgentSignal: boolean
   isRemote: boolean
   title: string
@@ -218,7 +218,7 @@ export function resolveTabAgentFromSignals(args: {
  *    live hook, process, and any reuse-title are absent. Suppressed on a local
  *    pane once OSC 133;D proves the agent exited.
  * 5. Sleeping session identity — a hibernated pane's captured session record.
- * 6. launchAgent — what Yiru launched here; the bootstrap before any hook, hook
+ * 6. launchAgent — what AgentStart launched here; the bootstrap before any hook, hook
  *    record, or process signal exists, cleared once exit evidence shows it left.
  * 7. Sibling-pane identity (live, then idle) — split-tab fallback.
  */

@@ -2,7 +2,7 @@ import {
   GitForkSyncBlockReason,
   GitForkSyncStatus,
   type GitRemoteServiceForkSyncResponse as ProtocolForkSyncResponse
-} from '../../generated/yiru/runtime/v1/git_remote_pb.js'
+} from '../../generated/agent_start/runtime/v1/git_remote_pb.js'
 
 export type GitForkSyncBlockedReason =
   | 'missing-origin'

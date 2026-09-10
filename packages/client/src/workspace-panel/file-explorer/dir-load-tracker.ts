@@ -1,10 +1,10 @@
-export type FileExplorerDirLoadToken = {
+type FileExplorerDirLoadToken = {
   dirPath: string
   revision: number
   session: number
 }
 
-export type FileExplorerDirLoadSession = number
+type FileExplorerDirLoadSession = number
 
 export type FileExplorerDirLoadTracker = {
   begin: (dirPath: string) => FileExplorerDirLoadToken

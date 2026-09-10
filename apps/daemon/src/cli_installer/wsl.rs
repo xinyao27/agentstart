@@ -22,7 +22,7 @@ use scripts::{
     posix_dirname, quote_shell,
 };
 
-const WSL_COMMAND_NAME: &str = "yiru";
+const WSL_COMMAND_NAME: &str = "agentstart";
 
 #[derive(Clone)]
 pub(super) struct WslCliInstaller {
@@ -85,7 +85,7 @@ impl WslCliInstaller {
         let command_path = status.command_path.as_deref().unwrap_or_default();
         if status.state == CliInstallState::Conflict {
             return Err(CliInstallerError::Refused(format!(
-                "Refusing to replace non-Yiru command at {command_path}."
+                "Refusing to replace non-AgentStart command at {command_path}."
             )));
         }
         let launcher_path = status.launcher_path.as_deref().unwrap_or_default();
@@ -114,7 +114,7 @@ impl WslCliInstaller {
         let command_path = status.command_path.as_deref().unwrap_or_default();
         if status.state == CliInstallState::Conflict {
             return Err(CliInstallerError::Refused(format!(
-                "Refusing to remove non-Yiru command at {command_path}."
+                "Refusing to remove non-AgentStart command at {command_path}."
             )));
         }
         let Some(distro) = distro.as_deref() else {
@@ -137,7 +137,10 @@ impl WslCliInstaller {
                 return Ok(ready.status(
                     CliInstallState::NotInstalled,
                     None,
-                    format!("Register {} to use Yiru from WSL.", ready.command_path),
+                    format!(
+                        "Register {} to use AgentStart from WSL.",
+                        ready.command_path
+                    ),
                 ));
             }
             CommandFile::NotFile => {
@@ -145,7 +148,7 @@ impl WslCliInstaller {
                     CliInstallState::Conflict,
                     None,
                     format!(
-                        "{} exists but is not a Yiru launcher script.",
+                        "{} exists but is not a AgentStart launcher script.",
                         ready.command_path
                     ),
                 ));
@@ -185,7 +188,10 @@ impl WslCliInstaller {
                 if is_stale {
                     format!("{} is missing its PowerShell bridge.", ready.command_path)
                 } else {
-                    format!("{} exists but is not managed by Yiru.", ready.bridge_path)
+                    format!(
+                        "{} exists but is not managed by AgentStart.",
+                        ready.bridge_path
+                    )
                 },
             ));
         }
@@ -199,12 +205,18 @@ impl WslCliInstaller {
             },
             current_target,
             if !managed {
-                format!("{} exists but is not managed by Yiru.", ready.command_path)
+                format!(
+                    "{} exists but is not managed by AgentStart.",
+                    ready.command_path
+                )
             } else if bridge_conflict {
-                format!("{} exists but is not managed by Yiru.", ready.bridge_path)
+                format!(
+                    "{} exists but is not managed by AgentStart.",
+                    ready.bridge_path
+                )
             } else {
                 format!(
-                    "{} points to a different Yiru launcher.",
+                    "{} points to a different AgentStart launcher.",
                     ready.command_path
                 )
             },
@@ -236,7 +248,7 @@ impl WslCliInstaller {
                 host_status
                     .detail
                     .as_deref()
-                    .unwrap_or("The Windows Yiru CLI launcher is missing."),
+                    .unwrap_or("The Windows AgentStart CLI launcher is missing."),
             )));
         };
         let home = run(distro, "printf %s \"$HOME\"").await?.trim().to_owned();
@@ -256,7 +268,7 @@ impl WslCliInstaller {
         if !interop_ready {
             return Ok(Err(unsupported(
                 CliInstallUnsupportedReason::LauncherMissing,
-                "WSL Windows interop is unavailable; Yiru cannot launch the Windows CLI from WSL.",
+                "WSL Windows interop is unavailable; AgentStart cannot launch the Windows CLI from WSL.",
             )));
         }
         let path_directory = format!("{home}/.local/bin");
@@ -350,11 +362,11 @@ async fn read_command_file(distro: &str, path: &str) -> Result<CommandFile, CliI
         distro,
         &[
             format!("if [ -L {} ]; then", quote_shell(path)),
-            "  printf __YIRU_NOT_FILE__".to_owned(),
+            "  printf __AGENTSTART_NOT_FILE__".to_owned(),
             format!("elif [ ! -e {} ]; then", quote_shell(path)),
-            "  printf __YIRU_MISSING__".to_owned(),
+            "  printf __AGENTSTART_MISSING__".to_owned(),
             format!("elif [ ! -f {} ]; then", quote_shell(path)),
-            "  printf __YIRU_NOT_FILE__".to_owned(),
+            "  printf __AGENTSTART_NOT_FILE__".to_owned(),
             "else".to_owned(),
             format!("  cat {}", quote_shell(path)),
             "fi".to_owned(),
@@ -363,8 +375,8 @@ async fn read_command_file(distro: &str, path: &str) -> Result<CommandFile, CliI
     )
     .await?;
     Ok(match output.as_str() {
-        "__YIRU_MISSING__" => CommandFile::Missing,
-        "__YIRU_NOT_FILE__" => CommandFile::NotFile,
+        "__AGENTSTART_MISSING__" => CommandFile::Missing,
+        "__AGENTSTART_NOT_FILE__" => CommandFile::NotFile,
         _ => CommandFile::Text(output),
     })
 }

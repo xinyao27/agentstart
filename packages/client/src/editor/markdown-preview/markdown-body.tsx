@@ -1,5 +1,5 @@
-import type { MarkdownDocument } from '@yiru/protocol/files/values'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { MarkdownDocument } from '@agentstart/protocol/files/values'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import React from 'react'
 import type { ComponentProps, RefObject } from 'react'
 import Markdown from 'react-markdown'
@@ -92,7 +92,7 @@ export const MarkdownBody = React.memo(function MarkdownBody(
   return (
     <div ref={bodyRef} className="markdown-body" translate="no">
       {isFrontMatterVisible ? (
-        <div className="border-border/60 bg-muted/40 mb-4 border px-3 py-2">
+        <div className="border-border/60 bg-muted/40 mb-4 rounded border px-3 py-2">
           <div className="text-muted-foreground mb-1 text-[10px] font-medium tracking-wider uppercase">
             {translate('auto.components.editor.MarkdownPreview.2b2b31382c', 'Front Matter')}
           </div>

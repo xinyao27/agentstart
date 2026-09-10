@@ -30,7 +30,7 @@ export type LayoutContext = {
 // (commit details reflowing rows instead of overlaying them) only needs to
 // add `height` once a point's row is past `afterRow` — vertices and the
 // baked edge paths below both call this, so a gap-crossing edge stretches.
-export function toPixel(
+function toPixel(
   point: GridPoint,
   grid: GitGraphGrid,
   rowGap?: GitGraphRowGap
@@ -61,7 +61,7 @@ function pixelStaircase(from: { x: number; y: number }, to: { x: number; y: numb
 // Why: ports `Branch.draw`'s per-segment path verbatim — angular is two
 // straight elbow segments anchored at the locked endpoint; rounded is a
 // single cubic Bezier with control points pulled `d` px off each endpoint.
-export function pathFromPoints(
+function pathFromPoints(
   points: readonly GridPoint[],
   lockedFirstFlags: readonly boolean[],
   { grid, style, rowGap }: LayoutContext

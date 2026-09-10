@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { useNow } from '~renderer/dashboard/use-now'
@@ -79,7 +79,7 @@ function CookieHelpPopover(): React.JSX.Element {
         <p className="text-muted-foreground">
           {translate(
             'auto.components.settings.AccountsPane.4e32e030b2',
-            'Stored locally. Yiru sends it only to platform.minimax.io for usage refreshes.'
+            'Stored locally. AgentStart sends it only to platform.minimax.io for usage refreshes.'
           )}
         </p>
       </div>

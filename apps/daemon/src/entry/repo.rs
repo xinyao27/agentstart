@@ -2,22 +2,23 @@ use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use std::time::Duration;
 
-use serde_json::{Value, json};
-use thiserror::Error;
-use yiru_protocol::method_metadata::UnaryMethod;
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1RepoServiceAdd as AddMethod, YiruRuntimeV1RepoServiceList as ListMethod,
+use agentstart_protocol::method_metadata::UnaryMethod;
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1RepoServiceAdd as AddMethod,
+    AgentStartRuntimeV1RepoServiceList as ListMethod,
 };
-use yiru_protocol::protocol::v1::StatusCode;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::StatusCode;
+use agentstart_protocol::runtime::v1::{
     RepoKind, RepoRevisionConflict, RepoServiceAddRequest, RepoServiceListRequest,
 };
-use yiru_protocol::transport::decode;
+use agentstart_protocol::transport::decode;
+use serde_json::{Value, json};
+use thiserror::Error;
 
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 
 const CALL_TIMEOUT: Duration = Duration::from_secs(30);
-const REVISION_CONFLICT_TYPE: &str = "yiru.runtime.v1.RepoRevisionConflict";
+const REVISION_CONFLICT_TYPE: &str = "agentstart.runtime.v1.RepoRevisionConflict";
 
 #[derive(Debug, Error)]
 pub(super) enum RepoCommandError {

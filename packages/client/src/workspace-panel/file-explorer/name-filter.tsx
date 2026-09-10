@@ -23,7 +23,7 @@ export function FileExplorerNameFilter({
 }: FileExplorerNameFilterProps): React.JSX.Element {
   return (
     <div
-      className="border-border bg-input/50 focus-within:border-ring flex h-7 items-center gap-1 border px-1.5"
+      className="border-border bg-input/50 focus-within:border-ring flex h-7 items-center gap-1 rounded-sm border px-1.5"
       data-ignore-file-explorer-keys="true"
     >
       <ListFilter className="text-muted-foreground size-3.5 shrink-0" />
@@ -50,7 +50,10 @@ export function FileExplorerNameFilter({
           type="button"
           variant="ghost"
           size="icon-xs"
-          className={cn(RIGHT_SIDEBAR_INPUT_BUTTON_SURFACE_CLASS_NAME, 'h-auto w-auto p-0.5')}
+          className={cn(
+            RIGHT_SIDEBAR_INPUT_BUTTON_SURFACE_CLASS_NAME,
+            'h-auto w-auto p-0.5 rounded-sm'
+          )}
           aria-label={translate(
             'auto.components.right.sidebar.FileExplorerNameFilter.4d5a6b2a49',
             'Clear file filter'

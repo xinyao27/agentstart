@@ -1,14 +1,16 @@
-import type { ThemeGradientTheme } from '@yiru/protocol/settings/theme-gradient'
+import type { ThemeGradientTheme } from '@agentstart/protocol/settings/theme-gradient'
 import { useEffect } from 'react'
 import { useAppStore } from '~renderer/store/state'
 
 import { resolveDocumentTheme } from '../editor/document-theme'
+import { systemAccentColor } from './accent-color'
 import { buildThemeGradientStyle } from './gradient-css'
 import { resolveThemeGradient } from './state'
+import { useSystemAccentColor } from './system-accent'
 
 export type ThemeGradientStyleVariables = Record<string, string>
 
-export function resolveThemeGradientStyleVariables(
+function resolveThemeGradientStyleVariables(
   theme: ThemeGradientTheme | null,
   isDarkMode: boolean
 ): ThemeGradientStyleVariables | undefined {
@@ -31,7 +33,7 @@ export function resolveThemeGradientStyleVariables(
 
 /**
  * Style variables for the active workspace's theme, or `undefined` when no
- * theme applies and the app should keep its stock chrome.
+ * palette applies. The system accent only changes the document's brand color.
  */
 export function useThemeGradientStyleVariables(
   systemPrefersDark: boolean
@@ -40,17 +42,16 @@ export function useThemeGradientStyleVariables(
   const themeGradientDefault = useAppStore((s) => s.themeGradientDefault)
   const themeGradientsByWorkspaceId = useAppStore((s) => s.themeGradientsByWorkspaceId)
   const themePreference = useAppStore((s) => s.settings?.theme)
-  const styleVariables = (() => {
-    const theme = resolveThemeGradient(
-      { themeGradientDefault, themeGradientsByWorkspaceId },
-      activeWorktreeId
-    )
-    const isDarkMode = resolveDocumentTheme(themePreference ?? 'system', () => ({
-      matches: systemPrefersDark
-    }))
-    return resolveThemeGradientStyleVariables(theme, isDarkMode)
-  })()
-  const brand = styleVariables?.['--brand']
+  const theme = resolveThemeGradient(
+    { themeGradientDefault, themeGradientsByWorkspaceId },
+    activeWorktreeId
+  )
+  const isDarkMode = resolveDocumentTheme(themePreference ?? 'system', () => ({
+    matches: systemPrefersDark
+  }))
+  const nativeAccent = useSystemAccentColor(theme === null)
+  const styleVariables = resolveThemeGradientStyleVariables(theme, isDarkMode)
+  const brand = styleVariables?.['--brand'] ?? systemAccentColor(nativeAccent, isDarkMode)
   useEffect(() => {
     if (!brand) {
       return
@@ -58,10 +59,10 @@ export function useThemeGradientStyleVariables(
     const root = document.documentElement
     // Why: Base UI portals render under body instead of the themed app node, so
     // the same brand input must also exist at their inheritance root.
-    root.dataset.themeGradientPortals = 'on'
+    root.dataset.themeAccent = 'on'
     root.style.setProperty('--brand', brand)
     return () => {
-      delete root.dataset.themeGradientPortals
+      delete root.dataset.themeAccent
       root.style.removeProperty('--brand')
     }
   }, [brand])

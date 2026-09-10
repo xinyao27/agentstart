@@ -1,8 +1,8 @@
 import {
   isFreshNonDoneAgentStatus,
   type AgentStatusEntry
-} from '@yiru/protocol/agent/status-records'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/agent/status-records'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
 
 import { resolveAgentStatusWorktreeId } from '../sidebar/agent-status-worktree-attribution'
@@ -13,7 +13,7 @@ type BrowserLikeTab = { id: string }
 type TabsByWorktree = Record<string, readonly TerminalLikeTab[]>
 type PtyIdsByTabId = Record<string, string[]>
 type BrowserTabsByWorktree = Record<string, readonly BrowserLikeTab[]>
-export type LiveAgentWorktreeStatus = 'working' | 'permission'
+type LiveAgentWorktreeStatus = 'working' | 'permission'
 
 /**
  * Worktree ids that currently have a live agent session, derived from the
@@ -30,7 +30,7 @@ export function getWorktreeIdsWithLiveAgent(
   return new Set(getLiveAgentStatusByWorktreeId(agentStatusByPaneKey, tabsByWorktree, now).keys())
 }
 
-export function getLiveAgentStatusByWorktreeId(
+function getLiveAgentStatusByWorktreeId(
   agentStatusByPaneKey: Record<string, AgentStatusEntry> | null | undefined,
   tabsByWorktree: TabsByWorktree | null | undefined,
   now: number
@@ -60,7 +60,7 @@ export function getLiveAgentStatusByWorktreeId(
   return result
 }
 
-export function hasActiveWorkspaceActivity(
+function hasActiveWorkspaceActivity(
   worktreeId: string,
   tabsByWorktree: TabsByWorktree | null | undefined,
   ptyIdsByTabId: PtyIdsByTabId | null | undefined,

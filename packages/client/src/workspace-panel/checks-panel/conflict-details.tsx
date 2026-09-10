@@ -1,7 +1,7 @@
 import type {
   PRConflictSummary,
   PRMergeableState
-} from '@yiru/protocol/hosted-review/pull-request-types'
+} from '@agentstart/protocol/hosted-review/pull-request-types'
 import React, { useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, Copy, Files } from '~renderer/icons/hugeicons'
@@ -13,7 +13,7 @@ export type ConflictReview = {
   conflictSummary?: PRConflictSummary
 }
 
-export function buildMergeabilityRecalculationCommands(): string {
+function buildMergeabilityRecalculationCommands(): string {
   return [
     'git fetch origin',
     'git commit --allow-empty --only -m "chore: refresh PR mergeability"',

@@ -13,7 +13,7 @@ export type TextControlPastePayloadOwnership =
       exceededLimit: false
     }
   | {
-      action: 'claim-yiru'
+      action: 'claim-agentstart'
       byteLength: number
       exceededLimit: true
     }
@@ -24,7 +24,7 @@ export type TextControlPastePayloadOwnership =
       exceededLimit: true
     }
 
-export function findOwnedTextControlPasteTarget(
+function findOwnedTextControlPasteTarget(
   activeElement: Element | null = typeof document === 'undefined' ? null : document.activeElement
 ): HTMLInputElement | HTMLTextAreaElement | null {
   if (!(activeElement instanceof Element)) {
@@ -97,7 +97,7 @@ export function classifyTextControlPastePayloadOwnership(
   }
 
   return {
-    action: 'claim-yiru',
+    action: 'claim-agentstart',
     byteLength: ownershipMeasurement.byteLength,
     exceededLimit: true
   }

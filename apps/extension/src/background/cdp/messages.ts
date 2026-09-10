@@ -1,4 +1,4 @@
-import type { BrowserReplayEvent } from '@yiru/protocol'
+import type { BrowserReplayEvent } from '@agentstart/protocol'
 
 import { isRecording, replayRecording, startRecording, stopRecording } from './recording'
 

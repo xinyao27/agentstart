@@ -1,10 +1,10 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import {
   isConfirmedStaleFolderPathStatus,
   type FolderWorkspacePathStatus
-} from '@yiru/protocol/workspace/folder-path'
-import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
+} from '@agentstart/protocol/workspace/folder-path'
+import type { WorkspaceStatus } from '@agentstart/protocol/workspace/status/model'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { RepoForkIndicator } from '~renderer/repo/fork-indicator'
@@ -13,7 +13,6 @@ import { cn } from '~renderer/ui/class-names'
 
 import { SidebarDisclosure } from '../disclosure'
 import { DiscoveredWorktreesAlert } from '../discovered-worktrees-alert'
-import { openSidebarWorkspace, prefetchSidebarWorkspace } from '../host-navigation'
 import type { ImportedWorktreeCardActionState } from '../imported-worktrees-card-actions'
 import { SidebarProjectHeader } from '../project-header'
 import { ProjectHeaderActions } from '../project-header-actions'
@@ -100,9 +99,6 @@ export function HeaderRow(props: {
     badgeColor: repo?.badgeColor
   })
   const openOrToggle = (): void => {
-    if (props.navigationSurface && repo && openSidebarWorkspace({ projectId: repo.id })) {
-      return
-    }
     props.onToggle(row.key)
   }
   const drag = props.repoDrag ?? props.projectGroupDrag
@@ -199,11 +195,6 @@ export function HeaderRow(props: {
         onDrop={workspaceStatus ? (event) => props.onStatusDrop(event, workspaceStatus) : undefined}
         onPointerDown={
           drag?.isDraggable ? (event) => drag.onPointerDown(event, drag.id) : undefined
-        }
-        onPointerEnter={
-          props.navigationSurface && repo
-            ? () => prefetchSidebarWorkspace({ projectId: repo.id })
-            : undefined
         }
         onClick={(event) => {
           if (!shouldIgnoreRepoHeaderToggle(event)) {

@@ -1,12 +1,12 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
-import type { Status } from '../generated/yiru/protocol/v1/errors_pb.js'
-import type { Welcome } from '../generated/yiru/protocol/v1/frame_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
+import type { Status } from '../generated/agent_start/protocol/v1/errors_pb.js'
+import type { Welcome } from '../generated/agent_start/protocol/v1/frame_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeEventStream } from './event-stream.js'
 import { boundedTimeout, statusError } from './peer-values.js'
 import type { RuntimeCall } from './transport.js'
 
-export type PendingUnary = {
+type PendingUnary = {
   abort: AbortController
   kind: 'unary'
   resolve: (payload: Uint8Array) => void
@@ -18,7 +18,7 @@ export type PendingUnary = {
   requestBytes: number
 }
 
-export type PendingStream = {
+type PendingStream = {
   abort: AbortController
   kind: 'stream'
   stream: RuntimeEventStream

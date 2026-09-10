@@ -1,11 +1,11 @@
-import { SESSION_TABS_PROTOCOL_CAPABILITY, SessionTabsClient } from '@yiru/protocol'
+import { SESSION_TABS_PROTOCOL_CAPABILITY, SessionTabsClient } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'
 import { readRuntimeStatus } from './status-client'
 
-export async function openSessionTabsProtocolTarget(
+async function openSessionTabsProtocolTarget(
   target: RuntimeClientTarget
 ): Promise<SessionTabsClient | null> {
   const status = await readRuntimeStatus(target)
@@ -25,7 +25,7 @@ export async function requireSessionTabsClient(
     throw new Error(
       translate(
         'runtime.sessionTabsTarget.unavailable',
-        'This action needs a current Yiru daemon connection.'
+        'This action needs a current AgentStart daemon connection.'
       )
     )
   }

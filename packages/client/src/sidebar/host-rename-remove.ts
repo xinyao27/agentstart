@@ -1,6 +1,6 @@
-import { parseExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { HostSettingOverrides } from '@yiru/protocol/settings/workspace-preferences'
+import { parseExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { HostSettingOverrides } from '@agentstart/protocol/settings/workspace-preferences'
 import { getHostSettingOverride, setHostSettingOverride } from '~renderer/host-setting-overrides'
 
 type OverridesSlice = Pick<GlobalSettings, 'hostSettingOverrides'>

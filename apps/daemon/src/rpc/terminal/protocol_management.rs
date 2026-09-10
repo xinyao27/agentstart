@@ -1,5 +1,5 @@
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     TerminalAgentStatusValue, TerminalManagedSession as ProtocolManagedSession,
     TerminalManagedSessionState, TerminalManagedShellState, TerminalServiceGetAgentStatusRequest,
     TerminalServiceGetAgentStatusResponse, TerminalServiceInspectProcessRequest,
@@ -10,7 +10,7 @@ use yiru_protocol::runtime::v1::{
     TerminalServiceListManagedSessionsResponse, TerminalServiceRestartManagedRequest,
     TerminalServiceRestartManagedResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::terminal_session::{TerminalManagementSession, TerminalSessionAuthority};
 

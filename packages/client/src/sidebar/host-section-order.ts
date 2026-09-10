@@ -1,4 +1,4 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
 
 import type { HostSectionOption } from './host-section-rows'
 

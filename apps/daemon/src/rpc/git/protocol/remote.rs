@@ -1,18 +1,18 @@
 // Remote synchronization: fetch, pull, fast-forward-only pull, push, and
 // upstream-fork sync. See
-// packages/protocol/proto/yiru/runtime/v1/git_remote.proto (GitRemoteService).
+// packages/protocol/proto/agentstart/runtime/v1/git_remote.proto (GitRemoteService).
 
 use serde_json::Value;
 
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     GitForkSyncBlockReason, GitForkSyncStatus, GitRemoteServiceFastForwardRequest,
     GitRemoteServiceFastForwardResponse, GitRemoteServiceFetchRequest,
     GitRemoteServiceFetchResponse, GitRemoteServiceForkSyncRequest,
     GitRemoteServiceForkSyncResponse, GitRemoteServicePullRequest, GitRemoteServicePullResponse,
     GitRemoteServicePushRequest, GitRemoteServicePushResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use super::super::GitRpc;
 use super::support::{authority_status, push_target, string_field};

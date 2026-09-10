@@ -6,7 +6,7 @@ import type {
   CodexUsageScope,
   CodexUsageSessionRow,
   CodexUsageSummary
-} from '@yiru/protocol/provider-usage/models'
+} from '@agentstart/protocol/provider-usage/models'
 import type { StateCreator } from 'zustand'
 import { codexProviderUsageClient } from '~renderer/runtime/provider-usage-client'
 import type { AppState } from '~renderer/store/types'
@@ -33,7 +33,7 @@ export const createCodexUsageSlice: StateCreator<AppState, [], [], CodexUsageSli
   set,
   get
 ) => ({
-  codexUsageScope: 'yiru',
+  codexUsageScope: 'agentstart',
   codexUsageRange: 'all',
   codexUsageScanState: null,
   codexUsageSnapshotReady: false,

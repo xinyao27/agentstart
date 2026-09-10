@@ -1,5 +1,5 @@
 // Why: the auto-generated workspace name pool lives in shared (not renderer)
-// so the main process can recognize a Yiru-generated branch name when deciding
+// so the main process can recognize a AgentStart-generated branch name when deciding
 // whether auto-rename-from-work is allowed to overwrite it.
 export const MARINE_CREATURES = [
   ...(['Nautilus', 'Seahorse', 'Starfish', 'Coral', 'Narwhal', 'Jellyfish'] as const),

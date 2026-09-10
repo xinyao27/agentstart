@@ -1,4 +1,4 @@
-import { folderWorkspaceKey, parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { folderWorkspaceKey, parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 
 import type { AppState } from '../../store/types'
@@ -14,7 +14,7 @@ type HydrationPurgeState = Pick<
   | 'tabsByWorktree'
 >
 
-export function collectHydratedWorktreePurgeIds(state: HydrationPurgeState): string[] | null {
+function collectHydratedWorktreePurgeIds(state: HydrationPurgeState): string[] | null {
   if (state.hasHydratedWorktreePurge) {
     return []
   }

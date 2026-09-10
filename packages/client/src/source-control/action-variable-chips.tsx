@@ -1,7 +1,7 @@
 import {
   SOURCE_CONTROL_ACTION_VARIABLES,
   type SourceControlActionId
-} from '@yiru/protocol/source-control/ai-actions'
+} from '@agentstart/protocol/source-control/ai-actions'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { BracketsCurly as Braces } from '~renderer/icons/hugeicons'
@@ -52,7 +52,7 @@ function SourceControlVariableDetails({
     return (
       <div className="space-y-1.5">
         <div className="text-muted-foreground font-mono text-[11px]">{`{${variable}}`}</div>
-        <pre className="bg-background/60 p-2 font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap">
+        <pre className="bg-background/60 rounded-sm p-2 font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap">
           {preview ||
             translate(
               'auto.components.source.control.SourceControlActionVariableChips.4bf6d88039',
@@ -77,7 +77,7 @@ function SourceControlVariableDetails({
             'Example'
           )}
         </div>
-        <pre className="bg-background/60 p-2 font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap">
+        <pre className="bg-background/60 rounded-sm p-2 font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap">
           {info.example}
         </pre>
       </div>
@@ -116,7 +116,7 @@ export function SourceControlActionVariableChips({
                     variant="ghost"
                     size="xs"
                     disabled={disabled}
-                    className="h-5 px-1.5 font-mono text-[10px]"
+                    className="h-5 rounded px-1.5 font-mono text-[10px]"
                     onClick={() => onInsert(variable)}
                   >
                     {`{${variable}}`}

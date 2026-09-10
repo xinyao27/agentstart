@@ -1,5 +1,5 @@
-import { agentPhaseFromStatus, type AgentPhase } from '@yiru/protocol/agent/phase'
-import { AGENT_STATUS_STALE_AFTER_MS } from '@yiru/protocol/agent/status-records'
+import { agentPhaseFromStatus, type AgentPhase } from '@agentstart/protocol/agent/phase'
+import { AGENT_STATUS_STALE_AFTER_MS } from '@agentstart/protocol/agent/status-records'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
 import { migrationUnsupportedToAgentStatusEntry } from '~renderer/agent/unsupported-entry-migration'
 import {

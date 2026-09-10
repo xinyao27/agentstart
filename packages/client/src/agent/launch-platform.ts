@@ -1,4 +1,4 @@
-import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
+import type { ProjectExecutionRuntimeResolution } from '@agentstart/protocol/project/runtime-preference'
 import { CLIENT_PLATFORM } from '~renderer/new-workspace/workspace-creation'
 
 // Why: this used to branch on repo.connectionId (SSH vs. local), but

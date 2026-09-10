@@ -1,5 +1,5 @@
 import SwiftUI
-import YiruComputerUseIcons
+import AgentStartComputerUseIcons
 
 @available(macOS 13.0, *)
 struct PermissionFlowPanelView: View {
@@ -41,7 +41,7 @@ struct PermissionFlowPanelView: View {
           Button {
             controller.reopenCurrentSettingsPane()
           } label: {
-            YiruComputerUseIcon(.settings, size: 15)
+            AgentStartComputerUseIcon(.settings, size: 15)
               .foregroundStyle(.primary, .secondary.opacity(0.35))
           }
           .buttonStyle(.borderless)
@@ -49,7 +49,7 @@ struct PermissionFlowPanelView: View {
         Button {
           controller.closePanel(returnToPreviousApp: true)
         } label: {
-          YiruComputerUseIcon(.close, size: 18)
+          AgentStartComputerUseIcon(.close, size: 18)
             .foregroundStyle(.primary, .secondary.opacity(0.35))
         }
         .buttonStyle(.borderless)
@@ -110,7 +110,7 @@ private struct HeaderDirectionIcon: View {
   @State private var scalePhase = false
 
   var body: some View {
-    YiruComputerUseIcon(.dragDirection, size: 14)
+    AgentStartComputerUseIcon(.dragDirection, size: 14)
       .foregroundStyle(.tint)
       .rotationEffect(.degrees(isDragging ? 0 : (wigglePhase ? 12 : -12)))
       .offset(y: isDragging ? 0 : (wigglePhase ? -2 : 1))

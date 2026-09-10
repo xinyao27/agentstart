@@ -1,8 +1,8 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   BrowserReplayEventKind as ProtocolReplayEventKind,
   type BrowserReplayRecording as ProtocolReplayRecording
-} from '../generated/yiru/runtime/v1/browser_replay_pb.js'
+} from '../generated/agent_start/runtime/v1/browser_replay_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const BROWSER_REPLAY_PROTOCOL_CAPABILITY = 'browserReplay.protobuf.v1' as const
@@ -29,7 +29,7 @@ export type BrowserReplayRecording = {
   videoArtifactId?: string
 }
 
-export function replayEventKind(kind: ProtocolReplayEventKind): BrowserReplayEventKind {
+function replayEventKind(kind: ProtocolReplayEventKind): BrowserReplayEventKind {
   switch (kind) {
     case ProtocolReplayEventKind.CLICK:
       return 'click'

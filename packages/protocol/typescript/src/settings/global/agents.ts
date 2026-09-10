@@ -18,13 +18,13 @@ export type GlobalAgentSettings = {
   promptCacheTtlMs: number
   /** Why: Codex rate-limit account routing is a durable app preference owned by
    *  the main process, not transient UI state. Persisting the selected managed
-   *  auth here lets Yiru prepare shared ~/.codex before the renderer hydrates,
+   *  auth here lets AgentStart prepare shared ~/.codex before the renderer hydrates,
    *  while keeping this scope explicitly separate from Codex usage analytics
    *  and external terminal sessions. */
   codexManagedAccounts: CodexManagedAccount[]
   activeCodexManagedAccountId: string | null
   activeCodexManagedAccountIdsByRuntime?: CodexManagedAccountRuntimeSelection
-  /** Why: Claude Code keeps conversations under one shared config root. Yiru
+  /** Why: Claude Code keeps conversations under one shared config root. AgentStart
    *  persists only per-account auth material here so switching accounts does
    *  not fork prior chat/session context the way CLAUDE_CONFIG_DIR swapping would. */
   claudeManagedAccounts: ClaudeManagedAccount[]
@@ -50,7 +50,7 @@ export type GlobalAgentSettings = {
    *  remains a raw PATH capability snapshot. */
   disabledTuiAgents: TuiAgent[]
   /** Why: worktree deletion is destructive (git worktree remove + rm -rf of the
-   *  working directory), so Yiru shows a confirmation dialog by default. Users
+   *  working directory), so AgentStart shows a confirmation dialog by default. Users
    *  who delete frequently can opt into skipping the dialog via a "Don't ask
    *  again" checkbox inside it or from the General settings pane. We keep this
    *  defaulted to false so first-time behavior stays safe. */
@@ -77,10 +77,10 @@ export type GlobalAgentSettings = {
   geminiCliOAuthEnabled: boolean
   /** Per-agent CLI command overrides. A missing key means use the catalog default binary name. */
   agentCmdOverrides: Partial<Record<TuiAgent, string>>
-  /** Why: Yiru bridges Codex session history from the user's real Codex home into
+  /** Why: AgentStart bridges Codex session history from the user's real Codex home into
    *  its managed home so /resume finds it, but defaults to ~/.codex. Users who run
    *  Codex with a custom CODEX_HOME can point history discovery at that folder here.
-   *  History-only: this does not change which account/config/hooks Yiru uses. */
+   *  History-only: this does not change which account/config/hooks AgentStart uses. */
   codexSessionSourceHome?: {
     /** Absolute host path; empty/undefined falls back to ~/.codex. */
     host?: string
@@ -106,7 +106,7 @@ export type GlobalAgentSettings = {
    *  path, so this gates that close behind a confirmation prompt to prevent
    *  accidental loss. Defaults on. */
   confirmClosePinnedTab: boolean
-  /** When true, Yiru requests local awake assertions while hook-reported agents are working. */
+  /** When true, AgentStart requests local awake assertions while hook-reported agents are working. */
   keepComputerAwakeWhileAgentsRun: boolean
   /** Why: macOS terminals must choose between letting Option compose layout
    *  characters (@ on German, € on French) or treating Option as Meta/Esc for

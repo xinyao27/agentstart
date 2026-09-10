@@ -1,4 +1,4 @@
-export function formatTerminalSessionCount(count: number): string {
+function formatTerminalSessionCount(count: number): string {
   return `${count} terminal session${count === 1 ? '' : 's'}`
 }
 

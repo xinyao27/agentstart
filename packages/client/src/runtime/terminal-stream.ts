@@ -1,5 +1,5 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { runtimePtyEnvironmentId, runtimePtyHandle } from '@yiru/protocol/terminal-identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { runtimePtyEnvironmentId, runtimePtyHandle } from '@agentstart/protocol/terminal-identity'
 
 import { getActiveRuntimeTarget } from './rpc-client'
 import { getRuntimeTerminalMultiplexer } from './terminal-multiplex/registry'

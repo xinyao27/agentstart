@@ -30,7 +30,7 @@ export function MobilePairedDevicesSection({
           {hasQrCode
             ? translate(
                 'auto.components.settings.MobilePane.1592afcc7a',
-                'No devices paired yet. Scan the QR code with the Yiru mobile app.'
+                'No devices paired yet. Scan the QR code with the AgentStart mobile app.'
               )
             : translate('auto.components.settings.MobilePane.1b1b70279a', 'No devices paired yet.')}
         </p>
@@ -39,7 +39,7 @@ export function MobilePairedDevicesSection({
           {devices.map((device) => (
             <div
               key={device.deviceId}
-              className="border-border/60 flex items-center justify-between border px-3 py-2"
+              className="border-border/60 flex items-center justify-between rounded-lg border px-3 py-2"
             >
               <div>
                 <div className="text-sm font-medium">{device.name}</div>

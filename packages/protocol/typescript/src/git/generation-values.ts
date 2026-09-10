@@ -1,4 +1,4 @@
-import type { GitPullRequestFields as ProtocolPullRequestFields } from '../../generated/yiru/runtime/v1/git_generation_pb.js'
+import type { GitPullRequestFields as ProtocolPullRequestFields } from '../../generated/agent_start/runtime/v1/git_generation_pb.js'
 
 export type RuntimeGenerateCommitMessageResult =
   | { success: true; message: string; agentLabel?: string }

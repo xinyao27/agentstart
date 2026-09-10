@@ -1,8 +1,8 @@
 use std::time::{Duration, Instant};
 
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::emulator_service_stream_frames_response::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::emulator_service_stream_frames_response::Event;
+use agentstart_protocol::runtime::v1::{
     EmulatorDeviceInfo, EmulatorGesturePointKind, EmulatorHelperStatus, EmulatorOrientation,
     EmulatorServiceAttachRequest, EmulatorServiceAttachResponse,
     EmulatorServiceAvailabilityRequest, EmulatorServiceAvailabilityResponse,
@@ -16,7 +16,7 @@ use yiru_protocol::runtime::v1::{
     EmulatorServiceUnregisterActiveRequest, EmulatorServiceUnregisterActiveResponse,
     EmulatorStreamError, EmulatorStreamFrame,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::emulator::{EmulatorError, GesturePoint, GesturePointKind, extract_frames, stream_url};
 use crate::rpc::protocol_call::ProtocolCallContext;
@@ -335,7 +335,7 @@ async fn send_stream_error(context: &ProtocolCallContext, message: String) -> Re
 }
 
 fn gesture_point(
-    point: yiru_protocol::runtime::v1::EmulatorGesturePoint,
+    point: agentstart_protocol::runtime::v1::EmulatorGesturePoint,
 ) -> Result<GesturePoint, Status> {
     let kind = match EmulatorGesturePointKind::try_from(point.kind) {
         Ok(EmulatorGesturePointKind::Begin) => GesturePointKind::Begin,

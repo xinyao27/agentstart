@@ -1,4 +1,4 @@
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
 import { useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { FolderPlus } from '~renderer/icons/hugeicons'
@@ -108,13 +108,13 @@ const AddProjectFromFolderDialog = function AddProjectFromFolderDialog() {
           <DialogDescription>
             {translate(
               'auto.components.sidebar.AddProjectFromFolderDialog.046751dbfb',
-              'Add this folder as a separate Yiru project.'
+              'Add this folder as a separate AgentStart project.'
             )}
           </DialogDescription>
         </DialogHeader>
 
         {folderPath && (
-          <div className="border-border/70 bg-muted/35 border px-3 py-2 text-xs">
+          <div className="border-border/70 bg-muted/35 rounded-md border px-3 py-2 text-xs">
             <div className="text-muted-foreground font-mono break-all">{folderPath}</div>
           </div>
         )}

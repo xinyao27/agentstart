@@ -1,4 +1,4 @@
-import type { CrashReportBreadcrumbData } from '@yiru/protocol/crash-reports/values'
+import type { CrashReportBreadcrumbData } from '@agentstart/protocol/crash-reports/values'
 
 import { shellClient } from './shell-client'
 

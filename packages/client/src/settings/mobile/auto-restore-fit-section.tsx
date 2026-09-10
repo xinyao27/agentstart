@@ -14,7 +14,7 @@ export function MobileAutoRestoreFitSection({
   onAutoRestoreFitChange
 }: MobileAutoRestoreFitSectionProps): React.JSX.Element {
   return (
-    <div className="border-border/60 border p-4">
+    <div className="border-border/60 rounded-lg border p-4">
       <div className="mb-3 flex items-center gap-2">
         <Smartphone className="text-muted-foreground size-4" />
         <span className="text-sm font-medium">
@@ -27,7 +27,7 @@ export function MobileAutoRestoreFitSection({
       <p className="text-muted-foreground mb-3 text-xs">
         {translate(
           'auto.components.settings.MobilePane.35100bca5d',
-          "While you're using a terminal on your phone, Yiru shrinks it to fit your phone screen. When you close the app or switch away, this controls whether it stays at phone size (so interactive CLI tools don't reflow) or resizes back to your desktop. You can always use Restore this terminal or Restore all terminals on the banner to resize manually."
+          "While you're using a terminal on your phone, AgentStart shrinks it to fit your phone screen. When you close the app or switch away, this controls whether it stays at phone size (so interactive CLI tools don't reflow) or resizes back to your desktop. You can always use Restore this terminal or Restore all terminals on the banner to resize manually."
         )}
       </p>
       <Select

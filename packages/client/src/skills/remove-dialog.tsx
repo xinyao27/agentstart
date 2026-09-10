@@ -1,4 +1,4 @@
-import type { DiscoveredSkill } from '@yiru/protocol'
+import type { DiscoveredSkill } from '@agentstart/protocol'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle, CheckCircle as CheckCircle2 } from '~renderer/icons/hugeicons'

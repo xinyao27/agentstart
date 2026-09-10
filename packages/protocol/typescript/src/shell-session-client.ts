@@ -1,6 +1,6 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ShellSessionJsonNull,
   ShellSessionJsonValueEntrySchema,
@@ -16,7 +16,7 @@ import {
   ShellSessionServiceSetRequestSchema,
   type ShellSessionJsonValue as ProtocolJsonValue,
   type ShellSessionJsonValueEntry as ProtocolJsonValueEntry
-} from '../generated/yiru/runtime/v1/shell_session_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_session_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeCallOptions, RuntimeStream, RuntimeTransport } from './transport.js'
 
@@ -133,7 +133,7 @@ export class ShellSessionClient {
   }
 }
 
-export function decodeJsonValue(value: ProtocolJsonValue | undefined): ShellSessionJsonValue {
+function decodeJsonValue(value: ProtocolJsonValue | undefined): ShellSessionJsonValue {
   const kind = value?.kind
   if (!kind) {
     // Why: an unset value and an explicit null decode identically, matching

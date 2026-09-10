@@ -52,12 +52,12 @@
     margin: 0.75em 0;
   }
 
-  .markdown-body details.yiru-details {
+  .markdown-body details.agentstart-details {
     margin: 0.85em 0;
     padding-left: 0.75em;
   }
 
-  .markdown-body details.yiru-details > summary {
+  .markdown-body details.agentstart-details > summary {
     position: relative;
     list-style: none;
     min-height: 1.6em;
@@ -69,11 +69,11 @@
   }
 
   /* Why: rendered markdown creates native summaries outside the shared primitives. */
-  .markdown-body details.yiru-details > summary:focus-visible {
+  .markdown-body details.agentstart-details > summary:focus-visible {
     background: var(--accent);
   }
 
-  .markdown-body details.yiru-details > summary::before {
+  .markdown-body details.agentstart-details > summary::before {
     position: absolute;
     top: 0.12em;
     left: 0;
@@ -84,15 +84,15 @@
     transition: transform 120ms ease;
   }
 
-  .markdown-body details.yiru-details[open] > summary::before {
+  .markdown-body details.agentstart-details[open] > summary::before {
     transform: rotate(90deg);
   }
 
-  .markdown-body details.yiru-details > summary::-webkit-details-marker {
+  .markdown-body details.agentstart-details > summary::-webkit-details-marker {
     display: none;
   }
 
-  .markdown-body details.yiru-details[data-yiru-toggle='heading-1'] > summary {
+  .markdown-body details.agentstart-details[data-agentstart-toggle='heading-1'] > summary {
     font-size: 1.85em;
     font-weight: 700;
     letter-spacing: 0;
@@ -100,22 +100,22 @@
   }
 
   /* Heading toggle sizes mirror the plain h2–h4 scales (1.4 / 1.15 / 1em). */
-  .markdown-body details.yiru-details[data-yiru-toggle='heading-2'] > summary {
+  .markdown-body details.agentstart-details[data-agentstart-toggle='heading-2'] > summary {
     font-size: 1.4em;
     line-height: 1.3;
   }
 
-  .markdown-body details.yiru-details[data-yiru-toggle='heading-3'] > summary {
+  .markdown-body details.agentstart-details[data-agentstart-toggle='heading-3'] > summary {
     font-size: 1.15em;
     line-height: 1.3;
   }
 
-  .markdown-body details.yiru-details[data-yiru-toggle='heading-4'] > summary {
+  .markdown-body details.agentstart-details[data-agentstart-toggle='heading-4'] > summary {
     font-size: 1em;
     line-height: 1.3;
   }
 
-  .markdown-body details.yiru-details > :not(summary) {
+  .markdown-body details.agentstart-details > :not(summary) {
     margin-left: 0.15em;
   }
 

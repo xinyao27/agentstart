@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+// Why: page-control commands share BrowserHostService.Execute's oneof (see browser.proto) but
+// their request messages live here so browser.proto stays within its line budget.
+
+message BrowserPageControlRegisterCommand {
+  string backend_page_id = 1;
+  string browser_page_id = 2;
+  string workspace_id = 3;
+  string worktree_id = 4;
+  // Why: the legacy field distinguishes "leave unset" (absent), "clear" (explicit null), and
+  // "assign" (a string) — the oneof keeps those three states without a Struct.
+  oneof session_profile {
+    string session_profile_id = 5;
+    bool clear_session_profile_id = 6;
+  }
+}
+
+message BrowserPageControlUnregisterCommand {
+  string browser_page_id = 1;
+  string expected_backend_page_id = 2;
+}
+
+message BrowserPageViewportOverride {
+  optional double device_scale_factor = 1;
+  optional double height = 2;
+  optional double width = 3;
+  optional bool mobile = 4;
+}
+
+message BrowserPageControlViewportOverrideCommand {
+  string browser_page_id = 1;
+  oneof override {
+    BrowserPageViewportOverride set = 2;
+    bool clear = 3;
+  }
+}
+
+message BrowserPageAnnotationRect {
+  optional double height = 1;
+  optional double width = 2;
+  optional double x = 3;
+  optional double y = 4;
+}
+
+message BrowserPageAnnotationMarker {
+  optional string id = 1;
+  optional int32 index = 2;
+  optional bool is_fixed = 3;
+  optional BrowserPageAnnotationRect rect_page = 4;
+  optional BrowserPageAnnotationRect rect_viewport = 5;
+}
+
+message BrowserPageControlAnnotationCommand {
+  string browser_page_id = 1;
+  optional bool emit_viewport = 2;
+  optional bool enabled = 3;
+  // Why: bounded at 50 entries to match the legacy annotation-marker validation cap.
+  repeated BrowserPageAnnotationMarker markers = 4;
+  optional string token = 5;
+}

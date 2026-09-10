@@ -20,13 +20,13 @@ export async function installReleaseTransaction(options) {
   let directory
   try {
     mkdirSync(options.installDirectory, { recursive: true })
-    directory = mkdtempSync(join(options.installDirectory, '.yiru-install-'))
+    directory = mkdtempSync(join(options.installDirectory, '.agentstart-install-'))
   } catch (error) {
     try {
       restoreManagedDirectory(installDirectoryState)
     } catch (restoreError) {
       throw new Error(
-        `Yiru could not create its transaction directory: ${errorMessage(error)}; directory rollback failed: ${errorMessage(restoreError)}`,
+        `AgentStart could not create its transaction directory: ${errorMessage(error)}; directory rollback failed: ${errorMessage(restoreError)}`,
         { cause: error }
       )
     }
@@ -86,7 +86,7 @@ export async function installReleaseTransaction(options) {
         rollbackFailed = true
         const recoveryLocations = [directory, ...state.replacementRecoveryPaths].join(' and ')
         failure = new Error(
-          `Yiru installation failed: ${errorMessage(error)}; rollback failed: ${errorMessage(rollbackError)}. Recovery files were preserved at ${recoveryLocations}.`,
+          `AgentStart installation failed: ${errorMessage(error)}; rollback failed: ${errorMessage(rollbackError)}. Recovery files were preserved at ${recoveryLocations}.`,
           { cause: error }
         )
       }
@@ -104,10 +104,10 @@ export async function installReleaseTransaction(options) {
       }
     } catch (error) {
       if (failure) {
-        console.error(`Yiru transaction cleanup also failed: ${errorMessage(error)}`)
+        console.error(`AgentStart transaction cleanup also failed: ${errorMessage(error)}`)
       } else {
         failure = new Error(
-          `Yiru ${options.packageVersion} was installed, but recovery data at ${directory} could not be removed: ${errorMessage(error)}`
+          `AgentStart ${options.packageVersion} was installed, but recovery data at ${directory} could not be removed: ${errorMessage(error)}`
         )
       }
     }

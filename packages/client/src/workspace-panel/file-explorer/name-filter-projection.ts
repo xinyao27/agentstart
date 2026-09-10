@@ -1,4 +1,4 @@
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 import { joinPath, normalizeRelativePath } from '~renderer/path'
 
 import { splitPathSegments } from '../path-tree'
@@ -16,7 +16,7 @@ export type FileExplorerNameFilterProjectionSource = {
   operationOwner?: FileExplorerOperationOwner
 }
 
-export const FILE_EXPLORER_NAME_FILTER_QUERY_MAX_BYTES = 2 * 1024
+const FILE_EXPLORER_NAME_FILTER_QUERY_MAX_BYTES = 2 * 1024
 
 export function getNextNameFilterCollapsedPaths(
   collapsedPaths: ReadonlySet<string>,
@@ -52,7 +52,7 @@ export function isFileExplorerNameFilterQueryTooLarge(
   return isUtf8ByteLengthOverLimit(value, maxBytes)
 }
 
-export function getFileExplorerNameFilterTokens(query: string | undefined): string[] {
+function getFileExplorerNameFilterTokens(query: string | undefined): string[] {
   if (isFileExplorerNameFilterQueryTooLarge(query)) {
     return []
   }

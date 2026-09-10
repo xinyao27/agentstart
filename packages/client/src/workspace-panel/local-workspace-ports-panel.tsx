@@ -1,4 +1,4 @@
-import type { WorkspacePort } from '@yiru/protocol'
+import type { WorkspacePort } from '@agentstart/protocol'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import type { WebLinkMouseEvent } from '~renderer/browser/link-gesture'
@@ -9,7 +9,7 @@ import {
   killWorkspacePortForTarget,
   openWorkspacePortInBrowser,
   refreshWorkspacePortScanAfterStop,
-  resolvePortOpenInYiruBrowser,
+  resolvePortOpenInAgentStartBrowser,
   scanWorkspacePortsForTarget,
   workspacePortRuntimeTargetKey
 } from '~renderer/ports/actions'
@@ -131,7 +131,7 @@ export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }):
       runtimeTarget,
       createBrowserTab,
       setRemoteBrowserPageHandle,
-      openInYiruBrowser: resolvePortOpenInYiruBrowser({
+      openInAgentStartBrowser: resolvePortOpenInAgentStartBrowser({
         event
       }),
       localhostLabelRoute: resolveLocalhostLabelRouteForPort(useAppStore.getState(), port)

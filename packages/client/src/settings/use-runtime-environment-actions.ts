@@ -1,5 +1,5 @@
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useQueryClient } from '@tanstack/react-query'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

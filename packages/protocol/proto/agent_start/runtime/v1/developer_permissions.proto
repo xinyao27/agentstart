@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+// Reads and requests the macOS privacy permissions a developer grants to the
+// daemon. Every permission reports `DEVELOPER_PERMISSION_STATUS_UNSUPPORTED`
+// off macOS, where the platform has no equivalent authority.
+service DeveloperPermissionsService {
+  rpc GetStatus(DeveloperPermissionsServiceGetStatusRequest) returns (DeveloperPermissionsServiceGetStatusResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  // Opens the system surface that grants one permission, then reports the
+  // permission as it stands once that surface is open.
+  rpc Request(DeveloperPermissionsServiceRequestRequest) returns (DeveloperPermissionsServiceRequestResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message DeveloperPermissionsServiceGetStatusRequest {}
+
+message DeveloperPermissionsServiceGetStatusResponse {
+  repeated DeveloperPermissionState permissions = 1;
+}
+
+message DeveloperPermissionsServiceRequestRequest {
+  DeveloperPermissionId id = 1;
+}
+
+message DeveloperPermissionsServiceRequestResponse {
+  DeveloperPermissionState permission = 1;
+  bool opened_system_settings = 2;
+}
+
+message DeveloperPermissionState {
+  DeveloperPermissionId id = 1;
+  DeveloperPermissionStatus status = 2;
+}
+
+enum DeveloperPermissionId {
+  DEVELOPER_PERMISSION_ID_UNSPECIFIED = 0;
+  DEVELOPER_PERMISSION_ID_MICROPHONE = 1;
+  DEVELOPER_PERMISSION_ID_CAMERA = 2;
+  DEVELOPER_PERMISSION_ID_SCREEN = 3;
+  DEVELOPER_PERMISSION_ID_ACCESSIBILITY = 4;
+  DEVELOPER_PERMISSION_ID_FULL_DISK_ACCESS = 5;
+  DEVELOPER_PERMISSION_ID_AUTOMATION = 6;
+  DEVELOPER_PERMISSION_ID_LOCAL_NETWORK = 7;
+  DEVELOPER_PERMISSION_ID_USB = 8;
+  DEVELOPER_PERMISSION_ID_BLUETOOTH = 9;
+}
+
+enum DeveloperPermissionStatus {
+  DEVELOPER_PERMISSION_STATUS_UNSPECIFIED = 0;
+  DEVELOPER_PERMISSION_STATUS_GRANTED = 1;
+  DEVELOPER_PERMISSION_STATUS_DENIED = 2;
+  DEVELOPER_PERMISSION_STATUS_NOT_DETERMINED = 3;
+  DEVELOPER_PERMISSION_STATUS_RESTRICTED = 4;
+  DEVELOPER_PERMISSION_STATUS_UNKNOWN = 5;
+  DEVELOPER_PERMISSION_STATUS_UNSUPPORTED = 6;
+  // A permission the daemon does not gate: the capability is available as soon
+  // as the developer wires the device up.
+  DEVELOPER_PERMISSION_STATUS_READY = 7;
+}

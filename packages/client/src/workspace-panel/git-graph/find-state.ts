@@ -1,4 +1,4 @@
-import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
+import type { GitHistoryItem } from '@agentstart/protocol/git/history-types'
 
 export type GitGraphFindState = {
   query: string

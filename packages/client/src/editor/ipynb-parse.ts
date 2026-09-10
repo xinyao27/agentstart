@@ -25,7 +25,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
-export function concatIpynbMultilineString(value: unknown): string {
+function concatIpynbMultilineString(value: unknown): string {
   if (Array.isArray(value)) {
     let result = ''
     for (let i = 0; i < value.length; i += 1) {
@@ -37,7 +37,7 @@ export function concatIpynbMultilineString(value: unknown): string {
   return String(value ?? '').replace(/\r\n/g, '\n')
 }
 
-export function translateKernelLanguageToMonaco(language: string | null | undefined): string {
+function translateKernelLanguageToMonaco(language: string | null | undefined): string {
   const normalized = (language ?? 'python').toLowerCase()
   if (normalized.length === 2 && normalized.endsWith('#')) {
     return `${normalized.slice(0, 1)}sharp`

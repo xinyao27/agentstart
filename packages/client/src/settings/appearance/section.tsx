@@ -31,7 +31,7 @@ export function AppearanceSection({
   return (
     <div
       className={cn(
-        'overflow-hidden border border-border/50 bg-card transition-colors',
+        'overflow-hidden rounded-xl border border-border/50 bg-card transition-colors',
         open && 'border-ring/40'
       )}
     >
@@ -44,7 +44,7 @@ export function AppearanceSection({
         onClick={onToggle}
         className="hover:bg-accent/15 flex h-auto w-full justify-start gap-3.5 border-0 py-3.5 text-left font-normal whitespace-normal transition-colors"
       >
-        <span className="bg-secondary text-foreground grid size-8 shrink-0 place-items-center [&_svg]:size-4">
+        <span className="bg-secondary text-foreground grid size-8 shrink-0 place-items-center rounded-md [&_svg]:size-4">
           {icon}
         </span>
         <span className="min-w-0 flex-1">

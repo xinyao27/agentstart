@@ -1,4 +1,4 @@
-import { BROWSER_WRITEBACK_PROTOCOL_CAPABILITY, BrowserWritebackClient } from '@yiru/protocol'
+import { BROWSER_WRITEBACK_PROTOCOL_CAPABILITY, BrowserWritebackClient } from '@agentstart/protocol'
 
 import {
   openConfiguredBrowserHostProtocol,

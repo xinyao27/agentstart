@@ -2,8 +2,8 @@ import type {
   BrowserCertificateFailure,
   BrowserPage,
   BrowserWorkspace
-} from '@yiru/protocol/workspace/browser-session'
-import type { Tab, TabGroup, TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/workspace/browser-session'
+import type { Tab, TabGroup, TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 import type { OpenFile } from '../../editor/state'
 import { sameStringArray } from './agent-status-equality'
@@ -53,7 +53,7 @@ export function withWorktreeEntry<T>(
   return next
 }
 
-export function terminalTabEqual(a: TerminalTab, b: TerminalTab): boolean {
+function terminalTabEqual(a: TerminalTab, b: TerminalTab): boolean {
   return (
     a.id === b.id &&
     a.ptyId === b.ptyId &&
@@ -86,7 +86,7 @@ export function sameTerminalTabs(
   return left.every((tab, index) => terminalTabEqual(tab, right[index]!))
 }
 
-export function browserPageEqual(a: BrowserPage, b: BrowserPage): boolean {
+function browserPageEqual(a: BrowserPage, b: BrowserPage): boolean {
   return (
     a.id === b.id &&
     a.workspaceId === b.workspaceId &&
@@ -141,7 +141,7 @@ export function sameBrowserPages(
   return left.every((page, index) => browserPageEqual(page, right[index]!))
 }
 
-export function browserWorkspaceEqual(a: BrowserWorkspace, b: BrowserWorkspace): boolean {
+function browserWorkspaceEqual(a: BrowserWorkspace, b: BrowserWorkspace): boolean {
   return (
     a.id === b.id &&
     a.worktreeId === b.worktreeId &&
@@ -174,7 +174,7 @@ export function sameBrowserTabs(
   return left.every((tab, index) => browserWorkspaceEqual(tab, right[index]!))
 }
 
-export function openFileEqual(a: OpenFile, b: OpenFile): boolean {
+function openFileEqual(a: OpenFile, b: OpenFile): boolean {
   return (
     a.id === b.id &&
     a.filePath === b.filePath &&
@@ -201,7 +201,7 @@ export function sameOpenFiles(a: readonly OpenFile[], b: readonly OpenFile[]): b
   return a.every((file, index) => openFileEqual(file, b[index]!))
 }
 
-export function tabEqual(a: Tab, b: Tab): boolean {
+function tabEqual(a: Tab, b: Tab): boolean {
   return (
     a.id === b.id &&
     a.entityId === b.entityId &&
@@ -227,7 +227,7 @@ export function sameUnifiedTabs(a: readonly Tab[] | undefined, b: readonly Tab[]
   return left.every((tab, index) => tabEqual(tab, right[index]!))
 }
 
-export function groupEqual(a: TabGroup, b: TabGroup): boolean {
+function groupEqual(a: TabGroup, b: TabGroup): boolean {
   return (
     a.id === b.id &&
     a.worktreeId === b.worktreeId &&

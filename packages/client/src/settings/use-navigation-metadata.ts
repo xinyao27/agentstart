@@ -1,4 +1,5 @@
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { hasExtensionBrowserCapabilities } from '~renderer/extension/browser-capabilities'
 import { translate } from '~renderer/i18n/i18n'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import { SlidersHorizontal } from '~renderer/icons/hugeicons'
@@ -18,7 +19,7 @@ import { buildNavigationWorkflowSections } from './navigation-workflow-sections'
 import { buildSettingsProjectList } from './project-list'
 import { getRepositoryPaneSearchEntries } from './repository/search'
 
-export function buildSettingsNavigationMetadata({
+function buildSettingsNavigationMetadata({
   isMac,
   isWindows,
   isWindowsTerminalHost = isWindows,
@@ -45,6 +46,7 @@ export function buildSettingsNavigationMetadata({
       isWindowsTerminalHost
     }),
     ...buildNavigationWorkflowSections({
+      hasBrowserCapabilities: hasExtensionBrowserCapabilities(),
       isDev,
       isMac,
       isWindows,

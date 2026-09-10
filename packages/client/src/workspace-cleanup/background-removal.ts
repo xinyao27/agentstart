@@ -1,4 +1,4 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
+import type { WorkspaceCleanupCandidate } from '@agentstart/protocol'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import type {

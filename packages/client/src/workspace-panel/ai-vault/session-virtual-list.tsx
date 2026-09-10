@@ -1,5 +1,5 @@
+import type { AgentStatusState } from '@agentstart/protocol/agent/status-records'
 import { LegendList, type LegendListRenderItemProps } from '@legendapp/list/react'
-import type { AgentStatusState } from '@yiru/protocol/agent/status-records'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { LEGEND_LIST_SCROLL_AREA_PROPS } from '~renderer/sidebar/list-scroll-area'
@@ -11,7 +11,7 @@ import { EmptyState, SessionLoadingState, VaultGroupHeader } from './panel-contr
 import type { AiVaultResumeStartup } from './resume-command'
 import { canContinueAiVaultSessionInNewSession } from './session-continuation'
 import {
-  canOpenAiVaultSessionLogInYiru,
+  canOpenAiVaultSessionLogInAgentStart,
   canUseLocalAiVaultSessionPathActions
 } from './session-path-actions'
 import {
@@ -274,10 +274,10 @@ function AiVaultListRowView({
   // empty conversation, so it is never offered as normally resumable.
   const resumeGating = aiVaultSessionRowResumeGating(session, resumeState)
   const canOpenLocalSessionPaths = canUseLocalAiVaultSessionPathActions(session.executionHostId)
-  // Why: in-Yiru View Log additionally withholds synthetic (SQLite/OpenCode)
+  // Why: in-AgentStart View Log additionally withholds synthetic (SQLite/OpenCode)
   // identities that have no single file to open, while Reveal/CWD stay on the
   // existing local-path gate.
-  const canOpenLogInYiru = canOpenAiVaultSessionLogInYiru(session)
+  const canOpenLogInAgentStart = canOpenAiVaultSessionLogInAgentStart(session)
 
   return (
     <VaultSessionRow
@@ -321,7 +321,7 @@ function AiVaultListRowView({
       }
       onCopyId={() => onCopyId(session)}
       onCopyPath={() => onCopyPath(session)}
-      onOpenLog={canOpenLogInYiru ? () => onOpenLog(session) : undefined}
+      onOpenLog={canOpenLogInAgentStart ? () => onOpenLog(session) : undefined}
       onRevealLog={canOpenLocalSessionPaths ? () => onRevealLog(session) : undefined}
       onOpenCwd={canOpenLocalSessionPaths && session.cwd ? () => onOpenCwd(session) : undefined}
     />

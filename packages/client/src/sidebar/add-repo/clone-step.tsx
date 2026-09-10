@@ -187,9 +187,9 @@ export function CloneStep({
               <span>{cloneProgress.phase}</span>
               <span>{cloneProgress.percent}%</span>
             </div>
-            <div className="bg-secondary h-1.5 w-full overflow-hidden">
+            <div className="bg-secondary h-1.5 w-full overflow-hidden rounded-full">
               <div
-                className="bg-foreground h-full transition-[width] duration-300 ease-out"
+                className="bg-foreground h-full rounded-full transition-[width] duration-300 ease-out"
                 style={{ width: `${cloneProgress.percent}%` }}
               />
             </div>

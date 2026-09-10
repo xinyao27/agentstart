@@ -13,7 +13,7 @@ import {
   ShellRepoHostServiceRemovedForHostResponseSchema,
   ShellRepoHostServiceReorderForHostRequestSchema,
   ShellRepoHostServiceReorderedForHostResponseSchema
-} from '../generated/yiru/runtime/v1/shell_repo_host_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_repo_host_pb.js'
 import {
   shellRepoHostPickedPath,
   shellRepoHostRemoved,

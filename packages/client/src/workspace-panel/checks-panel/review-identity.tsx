@@ -1,5 +1,5 @@
-import type { PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
+import type { PRInfo } from '@agentstart/protocol/hosted-review/pull-request-types'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
 import { useEffect, useState } from 'react'
 import { useNow } from '~renderer/dashboard/use-now'
 import { getGitHubPRCacheKey } from '~renderer/github/cache-key'

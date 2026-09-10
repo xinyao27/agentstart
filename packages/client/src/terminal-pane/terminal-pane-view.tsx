@@ -1,6 +1,6 @@
-import type { KeybindingOverrides } from '@yiru/protocol/keybindings'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { KeybindingOverrides } from '@agentstart/protocol/keybindings'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import type { CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { AgentSessionContinuationDialog } from '~renderer/agent-session-continuation/dialog'
@@ -44,8 +44,8 @@ import type { useTerminalPrimarySelectionPaste } from './use-terminal-primary-se
 import type { useTerminalQuickCommandMenu } from './use-terminal-quick-command-menu'
 
 type TerminalContainerStyle = CSSProperties & {
-  '--yiru-terminal-divider-color': string
-  '--yiru-terminal-divider-color-strong': string
+  '--agentstart-terminal-divider-color': string
+  '--agentstart-terminal-divider-color-strong': string
 }
 
 type TerminalPaneViewProps = {
@@ -157,8 +157,9 @@ export function TerminalPaneView(props: TerminalPaneViewProps): React.JSX.Elemen
     display: terminalContentVisible ? 'flex' : 'none',
     overflow: 'hidden',
     ...hiddenStartupStyle,
-    '--yiru-terminal-divider-color': appearance?.dividerColor ?? DEFAULT_TERMINAL_DIVIDER_DARK,
-    '--yiru-terminal-divider-color-strong': normalizeColor(
+    '--agentstart-terminal-divider-color':
+      appearance?.dividerColor ?? DEFAULT_TERMINAL_DIVIDER_DARK,
+    '--agentstart-terminal-divider-color-strong': normalizeColor(
       appearance?.dividerColor,
       DEFAULT_TERMINAL_DIVIDER_DARK
     )

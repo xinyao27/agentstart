@@ -1,6 +1,6 @@
-# Yiru for iOS
+# AgentStart for iOS
 
-Yiru 唯一的移动端客户端，基于原生 iOS 26。
+AgentStart 唯一的移动端客户端，基于原生 iOS 26。
 
 技术基线：
 
@@ -8,7 +8,7 @@ Yiru 唯一的移动端客户端，基于原生 iOS 26。
 - Xcode 26.5（与 CI 和发布工作流一致）
 - Swift 6 language mode，Swift 6.3 编译器，完整 strict concurrency
 - SwiftUI、Observation、NavigationStack 与系统 Liquid Glass
-- 固定版本 SwiftTerm 1.18.0，通过 Yiru 自有 `TerminalSurface` adapter 嵌入
+- 固定版本 SwiftTerm 1.18.0，通过 AgentStart 自有 `TerminalSurface` adapter 嵌入
 - Terminal 控制面与 multiplex frame 常量由 `packages/protocol/proto` 的 Protobuf schema 生成
 - URLSession WebSocket、CryptoKit 与固定版本 Swift-sodium 组成的 E2EE v2 transport
 - XcodeGen 生成工程，`.xcodeproj` 不入库
@@ -23,9 +23,9 @@ xcodebuild -downloadComponent MetalToolchain
 常用命令：
 
 ```sh
-vp run yiru-mobile#project:generate
-vp run yiru-mobile#dev
-vp run yiru-mobile#check
+vp run agentstart-mobile#project:generate
+vp run agentstart-mobile#dev
+vp run agentstart-mobile#check
 ```
 
 代码结构和依赖规则见 [ARCHITECTURE.md](./ARCHITECTURE.md)，视觉规则见

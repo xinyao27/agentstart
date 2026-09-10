@@ -1,4 +1,4 @@
-import type { TerminalPaneSplitSource } from '@yiru/protocol/telemetry/education'
+import type { TerminalPaneSplitSource } from '@agentstart/protocol/telemetry/education'
 import { trackTerminalPaneSplit } from '~renderer/feature-tips/telemetry'
 import { useAppStore } from '~renderer/store/state'
 

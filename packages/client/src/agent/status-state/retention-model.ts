@@ -2,13 +2,13 @@ import type {
   AgentStatusEntry,
   AgentType,
   ParsedAgentStatusPayload
-} from '@yiru/protocol/agent/status-records'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/agent/status-records'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 import type { AppState } from '../../store/types'
 import type { RetainedAgentEntry, DropAgentStatusByWorktreeOptions } from './slice'
 
-export const MAX_RETAINED_AGENTS = 500
+const MAX_RETAINED_AGENTS = 500
 
 export function capRetainedAgents(
   retained: Record<string, RetainedAgentEntry>,
@@ -141,7 +141,7 @@ export function findTabForAgentEntry(
   return (state.tabsByWorktree[worktreeId] ?? []).find((tab) => tab.id === tabId)
 }
 
-export function getRetainedFallbackTab(entry: AgentStatusEntry, worktreeId: string): TerminalTab {
+function getRetainedFallbackTab(entry: AgentStatusEntry, worktreeId: string): TerminalTab {
   const tabId = entry.tabId ?? getTabIdFromPaneKey(entry.paneKey) ?? entry.paneKey
   return {
     id: tabId,

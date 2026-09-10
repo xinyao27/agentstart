@@ -24,7 +24,7 @@ function isDriveRoot(value: string): boolean {
   return /^[A-Za-z]:[\\/]$/.test(value)
 }
 
-export function normalizeWorktreeRootPathForTerminalLink(path: string): string {
+function normalizeWorktreeRootPathForTerminalLink(path: string): string {
   const normalizedAbsolutePath = normalizeAbsolutePath(path)
   if (normalizedAbsolutePath) {
     return normalizedAbsolutePath.normalized

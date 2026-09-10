@@ -1,14 +1,14 @@
-import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
-import type { SessionOptionValue } from '@yiru/protocol/agent/session-options/types'
-import type { AgentStartupShell } from '@yiru/protocol/agent/shell-command'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
-import { resolveLocalWindowsAgentStartupShell } from '@yiru/protocol/host/windows-terminal-shell'
-import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { LaunchSource } from '@yiru/protocol/telemetry/events/foundations'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
-import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { TUI_AGENT_CONFIG } from '@agentstart/protocol/agent/launch/config'
+import type { SessionOptionValue } from '@agentstart/protocol/agent/session-options/types'
+import type { AgentStartupShell } from '@agentstart/protocol/agent/shell-command'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { isWindowsAbsolutePathLike } from '@agentstart/protocol/host/path'
+import { resolveLocalWindowsAgentStartupShell } from '@agentstart/protocol/host/windows-terminal-shell'
+import { isWslUncPath } from '@agentstart/protocol/host/wsl-paths'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { LaunchSource } from '@agentstart/protocol/telemetry/events/foundations'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
+import { folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import {
   buildAgentDraftLaunchPlan,
   buildAgentStartupPlan,
@@ -60,7 +60,7 @@ type SubmitFolderWorkspaceCreateParams = {
   onOpenChange: (open: boolean) => void
 }
 
-export function getFolderWorkspaceAgentLaunchPlatform(
+function getFolderWorkspaceAgentLaunchPlatform(
   projectGroup: Pick<ProjectGroup, 'connectionId' | 'parentPath'>
 ): NodeJS.Platform {
   const parentPath = projectGroup.parentPath?.trim() ?? ''
@@ -70,7 +70,7 @@ export function getFolderWorkspaceAgentLaunchPlatform(
   return parentPath && isWslUncPath(parentPath) ? 'linux' : CLIENT_PLATFORM
 }
 
-export function buildFolderWorkspaceLinkedStartupPlan(args: {
+function buildFolderWorkspaceLinkedStartupPlan(args: {
   agent: TuiAgent
   linkedWorkItem: LinkedWorkItemSummary
   note: string

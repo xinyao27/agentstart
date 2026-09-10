@@ -1,6 +1,6 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::accounts_service_subscribe_response::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::accounts_service_subscribe_response::Event;
+use agentstart_protocol::runtime::v1::{
     AccountProvider as ProtocolAccountProvider, AccountRateLimitState, AccountRoster,
     AccountUsageStatus as ProtocolAccountUsageStatus, AccountsServiceAddRequest,
     AccountsServiceAddResponse, AccountsServiceCancelPendingLoginRequest,
@@ -36,7 +36,7 @@ use yiru_protocol::runtime::v1::{
     UsageRateLimitMetadata as ProtocolUsageRateLimitMetadata,
     UsageRateLimitSource as ProtocolUsageRateLimitSource,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::account_usage::{
     AccountProvider, AccountUsageStatus, AccountsError, AccountsSnapshot,
@@ -252,7 +252,7 @@ pub(in crate::rpc) fn get_grok_status(
     let _ = decode::<AccountsServiceGetGrokStatusRequest>(payload)?;
     let value = rpc.authority.grok_status().map_err(accounts_status)?;
     Ok(encode(&AccountsServiceGetGrokStatusResponse {
-        status: Some(yiru_protocol::runtime::v1::GrokAccountStatus {
+        status: Some(agentstart_protocol::runtime::v1::GrokAccountStatus {
             signed_in: value.signed_in,
             email: value.email,
             team_id: value.team_id,
@@ -933,7 +933,7 @@ fn accounts_status(error: AccountsError) -> Status {
     let message = match code {
         StatusCode::Cancelled => "Account login was cancelled",
         StatusCode::DeadlineExceeded => "Account login timed out",
-        StatusCode::AlreadyExists => "This account is already managed by Yiru",
+        StatusCode::AlreadyExists => "This account is already managed by AgentStart",
         StatusCode::FailedPrecondition => "Account login cannot start in the current configuration",
         StatusCode::Unavailable => "Account login command is unavailable",
         _ => "Accounts request could not be completed",

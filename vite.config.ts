@@ -2,7 +2,7 @@ import { resolve } from 'node:path'
 
 import { defineConfig } from 'vite-plus'
 
-const lintProfile = process.env.YIRU_LINT_PROFILE
+const lintProfile = process.env.AGENTSTART_LINT_PROFILE
 // Why: SwiftPM checkouts and generated protobuf bindings are external/generated inputs; linting
 // them creates non-actionable violations and makes regeneration non-deterministic.
 const lintIgnorePatterns = [
@@ -14,7 +14,7 @@ const lintIgnorePatterns = [
   'packages/protocol/typescript/generated/**'
 ]
 
-const yiruRootToolingConfig = defineConfig({
+const agentstartRootToolingConfig = defineConfig({
   // Why: a commit can stage only files the fmt/lint ignore lists exclude — a generated protobuf
   // binding, runtime-metadata.json — and both commands exit non-zero on an empty selection, which
   // would fail the pre-commit hook for a legitimate change. The flag tolerates only that case; a
@@ -30,16 +30,15 @@ const yiruRootToolingConfig = defineConfig({
     // Why: Markdown includes generated skill guides whose formatting is part of
     // their authored content; toolchain migration must not rewrite that prose.
     // worker-configuration.d.ts must stay byte-identical to `wrangler types`
-    // output because the APNs gateway CI gate diffs the regenerated file.
+    // output because generated protocol artifacts are verified separately.
     // SwiftPM's .build contains read-only dependency checkouts, not project source. Protobuf's
     // TypeScript filenames and formatting are generator-owned and must stay reproducible, and so is
-    // runtime-metadata.json: formatting it makes every `@yiru/protocol#build` rewrite the file, so
+    // runtime-metadata.json: formatting it makes every `@agentstart/protocol#build` rewrite the file, so
     // `pnpm check` followed by CI's `git diff --exit-code` can never both pass.
     ignorePatterns: [
       '**/*.md',
       '**/.build',
       '**/build',
-      '**/worker-configuration.d.ts',
       'packages/protocol/generated/**',
       'packages/protocol/typescript/generated/**'
     ],
@@ -237,7 +236,7 @@ const yiruRootToolingConfig = defineConfig({
             ],
             ignorePatterns: lintIgnorePatterns,
             options: {
-              // Why: Yiru type-checks three explicit tsc projects and enables only the
+              // Why: AgentStart type-checks three explicit tsc projects and enables only the
               // switch exhaustiveness type-aware rule in a separate narrow lint pass.
               typeAware: false,
               typeCheck: false
@@ -260,4 +259,4 @@ const yiruRootToolingConfig = defineConfig({
   }
 })
 
-export default yiruRootToolingConfig
+export default agentstartRootToolingConfig

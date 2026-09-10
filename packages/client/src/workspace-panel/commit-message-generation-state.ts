@@ -1,8 +1,8 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 
-export type CommitMessageGenerationRuntimeTargetSettings = Pick<
+type CommitMessageGenerationRuntimeTargetSettings = Pick<
   GlobalSettings,
   'activeRuntimeEnvironmentId'
 >
@@ -15,7 +15,7 @@ export type CommitMessageGenerationContext = {
   runtimeTargetSettings?: CommitMessageGenerationRuntimeTargetSettings | null
 }
 
-export type CommitMessageGenerationStatus = 'idle' | 'running' | 'canceled' | 'failed' | 'succeeded'
+type CommitMessageGenerationStatus = 'idle' | 'running' | 'canceled' | 'failed' | 'succeeded'
 
 export type CommitMessageGenerationRecord = {
   context: CommitMessageGenerationContext
@@ -25,7 +25,7 @@ export type CommitMessageGenerationRecord = {
   hydrated: boolean
 }
 
-export type CommitMessageGenerationRecords = Record<string, CommitMessageGenerationRecord>
+type CommitMessageGenerationRecords = Record<string, CommitMessageGenerationRecord>
 
 export type CommitMessageGenerationSlice = {
   commitMessageGenerationRequestSeq: number

@@ -1,4 +1,5 @@
 use std::io;
+use std::path::Path;
 use std::process::Stdio;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex, MutexGuard};
@@ -49,7 +50,8 @@ pub(super) async fn run(request: HostCommand) -> Result<HostCommandOutput, HostC
         })
         .stderr(Stdio::piped())
         .stdout(Stdio::piped());
-    if let Some(cwd) = cwd.filter(|cwd| !cwd.is_empty()) {
+    let cwd = cwd.filter(|cwd| !cwd.is_empty());
+    if let Some(cwd) = &cwd {
         command.current_dir(cwd);
     }
     #[cfg(unix)]
@@ -70,7 +72,7 @@ pub(super) async fn run(request: HostCommand) -> Result<HostCommandOutput, HostC
     let mut child = command.spawn().map_err(|error| {
         HostCommandError::new(
             HostCommandErrorKind::Spawn,
-            format!("failed to start {executable}: {error}"),
+            spawn_failure(&executable, cwd.as_deref(), &error),
         )
     })?;
     let stdout = child.stdout.take().ok_or_else(|| {
@@ -218,6 +220,19 @@ pub(super) async fn run(request: HostCommand) -> Result<HostCommandOutput, HostC
             )
         }
     }
+}
+
+// Why: a missing working directory spawns as the same ENOENT as a missing
+// executable, so naming the executable sends readers hunting for an uninstalled
+// git that is in fact installed. Remote hosts fold their cwd into the transport
+// command, so this path only ever holds a local directory.
+fn spawn_failure(executable: &str, cwd: Option<&str>, error: &io::Error) -> String {
+    if error.kind() == io::ErrorKind::NotFound
+        && let Some(cwd) = cwd.filter(|cwd| !Path::new(cwd).is_dir())
+    {
+        return format!("failed to start {executable}: working directory {cwd} no longer exists");
+    }
+    format!("failed to start {executable}: {error}")
 }
 
 async fn terminate(child: &mut tokio::process::Child, process_tree: bool) {

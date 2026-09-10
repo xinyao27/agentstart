@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 import { useAppStore } from '~renderer/store/state'
 import { Switch } from '~renderer/ui/switch'
@@ -9,13 +9,11 @@ import {
   MIN_AGENT_HIBERNATION_IDLE_MS,
   getEffectiveAgentHibernationIdleMs
 } from './agent/hibernation-planner'
-import { getExperimentalPaneSearchEntries, getExperimentalSearchEntry } from './experimental-search'
+import { getExperimentalSearchEntry } from './experimental-search'
 import { NumberField, SettingsSwitch } from './form-controls'
 import { HiddenExperimentalGroup } from './hidden-experimental-group'
 import { matchesSettingsSearch } from './search'
 import { SearchableSetting } from './searchable-setting'
-
-export { getExperimentalPaneSearchEntries }
 
 const MS_PER_MINUTE = 60 * 1000
 
@@ -111,7 +109,7 @@ export function ExperimentalPane({
               <p className="text-muted-foreground text-xs">
                 {translate(
                   'auto.components.settings.ExperimentalPane.agentHibernation.copy',
-                  'Stops idle background agent terminals after the configured idle window and resumes supported sessions when you open them again. Agent sleep preserves launch options for agents started by Yiru. Manually started agents may resume with your current Yiru defaults. Experimental while we tune the safety model.'
+                  'Stops idle background agent terminals after the configured idle window and resumes supported sessions when you open them again. Agent sleep preserves launch options for agents started by AgentStart. Manually started agents may resume with your current AgentStart defaults. Experimental while we tune the safety model.'
                 )}
               </p>
             </div>
@@ -136,7 +134,7 @@ export function ExperimentalPane({
               )}
               description={translate(
                 'auto.components.settings.ExperimentalPane.agentHibernation.idleMinutesDescription',
-                'How many idle minutes a completed background agent must wait before Yiru can sleep it.'
+                'How many idle minutes a completed background agent must wait before AgentStart can sleep it.'
               )}
               value={agentHibernationIdleMinutes}
               min={MIN_AGENT_HIBERNATION_IDLE_MS / MS_PER_MINUTE}

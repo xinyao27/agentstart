@@ -1,6 +1,6 @@
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
 import { useQueryClient } from '@tanstack/react-query'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
-// Create-project flow hook for AddRepoDialog (yiru#763), split from
+// Create-project flow hook for AddRepoDialog (agentstart#763), split from
 // AddRepoCreateStep so the create-state machine stays scoped and testable.
 import { useLayoutEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'

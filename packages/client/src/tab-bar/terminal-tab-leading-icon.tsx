@@ -1,5 +1,5 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { AgentStateDot, type AgentDotState } from '~renderer/agent/status-dot'
 import { translate } from '~renderer/i18n/i18n'

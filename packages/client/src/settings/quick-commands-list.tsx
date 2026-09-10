@@ -1,13 +1,13 @@
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import {
   getTerminalQuickCommandBody,
   getTerminalQuickCommandScope,
   isTerminalAgentQuickCommand
-} from '@yiru/protocol/terminal/quick-commands'
+} from '@agentstart/protocol/terminal/quick-commands'
 import type {
   TerminalQuickCommand,
   TerminalQuickCommandScope
-} from '@yiru/protocol/terminal/quick-commands'
+} from '@agentstart/protocol/terminal/quick-commands'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { getAgentLabel } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
@@ -43,7 +43,7 @@ function QuickCommandRow({
 }): React.JSX.Element {
   const scope = getTerminalQuickCommandScope(command)
   return (
-    <div className="border-border/60 bg-background flex items-center gap-3 border px-3 py-2">
+    <div className="border-border/60 bg-background flex items-center gap-3 rounded-md border px-3 py-2">
       <div className="min-w-0 flex-1">
         <div className="flex min-w-0 items-center gap-2">
           <div className="truncate text-sm font-medium">
@@ -134,7 +134,7 @@ export function QuickCommandsList({
   onRemove: (command: TerminalQuickCommand) => void
 }): React.JSX.Element {
   return (
-    <div className="border-border/50 bg-muted/20 overflow-hidden border">
+    <div className="border-border/50 bg-muted/20 overflow-hidden rounded-lg border">
       {visibleCommands.length === 0 ? (
         <div className="text-muted-foreground px-3 py-6 text-sm">
           {commands.length === 0

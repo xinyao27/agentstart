@@ -29,7 +29,7 @@ pub(crate) enum SessionError {
     InvalidTerminalFrame,
     #[error("RPC request task failed: {0}")]
     RequestTask(#[from] tokio::task::JoinError),
-    #[error("Yiru protocol frame is invalid: {0}")]
+    #[error("AgentStart protocol frame is invalid: {0}")]
     Protocol(String),
 }
 
@@ -163,7 +163,7 @@ pub(crate) async fn run_session(
                     break Ok(());
                 };
                 let RpcMessage::Binary(bytes) = frame else {
-                    outgoing.close(1003, "This connection accepts only Yiru protocol frames");
+                    outgoing.close(1003, "This connection accepts only AgentStart protocol frames");
                     break Ok(());
                 };
                         match protocol_session.receive(
@@ -201,7 +201,7 @@ pub(crate) async fn run_session(
                                 continue;
                             }
                             Ok(ProtocolReceive::Unrecognized) => {
-                                outgoing.close(1003, "Connection received a non-Yiru frame");
+                                outgoing.close(1003, "Connection received a non-AgentStart frame");
                                 break Ok(());
                             }
                             Err(error) => break Err(error),

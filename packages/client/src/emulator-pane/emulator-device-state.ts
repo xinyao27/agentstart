@@ -1,6 +1,6 @@
 import type { SimulatorDeviceRow } from './types'
 
-export function markSimulatorDeviceState(
+function markSimulatorDeviceState(
   devices: SimulatorDeviceRow[],
   target: string | null | undefined,
   state: string

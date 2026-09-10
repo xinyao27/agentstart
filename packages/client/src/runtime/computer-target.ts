@@ -1,4 +1,4 @@
-import { COMPUTER_PROTOCOL_CAPABILITY, ComputerClient } from '@yiru/protocol'
+import { COMPUTER_PROTOCOL_CAPABILITY, ComputerClient } from '@agentstart/protocol'
 
 import {
   openConfiguredBrowserHostProtocol,

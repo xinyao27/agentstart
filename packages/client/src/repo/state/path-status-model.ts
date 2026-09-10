@@ -1,15 +1,15 @@
-import { FOLDER_WORKSPACE_PROTOCOL_CAPABILITY } from '@yiru/protocol'
+import { FOLDER_WORKSPACE_PROTOCOL_CAPABILITY } from '@agentstart/protocol'
 import {
   getRepoExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+} from '@agentstart/protocol/host/identity'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import {
   FOLDER_WORKSPACE_PATH_STATUS_TTL_MS,
   type FolderWorkspacePathStatus,
   type FolderWorkspacePathStatusRequest
-} from '@yiru/protocol/workspace/folder-path'
+} from '@agentstart/protocol/workspace/folder-path'
 import { translate } from '~renderer/i18n/i18n'
 import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { getRuntimeFolderPathStatus } from '~renderer/runtime/folder-workspace-target'
@@ -105,7 +105,7 @@ export async function fetchRuntimeAddProjectPathStatus(args: {
     FOLDER_WORKSPACE_PROTOCOL_CAPABILITY,
     translate(
       'auto.store.slices.repos.2975400634',
-      'Update Yiru on this runtime host to open non-Git folders.'
+      'Update AgentStart on this runtime host to open non-Git folders.'
     ),
     15_000
   )

@@ -7,7 +7,7 @@ plugins:
       - target=js+dts
       - import_extension=js
   - remote: buf.build/apple/swift:v1.38.1
-    out: swift/Sources/YiruProtocol/Generated
+    out: swift/Sources/AgentStartProtocol/Generated
     opt:
       - Visibility=Public
 inputs:

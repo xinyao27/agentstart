@@ -1,4 +1,4 @@
-import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '@yiru/protocol/settings/workspace-preferences'
+import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '@agentstart/protocol/settings/workspace-preferences'
 import { translate } from '~renderer/i18n/i18n'
 import { SlidersHorizontal } from '~renderer/icons/hugeicons'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
@@ -99,7 +99,7 @@ const SidebarWorkspaceOptionsMenu = function SidebarWorkspaceOptionsMenu() {
                     // needs the same at-a-glance signal that the old filter button had.
                     <span
                       aria-hidden
-                      className="bg-primary text-primary-foreground absolute -top-0.5 -right-0.5 flex h-3 min-w-3 items-center justify-center px-0.5 text-[9px] leading-none font-medium"
+                      className="bg-primary text-primary-foreground absolute -top-0.5 -right-0.5 flex h-3 min-w-3 items-center justify-center rounded-full px-0.5 text-[9px] leading-none font-medium"
                     >
                       {activeFilterCount > 9 ? '9+' : activeFilterCount}
                     </span>

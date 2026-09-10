@@ -1,4 +1,7 @@
-import type { ProjectUsageValue, ProviderUsageValue } from '@yiru/protocol/stats/usage-breakdown'
+import type {
+  ProjectUsageValue,
+  ProviderUsageValue
+} from '@agentstart/protocol/stats/usage-breakdown'
 import { useState } from 'react'
 import type { TokenValueMetric } from '~renderer/contribution-heatmap/metric'
 import { translate } from '~renderer/i18n/i18n'

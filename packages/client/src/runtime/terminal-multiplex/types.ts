@@ -1,9 +1,9 @@
-export type RemoteRuntimeTerminalDriver =
+type RemoteRuntimeTerminalDriver =
   | { kind: 'idle' }
   | { kind: 'desktop' }
   | { kind: 'mobile'; clientId: string }
 
-export type RemoteRuntimeTerminalError = {
+type RemoteRuntimeTerminalError = {
   kind: 'protocol'
   retryable: boolean
 }
@@ -68,4 +68,4 @@ export type RemoteRuntimeMultiplexedTerminal = {
 
 export const REMOTE_TERMINAL_SNAPSHOT_TOO_LARGE =
   'Remote terminal snapshot exceeded the 2 MiB replay limit; live output will continue.'
-import type { TerminalMultiplexSideEffectBatch } from '@yiru/protocol/terminal-multiplex/side-effects'
+import type { TerminalMultiplexSideEffectBatch } from '@agentstart/protocol/terminal-multiplex/side-effects'

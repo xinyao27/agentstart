@@ -1,4 +1,4 @@
-import { encodeRuntimePtyId } from '@yiru/protocol/terminal-identity'
+import { encodeRuntimePtyId } from '@agentstart/protocol/terminal-identity'
 import { isRemoteTerminalSurfaceTabId } from '~renderer/runtime/remote-terminal-surface-id'
 import { getRuntimeTerminalMultiplexer } from '~renderer/runtime/terminal-multiplex/registry'
 import { publishRendererTerminalSideEffects } from '~renderer/runtime/terminal-side-effect-client'

@@ -1,10 +1,10 @@
-import type { PhysicalModifierToken } from '@yiru/protocol/keybindings'
+import type { PhysicalModifierToken } from '@agentstart/protocol/keybindings'
 
 // Why: max gap between the first release and the second press. Internal — not
 // user-configurable — and tight enough that normal fast typing never triggers.
 const DOUBLE_TAP_WINDOW_MS = 300
 
-export type ModifierDoubleTapEventType = 'keyDown' | 'keyUp'
+type ModifierDoubleTapEventType = 'keyDown' | 'keyUp'
 
 // A keyboard event normalized to just what the detector needs.
 export type ModifierDoubleTapEvent = {

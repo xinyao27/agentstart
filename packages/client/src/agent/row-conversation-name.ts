@@ -1,5 +1,5 @@
-import type { AgentType } from '@yiru/protocol/agent/status-records'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { AgentType } from '@agentstart/protocol/agent/status-records'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { isClaudeManagementTitle } from '~renderer/agent/title/core'
 import { stripLeadingAgentTitleDecorationOrEmpty } from '~renderer/agent/title/decoration'
 import { isMeaningfulOpenCodeTerminalTitle } from '~renderer/agent/title/opencode'

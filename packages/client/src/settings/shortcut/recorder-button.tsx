@@ -3,7 +3,7 @@ import {
   isDoubleTapBinding,
   type KeybindingActionId,
   type KeybindingInput
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 import React, { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

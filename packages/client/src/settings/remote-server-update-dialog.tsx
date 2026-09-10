@@ -105,7 +105,7 @@ function ServerUpdateRow({
   )
 }
 
-export function RemoteServerUpdateDialog(): React.JSX.Element {
+function RemoteServerUpdateDialog(): React.JSX.Element {
   const open = useAppStore((state) => state.remoteServerUpdateDialogOpen)
   const setOpen = useAppStore((state) => state.setRemoteServerUpdateDialogOpen)
   const entries = [...useAppStore((state) => state.remoteServerUpdates).values()]

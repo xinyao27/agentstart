@@ -1,9 +1,9 @@
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
 import type {
   ProjectHostSetup,
   ProjectHostSetupCreateResult,
   ProjectHostSetupResult
-} from '@yiru/protocol/project/model'
+} from '@agentstart/protocol/project/model'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Plus, X } from '~renderer/icons/hugeicons'
@@ -160,7 +160,7 @@ export function RepositoryHostSetupActions({
 
   if (!isOpen) {
     return (
-      <div className="border-border bg-muted/20 flex items-center justify-between gap-3 border p-3">
+      <div className="border-border bg-muted/20 flex items-center justify-between gap-3 rounded-md border p-3">
         <div className="min-w-0 space-y-1">
           <Label className="text-sm font-semibold">
             {translate(
@@ -187,7 +187,7 @@ export function RepositoryHostSetupActions({
   }
 
   return (
-    <div className="border-border bg-background space-y-3 border p-3">
+    <div className="border-border bg-background space-y-3 rounded-md border p-3">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 space-y-1">
           <Label className="text-sm font-semibold">

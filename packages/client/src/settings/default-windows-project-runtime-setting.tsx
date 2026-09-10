@@ -1,6 +1,6 @@
-import type { GlobalWindowsRuntimeDefault } from '@yiru/protocol/project/runtime-preference'
-import { normalizeGlobalWindowsRuntimeDefault } from '@yiru/protocol/project/runtime-preference'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalWindowsRuntimeDefault } from '@agentstart/protocol/project/runtime-preference'
+import { normalizeGlobalWindowsRuntimeDefault } from '@agentstart/protocol/project/runtime-preference'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'

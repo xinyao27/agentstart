@@ -24,7 +24,7 @@ function sanitizeTuiAgentLaunchArgs(agent: TuiAgent, args: string): string {
     return args.trim()
   }
   // Why: a few agents have removed, relocated, or never exposed Claude-style
-  // skip-permission flags on the interactive TUI command Yiru launches.
+  // skip-permission flags on the interactive TUI command AgentStart launches.
   return unsupportedArgs.reduce((next, arg) => next.replace(argPattern(arg), ' '), args).trim()
 }
 

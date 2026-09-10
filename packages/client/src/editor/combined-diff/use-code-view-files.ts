@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 import { useMemo } from 'react'
 
 import type { DiffCodeViewFile } from '../diff-code-view/view'

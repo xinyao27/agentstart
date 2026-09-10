@@ -127,17 +127,17 @@ export function SkillFreshnessNudge(): null {
       names.size === 1
         ? translate(
             'auto.components.skills.SkillFreshnessNudge.titleOne',
-            'An installed Yiru skill is out of date'
+            'An installed AgentStart skill is out of date'
           )
         : translate(
             'auto.components.skills.SkillFreshnessNudge.titleMany',
-            '{{value0}} installed Yiru skills are out of date',
+            '{{value0}} installed AgentStart skills are out of date',
             { value0: names.size }
           ),
       {
         description: translate(
           'auto.components.skills.SkillFreshnessNudge.description',
-          'Update {{value0}} so agents follow the current instructions for this version of Yiru.',
+          'Update {{value0}} so agents follow the current instructions for this version of AgentStart.',
           { value0: outdatedNames }
         ),
         // Why: the nudge lingers until the user acts. Ignoring it (app quit)

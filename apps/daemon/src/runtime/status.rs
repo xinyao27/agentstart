@@ -34,7 +34,7 @@ const HOST_PROTOBUF_CAPABILITY: &str = "host.protobuf.v1";
 const MARKDOWN_PROTOBUF_CAPABILITY: &str = "markdown.protobuf.v1";
 const UI_PROTOBUF_CAPABILITY: &str = "ui.protobuf.v1";
 const PREFLIGHT_PROTOBUF_CAPABILITY: &str = "preflight.protobuf.v1";
-const TERMINAL_MULTIPLEX_CAPABILITY: &str = "/yiru.runtime.v1.TerminalService/Multiplex";
+const TERMINAL_MULTIPLEX_CAPABILITY: &str = "/agent_start.runtime.v1.TerminalService/Multiplex";
 const TERMINAL_FIT_PROTOBUF_CAPABILITY: &str = "terminal.fit.protobuf.v1";
 const TERMINAL_QUICK_COMMANDS_CAPABILITY: &str = "terminal.quick-commands.v1";
 const NOTIFICATION_SOUND_PROTOBUF_CAPABILITY: &str = "notifications.customSound.protobuf.v1";
@@ -64,7 +64,7 @@ const HOST_REGISTRY_PROTOBUF_CAPABILITY: &str = "hostRegistry.protobuf.v1";
 const BROWSER_COMMAND_PROTOBUF_CAPABILITY: &str = "browserCommand.protobuf.v1";
 const CLIPBOARD_PROTOBUF_CAPABILITY: &str = "clipboard.protobuf.v1";
 const FOLDER_WORKSPACE_PROTOBUF_CAPABILITY: &str = "folderWorkspace.protobuf.v1";
-const SHELL_YIRU_PROFILES_PROTOBUF_CAPABILITY: &str = "shell.yiruProfiles.protobuf.v1";
+const SHELL_AGENT_START_PROFILES_PROTOBUF_CAPABILITY: &str = "shell.agentstartProfiles.protobuf.v1";
 const WORKSPACE_CLEANUP_PROTOBUF_CAPABILITY: &str = "workspaceCleanup.protobuf.v1";
 const SHELL_SESSION_PROTOBUF_CAPABILITY: &str = "shell.session.cas.protobuf.v1";
 const SHELL_TELEMETRY_PROTOBUF_CAPABILITY: &str = "shell.telemetry.protobuf.v1";
@@ -140,7 +140,7 @@ const RUNTIME_CAPABILITIES: [&str; 75] = [
     BROWSER_COMMAND_PROTOBUF_CAPABILITY,
     CLIPBOARD_PROTOBUF_CAPABILITY,
     FOLDER_WORKSPACE_PROTOBUF_CAPABILITY,
-    SHELL_YIRU_PROFILES_PROTOBUF_CAPABILITY,
+    SHELL_AGENT_START_PROFILES_PROTOBUF_CAPABILITY,
     WORKSPACE_CLEANUP_PROTOBUF_CAPABILITY,
     SHELL_SESSION_PROTOBUF_CAPABILITY,
     SHELL_TELEMETRY_PROTOBUF_CAPABILITY,
@@ -201,7 +201,7 @@ impl RuntimeStatus {
         settings: SettingsAuthority,
         updater: DaemonUpdater,
     ) -> Self {
-        let app_version = std::env::var("YIRU_APP_VERSION")
+        let app_version = std::env::var("AGENTSTART_APP_VERSION")
             .unwrap_or_else(|_| env!("CARGO_PKG_VERSION").to_owned());
         Self {
             state: Arc::new(StatusState {

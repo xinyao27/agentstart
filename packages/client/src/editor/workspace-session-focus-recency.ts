@@ -1,4 +1,4 @@
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
 
 export function buildLastVisitedAtByWorktreeId(snapshot: {
   lastVisitedAtByWorktreeId: WorkspaceSessionState['lastVisitedAtByWorktreeId']

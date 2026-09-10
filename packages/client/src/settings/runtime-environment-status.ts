@@ -1,15 +1,15 @@
 import {
   PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
   PROJECT_CONTEXT_PROTOCOL_CAPABILITY
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import {
   evaluateRuntimeCompat,
   type RuntimeCompatVerdict
-} from '@yiru/protocol/runtime-compatibility'
+} from '@agentstart/protocol/runtime-compatibility'
 import {
   MIN_COMPATIBLE_RUNTIME_SERVER_VERSION,
   RUNTIME_PROTOCOL_VERSION
-} from '@yiru/protocol/runtime-versions'
+} from '@agentstart/protocol/runtime-versions'
 import { translate } from '~renderer/i18n/i18n'
 import { describeRuntimeCompatBlock } from '~renderer/runtime/compatibility-message'
 import type { RuntimeStatus } from '~renderer/runtime/status/model'

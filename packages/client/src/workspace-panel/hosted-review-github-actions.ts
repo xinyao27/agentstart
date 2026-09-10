@@ -1,6 +1,9 @@
-import { getRepoExecutionHostId, parseExecutionHostId } from '@yiru/protocol/host/identity'
-import type { GitHubPRMergeMethod, PRInfo } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { Repo } from '@yiru/protocol/project/repository'
+import { getRepoExecutionHostId, parseExecutionHostId } from '@agentstart/protocol/host/identity'
+import type {
+  GitHubPRMergeMethod,
+  PRInfo
+} from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
 import { openGitHubTarget } from '~renderer/runtime/github-target'
 import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'

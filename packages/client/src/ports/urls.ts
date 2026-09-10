@@ -1,4 +1,4 @@
-import type { WorkspacePort } from '@yiru/protocol'
+import type { WorkspacePort } from '@agentstart/protocol'
 
 // Why: the scanner reports numeric addresses (127.0.0.1, 0.0.0.0, ::1, ::)
 // while UI actions should use an address a browser can reliably open.

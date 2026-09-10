@@ -73,7 +73,7 @@ async fn create_wsl_location(
         .filter(|value| value.starts_with('/'))
         .ok_or(AccountsError::RuntimeMismatch)?;
     let (folder, leaf, marker) = location_parts(provider);
-    let linux_path = format!("{home}/.local/share/yiru/{folder}/{account_id}/{leaf}");
+    let linux_path = format!("{home}/.local/share/agentstart/{folder}/{account_id}/{leaf}");
     let script = "set -eu; umask 077; mkdir -p -- \"$1\"; chmod 700 -- \"$1\"; printf '%s\\n' \"$2\" > \"$1/$3\"; chmod 600 -- \"$1/$3\"";
     let status = Command::new("wsl.exe")
         .args([
@@ -83,7 +83,7 @@ async fn create_wsl_location(
             "sh",
             "-c",
             script,
-            "yiru-account",
+            "agentstart-account",
             &linux_path,
             account_id,
             marker,
@@ -153,7 +153,7 @@ pub(super) fn stored_location(
             .get(linux_key)
             .and_then(Value::as_str)
             .ok_or(AccountsError::InvalidState)?;
-        let expected_suffix = format!("/.local/share/yiru/{folder}/{account_id}/{leaf}");
+        let expected_suffix = format!("/.local/share/agentstart/{folder}/{account_id}/{leaf}");
         let expected_host_path = format!("//wsl.localhost/{distro}{linux_path}");
         let normalized_host_path = host_path.to_string_lossy().replace('\\', "/");
         if !linux_path.ends_with(&expected_suffix)
@@ -249,7 +249,9 @@ fn account_value_for_cleanup(
 
 fn location_parts(provider: AuthenticationProvider) -> (&'static str, &'static str, &'static str) {
     match provider {
-        AuthenticationProvider::Claude => ("claude-accounts", "auth", ".yiru-managed-claude-auth"),
-        AuthenticationProvider::Codex => ("codex-accounts", "home", ".yiru-managed-home"),
+        AuthenticationProvider::Claude => {
+            ("claude-accounts", "auth", ".agentstart-managed-claude-auth")
+        }
+        AuthenticationProvider::Codex => ("codex-accounts", "home", ".agentstart-managed-home"),
     }
 }

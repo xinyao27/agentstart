@@ -35,7 +35,7 @@ export type TerminalPastePlan = {
   target: TerminalPasteTarget
   payload: TerminalPastePayload
   mode: 'direct' | 'chunked' | 'bracketed-terminal' | 'reject'
-  // Why: 'terminal-cr' marks plans whose paste bytes Yiru constructs itself, so
+  // Why: 'terminal-cr' marks plans whose paste bytes AgentStart constructs itself, so
   // every write path applies xterm's native \r?\n -> \r before ConPTY sees LF.
   newlinePolicy: 'preserve' | 'terminal-cr'
   runtimeKey: string

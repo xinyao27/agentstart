@@ -1,22 +1,10 @@
-export const ORCHESTRATION_SETUP_STATE_EVENT = 'yiru:orchestration-setup-state'
-export const ORCHESTRATION_ENABLED_STORAGE_KEY = 'yiru.orchestration.enabled'
-export const ORCHESTRATION_SETUP_DISMISSED_STORAGE_KEY = 'yiru.orchestration.setupDismissed'
-
-export function isOrchestrationSetupEnabled(): boolean {
-  return localStorage.getItem(ORCHESTRATION_ENABLED_STORAGE_KEY) === '1'
-}
-
-export function hasOrchestrationSetupMarker(): boolean {
-  return isOrchestrationSetupEnabled()
-}
+const ORCHESTRATION_SETUP_STATE_EVENT = 'agentstart:orchestration-setup-state'
+export const ORCHESTRATION_ENABLED_STORAGE_KEY = 'agentstart.orchestration.enabled'
+export const ORCHESTRATION_SETUP_DISMISSED_STORAGE_KEY = 'agentstart.orchestration.setupDismissed'
 
 export function markOrchestrationSetupComplete(): void {
   localStorage.setItem(ORCHESTRATION_ENABLED_STORAGE_KEY, '1')
   notifyOrchestrationSetupStateChanged()
-}
-
-export function isOrchestrationSetupDismissed(): boolean {
-  return localStorage.getItem(ORCHESTRATION_SETUP_DISMISSED_STORAGE_KEY) === '1'
 }
 
 export function notifyOrchestrationSetupStateChanged(): void {

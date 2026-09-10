@@ -1,4 +1,8 @@
-import { GIT_PROTOCOL_CAPABILITY, GitClient, runtimeEnvironmentTransport } from '@yiru/protocol'
+import {
+  GIT_PROTOCOL_CAPABILITY,
+  GitClient,
+  runtimeEnvironmentTransport
+} from '@agentstart/protocol'
 
 import {
   openConfiguredBrowserHostProtocol,

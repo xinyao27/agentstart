@@ -70,8 +70,8 @@ pub(super) async fn run<T>(
                 "initialize",
                 Some(json!({
                     "clientInfo": {
-                        "name": "yiru_desktop",
-                        "title": "Yiru",
+                        "name": "agentstart_desktop",
+                        "title": "AgentStart",
                         "version": "0.0.0"
                     }
                 })),

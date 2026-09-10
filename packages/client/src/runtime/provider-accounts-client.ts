@@ -4,8 +4,8 @@ import {
   type CodexRateLimitAccountsState,
   type GrokAccountStatus,
   type RateLimitState
-} from '@yiru/protocol'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+} from '@agentstart/protocol'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import { getActiveRuntimeTarget, type RuntimeClientTarget } from './rpc-client'

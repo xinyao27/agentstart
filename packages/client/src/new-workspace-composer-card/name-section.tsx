@@ -1,5 +1,5 @@
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
-import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle } from '~renderer/icons/hugeicons'

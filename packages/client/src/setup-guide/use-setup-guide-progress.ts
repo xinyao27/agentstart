@@ -1,9 +1,9 @@
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
-import { hasFeatureInteraction } from '@yiru/protocol/telemetry/interactions/state'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
+import { hasFeatureInteraction } from '@agentstart/protocol/telemetry/interactions/state'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import {
   COMPUTER_USE_SKILL_NAME,
-  YIRU_CLI_SKILL_NAME,
+  AGENTSTART_CLI_SKILL_NAME,
   ORCHESTRATION_SKILL_NAME
 } from '~renderer/agent/feature-install-commands'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
@@ -57,7 +57,7 @@ export function useSetupGuideProgress(
     useState(false)
   const [computerUseUnavailable, setComputerUseUnavailable] = useState(false)
   const { installed: detectedBrowserUseSkillInstalled, loading: detectedBrowserUseSkillLoading } =
-    useInstalledAgentSkill(YIRU_CLI_SKILL_NAME, {
+    useInstalledAgentSkill(AGENTSTART_CLI_SKILL_NAME, {
       enabled: shouldRefreshCoreState,
       discoveryTarget: activeSkillRuntime.discoveryTarget,
       sourceKinds: GLOBAL_AGENT_SKILL_SOURCE_KINDS

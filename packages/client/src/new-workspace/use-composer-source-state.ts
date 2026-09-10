@@ -1,4 +1,4 @@
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
 import { useEffect, useRef, useState } from 'react'
 import { CONTEXTUAL_TOUR_ENABLE_AUTO_WORKSPACE_NAME_EVENT } from '~renderer/contextual-tours/contextual-tour-composer-events'
 import type { WorkspaceCreateErrorDisplay } from '~renderer/new-workspace-composer-card/workspace-create-error-format'

@@ -1,5 +1,5 @@
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
 import type { Popover as PopoverPrimitive } from '@base-ui/react/popover'
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
 import type { Dispatch, RefObject, SetStateAction } from 'react'
 import { parseGitHubPullRequestLink } from '~renderer/github/links'
 import { translate } from '~renderer/i18n/i18n'

@@ -6,7 +6,7 @@ import type {
   OpenCodeUsageScope,
   OpenCodeUsageSessionRow,
   OpenCodeUsageSummary
-} from '@yiru/protocol/provider-usage/models'
+} from '@agentstart/protocol/provider-usage/models'
 import type { StateCreator } from 'zustand'
 import { openCodeProviderUsageClient } from '~renderer/runtime/provider-usage-client'
 import type { AppState } from '~renderer/store/types'
@@ -33,7 +33,7 @@ export const createOpenCodeUsageSlice: StateCreator<AppState, [], [], OpenCodeUs
   set,
   get
 ) => ({
-  openCodeUsageScope: 'yiru',
+  openCodeUsageScope: 'agentstart',
   openCodeUsageRange: 'all',
   openCodeUsageScanState: null,
   openCodeUsageSnapshotReady: false,

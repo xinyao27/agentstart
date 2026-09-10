@@ -67,7 +67,7 @@ export type WorktreeSetInput = {
 export type WorktreePersistSortOrderResult = { updated: number }
 
 export type WorktreeDetectedWorktreeValue = WorktreeValue & {
-  ownership: 'yiru-managed' | 'external' | 'unknown-legacy'
+  ownership: 'agentstart-managed' | 'external' | 'unknown-legacy'
   selectedCheckout: boolean
   visible: boolean
 }
@@ -93,7 +93,7 @@ export type WorktreeResolvePrBaseInput = {
   baseRefName?: string
   isCrossRepository?: boolean
 }
-export type WorktreePrBaseSuccess = {
+type WorktreePrBaseSuccess = {
   baseBranch: string
   headSha: string
   branchNameOverride?: string
@@ -143,7 +143,7 @@ export type WorktreePsResult = {
   truncated: boolean
 }
 
-export type WorktreePsAgentRow = {
+type WorktreePsAgentRow = {
   paneKey: string
   parentPaneKey?: string
   state: string
@@ -159,8 +159,8 @@ export type WorktreePsAgentRow = {
   updatedAt: number
 }
 
-export type WorktreeBaseStatusKind = 'checking' | 'current' | 'drift' | 'base_changed' | 'unknown'
-export type WorktreeBaseStatusEvent = {
+type WorktreeBaseStatusKind = 'checking' | 'current' | 'drift' | 'base_changed' | 'unknown'
+type WorktreeBaseStatusEvent = {
   repoId: string
   worktreeId: string
   status: WorktreeBaseStatusKind

@@ -1,5 +1,8 @@
-import type { SleepingAgentSessionRecord } from '@yiru/protocol/agent/session-resume'
-import { parseLegacyNumericPaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { SleepingAgentSessionRecord } from '@agentstart/protocol/agent/session-resume'
+import {
+  parseLegacyNumericPaneKey,
+  parsePaneKey
+} from '@agentstart/protocol/terminal/pane-identity'
 import {
   WAKE_HIBERNATED_AGENTS_WORKTREE_EVENT,
   type WakeHibernatedAgentsWorktreeDetail
@@ -163,7 +166,7 @@ function getCanonicalPassiveWakeRecords(
  * Woken PTYs auto-publish to mobile via the renderer graph republish, so no
  * spawn is awaited.
  */
-export function wakeSleepingAgentsForWorktreeInBackground(worktreeId: string): void {
+function wakeSleepingAgentsForWorktreeInBackground(worktreeId: string): void {
   const worktreeRecords = Object.values(
     useAppStore.getState().sleepingAgentSessionsByPaneKey
   ).filter((record) => record.worktreeId === worktreeId)

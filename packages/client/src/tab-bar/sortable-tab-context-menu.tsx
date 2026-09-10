@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { translate } from '~renderer/i18n/i18n'
 import {
   Sidebar as PanelRightClose,
@@ -182,8 +182,8 @@ export function SortableTabContextMenu({
               <ContextMenuItem
                 key={color.label}
                 className={cn(
-                  'relative h-4 w-4 min-w-4 p-0 border',
-                  // Why: selection reuses the existing edge because Yiru does not use CSS outlines.
+                  'relative h-4 w-4 min-w-4 p-0 rounded-full border',
+                  // Why: selection reuses the existing edge because AgentStart does not use CSS outlines.
                   isSelected
                     ? 'border-ring'
                     : color.value

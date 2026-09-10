@@ -2,7 +2,7 @@ import {
   keybindingMatchesAction,
   type KeybindingContext,
   type KeybindingInput
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 import { useEffect } from 'react'
 import { getShortcutPlatform } from '~renderer/keyboard-input/shortcut-platform'
 import {
@@ -40,7 +40,7 @@ export function useTabBarQuickCommandsShortcut({
 }: UseTabBarQuickCommandsShortcutParams): void {
   const keybindings = useAppStore((s) => s.keybindings)
   const terminalShortcutPolicy = useAppStore(
-    (s) => s.settings?.terminalShortcutPolicy ?? 'yiru-first'
+    (s) => s.settings?.terminalShortcutPolicy ?? 'agentstart-first'
   )
   const activeView = useAppStore((s) => s.activeView)
 

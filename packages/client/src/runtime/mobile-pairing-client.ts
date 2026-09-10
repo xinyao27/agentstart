@@ -1,5 +1,5 @@
-import { MobilePairingClient } from '@yiru/protocol'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { MobilePairingClient } from '@agentstart/protocol'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 

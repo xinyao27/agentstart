@@ -1,12 +1,12 @@
-import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
-import { AI_VAULT_AGENTS, type AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
-import { normalizeExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import { measureUtf8ByteLength } from '@yiru/protocol/text/utf8-length'
+import type { SleepingAgentLaunchConfig } from '@agentstart/protocol/agent/session-resume'
+import { AI_VAULT_AGENTS, type AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
+import { normalizeExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import { measureUtf8ByteLength } from '@agentstart/protocol/text/utf8-length'
 
-export const AI_VAULT_SESSION_DRAG_TYPE = 'application/x-yiru-ai-vault-session'
-export const AI_VAULT_SESSION_DRAG_START_EVENT = 'yiru-ai-vault-session-drag-start'
-export const AI_VAULT_SESSION_DRAG_END_EVENT = 'yiru-ai-vault-session-drag-end'
-export const AI_VAULT_SESSION_DRAG_PAYLOAD_MAX_BYTES = 16 * 1024
+const AI_VAULT_SESSION_DRAG_TYPE = 'application/x-agentstart-ai-vault-session'
+export const AI_VAULT_SESSION_DRAG_START_EVENT = 'agentstart-ai-vault-session-drag-start'
+export const AI_VAULT_SESSION_DRAG_END_EVENT = 'agentstart-ai-vault-session-drag-end'
+const AI_VAULT_SESSION_DRAG_PAYLOAD_MAX_BYTES = 16 * 1024
 
 export type AiVaultSessionDragPayload = {
   agent: AiVaultAgent
@@ -101,7 +101,7 @@ export function writeAiVaultSessionDragData(
   activeAiVaultSessionDragPayload = { ...payload }
   dataTransfer.effectAllowed = 'copy'
   // Why: avoid text/plain so terminal/native drop targets cannot paste the
-  // resume command instead of letting Yiru's pane drop layer handle it.
+  // resume command instead of letting AgentStart's pane drop layer handle it.
   dataTransfer.setData(AI_VAULT_SESSION_DRAG_TYPE, serialized)
 }
 

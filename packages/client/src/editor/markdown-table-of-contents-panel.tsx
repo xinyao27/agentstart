@@ -2,7 +2,7 @@ import {
   MARKDOWN_TOC_PANEL_MIN_WIDTH,
   clampMarkdownTocPanelWidth,
   computeMaxMarkdownTocPanelWidth
-} from '@yiru/protocol/settings/markdown-toc'
+} from '@agentstart/protocol/settings/markdown-toc'
 import React, { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { TreeStructure as ListTree, CaretRight as ChevronRight, X } from '~renderer/icons/hugeicons'

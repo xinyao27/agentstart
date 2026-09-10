@@ -1,5 +1,5 @@
-import type { FeatureWallTileIdTelemetry } from '@yiru/protocol/telemetry/events/foundations'
-import type { FeatureWallWorkflowId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { FeatureWallTileIdTelemetry } from '@agentstart/protocol/telemetry/events/foundations'
+import type { FeatureWallWorkflowId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
 
@@ -17,7 +17,7 @@ export const getFeatureWallWorkflows = createLocalizedCatalog(
       title: translate('feature-wall.205b4561ed', 'Workspaces'),
       lede: translate(
         'feature-wall.45cdd75dbe',
-        'Yiru splits each task into an isolated workspace so agents can run in parallel.'
+        'AgentStart splits each task into an isolated workspace so agents can run in parallel.'
       ),
       telemetryTileId: 'tile-01'
     },
@@ -35,7 +35,7 @@ export const getFeatureWallWorkflows = createLocalizedCatalog(
       title: translate('feature-wall.93ef7c6368', 'Workbench'),
       lede: translate(
         'feature-wall.7e39fdc7c6',
-        'Bring your terminal setup into Yiru, then split panes to keep servers, tests, logs, and agents running side by side.'
+        'Bring your terminal setup into AgentStart, then split panes to keep servers, tests, logs, and agents running side by side.'
       ),
       telemetryTileId: 'tile-02'
     },

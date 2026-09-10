@@ -17,7 +17,7 @@ export type AgentHookSource =
   | 'devin'
   | 'kimi'
 
-/** All AI coding agents Yiru knows how to launch. Used for the agent picker in the new-workspace
+/** All AI coding agents AgentStart knows how to launch. Used for the agent picker in the new-workspace
  *  flow and for the default-agent setting. Extend this union as new agents are added. */
 export type TuiAgent =
   | 'claude' // Claude Code

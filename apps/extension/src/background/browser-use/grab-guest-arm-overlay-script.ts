@@ -1,6 +1,6 @@
 export const GUEST_ARM_OVERLAY_SCRIPT = `  // Why: selection must be intercepted while hit-testing beneath the overlay.
   var host = document.createElement('div');
-  host.id = '__yiru-grab-host';
+  host.id = '__agentstart-grab-host';
   host.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:2147483647;pointer-events:all;cursor:crosshair;';
   document.documentElement.appendChild(host);
 
@@ -68,7 +68,7 @@ export const GUEST_ARM_OVERLAY_SCRIPT = `  // Why: selection must be intercepted
 
   host.addEventListener('mousemove', onPointerMove);
 
-  window.__yiruGrab = {
+  window.__agentstartGrab = {
     host: host,
     extractPayload: extractPayload,
     getCurrentElement: function() { return currentEl; },
@@ -81,7 +81,7 @@ export const GUEST_ARM_OVERLAY_SCRIPT = `  // Why: selection must be intercepted
     cleanup: function() {
       host.removeEventListener('mousemove', onPointerMove);
       try { host.remove(); } catch(e) {}
-      delete window.__yiruGrab;
+      delete window.__agentstartGrab;
     }
   };
 

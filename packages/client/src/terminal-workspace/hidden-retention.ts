@@ -12,7 +12,7 @@ import {
   type TerminalColdParkPolicyOverrides
 } from '../terminal-pane/terminal-hidden-view-parking'
 
-export const TERMINAL_HIDDEN_WORKTREE_RETENTION_LIMIT = 12
+const TERMINAL_HIDDEN_WORKTREE_RETENTION_LIMIT = 12
 export const TERMINAL_HIDDEN_WORKTREE_RETENTION_TTL_MS = 45 * 60_000
 
 export type TerminalWorktreeRetentionCandidate = {

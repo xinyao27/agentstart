@@ -4,7 +4,6 @@ import { translate } from '../../i18n/i18n'
 import { useUiLocale } from '../../i18n/use-ui-locale'
 import type { WorkbenchLocation } from '../../runtime/workbench-location'
 import { AgentPresence } from '../agent-status/presence'
-import { AutomationsPage } from '../automations/page'
 import { CommandPalette } from '../command-palette/palette'
 import { ConsoleSensorBridge } from '../context/console-bridge'
 import { ProjectGroupCatalogBridge } from '../project-group-catalog'
@@ -25,10 +24,10 @@ export function ExtensionWorkbenchSurface({
     <RecoverableRenderErrorBoundary
       boundaryId="extension.workbench.root"
       surface="app-root"
-      title={translate('app.recoverableError.rootTitle', 'Yiru hit a renderer error.')}
+      title={translate('app.recoverableError.rootTitle', 'AgentStart hit a renderer error.')}
       description={translate(
         'app.recoverableError.rootDescription',
-        'The app shell could not finish rendering. Retry to remount it, or relaunch Yiru if the error persists.'
+        'The app shell could not finish rendering. Retry to remount it, or relaunch AgentStart if the error persists.'
       )}
     >
       <ConnectionStatus />
@@ -40,14 +39,8 @@ export function ExtensionWorkbenchSurface({
         <WorkspacePortClaimsBridge />
         <ProjectGroupCatalogBridge />
         <CommandPalette includeWorkspaceFiles />
-        {location.kind === 'page' && location.page === 'automations' ? (
-          <AutomationsPage />
-        ) : (
-          <>
-            <ExtensionWorkbenchLocationBridge location={location} />
-            <App />
-          </>
-        )}
+        <ExtensionWorkbenchLocationBridge location={location} />
+        <App />
       </RuntimeSnapshotSurface>
     </RecoverableRenderErrorBoundary>
   )

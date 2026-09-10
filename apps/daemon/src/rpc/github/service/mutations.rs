@@ -1,6 +1,5 @@
-use serde_json::Value;
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     GitHubMergeMethod, GitHubMutationResult, GitHubPrOpenState, GitHubServiceMergePrRequest,
     GitHubServiceMergePrResponse, GitHubServiceRemovePrReviewersRequest,
     GitHubServiceRemovePrReviewersResponse, GitHubServiceRequestPrReviewersRequest,
@@ -10,7 +9,8 @@ use yiru_protocol::runtime::v1::{
     GitHubServiceUpdatePrStateResponse, GitHubServiceUpdatePrTitleRequest,
     GitHubServiceUpdatePrTitleResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::Value;
 
 use super::mapping;
 use crate::rpc::github::GitHubRpc;

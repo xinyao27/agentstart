@@ -43,7 +43,7 @@ impl StatsAuthority {
         usage: ProviderUsageAuthority,
     ) -> Result<Self, StatsError> {
         Ok(Self {
-            activity: activity::ActivityAuthority::open(root.join("yiru-stats.json")).await?,
+            activity: activity::ActivityAuthority::open(root.join("agentstart-stats.json")).await?,
             usage,
             ai_vault: None,
         })
@@ -122,11 +122,11 @@ impl StatsAuthority {
         let range_name = range.as_str();
         let (claude, codex, open_code) = tokio::try_join!(
             self.usage
-                .snapshot(Provider::Claude, "yiru", range_name, Some(100)),
+                .snapshot(Provider::Claude, "agentstart", range_name, Some(100)),
             self.usage
-                .snapshot(Provider::Codex, "yiru", range_name, Some(100)),
+                .snapshot(Provider::Codex, "agentstart", range_name, Some(100)),
             self.usage
-                .snapshot(Provider::OpenCode, "yiru", range_name, Some(100))
+                .snapshot(Provider::OpenCode, "agentstart", range_name, Some(100))
         )?;
         let activity = self.activity.summary();
         Ok(aggregate::summary(

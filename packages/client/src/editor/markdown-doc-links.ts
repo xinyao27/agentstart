@@ -1,8 +1,8 @@
-import type { MarkdownDocument } from '@yiru/protocol/files/values'
+import type { MarkdownDocument } from '@agentstart/protocol/files/values'
 
 import { slugMarkdownHeading } from './markdown-heading-slug'
 
-export const MARKDOWN_DOC_LINK_PREFIX = '#yiru-doc-link='
+const MARKDOWN_DOC_LINK_PREFIX = '#agentstart-doc-link='
 
 type MarkdownTextNode = {
   type: 'text'
@@ -22,7 +22,7 @@ type MarkdownNode = {
   children?: MarkdownNode[]
 }
 
-export type MarkdownDocLinkTextPart =
+type MarkdownDocLinkTextPart =
   | { type: 'text'; value: string }
   | { type: 'docLink'; target: string; label: string }
 
@@ -180,7 +180,7 @@ export function formatMarkdownDocLink(target: string, alias?: string | null): st
   return `[[${formatMarkdownDocLinkBody(target, alias)}]]`
 }
 
-export function splitMarkdownDocLinkText(value: string): MarkdownDocLinkTextPart[] {
+function splitMarkdownDocLinkText(value: string): MarkdownDocLinkTextPart[] {
   const parts: MarkdownDocLinkTextPart[] = []
   let position = 0
 
@@ -214,7 +214,7 @@ export function splitMarkdownDocLinkText(value: string): MarkdownDocLinkTextPart
   return parts.length === 0 ? [{ type: 'text', value }] : parts
 }
 
-export function createMarkdownDocLinkHref(target: string): string {
+function createMarkdownDocLinkHref(target: string): string {
   return `${MARKDOWN_DOC_LINK_PREFIX}${encodeURIComponent(target)}`
 }
 

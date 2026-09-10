@@ -43,7 +43,7 @@ function tailBoundForkCapture(value: string): string {
   return value.slice(-MAX_FORK_CAPTURE_SANITIZE_CHARS)
 }
 
-export function cleanAgentSessionForkTranscript(value: string): string {
+function cleanAgentSessionForkTranscript(value: string): string {
   let result = ''
   let newlineRun = 0
 
@@ -150,7 +150,7 @@ export function buildAgentSessionForkPrompt({
   const fence = getMarkdownFenceForTranscript(transcript)
 
   const header = [
-    'This is a fork of an existing Yiru agent session.',
+    'This is a fork of an existing AgentStart agent session.',
     '',
     'Use the captured transcript as background context for this new, independent session. Keep file edits and decisions independent from the original terminal unless I explicitly ask you to coordinate with it.',
     '',

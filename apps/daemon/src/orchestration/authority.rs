@@ -247,7 +247,7 @@ impl OrchestrationAuthority {
         let terminal = self.terminals.show(handle).map_err(|_| {
             OrchestrationError::domain(
                 "stable_pane_required",
-                "The terminal has no stable pane identity. Run this command inside a live Yiru terminal.",
+                "The terminal has no stable pane identity. Run this command inside a live AgentStart terminal.",
             )
         })?;
         Ok((
@@ -2094,7 +2094,7 @@ fn run_required() -> OrchestrationError {
             "guide": { "full": true, "topic": "orchestration" },
             "nextCommandArgs": ["skills", "get", "orchestration", "--full"],
             "nextSteps": [
-                "Using this same Yiru CLI executable, run: skills get orchestration --full",
+                "Using this same AgentStart CLI executable, run: skills get orchestration --full",
                 "Read the returned guide completely and do not retry the previous command unchanged."
             ]
         }),
@@ -2178,15 +2178,19 @@ fn dispatch_preamble(
     capability: Option<&str>,
     dev_mode: bool,
 ) -> String {
-    let cli = if dev_mode { "pnpm yiru" } else { "yiru" };
+    let cli = if dev_mode {
+        "pnpm agentstart"
+    } else {
+        "agentstart"
+    };
     let capability = capability
         .map(|value| format!(" --dispatch-capability {value}"))
         .unwrap_or_default();
     format!(
-        "You are working inside Yiru, a multi-agent IDE. You are a dispatched worker.\n\
+        "You are working inside AgentStart, a multi-agent IDE. You are a dispatched worker.\n\
 Your coordinator's terminal handle is: {coordinator}\n\
 Your task ID is: {task_id}\n\n\
-You talk to the coordinator only through the Yiru CLI. Never use AskUserQuestion.\n\
+You talk to the coordinator only through the AgentStart CLI. Never use AskUserQuestion.\n\
 Report the outcome exactly once with:\n  {cli} orchestration send --from {worker}{capability} \\\n    --type worker_done --subject \"<short status>\" \\\n    --body \"<3-sentence summary: what you did, what you found, what's left>\" \\\n    --task-id {task_id} --dispatch-id {dispatch_id} --outcome succeeded\n\n\
 Send a heartbeat every 5 minutes while working:\n  {cli} orchestration send --from {worker}{capability} \\\n    --type heartbeat --subject alive --task-id {task_id} --dispatch-id {dispatch_id}\n\n\
 Ask the coordinator through:\n  {cli} orchestration ask --from {worker}{capability} --question \"<question>\" --timeout-ms 600000\n\n\
@@ -2449,7 +2453,7 @@ fn reject_lifecycle(
         .and_then(|payload| payload.as_object().cloned())
         .unwrap_or_default();
     payload.insert(
-        "_yiruLifecycleRejection".to_owned(),
+        "_agentstartLifecycleRejection".to_owned(),
         json!({ "code": code, "reason": reason }),
     );
     let payload = serde_json::to_string(&payload)
@@ -2462,7 +2466,7 @@ fn reject_lifecycle(
                 value_string(message, "type").unwrap_or_default(),
                 value_string(message, "subject").unwrap_or_default()
             ),
-            format!("Yiru rejected this lifecycle message: {reason}"),
+            format!("AgentStart rejected this lifecycle message: {reason}"),
             payload,
             id,
         ],
@@ -2574,7 +2578,7 @@ fn format_messages(messages: &[Value]) -> String {
             }
             if !legacy {
                 lines.push(format!(
-                    "[Reply: yiru orchestration reply --id {} --from {} --body \"...\"]",
+                    "[Reply: agentstart orchestration reply --id {} --from {} --body \"...\"]",
                     value_string(message, "id").unwrap_or_default(),
                     value_string(message, "to_handle").unwrap_or_default()
                 ));

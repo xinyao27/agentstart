@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -110,7 +110,7 @@ export function CombinedDiffNotesControl({
   return (
     <>
       {count > 0 ? (
-        <div className="border-border/70 bg-muted/40 ml-1 flex shrink-0 items-center overflow-hidden border">
+        <div className="border-border/70 bg-muted/40 ml-1 flex shrink-0 items-center overflow-hidden rounded-full border">
           <Popover>
             <PopoverTrigger
               render={
@@ -129,7 +129,7 @@ export function CombinedDiffNotesControl({
                   <span>
                     {translate('auto.components.editor.CombinedDiffViewer.bb84b4c374', 'AI notes')}
                   </span>
-                  <span className="bg-background/80 text-muted-foreground px-1 text-[10px] tabular-nums">
+                  <span className="bg-background/80 text-muted-foreground rounded-full px-1 text-[10px] tabular-nums">
                     {count}
                   </span>
                 </Button>
@@ -150,7 +150,7 @@ export function CombinedDiffNotesControl({
             groupId={groupId}
             comments={comments}
             actionLabel="Send"
-            triggerClassName="h-6 gap-1 border-l border-border/70 px-2 text-[11px] font-medium leading-none text-foreground/80 hover:bg-accent hover:text-foreground"
+            triggerClassName="rounded-none h-6 gap-1 border-l border-border/70 px-2 text-[11px] font-medium leading-none text-foreground/80 hover:bg-accent hover:text-foreground"
             iconClassName="size-3"
           />
         </div>
@@ -255,11 +255,11 @@ function DiffNotesPreview({
       </div>
       <div className="scrollbar-sleek max-h-72 overflow-y-auto p-2">
         {comments.map((comment) => (
-          <div key={comment.id} className="hover:bg-accent/50 px-2 py-1.5">
+          <div key={comment.id} className="hover:bg-accent/50 rounded-md px-2 py-1.5">
             <div className="text-muted-foreground flex items-center gap-1.5 text-[11px] leading-none">
               <span className="min-w-0 flex-1 truncate font-mono">{comment.filePath}</span>
               {comment.sentAt ? (
-                <span className="bg-muted shrink-0 px-1 py-0.5 text-[10px] leading-none">
+                <span className="bg-muted shrink-0 rounded px-1 py-0.5 text-[10px] leading-none">
                   {translate('auto.components.editor.CombinedDiffViewer.1da745c551', 'Sent')}
                 </span>
               ) : null}

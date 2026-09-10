@@ -1,4 +1,4 @@
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import type { RuntimeTerminalProcessInspection } from '~renderer/runtime/terminal-inspection'
 import { useAppStore } from '~renderer/store/state'
 import { createCodexAutoApprovalHookCompletionSuppressor } from '~renderer/terminal-pane/codex-auto-approval-notification-suppression'
@@ -133,7 +133,7 @@ function isAgentTaskCompleteTrackingEnabled(): boolean {
   return isAgentTaskCompleteNotificationEnabled() || isTerminalAttentionEnabled()
 }
 
-export function syncAgentHookCompletionNotificationSettings(): boolean {
+function syncAgentHookCompletionNotificationSettings(): boolean {
   pruneClosedPaneCoordinators()
   ensureTrackingBaseline()
   const enabled = isAgentTaskCompleteTrackingEnabled()

@@ -1,19 +1,20 @@
-use serde_json::{Map, Value};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     AppStarSource as ProtocolStarSource, GitHubPrChecksStatus, GitHubPrMergeable,
     GitHubPrRefreshCandidate as ProtocolCandidate,
     GitHubPrRefreshEnqueueKind as ProtocolEnqueueKind, GitHubPrRefreshFallbackSource,
     GitHubPrRefreshReason as ProtocolReason,
     GitHubPrRefreshValidationSkip as ProtocolValidationSkip, GitHubPrState,
-    GitHubShellServiceCheckYiruStarredRequest, GitHubShellServiceCheckYiruStarredResponse,
-    GitHubShellServiceEnqueuePrRefreshRequest, GitHubShellServiceEnqueuePrRefreshResponse,
-    GitHubShellServiceGetViewerRequest, GitHubShellServiceGetViewerResponse,
-    GitHubShellServiceReportVisiblePrRefreshCandidatesRequest,
-    GitHubShellServiceReportVisiblePrRefreshCandidatesResponse, GitHubShellServiceStarYiruRequest,
-    GitHubShellServiceStarYiruResponse, GitHubViewer, ProjectRepositoryKind,
+    GitHubShellServiceCheckAgentStartStarredRequest,
+    GitHubShellServiceCheckAgentStartStarredResponse, GitHubShellServiceEnqueuePrRefreshRequest,
+    GitHubShellServiceEnqueuePrRefreshResponse, GitHubShellServiceGetViewerRequest,
+    GitHubShellServiceGetViewerResponse, GitHubShellServiceReportVisiblePrRefreshCandidatesRequest,
+    GitHubShellServiceReportVisiblePrRefreshCandidatesResponse,
+    GitHubShellServiceStarAgentStartRequest, GitHubShellServiceStarAgentStartResponse,
+    GitHubViewer, ProjectRepositoryKind,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::{Map, Value};
 
 use crate::github::{
     AppStarSource, PrRefreshCandidate, PrRefreshEnqueueResult, PrRefreshReason, ValidationSkip,
@@ -99,29 +100,34 @@ pub(in crate::rpc) async fn report_visible_pr_refresh_candidates(
     ))
 }
 
-pub(in crate::rpc) async fn check_yiru_starred(
+pub(in crate::rpc) async fn check_agentstart_starred(
     rpc: &GitHubRpc,
     payload: &[u8],
 ) -> Result<Vec<u8>, Status> {
-    decode::<GitHubShellServiceCheckYiruStarredRequest>(payload)?;
-    Ok(encode(&GitHubShellServiceCheckYiruStarredResponse {
-        starred: rpc.authority.check_yiru_starred().await,
+    decode::<GitHubShellServiceCheckAgentStartStarredRequest>(payload)?;
+    Ok(encode(&GitHubShellServiceCheckAgentStartStarredResponse {
+        starred: rpc.authority.check_agentstart_starred().await,
     }))
 }
 
-pub(in crate::rpc) async fn star_yiru(rpc: &GitHubRpc, payload: &[u8]) -> Result<Vec<u8>, Status> {
-    let request = decode::<GitHubShellServiceStarYiruRequest>(payload)?;
+pub(in crate::rpc) async fn star_agentstart(
+    rpc: &GitHubRpc,
+    payload: &[u8],
+) -> Result<Vec<u8>, Status> {
+    let request = decode::<GitHubShellServiceStarAgentStartRequest>(payload)?;
     let source = star_source(request.source)?;
-    let starred = rpc.authority.star_yiru().await;
+    let starred = rpc.authority.star_agentstart().await;
     if starred {
         rpc.telemetry
             .track_main(
-                "app_starred_yiru",
+                "app_starred_agentstart",
                 Map::from_iter([("source".to_owned(), Value::from(source.as_str()))]),
             )
             .await;
     }
-    Ok(encode(&GitHubShellServiceStarYiruResponse { starred }))
+    Ok(encode(&GitHubShellServiceStarAgentStartResponse {
+        starred,
+    }))
 }
 
 fn candidate(candidate: ProtocolCandidate) -> Result<PrRefreshCandidate, Status> {
@@ -194,7 +200,7 @@ fn star_source(value: i32) -> Result<AppStarSource, Status> {
             ProtocolStarSource::Settings => AppStarSource::Settings,
             ProtocolStarSource::Landing => AppStarSource::Landing,
             ProtocolStarSource::Unspecified => {
-                return Err(invalid("Yiru star source is unspecified"));
+                return Err(invalid("AgentStart star source is unspecified"));
             }
         },
     )

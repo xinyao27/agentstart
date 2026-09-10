@@ -1,5 +1,5 @@
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type { IDisposable } from '@xterm/xterm'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
 
 import { isPrimarySelectionEnabled, setPrimarySelectionText } from '../clipboard/primary-selection'
 import { shellClient } from '../runtime/shell-client'

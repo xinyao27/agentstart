@@ -1,7 +1,7 @@
 import type {
   WorktreeArchive,
   WorktreeServiceCreateResponse
-} from '../generated/yiru/runtime/v1/worktree_pb.js'
+} from '../generated/agent_start/runtime/v1/worktree_pb.js'
 import { lineageValue, workspaceLineageValue } from './worktree-metadata-values.js'
 import { nullableString, worktreeValue } from './worktree-record-values.js'
 import type { WorktreeArchiveValue, WorktreeCreateResult } from './worktree-types.js'

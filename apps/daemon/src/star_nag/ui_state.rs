@@ -17,7 +17,7 @@ const STAR_NAG_COOLDOWN_MS: i64 = STAR_NAG_COOLDOWN_DAYS as i64 * 24 * 60 * 60 *
 /// Why: matches the fallback every other Rust call site uses for "current app version" — there is
 /// no shared helper for it in this codebase, each authority reads the same two sources inline.
 pub(super) fn app_version() -> String {
-    std::env::var("YIRU_APP_VERSION").unwrap_or_else(|_| env!("CARGO_PKG_VERSION").to_owned())
+    std::env::var("AGENTSTART_APP_VERSION").unwrap_or_else(|_| env!("CARGO_PKG_VERSION").to_owned())
 }
 
 pub(super) fn now_millis() -> i64 {

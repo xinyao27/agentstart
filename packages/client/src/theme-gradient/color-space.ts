@@ -1,4 +1,4 @@
-import { clamp01, round } from '@yiru/protocol/settings/color-values'
+import { clamp01, round } from '@agentstart/protocol/settings/color-values'
 
 /** Adapted from an MPL-2.0 gradient generator. */
 export type Rgb = readonly [number, number, number]
@@ -76,6 +76,6 @@ export function rgbToCss([r, g, b]: Rgb, alpha = 1): string {
   return `rgba(${clampChannel(r)}, ${clampChannel(g)}, ${clampChannel(b)}, ${round(alpha, 3)})`
 }
 
-export function clampChannel(value: number): number {
+function clampChannel(value: number): number {
   return Math.min(255, Math.max(0, Math.round(value)))
 }

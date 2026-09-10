@@ -1,9 +1,9 @@
-import { isTerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
+import { isTerminalLeafId } from '@agentstart/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode,
   TerminalPaneSplitDirection
-} from '@yiru/protocol/workspace/session'
+} from '@agentstart/protocol/workspace/session'
 import { recordRendererCrashBreadcrumb } from '~renderer/crash-report/breadcrumb-recorder'
 import type { PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
 import { isXtermInstanceDisposed } from '~renderer/terminal-pane/pane-manager/xterm-instance-disposed'
@@ -18,7 +18,6 @@ import type { RestoredViewportBlankingPanesRef } from './terminal-restored-viewp
 
 export {
   collectLeafIdsInOrder,
-  collectLeafIdsInReplayCreationOrder,
   normalizeTerminalLayoutSnapshot
 } from '~renderer/terminal-pane/terminal-layout-leaf-ids'
 
@@ -31,7 +30,7 @@ export const EMPTY_LAYOUT: TerminalLayoutSnapshot = {
 // Why: xterm's SerializeAddon captures display state by emitting mode-setting
 // bytes (e.g. `\e[?1004h` for focus reporting) so a re-fed emulator lands in
 // the same mode as the snapshot source. That's correct for tmux-style
-// "attach to a still-running TUI" — but Yiru restores scrollback against a
+// "attach to a still-running TUI" — but AgentStart restores scrollback against a
 // *fresh* shell, with no TUI to consume those modes. A stale focus-reporting
 // bit causes xterm to emit `\e[I`/`\e[O` on every pane click, which the
 // fresh zsh treats as unbound key input and rings the bell for.
@@ -57,8 +56,7 @@ export const RESET_KITTY_KEYBOARD_PROTOCOL = '\x1b[<99u\x1b[=0u'
 // Every mouse mode the daemon's buildRehydrateSequences can re-arm from a
 // snapshot: reporting protocols (9/1000/1002/1003) and SGR encodings
 // (1006/1016).
-export const RESET_MOUSE_REPORTING =
-  '\x1b[?9l\x1b[?1000l\x1b[?1002l\x1b[?1003l\x1b[?1006l\x1b[?1016l'
+const RESET_MOUSE_REPORTING = '\x1b[?9l\x1b[?1000l\x1b[?1002l\x1b[?1003l\x1b[?1006l\x1b[?1016l'
 
 export const POST_REPLAY_MODE_RESET = `${RESET_TERMINAL_CURSOR_STYLE}${RESET_KITTY_KEYBOARD_PROTOCOL}\x1b[?25h${RESET_MOUSE_REPORTING}\x1b[?1004l\x1b[?2004l`
 
@@ -94,11 +92,11 @@ export const POST_REPLAY_REATTACH_RESET = `${RESET_TERMINAL_CURSOR_STYLE}${RESET
 // Why: a live agent TUI legitimately owns focus reporting; resetting `?1004h`
 // would suppress the post-reattach focus-in the agent needs to move its real
 // cursor back to the input caret (the IME anchor).
-export const POST_REPLAY_LIVE_AGENT_REATTACH_RESET = `${RESET_TERMINAL_CURSOR_STYLE}${RESET_KITTY_KEYBOARD_PROTOCOL}\x1b[?25h`
+const POST_REPLAY_LIVE_AGENT_REATTACH_RESET = `${RESET_TERMINAL_CURSOR_STYLE}${RESET_KITTY_KEYBOARD_PROTOCOL}\x1b[?25h`
 
 // Why: DECTCEM applies in emission order, so the payload's last ?25l/?25h is
 // the state the TUI left the cursor in.
-export function replayPayloadEndsWithCursorHidden(payload: string): boolean {
+function replayPayloadEndsWithCursorHidden(payload: string): boolean {
   const hideIndex = payload.lastIndexOf('\x1b[?25l')
   return hideIndex !== -1 && hideIndex > payload.lastIndexOf('\x1b[?25h')
 }
@@ -131,7 +129,7 @@ export const POST_REPLAY_LIVE_AGENT_SNAPSHOT_RESET = RESET_TERMINAL_CURSOR_STYLE
 // Why Nerd Fonts are listed after the regular monospace fonts: OMP, Powerline
 // prompts, and many shell plugins emit glyphs in the Unicode Private Use Area
 // (U+E000–U+F8FF) that no standard monospace font contains. The bundled symbol
-// font gives Yiru a known-good fallback even on clean systems, while the
+// font gives AgentStart a known-good fallback even on clean systems, while the
 // installed-font fallbacks keep users' existing terminal setups working.
 const FALLBACK_FONTS = [
   'SF Mono', // macOS 10.12+
@@ -141,7 +139,7 @@ const FALLBACK_FONTS = [
   'Consolas', // Windows Vista+
   'DejaVu Sans Mono', // Linux (common)
   'Liberation Mono', // Linux (common)
-  'Yiru Nerd Font Symbols', // bundled PUA fallback for OMP/Powerline glyphs
+  'AgentStart Nerd Font Symbols', // bundled PUA fallback for OMP/Powerline glyphs
   'Symbols Nerd Font Mono', // purpose-built Nerd Fonts symbols-only fallback
   'MesloLGS Nerd Font', // p10k's recommended font; very common on zsh setups
   'JetBrainsMono Nerd Font', // widely installed; Ghostty ships a JBM-derived font
@@ -165,7 +163,7 @@ export function buildFontFamily(fontFamily: string): string {
   return parts.join(', ')
 }
 
-export function getLayoutChildNodes(split: HTMLElement): HTMLElement[] {
+function getLayoutChildNodes(split: HTMLElement): HTMLElement[] {
   return Array.from(split.children).filter(
     (child): child is HTMLElement =>
       child instanceof HTMLElement &&

@@ -3,7 +3,7 @@ import { fromBinary } from '@bufbuild/protobuf'
 import {
   SessionTabsServiceAllEventSchema,
   SessionTabsServiceEventSchema
-} from '../../generated/yiru/runtime/v1/session_tabs_pb.js'
+} from '../../generated/agent_start/runtime/v1/session_tabs_pb.js'
 import type { RuntimeStream } from '../transport.js'
 import { sessionTabsSnapshot } from './snapshot-values.js'
 import type { SessionTabsAllStreamEventValue, SessionTabsStreamEventValue } from './values.js'

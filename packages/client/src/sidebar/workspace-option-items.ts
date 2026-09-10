@@ -1,4 +1,4 @@
-import type { WorktreeCardProperty } from '@yiru/protocol/settings/ui-state'
+import type { WorktreeCardProperty } from '@agentstart/protocol/settings/ui-state'
 import { translate } from '~renderer/i18n/i18n'
 
 export type WorktreeCardPropertyOption = {

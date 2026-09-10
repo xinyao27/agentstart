@@ -8,13 +8,13 @@ pub(super) fn release_asset_name() -> Result<&'static str, UpdateError> {
         std::env::consts::ARCH,
         cfg!(target_env = "musl"),
     ) {
-        ("macos", "aarch64", _) => Ok("yiru-rust-darwin-arm64"),
-        ("macos", "x86_64", _) => Ok("yiru-rust-darwin-x64"),
-        ("linux", "aarch64", false) => Ok("yiru-rust-linux-arm64"),
-        ("linux", "x86_64", false) => Ok("yiru-rust-linux-x64"),
-        ("linux", "aarch64", true) => Ok("yiru-rust-linux-arm64-musl"),
-        ("linux", "x86_64", true) => Ok("yiru-rust-linux-x64-musl"),
-        ("windows", "x86_64", _) => Ok("yiru-rust-windows-x64.exe"),
+        ("macos", "aarch64", _) => Ok("agentstart-rust-darwin-arm64"),
+        ("macos", "x86_64", _) => Ok("agentstart-rust-darwin-x64"),
+        ("linux", "aarch64", false) => Ok("agentstart-rust-linux-arm64"),
+        ("linux", "x86_64", false) => Ok("agentstart-rust-linux-x64"),
+        ("linux", "aarch64", true) => Ok("agentstart-rust-linux-arm64-musl"),
+        ("linux", "x86_64", true) => Ok("agentstart-rust-linux-x64-musl"),
+        ("windows", "x86_64", _) => Ok("agentstart-rust-windows-x64.exe"),
         _ => Err(UpdateError::PlatformUnsupported),
     }
 }
@@ -23,12 +23,12 @@ pub(super) fn is_npm_install(executable: &Path) -> bool {
     cfg!(windows)
         || executable
             .parent()
-            .is_some_and(|directory| directory.join("yiru.version").exists())
+            .is_some_and(|directory| directory.join("agentstart.version").exists())
 }
 
 pub(super) fn is_homebrew_install(executable: &Path) -> bool {
     let path = executable.to_string_lossy();
-    path.contains("/Cellar/yiru/") || path.contains("/homebrew/")
+    path.contains("/Cellar/agentstart/") || path.contains("/homebrew/")
 }
 
 pub(super) fn is_development_build(executable: &Path, version: &str) -> bool {

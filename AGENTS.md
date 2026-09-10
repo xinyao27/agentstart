@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Yiru is a Rust daemon with a Chrome MV3 workbench and a native SwiftUI iOS companion for running
+AgentStart is a Rust daemon with a Chrome MV3 workbench and a native SwiftUI iOS companion for running
 coding agents across many git worktrees on local, WSL, and SSH hosts.
 
 This file is the contract for every agent writing code here: structure, naming, cohesion, code
@@ -24,7 +24,7 @@ exceptions inside a feature task.
 | Add an `eslint-disable`/`oxlint-disable max-lines`, a max-lines baseline, or a `#[allow(…)]` that silences clippy | Convention only |
 | Add a hand-written project-owned `.d.ts`; generated platform bindings are the only exception | Convention only |
 | Add a variable to the `@theme inline` block in `packages/client/src/assets/main.css` | Convention only |
-| Use a native `<button>`/`<input>`/`<textarea>`/`<select>` in client feature TSX; write `rounded-*`; use `bg-black/N`-style alpha washes; import `ui/*-styles.ts` from feature code | Convention only |
+| Use a native `<button>`/`<input>`/`<textarea>`/`<select>` in client feature TSX; use `bg-black/N`-style alpha washes; import `ui/*-styles.ts` from feature code | Convention only |
 | Use `interface`, `enum`, `namespace`, or `any` | oxlint + `erasableSyntaxOnly` |
 | Write `unsafe`, `.unwrap()`, or `panic!` in daemon code | `unsafe_code = "forbid"` + Section 4a |
 | Ship a user-visible string that isn't wrapped in `t()` / `translate()` | Convention only |
@@ -46,8 +46,7 @@ apps/
   daemon/       Rust runtime, CLI, Native Messaging host, host adapters, and authoritative state
   extension/    WXT-managed Chrome MV3 host: background, side panel, DevTools, browser bootstrap
   macos/        SwiftPM menu bar host that supervises the daemon binary on macOS
-  mobile/       native SwiftUI app, widgets, and notification service extension
-  apns-gateway/ stateless Cloudflare Worker forwarding opaque encrypted pushes to APNs
+  mobile/       native SwiftUI app and widgets
 packages/
   client/       source-only browser workbench UI consumed through declared exports
   protocol/     protobuf source of truth plus generated Swift, Rust, and TypeScript bindings
@@ -75,7 +74,7 @@ truth for that skill.
 **Import direction is one-way.** `packages/client` may import pure contracts and models, but never
 `apps/extension`, Node, or Chrome globals — and `apps/daemon` is a separate Rust binary it cannot
 import at all, only call over the protocol. `apps/extension` imports only declared
-`@yiru/client` exports and owns browser APIs, Native Messaging bootstrap, and capability adapters.
+`@agentstart/client` exports and owns browser APIs, Native Messaging bootstrap, and capability adapters.
 `apps/daemon` owns filesystem, git, process, PTY, persistence, and runtime capability effects.
 `packages/protocol` stays pure and never imports an app. Its `proto/` tree is the only source of
 truth for cross-language wire messages and method policy. After bootstrap, client-to-daemon
@@ -86,8 +85,8 @@ remain in their owning apps.
 Capability changes update their protobuf schema, generated bindings, owning authority, and active
 callers together. Keep one authenticated binary capability path across Chrome and iOS.
 
-`@yiru/client` is independently consumable source. Hosts import only its declared package exports;
-they never reach into `packages/client/src`. Its `@yiru/client/vite` preset owns source resolution,
+`@agentstart/client` is independently consumable source. Hosts import only its declared package exports;
+they never reach into `packages/client/src`. Its `@agentstart/client/vite` preset owns source resolution,
 React/Tailwind plugins, and client aliases, while the package owns its own `fmt`, `lint`, and
 `typecheck` tasks. Changing client implementation must not require an extension-host edit unless the
 bootstrap capability surface itself changes.
@@ -120,7 +119,7 @@ Past ~15 files, a feature folder has sub-features inside it — nest them (`sour
 **A typical feature change should touch 1–3 files in one folder.** If a small behavior change needs a dozen edits, that's a structural defect — the feature is smeared across the tree, or you're editing the wrong layer.
 
 Crossing the process boundary is the one legitimate multi-file change. Keep a runtime capability to
-three touchpoints sharing one feature name: the schema in `packages/protocol/proto/yiru/<feature>/`,
+three touchpoints sharing one feature name: the schema in `packages/protocol/proto/agent_start/<feature>/`,
 the handler in `apps/daemon/src/rpc/`, and the caller in `packages/client/src/`. A browser-owned
 capability has the same narrow shape: client capability type, `apps/extension` implementation, and
 feature caller. Keep Chrome APIs out of the source-only client package.
@@ -173,10 +172,10 @@ Splitting is good; scattering is not. The difference is whether the pieces stay 
 - Prefer `satisfies` over `as`. An `as` cast is a claim the type system can't back — if you need one, say why.
 - **Imports use an alias the moment they leave the folder they belong to.** `~renderer/*` means
   `packages/client/src/*`; it is package-internal and supplied to hosts by the
-  `@yiru/client/vite` preset. Inside an app or package, `./x` and `../x` stay relative — reach for
+  `@agentstart/client/vite` preset. Inside an app or package, `./x` and `../x` stay relative — reach for
   the package's alias at two levels up or more. Protocol and model packages use relative imports
   internally so they never depend on a host resolver.
-- Extension source cannot use `~renderer`; it consumes public `@yiru/client` exports. Client source
+- Extension source cannot use `~renderer`; it consumes public `@agentstart/client` exports. Client source
   cannot import app source. These are architectural rules, not style preferences; review currently
   enforces them.
 
@@ -184,7 +183,7 @@ Splitting is good; scattering is not. The difference is whether the pieces stay 
 
 ## 4a. Rust: the daemon
 
-One crate, `yiru-daemon`, edition 2024, toolchain 1.95, `unsafe_code = "forbid"`. Sections 1–3 apply
+One crate, `agentstart-daemon`, edition 2024, toolchain 1.95, `unsafe_code = "forbid"`. Sections 1–3 apply
 unchanged: a feature is a folder, named for the thing, and you should find it from the feature name
 in one guess. `snake_case` files and folders is the only naming difference.
 
@@ -192,7 +191,7 @@ in one guess. `snake_case` files and folders is the only naming difference.
   the sibling `<feature>.rs` next to the folder — the style throughout `src/rpc/` — or
   `<feature>/mod.rs`. Match whichever the neighbours use; don't introduce a third shape.
 - **A capability is one handler.** `src/rpc/<feature>.rs` plus its `src/rpc/<feature>/` folder, named
-  for the same feature as its `packages/protocol/proto/yiru/<feature>/` schema. Handlers use the
+  for the same feature as its `packages/protocol/proto/agent_start/<feature>/` schema. Handlers use the
   generated typed method descriptors; transport, authentication, authorization, deadlines, and
   resource limits are already enforced before a handler runs — never re-implement or bypass them.
 - **Errors are owned, typed, and matchable.** A `thiserror`-derived enum per feature, returned in
@@ -269,7 +268,7 @@ commands, and scripts.
 
 ## 8. Git
 
-Yiru shells out to **the user's** git binary, whose version differs across native, WSL, and SSH hosts. **Git 2.25** is the core-workflow baseline.
+AgentStart shells out to **the user's** git binary, whose version differs across native, WSL, and SSH hosts. **Git 2.25** is the core-workflow baseline.
 
 - Check when every subcommand and option was introduced. Newer behavior needs a baseline-compatible fallback, or must degrade safely.
 - A newer preferred/fallback pair owns a host-scoped capability cache and a narrow
@@ -303,14 +302,14 @@ builds, typechecking, linting, repository-contract checks, and running the app.
 `pnpm check` is the gate, and it spans both languages: `cargo fmt` on the daemon, repository
 lint/format fixes, the workspace typecheck graph, then `cargo fmt --check` plus zero-warning clippy.
 `pnpm typecheck`, `pnpm lint`, and `pnpm fmt` run the TypeScript pieces individually; `vp run
-@yiru/daemon#lint` runs the Rust gate alone. CI additionally builds the daemon on Linux, macOS, and
+@agentstart/daemon#lint` runs the Rust gate alone. CI additionally builds the daemon on Linux, macOS, and
 Windows, so a change that only compiles on your platform fails there.
 
 The design-token budget, UI style drift, source-path references, and localization coverage rules
 have no automated check; they still apply and require review.
 
 **Reach into a package with `vp run <package>#<task>`**, from anywhere in the repo — `vp run
-@yiru/daemon#build`, `vp run @yiru/extension#build`, `vp run yiru-mobile#dev`. The root
+@agentstart/daemon#build`, `vp run @agentstart/extension#build`, `vp run agentstart-mobile#dev`. The root
 `package.json` holds only what the whole workspace shares. Inside a package, one script calls another
 with `vp run <task>`, never `pnpm run <task>`, so the task graph stays visible to the runner.
 

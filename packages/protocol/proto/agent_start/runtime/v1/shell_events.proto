@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+import "agent_start/runtime/v1/shell_keybindings.proto";
+import "agent_start/runtime/v1/star_nag.proto";
+
+// Why: the legacy events stream admits only the local principal
+// (`principals: ["local"]`) from the Chrome workbench, so the policy is
+// narrower than the runtime-routed services and must stay that way.
+service ShellEventsService {
+  rpc Subscribe(ShellEventsServiceSubscribeRequest) returns (stream ShellEventsServiceEvent) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_RESTART_FROM_REQUEST
+    };
+  }
+}
+
+message ShellEventsServiceSubscribeRequest {
+  // Why: the cursor is the JSON sequence number the legacy channel carried as
+  // a bare number, so the wire keeps a double rather than an integer that
+  // would reject the resync cursors older clients replay.
+  optional double last_seen_seq = 1;
+}
+
+message ShellEventsCursor {
+  double seq = 1;
+}
+
+message ShellEventsReady {
+  ShellEventsCursor cursor = 1;
+}
+
+message ShellEventsResync {
+  ShellEventsCursor cursor = 1;
+}
+
+message ShellEventsKeybindingsChanged {
+  ShellEventsCursor cursor = 1;
+  ShellKeybindingsSnapshot snapshot = 2;
+}
+
+message ShellEventsStarNagShow {
+  ShellEventsCursor cursor = 1;
+  StarNagPromptMode mode = 2;
+  ShellEventsStarNagSurface surface = 3;
+}
+
+message ShellEventsStarNagHide {
+  ShellEventsCursor cursor = 1;
+}
+
+message ShellEventsServiceEvent {
+  oneof event {
+    ShellEventsReady ready = 1;
+    ShellEventsResync resync = 2;
+    ShellEventsKeybindingsChanged keybindings_changed = 3;
+    ShellEventsStarNagShow star_nag_show = 4;
+    ShellEventsStarNagHide star_nag_hide = 5;
+  }
+}
+
+enum ShellEventsStarNagSurface {
+  SHELL_EVENTS_STAR_NAG_SURFACE_UNSPECIFIED = 0;
+  SHELL_EVENTS_STAR_NAG_SURFACE_CARD = 1;
+  SHELL_EVENTS_STAR_NAG_SURFACE_TOAST = 2;
+}

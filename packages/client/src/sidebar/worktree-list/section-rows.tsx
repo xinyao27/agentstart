@@ -1,7 +1,7 @@
 import {
   isConfirmedStaleFolderPathStatus,
   type FolderWorkspacePathStatus
-} from '@yiru/protocol/workspace/folder-path'
+} from '@agentstart/protocol/workspace/folder-path'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {

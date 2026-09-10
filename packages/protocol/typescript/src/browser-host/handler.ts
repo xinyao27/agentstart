@@ -1,4 +1,4 @@
-import { BrowserHostService } from '../../generated/yiru/runtime/v1/browser_pb.js'
+import { BrowserHostService } from '../../generated/agent_start/runtime/v1/browser_pb.js'
 import type { RuntimeHandlerRegistry } from '../handler.js'
 import { decodeBrowserCommand } from './command.js'
 import { downloadBrowserFile } from './download.js'

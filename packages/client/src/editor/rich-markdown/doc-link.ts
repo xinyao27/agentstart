@@ -1,7 +1,7 @@
+import type { MarkdownDocument } from '@agentstart/protocol/files/values'
 import { Node } from '@tiptap/core'
 import { type EditorState, Plugin, PluginKey, TextSelection } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
-import type { MarkdownDocument } from '@yiru/protocol/files/values'
 
 import type { MarkdownDocumentIndex } from '../markdown-doc-links'
 import {

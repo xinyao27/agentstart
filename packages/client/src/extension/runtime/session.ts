@@ -1,3 +1,4 @@
+import { translate } from '~renderer/i18n/i18n'
 import {
   configureBrowserHostAppControl,
   configureBrowserHostDiagnostics,
@@ -7,54 +8,75 @@ import {
   configureBrowserHostStats,
   configureBrowserHostStatus,
   configureBrowserHostTerminalMultiplex
-} from '../../runtime/browser-host-runtime'
-import { ExtensionRuntimeClient, type ExtensionConnectionState } from './client'
-import { openExtensionTerminalMultiplex } from './terminal-multiplex'
+} from '~renderer/runtime/browser-host-runtime'
+import { installShellHostHandlers } from '~renderer/runtime/shell-host/handler'
 
-export type ExtensionRuntimeBootstrap = {
-  authToken: string
-  endpoint: string
-  expectedRuntimeId: string | null
-  protocolVersion: number
-  rpcProtocol: 'yiru-protobuf-v2'
-}
+import { ExtensionRuntimeCalls } from './calls'
+import type {
+  ExtensionConnectionState,
+  ExtensionRuntimeHost,
+  ExtensionRuntimeHostFactory
+} from './host'
 
-let runtimeClient: ExtensionRuntimeClient | null = null
-let runtimeLabel = ''
+let runtimeHost: ExtensionRuntimeHost | null = null
 
-export function configureExtensionRuntime(bootstrap: ExtensionRuntimeBootstrap): void {
-  runtimeClient?.close()
-  const nextRuntimeClient = new ExtensionRuntimeClient(bootstrap)
-  runtimeClient = nextRuntimeClient
-  runtimeLabel = new URL(bootstrap.endpoint).host
-  configureBrowserHostAppControl({
-    restart: (timeoutMs) => nextRuntimeClient.restartApp(timeoutMs),
-    recordStartupDiagnostic: (event, details, timeoutMs) =>
-      nextRuntimeClient.recordStartupDiagnostic(event, details, timeoutMs)
+export function configureExtensionRuntime(createRuntimeHost: ExtensionRuntimeHostFactory): void {
+  runtimeHost?.close()
+  const nextRuntimeHost = createRuntimeHost({
+    installShellHandlers: installShellHostHandlers,
+    messages: {
+      connectionClosed: translate('terminal.connection.closed', 'Terminal connection closed'),
+      connectionFailed: translate(
+        'extension.runtime.connectionFailed',
+        'Failed to connect to the AgentStart daemon.'
+      ),
+      connectionTimedOut: translate(
+        'extension.runtime.connectionTimedOut',
+        'Timed out while connecting to the AgentStart daemon.'
+      ),
+      invalidMultiplexResponse: translate(
+        'terminal.multiplex.invalidResponse',
+        'Invalid terminal multiplex response'
+      ),
+      invalidMultiplexTicket: translate(
+        'terminal.multiplex.invalidTicket',
+        'Runtime host returned an invalid terminal bulk ticket.'
+      )
+    }
   })
-  configureBrowserHostDiagnostics((timeoutMs) => nextRuntimeClient.getMemorySnapshot(timeoutMs))
-  configureBrowserHostLocalDownloads(() => nextRuntimeClient.getLocalDownloadClient())
+  runtimeHost = nextRuntimeHost
+  const calls = new ExtensionRuntimeCalls((timeoutMs) => nextRuntimeHost.openProtocol(timeoutMs))
+  configureBrowserHostAppControl({
+    restart: (timeoutMs) => calls.restartApp(timeoutMs),
+    recordStartupDiagnostic: (event, details, timeoutMs) =>
+      calls.recordStartupDiagnostic(event, details, timeoutMs)
+  })
+  configureBrowserHostDiagnostics((timeoutMs) => calls.getMemorySnapshot(timeoutMs))
+  configureBrowserHostLocalDownloads(() => calls.getLocalDownloadClient())
   configureBrowserHostNotificationSounds((cachedAssetId) =>
-    nextRuntimeClient.loadNotificationSound(cachedAssetId)
+    calls.loadNotificationSound(cachedAssetId)
   )
-  configureBrowserHostProtocol(() => nextRuntimeClient.getProtocolTransport())
-  configureBrowserHostStats((input, timeoutMs) =>
-    nextRuntimeClient.getStatsSummary(input, timeoutMs)
+  configureBrowserHostProtocol(
+    () => calls.getProtocolTransport(),
+    () => nextRuntimeHost.isLocalDevice()
   )
-  configureBrowserHostStatus((timeoutMs) => nextRuntimeClient.getStatus(timeoutMs))
-  configureBrowserHostTerminalMultiplex((options) =>
-    openExtensionTerminalMultiplex(bootstrap, options)
-  )
+  configureBrowserHostStats((input, timeoutMs) => calls.getStatsSummary(input, timeoutMs))
+  configureBrowserHostStatus((timeoutMs) => calls.getStatus(timeoutMs))
+  configureBrowserHostTerminalMultiplex((options) => nextRuntimeHost.openTerminalMultiplex(options))
 }
 
 export function getExtensionRuntimeLabel(): string {
-  return runtimeLabel
+  return runtimeHost?.label ?? ''
+}
+
+export function getExtensionRuntimeQueryCacheBuster(): string {
+  return runtimeHost?.queryCacheBuster ?? 'extension-runtime-unconfigured'
 }
 
 export function getExtensionConnectionSnapshot(): ExtensionConnectionState {
-  return runtimeClient?.getConnectionState() ?? 'connecting'
+  return runtimeHost?.getConnectionState() ?? 'connecting'
 }
 
 export function subscribeExtensionConnection(listener: () => void): () => void {
-  return runtimeClient?.subscribe(listener) ?? (() => {})
+  return runtimeHost?.subscribe(listener) ?? (() => {})
 }

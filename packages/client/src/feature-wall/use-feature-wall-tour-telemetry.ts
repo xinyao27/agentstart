@@ -1,19 +1,19 @@
-import type { EventProps } from '@yiru/protocol/telemetry/events/catalog'
-import type { FeatureWallOpenSourceTelemetry } from '@yiru/protocol/telemetry/events/foundations'
-import type { FeatureWallExitAction } from '@yiru/protocol/telemetry/feature-wall/depth'
-import type { FeatureWallTourDepthSummary } from '@yiru/protocol/telemetry/feature-wall/depth'
-import { FEATURE_WALL_MAX_DWELL_MS } from '@yiru/protocol/telemetry/feature-wall/dwell'
+import type { EventProps } from '@agentstart/protocol/telemetry/events/catalog'
+import type { FeatureWallOpenSourceTelemetry } from '@agentstart/protocol/telemetry/events/foundations'
+import type { FeatureWallExitAction } from '@agentstart/protocol/telemetry/feature-wall/depth'
+import type { FeatureWallTourDepthSummary } from '@agentstart/protocol/telemetry/feature-wall/depth'
+import { FEATURE_WALL_MAX_DWELL_MS } from '@agentstart/protocol/telemetry/feature-wall/dwell'
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { track } from '~renderer/telemetry/client'
 
-export type FeatureWallTourTelemetryState = {
+type FeatureWallTourTelemetryState = {
   open: boolean
   openedAtMs: number
   exitAction: FeatureWallExitAction
 }
 
-export function createFeatureWallTourTelemetryState(): FeatureWallTourTelemetryState {
+function createFeatureWallTourTelemetryState(): FeatureWallTourTelemetryState {
   return {
     open: false,
     openedAtMs: 0,
@@ -21,7 +21,7 @@ export function createFeatureWallTourTelemetryState(): FeatureWallTourTelemetryS
   }
 }
 
-export function openFeatureWallTourTelemetrySession(
+function openFeatureWallTourTelemetrySession(
   state: FeatureWallTourTelemetryState,
   nowMs: number
 ): boolean {
@@ -34,7 +34,7 @@ export function openFeatureWallTourTelemetrySession(
   return true
 }
 
-export function buildFeatureWallClosedTelemetry(
+function buildFeatureWallClosedTelemetry(
   state: FeatureWallTourTelemetryState,
   nowMs: number,
   source: FeatureWallOpenSourceTelemetry,
@@ -61,7 +61,7 @@ export function buildFeatureWallClosedTelemetry(
   }
 }
 
-export function markFeatureWallTourExitAction(
+function markFeatureWallTourExitAction(
   state: FeatureWallTourTelemetryState,
   exitAction: FeatureWallExitAction
 ): void {

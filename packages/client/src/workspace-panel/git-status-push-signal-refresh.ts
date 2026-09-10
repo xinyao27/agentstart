@@ -3,7 +3,7 @@ import { isWindowVisible } from '~renderer/application-shell/window-visibility-i
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { worktreeHostClient } from '~renderer/runtime/worktree-host-client'
 import {
-  YIRU_TERMINAL_COMMAND_FINISHED_EVENT,
+  AGENTSTART_TERMINAL_COMMAND_FINISHED_EVENT,
   type TerminalCommandFinishedEventDetail
 } from '~renderer/terminal/command-finished-event'
 
@@ -61,9 +61,9 @@ export function useGitStatusPushSignalRefresh({
       }
       refreshStatus()
     }
-    window.addEventListener(YIRU_TERMINAL_COMMAND_FINISHED_EVENT, handleCommandFinished)
+    window.addEventListener(AGENTSTART_TERMINAL_COMMAND_FINISHED_EVENT, handleCommandFinished)
     return () => {
-      window.removeEventListener(YIRU_TERMINAL_COMMAND_FINISHED_EVENT, handleCommandFinished)
+      window.removeEventListener(AGENTSTART_TERMINAL_COMMAND_FINISHED_EVENT, handleCommandFinished)
     }
   }, [activeWorktreeId, enabled, refreshStatus])
 }

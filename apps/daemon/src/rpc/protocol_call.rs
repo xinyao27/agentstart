@@ -17,13 +17,13 @@ use std::future::pending;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
-use tokio::sync::{Notify, OwnedSemaphorePermit, Semaphore, mpsc};
-use tokio::time::{Duration, Instant, sleep_until};
-use yiru_protocol::method_metadata::{MethodId, MethodMetadata, method_metadata};
-use yiru_protocol::protocol::v1::{
+use agentstart_protocol::method_metadata::{MethodId, MethodMetadata, method_metadata};
+use agentstart_protocol::protocol::v1::{
     AccessScope, AccessTier, CallerClass as ProtocolCallerClass, PeerKind, RuntimeRoutePolicy,
     Status, StatusCode, StreamReconnectPolicy,
 };
+use tokio::sync::{Notify, OwnedSemaphorePermit, Semaphore, mpsc};
+use tokio::time::{Duration, Instant, sleep_until};
 
 use crate::ai_vault::AiVaultAuthority;
 use crate::mobile::MobileAuthorization;
@@ -841,8 +841,8 @@ impl ProtocolRouter {
         };
         if !matches!(
             method.id,
-            MethodId::YiruRuntimeV1LocalDownloadServiceStartFile
-                | MethodId::YiruRuntimeV1LocalDownloadServiceStartFolder
+            MethodId::AgentStartRuntimeV1LocalDownloadServiceStartFile
+                | MethodId::AgentStartRuntimeV1LocalDownloadServiceStartFolder
         ) {
             return;
         }

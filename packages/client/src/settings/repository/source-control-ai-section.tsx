@@ -1,13 +1,13 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import {
   SOURCE_CONTROL_ACTION_IDS,
   type SourceControlActionId
-} from '@yiru/protocol/source-control/ai-actions'
-import type { RepoSourceControlAiOverrides } from '@yiru/protocol/source-control/ai-types'
-import { CUSTOM_AGENT_ID } from '@yiru/protocol/source-control/custom-agent'
-import { normalizeRepoSourceControlAiOverrides } from '@yiru/protocol/source-control/repo-overrides'
-import { normalizeSourceControlAiSettings } from '@yiru/protocol/source-control/settings'
+} from '@agentstart/protocol/source-control/ai-actions'
+import type { RepoSourceControlAiOverrides } from '@agentstart/protocol/source-control/ai-types'
+import { CUSTOM_AGENT_ID } from '@agentstart/protocol/source-control/custom-agent'
+import { normalizeRepoSourceControlAiOverrides } from '@agentstart/protocol/source-control/repo-overrides'
+import { normalizeSourceControlAiSettings } from '@agentstart/protocol/source-control/settings'
 import { useState } from 'react'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
@@ -41,12 +41,6 @@ import {
   DEFAULT_AGENT_VALUE,
   readInheritedCommandTemplate
 } from './source-control-ai-labels'
-
-export {
-  createRepoAiDraftState,
-  dropRepoLegacyInstructionForAction,
-  resolveRepoAiDraftState
-} from './source-control-ai-draft'
 
 type RepositorySourceControlAiSectionProps = {
   repo: Repo

@@ -33,7 +33,7 @@ impl RepoHostAuthority {
 
     pub(crate) fn default_create_project_parent(&self) -> Result<String, RepoHostError> {
         crate::paths::resolve_local_home_path()
-            .map(|home| home.join("yiru").join("projects"))
+            .map(|home| home.join("agentstart").join("projects"))
             .map(path_string)
             .ok_or(RepoHostError::HomeUnavailable)
     }

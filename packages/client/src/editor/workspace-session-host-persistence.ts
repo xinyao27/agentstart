@@ -3,12 +3,15 @@ import {
   LOCAL_EXECUTION_HOST_ID,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { WorkspaceSessionPatch, WorkspaceSessionState } from '@yiru/protocol/workspace/session'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type {
+  WorkspaceSessionPatch,
+  WorkspaceSessionState
+} from '@agentstart/protocol/workspace/session'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import {
   exchangePersistedWorkspaceSessionTerminalIds,
@@ -262,7 +265,7 @@ export async function persistWorkspaceSessionByHost(
 }
 
 /** Collect the distinct runtime hosts owning any persisted repo. */
-export function listKnownRuntimeHostIds(
+function listKnownRuntimeHostIds(
   repos: readonly Pick<Repo, 'connectionId' | 'executionHostId'>[]
 ): ExecutionHostId[] {
   const hostIds = new Set<ExecutionHostId>()

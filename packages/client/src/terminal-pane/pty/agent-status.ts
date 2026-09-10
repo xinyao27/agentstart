@@ -1,4 +1,4 @@
-import type { ParsedAgentStatusPayload } from '@yiru/protocol/agent/status-records'
+import type { ParsedAgentStatusPayload } from '@agentstart/protocol/agent/status-records'
 import {
   normalizeCompatibleAgentTitleForOwner,
   resolveCompatibleAgentTypeForOwner

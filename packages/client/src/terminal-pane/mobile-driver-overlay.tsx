@@ -302,11 +302,11 @@ function LoudOverlay({
         rootClassName
       )}
     >
-      <div className="border-border bg-card text-card-foreground pointer-events-auto flex w-full max-w-[30rem] flex-col gap-3 border p-6 pb-5">
+      <div className="border-border bg-card text-card-foreground pointer-events-auto flex w-full max-w-[30rem] flex-col gap-3 rounded-lg border p-6 pb-5">
         <div className="flex items-start gap-3">
           <div
             className={cn(
-              'flex size-10 shrink-0 items-center justify-center border border-border',
+              'flex size-10 shrink-0 items-center justify-center rounded-full border border-border',
               tone === 'driving' ? 'bg-muted' : 'bg-muted/60'
             )}
           >
@@ -324,7 +324,7 @@ function LoudOverlay({
               )}
             >
               {tone === 'driving' ? (
-                <span aria-hidden="true" className="bg-foreground size-1.5" />
+                <span aria-hidden="true" className="bg-foreground size-1.5 rounded-full" />
               ) : null}
               <span>{eyebrow}</span>
             </div>
@@ -399,7 +399,7 @@ function LockChip({
       ref={rootRef}
       aria-live="polite"
       className={cn(
-        'absolute right-2 top-2 z-50 flex items-center gap-1.5 border border-border bg-card px-2 py-1 text-xs font-medium text-card-foreground',
+        'absolute right-2 top-2 z-50 flex items-center gap-1.5 rounded-full border border-border bg-card px-2 py-1 text-xs font-medium text-card-foreground',
         rootClassName
       )}
     >

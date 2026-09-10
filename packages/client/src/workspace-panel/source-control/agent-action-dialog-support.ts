@@ -1,5 +1,5 @@
-import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { isTuiAgentEnabled } from '@agentstart/protocol/agent/selection'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { getAgentCatalog } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
 import type { SourceControlLaunchAgentScope } from '~renderer/source-control/agent-selection'

@@ -14,7 +14,7 @@ import {
   InstallWslResponseSchema,
   RemoveWslRequestSchema,
   RemoveWslResponseSchema
-} from '../generated/yiru/runtime/v1/cli_pb.js'
+} from '../generated/agent_start/runtime/v1/cli_pb.js'
 import { cliInstallStatus, localCliInstallStatus, type CliInstallStatus } from './cli-values.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 

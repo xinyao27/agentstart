@@ -1,7 +1,7 @@
 use std::time::Duration;
 
+use agentstart_protocol::protocol::v1::PeerKind;
 use tokio::time::{Instant, timeout_at};
-use yiru_protocol::protocol::v1::PeerKind;
 
 use super::records::RuntimeEnvironmentProfile;
 use super::transport::RuntimeWebSocket;
@@ -41,7 +41,7 @@ async fn connect_before(
     .map_err(|_| ProtocolPeerError::ConnectionTimeout)??;
     let identity = PeerIdentity::new(
         PeerKind::Daemon,
-        "yiru-runtime",
+        "agentstart-runtime",
         env!("CARGO_PKG_VERSION"),
         MAX_FRAME_BYTES,
         INITIAL_CALL_CREDIT_BYTES,

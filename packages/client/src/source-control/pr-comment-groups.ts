@@ -1,4 +1,4 @@
-import type { PRComment } from '@yiru/protocol/hosted-review/review-types'
+import type { PRComment } from '@agentstart/protocol/hosted-review/review-types'
 
 export type PRCommentGroup =
   | { kind: 'standalone'; comment: PRComment }
@@ -43,20 +43,8 @@ export function groupPRComments(comments: PRComment[]): PRCommentGroup[] {
   return groups
 }
 
-export function getPRCommentGroupComments(group: PRCommentGroup): PRComment[] {
-  return group.kind === 'thread' ? [group.root, ...group.replies] : [group.comment]
-}
-
 export function getPRCommentGroupRoot(group: PRCommentGroup): PRComment {
   return group.kind === 'thread' ? group.root : group.comment
-}
-
-export function getPRCommentGroupCount(group: PRCommentGroup): number {
-  return getPRCommentGroupComments(group).length
-}
-
-export function isResolvedPRCommentGroup(group: PRCommentGroup): boolean {
-  return getPRCommentGroupRoot(group).isResolved === true
 }
 
 export function getPRCommentGroupId(group: PRCommentGroup): string {

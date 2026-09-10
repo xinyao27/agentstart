@@ -8,6 +8,7 @@ mod port_linux;
 mod port_parse;
 mod port_windows;
 mod posix;
+mod process_liveness;
 mod ssh;
 mod wsl;
 
@@ -22,6 +23,7 @@ pub use model::{
     HostPlatform,
 };
 pub use port_adapter::HostWorkspacePorts;
+pub(crate) use process_liveness::{is_process_running, matches_dev_supervisor};
 pub(crate) use ssh::SshControlDirectory;
 pub use ssh::{SshHost, SshHostError};
 pub use wsl::{WslHost, WslHostError};

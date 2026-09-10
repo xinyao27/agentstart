@@ -29,7 +29,7 @@ function EnvVarChips(): React.JSX.Element {
                 render={
                   <code
                     tabIndex={0}
-                    className="border-border/50 bg-muted/35 text-muted-foreground hover:bg-muted/60 hover:text-foreground cursor-help border px-2 py-1 font-mono text-[11px] transition-colors outline-none"
+                    className="border-border/50 bg-muted/35 text-muted-foreground hover:bg-muted/60 hover:text-foreground cursor-help rounded-md border px-2 py-1 font-mono text-[11px] transition-colors outline-none"
                   >
                     {name}
                   </code>
@@ -59,7 +59,10 @@ function SaveIndicator({ status }: { status: SaveStatus }): React.JSX.Element | 
       aria-live="polite"
     >
       <span
-        className={cn('size-1.5', isSaving ? 'animate-pulse bg-amber-500' : 'bg-emerald-500')}
+        className={cn(
+          'size-1.5 rounded-full',
+          isSaving ? 'animate-pulse bg-amber-500' : 'bg-emerald-500'
+        )}
       />
       {isSaving
         ? translate('auto.components.settings.RepositoryHooksSection.81057d5f71', 'Saving...')
@@ -132,7 +135,10 @@ export function ScriptEditor({
   const editorRows = getRepositoryHookScriptTextareaRows(value)
 
   return (
-    <div className="border-border/50 bg-background/80 space-y-3 border p-4" id={sectionId}>
+    <div
+      className="border-border/50 bg-background/80 space-y-3 rounded-2xl border p-4"
+      id={sectionId}
+    >
       <div className="space-y-1">
         <h5 className="text-sm font-semibold">{field.label}</h5>
         <p className="text-muted-foreground text-xs">{field.description}</p>
@@ -143,8 +149,11 @@ export function ScriptEditor({
       {hasShared ? (
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-300">
-              {translate('auto.components.settings.RepositoryHooksSection.39da2ae12f', 'yiru.yaml')}
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-300">
+              {translate(
+                'auto.components.settings.RepositoryHooksSection.39da2ae12f',
+                'agentstart.yaml'
+              )}
               <span className="font-normal text-emerald-700/80 dark:text-emerald-300/80">
                 {translate(
                   'auto.components.settings.RepositoryHooksSection.f828e1de19',
@@ -154,10 +163,10 @@ export function ScriptEditor({
             </span>
             <span className="text-muted-foreground text-[11px]">
               {translate('auto.components.settings.RepositoryHooksSection.b113344b6a', 'Edit')}
-              <code className="bg-muted px-1 py-0.5">
+              <code className="bg-muted rounded px-1 py-0.5">
                 {translate(
                   'auto.components.settings.RepositoryHooksSection.39da2ae12f',
-                  'yiru.yaml'
+                  'agentstart.yaml'
                 )}
               </code>{' '}
               {translate(
@@ -174,7 +183,7 @@ export function ScriptEditor({
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
             {hasShared ? (
-              <span className="border-border bg-muted/30 text-muted-foreground inline-flex items-center gap-1.5 border px-2 py-0.5 text-[11px] font-medium">
+              <span className="border-border bg-muted/30 text-muted-foreground inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-medium">
                 {translate('auto.components.settings.RepositoryHooksSection.2d03a514db', 'local')}
                 <span className="font-normal">
                   {translate(
@@ -196,7 +205,7 @@ export function ScriptEditor({
             placeholder={field.placeholder}
             spellCheck={false}
             rows={editorRows}
-            className="border-input bg-muted/20 placeholder:text-muted-foreground/60 focus-visible:border-ring focus-visible:bg-background w-full min-w-0 resize-y border px-3 py-2 font-mono text-[12px] leading-[1.55] transition-[color] outline-none placeholder:italic"
+            className="border-input bg-muted/20 placeholder:text-muted-foreground/60 focus-visible:border-ring focus-visible:bg-background w-full min-w-0 resize-y rounded-lg border px-3 py-2 font-mono text-[12px] leading-[1.55] transition-[color] outline-none placeholder:italic"
           />
           <p className="text-muted-foreground text-[11px]">
             {translate(

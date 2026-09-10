@@ -1,5 +1,5 @@
-import type { ExecutionHostKind } from '@yiru/protocol/host/identity'
-import type { RuntimeCompatVerdict } from '@yiru/protocol/runtime-compatibility'
+import type { ExecutionHostKind } from '@agentstart/protocol/host/identity'
+import type { RuntimeCompatVerdict } from '@agentstart/protocol/runtime-compatibility'
 import type { ExecutionHostHealth } from '~renderer/execution-host-registry'
 
 // Why: the host-header dropdown shows different lifecycle actions per host kind.
@@ -8,7 +8,7 @@ import type { ExecutionHostHealth } from '~renderer/execution-host-registry'
 // Why: no 'focus' action here — the host scope strip is the single scoping
 // control (the design doc forbids a separate focused-host toggle), and
 // decluttering is served by collapsing the section.
-export type HostHeaderMenuAction = 'rename' | 'manage' | 'runtime-check-connection' | 'remove'
+type HostHeaderMenuAction = 'rename' | 'manage' | 'runtime-check-connection' | 'remove'
 
 export type HostHeaderMenuModel = {
   /** Lifecycle/navigation actions, in display order. */

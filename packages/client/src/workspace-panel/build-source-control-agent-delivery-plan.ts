@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { useAppStore } from '~renderer/store/state'
 
 import type { SourceControlAgentActionDeliveryPlanState } from './source-control/agent-action-dialog-form'

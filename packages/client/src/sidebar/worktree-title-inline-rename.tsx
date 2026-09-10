@@ -7,9 +7,9 @@ import { cn } from '~renderer/ui/class-names'
 import { Input } from '~renderer/ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
-export type WorktreeTitleRenameCommit = { kind: 'cancel' } | { kind: 'save'; displayName: string }
+type WorktreeTitleRenameCommit = { kind: 'cancel' } | { kind: 'save'; displayName: string }
 
-export function getWorktreeTitleRenameCommit(
+function getWorktreeTitleRenameCommit(
   currentDisplayName: string,
   nextDisplayName: string
 ): WorktreeTitleRenameCommit {
@@ -20,7 +20,7 @@ export function getWorktreeTitleRenameCommit(
   return { kind: 'save', displayName: trimmed }
 }
 
-export function isWorktreeTitleTruncated(
+function isWorktreeTitleTruncated(
   element: Pick<HTMLElement, 'clientWidth' | 'scrollWidth'>
 ): boolean {
   return element.scrollWidth > element.clientWidth
@@ -116,7 +116,7 @@ export function WorktreeTitleInlineRename({
   // hovercard can use a compact field that reads more like native rename UI.
   const editingInputClassName =
     editingPresentation === 'field'
-      ? 'h-6 border border-input bg-input/40 px-1.5 py-0 selection:bg-[Highlight] selection:text-[HighlightText] focus-visible:border-ring dark:bg-input/30'
+      ? 'h-6 rounded-sm border border-input bg-input/40 px-1.5 py-0 selection:bg-[Highlight] selection:text-[HighlightText] focus-visible:border-ring dark:bg-input/30'
       : 'h-[1lh] border-0 !border-transparent !bg-transparent p-0 focus-visible:border-transparent focus-visible:outline-none dark:!bg-transparent'
   const savingInputClassName = editingPresentation === 'field' ? 'pr-6' : 'pr-4'
   const savingSpinnerClassName = editingPresentation === 'field' ? 'right-1.5' : 'right-0'

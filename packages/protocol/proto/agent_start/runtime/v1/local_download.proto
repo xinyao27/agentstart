@@ -1,0 +1,197 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service LocalDownloadService {
+  rpc StartFile(LocalDownloadServiceStartFileRequest) returns (LocalDownloadServiceStartFileResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AppendFileChunk(LocalDownloadServiceAppendFileChunkRequest) returns (LocalDownloadServiceAppendFileChunkResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc FinishFile(LocalDownloadServiceFinishFileRequest) returns (LocalDownloadServiceFinishFileResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CancelFile(LocalDownloadServiceCancelFileRequest) returns (LocalDownloadServiceCancelFileResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc StartFolder(LocalDownloadServiceStartFolderRequest) returns (LocalDownloadServiceStartFolderResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CreateFolderDirectory(LocalDownloadServiceCreateFolderDirectoryRequest) returns (LocalDownloadServiceCreateFolderDirectoryResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AppendFolderFileChunk(LocalDownloadServiceAppendFolderFileChunkRequest) returns (LocalDownloadServiceAppendFolderFileChunkResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc FinishFolder(LocalDownloadServiceFinishFolderRequest) returns (LocalDownloadServiceFinishFolderResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CancelFolder(LocalDownloadServiceCancelFolderRequest) returns (LocalDownloadServiceCancelFolderResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message LocalDownloadServiceStartFileRequest {
+  string suggested_name = 1;
+}
+
+message LocalDownloadServiceStartFileResponse {
+  LocalDownloadSession session = 1;
+}
+
+message LocalDownloadServiceAppendFileChunkRequest {
+  string transfer_id = 1;
+  bytes content = 2;
+}
+
+message LocalDownloadServiceAppendFileChunkResponse {}
+
+message LocalDownloadServiceFinishFileRequest {
+  string transfer_id = 1;
+}
+
+message LocalDownloadServiceFinishFileResponse {
+  string destination_path = 1;
+}
+
+message LocalDownloadServiceCancelFileRequest {
+  string transfer_id = 1;
+}
+
+message LocalDownloadServiceCancelFileResponse {}
+
+message LocalDownloadServiceStartFolderRequest {
+  string suggested_name = 1;
+}
+
+message LocalDownloadServiceStartFolderResponse {
+  LocalDownloadSession session = 1;
+}
+
+message LocalDownloadServiceCreateFolderDirectoryRequest {
+  string transfer_id = 1;
+  repeated string path_segments = 2;
+}
+
+message LocalDownloadServiceCreateFolderDirectoryResponse {}
+
+message LocalDownloadServiceAppendFolderFileChunkRequest {
+  string transfer_id = 1;
+  repeated string path_segments = 2;
+  bytes content = 3;
+  bool first = 4;
+  bool last = 5;
+}
+
+message LocalDownloadServiceAppendFolderFileChunkResponse {}
+
+message LocalDownloadServiceFinishFolderRequest {
+  string transfer_id = 1;
+}
+
+message LocalDownloadServiceFinishFolderResponse {
+  string destination_path = 1;
+}
+
+message LocalDownloadServiceCancelFolderRequest {
+  string transfer_id = 1;
+}
+
+message LocalDownloadServiceCancelFolderResponse {}
+
+message LocalDownloadSession {
+  string transfer_id = 1;
+  string destination_path = 2;
+}

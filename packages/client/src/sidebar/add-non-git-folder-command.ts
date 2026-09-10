@@ -1,4 +1,4 @@
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { buildDismissedOnboardingFolderAgentStartup } from '~renderer/onboarding/folder-agent-startup'
 import { readProjectCatalogSnapshot } from '~renderer/project-catalog/catalog-snapshot'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'

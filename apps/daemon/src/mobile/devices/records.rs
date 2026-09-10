@@ -1,21 +1,11 @@
 use rusqlite::{Connection, OptionalExtension};
 
 use super::identity::{now_millis, random_token, random_uuid};
-use super::{ApnsEnvironment, MobileDevice, MobileDeviceStoreError, PushRegistration};
+use super::{MobileDevice, MobileDeviceStoreError};
 
-type MobileDeviceRow = (
-    String,
-    String,
-    String,
-    Option<String>,
-    Option<String>,
-    i64,
-    i64,
-);
+type MobileDeviceRow = (String, String, String, i64, i64);
 
-const SELECT_DEVICE: &str =
-    "SELECT id, name, token, apns_token, apns_environment, paired_at, last_seen_at
-     FROM mobile_device";
+const SELECT_DEVICE: &str = "SELECT id, name, token, paired_at, last_seen_at FROM mobile_device";
 
 pub(super) fn get_or_create_named(
     connection: &Connection,
@@ -118,46 +108,6 @@ pub(super) fn mark_seen(
         .map_err(MobileDeviceStoreError::storage)
 }
 
-pub(super) fn register_push(
-    connection: &Connection,
-    device_id: &str,
-    registration: Option<PushRegistration>,
-) -> Result<bool, MobileDeviceStoreError> {
-    let (token, environment) = registration
-        .map(|registration| {
-            (
-                Some(registration.token),
-                Some(registration.environment.as_str()),
-            )
-        })
-        .unwrap_or((None, None));
-    connection
-        .execute(
-            "UPDATE mobile_device
-             SET apns_token = ?1, apns_environment = ?2, push_updated_at = ?3
-             WHERE id = ?4",
-            rusqlite::params![token, environment, now_millis()?, device_id],
-        )
-        .map(|changes| changes == 1)
-        .map_err(MobileDeviceStoreError::storage)
-}
-
-pub(super) fn push_devices(
-    connection: &Connection,
-) -> Result<Vec<MobileDevice>, MobileDeviceStoreError> {
-    let mut statement = connection
-        .prepare(&format!(
-            "{SELECT_DEVICE}
-             WHERE apns_token IS NOT NULL AND apns_environment IS NOT NULL"
-        ))
-        .map_err(MobileDeviceStoreError::storage)?;
-    let rows = statement
-        .query_map([], read_row)
-        .map_err(MobileDeviceStoreError::storage)?;
-    rows.map(|row| hydrate(row.map_err(MobileDeviceStoreError::storage)?))
-        .collect()
-}
-
 fn find_by_name(
     connection: &Connection,
     name: &str,
@@ -184,8 +134,6 @@ fn find_one(
 
 fn create(connection: &Connection, name: String) -> Result<MobileDevice, MobileDeviceStoreError> {
     let device = MobileDevice {
-        apns_environment: None,
-        apns_token: None,
         id: random_uuid()?,
         last_seen_at: 0,
         name,
@@ -228,26 +176,12 @@ fn read_row(row: &rusqlite::Row<'_>) -> Result<MobileDeviceRow, rusqlite::Error>
         row.get(2)?,
         row.get(3)?,
         row.get(4)?,
-        row.get(5)?,
-        row.get(6)?,
     ))
 }
 
 fn hydrate(row: MobileDeviceRow) -> Result<MobileDevice, MobileDeviceStoreError> {
-    let (id, name, token, apns_token, apns_environment, paired_at, last_seen_at) = row;
-    let apns_environment = match apns_environment.as_deref() {
-        Some("production") => Some(ApnsEnvironment::Production),
-        Some("sandbox") => Some(ApnsEnvironment::Sandbox),
-        None => None,
-        Some(value) => {
-            return Err(MobileDeviceStoreError::storage(std::io::Error::other(
-                format!("invalid mobile APNS environment: {value}"),
-            )));
-        }
-    };
+    let (id, name, token, paired_at, last_seen_at) = row;
     Ok(MobileDevice {
-        apns_environment,
-        apns_token,
         id,
         last_seen_at,
         name,

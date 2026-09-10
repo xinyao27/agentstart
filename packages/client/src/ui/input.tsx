@@ -3,7 +3,7 @@ import * as React from 'react'
 import { cn } from '~renderer/ui/class-names'
 
 const inputVariants = cva(
-  'w-full min-w-0 appearance-none border border-input bg-transparent transition-[color] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground/60 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30 focus-visible:border-ring aria-invalid:border-destructive',
+  'w-full min-w-0 appearance-none rounded-md border border-input bg-transparent transition-[color] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground/60 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30 focus-visible:border-ring aria-invalid:border-destructive',
   {
     variants: {
       size: {

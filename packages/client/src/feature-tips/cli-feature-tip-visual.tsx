@@ -9,10 +9,10 @@ import { usePrefersReducedMotion } from '~renderer/react/use-prefers-reduced-mot
 import { cn } from '~renderer/ui/class-names'
 
 const CLI_AGENT_COMMANDS = [
-  'yiru worktree create --name auth-pr-1',
-  'yiru worktree create --name auth-pr-2',
-  'yiru orchestration dispatch --task pr1 --to w1',
-  'yiru orchestration dispatch --task pr2 --to w2'
+  'agentstart worktree create --name auth-pr-1',
+  'agentstart worktree create --name auth-pr-2',
+  'agentstart orchestration dispatch --task pr1 --to w1',
+  'agentstart orchestration dispatch --task pr2 --to w2'
 ]
 
 export function CliFeatureTipVisual(): JSX.Element {
@@ -57,11 +57,11 @@ export function CliFeatureTipVisual(): JSX.Element {
       className="bg-muted/60 relative flex min-h-[27rem] flex-col overflow-hidden px-6 py-7"
       aria-hidden="true"
     >
-      <div className="border-border/70 bg-card relative border">
+      <div className="border-border/70 bg-card relative rounded-lg border">
         <div className="border-border/70 flex items-center gap-2 border-b px-3 py-2">
-          <span className="bg-muted-foreground/35 size-2" />
-          <span className="bg-muted-foreground/25 size-2" />
-          <span className="bg-muted-foreground/20 size-2" />
+          <span className="bg-muted-foreground/35 size-2 rounded-full" />
+          <span className="bg-muted-foreground/25 size-2 rounded-full" />
+          <span className="bg-muted-foreground/20 size-2 rounded-full" />
         </div>
         <div className="text-foreground space-y-1.5 px-3 py-3 font-mono text-[10.5px] leading-[1.35]">
           <div className="text-muted-foreground truncate">
@@ -89,7 +89,7 @@ export function CliFeatureTipVisual(): JSX.Element {
                 </span>
                 <span>{command}</span>
                 {isCurrentLine ? (
-                  <span className="bg-foreground/70 ml-0.5 inline-block h-3 w-1 translate-y-0.5 animate-[cli-tip-caret_0.9s_steps(1,end)_infinite] motion-reduce:translate-y-0 motion-reduce:animate-none" />
+                  <span className="bg-foreground/70 ml-0.5 inline-block h-3 w-1 translate-y-0.5 animate-[cli-tip-caret_0.9s_steps(1,end)_infinite] rounded-sm motion-reduce:translate-y-0 motion-reduce:animate-none" />
                 ) : null}
               </div>
             )
@@ -97,7 +97,7 @@ export function CliFeatureTipVisual(): JSX.Element {
         </div>
       </div>
 
-      <div className="cli-tip-orchestration-frame border-border/70 bg-background relative mt-5 flex h-[17rem] items-center justify-center overflow-hidden border px-5">
+      <div className="cli-tip-orchestration-frame border-border/70 bg-background relative mt-5 flex h-[17rem] items-center justify-center overflow-hidden rounded-lg border px-5">
         <div className="origin-center">
           <AgentsOrchestrationVisual
             activeStepId="orchestration"

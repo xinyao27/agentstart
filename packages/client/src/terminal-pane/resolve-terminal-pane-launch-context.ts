@@ -1,4 +1,4 @@
-import { runtimePtyEnvironmentId } from '@yiru/protocol/terminal-identity'
+import { runtimePtyEnvironmentId } from '@agentstart/protocol/terminal-identity'
 
 import { useAppStore } from '../store/state'
 import type { LinkHandlerDeps } from './terminal-link-handlers'

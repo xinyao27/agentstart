@@ -1,5 +1,5 @@
-import type { Project, ProjectUpdateArgs } from '@yiru/protocol/project/model'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { Project, ProjectUpdateArgs } from '@agentstart/protocol/project/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 
 import { ProjectWindowsRuntimeSetting } from '../project-windows-runtime-setting'

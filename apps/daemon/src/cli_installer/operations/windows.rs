@@ -117,7 +117,7 @@ async fn write_path_entry(
                 "Remove this folder from your PATH manually"
             };
             Err(CliInstallerError::Refused(format!(
-                "Windows blocked updating your user PATH (access denied). This usually means your PATH environment variable is managed by Group Policy or your organization's device management. {instruction}: {}. Or run Yiru as an administrator and try again.",
+                "Windows blocked updating your user PATH (access denied). This usually means your PATH environment variable is managed by Group Policy or your organization's device management. {instruction}: {}. Or run AgentStart as an administrator and try again.",
                 display_path(directory)
             )))
         }

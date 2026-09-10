@@ -1,4 +1,4 @@
-import type { GitHistoryItem } from '@yiru/protocol/git/history-types'
+import type { GitHistoryItem } from '@agentstart/protocol/git/history-types'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { GitHistoryCommitAction } from '../git-history-commit-context-menu'

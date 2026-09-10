@@ -63,6 +63,8 @@ pub(crate) enum ServiceError {
 
 #[derive(Serialize)]
 struct ServiceOutput {
+    executable: Option<String>,
+    pid: Option<u32>,
     state: ServiceState,
 }
 
@@ -118,16 +120,31 @@ fn has_flag(args: &[OsString], flag: &str) -> bool {
 
 fn write_output(action: &str, state: ServiceState, json: bool) -> Result<(), ServiceError> {
     if json {
-        println!("{}", serde_json::to_string(&ServiceOutput { state })?);
+        let executable = platform::configured_executable()?
+            .map(|path| {
+                path.into_os_string()
+                    .into_string()
+                    .map_err(|path| ServiceError::NonUnicodePath(PathBuf::from(path)))
+            })
+            .transpose()?;
+        let pid = platform::running_pid()?;
+        println!(
+            "{}",
+            serde_json::to_string(&ServiceOutput {
+                executable,
+                pid,
+                state
+            })?
+        );
         return Ok(());
     }
     match action {
-        "install" => println!("Yiru daemon service installed and started"),
-        "uninstall" => println!("Yiru daemon service uninstalled"),
-        "status" => println!("Yiru daemon service state: {}", state_name(state)),
-        "start" => println!("Yiru daemon service started"),
-        "stop" => println!("Yiru daemon service stopped"),
-        "restart" => println!("Yiru daemon service restarted"),
+        "install" => println!("AgentStart daemon service installed and started"),
+        "uninstall" => println!("AgentStart daemon service uninstalled"),
+        "status" => println!("AgentStart daemon service state: {}", state_name(state)),
+        "start" => println!("AgentStart daemon service started"),
+        "stop" => println!("AgentStart daemon service stopped"),
+        "restart" => println!("AgentStart daemon service restarted"),
         _ => return Err(ServiceError::UnsupportedAction),
     }
     Ok(())
@@ -143,7 +160,7 @@ fn state_name(state: ServiceState) -> &'static str {
 
 pub(super) fn not_installed_error() -> ServiceError {
     ServiceError::CommandFailed {
-        program: "yiru service".to_owned(),
+        program: "agentstart service".to_owned(),
         code: "not_installed".to_owned(),
     }
 }
@@ -227,6 +244,14 @@ mod platform {
     }
 
     pub(super) fn restart() -> Result<ServiceState, ServiceError> {
+        Err(ServiceError::UnsupportedPlatform)
+    }
+
+    pub(super) fn configured_executable() -> Result<Option<std::path::PathBuf>, ServiceError> {
+        Err(ServiceError::UnsupportedPlatform)
+    }
+
+    pub(super) fn running_pid() -> Result<Option<u32>, ServiceError> {
         Err(ServiceError::UnsupportedPlatform)
     }
 }

@@ -1,4 +1,4 @@
-import { StatusCode } from '../../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   OrchestrationServiceCheckRequestSchema,
   OrchestrationServiceCheckResponseSchema,
@@ -12,7 +12,7 @@ import {
   OrchestrationServiceReplyResponseSchema,
   OrchestrationServiceSendRequestSchema,
   OrchestrationServiceSendResponseSchema
-} from '../../generated/yiru/runtime/v1/orchestration_pb.js'
+} from '../../generated/agent_start/runtime/v1/orchestration_pb.js'
 import { RuntimeProtocolError } from '../error.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { messagePriorityValue, messageTypeValue } from './enum-values.js'

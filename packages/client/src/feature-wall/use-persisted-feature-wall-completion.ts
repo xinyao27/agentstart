@@ -1,7 +1,7 @@
-import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { FeatureWallWorkflowId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { AgentsStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { FeatureWallWorkflowId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import { useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 

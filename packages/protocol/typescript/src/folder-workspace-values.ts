@@ -1,6 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   FolderWorkspaceLinkedReviewSchema,
   FolderWorkspacePathScope,
@@ -11,7 +11,7 @@ import {
   type FolderWorkspaceNullableText as ProtocolNullableText,
   type FolderWorkspacePathStatus as ProtocolPathStatus,
   type FolderWorkspace as ProtocolFolderWorkspace
-} from '../generated/yiru/runtime/v1/folder_workspace_pb.js'
+} from '../generated/agent_start/runtime/v1/folder_workspace_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RepoAgentValue } from './repo-types.js'
 
@@ -182,7 +182,7 @@ export function folderWorkspacePathStatus(
 // Why: the legacy projection serializes the rename error only once a rename was
 // attempted; the oneof keeps "no error" (null) apart from "not attempted"
 // (absent), and the decoded value keeps exactly those three states.
-export function nullableText(value: ProtocolNullableText): string | null {
+function nullableText(value: ProtocolNullableText): string | null {
   switch (value.value.case) {
     case 'null':
       return null

@@ -19,12 +19,7 @@ import {
 } from './primary-action-titles'
 import type { PrimaryAction, PrimaryActionInputs } from './primary-action-types'
 
-export type {
-  PrimaryActionKind,
-  RemoteOpKind,
-  PrimaryAction,
-  PrimaryActionInputs
-} from './primary-action-types'
+export type { RemoteOpKind, PrimaryAction, PrimaryActionInputs } from './primary-action-types'
 
 export function resolveCommitAreaPrimaryAction(inputs: PrimaryActionInputs): PrimaryAction {
   return toRendererPrimaryAction(

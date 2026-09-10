@@ -36,9 +36,9 @@ async function highlightChanges(tabId: number, value: unknown): Promise<void> {
 function renderHighlights(
   changes: { height: number; width: number; x: number; y: number }[]
 ): void {
-  document.getElementById('yiru-visual-diff')?.remove()
+  document.getElementById('agentstart-visual-diff')?.remove()
   const overlay = document.createElement('div')
-  overlay.id = 'yiru-visual-diff'
+  overlay.id = 'agentstart-visual-diff'
   overlay.style.cssText =
     'position:fixed;inset:0;z-index:2147483645;pointer-events:none;overflow:hidden'
   for (const change of changes) {

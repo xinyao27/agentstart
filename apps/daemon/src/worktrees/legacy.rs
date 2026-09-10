@@ -15,7 +15,7 @@ pub(super) enum LegacyMetadata {
 
 pub(super) fn read(user_data_path: &Path) -> LegacyMetadata {
     let document = read_document(user_data_path).or_else(|| {
-        let legacy_path = user_data_path.join("yiru-data.json");
+        let legacy_path = user_data_path.join("agentstart-data.json");
         parse_file(&legacy_path)
     });
     let Some(metadata) = document
@@ -42,7 +42,7 @@ pub(super) fn read(user_data_path: &Path) -> LegacyMetadata {
 }
 
 fn read_document(user_data_path: &Path) -> Option<Value> {
-    parse_file(&user_data_path.join("yiru-data-worktrees.json"))
+    parse_file(&user_data_path.join("agentstart-data-worktrees.json"))
 }
 
 fn parse_file(path: &Path) -> Option<Value> {

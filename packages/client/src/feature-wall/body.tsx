@@ -1,5 +1,5 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { FeatureWallOpenSourceTelemetry } from '@yiru/protocol/telemetry/events/foundations'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { FeatureWallOpenSourceTelemetry } from '@agentstart/protocol/telemetry/events/foundations'
 import type { JSX } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import type { InstalledAgentSkillState } from '~renderer/skills/use-installed-agents'

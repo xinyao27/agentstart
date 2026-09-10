@@ -1,4 +1,4 @@
-import { normalizeRuntimePathSeparators } from '@yiru/protocol/host/path'
+import { normalizeRuntimePathSeparators } from '@agentstart/protocol/host/path'
 import { translate } from '~renderer/i18n/i18n'
 import type { AiVaultScope } from '~renderer/workspace-panel/ai-vault/session/providers'
 

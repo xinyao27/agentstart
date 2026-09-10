@@ -5,7 +5,7 @@ import {
   toRuntimeExecutionHostId,
   type ExecutionHostId,
   type ExecutionHostScope
-} from '@yiru/protocol/host/identity'
+} from '@agentstart/protocol/host/identity'
 import { useState } from 'react'
 import { getExecutionHostLabel } from '~renderer/execution-host/labels'
 import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'

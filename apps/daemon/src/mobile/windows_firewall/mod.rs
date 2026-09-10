@@ -111,7 +111,7 @@ impl WindowsFirewall {
     fn supported_port(&self) -> Option<u16> {
         if !cfg!(windows)
             || !matches!(
-                std::env::var("YIRU_BUILD_IDENTITY").as_deref(),
+                std::env::var("AGENTSTART_BUILD_IDENTITY").as_deref(),
                 Ok("stable" | "rc")
             )
         {

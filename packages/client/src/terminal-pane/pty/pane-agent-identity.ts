@@ -1,6 +1,9 @@
-import { isTuiAgent } from '@yiru/protocol/agent/identity'
-import { isFreshNonDoneAgentStatus, type AgentType } from '@yiru/protocol/agent/status-records'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { isTuiAgent } from '@agentstart/protocol/agent/identity'
+import {
+  isFreshNonDoneAgentStatus,
+  type AgentType
+} from '@agentstart/protocol/agent/status-records'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { agentTypeToIconAgent } from '~renderer/agent/status'
 import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 import { resolvePaneAgentOwner } from '~renderer/pane-agent-owner'

@@ -1,21 +1,7 @@
-import type { ParsedExecutionHost } from '@yiru/protocol/host/identity'
-import { parseExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
-import { getProjectSourceRuntimeSettings } from '@yiru/protocol/project/source-context'
+import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
+import { getProjectSourceRuntimeSettings } from '@agentstart/protocol/project/source-context'
 import type { RuntimeClientTarget } from '~renderer/runtime/rpc-client'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
-
-export type GitHubRuntimeHost = Extract<ParsedExecutionHost, { kind: 'runtime' }>
-
-export function getGitHubSourceRuntimeHost(
-  sourceContext: ProjectSourceContext | null | undefined
-): GitHubRuntimeHost | null {
-  if (sourceContext?.provider !== 'github') {
-    return null
-  }
-  const parsedHost = parseExecutionHostId(sourceContext.hostId)
-  return parsedHost?.kind === 'runtime' ? parsedHost : null
-}
 
 export function getGitHubSourceRuntimeTarget(
   sourceContext: ProjectSourceContext | null | undefined

@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { buildDuplicatedBrowserTabOptions } from '~renderer/browser-tab-projection/duplicate-options'
 import { openMobileEmulatorTab } from '~renderer/emulator-pane/open-tab'
 import { useProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
@@ -14,7 +14,7 @@ import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-o
 import { openTabBarEntry, type TabCreateEntryArgs } from '../tab-bar/tab-create-entry-action'
 import { ensureSimulatorTab, getSimulatorTabForWorktree } from './ensure-simulator-tab'
 
-export function recordTerminalTabGroupSplit(createdTerminal: TerminalTab | null | undefined): void {
+function recordTerminalTabGroupSplit(createdTerminal: TerminalTab | null | undefined): void {
   if (createdTerminal) {
     useAppStore.getState().recordFeatureInteraction('terminal-pane-split')
   }

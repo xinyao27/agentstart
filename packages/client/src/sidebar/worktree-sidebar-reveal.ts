@@ -1,8 +1,7 @@
 import { GROUP_HEADER_ROW_HEIGHT } from './worktree-list/virtual-rows'
 
 const WORKTREE_REVEAL_TOP_CLEARANCE = 6
-export const WORKTREE_SIDEBAR_REVEAL_TOP_INSET =
-  GROUP_HEADER_ROW_HEIGHT + WORKTREE_REVEAL_TOP_CLEARANCE
+const WORKTREE_SIDEBAR_REVEAL_TOP_INSET = GROUP_HEADER_ROW_HEIGHT + WORKTREE_REVEAL_TOP_CLEARANCE
 
 type SidebarRevealBounds = {
   start: number
@@ -18,7 +17,7 @@ function getElementScrollBounds(container: HTMLElement, element: Element): Sideb
   }
 }
 
-export function getScrollTopToRevealBounds(
+function getScrollTopToRevealBounds(
   container: HTMLElement,
   bounds: SidebarRevealBounds,
   topInset = 0

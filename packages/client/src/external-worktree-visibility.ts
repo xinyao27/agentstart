@@ -1,6 +1,6 @@
-import { normalizeRuntimePathSeparators } from '@yiru/protocol/host/path'
+import { normalizeRuntimePathSeparators } from '@agentstart/protocol/host/path'
 
-export const UNKNOWN_EXTERNAL_WORKTREE_PARENT_PATH = 'Unknown location'
+const UNKNOWN_EXTERNAL_WORKTREE_PARENT_PATH = 'Unknown location'
 
 function trimRuntimePathTrailingSlash(value: string): string {
   if (value === '/' || /^[A-Za-z]:\/$/.test(value)) {

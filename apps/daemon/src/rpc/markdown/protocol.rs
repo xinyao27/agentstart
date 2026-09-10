@@ -1,10 +1,10 @@
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     MarkdownReadOnlyReason, MarkdownServiceReadTabRequest, MarkdownServiceReadTabResponse,
     MarkdownServiceSaveTabRequest, MarkdownServiceSaveTabResponse, MarkdownSource,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::Value;
 
 use crate::projects::ProjectCatalogError;
 use crate::session_tabs::SessionTabsError;
@@ -109,8 +109,7 @@ fn rpc_status(error: MarkdownRpcError) -> Status {
             // protobuf surface keeps those codes.
             SessionTabsError::EditorDirty
             | SessionTabsError::HostProvenance
-            | SessionTabsError::StateChanged
-            | SessionTabsError::RendererOwner => StatusCode::FailedPrecondition,
+            | SessionTabsError::StateChanged => StatusCode::FailedPrecondition,
             SessionTabsError::TabNotFound
             | SessionTabsError::AfterTabNotFound
             | SessionTabsError::Worktree(WorktreeCatalogError::NotFound)

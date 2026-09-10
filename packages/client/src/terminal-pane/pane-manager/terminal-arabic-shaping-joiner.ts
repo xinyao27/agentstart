@@ -16,7 +16,7 @@ const lazyArabicShapingJoinerByTerminal = new WeakMap<
 
 // Why: xterm draws every cell's glyph in isolation, so Arabic output shows
 // disconnected letterforms in logical (reversed) order — upstream has no
-// BiDi/shaping support (xtermjs/xterm.js#701, Yiru #5262). Joining each RTL
+// BiDi/shaping support (xtermjs/xterm.js#701, AgentStart #5262). Joining each RTL
 // run into one cell range makes both renderers (WebGL atlas, DOM row factory)
 // draw the run as a single string, letting the browser apply contextual
 // shaping and BiDi ordering inside the run's grid-aligned cell box. The
@@ -28,7 +28,7 @@ const lazyArabicShapingJoinerByTerminal = new WeakMap<
 // segments bail out with a single charCodeAt sweep and no per-char decode.
 const RTL_SCAN_FLOOR = 0x0590
 
-export function isStrongRtlCodePoint(codePoint: number): boolean {
+function isStrongRtlCodePoint(codePoint: number): boolean {
   return (
     // Hebrew, Arabic, Syriac, Arabic Sup, Thaana, NKo, Samaritan, Mandaic,
     // Syriac Sup, Arabic Extended-B/A — one contiguous strong-RTL span.
@@ -134,7 +134,7 @@ function canOpenRtlRun(codePoint: number): boolean {
  * the match covers the run's first cell, otherwise not at all. Same class as
  * ligatures today, extended here to phrase-length runs.
  */
-export function findRtlJoinRanges(text: string): [number, number][] {
+function findRtlJoinRanges(text: string): [number, number][] {
   const length = text.length
   let i = 0
   for (; i < length; i++) {
@@ -203,7 +203,7 @@ export function findRtlJoinRanges(text: string): [number, number][] {
  *  deregisters the joiner — `Terminal.dispose()` does not remove registered
  *  character joiners, so disposePane() must call this to avoid leaking the
  *  registration (xtermjs/xterm.js#3289). */
-export function registerArabicShapingJoiner(
+function registerArabicShapingJoiner(
   terminal: ArabicShapingTerminal,
   isShapingActive: () => boolean
 ): () => void {

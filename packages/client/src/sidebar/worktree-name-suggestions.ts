@@ -50,6 +50,6 @@ export function getSuggestedCreatureName(
   }
 }
 
-export function normalizeSuggestedName(name: string): string {
+function normalizeSuggestedName(name: string): string {
   return name.trim().toLowerCase()
 }

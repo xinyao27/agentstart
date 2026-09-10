@@ -171,6 +171,16 @@ impl MultiplexSession<'_> {
                     frame.sequence,
                 )
             }
+            Err(TerminalSessionError::NotFound) => {
+                self.send_error(
+                    frame.route_id,
+                    frame.correlation_id,
+                    "terminal_not_found",
+                    true,
+                )?;
+                self.remove_stream(frame.route_id);
+                Ok(())
+            }
             Ok(_) | Err(_) => self.send_ack(
                 frame.route_id,
                 frame.correlation_id,

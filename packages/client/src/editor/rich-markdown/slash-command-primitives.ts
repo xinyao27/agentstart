@@ -13,7 +13,7 @@ export type SlashMenuState = {
   top: number
 }
 
-export type SlashCommandId =
+type SlashCommandId =
   | 'text'
   | 'toggle-text'
   | 'heading-1'
@@ -42,7 +42,7 @@ export type SlashCommandIcon =
   | { kind: 'component'; component: React.ComponentType<IconProps> }
   | { kind: 'text'; value: string }
 
-export type SlashCommandGroup =
+type SlashCommandGroup =
   | 'Headings'
   | 'Toggle headings'
   | 'Basic blocks'

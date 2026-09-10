@@ -1,9 +1,9 @@
 import {
   PROJECT_HOST_SETUP_PROTOCOL_CAPABILITY,
   PROJECT_CONTEXT_PROTOCOL_CAPABILITY
-} from '@yiru/protocol'
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ProjectHostSetup, ProjectHostSetupState } from '@yiru/protocol/project/model'
+} from '@agentstart/protocol'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { ProjectHostSetup, ProjectHostSetupState } from '@agentstart/protocol/project/model'
 import type { ExecutionHostRegistryEntry } from '~renderer/execution-host-registry'
 import { getExecutionHostLabel } from '~renderer/execution-host/labels'
 import { translate } from '~renderer/i18n/i18n'
@@ -103,7 +103,7 @@ function getHostSetupAvailability(host: ExecutionHostRegistryEntry): {
         isAvailable: false,
         detail: translate(
           'auto.components.settings.RepositoryPane.hostSetupMissingCapability',
-          'Update Yiru on this host to set up projects'
+          'Update AgentStart on this host to set up projects'
         )
       }
     }

@@ -5,7 +5,7 @@ export type GitGraphColumnId = 'description' | 'date' | 'author' | 'commit'
 
 export type GitGraphColumnWidths = Record<GitGraphColumnId, number>
 
-export const GIT_GRAPH_COLUMN_MIN_WIDTH = 60
+const GIT_GRAPH_COLUMN_MIN_WIDTH = 60
 
 export const DEFAULT_GIT_GRAPH_COLUMN_WIDTHS: GitGraphColumnWidths = {
   description: 320,

@@ -1,7 +1,7 @@
 import {
   isFreshNonDoneAgentStatus,
   type AgentStatusEntry
-} from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/status-records'
 import { buildAgentNotificationId } from '~renderer/agent/notification-id'
 import { resolveCompatibleAgentTypeForOwner } from '~renderer/agent/title/owner'
 import { requireNotificationsTarget } from '~renderer/runtime/notifications-target'
@@ -18,7 +18,7 @@ import type {
 } from './agent/completion-coordinator-types'
 import { isSupersededAgentCompletionSnapshot } from './agent/completion-snapshot-staleness'
 import {
-  isYiruWindowForegroundFocused,
+  isAgentStartWindowForegroundFocused,
   isVisibleForegroundPaneKey
 } from './terminal-notification-pane-visibility'
 import {
@@ -161,9 +161,9 @@ export function dispatchTerminalNotification(
     // only the exact active pane counts as already viewed.
     const shouldMarkUnread = event.paneKey
       ? !isVisibleForegroundPaneKey(state, worktreeId, event.paneKey)
-      : state.activeWorktreeId !== worktreeId || !isYiruWindowForegroundFocused()
+      : state.activeWorktreeId !== worktreeId || !isAgentStartWindowForegroundFocused()
     if (shouldMarkUnread) {
-      // Why: activeWorktreeId is only in-app selection. If Yiru is backgrounded,
+      // Why: activeWorktreeId is only in-app selection. If AgentStart is backgrounded,
       // a selected chat finishing still needs unread/Dock attention.
       state.markWorktreeUnread(worktreeId)
       if (event.paneKey) {

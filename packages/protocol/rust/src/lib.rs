@@ -2,18 +2,18 @@
 
 pub mod protocol {
     pub mod v1 {
-        include!(concat!(env!("OUT_DIR"), "/yiru.protocol.v1.rs"));
+        include!(concat!(env!("OUT_DIR"), "/agent_start.protocol.v1.rs"));
     }
 }
 
 pub mod runtime {
     pub mod v1 {
-        include!(concat!(env!("OUT_DIR"), "/yiru.runtime.v1.rs"));
+        include!(concat!(env!("OUT_DIR"), "/agent_start.runtime.v1.rs"));
     }
 }
 
 pub mod method_metadata {
-    include!(concat!(env!("OUT_DIR"), "/yiru.method_metadata.rs"));
+    include!(concat!(env!("OUT_DIR"), "/agent_start.method_metadata.rs"));
 }
 
 pub mod transport;

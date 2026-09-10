@@ -1,5 +1,5 @@
-import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
-import { parseWslUncPath } from '@yiru/protocol/host/wsl-paths'
+import { isWindowsAbsolutePathLike } from '@agentstart/protocol/host/path'
+import { parseWslUncPath } from '@agentstart/protocol/host/wsl-paths'
 import { CLIENT_PLATFORM } from '~renderer/new-workspace/workspace-creation'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'
 import type { AppState } from '~renderer/store/types'

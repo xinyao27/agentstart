@@ -33,7 +33,7 @@ export function ContextualTourProgressDots({
             <span
               key={index}
               className={cn(
-                'block h-1.5 transition-all duration-200 ease-out',
+                'block h-1.5 transition-all duration-200 ease-out rounded-full',
                 isActive
                   ? 'w-4 bg-foreground'
                   : isComplete

@@ -2,7 +2,7 @@ import {
   PROGRESS_EVENTS_PROTOCOL_CAPABILITY,
   ProgressEventsClient,
   type ProgressEventsSubscriptionEventValue
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import { targetKey } from './query-target'
@@ -44,7 +44,7 @@ function hostProgressEvents(target: RuntimeClientTarget) {
   return created
 }
 
-export function onHostProgressEvent<TType extends ProgressEventsSubscriptionEventValue['type']>(
+function onHostProgressEvent<TType extends ProgressEventsSubscriptionEventValue['type']>(
   target: RuntimeClientTarget,
   type: TType,
   callback: (event: Extract<ProgressEventsSubscriptionEventValue, { type: TType }>) => void

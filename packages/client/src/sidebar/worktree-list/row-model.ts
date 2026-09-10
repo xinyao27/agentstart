@@ -1,4 +1,4 @@
-import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import { shallow } from 'zustand/shallow'
 
 import type { HostSectionRow } from '../host-section-rows'
@@ -16,7 +16,7 @@ function isWorktreeItemRow(row: HostSectionRow): row is WorktreeItemRow {
   return row.type === 'item'
 }
 
-export function renderRowContainsWorktree(row: RenderRow, worktreeId: string | null): boolean {
+function renderRowContainsWorktree(row: RenderRow, worktreeId: string | null): boolean {
   if (worktreeId === null) {
     return false
   }

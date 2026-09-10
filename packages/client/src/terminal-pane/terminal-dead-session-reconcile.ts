@@ -4,17 +4,7 @@
 // this routes such panes through the same exit teardown an observed exit runs.
 // See design-docs/terminal-dead-pane-on-bg-exit.md.
 
-import { isRuntimePtyId } from '@yiru/protocol/terminal-identity'
-
-/**
- * A pane binding that exposes its bound transport identity plus a reconcile
- * hook. Kept structural so the lifecycle fan-out can call it without importing
- * the full `PanePtyBinding` shape from pty-connection.
- */
-export type ReconcilableBinding = {
-  reconcileIfSessionDead?: (liveSessionIds: Set<string>, snapshotRequestedAt?: number) => void
-  reconcileIfSessionMissing?: (hasPty: HasPty, livenessRequestedAt?: number) => void
-}
+import { isRuntimePtyId } from '@agentstart/protocol/terminal-identity'
 
 export type HasPty = (ptyId: string) => Promise<boolean | null>
 
@@ -80,16 +70,4 @@ export function shouldReconcileMissingSession(args: {
     ptyBoundAt: args.ptyBoundAt,
     snapshotRequestedAt: args.livenessRequestedAt
   })
-}
-
-export function reconcileMissingSessions(args: {
-  bindings: Iterable<ReconcilableBinding>
-  hasPty: HasPty
-}): void {
-  // Why: the liveness request time must predate every async response so a
-  // stale response cannot close a PTY that bound after the request started.
-  const requestedAt = performance.now()
-  for (const binding of args.bindings) {
-    binding.reconcileIfSessionMissing?.(args.hasPty, requestedAt)
-  }
 }

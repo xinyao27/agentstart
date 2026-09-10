@@ -1,4 +1,4 @@
-export const SESSION_RESTORED_BANNER_TEXT = '--- session restored ---'
+const SESSION_RESTORED_BANNER_TEXT = '--- session restored ---'
 
 type SessionRestoredBannerProps = {
   visible: boolean

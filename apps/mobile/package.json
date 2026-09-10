@@ -1,20 +1,20 @@
 {
-  "name": "yiru-mobile",
-  "version": "0.0.1",
+  "name": "agentstart-mobile",
+  "version": "0.1.0",
   "private": true,
-  "description": "Native iOS 26 Yiru client",
+  "description": "Native iOS 26 AgentStart client",
   "scripts": {
-    "build": "vp run project:generate && xcodebuild -project YiruMobile.xcodeproj -scheme YiruMobile -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath build/DerivedData CODE_SIGNING_ALLOWED=NO build",
-    "build:release": "vp run project:generate && xcodebuild -project YiruMobile.xcodeproj -scheme YiruMobile -configuration Release -destination 'generic/platform=iOS' -derivedDataPath build/ReleaseDerivedData CODE_SIGNING_ALLOWED=NO build",
-    "dev": "vp run @yiru/daemon#build && vp run project:generate && node scripts/start-development.mjs",
-    "format": "xcrun swift-format format --configuration .swift-format --in-place --recursive YiruMobile YiruWidgets YiruNotificationService Shared/Widgets Shared/Notifications",
-    "lint": "xcrun swift-format lint --configuration .swift-format --strict --recursive YiruMobile YiruWidgets YiruNotificationService Shared/Widgets Shared/Notifications",
+    "build": "vp run project:generate && xcodebuild -project AgentStartMobile.xcodeproj -scheme AgentStartMobile -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath build/DerivedData CODE_SIGNING_ALLOWED=NO build",
+    "build:release": "vp run project:generate && xcodebuild -project AgentStartMobile.xcodeproj -scheme AgentStartMobile -configuration Release -destination 'generic/platform=iOS' -derivedDataPath build/ReleaseDerivedData CODE_SIGNING_ALLOWED=NO build",
+    "dev": "vp run @agentstart/daemon#build && vp run project:generate && node scripts/start-development.mjs",
+    "format": "xcrun swift-format format --configuration .swift-format --in-place --recursive AgentStartMobile AgentStartWidgets Shared/Widgets",
+    "lint": "xcrun swift-format lint --configuration .swift-format --strict --recursive AgentStartMobile AgentStartWidgets Shared/Widgets",
     "project:generate": "xcodegen generate",
     "release:archive": "bundle exec fastlane ios archive",
     "check": "vp run lint && vp run build && vp run build:release"
   },
   "dependencies": {
-    "@yiru/protocol": "workspace:*"
+    "@agentstart/protocol": "workspace:*"
   },
   "engines": {
     "node": "24"

@@ -1,4 +1,4 @@
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { getRepositorySourceControlAiSectionId } from '~renderer/settings/repository/settings-targets'
 import type { AppState } from '~renderer/store/state'
 

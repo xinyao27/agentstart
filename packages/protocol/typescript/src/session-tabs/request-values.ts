@@ -16,7 +16,7 @@ import {
   SessionTabsSplitDirection,
   SessionTabsStartupCommandDeliverySchema,
   type SessionTabsPaneLayoutNode as ProtocolPaneLayoutNode
-} from '../../generated/yiru/runtime/v1/session_tabs_pb.js'
+} from '../../generated/agent_start/runtime/v1/session_tabs_pb.js'
 import type {
   SessionTabsCreateTerminalInput,
   SessionTabsMoveInput,

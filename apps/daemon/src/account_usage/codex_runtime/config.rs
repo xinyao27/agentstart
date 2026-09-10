@@ -63,11 +63,13 @@ struct TomlBlock<'a> {
 
 pub(super) fn sync_all(root: &Path, user_data_path: &Path, accounts: &[ManagedCodexAccount]) {
     for account in accounts {
+        match fs::symlink_metadata(&account.host_path) {
+            Ok(_) => {}
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => continue,
+            Err(_) => {}
+        }
         if let Err(error) = sync_account(root, user_data_path, account, false) {
-            eprintln!(
-                "[codex-accounts] failed to sync config for {}: {error}",
-                account.id
-            );
+            eprintln!("[codex-accounts] failed to sync managed config: {error}");
         }
     }
 }
@@ -174,7 +176,10 @@ fn canonical_homes(account: &ManagedCodexAccount) -> Result<(PathBuf, String), C
         let linux_home = account
             .linux_path
             .as_deref()
-            .and_then(|path| path.split("/.local/share/yiru/codex-accounts/").next())
+            .and_then(|path| {
+                path.split("/.local/share/agentstart/codex-accounts/")
+                    .next()
+            })
             .filter(|path| path.starts_with('/'))
             .ok_or(CodexRuntimeError::InvalidManagedHome)?;
         let distro = account
@@ -227,7 +232,7 @@ fn promote_runtime_settings(
     runtime_home: &Path,
     system_home: &Path,
 ) -> Result<bool, CodexRuntimeError> {
-    let baseline_path = runtime_home.join(".yiru-config-settings-baseline.json");
+    let baseline_path = runtime_home.join(".agentstart-config-settings-baseline.json");
     let Some(baseline) = read_settings_baseline(&baseline_path) else {
         return Ok(true);
     };
@@ -282,7 +287,7 @@ fn snapshot_settings(runtime_home: &Path) -> Result<(), CodexRuntimeError> {
     let mut bytes =
         serde_json::to_vec_pretty(&value).map_err(|_| CodexRuntimeError::InvalidConfig)?;
     bytes.push(b'\n');
-    let path = runtime_home.join(".yiru-config-settings-baseline.json");
+    let path = runtime_home.join(".agentstart-config-settings-baseline.json");
     if managed_files::read_bounded(&path, CONFIG_BYTE_LIMIT)?
         .is_some_and(|current| current == bytes)
     {

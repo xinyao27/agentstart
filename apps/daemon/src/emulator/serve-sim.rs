@@ -19,7 +19,7 @@ pub(super) struct ServeSim {
 
 impl ServeSim {
     pub(super) fn resolve() -> Self {
-        if let Some(path) = env::var_os("YIRU_SERVE_SIM_PATH") {
+        if let Some(path) = env::var_os("AGENTSTART_SERVE_SIM_PATH") {
             return Self {
                 command: PathBuf::from(path),
                 prefix: Vec::new(),
@@ -120,7 +120,7 @@ impl ServeSim {
             {
                 return Err(EmulatorError::domain(
                     "emulator_no_active",
-                    "No active emulator for this worktree — use yiru emulator list/attach or open the pane",
+                    "No active emulator for this worktree — use agentstart emulator list/attach or open the pane",
                 ));
             }
             return Err(helper_error(if message.is_empty() {

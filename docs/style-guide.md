@@ -14,14 +14,16 @@ The native iOS client has a separate contract in
 
 ## Design intent
 
-Yiru frames terminals, source control, browser evidence, and agent sessions. Its chrome stays quiet
+AgentStart frames terminals, source control, browser evidence, and agent sessions. Its chrome stays quiet
 so product state and user work carry the visual emphasis.
 
 1. **Monochrome chrome.** Neutral colors carry navigation and controls. Color communicates a domain
    state such as success, warning, destructive action, git status, or diff meaning.
-2. **Rectilinear surfaces.** Browser work surfaces use square geometry, opaque backgrounds, and
-   one-pixel borders. Do not add rounded corners, shadows, decorative gradients, blur, or alpha-wash
-   backgrounds.
+2. **Natural geometry.** Keep component-appropriate corners: controls and floating surfaces may
+   use the existing radius scale, while edge-to-edge work panes retain their straight edges.
+   Preserve each component's intended shape; avoid blanket radius resets or rounding sweeps.
+   Use opaque backgrounds and one-pixel borders. Do not add shadows, decorative gradients, blur,
+   or alpha-wash backgrounds.
 3. **Dense but legible.** Body copy is 14px; compact navigation and metadata use 12px. Preserve clear
    spacing around the primary action instead of enlarging every control.
 4. **Stable interaction.** Hover, focus, loading, and selected states must not resize or move the

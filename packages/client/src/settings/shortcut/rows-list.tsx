@@ -1,4 +1,4 @@
-import type { KeybindingActionId, KeybindingInput } from '@yiru/protocol/keybindings'
+import type { KeybindingActionId, KeybindingInput } from '@agentstart/protocol/keybindings'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { cn } from '~renderer/ui/class-names'
@@ -47,7 +47,7 @@ export function ShortcutRowsList({
     return (
       <div
         className={cn(
-          'border border-dashed border-border/70 px-4 py-8 text-center text-sm text-muted-foreground',
+          'rounded-md border border-dashed border-border/70 px-4 py-8 text-center text-sm text-muted-foreground',
           className
         )}
       >

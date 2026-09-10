@@ -1,8 +1,8 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { SourceControlActionId } from '@yiru/protocol/source-control/ai-actions'
-import type { CustomAgentId } from '@yiru/protocol/source-control/custom-agent'
-import { CUSTOM_AGENT_ID, isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { SourceControlActionId } from '@agentstart/protocol/source-control/ai-actions'
+import type { CustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
+import { CUSTOM_AGENT_ID, isCustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'
 import { Terminal } from '~renderer/icons/hugeicons'
@@ -76,7 +76,7 @@ export function SourceControlActionRecipeRow({
   const agentSupportText = getSourceControlActionAgentSupportText(actionId)
 
   return (
-    <div className="border-border border px-3 py-3">
+    <div className="border-border rounded-md border px-3 py-3">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 space-y-0.5">
           <p className="text-foreground text-xs font-medium">
@@ -162,7 +162,7 @@ export function SourceControlActionRecipeRow({
             rows={3}
             spellCheck={false}
             onChange={(event) => onTemplateChange(actionId, event.target.value)}
-            className="border-border bg-background text-foreground placeholder:text-muted-foreground/70 w-full resize-y border px-2.5 py-2 font-mono text-xs outline-none"
+            className="border-border bg-background text-foreground placeholder:text-muted-foreground/70 w-full resize-y rounded-md border px-2.5 py-2 font-mono text-xs outline-none"
           />
           <SourceControlActionVariableChips
             actionId={actionId}

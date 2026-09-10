@@ -1,8 +1,8 @@
-import type { PRCheckDetail, PRComment } from '@yiru/protocol/hosted-review/review-types'
+import type { PRCheckDetail, PRComment } from '@agentstart/protocol/hosted-review/review-types'
 import type {
   SourceControlActionRecipe,
   SourceControlLaunchActionId
-} from '@yiru/protocol/source-control/ai-actions'
+} from '@agentstart/protocol/source-control/ai-actions'
 import { useEffect, useRef, useState } from 'react'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'
 import { useProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'

@@ -6,13 +6,13 @@ import {
   type CrashReport,
   type CrashReportDetails,
   type CrashReportDiagnosticBundle
-} from '@yiru/protocol/crash-reports'
-import type { CrashReportDiagnosticBundle as ReportDiagnosticBundle } from '@yiru/protocol/crash-reports/diagnostic-bundle'
-import type { RendererErrorReportArgs } from '@yiru/protocol/crash-reports/renderer-error'
+} from '@agentstart/protocol/crash-reports'
+import type { CrashReportDiagnosticBundle as ReportDiagnosticBundle } from '@agentstart/protocol/crash-reports/diagnostic-bundle'
+import type { RendererErrorReportArgs } from '@agentstart/protocol/crash-reports/renderer-error'
 import type {
   CrashReportRecord,
   CrashReportBreadcrumbData
-} from '@yiru/protocol/crash-reports/values'
+} from '@agentstart/protocol/crash-reports/values'
 import { translate } from '~renderer/i18n/i18n'
 
 export function crashReport(value: CrashReport | undefined): CrashReportRecord | null {

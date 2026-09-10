@@ -1,4 +1,4 @@
-import { keybindingMatchesAction, type KeybindingOverrides } from '@yiru/protocol/keybindings'
+import { keybindingMatchesAction, type KeybindingOverrides } from '@agentstart/protocol/keybindings'
 import type { MarkdownViewMode, OpenFile } from '~renderer/editor/state'
 
 import type { EditorToggleValue } from '../view-toggle'

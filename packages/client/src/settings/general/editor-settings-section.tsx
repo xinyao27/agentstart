@@ -2,8 +2,8 @@ import {
   DEFAULT_EDITOR_AUTO_SAVE_DELAY_MS,
   MAX_EDITOR_AUTO_SAVE_DELAY_MS,
   MIN_EDITOR_AUTO_SAVE_DELAY_MS
-} from '@yiru/protocol/settings/editor'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+} from '@agentstart/protocol/settings/editor'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type React from 'react'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
@@ -93,7 +93,7 @@ export function GeneralEditorSettingsSection({
         )}
         description={translate(
           'auto.components.settings.GeneralEditorSettingsSection.d21136d9ef',
-          'Configure how Yiru persists file edits.'
+          'Configure how AgentStart persists file edits.'
         )}
       />
 
@@ -129,7 +129,7 @@ export function GeneralEditorSettingsSection({
         )}
         description={translate(
           'auto.components.settings.GeneralEditorSettingsSection.1bec6d8318',
-          'How long Yiru waits after your last edit before saving automatically.'
+          'How long AgentStart waits after your last edit before saving automatically.'
         )}
         keywords={['autosave', 'delay', 'milliseconds']}
         className="flex items-center justify-between gap-4 py-2"
@@ -144,7 +144,7 @@ export function GeneralEditorSettingsSection({
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.settings.GeneralEditorSettingsSection.8112cd6dcf',
-              'How long Yiru waits after your last edit before saving automatically. First launch defaults to'
+              'How long AgentStart waits after your last edit before saving automatically. First launch defaults to'
             )}
             {DEFAULT_EDITOR_AUTO_SAVE_DELAY_MS}{' '}
             {translate('auto.components.settings.GeneralEditorSettingsSection.fc5c5306ff', 'ms.')}

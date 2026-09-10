@@ -2,15 +2,15 @@ import {
   normalizeExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { ListWorkItemsResult } from '@yiru/protocol/hosted-review/query-types'
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
-import type { Repo } from '@yiru/protocol/project/repository'
+} from '@agentstart/protocol/host/identity'
+import type { ListWorkItemsResult } from '@agentstart/protocol/hosted-review/query-types'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import {
   getProjectSourceCacheScope,
   getProjectSourceRuntimeSettings,
   type ProjectSourceContext
-} from '@yiru/protocol/project/source-context'
+} from '@agentstart/protocol/project/source-context'
 import { runtimeCallDestination } from '~renderer/runtime/github-runtime-destination'
 import { openGitHubTarget } from '~renderer/runtime/github-target'
 import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'

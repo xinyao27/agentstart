@@ -1,4 +1,4 @@
-import type { DraftPasteReadySignal } from '@yiru/protocol/agent/launch/config'
+import type { DraftPasteReadySignal } from '@agentstart/protocol/agent/launch/config'
 
 // Why: agents enable bracketed paste (DECSET 2004) before their composer is
 // actually mounted/focused. These markers let the scanner detect the real

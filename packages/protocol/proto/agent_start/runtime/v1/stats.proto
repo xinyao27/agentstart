@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+service StatsService {
+  rpc GetSummary(GetSummaryRequest) returns (GetSummaryResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+enum StatsUsageRange {
+  STATS_USAGE_RANGE_UNSPECIFIED = 0;
+  STATS_USAGE_RANGE_SEVEN_DAYS = 1;
+  STATS_USAGE_RANGE_THIRTY_DAYS = 2;
+  STATS_USAGE_RANGE_NINETY_DAYS = 3;
+  STATS_USAGE_RANGE_ALL = 4;
+}
+
+enum StatsUsageProvider {
+  STATS_USAGE_PROVIDER_UNSPECIFIED = 0;
+  STATS_USAGE_PROVIDER_CLAUDE = 1;
+  STATS_USAGE_PROVIDER_CODEX = 2;
+  STATS_USAGE_PROVIDER_OPEN_CODE = 3;
+}
+
+enum StatsUnavailableAgent {
+  STATS_UNAVAILABLE_AGENT_UNSPECIFIED = 0;
+  STATS_UNAVAILABLE_AGENT_ANTIGRAVITY = 1;
+  STATS_UNAVAILABLE_AGENT_CURSOR = 2;
+  STATS_UNAVAILABLE_AGENT_HERMES = 3;
+  STATS_UNAVAILABLE_AGENT_ROVO = 4;
+}
+
+message GetSummaryRequest {
+  bool refresh_usage = 1;
+  StatsUsageRange range = 2;
+}
+
+message GetSummaryResponse {
+  uint64 total_agents_spawned = 1;
+  uint64 total_prs_created = 2;
+  uint64 total_agent_time_ms = 3;
+  optional double first_event_at = 4;
+  repeated StatsDailyActivity daily_activity = 5;
+  repeated StatsDailyTokens daily_tokens = 6;
+  repeated StatsDailyTokens daily_unpriced_tokens = 7;
+  repeated StatsDailyValue daily_values = 8;
+  repeated StatsDailyProviderUsage daily_provider_usage = 9;
+  repeated StatsModelUsage model_usage = 10;
+  repeated StatsProjectUsage project_usage = 11;
+  bool token_data_available = 12;
+  repeated StatsUnavailableAgent token_unavailable_agents = 13;
+  StatsUsageRange usage_range = 14;
+  StatsSupplementalUsage supplemental_usage = 15;
+  bool usage_value_available = 16;
+  bool has_unpriced_usage = 17;
+}
+
+message StatsDailyActivity {
+  string day = 1;
+  uint64 agent_starts = 2;
+  uint64 prs_created = 3;
+}
+
+message StatsDailyTokens {
+  string day = 1;
+  uint64 tokens = 2;
+}
+
+message StatsDailyValue {
+  string day = 1;
+  optional double value_usd = 2;
+}
+
+message StatsProviderUsage {
+  StatsUsageProvider provider = 1;
+  uint64 tokens = 2;
+  optional double value_usd = 3;
+}
+
+message StatsDailyProviderUsage {
+  string day = 1;
+  repeated StatsProviderUsage providers = 2;
+}
+
+message StatsModelUsage {
+  string key = 1;
+  string label = 2;
+  uint64 tokens = 3;
+  optional double value_usd = 4;
+}
+
+message StatsProjectUsage {
+  string key = 1;
+  string label = 2;
+  uint64 sessions = 3;
+  uint64 tokens = 4;
+  optional double value_usd = 5;
+  repeated StatsProviderUsage providers = 6;
+}
+
+message StatsSupplementalDailyUsage {
+  string day = 1;
+  uint64 tokens = 2;
+  optional double value_usd = 3;
+  uint64 unpriced_tokens = 4;
+}
+
+message StatsSupplementalUsage {
+  repeated StatsSupplementalDailyUsage daily_tokens = 1;
+  repeated StatsModelUsage model_usage = 2;
+  optional double metered_value_usd = 3;
+}

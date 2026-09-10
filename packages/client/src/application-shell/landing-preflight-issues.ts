@@ -1,5 +1,5 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { projectHostSetupProjectionFromRepos } from '@yiru/protocol/project/setup-projection'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { projectHostSetupProjectionFromRepos } from '@agentstart/protocol/project/setup-projection'
 import { translate } from '~renderer/i18n/i18n'
 
 export type PreflightIssue = {
@@ -58,7 +58,7 @@ export function getLandingPreflightIssues(
       title: translate('auto.components.Landing.5beaef5f9e', 'GitHub CLI is not installed'),
       description: translate(
         'auto.components.Landing.73e1ad4282',
-        'Yiru uses the GitHub CLI (gh) to show pull requests and checks.'
+        'AgentStart uses the GitHub CLI (gh) to show pull requests and checks.'
       ),
       fixLabel: 'Install GitHub CLI',
       fixUrl: 'https://cli.github.com',

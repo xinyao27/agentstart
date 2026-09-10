@@ -12,7 +12,7 @@ export function isXtermHelperTextarea(target: EventTarget | null): target is HTM
   return target instanceof HTMLElement && target.classList.contains('xterm-helper-textarea')
 }
 
-export function getPaneOwnedActiveHelperTextarea(
+function getPaneOwnedActiveHelperTextarea(
   container: HTMLElement,
   activeElement: Element | null
 ): HTMLElement | null {

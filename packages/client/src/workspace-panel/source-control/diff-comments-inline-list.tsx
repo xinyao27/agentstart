@@ -1,5 +1,5 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import React from 'react'
 import { getDiffCommentLineLabel, getDiffCommentSource } from '~renderer/editor/diff-comment-compat'
 import { formatDiffComment } from '~renderer/editor/diff-comments-format'
@@ -12,7 +12,7 @@ import { cn } from '~renderer/ui/class-names'
 import { useCopyFeedbackState } from './copy-feedback-state'
 import { SOURCE_CONTROL_PANEL_GUTTER_CLASS_NAME } from './panel-constants'
 
-export function getLocalizedDiffCommentLineLabel(
+function getLocalizedDiffCommentLineLabel(
   comment: Pick<DiffComment, 'lineNumber' | 'startLine'>
 ): string {
   if (comment.startLine !== undefined && comment.startLine !== comment.lineNumber) {

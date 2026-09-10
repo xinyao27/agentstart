@@ -1,4 +1,4 @@
-import type { WorkspaceSpaceAnalysisValue as WorkspaceSpaceAnalysis } from '@yiru/protocol'
+import type { WorkspaceSpaceAnalysisValue as WorkspaceSpaceAnalysis } from '@agentstart/protocol'
 import type { StateCreator } from 'zustand'
 import {
   analyzeWorkspaceSpace as analyzeRuntimeWorkspaceSpace,

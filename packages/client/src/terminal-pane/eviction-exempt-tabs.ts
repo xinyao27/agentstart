@@ -1,4 +1,4 @@
-import { isRuntimePtyId, parseSshPtyId } from '@yiru/protocol/terminal-identity'
+import { isRuntimePtyId, parseSshPtyId } from '@agentstart/protocol/terminal-identity'
 import { useAppStore } from '~renderer/store/state'
 
 import {

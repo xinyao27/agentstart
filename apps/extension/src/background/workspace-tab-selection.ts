@@ -27,7 +27,7 @@ export function workspaceTabProjectId(url: string | undefined): string | null {
   return workspaceTabSearchParam(url, 'project')
 }
 
-export function workspaceTabWorktreeId(url: string | undefined): string | null {
+function workspaceTabWorktreeId(url: string | undefined): string | null {
   return workspaceTabSearchParam(url, 'worktree')
 }
 

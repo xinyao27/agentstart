@@ -1,5 +1,5 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { mergeExternalWorktreeInboxPaths } from '@yiru/protocol/worktree/external/paths'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { mergeExternalWorktreeInboxPaths } from '@agentstart/protocol/worktree/external/paths'
 
 export type ImportedWorktreeCardActionState = {
   pending: boolean
@@ -27,7 +27,7 @@ type ImportedWorktreeCardActionDeps = {
   refreshWorktrees: () => Promise<boolean>
 }
 
-export const IMPORTED_WORKTREES_SHOW_ERROR = 'Could not show discovered worktrees. Try again.'
+const IMPORTED_WORKTREES_SHOW_ERROR = 'Could not show discovered worktrees. Try again.'
 export const IMPORTED_WORKTREES_KEEP_HIDDEN_ERROR =
   'Could not keep discovered worktrees hidden. Try again.'
 

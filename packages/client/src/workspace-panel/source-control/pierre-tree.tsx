@@ -239,7 +239,7 @@ function SourceControlPierreTree({
     <FileTree
       id={treeHostId}
       model={model}
-      className="yiru-pierre-file-tree bg-sidebar block w-full shrink-0"
+      className="agentstart-pierre-file-tree bg-sidebar block w-full shrink-0"
       style={{ ...PIERRE_FILE_TREE_STYLE, height }}
       onClickCapture={(event) => {
         const path = findTreeItemPath(event)

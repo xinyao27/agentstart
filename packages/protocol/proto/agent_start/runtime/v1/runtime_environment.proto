@@ -1,0 +1,217 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+import "agent_start/runtime/v1/status.proto";
+
+service RuntimeEnvironmentService {
+  rpc GenerateOffer(RuntimeEnvironmentServiceGenerateOfferRequest) returns (RuntimeEnvironmentServiceGenerateOfferResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Import(RuntimeEnvironmentServiceImportRequest) returns (RuntimeEnvironmentServiceImportResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc List(RuntimeEnvironmentServiceListRequest) returns (RuntimeEnvironmentServiceListResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GetStatus(RuntimeEnvironmentServiceGetStatusRequest) returns (RuntimeEnvironmentServiceGetStatusResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Remove(RuntimeEnvironmentServiceRemoveRequest) returns (RuntimeEnvironmentServiceRemoveResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Disconnect(RuntimeEnvironmentServiceDisconnectRequest) returns (RuntimeEnvironmentServiceDisconnectResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ListPeers(RuntimeEnvironmentServiceListPeersRequest) returns (RuntimeEnvironmentServiceListPeersResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RevokePeer(RuntimeEnvironmentServiceRevokePeerRequest) returns (RuntimeEnvironmentServiceRevokePeerResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message RuntimeEnvironmentServiceGenerateOfferRequest {
+  string name = 1;
+  string address = 2;
+  optional string endpoint = 3;
+}
+
+message RuntimeEnvironmentServiceGenerateOfferResponse {
+  string peer_id = 1;
+  string endpoint = 2;
+  string pairing_offer = 3;
+}
+
+message RuntimeEnvironmentServiceImportRequest {
+  string name = 1;
+  string pairing_offer = 2;
+  optional string replace_environment_id = 3;
+}
+
+message RuntimeEnvironmentServiceImportResponse {
+  RuntimeEnvironment environment = 1;
+}
+
+message RuntimeEnvironmentServiceListRequest {}
+
+message RuntimeEnvironmentServiceListResponse {
+  repeated RuntimeEnvironment environments = 1;
+}
+
+message RuntimeEnvironmentServiceGetStatusRequest {
+  string selector = 1;
+  uint32 timeout_ms = 2;
+}
+
+message RuntimeEnvironmentServiceGetStatusResponse {
+  RuntimeEnvironment environment = 1;
+  GetStatusResponse status = 2;
+}
+
+message RuntimeEnvironmentServiceRemoveRequest {
+  string selector = 1;
+}
+
+message RuntimeEnvironmentServiceRemoveResponse {
+  RuntimeEnvironment removed = 1;
+}
+
+message RuntimeEnvironmentServiceDisconnectRequest {
+  string selector = 1;
+}
+
+message RuntimeEnvironmentServiceDisconnectResponse {
+  RuntimeEnvironment disconnected = 1;
+}
+
+message RuntimeEnvironmentServiceListPeersRequest {}
+
+message RuntimeEnvironmentServiceListPeersResponse {
+  repeated RuntimeAuthorizedPeer peers = 1;
+}
+
+message RuntimeEnvironmentServiceRevokePeerRequest {
+  string peer_id = 1;
+}
+
+message RuntimeEnvironmentServiceRevokePeerResponse {
+  RuntimeAuthorizedPeer revoked = 1;
+}
+
+message RuntimeEnvironment {
+  string id = 1;
+  string name = 2;
+  int64 created_at_unix_ms = 3;
+  int64 updated_at_unix_ms = 4;
+  optional int64 last_used_at_unix_ms = 5;
+  optional string runtime_id = 6;
+  repeated RuntimeEnvironmentEndpoint endpoints = 7;
+  string preferred_endpoint_id = 8;
+  bool pairing_required = 9;
+}
+
+message RuntimeEnvironmentEndpoint {
+  string id = 1;
+  RuntimeEnvironmentEndpointKind kind = 2;
+  string label = 3;
+  string endpoint = 4;
+}
+
+enum RuntimeEnvironmentEndpointKind {
+  RUNTIME_ENVIRONMENT_ENDPOINT_KIND_UNSPECIFIED = 0;
+  RUNTIME_ENVIRONMENT_ENDPOINT_KIND_WEBSOCKET = 1;
+}
+
+message RuntimeAuthorizedPeer {
+  string id = 1;
+  string name = 2;
+  int64 created_at_unix_ms = 3;
+  optional int64 last_seen_at_unix_ms = 4;
+}

@@ -1,14 +1,13 @@
-import type { WorktreeSetPatch } from '@yiru/protocol'
-import { getRepoExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
+import type { WorktreeSetPatch } from '@agentstart/protocol'
+import { getRepoExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
 import { readWorktreeMutationRevision } from '~renderer/project-catalog/catalog-snapshot'
 import { refreshAfterWorktreeMutation } from '~renderer/project-catalog/mutation-refresh'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
 import { setRuntimeWorktree } from '~renderer/runtime/worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 
-import { findRepoForHost } from '../../repo/state/host-identity'
 import type { AppState } from '../../store/types'
-import { findWorktreeById, getRepoIdFromWorktreeId } from './types'
+import { getRepoIdFromWorktreeId } from './types'
 
 export type WorktreeLineageUpdateResult = {
   target: ReturnType<typeof getActiveRuntimeTarget>
@@ -40,25 +39,6 @@ export async function setWorktreeLineageForRuntime(
   })
   await refreshAfterWorktreeMutation(target, repoId, result.revision)
   return { target }
-}
-
-export function getWorktreeHostId(
-  state: Pick<AppState, 'repos' | 'settings' | 'worktreesByRepo' | 'detectedWorktreesByRepo'>,
-  worktreeId: string
-): ExecutionHostId | null {
-  const worktree = findWorktreeById(state.worktreesByRepo, worktreeId)
-  if (worktree?.hostId) {
-    return worktree.hostId
-  }
-  const repoId = getRepoIdFromWorktreeId(worktreeId)
-  const detected = state.detectedWorktreesByRepo[repoId]?.worktrees.find(
-    (entry) => entry.id === worktreeId
-  )
-  if (detected?.hostId) {
-    return detected.hostId
-  }
-  const repo = findRepoForHost(state.repos, repoId, { settings: state.settings })
-  return repo ? getRepoExecutionHostId(repo) : null
 }
 
 export function resolveWorktreeRemovalHost(

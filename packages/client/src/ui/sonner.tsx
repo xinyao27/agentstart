@@ -13,7 +13,7 @@ const Toaster = ({ theme = 'system', ...props }: ToasterProps) => {
     <Sonner
       theme={theme}
       position="bottom-right"
-      // Why: Yiru has persistent bottom chrome, so bottom-right toasts need
+      // Why: AgentStart has persistent bottom chrome, so bottom-right toasts need
       // breathing room above the status bar instead of sitting on its edge.
       // mobileOffset keeps that clearance below Sonner's 600px breakpoint
       // (narrow/resized windows and the web client), which otherwise reverts

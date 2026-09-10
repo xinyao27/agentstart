@@ -1,4 +1,4 @@
-import { RATE_LIMIT_RESUME_PROTOCOL_CAPABILITY, RateLimitResumeClient } from '@yiru/protocol'
+import { RATE_LIMIT_RESUME_PROTOCOL_CAPABILITY, RateLimitResumeClient } from '@agentstart/protocol'
 
 import {
   openConfiguredBrowserHostProtocol,

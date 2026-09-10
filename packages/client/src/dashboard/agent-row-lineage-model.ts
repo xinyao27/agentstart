@@ -18,7 +18,7 @@ function buildPaneKeyByTerminalHandle<T extends DashboardAgentRow>(
   return paneKeyByTerminalHandle
 }
 
-export function resolveAgentRowParentPaneKey<T extends DashboardAgentRow>(
+function resolveAgentRowParentPaneKey<T extends DashboardAgentRow>(
   row: T,
   rowsByPaneKey: ReadonlyMap<string, T>,
   paneKeyByTerminalHandle: ReadonlyMap<string, string>

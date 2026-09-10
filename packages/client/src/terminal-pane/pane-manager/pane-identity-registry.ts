@@ -1,4 +1,4 @@
-import { isTerminalLeafId, type TerminalLeafId } from '@yiru/protocol/terminal/pane-identity'
+import { isTerminalLeafId, type TerminalLeafId } from '@agentstart/protocol/terminal/pane-identity'
 
 import { mintStablePaneId } from './mint-stable-pane-id'
 import type { ManagedPaneInternal } from './types'

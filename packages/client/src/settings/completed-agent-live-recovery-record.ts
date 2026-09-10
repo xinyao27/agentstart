@@ -3,8 +3,8 @@ import {
   getAgentResumeArgv,
   isResumableTuiAgent,
   type SleepingAgentSessionRecord
-} from '@yiru/protocol/agent/session-resume'
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/session-resume'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
 
 export function isCompletedAgentWithLiveRecoveryRecord(
   entry: AgentStatusEntry | undefined,

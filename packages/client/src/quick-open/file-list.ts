@@ -1,5 +1,5 @@
-import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import { isWindowsAbsolutePathLike } from '@agentstart/protocol/host/path'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { useEffect, useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { createBrowserUuid } from '~renderer/browser/uuid'
@@ -23,12 +23,12 @@ export type RuntimeFileListState = {
   operationOwner?: FileExplorerOperationOwner
 }
 
-export function cleanRuntimeFileListError(error: unknown): string {
+function cleanRuntimeFileListError(error: unknown): string {
   const raw = error instanceof Error ? error.message : String(error)
   return raw.replace(/^Error invoking remote method '[^']+':\s*Error:\s*/, '')
 }
 
-export function isNestedWorktreePath(parentPath: string, childPath: string): boolean {
+function isNestedWorktreePath(parentPath: string, childPath: string): boolean {
   const windowsPath = isWindowsAbsolutePathLike(parentPath)
   const parent = parentPath.replace(/[\\/]+$/, '').replace(/\\/g, '/')
   const child = childPath.replace(/\\/g, '/')
@@ -40,7 +40,7 @@ export function isNestedWorktreePath(parentPath: string, childPath: string): boo
   return comparableChild.startsWith(`${comparableParent}/`)
 }
 
-export function getNestedWorktreeExcludePaths(
+function getNestedWorktreeExcludePaths(
   worktreeId: string,
   worktreePath: string,
   repoWorktrees: readonly Worktree[]
@@ -53,18 +53,18 @@ export function getNestedWorktreeExcludePaths(
     .sort()
 }
 
-export type NestedWorktreeExcludeRequest = {
+type NestedWorktreeExcludeRequest = {
   paths: string[]
   key: string
 }
 
-export type RuntimeFileListTarget = {
+type RuntimeFileListTarget = {
   canList: boolean
   excludeRequest: NestedWorktreeExcludeRequest
   worktreePath: string | null
 }
 
-export function getRuntimeFileListTarget(
+function getRuntimeFileListTarget(
   worktreeId: string | null,
   worktreePath: string | null | undefined,
   repoWorktrees: readonly Worktree[]
@@ -84,7 +84,7 @@ export function getRuntimeFileListTarget(
   }
 }
 
-export function getNestedWorktreeExcludeRequest(
+function getNestedWorktreeExcludeRequest(
   worktreeId: string | null,
   worktreePath: string | null,
   repoWorktrees: readonly Worktree[]

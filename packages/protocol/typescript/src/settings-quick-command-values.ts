@@ -11,7 +11,7 @@ import {
   type SettingsQuickCommandMutation as ProtocolCommandMutation,
   type SettingsQuickCommand as ProtocolCommand,
   type SettingsQuickCommandScope as ProtocolCommandScope
-} from '../generated/yiru/runtime/v1/settings_pb.js'
+} from '../generated/agent_start/runtime/v1/settings_pb.js'
 import type { TerminalQuickCommand, TerminalQuickCommandMutation } from './settings-values.js'
 
 export function quickCommandMutation(

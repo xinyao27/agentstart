@@ -60,6 +60,8 @@ fn load_file(path: &Path) -> Result<NotificationSoundData, NotificationSoundUnav
     if !path.is_absolute() {
         return Err(NotificationSoundUnavailable::InvalidPath);
     }
+    let before_identity =
+        crate::file_identity::FileIdentity::from_path(path).map_err(classify_open_error)?;
     let before = fs::symlink_metadata(path).map_err(classify_path_error)?;
     if metadata_is_link_like(&before) || !before.is_file() {
         return Err(NotificationSoundUnavailable::InvalidPath);
@@ -75,9 +77,12 @@ fn load_file(path: &Path) -> Result<NotificationSoundData, NotificationSoundUnav
     let opened = file
         .metadata()
         .map_err(|_| NotificationSoundUnavailable::ReadFailed)?;
+    let opened_identity = crate::file_identity::FileIdentity::from_file(&file)
+        .map_err(|_| NotificationSoundUnavailable::ReadFailed)?;
     if metadata_is_link_like(&opened)
         || !opened.is_file()
-        || file_identity_changed(&before, &opened)
+        || before_identity != opened_identity
+        || file_metadata_changed(&before, &opened)
     {
         return Err(NotificationSoundUnavailable::InvalidPath);
     }
@@ -97,7 +102,7 @@ fn load_file(path: &Path) -> Result<NotificationSoundData, NotificationSoundUnav
     let after = file
         .metadata()
         .map_err(|_| NotificationSoundUnavailable::ReadFailed)?;
-    if file_identity_changed(&opened, &after) || after.len() != bytes.len() as u64 {
+    if file_metadata_changed(&opened, &after) || after.len() != bytes.len() as u64 {
         return Err(NotificationSoundUnavailable::ReadFailed);
     }
     let mime_type =
@@ -185,7 +190,7 @@ fn metadata_is_link_like(metadata: &fs::Metadata) -> bool {
 }
 
 #[cfg(unix)]
-fn file_identity_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
+fn file_metadata_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
     use std::os::unix::fs::MetadataExt as _;
 
     before.len() != opened.len()
@@ -195,18 +200,16 @@ fn file_identity_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
 }
 
 #[cfg(windows)]
-fn file_identity_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
+fn file_metadata_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
     use std::os::windows::fs::MetadataExt as _;
 
     before.len() != opened.len()
-        || before.volume_serial_number() != opened.volume_serial_number()
-        || before.file_index() != opened.file_index()
         || before.creation_time() != opened.creation_time()
         || before.last_write_time() != opened.last_write_time()
 }
 
 #[cfg(not(any(unix, windows)))]
-fn file_identity_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
+fn file_metadata_changed(before: &fs::Metadata, opened: &fs::Metadata) -> bool {
     before.len() != opened.len() || metadata_modified(before) != metadata_modified(opened)
 }
 

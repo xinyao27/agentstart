@@ -178,7 +178,7 @@ function MetricDisclosure({
             ? translate('auto.components.home.page.calculatingValue', 'Calculating…')
             : translate(
                 'auto.components.home.page.tokensUnavailable',
-                'No Claude, Codex, or OpenCode token usage attributed to Yiru worktrees is available yet.'
+                'No Claude, Codex, or OpenCode token usage attributed to AgentStart worktrees is available yet.'
               )}
         </p>
         <CursorMeteredDisclosure valueUsd={meteredValueUsd} />
@@ -194,7 +194,7 @@ function MetricDisclosure({
             : hasValue
               ? translate(
                   'auto.components.home.page.valueCoverage',
-                  'Standard global API-equivalent value sums authoritative per-request model pricing for usage attributed to Yiru worktrees. Unpriced token categories and session totals without request attribution are excluded; this is not a bill.'
+                  'Standard global API-equivalent value sums authoritative per-request model pricing for usage attributed to AgentStart worktrees. Unpriced token categories and session totals without request attribution are excluded; this is not a bill.'
                 )
               : translate(
                   'auto.components.home.page.valueUnavailable',
@@ -210,7 +210,7 @@ function MetricDisclosure({
       <p className="text-muted-foreground mt-4 text-xs">
         {translate(
           'auto.components.home.page.tokenCoverage',
-          'Token totals use request-attributed Claude, Codex, and OpenCode records from Yiru worktrees; cached input is not counted twice, and session totals without request attribution are excluded.'
+          'Token totals use request-attributed Claude, Codex, and OpenCode records from AgentStart worktrees; cached input is not counted twice, and session totals without request attribution are excluded.'
         )}
         {hasUnpricedUsage
           ? ` ${translate(
@@ -295,7 +295,7 @@ function metricDescription(metric: TokenValueMetric): string {
     case 'tokens':
       return translate(
         'auto.components.home.page.tokenDescription',
-        'Provider-reported token usage attributed to Yiru worktrees.'
+        'Provider-reported token usage attributed to AgentStart worktrees.'
       )
     case 'value':
       return translate(

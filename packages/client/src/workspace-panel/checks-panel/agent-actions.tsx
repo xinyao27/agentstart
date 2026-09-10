@@ -1,4 +1,4 @@
-import type { PRCheckRunDetails } from '@yiru/protocol/hosted-review/review-types'
+import type { PRCheckRunDetails } from '@agentstart/protocol/hosted-review/review-types'
 import { toast } from 'sonner'
 import { startFixChecksAgent } from '~renderer/editor/fix-checks-agent-launch'
 import { translate } from '~renderer/i18n/i18n'

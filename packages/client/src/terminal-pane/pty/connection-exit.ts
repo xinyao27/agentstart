@@ -1,4 +1,4 @@
-import type { SleepingAgentSessionRecord } from '@yiru/protocol/agent/session-resume'
+import type { SleepingAgentSessionRecord } from '@agentstart/protocol/agent/session-resume'
 import { useAppStore } from '~renderer/store/state'
 import type { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'
 

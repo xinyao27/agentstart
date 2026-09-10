@@ -1,10 +1,10 @@
-import type { AiVaultAgent } from '@yiru/protocol/ai-vault/providers'
+import type { AiVaultAgent } from '@agentstart/protocol/ai-vault/providers'
 
 export type AiVaultScope = 'workspace' | 'project' | 'all'
 export type AiVaultSort = 'updated' | 'created'
 export type AiVaultGroup = 'project' | 'folder' | 'agent'
 
-export const AI_VAULT_AGENT_LABELS = {
+const AI_VAULT_AGENT_LABELS = {
   claude: 'Claude',
   codex: 'Codex',
   hermes: 'Hermes',

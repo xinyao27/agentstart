@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { cn } from '~renderer/ui/class-names'
 
 export function ChromePreview({ variant }: { variant: GlobalSettings['theme'] }) {
@@ -28,7 +28,7 @@ export function ChromePreview({ variant }: { variant: GlobalSettings['theme'] })
 }
 
 function ChromeMock({ dark }: { dark: boolean }) {
-  // Tiny Yiru chrome: sidebar with two rows + a content area with a tab and
+  // Tiny AgentStart chrome: sidebar with two rows + a content area with a tab and
   // a composer line. Pure Tailwind so it stays lightweight inside the tile.
   // Why: these fixed washes are user theme preview data, not live app chrome.
   const bg = dark ? 'bg-[#0f1115]' : 'bg-[#f7f8fa]'
@@ -41,33 +41,33 @@ function ChromeMock({ dark }: { dark: boolean }) {
   return (
     <div className={cn('flex size-full', bg)}>
       <div className={cn('flex w-[34%] flex-col gap-1 border-r p-1.5', sidebar, sidebarBorder)}>
-        <div className={cn('h-1 w-7', rowDim)} />
+        <div className={cn('h-1 w-7 rounded-sm', rowDim)} />
         <div className="mt-0.5 flex items-center gap-1">
-          <span className={cn('size-1', accent)} />
-          <span className={cn('h-1 flex-1', row)} />
+          <span className={cn('size-1 rounded-full', accent)} />
+          <span className={cn('h-1 flex-1 rounded-sm', row)} />
         </div>
         <div className="flex items-center gap-1">
-          <span className={cn('size-1', rowDim)} />
-          <span className={cn('h-1 flex-1', rowDim)} />
+          <span className={cn('size-1 rounded-full', rowDim)} />
+          <span className={cn('h-1 flex-1 rounded-sm', rowDim)} />
         </div>
         <div className="flex items-center gap-1">
-          <span className={cn('size-1', rowDim)} />
-          <span className={cn('h-1 w-3/4', rowDim)} />
+          <span className={cn('size-1 rounded-full', rowDim)} />
+          <span className={cn('h-1 w-3/4 rounded-sm', rowDim)} />
         </div>
       </div>
       <div className="flex flex-1 flex-col p-1.5">
         <div className="flex gap-1">
-          <div className={cn('h-2 w-8 border', tab)} />
-          <div className={cn('h-2 w-5', rowDim)} />
+          <div className={cn('h-2 w-8 rounded-sm border', tab)} />
+          <div className={cn('h-2 w-5 rounded-sm', rowDim)} />
         </div>
         <div className="mt-1.5 flex-1 space-y-1">
-          <div className={cn('h-1 w-full', rowDim)} />
-          <div className={cn('h-1 w-5/6', rowDim)} />
-          <div className={cn('h-1 w-2/3', rowDim)} />
+          <div className={cn('h-1 w-full rounded-sm', rowDim)} />
+          <div className={cn('h-1 w-5/6 rounded-sm', rowDim)} />
+          <div className={cn('h-1 w-2/3 rounded-sm', rowDim)} />
         </div>
-        <div className={cn('mt-1 flex h-2.5 items-center gap-1 border px-1', tab)}>
-          <span className={cn('size-1', accent)} />
-          <span className={cn('h-0.5 flex-1', rowDim)} />
+        <div className={cn('mt-1 flex h-2.5 items-center gap-1 rounded-sm border px-1', tab)}>
+          <span className={cn('size-1 rounded-full', accent)} />
+          <span className={cn('h-0.5 flex-1 rounded-sm', rowDim)} />
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import type {
   TerminalQuickCommand,
   TerminalQuickCommandScope
-} from '@yiru/protocol/terminal/quick-commands'
+} from '@agentstart/protocol/terminal/quick-commands'
 import type { Dispatch, SetStateAction } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import RepoBadgeLabel from '~renderer/repo/badge-label'
@@ -26,7 +26,7 @@ function getRepoLabel(repo: Pick<Repo, 'displayName' | 'path'>): string {
   return repo.displayName || repo.path
 }
 
-export function getQuickCommandProjectScopeRepoId(
+function getQuickCommandProjectScopeRepoId(
   repos: Pick<Repo, 'id'>[],
   lastRepoScopeId: string | null
 ): string | null {

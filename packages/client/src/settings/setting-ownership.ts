@@ -1,10 +1,6 @@
 import { translate } from '~renderer/i18n/i18n'
 
-export type SettingOwnership =
-  | 'client-default'
-  | 'host-override'
-  | 'project-host-setup'
-  | 'provider-host'
+type SettingOwnership = 'client-default' | 'host-override' | 'project-host-setup' | 'provider-host'
 
 type SettingOwnershipSummary = {
   ownership: SettingOwnership

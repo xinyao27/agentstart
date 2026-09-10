@@ -1,4 +1,8 @@
-import type { CodexUsageLimitProbe, RateLimitHit, RateLimitResumeSchedule } from '@yiru/protocol'
+import type {
+  CodexUsageLimitProbe,
+  RateLimitHit,
+  RateLimitResumeSchedule
+} from '@agentstart/protocol'
 
 import { openRateLimitResumeTarget } from './rate-limit-resume-target'
 

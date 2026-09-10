@@ -1,5 +1,8 @@
-import type { ProviderRateLimits, RateLimitRuntimeTarget } from '@yiru/protocol/account-rate-types'
-import type { CodexSystemDefaultIdentity } from '@yiru/protocol/settings/managed-accounts'
+import type {
+  ProviderRateLimits,
+  RateLimitRuntimeTarget
+} from '@agentstart/protocol/account-rate-types'
+import type { CodexSystemDefaultIdentity } from '@agentstart/protocol/settings/managed-accounts'
 import { isCodexAuthError } from '~renderer/codex-auth-errors'
 
 type AccountRuntime = {
@@ -7,7 +10,7 @@ type AccountRuntime = {
   wslDistro?: string | null
 }
 
-export function codexRateLimitTargetMatchesAccountRuntime(
+function codexRateLimitTargetMatchesAccountRuntime(
   target: RateLimitRuntimeTarget,
   runtime: AccountRuntime
 ): boolean {

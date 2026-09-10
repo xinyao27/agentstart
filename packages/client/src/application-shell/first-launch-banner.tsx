@@ -1,10 +1,10 @@
 // Existing-user first-launch notice. Shown to users whose cohort marker is
 // `existedBeforeTelemetryRelease === true` and whose `optedIn` is still
-// `null`, i.e. users who installed Yiru before the telemetry release and
+// `null`, i.e. users who installed AgentStart before the telemetry release and
 // have not yet resolved the notice.
 //
 // Why existing users see a notice at all (and new users do not): pre-
-// telemetry users installed Yiru under a "no telemetry" social contract,
+// telemetry users installed AgentStart under a "no telemetry" social contract,
 // so default-on for them would be a silent policy flip. New users are
 // covered by the install-time disclosure and receive no first-launch UI —
 // see telemetry-plan.md §First-launch experience.
@@ -127,7 +127,7 @@ export function FirstLaunchBanner({
     // `relative` is load-bearing: the absolutely-positioned ✕ anchors to
     // this container.
     <div
-      className="border-border bg-card fixed top-2 left-1/2 z-40 flex w-[min(44.625rem,calc(100vw-2rem))] -translate-x-1/2 items-start gap-4 border py-3 pr-3 pl-4"
+      className="border-border bg-card fixed top-2 left-1/2 z-40 flex w-[min(44.625rem,calc(100vw-2rem))] -translate-x-1/2 items-start gap-4 rounded-lg border py-3 pr-3 pl-4"
       role="region"
       aria-label={translate('auto.components.FirstLaunchBanner.fcbee32f08', 'Telemetry notice')}
       aria-live="polite"

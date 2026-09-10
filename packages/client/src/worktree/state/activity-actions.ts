@@ -6,9 +6,9 @@ import { refreshOwnedWorktreeCatalog } from '~renderer/worktree/catalog-refresh'
 
 import { refreshHostedReviewCard } from '../../source-control/hosted-review-state/slice'
 import type { AppState } from '../../store/types'
+import { persistWorktreeActivity } from './activity-persistence'
 import { reconcileHydratedWorktreeReferences } from './hydration-reconciliation'
 import { findKnownWorktreeById, isRuntimeSelectorNotFoundError } from './known-model'
-import { persistWorktreeMeta } from './review-resolver'
 import { settingsForWorktreeOwner } from './runtime-owner'
 import type { WorktreeSlice } from './types'
 
@@ -41,7 +41,7 @@ export function createWorktreeActivityActions(
       updateProjectCatalogWorktree(worktreeId, { isUnread: true, lastActivityAt: now })
       set((current) => ({ sortEpoch: current.sortEpoch + 1 }))
 
-      void persistWorktreeMeta(settingsForWorktreeOwner(state, worktreeId), worktreeId, {
+      void persistWorktreeActivity(settingsForWorktreeOwner(state, worktreeId), worktreeId, {
         isUnread: true,
         lastActivityAt: now
       }).catch((err) => {
@@ -123,7 +123,7 @@ export function createWorktreeActivityActions(
       }
       updateProjectCatalogWorktree(worktreeId, { isUnread: false })
 
-      void persistWorktreeMeta(settingsForWorktreeOwner(state, worktreeId), worktreeId, {
+      void persistWorktreeActivity(settingsForWorktreeOwner(state, worktreeId), worktreeId, {
         isUnread: false
       }).catch((err) => {
         if (isRuntimeSelectorNotFoundError(err)) {
@@ -156,7 +156,7 @@ export function createWorktreeActivityActions(
         return isActive ? {} : { sortEpoch: s.sortEpoch + 1 }
       })
 
-      void persistWorktreeMeta(settingsForWorktreeOwner(state, worktreeId), worktreeId, {
+      void persistWorktreeActivity(settingsForWorktreeOwner(state, worktreeId), worktreeId, {
         lastActivityAt: now
       }).catch((err) => {
         if (isRuntimeSelectorNotFoundError(err)) {

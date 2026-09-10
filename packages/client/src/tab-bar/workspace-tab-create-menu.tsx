@@ -86,7 +86,7 @@ export function WorkspaceTabCreateMenu({
       <DropdownMenuContent
         align="start"
         sideOffset={6}
-        className="border-border/80 w-72 max-w-[calc(100vw-1rem)] p-1"
+        className="border-border/80 w-72 max-w-[calc(100vw-1rem)] rounded-lg p-1"
         finalFocus={finalFocus}
       >
         {children}
@@ -108,7 +108,7 @@ export function WorkspaceNewTerminalMenuItem({
     <DropdownMenuItem
       disabled={disabled}
       onClick={onSelect}
-      className="gap-2 px-2 py-1.5 text-[12px] leading-5 font-medium"
+      className="gap-2 rounded-[7px] px-2 py-1.5 text-[12px] leading-5 font-medium"
     >
       <TerminalSquare className="text-muted-foreground size-4" />
       <span className="flex-1">

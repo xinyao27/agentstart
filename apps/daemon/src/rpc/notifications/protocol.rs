@@ -1,31 +1,28 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::load_custom_sound_response::Event as SoundEvent;
-use yiru_protocol::runtime::v1::replay_notification_event::Event;
-use yiru_protocol::runtime::v1::subscribe_response::Event as SubscribeEvent;
-use yiru_protocol::runtime::v1::{
-    ApnsEnvironment as ProtocolApnsEnvironment, DismissRequest, DismissResponse,
-    GetMissedSinceRequest, GetMissedSinceResponse, LoadCustomSoundRequest, LoadCustomSoundResponse,
-    NotificationDismiss, NotificationDispatch, NotificationReportReason,
-    NotificationSoundAssetChunk, NotificationSoundAssetStart, NotificationSoundNotModified,
-    NotificationSoundUnavailable as ProtocolSoundUnavailable, NotificationSoundUnavailableReason,
-    NotificationSource as ProtocolNotificationSource, RegisterPushRequest, RegisterPushResponse,
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::load_custom_sound_response::Event as SoundEvent;
+use agentstart_protocol::runtime::v1::replay_notification_event::Event;
+use agentstart_protocol::runtime::v1::subscribe_response::Event as SubscribeEvent;
+use agentstart_protocol::runtime::v1::{
+    DismissRequest, DismissResponse, GetMissedSinceRequest, GetMissedSinceResponse,
+    LoadCustomSoundRequest, LoadCustomSoundResponse, NotificationDismiss, NotificationDispatch,
+    NotificationReportReason, NotificationSoundAssetChunk, NotificationSoundAssetStart,
+    NotificationSoundNotModified, NotificationSoundUnavailable as ProtocolSoundUnavailable,
+    NotificationSoundUnavailableReason, NotificationSource as ProtocolNotificationSource,
     ReplayNotificationEvent, ReportRequest, ReportResponse, SubscribeRequest, SubscribeResponse,
     SubscriptionReady,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
-use crate::mobile::{ApnsEnvironment, MobileDeviceStore, MobileDeviceStoreError, PushRegistration};
 use crate::notifications::{
     MobileNotificationEvent, NotificationAuthority, NotificationError, NotificationSoundAuthority,
     NotificationSoundLoad, NotificationSoundUnavailable, NotificationSource,
     ReplayableNotification,
 };
 
-use super::super::protocol_call::{ProtocolAccessContext, ProtocolCallContext};
+use super::super::protocol_call::ProtocolCallContext;
 use super::NotificationsRpc;
 use super::input::ReportInput;
 
-const MAX_APNS_TOKEN_BYTES: usize = 512;
 const NOTIFICATION_SOUND_CHUNK_BYTES: usize = 256 * 1024;
 
 pub(in crate::rpc) async fn dismiss(
@@ -238,20 +235,6 @@ pub(in crate::rpc) async fn get_missed_since(
     Ok(encode(&GetMissedSinceResponse { notifications }))
 }
 
-pub(in crate::rpc) async fn register_push(
-    devices: &MobileDeviceStore,
-    payload: &[u8],
-    access: &ProtocolAccessContext,
-) -> Result<Vec<u8>, Status> {
-    let request = decode::<RegisterPushRequest>(payload)?;
-    let registration = push_registration(request)?;
-    let registered = devices
-        .register_push(access.principal_id().to_owned(), registration)
-        .await
-        .map_err(device_status)?;
-    Ok(encode(&RegisterPushResponse { registered }))
-}
-
 pub(in crate::rpc) async fn subscribe(
     authority: &NotificationAuthority,
     payload: &[u8],
@@ -279,41 +262,6 @@ pub(in crate::rpc) async fn subscribe(
             .await?;
     }
     Ok(())
-}
-
-fn push_registration(request: RegisterPushRequest) -> Result<Option<PushRegistration>, Status> {
-    let (environment, token) = match (request.environment, request.token) {
-        (None, None) => return Ok(None),
-        (Some(environment), Some(token)) => (environment, token),
-        (None, Some(_)) | (Some(_), None) => {
-            return Err(status(
-                StatusCode::InvalidArgument,
-                "APNs environment and token must be provided together",
-            ));
-        }
-    };
-    let environment = match ProtocolApnsEnvironment::try_from(environment) {
-        Ok(ProtocolApnsEnvironment::Production) => ApnsEnvironment::Production,
-        Ok(ProtocolApnsEnvironment::Sandbox) => ApnsEnvironment::Sandbox,
-        Ok(ProtocolApnsEnvironment::Unspecified) | Err(_) => {
-            return Err(status(
-                StatusCode::InvalidArgument,
-                "APNs environment is invalid",
-            ));
-        }
-    };
-    if !valid_apns_token(&token) {
-        return Err(status(StatusCode::InvalidArgument, "APNs token is invalid"));
-    }
-    Ok(Some(PushRegistration { environment, token }))
-}
-
-fn valid_apns_token(token: &str) -> bool {
-    let bytes = token.as_bytes();
-    !bytes.is_empty()
-        && bytes.len() <= MAX_APNS_TOKEN_BYTES
-        && bytes.len().is_multiple_of(2)
-        && bytes.iter().all(u8::is_ascii_hexdigit)
 }
 
 fn replay_event(notification: ReplayableNotification) -> Result<ReplayNotificationEvent, Status> {
@@ -364,16 +312,6 @@ fn notification_status(error: NotificationError) -> Status {
         | NotificationError::Storage(_) => StatusCode::Internal,
     };
     status(code, "Notification replay could not be read")
-}
-
-fn device_status(error: MobileDeviceStoreError) -> Status {
-    let code = match error {
-        MobileDeviceStoreError::WorkerUnavailable => StatusCode::Unavailable,
-        MobileDeviceStoreError::Clock(_)
-        | MobileDeviceStoreError::Random(_)
-        | MobileDeviceStoreError::Storage(_) => StatusCode::Internal,
-    };
-    status(code, "Push registration could not be stored")
 }
 
 fn status(code: StatusCode, message: &str) -> Status {

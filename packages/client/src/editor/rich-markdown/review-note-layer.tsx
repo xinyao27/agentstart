@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 import { DiffCommentCard } from '~renderer/diff-comments/diff-comment-card'
 import { translate } from '~renderer/i18n/i18n'
 import { Check, Copy } from '~renderer/icons/hugeicons'
@@ -68,7 +68,7 @@ export function RichMarkdownReviewNoteLayer({
           data-rich-markdown-review-note-id={comment.id}
           // Why: `rich-markdown-review-note-card` plus `is-active`/`is-attention`
           // stay stable hooks for the highlight/attention treatment painted on
-          // the nested `.yiru-diff-comment-card` in rich-markdown-content.css —
+          // the nested `.agentstart-diff-comment-card` in rich-markdown-content.css —
           // DiffCommentCard is a separate component with no shared JSX here.
           className={cn(
             'rich-markdown-review-note-card absolute right-0 w-full pointer-events-auto',

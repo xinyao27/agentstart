@@ -40,7 +40,7 @@ export function MobileEmulatorAgentSetupGuide({
         'auto.components.emulator.pane.MobileEmulatorAgentSetupGuide.2fda9ff015',
         'Set up agent control'
       )}
-      className="border-border bg-card text-card-foreground overflow-hidden border"
+      className="border-border bg-card text-card-foreground overflow-hidden rounded-lg border"
     >
       <div className="flex items-center gap-2 px-3 py-2">
         <p className="text-muted-foreground min-w-0 flex-1 text-[11px] leading-4">
@@ -61,7 +61,7 @@ export function MobileEmulatorAgentSetupGuide({
               </span>
               {translate(
                 'auto.components.emulator.pane.MobileEmulatorAgentSetupGuide.72736b051f',
-                'Set up Yiru CLI + skill when you want agents to drive this simulator.'
+                'Set up AgentStart CLI + skill when you want agents to drive this simulator.'
               )}
             </>
           )}
@@ -124,7 +124,7 @@ export function MobileEmulatorAgentSetupGuide({
           <div className="flex items-center justify-end py-1.5">
             <span
               className={cn(
-                'px-2 py-0.5 text-[10px] font-medium',
+                'px-2 py-0.5 text-[10px] font-medium rounded-full',
                 setup.setupComplete
                   ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'
                   : 'bg-muted text-muted-foreground'

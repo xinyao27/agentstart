@@ -11,17 +11,17 @@
 // The renderer does NOT bundle `posthog-node` or any PostHog SDK. There is
 // one PostHog client in the process tree and it lives in main. That
 // invariant is what keeps the vendor out of the renderer's attack surface.
-import type { TelemetryConsentState } from '@yiru/protocol/telemetry/consent'
-import type { EventName, EventProps } from '@yiru/protocol/telemetry/events/catalog'
+import type { TelemetryConsentState } from '@agentstart/protocol/telemetry/consent'
+import type { EventName, EventProps } from '@agentstart/protocol/telemetry/events/catalog'
 import { shellClient } from '~renderer/runtime/shell-client'
 
-export { tuiAgentToAgentKind } from '@yiru/protocol/telemetry/agent-kind'
+export { tuiAgentToAgentKind } from '@agentstart/protocol/telemetry/agent-kind'
 
 // Why: single source-of-truth for the privacy doc URL linked from the two
 // telemetry surfaces (FirstLaunchBanner, PrivacyPane). Keeping it here — in
 // the shared telemetry lib — prevents the surfaces from drifting if the doc
 // ever moves.
-export const PRIVACY_URL = 'https://yiru.ai/docs/telemetry'
+export const PRIVACY_URL = 'https://github.com/xinyao27/agentstart/blob/main/PRIVACY.md'
 
 // Why: the IPC boundary is untyped at runtime, so a malformed payload from
 // main would otherwise let the Privacy pane render on garbage. Validate the
@@ -38,7 +38,7 @@ function isTelemetryConsentState(x: unknown): x is TelemetryConsentState {
   }
   if (e === 'disabled') {
     const r = (x as { reason?: unknown }).reason
-    return r === 'do_not_track' || r === 'yiru_disabled' || r === 'ci' || r === 'user_opt_out'
+    return r === 'do_not_track' || r === 'agentstart_disabled' || r === 'ci' || r === 'user_opt_out'
   }
   return false
 }

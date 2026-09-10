@@ -13,7 +13,7 @@ import {
   TerminalServiceRestartManagedRequestSchema,
   TerminalServiceRestartManagedResponseSchema,
   type TerminalManagedSession as ProtocolManagedSession
-} from '../../generated/yiru/runtime/v1/terminal_pb.js'
+} from '../../generated/agent_start/runtime/v1/terminal_pb.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { TerminalAgentClient } from './agent-client.js'
 import { required, safeInteger } from './request-values.js'

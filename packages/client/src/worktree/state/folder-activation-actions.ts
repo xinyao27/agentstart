@@ -1,4 +1,4 @@
-import { folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import type { StateCreator } from 'zustand'
 import { markInputQuietSchedulerInput } from '~renderer/keyboard-input/quiet-scheduler'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'

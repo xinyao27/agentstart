@@ -20,7 +20,7 @@ import {
   RepoServiceRmResponseSchema,
   RepoServiceUpdateRequestSchema,
   RepoServiceUpdateResponseSchema
-} from '../generated/yiru/runtime/v1/repo_pb.js'
+} from '../generated/agent_start/runtime/v1/repo_pb.js'
 import { RepoPresetClient } from './repo-preset-client.js'
 import { required, revision, revisionInput } from './repo-refs-client.js'
 import type {

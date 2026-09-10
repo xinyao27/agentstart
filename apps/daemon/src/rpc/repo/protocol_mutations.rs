@@ -1,7 +1,6 @@
-use serde_json::{Map, Value, json};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::repo_service_create_response::Result as CreateResult;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::repo_service_create_response::Result as CreateResult;
+use agentstart_protocol::runtime::v1::{
     RepoExternalWorktreeVisibility, RepoForgeRemotePreference, RepoForkSyncMode, RepoKind,
     RepoReorderStatus, RepoServiceCloneRequest, RepoServiceCloneResponse, RepoServiceCreateRequest,
     RepoServiceCreateResponse, RepoServiceCreateSuccess, RepoServiceGitAvailableRequest,
@@ -10,7 +9,8 @@ use yiru_protocol::runtime::v1::{
     RepoServiceUpdateResponse, RepoUpdateFields, repo_nullable_double,
     repo_nullable_source_control_ai,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::{Map, Value, json};
 
 use super::RepoRpc;
 use super::input::source_ai;
@@ -338,7 +338,9 @@ fn finite(value: f64) -> Result<f64, Status> {
     }
 }
 
-fn nullable_finite(value: yiru_protocol::runtime::v1::RepoNullableDouble) -> Result<Value, Status> {
+fn nullable_finite(
+    value: agentstart_protocol::runtime::v1::RepoNullableDouble,
+) -> Result<Value, Status> {
     match value.value {
         Some(repo_nullable_double::Value::Null(_)) => Ok(Value::Null),
         Some(repo_nullable_double::Value::Number(value)) if value.is_finite() => Ok(json!(value)),

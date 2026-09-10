@@ -122,7 +122,7 @@ impl TerminalSessionAuthority {
         self.state
             .with_mut(&request.terminal, |record| {
                 if record.process_exit_code.is_some() || record.control.is_none() {
-                    return Err(TerminalSessionError::NotWritable);
+                    return Err(TerminalSessionError::NotFound);
                 }
                 if request.input_kind == Some(TerminalSendInputKind::QueryReply) {
                     let authorized = request.client.as_ref().is_some_and(|client| {
@@ -156,7 +156,7 @@ impl TerminalSessionAuthority {
                     control: record
                         .control
                         .clone()
-                        .ok_or(TerminalSessionError::NotWritable)?,
+                        .ok_or(TerminalSessionError::NotFound)?,
                     lease: InputLease {
                         handle: request.terminal.clone(),
                         reservation,
@@ -175,10 +175,10 @@ impl TerminalSessionAuthority {
     ) -> Result<(), TerminalSessionError> {
         self.state
             .with(handle, |record| {
-                if record.process_exit_code.is_some()
-                    || record.control.is_none()
-                    || record.input_reservation != Some(reservation)
-                {
+                if record.process_exit_code.is_some() || record.control.is_none() {
+                    return Err(TerminalSessionError::NotFound);
+                }
+                if record.input_reservation != Some(reservation) {
                     return Err(TerminalSessionError::NotWritable);
                 }
                 if request.require_agent_sendable {

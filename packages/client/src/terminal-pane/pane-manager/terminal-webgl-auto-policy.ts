@@ -21,7 +21,7 @@ export function resetTerminalWebglAutoDecision(): void {
   cachedDecision = null
 }
 
-export function isLinuxRendererHost(
+function isLinuxRendererHost(
   platform: string = typeof navigator === 'undefined' ? '' : navigator.platform,
   userAgent: string = typeof navigator === 'undefined' ? '' : navigator.userAgent
 ): boolean {

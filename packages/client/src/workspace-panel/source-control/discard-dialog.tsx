@@ -1,4 +1,4 @@
-import type { GitStatusEntry } from '@yiru/protocol/git/status-types'
+import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import { useRef } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Trash, ArrowCounterClockwise as Undo2 } from '~renderer/icons/hugeicons'
@@ -76,7 +76,7 @@ export function SourceControlDiscardDialog({
           </DialogDescription>
         </DialogHeader>
         {pendingDiscard?.kind === 'area' ? (
-          <div className="border-border/70 bg-muted/35 text-muted-foreground border px-3 py-2 text-xs">
+          <div className="border-border/70 bg-muted/35 text-muted-foreground rounded-md border px-3 py-2 text-xs">
             {pendingDiscard.paths.length}{' '}
             {pendingDiscard.paths.length === 1
               ? translate(
@@ -89,7 +89,7 @@ export function SourceControlDiscardDialog({
                 )}
           </div>
         ) : pendingDiscard?.kind === 'entry' ? (
-          <div className="border-border/70 bg-muted/35 border px-3 py-2 text-xs">
+          <div className="border-border/70 bg-muted/35 rounded-md border px-3 py-2 text-xs">
             <div className="text-foreground font-medium break-all">{pendingDiscard.entry.path}</div>
           </div>
         ) : null}

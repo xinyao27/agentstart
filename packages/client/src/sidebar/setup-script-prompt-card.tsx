@@ -1,4 +1,4 @@
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -222,7 +222,7 @@ function SetupScriptPromptCard(): React.JSX.Element | null {
             onOpenSettings: () => openLocalCommandSettings(importedRepoId),
             description: translate(
               'auto.components.sidebar.SetupScriptPromptCard.a49196d538',
-              'Runs when Yiru creates a new worktree.'
+              'Runs when AgentStart creates a new worktree.'
             )
           })
         }

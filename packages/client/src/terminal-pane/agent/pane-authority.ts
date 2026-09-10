@@ -1,4 +1,4 @@
-import { parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 
 type AgentPaneAuthorityAlias = {
   ownerPaneKey: string
@@ -39,7 +39,7 @@ export function transferAgentPaneAuthorityAlias(args: {
   }
   const ptyId = args.ptyId?.trim() || aliasesByPhysicalPaneKey.get(physicalPaneKey)?.ptyId || null
   if (physicalPaneKey !== args.toPaneKey) {
-    // Why: the process keeps posting its original YIRU_PANE_KEY after detach;
+    // Why: the process keeps posting its original AGENTSTART_PANE_KEY after detach;
     // one physical-to-owner alias keeps chained moves on the current surface.
     aliasesByPhysicalPaneKey.set(physicalPaneKey, {
       ownerPaneKey: args.toPaneKey,

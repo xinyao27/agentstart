@@ -1,22 +1,19 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   WorkspaceSpaceService,
   WorkspaceSpaceServiceAnalyzeRequestSchema,
   WorkspaceSpaceServiceAnalyzeResponseSchema,
   WorkspaceSpaceServiceCancelRequestSchema,
   WorkspaceSpaceServiceCancelResponseSchema
-} from '../generated/yiru/runtime/v1/workspace_space_pb.js'
+} from '../generated/agent_start/runtime/v1/workspace_space_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 import {
-  WORKSPACE_SPACE_PROTOCOL_CAPABILITY,
   workspaceSpaceAnalysis,
   type WorkspaceSpaceAnalysisValue
 } from './workspace-space-values.js'
-
-export { WORKSPACE_SPACE_PROTOCOL_CAPABILITY }
 
 const ANALYZE_PROCEDURE = `/${WorkspaceSpaceService.typeName}/${WorkspaceSpaceService.method.analyze.name}`
 const CANCEL_PROCEDURE = `/${WorkspaceSpaceService.typeName}/${WorkspaceSpaceService.method.cancel.name}`

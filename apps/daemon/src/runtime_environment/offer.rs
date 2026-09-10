@@ -44,15 +44,16 @@ pub(super) fn encode(
     if code.len() > MAX_OFFER_CODE_BYTES {
         return Err(RuntimeEnvironmentError::OfferInvalid);
     }
-    let mut url = Url::parse("yiru://pair").map_err(|_| RuntimeEnvironmentError::OfferInvalid)?;
+    let mut url =
+        Url::parse("agentstart://pair").map_err(|_| RuntimeEnvironmentError::OfferInvalid)?;
     url.query_pairs_mut().append_pair("code", &code);
     Ok(url.into())
 }
 
 pub(super) fn decode(value: &str) -> Result<DecodedRuntimeOffer, RuntimeEnvironmentError> {
-    let code = if value.starts_with("yiru://") {
+    let code = if value.starts_with("agentstart://") {
         let url = Url::parse(value).map_err(|_| RuntimeEnvironmentError::OfferInvalid)?;
-        if url.scheme() != "yiru" || url.host_str() != Some("pair") {
+        if url.scheme() != "agentstart" || url.host_str() != Some("pair") {
             return Err(RuntimeEnvironmentError::OfferInvalid);
         }
         let mut codes = url

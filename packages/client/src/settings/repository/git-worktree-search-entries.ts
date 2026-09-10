@@ -1,4 +1,4 @@
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { SettingsSearchEntry } from '../search'

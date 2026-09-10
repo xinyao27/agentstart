@@ -1,5 +1,5 @@
-import { resolveTuiAgentPermissionMode } from '@yiru/protocol/agent/launch/permissions'
-import type { AgentProviderSessionMetadata } from '@yiru/protocol/agent/session-resume'
+import { resolveTuiAgentPermissionMode } from '@agentstart/protocol/agent/launch/permissions'
+import type { AgentProviderSessionMetadata } from '@agentstart/protocol/agent/session-resume'
 import { getSyntheticAgentTitleProfile } from '~renderer/agent/title/synthetic'
 import { useAppStore } from '~renderer/store/state'
 

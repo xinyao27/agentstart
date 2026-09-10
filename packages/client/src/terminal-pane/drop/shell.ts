@@ -1,11 +1,11 @@
-import { isWindowsAbsolutePathLike } from '@yiru/protocol/host/path'
-import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
+import { isWindowsAbsolutePathLike } from '@agentstart/protocol/host/path'
+import { isWslUncPath } from '@agentstart/protocol/host/wsl-paths'
 
 import { isWindowsUserAgent } from '../pane-interactions'
 
 export type TerminalTargetShell = 'posix' | 'windows'
 
-export function getTerminalTargetShellForWorktreePath(worktreePath: string): TerminalTargetShell {
+function getTerminalTargetShellForWorktreePath(worktreePath: string): TerminalTargetShell {
   if (isWslUncPath(worktreePath)) {
     return 'posix'
   }
@@ -37,7 +37,7 @@ export function resolveTerminalDropTargetShell({
   return isWindowsUserAgent(userAgent) ? 'windows' : 'posix'
 }
 
-export function isTerminalDropWindowsPathLike(path: string): boolean {
+function isTerminalDropWindowsPathLike(path: string): boolean {
   if (isWslUncPath(path)) {
     return false
   }

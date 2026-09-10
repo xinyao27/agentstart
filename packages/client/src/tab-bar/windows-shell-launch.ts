@@ -1,4 +1,4 @@
-import type { BuiltInWindowsTerminalShell } from '@yiru/protocol/host/windows-terminal-shell'
+import type { BuiltInWindowsTerminalShell } from '@agentstart/protocol/host/windows-terminal-shell'
 
 export function resolveWindowsShellLaunchTarget(
   shell: BuiltInWindowsTerminalShell,

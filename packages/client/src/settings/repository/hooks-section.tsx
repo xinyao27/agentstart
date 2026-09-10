@@ -1,13 +1,13 @@
-import type { RepoHookSettingsValue as RepoHookSettings } from '@yiru/protocol'
-import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { resolveHookCommandSourcePolicy } from '@yiru/protocol/setup/command-source-policy'
+import type { RepoHookSettingsValue as RepoHookSettings } from '@agentstart/protocol'
+import { getRepoExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { resolveHookCommandSourcePolicy } from '@agentstart/protocol/setup/command-source-policy'
 import type {
   HookCommandSourcePolicy,
   SetupAgentStartupPolicy,
   SetupRunPolicy
-} from '@yiru/protocol/worktree/hooks'
-import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
+} from '@agentstart/protocol/worktree/hooks'
+import type { AgentStartHooks } from '@agentstart/protocol/worktree/hooks'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'
@@ -24,19 +24,15 @@ import {
   getLocalHookFields,
   getParseErrorFixes,
   getSetupRunPolicyOptions,
-  getYamlStateCopy,
-  type LocalCommandSourcePolicyNotice as LocalCommandSourcePolicyNoticeType
+  getYamlStateCopy
 } from './hook-settings-model'
 import { RepositoryHooksAdvancedSection } from './hooks-advanced-section'
 import { getRepositoryLocalCommandsSectionId } from './settings-targets'
 import { useRepositoryHookSettingsDraft } from './use-hook-settings-draft'
 
-export { getLocalCommandSourcePolicyNotice } from './hook-settings-model'
-export type LocalCommandSourcePolicyNotice = LocalCommandSourcePolicyNoticeType
-
 type RepositoryHooksSectionProps = {
   repo: Repo
-  yamlHooks: YiruHooks | null
+  yamlHooks: AgentStartHooks | null
   hasHooksFile: boolean
   hooksInspectionReady: boolean
   mayNeedUpdate: boolean
@@ -113,12 +109,12 @@ export function RepositoryHooksSection({
       title: translate('auto.components.settings.RepositoryHooksSection.c9bc1bfd8f', 'Advanced'),
       description: translate(
         'auto.components.settings.RepositoryHooksSection.610d90fdbd',
-        'Command source and yiru.yaml details.'
+        'Command source and agentstart.yaml details.'
       ),
       keywords: [
         translate('auto.components.settings.RepositoryHooksSection.c5a55a2d2e', 'advanced'),
         translate('auto.components.settings.RepositoryHooksSection.4611b78617', 'command source'),
-        translate('auto.components.settings.RepositoryHooksSection.39da2ae12f', 'yiru.yaml'),
+        translate('auto.components.settings.RepositoryHooksSection.39da2ae12f', 'agentstart.yaml'),
         translate('auto.components.settings.RepositoryHooksSection.d2b3016c20', 'shared'),
         translate('auto.components.settings.RepositoryHooksSection.2d03a514db', 'local'),
         translate('auto.components.settings.RepositoryHooksSection.0518758f38', 'both'),
@@ -139,7 +135,7 @@ export function RepositoryHooksSection({
         <p className="text-muted-foreground text-xs">
           {translate(
             'auto.components.settings.RepositoryHooksSection.8567127a40',
-            'Scripts that run when worktrees are created or archived. Local scripts are stored on this machine; `yiru.yaml` scripts are shared with your team.'
+            'Scripts that run when worktrees are created or archived. Local scripts are stored on this machine; `agentstart.yaml` scripts are shared with your team.'
           )}
         </p>
       </div>
@@ -160,8 +156,8 @@ export function RepositoryHooksSection({
           'command',
           'local',
           'local settings scripts',
-          'yiru.yaml',
-          'yiru.yaml hooks',
+          'agentstart.yaml',
+          'agentstart.yaml hooks',
           'hook'
         ]}
       >
@@ -189,7 +185,7 @@ export function RepositoryHooksSection({
         forceVisible={forceVisible}
         keywords={['setup run policy', 'ask', 'run by default', 'skip by default']}
       >
-        <div className="border-border/50 bg-background/80 space-y-4 border p-4">
+        <div className="border-border/50 bg-background/80 space-y-4 rounded-2xl border p-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
               <h5 className="text-sm font-semibold">
@@ -261,8 +257,8 @@ export function RepositoryHooksSection({
           'command',
           'local',
           'local settings scripts',
-          'yiru.yaml',
-          'yiru.yaml hooks',
+          'agentstart.yaml',
+          'agentstart.yaml hooks',
           'hook'
         ]}
       >

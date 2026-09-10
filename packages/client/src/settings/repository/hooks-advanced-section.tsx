@@ -1,5 +1,5 @@
-import type { HookCommandSourcePolicy } from '@yiru/protocol/worktree/hooks'
-import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
+import type { HookCommandSourcePolicy } from '@agentstart/protocol/worktree/hooks'
+import type { AgentStartHooks } from '@agentstart/protocol/worktree/hooks'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle, CaretRight as ChevronRight } from '~renderer/icons/hugeicons'
 import { cn } from '~renderer/ui/class-names'
@@ -32,7 +32,7 @@ export function RepositoryHooksAdvancedSection({
   onSelectPolicy: (policy: HookCommandSourcePolicy) => void
   yamlState: string
   yamlStateCopy: { heading: string; description: string }
-  yamlHooks: YiruHooks | null
+  yamlHooks: AgentStartHooks | null
   parseErrorFixes: readonly string[]
   copiedTemplate: boolean
   onCopyTemplate: () => void
@@ -42,13 +42,13 @@ export function RepositoryHooksAdvancedSection({
       title={translate('auto.components.settings.RepositoryHooksSection.c9bc1bfd8f', 'Advanced')}
       description={translate(
         'auto.components.settings.RepositoryHooksSection.610d90fdbd',
-        'Command source and yiru.yaml details.'
+        'Command source and agentstart.yaml details.'
       )}
       forceVisible={forceVisible}
       keywords={[
         'advanced',
         'command source',
-        'yiru.yaml',
+        'agentstart.yaml',
         'shared',
         'local',
         'both',
@@ -56,7 +56,7 @@ export function RepositoryHooksAdvancedSection({
       ]}
     >
       <details
-        className="group border-border/50 bg-background/80 border"
+        className="group border-border/50 bg-background/80 rounded-2xl border"
         open={advancedMatchesSearch || isAdvancedOpen}
         onToggle={(event) => {
           if (advancedMatchesSearch) {
@@ -81,11 +81,11 @@ export function RepositoryHooksAdvancedSection({
             <span className="text-muted-foreground text-xs">
               {translate(
                 'auto.components.settings.RepositoryHooksSection.bbbd6e0bc4',
-                'Command source & yiru.yaml'
+                'Command source & agentstart.yaml'
               )}
             </span>
           </div>
-          <span className="border-border bg-muted text-foreground border px-2 py-0.5 text-[11px] font-medium">
+          <span className="border-border bg-muted text-foreground rounded-full border px-2 py-0.5 text-[11px] font-medium">
             {getCommandSourceLabel(selectedCommandSourcePolicy)}
           </span>
         </summary>
@@ -104,10 +104,10 @@ export function RepositoryHooksAdvancedSection({
                   'auto.components.settings.RepositoryHooksSection.ac9038d2cc',
                   'When both'
                 )}
-                <code className="bg-muted px-1 py-0.5">
+                <code className="bg-muted rounded px-1 py-0.5">
                   {translate(
                     'auto.components.settings.RepositoryHooksSection.39da2ae12f',
-                    'yiru.yaml'
+                    'agentstart.yaml'
                   )}
                 </code>{' '}
                 {translate(
@@ -124,7 +124,7 @@ export function RepositoryHooksAdvancedSection({
             />
           </div>
 
-          <div className={cn('space-y-3 border p-3', YAML_STATE_STYLES[yamlState].card)}>
+          <div className={cn('space-y-3 rounded-xl border p-3', YAML_STATE_STYLES[yamlState].card)}>
             <div className="space-y-1">
               <p className={cn('text-sm font-medium', YAML_STATE_STYLES[yamlState].titleClassName)}>
                 {yamlStateCopy.heading}
@@ -136,13 +136,13 @@ export function RepositoryHooksAdvancedSection({
               <YamlScriptBlock content={renderYamlScriptPreview(yamlHooks)} />
             ) : yamlState === 'invalid' ? (
               <div className="space-y-4">
-                <div className="bg-background/60 flex items-start gap-3 border border-amber-500/20 p-3">
+                <div className="bg-background/60 flex items-start gap-3 rounded-lg border border-amber-500/20 p-3">
                   <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-300" />
                   <div className="text-muted-foreground space-y-2 text-xs">
                     <p>
                       {translate(
                         'auto.components.settings.RepositoryHooksSection.af49e2a19e',
-                        'The file is present, but Yiru could not find valid `scripts` definitions.'
+                        'The file is present, but AgentStart could not find valid `scripts` definitions.'
                       )}
                     </p>
                     <ol className="space-y-1.5 pl-4 text-[11.5px]">
@@ -172,7 +172,7 @@ export function RepositoryHooksAdvancedSection({
   )
 }
 
-function renderYamlScriptPreview(hooks: YiruHooks | null): string {
+function renderYamlScriptPreview(hooks: AgentStartHooks | null): string {
   const format = (key: string, command?: string): string =>
     command ? `\n  ${key}: |\n${command.replace(/^/gm, '    ')}` : ''
   return `scripts:${format('setup', hooks?.scripts.setup)}${format('archive', hooks?.scripts.archive)}`

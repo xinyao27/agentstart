@@ -1,5 +1,5 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     TerminalClose as ProtocolClose, TerminalServiceApproveRequest, TerminalServiceApproveResponse,
     TerminalServiceClearBufferRequest, TerminalServiceClearBufferResponse,
     TerminalServiceCloseTabRequest, TerminalServiceCloseTabResponse, TerminalServiceRenameRequest,
@@ -15,7 +15,7 @@ use yiru_protocol::runtime::v1::{
     TerminalSplitTelemetrySource as ProtocolTelemetrySource, TerminalWaitCondition,
     TerminalWaitStatus,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::dangerous_approval::{DangerousApprovalAuthority, DangerousApprovalError};
 use crate::rpc::protocol_call::status;

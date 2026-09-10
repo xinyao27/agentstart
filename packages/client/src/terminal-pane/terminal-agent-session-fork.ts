@@ -1,8 +1,8 @@
-import { TUI_AGENT_CONFIG } from '@yiru/protocol/agent/launch/config'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
-import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import { TUI_AGENT_CONFIG } from '@agentstart/protocol/agent/launch/config'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { isWslUncPath } from '@agentstart/protocol/host/wsl-paths'
+import type { ProjectExecutionRuntimeResolution } from '@agentstart/protocol/project/runtime-preference'
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { translate } from '~renderer/i18n/i18n'
@@ -290,11 +290,4 @@ export async function startAgentSessionFork(fork: PreparedAgentSessionFork): Pro
     )
   )
   return true
-}
-
-export async function forkAgentSessionFromPane(args: ForkAgentSessionFromPaneArgs): Promise<void> {
-  const fork = prepareAgentSessionForkFromPane(args)
-  if (fork) {
-    await startAgentSessionFork(fork)
-  }
 }

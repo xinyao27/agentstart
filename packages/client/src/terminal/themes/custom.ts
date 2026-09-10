@@ -3,11 +3,11 @@ import type {
   TerminalCustomTheme,
   TerminalCustomThemeSource,
   TerminalCustomThemeMode
-} from '@yiru/protocol/terminal/theme-types'
+} from '@agentstart/protocol/terminal/theme-types'
 import { translate } from '~renderer/i18n/i18n'
 const HEX_COLOR_RE = /^#?([0-9a-fA-F]{3}){1,2}$/
 export const MAX_TERMINAL_CUSTOM_THEMES = 200
-export const CUSTOM_TERMINAL_THEME_PREFIX = 'custom:'
+const CUSTOM_TERMINAL_THEME_PREFIX = 'custom:'
 
 const TERMINAL_COLOR_KEYS = [
   'foreground',
@@ -73,7 +73,7 @@ function removeControlCharacters(value: string): string {
     .join('')
 }
 
-export function normalizeTerminalThemeId(value: unknown, fallback = 'theme'): string {
+function normalizeTerminalThemeId(value: unknown, fallback = 'theme'): string {
   const raw = typeof value === 'string' ? value : fallback
   const normalized = removeControlCharacters(raw)
     .trim()
@@ -85,7 +85,7 @@ export function normalizeTerminalThemeId(value: unknown, fallback = 'theme'): st
   return normalized || fallback
 }
 
-export function normalizeTerminalThemeName(
+function normalizeTerminalThemeName(
   value: unknown,
   fallback = translate('terminal.theme.imported', 'Imported Theme')
 ): string {
@@ -99,7 +99,7 @@ export function normalizeTerminalThemeName(
   return normalized || fallback
 }
 
-export function normalizeTerminalHexColor(value: unknown): string | null {
+function normalizeTerminalHexColor(value: unknown): string | null {
   if (typeof value !== 'string') {
     return null
   }
@@ -133,7 +133,7 @@ export function normalizeTerminalColorOverrides(value: unknown): TerminalColorOv
   return output
 }
 
-export function hasUsableTerminalThemeColors(terminal: TerminalColorOverrides): boolean {
+function hasUsableTerminalThemeColors(terminal: TerminalColorOverrides): boolean {
   const ansiCount = TERMINAL_ANSI_COLOR_KEYS.filter((key) => terminal[key]).length
   return Boolean(terminal.background && terminal.foreground && ansiCount > 0)
 }

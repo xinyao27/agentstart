@@ -123,10 +123,10 @@ export function CreateHostedReviewComposerFields({
           // Why: visible scrim + status row so the user understands the title
           // and description fields will be replaced while inputs are locked.
           <div
-            className="bg-background/40 pointer-events-none absolute inset-0 flex items-center justify-center"
+            className="bg-background/40 pointer-events-none absolute inset-0 flex items-center justify-center rounded-md"
             aria-hidden="true"
           >
-            <div className="border-border bg-background text-muted-foreground pointer-events-auto flex items-center gap-1.5 border px-2 py-1 text-[11px]">
+            <div className="border-border bg-background text-muted-foreground pointer-events-auto flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11px]">
               <Sparkles className="text-foreground size-3 animate-pulse" />
               <span>
                 {translate(
@@ -175,7 +175,7 @@ export function CreateHostedReviewComposerFields({
 
       <label
         className={cn(
-          'flex h-7 items-center gap-2 border border-border bg-background px-2 text-xs text-foreground transition-colors',
+          'flex h-7 items-center gap-2 rounded-md border border-border bg-background px-2 text-xs text-foreground transition-colors',
           fieldsLocked
             ? 'cursor-not-allowed opacity-60'
             : 'cursor-pointer hover:bg-accent hover:text-accent-foreground'
@@ -192,7 +192,7 @@ export function CreateHostedReviewComposerFields({
       </label>
 
       {baseResults.length > 0 ? (
-        <div className="border-border scrollbar-sleek max-h-28 overflow-auto border p-1">
+        <div className="border-border scrollbar-sleek max-h-28 overflow-auto rounded-md border p-1">
           {baseResults.map((ref) => (
             <Button
               variant="ghost"

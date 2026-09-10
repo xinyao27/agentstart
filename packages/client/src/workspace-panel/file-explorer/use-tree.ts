@@ -49,7 +49,7 @@ type RefreshFileExplorerExpandedDirsParams = {
   readDirectory: (dirPath: string) => Promise<FileExplorerDirectoryListing>
 }
 
-export async function refreshFileExplorerExpandedDirs({
+async function refreshFileExplorerExpandedDirs({
   dirs,
   worktreePath,
   dirLoadTracker,

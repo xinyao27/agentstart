@@ -1,7 +1,7 @@
-import type { WorkspacePort } from '@yiru/protocol'
-import type { Project } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { WorkspacePort } from '@agentstart/protocol'
+import type { Project } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type { LocalhostWorktreeLabelRoute } from '~renderer/ports/loopback-url'
 
 import { browserUrlForPort } from './urls'

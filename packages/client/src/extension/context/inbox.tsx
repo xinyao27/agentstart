@@ -1,5 +1,5 @@
+import { AgentSessionStatus, type AgentSession } from '@agentstart/protocol/agent-session'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { AgentSessionStatus, type AgentSession } from '@yiru/protocol/agent-session'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { agentSessionListQuery, followupAgentSession } from '~renderer/runtime/agent-session/query'

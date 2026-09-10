@@ -1,7 +1,7 @@
 import type { EmulatorStreamInfo } from '~renderer/emulator-pane/types'
 
-export const EMULATOR_MANUAL_LAUNCH_STARTED_EVENT = 'yiru:emulator-launch-started'
-export const EMULATOR_MANUAL_LAUNCH_FAILED_EVENT = 'yiru:emulator-launch-failed'
+export const EMULATOR_MANUAL_LAUNCH_STARTED_EVENT = 'agentstart:emulator-launch-started'
+export const EMULATOR_MANUAL_LAUNCH_FAILED_EVENT = 'agentstart:emulator-launch-failed'
 
 const manualLaunchesByWorktree = new Set<string>()
 type PrelaunchedSimulatorSession = {

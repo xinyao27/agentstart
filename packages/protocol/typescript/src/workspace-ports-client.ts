@@ -8,7 +8,7 @@ import {
   WorkspacePortsServiceScanRequestSchema,
   WorkspacePortsServiceScanResponseSchema,
   WorkspacePortsServiceSubscribeEventsRequestSchema
-} from '../generated/yiru/runtime/v1/workspace_ports_pb.js'
+} from '../generated/agent_start/runtime/v1/workspace_ports_pb.js'
 import type { RuntimeCallOptions, RuntimeStream, RuntimeTransport } from './transport.js'
 import {
   decodeWorkspacePortEvent,

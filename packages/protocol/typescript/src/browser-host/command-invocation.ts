@@ -1,4 +1,7 @@
-import type { BrowserTarget, ExecuteRequest } from '../../generated/yiru/runtime/v1/browser_pb.js'
+import type {
+  BrowserTarget,
+  ExecuteRequest
+} from '../../generated/agent_start/runtime/v1/browser_pb.js'
 
 export type BrowserCommandInvocation = Readonly<{ input: unknown; method: string }>
 

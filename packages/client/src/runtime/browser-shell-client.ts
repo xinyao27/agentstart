@@ -1,4 +1,4 @@
-import type { ShellPlatformOutcomeValue } from '@yiru/protocol'
+import type { ShellPlatformOutcomeValue } from '@agentstart/protocol'
 
 import type { ShellPlatformApi } from './shell-platform-client'
 

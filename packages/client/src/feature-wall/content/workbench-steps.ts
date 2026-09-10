@@ -1,7 +1,7 @@
-import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
-// Per-step copy for the workbench tile in the Explore Yiru modal. Mirrors
+// Per-step copy for the workbench tile in the Explore AgentStart modal. Mirrors
 // agents-orchestration-steps.ts so the rail / body code can render both the
 // same way.
 
@@ -31,7 +31,7 @@ export const getWorkbenchSteps = createLocalizedCatalog((): readonly WorkbenchSt
     subtitle: translate('feature-wall.c7e9fb2ea6', 'Editor'),
     description: translate(
       'feature-wall.70930331cf',
-      'Use our Notion-style markdown editor to write notes without leaving Yiru.'
+      'Use our Notion-style markdown editor to write notes without leaving AgentStart.'
     )
   },
   {
@@ -40,7 +40,7 @@ export const getWorkbenchSteps = createLocalizedCatalog((): readonly WorkbenchSt
     subtitle: translate('feature-wall.54a2cf5e63', 'Browser'),
     description: translate(
       'feature-wall.9bf3317c89',
-      "Run your app in Yiru's browser, send selected UI elements to agents, and let your agents interact with your webpage."
+      "Run your app in AgentStart's browser, send selected UI elements to agents, and let your agents interact with your webpage."
     )
   }
 ])

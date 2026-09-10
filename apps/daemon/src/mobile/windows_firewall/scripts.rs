@@ -1,8 +1,8 @@
 use base64::Engine as _;
 use base64::engine::general_purpose::STANDARD as BASE64;
 
-const FIREWALL_RULE_DISPLAY_NAME: &str = "Yiru Mobile Pairing";
-const FIREWALL_RULE_NAME: &str = "Yiru.MobilePairing";
+const FIREWALL_RULE_DISPLAY_NAME: &str = "AgentStart Mobile Pairing";
+const FIREWALL_RULE_NAME: &str = "AgentStart.MobilePairing";
 
 pub(super) fn inspection(port: u16, executable_path: &str, address: Option<&str>) -> String {
     let address_lookup = address.map_or_else(String::new, |address| {
@@ -19,7 +19,7 @@ pub(super) fn inspection(port: u16, executable_path: &str, address: Option<&str>
 
 pub(super) fn repair(port: u16, executable_path: &str) -> String {
     format!(
-        "$ErrorActionPreference = 'Stop'\n$blockingRules = @(Get-NetFirewallApplicationFilter -Program {} -ErrorAction SilentlyContinue | Get-NetFirewallRule | Where-Object {{ $_.Enabled -eq 'True' -and $_.Direction -eq 'Inbound' -and $_.Action -eq 'Block' }})\nforeach ($rule in $blockingRules) {{\n  $portFilter = $rule | Get-NetFirewallPortFilter\n  $protocol = [string]$portFilter.Protocol\n  $profile = [string]$rule.Profile\n  $portMatches = @($portFilter.LocalPort | Where-Object {{ [string]$_ -eq 'Any' -or [string]$_ -eq '{port}' }}).Count -gt 0\n  if (($protocol -eq 'Any' -or $protocol -eq 'TCP' -or $protocol -eq '6') -and ($profile -eq 'Any' -or $profile -match 'Private') -and $portMatches) {{\n    $rule | Remove-NetFirewallRule\n  }}\n}}\nGet-NetFirewallRule -Name {} -ErrorAction SilentlyContinue | Remove-NetFirewallRule\nNew-NetFirewallRule -Name {} -DisplayName {} -Description 'Allows Yiru Mobile to connect to this Yiru daemon on private networks.' -Direction Inbound -Action Allow -Enabled True -Profile Private -Protocol TCP -LocalPort {port} -Program {} -EdgeTraversalPolicy Block | Out-Null",
+        "$ErrorActionPreference = 'Stop'\n$blockingRules = @(Get-NetFirewallApplicationFilter -Program {} -ErrorAction SilentlyContinue | Get-NetFirewallRule | Where-Object {{ $_.Enabled -eq 'True' -and $_.Direction -eq 'Inbound' -and $_.Action -eq 'Block' }})\nforeach ($rule in $blockingRules) {{\n  $portFilter = $rule | Get-NetFirewallPortFilter\n  $protocol = [string]$portFilter.Protocol\n  $profile = [string]$rule.Profile\n  $portMatches = @($portFilter.LocalPort | Where-Object {{ [string]$_ -eq 'Any' -or [string]$_ -eq '{port}' }}).Count -gt 0\n  if (($protocol -eq 'Any' -or $protocol -eq 'TCP' -or $protocol -eq '6') -and ($profile -eq 'Any' -or $profile -match 'Private') -and $portMatches) {{\n    $rule | Remove-NetFirewallRule\n  }}\n}}\nGet-NetFirewallRule -Name {} -ErrorAction SilentlyContinue | Remove-NetFirewallRule\nNew-NetFirewallRule -Name {} -DisplayName {} -Description 'Allows AgentStart Mobile to connect to this AgentStart daemon on private networks.' -Direction Inbound -Action Allow -Enabled True -Profile Private -Protocol TCP -LocalPort {port} -Program {} -EdgeTraversalPolicy Block | Out-Null",
         quote(executable_path),
         quote(FIREWALL_RULE_NAME),
         quote(FIREWALL_RULE_NAME),

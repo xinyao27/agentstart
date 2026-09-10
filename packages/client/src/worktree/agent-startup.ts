@@ -1,9 +1,9 @@
-import { isTuiAgent } from '@yiru/protocol/agent/identity'
+import { isTuiAgent } from '@agentstart/protocol/agent/identity'
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/protocol/agent/launch-defaults'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/agent/launch-defaults'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import { getAgentLaunchPlatformForRepo } from '../agent/launch-platform'
 import { buildAgentStartupPlan } from '../agent/tui-startup'

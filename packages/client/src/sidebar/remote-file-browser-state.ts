@@ -1,4 +1,4 @@
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 import { translate } from '~renderer/i18n/i18n'
 import { shouldHandleTextControlPaste } from '~renderer/keyboard-input/paste/write'
 export type DirEntry = {
@@ -6,9 +6,9 @@ export type DirEntry = {
   isDirectory: boolean
 }
 
-export const REMOTE_FILE_BROWSER_FILTER_QUERY_MAX_BYTES = 2 * 1024
+const REMOTE_FILE_BROWSER_FILTER_QUERY_MAX_BYTES = 2 * 1024
 
-export function isRemoteFileBrowserFilterQueryTooLarge(
+function isRemoteFileBrowserFilterQueryTooLarge(
   query: string,
   maxBytes = REMOTE_FILE_BROWSER_FILTER_QUERY_MAX_BYTES
 ): boolean {

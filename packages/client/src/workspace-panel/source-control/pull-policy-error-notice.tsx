@@ -63,12 +63,12 @@ export function PullPolicyRemoteActionNotice({
       id={id}
       role="alert"
       aria-live="polite"
-      className="border-destructive/20 bg-card text-card-foreground mt-2 min-w-0 overflow-hidden border"
+      className="border-destructive/20 bg-card text-card-foreground mt-2 min-w-0 overflow-hidden rounded-lg border"
     >
       <div className="bg-destructive/70 h-0.5" aria-hidden="true" />
       <div className="space-y-2.5 px-2.5 py-2.5">
         <div className="grid min-w-0 grid-cols-[1rem_minmax(0,1fr)] gap-1.5">
-          <span className="bg-destructive/10 text-destructive mt-px inline-flex size-4 shrink-0 items-center justify-center">
+          <span className="bg-destructive/10 text-destructive mt-px inline-flex size-4 shrink-0 items-center justify-center rounded-full">
             <TriangleAlert className="size-3" aria-hidden="true" />
           </span>
           <div className="min-w-0 space-y-1">
@@ -79,7 +79,7 @@ export function PullPolicyRemoteActionNotice({
                   'Pull needs a policy'
                 )}
               </span>
-              <span className="bg-destructive/10 text-destructive shrink-0 px-1.5 py-px text-[10px] leading-4 font-semibold">
+              <span className="bg-destructive/10 text-destructive shrink-0 rounded-full px-1.5 py-px text-[10px] leading-4 font-semibold">
                 {translate('auto.components.right.sidebar.pull.policy.notice.diverged', 'Diverged')}
               </span>
             </div>
@@ -97,7 +97,10 @@ export function PullPolicyRemoteActionNotice({
             const label = translate(option.labelKey, option.labelFallback)
             const description = translate(option.descriptionKey, option.descriptionFallback)
             return (
-              <div key={option.command} className="border-border bg-muted/30 border px-2 py-1.5">
+              <div
+                key={option.command}
+                className="border-border bg-muted/30 rounded-md border px-2 py-1.5"
+              >
                 <div className="flex min-w-0 items-start justify-between gap-2">
                   <div className="min-w-0">
                     <div className="text-foreground text-[11px] leading-4 font-semibold">
@@ -141,7 +144,7 @@ export function PullPolicyRemoteActionNotice({
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <code className="border-border bg-background text-foreground mt-1 block border px-1.5 py-1 font-mono text-[11px] leading-4 break-words">
+                <code className="border-border bg-background text-foreground mt-1 block rounded border px-1.5 py-1 font-mono text-[11px] leading-4 break-words">
                   {option.command}
                 </code>
               </div>

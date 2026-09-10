@@ -2,7 +2,7 @@
 // RELATIVE moves (CUD/CUB) computed from where it assumes replay leaves the
 // cursor. When the final content row is filled exactly to the right margin,
 // replay leaves the fresh terminal wrap-pending (internal x == cols), so the
-// relative math lands one column short of the real cursor. Every Yiru buffer
+// relative math lands one column short of the real cursor. Every AgentStart buffer
 // snapshot that will be replayed into another terminal must therefore end
 // with an absolute CUP derived from the SOURCE terminal's authoritative
 // cursor position. Snapshot producers that also need the VT100 DECSC
@@ -20,42 +20,6 @@ type BufferSerializer<TOpts> = {
 
 /** VT100 DECSC saved-cursor register (0-based, viewport-relative row). */
 export type SavedCursorRegister = { x: number; y: number }
-
-// xterm keeps the DECSC register on each Buffer (savedY is absolute:
-// ybase-included). It is not exposed through the public API, so snapshot
-// producers read the core buffer directly — `_core.buffer` is the ACTIVE
-// buffer, so an alt-screen TUI yields the alternate screen's own register,
-// matching the one a post-restore DECRC would consult.
-type TerminalWithSavedCursorCore = SerializeCursorTerminal & {
-  _core?: { buffer?: { savedX?: number; savedY?: number; ybase?: number } }
-}
-
-/** Reads the source terminal's active-buffer DECSC register, or null when it
- *  is unavailable or indistinguishable from the never-saved default. */
-export function readSavedCursorRegister(
-  terminal: SerializeCursorTerminal
-): SavedCursorRegister | null {
-  const core = (terminal as TerminalWithSavedCursorCore)._core?.buffer
-  if (
-    typeof core?.savedX !== 'number' ||
-    typeof core.savedY !== 'number' ||
-    typeof core.ybase !== 'number'
-  ) {
-    return null
-  }
-  // savedY is absolute; DECRC restores it relative to the ybase current at
-  // restore time, clamping at the top — mirror that clamp here. savedX can be
-  // cols (DECSC during wrap-pending); CUP cannot re-create pending, so clamp.
-  const y = Math.min(Math.max(core.savedY - core.ybase, 0), terminal.rows - 1)
-  const x = Math.min(Math.max(core.savedX, 0), terminal.cols - 1)
-  if (x === 0 && y === 0) {
-    // Home is xterm's never-saved default: a fresh restore terminal already
-    // sends DECRC to home, and skipping the injection avoids overwriting the
-    // fresh terminal's default saved SGR/charset when nothing was ever saved.
-    return null
-  }
-  return { x, y }
-}
 
 export function serializeWithAbsoluteCursor<TOpts>(
   serializer: BufferSerializer<TOpts>,

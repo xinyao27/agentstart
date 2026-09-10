@@ -1,0 +1,324 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+import "agent_start/runtime/v1/git_common.proto";
+
+// Commit-graph rewriting and in-progress-operation resolution: cherry-pick,
+// revert, drop, reset, rebase, merge, plus reading and aborting whichever of
+// those is currently in progress. See apps/daemon/src/rpc/git.rs's
+// METHODS table (git.cherryPick, git.revertCommit, git.dropCommit,
+// git.resetToCommit, git.rebaseFromBase, git.rebaseOntoCommit,
+// git.mergeCommit, git.conflictOperation, git.abortMerge, git.abortRebase,
+// git.abortRevert).
+service GitHistoryRewriteService {
+  rpc ConflictOperation(GitHistoryRewriteServiceConflictOperationRequest) returns (GitHistoryRewriteServiceConflictOperationResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AbortMerge(GitHistoryRewriteServiceAbortMergeRequest) returns (GitHistoryRewriteServiceAbortMergeResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AbortRebase(GitHistoryRewriteServiceAbortRebaseRequest) returns (GitHistoryRewriteServiceAbortRebaseResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AbortRevert(GitHistoryRewriteServiceAbortRevertRequest) returns (GitHistoryRewriteServiceAbortRevertResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CherryPick(GitHistoryRewriteServiceCherryPickRequest) returns (GitHistoryRewriteServiceCherryPickResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RevertCommit(GitHistoryRewriteServiceRevertCommitRequest) returns (GitHistoryRewriteServiceRevertCommitResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc DropCommit(GitHistoryRewriteServiceDropCommitRequest) returns (GitHistoryRewriteServiceDropCommitResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc ResetToCommit(GitHistoryRewriteServiceResetToCommitRequest) returns (GitHistoryRewriteServiceResetToCommitResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RebaseFromBase(GitHistoryRewriteServiceRebaseFromBaseRequest) returns (GitHistoryRewriteServiceRebaseFromBaseResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc RebaseOntoCommit(GitHistoryRewriteServiceRebaseOntoCommitRequest) returns (GitHistoryRewriteServiceRebaseOntoCommitResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc MergeCommit(GitHistoryRewriteServiceMergeCommitRequest) returns (GitHistoryRewriteServiceMergeCommitResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message GitHistoryRewriteServiceConflictOperationRequest {
+  string worktree = 1;
+}
+
+message GitHistoryRewriteServiceConflictOperationResponse {
+  GitConflictOperation operation = 1;
+}
+
+message GitHistoryRewriteServiceAbortMergeRequest {
+  string worktree = 1;
+}
+
+message GitHistoryRewriteServiceAbortMergeResponse {
+  bool ok = 1;
+}
+
+message GitHistoryRewriteServiceAbortRebaseRequest {
+  string worktree = 1;
+}
+
+message GitHistoryRewriteServiceAbortRebaseResponse {
+  bool ok = 1;
+}
+
+message GitHistoryRewriteServiceAbortRevertRequest {
+  string worktree = 1;
+}
+
+message GitHistoryRewriteServiceAbortRevertResponse {
+  bool ok = 1;
+}
+
+message GitHistoryRewriteServiceCherryPickRequest {
+  string worktree = 1;
+  string commit = 2;
+  optional uint32 mainline = 3;
+}
+
+message GitHistoryRewriteServiceCherryPickResponse {
+  GitWriteOutcome outcome = 1;
+}
+
+message GitHistoryRewriteServiceRevertCommitRequest {
+  string worktree = 1;
+  string commit = 2;
+  optional uint32 mainline = 3;
+}
+
+message GitHistoryRewriteServiceRevertCommitResponse {
+  GitWriteOutcome outcome = 1;
+}
+
+message GitHistoryRewriteServiceDropCommitRequest {
+  string worktree = 1;
+  string commit = 2;
+}
+
+message GitHistoryRewriteServiceDropCommitResponse {
+  GitWriteOutcome outcome = 1;
+}
+
+enum GitResetMode {
+  GIT_RESET_MODE_UNSPECIFIED = 0;
+  GIT_RESET_MODE_SOFT = 1;
+  GIT_RESET_MODE_MIXED = 2;
+  GIT_RESET_MODE_HARD = 3;
+}
+
+message GitHistoryRewriteServiceResetToCommitRequest {
+  string worktree = 1;
+  string commit = 2;
+  GitResetMode mode = 3;
+}
+
+message GitHistoryRewriteServiceResetToCommitResponse {
+  GitWriteOutcome outcome = 1;
+}
+
+message GitHistoryRewriteServiceRebaseFromBaseRequest {
+  string worktree = 1;
+  string base_ref = 2;
+}
+
+// rebase_from_base (remote.rs) is not status-shaped: success is always
+// {"ok":true} and any git/validation failure surfaces as an RPC error.
+message GitHistoryRewriteServiceRebaseFromBaseResponse {
+  bool ok = 1;
+}
+
+message GitHistoryRewriteServiceRebaseOntoCommitRequest {
+  string worktree = 1;
+  string commit = 2;
+}
+
+message GitHistoryRewriteServiceRebaseOntoCommitResponse {
+  GitWriteOutcome outcome = 1;
+}
+
+message GitHistoryRewriteServiceMergeCommitRequest {
+  string worktree = 1;
+  string commit = 2;
+  bool no_ff = 3;
+  bool squash = 4;
+  optional string message = 5;
+}
+
+message GitHistoryRewriteServiceMergeCommitResponse {
+  GitWriteOutcome outcome = 1;
+}

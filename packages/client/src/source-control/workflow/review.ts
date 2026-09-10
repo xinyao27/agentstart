@@ -1,15 +1,15 @@
-import type { GitUpstreamStatus } from '@yiru/protocol/git/status-types'
-import { supportsHostedReviewCreation } from '@yiru/protocol/hosted-review/creation-provider'
+import type { GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
+import { supportsHostedReviewCreation } from '@agentstart/protocol/hosted-review/creation-provider'
 import type {
   CreateHostedReviewErrorCode,
   CreateHostedReviewResult,
   HostedReviewCreationBlockedReason,
   HostedReviewCreationEligibility
-} from '@yiru/protocol/hosted-review/types'
+} from '@agentstart/protocol/hosted-review/types'
 
 import { isBehindOnlyUpstream, shouldForcePushWithLeaseForUpstream } from './operation'
 
-export type CreateReviewIntentKind =
+type CreateReviewIntentKind =
   | 'dirty'
   | 'message_required'
   | 'no_upstream'

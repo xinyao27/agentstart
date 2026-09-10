@@ -6,8 +6,8 @@ import {
   type DeveloperPermissionState,
   type WindowsMobileFirewallRepairResult,
   type WindowsMobileFirewallStatus
-} from '@yiru/protocol'
-import { WorktreeLabelsClient } from '@yiru/protocol/worktree-labels'
+} from '@agentstart/protocol'
+import { WorktreeLabelsClient } from '@agentstart/protocol/worktree-labels'
 import type { PdfExportInput, PdfExportResult } from '~renderer/extension/pdf-export'
 import type {
   LocalhostWorktreeLabelResult,

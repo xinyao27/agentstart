@@ -1,12 +1,12 @@
 // Why: the WorkspaceSession document is schema-open, so both wire directions
 // convert between `serde_json::Value` and the typed recursive JSON value here —
 // the single encoding boundary for the session payload.
-use serde_json::{Map, Value};
-use yiru_protocol::runtime::v1::shell_session_json_value::Kind as JsonKind;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::shell_session_json_value::Kind as JsonKind;
+use agentstart_protocol::runtime::v1::{
     ShellSessionJsonNull, ShellSessionJsonValue, ShellSessionJsonValueEntry,
     ShellSessionJsonValueList, ShellSessionJsonValueObject,
 };
+use serde_json::{Map, Value};
 
 pub(in crate::rpc) fn session_value(session: &Value) -> ShellSessionJsonValue {
     json_value(session)

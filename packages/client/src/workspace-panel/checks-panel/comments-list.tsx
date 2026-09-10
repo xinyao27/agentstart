@@ -1,4 +1,4 @@
-import type { PRComment } from '@yiru/protocol/hosted-review/review-types'
+import type { PRComment } from '@agentstart/protocol/hosted-review/review-types'
 import React, { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { LoadingIndicator } from '~renderer/loading/indicator'

@@ -3,7 +3,7 @@ import {
   UI_LANGUAGE_ENGLISH,
   UI_LANGUAGE_SYSTEM,
   type UiLanguage
-} from '@yiru/protocol/settings/ui-language'
+} from '@agentstart/protocol/settings/ui-language'
 
 import { DEFAULT_UI_LOCALE, resolveRendererUiLocale, type SupportedUiLocale } from './locale'
 

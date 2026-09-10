@@ -1,8 +1,8 @@
 {
-  "name": "@yiru/client",
+  "name": "@agentstart/client",
   "version": "0.0.1",
   "private": true,
-  "description": "Yiru source-only browser workbench consumed through declared host exports",
+  "description": "AgentStart source-only browser workbench consumed through declared host exports",
   "type": "module",
   "sideEffects": [
     "./src/assets/main.css"
@@ -11,7 +11,6 @@
     "./extension-bootstrap": "./src/extension/bootstrap.ts",
     "./extension-devtools": "./src/extension/devtools/bootstrap.tsx",
     "./extension-install": "./src/extension/install/bootstrap.tsx",
-    "./extension-settings": "./src/extension/settings/bootstrap.tsx",
     "./styles": "./src/assets/main.css",
     "./vite": "./vite.ts",
     "./pdf-export": "./src/extension/pdf-export.ts",
@@ -23,6 +22,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@agentstart/protocol": "workspace:*",
     "@base-ui/react": "catalog:",
     "@dnd-kit/core": "catalog:",
     "@dnd-kit/sortable": "catalog:",
@@ -66,7 +66,6 @@
     "@xterm/addon-web-links": "catalog:",
     "@xterm/addon-webgl": "catalog:workbench",
     "@xterm/xterm": "catalog:workbench",
-    "@yiru/protocol": "workspace:*",
     "babel-plugin-react-compiler": "catalog:",
     "class-variance-authority": "catalog:",
     "cmdk": "catalog:",
@@ -80,7 +79,6 @@
     "pdfjs-dist": "catalog:",
     "qrcode": "catalog:",
     "react-colorful": "catalog:",
-    "react-grab": "catalog:",
     "react-markdown": "catalog:",
     "rehype-highlight": "catalog:",
     "rehype-katex": "catalog:",
@@ -96,9 +94,7 @@
     "tailwindcss": "catalog:",
     "thinking-orbs": "catalog:",
     "tw-animate-css": "catalog:",
-    "tweetnacl": "catalog:",
     "unified": "catalog:",
-    "zod": "catalog:",
     "zustand": "catalog:workbench"
   },
   "devDependencies": {

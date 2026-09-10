@@ -29,7 +29,7 @@ export function DeleteWorktreeSkipConfirmOption({
     >
       <span
         className={cn(
-          'flex size-4 items-center justify-center border transition-colors',
+          'flex size-4 items-center justify-center rounded-sm border transition-colors',
           dontAskAgain
             ? 'border-foreground bg-foreground text-background'
             : 'border-muted-foreground bg-transparent'

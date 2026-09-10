@@ -24,7 +24,7 @@ import {
   SettingsTuiAgentValueSchema,
   SettingsWarpThemeImportPreviewSchema,
   type SettingsServiceUpdateRequest
-} from '../generated/yiru/runtime/v1/settings_pb.js'
+} from '../generated/agent_start/runtime/v1/settings_pb.js'
 import {
   decodeSettingsDocument,
   encodeSettingsUpdates,

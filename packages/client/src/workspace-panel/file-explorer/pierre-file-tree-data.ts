@@ -1,12 +1,12 @@
+import type { GitFileStatus } from '@agentstart/protocol/git/status-types'
 import type { GitStatus, GitStatusEntry } from '@pierre/trees'
-import type { GitFileStatus } from '@yiru/protocol/git/status-types'
 import { normalizeRelativePath } from '~renderer/path'
 
 import type { FileExplorerRowProjection } from './row-projection'
 import type { TreeNode } from './types'
 
-export const NEW_FILE_NAME = '__yiru_new_file__'
-export const NEW_FOLDER_NAME = '__yiru_new_folder__'
+export const NEW_FILE_NAME = '__agentstart_new_file__'
+export const NEW_FOLDER_NAME = '__agentstart_new_folder__'
 
 export type PierreFileTreeData = {
   canonicalPathByAbsolutePath: Map<string, string>

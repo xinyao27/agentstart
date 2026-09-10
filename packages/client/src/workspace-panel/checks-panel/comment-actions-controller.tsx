@@ -1,4 +1,4 @@
-import type { PRComment } from '@yiru/protocol/hosted-review/review-types'
+import type { PRComment } from '@agentstart/protocol/hosted-review/review-types'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import { mergePRCommentIntoList } from '~renderer/github/state'

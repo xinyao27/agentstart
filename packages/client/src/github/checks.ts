@@ -1,9 +1,12 @@
-import type { CheckStatus } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { PRCheckDetail, GitHubOwnerRepo } from '@yiru/protocol/hosted-review/review-types'
+import type { CheckStatus } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type {
+  PRCheckDetail,
+  GitHubOwnerRepo
+} from '@agentstart/protocol/hosted-review/review-types'
 import { getGitHubPRCacheKey } from '~renderer/github/cache-key'
 import type { AppState } from '~renderer/store/types'
 
-export function normalizeBranchName(branch: string): string {
+function normalizeBranchName(branch: string): string {
   return branch.replace(/^refs\/heads\//, '')
 }
 

@@ -1,5 +1,5 @@
-import { isTuiAgent } from '@yiru/protocol/agent/identity'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { isTuiAgent } from '@agentstart/protocol/agent/identity'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 
 export function chooseInitialContinuationAgent(args: {
   availableAgents: TuiAgent[]

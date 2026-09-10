@@ -1,4 +1,4 @@
-import { StatusCode } from '../../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   OrchestrationDispatchStatus,
   OrchestrationGateStatus,
@@ -7,7 +7,7 @@ import {
   OrchestrationQuestionStatus,
   OrchestrationResetScope,
   OrchestrationTaskStatus
-} from '../../generated/yiru/runtime/v1/orchestration_pb.js'
+} from '../../generated/agent_start/runtime/v1/orchestration_pb.js'
 import { RuntimeProtocolError } from '../error.js'
 import type {
   OrchestrationDispatchStatusName,
@@ -209,20 +209,6 @@ export function resetScopeValue(value: OrchestrationResetScopeName): Orchestrati
     case 'messages':
       return OrchestrationResetScope.MESSAGES
   }
-}
-
-export function resetScopeName(value: OrchestrationResetScope): OrchestrationResetScopeName {
-  switch (value) {
-    case OrchestrationResetScope.ALL:
-      return 'all'
-    case OrchestrationResetScope.TASKS:
-      return 'tasks'
-    case OrchestrationResetScope.MESSAGES:
-      return 'messages'
-    case OrchestrationResetScope.UNSPECIFIED:
-      throw invalidResponse('Reset scope is unspecified')
-  }
-  throw invalidResponse('Reset scope is unknown')
 }
 
 export function invalidResponse(message: string): RuntimeProtocolError {

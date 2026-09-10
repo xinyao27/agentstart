@@ -1,7 +1,7 @@
 import type {
   ClaudeRateLimitAccountsState,
   CodexRateLimitAccountsState
-} from '@yiru/protocol/settings/managed-accounts'
+} from '@agentstart/protocol/settings/managed-accounts'
 import { useEffect, useState } from 'react'
 import type { JSX, ReactNode } from 'react'
 import { toast } from 'sonner'
@@ -24,13 +24,18 @@ function ConnectionPill(props: { connected: boolean; label: string }): JSX.Eleme
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 whitespace-nowrap border px-2 py-0.5 text-[11px] font-medium',
+        'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-medium',
         connected
           ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
           : 'border-border bg-background text-muted-foreground'
       )}
     >
-      <span className={cn('size-1.5', connected ? 'bg-emerald-500' : 'bg-muted-foreground')} />
+      <span
+        className={cn(
+          'size-1.5 rounded-full',
+          connected ? 'bg-emerald-500' : 'bg-muted-foreground'
+        )}
+      />
       {label}
     </span>
   )
@@ -47,9 +52,9 @@ function ProviderRow(props: {
 }): JSX.Element {
   const { icon, name, description, connected, connectionLabel, isAdding, onSignIn } = props
   return (
-    <div className="border-border bg-muted/20 border">
+    <div className="border-border bg-muted/20 rounded-lg border">
       <div className="flex items-center gap-3 px-3 py-2">
-        <div className="border-border bg-background text-foreground flex size-7 shrink-0 items-center justify-center border">
+        <div className="border-border bg-background text-foreground flex size-7 shrink-0 items-center justify-center rounded-md border">
           {icon}
         </div>
         <div className="min-w-0 flex-1">

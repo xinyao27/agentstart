@@ -65,7 +65,7 @@ export function IpynbLayout(props: IpynbLayoutProps): React.JSX.Element {
           >
             <Save className="size-3.5" />
           </NotebookHeaderButton>
-          <span className="border-border bg-muted text-muted-foreground border px-1.5 py-0.5 font-medium">
+          <span className="border-border bg-muted text-muted-foreground rounded-sm border px-1.5 py-0.5 font-medium">
             {translate('auto.components.editor.IpynbViewer.329764e9fc', 'BETA')}
           </span>
           <span className="font-mono">
@@ -76,7 +76,7 @@ export function IpynbLayout(props: IpynbLayoutProps): React.JSX.Element {
       </div>
       <div className="mx-auto flex max-w-[980px] flex-col gap-3 px-5 py-5">
         {notebook.cells.length === 0 ? (
-          <div className="border-border bg-background text-muted-foreground flex items-center justify-center border p-8 text-sm">
+          <div className="border-border bg-background text-muted-foreground flex items-center justify-center rounded-md border p-8 text-sm">
             {translate('auto.components.editor.IpynbViewer.d6f37a640b', 'Empty notebook')}
           </div>
         ) : (
@@ -86,7 +86,10 @@ export function IpynbLayout(props: IpynbLayoutProps): React.JSX.Element {
               ? (props.sourceDrafts[cellKey] ?? '')
               : cell.source
             return (
-              <section key={cellKey} className="border-border bg-background overflow-hidden border">
+              <section
+                key={cellKey}
+                className="border-border bg-background overflow-hidden rounded-md border"
+              >
                 <NotebookCellHeader
                   cell={cell}
                   index={index}

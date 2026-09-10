@@ -1,4 +1,4 @@
-import type { MarkdownDocument } from '@yiru/protocol/files/values'
+import type { MarkdownDocument } from '@agentstart/protocol/files/values'
 import React, { useEffect, useMemo, useRef } from 'react'
 import { createConnectionIdForFileSelector } from '~renderer/editor/connection-owner-resolution'
 import { isMarkdownComment } from '~renderer/editor/diff-comment-compat'
@@ -67,18 +67,6 @@ type MarkdownPreviewProps = {
   ) => void | Promise<void>
   markdownAnnotationsEnabled?: boolean
 }
-
-export {
-  decodeMarkdownPreviewAnchor,
-  getMarkdownPreviewAnchorScrollTop
-} from './markdown-preview/navigation'
-export {
-  deriveMarkdownPreviewSourceRoot,
-  findMarkdownPreviewOpenedEditFileId,
-  findMarkdownPreviewSourceOpenFile,
-  getMarkdownPreviewSourceRelativePath,
-  resolveMarkdownPreviewSourceWorktree
-} from './markdown-preview/source-model'
 
 export default function MarkdownPreview({
   content,

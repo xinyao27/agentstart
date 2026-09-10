@@ -1,12 +1,12 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     DangerousApprovalCeremonyResponse, DangerousApprovalServiceBeginApprovalRequest,
     DangerousApprovalServiceBeginRegistrationRequest,
     DangerousApprovalServiceFinishApprovalRequest,
     DangerousApprovalServiceFinishRegistrationRequest, DangerousApprovalServiceRemoveRequest,
     DangerousApprovalServiceStatusRequest,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::dangerous_approval::CeremonyResponse;
 use crate::rpc::zod_input::{is_uuid, trim_ecmascript_whitespace};

@@ -1,10 +1,13 @@
-import type { SleepingAgentSessionRecord } from '@yiru/protocol/agent/session-resume'
-import { parseLegacyNumericPaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { SleepingAgentSessionRecord } from '@agentstart/protocol/agent/session-resume'
+import {
+  parseLegacyNumericPaneKey,
+  parsePaneKey
+} from '@agentstart/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode
-} from '@yiru/protocol/workspace/session'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/workspace/session'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import type { useAppStore } from '~renderer/store/state'
 
 type AppStoreState = ReturnType<typeof useAppStore.getState>

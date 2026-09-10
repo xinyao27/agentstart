@@ -1,4 +1,4 @@
-import type { SkillUpdateStartResult } from '@yiru/protocol'
+import type { SkillUpdateStartResult } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 type SkillRunRejectionReason = Extract<SkillUpdateStartResult, { started: false }>['reason']

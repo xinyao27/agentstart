@@ -22,7 +22,7 @@ const MAC_PROBE_POLL_INTERVAL_MS = 2500
 // in System Settings.
 const MAC_PROBE_POLL_MAX_ATTEMPTS = 72
 
-export function resolveMacNotificationPermissionState(
+function resolveMacNotificationPermissionState(
   probeState: NotificationDeliveryProbeResult['state'],
   promptedBefore: boolean
 ): MacNotificationPermissionState | null {
@@ -48,7 +48,7 @@ export function useMacNotificationPermissionState(
     useState<MacNotificationPermissionState | null>(null)
 
   useEffect(() => {
-    // Why: while Yiru's own notifications setting is off, the OS permission
+    // Why: while AgentStart's own notifications setting is off, the OS permission
     // is irrelevant — a green "notifications are enabled" card next to a
     // disabled toggle reads as a contradiction. Skip the readout polling
     // entirely until the setting is back on; the returned tuple below always
@@ -125,7 +125,7 @@ export function MacNotificationPermissionCard({
 }): React.JSX.Element | null {
   if (state === 'checking') {
     return (
-      <section className="border-border bg-muted/20 text-muted-foreground border px-5 py-4 text-[13px]">
+      <section className="border-border bg-muted/20 text-muted-foreground rounded-xl border px-5 py-4 text-[13px]">
         {translate(
           'auto.components.onboarding.NotificationStep.56b836215c',
           'Checking notification permission…'
@@ -136,7 +136,7 @@ export function MacNotificationPermissionCard({
 
   if (state === 'enabled') {
     return (
-      <section className="flex items-center gap-2.5 border border-emerald-500/30 bg-emerald-500/[0.07] px-5 py-4">
+      <section className="flex items-center gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/[0.07] px-5 py-4">
         <Check className="size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
         <div className="min-w-0">
           <div className="text-foreground text-sm font-semibold">
@@ -158,14 +158,14 @@ export function MacNotificationPermissionCard({
 
   if (state === 'awaiting-permission') {
     return (
-      <section className="border-border bg-card border px-5 py-4">
+      <section className="border-border bg-card rounded-xl border px-5 py-4">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0 space-y-1">
             <div className="text-foreground flex items-center gap-2 text-sm font-semibold">
               <BellRing className="size-4" />
               {translate(
                 'auto.components.onboarding.NotificationStep.95d99b52fa',
-                'Allow notifications for Yiru'
+                'Allow notifications for AgentStart'
               )}
             </div>
             <p className="text-muted-foreground max-w-[58ch] text-[13px] leading-relaxed">
@@ -195,20 +195,23 @@ export function MacNotificationPermissionCard({
 
   if (state === 'blocked') {
     return (
-      <section role="alert" className="border border-amber-500/40 bg-amber-500/10 px-5 py-4">
+      <section
+        role="alert"
+        className="rounded-xl border border-amber-500/40 bg-amber-500/10 px-5 py-4"
+      >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0 space-y-1">
             <div className="flex items-center gap-2 text-sm font-semibold text-amber-700 dark:text-amber-300">
               <TriangleAlert className="size-4" />
               {translate(
                 'auto.components.onboarding.NotificationStep.90b5d2e363',
-                'macOS is not delivering Yiru notifications'
+                'macOS is not delivering AgentStart notifications'
               )}
             </div>
             <p className="max-w-[58ch] text-[13px] leading-relaxed text-amber-700/80 dark:text-amber-200/80">
               {translate(
                 'auto.components.onboarding.mac.notification.permission.card.721d2bedb6',
-                'Turn on Allow notifications for Yiru in System Settings.'
+                'Turn on Allow notifications for AgentStart in System Settings.'
               )}
             </p>
           </div>

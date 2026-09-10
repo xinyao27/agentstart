@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { listPairedMobileDevices } from '~renderer/runtime/mobile-pairing-client'
 import { useAppStore } from '~renderer/store/state'
 
-const DISMISS_KEY = 'yiru.mobile.sidebar-onboarding-dismissed'
+const DISMISS_KEY = 'agentstart.mobile.sidebar-onboarding-dismissed'
 
 function readDismissed(): boolean {
   try {
@@ -12,14 +12,11 @@ function readDismissed(): boolean {
   }
 }
 
-export function shouldLoadMobileSidebarOnboardingBadge(
-  enabled: boolean,
-  dismissed: boolean
-): boolean {
+function shouldLoadMobileSidebarOnboardingBadge(enabled: boolean, dismissed: boolean): boolean {
   return enabled && !dismissed
 }
 
-// Why: surface a one-time "Try it" badge on the Yiru Mobile sidebar entry
+// Why: surface a one-time "Try it" badge on the AgentStart Mobile sidebar entry
 // for users who haven't paired any device. Clicking the row dismisses it
 // permanently, mirroring the once-and-done feel of an inbox unread dot.
 export function useMobileSidebarOnboardingBadge(enabled = true): {

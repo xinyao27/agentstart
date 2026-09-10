@@ -4,64 +4,62 @@ import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
 import type { SettingsSearchEntry } from './search'
 import { translateSearchKeyword } from './search-keywords'
 
-export const getAutoRenameBranchParentSearchEntry = createLocalizedCatalog(
-  (): SettingsSearchEntry => ({
-    title: translate(
-      'auto.components.settings.auto.rename.branch.search.427f2cd1eb',
-      'Auto-rename branch & worktree'
+const getAutoRenameBranchParentSearchEntry = createLocalizedCatalog((): SettingsSearchEntry => ({
+  title: translate(
+    'auto.components.settings.auto.rename.branch.search.427f2cd1eb',
+    'Auto-rename branch & worktree'
+  ),
+  description: translate(
+    'auto.components.settings.auto.rename.branch.search.ea94b9da8a',
+    'Rename the auto-generated branch based on the work once an agent starts.'
+  ),
+  keywords: [
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.9319bd9827',
+      'branch'
     ),
-    description: translate(
-      'auto.components.settings.auto.rename.branch.search.ea94b9da8a',
-      'Rename the auto-generated branch based on the work once an agent starts.'
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.55a1860e47',
+      'rename'
     ),
-    keywords: [
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.9319bd9827',
-        'branch'
-      ),
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.55a1860e47',
-        'rename'
-      ),
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.7803423877',
-        'auto'
-      ),
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.f0acf64301',
-        'creature name'
-      ),
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.3ef3cbe98c',
-        'agent'
-      ),
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.40d21f2efc',
-        'prompt'
-      ),
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.10485c4fc5',
-        'command'
-      ),
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.7adefcdd94',
-        'template'
-      ),
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.ed677944cc',
-        'worktree'
-      ),
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.a482f6a423',
-        'slug'
-      ),
-      ...translateSearchKeyword(
-        'auto.components.settings.auto.rename.branch.search.f41833025e',
-        'generate'
-      )
-    ]
-  })
-)
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.7803423877',
+      'auto'
+    ),
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.f0acf64301',
+      'creature name'
+    ),
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.3ef3cbe98c',
+      'agent'
+    ),
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.40d21f2efc',
+      'prompt'
+    ),
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.10485c4fc5',
+      'command'
+    ),
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.7adefcdd94',
+      'template'
+    ),
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.ed677944cc',
+      'worktree'
+    ),
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.a482f6a423',
+      'slug'
+    ),
+    ...translateSearchKeyword(
+      'auto.components.settings.auto.rename.branch.search.f41833025e',
+      'generate'
+    )
+  ]
+}))
 
 export const getAutoRenameBranchAdvancedSearchEntries = createLocalizedCatalog(() => [
   {

@@ -1,10 +1,10 @@
-import type { DiscoveredSkill } from '@yiru/protocol'
-import { TUI_AGENT_AUTO_PICK_ORDER } from '@yiru/protocol/agent/selection'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { DiscoveredSkill } from '@agentstart/protocol'
+import { TUI_AGENT_AUTO_PICK_ORDER } from '@agentstart/protocol/agent/selection'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { getAgentLabel } from '~renderer/agent/catalog'
 import { ORCHESTRATION_SKILL_NAME } from '~renderer/agent/feature-install-commands'
 
-export type OrchestrationSkillLocationId =
+type OrchestrationSkillLocationId =
   | 'claude-home'
   | 'codex-home'
   | 'codex-plugin-cache'
@@ -163,16 +163,13 @@ function isOrchestrationSkillInstalledAtLocation(
   return skills.some((skill) => location.matchesSkill(skill))
 }
 
-export function agentHasOrchestrationSkill(
-  agent: TuiAgent,
-  skills: readonly DiscoveredSkill[]
-): boolean {
+function agentHasOrchestrationSkill(agent: TuiAgent, skills: readonly DiscoveredSkill[]): boolean {
   return getOrchestrationSkillLocationIdsForAgent(agent).some((locationId) =>
     isOrchestrationSkillInstalledAtLocation(skills, locationId)
   )
 }
 
-export function sortOrchestrationAgents(agents: readonly TuiAgent[]): TuiAgent[] {
+function sortOrchestrationAgents(agents: readonly TuiAgent[]): TuiAgent[] {
   const order = new Map<TuiAgent, number>()
   for (const [index, agent] of TUI_AGENT_AUTO_PICK_ORDER.entries()) {
     order.set(agent, index)

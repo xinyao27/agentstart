@@ -1,3 +1,3 @@
-"CFBundleDisplayName" = "Yiru Computer Use";
-"NSAccessibilityUsageDescription" = "Yiru Computer Use needs Accessibility permission to read and interact with app interfaces when you ask Yiru to use apps.";
-"NSScreenCaptureUsageDescription" = "Yiru Computer Use needs Screen Recording permission to capture app windows when you ask Yiru to inspect your screen.";
+"CFBundleDisplayName" = "AgentStart Computer Use";
+"NSAccessibilityUsageDescription" = "AgentStart Computer Use needs Accessibility permission to read and interact with app interfaces when you ask AgentStart to use apps.";
+"NSScreenCaptureUsageDescription" = "AgentStart Computer Use needs Screen Recording permission to capture app windows when you ask AgentStart to inspect your screen.";

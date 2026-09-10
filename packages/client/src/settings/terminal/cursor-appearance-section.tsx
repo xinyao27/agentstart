@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 import { clampNumber } from '~renderer/terminal/theme'
 
@@ -37,7 +37,7 @@ export function TerminalCursorAppearanceSection({
           )}
           description={translate(
             'auto.components.settings.TerminalAppearanceSection.d455f2ef4f',
-            'Default cursor appearance for Yiru terminal panes.'
+            'Default cursor appearance for AgentStart terminal panes.'
           )}
           keywords={['terminal', 'cursor', 'bar', 'block', 'underline']}
         >

@@ -1,8 +1,8 @@
 import {
   agentProviderSessionsEqual,
   type SleepingAgentSessionRecord
-} from '@yiru/protocol/agent/session-resume'
-import { parseLegacyNumericPaneKey } from '@yiru/protocol/terminal/pane-identity'
+} from '@agentstart/protocol/agent/session-resume'
+import { parseLegacyNumericPaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import type { useAppStore } from '~renderer/store/state'
 
 import { getProviderSessionClaimKey } from '../sleeping-agent-pane-ownership'

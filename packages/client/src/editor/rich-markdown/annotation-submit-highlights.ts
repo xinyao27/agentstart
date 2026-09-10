@@ -1,5 +1,5 @@
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 import type { Editor } from '@tiptap/react'
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
 
 import { richMarkdownAnnotationHighlightPluginKey } from './annotation-highlight'
 import {

@@ -1,0 +1,456 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+import "agent_start/runtime/v1/browser_grab.proto";
+import "agent_start/runtime/v1/browser_page_control.proto";
+
+service BrowserCliService {
+  rpc ResolveTarget(ResolveTargetRequest) returns (ResolveTargetResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST tier: ACCESS_TIER_READ callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+  rpc ResolveUpload(ResolveUploadRequest) returns (ResolveUploadResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST tier: ACCESS_TIER_READ callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+// Why: all commands share one Chrome authority and policy; the oneof retains each operation's
+// concrete schema without multiplying identical RPC policy declarations.
+// Why: remote runtimes receive only tab creation, not the full host browser command surface.
+service BrowserRuntimeService {
+  rpc CreateTab(TabCreateCommand) returns (PageResult) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST tier: ACCESS_TIER_HOST
+      callers: CALLER_CLASS_LOCAL callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+service BrowserHostService {
+  rpc Execute(ExecuteRequest) returns (ExecuteResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST tier: ACCESS_TIER_HOST callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+  rpc Download(DownloadRequest) returns (stream DownloadResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST tier: ACCESS_TIER_HOST callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+  // Why: a distinct rpc — rather than widening Execute's own policy — grants the small subset of
+  // commands the legacy contract marks mobile:true to PEER_KIND_IOS_APP without exposing the other
+  // ~75 Execute commands (mobile:false) to mobile callers.
+  rpc ExecuteMobile(ExecuteMobileRequest) returns (ExecuteMobileResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST tier: ACCESS_TIER_HOST callers: CALLER_CLASS_MOBILE
+      peer_kinds: PEER_KIND_IOS_APP
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message ResolveTargetRequest {
+  optional string page = 1;
+  optional string worktree = 2;
+  string current_directory = 3;
+  bool require_worktree = 4;
+}
+message ResolveTargetResponse { BrowserTarget target = 1; }
+message ResolveUploadRequest {
+  repeated string files = 1;
+  optional string page = 2;
+  optional string worktree = 3;
+  string current_directory = 4;
+}
+message ResolveUploadResponse { BrowserTarget target = 1; repeated string files = 2; }
+
+message ExecuteRequest {
+  reserved 31;
+  reserved "exec";
+  // Why: daemon-populated from the call's authenticated principal, never client-supplied — it
+  // lets pageControl/grab commands scope registration ownership the way the legacy authorityId
+  // (the caller's shell/session identity) did.
+  optional string authority_id = 91;
+  oneof command {
+    TargetCommand snapshot = 1;
+    ScreenshotCommand screenshot = 2;
+    ScreenshotCommand full_screenshot = 3;
+    UrlCommand goto = 4;
+    TargetCommand back = 5;
+    TargetCommand reload = 6;
+    TargetCommand forward = 7;
+    EvalCommand eval = 8;
+    ScrollCommand scroll = 9;
+    WaitCommand wait = 10;
+    TargetCommand pdf = 11;
+    ElementCommand click = 12;
+    ElementCommand double_click = 13;
+    ElementCommand focus = 14;
+    ElementCommand clear = 15;
+    ElementCommand select_all = 16;
+    ElementCommand hover = 17;
+    ElementCommand scroll_into_view = 18;
+    ElementValueCommand fill = 19;
+    TextInputCommand type = 20;
+    ElementValueCommand select = 21;
+    CheckCommand check = 22;
+    KeyCommand keypress = 23;
+    DragCommand drag = 24;
+    UploadCommand upload = 25;
+    GetCommand get = 26;
+    IsCommand is = 27;
+    TextCommand insert_text = 28;
+    FindCommand find = 29;
+    SelectorCommand highlight = 30;
+    MouseMoveCommand mouse_move = 32;
+    MouseButtonCommand mouse_down = 33;
+    MouseButtonCommand mouse_up = 34;
+    MouseWheelCommand mouse_wheel = 35;
+    TargetCommand tab_list = 36;
+    TargetCommand tab_show = 37;
+    TargetCommand tab_current = 38;
+    TabSwitchCommand tab_switch = 39;
+    TabCreateCommand tab_create = 40;
+    TabCloseCommand tab_close = 41;
+    EmptyCommand profile_list = 42;
+    ProfileCreateCommand profile_create = 43;
+    ProfileDeleteCommand profile_delete = 44;
+    TabProfileCommand tab_set_profile = 45;
+    TargetCommand tab_profile_show = 46;
+    TabProfileCommand tab_profile_clone = 47;
+    CookieGetCommand cookie_get = 48;
+    CookieSetCommand cookie_set = 49;
+    CookieDeleteCommand cookie_delete = 50;
+    ViewportCommand viewport = 51;
+    GeolocationCommand geolocation = 52;
+    NameCommand set_device = 53;
+    StateCommand set_offline = 54;
+    HeadersCommand set_headers = 55;
+    CredentialsCommand set_credentials = 56;
+    MediaCommand set_media = 57;
+    TargetCommand clipboard_read = 58;
+    TextCommand clipboard_write = 59;
+    OptionalTextCommand dialog_accept = 60;
+    TargetCommand dialog_dismiss = 61;
+    PatternsCommand intercept_enable = 62;
+    TargetCommand intercept_disable = 63;
+    TargetCommand intercept_list = 64;
+    TargetCommand capture_start = 65;
+    TargetCommand capture_stop = 66;
+    LimitCommand console = 67;
+    LimitCommand network = 68;
+    StorageKeyCommand storage_local_get = 69;
+    StorageSetCommand storage_local_set = 70;
+    TargetCommand storage_local_clear = 71;
+    StorageKeyCommand storage_session_get = 72;
+    StorageSetCommand storage_session_set = 73;
+    TargetCommand storage_session_clear = 74;
+    CertificateProceedCommand certificate_proceed = 75;
+    BrowserPageIdCommand grab_cancel = 76;
+    BrowserPageIdCommand page_control_open_dev_tools = 77;
+    BrowserPageIdCommand page_control_set_active = 78;
+    BrowserGrabSetModeCommand grab_set_mode = 79;
+    BrowserGrabAwaitCommand grab_await_selection = 80;
+    BrowserGrabCaptureCommand grab_capture_selection = 81;
+    BrowserPageIdCommand grab_extract_hover = 82;
+    BrowserPageControlRegisterCommand page_control_register = 83;
+    BrowserPageControlUnregisterCommand page_control_unregister = 84;
+    BrowserPageControlViewportOverrideCommand page_control_set_viewport_override = 85;
+    BrowserPageControlAnnotationCommand page_control_set_annotation_viewport = 86;
+    MouseClickCommand mouse_click = 87;
+    EmptyCommand profile_clear_default_cookies = 88;
+    EmptyCommand profile_detect_browsers = 89;
+    ProfileImportCommand profile_import_from_browser = 90;
+  }
+}
+
+message ExecuteResponse {
+  reserved 31;
+  reserved "exec";
+  oneof result {
+    SnapshotResult snapshot = 1;
+    ScreenshotResult screenshot = 2;
+    ScreenshotResult full_screenshot = 3;
+    NavigationResult goto = 4;
+    NavigationResult back = 5;
+    NavigationResult reload = 6;
+    NavigationResult forward = 7;
+    EvalResult eval = 8;
+    ScrollResult scroll = 9;
+    BoolResult wait = 10;
+    BinaryResult pdf = 11;
+    StringResult click = 12;
+    StringResult double_click = 13;
+    StringResult focus = 14;
+    StringResult clear = 15;
+    StringResult select_all = 16;
+    StringResult hover = 17;
+    ValueResult scroll_into_view = 18;
+    StringResult fill = 19;
+    BoolResult type = 20;
+    StringResult select = 21;
+    BoolResult check = 22;
+    StringResult keypress = 23;
+    DragResult drag = 24;
+    CountResult upload = 25;
+    ValueResult get = 26;
+    ValueResult is = 27;
+    ValueResult insert_text = 28;
+    ValueResult find = 29;
+    ValueResult highlight = 30;
+    ValueResult mouse_move = 32;
+    ValueResult mouse_down = 33;
+    ValueResult mouse_up = 34;
+    ValueResult mouse_wheel = 35;
+    TabListResult tab_list = 36;
+    TabResult tab_show = 37;
+    TabResult tab_current = 38;
+    TabSwitchResult tab_switch = 39;
+    PageResult tab_create = 40;
+    BoolResult tab_close = 41;
+    ProfileListResult profile_list = 42;
+    ProfileCreateResult profile_create = 43;
+    ProfileDeleteResult profile_delete = 44;
+    TabProfileResult tab_set_profile = 45;
+    TabProfileResult tab_profile_show = 46;
+    TabProfileCloneResult tab_profile_clone = 47;
+    CookieGetResult cookie_get = 48;
+    BoolResult cookie_set = 49;
+    BoolResult cookie_delete = 50;
+    ViewportResult viewport = 51;
+    GeolocationResult geolocation = 52;
+    ValueResult set_device = 53;
+    ValueResult set_offline = 54;
+    ValueResult set_headers = 55;
+    ValueResult set_credentials = 56;
+    ValueResult set_media = 57;
+    ValueResult clipboard_read = 58;
+    ValueResult clipboard_write = 59;
+    ValueResult dialog_accept = 60;
+    ValueResult dialog_dismiss = 61;
+    InterceptEnableResult intercept_enable = 62;
+    BoolResult intercept_disable = 63;
+    InterceptListResult intercept_list = 64;
+    BoolResult capture_start = 65;
+    BoolResult capture_stop = 66;
+    ConsoleResult console = 67;
+    NetworkResult network = 68;
+    ValueResult storage_local_get = 69;
+    ValueResult storage_local_set = 70;
+    ValueResult storage_local_clear = 71;
+    ValueResult storage_session_get = 72;
+    ValueResult storage_session_set = 73;
+    ValueResult storage_session_clear = 74;
+    OutcomeResult certificate_proceed = 75;
+    ValueResult grab_cancel = 76;
+    BoolResult page_control_open_dev_tools = 77;
+    BoolResult page_control_set_active = 78;
+    ValueResult grab_set_mode = 79;
+    ValueResult grab_await_selection = 80;
+    ValueResult grab_capture_selection = 81;
+    ValueResult grab_extract_hover = 82;
+    BoolResult page_control_register = 83;
+    BoolResult page_control_unregister = 84;
+    BoolResult page_control_set_viewport_override = 85;
+    BoolResult page_control_set_annotation_viewport = 86;
+    ValueResult mouse_click = 87;
+    BoolResult profile_clear_default_cookies = 88;
+    DetectedBrowsersResult profile_detect_browsers = 89;
+    OutcomeResult profile_import_from_browser = 90;
+  }
+}
+
+message BrowserPageIdCommand { string browser_page_id = 1; }
+message CertificateProceedCommand { BrowserTarget target = 1; string challenge_id = 2; }
+message MouseClickCommand {
+  BrowserTarget target = 1;
+  double x = 2;
+  double y = 3;
+  optional string button = 4;
+  optional double radius = 5;
+  repeated string modifiers = 6;
+}
+message ProfileImportCommand {
+  string profile_id = 1;
+  string browser_family = 2;
+  optional string browser_profile = 3;
+}
+message OutcomeResult { bool ok = 1; optional string reason = 2; }
+message DetectedBrowserProfile { string browser_family = 1; optional string browser_profile = 2; }
+message DetectedBrowsersResult { repeated DetectedBrowserProfile browsers = 1; }
+
+// Why: mirrors the mobile-eligible subset of ExecuteRequest's oneof under ExecuteMobile's own
+// tighter method_policy (see BrowserHostService.ExecuteMobile) instead of widening Execute itself.
+message ExecuteMobileRequest {
+  oneof command {
+    UrlCommand goto = 1;
+    TargetCommand back = 2;
+    TargetCommand forward = 3;
+    TargetCommand reload = 4;
+    KeyCommand keypress = 5;
+    TextCommand insert_text = 6;
+    MouseClickCommand mouse_click = 7;
+    MouseMoveCommand mouse_move = 8;
+    MouseButtonCommand mouse_down = 9;
+    MouseButtonCommand mouse_up = 10;
+    MouseWheelCommand mouse_wheel = 11;
+    TabCreateCommand tab_create = 12;
+    OptionalTextCommand dialog_accept = 13;
+    TargetCommand dialog_dismiss = 14;
+    ViewportCommand viewport = 15;
+  }
+}
+message ExecuteMobileResponse {
+  oneof result {
+    NavigationResult goto = 1;
+    NavigationResult back = 2;
+    NavigationResult forward = 3;
+    NavigationResult reload = 4;
+    StringResult keypress = 5;
+    ValueResult insert_text = 6;
+    ValueResult mouse_click = 7;
+    ValueResult mouse_move = 8;
+    ValueResult mouse_down = 9;
+    ValueResult mouse_up = 10;
+    ValueResult mouse_wheel = 11;
+    PageResult tab_create = 12;
+    ValueResult dialog_accept = 13;
+    ValueResult dialog_dismiss = 14;
+    ViewportResult viewport = 15;
+  }
+}
+
+message DownloadRequest { BrowserTarget target = 1; string selector = 2; string path = 3; }
+message DownloadResponse { oneof event { bytes chunk = 1; uint32 byte_length = 2; } }
+
+message BrowserTarget { optional string page = 1; optional string worktree = 2; }
+message EmptyCommand {}
+message TargetCommand { BrowserTarget target = 1; }
+message UrlCommand { BrowserTarget target = 1; string url = 2; }
+message EvalCommand { BrowserTarget target = 1; string expression = 2; }
+message ScrollCommand { BrowserTarget target = 1; string direction = 2; optional double amount = 3; }
+message WaitCommand { BrowserTarget target = 1; optional string selector = 2; optional double timeout = 3; optional string text = 4; optional string url = 5; optional string load = 6; optional string function = 7; optional string state = 8; }
+message ScreenshotCommand { BrowserTarget target = 1; string format = 2; }
+message ElementCommand { BrowserTarget target = 1; string element = 2; }
+message ElementValueCommand { BrowserTarget target = 1; string element = 2; string value = 3; }
+message TextInputCommand { BrowserTarget target = 1; string input = 2; }
+message CheckCommand { BrowserTarget target = 1; string element = 2; bool checked = 3; }
+message KeyCommand { BrowserTarget target = 1; string key = 2; }
+message DragCommand { BrowserTarget target = 1; string from = 2; string to = 3; }
+message UploadCommand { BrowserTarget target = 1; string element = 2; repeated string files = 3; }
+message GetCommand { BrowserTarget target = 1; string what = 2; optional string selector = 3; }
+message IsCommand { BrowserTarget target = 1; string what = 2; string selector = 3; }
+message TextCommand { BrowserTarget target = 1; string text = 2; }
+message OptionalTextCommand { BrowserTarget target = 1; optional string text = 2; }
+message FindCommand { BrowserTarget target = 1; string locator = 2; string value = 3; string action = 4; optional string text = 5; }
+message SelectorCommand { BrowserTarget target = 1; string selector = 2; }
+message MouseMoveCommand { BrowserTarget target = 1; double x = 2; double y = 3; }
+message MouseButtonCommand { BrowserTarget target = 1; optional string button = 2; }
+message MouseWheelCommand { BrowserTarget target = 1; double dy = 2; optional double dx = 3; }
+message TabSwitchCommand { BrowserTarget target = 1; optional double index = 2; bool focus = 3; }
+message TabCreateCommand { BrowserTarget target = 1; optional string url = 2; optional string profile_id = 3; }
+message TabCloseCommand { BrowserTarget target = 1; optional double index = 2; }
+message ProfileCreateCommand { string label = 1; string scope = 2; }
+message ProfileDeleteCommand { string profile_id = 1; }
+message TabProfileCommand { BrowserTarget target = 1; string profile_id = 2; }
+message CookieGetCommand { BrowserTarget target = 1; optional string url = 2; }
+message CookieSetCommand { BrowserTarget target = 1; string name = 2; string value = 3; optional string domain = 4; optional string path = 5; optional bool secure = 6; optional bool http_only = 7; optional string same_site = 8; optional double expires = 9; }
+message CookieDeleteCommand { BrowserTarget target = 1; string name = 2; optional string domain = 3; optional string url = 4; }
+message ViewportCommand { BrowserTarget target = 1; double width = 2; double height = 3; optional double device_scale_factor = 4; optional bool mobile = 5; }
+message GeolocationCommand { BrowserTarget target = 1; double latitude = 2; double longitude = 3; optional double accuracy = 4; }
+message NameCommand { BrowserTarget target = 1; string name = 2; }
+message StateCommand { BrowserTarget target = 1; optional string state = 2; }
+message HeadersCommand { BrowserTarget target = 1; string headers = 2; }
+message CredentialsCommand { BrowserTarget target = 1; string user = 2; string pass = 3; }
+message MediaCommand { BrowserTarget target = 1; optional string color_scheme = 2; optional string reduced_motion = 3; }
+message PatternsCommand { BrowserTarget target = 1; repeated string patterns = 2; }
+message LimitCommand { BrowserTarget target = 1; optional double limit = 2; }
+message StorageKeyCommand { BrowserTarget target = 1; string key = 2; }
+message StorageSetCommand { BrowserTarget target = 1; string key = 2; string value = 3; }
+
+message SnapshotResult { string browser_page_id = 1; string snapshot = 2; repeated SnapshotRef refs = 3; string url = 4; string title = 5; }
+message SnapshotRef { string ref = 1; string role = 2; string name = 3; }
+message NavigationResult { string url = 1; string title = 2; }
+message ScreenshotResult { bytes data = 1; string format = 2; }
+message BinaryResult { bytes data = 1; }
+message EvalResult { string result = 1; string origin = 2; }
+message ScrollResult { string scrolled = 1; }
+message StringResult { string value = 1; }
+message BoolResult { bool value = 1; }
+message CountResult { uint32 value = 1; }
+message DragResult { string from = 1; string to = 2; }
+message PageResult { string browser_page_id = 1; }
+message TabSwitchResult { double switched = 1; string browser_page_id = 2; }
+
+message ConsoleResult { repeated ConsoleEntry entries = 1; bool truncated = 2; }
+message ConsoleEntry { string level = 1; string text = 2; double timestamp = 3; optional string url = 4; optional double line = 5; }
+message NetworkResult { repeated NetworkEntry entries = 1; bool truncated = 2; }
+message NetworkEntry { string url = 1; string method = 2; double status = 3; string mime_type = 4; double size = 5; double timestamp = 6; }
+
+message TabListResult { repeated BrowserTab tabs = 1; }
+message TabResult { BrowserTab tab = 1; }
+message BrowserTab { string browser_page_id = 1; double index = 2; string url = 3; string title = 4; bool active = 5; optional string worktree_id = 6; optional string profile_id = 7; optional string profile_label = 8; optional BrowserLoadError load_error = 9; optional BrowserCertificateFailure certificate_failure = 10; }
+message BrowserLoadError { double code = 1; string description = 2; string validated_url = 3; }
+message BrowserCertificateFailure { string challenge_id = 1; string browser_page_id = 2; optional double error_code = 3; string error = 4; string origin = 5; string display_host = 6; bool can_proceed = 7; double observed_at = 8; }
+message ProfileListResult { repeated BrowserProfile profiles = 1; }
+message ProfileCreateResult { optional BrowserProfile profile = 1; }
+message ProfileDeleteResult { bool deleted = 1; string profile_id = 2; }
+message BrowserProfile { string id = 1; string scope = 2; string partition = 3; string label = 4; optional BrowserProfileSource source = 5; }
+message BrowserProfileSource { string browser_family = 1; optional string profile_name = 2; double imported_at = 3; }
+message TabProfileResult { string browser_page_id = 1; optional string worktree_id = 2; optional string profile_id = 3; optional string profile_label = 4; }
+message TabProfileCloneResult { string browser_page_id = 1; string source_browser_page_id = 2; optional string profile_id = 3; optional string profile_label = 4; }
+
+message CookieGetResult { repeated BrowserCookie cookies = 1; }
+message BrowserCookie { string name = 1; string value = 2; string domain = 3; string path = 4; double expires = 5; bool http_only = 6; bool secure = 7; string same_site = 8; }
+message ViewportResult { double width = 1; double height = 2; double device_scale_factor = 3; bool mobile = 4; }
+message GeolocationResult { double latitude = 1; double longitude = 2; double accuracy = 3; }
+message InterceptEnableResult { bool enabled = 1; repeated string patterns = 2; }
+message InterceptListResult { repeated InterceptedRequest requests = 1; }
+message InterceptedRequest { string id = 1; string url = 2; string method = 3; repeated BrowserHeader headers = 4; string resource_type = 5; }
+message BrowserHeader { string name = 1; string value = 2; }
+
+message ValueResult { optional BrowserValue value = 1; }
+message BrowserValue {
+  oneof kind {
+    BrowserNull null_value = 1;
+    bool bool_value = 2;
+    double number_value = 3;
+    string string_value = 4;
+    BrowserValueList list_value = 5;
+    BrowserValueObject object_value = 6;
+  }
+}
+message BrowserValueList { repeated BrowserValue values = 1; }
+message BrowserValueObject { repeated BrowserValueEntry entries = 1; }
+message BrowserValueEntry { string key = 1; BrowserValue value = 2; }
+enum BrowserNull { BROWSER_NULL_UNSPECIFIED = 0; BROWSER_NULL_VALUE = 1; }

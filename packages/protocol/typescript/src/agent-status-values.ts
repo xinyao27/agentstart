@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   AgentMigrationUnsupportedSource,
   AgentProviderSessionKey,
@@ -7,14 +7,14 @@ import {
   type AgentMigrationUnsupportedPtyEntry,
   type AgentStatusSnapshotEntry,
   type AgentStatusSubagent
-} from '../generated/yiru/runtime/v1/agent_status_pb.js'
+} from '../generated/agent_start/runtime/v1/agent_status_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const AGENT_STATUS_PROTOCOL_CAPABILITY = 'agentStatus.protobuf.v1' as const
 
 export type AgentStatusStateValue = 'working' | 'blocked' | 'waiting' | 'done'
 export type AgentSubagentStateValue = 'working' | 'blocked' | 'waiting' | 'idle'
-export type AgentProviderSessionKeyValue = 'session_id' | 'conversation_id'
+type AgentProviderSessionKeyValue = 'session_id' | 'conversation_id'
 
 export type AgentStatusProviderSessionValue = {
   key: AgentProviderSessionKeyValue

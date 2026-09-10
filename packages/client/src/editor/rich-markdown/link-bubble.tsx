@@ -101,7 +101,7 @@ export function getLinkBubblePosition(
   }
 }
 
-export function isLinkEditCancelShortcut(
+function isLinkEditCancelShortcut(
   event: Pick<KeyboardEvent, 'key' | 'metaKey' | 'ctrlKey'>,
   isMac: boolean
 ): boolean {

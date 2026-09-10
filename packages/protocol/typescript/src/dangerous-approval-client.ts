@@ -12,7 +12,7 @@ import {
   DangerousApprovalServiceRemoveRequestSchema,
   DangerousApprovalServiceStatusRequestSchema,
   DangerousApprovalServiceStatusResponseSchema
-} from '../generated/yiru/runtime/v1/dangerous_approval_pb.js'
+} from '../generated/agent_start/runtime/v1/dangerous_approval_pb.js'
 import {
   dangerousApprovalBeginApproval,
   dangerousApprovalBeginRegistration,

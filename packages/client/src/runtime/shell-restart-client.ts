@@ -1,5 +1,5 @@
 import {
-  YIRU_EDITOR_PREPARE_HOT_EXIT_EVENT,
+  AGENTSTART_EDITOR_PREPARE_HOT_EXIT_EVENT,
   type EditorPrepareHotExitDetail
 } from '~renderer/editor-save-events'
 
@@ -12,7 +12,7 @@ function requestEditorHotExitBackup(): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     let claimed = false
     window.dispatchEvent(
-      new CustomEvent<EditorPrepareHotExitDetail>(YIRU_EDITOR_PREPARE_HOT_EXIT_EVENT, {
+      new CustomEvent<EditorPrepareHotExitDetail>(AGENTSTART_EDITOR_PREPARE_HOT_EXIT_EVENT, {
         detail: {
           claim: () => {
             claimed = true

@@ -1,6 +1,6 @@
-import type { GitUpstreamStatus } from '@yiru/protocol/git/status-types'
-import type { PRState } from '@yiru/protocol/hosted-review/pull-request-types'
-import type { HostedReviewCreationEligibility } from '@yiru/protocol/hosted-review/types'
+import type { GitUpstreamStatus } from '@agentstart/protocol/git/status-types'
+import type { PRState } from '@agentstart/protocol/hosted-review/pull-request-types'
+import type { HostedReviewCreationEligibility } from '@agentstart/protocol/hosted-review/types'
 import type {
   SourceControlPrimaryActionKind,
   SourceControlRemoteOpKind
@@ -13,7 +13,7 @@ import type {
 // `handlePrimaryClick` switch exhaustively over only the kinds the
 // primary can actually emit, and it kills the compound-commit branch in
 // the isRemoteOperationActive tooltip below at compile time.
-export type PrimaryActionKind =
+type PrimaryActionKind =
   | Exclude<SourceControlPrimaryActionKind, 'create_review_intent' | 'create_review'>
   | 'create_pr_intent'
   | 'create_pr'
@@ -58,7 +58,7 @@ export type PrimaryActionInputs = {
   // status alone, but it has no branch ref that Publish Branch can push.
   hasCurrentBranch?: boolean
   // Why: linked review branches without upstream counts are pushable only when
-  // Yiru has a persisted or Git-configured target. Otherwise Push could fall
+  // AgentStart has a persisted or Git-configured target. Otherwise Push could fall
   // through to the default publish-to-origin behavior.
   canPushLinkedReviewWithoutUpstream?: boolean
   isPrIntentInFlight?: boolean

@@ -1,6 +1,6 @@
-import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
+import { getRepoExecutionHostId, LOCAL_EXECUTION_HOST_ID } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
 import { translate } from '~renderer/i18n/i18n'
 
 import type { SettingsSearchEntry } from '../search'
@@ -168,7 +168,7 @@ export function getRepositoryPaneSearchEntries(
       title: translate('auto.components.settings.repository.search.c5266c2c9d', 'Remove Project'),
       description: translate(
         'auto.components.settings.repository.search.c86478c3d8',
-        'Remove this project from Yiru.'
+        'Remove this project from AgentStart.'
       ),
       keywords: [
         repo.displayName,

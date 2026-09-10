@@ -1,4 +1,4 @@
-import { ORCHESTRATION_PROTOCOL_CAPABILITY, OrchestrationClient } from '@yiru/protocol'
+import { ORCHESTRATION_PROTOCOL_CAPABILITY, OrchestrationClient } from '@agentstart/protocol'
 
 import {
   openConfiguredBrowserHostProtocol,

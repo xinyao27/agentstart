@@ -1,4 +1,4 @@
-import type { GitHubOwnerRepo } from '@yiru/protocol/hosted-review/review-types'
+import type { GitHubOwnerRepo } from '@agentstart/protocol/hosted-review/review-types'
 
 function normalizedPRRepoIdentity(prRepo?: GitHubOwnerRepo | null): string {
   if (!prRepo) {
@@ -17,16 +17,6 @@ export function checksPanelAsyncResultKey(
   return `${repoId}::${branch}::${normalizedPRRepoIdentity(prRepo)}::${prNumber ?? 'none'}::${
     headSha ?? 'none'
   }`
-}
-
-export function checksPanelHostedReviewAsyncResultKey(
-  repoId: string,
-  branch: string,
-  provider: string,
-  reviewNumber: number | null,
-  headSha?: string | null
-): string {
-  return `${repoId}::${branch}::${provider}::${reviewNumber ?? 'none'}::${headSha ?? 'none'}`
 }
 
 export function shouldCommitChecksPanelAsyncResult(

@@ -1,10 +1,10 @@
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::progress_events_service_event::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::progress_events_service_event::Event;
+use agentstart_protocol::runtime::v1::{
     ProgressEventsRepoCloneProgress, ProgressEventsServiceEvent,
     ProgressEventsServiceSubscribeRequest, ProgressEventsSubscribeReady,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::host_progress::HostProgressSubscriptionEvent;
 use crate::rpc::protocol_call::ProtocolCallContext;

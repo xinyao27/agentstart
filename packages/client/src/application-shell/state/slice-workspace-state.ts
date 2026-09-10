@@ -8,22 +8,22 @@ import type {
   WorkspaceHostOrder,
   WorkspaceHostScope,
   VisibleWorkspaceHostIds
-} from '@yiru/protocol/settings/ui-state'
-import type { StatusBarUsageMode } from '@yiru/protocol/settings/usage-display'
-import type { UsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
-import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
-import type { PersistedTrustedYiruHooks } from '@yiru/protocol/worktree/hooks'
-import type { YiruHookScriptKind } from '~renderer/sidebar/yiru-hook-trust'
+} from '@agentstart/protocol/settings/ui-state'
+import type { StatusBarUsageMode } from '@agentstart/protocol/settings/usage-display'
+import type { UsagePercentageDisplay } from '@agentstart/protocol/settings/usage-display'
+import type { WorkspaceStatusDefinition } from '@agentstart/protocol/workspace/status/model'
+import type { PersistedTrustedAgentStartHooks } from '@agentstart/protocol/worktree/hooks'
+import type { AgentStartHookScriptKind } from '~renderer/sidebar/agentstart-hook-trust'
 
 export type UIWorkspaceState = {
-  trustedYiruHooks: PersistedTrustedYiruHooks
-  markYiruHookScriptConfirmed: (
+  trustedAgentStartHooks: PersistedTrustedAgentStartHooks
+  markAgentStartHookScriptConfirmed: (
     repoId: string,
-    kind: YiruHookScriptKind,
+    kind: AgentStartHookScriptKind,
     contentHash: string
   ) => void
-  markYiruHookRepoAlwaysTrusted: (repoId: string) => void
-  clearYiruHookTrustForRepo: (repoId: string) => void
+  markAgentStartHookRepoAlwaysTrusted: (repoId: string) => void
+  clearAgentStartHookTrustForRepo: (repoId: string) => void
   setupScriptPromptDismissedRepoIds: string[]
   dismissSetupScriptPrompt: (repoId: string) => void
   setupGuideSidebarDismissed: boolean

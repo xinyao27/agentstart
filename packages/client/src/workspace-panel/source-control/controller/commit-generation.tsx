@@ -1,4 +1,4 @@
-import { isCustomAgentId } from '@yiru/protocol/source-control/custom-agent'
+import { isCustomAgentId } from '@agentstart/protocol/source-control/custom-agent'
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import {
   generateRuntimeCommitMessage,

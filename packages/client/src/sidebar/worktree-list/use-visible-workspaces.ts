@@ -1,5 +1,5 @@
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import type { OnViewableItemsChangedInfo } from '@legendapp/list/react'
-import type { Worktree } from '@yiru/protocol/worktree/model'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { projectCatalogRepoBuckets } from '~renderer/project-catalog/repo-buckets'

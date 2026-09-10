@@ -1,4 +1,4 @@
-import type { Tab } from '@yiru/protocol/workspace/tabs'
+import type { Tab } from '@agentstart/protocol/workspace/tabs'
 
 export function resolveGroupTabFromVisibleId(
   groupTabs: readonly Tab[],

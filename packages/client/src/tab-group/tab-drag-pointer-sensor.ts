@@ -105,7 +105,7 @@ function hasExceededDistance(delta: PointerCoordinates, measurement: DistanceMea
   return false
 }
 
-export function shouldActivateTabDragFromDistanceSample({
+function shouldActivateTabDragFromDistanceSample({
   elapsedMs,
   overThresholdSampleCount
 }: {

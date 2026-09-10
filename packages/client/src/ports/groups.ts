@@ -1,4 +1,4 @@
-import type { WorkspacePort, WorkspacePortScanResult } from '@yiru/protocol'
+import type { WorkspacePort, WorkspacePortScanResult } from '@agentstart/protocol'
 
 export type WorkspacePortGroup = {
   worktreeId: string
@@ -7,44 +7,13 @@ export type WorkspacePortGroup = {
   ports: WorkspacePort[]
 }
 
-const portsByWorktreeCache = new WeakMap<WorkspacePortScanResult, Map<string, WorkspacePort[]>>()
 const workspaceGroupsCache = new WeakMap<WorkspacePortScanResult, WorkspacePortGroup[]>()
 const externalPortsCache = new WeakMap<WorkspacePortScanResult, WorkspacePort[]>()
-const EMPTY_PORTS_BY_WORKTREE = new Map<string, WorkspacePort[]>()
 const EMPTY_WORKSPACE_PORT_GROUPS: WorkspacePortGroup[] = []
 const EMPTY_EXTERNAL_PORTS: WorkspacePort[] = []
 
 function comparePorts(a: WorkspacePort, b: WorkspacePort): number {
   return a.port - b.port || (a.processName ?? '').localeCompare(b.processName ?? '')
-}
-
-export function getWorkspacePortsByWorktreeId(
-  scan: WorkspacePortScanResult | null | undefined
-): Map<string, WorkspacePort[]> {
-  if (!scan) {
-    return EMPTY_PORTS_BY_WORKTREE
-  }
-  const cached = portsByWorktreeCache.get(scan)
-  if (cached) {
-    return cached
-  }
-  const grouped = new Map<string, WorkspacePort[]>()
-  for (const port of scan.ports) {
-    if (port.kind !== 'workspace') {
-      continue
-    }
-    const current = grouped.get(port.owner.worktreeId)
-    if (current) {
-      current.push(port)
-    } else {
-      grouped.set(port.owner.worktreeId, [port])
-    }
-  }
-  for (const ports of grouped.values()) {
-    ports.sort(comparePorts)
-  }
-  portsByWorktreeCache.set(scan, grouped)
-  return grouped
 }
 
 export function getWorkspacePortGroups(

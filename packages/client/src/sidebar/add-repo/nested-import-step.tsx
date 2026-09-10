@@ -1,5 +1,5 @@
-import { getRuntimePathBasename } from '@yiru/protocol/host/path'
-import type { NestedRepoScanResult } from '@yiru/protocol/project/group-model'
+import { getRuntimePathBasename } from '@agentstart/protocol/host/path'
+import type { NestedRepoScanResult } from '@agentstart/protocol/project/group-model'
 import { useId, useState, type Dispatch, type SetStateAction } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { StopCircle as CircleStop } from '~renderer/icons/hugeicons'
@@ -116,7 +116,7 @@ export function AddRepoNestedImportStep({
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.sidebar.AddRepoNestedImportStep.d75170194e',
-              'Choose this if these projects belong together — a monorepo, or just a set of related repos. Yiru will group them and let you work from the parent folder.'
+              'Choose this if these projects belong together — a monorepo, or just a set of related repos. AgentStart will group them and let you work from the parent folder.'
             )}
           </p>
         </div>

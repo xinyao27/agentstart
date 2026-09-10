@@ -1,9 +1,9 @@
+import { HEX_COLOR_RE } from '@agentstart/protocol/settings/color-values'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { resolveTerminalFontWeights } from '@agentstart/protocol/terminal/font-settings'
+import { normalizeTerminalLineHeight } from '@agentstart/protocol/terminal/line-height'
+import type { TerminalViewAttributesInput as TerminalViewAttributes } from '@agentstart/protocol/terminal/types'
 import type { IDisposable, IParser, ITheme } from '@xterm/xterm'
-import { HEX_COLOR_RE } from '@yiru/protocol/settings/color-values'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import { resolveTerminalFontWeights } from '@yiru/protocol/terminal/font-settings'
-import { normalizeTerminalLineHeight } from '@yiru/protocol/terminal/line-height'
-import type { TerminalViewAttributesInput as TerminalViewAttributes } from '@yiru/protocol/terminal/types'
 import type { EffectiveMacOptionAsAlt } from '~renderer/keyboard-layout/detect-option-as-alt'
 import { getFitOverrideForPty } from '~renderer/terminal-pane/pane-manager/mobile-fit-overrides'
 import type { PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
@@ -110,7 +110,7 @@ export function installMode2031Handlers(deps: Mode2031HandlerDeps): IDisposable[
   ]
 }
 
-export function hexToRgba(hex: string, alpha: number): string {
+function hexToRgba(hex: string, alpha: number): string {
   let clean = hex.replace('#', '')
   if (clean.length === 3) {
     clean = clean
@@ -124,7 +124,7 @@ export function hexToRgba(hex: string, alpha: number): string {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }
 
-export function isHexColor(value: string): boolean {
+function isHexColor(value: string): boolean {
   return HEX_COLOR_RE.test(value)
 }
 

@@ -1,4 +1,4 @@
-import type { SetupAgentStartupPolicy } from '@yiru/protocol/worktree/hooks'
+import type { SetupAgentStartupPolicy } from '@agentstart/protocol/worktree/hooks'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import type { SetupConfig } from '~renderer/new-workspace/workspace-creation'
@@ -64,17 +64,17 @@ export function SetupSection({
         <label className="text-muted-foreground text-xs font-medium">{setupConfigLabel}</label>
         <span className="border-border/70 bg-muted/45 text-foreground/70 border px-2 py-0.5 text-[10px] font-medium tracking-[0.14em] uppercase">
           {setupConfig.source === 'yaml'
-            ? translate('auto.components.NewWorkspaceComposerCard.23bb365554', 'yiru.yaml')
+            ? translate('auto.components.NewWorkspaceComposerCard.23bb365554', 'agentstart.yaml')
             : setupConfig.source === 'both'
               ? translate(
                   'auto.components.NewWorkspaceComposerCard.326a578923',
-                  'yiru.yaml + local'
+                  'agentstart.yaml + local'
                 )
               : translate('auto.components.NewWorkspaceComposerCard.92e34f0311', 'local settings')}
         </span>
       </div>
 
-      {/* Why: `yiru.yaml` is the committed source of truth for shared setup,
+      {/* Why: `agentstart.yaml` is the committed source of truth for shared setup,
           so the preview reconstructs the real YAML shape instead of showing a raw
           shell blob that hides where the command came from. */}
       <SetupCommandPreview

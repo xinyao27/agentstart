@@ -1,6 +1,5 @@
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     AgentSession as ProtocolAgentSession, AgentSessionPhase as ProtocolAgentSessionPhase,
     AgentSessionProvider as ProtocolAgentSessionProvider, AgentSessionServiceFollowupRequest,
     AgentSessionServiceFollowupResponse, AgentSessionServiceListRequest,
@@ -9,7 +8,8 @@ use yiru_protocol::runtime::v1::{
     AgentSessionServiceStartResponse, AgentSessionServiceStopRequest,
     AgentSessionServiceStopResponse, AgentSessionStatus as ProtocolAgentSessionStatus,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::Value;
 
 use crate::terminal_session::TerminalPresentation;
 

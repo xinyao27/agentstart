@@ -1,12 +1,11 @@
 use std::collections::HashSet;
 use std::sync::atomic::AtomicBool;
 
-use serde_json::{Map, Value};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::session_tabs_service_all_event::Event as AllEvent;
-use yiru_protocol::runtime::v1::session_tabs_service_event::Event;
-use yiru_protocol::runtime::v1::session_tabs_service_move_request::Detail;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::session_tabs_service_all_event::Event as AllEvent;
+use agentstart_protocol::runtime::v1::session_tabs_service_event::Event;
+use agentstart_protocol::runtime::v1::session_tabs_service_move_request::Detail;
+use agentstart_protocol::runtime::v1::{
     SessionTabsMoveKind, SessionTabsServiceActivateRequest, SessionTabsServiceAllEvent,
     SessionTabsServiceClosedResponse, SessionTabsServiceCreateTerminalRequest,
     SessionTabsServiceCreateTerminalResponse, SessionTabsServiceEvent,
@@ -20,7 +19,8 @@ use yiru_protocol::runtime::v1::{
     session_tabs_nullable_string_field, session_tabs_pane_layout_node,
     session_tabs_pane_layout_root, session_tabs_startup_command_delivery,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use serde_json::{Map, Value};
 
 use crate::rpc::protocol_call::ProtocolCallContext;
 use crate::session_tabs::{
@@ -586,7 +586,7 @@ fn move_kind(request: &SessionTabsServiceMoveRequest) -> Result<SessionTabMove, 
 }
 
 fn validate_pane_layout(
-    node: &yiru_protocol::runtime::v1::SessionTabsPaneLayoutNode,
+    node: &agentstart_protocol::runtime::v1::SessionTabsPaneLayoutNode,
 ) -> Result<(), Status> {
     let mut count = 0_usize;
     let mut stack = vec![(node, 0_usize)];
@@ -659,9 +659,6 @@ pub(in crate::rpc) fn tabs_status(error: SessionTabsError) -> Status {
         }
         SessionTabsError::StateChanged => {
             return status(StatusCode::Aborted, "session_tabs_state_changed");
-        }
-        SessionTabsError::RendererOwner => {
-            return status(StatusCode::Aborted, "renderer_projection_owned");
         }
         SessionTabsError::Worktree(WorktreeCatalogError::NotFound)
         | SessionTabsError::Worktree(WorktreeCatalogError::Project(

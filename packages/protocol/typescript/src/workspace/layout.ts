@@ -1,4 +1,4 @@
-export type YiruWorkspaceLayout = {
+export type AgentStartWorkspaceLayout = {
   path: string
   nestWorkspaces: boolean
 }
@@ -6,5 +6,5 @@ export type YiruWorkspaceLayout = {
 export type WorkspaceLayoutSettings = {
   workspaceDir: string
   nestWorkspaces: boolean
-  workspaceDirHistory?: YiruWorkspaceLayout[]
+  workspaceDirHistory?: AgentStartWorkspaceLayout[]
 }

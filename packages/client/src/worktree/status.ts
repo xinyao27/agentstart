@@ -1,5 +1,5 @@
-import type { AgentPhase } from '@yiru/protocol/agent/phase'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { AgentPhase } from '@agentstart/protocol/agent/phase'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { translate } from '~renderer/i18n/i18n'
 import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
 
@@ -17,7 +17,7 @@ const STATUS_LABEL_KEYS: Record<WorktreeStatus, { fallback: string; key: string 
   }
 }
 
-export function getWorktreeStatus(
+function getWorktreeStatus(
   tabs: readonly Pick<TerminalTab, 'id'>[],
   browserTabs: readonly { id: string }[],
   ptyIdsByTabId: Record<string, string[]>

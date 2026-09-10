@@ -1,4 +1,8 @@
-import { mountExtensionDevTools } from '@yiru/client/extension-devtools'
+import { mountExtensionDevTools } from '@agentstart/client/extension-devtools'
+
+import { createBrowserCapabilities } from '../bootstrap/browser-capabilities'
+import { requestRuntimeBootstrap } from '../runtime/bootstrap'
+import { createExtensionRuntimeHostFactory } from '../runtime/client'
 
 type BootstrapResponse = {
   ok: boolean
@@ -7,25 +11,33 @@ type BootstrapResponse = {
     endpoint: string
     expectedRuntimeId: string | null
     protocolVersion: number
-    rpcProtocol: 'yiru-protobuf-v2'
+    rpcProtocol: 'agentstart-protobuf-v2'
   }
 }
 
 const response: unknown = await chrome.runtime.sendMessage({ type: 'bootstrap' })
 if (isBootstrapResponse(response)) {
   await installConsoleCapture()
-  mountExtensionDevTools(response.result, {
-    evaluate: evaluateInspectedWindow,
-    readDiagnostics: async () => [
-      ...(await readConsoleDiagnostics()),
-      ...(await readNetworkDiagnostics())
-    ]
-  })
+  const browserCapabilities = createBrowserCapabilities(response.result)
+  mountExtensionDevTools(
+    createExtensionRuntimeHostFactory(
+      response.result,
+      requestRuntimeBootstrap,
+      browserCapabilities.executeBrowserCommand
+    ),
+    {
+      evaluate: evaluateInspectedWindow,
+      readDiagnostics: async () => [
+        ...(await readConsoleDiagnostics()),
+        ...(await readNetworkDiagnostics())
+      ]
+    }
+  )
 }
 
 async function installConsoleCapture(): Promise<void> {
   await evaluateInspectedWindow(`(() => {
-    if (globalThis.__yiruDevToolsConsole) return;
+    if (globalThis.__agentstartDevToolsConsole) return;
     const rows = [];
     const original = console.error;
     console.error = function (...args) {
@@ -39,7 +51,7 @@ async function installConsoleCapture(): Promise<void> {
         original.apply(this, args);
       }
     };
-    globalThis.__yiruDevToolsConsole = rows;
+    globalThis.__agentstartDevToolsConsole = rows;
   })()`)
 }
 
@@ -51,7 +63,7 @@ async function readConsoleDiagnostics(): Promise<
     title: string
   }[]
 > {
-  const evaluated = await evaluateInspectedWindow('globalThis.__yiruDevToolsConsole ?? []')
+  const evaluated = await evaluateInspectedWindow('globalThis.__agentstartDevToolsConsole ?? []')
   if (!Array.isArray(evaluated)) {
     return []
   }
@@ -200,14 +212,14 @@ function isBootstrapResponse(value: unknown): value is BootstrapResponse & {
     typeof Reflect.get(result, 'endpoint') === 'string' &&
     (expectedRuntimeId === null || typeof expectedRuntimeId === 'string') &&
     typeof Reflect.get(result, 'protocolVersion') === 'number' &&
-    Reflect.get(result, 'rpcProtocol') === 'yiru-protobuf-v2'
+    Reflect.get(result, 'rpcProtocol') === 'agentstart-protobuf-v2'
   )
 }
 
 function evaluateInspectedWindow(expression: string): Promise<unknown> {
   return new Promise((resolve, reject) => {
     // Why: inspectedWindow.eval only gained a Promise overload in Chrome 151;
-    // Yiru supports Chrome 120+, so the callback form remains the compatibility path.
+    // AgentStart supports Chrome 120+, so the callback form remains the compatibility path.
     const evaluate: unknown = chrome.devtools.inspectedWindow.eval
     if (typeof evaluate !== 'function') {
       reject(new Error('devtools_evaluation_unavailable'))

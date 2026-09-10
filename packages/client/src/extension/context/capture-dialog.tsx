@@ -38,12 +38,12 @@ export function BrowserContextCaptureDialog({
       <DialogContent className="max-w-sm sm:max-w-sm" showCloseButton={!capture.isPending}>
         <DialogHeader>
           <DialogTitle>
-            {translate('extension.context.captureTitle', 'Use the current page in Yiru?')}
+            {translate('extension.context.captureTitle', 'Use the current page in AgentStart?')}
           </DialogTitle>
           <DialogDescription>
             {translate(
               'extension.context.captureDescription',
-              'Yiru will read visible page text and show it for review before anything is sent to an agent.'
+              'AgentStart will read visible page text and show it for review before anything is sent to an agent.'
             )}
           </DialogDescription>
         </DialogHeader>

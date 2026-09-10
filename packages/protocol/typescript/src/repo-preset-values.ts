@@ -1,5 +1,5 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
-import type { RepoSparsePreset } from '../generated/yiru/runtime/v1/repo_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
+import type { RepoSparsePreset } from '../generated/agent_start/runtime/v1/repo_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RepoSparsePresetValue } from './repo-types.js'
 

@@ -47,7 +47,7 @@ export function isLazyChunkLoadError(error: unknown): error is LazyChunkLoadErro
 // (not localStorage) gives exactly that lifetime; it is never cleared mid-session,
 // otherwise a sibling chunk's healthy load would re-arm the reload and an
 // auto-mounted corrupt chunk would loop.
-const RELOAD_GUARD_KEY = 'yiru:lazy-chunk-reload-attempted'
+const RELOAD_GUARD_KEY = 'agentstart:lazy-chunk-reload-attempted'
 const DEFAULT_RETRIES = 2
 const DEFAULT_BASE_DELAY_MS = 250
 
@@ -114,7 +114,7 @@ function isKnownDynamicImportFailure(error: unknown): boolean {
   ].some((pattern) => pattern.test(error.message))
 }
 
-export async function loadLazyWithRetry<T extends LazyComponent>(
+async function loadLazyWithRetry<T extends LazyComponent>(
   factory: LazyFactory<T>,
   options: LazyWithRetryOptions = {}
 ): Promise<{ default: T }> {
@@ -126,6 +126,9 @@ export async function loadLazyWithRetry<T extends LazyComponent>(
     try {
       return await factory()
     } catch (error) {
+      if (!isKnownDynamicImportFailure(error)) {
+        throw error
+      }
       lastError = error
       if (attempt < retries) {
         // Exponential backoff absorbs transient fetch hiccups (HTTP / relay / SSH).

@@ -1,11 +1,11 @@
-use yiru_protocol::CURRENT_PROTOCOL_VERSION;
-use yiru_protocol::protocol::v1::Welcome;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::CURRENT_PROTOCOL_VERSION;
+use agentstart_protocol::protocol::v1::Welcome;
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     GetStatusRequest, GetStatusResponse, RemoteUpdateInstallMode, RemoteUpdateReason,
     RemoteUpdateSupport, RuntimeDeviceScope, RuntimeGraphStatus,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::protocol::CallerClass;
 use crate::runtime::RuntimeStatus;

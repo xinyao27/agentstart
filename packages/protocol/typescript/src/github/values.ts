@@ -5,7 +5,7 @@ import {
   type GitHubConflictSummary as ProtocolConflictSummary,
   type GitHubMergeMethodSettings as ProtocolMergeMethodSettings,
   type GitHubUser as ProtocolUser
-} from '../../generated/yiru/runtime/v1/github_pb.js'
+} from '../../generated/agent_start/runtime/v1/github_pb.js'
 
 export type GitHubOwnerRepo = { owner: string; repo: string }
 export type GitHubAssignableUser = { login: string; name: string | null; avatarUrl: string }

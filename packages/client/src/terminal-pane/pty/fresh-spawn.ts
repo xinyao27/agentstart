@@ -1,4 +1,4 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 
 import type { ColdRestoreAgentResumeStartup } from './cold-restore-agent-startup'
 import type { PtyConnectResult, PtyTransport } from './transport-types'
@@ -74,8 +74,10 @@ export function createFreshSpawn(options: FreshSpawnFactoryOptions) {
             env: {
               ...startupOverride.env,
               ...options.paneIdentityEnv,
-              ...(startupOverride.env.YIRU_AGENT_LAUNCH_TOKEN
-                ? { YIRU_AGENT_LAUNCH_TOKEN: startupOverride.env.YIRU_AGENT_LAUNCH_TOKEN }
+              ...(startupOverride.env.AGENTSTART_AGENT_LAUNCH_TOKEN
+                ? {
+                    AGENTSTART_AGENT_LAUNCH_TOKEN: startupOverride.env.AGENTSTART_AGENT_LAUNCH_TOKEN
+                  }
                 : {})
             }
           }
@@ -93,12 +95,15 @@ export function createFreshSpawn(options: FreshSpawnFactoryOptions) {
       })
     const tracked: Promise<string | null> = Promise.resolve(spawnedRaw)
       .then((spawned) => {
-        if (output.generation !== options.getStreamGeneration()) {
-          return null
-        }
         const result = spawned && typeof spawned === 'object' && 'id' in spawned ? spawned : null
         const ptyId =
           result?.id ?? (typeof spawned === 'string' ? spawned : options.transport.getPtyId())
+        if (output.generation !== options.getStreamGeneration()) {
+          // Why: a fresh tab can unmount while its spawn is in flight. The old
+          // renderer must skip binding side effects, but its successor is
+          // waiting on this promise and still needs the valid PTY id to attach.
+          return ptyId
+        }
         if (result) {
           options.registerLaunchConfig(result.launchConfig, {
             ...(coldRestoreOverride ? { launchToken: coldRestoreOverride.launchToken } : {}),

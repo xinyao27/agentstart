@@ -1,4 +1,4 @@
-import { RuntimeProtocolError, StatusCode, type UpdaterSnapshot } from '@yiru/protocol'
+import { RuntimeProtocolError, StatusCode, type UpdaterSnapshot } from '@agentstart/protocol'
 
 export async function nextRemoteServerUpdaterSnapshot(
   snapshots: AsyncIterator<UpdaterSnapshot>,

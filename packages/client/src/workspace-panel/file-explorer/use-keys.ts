@@ -1,4 +1,4 @@
-import { keybindingMatchesAction } from '@yiru/protocol/keybindings'
+import { keybindingMatchesAction } from '@agentstart/protocol/keybindings'
 import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -19,7 +19,7 @@ import {
   undoFileExplorer
 } from './undo-redo'
 
-export function shouldIgnoreFileExplorerKeyTarget(target: EventTarget | null): boolean {
+function shouldIgnoreFileExplorerKeyTarget(target: EventTarget | null): boolean {
   return (
     isEditableTarget(target) ||
     (target instanceof Element &&
@@ -126,7 +126,8 @@ export function useFileExplorerKeys(opts: {
       }
       // Fallback: Radix portaled nodes or timing quirks — shell is marked explicitly.
       return (
-        el instanceof Element && el.closest('[data-yiru-explorer-shell]') === opts.containerElement
+        el instanceof Element &&
+        el.closest('[data-agentstart-explorer-shell]') === opts.containerElement
       )
     }
 

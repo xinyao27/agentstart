@@ -6,8 +6,9 @@ use crate::agent_status_hooks::command::managed_posix_command;
 use crate::agent_status_hooks::{scripts, storage};
 
 const SCRIPT_NAME: &str = "kimi-hook.sh";
-const BLOCK_START: &str = "# >>> yiru-managed-kimi-hooks (managed by Yiru; do not edit) >>>";
-const BLOCK_END: &str = "# <<< yiru-managed-kimi-hooks <<<";
+const BLOCK_START: &str =
+    "# >>> agentstart-managed-kimi-hooks (managed by AgentStart; do not edit) >>>";
+const BLOCK_END: &str = "# <<< agentstart-managed-kimi-hooks <<<";
 const EVENTS: &[&str] = &[
     "UserPromptSubmit",
     "PreToolUse",

@@ -1,5 +1,5 @@
-import { WorktreeBaseStatusKind } from '../generated/yiru/runtime/v1/worktree_pb.js'
-import type { WorktreeServiceSubscribeStateEventsResponse } from '../generated/yiru/runtime/v1/worktree_pb.js'
+import { WorktreeBaseStatusKind } from '../generated/agent_start/runtime/v1/worktree_pb.js'
+import type { WorktreeServiceSubscribeStateEventsResponse } from '../generated/agent_start/runtime/v1/worktree_pb.js'
 import type { WorktreeStateSubscriptionEvent } from './worktree-operation-types.js'
 
 export function worktreeStateSubscriptionEvent(

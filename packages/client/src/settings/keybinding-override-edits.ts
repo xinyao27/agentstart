@@ -2,7 +2,7 @@ import type {
   KeybindingActionId,
   KeybindingFileSnapshot,
   KeybindingOverrides
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 
 // Predicates and edits on the per-action overrides map (distinct from
 // shortcut-binding-list-mutations, which edits a single action's binding array).

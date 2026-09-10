@@ -142,7 +142,7 @@ function tokenLooksExecutable(token: string, index: number, firstNormalized: str
     return false
   }
   // Why: only inspect interpreter script paths. Prompt text can mention other
-  // agents ("compare opencode vs yiru"), and treating every argv token as an
+  // agents ("compare opencode vs agentstart"), and treating every argv token as an
   // executable would reintroduce the substring-style false identity class that
   // foreground-process detection is meant to avoid.
   return token.includes('/') || token.includes('\\') || PROCESS_EXTENSION_RE.test(token)

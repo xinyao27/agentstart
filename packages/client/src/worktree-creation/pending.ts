@@ -1,13 +1,13 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
 import type {
   ProjectSourceContext,
   WorkspaceRunContext
-} from '@yiru/protocol/project/source-context'
-import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@yiru/protocol/workspace/source'
-import type { WorkspaceStatus } from '@yiru/protocol/workspace/status/model'
-import type { SetupDecision } from '@yiru/protocol/worktree/hooks'
-import type { CreateSparseCheckoutRequest } from '@yiru/protocol/worktree/sparse'
+} from '@agentstart/protocol/project/source-context'
+import type { WorkspaceSource as WorkspaceCreateTelemetrySource } from '@agentstart/protocol/workspace/source'
+import type { WorkspaceStatus } from '@agentstart/protocol/workspace/status/model'
+import type { SetupDecision } from '@agentstart/protocol/worktree/hooks'
+import type { CreateSparseCheckoutRequest } from '@agentstart/protocol/worktree/sparse'
 import type { AgentStartedTelemetry } from '~renderer/agent/started-telemetry'
 import type { AgentStartupPlan } from '~renderer/agent/tui-startup'
 import { translate } from '~renderer/i18n/i18n'
@@ -21,7 +21,7 @@ import type { WorktreeCreateProgressPhase } from './progress'
  *  add`. Remote/runtime creates may skip git phases. */
 export type WorktreeCreationPhase = WorktreeCreateProgressPhase
 
-export type WorktreeCreationProgressMode = 'stepped' | 'indeterminate'
+type WorktreeCreationProgressMode = 'stepped' | 'indeterminate'
 
 /**
  * Everything needed to run a worktree create in the background and reproduce it

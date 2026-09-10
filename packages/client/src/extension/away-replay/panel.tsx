@@ -1,5 +1,5 @@
+import type { WorkspaceEventRecord } from '@agentstart/protocol'
 import { useQuery } from '@tanstack/react-query'
-import type { WorkspaceEventRecord } from '@yiru/protocol'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { ClockCounterClockwise } from '~renderer/icons/hugeicons'
@@ -18,7 +18,7 @@ import {
   type AwayReplayScope
 } from './model'
 
-const MARKER_KEY = 'yiru.away-replay.v1'
+const MARKER_KEY = 'agentstart.away-replay.v1'
 const EVENT_PAGE_SIZE = 500
 
 type ReplayCycle = {

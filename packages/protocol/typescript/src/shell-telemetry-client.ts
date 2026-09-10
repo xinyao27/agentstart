@@ -1,6 +1,6 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ShellTelemetryConsentState as ProtocolConsentState,
   ShellTelemetryJsonNull,
@@ -16,7 +16,7 @@ import {
   ShellTelemetryServiceSetOptInRequestSchema,
   ShellTelemetryServiceTrackRequestSchema,
   type ShellTelemetryJsonValue as ProtocolJsonValue
-} from '../generated/yiru/runtime/v1/shell_telemetry_pb.js'
+} from '../generated/agent_start/runtime/v1/shell_telemetry_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 
@@ -26,7 +26,7 @@ export type ShellTelemetryConsentState =
   | { effective: 'enabled' }
   | {
       effective: 'disabled'
-      reason: 'do_not_track' | 'yiru_disabled' | 'ci' | 'user_opt_out'
+      reason: 'do_not_track' | 'agentstart_disabled' | 'ci' | 'user_opt_out'
     }
   | { effective: 'pending_banner' }
 
@@ -112,8 +112,8 @@ function consentState(state: ProtocolConsentState): ShellTelemetryConsentState {
       return { effective: 'pending_banner' }
     case ProtocolConsentState.DISABLED_DO_NOT_TRACK:
       return { effective: 'disabled', reason: 'do_not_track' }
-    case ProtocolConsentState.DISABLED_YIRU_DISABLED:
-      return { effective: 'disabled', reason: 'yiru_disabled' }
+    case ProtocolConsentState.DISABLED_AGENT_START_DISABLED:
+      return { effective: 'disabled', reason: 'agentstart_disabled' }
     case ProtocolConsentState.DISABLED_CI:
       return { effective: 'disabled', reason: 'ci' }
     case ProtocolConsentState.DISABLED_USER_OPT_OUT:

@@ -2,9 +2,7 @@ import {
   HardDriveIcon as HugeHardDriveIcon,
   HddIcon as HugeHddIcon,
   TextNumberSignIcon as HugeTextNumberSignIcon,
-  HighlighterIcon as HugeHighlighterIcon,
   Home01Icon as HugeHome01Icon,
-  ImageNotFound01Icon as HugeImageNotFound01Icon,
   Image01Icon as HugeImage01Icon,
   InformationCircleIcon as HugeInformationCircleIcon,
   KeyboardIcon as HugeKeyboardIcon,
@@ -19,7 +17,6 @@ import {
   ListViewIcon as HugeListViewIcon,
   LeftToRightListNumberIcon as HugeLeftToRightListNumberIcon,
   LockIcon as HugeLockIcon,
-  LockKeyIcon as HugeLockKeyIcon,
   SquareUnlock01Icon as HugeSquareUnlock01Icon,
   Search01Icon as HugeSearch01Icon,
   SearchMinusIcon as HugeSearchMinusIcon,
@@ -27,26 +24,20 @@ import {
   RamMemoryIcon as HugeRamMemoryIcon,
   Mic01Icon as HugeMic01Icon,
   Remove01Icon as HugeRemove01Icon,
-  Minimize01Icon as HugeMinimize01Icon,
-  Maximize01Icon as HugeMaximize01Icon,
   Cancel01Icon as HugeCancel01Icon,
   RemoveCircleIcon as HugeRemoveCircleIcon,
   ComputerIcon as HugeComputerIcon,
   ComputerArrowUpIcon as HugeComputerArrowUpIcon,
   Moon02Icon as HugeMoon02Icon,
   NeuralNetworkIcon as HugeNeuralNetworkIcon,
-  Note01Icon as HugeNote01Icon,
   Notebook01Icon as HugeNotebook01Icon,
   PackageIcon as HugePackageIcon,
   ColorsIcon as HugeColorsIcon,
   Sent02Icon as HugeSent02Icon,
   SendingOrderIcon as HugeSendingOrderIcon,
   ParagraphIcon as HugeParagraphIcon,
-  PauseIcon as HugePauseIcon,
   PauseCircleIcon as HugePauseCircleIcon,
-  StationeryIcon as HugeStationeryIcon,
   PencilIcon as HugePencilIcon,
-  ContentWritingIcon as HugeContentWritingIcon,
   UserFullViewIcon as HugeUserFullViewIcon,
   PlayIcon as HugePlayIcon,
   PlayCircleIcon as HugePlayCircleIcon,
@@ -69,7 +60,6 @@ import {
   CursorAddSelection01Icon as HugeCursorAddSelection01Icon,
   ShapesIcon as HugeShapesIcon,
   Share01Icon as HugeShare01Icon,
-  Shield01Icon as HugeShield01Icon,
   SecurityCheckIcon as HugeSecurityCheckIcon,
   SecurityWarningIcon as HugeSecurityWarningIcon,
   SidebarRightIcon as HugeSidebarRightIcon,
@@ -102,7 +92,6 @@ import {
   Heading03Icon as HugeHeading03Icon,
   Heading02Icon as HugeHeading02Icon,
   TextItalicIcon as HugeTextItalicIcon,
-  TextIcon as HugeTextIcon,
   Timer02Icon as HugeTimer02Icon,
   Delete01Icon as HugeDelete01Icon,
   HierarchyIcon as HugeHierarchyIcon,
@@ -110,7 +99,6 @@ import {
   UsbIcon as HugeUsbIcon,
   UserCircleIcon as HugeUserCircleIcon,
   UserSettings01Icon as HugeUserSettings01Icon,
-  UserGroup03Icon as HugeUserGroup03Icon,
   AlertCircleIcon as HugeAlertCircleIcon,
   Pulse02Icon as HugePulse02Icon,
   Wrench01Icon as HugeWrench01Icon,
@@ -122,10 +110,8 @@ import { createHugeIcon } from './hugeicon-renderer'
 export const HardDrive = createHugeIcon(HugeHardDriveIcon)
 export const HardDrives = createHugeIcon(HugeHddIcon)
 export const Hash = createHugeIcon(HugeTextNumberSignIcon)
-export const Highlighter = createHugeIcon(HugeHighlighterIcon)
 export const House = createHugeIcon(HugeHome01Icon)
 export const Image = createHugeIcon(HugeImage01Icon)
-export const ImageBroken = createHugeIcon(HugeImageNotFound01Icon)
 export const ImageIcon = createHugeIcon(HugeImage01Icon)
 export const Info = createHugeIcon(HugeInformationCircleIcon)
 export const Keyboard = createHugeIcon(HugeKeyboardIcon)
@@ -141,7 +127,6 @@ export const ListChecks = createHugeIcon(HugeTask01Icon)
 export const ListDashes = createHugeIcon(HugeListViewIcon)
 export const ListNumbers = createHugeIcon(HugeLeftToRightListNumberIcon)
 export const Lock = createHugeIcon(HugeLockIcon)
-export const LockKey = createHugeIcon(HugeLockKeyIcon)
 export const LockOpen = createHugeIcon(HugeSquareUnlock01Icon)
 export const MagnifyingGlass = createHugeIcon(HugeSearch01Icon)
 export const MagnifyingGlassMinus = createHugeIcon(HugeSearchMinusIcon)
@@ -149,26 +134,19 @@ export const MagnifyingGlassPlus = createHugeIcon(HugeSearchAddIcon)
 export const Memory = createHugeIcon(HugeRamMemoryIcon)
 export const Microphone = createHugeIcon(HugeMic01Icon)
 export const Minus = createHugeIcon(HugeRemove01Icon)
-export const WindowMinimize = createHugeIcon(HugeMinimize01Icon)
-export const WindowMaximize = createHugeIcon(HugeMaximize01Icon)
-export const WindowClose = createHugeIcon(HugeCancel01Icon)
 export const MinusCircle = createHugeIcon(HugeRemoveCircleIcon)
 export const Monitor = createHugeIcon(HugeComputerIcon)
 export const MonitorArrowUp = createHugeIcon(HugeComputerArrowUpIcon)
 export const Moon = createHugeIcon(HugeMoon02Icon)
 export const Network = createHugeIcon(HugeNeuralNetworkIcon)
-export const Note = createHugeIcon(HugeNote01Icon)
 export const Notebook = createHugeIcon(HugeNotebook01Icon)
 export const Package = createHugeIcon(HugePackageIcon)
 export const Palette = createHugeIcon(HugeColorsIcon)
 export const PaperPlaneRight = createHugeIcon(HugeSent02Icon)
 export const PaperPlaneTilt = createHugeIcon(HugeSendingOrderIcon)
 export const Paragraph = createHugeIcon(HugeParagraphIcon)
-export const Pause = createHugeIcon(HugePauseIcon)
 export const PauseCircle = createHugeIcon(HugePauseCircleIcon)
-export const PenNib = createHugeIcon(HugeStationeryIcon)
 export const Pencil = createHugeIcon(HugePencilIcon)
-export const PencilLine = createHugeIcon(HugeContentWritingIcon)
 export const PersonArmsSpread = createHugeIcon(HugeUserFullViewIcon)
 export const Play = createHugeIcon(HugePlayIcon)
 export const PlayCircle = createHugeIcon(HugePlayCircleIcon)
@@ -191,7 +169,6 @@ export const Scroll = createHugeIcon(HugeScrollVerticalIcon)
 export const SelectionAll = createHugeIcon(HugeCursorAddSelection01Icon)
 export const Shapes = createHugeIcon(HugeShapesIcon)
 export const ShareNetwork = createHugeIcon(HugeShare01Icon)
-export const Shield = createHugeIcon(HugeShield01Icon)
 export const ShieldCheck = createHugeIcon(HugeSecurityCheckIcon)
 export const ShieldWarning = createHugeIcon(HugeSecurityWarningIcon)
 export const Sidebar = createHugeIcon(HugeSidebarRightIcon)
@@ -225,7 +202,6 @@ export const TextHOne = createHugeIcon(HugeHeading01Icon)
 export const TextHThree = createHugeIcon(HugeHeading03Icon)
 export const TextHTwo = createHugeIcon(HugeHeading02Icon)
 export const TextItalic = createHugeIcon(HugeTextItalicIcon)
-export const TextT = createHugeIcon(HugeTextIcon)
 export const Timer = createHugeIcon(HugeTimer02Icon)
 export const Trash = createHugeIcon(HugeDelete01Icon)
 export const TreeStructure = createHugeIcon(HugeHierarchyIcon)
@@ -233,7 +209,6 @@ export const Upload = createHugeIcon(HugeUpload01Icon)
 export const Usb = createHugeIcon(HugeUsbIcon)
 export const UserCircle = createHugeIcon(HugeUserCircleIcon)
 export const UserGear = createHugeIcon(HugeUserSettings01Icon)
-export const UsersThree = createHugeIcon(HugeUserGroup03Icon)
 export const Warning = createHugeIcon(HugeAlert02Icon)
 export const WarningCircle = createHugeIcon(HugeAlertCircleIcon)
 export const Waveform = createHugeIcon(HugePulse02Icon)

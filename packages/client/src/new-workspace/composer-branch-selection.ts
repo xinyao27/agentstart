@@ -1,6 +1,6 @@
-import type { GitPushTarget } from '@yiru/protocol/git/worktree-source'
+import type { GitPushTarget } from '@agentstart/protocol/git/worktree-source'
 
-export type ComposerBranchSelection = {
+type ComposerBranchSelection = {
   baseBranch: string
   branchNameOverride: string | undefined
   branchAutoName: string
@@ -8,7 +8,7 @@ export type ComposerBranchSelection = {
   lastAutoName: string | undefined
 }
 
-export function resolveComposerBranchSelection(args: {
+function resolveComposerBranchSelection(args: {
   refName: string
   localBranchName: string
   currentName: string
@@ -54,7 +54,7 @@ export function resolveComposerBranchSelection(args: {
  * branch refs (which may be `refs/heads/foo` or short `foo`). Git refuses to
  * check out a branch in two worktrees, so such a branch cannot be reused.
  */
-export function isBranchCheckedOutInWorktrees(
+function isBranchCheckedOutInWorktrees(
   branchName: string,
   worktreeBranches: readonly string[]
 ): boolean {
@@ -83,7 +83,7 @@ export function getComposerRepoWorktreeBranches(
  * worktree name first is branching off the ref, so reuse stays OFF unless they
  * opt in.
  */
-export function resolveComposerBranchReuse(args: {
+function resolveComposerBranchReuse(args: {
   refName: string
   localBranchName: string
   selectionProducedOverride: boolean
@@ -105,7 +105,7 @@ export function resolveComposerBranchReuse(args: {
  * and busy local rows cannot be reused; pinning either local leaf would collide
  * and silently produce a numbered sibling.
  */
-export function resolveComposerReuseOverride(args: {
+function resolveComposerReuseOverride(args: {
   refName: string
   localBranchName: string
   branchNameOverride: string | undefined

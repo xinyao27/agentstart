@@ -327,7 +327,7 @@ impl WorktreeAuthority {
             .map(str::trim)
             .filter(|value| !value.is_empty())
             .map(str::to_owned)
-            .unwrap_or_else(|| format!("yiru/{}", unix_millis()));
+            .unwrap_or_else(|| format!("agentstart/{}", unix_millis()));
         reject_git_name(&branch)?;
         let branch_check = self
             .catalog
@@ -1159,10 +1159,13 @@ impl WorktreeAuthority {
     ) -> Result<Value, WorktreeAuthorityError> {
         let limit = parse_limit(limit)?;
         let mut worktrees = self.catalog.list_resolved().await?;
-        if let Some(repo) = repo {
+        let revision = if let Some(repo) = repo {
             let repo_id = resolve_repo_id(&worktrees, repo)?;
             worktrees.retain(|worktree| worktree.repo_id == repo_id);
-        }
+            Some(self.journal.revision(repo_id).await?)
+        } else {
+            None
+        };
         worktrees.retain(|worktree| worktree.visible);
         let total_count = worktrees.len();
         worktrees.truncate(limit);
@@ -1170,6 +1173,7 @@ impl WorktreeAuthority {
             "worktrees": worktrees.iter().map(record_value).collect::<Vec<_>>(),
             "totalCount": total_count,
             "truncated": total_count > worktrees.len(),
+            "revision": revision,
         }))
     }
 

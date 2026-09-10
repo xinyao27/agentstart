@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { lazy, Suspense } from 'react'
 
 import { translate } from '../../i18n/i18n'
@@ -63,7 +63,7 @@ export function SystemSections({
         )}
         description={translate(
           'auto.components.settings.Settings.runtimeEnvironmentsDescription',
-          'Connect to Yiru daemons on this computer or remote hosts.'
+          'Connect to AgentStart daemons on this computer or remote hosts.'
         )}
         searchEntries={getSearchEntries('runtime-environments')}
       >

@@ -1,15 +1,15 @@
-import { useQueryClient } from '@tanstack/react-query'
 import type {
   NestedRepoScanResult,
   ProjectGroupImportResult
-} from '@yiru/protocol/project/group-model'
-import type { AddRepoExistingWorkspaceSource } from '@yiru/protocol/telemetry/events/foundations'
+} from '@agentstart/protocol/project/group-model'
+import type { AddRepoExistingWorkspaceSource } from '@agentstart/protocol/telemetry/events/foundations'
 import {
   buildNestedRepoImportActionTelemetry,
   buildNestedRepoImportResultTelemetry,
   shouldEmitNestedRepoImportSubmitTelemetry,
   type NestedRepoTelemetryRuntimeKind
-} from '@yiru/protocol/telemetry/nested-repo'
+} from '@agentstart/protocol/telemetry/nested-repo'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRef } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { requireNotificationsTarget } from '~renderer/runtime/notifications-target'
@@ -11,20 +11,20 @@ type SystemNotificationSettingsCopy = {
   failureDescription: string
 }
 
-export function getSystemNotificationSettingsCopy(
+function getSystemNotificationSettingsCopy(
   platform: NodeJS.Platform
 ): SystemNotificationSettingsCopy | null {
   if (platform === 'darwin') {
     return {
       failureTitle: 'macOS did not show the notification',
-      failureDescription: 'Enable Allow notifications for Yiru in System Settings.'
+      failureDescription: 'Enable Allow notifications for AgentStart in System Settings.'
     }
   }
 
   if (platform === 'win32') {
     return {
       failureTitle: 'Windows did not show the notification',
-      failureDescription: 'Enable notifications for Yiru in Windows Settings.'
+      failureDescription: 'Enable notifications for AgentStart in Windows Settings.'
     }
   }
 
@@ -117,7 +117,7 @@ export async function sendNotificationSettingsTestNotification(
         {
           description: translate(
             'auto.components.settings.NotificationsPane.115437bc35',
-            'If no macOS banner appeared, enable Allow notifications for Yiru.'
+            'If no macOS banner appeared, enable Allow notifications for AgentStart.'
           ),
           action: {
             label: translate(
@@ -165,7 +165,7 @@ export async function sendNotificationSettingsTestNotification(
         {
           description: translate(
             'auto.components.settings.NotificationsPane.4676a95bc3',
-            'Check your system notification settings for Yiru.'
+            'Check your system notification settings for AgentStart.'
           )
         }
       )

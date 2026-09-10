@@ -1,6 +1,6 @@
 import { addBackgroundMountedTerminalWorktree } from '../terminal/background-terminal-worktree-mount'
 
-export const BACKGROUND_WORKTREE_MEASURE_WINDOW_MS = 3000
+const BACKGROUND_WORKTREE_MEASURE_WINDOW_MS = 3000
 
 type ScheduleMeasureArgs = {
   mountedWorktreeIds: Set<string>

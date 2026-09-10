@@ -14,17 +14,19 @@ permissions: {}
 # standalone and Node-distributed pnpm identities from rewriting the cross-platform lockfile.
 env:
   HOMEBREW_RUST_ASSETS: >-
-    yiru-rust-darwin-arm64 yiru-rust-darwin-x64
-    yiru-rust-linux-arm64 yiru-rust-linux-x64
+    agentstart-rust-darwin-arm64 agentstart-rust-darwin-x64
+    agentstart-rust-linux-arm64 agentstart-rust-linux-x64
   PNPM_CONFIG_PM_ON_FAIL: ignore
   RUST_RELEASE_ASSETS: >-
-    yiru-rust-darwin-arm64 yiru-rust-darwin-x64
-    yiru-rust-linux-arm64 yiru-rust-linux-x64
-    yiru-rust-linux-arm64-musl yiru-rust-linux-x64-musl
-    yiru-rust-windows-x64.exe
+    agentstart-rust-darwin-arm64 agentstart-rust-darwin-x64
+    agentstart-rust-linux-arm64 agentstart-rust-linux-x64
+    agentstart-rust-linux-arm64-musl agentstart-rust-linux-x64-musl
+    agentstart-rust-windows-x64.exe
 
 jobs:
   validate-ref:
+    permissions:
+      contents: read
     runs-on: ubuntu-22.04
     timeout-minutes: 2
     steps:
@@ -37,8 +39,101 @@ jobs:
             exit 1
           fi
 
+      - name: Checkout tag
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Require release credentials, aligned versions, and reviewed release notes
+        env:
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          MAC_CERTS: ${{ secrets.MAC_CERTS }}
+          MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          POSTHOG_WRITE_KEY: ${{ secrets.POSTHOG_WRITE_KEY }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          missing=()
+          for name in APPLE_APP_SPECIFIC_PASSWORD APPLE_ID APPLE_TEAM_ID MAC_CERTS \
+            MAC_CERTS_PASSWORD POSTHOG_WRITE_KEY; do
+            if [ -z "${!name:-}" ]; then
+              missing+=("$name")
+            fi
+          done
+          if (( ${#missing[@]} > 0 )); then
+            printf 'Missing daemon release credentials: %s\n' "${missing[*]}" >&2
+            exit 1
+          fi
+          if ! npm view @agentstart/cli version >/dev/null 2>&1 && [ -z "$NPM_TOKEN" ]; then
+            echo 'NPM_TOKEN is required to bootstrap the first @agentstart/cli release.' >&2
+            exit 1
+          fi
+          if [ "$APPLE_TEAM_ID" != '8H6Q2YA365' ]; then
+            echo 'APPLE_TEAM_ID does not identify the AgentStart Apple Developer team.' >&2
+            exit 1
+          fi
+          version="${RELEASE_TAG#v}"
+          root_version="$(node -p "require('./package.json').version")"
+          daemon_version="$(node -p "require('./apps/daemon/package.json').version")"
+          rust_cargo_version="$(sed -n 's/^version = "\([^"]*\)"/\1/p' apps/daemon/Cargo.toml | head -1)"
+          computer_use_version="$(node -p "require('./apps/computer-use-macos/package.json').version")"
+          extension_version="$(node -p "require('./apps/extension/package.json').version")"
+          macos_app_version="$(node -p "require('./apps/macos/package.json').version")"
+          mobile_package_version="$(node -p "require('./apps/mobile/package.json').version")"
+          cli_version="$(node -p "require('./packages/cli/package.json').version")"
+          if [ "$version" != "$root_version" ] || \
+            [ "$version" != "$daemon_version" ] || \
+            [ "$version" != "$rust_cargo_version" ] || \
+            [ "$version" != "$computer_use_version" ] || \
+            [ "$version" != "$extension_version" ] || \
+            [ "$version" != "$macos_app_version" ] || \
+            [ "$version" != "$mobile_package_version" ] || \
+            [ "$version" != "$cli_version" ]; then
+            echo "Tag and every workspace shipping package version must match." >&2
+            exit 1
+          fi
+          node <<'NODE'
+          const { readFileSync } = require('node:fs')
+          const template = readFileSync('Formula/agentstart.rb.template', 'utf8')
+          const versionMarkers = template.match(/__AGENTSTART_VERSION__/g) ?? []
+          if (versionMarkers.length !== 5) {
+            throw new Error(`Formula template needs five version markers; found ${versionMarkers.length}`)
+          }
+          for (const marker of [
+            '__SHA256_AGENTSTART_RUST_DARWIN_ARM64__',
+            '__SHA256_AGENTSTART_RUST_DARWIN_X64__',
+            '__SHA256_AGENTSTART_RUST_LINUX_ARM64__',
+            '__SHA256_AGENTSTART_RUST_LINUX_X64__'
+          ]) {
+            const occurrences = template.split(marker).length - 1
+            if (occurrences !== 1) {
+              throw new Error(`Formula template needs one ${marker}; found ${occurrences}`)
+            }
+          }
+          if (/sha256 "[0-9a-f]{64}"/.test(template)) {
+            throw new Error('Formula template must not contain a release checksum')
+          }
+          NODE
+          notes_file="docs/releases/${version}.md"
+          if [ ! -s "$notes_file" ]; then
+            echo "Reviewed release notes are required at ${notes_file}." >&2
+            exit 1
+          fi
+          if [ "$(sed -n '1p' "$notes_file")" != "# AgentStart ${version}" ]; then
+            echo "${notes_file} must start with: # AgentStart ${version}" >&2
+            exit 1
+          fi
+          body="$(sed -n '2,$p' "$notes_file" | sed -e '/^[[:space:]]*#/d' -e '/^[[:space:]]*<!--/d' -e '/^[[:space:]]*$/d')"
+          if [ -z "$body" ]; then
+            echo "${notes_file} needs user-facing body text." >&2
+            exit 1
+          fi
+
   macos-helper:
-    if: github.repository == 'xinyao27/yiru'
+    if: github.repository == 'xinyao27/agentstart'
     needs: validate-ref
     permissions:
       attestations: write
@@ -83,9 +178,9 @@ jobs:
             echo "MAC_CERTS and MAC_CERTS_PASSWORD are required for macOS releases." >&2
             exit 1
           fi
-          keychain_path="$RUNNER_TEMP/yiru-computer-use.keychain-db"
+          keychain_path="$RUNNER_TEMP/agentstart-computer-use.keychain-db"
           keychain_password="$(openssl rand -base64 24)"
-          certificate_path="$RUNNER_TEMP/yiru-computer-use.p12"
+          certificate_path="$RUNNER_TEMP/agentstart-computer-use.p12"
           echo "$MAC_CERTS" | base64 --decode > "$certificate_path"
           security create-keychain -p "$keychain_password" "$keychain_path"
           security set-keychain-settings -lut 21600 "$keychain_path"
@@ -99,7 +194,7 @@ jobs:
 
       - name: Build signed universal computer-use helper
         env:
-          YIRU_MAC_RELEASE: '1'
+          AGENTSTART_MAC_RELEASE: '1'
         run: |
           set -euo pipefail
           identity="$(security find-identity -v -p codesigning | sed -n 's/.*"\(Developer ID Application:[^"]*\)".*/\1/p' | head -1)"
@@ -107,8 +202,8 @@ jobs:
             echo "Developer ID Application identity is unavailable." >&2
             exit 1
           fi
-          YIRU_COMPUTER_MACOS_SIGN_IDENTITY="$identity" \
-            pnpm exec vp run @yiru/computer-use-macos#build -- --universal
+          AGENTSTART_COMPUTER_MACOS_SIGN_IDENTITY="$identity" \
+            pnpm exec vp run @agentstart/computer-use-macos#build -- --universal
 
       - name: Notarize and package computer-use helper
         env:
@@ -122,13 +217,13 @@ jobs:
             exit 1
           fi
           expected_team_id='8H6Q2YA365'
-          expected_bundle_id='com.xinyao27.yiru.computer-use'
+          expected_bundle_id='com.xinyao27.agentstart.computer-use'
           if [ "$APPLE_TEAM_ID" != "$expected_team_id" ]; then
-            echo "APPLE_TEAM_ID must match the Yiru updater Team ID ${expected_team_id}." >&2
+            echo "APPLE_TEAM_ID must match the AgentStart updater Team ID ${expected_team_id}." >&2
             exit 1
           fi
-          app="apps/computer-use-macos/.build/release/Yiru Computer Use.app"
-          archive="apps/computer-use-macos/dist/yiru-computer-use-macos.zip"
+          app="apps/computer-use-macos/.build/release/AgentStart Computer Use.app"
+          archive="apps/computer-use-macos/dist/agentstart-computer-use-macos.zip"
           mkdir -p "$(dirname "$archive")"
           codesign --verify --deep --strict "$app"
           signature_details="$(codesign -d --verbose=4 "$app" 2>&1)"
@@ -150,18 +245,18 @@ jobs:
       - name: Attest computer-use helper
         uses: actions/attest@v4
         with:
-          subject-path: apps/computer-use-macos/dist/yiru-computer-use-macos.zip
+          subject-path: apps/computer-use-macos/dist/agentstart-computer-use-macos.zip
 
       - name: Upload computer-use helper
         uses: actions/upload-artifact@v7
         with:
-          name: yiru-computer-use-macos
-          path: apps/computer-use-macos/dist/yiru-computer-use-macos.zip
+          name: agentstart-computer-use-macos
+          path: apps/computer-use-macos/dist/agentstart-computer-use-macos.zip
           if-no-files-found: error
           retention-days: 7
 
   rust-daemon:
-    if: github.repository == 'xinyao27/yiru'
+    if: github.repository == 'xinyao27/agentstart'
     needs: validate-ref
     name: Daemon ${{ matrix.asset }}
     permissions:
@@ -174,27 +269,27 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - asset: yiru-rust-darwin-arm64
+          - asset: agentstart-rust-darwin-arm64
             runner: macos-26
             target: aarch64-apple-darwin
-          - asset: yiru-rust-darwin-x64
+          - asset: agentstart-rust-darwin-x64
             runner: macos-26-intel
             target: x86_64-apple-darwin
-          - asset: yiru-rust-linux-arm64
+          - asset: agentstart-rust-linux-arm64
             runner: ubuntu-22.04-arm
             target: aarch64-unknown-linux-gnu
-          - asset: yiru-rust-linux-x64
+          - asset: agentstart-rust-linux-x64
             runner: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
-          - asset: yiru-rust-linux-arm64-musl
+          - asset: agentstart-rust-linux-arm64-musl
             runner: ubuntu-22.04-arm
             target: aarch64-unknown-linux-musl
             musl: true
-          - asset: yiru-rust-linux-x64-musl
+          - asset: agentstart-rust-linux-x64-musl
             runner: ubuntu-22.04
             target: x86_64-unknown-linux-musl
             musl: true
-          - asset: yiru-rust-windows-x64.exe
+          - asset: agentstart-rust-windows-x64.exe
             runner: windows-2025
             target: x86_64-pc-windows-msvc
             executable_suffix: .exe
@@ -235,7 +330,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       # Why: release binaries must use the same Developer ID identity as the helper so macOS
-      # grants and Gatekeeper see one stable Yiru publisher across both executables.
+      # grants and Gatekeeper see one stable AgentStart publisher across both executables.
       - name: Import Developer ID certificate
         if: runner.os == 'macOS'
         env:
@@ -247,9 +342,9 @@ jobs:
             echo "MAC_CERTS and MAC_CERTS_PASSWORD are required for macOS Rust releases." >&2
             exit 1
           fi
-          keychain_path="$RUNNER_TEMP/yiru-rust.keychain-db"
+          keychain_path="$RUNNER_TEMP/agentstart-rust.keychain-db"
           keychain_password="$(openssl rand -base64 24)"
-          certificate_path="$RUNNER_TEMP/yiru-rust.p12"
+          certificate_path="$RUNNER_TEMP/agentstart-rust.p12"
           echo "$MAC_CERTS" | base64 --decode > "$certificate_path"
           security create-keychain -p "$keychain_password" "$keychain_path"
           security set-keychain-settings -lut 21600 "$keychain_path"
@@ -264,16 +359,22 @@ jobs:
       - name: Build daemon
         shell: bash
         env:
+          AGENTSTART_BUILD_IDENTITY: stable
+          AGENTSTART_POSTHOG_WRITE_KEY: ${{ secrets.POSTHOG_WRITE_KEY }}
           CARGO_INCREMENTAL: '0'
           CC_aarch64_unknown_linux_musl: ${{ matrix.musl && 'musl-gcc' || '' }}
           CC_x86_64_unknown_linux_musl: ${{ matrix.musl && 'musl-gcc' || '' }}
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER: ${{ matrix.musl && 'musl-gcc' || '' }}
           CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER: ${{ matrix.musl && 'musl-gcc' || '' }}
         run: |
-          pnpm exec vp run --filter '@yiru/daemon^...' --fail-if-no-match build
+          if [ "$AGENTSTART_BUILD_IDENTITY" != stable ] || [ -z "$AGENTSTART_POSTHOG_WRITE_KEY" ]; then
+            echo "Every daemon release target requires the stable identity and POSTHOG_WRITE_KEY." >&2
+            exit 1
+          fi
+          pnpm exec vp run --filter '@agentstart/daemon^...' --fail-if-no-match build
           cargo build --manifest-path apps/daemon/Cargo.toml --release --locked --target "${{ matrix.target }}"
           mkdir -p apps/daemon/dist
-          cp "apps/daemon/target/${{ matrix.target }}/release/yiru${{ matrix.executable_suffix }}" \
+          cp "apps/daemon/target/${{ matrix.target }}/release/agentstart${{ matrix.executable_suffix }}" \
             "apps/daemon/dist/${{ matrix.asset }}"
 
       - name: Sign, notarize, and verify macOS Rust daemon
@@ -290,7 +391,7 @@ jobs:
           fi
           expected_team_id='8H6Q2YA365'
           if [ "$APPLE_TEAM_ID" != "$expected_team_id" ]; then
-            echo "APPLE_TEAM_ID must match the Yiru updater Team ID ${expected_team_id}." >&2
+            echo "APPLE_TEAM_ID must match the AgentStart updater Team ID ${expected_team_id}." >&2
             exit 1
           fi
           binary="apps/daemon/dist/${{ matrix.asset }}"
@@ -335,9 +436,192 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  # Why: the drag-to-Applications image is the only install path that needs no terminal, so it
+  # reuses the notarized darwin daemon bytes instead of rebuilding an unattested second copy.
+  macos-app:
+    if: github.repository == 'xinyao27/agentstart'
+    needs: rust-daemon
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+
+      - name: Setup pnpm
+        uses: pnpm/setup@v2
+        with:
+          install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download darwin daemon binaries
+        uses: actions/download-artifact@v8
+        with:
+          pattern: agentstart-rust-darwin-*
+          path: apps/daemon/dist
+          merge-multiple: true
+
+      - name: Import Developer ID certificate
+        env:
+          MAC_CERTS: ${{ secrets.MAC_CERTS }}
+          MAC_CERTS_PASSWORD: ${{ secrets.MAC_CERTS_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "$MAC_CERTS" ] || [ -z "$MAC_CERTS_PASSWORD" ]; then
+            echo "MAC_CERTS and MAC_CERTS_PASSWORD are required for macOS app releases." >&2
+            exit 1
+          fi
+          keychain_path="$RUNNER_TEMP/agentstart-macos-app.keychain-db"
+          keychain_password="$(openssl rand -base64 24)"
+          certificate_path="$RUNNER_TEMP/agentstart-macos-app.p12"
+          echo "$MAC_CERTS" | base64 --decode > "$certificate_path"
+          security create-keychain -p "$keychain_password" "$keychain_path"
+          security set-keychain-settings -lut 21600 "$keychain_path"
+          security unlock-keychain -p "$keychain_password" "$keychain_path"
+          security import "$certificate_path" -P "$MAC_CERTS_PASSWORD" \
+            -A -t cert -f pkcs12 -k "$keychain_path"
+          security set-key-partition-list -S apple-tool:,apple: \
+            -k "$keychain_password" "$keychain_path" >/dev/null
+          security list-keychains -d user -s "$keychain_path" login.keychain-db
+          rm -f "$certificate_path"
+
+      - name: Build signed universal app
+        env:
+          AGENTSTART_MAC_RELEASE: '1'
+        run: |
+          set -euo pipefail
+          identity="$(security find-identity -v -p codesigning | sed -n 's/.*"\(Developer ID Application:[^"]*\)".*/\1/p' | head -1)"
+          if [ -z "$identity" ]; then
+            echo "Developer ID Application identity is unavailable." >&2
+            exit 1
+          fi
+          AGENTSTART_MACOS_SIGN_IDENTITY="$identity" \
+            pnpm exec vp run @agentstart/workspace#package:macos -- \
+              --universal \
+              --daemon-arm64 apps/daemon/dist/agentstart-rust-darwin-arm64 \
+              --daemon-x64 apps/daemon/dist/agentstart-rust-darwin-x64
+
+      # Why: the app is notarized and stapled before the image is built so a first launch from a
+      # copied bundle passes Gatekeeper offline, and the image is notarized again so the download
+      # itself carries a ticket.
+      - name: Notarize app and package the installer image
+        env:
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          AGENTSTART_MAC_RELEASE: '1'
+        run: |
+          set -euo pipefail
+          if [ -z "$APPLE_APP_SPECIFIC_PASSWORD" ] || [ -z "$APPLE_ID" ] || [ -z "$APPLE_TEAM_ID" ]; then
+            echo "Apple notarization credentials are required for macOS app releases." >&2
+            exit 1
+          fi
+          expected_team_id='8H6Q2YA365'
+          expected_bundle_id='com.xinyao27.agentstart.macos'
+          if [ "$APPLE_TEAM_ID" != "$expected_team_id" ]; then
+            echo "APPLE_TEAM_ID must match the AgentStart updater Team ID ${expected_team_id}." >&2
+            exit 1
+          fi
+          app='apps/macos/dist/AgentStart.app'
+          image='apps/macos/dist/AgentStart.dmg'
+          archive="$RUNNER_TEMP/AgentStart.app.zip"
+          codesign --verify --deep --strict "$app"
+          signature_details="$(codesign -d --verbose=4 "$app" 2>&1)"
+          grep -Fq 'Authority=Developer ID Application:' <<< "$signature_details"
+          grep -Fq "TeamIdentifier=$expected_team_id" <<< "$signature_details"
+          grep -Fq "Identifier=$expected_bundle_id" <<< "$signature_details"
+          entitlement_index=0
+          for signed_target in \
+            "$app" \
+            "$app/Contents/MacOS/AgentStartMenuBar" \
+            "$app/Contents/MacOS/agentstart"; do
+            entitlements="$RUNNER_TEMP/direct-download-entitlements-${entitlement_index}.plist"
+            codesign -d --entitlements - --xml "$signed_target" > "$entitlements"
+            if [ -s "$entitlements" ] && \
+              [ "$(plutil -convert json -o - "$entitlements")" != '{}' ]; then
+              echo "Direct-download target carries unexpected entitlements: ${signed_target}" >&2
+              plutil -p "$entitlements" >&2
+              exit 1
+            fi
+            entitlement_index=$((entitlement_index + 1))
+          done
+          for universal_binary in \
+            "$app/Contents/MacOS/agentstart" \
+            "$app/Contents/MacOS/AgentStartMenuBar"; do
+            architectures="$(lipo -archs "$universal_binary")"
+            grep -Eq '(^| )arm64( |$)' <<< "$architectures"
+            grep -Eq '(^| )x86_64( |$)' <<< "$architectures"
+          done
+          notarize() {
+            notary_result="$RUNNER_TEMP/$(basename "$1")-notary.json"
+            xcrun notarytool submit "$1" \
+              --apple-id "$APPLE_ID" \
+              --password "$APPLE_APP_SPECIFIC_PASSWORD" \
+              --team-id "$APPLE_TEAM_ID" \
+              --wait \
+              --output-format json | tee "$notary_result"
+            NOTARY_RESULT="$notary_result" node <<'NODE'
+          const { readFileSync } = require('node:fs')
+          const result = JSON.parse(readFileSync(process.env.NOTARY_RESULT, 'utf8'))
+          if (result.status !== 'Accepted') {
+            throw new Error(`Apple notarization returned ${String(result.status)}`)
+          }
+          NODE
+            rm -f "$notary_result"
+          }
+          ditto -c -k --sequesterRsrc --keepParent "$app" "$archive"
+          notarize "$archive"
+          rm -f "$archive"
+          xcrun stapler staple "$app"
+          codesign --verify --deep --strict "$app"
+          spctl --assess --type execute "$app"
+          identity="$(security find-identity -v -p codesigning | sed -n 's/.*"\(Developer ID Application:[^"]*\)".*/\1/p' | head -1)"
+          AGENTSTART_MACOS_SIGN_IDENTITY="$identity" pnpm exec vp run @agentstart/macos#package:dmg
+          codesign --verify --strict --verbose=2 "$image"
+          image_signature_details="$(codesign -d --verbose=4 "$image" 2>&1)"
+          grep -Fq 'Authority=Developer ID Application:' <<< "$image_signature_details"
+          grep -Fq "TeamIdentifier=$expected_team_id" <<< "$image_signature_details"
+          hdiutil verify "$image"
+          notarize "$image"
+          xcrun stapler staple "$image"
+          hdiutil verify "$image"
+          spctl --assess --type open --context context:primary-signature "$image"
+
+      - name: Attest installer image
+        uses: actions/attest@v4
+        with:
+          subject-path: apps/macos/dist/AgentStart.dmg
+
+      - name: Upload installer image
+        uses: actions/upload-artifact@v7
+        with:
+          name: AgentStart.dmg
+          path: apps/macos/dist/AgentStart.dmg
+          if-no-files-found: error
+          retention-days: 7
+
   release:
-    if: github.repository == 'xinyao27/yiru'
+    if: github.repository == 'xinyao27/agentstart'
     needs:
+      - macos-app
       - macos-helper
       - rust-daemon
     permissions:
@@ -372,34 +656,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Verify release versions
-        env:
-          RELEASE_TAG: ${{ github.ref_name }}
-        run: |
-          version="${RELEASE_TAG#v}"
-          daemon_version="$(node -p "require('./apps/daemon/package.json').version")"
-          rust_cargo_version="$(sed -n 's/^version = "\([^"]*\)"/\1/p' apps/daemon/Cargo.toml | head -1)"
-          computer_use_version="$(node -p "require('./apps/computer-use-macos/package.json').version")"
-          cli_version="$(node -p "require('./packages/cli/package.json').version")"
-          if [ "$version" != "$daemon_version" ] || \
-            [ "$version" != "$rust_cargo_version" ] || \
-            [ "$version" != "$computer_use_version" ] || \
-            [ "$version" != "$cli_version" ]; then
-            echo "Tag, daemon package and Cargo manifest, computer-use helper, and npm CLI versions must match." >&2
-            exit 1
-          fi
-          grep -Fq "version \"$version\"" Formula/yiru.rb
-
       - name: Download computer-use helper
         uses: actions/download-artifact@v8
         with:
-          name: yiru-computer-use-macos
+          name: agentstart-computer-use-macos
+          path: apps/daemon/dist
+
+      - name: Download installer image
+        uses: actions/download-artifact@v8
+        with:
+          name: AgentStart.dmg
           path: apps/daemon/dist
 
       - name: Download daemon target artifacts
         uses: actions/download-artifact@v8
         with:
-          pattern: yiru-rust-*
+          pattern: agentstart-rust-*
           path: apps/daemon/dist
           merge-multiple: true
 
@@ -412,7 +684,7 @@ jobs:
         run: |
           set -euo pipefail
           read -r -a rust_assets <<< "$RUST_RELEASE_ASSETS"
-          assets=(yiru-computer-use-macos.zip "${rust_assets[@]}")
+          assets=(AgentStart.dmg agentstart-computer-use-macos.zip "${rust_assets[@]}")
           for asset in "${assets[@]}"; do
             test -f "$asset"
             gh attestation verify "$asset" --repo "$GITHUB_REPOSITORY"
@@ -429,7 +701,7 @@ jobs:
             echo "Release asset sets must contain 7 Rust and 4 Homebrew binaries." >&2
             exit 1
           fi
-          assets=(yiru-computer-use-macos.zip "${rust_assets[@]}")
+          assets=(AgentStart.dmg agentstart-computer-use-macos.zip "${rust_assets[@]}")
           if ! printf '%s\n' "${assets[@]}" | awk 'seen[$0]++ { exit 1 }'; then
             echo "Release asset names must be unique." >&2
             exit 1
@@ -450,80 +722,241 @@ jobs:
           for asset in "${assets[@]}"; do
             test -f "$asset"
           done
-          shasum -a 256 "${assets[@]}" > yiru-checksums.txt
-          shasum -a 256 --check yiru-checksums.txt
+          shasum -a 256 "${assets[@]}" > agentstart-checksums.txt
+          shasum -a 256 --check agentstart-checksums.txt
 
       # Why: the checksum manifest is built from the explicit release asset sets above, so the
       # attestation cannot silently omit a target that an upload glob happened not to match.
       - name: Attest release assets
         uses: actions/attest@v4
         with:
-          subject-checksums: apps/daemon/dist/yiru-checksums.txt
+          subject-checksums: apps/daemon/dist/agentstart-checksums.txt
 
       - name: Attest release checksum manifest
         uses: actions/attest@v4
         with:
-          subject-path: apps/daemon/dist/yiru-checksums.txt
+          subject-path: apps/daemon/dist/agentstart-checksums.txt
 
-      - name: Create GitHub release
+      - name: Stage and verify GitHub release
         working-directory: apps/daemon/dist
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          notes_file="$GITHUB_WORKSPACE/docs/releases/${version}.md"
+          test -s "$notes_file"
           read -r -a rust_assets <<< "$RUST_RELEASE_ASSETS"
-          assets=(
-            yiru-computer-use-macos.zip
+          payload_assets=(
+            AgentStart.dmg
+            agentstart-computer-use-macos.zip
             "${rust_assets[@]}"
-            yiru-checksums.txt
           )
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || \
-            gh release create "$GITHUB_REF_NAME" --generate-notes --title "$GITHUB_REF_NAME"
-          gh release upload "$GITHUB_REF_NAME" "${assets[@]}" --clobber
-
-      # Why: Rust release bytes exist only after this workflow signs and notarizes them, so the
-      # Homebrew checksums are pinned here from the attested artifacts instead of being predicted
-      # during local preparation.
-      - name: Pin Homebrew formula checksums
-        working-directory: apps/daemon/dist
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          node <<'NODE'
-          const { readFileSync, writeFileSync } = require('node:fs')
-          const { createHash } = require('node:crypto')
-          const formulaPath = '../../../Formula/yiru.rb'
-          let formula = readFileSync(formulaPath, 'utf8')
-          for (const asset of process.env.HOMEBREW_RUST_ASSETS.split(/\s+/).filter(Boolean)) {
-            const checksum = createHash('sha256').update(readFileSync(asset)).digest('hex')
-            const escaped = asset.replaceAll('-', '\\-')
-            const pattern = new RegExp(`(url "[^"]+/${escaped}",[\\s\\S]*?sha256 ")[0-9a-f]{64}(")`)
-            const matches = [...formula.matchAll(new RegExp(pattern.source, 'g'))]
-            if (matches.length !== 1) {
-              throw new Error(
-                `Expected one ${asset} checksum in Formula/yiru.rb, found ${matches.length}`
-              )
-            }
-            formula = formula.replace(pattern, `$1${checksum}$2`)
+          assets=(
+            "${payload_assets[@]}"
+            agentstart-checksums.txt
+          )
+          release_dir="$RUNNER_TEMP/agentstart-release-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir "$release_dir"
+          release_state="$release_dir/release-state.json"
+          release_error="$release_dir/release-error.txt"
+          verify_release_assets() {
+            printf '%s\n' "${assets[@]}" | sort > "$release_dir/expected-release-assets.txt"
+            gh release view "$GITHUB_REF_NAME" --json assets --jq '.assets[].name' | sort \
+              > "$release_dir/remote-release-assets.txt"
+            cmp "$release_dir/expected-release-assets.txt" "$release_dir/remote-release-assets.txt"
+            for asset in "${assets[@]}"; do
+              gh release download "$GITHUB_REF_NAME" --dir "$release_dir" --pattern "$asset"
+            done
+            (
+              cd "$release_dir"
+              printf '%s\n' "${payload_assets[@]}" | sort > expected-assets.txt
+              awk '{print $2}' agentstart-checksums.txt | sed 's/^\*//' | sort > manifest-assets.txt
+              cmp expected-assets.txt manifest-assets.txt
+              shasum -a 256 --check agentstart-checksums.txt
+            )
           }
-          writeFileSync(formulaPath, formula)
-          NODE
-          gh api --method PUT "repos/${GITHUB_REPOSITORY}/contents/Formula/yiru.rb" \
-            -f message="chore: pin Homebrew checksums for ${GITHUB_REF_NAME}" \
-            -f content="$(base64 -w0 ../../../Formula/yiru.rb)" \
-            -f sha="$(git rev-parse 'HEAD:Formula/yiru.rb')"
+          if gh release view "$GITHUB_REF_NAME" --json isDraft > "$release_state" 2> "$release_error"; then
+            is_draft="$(jq -r '.isDraft' "$release_state")"
+            if [ "$is_draft" != 'true' ]; then
+              verify_release_assets
+              echo "Published release ${GITHUB_REF_NAME} is complete; leaving it immutable."
+              exit 0
+            fi
+            gh release edit "$GITHUB_REF_NAME" --draft \
+              --notes-file "$notes_file" --title "$GITHUB_REF_NAME"
+          elif grep -Eqi 'release not found|HTTP 404' "$release_error"; then
+            gh release create "$GITHUB_REF_NAME" --draft --verify-tag \
+              --notes-file "$notes_file" --title "$GITHUB_REF_NAME"
+          else
+            cat "$release_error" >&2
+            exit 1
+          fi
+          gh release upload "$GITHUB_REF_NAME" "${assets[@]}" --clobber
+          verify_release_assets
+          cmp agentstart-checksums.txt "$release_dir/agentstart-checksums.txt"
 
       - name: Publish npm and bunx installer
         working-directory: packages/cli
         env:
-          # Why: the token bootstraps the package's first release. Once @yiru/cli exists,
+          # Why: the token bootstraps the package's first release. Once @agentstart/cli exists,
           # npm trusted publishing uses this job's OIDC identity and the token can be removed.
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           version="$(node -p "require('./package.json').version")"
-          if npm view "@yiru/cli@${version}" version >/dev/null 2>&1; then
-            echo "@yiru/cli@${version} is already published"
+          if npm view "@agentstart/cli@${version}" version >/dev/null 2>&1; then
+            echo "@agentstart/cli@${version} is already published"
           else
-            npm publish --access public
+            npm publish --access public --provenance
           fi
+
+      # Why: every registry and install entry point must succeed before release notes make this
+      # version visible to users; a failed rerun leaves the verified GitHub release as a draft.
+      - name: Publish verified GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          is_draft="$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq '.isDraft')"
+          if [ "$is_draft" = 'true' ]; then
+            gh release edit "$GITHUB_REF_NAME" --draft=false
+          else
+            echo "GitHub release ${GITHUB_REF_NAME} is already public."
+          fi
+          if [ "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq '.isDraft')" != 'false' ]; then
+            echo "GitHub release ${GITHUB_REF_NAME} is not public." >&2
+            exit 1
+          fi
+
+      # Why: Homebrew becomes installable only after the exact attested bytes have public URLs.
+      # The Contents API update is therefore the final release feed and can create the first formula.
+      - name: Publish Homebrew formula
+        working-directory: apps/daemon/dist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq '.isDraft')" != 'false' ]; then
+            echo "Homebrew cannot advance before ${GITHUB_REF_NAME} is public." >&2
+            exit 1
+          fi
+          release_version="${GITHUB_REF_NAME#v}"
+          formula_release_dir="$RUNNER_TEMP/agentstart-formula-release"
+          mkdir "$formula_release_dir"
+          read -r -a homebrew_assets <<< "$HOMEBREW_RUST_ASSETS"
+          for asset in agentstart-checksums.txt "${homebrew_assets[@]}"; do
+            gh release download "$GITHUB_REF_NAME" --dir "$formula_release_dir" --pattern "$asset"
+          done
+          formula_checksums="$formula_release_dir/agentstart-formula-checksums.txt"
+          for asset in "${homebrew_assets[@]}"; do
+            match_count="$(awk -v asset="$asset" \
+              '$2 == asset || $2 == "*" asset { count += 1 } END { print count + 0 }' \
+              "$formula_release_dir/agentstart-checksums.txt")"
+            if [ "$match_count" -ne 1 ]; then
+              echo "Published checksum manifest needs exactly one ${asset} entry." >&2
+              exit 1
+            fi
+            awk -v asset="$asset" '$2 == asset || $2 == "*" asset' \
+              "$formula_release_dir/agentstart-checksums.txt" >> "$formula_checksums"
+          done
+          (
+            cd "$formula_release_dir"
+            shasum -a 256 --check "$(basename "$formula_checksums")"
+            gh attestation verify agentstart-checksums.txt --repo "$GITHUB_REPOSITORY"
+            for asset in "${homebrew_assets[@]}"; do
+              gh attestation verify "$asset" --repo "$GITHUB_REPOSITORY"
+            done
+          )
+          rendered_formula="$RUNNER_TEMP/agentstart.rb"
+          TEMPLATE_PATH="$GITHUB_WORKSPACE/Formula/agentstart.rb.template" \
+            ASSET_DIR="$formula_release_dir" OUTPUT_PATH="$rendered_formula" \
+            RELEASE_VERSION="$release_version" node <<'NODE'
+          const { createHash } = require('node:crypto')
+          const { readFileSync, writeFileSync } = require('node:fs')
+          const { join } = require('node:path')
+          const assets = new Map([
+            ['agentstart-rust-darwin-arm64', '__SHA256_AGENTSTART_RUST_DARWIN_ARM64__'],
+            ['agentstart-rust-darwin-x64', '__SHA256_AGENTSTART_RUST_DARWIN_X64__'],
+            ['agentstart-rust-linux-arm64', '__SHA256_AGENTSTART_RUST_LINUX_ARM64__'],
+            ['agentstart-rust-linux-x64', '__SHA256_AGENTSTART_RUST_LINUX_X64__']
+          ])
+          let formula = readFileSync(process.env.TEMPLATE_PATH, 'utf8')
+          const versionMarkers = formula.match(/__AGENTSTART_VERSION__/g) ?? []
+          if (versionMarkers.length !== 5) {
+            throw new Error(`Formula template needs five version markers; found ${versionMarkers.length}`)
+          }
+          formula = formula.replaceAll('__AGENTSTART_VERSION__', process.env.RELEASE_VERSION)
+          for (const [asset, marker] of assets) {
+            const occurrences = formula.split(marker).length - 1
+            if (occurrences !== 1) {
+              throw new Error(`Formula template needs one ${marker}; found ${occurrences}`)
+            }
+            const checksum = createHash('sha256')
+              .update(readFileSync(join(process.env.ASSET_DIR, asset)))
+              .digest('hex')
+            formula = formula.replace(marker, checksum)
+          }
+          if (/__[A-Z0-9_]+__/.test(formula)) {
+            throw new Error('Rendered Homebrew formula still contains a template marker')
+          }
+          writeFileSync(process.env.OUTPUT_PATH, formula)
+          NODE
+
+          response="$RUNNER_TEMP/agentstart-formula.json"
+          error="$RUNNER_TEMP/agentstart-formula-error.txt"
+          formula_exists=false
+          if gh api "repos/${GITHUB_REPOSITORY}/contents/Formula/agentstart.rb?ref=main" \
+            > "$response" 2> "$error"; then
+            formula_exists=true
+          elif ! grep -Eqi 'HTTP 404|Not Found' "$error"; then
+            cat "$error" >&2
+            exit 1
+          fi
+
+          if [ "$formula_exists" = true ]; then
+            existing_formula="$RUNNER_TEMP/agentstart-existing.rb"
+            jq -r '.content' "$response" | base64 --decode > "$existing_formula"
+            formula_sha="$(jq -r '.sha' "$response")"
+            decision="$(EXISTING_PATH="$existing_formula" RENDERED_PATH="$rendered_formula" \
+              RELEASE_VERSION="$release_version" node <<'NODE'
+          const { readFileSync } = require('node:fs')
+          const parse = (value) => {
+            const match = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.exec(value)
+            if (!match) throw new Error(`Invalid Homebrew formula version: ${value}`)
+            return match.slice(1).map(Number)
+          }
+          const existing = readFileSync(process.env.EXISTING_PATH, 'utf8')
+          const rendered = readFileSync(process.env.RENDERED_PATH, 'utf8')
+          const match = /^  version "([^"]+)"$/m.exec(existing)
+          if (!match) throw new Error('Existing Homebrew formula has no version')
+          const current = parse(match[1])
+          const release = parse(process.env.RELEASE_VERSION)
+          let order = 0
+          for (let index = 0; index < current.length; index += 1) {
+            if (current[index] !== release[index]) {
+              order = Math.sign(current[index] - release[index])
+              break
+            }
+          }
+          if (order > 0) process.stdout.write('newer')
+          else if (order === 0 && existing === rendered) process.stdout.write('same')
+          else process.stdout.write('replace')
+          NODE
+            )"
+            if [ "$decision" = newer ]; then
+              echo "Homebrew formula is newer than ${GITHUB_REF_NAME}; leaving it unchanged."
+              exit 0
+            fi
+            if [ "$decision" = same ]; then
+              echo "Homebrew formula for ${GITHUB_REF_NAME} is already published."
+              exit 0
+            fi
+            sha_args=(-f "sha=$formula_sha")
+          else
+            sha_args=()
+          fi
+          gh api --method PUT "repos/${GITHUB_REPOSITORY}/contents/Formula/agentstart.rb" \
+            -f branch=main \
+            -f message="chore: publish Homebrew formula for ${GITHUB_REF_NAME}" \
+            -f content="$(base64 -w0 "$rendered_formula")" \
+            "${sha_args[@]}"

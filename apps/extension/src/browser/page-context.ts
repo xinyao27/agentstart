@@ -1,4 +1,4 @@
-import type { BrowserContextPayload } from '@yiru/client/extension-bootstrap'
+import type { BrowserContextPayload } from '@agentstart/client/extension-bootstrap'
 
 import { readEnterprisePolicy } from '../enterprise-policy'
 import { requestBrowserPermissions } from './permission'
@@ -109,7 +109,7 @@ function readSanitizedPage(): {
     .replace(/\n{3,}/g, '\n\n')
     .trim()
     .slice(0, 16_000)
-  const adapterContext = document.documentElement.dataset.yiruContext?.trim().slice(0, 4_000)
+  const adapterContext = document.documentElement.dataset.agentstartContext?.trim().slice(0, 4_000)
   return {
     selection,
     text: adapterContext

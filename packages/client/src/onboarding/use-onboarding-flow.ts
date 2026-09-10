@@ -1,5 +1,5 @@
-import { ONBOARDING_FINAL_STEP } from '@yiru/protocol/settings/onboarding'
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import { ONBOARDING_FINAL_STEP } from '@agentstart/protocol/settings/onboarding'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { applyDocumentTheme } from '~renderer/editor/document-theme'
@@ -15,11 +15,6 @@ import { resolveOnboardingStepIndex } from './step-navigation'
 import { persistStep, useCloseWith, usePersistCurrentStep } from './use-onboarding-flow-persistence'
 import { STEPS } from './use-onboarding-flow-types'
 import { buildWindowsTerminalSnapshotPayload } from './windows-terminal-onboarding-telemetry'
-
-export { STEPS } from './use-onboarding-flow-types'
-export type { StepId, StepNumber } from './use-onboarding-flow-types'
-
-export type OnboardingFlowController = ReturnType<typeof useOnboardingFlow>
 
 export function useOnboardingFlow(
   onboarding: OnboardingState,

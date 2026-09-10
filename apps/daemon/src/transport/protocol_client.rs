@@ -1,17 +1,17 @@
 use std::sync::Arc;
 use std::time::Duration;
 
+use agentstart_protocol::CURRENT_PROTOCOL_VERSION;
+use agentstart_protocol::method_metadata::{MethodMetadata, ServerStreamMethod, UnaryMethod};
+use agentstart_protocol::protocol::v1::frame::Body;
+use agentstart_protocol::protocol::v1::{Frame, Hello, PeerKind, Status, StatusCode, Welcome};
+use agentstart_protocol::transport::{FRAME_PREAMBLE_BYTES, decode_frame, encode_frame};
 use async_trait::async_trait;
 use getrandom::fill;
 use prost::Message;
 use thiserror::Error;
 use tokio::sync::{OwnedSemaphorePermit, Semaphore, mpsc, oneshot};
 use tokio::time::{Instant, timeout};
-use yiru_protocol::CURRENT_PROTOCOL_VERSION;
-use yiru_protocol::method_metadata::{MethodMetadata, ServerStreamMethod, UnaryMethod};
-use yiru_protocol::protocol::v1::frame::Body;
-use yiru_protocol::protocol::v1::{Frame, Hello, PeerKind, Status, StatusCode, Welcome};
-use yiru_protocol::transport::{FRAME_PREAMBLE_BYTES, decode_frame, encode_frame};
 
 mod connection;
 mod duplex;
@@ -177,7 +177,7 @@ impl ProtocolClient {
         .map_err(|_| ProtocolPeerError::ConnectionTimeout)??;
         let identity = PeerIdentity::new(
             PeerKind::Cli,
-            "yiru-cli",
+            "agentstart-cli",
             env!("CARGO_PKG_VERSION"),
             MAX_FRAME_BYTES,
             INITIAL_CALL_CREDIT_BYTES,

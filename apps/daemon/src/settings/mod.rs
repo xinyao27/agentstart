@@ -126,10 +126,22 @@ impl SettingsAuthority {
                 update_gate: Mutex::new(()),
             }),
         };
-        {
+        let hooks_enabled = {
             let mut state = lock(&authority.inner.state);
             commit(&authority.inner, &mut state, None)?;
-        }
+            state
+                .document
+                .get("agentStatusHooksEnabled")
+                .and_then(Value::as_bool)
+                != Some(false)
+        };
+        // Why: startup must reconcile renamed or missing managed scripts even when the
+        // persisted setting already matches its effective value.
+        authority
+            .inner
+            .agent_status_hooks
+            .apply_local(hooks_enabled)
+            .await;
         Ok(authority)
     }
 

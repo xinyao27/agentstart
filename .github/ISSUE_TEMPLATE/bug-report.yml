@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a problem with Yiru
+description: Report a problem with AgentStart
 title: '[Bug]: '
 type: Bug
 labels:
@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Use this form for Yiru bugs. Include enough detail for someone else to reproduce the issue.
+        Use this form for AgentStart bugs. Include enough detail for someone else to reproduce the issue.
 
   - type: dropdown
     id: os
@@ -23,10 +23,10 @@ body:
       required: true
 
   - type: input
-    id: yiru_version
+    id: agentstart_version
     attributes:
-      label: Yiru version
-      description: Include the exact Yiru version if you can. You can find it in `Yiru > About Yiru`.
+      label: AgentStart version
+      description: Include the exact AgentStart version if you can. You can find it in `AgentStart > About AgentStart`.
       placeholder: v0.14.2
     validations:
       required: false
@@ -38,7 +38,7 @@ body:
       description: Describe the bug in your own words. Include a short summary, reproduction steps, and anything else that seems relevant.
       placeholder: |
         Short summary:
-        Yiru crashes when ...
+        AgentStart crashes when ...
 
         What happened?
 

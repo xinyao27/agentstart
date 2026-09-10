@@ -1,5 +1,5 @@
-import { StatusCode, type Status } from '../generated/yiru/protocol/v1/errors_pb.js'
-import type { CallStart, Frame, Welcome } from '../generated/yiru/protocol/v1/frame_pb.js'
+import { StatusCode, type Status } from '../generated/agent_start/protocol/v1/errors_pb.js'
+import type { CallStart, Frame, Welcome } from '../generated/agent_start/protocol/v1/frame_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import { statusError } from './peer-values.js'
 

@@ -41,7 +41,7 @@ export const CONTEXTUAL_TOUR_ARROW_SIZE = {
 // Why: keep the arrow just outside the panel border so the two edges do not collide.
 export const CONTEXTUAL_TOUR_PANEL_BORDER_WIDTH = 1
 
-export async function getContextualTourFloatingPosition(args: {
+async function getContextualTourFloatingPosition(args: {
   arrowElement: Element
   floatingElement: HTMLElement
   panelHost: HTMLElement | null

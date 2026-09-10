@@ -1,5 +1,5 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import type { FeatureWallSetupStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import type { FeatureWallSetupStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import { useEffect } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'
@@ -59,10 +59,12 @@ function SetupStepRow(props: {
           : cn('px-3 py-2.5', active ? 'bg-accent text-accent-foreground' : '')
       )}
     >
-      {active ? <span className="bg-foreground absolute top-2 bottom-2 left-0 w-0.5" /> : null}
+      {active ? (
+        <span className="bg-foreground absolute top-2 bottom-2 left-0 w-0.5 rounded-full" />
+      ) : null}
       <span
         className={cn(
-          'flex size-5 shrink-0 items-center justify-center border',
+          'flex size-5 shrink-0 items-center justify-center rounded-full border',
           done
             ? 'border-green-500/45 bg-green-500/10 text-green-600 dark:text-green-300'
             : 'border-border text-muted-foreground'
@@ -295,7 +297,7 @@ export function FeatureWallSetupChecklist(
               </div>
               <span
                 className={cn(
-                  'shrink-0 border px-2.5 py-1 text-xs font-medium',
+                  'shrink-0 rounded-full border px-2.5 py-1 text-xs font-medium',
                   activeDone
                     ? 'border-green-500/45 bg-green-500/10 text-green-600 dark:text-green-300'
                     : 'border-border bg-muted/30 text-muted-foreground'

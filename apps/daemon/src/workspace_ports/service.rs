@@ -117,7 +117,7 @@ impl WorkspacePorts {
             return WorkspacePortKillResult::failed("The owning process is unknown.");
         };
         if self.host.runtime_pid() == Some(pid) {
-            return WorkspacePortKillResult::failed("Yiru cannot stop its own process.");
+            return WorkspacePortKillResult::failed("AgentStart cannot stop its own process.");
         }
         match self.host.terminate(pid).await {
             Ok(()) => WorkspacePortKillResult::succeeded(),

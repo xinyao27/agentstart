@@ -15,7 +15,7 @@ import {
   GetMemorySnapshotRequestSchema,
   GetMemorySnapshotResponseSchema,
   type GetMemorySnapshotResponse
-} from '../generated/yiru/runtime/v1/diagnostics_pb.js'
+} from '../generated/agent_start/runtime/v1/diagnostics_pb.js'
 import {
   diagnosticsBundle,
   diagnosticsLookbackMinutes,

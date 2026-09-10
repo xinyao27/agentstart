@@ -5,7 +5,7 @@ import {
   GetStatusResponseSchema,
   StatusService,
   type GetStatusResponse
-} from '../generated/yiru/runtime/v1/status_pb.js'
+} from '../generated/agent_start/runtime/v1/status_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 
 const GET_STATUS_PROCEDURE = `/${StatusService.typeName}/${StatusService.method.getStatus.name}`

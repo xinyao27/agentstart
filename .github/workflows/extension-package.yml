@@ -63,12 +63,12 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build Web Store package
-        run: pnpm exec vp run @yiru/extension#package:web-store
+        run: pnpm exec vp run @agentstart/extension#package:web-store
 
       - name: Upload review-ready extension package
         uses: actions/upload-artifact@v7
         with:
-          name: yiru-extension-web-store
+          name: agentstart-extension-web-store
           path: |
             apps/extension/release/*.zip
             apps/extension/release/*.sha256
@@ -77,7 +77,7 @@ jobs:
 
   publish-web-store:
     if: startsWith(github.ref, 'refs/tags/extension-v') && github.repository ==
-      'xinyao27/yiru'
+      'xinyao27/agentstart'
     needs: package
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -97,7 +97,7 @@ jobs:
       - name: Download extension package
         uses: actions/download-artifact@v8
         with:
-          name: yiru-extension-web-store
+          name: agentstart-extension-web-store
           path: apps/extension/release
 
       - name: Upload and submit Web Store revision
@@ -105,8 +105,13 @@ jobs:
         run: |
           set -euo pipefail
           version="$(node -p "require('./apps/extension/package.json').version")"
+          root_version="$(node -p "require('./package.json').version")"
           if [ "$GITHUB_REF_NAME" != "extension-v${version}" ]; then
             echo "Extension tag and package version must match." >&2
+            exit 1
+          fi
+          if [ "$root_version" != "$version" ]; then
+            echo "Extension and workspace versions must match." >&2
             exit 1
           fi
           for name in CWS_CLIENT_ID CWS_CLIENT_SECRET CWS_PUBLISHER_ID CWS_REFRESH_TOKEN; do
@@ -115,7 +120,8 @@ jobs:
               exit 1
             fi
           done
-          oauth_response="$(curl --fail-with-body --silent --show-error \
+          oauth_response="$(curl --connect-timeout 15 --max-time 30 \
+            --fail-with-body --silent --show-error \
             --data-urlencode "client_id=${CWS_CLIENT_ID}" \
             --data-urlencode "client_secret=${CWS_CLIENT_SECRET}" \
             --data-urlencode "refresh_token=${CWS_REFRESH_TOKEN}" \
@@ -125,15 +131,69 @@ jobs:
             "const value = JSON.parse(process.env.OAUTH_RESPONSE || '{}'); if (!value.access_token) process.exit(1); process.stdout.write(value.access_token)")"
           echo "::add-mask::${access_token}"
           item="publishers/${CWS_PUBLISHER_ID}/items/${EXTENSION_ID}"
-          archive="apps/extension/release/yiru-extension-${version}.zip"
-          curl --fail-with-body --silent --show-error \
+          archive="apps/extension/release/agentstart-extension-${version}.zip"
+          checksum="${archive}.sha256"
+          test -f "$archive"
+          test -f "$checksum"
+          (cd "$(dirname "$archive")" && sha256sum --check "$(basename "$checksum")")
+          upload_response_file="$RUNNER_TEMP/chrome-web-store-upload.json"
+          if ! curl --connect-timeout 15 --max-time 180 \
+            --fail-with-body --silent --show-error \
             -H "Authorization: Bearer ${access_token}" \
             -H 'Content-Type: application/zip' \
             -X POST -T "$archive" \
-            "https://chromewebstore.googleapis.com/upload/v2/${item}:upload"
-          curl --fail-with-body --silent --show-error \
+            --output "$upload_response_file" \
+            "https://chromewebstore.googleapis.com/upload/v2/${item}:upload"; then
+            echo 'Chrome Web Store upload API response:' >&2
+            if [ -s "$upload_response_file" ]; then
+              cat "$upload_response_file" >&2
+            fi
+            exit 1
+          fi
+          upload_response="$(<"$upload_response_file")"
+          upload_state="$(UPLOAD_RESPONSE="$upload_response" node -e \
+            "const value = JSON.parse(process.env.UPLOAD_RESPONSE || '{}'); process.stdout.write(value.uploadState || '')")"
+          upload_deadline=$((SECONDS + 180))
+          attempt=0
+          while [ "$upload_state" = 'IN_PROGRESS' ] && (( SECONDS < upload_deadline )); do
+            sleep 5
+            attempt=$((attempt + 1))
+            status_response_file="$RUNNER_TEMP/chrome-web-store-status.json"
+            if ! curl --connect-timeout 10 --max-time 10 \
+              --fail-with-body --silent --show-error \
+              -H "Authorization: Bearer ${access_token}" \
+              --output "$status_response_file" \
+              "https://chromewebstore.googleapis.com/v2/${item}:fetchStatus"; then
+              echo 'Chrome Web Store status API response:' >&2
+              if [ -s "$status_response_file" ]; then
+                cat "$status_response_file" >&2
+              fi
+              exit 1
+            fi
+            status_response="$(<"$status_response_file")"
+            upload_state="$(STATUS_RESPONSE="$status_response" node -e \
+              "const value = JSON.parse(process.env.STATUS_RESPONSE || '{}'); process.stdout.write(value.lastAsyncUploadState || '')")"
+            echo "Chrome Web Store upload attempt ${attempt}: ${upload_state}"
+          done
+          if [ "$upload_state" != 'SUCCEEDED' ]; then
+            echo "Chrome Web Store upload did not succeed: ${upload_state:-missing state}" >&2
+            exit 1
+          fi
+          publish_response_file="$RUNNER_TEMP/chrome-web-store-publish.json"
+          if ! curl --connect-timeout 15 --max-time 60 \
+            --fail-with-body --silent --show-error \
             -H "Authorization: Bearer ${access_token}" \
             -H 'Content-Type: application/json' \
             -X POST \
-            -d '{"publishType":"DEFAULT_PUBLISH"}' \
-            "https://chromewebstore.googleapis.com/v2/${item}:publish"
+            -d '{"publishType":"DEFAULT_PUBLISH","blockOnWarnings":true}' \
+            --output "$publish_response_file" \
+            "https://chromewebstore.googleapis.com/v2/${item}:publish"; then
+            echo 'Chrome Web Store publish API response:' >&2
+            if [ -s "$publish_response_file" ]; then
+              cat "$publish_response_file" >&2
+            fi
+            exit 1
+          fi
+          publish_response="$(<"$publish_response_file")"
+          PUBLISH_RESPONSE="$publish_response" node -e \
+            "const value = JSON.parse(process.env.PUBLISH_RESPONSE || '{}'); const accepted = new Set(['PENDING_REVIEW', 'STAGED', 'PUBLISHED', 'PUBLISHED_TO_TESTERS']); if (!accepted.has(value.state)) throw new Error('Chrome Web Store publish response has an unsuccessful state: ' + (value.state || 'missing')); console.log('Chrome Web Store submission state:', value.state)"

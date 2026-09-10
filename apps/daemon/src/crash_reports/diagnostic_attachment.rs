@@ -54,8 +54,10 @@ fn collect_error_text(error: &SupportDiagnosticsError) -> String {
 fn disabled_reason_code(reason: DiagnosticsDisabledReason) -> &'static str {
     match reason {
         DiagnosticsDisabledReason::DoNotTrack => "do_not_track",
-        DiagnosticsDisabledReason::YiruTelemetryDisabled => "yiru_telemetry_disabled",
-        DiagnosticsDisabledReason::YiruDiagnosticsDisabled => "yiru_diagnostics_disabled",
+        DiagnosticsDisabledReason::AgentStartTelemetryDisabled => "agentstart_telemetry_disabled",
+        DiagnosticsDisabledReason::AgentStartDiagnosticsDisabled => {
+            "agentstart_diagnostics_disabled"
+        }
         DiagnosticsDisabledReason::Ci => "ci",
     }
 }

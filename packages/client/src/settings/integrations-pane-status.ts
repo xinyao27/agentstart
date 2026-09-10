@@ -1,6 +1,6 @@
-import type { PreflightStatusValue as PreflightStatus } from '@yiru/protocol'
+import type { PreflightStatusValue as PreflightStatus } from '@agentstart/protocol'
 
-export type GhStatus = 'checking' | 'connected' | 'not-installed' | 'not-authenticated'
+type GhStatus = 'checking' | 'connected' | 'not-installed' | 'not-authenticated'
 export type PreflightRefreshProvider = 'gh'
 
 export type PreflightIntegrationStatuses = {

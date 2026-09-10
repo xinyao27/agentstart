@@ -43,7 +43,7 @@ pub(super) async fn verify(executable: &Path) -> Result<(), UpdateError> {
         || !has_hardened_runtime(&details)
     {
         return Err(UpdateError::SignatureInvalid(
-            "expected Yiru Developer ID authority, team, and hardened runtime".to_owned(),
+            "expected AgentStart Developer ID authority, team, and hardened runtime".to_owned(),
         ));
     }
     Ok(())

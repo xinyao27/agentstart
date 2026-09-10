@@ -1,4 +1,4 @@
-import type { PRCheckJob, PRCheckStep } from '@yiru/protocol/hosted-review/review-types'
+import type { PRCheckJob, PRCheckStep } from '@agentstart/protocol/hosted-review/review-types'
 
 export type StepOutcome = 'success' | 'failure' | 'skipped' | 'pending'
 

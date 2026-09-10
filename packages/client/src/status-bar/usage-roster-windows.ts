@@ -1,4 +1,4 @@
-import type { ProviderRateLimits, RateLimitWindow } from '@yiru/protocol/account-rate-types'
+import type { ProviderRateLimits, RateLimitWindow } from '@agentstart/protocol/account-rate-types'
 import { formatWindowLabel } from '~renderer/status-bar/window-label-formatter'
 
 import { formatResetCountdown, getWindowSections } from './tooltip'

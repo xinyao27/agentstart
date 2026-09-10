@@ -1,8 +1,8 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type {
   CodexRateLimitAccountsState,
   CodexSystemDefaultIdentity
-} from '@yiru/protocol/settings/managed-accounts'
+} from '@agentstart/protocol/settings/managed-accounts'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Warning as AlertTriangle, Plus } from '~renderer/icons/hugeicons'
@@ -101,7 +101,7 @@ export function CodexAccountsSection({
             <DialogDescription>
               {translate(
                 'auto.components.settings.AccountsPane.99c8f9e498',
-                'Yiru will delete the managed Codex home for this saved account. If it is currently active, Yiru falls back to the system default Codex login.'
+                'AgentStart will delete the managed Codex home for this saved account. If it is currently active, AgentStart falls back to the system default Codex login.'
               )}
             </DialogDescription>
           </DialogHeader>
@@ -138,7 +138,7 @@ export function CodexAccountsSection({
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.settings.AccountsPane.cedfab35ab',
-              'Optional. Yiru can use your normal Codex login; add accounts only if you want quick switching in Yiru.'
+              'Optional. AgentStart can use your normal Codex login; add accounts only if you want quick switching in AgentStart.'
             )}
           </p>
           <p className="text-muted-foreground text-xs">
@@ -150,7 +150,7 @@ export function CodexAccountsSection({
                 )
               : translate(
                   'auto.components.settings.AccountsPane.340d6f7a85',
-                  'Each account keeps its own local sign-in context in Yiru. Account auth stays on this device.'
+                  'Each account keeps its own local sign-in context in AgentStart. Account auth stays on this device.'
                 )}
           </p>
         </div>
@@ -159,7 +159,7 @@ export function CodexAccountsSection({
           title={translate('auto.components.settings.AccountsPane.3180536c7a', 'Codex Accounts')}
           description={translate(
             'auto.components.settings.AccountsPane.d0d53b7eb0',
-            'Manage which Codex account Yiru uses for live rate limit fetching.'
+            'Manage which Codex account AgentStart uses for live rate limit fetching.'
           )}
           // Why: this single SearchableSetting backs the whole Codex section,
           // including the "Active Codex Account" sub-control (account picker
@@ -326,7 +326,7 @@ export function CodexAccountsSection({
                     )
                   : translate(
                       'auto.components.settings.AccountsPane.b4c9450319',
-                      "No managed Codex accounts for {{value0}}. Yiru will use that environment's system default Codex login until you add one here.",
+                      "No managed Codex accounts for {{value0}}. AgentStart will use that environment's system default Codex login until you add one here.",
                       { value0: accountRuntimeSentenceLabel }
                     )}
               </div>

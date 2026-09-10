@@ -277,13 +277,13 @@ function RuntimeEnvironmentUpdate({
         <span className="text-muted-foreground text-[11px]">
           {entry.currentVersion
             ? translate(
-                'auto.components.settings.RuntimeEnvironmentsPane.yiruVersion',
-                'Yiru v{{value0}}',
+                'auto.components.settings.RuntimeEnvironmentsPane.agentstartVersion',
+                'AgentStart v{{value0}}',
                 { value0: entry.currentVersion }
               )
             : translate(
                 'auto.components.settings.RuntimeEnvironmentsPane.versionUnavailable',
-                'Yiru version unavailable'
+                'AgentStart version unavailable'
               )}
         </span>
         <RemoteServerUpdateStatus entry={entry} compact />

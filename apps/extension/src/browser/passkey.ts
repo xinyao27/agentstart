@@ -25,10 +25,10 @@ export async function createDangerousCredential(input: {
       },
       challenge: decodeBase64Url(input.challenge),
       pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
-      rp: { name: 'Yiru' },
+      rp: { name: 'AgentStart' },
       timeout: 120_000,
       user: {
-        displayName: translate('passkeyDisplayName', 'Yiru local approval'),
+        displayName: translate('passkeyDisplayName', 'AgentStart local approval'),
         id: decodeBase64Url(input.userId),
         name: 'local-user'
       }

@@ -57,13 +57,6 @@ impl SessionTabsAuthority {
         }
         {
             let mut state = lock(&self.inner.state);
-            if state
-                .owner
-                .as_deref()
-                .is_some_and(|owner| owner != connection_id)
-            {
-                return Err(SessionTabsError::RendererOwner);
-            }
             for next in &mut incoming {
                 if let Some(prior) = state.browser_snapshots.iter().find(|prior| {
                     prior.worktree == next.worktree
@@ -74,6 +67,9 @@ impl SessionTabsAuthority {
                     *next = prior.clone();
                 }
             }
+            // Why: Chrome can keep several workbench pages connected. The
+            // focused renderer publishes next and takes over without waiting
+            // for the previously focused page's socket to close.
             state.owner = Some(connection_id.to_owned());
             state.browser_snapshots = incoming;
             state.browser_revision = state.browser_revision.saturating_add(1);

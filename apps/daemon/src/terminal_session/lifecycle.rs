@@ -240,6 +240,22 @@ impl TerminalSessionAuthority {
         Ok(stopped)
     }
 
+    pub(crate) async fn forget_worktree(
+        &self,
+        host_id: &str,
+        worktree_id: &str,
+    ) -> Result<(), TerminalSessionError> {
+        let host_scope = (host_id != "local").then_some(host_id);
+        self.workspace_session
+            .prune_worktree_owner(worktree_id, host_scope)
+            .await?;
+        for handle in self.state.remove_worktree(host_scope, worktree_id) {
+            self.auto_restore_fit.cancel(&handle);
+        }
+        self.forget_worktree_ports(host_id, worktree_id);
+        Ok(())
+    }
+
     pub(crate) async fn stop_exact(
         &self,
         selector: &str,

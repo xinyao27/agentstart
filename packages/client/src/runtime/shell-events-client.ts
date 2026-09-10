@@ -2,13 +2,12 @@ import {
   SHELL_EVENTS_PROTOCOL_CAPABILITY,
   ShellEventsClient,
   type ShellEventsSubscriptionEventValue
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import { readRuntimeStatus } from './status-client'
 import { createRuntimeStreamFanOut } from './stream-fan-out'
 
-export type ShellSubscriptionEvent = ShellEventsSubscriptionEventValue
 export type ShellEvent = Exclude<ShellEventsSubscriptionEventValue, { type: 'ready' | 'resync' }>
 
 // Why: shell.events is LOCAL-only by contract, so its stream anchors to the

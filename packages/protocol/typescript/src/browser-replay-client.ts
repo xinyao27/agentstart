@@ -8,7 +8,7 @@ import {
   BrowserReplayServiceSaveRequestSchema,
   BrowserReplayServiceSaveResponseSchema,
   BrowserReplayService
-} from '../generated/yiru/runtime/v1/browser_replay_pb.js'
+} from '../generated/agent_start/runtime/v1/browser_replay_pb.js'
 import {
   browserReplayRecording,
   encodeReplayEventKind,

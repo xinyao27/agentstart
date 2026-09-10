@@ -1,4 +1,4 @@
-import type { SourceControlAiSettings } from '@yiru/protocol/source-control/ai-types'
+import type { SourceControlAiSettings } from '@agentstart/protocol/source-control/ai-types'
 import { translate } from '~renderer/i18n/i18n'
 import { Checkbox } from '~renderer/ui/checkbox'
 
@@ -101,7 +101,7 @@ export function HostedReviewCreationDefaults({
         {getHostedReviewDefaultRows().map((row) => (
           <label
             key={row.key}
-            className="border-border flex items-start justify-between gap-4 border px-3 py-2"
+            className="border-border flex items-start justify-between gap-4 rounded-md border px-3 py-2"
           >
             <span className="space-y-0.5">
               <span className="text-foreground block text-xs font-medium">{row.label}</span>

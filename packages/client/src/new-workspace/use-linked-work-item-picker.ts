@@ -1,7 +1,7 @@
-import type { GitHubWorkItem } from '@yiru/protocol/hosted-review/review-types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { ProjectSourceContext } from '@yiru/protocol/project/source-context'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { normalizeGitHubLinkQuery } from '~renderer/github/links'
 import {

@@ -5,8 +5,8 @@ import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useAppStore } from '~renderer/store/state'
 
 import {
-  YIRU_EDITOR_REQUEST_FILE_CLOSE_EVENT,
-  YIRU_EDITOR_SAVE_AND_CLOSE_EVENT,
+  AGENTSTART_EDITOR_REQUEST_FILE_CLOSE_EVENT,
+  AGENTSTART_EDITOR_SAVE_AND_CLOSE_EVENT,
   type EditorRequestFileCloseDetail,
   requestEditorSaveQuiesce
 } from '../editor/autosave'
@@ -61,7 +61,7 @@ export function useEditorCloseQueue({
   // Why: while a save-and-close is awaiting the file to disappear from
   // openFiles, concurrent queueEditorCloseRequests calls (e.g. user clicks X
   // on another dirty tab, or a split-group dispatch fires
-  // YIRU_EDITOR_REQUEST_FILE_CLOSE_EVENT) must not re-open the dialog over
+  // AGENTSTART_EDITOR_REQUEST_FILE_CLOSE_EVENT) must not re-open the dialog over
   // the in-flight save. Track the in-flight file here so
   // getNextQueuedEditorClose can skip it as an un-advanceable head.
   const inFlightSaveFileIdRef = useRef<string | null>(null)
@@ -185,7 +185,9 @@ export function useEditorCloseQueue({
     // owns that write path now, so the dialog signals it through a custom
     // event instead of poking at editor component refs.
     setSaveDialogFileId(null)
-    window.dispatchEvent(new CustomEvent(YIRU_EDITOR_SAVE_AND_CLOSE_EVENT, { detail: { fileId } }))
+    window.dispatchEvent(
+      new CustomEvent(AGENTSTART_EDITOR_SAVE_AND_CLOSE_EVENT, { detail: { fileId } })
+    )
     inFlightSaveFileIdRef.current = fileId
     let closed = false
     try {
@@ -288,12 +290,12 @@ export function useEditorCloseQueue({
       queueEditorCloseRequests([fileId])
     }
     window.addEventListener(
-      YIRU_EDITOR_REQUEST_FILE_CLOSE_EVENT,
+      AGENTSTART_EDITOR_REQUEST_FILE_CLOSE_EVENT,
       onRequestEditorClose as EventListener
     )
     return () =>
       window.removeEventListener(
-        YIRU_EDITOR_REQUEST_FILE_CLOSE_EVENT,
+        AGENTSTART_EDITOR_REQUEST_FILE_CLOSE_EVENT,
         onRequestEditorClose as EventListener
       )
   }, [queueEditorCloseRequests])

@@ -21,13 +21,13 @@ export function WorkspaceCard(props: {
     <div
       data-feature-wall-card={dataCard}
       className={cn(
-        'relative flex flex-col gap-[7px] px-[13px] py-[11px]',
+        'relative flex flex-col gap-[7px] px-[13px] py-[11px] rounded-[9px]',
         variant === 'coordinator' ? 'bg-foreground/[0.04]' : 'bg-card'
       )}
     >
       <div className="grid grid-cols-[12px_minmax(0,1fr)] items-center gap-[9px]">
         <span
-          className="block size-[9px]"
+          className="block size-[9px] rounded-full"
           style={{
             background: amberDot ? 'rgb(245 158 11)' : 'rgb(16 185 129)',
             margin: '0 auto'

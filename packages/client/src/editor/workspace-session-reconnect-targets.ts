@@ -1,5 +1,5 @@
-import { parseSshPtyId } from '@yiru/protocol/terminal-identity'
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import { parseSshPtyId } from '@agentstart/protocol/terminal-identity'
+import type { WorkspaceSessionState } from '@agentstart/protocol/workspace/session'
 
 import type { WorkspaceSessionSnapshot } from './workspace-session'
 
@@ -20,7 +20,7 @@ export function buildActiveConnectionIdsAtShutdown(
 
   // Why: shutdown can observe SSH in a transient state (relay drop mid-quit,
   // exhausted reconnect) after the socket closed but before the snapshot
-  // flushed. The durable PTY id still names the target Yiru must reconnect to
+  // flushed. The durable PTY id still names the target AgentStart must reconnect to
   // restore that surviving remote session. Two exclusions:
   // 'disconnected'/'auth-failed'/never-observed usually mean an explicit user
   // disconnect or a failed/cancelled connect — startup must not auto-dial a

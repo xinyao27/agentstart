@@ -15,15 +15,15 @@ use super::SettingsError;
 
 const BACKUP_COUNT: usize = 5;
 const BACKUP_INTERVAL: Duration = Duration::from_secs(60 * 60);
-const LEGACY_FILE: &str = "yiru-data.json";
-const SETTINGS_FILE: &str = "yiru-data-settings.json";
+const LEGACY_FILE: &str = "agentstart-data.json";
+const SETTINGS_FILE: &str = "agentstart-data-settings.json";
 const REGION_FILES: &[&str] = &[
-    "yiru-data-projects.json",
-    "yiru-data-worktrees.json",
+    "agentstart-data-projects.json",
+    "agentstart-data-worktrees.json",
     SETTINGS_FILE,
-    "yiru-data-ui.json",
-    "yiru-data-sessions.json",
-    "yiru-data-runtime.json",
+    "agentstart-data-ui.json",
+    "agentstart-data-sessions.json",
+    "agentstart-data-runtime.json",
 ];
 const SAVE_DEBOUNCE: Duration = Duration::from_secs(1);
 const SAVE_MAX_WAIT: Duration = Duration::from_secs(5);

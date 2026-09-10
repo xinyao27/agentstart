@@ -1,4 +1,4 @@
-import type { WorktreeSetupLaunch } from '@yiru/protocol/worktree/create-result'
+import type { WorktreeSetupLaunch } from '@agentstart/protocol/worktree/create-result'
 
 import { buildSetupRunnerCommand } from '../setup/runner'
 import { useAppStore } from '../store/state'

@@ -7,7 +7,7 @@ import {
   type GetStatusResponse,
   type RemoteControlDiagnostics,
   type RemoteUpdateSupport
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import type {
   RuntimeDeviceScope as RuntimeDeviceScopeName,
   RuntimeGraphStatus as RuntimeGraphStatusName,

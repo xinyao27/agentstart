@@ -7,8 +7,8 @@ pub(super) enum Method {
     ShellServiceGetViewer,
     ShellServiceEnqueuePrRefresh,
     ShellServiceReportVisiblePrRefreshCandidates,
-    ShellServiceCheckYiruStarred,
-    ShellServiceStarYiru,
+    ShellServiceCheckAgentStartStarred,
+    ShellServiceStarAgentStart,
     ServiceGetRepoSlug,
     ServiceGetRepoUpstream,
     ServiceGetRateLimit,
@@ -73,13 +73,13 @@ impl ProtocolRouter {
                 .await
                 .map(ProtocolHandlerResponse::plain)
             }
-            Method::ShellServiceCheckYiruStarred => {
-                github_protocol::check_yiru_starred(&self.github, request.payload)
+            Method::ShellServiceCheckAgentStartStarred => {
+                github_protocol::check_agentstart_starred(&self.github, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }
-            Method::ShellServiceStarYiru => {
-                github_protocol::star_yiru(&self.github, request.payload)
+            Method::ShellServiceStarAgentStart => {
+                github_protocol::star_agentstart(&self.github, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }

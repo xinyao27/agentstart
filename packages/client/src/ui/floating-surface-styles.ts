@@ -1,9 +1,10 @@
 // Why: every portaled surface needs one opaque, bordered recipe; outline-none
 // prevents focused Base UI popups from adding a second browser-native stroke.
 export const floatingSurfaceClass =
-  'border border-border outline-none !bg-popover text-popover-foreground !backdrop-blur-none'
+  'rounded-lg border border-border outline-none !bg-popover text-popover-foreground !backdrop-blur-none'
 
-export const modalSurfaceClass = 'border-border bg-background text-foreground !backdrop-blur-none'
+export const modalSurfaceClass =
+  'rounded-lg border-border bg-background text-foreground !backdrop-blur-none'
 
 export const modalBackdropClass = 'bg-black/50'
 

@@ -1,10 +1,9 @@
-import type { BrowserHistoryEntry } from '@yiru/protocol/workspace/browser-session'
-import type { WorkspaceSessionState } from '@yiru/protocol/workspace/session'
+import type { BrowserHistoryEntry } from '@agentstart/protocol/workspace/browser-session'
 import { redactKagiSessionToken } from '~renderer/browser/session/kagi-link'
 
-export const MAX_BROWSER_HISTORY_ENTRIES = 200
+const MAX_BROWSER_HISTORY_ENTRIES = 200
 
-export function normalizeBrowserHistoryUrl(url: string): string {
+function normalizeBrowserHistoryUrl(url: string): string {
   try {
     const parsed = new URL(redactKagiSessionToken(url))
     parsed.hostname = parsed.hostname.toLowerCase()
@@ -48,20 +47,4 @@ export function normalizeBrowserHistoryEntries(
     }
   }
   return normalizedEntries
-}
-
-export function pruneWorkspaceSessionBrowserHistory(
-  session: WorkspaceSessionState
-): WorkspaceSessionState {
-  if (!session.browserUrlHistory) {
-    return session
-  }
-  const browserUrlHistory = normalizeBrowserHistoryEntries(session.browserUrlHistory)
-  if (
-    browserUrlHistory.length === session.browserUrlHistory.length &&
-    browserUrlHistory.every((entry, index) => entry === session.browserUrlHistory?.[index])
-  ) {
-    return session
-  }
-  return { ...session, browserUrlHistory }
 }

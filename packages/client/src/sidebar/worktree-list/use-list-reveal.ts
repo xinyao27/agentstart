@@ -1,4 +1,4 @@
-import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '@yiru/protocol/settings/workspace-preferences'
+import { DEFAULT_SHOW_SLEEPING_WORKSPACES } from '@agentstart/protocol/settings/workspace-preferences'
 import { useEffect } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import {

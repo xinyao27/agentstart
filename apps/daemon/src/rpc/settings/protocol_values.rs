@@ -2,13 +2,12 @@
 // commands as `serde_json::Value` trees shared with the legacy JSON surface;
 // this is the single place that reads those trees into the typed protobuf
 // wire messages.
-use serde_json::{Map, Value};
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::settings_json_value::Kind as JsonKind;
-use yiru_protocol::runtime::v1::settings_quick_command::Kind as CommandKind;
-use yiru_protocol::runtime::v1::settings_quick_command_scope::Scope as CommandScope;
-use yiru_protocol::runtime::v1::settings_tui_agent_value::Value as AgentValue;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::settings_json_value::Kind as JsonKind;
+use agentstart_protocol::runtime::v1::settings_quick_command::Kind as CommandKind;
+use agentstart_protocol::runtime::v1::settings_quick_command_scope::Scope as CommandScope;
+use agentstart_protocol::runtime::v1::settings_tui_agent_value::Value as AgentValue;
+use agentstart_protocol::runtime::v1::{
     SettingsAgentEnv, SettingsAgentPrompt, SettingsDocument, SettingsGhosttyImportPreview,
     SettingsJsonNull, SettingsJsonValue, SettingsJsonValueEntry, SettingsJsonValueList,
     SettingsJsonValueObject, SettingsQuickCommand, SettingsQuickCommandScope,
@@ -16,6 +15,7 @@ use yiru_protocol::runtime::v1::{
     SettingsWarpThemeImportPreview, SettingsWarpThemeMode, SettingsWarpThemePreview,
     SettingsWarpThemeSkippedFile, SettingsWarpThemeSource,
 };
+use serde_json::{Map, Value};
 
 use crate::settings::quick_commands;
 
@@ -260,21 +260,25 @@ pub(super) fn quick_commands(commands: &[Value]) -> Vec<SettingsQuickCommand> {
 }
 
 pub(super) fn quick_command_mutation(
-    mutation: &yiru_protocol::runtime::v1::SettingsQuickCommandMutation,
+    mutation: &agentstart_protocol::runtime::v1::SettingsQuickCommandMutation,
 ) -> Result<Map<String, Value>, Status> {
     let mutation = mutation
         .mutation
         .as_ref()
         .ok_or_else(|| invalid_argument("A quick command mutation is required"))?;
     match mutation {
-        yiru_protocol::runtime::v1::settings_quick_command_mutation::Mutation::Delete(delete) => {
+        agentstart_protocol::runtime::v1::settings_quick_command_mutation::Mutation::Delete(
+            delete,
+        ) => {
             bounded("id", &delete.id, quick_commands::MAX_ID)?;
             let mut object = Map::new();
             object.insert("type".to_owned(), Value::String("delete".to_owned()));
             object.insert("id".to_owned(), Value::String(delete.id.clone()));
             Ok(object)
         }
-        yiru_protocol::runtime::v1::settings_quick_command_mutation::Mutation::Upsert(upsert) => {
+        agentstart_protocol::runtime::v1::settings_quick_command_mutation::Mutation::Upsert(
+            upsert,
+        ) => {
             let command = upsert
                 .command
                 .as_ref()
@@ -503,7 +507,7 @@ fn json_value(value: &Value) -> SettingsJsonValue {
             entries: object
                 .iter()
                 .map(
-                    |(key, value)| yiru_protocol::runtime::v1::SettingsJsonValueEntry {
+                    |(key, value)| agentstart_protocol::runtime::v1::SettingsJsonValueEntry {
                         key: key.clone(),
                         value: Some(json_value(value)),
                     },

@@ -105,10 +105,19 @@ pub(in crate::provider_usage) struct ProcessedFile {
     pub daily_aggregates: Vec<Daily>,
     pub owned_dedupe_keys: Vec<String>,
     pub has_deferred_claims: bool,
+    #[serde(default)]
+    pub attribution_fingerprint: String,
+    #[serde(default)]
+    pub ignored_oversized: bool,
+    #[serde(default)]
+    pub ignored_failed: bool,
 }
 
 pub(in crate::provider_usage) struct ScanOutput {
     pub processed_files: Vec<ProcessedFile>,
     pub sessions: Vec<Session>,
     pub daily_aggregates: Vec<Daily>,
+    pub deferred_files: u64,
+    pub failed_files: u64,
+    pub oversized_files: u64,
 }

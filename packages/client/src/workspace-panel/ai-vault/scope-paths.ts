@@ -1,7 +1,10 @@
-import { isRuntimePathAbsolute, normalizeRuntimePathForComparison } from '@yiru/protocol/host/path'
-import type { ProjectHostSetupProjection } from '@yiru/protocol/project/setup-projection'
-import { splitWorktreeIdForFilesystem } from '@yiru/protocol/worktree/identity'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import {
+  isRuntimePathAbsolute,
+  normalizeRuntimePathForComparison
+} from '@agentstart/protocol/host/path'
+import type { ProjectHostSetupProjection } from '@agentstart/protocol/project/setup-projection'
+import { splitWorktreeIdForFilesystem } from '@agentstart/protocol/worktree/identity'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 export function deriveAiVaultWorkspaceScopePaths(
   activeWorktree: Pick<Worktree, 'id' | 'path' | 'priorWorktreeIds' | 'repoId'> | null,

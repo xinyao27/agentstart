@@ -2,14 +2,14 @@ import {
   SETTINGS_DOCUMENT_PROTOCOL_CAPABILITY,
   SETTINGS_PROTOCOL_CAPABILITY,
   SettingsClient
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'
 import { readRuntimeStatus } from './status-client'
 
-export async function openSettingsProtocolTarget(
+async function openSettingsProtocolTarget(
   target: RuntimeClientTarget
 ): Promise<SettingsClient | null> {
   const status = await readRuntimeStatus(target)
@@ -41,7 +41,7 @@ export async function requireSettingsProtocolClient(
     throw new Error(
       translate(
         'runtime.settingsProtocolTarget.unavailable',
-        'This action needs a current Yiru daemon connection.'
+        'This action needs a current AgentStart daemon connection.'
       )
     )
   }

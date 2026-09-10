@@ -1,7 +1,7 @@
-import type { ProviderRateLimits } from '@yiru/protocol/account-rate-types'
-import type { StatusBarItem } from '@yiru/protocol/settings/ui-state'
-import { normalizeStatusBarUsageMode } from '@yiru/protocol/settings/usage-display'
-import { normalizeUsagePercentageDisplay } from '@yiru/protocol/settings/usage-display'
+import type { ProviderRateLimits } from '@agentstart/protocol/account-rate-types'
+import type { StatusBarItem } from '@agentstart/protocol/settings/ui-state'
+import { normalizeStatusBarUsageMode } from '@agentstart/protocol/settings/usage-display'
+import { normalizeUsagePercentageDisplay } from '@agentstart/protocol/settings/usage-display'
 import { Suspense, useState } from 'react'
 
 import { translate } from '../i18n/i18n'
@@ -22,7 +22,7 @@ import { ProviderUsageSegment } from './provider-usage-segment'
 import { getVisibleUsageProvider } from './provider-visibility'
 import { RemoteServerUpdateStatusSegment } from './remote-server-update-status-segment'
 import { ResourceUsageStatusSegment } from './resource-usage-status-segment'
-import { YiruRuntimeStatusSegment } from './runtime-status/segment'
+import { AgentStartRuntimeStatusSegment } from './runtime-status/segment'
 import { SkillUpdateStatusSegment } from './skill-update-status-segment'
 import { getUsageProviderAccountsSectionId } from './usage-provider-settings-target'
 import { UsageRosterPanel } from './usage-roster-panel'
@@ -120,6 +120,7 @@ export function StatusBar(): React.JSX.Element | null {
   const statusBarItems = useAppStore((state) => state.statusBarItems)
   const toggleStatusBarItem = useAppStore((state) => state.toggleStatusBarItem)
   const refreshRateLimits = useAppStore((state) => state.refreshRateLimits)
+  const fetchRateLimits = useAppStore((state) => state.fetchRateLimits)
   const openHomePage = useAppStore((state) => state.openHomePage)
   const openSettingsPage = useAppStore((state) => state.openSettingsPage)
   const openSettingsTarget = useAppStore((state) => state.openSettingsTarget)
@@ -134,7 +135,6 @@ export function StatusBar(): React.JSX.Element | null {
     return null
   }
   const providers = visibleProviders(rateLimits, settings, statusBarItems)
-  const anyFetching = providers.some((provider) => provider.status === 'fetching')
 
   const openProvider = (provider: ProviderId): void => {
     const sectionId = getUsageProviderAccountsSectionId(provider)
@@ -166,7 +166,17 @@ export function StatusBar(): React.JSX.Element | null {
     <ContextMenu>
       <ContextMenuTrigger className="border-border bg-background flex h-6 min-h-6 shrink-0 items-center border-t pr-3 text-xs">
         {providers.length > 0 ? (
-          <DropdownMenu modal={false} onOpenChange={setUsageOpen} open={usageOpen}>
+          <DropdownMenu
+            modal={false}
+            onOpenChange={(open) => {
+              setUsageOpen(open)
+              if (open && !isRefreshing) {
+                setIsRefreshing(true)
+                void fetchRateLimits().finally(() => setIsRefreshing(false))
+              }
+            }}
+            open={usageOpen}
+          >
             <DropdownMenuTrigger
               render={
                 <Button
@@ -192,7 +202,7 @@ export function StatusBar(): React.JSX.Element | null {
               <UsageRosterPanel
                 canSignIn={(provider) => getUsageProviderAccountsSectionId(provider) !== null}
                 display={usagePercentageDisplay}
-                isRefreshing={isRefreshing || anyFetching}
+                isRefreshing={isRefreshing}
                 onManageAccounts={() => openProvider('codex')}
                 onOpenProvider={openProvider}
                 onRefresh={refresh}
@@ -218,7 +228,7 @@ export function StatusBar(): React.JSX.Element | null {
           </DropdownMenu>
         ) : null}
         <div className="flex-1" />
-        <div className="flex h-full shrink-0 items-center gap-0.5">
+        <div className="flex h-full shrink-0 items-center gap-0.5 rounded-full">
           <SkillUpdateStatusSegment />
           <RemoteServerUpdateStatusSegment iconOnly />
           <Suspense fallback={null}>
@@ -227,7 +237,7 @@ export function StatusBar(): React.JSX.Element | null {
             ) : null}
             {statusBarItems.includes('ports') ? <PortsStatusSegment compact iconOnly /> : null}
           </Suspense>
-          <YiruRuntimeStatusSegment />
+          <AgentStartRuntimeStatusSegment />
         </div>
       </ContextMenuTrigger>
       <StatusBarSettings items={statusBarItems} onToggle={toggleStatusBarItem} />

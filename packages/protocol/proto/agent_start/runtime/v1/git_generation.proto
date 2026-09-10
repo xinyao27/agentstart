@@ -1,0 +1,244 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+// AI-assisted commit message and pull-request field generation, plus
+// cancellation. See apps/daemon/src/rpc/git.rs's METHODS table
+// (git.generateCommitMessage, git.cancelGenerateCommitMessage,
+// git.generatePullRequestFields, git.cancelGeneratePullRequestFields).
+// Generation is a single request/response call (apps/daemon/src/git/
+// generation/mod.rs issues one host.exec and parses its finished output —
+// there is no partial-result stream); cancellation is scoped to the
+// worktree + operation kind, not to a request id, matching
+// GitAuthority::cancel_generate_commit_message /
+// cancel_generate_pull_request_fields.
+service GitGenerationService {
+  rpc GenerateCommitMessage(GitGenerationServiceGenerateCommitMessageRequest) returns (GitGenerationServiceGenerateCommitMessageResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CancelGenerateCommitMessage(GitGenerationServiceCancelGenerateCommitMessageRequest) returns (GitGenerationServiceCancelGenerateCommitMessageResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc GeneratePullRequestFields(GitGenerationServiceGeneratePullRequestFieldsRequest) returns (GitGenerationServiceGeneratePullRequestFieldsResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CancelGeneratePullRequestFields(GitGenerationServiceCancelGeneratePullRequestFieldsRequest) returns (GitGenerationServiceCancelGeneratePullRequestFieldsResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message GitAiCapabilityThinkingLevel {
+  string id = 1;
+  string label = 2;
+}
+
+message GitAiCapability {
+  string id = 1;
+  string label = 2;
+  repeated GitAiCapabilityThinkingLevel thinking_levels = 3;
+  optional string default_thinking_level = 4;
+}
+
+message GitAiCapabilityList {
+  repeated GitAiCapability capabilities = 1;
+}
+
+message GitAiCapabilityListByHost {
+  map<string, GitAiCapabilityList> by_host = 1;
+}
+
+message GitAiStringMap {
+  map<string, string> values = 1;
+}
+
+message GitAiActionOverride {
+  optional string agent_id = 1;
+  optional string command_input_template = 2;
+  optional string agent_args = 3;
+}
+
+message GitAiModelOverride {
+  map<string, string> selected_model_by_agent = 1;
+  map<string, GitAiStringMap> selected_model_by_agent_by_host = 2;
+  map<string, string> selected_thinking_by_model = 3;
+}
+
+message GitAiPrCreationDefaults {
+  optional bool draft = 1;
+  optional bool use_template = 2;
+  optional bool generate_details_on_open = 3;
+  optional bool open_after_create = 4;
+}
+
+// The "commitMessageAi" settings snapshot (generation_settings.rs's
+// commit_settings(), legacy=true): a whitelisted, re-validated re-encoding of
+// the client's AI settings, not a passthrough blob.
+message GitCommitMessageAiSettings {
+  bool enabled = 1;
+  optional string agent_id = 2;
+  map<string, string> selected_model_by_agent = 3;
+  map<string, GitAiStringMap> selected_model_by_agent_by_host = 4;
+  map<string, GitAiCapabilityList> discovered_models_by_agent = 5;
+  map<string, GitAiCapabilityListByHost> discovered_models_by_agent_by_host = 6;
+  map<string, string> selected_thinking_by_model = 7;
+  string custom_prompt = 8;
+  string custom_agent_command = 9;
+}
+
+// The "sourceControlAi" settings snapshot (generation_settings.rs's
+// source_settings(), legacy=false) — same whitelist as commitMessageAi plus
+// the non-legacy action/override/PR-defaults fields.
+message GitSourceControlAiSettings {
+  bool enabled = 1;
+  optional string agent_id = 2;
+  map<string, string> selected_model_by_agent = 3;
+  map<string, GitAiStringMap> selected_model_by_agent_by_host = 4;
+  map<string, GitAiCapabilityList> discovered_models_by_agent = 5;
+  map<string, GitAiCapabilityListByHost> discovered_models_by_agent_by_host = 6;
+  map<string, string> selected_thinking_by_model = 7;
+  string custom_agent_command = 8;
+  map<string, GitAiActionOverride> actions = 9;
+  map<string, string> instructions_by_operation = 10;
+  map<string, GitAiModelOverride> model_overrides_by_operation = 11;
+  optional GitAiPrCreationDefaults pr_creation_defaults = 12;
+  map<string, GitAiActionOverride> launch_action_defaults = 13;
+}
+
+// input/generation.rs's GenerationParams (the client's already-resolved agent
+// choice for this generation call).
+message GitGenerationParams {
+  string agent_id = 1;
+  string model = 2;
+  optional string thinking_level = 3;
+  optional string custom_prompt = 4;
+  optional string command_input_template = 5;
+  optional string agent_args = 6;
+  optional string custom_agent_command = 7;
+  optional string agent_command_override = 8;
+}
+
+// input/generation.rs's GenerationOverrides, shared verbatim by
+// GenerateCommitMessage and GeneratePullRequestFields.
+message GitGenerationOverrides {
+  map<string, string> agent_commands = 1;
+  optional string discovery_host_key = 2;
+  optional GitCommitMessageAiSettings commit_message_ai = 3;
+  optional GitSourceControlAiSettings source_control_ai = 4;
+  optional GitGenerationParams resolved_params = 5;
+}
+
+message GitGenerationServiceGenerateCommitMessageRequest {
+  string worktree = 1;
+  GitGenerationOverrides overrides = 2;
+}
+
+message GitGenerationServiceGenerateCommitMessageResponse {
+  bool success = 1;
+  optional string message = 2;
+  optional string agent_label = 3;
+  optional string error = 4;
+  optional bool canceled = 5;
+}
+
+message GitGenerationServiceCancelGenerateCommitMessageRequest {
+  string worktree = 1;
+}
+
+message GitGenerationServiceCancelGenerateCommitMessageResponse {
+  bool ok = 1;
+}
+
+message GitGenerationServiceGeneratePullRequestFieldsRequest {
+  string worktree = 1;
+  string base = 2;
+  string title = 3;
+  string body = 4;
+  bool draft = 5;
+  optional bool use_template = 6;
+  GitGenerationOverrides overrides = 7;
+}
+
+message GitPullRequestFields {
+  string base = 1;
+  string title = 2;
+  string body = 3;
+  bool draft = 4;
+}
+
+message GitGenerationServiceGeneratePullRequestFieldsResponse {
+  bool success = 1;
+  optional GitPullRequestFields fields = 2;
+  optional string agent_label = 3;
+  bool branch_changed_by_preparation = 4;
+  optional string error = 5;
+  optional bool canceled = 6;
+}
+
+message GitGenerationServiceCancelGeneratePullRequestFieldsRequest {
+  string worktree = 1;
+}
+
+message GitGenerationServiceCancelGeneratePullRequestFieldsResponse {
+  bool ok = 1;
+}

@@ -1,4 +1,4 @@
-import { fileUriToFilesystemPath } from '@yiru/protocol/host/file-uri-path'
+import { fileUriToFilesystemPath } from '@agentstart/protocol/host/file-uri-path'
 
 export type TerminalFileUrlTarget = {
   filePath: string

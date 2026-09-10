@@ -5,7 +5,7 @@
  *
  * The probe's `current` is held outside React state, so we subscribe inside
  * a useSyncExternalStore to keep every consumer in sync when the OS layout
- * switches mid-session (e.g. user flips Input Source, Yiru regains focus,
+ * switches mid-session (e.g. user flips Input Source, AgentStart regains focus,
  * focus-in listener re-probes).
  */
 import { useSyncExternalStore } from 'react'

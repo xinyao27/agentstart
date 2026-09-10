@@ -1,9 +1,9 @@
-import { hostedReviewInfoFromGitHubPRInfo } from '@yiru/protocol/hosted-review/github-mapping'
-import type { PRCheckDetail } from '@yiru/protocol/hosted-review/review-types'
-import type { HostedReviewInfo } from '@yiru/protocol/hosted-review/types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isFolderRepo } from '@yiru/protocol/project/repository'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import { hostedReviewInfoFromGitHubPRInfo } from '@agentstart/protocol/hosted-review/github-mapping'
+import type { PRCheckDetail } from '@agentstart/protocol/hosted-review/review-types'
+import type { HostedReviewInfo } from '@agentstart/protocol/hosted-review/types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isFolderRepo } from '@agentstart/protocol/project/repository'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { getGitHubRepoCacheKey } from '~renderer/github/cache-key'
 import { prChecksCacheSuffix } from '~renderer/github/state'
 import {
@@ -38,12 +38,9 @@ import {
 type ParentPrChecksRowSourceArgs = Omit<BuildParentPrChecksRowsArgs, 'repos'>
 
 export type {
-  ParentPrChecksGroupKey,
   ParentPrChecksProjection,
   ParentPrChecksRefreshOutcome,
-  ParentPrChecksRow,
-  ParentPrChecksRowStatus,
-  ParentPrChecksSummary
+  ParentPrChecksRow
 } from './parent-pr-checks-row-types'
 
 export function buildParentPrChecksProjection(
@@ -74,9 +71,7 @@ export function buildParentPrChecksRows(
   )
 }
 
-export function summarizeParentPrChecksRows(
-  rows: readonly ParentPrChecksRow[]
-): ParentPrChecksSummary {
+function summarizeParentPrChecksRows(rows: readonly ParentPrChecksRow[]): ParentPrChecksSummary {
   return {
     attached: rows.length,
     knownReview: rows.filter((row) => row.reviewLabel !== null && row.status !== 'noReview').length,

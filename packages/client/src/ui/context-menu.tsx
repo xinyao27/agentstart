@@ -22,37 +22,9 @@ function ContextMenu({ ...props }: ContextMenuPrimitive.Root.Props) {
   return <ContextMenuPrimitive.Root data-slot="context-menu" {...props} />
 }
 
-/** Base UI virtual element: a zero-area rect in viewport space. */
-export type ContextMenuPointAnchor = { getBoundingClientRect: () => DOMRect }
-
-// Why: a few hosts swallow the right-click before React sees it — the code
-// ContextMenuController stopPropagation()s gutter clicks, and a <webview> reports
-// them over IPC from another process — so ContextMenuTrigger has no element to
-// anchor to. Use this only there. Everywhere a real contextmenu event exists,
-// ContextMenuTrigger already does this internally and is the right answer.
-// It replaces parking an invisible element at the cursor, which mispositions
-// twice over: a fixed stand-in resolves against a transformed ancestor's
-// containing block, and moving one while the menu is open never re-measures, so
-// the menu keeps the previous point. A new virtual element re-anchors the
-// positioner on every open.
-function useContextMenuPointAnchor(point: { x: number; y: number }): ContextMenuPointAnchor {
-  return (() => {
-    const { x, y } = point
-    return { getBoundingClientRect: () => new DOMRect(x, y, 0, 0) }
-  })()
-}
-
 // FLAG: Base UI ContextMenu.Trigger renders a <div> and has no `disabled` prop.
 function ContextMenuTrigger({ ...props }: ContextMenuPrimitive.Trigger.Props) {
   return <ContextMenuPrimitive.Trigger data-slot="context-menu-trigger" {...props} />
-}
-
-function ContextMenuGroup({ ...props }: ContextMenuPrimitive.Group.Props) {
-  return <ContextMenuPrimitive.Group data-slot="context-menu-group" {...props} />
-}
-
-function ContextMenuPortal({ ...props }: ContextMenuPrimitive.Portal.Props) {
-  return <ContextMenuPrimitive.Portal data-slot="context-menu-portal" {...props} />
 }
 
 function ContextMenuSub({ ...props }: ContextMenuPrimitive.SubmenuRoot.Props) {
@@ -272,11 +244,8 @@ export {
   ContextMenuLabel,
   ContextMenuSeparator,
   ContextMenuShortcut,
-  ContextMenuGroup,
-  ContextMenuPortal,
   ContextMenuSub,
   ContextMenuSubContent,
   ContextMenuSubTrigger,
-  ContextMenuRadioGroup,
-  useContextMenuPointAnchor
+  ContextMenuRadioGroup
 }

@@ -1,4 +1,4 @@
-import type { Repo } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { X } from '~renderer/icons/hugeicons'
@@ -134,7 +134,7 @@ const SidebarRepositoryFilterSection = function SidebarRepositoryFilterSection()
           onValueChange={setQuery}
           onKeyDown={handleInputKeyDown}
           className="h-8 py-2 text-xs"
-          wrapperClassName="mx-1 border border-border/70 px-2"
+          wrapperClassName="mx-1 rounded-[7px] border border-border/70 px-2"
           iconClassName="h-3.5 w-3.5"
         />
         <ScrollArea className="h-40">
@@ -186,7 +186,7 @@ function SelectedProjectPills({
   }
 
   return (
-    <div className="scrollbar-sleek border-border/70 bg-muted/25 mx-1 mb-1 flex max-h-16 flex-wrap gap-1 overflow-y-auto border p-1">
+    <div className="scrollbar-sleek border-border/70 bg-muted/25 mx-1 mb-1 flex max-h-16 flex-wrap gap-1 overflow-y-auto rounded-[7px] border p-1">
       {selectedRepos.map((repo) => (
         <Badge
           key={repo.id}

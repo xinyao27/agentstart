@@ -8,7 +8,7 @@ pub(super) async fn run(args: &[OsString]) -> ExitCode {
     match execute(args).await {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
-            eprintln!("Yiru update failed: {error}");
+            eprintln!("AgentStart update failed: {error}");
             ExitCode::FAILURE
         }
     }
@@ -25,11 +25,11 @@ async fn execute(args: &[OsString]) -> Result<(), UpdateCommandError> {
         } else if status.update_available {
             let version = status.latest_version.as_deref().unwrap_or("unknown");
             println!(
-                "Yiru {version} is available; run {}",
+                "AgentStart {version} is available; run {}",
                 status.install_command
             );
         } else {
-            println!("Yiru is up to date");
+            println!("AgentStart is up to date");
         }
         return Ok(());
     }
@@ -38,15 +38,15 @@ async fn execute(args: &[OsString]) -> Result<(), UpdateCommandError> {
     if is_json {
         println!("{}", serde_json::to_string(&result)?);
     } else if !result.installed {
-        println!("Yiru is already up to date");
+        println!("AgentStart is already up to date");
     } else if service_restarted {
         println!(
-            "Installed Yiru {} and restarted the service",
+            "Installed AgentStart {} and restarted the service",
             result.version
         );
     } else {
         println!(
-            "Installed Yiru {}; no running managed service required a restart",
+            "Installed AgentStart {}; no running managed service required a restart",
             result.version
         );
     }

@@ -1,7 +1,7 @@
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { runtimePtyEnvironmentId } from '@yiru/protocol/terminal-identity'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { runtimePtyEnvironmentId } from '@agentstart/protocol/terminal-identity'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { sanitizeTerminalLayoutPaneTitlesForLabels } from '~renderer/terminal-pane/title-sanitization'
 
 import { resolveTerminalLayoutRoot } from '../remote-terminal-layout-resolution'

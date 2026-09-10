@@ -1,4 +1,4 @@
-import type { YiruWorkspaceLayout } from '../workspace/layout.js'
+import type { AgentStartWorkspaceLayout } from '../workspace/layout.js'
 import type { WorktreeValue, WorktreeGitInfo } from '../worktree-types.js'
 
 export type GitWorktreeInfo = WorktreeGitInfo
@@ -8,9 +8,9 @@ export type Worktree = Omit<
 >
 export type WorktreeMeta = Omit<Worktree, 'id' | 'repoId' | keyof WorktreeGitInfo> & {
   preserveBranchOnDelete?: boolean
-  yiruCreatedAt?: number
-  yiruCreationSource?: 'desktop' | 'runtime' | 'cli' | 'ssh'
-  yiruCreationWorkspaceLayout?: YiruWorkspaceLayout
+  agentstartCreatedAt?: number
+  agentstartCreationSource?: 'desktop' | 'runtime' | 'cli' | 'ssh'
+  agentstartCreationWorkspaceLayout?: AgentStartWorkspaceLayout
 }
 
 export type WorktreeHeadIdentity = {
@@ -20,7 +20,7 @@ export type WorktreeHeadIdentity = {
   branch: string | null
 }
 
-export type WorktreeOwnership = 'yiru-managed' | 'external' | 'unknown-legacy'
+export type WorktreeOwnership = 'agentstart-managed' | 'external' | 'unknown-legacy'
 
 export type DetectedWorktreeListSource = 'git' | 'metadata-fallback' | 'session-fallback'
 

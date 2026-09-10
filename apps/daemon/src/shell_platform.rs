@@ -1,6 +1,9 @@
 use std::io;
 use std::path::{Path, PathBuf};
 use std::process::Stdio;
+use std::time::Duration;
+
+const SYSTEM_ACCENT_READ_TIMEOUT: Duration = Duration::from_secs(2);
 
 #[derive(Clone, Copy)]
 pub(crate) struct ShellPlatformAuthority;
@@ -8,6 +11,26 @@ pub(crate) struct ShellPlatformAuthority;
 impl ShellPlatformAuthority {
     pub(crate) const fn new() -> Self {
         Self
+    }
+
+    pub(crate) async fn get_system_accent_color(&self) -> Option<String> {
+        let (executable, arguments) = system_accent_command()?;
+        let mut command = tokio::process::Command::new(executable);
+        command
+            .args(arguments)
+            .stdin(Stdio::null())
+            .stderr(Stdio::null())
+            .kill_on_drop(true);
+        #[cfg(windows)]
+        command.creation_flags(windows_sys::Win32::System::Threading::CREATE_NO_WINDOW);
+        let output = tokio::time::timeout(SYSTEM_ACCENT_READ_TIMEOUT, command.output())
+            .await
+            .ok()?
+            .ok()?;
+        if !output.status.success() {
+            return None;
+        }
+        normalize_hex_color(&String::from_utf8_lossy(&output.stdout))
     }
 
     pub(crate) async fn open_path(&self, path: &str) {
@@ -98,6 +121,38 @@ impl ShellPlatformAuthority {
     }
 }
 
+fn system_accent_command() -> Option<(&'static str, Vec<&'static str>)> {
+    #[cfg(target_os = "macos")]
+    {
+        const SCRIPT: &str = "ObjC.import('AppKit'); (() => { const color = $.NSColor.controlAccentColor.colorUsingColorSpace($.NSColorSpace.sRGBColorSpace); if (!color) return ''; const byte = value => Math.max(0, Math.min(255, Math.round(value * 255))).toString(16).padStart(2, '0'); return '#' + byte(color.redComponent) + byte(color.greenComponent) + byte(color.blueComponent); })()";
+        Some(("/usr/bin/osascript", vec!["-l", "JavaScript", "-e", SCRIPT]))
+    }
+    #[cfg(target_os = "windows")]
+    {
+        const SCRIPT: &str = "$settings = [Windows.UI.ViewManagement.UISettings,Windows.UI.ViewManagement,ContentType=WindowsRuntime]::new(); $accent = $settings.GetColorValue([Windows.UI.ViewManagement.UIColorType]::Accent); [Console]::Write(('#{0:x2}{1:x2}{2:x2}' -f $accent.R, $accent.G, $accent.B))";
+        Some((
+            "powershell.exe",
+            vec![
+                "-NoLogo",
+                "-NoProfile",
+                "-NonInteractive",
+                "-Command",
+                SCRIPT,
+            ],
+        ))
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    None
+}
+
+fn normalize_hex_color(value: &str) -> Option<String> {
+    let color = value.trim().to_ascii_lowercase();
+    (color.len() == 7
+        && color.starts_with('#')
+        && color[1..].bytes().all(|byte| byte.is_ascii_hexdigit()))
+    .then_some(color)
+}
+
 #[derive(Clone, Copy)]
 pub(crate) enum FileKind {
     Attachment,
@@ -164,7 +219,7 @@ fn editor_arguments(command: &str, target: &str) -> Vec<String> {
                 "/bin/sh".into(),
                 "-c".into(),
                 format!("{command} \"$1\""),
-                "yiru-editor".into(),
+                "agentstart-editor".into(),
                 target.into(),
             ]
         }
@@ -219,7 +274,7 @@ fn find_executable(name: &str) -> Option<String> {
 }
 
 async fn pick_file(kind: FileKind) -> Option<String> {
-    let prompt = "Choose a file for Yiru";
+    let prompt = "Choose a file for AgentStart";
     if cfg!(target_os = "macos") {
         let script = format!("POSIX path of (choose file with prompt {prompt:?})");
         return picker_output("osascript", ["-e", script.as_str()]).await;

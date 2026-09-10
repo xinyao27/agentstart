@@ -1,9 +1,12 @@
-import { WINDOWS_GIT_BASH_SHELL } from '@yiru/protocol/host/windows-terminal-shell'
-import { isWslUncPath } from '@yiru/protocol/host/wsl-paths'
-import type { ProjectExecutionRuntimeResolution } from '@yiru/protocol/project/runtime-preference'
-import { parseLegacyNumericPaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import { WINDOWS_GIT_BASH_SHELL } from '@agentstart/protocol/host/windows-terminal-shell'
+import { isWslUncPath } from '@agentstart/protocol/host/wsl-paths'
+import type { ProjectExecutionRuntimeResolution } from '@agentstart/protocol/project/runtime-preference'
+import {
+  parseLegacyNumericPaneKey,
+  parsePaneKey
+} from '@agentstart/protocol/terminal/pane-identity'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
 import { getFolderWorkspaceConnectionId } from '~renderer/editor/folder-workspace-connection'
 import { resolveLocalWindowsTerminalShellOverrideForTab } from '~renderer/local-windows-terminal-runtime'
 import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-owner'
@@ -14,11 +17,11 @@ export function getTabIdFromPaneKey(paneKey: string): string | null {
   return parsePaneKey(paneKey)?.tabId ?? parseLegacyNumericPaneKey(paneKey)?.tabId ?? null
 }
 
-export function isWindowsRendererRuntime(): boolean {
+function isWindowsRendererRuntime(): boolean {
   return typeof navigator !== 'undefined' && navigator.userAgent.includes('Windows')
 }
 
-export function isAllowedRemoteWindowsTerminalShell(shell: string | undefined): boolean {
+function isAllowedRemoteWindowsTerminalShell(shell: string | undefined): boolean {
   return (
     shell === 'powershell.exe' ||
     shell === 'pwsh.exe' ||

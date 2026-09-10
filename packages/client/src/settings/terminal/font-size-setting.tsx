@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 import { Minus, Plus } from '~renderer/icons/hugeicons'
 import { Button } from '~renderer/ui/button'

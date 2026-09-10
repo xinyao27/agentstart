@@ -1,9 +1,9 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { FeatureWallOpenSourceTelemetry } from '@yiru/protocol/telemetry/events/foundations'
-import type { AgentsStepId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { FeatureWallWorkflowId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { ReviewStepId } from '@yiru/protocol/telemetry/feature-wall/types'
-import type { WorkbenchStepId } from '@yiru/protocol/telemetry/feature-wall/types'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { FeatureWallOpenSourceTelemetry } from '@agentstart/protocol/telemetry/events/foundations'
+import type { AgentsStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { FeatureWallWorkflowId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { ReviewStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
+import type { WorkbenchStepId } from '@agentstart/protocol/telemetry/feature-wall/types'
 import type { JSX, KeyboardEvent, MutableRefObject, ReactNode } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import type { InstalledAgentSkillState } from '~renderer/skills/use-installed-agents'
@@ -114,7 +114,7 @@ export function FeatureWallTourPanel(props: {
                 {previewTitle}
               </h3>
               {props.activeStepCopy?.optional ? (
-                <span className="border-border bg-background text-muted-foreground border px-2 py-0.5 text-[11px] font-medium">
+                <span className="border-border bg-background text-muted-foreground rounded-full border px-2 py-0.5 text-[11px] font-medium">
                   {translate(
                     'auto.components.feature.wall.FeatureWallTourPanel.af7d622f6f',
                     'Optional'

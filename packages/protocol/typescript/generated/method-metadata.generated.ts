@@ -2,7 +2,7 @@
 import {
   RuntimeRoutePolicy,
   StreamReconnectPolicy
-} from './yiru/protocol/v1/annotations_pb.js'
+} from './agent_start/protocol/v1/annotations_pb.js'
 
 export type MethodTransportMetadata = {
   readonly clientStreaming: boolean
@@ -13,3929 +13,3929 @@ export type MethodTransportMetadata = {
 }
 
 export const METHOD_TRANSPORT_METADATA = {
-  '/yiru.runtime.v1.AccountsService/Add': {
+  '/agent_start.runtime.v1.AccountsService/Add': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/Add',
+    procedure: '/agent_start.runtime.v1.AccountsService/Add',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/CancelPendingLogin': {
+  '/agent_start.runtime.v1.AccountsService/CancelPendingLogin': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/CancelPendingLogin',
+    procedure: '/agent_start.runtime.v1.AccountsService/CancelPendingLogin',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/ClearMiniMaxCookie': {
+  '/agent_start.runtime.v1.AccountsService/ClearMiniMaxCookie': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/ClearMiniMaxCookie',
+    procedure: '/agent_start.runtime.v1.AccountsService/ClearMiniMaxCookie',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/ConsumeCodexResetCredit': {
+  '/agent_start.runtime.v1.AccountsService/ConsumeCodexResetCredit': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/ConsumeCodexResetCredit',
+    procedure: '/agent_start.runtime.v1.AccountsService/ConsumeCodexResetCredit',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/GetGrokStatus': {
+  '/agent_start.runtime.v1.AccountsService/GetGrokStatus': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/GetGrokStatus',
+    procedure: '/agent_start.runtime.v1.AccountsService/GetGrokStatus',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/GetMiniMaxCredentials': {
+  '/agent_start.runtime.v1.AccountsService/GetMiniMaxCredentials': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/GetMiniMaxCredentials',
+    procedure: '/agent_start.runtime.v1.AccountsService/GetMiniMaxCredentials',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/List': {
+  '/agent_start.runtime.v1.AccountsService/List': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/List',
+    procedure: '/agent_start.runtime.v1.AccountsService/List',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/ListCachedClaude': {
+  '/agent_start.runtime.v1.AccountsService/ListCachedClaude': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/ListCachedClaude',
+    procedure: '/agent_start.runtime.v1.AccountsService/ListCachedClaude',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/ListCachedCodex': {
+  '/agent_start.runtime.v1.AccountsService/ListCachedCodex': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/ListCachedCodex',
+    procedure: '/agent_start.runtime.v1.AccountsService/ListCachedCodex',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/Reauthenticate': {
+  '/agent_start.runtime.v1.AccountsService/Reauthenticate': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/Reauthenticate',
+    procedure: '/agent_start.runtime.v1.AccountsService/Reauthenticate',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/RefreshGrokRateLimits': {
+  '/agent_start.runtime.v1.AccountsService/RefreshGrokRateLimits': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/RefreshGrokRateLimits',
+    procedure: '/agent_start.runtime.v1.AccountsService/RefreshGrokRateLimits',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/RefreshInactiveAccounts': {
+  '/agent_start.runtime.v1.AccountsService/RefreshInactiveAccounts': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/RefreshInactiveAccounts',
+    procedure: '/agent_start.runtime.v1.AccountsService/RefreshInactiveAccounts',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/RefreshRateLimits': {
+  '/agent_start.runtime.v1.AccountsService/RefreshRateLimits': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/RefreshRateLimits',
+    procedure: '/agent_start.runtime.v1.AccountsService/RefreshRateLimits',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/RefreshRateLimitsForTarget': {
+  '/agent_start.runtime.v1.AccountsService/RefreshRateLimitsForTarget': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/RefreshRateLimitsForTarget',
+    procedure: '/agent_start.runtime.v1.AccountsService/RefreshRateLimitsForTarget',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/Remove': {
+  '/agent_start.runtime.v1.AccountsService/Remove': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/Remove',
+    procedure: '/agent_start.runtime.v1.AccountsService/Remove',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/SaveMiniMaxCookie': {
+  '/agent_start.runtime.v1.AccountsService/SaveMiniMaxCookie': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/SaveMiniMaxCookie',
+    procedure: '/agent_start.runtime.v1.AccountsService/SaveMiniMaxCookie',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/Select': {
+  '/agent_start.runtime.v1.AccountsService/Select': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/Select',
+    procedure: '/agent_start.runtime.v1.AccountsService/Select',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AccountsService/Subscribe': {
+  '/agent_start.runtime.v1.AccountsService/Subscribe': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/Subscribe',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
-  },
-  '/yiru.runtime.v1.AccountsService/Unsubscribe': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AccountsService/Unsubscribe',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentSessionService/Followup': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentSessionService/Followup',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentSessionService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentSessionService/List',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentSessionService/Providers': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentSessionService/Providers',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentSessionService/Start': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentSessionService/Start',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentSessionService/Stop': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentSessionService/Stop',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentStatusService/Drop': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentStatusService/Drop',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentStatusService/DropByTabPrefix': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentStatusService/DropByTabPrefix',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentStatusService/GetMigrationUnsupportedSnapshot': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentStatusService/GetMigrationUnsupportedSnapshot',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentStatusService/GetSnapshot': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentStatusService/GetSnapshot',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentStatusService/InferInterrupt': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentStatusService/InferInterrupt',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentStatusService/RetirePaneAuthority': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentStatusService/RetirePaneAuthority',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AgentStatusService/Subscribe': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentStatusService/Subscribe',
+    procedure: '/agent_start.runtime.v1.AccountsService/Subscribe',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
   },
-  '/yiru.runtime.v1.AgentStatusService/TransferPaneAuthority': {
+  '/agent_start.runtime.v1.AccountsService/Unsubscribe': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AgentStatusService/TransferPaneAuthority',
+    procedure: '/agent_start.runtime.v1.AccountsService/Unsubscribe',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AiVaultService/ListSessions': {
+  '/agent_start.runtime.v1.AgentSessionService/Followup': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AiVaultService/ListSessions',
+    procedure: '/agent_start.runtime.v1.AgentSessionService/Followup',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AiVaultService/ListSubagentSessions': {
+  '/agent_start.runtime.v1.AgentSessionService/List': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AiVaultService/ListSubagentSessions',
+    procedure: '/agent_start.runtime.v1.AgentSessionService/List',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.AppControlService/RecordStartupDiagnostic': {
+  '/agent_start.runtime.v1.AgentSessionService/Providers': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AppControlService/RecordStartupDiagnostic',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.AppControlService/Restart': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.AppControlService/Restart',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ArtifactService/Abort': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ArtifactService/Abort',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ArtifactService/Append': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ArtifactService/Append',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ArtifactService/Begin': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ArtifactService/Begin',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ArtifactService/Complete': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ArtifactService/Complete',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ArtifactService/DownloadTicket': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ArtifactService/DownloadTicket',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ArtifactService/Read': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ArtifactService/Read',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserCliService/ResolveTarget': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserCliService/ResolveTarget',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserCliService/ResolveUpload': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserCliService/ResolveUpload',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserCommandService/Open': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserCommandService/Open',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserHostService/Download': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserHostService/Download',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserHostService/Execute': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserHostService/Execute',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserHostService/ExecuteMobile': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserHostService/ExecuteMobile',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserReplayService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserReplayService/List',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserReplayService/RecordResult': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserReplayService/RecordResult',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserReplayService/Save': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserReplayService/Save',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserRuntimeService/CreateTab': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserRuntimeService/CreateTab',
+    procedure: '/agent_start.runtime.v1.AgentSessionService/Providers',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.BrowserScreencastService/Subscribe': {
+  '/agent_start.runtime.v1.AgentSessionService/Start': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserScreencastService/Subscribe',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.BrowserWritebackService/ApplyColor': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserWritebackService/ApplyColor',
+    procedure: '/agent_start.runtime.v1.AgentSessionService/Start',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.BrowserWritebackService/ApplyCss': {
+  '/agent_start.runtime.v1.AgentSessionService/Stop': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserWritebackService/ApplyCss',
+    procedure: '/agent_start.runtime.v1.AgentSessionService/Stop',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.BrowserWritebackService/LocateElement': {
+  '/agent_start.runtime.v1.AgentStatusService/Drop': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserWritebackService/LocateElement',
+    procedure: '/agent_start.runtime.v1.AgentStatusService/Drop',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.BrowserWritebackService/RecordVerification': {
+  '/agent_start.runtime.v1.AgentStatusService/DropByTabPrefix': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.BrowserWritebackService/RecordVerification',
+    procedure: '/agent_start.runtime.v1.AgentStatusService/DropByTabPrefix',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ClientEventsService/Subscribe': {
+  '/agent_start.runtime.v1.AgentStatusService/GetMigrationUnsupportedSnapshot': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ClientEventsService/Subscribe',
+    procedure: '/agent_start.runtime.v1.AgentStatusService/GetMigrationUnsupportedSnapshot',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.AgentStatusService/GetSnapshot': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.AgentStatusService/GetSnapshot',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.AgentStatusService/InferInterrupt': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.AgentStatusService/InferInterrupt',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.AgentStatusService/RetirePaneAuthority': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.AgentStatusService/RetirePaneAuthority',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.AgentStatusService/Subscribe': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.AgentStatusService/Subscribe',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
   },
-  '/yiru.runtime.v1.ClientEventsService/Unsubscribe': {
+  '/agent_start.runtime.v1.AgentStatusService/TransferPaneAuthority': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ClientEventsService/Unsubscribe',
+    procedure: '/agent_start.runtime.v1.AgentStatusService/TransferPaneAuthority',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ClipboardService/AbortImageUpload': {
+  '/agent_start.runtime.v1.AiVaultService/ListSessions': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ClipboardService/AbortImageUpload',
+    procedure: '/agent_start.runtime.v1.AiVaultService/ListSessions',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ClipboardService/AppendImageUploadChunk': {
+  '/agent_start.runtime.v1.AiVaultService/ListSubagentSessions': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ClipboardService/AppendImageUploadChunk',
+    procedure: '/agent_start.runtime.v1.AiVaultService/ListSubagentSessions',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ClipboardService/CommitImageUpload': {
+  '/agent_start.runtime.v1.AppControlService/RecordStartupDiagnostic': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ClipboardService/CommitImageUpload',
+    procedure: '/agent_start.runtime.v1.AppControlService/RecordStartupDiagnostic',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.AppControlService/Restart': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.AppControlService/Restart',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ArtifactService/Abort': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ArtifactService/Abort',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ArtifactService/Append': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ArtifactService/Append',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ArtifactService/Begin': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ArtifactService/Begin',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ArtifactService/Complete': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ArtifactService/Complete',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ArtifactService/DownloadTicket': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ArtifactService/DownloadTicket',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ArtifactService/Read': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ArtifactService/Read',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserCliService/ResolveTarget': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserCliService/ResolveTarget',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserCliService/ResolveUpload': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserCliService/ResolveUpload',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserCommandService/Open': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserCommandService/Open',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserHostService/Download': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserHostService/Download',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserHostService/Execute': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserHostService/Execute',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserHostService/ExecuteMobile': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserHostService/ExecuteMobile',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserReplayService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserReplayService/List',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserReplayService/RecordResult': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserReplayService/RecordResult',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserReplayService/Save': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserReplayService/Save',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserRuntimeService/CreateTab': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserRuntimeService/CreateTab',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ClipboardService/SaveImageAsTempFile': {
+  '/agent_start.runtime.v1.BrowserScreencastService/Subscribe': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ClipboardService/SaveImageAsTempFile',
+    procedure: '/agent_start.runtime.v1.BrowserScreencastService/Subscribe',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.BrowserWritebackService/ApplyColor': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserWritebackService/ApplyColor',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ClipboardService/StartImageUpload': {
+  '/agent_start.runtime.v1.BrowserWritebackService/ApplyCss': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ClipboardService/StartImageUpload',
+    procedure: '/agent_start.runtime.v1.BrowserWritebackService/ApplyCss',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.CliService/GetInstallStatus': {
+  '/agent_start.runtime.v1.BrowserWritebackService/LocateElement': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CliService/GetInstallStatus',
+    procedure: '/agent_start.runtime.v1.BrowserWritebackService/LocateElement',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.CliService/GetWslInstallStatus': {
+  '/agent_start.runtime.v1.BrowserWritebackService/RecordVerification': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CliService/GetWslInstallStatus',
+    procedure: '/agent_start.runtime.v1.BrowserWritebackService/RecordVerification',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.CliService/Install': {
+  '/agent_start.runtime.v1.ClientEventsService/Subscribe': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CliService/Install',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.CliService/InstallWsl': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CliService/InstallWsl',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.CliService/Remove': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CliService/Remove',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.CliService/RemoveWsl': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CliService/RemoveWsl',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/Capabilities': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/Capabilities',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/Click': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/Click',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/Drag': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/Drag',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/GetAppState': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/GetAppState',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/Hotkey': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/Hotkey',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/ListApps': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/ListApps',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/ListWindows': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/ListWindows',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/PasteText': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/PasteText',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/PerformSecondaryAction': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/PerformSecondaryAction',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/Permissions': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/Permissions',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/PermissionsReset': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/PermissionsReset',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/PermissionsStatus': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/PermissionsStatus',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/PressKey': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/PressKey',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/Scroll': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/Scroll',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/SetValue': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/SetValue',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ComputerService/TypeText': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ComputerService/TypeText',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.CrashReportsService/CopyLatestDiagnostics': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CrashReportsService/CopyLatestDiagnostics',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.CrashReportsService/Dismiss': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CrashReportsService/Dismiss',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.CrashReportsService/GetLatestPending': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CrashReportsService/GetLatestPending',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.CrashReportsService/GetLatestReport': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CrashReportsService/GetLatestReport',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.CrashReportsService/RecordBreadcrumb': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CrashReportsService/RecordBreadcrumb',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.CrashReportsService/RecordRendererError': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CrashReportsService/RecordRendererError',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.CrashReportsService/Submit': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.CrashReportsService/Submit',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DangerousApprovalService/BeginApproval': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DangerousApprovalService/BeginApproval',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DangerousApprovalService/BeginRegistration': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DangerousApprovalService/BeginRegistration',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DangerousApprovalService/FinishApproval': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DangerousApprovalService/FinishApproval',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DangerousApprovalService/FinishRegistration': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DangerousApprovalService/FinishRegistration',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DangerousApprovalService/Remove': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DangerousApprovalService/Remove',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DangerousApprovalService/Status': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DangerousApprovalService/Status',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DeveloperPermissionsService/GetStatus': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DeveloperPermissionsService/GetStatus',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DeveloperPermissionsService/Request': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DeveloperPermissionsService/Request',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DiagnosticsService/CollectBundle': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DiagnosticsService/CollectBundle',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DiagnosticsService/DiscardBundlePreview': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DiagnosticsService/DiscardBundlePreview',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DiagnosticsService/GetMemorySnapshot': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DiagnosticsService/GetMemorySnapshot',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DiagnosticsService/GetStatus': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DiagnosticsService/GetStatus',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DiagnosticsService/OpenBundlePreview': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DiagnosticsService/OpenBundlePreview',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DiagnosticsService/UploadBundle': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DiagnosticsService/UploadBundle',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.DriverEventsService/Subscribe': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.DriverEventsService/Subscribe',
+    procedure: '/agent_start.runtime.v1.ClientEventsService/Subscribe',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
   },
-  '/yiru.runtime.v1.EmulatorService/Attach': {
+  '/agent_start.runtime.v1.ClientEventsService/Unsubscribe': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/Attach',
+    procedure: '/agent_start.runtime.v1.ClientEventsService/Unsubscribe',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ClipboardService/AbortImageUpload': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ClipboardService/AbortImageUpload',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ClipboardService/AppendImageUploadChunk': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ClipboardService/AppendImageUploadChunk',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ClipboardService/CommitImageUpload': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ClipboardService/CommitImageUpload',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ClipboardService/SaveImageAsTempFile': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ClipboardService/SaveImageAsTempFile',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ClipboardService/StartImageUpload': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ClipboardService/StartImageUpload',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.CliService/GetInstallStatus': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.CliService/GetInstallStatus',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.CliService/GetWslInstallStatus': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.CliService/GetWslInstallStatus',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.CliService/Install': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.CliService/Install',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.CliService/InstallWsl': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.CliService/InstallWsl',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.CliService/Remove': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.CliService/Remove',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.CliService/RemoveWsl': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.CliService/RemoveWsl',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ComputerService/Capabilities': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ComputerService/Capabilities',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/Availability': {
+  '/agent_start.runtime.v1.ComputerService/Click': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/Availability',
+    procedure: '/agent_start.runtime.v1.ComputerService/Click',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/Button': {
+  '/agent_start.runtime.v1.ComputerService/Drag': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/Button',
+    procedure: '/agent_start.runtime.v1.ComputerService/Drag',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/Exec': {
+  '/agent_start.runtime.v1.ComputerService/GetAppState': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/Exec',
+    procedure: '/agent_start.runtime.v1.ComputerService/GetAppState',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/Gesture': {
+  '/agent_start.runtime.v1.ComputerService/Hotkey': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/Gesture',
+    procedure: '/agent_start.runtime.v1.ComputerService/Hotkey',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/Kill': {
+  '/agent_start.runtime.v1.ComputerService/ListApps': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/Kill',
+    procedure: '/agent_start.runtime.v1.ComputerService/ListApps',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/List': {
+  '/agent_start.runtime.v1.ComputerService/ListWindows': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/List',
+    procedure: '/agent_start.runtime.v1.ComputerService/ListWindows',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/ListSimulators': {
+  '/agent_start.runtime.v1.ComputerService/PasteText': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/ListSimulators',
+    procedure: '/agent_start.runtime.v1.ComputerService/PasteText',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/Rotate': {
+  '/agent_start.runtime.v1.ComputerService/PerformSecondaryAction': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/Rotate',
+    procedure: '/agent_start.runtime.v1.ComputerService/PerformSecondaryAction',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/Shutdown': {
+  '/agent_start.runtime.v1.ComputerService/Permissions': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/Shutdown',
+    procedure: '/agent_start.runtime.v1.ComputerService/Permissions',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/StreamFrames': {
+  '/agent_start.runtime.v1.ComputerService/PermissionsReset': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/StreamFrames',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.EmulatorService/Tap': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/Tap',
+    procedure: '/agent_start.runtime.v1.ComputerService/PermissionsReset',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/TypeText': {
+  '/agent_start.runtime.v1.ComputerService/PermissionsStatus': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/TypeText',
+    procedure: '/agent_start.runtime.v1.ComputerService/PermissionsStatus',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.EmulatorService/UnregisterActive': {
+  '/agent_start.runtime.v1.ComputerService/PressKey': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.EmulatorService/UnregisterActive',
+    procedure: '/agent_start.runtime.v1.ComputerService/PressKey',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ExternalEditorService/OpenRemoteSsh': {
+  '/agent_start.runtime.v1.ComputerService/Scroll': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ExternalEditorService/OpenRemoteSsh',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FeedbackService/Submit': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FeedbackService/Submit',
+    procedure: '/agent_start.runtime.v1.ComputerService/Scroll',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.FilesService/BrowseServerDirectory': {
+  '/agent_start.runtime.v1.ComputerService/SetValue': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/BrowseServerDirectory',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/CommitUpload': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/CommitUpload',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/Copy': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/Copy',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/CreateDirectory': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/CreateDirectory',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/CreateDirectoryNoClobber': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/CreateDirectoryNoClobber',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/CreateFile': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/CreateFile',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/Delete': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/Delete',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/List',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/ListAll': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/ListAll',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/ListMarkdownDocuments': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/ListMarkdownDocuments',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/Open': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/Open',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/OpenDiff': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/OpenDiff',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/Read': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/Read',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/ReadChunk': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/ReadChunk',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/ReadDirectory': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/ReadDirectory',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/ReadLogTail': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/ReadLogTail',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/ReadPreview': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/ReadPreview',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/ReadTerminalArtifact': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/ReadTerminalArtifact',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/ReadTerminalArtifactPreview': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/ReadTerminalArtifactPreview',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/Rename': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/Rename',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/ResolveTerminalPath': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/ResolveTerminalPath',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/Search': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/Search',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/SearchPaths': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/SearchPaths',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/Stat': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/Stat',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/Watch': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/Watch',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/WatchLogTail': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/WatchLogTail',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/Write': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/Write',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/WriteBase64': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/WriteBase64',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/WriteBase64Chunk': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/WriteBase64Chunk',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FilesService/WriteTerminalArtifact': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FilesService/WriteTerminalArtifact',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FolderWorkspaceService/Create': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FolderWorkspaceService/Create',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FolderWorkspaceService/Delete': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FolderWorkspaceService/Delete',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FolderWorkspaceService/GetPathStatus': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FolderWorkspaceService/GetPathStatus',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FolderWorkspaceService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FolderWorkspaceService/List',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.FolderWorkspaceService/Update': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.FolderWorkspaceService/Update',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitBranchService/AddTag': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitBranchService/AddTag',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitBranchService/Checkout': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitBranchService/Checkout',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitBranchService/CheckoutCommit': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitBranchService/CheckoutCommit',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitBranchService/CreateBranch': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitBranchService/CreateBranch',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitGenerationService/CancelGenerateCommitMessage': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitGenerationService/CancelGenerateCommitMessage',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitGenerationService/CancelGeneratePullRequestFields': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitGenerationService/CancelGeneratePullRequestFields',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitGenerationService/GenerateCommitMessage': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitGenerationService/GenerateCommitMessage',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitGenerationService/GeneratePullRequestFields': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitGenerationService/GeneratePullRequestFields',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/AbortMerge': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/AbortMerge',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/AbortRebase': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/AbortRebase',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/AbortRevert': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/AbortRevert',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/CherryPick': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/CherryPick',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/ConflictOperation': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/ConflictOperation',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/DropCommit': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/DropCommit',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/MergeCommit': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/MergeCommit',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/RebaseFromBase': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/RebaseFromBase',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/RebaseOntoCommit': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/RebaseOntoCommit',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/ResetToCommit': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/ResetToCommit',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryRewriteService/RevertCommit': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryRewriteService/RevertCommit',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryService/BranchCompare': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryService/BranchCompare',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryService/BranchDiff': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryService/BranchDiff',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryService/CommitCompare': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryService/CommitCompare',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryService/CommitDiff': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryService/CommitDiff',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHistoryService/History': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHistoryService/History',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/AddPrComment': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/AddPrComment',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/AddPrReviewComment': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/AddPrReviewComment',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/AddPrReviewCommentReply': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/AddPrReviewCommentReply',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/CreateCommentDraft': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/CreateCommentDraft',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/CreateHostedReview': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/CreateHostedReview',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetHostedReviewCreationEligibility': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetHostedReviewCreationEligibility',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetHostedReviewForBranch': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetHostedReviewForBranch',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetPrCheckDetails': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetPrCheckDetails',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetPrChecks': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetPrChecks',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetPrComments': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetPrComments',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetPrFileContents': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetPrFileContents',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetPrForBranch': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetPrForBranch',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetRateLimit': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetRateLimit',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetRepoSlug': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetRepoSlug',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetRepoUpstream': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetRepoUpstream',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetWorkItem': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetWorkItem',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetWorkItemByOwnerRepo': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetWorkItemByOwnerRepo',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/GetWorkItemDetails': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/GetWorkItemDetails',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/ListAssignableUsers': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/ListAssignableUsers',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/ListLabels': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/ListLabels',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/ListWorkItems': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/ListWorkItems',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/MergePr': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/MergePr',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/RefreshPrForBranch': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/RefreshPrForBranch',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/RemovePrReviewers': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/RemovePrReviewers',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/RequestPrReviewers': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/RequestPrReviewers',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/RerunPrChecks': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/RerunPrChecks',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/ResolveReviewThread': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/ResolveReviewThread',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/SetPrAutoMerge': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/SetPrAutoMerge',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/SetPrFileViewed': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/SetPrFileViewed',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/SubscribeEvents': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/SubscribeEvents',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/UpdatePr': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/UpdatePr',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/UpdatePrState': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/UpdatePrState',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubService/UpdatePrTitle': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubService/UpdatePrTitle',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitHubShellService/CheckYiruStarred': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubShellService/CheckYiruStarred',
+    procedure: '/agent_start.runtime.v1.ComputerService/SetValue',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.GitHubShellService/EnqueuePrRefresh': {
+  '/agent_start.runtime.v1.ComputerService/TypeText': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubShellService/EnqueuePrRefresh',
+    procedure: '/agent_start.runtime.v1.ComputerService/TypeText',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.GitHubShellService/GetViewer': {
+  '/agent_start.runtime.v1.CrashReportsService/CopyLatestDiagnostics': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubShellService/GetViewer',
+    procedure: '/agent_start.runtime.v1.CrashReportsService/CopyLatestDiagnostics',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.GitHubShellService/ReportVisiblePrRefreshCandidates': {
+  '/agent_start.runtime.v1.CrashReportsService/Dismiss': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubShellService/ReportVisiblePrRefreshCandidates',
+    procedure: '/agent_start.runtime.v1.CrashReportsService/Dismiss',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.GitHubShellService/StarYiru': {
+  '/agent_start.runtime.v1.CrashReportsService/GetLatestPending': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitHubShellService/StarYiru',
+    procedure: '/agent_start.runtime.v1.CrashReportsService/GetLatestPending',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.GitRemoteService/FastForward': {
+  '/agent_start.runtime.v1.CrashReportsService/GetLatestReport': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitRemoteService/FastForward',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitRemoteService/Fetch': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitRemoteService/Fetch',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitRemoteService/ForkSync': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitRemoteService/ForkSync',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitRemoteService/Pull': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitRemoteService/Pull',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitRemoteService/Push': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitRemoteService/Push',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStagingService/AppendGitignore': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStagingService/AppendGitignore',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStagingService/BulkDiscard': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStagingService/BulkDiscard',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStagingService/BulkStage': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStagingService/BulkStage',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStagingService/BulkUnstage': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStagingService/BulkUnstage',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStagingService/Commit': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStagingService/Commit',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStagingService/Discard': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStagingService/Discard',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStagingService/Stage': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStagingService/Stage',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStagingService/Unstage': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStagingService/Unstage',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStatusService/CheckIgnored': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStatusService/CheckIgnored',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStatusService/Diff': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStatusService/Diff',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStatusService/FindHugeFoldersToIgnore': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStatusService/FindHugeFoldersToIgnore',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStatusService/LocalBranches': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStatusService/LocalBranches',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStatusService/RemoteCommitUrl': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStatusService/RemoteCommitUrl',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStatusService/Status': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStatusService/Status',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStatusService/SubmoduleStatus': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStatusService/SubmoduleStatus',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.GitStatusService/UpstreamStatus': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.GitStatusService/UpstreamStatus',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.HostRegistryService/Add': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.HostRegistryService/Add',
+    procedure: '/agent_start.runtime.v1.CrashReportsService/GetLatestReport',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.HostRegistryService/IsGitBashAvailable': {
+  '/agent_start.runtime.v1.CrashReportsService/RecordBreadcrumb': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.HostRegistryService/IsGitBashAvailable',
+    procedure: '/agent_start.runtime.v1.CrashReportsService/RecordBreadcrumb',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.CrashReportsService/RecordRendererError': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.CrashReportsService/RecordRendererError',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.CrashReportsService/Submit': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.CrashReportsService/Submit',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DangerousApprovalService/BeginApproval': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DangerousApprovalService/BeginApproval',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DangerousApprovalService/BeginRegistration': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DangerousApprovalService/BeginRegistration',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DangerousApprovalService/FinishApproval': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DangerousApprovalService/FinishApproval',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DangerousApprovalService/FinishRegistration': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DangerousApprovalService/FinishRegistration',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DangerousApprovalService/Remove': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DangerousApprovalService/Remove',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DangerousApprovalService/Status': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DangerousApprovalService/Status',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DeveloperPermissionsService/GetStatus': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DeveloperPermissionsService/GetStatus',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DeveloperPermissionsService/Request': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DeveloperPermissionsService/Request',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DiagnosticsService/CollectBundle': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DiagnosticsService/CollectBundle',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DiagnosticsService/DiscardBundlePreview': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DiagnosticsService/DiscardBundlePreview',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.DiagnosticsService/GetMemorySnapshot': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.DiagnosticsService/GetMemorySnapshot',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.HostRegistryService/IsPwshAvailable': {
+  '/agent_start.runtime.v1.DiagnosticsService/GetStatus': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.HostRegistryService/IsPwshAvailable',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.HostRegistryService/IsWslAvailable': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.HostRegistryService/IsWslAvailable',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.HostRegistryService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.HostRegistryService/List',
+    procedure: '/agent_start.runtime.v1.DiagnosticsService/GetStatus',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.HostRegistryService/ListWslDistros': {
+  '/agent_start.runtime.v1.DiagnosticsService/OpenBundlePreview': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.HostRegistryService/ListWslDistros',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.HostRegistryService/MarkAgentTrusted': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.HostRegistryService/MarkAgentTrusted',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.HostRegistryService/Probe': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.HostRegistryService/Probe',
+    procedure: '/agent_start.runtime.v1.DiagnosticsService/OpenBundlePreview',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.HostRegistryService/Remove': {
+  '/agent_start.runtime.v1.DiagnosticsService/UploadBundle': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.HostRegistryService/Remove',
+    procedure: '/agent_start.runtime.v1.DiagnosticsService/UploadBundle',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.LayoutService/Apply': {
+  '/agent_start.runtime.v1.DriverEventsService/Subscribe': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LayoutService/Apply',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.LayoutService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LayoutService/List',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.LocalDownloadService/AppendFileChunk': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LocalDownloadService/AppendFileChunk',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.LocalDownloadService/AppendFolderFileChunk': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LocalDownloadService/AppendFolderFileChunk',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.LocalDownloadService/CancelFile': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LocalDownloadService/CancelFile',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.LocalDownloadService/CancelFolder': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LocalDownloadService/CancelFolder',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.LocalDownloadService/CreateFolderDirectory': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LocalDownloadService/CreateFolderDirectory',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.LocalDownloadService/FinishFile': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LocalDownloadService/FinishFile',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.LocalDownloadService/FinishFolder': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LocalDownloadService/FinishFolder',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.LocalDownloadService/StartFile': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LocalDownloadService/StartFile',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.LocalDownloadService/StartFolder': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.LocalDownloadService/StartFolder',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.MarkdownService/ReadTab': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.MarkdownService/ReadTab',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.MarkdownService/SaveTab': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.MarkdownService/SaveTab',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.MobilePairingService/CreateDevelopmentOffer': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.MobilePairingService/CreateDevelopmentOffer',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.MobilePairingService/GetPairingQr': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.MobilePairingService/GetPairingQr',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.MobilePairingService/ListDevices': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.MobilePairingService/ListDevices',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.MobilePairingService/ListNetworkInterfaces': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.MobilePairingService/ListNetworkInterfaces',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.MobilePairingService/RevokeDevice': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.MobilePairingService/RevokeDevice',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.NotebookService/RunPythonCell': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.NotebookService/RunPythonCell',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.NotificationsService/Dismiss': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.NotificationsService/Dismiss',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.NotificationsService/GetMissedSince': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.NotificationsService/GetMissedSince',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.NotificationsService/LoadCustomSound': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.NotificationsService/LoadCustomSound',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.NotificationsService/RegisterPush': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.NotificationsService/RegisterPush',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.NotificationsService/Report': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.NotificationsService/Report',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.NotificationsService/Subscribe': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.NotificationsService/Subscribe',
+    procedure: '/agent_start.runtime.v1.DriverEventsService/Subscribe',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
   },
-  '/yiru.runtime.v1.OrchestrationService/Ask': {
+  '/agent_start.runtime.v1.EmulatorService/Attach': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/Ask',
+    procedure: '/agent_start.runtime.v1.EmulatorService/Attach',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/Availability': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/Availability',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/Button': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/Button',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/Exec': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/Exec',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/Gesture': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/Gesture',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/Kill': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/Kill',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/List',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/ListSimulators': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/ListSimulators',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/Rotate': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/Rotate',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/Shutdown': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/Shutdown',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/StreamFrames': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/StreamFrames',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/Tap': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/Tap',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/TypeText': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/TypeText',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.EmulatorService/UnregisterActive': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.EmulatorService/UnregisterActive',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ExternalEditorService/OpenRemoteSsh': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ExternalEditorService/OpenRemoteSsh',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/Check': {
+  '/agent_start.runtime.v1.FeedbackService/Submit': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/Check',
+    procedure: '/agent_start.runtime.v1.FeedbackService/Submit',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.FilesService/BrowseServerDirectory': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.FilesService/BrowseServerDirectory',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/Dispatch': {
+  '/agent_start.runtime.v1.FilesService/CommitUpload': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/Dispatch',
+    procedure: '/agent_start.runtime.v1.FilesService/CommitUpload',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/DispatchShow': {
+  '/agent_start.runtime.v1.FilesService/Copy': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/DispatchShow',
+    procedure: '/agent_start.runtime.v1.FilesService/Copy',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/FederationAck': {
+  '/agent_start.runtime.v1.FilesService/CreateDirectory': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/FederationAck',
+    procedure: '/agent_start.runtime.v1.FilesService/CreateDirectory',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/FederationAttachStart': {
+  '/agent_start.runtime.v1.FilesService/CreateDirectoryNoClobber': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/FederationAttachStart',
+    procedure: '/agent_start.runtime.v1.FilesService/CreateDirectoryNoClobber',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/FederationImport': {
+  '/agent_start.runtime.v1.FilesService/CreateFile': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/FederationImport',
+    procedure: '/agent_start.runtime.v1.FilesService/CreateFile',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/FederationPull': {
+  '/agent_start.runtime.v1.FilesService/Delete': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/FederationPull',
+    procedure: '/agent_start.runtime.v1.FilesService/Delete',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/FederationRead': {
+  '/agent_start.runtime.v1.FilesService/List': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/FederationRead',
+    procedure: '/agent_start.runtime.v1.FilesService/List',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/FederationReadOutput': {
+  '/agent_start.runtime.v1.FilesService/ListAll': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/FederationReadOutput',
+    procedure: '/agent_start.runtime.v1.FilesService/ListAll',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/FederationShow': {
+  '/agent_start.runtime.v1.FilesService/ListMarkdownDocuments': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/FederationShow',
+    procedure: '/agent_start.runtime.v1.FilesService/ListMarkdownDocuments',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/FederationStop': {
+  '/agent_start.runtime.v1.FilesService/Open': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/FederationStop',
+    procedure: '/agent_start.runtime.v1.FilesService/Open',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/GateCreate': {
+  '/agent_start.runtime.v1.FilesService/OpenDiff': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/GateCreate',
+    procedure: '/agent_start.runtime.v1.FilesService/OpenDiff',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/GateList': {
+  '/agent_start.runtime.v1.FilesService/Read': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/GateList',
+    procedure: '/agent_start.runtime.v1.FilesService/Read',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/GateResolve': {
+  '/agent_start.runtime.v1.FilesService/ReadChunk': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/GateResolve',
+    procedure: '/agent_start.runtime.v1.FilesService/ReadChunk',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/Inbox': {
+  '/agent_start.runtime.v1.FilesService/ReadDirectory': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/Inbox',
+    procedure: '/agent_start.runtime.v1.FilesService/ReadDirectory',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/Reply': {
+  '/agent_start.runtime.v1.FilesService/ReadLogTail': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/Reply',
+    procedure: '/agent_start.runtime.v1.FilesService/ReadLogTail',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/Reset': {
+  '/agent_start.runtime.v1.FilesService/ReadPreview': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/Reset',
+    procedure: '/agent_start.runtime.v1.FilesService/ReadPreview',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/Run': {
+  '/agent_start.runtime.v1.FilesService/ReadTerminalArtifact': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/Run',
+    procedure: '/agent_start.runtime.v1.FilesService/ReadTerminalArtifact',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/RunCreate': {
+  '/agent_start.runtime.v1.FilesService/ReadTerminalArtifactPreview': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/RunCreate',
+    procedure: '/agent_start.runtime.v1.FilesService/ReadTerminalArtifactPreview',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/RunCurrent': {
+  '/agent_start.runtime.v1.FilesService/Rename': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/RunCurrent',
+    procedure: '/agent_start.runtime.v1.FilesService/Rename',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/RunList': {
+  '/agent_start.runtime.v1.FilesService/ResolveTerminalPath': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/RunList',
+    procedure: '/agent_start.runtime.v1.FilesService/ResolveTerminalPath',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/RunShow': {
+  '/agent_start.runtime.v1.FilesService/Search': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/RunShow',
+    procedure: '/agent_start.runtime.v1.FilesService/Search',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/RunStop': {
+  '/agent_start.runtime.v1.FilesService/SearchPaths': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/RunStop',
+    procedure: '/agent_start.runtime.v1.FilesService/SearchPaths',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/RunUse': {
+  '/agent_start.runtime.v1.FilesService/Stat': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/RunUse',
+    procedure: '/agent_start.runtime.v1.FilesService/Stat',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/Send': {
+  '/agent_start.runtime.v1.FilesService/Watch': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/Send',
+    procedure: '/agent_start.runtime.v1.FilesService/Watch',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.FilesService/WatchLogTail': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.FilesService/WatchLogTail',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.FilesService/Write': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.FilesService/Write',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/TaskCreate': {
+  '/agent_start.runtime.v1.FilesService/WriteBase64': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/TaskCreate',
+    procedure: '/agent_start.runtime.v1.FilesService/WriteBase64',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/TaskList': {
+  '/agent_start.runtime.v1.FilesService/WriteBase64Chunk': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/TaskList',
+    procedure: '/agent_start.runtime.v1.FilesService/WriteBase64Chunk',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/TaskUpdate': {
+  '/agent_start.runtime.v1.FilesService/WriteTerminalArtifact': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/TaskUpdate',
+    procedure: '/agent_start.runtime.v1.FilesService/WriteTerminalArtifact',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/WorkerAbandon': {
+  '/agent_start.runtime.v1.FolderWorkspaceService/Create': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/WorkerAbandon',
+    procedure: '/agent_start.runtime.v1.FolderWorkspaceService/Create',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/WorkerRead': {
+  '/agent_start.runtime.v1.FolderWorkspaceService/Delete': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/WorkerRead',
+    procedure: '/agent_start.runtime.v1.FolderWorkspaceService/Delete',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/WorkerShow': {
+  '/agent_start.runtime.v1.FolderWorkspaceService/GetPathStatus': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/WorkerShow',
+    procedure: '/agent_start.runtime.v1.FolderWorkspaceService/GetPathStatus',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/WorkerStart': {
+  '/agent_start.runtime.v1.FolderWorkspaceService/List': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/WorkerStart',
+    procedure: '/agent_start.runtime.v1.FolderWorkspaceService/List',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.OrchestrationService/WorkerStop': {
+  '/agent_start.runtime.v1.FolderWorkspaceService/Update': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.OrchestrationService/WorkerStop',
+    procedure: '/agent_start.runtime.v1.FolderWorkspaceService/Update',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.PreflightService/Check': {
+  '/agent_start.runtime.v1.GitBranchService/AddTag': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.PreflightService/Check',
+    procedure: '/agent_start.runtime.v1.GitBranchService/AddTag',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.PreflightService/DetectAgents': {
+  '/agent_start.runtime.v1.GitBranchService/Checkout': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.PreflightService/DetectAgents',
+    procedure: '/agent_start.runtime.v1.GitBranchService/Checkout',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.PreflightService/DetectRemoteAgents': {
+  '/agent_start.runtime.v1.GitBranchService/CheckoutCommit': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.PreflightService/DetectRemoteAgents',
+    procedure: '/agent_start.runtime.v1.GitBranchService/CheckoutCommit',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.PreflightService/RefreshAgents': {
+  '/agent_start.runtime.v1.GitBranchService/CreateBranch': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.PreflightService/RefreshAgents',
+    procedure: '/agent_start.runtime.v1.GitBranchService/CreateBranch',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProgressEventsService/Subscribe': {
+  '/agent_start.runtime.v1.GitGenerationService/CancelGenerateCommitMessage': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProgressEventsService/Subscribe',
+    procedure: '/agent_start.runtime.v1.GitGenerationService/CancelGenerateCommitMessage',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitGenerationService/CancelGeneratePullRequestFields': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitGenerationService/CancelGeneratePullRequestFields',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitGenerationService/GenerateCommitMessage': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitGenerationService/GenerateCommitMessage',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitGenerationService/GeneratePullRequestFields': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitGenerationService/GeneratePullRequestFields',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/AbortMerge': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/AbortMerge',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/AbortRebase': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/AbortRebase',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/AbortRevert': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/AbortRevert',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/CherryPick': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/CherryPick',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/ConflictOperation': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/ConflictOperation',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/DropCommit': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/DropCommit',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/MergeCommit': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/MergeCommit',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/RebaseFromBase': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/RebaseFromBase',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/RebaseOntoCommit': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/RebaseOntoCommit',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/ResetToCommit': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/ResetToCommit',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryRewriteService/RevertCommit': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryRewriteService/RevertCommit',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryService/BranchCompare': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryService/BranchCompare',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryService/BranchDiff': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryService/BranchDiff',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryService/CommitCompare': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryService/CommitCompare',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryService/CommitDiff': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryService/CommitDiff',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHistoryService/History': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHistoryService/History',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/AddPrComment': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/AddPrComment',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/AddPrReviewComment': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/AddPrReviewComment',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/AddPrReviewCommentReply': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/AddPrReviewCommentReply',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/CreateCommentDraft': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/CreateCommentDraft',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/CreateHostedReview': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/CreateHostedReview',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetHostedReviewCreationEligibility': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetHostedReviewCreationEligibility',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetHostedReviewForBranch': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetHostedReviewForBranch',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetPrCheckDetails': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetPrCheckDetails',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetPrChecks': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetPrChecks',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetPrComments': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetPrComments',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetPrFileContents': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetPrFileContents',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetPrForBranch': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetPrForBranch',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetRateLimit': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetRateLimit',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetRepoSlug': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetRepoSlug',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetRepoUpstream': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetRepoUpstream',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetWorkItem': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetWorkItem',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetWorkItemByOwnerRepo': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetWorkItemByOwnerRepo',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/GetWorkItemDetails': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/GetWorkItemDetails',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/ListAssignableUsers': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/ListAssignableUsers',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/ListLabels': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/ListLabels',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/ListWorkItems': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/ListWorkItems',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/MergePr': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/MergePr',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/RefreshPrForBranch': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/RefreshPrForBranch',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/RemovePrReviewers': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/RemovePrReviewers',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/RequestPrReviewers': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/RequestPrReviewers',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/RerunPrChecks': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/RerunPrChecks',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/ResolveReviewThread': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/ResolveReviewThread',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/SetPrAutoMerge': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/SetPrAutoMerge',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/SetPrFileViewed': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/SetPrFileViewed',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/SubscribeEvents': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/SubscribeEvents',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/UpdatePr': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/UpdatePr',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/UpdatePrState': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/UpdatePrState',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubService/UpdatePrTitle': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubService/UpdatePrTitle',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubShellService/CheckAgentStartStarred': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubShellService/CheckAgentStartStarred',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubShellService/EnqueuePrRefresh': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubShellService/EnqueuePrRefresh',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubShellService/GetViewer': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubShellService/GetViewer',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubShellService/ReportVisiblePrRefreshCandidates': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubShellService/ReportVisiblePrRefreshCandidates',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitHubShellService/StarAgentStart': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitHubShellService/StarAgentStart',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitRemoteService/FastForward': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitRemoteService/FastForward',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitRemoteService/Fetch': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitRemoteService/Fetch',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitRemoteService/ForkSync': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitRemoteService/ForkSync',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitRemoteService/Pull': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitRemoteService/Pull',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitRemoteService/Push': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitRemoteService/Push',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStagingService/AppendGitignore': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStagingService/AppendGitignore',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStagingService/BulkDiscard': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStagingService/BulkDiscard',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStagingService/BulkStage': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStagingService/BulkStage',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStagingService/BulkUnstage': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStagingService/BulkUnstage',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStagingService/Commit': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStagingService/Commit',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStagingService/Discard': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStagingService/Discard',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStagingService/Stage': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStagingService/Stage',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStagingService/Unstage': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStagingService/Unstage',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStatusService/CheckIgnored': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStatusService/CheckIgnored',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStatusService/Diff': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStatusService/Diff',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStatusService/FindHugeFoldersToIgnore': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStatusService/FindHugeFoldersToIgnore',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStatusService/LocalBranches': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStatusService/LocalBranches',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStatusService/RemoteCommitUrl': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStatusService/RemoteCommitUrl',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStatusService/Status': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStatusService/Status',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStatusService/SubmoduleStatus': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStatusService/SubmoduleStatus',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.GitStatusService/UpstreamStatus': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.GitStatusService/UpstreamStatus',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.HostRegistryService/Add': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.HostRegistryService/Add',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.HostRegistryService/IsGitBashAvailable': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.HostRegistryService/IsGitBashAvailable',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.HostRegistryService/IsPwshAvailable': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.HostRegistryService/IsPwshAvailable',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.HostRegistryService/IsWslAvailable': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.HostRegistryService/IsWslAvailable',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.HostRegistryService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.HostRegistryService/List',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.HostRegistryService/ListWslDistros': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.HostRegistryService/ListWslDistros',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.HostRegistryService/MarkAgentTrusted': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.HostRegistryService/MarkAgentTrusted',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.HostRegistryService/Probe': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.HostRegistryService/Probe',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.HostRegistryService/Remove': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.HostRegistryService/Remove',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LayoutService/Apply': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LayoutService/Apply',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LayoutService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LayoutService/List',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LocalDownloadService/AppendFileChunk': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LocalDownloadService/AppendFileChunk',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LocalDownloadService/AppendFolderFileChunk': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LocalDownloadService/AppendFolderFileChunk',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LocalDownloadService/CancelFile': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LocalDownloadService/CancelFile',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LocalDownloadService/CancelFolder': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LocalDownloadService/CancelFolder',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LocalDownloadService/CreateFolderDirectory': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LocalDownloadService/CreateFolderDirectory',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LocalDownloadService/FinishFile': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LocalDownloadService/FinishFile',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LocalDownloadService/FinishFolder': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LocalDownloadService/FinishFolder',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LocalDownloadService/StartFile': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LocalDownloadService/StartFile',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.LocalDownloadService/StartFolder': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.LocalDownloadService/StartFolder',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.MarkdownService/ReadTab': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.MarkdownService/ReadTab',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.MarkdownService/SaveTab': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.MarkdownService/SaveTab',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.MobilePairingService/CreateDevelopmentOffer': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.MobilePairingService/CreateDevelopmentOffer',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.MobilePairingService/GetPairingQr': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.MobilePairingService/GetPairingQr',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.MobilePairingService/ListDevices': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.MobilePairingService/ListDevices',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.MobilePairingService/ListNetworkInterfaces': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.MobilePairingService/ListNetworkInterfaces',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.MobilePairingService/RevokeDevice': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.MobilePairingService/RevokeDevice',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.NotebookService/RunPythonCell': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.NotebookService/RunPythonCell',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.NotificationsService/Dismiss': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.NotificationsService/Dismiss',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.NotificationsService/GetMissedSince': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.NotificationsService/GetMissedSince',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.NotificationsService/LoadCustomSound': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.NotificationsService/LoadCustomSound',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.NotificationsService/Report': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.NotificationsService/Report',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.NotificationsService/Subscribe': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.NotificationsService/Subscribe',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
   },
-  '/yiru.runtime.v1.ProjectContextService/Resolve': {
+  '/agent_start.runtime.v1.OrchestrationService/Ask': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectContextService/Resolve',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/Ask',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProjectGroupService/CancelNestedScan': {
+  '/agent_start.runtime.v1.OrchestrationService/Check': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectGroupService/CancelNestedScan',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/Check',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProjectGroupService/Create': {
+  '/agent_start.runtime.v1.OrchestrationService/Dispatch': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectGroupService/Create',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/Dispatch',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProjectGroupService/Delete': {
+  '/agent_start.runtime.v1.OrchestrationService/DispatchShow': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectGroupService/Delete',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/DispatchShow',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProjectGroupService/ImportNested': {
+  '/agent_start.runtime.v1.OrchestrationService/FederationAck': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectGroupService/ImportNested',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/FederationAck',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProjectGroupService/List': {
+  '/agent_start.runtime.v1.OrchestrationService/FederationAttachStart': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectGroupService/List',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/FederationAttachStart',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProjectGroupService/MoveProject': {
+  '/agent_start.runtime.v1.OrchestrationService/FederationImport': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectGroupService/MoveProject',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/FederationImport',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProjectGroupService/ScanNested': {
+  '/agent_start.runtime.v1.OrchestrationService/FederationPull': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectGroupService/ScanNested',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/FederationPull',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProjectGroupService/SubscribeEvents': {
+  '/agent_start.runtime.v1.OrchestrationService/FederationRead': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectGroupService/SubscribeEvents',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
-  },
-  '/yiru.runtime.v1.ProjectGroupService/Update': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectGroupService/Update',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/FederationRead',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProjectHostSetupService/Clone': {
+  '/agent_start.runtime.v1.OrchestrationService/FederationReadOutput': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectHostSetupService/Clone',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ProjectHostSetupService/Create': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectHostSetupService/Create',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ProjectHostSetupService/Delete': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectHostSetupService/Delete',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ProjectHostSetupService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectHostSetupService/List',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ProjectHostSetupService/SetupExistingFolder': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectHostSetupService/SetupExistingFolder',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ProjectHostSetupService/Update': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectHostSetupService/Update',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ProjectService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectService/List',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/FederationReadOutput',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProjectService/Update': {
+  '/agent_start.runtime.v1.OrchestrationService/FederationShow': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProjectService/Update',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/FederationShow',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProviderUsageService/GetScanState': {
+  '/agent_start.runtime.v1.OrchestrationService/FederationStop': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProviderUsageService/GetScanState',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/FederationStop',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProviderUsageService/GetSnapshot': {
+  '/agent_start.runtime.v1.OrchestrationService/GateCreate': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProviderUsageService/GetSnapshot',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/GateCreate',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProviderUsageService/Refresh': {
+  '/agent_start.runtime.v1.OrchestrationService/GateList': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProviderUsageService/Refresh',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/GateList',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ProviderUsageService/SetEnabled': {
+  '/agent_start.runtime.v1.OrchestrationService/GateResolve': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ProviderUsageService/SetEnabled',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/GateResolve',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RateLimitResumeService/Cancel': {
+  '/agent_start.runtime.v1.OrchestrationService/Inbox': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RateLimitResumeService/Cancel',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RateLimitResumeService/InspectCodex': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RateLimitResumeService/InspectCodex',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RateLimitResumeService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RateLimitResumeService/List',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RateLimitResumeService/MarkFailed': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RateLimitResumeService/MarkFailed',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RateLimitResumeService/MarkFired': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RateLimitResumeService/MarkFired',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RateLimitResumeService/MarkStale': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RateLimitResumeService/MarkStale',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RateLimitResumeService/RendererReady': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RateLimitResumeService/RendererReady',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RateLimitResumeService/RunNow': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RateLimitResumeService/RunNow',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RateLimitResumeService/Schedule': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RateLimitResumeService/Schedule',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RepoService/Add': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/Add',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/Inbox',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/BaseRefDefault': {
+  '/agent_start.runtime.v1.OrchestrationService/Reply': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/BaseRefDefault',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/Reply',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/Clone': {
+  '/agent_start.runtime.v1.OrchestrationService/Reset': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/Clone',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/Reset',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/Create': {
+  '/agent_start.runtime.v1.OrchestrationService/Run': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/Create',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/Run',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/GetHooks': {
+  '/agent_start.runtime.v1.OrchestrationService/RunCreate': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/GetHooks',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/RunCreate',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/GitAvailable': {
+  '/agent_start.runtime.v1.OrchestrationService/RunCurrent': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/GitAvailable',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/RunCurrent',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/Hooks': {
+  '/agent_start.runtime.v1.OrchestrationService/RunList': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/Hooks',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/RunList',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/HooksCheck': {
+  '/agent_start.runtime.v1.OrchestrationService/RunShow': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/HooksCheck',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/RunShow',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/List': {
+  '/agent_start.runtime.v1.OrchestrationService/RunStop': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/List',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/RunStop',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/RemoveSparsePreset': {
+  '/agent_start.runtime.v1.OrchestrationService/RunUse': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/RemoveSparsePreset',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/RunUse',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/Reorder': {
+  '/agent_start.runtime.v1.OrchestrationService/Send': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/Reorder',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/Send',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/Rm': {
+  '/agent_start.runtime.v1.OrchestrationService/TaskCreate': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/Rm',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/TaskCreate',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/SaveSparsePreset': {
+  '/agent_start.runtime.v1.OrchestrationService/TaskList': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/SaveSparsePreset',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/TaskList',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/SearchRefs': {
+  '/agent_start.runtime.v1.OrchestrationService/TaskUpdate': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/SearchRefs',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/TaskUpdate',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/SetupScriptImports': {
+  '/agent_start.runtime.v1.OrchestrationService/WorkerAbandon': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/SetupScriptImports',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/WorkerAbandon',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/SparsePresets': {
+  '/agent_start.runtime.v1.OrchestrationService/WorkerRead': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/SparsePresets',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/WorkerRead',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RepoService/Update': {
+  '/agent_start.runtime.v1.OrchestrationService/WorkerShow': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RepoService/Update',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/WorkerShow',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RitualService/GetSchedule': {
+  '/agent_start.runtime.v1.OrchestrationService/WorkerStart': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RitualService/GetSchedule',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/WorkerStart',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RitualService/Run': {
+  '/agent_start.runtime.v1.OrchestrationService/WorkerStop': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RitualService/Run',
+    procedure: '/agent_start.runtime.v1.OrchestrationService/WorkerStop',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RitualService/SetSchedule': {
+  '/agent_start.runtime.v1.PreflightService/Check': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RitualService/SetSchedule',
+    procedure: '/agent_start.runtime.v1.PreflightService/Check',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.RuntimeEnvironmentService/Disconnect': {
+  '/agent_start.runtime.v1.PreflightService/DetectAgents': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RuntimeEnvironmentService/Disconnect',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RuntimeEnvironmentService/GenerateOffer': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RuntimeEnvironmentService/GenerateOffer',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RuntimeEnvironmentService/GetStatus': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RuntimeEnvironmentService/GetStatus',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RuntimeEnvironmentService/Import': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RuntimeEnvironmentService/Import',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RuntimeEnvironmentService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RuntimeEnvironmentService/List',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RuntimeEnvironmentService/ListPeers': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RuntimeEnvironmentService/ListPeers',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RuntimeEnvironmentService/Remove': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RuntimeEnvironmentService/Remove',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.RuntimeEnvironmentService/RevokePeer': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.RuntimeEnvironmentService/RevokePeer',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SessionTabsService/Activate': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/Activate',
+    procedure: '/agent_start.runtime.v1.PreflightService/DetectAgents',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SessionTabsService/Close': {
+  '/agent_start.runtime.v1.PreflightService/DetectRemoteAgents': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/Close',
+    procedure: '/agent_start.runtime.v1.PreflightService/DetectRemoteAgents',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SessionTabsService/CreateTerminal': {
+  '/agent_start.runtime.v1.PreflightService/RefreshAgents': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/CreateTerminal',
+    procedure: '/agent_start.runtime.v1.PreflightService/RefreshAgents',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SessionTabsService/List': {
+  '/agent_start.runtime.v1.ProgressEventsService/Subscribe': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/List',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SessionTabsService/ListAll': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/ListAll',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SessionTabsService/Move': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/Move',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SessionTabsService/SetTabProps': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/SetTabProps',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SessionTabsService/Subscribe': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/Subscribe',
+    procedure: '/agent_start.runtime.v1.ProgressEventsService/Subscribe',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
   },
-  '/yiru.runtime.v1.SessionTabsService/SubscribeAll': {
+  '/agent_start.runtime.v1.ProjectContextService/Resolve': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/SubscribeAll',
+    procedure: '/agent_start.runtime.v1.ProjectContextService/Resolve',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectGroupService/CancelNestedScan': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectGroupService/CancelNestedScan',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectGroupService/Create': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectGroupService/Create',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectGroupService/Delete': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectGroupService/Delete',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectGroupService/ImportNested': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectGroupService/ImportNested',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectGroupService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectGroupService/List',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectGroupService/MoveProject': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectGroupService/MoveProject',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectGroupService/ScanNested': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectGroupService/ScanNested',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectGroupService/SubscribeEvents': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectGroupService/SubscribeEvents',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
   },
-  '/yiru.runtime.v1.SessionTabsService/Unsubscribe': {
+  '/agent_start.runtime.v1.ProjectGroupService/Update': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/Unsubscribe',
+    procedure: '/agent_start.runtime.v1.ProjectGroupService/Update',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SessionTabsService/UnsubscribeAll': {
+  '/agent_start.runtime.v1.ProjectHostSetupService/Clone': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/UnsubscribeAll',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SessionTabsService/UpdatePaneLayout': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SessionTabsService/UpdatePaneLayout',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SettingsService/Get': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SettingsService/Get',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SettingsService/GetDocument': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SettingsService/GetDocument',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SettingsService/GetTerminalQuickCommands': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SettingsService/GetTerminalQuickCommands',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SettingsService/ListFonts': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SettingsService/ListFonts',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SettingsService/PreviewGhosttyImport': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SettingsService/PreviewGhosttyImport',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SettingsService/PreviewWarpThemeImport': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SettingsService/PreviewWarpThemeImport',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SettingsService/SetDocument': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SettingsService/SetDocument',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SettingsService/Update': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SettingsService/Update',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SettingsService/UpdatePRBotAuthorOverride': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SettingsService/UpdatePRBotAuthorOverride',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SettingsService/UpdateTerminalQuickCommands': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SettingsService/UpdateTerminalQuickCommands',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ShellCacheService/GetGitHub': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellCacheService/GetGitHub',
+    procedure: '/agent_start.runtime.v1.ProjectHostSetupService/Clone',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellCacheService/SetGitHub': {
+  '/agent_start.runtime.v1.ProjectHostSetupService/Create': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellCacheService/SetGitHub',
+    procedure: '/agent_start.runtime.v1.ProjectHostSetupService/Create',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellEventsService/Subscribe': {
+  '/agent_start.runtime.v1.ProjectHostSetupService/Delete': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellEventsService/Subscribe',
+    procedure: '/agent_start.runtime.v1.ProjectHostSetupService/Delete',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectHostSetupService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectHostSetupService/List',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectHostSetupService/SetupExistingFolder': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectHostSetupService/SetupExistingFolder',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectHostSetupService/Update': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectHostSetupService/Update',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectService/List',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectService/Update': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectService/Update',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProviderUsageService/GetScanState': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProviderUsageService/GetScanState',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProviderUsageService/GetSnapshot': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProviderUsageService/GetSnapshot',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProviderUsageService/Refresh': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProviderUsageService/Refresh',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProviderUsageService/SetEnabled': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProviderUsageService/SetEnabled',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RateLimitResumeService/Cancel': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RateLimitResumeService/Cancel',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RateLimitResumeService/InspectCodex': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RateLimitResumeService/InspectCodex',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RateLimitResumeService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RateLimitResumeService/List',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RateLimitResumeService/MarkFailed': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RateLimitResumeService/MarkFailed',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RateLimitResumeService/MarkFired': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RateLimitResumeService/MarkFired',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RateLimitResumeService/MarkStale': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RateLimitResumeService/MarkStale',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RateLimitResumeService/RendererReady': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RateLimitResumeService/RendererReady',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RateLimitResumeService/RunNow': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RateLimitResumeService/RunNow',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RateLimitResumeService/Schedule': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RateLimitResumeService/Schedule',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/Add': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/Add',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/BaseRefDefault': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/BaseRefDefault',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/Clone': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/Clone',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/Create': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/Create',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/GetHooks': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/GetHooks',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/GitAvailable': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/GitAvailable',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/Hooks': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/Hooks',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/HooksCheck': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/HooksCheck',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/List',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/RemoveSparsePreset': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/RemoveSparsePreset',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/Reorder': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/Reorder',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/Rm': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/Rm',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/SaveSparsePreset': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/SaveSparsePreset',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/SearchRefs': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/SearchRefs',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/SetupScriptImports': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/SetupScriptImports',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/SparsePresets': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/SparsePresets',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RepoService/Update': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RepoService/Update',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RitualService/GetSchedule': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RitualService/GetSchedule',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RitualService/Run': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RitualService/Run',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RitualService/SetSchedule': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RitualService/SetSchedule',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RuntimeEnvironmentService/Disconnect': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RuntimeEnvironmentService/Disconnect',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RuntimeEnvironmentService/GenerateOffer': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RuntimeEnvironmentService/GenerateOffer',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RuntimeEnvironmentService/GetStatus': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RuntimeEnvironmentService/GetStatus',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RuntimeEnvironmentService/Import': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RuntimeEnvironmentService/Import',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RuntimeEnvironmentService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RuntimeEnvironmentService/List',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RuntimeEnvironmentService/ListPeers': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RuntimeEnvironmentService/ListPeers',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RuntimeEnvironmentService/Remove': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RuntimeEnvironmentService/Remove',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.RuntimeEnvironmentService/RevokePeer': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.RuntimeEnvironmentService/RevokePeer',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SessionTabsService/Activate': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/Activate',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SessionTabsService/Close': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/Close',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SessionTabsService/CreateTerminal': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/CreateTerminal',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SessionTabsService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/List',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SessionTabsService/ListAll': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/ListAll',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SessionTabsService/Move': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/Move',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SessionTabsService/SetTabProps': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/SetTabProps',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SessionTabsService/Subscribe': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/Subscribe',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
+  },
+  '/agent_start.runtime.v1.SessionTabsService/SubscribeAll': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/SubscribeAll',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
+  },
+  '/agent_start.runtime.v1.SessionTabsService/Unsubscribe': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/Unsubscribe',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SessionTabsService/UnsubscribeAll': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/UnsubscribeAll',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SessionTabsService/UpdatePaneLayout': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SessionTabsService/UpdatePaneLayout',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SettingsService/Get': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SettingsService/Get',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SettingsService/GetDocument': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SettingsService/GetDocument',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SettingsService/GetTerminalQuickCommands': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SettingsService/GetTerminalQuickCommands',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SettingsService/ListFonts': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SettingsService/ListFonts',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SettingsService/PreviewGhosttyImport': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SettingsService/PreviewGhosttyImport',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SettingsService/PreviewWarpThemeImport': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SettingsService/PreviewWarpThemeImport',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SettingsService/SetDocument': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SettingsService/SetDocument',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SettingsService/Update': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SettingsService/Update',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SettingsService/UpdatePRBotAuthorOverride': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SettingsService/UpdatePRBotAuthorOverride',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.SettingsService/UpdateTerminalQuickCommands': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.SettingsService/UpdateTerminalQuickCommands',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ShellAgentStartProfilesService/CreateLocal': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ShellAgentStartProfilesService/CreateLocal',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ShellAgentStartProfilesService/FindProjectProfiles': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ShellAgentStartProfilesService/FindProjectProfiles',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ShellAgentStartProfilesService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ShellAgentStartProfilesService/List',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ShellAgentStartProfilesService/SwitchProfile': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ShellAgentStartProfilesService/SwitchProfile',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ShellAgentStartProfilesService/TransferProject': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ShellAgentStartProfilesService/TransferProject',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ShellCacheService/GetGitHub': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ShellCacheService/GetGitHub',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ShellCacheService/SetGitHub': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ShellCacheService/SetGitHub',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ShellEventsService/Subscribe': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ShellEventsService/Subscribe',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
   },
-  '/yiru.runtime.v1.ShellFilesService/AuthorizeExternalPath': {
+  '/agent_start.runtime.v1.ShellFilesService/AuthorizeExternalPath': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/AuthorizeExternalPath',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/AuthorizeExternalPath',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/Copy': {
+  '/agent_start.runtime.v1.ShellFilesService/Copy': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/Copy',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/Copy',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/CreateDirectory': {
+  '/agent_start.runtime.v1.ShellFilesService/CreateDirectory': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/CreateDirectory',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/CreateDirectory',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/CreateFile': {
+  '/agent_start.runtime.v1.ShellFilesService/CreateFile': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/CreateFile',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/CreateFile',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/Delete': {
+  '/agent_start.runtime.v1.ShellFilesService/Delete': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/Delete',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/Delete',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/PathExists': {
+  '/agent_start.runtime.v1.ShellFilesService/PathExists': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/PathExists',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/PathExists',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/Read': {
+  '/agent_start.runtime.v1.ShellFilesService/Read': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/Read',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/Read',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/ReadChunk': {
+  '/agent_start.runtime.v1.ShellFilesService/ReadChunk': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/ReadChunk',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/ReadChunk',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/Rename': {
+  '/agent_start.runtime.v1.ShellFilesService/Rename': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/Rename',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/Rename',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/ResolveDroppedPathsForAgent': {
+  '/agent_start.runtime.v1.ShellFilesService/ResolveDroppedPathsForAgent': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/ResolveDroppedPathsForAgent',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/ResolveDroppedPathsForAgent',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/StageExternalPathsForRuntimeUpload': {
+  '/agent_start.runtime.v1.ShellFilesService/StageExternalPathsForRuntimeUpload': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/StageExternalPathsForRuntimeUpload',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/StageExternalPathsForRuntimeUpload',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/Stat': {
+  '/agent_start.runtime.v1.ShellFilesService/Stat': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/Stat',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/Stat',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellFilesService/Write': {
+  '/agent_start.runtime.v1.ShellFilesService/Write': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellFilesService/Write',
+    procedure: '/agent_start.runtime.v1.ShellFilesService/Write',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellHostService/Execute': {
+  '/agent_start.runtime.v1.ShellHostService/Execute': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellHostService/Execute',
+    procedure: '/agent_start.runtime.v1.ShellHostService/Execute',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellHostService/Register': {
+  '/agent_start.runtime.v1.ShellHostService/Register': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellHostService/Register',
+    procedure: '/agent_start.runtime.v1.ShellHostService/Register',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellKeybindingsService/EnsureFile': {
+  '/agent_start.runtime.v1.ShellKeybindingsService/EnsureFile': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellKeybindingsService/EnsureFile',
+    procedure: '/agent_start.runtime.v1.ShellKeybindingsService/EnsureFile',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellKeybindingsService/Get': {
+  '/agent_start.runtime.v1.ShellKeybindingsService/Get': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellKeybindingsService/Get',
+    procedure: '/agent_start.runtime.v1.ShellKeybindingsService/Get',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellKeybindingsService/OpenFile': {
+  '/agent_start.runtime.v1.ShellKeybindingsService/OpenFile': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellKeybindingsService/OpenFile',
+    procedure: '/agent_start.runtime.v1.ShellKeybindingsService/OpenFile',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellKeybindingsService/Reload': {
+  '/agent_start.runtime.v1.ShellKeybindingsService/Reload': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellKeybindingsService/Reload',
+    procedure: '/agent_start.runtime.v1.ShellKeybindingsService/Reload',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellKeybindingsService/RevealFile': {
+  '/agent_start.runtime.v1.ShellKeybindingsService/RevealFile': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellKeybindingsService/RevealFile',
+    procedure: '/agent_start.runtime.v1.ShellKeybindingsService/RevealFile',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellKeybindingsService/SetAction': {
+  '/agent_start.runtime.v1.ShellKeybindingsService/SetAction': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellKeybindingsService/SetAction',
+    procedure: '/agent_start.runtime.v1.ShellKeybindingsService/SetAction',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellOnboardingService/Get': {
+  '/agent_start.runtime.v1.ShellOnboardingService/Get': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellOnboardingService/Get',
+    procedure: '/agent_start.runtime.v1.ShellOnboardingService/Get',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellOnboardingService/Update': {
+  '/agent_start.runtime.v1.ShellOnboardingService/Update': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellOnboardingService/Update',
+    procedure: '/agent_start.runtime.v1.ShellOnboardingService/Update',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellPlatformService/OpenFilePath': {
+  '/agent_start.runtime.v1.ShellPlatformService/GetSystemAccentColor': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellPlatformService/OpenFilePath',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/GetSystemAccentColor',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellPlatformService/OpenFileUri': {
+  '/agent_start.runtime.v1.ShellPlatformService/OpenFilePath': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellPlatformService/OpenFileUri',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/OpenFilePath',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellPlatformService/OpenInExternalEditor': {
+  '/agent_start.runtime.v1.ShellPlatformService/OpenFileUri': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellPlatformService/OpenInExternalEditor',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/OpenFileUri',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellPlatformService/OpenInFileManager': {
+  '/agent_start.runtime.v1.ShellPlatformService/OpenInExternalEditor': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellPlatformService/OpenInFileManager',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/OpenInExternalEditor',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellPlatformService/OpenPath': {
+  '/agent_start.runtime.v1.ShellPlatformService/OpenInFileManager': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellPlatformService/OpenPath',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/OpenInFileManager',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellPlatformService/PathExists': {
+  '/agent_start.runtime.v1.ShellPlatformService/OpenPath': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellPlatformService/PathExists',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/OpenPath',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellPlatformService/PickAttachment': {
+  '/agent_start.runtime.v1.ShellPlatformService/PathExists': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellPlatformService/PickAttachment',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/PathExists',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellPlatformService/PickAudio': {
+  '/agent_start.runtime.v1.ShellPlatformService/PickAttachment': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellPlatformService/PickAudio',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/PickAttachment',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellPlatformService/PickDirectory': {
+  '/agent_start.runtime.v1.ShellPlatformService/PickAudio': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellPlatformService/PickDirectory',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/PickAudio',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellPlatformService/PickImage': {
+  '/agent_start.runtime.v1.ShellPlatformService/PickDirectory': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellPlatformService/PickImage',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/PickDirectory',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellRepoHostService/CloneAbort': {
+  '/agent_start.runtime.v1.ShellPlatformService/PickImage': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellRepoHostService/CloneAbort',
+    procedure: '/agent_start.runtime.v1.ShellPlatformService/PickImage',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellRepoHostService/GetDefaultCreateProjectParent': {
+  '/agent_start.runtime.v1.ShellRepoHostService/CloneAbort': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellRepoHostService/GetDefaultCreateProjectParent',
+    procedure: '/agent_start.runtime.v1.ShellRepoHostService/CloneAbort',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellRepoHostService/PickDirectory': {
+  '/agent_start.runtime.v1.ShellRepoHostService/GetDefaultCreateProjectParent': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellRepoHostService/PickDirectory',
+    procedure: '/agent_start.runtime.v1.ShellRepoHostService/GetDefaultCreateProjectParent',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellRepoHostService/PickFolder': {
+  '/agent_start.runtime.v1.ShellRepoHostService/PickDirectory': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellRepoHostService/PickFolder',
+    procedure: '/agent_start.runtime.v1.ShellRepoHostService/PickDirectory',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellRepoHostService/PickFolders': {
+  '/agent_start.runtime.v1.ShellRepoHostService/PickFolder': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellRepoHostService/PickFolders',
+    procedure: '/agent_start.runtime.v1.ShellRepoHostService/PickFolder',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellRepoHostService/RemoveForHost': {
+  '/agent_start.runtime.v1.ShellRepoHostService/PickFolders': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellRepoHostService/RemoveForHost',
+    procedure: '/agent_start.runtime.v1.ShellRepoHostService/PickFolders',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellRepoHostService/ReorderForHost': {
+  '/agent_start.runtime.v1.ShellRepoHostService/RemoveForHost': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellRepoHostService/ReorderForHost',
+    procedure: '/agent_start.runtime.v1.ShellRepoHostService/RemoveForHost',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellRuntimeService/SyncWindowGraph': {
+  '/agent_start.runtime.v1.ShellRepoHostService/ReorderForHost': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellRuntimeService/SyncWindowGraph',
+    procedure: '/agent_start.runtime.v1.ShellRepoHostService/ReorderForHost',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellSessionService/Flush': {
+  '/agent_start.runtime.v1.ShellRuntimeService/SyncWindowGraph': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellSessionService/Flush',
+    procedure: '/agent_start.runtime.v1.ShellRuntimeService/SyncWindowGraph',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellSessionService/Get': {
+  '/agent_start.runtime.v1.ShellSessionService/Flush': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellSessionService/Get',
+    procedure: '/agent_start.runtime.v1.ShellSessionService/Flush',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellSessionService/Patch': {
+  '/agent_start.runtime.v1.ShellSessionService/Get': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellSessionService/Patch',
+    procedure: '/agent_start.runtime.v1.ShellSessionService/Get',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellSessionService/Set': {
+  '/agent_start.runtime.v1.ShellSessionService/Patch': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellSessionService/Set',
+    procedure: '/agent_start.runtime.v1.ShellSessionService/Patch',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellSessionService/Watch': {
+  '/agent_start.runtime.v1.ShellSessionService/Set': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellSessionService/Watch',
+    procedure: '/agent_start.runtime.v1.ShellSessionService/Set',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ShellSessionService/Watch': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ShellSessionService/Watch',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
   },
-  '/yiru.runtime.v1.ShellTelemetryService/AcknowledgeBanner': {
+  '/agent_start.runtime.v1.ShellTelemetryService/AcknowledgeBanner': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellTelemetryService/AcknowledgeBanner',
+    procedure: '/agent_start.runtime.v1.ShellTelemetryService/AcknowledgeBanner',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellTelemetryService/GetConsentState': {
+  '/agent_start.runtime.v1.ShellTelemetryService/GetConsentState': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellTelemetryService/GetConsentState',
+    procedure: '/agent_start.runtime.v1.ShellTelemetryService/GetConsentState',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellTelemetryService/SetOptIn': {
+  '/agent_start.runtime.v1.ShellTelemetryService/SetOptIn': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellTelemetryService/SetOptIn',
+    procedure: '/agent_start.runtime.v1.ShellTelemetryService/SetOptIn',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellTelemetryService/Track': {
+  '/agent_start.runtime.v1.ShellTelemetryService/Track': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellTelemetryService/Track',
+    procedure: '/agent_start.runtime.v1.ShellTelemetryService/Track',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.ShellYiruProfilesService/CreateLocal': {
+  '/agent_start.runtime.v1.SkillsService/Discover': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellYiruProfilesService/CreateLocal',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ShellYiruProfilesService/FindProjectProfiles': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellYiruProfilesService/FindProjectProfiles',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ShellYiruProfilesService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellYiruProfilesService/List',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ShellYiruProfilesService/SwitchProfile': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellYiruProfilesService/SwitchProfile',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.ShellYiruProfilesService/TransferProject': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.ShellYiruProfilesService/TransferProject',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.SkillsService/Discover': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/Discover',
+    procedure: '/agent_start.runtime.v1.SkillsService/Discover',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SkillsService/ManageAcknowledgeUpdateRun': {
+  '/agent_start.runtime.v1.SkillsService/ManageAcknowledgeUpdateRun': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/ManageAcknowledgeUpdateRun',
+    procedure: '/agent_start.runtime.v1.SkillsService/ManageAcknowledgeUpdateRun',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SkillsService/ManageCancelUpdateRun': {
+  '/agent_start.runtime.v1.SkillsService/ManageCancelUpdateRun': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/ManageCancelUpdateRun',
+    procedure: '/agent_start.runtime.v1.SkillsService/ManageCancelUpdateRun',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SkillsService/ManageEventsSubscribe': {
+  '/agent_start.runtime.v1.SkillsService/ManageEventsSubscribe': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/ManageEventsSubscribe',
+    procedure: '/agent_start.runtime.v1.SkillsService/ManageEventsSubscribe',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SkillsService/ManageFreshnessInventory': {
+  '/agent_start.runtime.v1.SkillsService/ManageFreshnessInventory': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/ManageFreshnessInventory',
+    procedure: '/agent_start.runtime.v1.SkillsService/ManageFreshnessInventory',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SkillsService/ManageGetUpdateRun': {
+  '/agent_start.runtime.v1.SkillsService/ManageGetUpdateRun': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/ManageGetUpdateRun',
+    procedure: '/agent_start.runtime.v1.SkillsService/ManageGetUpdateRun',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SkillsService/ManageListSkillFiles': {
+  '/agent_start.runtime.v1.SkillsService/ManageListSkillFiles': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/ManageListSkillFiles',
+    procedure: '/agent_start.runtime.v1.SkillsService/ManageListSkillFiles',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SkillsService/ManageReadSkillDirFile': {
+  '/agent_start.runtime.v1.SkillsService/ManageReadSkillDirFile': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/ManageReadSkillDirFile',
+    procedure: '/agent_start.runtime.v1.SkillsService/ManageReadSkillDirFile',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SkillsService/ManageStartInstallRun': {
+  '/agent_start.runtime.v1.SkillsService/ManageStartInstallRun': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/ManageStartInstallRun',
+    procedure: '/agent_start.runtime.v1.SkillsService/ManageStartInstallRun',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SkillsService/ManageStartRemoveRun': {
+  '/agent_start.runtime.v1.SkillsService/ManageStartRemoveRun': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/ManageStartRemoveRun',
+    procedure: '/agent_start.runtime.v1.SkillsService/ManageStartRemoveRun',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.SkillsService/ManageStartUpdateRun': {
+  '/agent_start.runtime.v1.SkillsService/ManageStartUpdateRun': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.SkillsService/ManageStartUpdateRun',
+    procedure: '/agent_start.runtime.v1.SkillsService/ManageStartUpdateRun',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.StarNagShellService/AgentValueMoment': {
+  '/agent_start.runtime.v1.StarNagShellService/AgentValueMoment': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.StarNagShellService/AgentValueMoment',
+    procedure: '/agent_start.runtime.v1.StarNagShellService/AgentValueMoment',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.StarNagShellService/Complete': {
+  '/agent_start.runtime.v1.StarNagShellService/Complete': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.StarNagShellService/Complete',
+    procedure: '/agent_start.runtime.v1.StarNagShellService/Complete',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.StarNagShellService/Dismiss': {
+  '/agent_start.runtime.v1.StarNagShellService/Dismiss': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.StarNagShellService/Dismiss',
+    procedure: '/agent_start.runtime.v1.StarNagShellService/Dismiss',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.StarNagShellService/Later': {
+  '/agent_start.runtime.v1.StarNagShellService/Later': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.StarNagShellService/Later',
+    procedure: '/agent_start.runtime.v1.StarNagShellService/Later',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.StarNagShellService/OnboardingCompleted': {
+  '/agent_start.runtime.v1.StarNagShellService/OnboardingCompleted': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.StarNagShellService/OnboardingCompleted',
+    procedure: '/agent_start.runtime.v1.StarNagShellService/OnboardingCompleted',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.StarNagShellService/OpenWeb': {
+  '/agent_start.runtime.v1.StarNagShellService/OpenWeb': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.StarNagShellService/OpenWeb',
+    procedure: '/agent_start.runtime.v1.StarNagShellService/OpenWeb',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.StarNagShellService/ShowAgentValueMoment': {
+  '/agent_start.runtime.v1.StarNagShellService/ShowAgentValueMoment': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.StarNagShellService/ShowAgentValueMoment',
+    procedure: '/agent_start.runtime.v1.StarNagShellService/ShowAgentValueMoment',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.StarNagShellService/StarYiru': {
+  '/agent_start.runtime.v1.StarNagShellService/StarAgentStart': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.StarNagShellService/StarYiru',
+    procedure: '/agent_start.runtime.v1.StarNagShellService/StarAgentStart',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.StatsService/GetSummary': {
+  '/agent_start.runtime.v1.StatsService/GetSummary': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.StatsService/GetSummary',
+    procedure: '/agent_start.runtime.v1.StatsService/GetSummary',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.StatusService/GetStatus': {
+  '/agent_start.runtime.v1.StatusService/GetStatus': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.StatusService/GetStatus',
+    procedure: '/agent_start.runtime.v1.StatusService/GetStatus',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalFitService/GetDrivers': {
+  '/agent_start.runtime.v1.TerminalFitService/GetDrivers': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalFitService/GetDrivers',
+    procedure: '/agent_start.runtime.v1.TerminalFitService/GetDrivers',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalFitService/GetOverrides': {
+  '/agent_start.runtime.v1.TerminalFitService/GetOverrides': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalFitService/GetOverrides',
+    procedure: '/agent_start.runtime.v1.TerminalFitService/GetOverrides',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalFitService/Restore': {
+  '/agent_start.runtime.v1.TerminalFitService/Restore': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalFitService/Restore',
+    procedure: '/agent_start.runtime.v1.TerminalFitService/Restore',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalPreferencesService/GetAutoRestoreFit': {
+  '/agent_start.runtime.v1.TerminalPreferencesService/GetAutoRestoreFit': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalPreferencesService/GetAutoRestoreFit',
+    procedure: '/agent_start.runtime.v1.TerminalPreferencesService/GetAutoRestoreFit',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalPreferencesService/SetAutoRestoreFit': {
+  '/agent_start.runtime.v1.TerminalPreferencesService/SetAutoRestoreFit': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalPreferencesService/SetAutoRestoreFit',
+    procedure: '/agent_start.runtime.v1.TerminalPreferencesService/SetAutoRestoreFit',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Approve': {
+  '/agent_start.runtime.v1.TerminalService/Approve': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Approve',
+    procedure: '/agent_start.runtime.v1.TerminalService/Approve',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/ClearBuffer': {
+  '/agent_start.runtime.v1.TerminalService/ClearBuffer': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/ClearBuffer',
+    procedure: '/agent_start.runtime.v1.TerminalService/ClearBuffer',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Close': {
+  '/agent_start.runtime.v1.TerminalService/Close': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Close',
+    procedure: '/agent_start.runtime.v1.TerminalService/Close',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/CloseTab': {
+  '/agent_start.runtime.v1.TerminalService/CloseTab': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/CloseTab',
+    procedure: '/agent_start.runtime.v1.TerminalService/CloseTab',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Create': {
+  '/agent_start.runtime.v1.TerminalService/Create': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Create',
+    procedure: '/agent_start.runtime.v1.TerminalService/Create',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Focus': {
+  '/agent_start.runtime.v1.TerminalService/Focus': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Focus',
+    procedure: '/agent_start.runtime.v1.TerminalService/Focus',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/GetAgentStatus': {
+  '/agent_start.runtime.v1.TerminalService/GetAgentStatus': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/GetAgentStatus',
+    procedure: '/agent_start.runtime.v1.TerminalService/GetAgentStatus',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/GetDisplayMode': {
+  '/agent_start.runtime.v1.TerminalService/GetDisplayMode': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/GetDisplayMode',
+    procedure: '/agent_start.runtime.v1.TerminalService/GetDisplayMode',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/InspectProcess': {
+  '/agent_start.runtime.v1.TerminalService/InspectProcess': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/InspectProcess',
+    procedure: '/agent_start.runtime.v1.TerminalService/InspectProcess',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/IsRunningAgent': {
+  '/agent_start.runtime.v1.TerminalService/IsRunningAgent': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/IsRunningAgent',
+    procedure: '/agent_start.runtime.v1.TerminalService/IsRunningAgent',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/KillAllManaged': {
+  '/agent_start.runtime.v1.TerminalService/KillAllManaged': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/KillAllManaged',
+    procedure: '/agent_start.runtime.v1.TerminalService/KillAllManaged',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/KillManaged': {
+  '/agent_start.runtime.v1.TerminalService/KillManaged': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/KillManaged',
+    procedure: '/agent_start.runtime.v1.TerminalService/KillManaged',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/List': {
+  '/agent_start.runtime.v1.TerminalService/List': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/List',
+    procedure: '/agent_start.runtime.v1.TerminalService/List',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/ListManagedSessions': {
+  '/agent_start.runtime.v1.TerminalService/ListManagedSessions': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/ListManagedSessions',
+    procedure: '/agent_start.runtime.v1.TerminalService/ListManagedSessions',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Multiplex': {
+  '/agent_start.runtime.v1.TerminalService/Multiplex': {
     clientStreaming: true,
-    procedure: '/yiru.runtime.v1.TerminalService/Multiplex',
+    procedure: '/agent_start.runtime.v1.TerminalService/Multiplex',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/OpenMultiplex': {
+  '/agent_start.runtime.v1.TerminalService/OpenMultiplex': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/OpenMultiplex',
+    procedure: '/agent_start.runtime.v1.TerminalService/OpenMultiplex',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Read': {
+  '/agent_start.runtime.v1.TerminalService/Read': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Read',
+    procedure: '/agent_start.runtime.v1.TerminalService/Read',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Rename': {
+  '/agent_start.runtime.v1.TerminalService/Rename': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Rename',
+    procedure: '/agent_start.runtime.v1.TerminalService/Rename',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/ResizeForClient': {
+  '/agent_start.runtime.v1.TerminalService/ResizeForClient': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/ResizeForClient',
+    procedure: '/agent_start.runtime.v1.TerminalService/ResizeForClient',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/ResolveActive': {
+  '/agent_start.runtime.v1.TerminalService/ResolveActive': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/ResolveActive',
+    procedure: '/agent_start.runtime.v1.TerminalService/ResolveActive',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/ResolvePane': {
+  '/agent_start.runtime.v1.TerminalService/ResolvePane': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/ResolvePane',
+    procedure: '/agent_start.runtime.v1.TerminalService/ResolvePane',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/RestartManaged': {
+  '/agent_start.runtime.v1.TerminalService/RestartManaged': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/RestartManaged',
+    procedure: '/agent_start.runtime.v1.TerminalService/RestartManaged',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/RestoreDesktopFit': {
+  '/agent_start.runtime.v1.TerminalService/RestoreDesktopFit': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/RestoreDesktopFit',
+    procedure: '/agent_start.runtime.v1.TerminalService/RestoreDesktopFit',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Send': {
+  '/agent_start.runtime.v1.TerminalService/Send': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Send',
+    procedure: '/agent_start.runtime.v1.TerminalService/Send',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/SetDisplayMode': {
+  '/agent_start.runtime.v1.TerminalService/SetDisplayMode': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/SetDisplayMode',
+    procedure: '/agent_start.runtime.v1.TerminalService/SetDisplayMode',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Show': {
+  '/agent_start.runtime.v1.TerminalService/Show': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Show',
+    procedure: '/agent_start.runtime.v1.TerminalService/Show',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Split': {
+  '/agent_start.runtime.v1.TerminalService/Split': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Split',
+    procedure: '/agent_start.runtime.v1.TerminalService/Split',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Stop': {
+  '/agent_start.runtime.v1.TerminalService/Stop': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Stop',
+    procedure: '/agent_start.runtime.v1.TerminalService/Stop',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/StopExact': {
+  '/agent_start.runtime.v1.TerminalService/StopExact': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/StopExact',
+    procedure: '/agent_start.runtime.v1.TerminalService/StopExact',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Unsubscribe': {
+  '/agent_start.runtime.v1.TerminalService/Unsubscribe': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Unsubscribe',
+    procedure: '/agent_start.runtime.v1.TerminalService/Unsubscribe',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/UpdateViewAttributes': {
+  '/agent_start.runtime.v1.TerminalService/UpdateViewAttributes': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/UpdateViewAttributes',
+    procedure: '/agent_start.runtime.v1.TerminalService/UpdateViewAttributes',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/UpdateViewport': {
+  '/agent_start.runtime.v1.TerminalService/UpdateViewport': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/UpdateViewport',
+    procedure: '/agent_start.runtime.v1.TerminalService/UpdateViewport',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.TerminalService/Wait': {
+  '/agent_start.runtime.v1.TerminalService/Wait': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.TerminalService/Wait',
+    procedure: '/agent_start.runtime.v1.TerminalService/Wait',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.UiService/Get': {
+  '/agent_start.runtime.v1.UiService/Get': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.UiService/Get',
+    procedure: '/agent_start.runtime.v1.UiService/Get',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.UiService/RecordFeatureInteraction': {
+  '/agent_start.runtime.v1.UiService/RecordFeatureInteraction': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.UiService/RecordFeatureInteraction',
+    procedure: '/agent_start.runtime.v1.UiService/RecordFeatureInteraction',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.UiService/Set': {
+  '/agent_start.runtime.v1.UiService/Set': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.UiService/Set',
+    procedure: '/agent_start.runtime.v1.UiService/Set',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.UpdaterService/Check': {
+  '/agent_start.runtime.v1.UpdaterService/Check': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.UpdaterService/Check',
+    procedure: '/agent_start.runtime.v1.UpdaterService/Check',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.UpdaterService/Download': {
+  '/agent_start.runtime.v1.UpdaterService/Download': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.UpdaterService/Download',
+    procedure: '/agent_start.runtime.v1.UpdaterService/Download',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.UpdaterService/GetStatus': {
+  '/agent_start.runtime.v1.UpdaterService/GetStatus': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.UpdaterService/GetStatus',
+    procedure: '/agent_start.runtime.v1.UpdaterService/GetStatus',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.UpdaterService/GetVersion': {
+  '/agent_start.runtime.v1.UpdaterService/GetVersion': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.UpdaterService/GetVersion',
+    procedure: '/agent_start.runtime.v1.UpdaterService/GetVersion',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.UpdaterService/Install': {
+  '/agent_start.runtime.v1.UpdaterService/Install': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.UpdaterService/Install',
+    procedure: '/agent_start.runtime.v1.UpdaterService/Install',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.UpdaterService/SubscribeStatus': {
+  '/agent_start.runtime.v1.UpdaterService/SubscribeStatus': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.UpdaterService/SubscribeStatus',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
-  },
-  '/yiru.runtime.v1.VisualRegressionService/Latest': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.VisualRegressionService/Latest',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.VisualRegressionService/Save': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.VisualRegressionService/Save',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WindowsFirewallService/GetStatus': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WindowsFirewallService/GetStatus',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WindowsFirewallService/OpenNetworkSettings': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WindowsFirewallService/OpenNetworkSettings',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WindowsFirewallService/Repair': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WindowsFirewallService/Repair',
-    route: RuntimeRoutePolicy.LOCAL_ONLY,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WorkspaceCleanupService/ClearDismissals': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceCleanupService/ClearDismissals',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WorkspaceCleanupService/Dismiss': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceCleanupService/Dismiss',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WorkspaceCleanupService/Scan': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceCleanupService/Scan',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WorkspaceCleanupService/SubscribeEvents': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceCleanupService/SubscribeEvents',
+    procedure: '/agent_start.runtime.v1.UpdaterService/SubscribeStatus',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
   },
-  '/yiru.runtime.v1.WorkspaceEventsService/AppendConsole': {
+  '/agent_start.runtime.v1.VisualRegressionService/Latest': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceEventsService/AppendConsole',
+    procedure: '/agent_start.runtime.v1.VisualRegressionService/Latest',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorkspaceEventsService/AppendPerformance': {
+  '/agent_start.runtime.v1.VisualRegressionService/Save': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceEventsService/AppendPerformance',
+    procedure: '/agent_start.runtime.v1.VisualRegressionService/Save',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorkspaceEventsService/GetProjectRevision': {
+  '/agent_start.runtime.v1.WindowsFirewallService/GetStatus': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceEventsService/GetProjectRevision',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WorkspaceEventsService/List': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceEventsService/List',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WorkspaceEventsService/Watch': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceEventsService/Watch',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
-  },
-  '/yiru.runtime.v1.WorkspacePortsService/Kill': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspacePortsService/Kill',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WorkspacePortsService/Scan': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspacePortsService/Scan',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WorkspacePortsService/SubscribeEvents': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspacePortsService/SubscribeEvents',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: true,
-    streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
-  },
-  '/yiru.runtime.v1.WorkspaceSpaceService/Analyze': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceSpaceService/Analyze',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WorkspaceSpaceService/Cancel': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorkspaceSpaceService/Cancel',
-    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
-    serverStreaming: false,
-    streamReconnect: StreamReconnectPolicy.FAIL
-  },
-  '/yiru.runtime.v1.WorktreeLabelsService/Register': {
-    clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeLabelsService/Register',
+    procedure: '/agent_start.runtime.v1.WindowsFirewallService/GetStatus',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/Activate': {
+  '/agent_start.runtime.v1.WindowsFirewallService/OpenNetworkSettings': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/Activate',
+    procedure: '/agent_start.runtime.v1.WindowsFirewallService/OpenNetworkSettings',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WindowsFirewallService/Repair': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WindowsFirewallService/Repair',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorkspaceCleanupService/ClearDismissals': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorkspaceCleanupService/ClearDismissals',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/Archive': {
+  '/agent_start.runtime.v1.WorkspaceCleanupService/Dismiss': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/Archive',
+    procedure: '/agent_start.runtime.v1.WorkspaceCleanupService/Dismiss',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/BranchRenameFailureOutput': {
+  '/agent_start.runtime.v1.WorkspaceCleanupService/Scan': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/BranchRenameFailureOutput',
+    procedure: '/agent_start.runtime.v1.WorkspaceCleanupService/Scan',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/Create': {
+  '/agent_start.runtime.v1.WorkspaceCleanupService/SubscribeEvents': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/Create',
+    procedure: '/agent_start.runtime.v1.WorkspaceCleanupService/SubscribeEvents',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
+  },
+  '/agent_start.runtime.v1.WorkspaceEventsService/AppendConsole': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorkspaceEventsService/AppendConsole',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/DetectedList': {
+  '/agent_start.runtime.v1.WorkspaceEventsService/AppendPerformance': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/DetectedList',
+    procedure: '/agent_start.runtime.v1.WorkspaceEventsService/AppendPerformance',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/ForceDeleteBranch': {
+  '/agent_start.runtime.v1.WorkspaceEventsService/GetProjectRevision': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/ForceDeleteBranch',
+    procedure: '/agent_start.runtime.v1.WorkspaceEventsService/GetProjectRevision',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/LineageList': {
+  '/agent_start.runtime.v1.WorkspaceEventsService/List': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/LineageList',
+    procedure: '/agent_start.runtime.v1.WorkspaceEventsService/List',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/List': {
+  '/agent_start.runtime.v1.WorkspaceEventsService/Watch': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/List',
+    procedure: '/agent_start.runtime.v1.WorkspaceEventsService/Watch',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
+  },
+  '/agent_start.runtime.v1.WorkspacePortsService/Kill': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorkspacePortsService/Kill',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/ListArchives': {
+  '/agent_start.runtime.v1.WorkspacePortsService/Scan': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/ListArchives',
+    procedure: '/agent_start.runtime.v1.WorkspacePortsService/Scan',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/PersistSortOrder': {
+  '/agent_start.runtime.v1.WorkspacePortsService/SubscribeEvents': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/PersistSortOrder',
+    procedure: '/agent_start.runtime.v1.WorkspacePortsService/SubscribeEvents',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: true,
+    streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST
+  },
+  '/agent_start.runtime.v1.WorkspaceSpaceService/Analyze': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorkspaceSpaceService/Analyze',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/PrefetchCreateBase': {
+  '/agent_start.runtime.v1.WorkspaceSpaceService/Cancel': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/PrefetchCreateBase',
+    procedure: '/agent_start.runtime.v1.WorkspaceSpaceService/Cancel',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/Ps': {
+  '/agent_start.runtime.v1.WorktreeLabelsService/Register': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/Ps',
+    procedure: '/agent_start.runtime.v1.WorktreeLabelsService/Register',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/Activate': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/Activate',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/Remove': {
+  '/agent_start.runtime.v1.WorktreeService/Archive': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/Remove',
+    procedure: '/agent_start.runtime.v1.WorktreeService/Archive',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/ResolvePrBase': {
+  '/agent_start.runtime.v1.WorktreeService/BranchRenameFailureOutput': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/ResolvePrBase',
+    procedure: '/agent_start.runtime.v1.WorktreeService/BranchRenameFailureOutput',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/Restore': {
+  '/agent_start.runtime.v1.WorktreeService/Create': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/Restore',
+    procedure: '/agent_start.runtime.v1.WorktreeService/Create',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/Set': {
+  '/agent_start.runtime.v1.WorktreeService/DetectedList': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/Set',
+    procedure: '/agent_start.runtime.v1.WorktreeService/DetectedList',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/Show': {
+  '/agent_start.runtime.v1.WorktreeService/ForceDeleteBranch': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/Show',
+    procedure: '/agent_start.runtime.v1.WorktreeService/ForceDeleteBranch',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/Sleep': {
+  '/agent_start.runtime.v1.WorktreeService/LineageList': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/Sleep',
+    procedure: '/agent_start.runtime.v1.WorktreeService/LineageList',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
-  '/yiru.runtime.v1.WorktreeService/SubscribeStateEvents': {
+  '/agent_start.runtime.v1.WorktreeService/List': {
     clientStreaming: false,
-    procedure: '/yiru.runtime.v1.WorktreeService/SubscribeStateEvents',
+    procedure: '/agent_start.runtime.v1.WorktreeService/List',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/ListArchives': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/ListArchives',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/PersistSortOrder': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/PersistSortOrder',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/PrefetchCreateBase': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/PrefetchCreateBase',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/Ps': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/Ps',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/Remove': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/Remove',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/ResolvePrBase': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/ResolvePrBase',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/Restore': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/Restore',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/Set': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/Set',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/Show': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/Show',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/Sleep': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/Sleep',
+    route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.WorktreeService/SubscribeStateEvents': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.WorktreeService/SubscribeStateEvents',
     route: RuntimeRoutePolicy.ENVIRONMENT_ALLOWED,
     serverStreaming: true,
     streamReconnect: StreamReconnectPolicy.RESTART_FROM_REQUEST

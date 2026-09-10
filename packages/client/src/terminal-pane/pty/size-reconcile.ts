@@ -25,7 +25,7 @@
 // (pty:getSize) and re-forwards on true drift, healing a pane that later
 // hides/shows.
 
-export type PtySizeReconcileDimensions = { cols: number; rows: number }
+type PtySizeReconcileDimensions = { cols: number; rows: number }
 
 export type PtySizeReconcileOptions = {
   /** Dimensions the PTY was spawned at — the size it currently believes it is. */

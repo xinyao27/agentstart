@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeStream } from './transport.js'
 

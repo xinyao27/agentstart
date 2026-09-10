@@ -1,7 +1,6 @@
 use crate::rpc::orchestration::protocol_status_code;
-use serde_json::Value;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     OrchestrationDispatch as ProtocolDispatch, OrchestrationDispatchStatus,
     OrchestrationEffect as ProtocolEffect, OrchestrationFieldEntry as ProtocolFieldEntry,
     OrchestrationFieldValue as ProtocolFieldValue, OrchestrationGate as ProtocolGate,
@@ -13,6 +12,7 @@ use yiru_protocol::runtime::v1::{
     OrchestrationWorkerSetupMode, OrchestrationWorkerSetupSource, OrchestrationWorkerState,
     orchestration_field_value::Value as FieldValueKind,
 };
+use serde_json::Value;
 
 use super::super::OrchestrationRpc;
 
@@ -353,9 +353,9 @@ pub(in crate::rpc) fn setup_mode(value: &str) -> OrchestrationWorkerSetupMode {
 
 pub(in crate::rpc) fn setup_receipt(
     value: &Value,
-) -> Result<yiru_protocol::runtime::v1::OrchestrationWorkerSetupReceipt, Status> {
+) -> Result<agentstart_protocol::runtime::v1::OrchestrationWorkerSetupReceipt, Status> {
     Ok(
-        yiru_protocol::runtime::v1::OrchestrationWorkerSetupReceipt {
+        agentstart_protocol::runtime::v1::OrchestrationWorkerSetupReceipt {
             requested: setup_mode(required_str(value, "requested")?) as i32,
             effective: setup_mode(required_str(value, "effective")?) as i32,
             source: required_str(value, "source")?.to_owned(),
@@ -402,8 +402,8 @@ pub(in crate::rpc) fn reset_scope_str(
 
 pub(in crate::rpc) fn process_action(
     value: &str,
-) -> yiru_protocol::runtime::v1::OrchestrationWorkerProcessAction {
-    use yiru_protocol::runtime::v1::OrchestrationWorkerProcessAction;
+) -> agentstart_protocol::runtime::v1::OrchestrationWorkerProcessAction {
+    use agentstart_protocol::runtime::v1::OrchestrationWorkerProcessAction;
     match value {
         "none" => OrchestrationWorkerProcessAction::None,
         "closed_agent_terminal" => OrchestrationWorkerProcessAction::ClosedAgentTerminal,
@@ -414,8 +414,8 @@ pub(in crate::rpc) fn process_action(
 
 pub(in crate::rpc) fn worker(
     value: &Value,
-) -> Result<yiru_protocol::runtime::v1::OrchestrationWorker, Status> {
-    Ok(yiru_protocol::runtime::v1::OrchestrationWorker {
+) -> Result<agentstart_protocol::runtime::v1::OrchestrationWorker, Status> {
+    Ok(agentstart_protocol::runtime::v1::OrchestrationWorker {
         dispatch_id: required_str(value, "dispatch_id")?.to_owned(),
         runtime_epoch: optional_str(value, "runtime_epoch"),
         state: worker_state(required_str(value, "state")?) as i32,
@@ -437,35 +437,37 @@ pub(in crate::rpc) fn worker(
 
 pub(in crate::rpc) fn remote_attachment(
     value: &Value,
-) -> Result<yiru_protocol::runtime::v1::OrchestrationRemoteAttachment, Status> {
-    Ok(yiru_protocol::runtime::v1::OrchestrationRemoteAttachment {
-        dispatch_id: required_str(value, "dispatch_id")?.to_owned(),
-        task_id: required_str(value, "task_id")?.to_owned(),
-        home_peer_fingerprint: required_str(value, "home_peer_fingerprint")?.to_owned(),
-        protocol_version: required_i64(value, "protocol_version")?,
-        runtime_epoch: required_str(value, "runtime_epoch")?.to_owned(),
-        capability_hash: optional_str(value, "capability_hash"),
-        pane_key: optional_str(value, "pane_key"),
-        process_incarnation: optional_str(value, "process_incarnation"),
-        state: worker_state(required_str(value, "state")?) as i32,
-        stage: required_str(value, "stage")?.to_owned(),
-        worktree_id: optional_str(value, "worktree_id"),
-        terminal_handle: optional_str(value, "terminal_handle"),
-        setup_state: required_str(value, "setup_state")?.to_owned(),
-        effects: effects(value, "effects"),
-        residual_resources: effects(value, "residualResources"),
-        to_worker_imported_sequence: required_i64(value, "to_worker_imported_sequence")?,
-        last_error: optional_str(value, "last_error"),
-        created_at: required_str(value, "created_at")?.to_owned(),
-        updated_at: required_str(value, "updated_at")?.to_owned(),
-    })
+) -> Result<agentstart_protocol::runtime::v1::OrchestrationRemoteAttachment, Status> {
+    Ok(
+        agentstart_protocol::runtime::v1::OrchestrationRemoteAttachment {
+            dispatch_id: required_str(value, "dispatch_id")?.to_owned(),
+            task_id: required_str(value, "task_id")?.to_owned(),
+            home_peer_fingerprint: required_str(value, "home_peer_fingerprint")?.to_owned(),
+            protocol_version: required_i64(value, "protocol_version")?,
+            runtime_epoch: required_str(value, "runtime_epoch")?.to_owned(),
+            capability_hash: optional_str(value, "capability_hash"),
+            pane_key: optional_str(value, "pane_key"),
+            process_incarnation: optional_str(value, "process_incarnation"),
+            state: worker_state(required_str(value, "state")?) as i32,
+            stage: required_str(value, "stage")?.to_owned(),
+            worktree_id: optional_str(value, "worktree_id"),
+            terminal_handle: optional_str(value, "terminal_handle"),
+            setup_state: required_str(value, "setup_state")?.to_owned(),
+            effects: effects(value, "effects"),
+            residual_resources: effects(value, "residualResources"),
+            to_worker_imported_sequence: required_i64(value, "to_worker_imported_sequence")?,
+            last_error: optional_str(value, "last_error"),
+            created_at: required_str(value, "created_at")?.to_owned(),
+            updated_at: required_str(value, "updated_at")?.to_owned(),
+        },
+    )
 }
 
 pub(in crate::rpc) fn relay_item(
     value: &Value,
-) -> Result<yiru_protocol::runtime::v1::OrchestrationFederationRelayItem, Status> {
+) -> Result<agentstart_protocol::runtime::v1::OrchestrationFederationRelayItem, Status> {
     Ok(
-        yiru_protocol::runtime::v1::OrchestrationFederationRelayItem {
+        agentstart_protocol::runtime::v1::OrchestrationFederationRelayItem {
             dispatch_id: required_str(value, "dispatch_id")?.to_owned(),
             direction: required_str(value, "direction")?.to_owned(),
             sequence: required_i64(value, "sequence")?,
@@ -587,8 +589,8 @@ pub(in crate::rpc) fn question(value: &Value) -> Result<ProtocolQuestion, Status
 
 pub(in crate::rpc) fn server_ref(
     value: &Value,
-) -> Result<yiru_protocol::runtime::v1::OrchestrationServerRef, Status> {
-    Ok(yiru_protocol::runtime::v1::OrchestrationServerRef {
+) -> Result<agentstart_protocol::runtime::v1::OrchestrationServerRef, Status> {
+    Ok(agentstart_protocol::runtime::v1::OrchestrationServerRef {
         environment_id: optional_str(value, "environmentId"),
         name: required_str(value, "name")?.to_owned(),
     })
@@ -601,8 +603,8 @@ pub(in crate::rpc) fn server_ref(
 // TerminalSummary message for the flattened part instead of redeclaring those fields here.
 pub(in crate::rpc) fn worker_terminal(
     value: &Value,
-) -> Result<yiru_protocol::runtime::v1::OrchestrationWorkerTerminal, Status> {
-    use yiru_protocol::runtime::v1::{OrchestrationWorkerTerminal, TerminalSummary};
+) -> Result<agentstart_protocol::runtime::v1::OrchestrationWorkerTerminal, Status> {
+    use agentstart_protocol::runtime::v1::{OrchestrationWorkerTerminal, TerminalSummary};
     let summary = TerminalSummary {
         handle: required_str(value, "handle")?.to_owned(),
         pty_id: optional_str(value, "ptyId"),
@@ -631,8 +633,8 @@ pub(in crate::rpc) fn worker_terminal(
 // read_worker_terminal in apps/daemon/src/orchestration/authority/workers.rs.
 pub(in crate::rpc) fn terminal_read(
     value: &Value,
-) -> Result<yiru_protocol::runtime::v1::TerminalRead, Status> {
-    use yiru_protocol::runtime::v1::{TerminalRead, TerminalState};
+) -> Result<agentstart_protocol::runtime::v1::TerminalRead, Status> {
+    use agentstart_protocol::runtime::v1::{TerminalRead, TerminalState};
     let status = match required_str(value, "status")? {
         "running" => TerminalState::Running,
         "exited" => TerminalState::Exited,
@@ -664,26 +666,28 @@ pub(in crate::rpc) fn terminal_read(
 
 pub(in crate::rpc) fn worker_read_result(
     value: &Value,
-) -> Result<yiru_protocol::runtime::v1::OrchestrationWorkerReadResult, Status> {
+) -> Result<agentstart_protocol::runtime::v1::OrchestrationWorkerReadResult, Status> {
     let status = field(value, "status")?;
-    Ok(yiru_protocol::runtime::v1::OrchestrationWorkerReadResult {
-        dispatch_id: required_str(value, "dispatchId")?.to_owned(),
-        terminal: Some(terminal_read(field(value, "terminal")?)?),
-        cursor: optional_str(value, "cursor"),
-        worker_state: required_str(status, "worker")?.to_owned(),
-        fallback_reason: optional_str(value, "fallbackReason").unwrap_or_default(),
-        warnings: value
-            .get("warnings")
-            .and_then(Value::as_array)
-            .map(|items| {
-                items
-                    .iter()
-                    .filter_map(Value::as_str)
-                    .map(str::to_owned)
-                    .collect()
-            })
-            .unwrap_or_default(),
-    })
+    Ok(
+        agentstart_protocol::runtime::v1::OrchestrationWorkerReadResult {
+            dispatch_id: required_str(value, "dispatchId")?.to_owned(),
+            terminal: Some(terminal_read(field(value, "terminal")?)?),
+            cursor: optional_str(value, "cursor"),
+            worker_state: required_str(status, "worker")?.to_owned(),
+            fallback_reason: optional_str(value, "fallbackReason").unwrap_or_default(),
+            warnings: value
+                .get("warnings")
+                .and_then(Value::as_array)
+                .map(|items| {
+                    items
+                        .iter()
+                        .filter_map(Value::as_str)
+                        .map(str::to_owned)
+                        .collect()
+                })
+                .unwrap_or_default(),
+        },
+    )
 }
 
 pub(in crate::rpc) fn gate(value: &Value) -> Result<ProtocolGate, Status> {

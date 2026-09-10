@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   RepoHooksCheckStatus,
   RepoHooksSource,
@@ -6,20 +6,20 @@ import {
   type RepoServiceHooksResponse,
   type RepoServiceSetupScriptImportsResponse,
   RepoSetupRunPolicy,
-  type RepoYiruHooks
-} from '../generated/yiru/runtime/v1/repo_pb.js'
+  type RepoAgentStartHooks
+} from '../generated/agent_start/runtime/v1/repo_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type {
   RepoHooksCheckResult,
   RepoHooksValue,
   RepoSetupImportCandidateValue,
-  RepoYiruHooksValue
+  RepoAgentStartHooksValue
 } from './repo-types.js'
 
 export function repoHooks(value: RepoServiceHooksResponse): RepoHooksValue {
   return {
     hasHooksFile: value.hasHooksFile,
-    hooks: value.hooks ? yiruHooks(value.hooks) : null,
+    hooks: value.hooks ? agentstartHooks(value.hooks) : null,
     setupRunPolicy: runPolicy(value.setupRunPolicy),
     source: hooksSource(value.source),
     ...(value.setupTrust
@@ -37,7 +37,7 @@ export function repoHooksCheck(value: RepoServiceHooksCheckResponse): RepoHooksC
   return {
     status: value.status === RepoHooksCheckStatus.OK ? 'ok' : 'error',
     hasHooks: value.hasHooks,
-    hooks: value.hooks ? yiruHooks(value.hooks) : null,
+    hooks: value.hooks ? agentstartHooks(value.hooks) : null,
     mayNeedUpdate: value.mayNeedUpdate
   }
 }
@@ -57,7 +57,7 @@ export function setupScriptImports(
   }))
 }
 
-function yiruHooks(value: RepoYiruHooks): RepoYiruHooksValue {
+function agentstartHooks(value: RepoAgentStartHooks): RepoAgentStartHooksValue {
   return {
     scripts: {
       ...(value.scripts?.setup === undefined ? {} : { setup: value.scripts.setup }),
@@ -94,8 +94,8 @@ function runPolicy(value: RepoSetupRunPolicy): RepoHooksValue['setupRunPolicy'] 
 
 function hooksSource(value: RepoHooksSource): RepoHooksValue['source'] {
   switch (value) {
-    case RepoHooksSource.YIRU_YAML:
-      return 'yiru.yaml'
+    case RepoHooksSource.AGENT_START_YAML:
+      return 'agentstart.yaml'
     case RepoHooksSource.LEGACY:
       return 'legacy'
     case RepoHooksSource.UNSPECIFIED:

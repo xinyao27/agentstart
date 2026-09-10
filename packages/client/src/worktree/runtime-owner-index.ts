@@ -1,7 +1,7 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 type WorktreeOwnerRecord = Pick<Worktree, 'id' | 'repoId' | 'hostId'>
 type RepoOwnerRecord = Pick<Repo, 'id' | 'connectionId' | 'executionHostId'>

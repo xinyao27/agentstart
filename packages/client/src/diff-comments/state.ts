@@ -1,4 +1,4 @@
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 import type { StateCreator } from 'zustand'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import { readProjectCatalogWorktree } from '~renderer/project-catalog/worktree-cache'
@@ -11,8 +11,6 @@ import {
 } from './comment-model'
 import { enqueueDiffCommentPersistence } from './comment-persistence'
 import { mutateDiffComments, rollbackDiffComments } from './optimistic-comments'
-
-export type { DiffCommentDeliverySnapshot } from './comment-model'
 
 export type DiffCommentsSlice = {
   getDiffComments: (worktreeId: string | null | undefined) => readonly DiffComment[]

@@ -1,11 +1,11 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
-import { getHiddenExternalWorktrees } from '@yiru/protocol/worktree/external/inbox'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
+import { getHiddenExternalWorktrees } from '@agentstart/protocol/worktree/external/inbox'
 import {
   effectiveExternalWorktreeVisibility,
   isLegacyRepoForExternalWorktreeVisibility
-} from '@yiru/protocol/worktree/external/ownership'
-import type { DetectedWorktreeListResult, Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/worktree/external/ownership'
+import type { DetectedWorktreeListResult, Worktree } from '@agentstart/protocol/worktree/model'
 
 import type { ImportedWorktreesCardCandidate } from './worktree-list/groups'
 

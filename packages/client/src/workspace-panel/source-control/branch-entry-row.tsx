@@ -1,4 +1,4 @@
-import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { GitBranchChangeEntry } from '@agentstart/protocol/git/branch-compare-types'
 import React from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import { translate } from '~renderer/i18n/i18n'

@@ -2,13 +2,13 @@ import type {
   CursorRateLimitRefreshContext,
   RateLimitRuntimeTarget,
   RateLimitState
-} from '@yiru/protocol/account-rate-types'
+} from '@agentstart/protocol/account-rate-types'
 import type { StateCreator } from 'zustand'
+import { translate } from '~renderer/i18n/i18n'
 import {
   consumeCodexRateLimitResetCredit,
   fetchInactiveClaudeRateLimitAccounts,
   fetchInactiveCodexRateLimitAccounts,
-  fetchRateLimitSnapshot,
   refreshClaudeRateLimitTarget,
   refreshCodexRateLimitTarget,
   refreshGrokRateLimitSnapshot,
@@ -51,10 +51,11 @@ export const createRateLimitSlice: StateCreator<AppState, [], [], RateLimitSlice
 
   fetchRateLimits: async () => {
     try {
-      const state = await fetchRateLimitSnapshot()
+      const state = await refreshRateLimitSnapshot()
       set({ rateLimits: state })
     } catch (error) {
-      console.error('Failed to fetch rate limits:', error)
+      setRateLimitFailure(set, get, error)
+      console.error('Failed to fetch rate limits.')
     }
   },
 
@@ -63,7 +64,8 @@ export const createRateLimitSlice: StateCreator<AppState, [], [], RateLimitSlice
       const state = await refreshRateLimitSnapshot(cursorContext)
       set({ rateLimits: state })
     } catch (error) {
-      console.error('Failed to refresh rate limits:', error)
+      setRateLimitFailure(set, get, error)
+      console.error('Failed to refresh rate limits.')
     }
   },
 
@@ -102,6 +104,7 @@ export const createRateLimitSlice: StateCreator<AppState, [], [], RateLimitSlice
       const state = await refreshClaudeRateLimitTarget(target)
       set({ rateLimits: state })
     } catch (error) {
+      setProviderRateLimitFailure(set, get, 'claude', error)
       console.error('Failed to refresh Claude usage for runtime:', error)
     }
   },
@@ -132,6 +135,7 @@ export const createRateLimitSlice: StateCreator<AppState, [], [], RateLimitSlice
       const state = await refreshCodexRateLimitTarget(target)
       set({ rateLimits: state })
     } catch (error) {
+      setProviderRateLimitFailure(set, get, 'codex', error)
       console.error('Failed to refresh Codex usage for runtime:', error)
     }
   },
@@ -166,3 +170,72 @@ export const createRateLimitSlice: StateCreator<AppState, [], [], RateLimitSlice
     set({ rateLimits: state })
   }
 })
+
+function setRateLimitFailure(
+  set: Parameters<typeof createRateLimitSlice>[0],
+  get: Parameters<typeof createRateLimitSlice>[1],
+  error: unknown
+): void {
+  const current = get().rateLimits
+  const message = rateLimitFailureMessage(error)
+  const updatedAt = Date.now()
+  const failed = (provider: 'claude' | 'codex') => ({
+    provider,
+    session: null,
+    weekly: null,
+    updatedAt,
+    error: message,
+    status: 'error' as const
+  })
+  set({
+    rateLimits: {
+      ...current,
+      claude:
+        current.claude !== null
+          ? { ...current.claude, error: message, status: 'error', updatedAt }
+          : (get().settings?.claudeManagedAccounts.length ?? 0) > 0
+            ? failed('claude')
+            : null,
+      codex:
+        current.codex !== null
+          ? { ...current.codex, error: message, status: 'error', updatedAt }
+          : (get().settings?.codexManagedAccounts.length ?? 0) > 0
+            ? failed('codex')
+            : null
+    }
+  })
+}
+
+function setProviderRateLimitFailure(
+  set: Parameters<typeof createRateLimitSlice>[0],
+  get: Parameters<typeof createRateLimitSlice>[1],
+  provider: 'claude' | 'codex',
+  error: unknown
+): void {
+  const current = get().rateLimits
+  const message = rateLimitFailureMessage(error)
+  const updatedAt = Date.now()
+  if (provider === 'claude') {
+    set({
+      rateLimits: {
+        ...current,
+        claude: current.claude
+          ? { ...current.claude, error: message, status: 'error', updatedAt }
+          : null
+      }
+    })
+    return
+  }
+  set({
+    rateLimits: {
+      ...current,
+      codex: current.codex ? { ...current.codex, error: message, status: 'error', updatedAt } : null
+    }
+  })
+}
+
+function rateLimitFailureMessage(error: unknown): string {
+  return error instanceof Error && error.message === 'Rate-limit refresh timed out.'
+    ? translate('usage.refreshTimedOut', 'Usage refresh timed out.')
+    : translate('usage.refreshFailed', 'Usage refresh failed.')
+}

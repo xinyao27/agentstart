@@ -37,7 +37,7 @@ export function EmulatorPaneToolbar({
   onHome,
   onRotate
 }: EmulatorPaneToolbarProps) {
-  // Why: the toolbar chip describes Yiru's preview/control stream, not the
+  // Why: the toolbar chip describes AgentStart's preview/control stream, not the
   // lower-level CoreSimulator boot state.
   const statusLabel = isLive ? 'Connected' : loading ? 'Working…' : 'Not connected'
   const subtleStatus = isLive || loading
@@ -54,7 +54,7 @@ export function EmulatorPaneToolbar({
       <span
         className={cn(
           'shrink-0 text-[11px]',
-          !subtleStatus && 'border px-1.5 py-0.5 text-[10px]',
+          !subtleStatus && 'rounded border px-1.5 py-0.5 text-[10px]',
           statusClassName
         )}
       >

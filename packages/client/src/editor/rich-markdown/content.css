@@ -24,12 +24,12 @@
   padding-right: clamp(252px, 28%, 308px);
 }
 
-/* Why: `.yiru-diff-comment-add-btn` is unlayered CSS owned by the diff-comments
+/* Why: `.agentstart-diff-comment-add-btn` is unlayered CSS owned by the diff-comments
    feature (main.css) and always wins over layered Tailwind utilities, so this
    button — which must stay visible without hover, unlike the Monaco "+" it
    shares base chrome with — keeps a paired override here instead of fighting
    the base rule with a className. */
-.yiru-diff-comment-add-btn.rich-markdown-comment-add-btn {
+.agentstart-diff-comment-add-btn.rich-markdown-comment-add-btn {
   display: flex;
   width: 24px;
   height: 24px;
@@ -39,7 +39,7 @@
   background: color-mix(in srgb, var(--primary) 14%, var(--background));
 }
 
-.yiru-diff-comment-add-btn.rich-markdown-comment-add-btn:hover {
+.agentstart-diff-comment-add-btn.rich-markdown-comment-add-btn:hover {
   color: var(--primary);
   border-color: color-mix(in srgb, var(--primary) 68%, var(--border));
   background: color-mix(in srgb, var(--primary) 22%, var(--background));
@@ -233,17 +233,17 @@
   color: var(--muted-foreground);
 }
 
-.rich-markdown-editor .yiru-details {
+.rich-markdown-editor .agentstart-details {
   margin: 0.85em 0;
 }
 
-.rich-markdown-editor details.yiru-details,
-.rich-markdown-editor .yiru-details[data-type='details'] {
+.rich-markdown-editor details.agentstart-details,
+.rich-markdown-editor .agentstart-details[data-type='details'] {
   padding-left: 0.75em;
 }
 
-.rich-markdown-editor details.yiru-details > summary,
-.rich-markdown-editor .yiru-details[data-type='details'] summary {
+.rich-markdown-editor details.agentstart-details > summary,
+.rich-markdown-editor .agentstart-details[data-type='details'] summary {
   display: block;
   list-style: none;
   min-height: 1.6em;
@@ -253,22 +253,22 @@
   outline: none;
 }
 
-.rich-markdown-editor details.yiru-details > summary:focus-visible,
-.rich-markdown-editor .yiru-details[data-type='details'] summary:focus-visible {
+.rich-markdown-editor details.agentstart-details > summary:focus-visible,
+.rich-markdown-editor .agentstart-details[data-type='details'] summary:focus-visible {
   background: var(--accent);
 }
 
-.rich-markdown-editor details.yiru-details > summary::-webkit-details-marker,
-.rich-markdown-editor .yiru-details[data-type='details'] summary::-webkit-details-marker {
+.rich-markdown-editor details.agentstart-details > summary::-webkit-details-marker,
+.rich-markdown-editor .agentstart-details[data-type='details'] summary::-webkit-details-marker {
   display: none;
 }
 
-.rich-markdown-editor .yiru-details[data-type='details'] {
+.rich-markdown-editor .agentstart-details[data-type='details'] {
   position: relative;
   padding-left: 1.65em;
 }
 
-.rich-markdown-editor .yiru-details[data-type='details'] > button {
+.rich-markdown-editor .agentstart-details[data-type='details'] > button {
   position: absolute;
   top: 0;
   left: 0.15em;
@@ -285,57 +285,69 @@
   outline: none;
 }
 
-.rich-markdown-editor .yiru-details[data-type='details'] > button:focus-visible {
+.rich-markdown-editor .agentstart-details[data-type='details'] > button:focus-visible {
   background: var(--accent);
 }
 
-.rich-markdown-editor .yiru-details[data-type='details'] > button::before {
+.rich-markdown-editor .agentstart-details[data-type='details'] > button::before {
   content: '\203A';
   font-size: 1.25em;
   line-height: 1;
   transition: transform 120ms ease;
 }
 
-.rich-markdown-editor .yiru-details[data-type='details'].is-open > button::before {
+.rich-markdown-editor .agentstart-details[data-type='details'].is-open > button::before {
   transform: rotate(90deg);
 }
 
-.rich-markdown-editor details.yiru-details > div[data-type='detailsContent'],
-.rich-markdown-editor .yiru-details[data-type='details'] div[data-type='detailsContent'] {
+.rich-markdown-editor details.agentstart-details > div[data-type='detailsContent'],
+.rich-markdown-editor .agentstart-details[data-type='details'] div[data-type='detailsContent'] {
   padding-left: 0.15em;
 }
 
-.rich-markdown-editor details.yiru-details[data-yiru-toggle='heading-1'] > summary,
-.rich-markdown-editor .yiru-details[data-type='details'][data-yiru-toggle='heading-1'] summary {
+.rich-markdown-editor details.agentstart-details[data-agentstart-toggle='heading-1'] > summary,
+.rich-markdown-editor
+  .agentstart-details[data-type='details'][data-agentstart-toggle='heading-1']
+  summary {
   font-size: 1.85em;
   font-weight: 700;
   letter-spacing: 0;
   line-height: 1.3;
 }
 
-.rich-markdown-editor .yiru-details[data-type='details'][data-yiru-toggle='heading-1'] > button {
+.rich-markdown-editor
+  .agentstart-details[data-type='details'][data-agentstart-toggle='heading-1']
+  > button {
   height: 2.405em;
 }
 
 /* Heading toggle sizes mirror the plain h2–h4 scales (1.4 / 1.15 / 1em). */
-.rich-markdown-editor details.yiru-details[data-yiru-toggle='heading-2'] > summary,
-.rich-markdown-editor .yiru-details[data-type='details'][data-yiru-toggle='heading-2'] summary {
+.rich-markdown-editor details.agentstart-details[data-agentstart-toggle='heading-2'] > summary,
+.rich-markdown-editor
+  .agentstart-details[data-type='details'][data-agentstart-toggle='heading-2']
+  summary {
   font-size: 1.4em;
   line-height: 1.3;
 }
 
-.rich-markdown-editor .yiru-details[data-type='details'][data-yiru-toggle='heading-2'] > button {
+.rich-markdown-editor
+  .agentstart-details[data-type='details'][data-agentstart-toggle='heading-2']
+  > button {
   height: 1.82em;
 }
 
-.rich-markdown-editor details.yiru-details[data-yiru-toggle='heading-3'] > summary,
-.rich-markdown-editor .yiru-details[data-type='details'][data-yiru-toggle='heading-3'] summary {
+.rich-markdown-editor details.agentstart-details[data-agentstart-toggle='heading-3'] > summary,
+.rich-markdown-editor
+  .agentstart-details[data-type='details'][data-agentstart-toggle='heading-3']
+  summary {
   font-size: 1.15em;
   line-height: 1.3;
 }
 
-.rich-markdown-editor details.yiru-details[data-yiru-toggle='heading-4'] > summary,
-.rich-markdown-editor .yiru-details[data-type='details'][data-yiru-toggle='heading-4'] summary {
+.rich-markdown-editor details.agentstart-details[data-agentstart-toggle='heading-4'] > summary,
+.rich-markdown-editor
+  .agentstart-details[data-type='details'][data-agentstart-toggle='heading-4']
+  summary {
   font-size: 1em;
   line-height: 1.3;
 }
@@ -669,14 +681,14 @@
 }
 
 /* Why: the review note card is JSX-owned, but the highlighted/attention
-   treatment paints a nested `.yiru-diff-comment-card` rendered by the
+   treatment paints a nested `.agentstart-diff-comment-card` rendered by the
    separate DiffCommentCard component — no shared JSX to carry a className. */
-.rich-markdown-review-note-card.is-active > .yiru-diff-comment-card {
+.rich-markdown-review-note-card.is-active > .agentstart-diff-comment-card {
   border-color: color-mix(in srgb, var(--foreground) 18%, transparent);
   background: color-mix(in srgb, var(--foreground) 4%, var(--editor-surface));
 }
 
-.rich-markdown-review-note-card.is-attention > .yiru-diff-comment-card {
+.rich-markdown-review-note-card.is-attention > .agentstart-diff-comment-card {
   animation: rich-markdown-note-attention 900ms ease-out;
 }
 

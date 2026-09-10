@@ -1,4 +1,4 @@
-import type { RuntimeCapability } from '@yiru/protocol/runtime-versions'
+import type { RuntimeCapability } from '@agentstart/protocol/runtime-versions'
 import { translate } from '~renderer/i18n/i18n'
 
 import { assertRuntimeStatusCompatible } from './protocol-compat'
@@ -8,7 +8,6 @@ import type { RuntimeStatusResult } from './status/model'
 type RuntimeEnvironmentStatus = RuntimeStatusResult
 
 const RUNTIME_COMPATIBILITY_CACHE_MAX = 32
-const RECENT_RUNTIME_COMPATIBILITY_FAILURE_TTL_MS = 60_000
 // Why: capability verdicts must eventually follow a saved environment's version changes.
 const RUNTIME_CAPABILITY_STATUS_TTL_MS = 60_000
 
@@ -22,71 +21,6 @@ type RuntimeCompatibilityCacheEntry = {
 }
 
 const runtimeCompatibilityChecks = new Map<string, RuntimeCompatibilityCacheEntry>()
-
-export async function ensureRuntimeEnvironmentCompatible(
-  environmentId: string,
-  options: { timeoutMs?: number; reuseRecentCompatibilityFailure?: boolean } = {}
-): Promise<void> {
-  const cached = getCachedRuntimeCompatibilityCheck(environmentId, options)
-  if (cached) {
-    await cached.check
-    return
-  }
-  const entry: RuntimeCompatibilityCacheEntry = {
-    check: Promise.resolve(),
-    failedAt: null,
-    provenCompatible: false,
-    status: null,
-    statusCheckedAt: null
-  }
-  const check = (async () => {
-    const status = await runtimeEnvironmentsClient.getStatus({
-      selector: environmentId,
-      timeoutMs: options.timeoutMs
-    })
-    assertRuntimeStatusCompatible(status)
-    entry.status = status
-    entry.statusCheckedAt = Date.now()
-  })()
-  entry.check = check
-  rememberRuntimeEnvironmentCompatibility(environmentId, entry)
-  try {
-    await check
-    if (runtimeCompatibilityChecks.get(environmentId) === entry) {
-      entry.provenCompatible = true
-    }
-  } catch (error) {
-    if (runtimeCompatibilityChecks.get(environmentId) === entry) {
-      // Why: startup asks each remote for repos, groups, then folders; an
-      // offline runtime should pay one timeout during that burst, not three.
-      entry.failedAt = Date.now()
-    }
-    throw error
-  }
-}
-
-function getCachedRuntimeCompatibilityCheck(
-  environmentId: string,
-  options: { reuseRecentCompatibilityFailure?: boolean }
-): RuntimeCompatibilityCacheEntry | null {
-  const cached = runtimeCompatibilityChecks.get(environmentId)
-  if (!cached) {
-    return null
-  }
-  if (
-    cached.failedAt !== null &&
-    Date.now() - cached.failedAt >= RECENT_RUNTIME_COMPATIBILITY_FAILURE_TTL_MS
-  ) {
-    runtimeCompatibilityChecks.delete(environmentId)
-    return null
-  }
-  if (cached.failedAt !== null && options.reuseRecentCompatibilityFailure !== true) {
-    return null
-  }
-  runtimeCompatibilityChecks.delete(environmentId)
-  runtimeCompatibilityChecks.set(environmentId, cached)
-  return cached
-}
 
 function rememberRuntimeEnvironmentCompatibility(
   environmentId: string,

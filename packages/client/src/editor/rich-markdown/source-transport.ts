@@ -9,12 +9,16 @@ export type RichMarkdownSourceKind =
   | 'document-link'
   | 'html-superscript-link'
 
-const TRANSPORT_PREFIX = '[[YIRU_RICH_MD:'
+const TRANSPORT_PREFIX = '[[AGENTSTART_RICH_MD:'
 const TRANSPORT_SUFFIX = ']]'
 const KEY_PATTERN = /^[a-f0-9]{32}$/
 const TRANSPORT_BODY_PATTERN =
-  /^YIRU_RICH_MD:[a-f0-9]{32}:(?:literal|inline-html|block-html|document-link|html-superscript-link):/
-const LEGACY_PREFIXES = ['YIRU_RAW_HTML_INLINE:', 'YIRU_RAW_HTML_BLOCK:', 'YIRU_DOC_LINK:'] as const
+  /^AGENTSTART_RICH_MD:[a-f0-9]{32}:(?:literal|inline-html|block-html|document-link|html-superscript-link):/
+const LEGACY_PREFIXES = [
+  'AGENTSTART_RAW_HTML_INLINE:',
+  'AGENTSTART_RAW_HTML_BLOCK:',
+  'AGENTSTART_DOC_LINK:'
+] as const
 
 export type RichMarkdownSourceTransport = {
   readonly key: string
@@ -24,7 +28,7 @@ export type RichMarkdownSourceTransport = {
   startFor: (kind: RichMarkdownSourceKind) => string
 }
 
-export function isLegacyRichMarkdownTransportBody(value: string): boolean {
+function isLegacyRichMarkdownTransportBody(value: string): boolean {
   return LEGACY_PREFIXES.some((prefix) => value.startsWith(prefix))
 }
 
@@ -46,7 +50,7 @@ export function createRichMarkdownEditorCodec(key = createCodecKey()): RichMarkd
   }
 }
 
-export function createRichMarkdownSourceTransport(key: string): RichMarkdownSourceTransport {
+function createRichMarkdownSourceTransport(key: string): RichMarkdownSourceTransport {
   if (!KEY_PATTERN.test(key)) {
     throw new Error('Rich Markdown transport keys must be 128-bit lowercase hex values')
   }

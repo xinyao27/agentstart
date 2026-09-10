@@ -1,6 +1,6 @@
-import type { BuiltInWindowsTerminalShell } from '@yiru/protocol/host/windows-terminal-shell'
-import { WINDOWS_GIT_BASH_SHELL } from '@yiru/protocol/host/windows-terminal-shell'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { BuiltInWindowsTerminalShell } from '@agentstart/protocol/host/windows-terminal-shell'
+import { WINDOWS_GIT_BASH_SHELL } from '@agentstart/protocol/host/windows-terminal-shell'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Check } from '~renderer/icons/hugeicons'
@@ -156,7 +156,7 @@ export function WindowsTerminalStep({
 
   if (!settings) {
     return (
-      <div className="border-border bg-muted/20 text-muted-foreground border px-5 py-4 text-sm">
+      <div className="border-border bg-muted/20 text-muted-foreground rounded-xl border px-5 py-4 text-sm">
         {translate(
           'auto.components.onboarding.WindowsTerminalStep.loading',
           'Loading terminal settings...'
@@ -183,7 +183,7 @@ export function WindowsTerminalStep({
           <p className="text-muted-foreground text-[13px] leading-relaxed">
             {translate(
               'auto.components.onboarding.WindowsTerminalStep.defaultShellDescription',
-              'Choose the shell Yiru opens for new Windows terminal panes.'
+              'Choose the shell AgentStart opens for new Windows terminal panes.'
             )}
           </p>
         </div>
@@ -203,7 +203,7 @@ export function WindowsTerminalStep({
         </div>
 
         {windowsShell === 'wsl.exe' ? (
-          <div className="border-border bg-muted/20 border px-4 py-3">
+          <div className="border-border bg-muted/20 rounded-xl border px-4 py-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0 space-y-1">
                 <div className="text-foreground text-sm font-medium">
@@ -340,12 +340,12 @@ function PreferenceCard({
       )}
     >
       {selected ? (
-        <span className="bg-primary text-primary-foreground absolute top-3 right-3 grid size-5 place-items-center">
+        <span className="bg-primary text-primary-foreground absolute top-3 right-3 grid size-5 place-items-center rounded-full">
           <Check className="size-3" />
         </span>
       ) : null}
       <span className="flex min-w-0 items-start gap-3 pr-7">
-        <span className="border-border bg-background text-foreground grid size-9 shrink-0 place-items-center border">
+        <span className="border-border bg-background text-foreground grid size-9 shrink-0 place-items-center rounded-lg border">
           {icon}
         </span>
         <span className="min-w-0 space-y-1">

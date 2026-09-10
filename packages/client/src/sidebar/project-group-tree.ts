@@ -1,5 +1,5 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
 
 import { sortProjectGroupEntries, withRepoSectionDisplayLabels } from './project-row-order'
 import { getProjectGroupHeaderKey, PROJECT_GROUP_META } from './worktree-group-metadata'

@@ -1,6 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   SettingsJsonNull,
   SettingsJsonValueEntrySchema,
@@ -10,7 +10,7 @@ import {
   type SettingsDocument as ProtocolSettingsDocument,
   type SettingsJsonValue as ProtocolJsonValue,
   type SettingsJsonValueEntry as ProtocolJsonValueEntry
-} from '../generated/yiru/runtime/v1/settings_pb.js'
+} from '../generated/agent_start/runtime/v1/settings_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import {
   decodeJsonValue,

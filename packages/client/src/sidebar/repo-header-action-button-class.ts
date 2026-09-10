@@ -6,5 +6,5 @@ export const REPO_HEADER_ACTION_REVEAL_CLASS =
 export const REPO_HEADER_ACTION_BUTTON_CLASS = cn(
   'size-5 shrink-0',
   REPO_HEADER_ACTION_REVEAL_CLASS,
-  'text-muted-foreground transition-[margin,max-width,opacity,background-color,color] hover:bg-accent/70 hover:text-foreground data-[state=open]:ml-0 data-[state=open]:max-w-5 data-[state=open]:opacity-100'
+  'text-muted-foreground transition-[margin,max-width,opacity,background-color,color] hover:bg-accent/70 hover:text-foreground data-[state=open]:ml-0 data-[state=open]:max-w-5 data-[state=open]:opacity-100 rounded-md'
 )

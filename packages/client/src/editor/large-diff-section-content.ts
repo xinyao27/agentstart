@@ -1,7 +1,7 @@
-import type { GitDiffResult } from '@yiru/protocol/git/diff-values'
-import type { LargeDiffRenderLimit } from '@yiru/protocol/git/render-limit'
+import type { GitDiffResult } from '@agentstart/protocol/git/diff-values'
+import type { LargeDiffRenderLimit } from '@agentstart/protocol/git/render-limit'
 
-export function shouldPruneLargeDiffContent(
+function shouldPruneLargeDiffContent(
   renderLimit: LargeDiffRenderLimit | null | undefined
 ): boolean {
   return renderLimit?.limited === true

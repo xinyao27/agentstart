@@ -8,7 +8,7 @@ import {
   ComputerServicePermissionsResponseSchema,
   ComputerServicePermissionsStatusRequestSchema,
   ComputerServicePermissionsStatusResponseSchema
-} from '../generated/yiru/runtime/v1/computer_pb.js'
+} from '../generated/agent_start/runtime/v1/computer_pb.js'
 import {
   computerPermissionResetResult,
   computerPermissionSetupResult,
@@ -26,7 +26,7 @@ const PERMISSIONS_STATUS_PROCEDURE = `/${ComputerService.typeName}/${ComputerSer
 const PERMISSIONS_RESET_PROCEDURE = `/${ComputerService.typeName}/${ComputerService.method.permissionsReset.name}`
 
 // Why: only these three of the sixteen ComputerService rpcs have a browser
-// caller — the rest are CLI/skill-only and driven from `yiru computer`.
+// caller — the rest are CLI/skill-only and driven from `agentstart computer`.
 export class ComputerClient {
   private readonly transport: RuntimeTransport
 

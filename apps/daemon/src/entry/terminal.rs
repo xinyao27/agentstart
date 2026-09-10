@@ -2,17 +2,16 @@ use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use std::time::Duration;
 
-use serde_json::{Map, Value, json};
-use thiserror::Error;
-use yiru_protocol::method_metadata::UnaryMethod;
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1TerminalServiceClose as CloseMethod,
-    YiruRuntimeV1TerminalServiceCreate as CreateMethod,
-    YiruRuntimeV1TerminalServiceFocus as FocusMethod,
-    YiruRuntimeV1TerminalServiceList as ListMethod, YiruRuntimeV1TerminalServiceRead as ReadMethod,
-    YiruRuntimeV1TerminalServiceSend as SendMethod,
+use agentstart_protocol::method_metadata::UnaryMethod;
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1TerminalServiceClose as CloseMethod,
+    AgentStartRuntimeV1TerminalServiceCreate as CreateMethod,
+    AgentStartRuntimeV1TerminalServiceFocus as FocusMethod,
+    AgentStartRuntimeV1TerminalServiceList as ListMethod,
+    AgentStartRuntimeV1TerminalServiceRead as ReadMethod,
+    AgentStartRuntimeV1TerminalServiceSend as SendMethod,
 };
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::{
     TerminalAgentPhase, TerminalClientIdentity, TerminalClientKind, TerminalCwdFallback,
     TerminalPresentation, TerminalRestoreKind, TerminalServiceCloseRequest,
     TerminalServiceCreateRequest, TerminalServiceFocusRequest, TerminalServiceListRequest,
@@ -20,6 +19,8 @@ use yiru_protocol::runtime::v1::{
     TerminalStartupCommandDelivery, TerminalState, TerminalSurface, TerminalVisualLayout,
     TerminalVisualLayoutNode, TerminalVisualPaneNode,
 };
+use serde_json::{Map, Value, json};
+use thiserror::Error;
 
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 
@@ -292,7 +293,7 @@ async fn focus(peer: &LocalProtocolClient, args: &[OsString]) -> Result<(), Term
 }
 
 fn terminal_summary_json(
-    terminal: yiru_protocol::runtime::v1::TerminalSummary,
+    terminal: agentstart_protocol::runtime::v1::TerminalSummary,
 ) -> Result<Value, TerminalCommandError> {
     let agent_phase = terminal
         .agent_phase
@@ -342,7 +343,7 @@ fn terminal_summary_json(
 }
 
 fn terminal_create_json(
-    terminal: &yiru_protocol::runtime::v1::TerminalCreate,
+    terminal: &agentstart_protocol::runtime::v1::TerminalCreate,
 ) -> Result<Value, TerminalCommandError> {
     let surface = match TerminalSurface::try_from(terminal.surface) {
         Ok(TerminalSurface::Background) => "background",
@@ -421,7 +422,7 @@ fn terminal_create_json(
 }
 
 fn terminal_read_json(
-    terminal: &yiru_protocol::runtime::v1::TerminalRead,
+    terminal: &agentstart_protocol::runtime::v1::TerminalRead,
 ) -> Result<Value, TerminalCommandError> {
     let status = match TerminalState::try_from(terminal.status) {
         Ok(TerminalState::Running) => "running",
@@ -445,19 +446,23 @@ fn terminal_read_json(
 }
 
 fn terminal_send_json(
-    send: &yiru_protocol::runtime::v1::TerminalSend,
+    send: &agentstart_protocol::runtime::v1::TerminalSend,
 ) -> Result<Value, TerminalCommandError> {
     let mut value = Map::from_iter([
         ("handle".to_owned(), Value::String(send.handle.clone())),
         ("accepted".to_owned(), Value::Bool(send.accepted)),
         ("bytesWritten".to_owned(), Value::from(send.bytes_written)),
     ]);
-    let reason = match yiru_protocol::runtime::v1::TerminalSendRefusedReason::try_from(
+    let reason = match agentstart_protocol::runtime::v1::TerminalSendRefusedReason::try_from(
         send.refused_reason,
     ) {
-        Ok(yiru_protocol::runtime::v1::TerminalSendRefusedReason::Unspecified) => None,
-        Ok(yiru_protocol::runtime::v1::TerminalSendRefusedReason::NoAgent) => Some("no-agent"),
-        Ok(yiru_protocol::runtime::v1::TerminalSendRefusedReason::Permission) => Some("permission"),
+        Ok(agentstart_protocol::runtime::v1::TerminalSendRefusedReason::Unspecified) => None,
+        Ok(agentstart_protocol::runtime::v1::TerminalSendRefusedReason::NoAgent) => {
+            Some("no-agent")
+        }
+        Ok(agentstart_protocol::runtime::v1::TerminalSendRefusedReason::Permission) => {
+            Some("permission")
+        }
         Err(_) => return Err(TerminalCommandError::InvalidResponse),
     };
     if let Some(reason) = reason {
@@ -477,7 +482,7 @@ fn visual_layout_json(layout: &TerminalVisualLayout) -> Result<Value, TerminalCo
 }
 
 fn visual_layout_node_json(node: &TerminalVisualLayoutNode) -> Result<Value, TerminalCommandError> {
-    use yiru_protocol::runtime::v1::terminal_visual_layout_node::Node;
+    use agentstart_protocol::runtime::v1::terminal_visual_layout_node::Node;
     match node
         .node
         .as_ref()
@@ -512,7 +517,7 @@ fn visual_layout_node_json(node: &TerminalVisualLayoutNode) -> Result<Value, Ter
 }
 
 fn visual_pane_node_json(node: &TerminalVisualPaneNode) -> Result<Value, TerminalCommandError> {
-    use yiru_protocol::runtime::v1::terminal_visual_pane_node::Node;
+    use agentstart_protocol::runtime::v1::terminal_visual_pane_node::Node;
     match node
         .node
         .as_ref()

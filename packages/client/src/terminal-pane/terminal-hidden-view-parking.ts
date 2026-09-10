@@ -1,6 +1,6 @@
-import { isRuntimePtyId, parseSshPtyId } from '@yiru/protocol/terminal-identity'
-import { PTY_SESSION_ID_SEPARATOR } from '@yiru/protocol/terminal/session-identity'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import { isRuntimePtyId, parseSshPtyId } from '@agentstart/protocol/terminal-identity'
+import { PTY_SESSION_ID_SEPARATOR } from '@agentstart/protocol/terminal/session-identity'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 // Why: cold-park hysteresis keeps a hidden pane mounted for 30s so quick tab
 // flips never pay a re-hydrate; hot-retain keeps a bounded recently-visible
@@ -11,10 +11,10 @@ import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
 // size, so cutting remount *frequency* beats shaving replay.
 export const TERMINAL_WORKTREE_COLD_PARK_DELAY_MS = 30_000
 export const TERMINAL_WORKTREE_HOT_RETAIN_MS = 15 * 60_000
-export const TERMINAL_WORKTREE_HOT_RETAIN_LIMIT = 8
+const TERMINAL_WORKTREE_HOT_RETAIN_LIMIT = 8
 export const TERMINAL_TAB_COLD_PARK_DELAY_MS = 30_000
 export const TERMINAL_TAB_HOT_RETAIN_MS = 15 * 60_000
-export const TERMINAL_TAB_HOT_RETAIN_LIMIT = 12
+const TERMINAL_TAB_HOT_RETAIN_LIMIT = 12
 
 // Why: tests override these per call (instead of process.env reads inside the
 // module) to shrink the 30s hysteresis to test-friendly durations.
@@ -83,7 +83,7 @@ export function isParkRestorableTerminalPty(
   return policy?.sshParkingEnabled === true && ptyId !== null && parseSshPtyId(ptyId) !== null
 }
 
-export function canParkTerminalWorktreeRenderers(args: {
+function canParkTerminalWorktreeRenderers(args: {
   worktreeId: string
   terminalTabs: readonly ColdParkableTerminalTab[]
   pendingStartupByTabId: Readonly<Record<string, unknown>>
@@ -124,7 +124,7 @@ export function canParkTerminalWorktreeRenderers(args: {
   })
 }
 
-export function canParkTerminalTabRenderer(args: {
+function canParkTerminalTabRenderer(args: {
   worktreeId: string
   terminalTab: TerminalTabColdParkCandidate
   pendingStartupByTabId: Readonly<Record<string, unknown>>

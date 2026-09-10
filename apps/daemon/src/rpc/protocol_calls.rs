@@ -1,9 +1,11 @@
 use std::collections::{HashMap, VecDeque};
 
+use agentstart_protocol::method_metadata::method_metadata;
+use agentstart_protocol::protocol::v1::call_destination::Target as CallTarget;
+use agentstart_protocol::protocol::v1::{
+    CallEnd, CallStart, Payload, PeerKind, Status, StatusCode,
+};
 use tokio::time::{Duration, Instant};
-use yiru_protocol::method_metadata::method_metadata;
-use yiru_protocol::protocol::v1::call_destination::Target as CallTarget;
-use yiru_protocol::protocol::v1::{CallEnd, CallStart, Payload, PeerKind, Status, StatusCode};
 
 use super::protocol_call::{
     MAX_CONNECTION_BUFFERED_RESPONSE_BYTES, ProtocolCall, ProtocolCancellation, ProtocolCompletion,

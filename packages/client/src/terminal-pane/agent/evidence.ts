@@ -3,8 +3,8 @@ import {
   type AgentStatusEntry,
   type AgentStatusState,
   type AgentType
-} from '@yiru/protocol/agent/status-records'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+} from '@agentstart/protocol/agent/status-records'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import type { AgentStatus } from '~renderer/agent/title/core'
 import { getAgentTitleLabel } from '~renderer/agent/title/identity'
 import { resolveExplicitTerminalTitleAgentType } from '~renderer/agent/title/provider'

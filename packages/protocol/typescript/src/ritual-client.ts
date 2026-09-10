@@ -8,7 +8,7 @@ import {
   RitualServiceScheduleResponseSchema,
   RitualServiceSetScheduleRequestSchema,
   RitualScheduleSchema
-} from '../generated/yiru/runtime/v1/ritual_pb.js'
+} from '../generated/agent_start/runtime/v1/ritual_pb.js'
 import {
   decodeRitualRunResult,
   decodeRitualScheduleStatus,

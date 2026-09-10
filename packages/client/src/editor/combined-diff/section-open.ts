@@ -1,4 +1,4 @@
-import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
+import type { GitBranchChangeEntry } from '@agentstart/protocol/git/branch-compare-types'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { joinPath } from '~renderer/path'
 import { useAppStore } from '~renderer/store/state'

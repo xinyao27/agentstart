@@ -4,7 +4,7 @@ import {
   type GitHubFileEntry,
   type GitHubWorkItem as ProtocolWorkItem,
   type GitHubWorkItemDetails as ProtocolWorkItemDetails
-} from '../../generated/yiru/runtime/v1/github_pb.js'
+} from '../../generated/agent_start/runtime/v1/github_pb.js'
 import { githubCheckEntry } from './check-values.js'
 import type { PRCheckDetail } from './check-values.js'
 import { githubComment, type PRComment } from './comment-values.js'

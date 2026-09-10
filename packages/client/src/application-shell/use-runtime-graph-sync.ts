@@ -48,8 +48,21 @@ export function useRuntimeGraphSync(workspaceSessionReady: boolean): void {
   }, [])
 
   useEffect(() => {
-    setRuntimeGraphSyncEnabled(workspaceSessionReady)
+    const reconcilePublisher = (): void => {
+      // Why: every extension page has its own daemon connection. Only the
+      // focused page should own the renderer projection across open windows.
+      setRuntimeGraphSyncEnabled(
+        workspaceSessionReady && document.visibilityState === 'visible' && document.hasFocus()
+      )
+    }
+    reconcilePublisher()
+    window.addEventListener('focus', reconcilePublisher)
+    window.addEventListener('blur', reconcilePublisher)
+    document.addEventListener('visibilitychange', reconcilePublisher)
     return () => {
+      window.removeEventListener('focus', reconcilePublisher)
+      window.removeEventListener('blur', reconcilePublisher)
+      document.removeEventListener('visibilitychange', reconcilePublisher)
       setRuntimeGraphSyncEnabled(false)
     }
   }, [workspaceSessionReady])

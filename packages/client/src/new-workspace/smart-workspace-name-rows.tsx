@@ -12,7 +12,7 @@ export type SmartWorkspaceNameSelection = {
 
 const ROW_ITEM_CLASS_NAME = 'gap-2 px-3 py-2 text-xs'
 
-export function isTypedTextSourceRow(row: SmartWorkspaceSourceRow): boolean {
+function isTypedTextSourceRow(row: SmartWorkspaceSourceRow): boolean {
   return row.kind === 'use-name' || row.kind === 'create-branch'
 }
 

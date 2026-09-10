@@ -3,15 +3,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "YiruProtocol",
+    name: "AgentStartProtocol",
     platforms: [
         .iOS(.v16),
         .macOS(.v13),
     ],
     products: [
         .library(
-            name: "YiruProtocol",
-            targets: ["YiruProtocol"]
+            name: "AgentStartProtocol",
+            targets: ["AgentStartProtocol"]
         ),
     ],
     dependencies: [
@@ -22,11 +22,11 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "YiruProtocol",
+            name: "AgentStartProtocol",
             dependencies: [
                 .product(name: "SwiftProtobuf", package: "swift-protobuf"),
             ],
-            path: "Sources/YiruProtocol"
+            path: "Sources/AgentStartProtocol"
         ),
     ]
 )

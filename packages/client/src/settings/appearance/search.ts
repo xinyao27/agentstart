@@ -5,7 +5,7 @@ import { SHOW_UI_LANGUAGE_SETTING } from '~renderer/i18n/supported-languages'
 import type { SettingsSearchEntry } from '../search'
 import { translateSearchKeyword } from '../search-keywords'
 import { getTerminalAppearanceSearchEntries } from '../terminal/search'
-import { getLeftSidebarAppearanceEntry, getSidebarEntries } from './sidebar-search'
+import { getSidebarEntries } from './sidebar-search'
 import { getStatusBarToggles } from './status-bar-search'
 import { getThemeColorEntries } from './theme-color-search'
 import { getUsagePercentageDisplayEntry } from './usage-percentage-search'
@@ -17,7 +17,7 @@ export const getThemeEntries = createLocalizedCatalog((): SettingsSearchEntry[] 
     title: translate('auto.components.settings.appearance.search.71e06350b4', 'Theme'),
     description: translate(
       'auto.components.settings.appearance.search.0709c794f7',
-      'Choose how Yiru looks in the app window.'
+      'Choose how AgentStart looks in the app window.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.appearance.search.262fe1d24f', 'dark'),
@@ -32,7 +32,7 @@ export const getLoaderStyleEntries = createLocalizedCatalog((): SettingsSearchEn
     title: translate('settings.appearance.loader.title', 'Loader'),
     description: translate(
       'settings.appearance.loader.description',
-      'Choose the dotted agent-state animation used across Yiru.'
+      'Choose the dotted agent-state animation used across AgentStart.'
     ),
     keywords: [
       ...translateSearchKeyword('settings.appearance.loader.keyword.loader', 'loader'),
@@ -55,13 +55,13 @@ export const getLanguageEntries = createLocalizedCatalog((): SettingsSearchEntry
     title: translate('settings.appearance.language.title', 'Language'),
     description: translate(
       'settings.appearance.language.description',
-      'Choose the language used by the Yiru interface.'
+      'Choose the language used by the AgentStart interface.'
     ),
     keywords: [
       ...translateSearchKeyword('settings.appearance.language.title', 'Language'),
       ...translateSearchKeyword(
         'settings.appearance.language.description',
-        'Choose the language used by the Yiru interface.'
+        'Choose the language used by the AgentStart interface.'
       ),
       ...translateSearchKeyword('settings.appearance.language.system', 'System'),
       ...translateSearchKeyword('settings.appearance.language.english', 'English'),
@@ -99,7 +99,7 @@ export const getTypographyEntries = createLocalizedCatalog((): SettingsSearchEnt
     title: translate('auto.components.settings.appearance.search.ddb991024d', 'IDE Font'),
     description: translate(
       'auto.components.settings.appearance.search.07c7c38fac',
-      'Choose the font used by the Yiru interface.'
+      'Choose the font used by the AgentStart interface.'
     ),
     keywords: [
       ...translateSearchKeyword('auto.components.settings.appearance.search.24094af355', 'font'),
@@ -112,7 +112,10 @@ export const getTypographyEntries = createLocalizedCatalog((): SettingsSearchEnt
         'typography'
       ),
       ...translateSearchKeyword('auto.components.settings.appearance.search.fab91464dd', 'ide'),
-      ...translateSearchKeyword('auto.components.settings.appearance.search.1f2880a9d5', 'yiru'),
+      ...translateSearchKeyword(
+        'auto.components.settings.appearance.search.1f2880a9d5',
+        'agentstart'
+      ),
       ...translateSearchKeyword(
         'auto.components.settings.appearance.search.5095258df2',
         'interface'
@@ -159,7 +162,7 @@ export const getStatusBarEntries = createLocalizedCatalog((): SettingsSearchEntr
   }))
 ])
 
-export { getLeftSidebarAppearanceEntry, getSidebarEntries }
+export { getSidebarEntries }
 
 const getAppearanceCoreSectionEntries = createLocalizedCatalog((): SettingsSearchEntry[] => [
   {

@@ -2,7 +2,7 @@ import {
   RuntimeEnvironmentClient,
   RuntimeEnvironmentEndpointKind,
   type RuntimeEnvironment
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import { openConfiguredBrowserHostProtocol } from './browser-host-runtime'

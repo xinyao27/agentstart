@@ -37,11 +37,6 @@ const subscribersByOwnerKey = new Map<
   Set<(capabilities: WindowsTerminalCapabilities) => void>
 >()
 
-type WindowsTerminalCapabilityHookState = {
-  ownerKey: string
-  capabilities: WindowsTerminalCapabilities
-}
-
 function resolveWindowsTerminalCapabilityCacheKey(args: {
   ownerKey?: string
   target?: WindowsTerminalCapabilityLoadTarget
@@ -121,7 +116,7 @@ export function hasCachedWindowsTerminalCapabilities(ownerKey = 'local'): boolea
   return cachedCapabilitiesByOwnerKey.has(ownerKey)
 }
 
-export function loadWindowsTerminalCapabilities(
+function loadWindowsTerminalCapabilities(
   options: {
     force?: boolean
     now?: number
@@ -172,19 +167,6 @@ export function loadWindowsTerminalCapabilities(
 
   pendingCapabilitiesByOwnerKey.set(ownerKey, nextPendingCapabilities)
   return nextPendingCapabilities
-}
-
-export function selectWindowsTerminalCapabilitiesForOwner(
-  state: WindowsTerminalCapabilityHookState,
-  enabled: boolean,
-  ownerKey: string
-): WindowsTerminalCapabilities {
-  if (!enabled) {
-    return UNAVAILABLE_CAPABILITIES
-  }
-  return state.ownerKey === ownerKey
-    ? state.capabilities
-    : getCachedWindowsTerminalCapabilities(ownerKey)
 }
 
 export function useWindowsTerminalCapabilities(

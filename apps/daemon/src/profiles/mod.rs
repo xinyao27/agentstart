@@ -118,7 +118,7 @@ impl ProfilesAuthority {
 
 fn seed_telemetry(root: &Path, profile_id: &str, telemetry: &Value) -> Result<(), ProfileError> {
     let directory = index::ensure_profile_directory(root, profile_id)?;
-    let path = directory.join("yiru-data-settings.json");
+    let path = directory.join("agentstart-data-settings.json");
     if leaf_file::exists(&path)? {
         return Ok(());
     }

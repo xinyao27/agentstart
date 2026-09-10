@@ -21,7 +21,7 @@ import {
 import type { RateLimitNotice } from './notice-selection'
 import { notifyRateLimitToastDismissed } from './use-rate-limit-resume-notifications'
 
-export function rateLimitToastId(ptyId: string): string {
+function rateLimitToastId(ptyId: string): string {
   return `rate-limit-resume:${ptyId}`
 }
 

@@ -1,4 +1,4 @@
-import type { BrowserTab } from '@yiru/protocol/workspace/browser-session'
+import type { BrowserTab } from '@agentstart/protocol/workspace/browser-session'
 
 export function buildDuplicatedBrowserTabOptions(
   source: Pick<BrowserTab, 'title' | 'sessionProfileId' | 'sessionPartition'>

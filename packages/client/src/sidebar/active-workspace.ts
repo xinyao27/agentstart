@@ -1,4 +1,4 @@
-import { parseWorkspaceKey, folderWorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { parseWorkspaceKey, folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 
 // Why: activeWorktreeId drives the workspace surface users can see. The scoped
 // key is only a fallback for legacy folder sessions that did not populate it.

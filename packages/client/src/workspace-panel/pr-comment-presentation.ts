@@ -4,9 +4,9 @@ import type { PRCommentGroupActionState } from '~renderer/workspace-panel/pr-com
 /** PR comment sidebar typography and layout variants. */
 export type PRCommentPresentationVariant = 'flat' | 'cards' | 'focus'
 
-export const DEFAULT_PR_COMMENT_PRESENTATION_VARIANT: PRCommentPresentationVariant = 'cards'
+const DEFAULT_PR_COMMENT_PRESENTATION_VARIANT: PRCommentPresentationVariant = 'cards'
 
-const STORAGE_KEY = 'yiru:pr-comment-presentation'
+const STORAGE_KEY = 'agentstart:pr-comment-presentation'
 
 export type PRCommentPresentationClasses = {
   variant: PRCommentPresentationVariant
@@ -74,12 +74,13 @@ const MARKDOWN_BASE =
 
 // Why: in light mode card and canvas are both #fff, so border-border alone disappears.
 // overflow-clip preserves rounded clipping without letting focused row actions scroll content.
-const COMMENT_CARD_SURFACE = 'overflow-clip border border-border bg-secondary dark:bg-card'
+const COMMENT_CARD_SURFACE =
+  'overflow-clip rounded-lg border border-border bg-secondary dark:bg-card'
 
 const COMMENT_CARD_DIVIDER = 'border-border dark:border-border/60'
 
 // Why: placeholders used bg-muted on bg-secondary cards — same grey in light mode.
-const COMMENT_AVATAR = 'shrink-0 border border-border bg-background object-cover'
+const COMMENT_AVATAR = 'shrink-0 rounded-full border border-border bg-background object-cover'
 
 const RESOLVED_SECTION_LABEL =
   'text-[11px] font-semibold uppercase tracking-wider text-muted-foreground'
@@ -103,8 +104,8 @@ function isVariant(value: string | null): value is PRCommentPresentationVariant 
 }
 
 /** Resolve the active variant. In dev, override with
- *  localStorage.setItem('yiru:pr-comment-presentation', 'cards' | 'flat' | 'focus'). */
-export function resolvePRCommentPresentationVariant(): PRCommentPresentationVariant {
+ *  localStorage.setItem('agentstart:pr-comment-presentation', 'cards' | 'flat' | 'focus'). */
+function resolvePRCommentPresentationVariant(): PRCommentPresentationVariant {
   if (typeof window === 'undefined') {
     return DEFAULT_PR_COMMENT_PRESENTATION_VARIANT
   }
@@ -138,7 +139,7 @@ export function getPRCommentPresentationClasses(
       avatar: cn('size-4', COMMENT_AVATAR),
       avatarReply: cn('size-3.5', COMMENT_AVATAR),
       botBadge:
-        'shrink-0 border border-border bg-accent/40 px-1 py-px text-[9px] font-medium uppercase tracking-wide text-muted-foreground',
+        'shrink-0 rounded border border-border bg-accent/40 px-1 py-px text-[9px] font-medium uppercase tracking-wide text-muted-foreground',
       pathBadge: 'min-w-0 flex-1 truncate text-[10px] font-mono text-muted-foreground/60',
       time: 'hidden',
       resolvedContainer: 'opacity-50',
@@ -149,15 +150,15 @@ export function getPRCommentPresentationClasses(
       sectionHeader: 'flex flex-col gap-2.5 border-b border-border px-3 py-2.5',
       sectionHeaderLabel: 'text-[11px] font-medium text-foreground',
       sectionCount: 'text-[10px] text-muted-foreground',
-      audienceTabs: 'grid grid-cols-3 border border-border bg-background p-0.5',
+      audienceTabs: 'grid grid-cols-3 rounded-md border border-border bg-background p-0.5',
       audienceTab:
-        'flex h-7 items-center justify-center gap-1 px-1.5 text-[11px] font-medium text-muted-foreground transition-colors',
+        'flex h-7 items-center justify-center gap-1 px-1.5 text-[11px] font-medium text-muted-foreground transition-colors rounded-md',
       audienceTabActive: 'bg-muted text-foreground',
       sectionTriageLabel: cn('px-3 pt-2', RESOLVED_SECTION_LABEL),
       statusBadgeResolved:
-        'shrink-0 border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground',
+        'shrink-0 rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground',
       statusBadgeQueued:
-        'shrink-0 border border-ring/40 bg-accent px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground',
+        'shrink-0 rounded border border-ring/40 bg-accent px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground',
       commentHeaderPrimary: 'flex min-w-0 items-center gap-1.5',
       commentHeaderMeta: '',
       commentHeaderMetaWithSelection: '',
@@ -194,7 +195,7 @@ export function getPRCommentPresentationClasses(
     avatar: cn('size-5', COMMENT_AVATAR),
     avatarReply: cn('size-4', COMMENT_AVATAR),
     botBadge:
-      'shrink-0 border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground',
+      'shrink-0 rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground',
     pathBadge: 'min-w-0 max-w-full truncate font-mono text-muted-foreground',
     time: 'shrink-0 text-[11px] text-muted-foreground',
     resolvedContainer: 'opacity-60',
@@ -205,16 +206,16 @@ export function getPRCommentPresentationClasses(
     sectionHeader: 'flex flex-col gap-2.5 border-b border-border px-3 py-2.5',
     sectionHeaderLabel: 'text-[11px] font-semibold uppercase tracking-wider text-muted-foreground',
     sectionCount:
-      'border border-border bg-muted px-1.5 py-px text-[10px] font-semibold tabular-nums text-muted-foreground',
-    audienceTabs: 'grid grid-cols-3 border border-border bg-background p-0.5',
+      'rounded-full border border-border bg-muted px-1.5 py-px text-[10px] font-semibold tabular-nums text-muted-foreground',
+    audienceTabs: 'grid grid-cols-3 rounded-md border border-border bg-background p-0.5',
     audienceTab:
-      'flex h-7 items-center justify-center gap-1 px-1.5 text-[11px] font-medium text-muted-foreground transition-colors',
+      'flex h-7 items-center justify-center gap-1 px-1.5 text-[11px] font-medium text-muted-foreground transition-colors rounded-md',
     audienceTabActive: 'bg-muted text-foreground',
     sectionTriageLabel: cn('px-3 pt-1', RESOLVED_SECTION_LABEL),
     statusBadgeResolved:
-      'shrink-0 border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground',
+      'shrink-0 rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground',
     statusBadgeQueued:
-      'shrink-0 border border-ring/40 bg-accent px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground',
+      'shrink-0 rounded border border-ring/40 bg-accent px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground',
     commentHeaderPrimary: 'flex min-w-0 items-center gap-2',
     commentHeaderMeta: cn(
       CARD_COMMENT_META_INDENT,

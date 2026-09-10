@@ -1,4 +1,4 @@
-import type { FilesClient } from '@yiru/protocol'
+import type { FilesClient } from '@agentstart/protocol'
 import { basename, joinPath, normalizeRelativePath } from '~renderer/path'
 
 import { requireFilesTarget } from '../files-target'
@@ -239,7 +239,7 @@ function makeRuntimeUploadTempPath(relativePath: string): string {
   const dir = slashIndex === -1 ? '' : normalized.slice(0, slashIndex + 1)
   const leaf = slashIndex === -1 ? normalized : normalized.slice(slashIndex + 1)
   const nonce = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`
-  return `${dir}.${leaf}.yiru-upload-${nonce}`
+  return `${dir}.${leaf}.agentstart-upload-${nonce}`
 }
 
 function joinRuntimeRelativePath(basePath: string, relativePath: string): string {

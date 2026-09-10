@@ -28,7 +28,7 @@ pub(super) fn apply(context: &ProviderContext, enabled: bool) -> ProviderResult 
         .filter(|value| !value.is_empty())
         .map(std::path::PathBuf::from)
         .unwrap_or_else(|| context.home_path.join(".copilot"));
-    let config_path = home.join("hooks").join("yiru.json");
+    let config_path = home.join("hooks").join("agentstart.json");
     if !enabled && !config_path.exists() {
         return Ok(());
     }
@@ -53,7 +53,7 @@ pub(super) fn apply(context: &ProviderContext, enabled: bool) -> ProviderResult 
             let command = managed_command_with_env(
                 &script_path,
                 "copilot",
-                &[("YIRU_COPILOT_HOOK_EVENT", event)],
+                &[("AGENTSTART_COPILOT_HOOK_EVENT", event)],
             );
             let definition = if cfg!(windows) {
                 json!({ "type": "command", "powershell": command, "timeoutSec": 5 })

@@ -2,7 +2,7 @@ import { readFileSync, statSync } from 'node:fs'
 
 import type { PluginAPI } from '@ampcode/plugin'
 
-// Managed by Yiru. Do not edit; changes may be overwritten.
+// Managed by AgentStart. Do not edit; changes may be overwritten.
 type HookCoords = { port?: string; token?: string; env?: string; version?: string }
 
 let warnedBadEndpoint = false
@@ -10,7 +10,7 @@ let cachedEndpointKey = ''
 let cachedEndpointValues: HookCoords | null = null
 
 function readEndpointFile(): HookCoords | null {
-  const endpointPath = process.env.YIRU_AGENT_HOOK_ENDPOINT
+  const endpointPath = process.env.AGENTSTART_AGENT_HOOK_ENDPOINT
   if (!endpointPath) {
     return null
   }
@@ -28,16 +28,16 @@ function readEndpointFile(): HookCoords | null {
         continue
       }
       const value = match[2].replace(/\r$/, '')
-      if (match[1] === 'YIRU_AGENT_HOOK_PORT') {
+      if (match[1] === 'AGENTSTART_AGENT_HOOK_PORT') {
         out.port = value
       }
-      if (match[1] === 'YIRU_AGENT_HOOK_TOKEN') {
+      if (match[1] === 'AGENTSTART_AGENT_HOOK_TOKEN') {
         out.token = value
       }
-      if (match[1] === 'YIRU_AGENT_HOOK_ENV') {
+      if (match[1] === 'AGENTSTART_AGENT_HOOK_ENV') {
         out.env = value
       }
-      if (match[1] === 'YIRU_AGENT_HOOK_VERSION') {
+      if (match[1] === 'AGENTSTART_AGENT_HOOK_VERSION') {
         out.version = value
       }
     }
@@ -49,21 +49,21 @@ function readEndpointFile(): HookCoords | null {
     cachedEndpointValues = null
     if ((error as { code?: unknown })?.code !== 'ENOENT' && !warnedBadEndpoint) {
       warnedBadEndpoint = true
-      console.warn('[yiru-hook] failed to parse Amp endpoint file:', (error as Error).message)
+      console.warn('[agentstart-hook] failed to parse Amp endpoint file:', (error as Error).message)
     }
     return null
   }
 }
 
 function resolveHookCoords(): HookCoords {
-  // Why: Amp sessions can outlive a Yiru restart; the endpoint file is
+  // Why: Amp sessions can outlive a AgentStart restart; the endpoint file is
   // rewritten on each start, so read it per event before falling back to env.
   const fileEnv = readEndpointFile() ?? {}
   return {
-    port: fileEnv.port || process.env.YIRU_AGENT_HOOK_PORT,
-    token: fileEnv.token || process.env.YIRU_AGENT_HOOK_TOKEN,
-    env: fileEnv.env || process.env.YIRU_AGENT_HOOK_ENV || '',
-    version: fileEnv.version || process.env.YIRU_AGENT_HOOK_VERSION || ''
+    port: fileEnv.port || process.env.AGENTSTART_AGENT_HOOK_PORT,
+    token: fileEnv.token || process.env.AGENTSTART_AGENT_HOOK_TOKEN,
+    env: fileEnv.env || process.env.AGENTSTART_AGENT_HOOK_ENV || '',
+    version: fileEnv.version || process.env.AGENTSTART_AGENT_HOOK_VERSION || ''
   }
 }
 
@@ -109,7 +109,7 @@ function jsonSafe(value: unknown, depth = 0): unknown {
 
 async function post(hookEventName: string, payload: Record<string, unknown>): Promise<void> {
   const coords = resolveHookCoords()
-  const paneKey = process.env.YIRU_PANE_KEY
+  const paneKey = process.env.AGENTSTART_PANE_KEY
   if (!coords.port || !coords.token || !paneKey) {
     return
   }
@@ -121,13 +121,13 @@ async function post(hookEventName: string, payload: Record<string, unknown>): Pr
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
-        'X-Yiru-Agent-Hook-Token': coords.token
+        'X-AgentStart-Agent-Hook-Token': coords.token
       },
       body: JSON.stringify({
         paneKey,
-        launchToken: process.env.YIRU_AGENT_LAUNCH_TOKEN || '',
-        tabId: process.env.YIRU_TAB_ID || '',
-        worktreeId: process.env.YIRU_WORKTREE_ID || '',
+        launchToken: process.env.AGENTSTART_AGENT_LAUNCH_TOKEN || '',
+        tabId: process.env.AGENTSTART_TAB_ID || '',
+        worktreeId: process.env.AGENTSTART_WORKTREE_ID || '',
         env: coords.env,
         version: coords.version,
         hook_event_name: hookEventName,
@@ -135,7 +135,7 @@ async function post(hookEventName: string, payload: Record<string, unknown>): Pr
       })
     })
   } catch {
-    // Why: Yiru status reporting must never affect the Amp run.
+    // Why: AgentStart status reporting must never affect the Amp run.
   } finally {
     clearTimeout(timeout)
   }
@@ -168,7 +168,7 @@ async function drainPostQueue(): Promise<void> {
 }
 function enqueuePost(hookEventName: string, payload: Record<string, unknown>): void {
   // Why: keep hook callbacks non-blocking without retaining unbounded
-  // payload closures when Yiru is down and each POST waits for timeout.
+  // payload closures when AgentStart is down and each POST waits for timeout.
   if (postQueue.length >= MAX_PENDING_POSTS) {
     postQueue.shift()
   }

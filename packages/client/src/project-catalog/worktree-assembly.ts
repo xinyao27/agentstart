@@ -1,12 +1,12 @@
-import type { WorktreeDetectedListResult as RuntimeDetectedWorktreeListResult } from '@yiru/protocol'
+import type { WorktreeDetectedListResult as RuntimeDetectedWorktreeListResult } from '@agentstart/protocol'
 import {
   getRepoExecutionHostId,
   LOCAL_EXECUTION_HOST_ID,
   toRuntimeExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { DetectedWorktreeListResult, Worktree } from '@yiru/protocol/worktree/model'
+} from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { DetectedWorktreeListResult, Worktree } from '@agentstart/protocol/worktree/model'
 import type { RuntimeClientTarget } from '~renderer/runtime/runtime-target'
 
 export type CatalogRepo = {

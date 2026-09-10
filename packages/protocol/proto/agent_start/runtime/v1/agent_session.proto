@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+// Why: mirrors the legacy agentSession.* JSON methods in
+// apps/daemon/src/rpc/agent_session.rs so the CLI (and later Chrome) can leave the JSON
+// transport; the legacy methods keep their own byte-for-byte behavior and now share the typed
+// AgentSessionAuthority these handlers also call.
+service AgentSessionService {
+  rpc Providers(AgentSessionServiceProvidersRequest) returns (AgentSessionServiceProvidersResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc List(AgentSessionServiceListRequest) returns (AgentSessionServiceListResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Start(AgentSessionServiceStartRequest) returns (AgentSessionServiceStartResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Followup(AgentSessionServiceFollowupRequest) returns (AgentSessionServiceFollowupResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Stop(AgentSessionServiceStopRequest) returns (AgentSessionServiceStopResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message AgentSessionServiceProvidersRequest {
+  optional string host_id = 1;
+}
+
+message AgentSessionServiceProvidersResponse {
+  repeated AgentSessionProvider providers = 1;
+}
+
+message AgentSessionProvider {
+  string id = 1;
+  string label = 2;
+  bool available = 3;
+  optional string executable = 4;
+  bool resumable = 5;
+}
+
+message AgentSessionServiceListRequest {
+  optional string worktree_id = 1;
+}
+
+message AgentSessionServiceListResponse {
+  repeated AgentSession sessions = 1;
+}
+
+message AgentSessionServiceStartRequest {
+  string agent = 1;
+  string worktree_id = 2;
+  optional string prompt = 3;
+  optional string title = 4;
+}
+
+message AgentSessionServiceStartResponse {
+  AgentSession session = 1;
+}
+
+message AgentSessionServiceFollowupRequest {
+  string session_id = 1;
+  string prompt = 2;
+}
+
+message AgentSessionServiceFollowupResponse {
+  bool accepted = 1;
+  AgentSession session = 2;
+}
+
+message AgentSessionServiceStopRequest {
+  string session_id = 1;
+}
+
+message AgentSessionServiceStopResponse {
+  AgentSession session = 1;
+}
+
+enum AgentSessionPhase {
+  AGENT_SESSION_PHASE_UNSPECIFIED = 0;
+  AGENT_SESSION_PHASE_THINKING = 1;
+  AGENT_SESSION_PHASE_WAITING_DECISION = 2;
+  AGENT_SESSION_PHASE_COMPLETE = 3;
+}
+
+enum AgentSessionStatus {
+  AGENT_SESSION_STATUS_UNSPECIFIED = 0;
+  AGENT_SESSION_STATUS_RUNNING = 1;
+  AGENT_SESSION_STATUS_COMPLETE = 2;
+  AGENT_SESSION_STATUS_INTERRUPTED = 3;
+}
+
+message AgentSession {
+  string id = 1;
+  string agent = 2;
+  string worktree_id = 3;
+  string terminal_handle = 4;
+  optional string title = 5;
+  AgentSessionPhase phase = 6;
+  AgentSessionStatus status = 7;
+  int64 created_at = 8;
+  int64 updated_at = 9;
+  optional int64 completed_at = 10;
+}

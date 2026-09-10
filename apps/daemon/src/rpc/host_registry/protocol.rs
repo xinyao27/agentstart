@@ -1,5 +1,5 @@
-use yiru_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     HostCapability as ProtocolHostCapability, HostCapabilityKind as ProtocolHostCapabilityKind,
     HostKind as ProtocolHostKind, HostPlatform as ProtocolHostPlatform,
     HostRegistryServiceAddRequest, HostRegistryServiceAddResponse,
@@ -12,7 +12,7 @@ use yiru_protocol::runtime::v1::{
     HostRegistryServiceRemoveRequest, HostRegistryServiceRemoveResponse, HostRevisionConflict,
     RegisteredHost,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::host_registry::{
     HostAddInput, HostCapability, HostDescriptor, HostRegistry, HostRegistryError,
@@ -279,7 +279,7 @@ fn store_status(error: HostStoreError) -> Status {
             code: StatusCode::Aborted as i32,
             message: "workspaceRevisionConflict".to_owned(),
             details: vec![ErrorDetail {
-                type_name: "yiru.runtime.v1.HostRevisionConflict".to_owned(),
+                type_name: "agentstart.runtime.v1.HostRevisionConflict".to_owned(),
                 value: encode(&HostRevisionConflict {
                     expected_revision,
                     actual_revision,

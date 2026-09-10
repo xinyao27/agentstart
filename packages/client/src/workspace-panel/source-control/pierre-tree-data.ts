@@ -1,6 +1,6 @@
+import type { GitBranchChangeEntry } from '@agentstart/protocol/git/branch-compare-types'
+import type { GitFileStatus, GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import type { GitStatusEntry as PierreGitStatusEntry } from '@pierre/trees'
-import type { GitBranchChangeEntry } from '@yiru/protocol/git/branch-compare-types'
-import type { GitFileStatus, GitStatusEntry } from '@yiru/protocol/git/status-types'
 import { normalizeRelativePath } from '~renderer/path'
 
 import type { SourceControlTreeDirectoryNode } from './directory-action-paths'
@@ -17,25 +17,25 @@ import {
 } from './submodule-expansion'
 import type { SourceControlTreeNode } from './tree'
 
-export type SourceControlPierreDirectoryTarget = {
+type SourceControlPierreDirectoryTarget = {
   kind: 'directory'
   relativePath: string
   collapseKey: string
   node?: SourceControlTreeDirectoryNode
 }
 
-export type SourceControlPierreUncommittedTarget = {
+type SourceControlPierreUncommittedTarget = {
   kind: 'uncommitted'
   entry: GitStatusEntry
   isSubmodule: boolean
 }
 
-export type SourceControlPierreBranchTarget = {
+type SourceControlPierreBranchTarget = {
   kind: 'branch'
   entry: GitBranchChangeEntry
 }
 
-export type SourceControlPierrePlaceholderTarget = {
+type SourceControlPierrePlaceholderTarget = {
   kind: 'placeholder'
   message: string
 }

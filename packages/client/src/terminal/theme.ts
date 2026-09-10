@@ -1,6 +1,6 @@
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { TerminalCustomTheme } from '@agentstart/protocol/terminal/theme-types'
 import type { ITheme } from '@xterm/xterm'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { TerminalCustomTheme } from '@yiru/protocol/terminal/theme-types'
 import {
   makeCustomTerminalThemeSelection,
   normalizeTerminalCustomThemes,
@@ -10,7 +10,7 @@ import {
 
 import { getTheme, getThemeNames } from './themes/data'
 
-export const BUILTIN_TERMINAL_THEME_NAMES = getThemeNames()
+const BUILTIN_TERMINAL_THEME_NAMES = getThemeNames()
 
 export const DEFAULT_TERMINAL_THEME_DARK = 'Ghostty Default Style Dark'
 export const DEFAULT_TERMINAL_THEME_LIGHT = 'Builtin Tango Light'
@@ -79,7 +79,7 @@ function findCustomTheme(
   )
 }
 
-export function getTerminalTheme(
+function getTerminalTheme(
   settings: Pick<GlobalSettings, 'terminalCustomThemes'> | undefined,
   selection: string
 ): ITheme | null {
@@ -90,7 +90,7 @@ export function getTerminalTheme(
   return getTheme(selection)
 }
 
-export function getTerminalThemePreview(
+function getTerminalThemePreview(
   name: string,
   settings?: Pick<GlobalSettings, 'terminalCustomThemes'>,
   fallbackMode: 'dark' | 'light' = 'dark'

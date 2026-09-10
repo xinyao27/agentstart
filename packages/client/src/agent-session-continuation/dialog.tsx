@@ -1,5 +1,5 @@
-import { isTuiAgentEnabled } from '@yiru/protocol/agent/selection'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
+import { isTuiAgentEnabled } from '@agentstart/protocol/agent/selection'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { useEffect, useState } from 'react'
 import {
   detectAgentSessionContinuationAgents,

@@ -1,22 +1,19 @@
 import { create, fromBinary, toBinary } from '@bufbuild/protobuf'
 
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   VisualRegressionDiffRatioSchema,
   VisualRegressionService,
   VisualRegressionServiceCaptureResponseSchema,
   VisualRegressionServiceLatestRequestSchema,
   VisualRegressionServiceSaveRequestSchema
-} from '../generated/yiru/runtime/v1/visual_regression_pb.js'
+} from '../generated/agent_start/runtime/v1/visual_regression_pb.js'
 import { RuntimeProtocolError } from './error.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 import {
-  VISUAL_REGRESSION_PROTOCOL_CAPABILITY,
   visualRegressionCapture,
   type VisualRegressionCaptureValue
 } from './visual-regression-values.js'
-
-export { VISUAL_REGRESSION_PROTOCOL_CAPABILITY }
 
 const LATEST_PROCEDURE = `/${VisualRegressionService.typeName}/${VisualRegressionService.method.latest.name}`
 const SAVE_PROCEDURE = `/${VisualRegressionService.typeName}/${VisualRegressionService.method.save.name}`

@@ -1,4 +1,4 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   ClaudeManagedAuthMethod,
   CodexSystemAuthKind,
@@ -8,7 +8,7 @@ import {
   type GrokAccountStatus as ProtocolGrokAccountStatus,
   type ManagedAccount,
   type ManagedAccountSelection
-} from '../generated/yiru/runtime/v1/accounts_pb.js'
+} from '../generated/agent_start/runtime/v1/accounts_pb.js'
 import type { RateLimitState } from './account-rate-types.js'
 import { rateLimitState } from './account-rate-values.js'
 import { RuntimeProtocolError } from './error.js'

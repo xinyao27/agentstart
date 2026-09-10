@@ -1,5 +1,5 @@
-import { TERMINAL_MULTIPLEX_PROTOCOL_CAPABILITY } from '@yiru/protocol/terminal-multiplex'
-import type { TerminalMultiplexOpcode as TerminalMultiplexOpcodeValue } from '@yiru/protocol/terminal-multiplex/frame'
+import { TERMINAL_MULTIPLEX_PROTOCOL_CAPABILITY } from '@agentstart/protocol/terminal-multiplex'
+import type { TerminalMultiplexOpcode as TerminalMultiplexOpcodeValue } from '@agentstart/protocol/terminal-multiplex/frame'
 
 import type { RuntimeClientTarget } from '../runtime-target'
 import { readRuntimeStatus } from '../status-client'

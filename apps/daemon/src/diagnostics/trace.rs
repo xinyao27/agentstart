@@ -67,7 +67,7 @@ impl DiagnosticsTrace {
         let process_rss_bytes = Arc::new(AtomicU64::new(0));
         let worker_process_rss_bytes = Arc::clone(&process_rss_bytes);
         let worker = match std::thread::Builder::new()
-            .name("yiru-diagnostics-trace".to_owned())
+            .name("agentstart-diagnostics-trace".to_owned())
             .spawn(move || {
                 trace_worker(
                     receiver,

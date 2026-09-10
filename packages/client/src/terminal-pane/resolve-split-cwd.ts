@@ -1,4 +1,4 @@
-export type PaneCwdEntry = { cwd: string; confirmed: boolean }
+type PaneCwdEntry = { cwd: string; confirmed: boolean }
 
 export type PaneCwdMap = Map<number, PaneCwdEntry>
 

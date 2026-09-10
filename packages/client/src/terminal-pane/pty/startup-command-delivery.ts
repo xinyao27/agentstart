@@ -1,5 +1,5 @@
-import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
-import { shouldUseShellReadyStartupDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
+import type { StartupCommandDelivery } from '@agentstart/protocol/agent/launch/startup-delivery'
+import { shouldUseShellReadyStartupDelivery } from '@agentstart/protocol/agent/launch/startup-delivery'
 
 import {
   createShellReadyMarkerScanState,
@@ -63,7 +63,7 @@ export function createStartupCommandDelivery(
     }
     if (!isShellReady) {
       if (fallbackTimer === null) {
-        // Why: some SSH shells cannot emit Yiru's marker. Prefer it, then fall
+        // Why: some SSH shells cannot emit AgentStart's marker. Prefer it, then fall
         // back to renderer delivery instead of dropping the command forever.
         fallbackTimer = setTimeout(() => {
           fallbackTimer = null

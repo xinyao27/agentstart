@@ -1,5 +1,5 @@
-use yiru_protocol::protocol::v1::Status;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::Status;
+use agentstart_protocol::runtime::v1::{
     TerminalColorSchemeMode, TerminalCursorStyle, TerminalDisplayModeKind,
     TerminalResizeForClientResult as ProtocolResizeResult, TerminalResizeMode,
     TerminalRgb as ProtocolRgb, TerminalServiceGetDisplayModeRequest,
@@ -9,7 +9,7 @@ use yiru_protocol::runtime::v1::{
     TerminalServiceUpdateViewAttributesResponse, TerminalServiceUpdateViewportRequest,
     TerminalServiceUpdateViewportResponse, terminal_service_resize_for_client_request::Mode,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::terminal_session::{TerminalClientType, TerminalResizeResult, TerminalSessionAuthority};
 

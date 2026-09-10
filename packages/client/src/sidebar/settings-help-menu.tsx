@@ -1,10 +1,10 @@
 import {
-  YIRU_GITHUB_RELEASES_URL,
-  YIRU_GITHUB_REPOSITORY_URL
-} from '@yiru/protocol/hosted-review/yiru-repository'
+  AGENTSTART_GITHUB_RELEASES_URL,
+  AGENTSTART_GITHUB_REPOSITORY_URL
+} from '@agentstart/protocol/hosted-review/agentstart-repository'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
-import logo from '~renderer/assets/brand/yiru-wordmark.png?url'
+import logo from '~renderer/assets/brand/agentstart-wordmark.png?url'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -46,7 +46,7 @@ import { useSetupGuideProgress } from '../setup-guide/use-setup-guide-progress'
 import { SidebarFeedbackDialog } from './feedback-dialog'
 import { openSidebarPage } from './host-navigation'
 
-const DOCS_URL = 'https://yiru.ai/docs'
+const DOCS_URL = `${AGENTSTART_GITHUB_REPOSITORY_URL}#readme`
 const NO_UPDATE_CHECK_MODIFIERS = { ctrlKey: false, metaKey: false, shiftKey: false }
 
 function openExternalUrl(url: string, event: React.MouseEvent<HTMLElement>): void {
@@ -82,7 +82,7 @@ export function SidebarSettingsHelpMenu(): React.JSX.Element {
   const [menuOpen, setMenuOpen] = useState(false)
   const [feedbackOpen, setFeedbackOpen] = useState(false)
   const [showAdminOptions, setShowAdminOptions] = useState(false)
-  const [isRestartingYiru, setIsRestartingYiru] = useState(false)
+  const [isRestartingAgentStart, setIsRestartingAgentStart] = useState(false)
   const lastShowOnboardingAtRef = React.useRef(0)
   const updateCheckModifiersRef = React.useRef(NO_UPDATE_CHECK_MODIFIERS)
   const mountedRef = useMountedRef()
@@ -114,21 +114,24 @@ export function SidebarSettingsHelpMenu(): React.JSX.Element {
     void showOnboardingFromRenderer()
   }
 
-  const handleRestartYiru = (): void => {
-    if (isRestartingYiru) {
+  const handleRestartAgentStart = (): void => {
+    if (isRestartingAgentStart) {
       return
     }
-    setIsRestartingYiru(true)
+    setIsRestartingAgentStart(true)
     toast.info(
-      translate('auto.components.sidebar.SidebarSettingsHelpMenu.5161eef55d', 'Restarting Yiru…')
+      translate(
+        'auto.components.sidebar.SidebarSettingsHelpMenu.5161eef55d',
+        'Restarting AgentStart…'
+      )
     )
     void shellClient.app.restart().catch((error) => {
       if (mountedRef.current) {
-        setIsRestartingYiru(false)
+        setIsRestartingAgentStart(false)
         toast.error(
           translate(
             'auto.components.sidebar.SidebarSettingsHelpMenu.4e8f5710d3',
-            "Couldn't restart Yiru."
+            "Couldn't restart AgentStart."
           ),
           {
             description: error instanceof Error ? error.message : undefined
@@ -248,12 +251,7 @@ export function SidebarSettingsHelpMenu(): React.JSX.Element {
             </DropdownMenuItem>
             {showMilestones ? (
               <DropdownMenuItem onClick={openMilestones}>
-                <img
-                  src={logo}
-                  alt=""
-                  aria-hidden="true"
-                  className="h-3.5 w-6 object-contain opacity-55 invert dark:invert-0"
-                />
+                <img src={logo} alt="" aria-hidden="true" className="size-5 object-contain" />
                 {translate(
                   'auto.components.sidebar.SidebarSettingsHelpMenu.f8a2c91d4e',
                   'Milestones'
@@ -288,7 +286,7 @@ export function SidebarSettingsHelpMenu(): React.JSX.Element {
                 'auto.components.sidebar.SidebarSettingsHelpMenu.5f83d86d92',
                 'Changelog'
               )}
-              url={YIRU_GITHUB_RELEASES_URL}
+              url={AGENTSTART_GITHUB_RELEASES_URL}
               icon={<ScrollText className="size-3.5" />}
             />
             <DropdownMenuSeparator />
@@ -297,7 +295,7 @@ export function SidebarSettingsHelpMenu(): React.JSX.Element {
                 'auto.components.sidebar.SidebarSettingsHelpMenu.5687ab246a',
                 'GitHub'
               )}
-              url={YIRU_GITHUB_REPOSITORY_URL}
+              url={AGENTSTART_GITHUB_REPOSITORY_URL}
               icon={<Github className="size-3.5" />}
             />
             <DropdownMenuSeparator />
@@ -320,11 +318,14 @@ export function SidebarSettingsHelpMenu(): React.JSX.Element {
             {showAdminOptions ? (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleRestartYiru} disabled={isRestartingYiru}>
+                <DropdownMenuItem
+                  onClick={handleRestartAgentStart}
+                  disabled={isRestartingAgentStart}
+                >
                   <RotateCw className="size-3.5" />
                   {translate(
                     'auto.components.sidebar.SidebarSettingsHelpMenu.ad3d3ed7f1',
-                    'Restart Yiru'
+                    'Restart AgentStart'
                   )}
                 </DropdownMenuItem>
               </>

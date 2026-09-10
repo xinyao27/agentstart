@@ -1,10 +1,10 @@
 "computer-use.accessibility.description" = "读取应用界面结构并执行你要求的操作。";
-"computer-use.app-name" = "Yiru 电脑控制";
+"computer-use.app-name" = "AgentStart 电脑控制";
 "computer-use.screenshots.description" = "捕获应用窗口，让智能体检查画面状态。";
 "computer-use.screenshots.title" = "屏幕截图";
-"computer-use.window.enable-description" = "Yiru 电脑控制需要以下权限才能使用 Mac 上的应用。\n仅当你要求 Yiru 执行任务时才会使用这些权限。";
-"computer-use.window.enable-title" = "启用 Yiru 电脑控制";
-"computer-use.window.ready-description" = "你发出请求后，Yiru 就能使用本机应用。";
+"computer-use.window.enable-description" = "AgentStart 电脑控制需要以下权限才能使用 Mac 上的应用。\n仅当你要求 AgentStart 执行任务时才会使用这些权限。";
+"computer-use.window.enable-title" = "启用 AgentStart 电脑控制";
+"computer-use.window.ready-description" = "你发出请求后，AgentStart 就能使用本机应用。";
 "computer-use.window.ready-title" = "电脑控制已就绪";
 "permission.accessibility.title" = "辅助功能";
 "permission.action.allow" = "允许";

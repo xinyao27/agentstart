@@ -139,7 +139,7 @@ export function shouldMountBackgroundWorktreeTab(
 // seconds (field trace: 200+ replay-guard stall releases in one activation
 // window). Deferred tabs behave like cold-parked tabs from birth: no view
 // until first reveal, parked byte watchers own their side effects meanwhile.
-export const COLD_ACTIVATION_TAB_DEFER_THRESHOLD = 4
+const COLD_ACTIVATION_TAB_DEFER_THRESHOLD = 4
 
 export function canDeferColdActivationTabsForHost(args: {
   executionHostId: string | null
@@ -259,7 +259,7 @@ export function revealActivationDeferredTabs(opts: {
 
 /** Tabs a restriction currently keeps unmounted — the set that needs parked
  *  byte-watcher coverage while deferred. */
-export function collectDeferredMountTabIds(
+function collectDeferredMountTabIds(
   restrictedTabIds: ReadonlySet<string> | null,
   tabIds: readonly string[]
 ): Set<string> {

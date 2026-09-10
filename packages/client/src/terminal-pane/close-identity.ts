@@ -1,4 +1,4 @@
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 export function shouldClearLaunchAgentForClosedPane(
   tab: Pick<TerminalTab, 'launchAgent' | 'ptyId'> | null | undefined,

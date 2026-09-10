@@ -1,10 +1,10 @@
-import { StatusCode } from '../../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   AgentProviderSessionKey,
   AgentStatusState,
   type AgentStatusState as AgentStatusStateValue,
   type AgentProviderSessionKey as AgentProviderSessionKeyValue
-} from '../../generated/yiru/runtime/v1/agent_status_pb.js'
+} from '../../generated/agent_start/runtime/v1/agent_status_pb.js'
 import {
   SessionTabsFileDiffSource,
   SessionTabsFileMode,
@@ -21,7 +21,7 @@ import {
   type SessionTabsTab,
   type SessionTabsTabGroup,
   type SessionTabsTerminalTab
-} from '../../generated/yiru/runtime/v1/session_tabs_pb.js'
+} from '../../generated/agent_start/runtime/v1/session_tabs_pb.js'
 import { RuntimeProtocolError } from '../error.js'
 import type {
   SessionTabsAgentStateValue,
@@ -236,7 +236,7 @@ function groupLayoutNode(value: SessionTabsGroupLayoutNode): SessionTabsGroupLay
 
 // Why: the tab type enum is open at runtime — a future daemon can send a value
 // this client does not know — so unknown values fall to the default arm.
-export function tabType(value: SessionTabsTabType): SessionTabsTabTypeValue | null {
+function tabType(value: SessionTabsTabType): SessionTabsTabTypeValue | null {
   switch (value) {
     case SessionTabsTabType.TERMINAL:
       return 'terminal'

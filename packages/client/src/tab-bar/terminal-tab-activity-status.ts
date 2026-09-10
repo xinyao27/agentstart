@@ -1,10 +1,13 @@
-import { agentPhaseFromStatus, type AgentPhase } from '@yiru/protocol/agent/phase'
+import { agentPhaseFromStatus, type AgentPhase } from '@agentstart/protocol/agent/phase'
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry
-} from '@yiru/protocol/agent/status-records'
-import { parseLegacyNumericPaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/agent/status-records'
+import {
+  parseLegacyNumericPaneKey,
+  parsePaneKey
+} from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
 import { resolveWorktreeStatus, type WorktreeStatus } from '~renderer/worktree/status'
 

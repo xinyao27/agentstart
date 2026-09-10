@@ -107,7 +107,7 @@ export async function executeTerminalPastePlan(
   return finish('pasted', chunksWritten)
 }
 
-export function getTerminalPasteOperationTimeoutMs(plan: TerminalPastePlan): number {
+function getTerminalPasteOperationTimeoutMs(plan: TerminalPastePlan): number {
   // Why: SSH/remote-runtime acknowledged PTY writes can include network
   // backpressure; keep local paste hangs tight without aborting slow remotes.
   return plan.target.runtime.kind === 'ssh' || plan.target.runtime.kind === 'remote-runtime'

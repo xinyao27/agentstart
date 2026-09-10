@@ -50,7 +50,7 @@ export function capturePathState(path, backupPath, manageParent = false) {
 export function restorePathState(state) {
   const parentPath = dirname(state.path)
   mkdirSync(parentPath, { recursive: true })
-  const staging = mkdtempSync(join(parentPath, '.yiru-path-restore-'))
+  const staging = mkdtempSync(join(parentPath, '.agentstart-path-restore-'))
   const guard = { preserve: false }
   const errors = []
   try {
@@ -128,7 +128,7 @@ export function replacePath(source, destination) {
     }
   }
   assertReplaceablePath(destination)
-  const staging = mkdtempSync(join(dirname(destination), '.yiru-replace-'))
+  const staging = mkdtempSync(join(dirname(destination), '.agentstart-replace-'))
   const current = join(staging, 'current')
   let preserve = false
   let recoveryStagingPath = null

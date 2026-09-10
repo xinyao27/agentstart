@@ -65,7 +65,7 @@ export function CommandPaletteTipDialog({
               {/* Why: uppercase eyebrow reads as a category label, not a feature launch. */}
               <Badge
                 variant="outline"
-                className="text-muted-foreground mb-3 px-2 py-0.5 text-[10px] font-semibold tracking-[0.12em] uppercase"
+                className="text-muted-foreground mb-3 rounded-md px-2 py-0.5 text-[10px] font-semibold tracking-[0.12em] uppercase"
               >
                 {tip.eyebrow.toUpperCase()}
               </Badge>
@@ -78,7 +78,7 @@ export function CommandPaletteTipDialog({
                 {displayShortcutLabel ? (
                   <>
                     {' '}
-                    <kbd className="border-border bg-card text-foreground ml-0.5 inline-flex items-center border px-2 py-0.5 align-middle font-mono text-base font-medium whitespace-nowrap">
+                    <kbd className="border-border bg-card text-foreground ml-0.5 inline-flex items-center rounded-md border px-2 py-0.5 align-middle font-mono text-base font-medium whitespace-nowrap">
                       {displayShortcutLabel}
                     </kbd>
                   </>

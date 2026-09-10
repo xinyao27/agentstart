@@ -1,8 +1,8 @@
 // Why: the ports authority answers with typed scan and kill structs; this is
 // the single place that renders those structs into the protobuf wire messages,
 // mirroring the legacy serde camelCase projection.
-use yiru_protocol::runtime::v1::workspace_ports_classification::Kind as ClassificationKind;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::workspace_ports_classification::Kind as ClassificationKind;
+use agentstart_protocol::runtime::v1::{
     WorkspacePortsAttributionConfidence, WorkspacePortsClassification, WorkspacePortsContainer,
     WorkspacePortsExternal, WorkspacePortsOwner, WorkspacePortsPlatform, WorkspacePortsPort,
     WorkspacePortsProtocol, WorkspacePortsServiceKillResponse, WorkspacePortsServiceScanResponse,

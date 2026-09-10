@@ -1,4 +1,7 @@
-import type { RateLimitHit, RateLimitResumeSchedule } from '@yiru/protocol/rate-limit-resume-values'
+import type {
+  RateLimitHit,
+  RateLimitResumeSchedule
+} from '@agentstart/protocol/rate-limit-resume-values'
 import type { AppState } from '~renderer/store/types'
 
 export type RateLimitNotice = {

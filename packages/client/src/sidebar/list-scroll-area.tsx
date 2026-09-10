@@ -75,7 +75,7 @@ function getScrollBehavior(animated: boolean | undefined): ScrollBehavior {
   return animated ? 'smooth' : 'auto'
 }
 
-export function LegendListScrollArea({
+function LegendListScrollArea({
   children,
   className,
   contentContainerClassName,

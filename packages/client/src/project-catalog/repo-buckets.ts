@@ -1,4 +1,4 @@
-import type { DetectedWorktreeListResult, Worktree } from '@yiru/protocol/worktree/model'
+import type { DetectedWorktreeListResult, Worktree } from '@agentstart/protocol/worktree/model'
 
 import { projectCatalogRepoKey, type ProjectCatalog } from './query'
 

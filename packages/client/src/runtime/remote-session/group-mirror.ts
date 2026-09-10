@@ -1,4 +1,4 @@
-import type { TabGroup, TabGroupLayoutNode, TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TabGroup, TabGroupLayoutNode, TerminalTab } from '@agentstart/protocol/workspace/tabs'
 
 import { toRemoteTerminalSurfaceTabId } from '../remote-terminal-surface-id'
 import { resolveRemoteSessionReorderedOrder } from './reorder-intent'

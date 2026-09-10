@@ -3,17 +3,17 @@ import {
   ShellRuntimeClient,
   type TerminalDriverState,
   type TerminalFitOverride
-} from '@yiru/protocol'
+} from '@agentstart/protocol'
 import type {
   UpdaterCheckOptions as UpdateCheckOptions,
   UpdaterStatus as UpdateStatus
-} from '@yiru/protocol/updater-values'
+} from '@agentstart/protocol/updater-values'
 import type { RuntimeSyncWindowGraph } from '~renderer/runtime/status/window-graph'
 import {
-  YIRU_APP_RESTART_ABORTED_EVENT,
-  YIRU_APP_RESTART_STARTED_EVENT,
-  YIRU_UPDATER_QUIT_AND_INSTALL_ABORTED_EVENT,
-  YIRU_UPDATER_QUIT_AND_INSTALL_STARTED_EVENT
+  AGENTSTART_APP_RESTART_ABORTED_EVENT,
+  AGENTSTART_APP_RESTART_STARTED_EVENT,
+  AGENTSTART_UPDATER_QUIT_AND_INSTALL_ABORTED_EVENT,
+  AGENTSTART_UPDATER_QUIT_AND_INSTALL_STARTED_EVENT
 } from '~renderer/updater-renderer-events'
 
 import {
@@ -70,13 +70,13 @@ export type ShellUpdaterApi = {
 export const shellAppApi: ShellAppApi = {
   restart: async () => {
     await prepareShellRestart({
-      startedEventName: YIRU_APP_RESTART_STARTED_EVENT,
-      abortedEventName: YIRU_APP_RESTART_ABORTED_EVENT
+      startedEventName: AGENTSTART_APP_RESTART_STARTED_EVENT,
+      abortedEventName: AGENTSTART_APP_RESTART_ABORTED_EVENT
     })
     try {
       await restartConfiguredBrowserHost()
     } catch (error) {
-      window.dispatchEvent(new Event(YIRU_APP_RESTART_ABORTED_EVENT))
+      window.dispatchEvent(new Event(AGENTSTART_APP_RESTART_ABORTED_EVENT))
       throw error
     }
   },
@@ -130,13 +130,13 @@ export const shellUpdaterApi: ShellUpdaterApi = {
   },
   quitAndInstall: async () => {
     await prepareShellRestart({
-      startedEventName: YIRU_UPDATER_QUIT_AND_INSTALL_STARTED_EVENT,
-      abortedEventName: YIRU_UPDATER_QUIT_AND_INSTALL_ABORTED_EVENT
+      startedEventName: AGENTSTART_UPDATER_QUIT_AND_INSTALL_STARTED_EVENT,
+      abortedEventName: AGENTSTART_UPDATER_QUIT_AND_INSTALL_ABORTED_EVENT
     })
     try {
       await (await openLocalUpdaterTarget()).install()
     } catch (error) {
-      window.dispatchEvent(new Event(YIRU_UPDATER_QUIT_AND_INSTALL_ABORTED_EVENT))
+      window.dispatchEvent(new Event(AGENTSTART_UPDATER_QUIT_AND_INSTALL_ABORTED_EVENT))
       throw error
     }
   },

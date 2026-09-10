@@ -37,7 +37,7 @@ import {
   normalizeAiVaultScopeForContext
 } from './scope-state'
 import { useAiVaultSessionLaunchActions } from './session-launch-actions'
-import { openAiVaultSessionLogInYiru } from './session-log-open'
+import { openAiVaultSessionLogInAgentStart } from './session-log-open'
 import { buildAiVaultProjectContext, buildAiVaultSessionProjectById } from './session-projects'
 import { useAiVaultSessionRefresh } from './session-refresh'
 import {
@@ -321,7 +321,7 @@ function LocalAiVaultPanel(): React.JSX.Element {
             translate('auto.components.right.sidebar.AiVaultPanel.logPath', 'Log path')
           )
         }
-        onOpenLog={(session) => void openAiVaultSessionLogInYiru(session)}
+        onOpenLog={(session) => void openAiVaultSessionLogInAgentStart(session)}
         onRevealLog={(session) => void shellClient.shell.openPath(session.filePath)}
         onOpenCwd={(session) => {
           if (session.cwd) {

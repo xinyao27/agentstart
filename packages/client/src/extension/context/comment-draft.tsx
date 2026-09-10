@@ -55,7 +55,7 @@ export function CommentDraft({ identity, projectId }: CommentDraftProps): React.
       <p className="text-muted-foreground pt-1 text-xs">
         {translate(
           'extension.githubDraft.safety',
-          'Uses the local diff and session context. Yiru never submits it.'
+          'Uses the local diff and session context. AgentStart never submits it.'
         )}
       </p>
       {draft.isError ? (

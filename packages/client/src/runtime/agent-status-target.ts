@@ -1,4 +1,4 @@
-import { AGENT_STATUS_PROTOCOL_CAPABILITY, AgentStatusClient } from '@yiru/protocol'
+import { AGENT_STATUS_PROTOCOL_CAPABILITY, AgentStatusClient } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 import {
@@ -24,7 +24,7 @@ export async function requireAgentStatusClient(): Promise<AgentStatusClient> {
     throw new Error(
       translate(
         'runtime.agentStatusTarget.unavailable',
-        'This action needs a current Yiru daemon connection.'
+        'This action needs a current AgentStart daemon connection.'
       )
     )
   }

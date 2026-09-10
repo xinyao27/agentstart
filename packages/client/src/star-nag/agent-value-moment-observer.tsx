@@ -1,4 +1,4 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
 import { useEffect, useRef } from 'react'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { shellClient } from '~renderer/runtime/shell-client'

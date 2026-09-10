@@ -30,7 +30,7 @@ export function AiCommitPrSettingsCard(): JSX.Element | null {
   }
 
   return (
-    <div ref={setSelectPortalHost} className="border-border bg-muted/20 border p-3.5">
+    <div ref={setSelectPortalHost} className="border-border bg-muted/20 rounded-xl border p-3.5">
       <div className="space-y-2.5">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">

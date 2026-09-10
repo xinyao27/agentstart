@@ -1,9 +1,9 @@
-import { supportsHostedReviewCreation } from '@yiru/protocol/hosted-review/creation-provider'
+import { supportsHostedReviewCreation } from '@agentstart/protocol/hosted-review/creation-provider'
 import type {
   HostedReviewCreationEligibility,
   HostedReviewInfo,
   HostedReviewProvider
-} from '@yiru/protocol/hosted-review/types'
+} from '@agentstart/protocol/hosted-review/types'
 import {
   localizedHostedReviewCopy,
   resolveSupportedHostedReviewCopyProvider
@@ -82,7 +82,7 @@ function buildCreatePrHeaderAction(
   }
 }
 
-export function resolveDisabledCreatePrHeaderAction(
+function resolveDisabledCreatePrHeaderAction(
   inputs: Pick<
     PrimaryActionInputs,
     'hostedReviewCreation' | 'isCommitting' | 'isRemoteOperationActive' | 'hasUnresolvedConflicts'
@@ -185,7 +185,7 @@ export function resolveDisabledCreatePrHeaderAction(
   return buildCreatePrHeaderAction(hostedReviewCreation, title, disabled)
 }
 
-export function resolveCreatePrIntentInFlightPrimaryAction(
+function resolveCreatePrIntentInFlightPrimaryAction(
   inputs?: Pick<PrimaryActionInputs, 'hostedReviewCreation'>
 ): PrimaryAction {
   const copy = localizedHostedReviewCopy(
@@ -207,9 +207,7 @@ export function resolveCreatePrIntentInFlightPrimaryAction(
   }
 }
 
-export function resolveCreatePrIntentPrimaryAction(
-  inputs: PrimaryActionInputs
-): PrimaryAction | null {
+function resolveCreatePrIntentPrimaryAction(inputs: PrimaryActionInputs): PrimaryAction | null {
   const createPrIntent = resolveCreatePrIntentEligibility({
     stagedCount: inputs.stagedCount,
     hasStageableChanges: inputs.hasStageableChanges,

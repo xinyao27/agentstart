@@ -5,7 +5,7 @@ import {
   GitHubServiceGetHostedReviewCreationEligibilityResponseSchema,
   GitHubServiceGetHostedReviewForBranchRequestSchema,
   GitHubServiceGetHostedReviewForBranchResponseSchema
-} from '../../generated/yiru/runtime/v1/github_pb.js'
+} from '../../generated/agent_start/runtime/v1/github_pb.js'
 import type { RuntimeCallOptions } from '../transport.js'
 import { GitHubCommentClient } from './comment-client.js'
 import {

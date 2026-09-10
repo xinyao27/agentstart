@@ -266,7 +266,7 @@ export function terminalOutputPrefersRenderRefresh(data: string): boolean {
   return false
 }
 
-export function terminalOutputContainsEastAsianRendererRisk(data: string): boolean {
+function terminalOutputContainsEastAsianRendererRisk(data: string): boolean {
   for (let i = 0; i < data.length; i += 1) {
     const codePoint = data.codePointAt(i)
     if (codePoint === undefined) {

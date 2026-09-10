@@ -7,7 +7,7 @@ use super::super::ProviderUsageError;
 const MAX_FILES: usize = 100_000;
 const MAX_DIRECTORIES: usize = 100_000;
 const MAX_DEPTH: usize = 64;
-const MAX_SCAN_BYTES: u64 = 512 * 1024 * 1024;
+pub(super) const MAX_REFRESH_BYTES: u64 = 512 * 1024 * 1024;
 const MAX_LINE_BYTES: u64 = 8 * 1024 * 1024;
 
 pub(super) fn files() -> Result<Vec<PathBuf>, ProviderUsageError> {
@@ -28,7 +28,6 @@ fn discover(roots: &[PathBuf]) -> Result<Vec<PathBuf>, ProviderUsageError> {
         .collect::<Vec<_>>();
     let mut files = Vec::new();
     let mut directory_count = 0;
-    let mut bytes = 0_u64;
     let mut visited_entries = 0_u64;
     while let Some((directory, depth)) = pending.pop() {
         directory_count += 1;
@@ -59,11 +58,8 @@ fn discover(roots: &[PathBuf]) -> Result<Vec<PathBuf>, ProviderUsageError> {
                     .extension()
                     .is_some_and(|extension| extension == "jsonl")
             {
-                bytes = bytes
-                    .checked_add(entry.metadata()?.len())
-                    .ok_or_else(limit_error)?;
                 files.push(entry.path());
-                if files.len() > MAX_FILES || bytes > MAX_SCAN_BYTES {
+                if files.len() > MAX_FILES {
                     return Err(limit_error());
                 }
             }
@@ -101,7 +97,7 @@ pub(super) fn read_lines(
             break;
         }
         bytes = bytes.saturating_add(read as u64);
-        if read as u64 > MAX_LINE_BYTES || bytes > MAX_SCAN_BYTES {
+        if read as u64 > MAX_LINE_BYTES || bytes > MAX_REFRESH_BYTES {
             return Err(limit_error());
         }
         line_count = line_count.saturating_add(1);

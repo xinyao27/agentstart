@@ -1,8 +1,8 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { Project, ProjectHostSetup } from '@yiru/protocol/project/model'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { projectHostSetupProjectionFromRepos } from '@yiru/protocol/project/setup-projection'
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { Project, ProjectHostSetup } from '@agentstart/protocol/project/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { projectHostSetupProjectionFromRepos } from '@agentstart/protocol/project/setup-projection'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 import type { ExecutionHostRegistryEntry } from '~renderer/execution-host-registry'
 
 import {
@@ -10,7 +10,7 @@ import {
   type ProjectSetupDirectory
 } from './new-workspace-duplicate-project-details'
 
-export const NEW_WORKSPACE_PROJECT_GROUP_OPTION_PREFIX = 'project-group:'
+const NEW_WORKSPACE_PROJECT_GROUP_OPTION_PREFIX = 'project-group:'
 
 export type NewWorkspaceProjectOption =
   | {
@@ -39,9 +39,9 @@ type NewWorkspaceProjectOptionBase = {
   detail: string
 }
 
-export const NEW_WORKSPACE_PROJECT_OPTION_QUERY_MAX_BYTES = 2 * 1024
+const NEW_WORKSPACE_PROJECT_OPTION_QUERY_MAX_BYTES = 2 * 1024
 
-export function isNewWorkspaceProjectOptionQueryTooLarge(
+function isNewWorkspaceProjectOptionQueryTooLarge(
   query: string,
   maxBytes = NEW_WORKSPACE_PROJECT_OPTION_QUERY_MAX_BYTES
 ): boolean {
@@ -87,7 +87,7 @@ function getProjectDetail(project: Project, readySetupCount: number): string {
   return 'Project'
 }
 
-export function buildNewWorkspaceProjectOptions(
+function buildNewWorkspaceProjectOptions(
   input: BuildNewWorkspaceProjectOptionsInput
 ): NewWorkspaceProjectOption[] {
   const { eligibleRepos } = input

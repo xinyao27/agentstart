@@ -1,4 +1,4 @@
-import type { Tab, TabGroup, TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { Tab, TabGroup, TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { SYNC_FIT_PANES_EVENT } from '~renderer/constants/terminal'
@@ -22,9 +22,9 @@ const EMPTY_UNIFIED_TABS: readonly Tab[] = []
 const EMPTY_GROUPS: readonly TabGroup[] = []
 const HAS_CSS_ANCHOR_POSITIONING =
   typeof CSS !== 'undefined' &&
-  CSS.supports('position-anchor', '--yiru-terminal-overlay-probe') &&
-  CSS.supports('top', 'anchor(--yiru-terminal-overlay-probe top)') &&
-  CSS.supports('width', 'anchor-size(--yiru-terminal-overlay-probe width)')
+  CSS.supports('position-anchor', '--agentstart-terminal-overlay-probe') &&
+  CSS.supports('top', 'anchor(--agentstart-terminal-overlay-probe top)') &&
+  CSS.supports('width', 'anchor-size(--agentstart-terminal-overlay-probe width)')
 const MIN_OVERLAY_FIT_WIDTH_PX = 48
 const MIN_OVERLAY_FIT_HEIGHT_PX = 24
 

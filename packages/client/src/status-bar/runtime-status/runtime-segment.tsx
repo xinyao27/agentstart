@@ -1,4 +1,4 @@
-import type { CliInstallStatus } from '@yiru/protocol/cli-values'
+import type { CliInstallStatus } from '@agentstart/protocol/cli-values'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
@@ -37,7 +37,7 @@ type CliProbeState =
   | { kind: 'unavailable' }
 
 function getCliDetail(state: CliProbeState): RuntimeStatusIndicatorDetail {
-  const label = translate('auto.components.status.bar.DesktopRuntimeStatus.cli', 'Yiru CLI')
+  const label = translate('auto.components.status.bar.DesktopRuntimeStatus.cli', 'AgentStart CLI')
   switch (state.kind) {
     case 'idle':
     case 'checking':
@@ -103,7 +103,10 @@ function getRuntimePresentation(
   isLocal: boolean,
   cliState: CliProbeState
 ): RuntimeStatusIndicatorProps {
-  const title = translate('auto.components.status.bar.DesktopRuntimeStatus.title', 'Yiru Runtime')
+  const title = translate(
+    'auto.components.status.bar.DesktopRuntimeStatus.title',
+    'AgentStart Runtime'
+  )
   const hostDetail: RuntimeStatusIndicatorDetail = {
     label: translate('auto.components.status.bar.DesktopRuntimeStatus.host', 'Host'),
     value: hostName
@@ -123,7 +126,7 @@ function getRuntimePresentation(
       )
       label = translate(
         'auto.components.status.bar.DesktopRuntimeStatus.runtimeCheckingLabel',
-        'Checking Yiru Runtime on {{host}}',
+        'Checking AgentStart Runtime on {{host}}',
         { host: hostName }
       )
       description = translate(
@@ -139,17 +142,17 @@ function getRuntimePresentation(
       )
       label = translate(
         'auto.components.status.bar.DesktopRuntimeStatus.runtimeReadyLabel',
-        'Yiru Runtime ready on {{host}}',
+        'AgentStart Runtime ready on {{host}}',
         { host: hostName }
       )
       description = isLocal
         ? translate(
             'auto.components.status.bar.DesktopRuntimeStatus.localReadyDescription',
-            'Yiru can execute work on this computer.'
+            'AgentStart can execute work on this computer.'
           )
         : translate(
             'auto.components.status.bar.DesktopRuntimeStatus.remoteReadyDescription',
-            'Yiru is connected to the selected execution host.'
+            'AgentStart is connected to the selected execution host.'
           )
       if (state.appVersion) {
         details.splice(1, 0, {
@@ -166,12 +169,12 @@ function getRuntimePresentation(
       )
       label = translate(
         'auto.components.status.bar.DesktopRuntimeStatus.runtimeUnavailableLabel',
-        'Yiru Runtime unavailable on {{host}}',
+        'AgentStart Runtime unavailable on {{host}}',
         { host: hostName }
       )
       description = translate(
         'auto.components.status.bar.DesktopRuntimeStatus.runtimeUnavailableDescription',
-        'The current execution host is not ready. Yiru will keep checking automatically.'
+        'The current execution host is not ready. AgentStart will keep checking automatically.'
       )
       break
     case 'warning':
@@ -182,12 +185,12 @@ function getRuntimePresentation(
       )
       label = translate(
         'auto.components.status.bar.DesktopRuntimeStatus.updateRequiredLabel',
-        'Yiru Runtime update required on {{host}}',
+        'AgentStart Runtime update required on {{host}}',
         { host: hostName }
       )
       description = translate(
         'auto.components.status.bar.DesktopRuntimeStatus.updateRequiredDescription',
-        'Update Yiru on this computer or the selected host before using it.'
+        'Update AgentStart on this computer or the selected host before using it.'
       )
       break
   }

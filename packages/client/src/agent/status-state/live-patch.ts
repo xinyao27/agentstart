@@ -1,5 +1,5 @@
-import { agentProviderSessionsEqual } from '@yiru/protocol/agent/session-resume'
-import { AGENT_STATUS_STALE_AFTER_MS } from '@yiru/protocol/agent/status-records'
+import { agentProviderSessionsEqual } from '@agentstart/protocol/agent/session-resume'
+import { AGENT_STATUS_STALE_AFTER_MS } from '@agentstart/protocol/agent/status-records'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
 
 import type { AppState } from '../../store/types'
@@ -171,7 +171,7 @@ export function buildLiveAgentStatusPatch(input: {
       }
     }
   }
-  // Why: launch tokens can remain in a shell after a Yiru-started TUI exits;
+  // Why: launch tokens can remain in a shell after a AgentStart-started TUI exits;
   // once the original session is done they must no longer authorize config reuse.
   if (
     (providerSessionChanged || entry.state === 'done') &&

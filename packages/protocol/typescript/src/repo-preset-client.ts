@@ -8,7 +8,7 @@ import {
   RepoServiceSaveSparsePresetResponseSchema,
   RepoServiceSparsePresetsRequestSchema,
   RepoServiceSparsePresetsResponseSchema
-} from '../generated/yiru/runtime/v1/repo_pb.js'
+} from '../generated/agent_start/runtime/v1/repo_pb.js'
 import { RepoHooksClient } from './repo-hooks-client.js'
 import { sparsePreset } from './repo-preset-values.js'
 import { required } from './repo-refs-client.js'

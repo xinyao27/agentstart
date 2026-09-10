@@ -1,4 +1,4 @@
-export const COMMAND_CODE_OUTPUT_DONE_SETTLE_MS = 1500
+const COMMAND_CODE_OUTPUT_DONE_SETTLE_MS = 1500
 
 type CommandCodeDoneSettleExecutor = (normalizedPrompt: string) => void
 

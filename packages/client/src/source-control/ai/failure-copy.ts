@@ -1,5 +1,5 @@
-import type { SourceControlAiOperation } from '@yiru/protocol/source-control/ai-types'
-import type { GenerationFailureReason } from '@yiru/protocol/source-control/failure'
+import type { SourceControlAiOperation } from '@agentstart/protocol/source-control/ai-types'
+import type { GenerationFailureReason } from '@agentstart/protocol/source-control/failure'
 import { translate } from '~renderer/i18n/i18n'
 
 function operationLabel(operation: SourceControlAiOperation): string {

@@ -1,5 +1,5 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
 import type { StateCreator } from 'zustand'
 import {
   readProjectCatalogMutationRevision,
@@ -80,7 +80,7 @@ export function createRepoAddProjectActions(
         const repoIdentity = getRepoHostIdentity(repo)
         const alreadyAdded = knownRepoIdentities.has(repoIdentity)
         if (alreadyAdded) {
-          get().clearYiruHookTrustForRepo(repo.id)
+          get().clearAgentStartHookTrustForRepo(repo.id)
         }
         set({ folderWorkspacePathStatuses: {} })
         if (alreadyAdded) {
@@ -98,7 +98,7 @@ export function createRepoAddProjectActions(
           })
           // Why: the design requires the cross-profile advisory for paired-runtime
           // projects too because the presence lookup is already host-scoped.
-          await warnIfProjectKnownInAnotherProfile(repo, get().activeYiruProfileId)
+          await warnIfProjectKnownInAnotherProfile(repo, get().activeAgentStartProfileId)
         }
         return repo
       } catch (err) {

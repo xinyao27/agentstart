@@ -1,4 +1,4 @@
-import type { ExecuteRequest } from '../../generated/yiru/runtime/v1/browser_pb.js'
+import type { ExecuteRequest } from '../../generated/agent_start/runtime/v1/browser_pb.js'
 import { invocation, targetInput } from './command-invocation.js'
 import type { BrowserCommandInvocation } from './command-invocation.js'
 import { decodePageControlCommand } from './command-page-control.js'

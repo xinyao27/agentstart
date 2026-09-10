@@ -9,26 +9,26 @@ pub(in crate::rpc) use screencast::screencast;
 use std::path::{Component, Path, PathBuf};
 use std::time::Duration;
 
-use getrandom::fill;
-use prost::Message;
-use tokio::io::AsyncWriteExt;
-use tokio::time::Instant;
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1BrowserHostServiceDownload as DownloadMethod,
-    YiruRuntimeV1BrowserHostServiceExecute as ExecuteMethod,
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1BrowserHostServiceDownload as DownloadMethod,
+    AgentStartRuntimeV1BrowserHostServiceExecute as ExecuteMethod,
 };
-use yiru_protocol::protocol::v1::{PeerKind, Status, StatusCode};
-use yiru_protocol::runtime::v1::download_response::Event;
-use yiru_protocol::runtime::v1::execute_mobile_request::Command as MobileRequestCommand;
-use yiru_protocol::runtime::v1::execute_mobile_response::Result as MobileResponseResult;
-use yiru_protocol::runtime::v1::execute_request::Command as RequestCommand;
-use yiru_protocol::runtime::v1::execute_response::Result as ResponseResult;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{PeerKind, Status, StatusCode};
+use agentstart_protocol::runtime::v1::download_response::Event;
+use agentstart_protocol::runtime::v1::execute_mobile_request::Command as MobileRequestCommand;
+use agentstart_protocol::runtime::v1::execute_mobile_response::Result as MobileResponseResult;
+use agentstart_protocol::runtime::v1::execute_request::Command as RequestCommand;
+use agentstart_protocol::runtime::v1::execute_response::Result as ResponseResult;
+use agentstart_protocol::runtime::v1::{
     BrowserTarget, DownloadRequest, DownloadResponse, ExecuteMobileRequest, ExecuteMobileResponse,
     ExecuteRequest, ResolveTargetRequest, ResolveTargetResponse, ResolveUploadRequest,
     ResolveUploadResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use getrandom::fill;
+use prost::Message;
+use tokio::io::AsyncWriteExt;
+use tokio::time::Instant;
 
 use crate::atomic_file_replace;
 use crate::reverse_protocol::{ReverseProtocolError, ReverseProtocolRegistry};
@@ -605,7 +605,7 @@ impl StagingFile {
         let parent = destination
             .parent()
             .ok_or_else(|| status(StatusCode::InvalidArgument, "browser_download_path_invalid"))?;
-        let path = parent.join(format!(".yiru-download-{}.part", random_uuid()?));
+        let path = parent.join(format!(".agentstart-download-{}.part", random_uuid()?));
         let file = tokio::fs::OpenOptions::new()
             .create_new(true)
             .write(true)

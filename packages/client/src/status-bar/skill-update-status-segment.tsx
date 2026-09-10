@@ -1,4 +1,4 @@
-import type { SkillUpdateOperation as SkillManageOperation } from '@yiru/protocol'
+import type { SkillUpdateOperation as SkillManageOperation } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 import {
   WarningCircle as AlertCircle,

@@ -1,4 +1,4 @@
-import type { ClientEventsSubscriptionEventValue } from '@yiru/protocol'
+import type { ClientEventsSubscriptionEventValue } from '@agentstart/protocol'
 
 import { requireClientEventsClient } from './client-events-target'
 import { onLocalHostProgressEvent } from './host-progress-stream'

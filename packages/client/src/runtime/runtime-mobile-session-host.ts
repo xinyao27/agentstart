@@ -1,6 +1,6 @@
-import { getRepoExecutionHostId } from '@yiru/protocol/host/identity'
-import type { ExecutionHostId } from '@yiru/protocol/host/identity'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+import { getRepoExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 import type { AppState } from '~renderer/store/types'
 import { getExecutionHostIdForWorktree } from '~renderer/worktree/runtime-owner'
 

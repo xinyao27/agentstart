@@ -1,7 +1,7 @@
-import type { StartupCommandDelivery } from '@yiru/protocol/agent/launch/startup-delivery'
-import type { SleepingAgentLaunchConfig } from '@yiru/protocol/agent/session-resume'
-import type { TuiAgent } from '@yiru/protocol/agent/types'
-import { BrowserRuntimeClient } from '@yiru/protocol/browser-runtime'
+import type { StartupCommandDelivery } from '@agentstart/protocol/agent/launch/startup-delivery'
+import type { SleepingAgentLaunchConfig } from '@agentstart/protocol/agent/session-resume'
+import type { TuiAgent } from '@agentstart/protocol/agent/types'
+import { BrowserRuntimeClient } from '@agentstart/protocol/browser-runtime'
 
 import { openRuntimeProtocolTarget } from '../protocol-target'
 import { isRemoteTerminalSurfaceTabId, toHostSessionTabId } from '../remote-terminal-surface-id'

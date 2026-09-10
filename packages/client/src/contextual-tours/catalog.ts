@@ -1,5 +1,5 @@
-import type { ContextualTourId } from '@yiru/protocol/settings/contextual-tours'
-import type { FeatureInteractionId } from '@yiru/protocol/telemetry/interactions/catalog'
+import type { ContextualTourId } from '@agentstart/protocol/settings/contextual-tours'
+import type { FeatureInteractionId } from '@agentstart/protocol/telemetry/interactions/catalog'
 import { translate } from '~renderer/i18n/i18n'
 import { createLocalizedCatalog } from '~renderer/i18n/localized-catalog'
 
@@ -7,7 +7,7 @@ export type ContextualTourStepControl = {
   kind: 'auto-rename-branch-from-work'
 }
 
-export type ContextualTourStepActionKind =
+type ContextualTourStepActionKind =
   | 'next'
   | 'complete'
   | 'split-terminal-pane'
@@ -43,7 +43,7 @@ export type ContextualTour = {
   steps: readonly ContextualTourStep[]
 }
 
-export const getContextualTours = createLocalizedCatalog((): readonly ContextualTour[] => [
+const getContextualTours = createLocalizedCatalog((): readonly ContextualTour[] => [
   {
     id: 'workspace-agent-sessions',
     steps: [
@@ -102,7 +102,7 @@ export const getContextualTours = createLocalizedCatalog((): readonly Contextual
         title: translate('contextual-tours.ab573bd0e9', 'Stay logged in'),
         body: translate(
           'contextual-tours.cc98d6cf9e',
-          'Bring your existing logins into Yiru to stay signed in immediately.'
+          'Bring your existing logins into AgentStart to stay signed in immediately.'
         ),
         // Prefer the always-visible Import button; fall back to the overflow-menu
         // item only once the user has dismissed the import hint.
@@ -121,7 +121,7 @@ export const getContextualTours = createLocalizedCatalog((): readonly Contextual
         title: translate('contextual-tours.eca71e5d1a', 'Pick a project'),
         body: translate(
           'contextual-tours.d322379476',
-          'Yiru isolates each task in its own worktree, branched off your base.'
+          'AgentStart isolates each task in its own worktree, branched off your base.'
         ),
         targetSelector: '[data-contextual-tour-target="workspace-creation-project"]',
         requiredForStart: true

@@ -1,6 +1,6 @@
+import type { DiffComment } from '@agentstart/protocol/git/diff-review'
 import type { EditorView } from '@tiptap/pm/view'
 import type { Editor } from '@tiptap/react'
-import type { DiffComment } from '@yiru/protocol/git/diff-review'
 import type { MutableRefObject } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -27,7 +27,7 @@ export type ActivateMarkdownLink = (
     worktreeId: string
     worktreeRoot: string | null
     runtimeEnvironmentId?: string | null
-    openInYiruBrowser?: boolean
+    openInAgentStartBrowser?: boolean
     sourceOwner?: HttpLinkSourceOwner
   }
 ) => void | Promise<unknown>
@@ -98,7 +98,7 @@ export function handleRichMarkdownEditorClick({
       activateMarkdownLink,
       filePath,
       runtimeEnvironmentId,
-      openInYiruBrowser: true,
+      openInAgentStartBrowser: true,
       src: (clickedNode.attrs.src as string | undefined) ?? '',
       sourceOwner,
       worktreeId,
@@ -143,7 +143,7 @@ export function handleRichMarkdownEditorClick({
     worktreeId,
     worktreeRoot,
     runtimeEnvironmentId,
-    openInYiruBrowser: true,
+    openInAgentStartBrowser: true,
     sourceOwner
   })
   return true
@@ -153,7 +153,7 @@ function activateMarkdownImageClick({
   activateMarkdownLink,
   filePath,
   runtimeEnvironmentId,
-  openInYiruBrowser,
+  openInAgentStartBrowser,
   sourceOwner,
   src,
   worktreeId,
@@ -162,7 +162,7 @@ function activateMarkdownImageClick({
   activateMarkdownLink: ActivateMarkdownLink
   filePath: string
   runtimeEnvironmentId?: string | null
-  openInYiruBrowser?: boolean
+  openInAgentStartBrowser?: boolean
   sourceOwner?: HttpLinkSourceOwner
   src: string
   worktreeId: string
@@ -176,7 +176,7 @@ function activateMarkdownImageClick({
     worktreeId,
     worktreeRoot,
     runtimeEnvironmentId,
-    openInYiruBrowser,
+    openInAgentStartBrowser,
     sourceOwner
   })
   return true

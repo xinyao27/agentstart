@@ -5,7 +5,7 @@ import {
   ExternalEditorServiceOpenRemoteSshRequestSchema,
   ExternalEditorServiceOpenRemoteSshResponseSchema,
   ExternalEditorUnsupportedReason
-} from '../generated/yiru/runtime/v1/external_editor_pb.js'
+} from '../generated/agent_start/runtime/v1/external_editor_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 
 export const EXTERNAL_EDITOR_PROTOCOL_CAPABILITY = 'externalEditor.protobuf.v1' as const

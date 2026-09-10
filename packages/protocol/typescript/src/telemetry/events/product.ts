@@ -144,7 +144,7 @@ export const supportReportSubmittedSchema = z
     platform: z.string().max(64),
     arch: z.string().max(64),
     os_release: z.string().max(64),
-    yiru_channel: z.enum(['stable', 'rc']),
+    agentstart_channel: z.enum(['stable', 'rc']),
     diagnostic_bundle_id: z
       .string()
       .regex(/^[A-Za-z0-9_-]{16,64}$/)

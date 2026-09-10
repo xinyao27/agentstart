@@ -1,7 +1,7 @@
 import {
   TerminalClientKind,
   TerminalSplitTelemetrySource
-} from '../../generated/yiru/runtime/v1/terminal_pb.js'
+} from '../../generated/agent_start/runtime/v1/terminal_pb.js'
 import type { TerminalClientIdentity, TerminalViewport } from './types.js'
 
 export function required(value: string, label: string): string {

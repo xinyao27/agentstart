@@ -9,32 +9,21 @@ import {
 import { appendOrderedGroups } from '../worktree-section-emission'
 import type { BuildRowsOptions, Row } from './rows'
 
-export { branchName } from '~renderer/source-control/branch-name'
-export { getGroupKeyForWorktree, getGroupKeysForWorktree } from '../worktree-group-keys'
+export { getGroupKeysForWorktree } from '../worktree-group-keys'
 export {
   ALL_GROUP_KEY,
-  ALL_GROUP_META,
   getLineageGroupKey,
   getLineageRenderInfo,
-  getPRGroupKey,
   getProjectGroupHeaderKey,
-  LINEAGE_GROUP_PREFIX,
-  PINNED_GROUP_KEY,
-  PINNED_GROUP_META,
-  PR_GROUP_META,
-  PR_GROUP_ORDER,
-  PROJECT_GROUP_META
+  PINNED_GROUP_KEY
 } from '../worktree-group-metadata'
-export type { LineageRenderInfo, PRGroupKey } from '../worktree-group-metadata'
 export type {
   BuildRowsOptions,
-  FolderWorkspaceRow,
   GroupHeaderRow,
   ImportedWorktreesCardCandidate,
   ImportedWorktreesCardRow,
   NewExternalWorktreesInboxCandidate,
   NewExternalWorktreesInboxRow,
-  PendingCreationRef,
   PendingCreationRow,
   PinnedWorktreeDisplayPolicy,
   ProjectGroupingModel,
@@ -42,8 +31,6 @@ export type {
   WorktreeGroupBy,
   WorktreeRow
 } from './rows'
-export { getProjectHeaderRevealTarget } from '../worktree-project-grouping'
-export type { ProjectHeaderRevealTarget } from '../worktree-project-grouping'
 export { getPinnedWorktreeDisplayPolicy }
 
 export function buildRows(options: BuildRowsOptions): Row[] {

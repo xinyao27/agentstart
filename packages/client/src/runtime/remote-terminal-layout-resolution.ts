@@ -1,4 +1,4 @@
-import type { TerminalPaneLayoutNode } from '@yiru/protocol/workspace/session'
+import type { TerminalPaneLayoutNode } from '@agentstart/protocol/workspace/session'
 
 /**
  * Single source of truth for turning a set of terminal leaves into a layout
@@ -31,7 +31,7 @@ function collectLayoutLeafIds(
 }
 
 /** Whether `root` is a layout for exactly `leafIds` — every leaf present, no extras. */
-export function layoutCoversLeaves(
+function layoutCoversLeaves(
   root: TerminalPaneLayoutNode | null | undefined,
   leafIds: readonly string[]
 ): boolean {

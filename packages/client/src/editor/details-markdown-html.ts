@@ -4,7 +4,7 @@ import type { MarkdownToken } from '@tiptap/core'
 // heading levels the slash menu / toolbar dropdown offer (h1–h4).
 export type ToggleHeadingVariant = 'heading-1' | 'heading-2' | 'heading-3' | 'heading-4'
 
-export const TOGGLE_HEADING_VARIANTS: readonly ToggleHeadingVariant[] = [
+const TOGGLE_HEADING_VARIANTS: readonly ToggleHeadingVariant[] = [
   'heading-1',
   'heading-2',
   'heading-3',
@@ -49,7 +49,7 @@ export function parseDetailsAttributes(rawAttributes: string): Record<string, un
   // Why: validation accepts normal HTML whitespace around `=`, so parsing
   // must accept it too or an editable toggle loses its heading variant.
   const variantMatch = rawAttributes.match(
-    /\sdata-yiru-toggle\s*=\s*(?:"(heading-[1-4])"|'(heading-[1-4])'|(heading-[1-4]))(?:\s|$)/i
+    /\sdata-agentstart-toggle\s*=\s*(?:"(heading-[1-4])"|'(heading-[1-4])'|(heading-[1-4]))(?:\s|$)/i
   )
   return {
     open: /\sopen(?:\s|=|$)/i.test(rawAttributes),
@@ -68,11 +68,11 @@ export function detailsBodyHtmlToMarkdown(body: string): string {
 }
 
 export function renderDetailsAttributes(attrs: Record<string, unknown> | undefined): string {
-  const attributes = ['class="yiru-details"']
+  const attributes = ['class="agentstart-details"']
 
   const variant = parseToggleHeadingVariant(attrs?.variant)
   if (variant) {
-    attributes.push(`data-yiru-toggle="${variant}"`)
+    attributes.push(`data-agentstart-toggle="${variant}"`)
   }
 
   if (attrs?.open === true) {
@@ -178,9 +178,12 @@ function hasOnlySupportedDetailsAttributes(rawAttributes: string): boolean {
   return (
     rawAttributes
       .replace(/\s+open(?:\s*=\s*(?:""|"open"|''|'open'|open))?(?=\s|$)/giu, '')
-      .replace(/\s+class\s*=\s*(?:"yiru-details"|'yiru-details'|yiru-details)(?=\s|$)/giu, '')
       .replace(
-        /\s+data-yiru-toggle\s*=\s*(?:"heading-[1-4]"|'heading-[1-4]'|heading-[1-4])(?=\s|$)/giu,
+        /\s+class\s*=\s*(?:"agentstart-details"|'agentstart-details'|agentstart-details)(?=\s|$)/giu,
+        ''
+      )
+      .replace(
+        /\s+data-agentstart-toggle\s*=\s*(?:"heading-[1-4]"|'heading-[1-4]'|heading-[1-4])(?=\s|$)/giu,
         ''
       )
       .trim() === ''

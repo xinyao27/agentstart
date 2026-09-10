@@ -1,4 +1,7 @@
-import type { BrowserConsoleEntry, BrowserNetworkEntry } from '@yiru/protocol/browser-observation'
+import type {
+  BrowserConsoleEntry,
+  BrowserNetworkEntry
+} from '@agentstart/protocol/browser-observation'
 
 import { acquireCdp, releaseCdp, sendCdp, subscribeCdp } from '../cdp/session'
 import { optionalNumber, readArray, readNumberValue, readStringValue } from './command-value'

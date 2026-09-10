@@ -9,7 +9,7 @@ use crate::hosts::{ExecutionHost, HostCommand, HostCommandErrorKind, HostPlatfor
 
 use super::model::{ShellHydration, ShellHydrationFailureReason};
 
-const DELIMITER: &str = "__YIRU_SHELL_PATH__";
+const DELIMITER: &str = "__AGENTSTART_SHELL_PATH__";
 const HYDRATION_TIMEOUT_MS: u64 = 5_000;
 const WINDOWS_PATH_CACHE_TTL: Duration = Duration::from_secs(30);
 

@@ -1,4 +1,4 @@
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 export function findGithubPrWorkspaceAttachment(
   worktrees: readonly Worktree[],

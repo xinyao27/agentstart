@@ -1,20 +1,8 @@
-import type {
-  AgentStatusEntry,
-  MigrationUnsupportedPtyEntry
-} from '@yiru/protocol/agent/status-records'
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 import { basename } from '~renderer/path'
-import { tabHasLivePty } from '~renderer/tab-bar/has-live-pty'
 
-import {
-  IDLE,
-  buildAttentionByWorktree,
-  hasFreshAttributedAgentStatus,
-  type WorktreeAttention
-} from './smart-attention'
+import { IDLE, type WorktreeAttention } from './smart-attention'
 
 export type SortBy = 'name' | 'smart' | 'recent' | 'repo' | 'manual'
 
@@ -27,7 +15,7 @@ export type SortBy = 'name' | 'smart' | 'recent' | 'repo' | 'manual'
 // so it stays on top until the user has had a chance to notice it. 5 min is
 // long enough for the user to interact, short enough that steady-state
 // ordering resumes quickly.
-export const CREATE_GRACE_MS = 5 * 60 * 1000
+const CREATE_GRACE_MS = 5 * 60 * 1000
 
 /**
  * Rank a worktree in Recent sort using `lastActivityAt`, but with a floor of
@@ -37,7 +25,7 @@ export const CREATE_GRACE_MS = 5 * 60 * 1000
  * without `createdAt` (discovered on disk, or persisted before this field
  * existed).
  */
-export function effectiveRecentActivity(worktree: Worktree, now: number): number {
+function effectiveRecentActivity(worktree: Worktree, now: number): number {
   const { lastActivityAt, createdAt } = worktree
   // Why bound by now: a worktree with createdAt set but no subsequent activity
   // should not retain artificially-high recency forever; the floor exists to
@@ -52,7 +40,7 @@ export function effectiveRecentActivity(worktree: Worktree, now: number): number
 
 type WorktreeSortLabelInput = Pick<Worktree, 'displayName' | 'path' | 'id'>
 
-export function getWorktreeSortLabel(worktree: WorktreeSortLabelInput): string {
+function getWorktreeSortLabel(worktree: WorktreeSortLabelInput): string {
   const displayName = typeof worktree.displayName === 'string' ? worktree.displayName.trim() : ''
   if (displayName) {
     return displayName
@@ -136,59 +124,4 @@ export function buildWorktreeComparator(
         )
     }
   }
-}
-
-/**
- * Sort worktrees by the smart-attention comparator (status class first,
- * recency-of-attention second). On cold start (no live PTYs yet), falls back
- * to persisted `sortOrder` descending so the sidebar restores the pre-quit
- * order until the agent-status snapshot lands.
- *
- * Both the palette and `getVisibleWorktreeIds()` import this to avoid
- * duplicating the cold/warm branching logic.
- *
- * `agentStatusByPaneKey` carries the primary signal; `runtimePaneTitlesByTabId`
- * and `ptyIdsByTabId` enable the title-heuristic fallback for hookless agents
- * (Edge case 9 in the design doc). Why all three are non-optional: a forgotten
- * caller would silently regress every worktree to Class 4 or quietly disable
- * the hookless-fallback path.
- */
-export function sortWorktreesSmart(
-  worktrees: Worktree[],
-  tabsByWorktree: Record<string, TerminalTab[]>,
-  repoMap: Map<string, Repo>,
-  agentStatusByPaneKey: Record<string, AgentStatusEntry>,
-  runtimePaneTitlesByTabId: Record<string, Record<number, string>>,
-  ptyIdsByTabId: Record<string, string[]>,
-  migrationUnsupportedByPtyId?: Record<string, MigrationUnsupportedPtyEntry>,
-  terminalLayoutsByTabId?: Record<string, TerminalLayoutSnapshot>
-): Worktree[] {
-  // Why: `tabHasLivePty` (over `ptyIdsByTabId`) is the source of truth for
-  // liveness — slept terminals retain `tab.ptyId` as a wake hint, so reading
-  // it directly would falsely keep cold-start ordering off after restart.
-  const hasAnyLivePty = Object.values(tabsByWorktree)
-    .flat()
-    .some((tab) => tabHasLivePty(ptyIdsByTabId, tab.id))
-
-  const now = Date.now()
-  if (!hasAnyLivePty && !hasFreshAttributedAgentStatus(agentStatusByPaneKey, now, tabsByWorktree)) {
-    // Cold start: use persisted sortOrder snapshot until the agent-status
-    // snapshot lands and a warm sort runs.
-    return [...worktrees].sort(
-      (a, b) => b.sortOrder - a.sortOrder || compareWorktreeSortLabel(a, b)
-    )
-  }
-
-  const attentionByWorktree = buildAttentionByWorktree(
-    worktrees,
-    tabsByWorktree,
-    agentStatusByPaneKey,
-    runtimePaneTitlesByTabId,
-    ptyIdsByTabId,
-    now,
-    migrationUnsupportedByPtyId,
-    terminalLayoutsByTabId
-  )
-
-  return [...worktrees].sort(buildWorktreeComparator('smart', repoMap, now, attentionByWorktree))
 }

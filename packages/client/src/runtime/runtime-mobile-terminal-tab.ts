@@ -1,5 +1,5 @@
-import { isTerminalLeafId, makePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
+import { isTerminalLeafId, makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
 import { isClaudeManagementTitle } from '~renderer/agent/title/core'
 import type { AppState } from '~renderer/store/types'
 import {

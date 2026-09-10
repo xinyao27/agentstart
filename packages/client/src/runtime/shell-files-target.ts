@@ -1,4 +1,4 @@
-import { SHELL_FILES_PROTOCOL_CAPABILITY, ShellFilesClient } from '@yiru/protocol'
+import { SHELL_FILES_PROTOCOL_CAPABILITY, ShellFilesClient } from '@agentstart/protocol'
 
 import {
   openConfiguredBrowserHostProtocol,
@@ -8,7 +8,7 @@ import {
 // Why: `shell.files` always addresses the OS host running the current Chrome
 // client (never the selected runtime environment), so this reaches the local
 // protocol channel directly, preserving its local-only routing policy.
-export async function openShellFilesTarget(): Promise<ShellFilesClient | null> {
+async function openShellFilesTarget(): Promise<ShellFilesClient | null> {
   const status = await readConfiguredBrowserHostStatus()
   if (!status.capabilities?.includes(SHELL_FILES_PROTOCOL_CAPABILITY)) {
     return null

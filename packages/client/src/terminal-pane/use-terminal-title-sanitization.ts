@@ -1,5 +1,5 @@
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { useEffect } from 'react'
 
 import type { PaneManager } from './pane-manager/pane-manager'

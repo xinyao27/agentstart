@@ -14,6 +14,7 @@ use super::ComputerError;
 const CONNECT_TIMEOUT: Duration = Duration::from_secs(10);
 const CALL_TIMEOUT: Duration = Duration::from_secs(60);
 const PROTOCOL_VERSION: u64 = 1;
+const SOCKET_ROOT: &str = "/tmp";
 
 pub(super) struct MacProvider {
     capabilities: Option<Value>,
@@ -28,7 +29,10 @@ impl MacProvider {
     pub(super) async fn start(user_data_path: &Path) -> Result<Self, ComputerError> {
         ensure_supported_macos().await?;
         let executable = resolve_executable(user_data_path).ok_or_else(|| {
-            ComputerError::domain("accessibility_error", "Yiru Computer Use.app was not found")
+            ComputerError::domain(
+                "accessibility_error",
+                "AgentStart Computer Use.app was not found",
+            )
         })?;
         let socket_directory = create_socket_directory().await?;
         let socket_path = socket_directory.join("provider.sock");
@@ -301,21 +305,36 @@ fn resolve_executable(user_data_path: &Path) -> Option<PathBuf> {
         .map(|path| {
             path.join("Contents")
                 .join("MacOS")
-                .join("yiru-computer-use-macos")
+                .join("agentstart-computer-use-macos")
         })
         .filter(|path| path.is_file())
 }
 
 pub(super) fn resolve_app(user_data_path: &Path) -> Option<PathBuf> {
     let mut candidates = Vec::new();
-    if let Some(override_path) = env::var_os("YIRU_COMPUTER_MACOS_HELPER_APP_PATH") {
+    if let Some(override_path) = env::var_os("AGENTSTART_COMPUTER_MACOS_HELPER_APP_PATH") {
         candidates.push(PathBuf::from(override_path));
+    }
+    if let Ok(executable) = env::current_exe()
+        && let Some(apps_directory) = executable
+            .ancestors()
+            .find(|path| path.file_name().is_some_and(|name| name == "apps"))
+    {
+        // Why: a source-built daemon must launch the helper from the same checkout;
+        // the installed profile copy belongs to a different trust root.
+        candidates.push(
+            apps_directory
+                .join("computer-use-macos")
+                .join(".build")
+                .join("release")
+                .join("AgentStart Computer Use.app"),
+        );
     }
     candidates.push(
         user_data_path
             .join("native")
             .join("computer-use")
-            .join("Yiru Computer Use.app"),
+            .join("AgentStart Computer Use.app"),
     );
     if let Ok(executable) = env::current_exe()
         && let Some(directory) = executable.parent()
@@ -324,13 +343,13 @@ pub(super) fn resolve_app(user_data_path: &Path) -> Option<PathBuf> {
             directory
                 .join("..")
                 .join("Resources")
-                .join("Yiru Computer Use.app"),
+                .join("AgentStart Computer Use.app"),
         );
         candidates.push(
             directory
                 .join("..")
                 .join("libexec")
-                .join("Yiru Computer Use.app"),
+                .join("AgentStart Computer Use.app"),
         );
     }
     if let Ok(cwd) = env::current_dir() {
@@ -339,7 +358,7 @@ pub(super) fn resolve_app(user_data_path: &Path) -> Option<PathBuf> {
                 .join("computer-use-macos")
                 .join(".build")
                 .join("release")
-                .join("Yiru Computer Use.app"),
+                .join("AgentStart Computer Use.app"),
         );
     }
     candidates.into_iter().find(|path| path.is_dir())
@@ -366,7 +385,9 @@ async fn connect(socket_path: &Path) -> Result<UnixStream, ComputerError> {
 
 async fn create_socket_directory() -> Result<PathBuf, ComputerError> {
     for _ in 0..8 {
-        let path = env::temp_dir().join(format!("yiru-computer-use-{}", random_token()?));
+        // Why: macOS TMPDIR paths are long enough that a random child plus the socket
+        // name exceeds sockaddr_un.sun_path. /tmp keeps the path below SUN_LEN.
+        let path = Path::new(SOCKET_ROOT).join(format!("as-cu-{}", random_token()?));
         match tokio::fs::create_dir(&path).await {
             Ok(()) => {
                 set_private_permissions(&path, true)?;

@@ -6,7 +6,7 @@ export type OrderedOutputChunk = {
   rawLength?: number
 }
 
-export type RestoredSnapshotReconciliation =
+type RestoredSnapshotReconciliation =
   | { action: 'write'; data: string; meta: PtyDataMeta | undefined }
   | { action: 'drop-duplicate' }
   | { action: 'force-fresh-restore' }

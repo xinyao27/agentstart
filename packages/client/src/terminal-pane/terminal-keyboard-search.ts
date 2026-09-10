@@ -3,7 +3,7 @@ import {
   type KeybindingOverrides,
   type KeybindingPlatform,
   type TerminalShortcutPolicy
-} from '@yiru/protocol/keybindings'
+} from '@agentstart/protocol/keybindings'
 import { isFindQueryTooLarge } from '~renderer/search/query-bounds'
 import type { ManagedPane } from '~renderer/terminal-pane/pane-manager/pane-manager'
 
@@ -77,7 +77,7 @@ export function matchFileSearchShortcut(
   event: Pick<KeyboardEvent, 'key' | 'metaKey' | 'ctrlKey' | 'shiftKey' | 'altKey' | 'repeat'>,
   platform: KeybindingPlatform,
   keybindings?: KeybindingOverrides,
-  terminalShortcutPolicy: TerminalShortcutPolicy = 'yiru-first'
+  terminalShortcutPolicy: TerminalShortcutPolicy = 'agentstart-first'
 ): boolean {
   return (
     !event.repeat &&

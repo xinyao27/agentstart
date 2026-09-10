@@ -1,4 +1,4 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
 
 import type { Row } from './worktree-list/groups'
 import {
@@ -66,7 +66,7 @@ export function getSidebarOrderedProjectGroupHeaderIdsByBucket(
   return buckets
 }
 
-export function mapSidebarProjectGroupDropIndexToSiblingInsertIndex(args: {
+function mapSidebarProjectGroupDropIndexToSiblingInsertIndex(args: {
   sidebarDropIndex: number
   sourceIndex: number
   siblingCount: number

@@ -1,4 +1,4 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { BellRinging as BellRing, Robot as Bot, Siren } from '~renderer/icons/hugeicons'
@@ -17,12 +17,7 @@ import {
   sendNotificationSettingsTestNotification
 } from './notification-settings-copy'
 import { NotificationSoundSection } from './notification-sound-section'
-export { getNotificationsPaneSearchEntries } from './notifications-search'
-export {
-  createNotificationVolumeDraftState,
-  resolveNotificationVolumeDraftState,
-  sendNotificationSettingsTestNotification
-} from './notification-settings-copy'
+export { sendNotificationSettingsTestNotification } from './notification-settings-copy'
 
 type NotificationsPaneProps = {
   settings: GlobalSettings

@@ -1,27 +1,26 @@
-# Yiru native iOS release lane. It signs and uploads the only mobile client while
-# refusing to target any App Store Connect record other than the existing Yiru app.
+# AgentStart native iOS release lane. It signs and uploads the only mobile client while
+# refusing to target any App Store Connect record other than the configured AgentStart app.
 
 require "base64"
-require "yaml"
+require "open3"
+require "plist"
+require "tmpdir"
 
 default_platform(:ios)
 
 MOBILE_ROOT = File.expand_path("..", __dir__)
-PROJECT_CONFIG_PATH = File.join(MOBILE_ROOT, "project.yml")
-PROJECT = File.join(MOBILE_ROOT, "YiruMobile.xcodeproj")
+PROJECT = File.join(MOBILE_ROOT, "AgentStartMobile.xcodeproj")
 BUILD_OUTPUT_DIRECTORY = File.join(MOBILE_ROOT, "build")
-SCHEME = "YiruMobile"
-APP_TARGET = "YiruMobile"
-BUNDLE_ID = "com.xinyao27.yiru.mobile"
-APP_STORE_APP_ID = "6792278376"
-WIDGET_TARGET = "YiruWidgets"
-# Why: this is the extension identifier already registered on the existing App Store app.
-# Renaming it would break the upgrade path and require a separate identifier migration.
-WIDGET_BUNDLE_ID = "com.xinyao27.yiru.mobile.ExpoWidgetsTarget"
-NOTIFICATION_TARGET = "YiruNotificationService"
-NOTIFICATION_BUNDLE_ID = "com.xinyao27.yiru.mobile.NotificationService"
+SCHEME = "AgentStartMobile"
+APP_TARGET = "AgentStartMobile"
+BUNDLE_ID = "com.xinyao27.agentstart.mobile"
+APP_STORE_APP_ID = "6810343597"
+APPLE_TEAM_ID = "8H6Q2YA365"
+WIDGET_TARGET = "AgentStartWidgets"
+WIDGET_BUNDLE_ID = "com.xinyao27.agentstart.mobile.Widgets"
+APP_GROUP_ID = "group.com.xinyao27.agentstart.mobile"
 TESTFLIGHT_GROUPS = ["peeps"].freeze
-DEFAULT_TESTFLIGHT_CHANGELOG = "Latest Yiru Mobile updates and fixes.".freeze
+DEFAULT_TESTFLIGHT_CHANGELOG = "Latest AgentStart Mobile updates and fixes.".freeze
 CLOSED_APP_STORE_STATES = %w[
   READY_FOR_SALE
   PENDING_DEVELOPER_RELEASE
@@ -41,22 +40,6 @@ def app_store_connect_api_key_from_env
   )
 end
 
-def project_marketing_version
-  project = YAML.safe_load(File.read(PROJECT_CONFIG_PATH))
-  project.fetch("settings").fetch("base").fetch("MARKETING_VERSION")
-end
-
-def truthy_option?(value)
-  %w[1 true yes on].include?(value.to_s.strip.downcase)
-end
-
-def bump_patch_version(version)
-  match = version.match(/\A(\d+)\.(\d+)\.(\d+)\z/)
-  UI.user_error!("Cannot bump non-semver mobile version '#{version}'") unless match
-
-  "#{match[1]}.#{match[2]}.#{match[3].to_i + 1}"
-end
-
 def release_history(app)
   app_store_versions = app
     .get_app_store_versions(filter: { platform: Spaceship::ConnectAPI::Platform::IOS })
@@ -72,36 +55,18 @@ def release_history(app)
   }
 rescue StandardError => error
   UI.user_error!(
-    "Could not read version and build history from the existing App Store app; " \
+    "Could not read version and build history from the configured AgentStart App Store app; " \
     "release blocked (#{error.message})",
   )
 end
 
-def resolve_requested_version(options, history)
+def resolve_requested_version(options)
   requested = options[:version].to_s.strip
   requested = ENV.fetch("MOBILE_RELEASE_VERSION", "").strip if requested.empty?
-
-  unless requested.empty?
-    UI.user_error!("iOS release version must be x.y.z") unless requested.match?(/\A\d+\.\d+\.\d+\z/)
-    return requested
+  unless requested.match?(/\A\d+\.\d+\.\d+\z/)
+    UI.user_error!("iOS release requires an exact x.y.z version")
   end
-
-  versions = [project_marketing_version, *history.fetch(:versions)]
-  unsupported_versions = versions.reject { |version| version.match?(/\A\d+\.\d+\.\d+\z/) }
-  unless unsupported_versions.empty?
-    UI.user_error!(
-      "Existing iOS version history contains unsupported versions: " \
-      "#{unsupported_versions.join(', ')}; provide an exact release_version",
-    )
-  end
-
-  version = versions.max_by { |candidate| Gem::Version.new(candidate) }
-  should_bump = truthy_option?(options[:bump_patch]) ||
-                truthy_option?(ENV["MOBILE_BUMP_PATCH_VERSION"])
-  version = bump_patch_version(version) if should_bump
-
-  UI.user_error!("iOS release version must be x.y.z") unless version.match?(/\A\d+\.\d+\.\d+\z/)
-  version
+  requested
 end
 
 def version_train_closed?(app, version)
@@ -118,37 +83,54 @@ rescue StandardError => error
   )
 end
 
-def existing_app_store_app!
+def configured_app_store_app!
+  app_store_app_id = ENV.fetch("APP_STORE_APP_ID").strip
+  unless app_store_app_id.match?(/\A[1-9]\d*\z/)
+    UI.user_error!("APP_STORE_APP_ID must be the numeric ID of the AgentStart App Store record")
+  end
+  unless app_store_app_id == APP_STORE_APP_ID
+    UI.user_error!(
+      "APP_STORE_APP_ID must identify the AgentStart App Store record #{APP_STORE_APP_ID}; " \
+      "received #{app_store_app_id}",
+    )
+  end
   app =
     begin
       Spaceship::ConnectAPI::App.find(BUNDLE_ID)
     rescue StandardError => error
       UI.user_error!(
-        "Could not verify the existing App Store app #{BUNDLE_ID}; release blocked " \
+        "Could not verify the configured AgentStart App Store app #{BUNDLE_ID}; release blocked " \
         "(#{error.message})",
       )
     end
 
   unless app
-    UI.user_error!("Existing App Store app #{BUNDLE_ID} was not found; release blocked")
+    UI.user_error!("Configured AgentStart App Store app #{BUNDLE_ID} was not found; release blocked")
   end
-  unless app.id == APP_STORE_APP_ID
+  unless app.id == app_store_app_id
     UI.user_error!(
-      "App Store record mismatch for #{BUNDLE_ID}: expected Apple ID #{APP_STORE_APP_ID}, " \
+      "App Store record mismatch for #{BUNDLE_ID}: expected Apple ID #{app_store_app_id}, " \
       "received #{app.id}; release blocked",
     )
   end
 
-  UI.message("Verified existing App Store app #{BUNDLE_ID} (Apple ID #{APP_STORE_APP_ID})")
+  UI.message("Verified AgentStart App Store app #{BUNDLE_ID} (Apple ID #{app_store_app_id})")
   app
+end
+
+def configured_apple_team_id!
+  team_id = ENV.fetch("APPLE_TEAM_ID").strip
+  unless team_id == APPLE_TEAM_ID
+    UI.user_error!("APPLE_TEAM_ID must identify the AgentStart team #{APPLE_TEAM_ID}")
+  end
+  team_id
 end
 
 def ensure_open_version_train!(app, version)
   return unless version_train_closed?(app, version)
 
   UI.user_error!(
-    "iOS version #{version} is already submitted or released. Use bump_patch_version or " \
-    "provide a higher release_version.",
+    "iOS version #{version} is already submitted or released. Provide a higher release_version.",
   )
 end
 
@@ -190,6 +172,125 @@ def generate_project
   end
 end
 
+def signed_entitlements(bundle_path)
+  stdout, stderr, status = Open3.capture3(
+    "codesign",
+    "--display",
+    "--entitlements",
+    "-",
+    "--xml",
+    bundle_path,
+  )
+  unless status.success?
+    UI.user_error!("Could not read signed entitlements for #{bundle_path}: #{stderr.strip}")
+  end
+  entitlements = Plist.parse_xml(stdout)
+  unless entitlements.is_a?(Hash)
+    UI.user_error!("Signed entitlements are missing from #{bundle_path}")
+  end
+  entitlements
+end
+
+def verify_signed_bundle(
+  bundle_path:,
+  bundle_id:,
+  team_id:,
+  version:,
+  build_number:,
+  needs_app_group:
+)
+  sh("codesign", "--verify", "--strict", bundle_path)
+  info = Plist.parse_xml(File.join(bundle_path, "Info.plist"))
+  unless info.is_a?(Hash) && info["CFBundleIdentifier"] == bundle_id
+    UI.user_error!("Signed bundle identifier mismatch for #{bundle_path}; expected #{bundle_id}")
+  end
+  unless info["CFBundleShortVersionString"] == version && info["CFBundleVersion"] == build_number
+    UI.user_error!(
+      "Signed bundle version mismatch for #{bundle_id}; expected #{version} (#{build_number})",
+    )
+  end
+
+  entitlements = signed_entitlements(bundle_path)
+  application_identifier = entitlements["application-identifier"]
+  unless application_identifier.is_a?(String) && application_identifier.end_with?(".#{bundle_id}")
+    UI.user_error!("Signed application identifier does not authorize #{bundle_id}")
+  end
+  unless entitlements["com.apple.developer.team-identifier"] == team_id
+    UI.user_error!("Signed Team ID does not match #{team_id} for #{bundle_id}")
+  end
+  if needs_app_group && !Array(entitlements["com.apple.security.application-groups"]).include?(APP_GROUP_ID)
+    UI.user_error!("Signed profile does not authorize App Group #{APP_GROUP_ID} for #{bundle_id}")
+  end
+end
+
+def verify_signed_app(app:, team_id:, version:, build_number:)
+  verify_signed_bundle(
+    bundle_path: app,
+    bundle_id: BUNDLE_ID,
+    team_id: team_id,
+    version: version,
+    build_number: build_number,
+    needs_app_group: true,
+  )
+  app_entitlements = signed_entitlements(app)
+  if app_entitlements.key?("aps-environment")
+    UI.user_error!("Signed AgentStart app unexpectedly includes remote notification entitlement")
+  end
+  embedded_extensions = Dir.glob(File.join(app, "PlugIns", "*.appex"))
+  expected_widget = File.join(app, "PlugIns", "AgentStartWidgets.appex")
+  unless embedded_extensions == [expected_widget]
+    UI.user_error!("Signed AgentStart app must contain only the widget extension")
+  end
+  verify_signed_bundle(
+    bundle_path: expected_widget,
+    bundle_id: WIDGET_BUNDLE_ID,
+    team_id: team_id,
+    version: version,
+    build_number: build_number,
+    needs_app_group: true,
+  )
+  unless File.file?(File.join(app, "PrivacyInfo.xcprivacy")) &&
+      File.file?(File.join(expected_widget, "PrivacyInfo.xcprivacy"))
+    UI.user_error!("Signed AgentStart product is missing a required privacy manifest")
+  end
+end
+
+def verify_signed_archive(team_id:, version:, build_number:)
+  app = File.join(
+    BUILD_OUTPUT_DIRECTORY,
+    "AgentStart.xcarchive",
+    "Products",
+    "Applications",
+    "AgentStart.app",
+  )
+  verify_signed_app(app: app, team_id: team_id, version: version, build_number: build_number)
+  UI.message("Verified AgentStart archive identities, versions, entitlements, and privacy manifests")
+end
+
+def verify_exported_ipa(ipa_path:, team_id:, version:, build_number:)
+  unless ipa_path.is_a?(String) && File.file?(ipa_path)
+    UI.user_error!("AgentStart IPA export is missing")
+  end
+
+  Dir.mktmpdir("agentstart-ipa-") do |directory|
+    _stdout, stderr, status = Open3.capture3("ditto", "-x", "-k", ipa_path, directory)
+    unless status.success?
+      UI.user_error!("Could not inspect exported AgentStart IPA: #{stderr.strip}")
+    end
+    apps = Dir.glob(File.join(directory, "Payload", "*.app"))
+    unless apps.length == 1
+      UI.user_error!("AgentStart IPA must contain exactly one application bundle")
+    end
+    verify_signed_app(
+      app: apps.fetch(0),
+      team_id: team_id,
+      version: version,
+      build_number: build_number,
+    )
+  end
+  UI.message("Verified exported AgentStart IPA identities, versions, entitlements, and privacy manifests")
+end
+
 def build_signed_archive(api_key:, version:, build_number:, team_id:, force_profiles:)
   app_profile = get_provisioning_profile(
     api_key: api_key,
@@ -211,16 +312,6 @@ def build_signed_archive(api_key:, version:, build_number:, team_id:, force_prof
     UI.user_error!("Could not resolve widget provisioning profile #{widget_profile}")
   end
 
-  notification_profile = get_provisioning_profile(
-    api_key: api_key,
-    app_identifier: NOTIFICATION_BUNDLE_ID,
-    force: force_profiles,
-  )
-  notification_profile_name = lane_context[SharedValues::SIGH_NAME]
-  unless notification_profile_name
-    UI.user_error!("Could not resolve notification provisioning profile #{notification_profile}")
-  end
-
   generate_project
   update_code_signing_settings(
     path: PROJECT,
@@ -240,35 +331,34 @@ def build_signed_archive(api_key:, version:, build_number:, team_id:, force_prof
     code_sign_identity: "Apple Distribution",
     profile_name: widget_profile_name,
   )
-  update_code_signing_settings(
-    path: PROJECT,
-    use_automatic_signing: false,
-    team_id: team_id,
-    targets: [NOTIFICATION_TARGET],
-    build_configurations: ["Release"],
-    code_sign_identity: "Apple Distribution",
-    profile_name: notification_profile_name,
-  )
-
-  build_app(
+  ipa_path = build_app(
     project: PROJECT,
     scheme: SCHEME,
     configuration: "Release",
+    # Why: fastlane 2.237 still validates the legacy spelling, while Xcode maps it to the current
+    # App Store Connect distribution method. Keep the export plist otherwise explicit below.
     export_method: "app-store",
     export_options: {
+      manageAppVersionAndBuildNumber: false,
       teamID: team_id,
       signingStyle: "manual",
       provisioningProfiles: {
         BUNDLE_ID => app_profile_name,
         WIDGET_BUNDLE_ID => widget_profile_name,
-        NOTIFICATION_BUNDLE_ID => notification_profile_name,
       },
     },
     xcargs: "MARKETING_VERSION=#{version} CURRENT_PROJECT_VERSION=#{build_number}",
-    archive_path: File.join(BUILD_OUTPUT_DIRECTORY, "Yiru.xcarchive"),
+    archive_path: File.join(BUILD_OUTPUT_DIRECTORY, "AgentStart.xcarchive"),
     output_directory: BUILD_OUTPUT_DIRECTORY,
-    output_name: "Yiru.ipa",
+    output_name: "AgentStart.ipa",
     clean: true,
+  )
+  verify_signed_archive(team_id: team_id, version: version, build_number: build_number)
+  verify_exported_ipa(
+    ipa_path: ipa_path,
+    team_id: team_id,
+    version: version,
+    build_number: build_number,
   )
 end
 
@@ -276,21 +366,21 @@ platform :ios do
   desc "Validate the requested native iOS version and report its next TestFlight build number"
   lane :prepare_release_version do |options|
     app_store_connect_api_key_from_env
-    app = existing_app_store_app!
+    app = configured_app_store_app!
     history = release_history(app)
-    version = resolve_requested_version(options, history)
+    version = resolve_requested_version(options)
     ensure_open_version_train!(app, version)
     build_number = next_testflight_build_number(history)
-    UI.message("Prepared Yiru Mobile #{version} (#{build_number})")
+    UI.message("Prepared AgentStart Mobile #{version} (#{build_number})")
   end
 
   desc "Build and export a signed native archive without uploading it"
   lane :archive do |options|
     api_key = app_store_connect_api_key_from_env
-    team_id = ENV.fetch("APPLE_TEAM_ID")
-    app = existing_app_store_app!
+    team_id = configured_apple_team_id!
+    app = configured_app_store_app!
     history = release_history(app)
-    version = resolve_requested_version(options, history)
+    version = resolve_requested_version(options)
     build_number = resolve_archive_build_number(options, history)
 
     build_signed_archive(
@@ -300,19 +390,19 @@ platform :ios do
       team_id: team_id,
       force_profiles: false,
     )
-    UI.success("Archived Yiru Mobile #{version} (#{build_number}) without upload")
+    UI.success("Archived AgentStart Mobile #{version} (#{build_number}) without upload")
   end
 
   desc "Build, sign, upload, and distribute the native iOS app through TestFlight"
   lane :release do |options|
     api_key = app_store_connect_api_key_from_env
-    app = existing_app_store_app!
+    app = configured_app_store_app!
     history = release_history(app)
-    version = resolve_requested_version(options, history)
+    version = resolve_requested_version(options)
     ensure_open_version_train!(app, version)
     build_number = next_testflight_build_number(history)
     distribution = testflight_distribution
-    team_id = ENV.fetch("APPLE_TEAM_ID")
+    team_id = configured_apple_team_id!
 
     build_signed_archive(
       api_key: api_key,
@@ -338,6 +428,6 @@ platform :ios do
       )
     end
 
-    UI.success("Uploaded Yiru Mobile #{version} (#{build_number})")
+    UI.success("Uploaded AgentStart Mobile #{version} (#{build_number})")
   end
 end

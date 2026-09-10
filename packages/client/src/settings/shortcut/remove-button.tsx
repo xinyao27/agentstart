@@ -1,4 +1,4 @@
-import type { KeybindingActionId } from '@yiru/protocol/keybindings'
+import type { KeybindingActionId } from '@agentstart/protocol/keybindings'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { X } from '~renderer/icons/hugeicons'

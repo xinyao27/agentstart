@@ -2,7 +2,7 @@ import {
   getRepoExecutionHostId,
   parseExecutionHostId,
   type ExecutionHostId
-} from '@yiru/protocol/host/identity'
+} from '@agentstart/protocol/host/identity'
 
 import { findRepoForHost } from '../../repo/state/host-identity'
 import type { AppState } from '../../store/types'
@@ -17,7 +17,7 @@ export function settingsForRepoOwner(
   return repo ? settingsForKnownRepoOwner(state.settings, repo) : state.settings
 }
 
-export function settingsForKnownRepoOwner(
+function settingsForKnownRepoOwner(
   settings: AppState['settings'],
   repo: { connectionId?: string | null; executionHostId?: ExecutionHostId | null }
 ) {

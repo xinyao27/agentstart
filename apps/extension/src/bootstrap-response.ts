@@ -1,4 +1,4 @@
-import type { ExtensionUnavailableReason } from '@yiru/client/extension-bootstrap'
+import type { ExtensionUnavailableReason } from '@agentstart/client/extension-bootstrap'
 
 type ExtensionBootstrapResponse =
   | {
@@ -12,7 +12,7 @@ export type ExtensionBootstrapResult = {
   endpoint: string
   expectedRuntimeId: string | null
   protocolVersion: number
-  rpcProtocol: 'yiru-protobuf-v2'
+  rpcProtocol: 'agentstart-protobuf-v2'
 }
 
 export function classifyUnavailableResponse(value: unknown): ExtensionUnavailableReason {
@@ -32,8 +32,8 @@ export function classifyUnavailableError(error: unknown): ExtensionUnavailableRe
       return 'daemon-stopped'
     case 'onboarding:incompatible-version':
       return 'incompatible-version'
-    case 'onboarding:loopback-blocked':
-      return 'loopback-blocked'
+    case 'onboarding:loopback-check-failed':
+      return 'loopback-check-failed'
     default:
       return 'unknown'
   }
@@ -67,6 +67,6 @@ function isExtensionBootstrapResult(result: unknown): result is ExtensionBootstr
     typeof Reflect.get(result, 'endpoint') === 'string' &&
     (expectedRuntimeId === null || typeof expectedRuntimeId === 'string') &&
     typeof Reflect.get(result, 'protocolVersion') === 'number' &&
-    rpcProtocol === 'yiru-protobuf-v2'
+    rpcProtocol === 'agentstart-protobuf-v2'
   )
 }

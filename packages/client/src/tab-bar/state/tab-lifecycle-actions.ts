@@ -128,7 +128,7 @@ export function createTabLifecycleActions(
           // Why: the split-group model can legally derive "terminal with no
           // active tab" after the final unified tab closes. That leaves the
           // worktree selected but render-empty, so the workspace shows a blank
-          // pane instead of Yiru's landing screen. When that happens, write the
+          // pane instead of AgentStart's landing screen. When that happens, write the
           // landing-state fallback directly instead of recomputing active-surface
           // fields from a worktree that is no longer active.
           ...(shouldDeactivateWorktree

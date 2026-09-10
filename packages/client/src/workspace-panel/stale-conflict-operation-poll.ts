@@ -1,6 +1,6 @@
-import type { GitConflictOperation } from '@yiru/protocol/git/status-types'
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
+import type { GitConflictOperation } from '@agentstart/protocol/git/status-types'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
 import { useEffect } from 'react'
 import {
   installWindowVisibilityInterval,
@@ -23,7 +23,7 @@ const CONFLICT_POLL_INTERVAL_MS = 3000
 export function useStaleConflictOperationPolling(args: {
   enabled: boolean
   activeWorktreeId: string | null
-  allWorktrees: { id: string; path: string; repoId: string }[]
+  allWorktrees: { id: string; path: string; prunable?: boolean; repoId: string }[]
   repoMap: Map<string, Pick<Repo, 'kind'>>
   conflictOperationByWorktree: Record<string, GitConflictOperation>
   setConflictOperation: (worktreeId: string, operation: GitConflictOperation) => void
@@ -49,7 +49,7 @@ export function useStaleConflictOperationPolling(args: {
         continue
       }
       const worktree = allWorktrees.find((entry) => entry.id === worktreeId)
-      if (worktree) {
+      if (worktree && worktree.prunable !== true) {
         const repo = repoMap.get(worktree.repoId)
         if (repo && !isGitRepoKind(repo)) {
           continue

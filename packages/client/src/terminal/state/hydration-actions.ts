@@ -1,12 +1,12 @@
-import { isValidTerminalTabId } from '@yiru/protocol/terminal/tab-identity'
-import type { WorkspaceKey } from '@yiru/protocol/workspace/identity'
+import { isValidTerminalTabId } from '@agentstart/protocol/terminal/tab-identity'
+import type { WorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import {
   folderWorkspaceKey,
   parseWorkspaceKey,
   worktreeWorkspaceKey
-} from '@yiru/protocol/workspace/identity'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
-import { getRepoIdFromWorktreeId } from '@yiru/protocol/worktree/identity'
+} from '@agentstart/protocol/workspace/identity'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
+import { getRepoIdFromWorktreeId } from '@agentstart/protocol/worktree/identity'
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import {

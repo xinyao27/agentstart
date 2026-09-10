@@ -1,4 +1,4 @@
-import type { StartupCommandError } from '@yiru/protocol/agent/shell-command'
+import type { StartupCommandError } from '@agentstart/protocol/agent/shell-command'
 import { translate } from '~renderer/i18n/i18n'
 
 export function startupCommandErrorMessage(error: StartupCommandError): string {

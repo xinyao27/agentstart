@@ -1,19 +1,5 @@
 import type { ManagedPane, PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
 
-export function resolveNativeTerminalDropPane(
-  manager: PaneManager,
-  paneLeafId: string | undefined
-): ManagedPane | null {
-  const panes = manager.getPanes()
-  if (paneLeafId) {
-    const targetedPane = panes.find((pane) => pane.leafId === paneLeafId)
-    if (targetedPane) {
-      return targetedPane
-    }
-  }
-  return manager.getActivePane() ?? panes[0] ?? null
-}
-
 export function resolveInternalTerminalDropPane(
   manager: PaneManager,
   dropTarget: EventTarget | null | undefined

@@ -208,7 +208,7 @@ export function DiffCommentPopover({
   return (
     <div
       ref={popoverRef}
-      className="yiru-diff-comment-popover"
+      className="agentstart-diff-comment-popover"
       style={{ top: `${resolvedTop}px`, ...(left == null ? {} : { left: `${left}px` }) }}
       role="dialog"
       aria-modal="true"
@@ -217,8 +217,8 @@ export function DiffCommentPopover({
       onClick={(ev) => ev.stopPropagation()}
     >
       {/* Content */}
-      <div className="yiru-diff-comment-content-col" style={{ gap: '8px' }}>
-        <div id={labelId} className="yiru-diff-comment-popover-label">
+      <div className="agentstart-diff-comment-content-col" style={{ gap: '8px' }}>
+        <div id={labelId} className="agentstart-diff-comment-popover-label">
           {title ??
             (startLine && startLine !== lineNumber
               ? translate(
@@ -234,7 +234,7 @@ export function DiffCommentPopover({
         </div>
         <Textarea
           ref={focusTextareaRef}
-          className="yiru-diff-comment-popover-textarea focus-visible:border-ring outline-none"
+          className="agentstart-diff-comment-popover-textarea focus-visible:border-ring outline-none"
           placeholder={placeholder}
           value={body}
           onChange={(e) => setBody(e.target.value)}
@@ -264,7 +264,7 @@ export function DiffCommentPopover({
           }}
           rows={3}
         />
-        <div className="yiru-diff-comment-popover-footer">
+        <div className="agentstart-diff-comment-popover-footer">
           <Button variant="ghost" size="sm" onClick={onCancel}>
             {translate('auto.components.diff.comments.DiffCommentPopover.2b3ce6d394', 'Cancel')}
           </Button>

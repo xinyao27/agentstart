@@ -1,5 +1,5 @@
+import type { TabGroup, TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
 import type { DragEndEvent, DragMoveEvent, DragOverEvent } from '@dnd-kit/core'
-import type { TabGroup, TabGroupLayoutNode } from '@yiru/protocol/workspace/tabs'
 import { isPaneColumnSplitDropNoOp } from '~renderer/tab-bar/state/split-drop-no-op'
 
 import {
@@ -14,7 +14,7 @@ import {
   type PaneColumnSplitTarget
 } from './tab-drop-zone'
 
-export type TabGroupPanelGeometryEntry = {
+type TabGroupPanelGeometryEntry = {
   groupId: string
   panelRect: DOMRect
   bodyRect: DOMRect
@@ -44,11 +44,11 @@ function getTabGroupBodyElement(groupId: string, worktreeId: string): HTMLElemen
   )
 }
 
-export function getTabGroupPanelRect(groupId: string, worktreeId: string): DOMRect | null {
+function getTabGroupPanelRect(groupId: string, worktreeId: string): DOMRect | null {
   return getTabGroupBodyElement(groupId, worktreeId)?.parentElement?.getBoundingClientRect() ?? null
 }
 
-export function getTabGroupBodyRect(groupId: string, worktreeId: string): DOMRect | null {
+function getTabGroupBodyRect(groupId: string, worktreeId: string): DOMRect | null {
   return getTabGroupBodyElement(groupId, worktreeId)?.getBoundingClientRect() ?? null
 }
 
@@ -79,7 +79,7 @@ export function captureTabGroupPanelGeometrySnapshot(
   }
 }
 
-export function findTabGroupPanelUnderPointer(
+function findTabGroupPanelUnderPointer(
   worktreeId: string,
   pointer: { x: number; y: number },
   options: {
@@ -128,7 +128,7 @@ export function findTabGroupPanelUnderPointer(
   return null
 }
 
-export function resolvePanelEdgePaneColumnSplit({
+function resolvePanelEdgePaneColumnSplit({
   activeDrag,
   targetGroupId,
   worktreeId,

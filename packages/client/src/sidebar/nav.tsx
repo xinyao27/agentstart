@@ -1,11 +1,11 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { openCommandPalette } from '~renderer/extension/command-palette/open'
 import { translate } from '~renderer/i18n/i18n'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'
 import {
   ActivityIcon as Activity,
   BookOpen,
-  CalendarDots,
+  GearSix,
   DeviceMobile as Smartphone,
   MagnifyingGlass as Search
 } from '~renderer/icons/hugeicons'
@@ -22,12 +22,7 @@ import { useMobileSidebarOnboardingBadge } from './mobile-sidebar-onboarding-bad
 import { HideSidebarMenu } from './nav-controls'
 import { SetupGuideSidebarEntry } from './setup-guide-sidebar-entry'
 
-export {
-  getSetupGuideSidebarEntryReady,
-  shouldShowSetupGuideEntry
-} from './setup-guide-sidebar-entry'
-
-export function shouldShowMobileButton(
+function shouldShowMobileButton(
   settings: Pick<GlobalSettings, 'showMobileButton'> | null | undefined
 ): boolean {
   return settings?.showMobileButton !== false
@@ -134,12 +129,12 @@ const SidebarNav = function SidebarNav() {
           variant="ghost"
           size="sidebar-row"
           type="button"
-          onClick={() => openSidebarPage('automations')}
+          onClick={() => openSidebarPage('settings')}
           className={getSelectableControlStateClasses(false)}
         >
-          <CalendarDots className="text-sidebar-foreground/30 size-4 shrink-0" />
+          <GearSix className="text-sidebar-foreground/30 size-4 shrink-0" />
           <span className="flex-1">
-            {translate('extension.navigation.automations', 'Automations')}
+            {translate('auto.components.sidebar.SidebarNav.settings', 'Settings')}
           </span>
         </Button>
       ) : null}
@@ -168,10 +163,10 @@ const SidebarNav = function SidebarNav() {
                   className={cn('size-4 shrink-0', !mobileActive && 'text-sidebar-foreground/30')}
                 />
                 <span className="flex-1">
-                  {translate('auto.components.sidebar.SidebarNav.1b5c41caee', 'Yiru Mobile')}
+                  {translate('auto.components.sidebar.SidebarNav.1b5c41caee', 'AgentStart Mobile')}
                 </span>
                 {mobileOnboardingBadge.visible ? (
-                  <span className="bg-primary text-primary-foreground px-1.5 py-px text-[10px] font-semibold">
+                  <span className="bg-primary text-primary-foreground rounded-full px-1.5 py-px text-[10px] font-semibold">
                     {translate('auto.components.sidebar.SidebarNav.c86d83b5c3', 'New')}
                   </span>
                 ) : null}

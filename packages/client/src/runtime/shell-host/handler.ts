@@ -1,11 +1,11 @@
-import type { RuntimeHandlerRegistry } from '@yiru/protocol'
+import type { RuntimeHandlerRegistry } from '@agentstart/protocol'
 import {
   ShellHostService,
   createShellHostResponse,
   decodeShellHostResume,
   type ShellHostRequest,
   type ShellHostResponse
-} from '@yiru/protocol/shell-host'
+} from '@agentstart/protocol/shell-host'
 import { buildWorkspaceSessionPayload } from '~renderer/editor/workspace-session'
 import { persistWorkspaceSessionByHost } from '~renderer/editor/workspace-session-host-persistence'
 import { translate } from '~renderer/i18n/i18n'

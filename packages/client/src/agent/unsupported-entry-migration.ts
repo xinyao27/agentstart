@@ -1,7 +1,7 @@
 import type {
   AgentStatusEntry,
   MigrationUnsupportedPtyEntry
-} from '@yiru/protocol/agent/status-records'
+} from '@agentstart/protocol/agent/status-records'
 
 const cachedMigrationUnsupportedEntries = new WeakMap<
   MigrationUnsupportedPtyEntry,
@@ -31,7 +31,7 @@ export function migrationUnsupportedToAgentStatusEntry(
         terminalTitle: 'Migration unsupported',
         stateHistory: [],
         lastAssistantMessage:
-          'Restart this terminal so Yiru can attach a stable UUID pane key to agent hooks.'
+          'Restart this terminal so AgentStart can attach a stable UUID pane key to agent hooks.'
       }
 
   cachedMigrationUnsupportedEntries.set(entry, converted)

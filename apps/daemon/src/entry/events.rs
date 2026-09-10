@@ -2,16 +2,16 @@ use std::ffi::{OsStr, OsString};
 use std::path::PathBuf;
 use std::time::Duration;
 
-use serde_json::{Value, json};
-use thiserror::Error;
-use yiru_protocol::method_metadata::methods::{
-    YiruRuntimeV1WorkspaceEventsServiceList as ListMethod,
-    YiruRuntimeV1WorkspaceEventsServiceWatch as WatchMethod,
+use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1WorkspaceEventsServiceList as ListMethod,
+    AgentStartRuntimeV1WorkspaceEventsServiceWatch as WatchMethod,
 };
-use yiru_protocol::runtime::v1::workspace_events_service_watch_response::Event;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::workspace_events_service_watch_response::Event;
+use agentstart_protocol::runtime::v1::{
     WorkspaceEventsServiceListRequest, WorkspaceEventsServiceWatchRequest,
 };
+use serde_json::{Value, json};
+use thiserror::Error;
 
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 

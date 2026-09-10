@@ -1,4 +1,4 @@
-import type { AgentStatusIpcPayload } from '@yiru/protocol/agent/status-records'
+import type { AgentStatusIpcPayload } from '@agentstart/protocol/agent/status-records'
 import {
   getAgentStatusSnapshot,
   getMigrationUnsupportedAgentStatusSnapshot

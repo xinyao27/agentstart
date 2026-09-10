@@ -73,7 +73,7 @@ function MarkdownPreviewImage({
       worktreeId: sourceRoutingWorktreeId,
       worktreeRoot,
       runtimeEnvironmentId: resolvedSourceRuntimeEnvironmentId,
-      openInYiruBrowser: true,
+      openInAgentStartBrowser: true,
       sourceOwner
     })
   }

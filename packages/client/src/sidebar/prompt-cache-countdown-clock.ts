@@ -60,7 +60,7 @@ function stopClock(): void {
   stopVisibilityWatcher = null
 }
 
-export function subscribePromptCacheCountdownClock(listener: Listener): () => void {
+function subscribePromptCacheCountdownClock(listener: Listener): () => void {
   listeners.add(listener)
   // Why: the clock only runs while a countdown is visible. Refresh immediately
   // on subscribe so a card mounted after a long idle period does not render a

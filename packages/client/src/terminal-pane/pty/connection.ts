@@ -1,5 +1,5 @@
-import type { AgentType } from '@yiru/protocol/agent/status-records'
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
+import type { AgentType } from '@agentstart/protocol/agent/status-records'
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import { useAppStore } from '~renderer/store/state'
 import { resolveCommittedTitleAgentType } from '~renderer/terminal-pane/agent/evidence'
 import { TerminalKittyKeyboardModeTracker } from '~renderer/terminal-pane/emulator/kitty-keyboard'

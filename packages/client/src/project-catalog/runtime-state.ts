@@ -27,7 +27,7 @@ type ProjectCatalogUiState = Pick<
   'activeRepoId' | 'activeWorktreeId' | 'restoredRuntimeHostIdByWorkspaceSessionKey' | 'settings'
 >
 
-export function projectCatalogRuntimeState(
+function projectCatalogRuntimeState(
   catalog: ProjectCatalog,
   uiState: ProjectCatalogUiState
 ): ProjectCatalogRuntimeState {

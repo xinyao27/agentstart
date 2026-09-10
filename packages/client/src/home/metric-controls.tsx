@@ -1,4 +1,4 @@
-import type { StatsUsageBoundedRange } from '@yiru/protocol/stats/range'
+import type { StatsUsageBoundedRange } from '@agentstart/protocol/stats/range'
 import type { TokenValueMetric } from '~renderer/contribution-heatmap/metric'
 import { translate } from '~renderer/i18n/i18n'
 import { ToggleGroup, ToggleGroupItem } from '~renderer/ui/toggle-group'

@@ -1,4 +1,4 @@
-import type { WorkspacePortScanResult } from '@yiru/protocol'
+import type { WorkspacePortScanResult } from '@agentstart/protocol'
 
 export type KeyedPortScan = { key: string; result: WorkspacePortScanResult }
 

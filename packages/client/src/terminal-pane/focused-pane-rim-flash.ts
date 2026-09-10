@@ -1,5 +1,5 @@
 const FOCUSED_PANE_FLASH_CLASS = 'pane-focus-rim-flash'
-export const FOCUSED_PANE_FLASH_MS = 1_500
+const FOCUSED_PANE_FLASH_MS = 1_500
 
 const flashTimersByPane = new WeakMap<HTMLElement, ReturnType<typeof setTimeout>>()
 

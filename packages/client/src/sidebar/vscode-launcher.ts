@@ -10,7 +10,7 @@ function stripMatchingQuotes(value: string): string {
   return trimmed
 }
 
-export function isVsCodeLauncherExecutable(command: string): boolean {
+function isVsCodeLauncherExecutable(command: string): boolean {
   const unquoted = stripMatchingQuotes(command)
   const segments = unquoted.split(/[\\/]/)
   const fileName = segments.at(-1) ?? ''

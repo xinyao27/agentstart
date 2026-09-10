@@ -26,8 +26,8 @@ export function GhosttyDiscoveryRow({
 
   if (discovery.status === 'detecting') {
     return (
-      <div className="border-border text-muted-foreground flex items-center gap-2.5 border border-dashed bg-transparent px-3.5 py-2.5 text-[12px]">
-        <span className="bg-muted-foreground/60 size-1.5 animate-pulse" />
+      <div className="border-border text-muted-foreground flex items-center gap-2.5 rounded-lg border border-dashed bg-transparent px-3.5 py-2.5 text-[12px]">
+        <span className="bg-muted-foreground/60 size-1.5 animate-pulse rounded-full" />
         {translate(
           'auto.components.onboarding.ThemeStep.2c3aa538f8',
           'Looking for a Ghostty config...'
@@ -38,7 +38,7 @@ export function GhosttyDiscoveryRow({
 
   if (discovery.status === 'imported') {
     return (
-      <div className="text-foreground flex items-center gap-2.5 border border-emerald-500/30 bg-emerald-500/[0.07] px-3.5 py-2.5 text-[12px]">
+      <div className="text-foreground flex items-center gap-2.5 rounded-lg border border-emerald-500/30 bg-emerald-500/[0.07] px-3.5 py-2.5 text-[12px]">
         <Check className="size-3.5 text-emerald-600 dark:text-emerald-400" />
         <span className="flex-1">
           <span className="font-medium">

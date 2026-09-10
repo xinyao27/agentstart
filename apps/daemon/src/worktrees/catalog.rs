@@ -199,12 +199,18 @@ impl WorktreeCatalog {
         let projects = self.projects.list().await?;
         let mut matches = Vec::new();
         let mut observed = 0_usize;
+        let mut scan_failure = None;
         for project in &projects {
-            let probes = self.scan_project(project).await?;
-            collect_matches(&mut matches, probes, selector, &mut observed);
+            // Why: a project whose folder was renamed or deleted fails to scan, and
+            // propagating that would deny every selector on the host. Its failure is
+            // only reported when nothing else matched the selector.
+            match self.scan_project(project).await {
+                Ok(probes) => collect_matches(&mut matches, probes, selector, &mut observed),
+                Err(error) => scan_failure = scan_failure.or(Some(error)),
+            }
         }
         match matches.len() {
-            0 => Err(WorktreeCatalogError::NotFound),
+            0 => Err(scan_failure.unwrap_or(WorktreeCatalogError::NotFound)),
             1 => Ok(matches.remove(0)),
             _ => Err(WorktreeCatalogError::AmbiguousSelector),
         }

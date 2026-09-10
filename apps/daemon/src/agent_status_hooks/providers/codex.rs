@@ -33,7 +33,7 @@ fn install(
 ) -> ProviderResult {
     let _ = config::read(config_path)?;
     let system_path = context.home_path.join(".codex").join("hooks.json");
-    let system = config::read(&system_path).unwrap_or_default();
+    let system = config::read(&system_path)?;
     let mut hooks = mirrored_user_hooks(&system, matcher);
     let command = managed_command(script_path, "codex");
     for (event, _) in EVENTS {

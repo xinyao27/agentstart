@@ -1,4 +1,4 @@
-import { getBranchPrefixIssue, normalizeBranchPrefix } from '@yiru/protocol/git/branch-prefix'
+import { getBranchPrefixIssue, normalizeBranchPrefix } from '@agentstart/protocol/git/branch-prefix'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 

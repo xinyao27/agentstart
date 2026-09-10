@@ -1,4 +1,4 @@
-import type { GitBranchCompareSummary } from '@yiru/protocol/git/branch-compare-types'
+import type { GitBranchCompareSummary } from '@agentstart/protocol/git/branch-compare-types'
 
 export function getKnownGitHead(head: string | null | undefined): string | undefined {
   const trimmed = head?.trim()

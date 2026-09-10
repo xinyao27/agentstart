@@ -1,4 +1,4 @@
-import type { WorkspaceEventRecord } from '@yiru/protocol'
+import type { WorkspaceEventRecord } from '@agentstart/protocol'
 import { translate } from '~renderer/i18n/i18n'
 
 export type AwayReplayMarker = Record<string, number>

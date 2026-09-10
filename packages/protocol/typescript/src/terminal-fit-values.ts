@@ -1,10 +1,10 @@
-import { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   TerminalDriverKind as ProtocolDriverKind,
   type TerminalDriverSnapshot as ProtocolDriverSnapshot,
   type TerminalFitOverride as ProtocolFitOverride,
   TerminalFitOverrideMode as ProtocolFitOverrideMode
-} from '../generated/yiru/runtime/v1/terminal_fit_pb.js'
+} from '../generated/agent_start/runtime/v1/terminal_fit_pb.js'
 import { RuntimeProtocolError } from './error.js'
 
 export const TERMINAL_FIT_PROTOCOL_CAPABILITY = 'terminal.fit.protobuf.v1' as const

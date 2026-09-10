@@ -1,5 +1,5 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { TelemetryConsentState } from '@yiru/protocol/telemetry/consent'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { TelemetryConsentState } from '@agentstart/protocol/telemetry/consent'
 import { useEffect, useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { BrowserContextPrivacySetting } from '~renderer/extension/context/privacy-setting'
@@ -18,8 +18,8 @@ import { Switch } from '~renderer/ui/switch'
 import { Label } from '../ui/label'
 import { PrivacyDiagnosticsSection } from './privacy-diagnostics-section'
 
-export type EnvBlockedReason = 'do_not_track' | 'yiru_disabled' | 'ci'
-export type BlockedReason = { kind: 'env'; reason: EnvBlockedReason }
+type EnvBlockedReason = 'do_not_track' | 'agentstart_disabled' | 'ci'
+type BlockedReason = { kind: 'env'; reason: EnvBlockedReason }
 
 type PrivacyPaneProps = {
   settings: GlobalSettings
@@ -27,29 +27,29 @@ type PrivacyPaneProps = {
 
 const PRIVACY_PANE_BLOCKED_HELPER_ID = 'privacy-pane-blocked-helper'
 
-export function isEnvBlocked(consent: TelemetryConsentState | null): consent is {
+function isEnvBlocked(consent: TelemetryConsentState | null): consent is {
   effective: 'disabled'
   reason: EnvBlockedReason
 } {
   return (
     consent?.effective === 'disabled' &&
     (consent.reason === 'do_not_track' ||
-      consent.reason === 'yiru_disabled' ||
+      consent.reason === 'agentstart_disabled' ||
       consent.reason === 'ci')
   )
 }
 
-export function envVarNameForReason(reason: EnvBlockedReason): string {
+function envVarNameForReason(reason: EnvBlockedReason): string {
   if (reason === 'do_not_track') {
     return 'DO_NOT_TRACK'
   }
-  if (reason === 'yiru_disabled') {
-    return 'YIRU_TELEMETRY_DISABLED'
+  if (reason === 'agentstart_disabled') {
+    return 'AGENT_START_TELEMETRY_DISABLED'
   }
   return 'CI'
 }
 
-export function computeBlockedReason(consent: TelemetryConsentState | null): BlockedReason | null {
+function computeBlockedReason(consent: TelemetryConsentState | null): BlockedReason | null {
   if (isEnvBlocked(consent)) {
     return { kind: 'env', reason: consent.reason }
   }
@@ -109,7 +109,7 @@ export function PrivacyPane({ settings }: PrivacyPaneProps): React.JSX.Element {
           <p className="text-muted-foreground text-xs">
             {translate(
               'auto.components.settings.PrivacyPane.8bfdd23a88',
-              'Help us figure out what to build next. Yiru sends anonymous counts of which features you use and where things break.'
+              'Help us figure out what to build next. AgentStart sends anonymous counts of which features you use and where things break.'
             )}{' '}
             <Button
               variant="ghost"
@@ -157,7 +157,7 @@ function BlockedHelper({ blocked, id }: { blocked: BlockedReason; id: string }):
             'auto.components.settings.PrivacyPane.79a0f3c16c',
             'Telemetry is disabled by the'
           )}{' '}
-          <code className="bg-muted px-1 py-0.5 font-mono text-[11px]">
+          <code className="bg-muted rounded px-1 py-0.5 font-mono text-[11px]">
             {envVarNameForReason(blocked.reason)}
           </code>{' '}
           {translate(

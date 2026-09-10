@@ -21,7 +21,7 @@ export type EventName = keyof EventMap
 export type EventProps<N extends EventName> = EventMap[N]
 export type SupportReportDraft = Omit<
   EventProps<'support_report_submitted'>,
-  'report_id' | 'app_version' | 'platform' | 'arch' | 'os_release' | 'yiru_channel'
+  'report_id' | 'app_version' | 'platform' | 'arch' | 'os_release' | 'agentstart_channel'
 >
 
 // Why: events whose schemas declare a given property name. Extracted so the
@@ -73,7 +73,7 @@ const COHORT_EXTENDED_SET = eventsWithShapeKey('nth_repo_added')
 // injection set against silent schema drift.
 type _CohortExtendedRoster =
   | 'app_opened'
-  | 'app_starred_yiru'
+  | 'app_starred_agentstart'
   | 'star_nag_outcome'
   | 'feature_interaction_usage_bucket_reached'
   | 'repo_added'
@@ -90,9 +90,9 @@ type _CohortExtendedRoster =
   | 'agent_started'
   | 'agent_prompt_sent'
   | 'agent_error'
-  | 'yiru_cli_feature_tip_shown'
-  | 'yiru_cli_feature_tip_setup_clicked'
-  | 'yiru_cli_feature_tip_setup_result'
+  | 'agentstart_cli_feature_tip_shown'
+  | 'agentstart_cli_feature_tip_setup_clicked'
+  | 'agentstart_cli_feature_tip_setup_result'
   | 'command_palette_feature_tip_shown'
   | 'command_palette_feature_tip_acknowledged'
 // Why: `z.object({}).strict()` infers a string index signature, which would
@@ -194,7 +194,7 @@ export const commonPropsSchema = z
     // scheme is cheap to preserve).
     install_id: z.string().min(1).max(64),
     session_id: z.string().min(1).max(64),
-    yiru_channel: z.enum(['stable', 'rc'])
+    agentstart_channel: z.enum(['stable', 'rc'])
   })
   .strict()
 export type CommonProps = z.infer<typeof commonPropsSchema>

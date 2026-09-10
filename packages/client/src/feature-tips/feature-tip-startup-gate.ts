@@ -1,7 +1,7 @@
-import type { CliInstallStatus } from '@yiru/protocol/cli-values'
-import type { FeatureTipId } from '@yiru/protocol/settings/feature-tips'
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
-import type { FeatureInteractionState } from '@yiru/protocol/telemetry/interactions/state'
+import type { CliInstallStatus } from '@agentstart/protocol/cli-values'
+import type { FeatureTipId } from '@agentstart/protocol/settings/feature-tips'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
+import type { FeatureInteractionState } from '@agentstart/protocol/telemetry/interactions/state'
 
 import { shouldShowOnboarding } from '../onboarding/should-show-onboarding'
 import { getCompletedFeatureTipIds, getOrderedUnseenFeatureTips } from './catalog'

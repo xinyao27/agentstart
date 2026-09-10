@@ -1,6 +1,6 @@
+import { makePaneKey } from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalQuickCommand } from '@agentstart/protocol/terminal/quick-commands'
 import type { BaseUIEvent } from '@base-ui/react/types'
-import { makePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalQuickCommand } from '@yiru/protocol/terminal/quick-commands'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
 import {
@@ -16,23 +16,12 @@ import type { ManagedPane, PaneManager } from '~renderer/terminal-pane/pane-mana
 import type { AgentSessionContinuationRequest } from './agent/session-continuation'
 import type { PtyTransport } from './pty/transport-types'
 import type { PaneCwdMap } from './resolve-split-cwd'
-import { recordCreatedTerminalPaneSplit } from './split-completion'
 import { splitTerminalPaneWithInheritedCwd } from './split-with-inherited-cwd'
 import type { PreparedAgentSessionFork } from './terminal-agent-session-fork'
 import { useTerminalContextMenuAgentActions } from './terminal-context-menu-agent-actions'
 import { pasteFromTerminalContextMenu } from './terminal-context-menu-paste'
 import { copyTerminalHandleForPane } from './terminal-handle-copy'
 import { useTerminalContextMenuTarget } from './use-terminal-context-menu-target'
-
-export function recordContextMenuCreatedTerminalPaneSplit(
-  createdPane: unknown,
-  args: {
-    source: 'contextual_tour' | 'context_menu'
-    direction: 'vertical' | 'horizontal'
-  }
-): boolean {
-  return recordCreatedTerminalPaneSplit(createdPane, args)
-}
 
 type UseTerminalPaneContextMenuDeps = {
   fallbackCwd: string

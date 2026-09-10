@@ -1,17 +1,16 @@
-// Why: decode/encode between yiru.runtime.v1.CrashReportsService wire messages and
+// Why: decode/encode between agentstart.runtime.v1.CrashReportsService wire messages and
 // `crate::crash_reports`'s domain types. Kept separate from crash_reports.rs (the
 // dispatch surface) because this file is pure conversion — the same split
 // rpc/github.rs + rpc/github/protocol.rs uses.
 
-use serde_json::Value as JsonValue;
-use yiru_protocol::runtime::v1::crash_report_copy_submission_failure::DiagnosticContext as ProtoCopyDiagnosticContext;
-use yiru_protocol::runtime::v1::crash_report_detail_value::Kind as ProtoDetailKind;
-use yiru_protocol::runtime::v1::crash_report_diagnostic_bundle::Status as ProtoDiagnosticBundleStatus;
-use yiru_protocol::runtime::v1::crash_report_nullable_string::Value as ProtoNullableValue;
-use yiru_protocol::runtime::v1::crash_reports_service_copy_latest_diagnostics_response::Result as ProtoCopyResult;
-use yiru_protocol::runtime::v1::crash_reports_service_record_renderer_error_response::Result as ProtoRendererErrorResult;
-use yiru_protocol::runtime::v1::crash_reports_service_submit_response::Result as ProtoSubmitResult;
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::runtime::v1::crash_report_copy_submission_failure::DiagnosticContext as ProtoCopyDiagnosticContext;
+use agentstart_protocol::runtime::v1::crash_report_detail_value::Kind as ProtoDetailKind;
+use agentstart_protocol::runtime::v1::crash_report_diagnostic_bundle::Status as ProtoDiagnosticBundleStatus;
+use agentstart_protocol::runtime::v1::crash_report_nullable_string::Value as ProtoNullableValue;
+use agentstart_protocol::runtime::v1::crash_reports_service_copy_latest_diagnostics_response::Result as ProtoCopyResult;
+use agentstart_protocol::runtime::v1::crash_reports_service_record_renderer_error_response::Result as ProtoRendererErrorResult;
+use agentstart_protocol::runtime::v1::crash_reports_service_submit_response::Result as ProtoSubmitResult;
+use agentstart_protocol::runtime::v1::{
     CrashReport as ProtoCrashReport, CrashReportBreadcrumb as ProtoCrashReportBreadcrumb,
     CrashReportCopyDiagnosticNotUploaded as ProtoCopyDiagnosticNotUploaded,
     CrashReportCopyDiagnosticUploaded as ProtoCopyDiagnosticUploaded,
@@ -36,6 +35,7 @@ use yiru_protocol::runtime::v1::{
     RendererErrorReportSuccess as ProtoRendererErrorReportSuccess,
     RendererErrorSurface as ProtoRendererErrorSurface,
 };
+use serde_json::Value as JsonValue;
 
 use crate::crash_reports::model::{
     CrashReportBreadcrumb, CrashReportCopyDiagnosticContext, CrashReportCopyDiagnosticsArgs,

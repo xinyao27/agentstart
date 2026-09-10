@@ -43,9 +43,9 @@ export const PHASE1_BEATS: readonly Beat[] = [
   }
 ]
 
-export const COORD_INITIAL_MSG = 'Splitting auth rewrite into 2 PRs…'
-export const CHILD_CODEX_INITIAL_MSG = 'Writing the users table migration…'
-export const CHILD_CLAUDE_INITIAL_MSG = 'Sketching withSession middleware…'
+const COORD_INITIAL_MSG = 'Splitting auth rewrite into 2 PRs…'
+const CHILD_CODEX_INITIAL_MSG = 'Writing the users table migration…'
+const CHILD_CLAUDE_INITIAL_MSG = 'Sketching withSession middleware…'
 
 export type AgentRowState = 'working' | 'done'
 

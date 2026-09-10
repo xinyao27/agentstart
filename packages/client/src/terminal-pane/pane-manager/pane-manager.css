@@ -26,7 +26,7 @@
   content: '';
   position: absolute;
   border-radius: 1px;
-  background: var(--yiru-terminal-divider-color, transparent);
+  background: var(--agentstart-terminal-divider-color, transparent);
   transition: background 100ms ease;
 }
 
@@ -77,8 +77,8 @@
 .pane-divider.is-horizontal:hover::after,
 .pane-divider.is-horizontal.is-dragging::after {
   background: var(
-    --yiru-terminal-divider-color-strong,
-    var(--yiru-terminal-divider-color, transparent)
+    --agentstart-terminal-divider-color-strong,
+    var(--agentstart-terminal-divider-color, transparent)
   );
 }
 

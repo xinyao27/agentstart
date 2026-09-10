@@ -1,5 +1,5 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import type { OnboardingState } from '@yiru/protocol/settings/onboarding'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import type { OnboardingState } from '@agentstart/protocol/settings/onboarding'
 import { useEffect, useState } from 'react'
 import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 

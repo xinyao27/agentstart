@@ -95,7 +95,8 @@ export function useChecksPanelStatusEffects(context: useChecksPanelGenerationFie
       !branch ||
       !isPanelVisible ||
       !activeWorktreeId ||
-      !activeWorktreePath
+      !activeWorktreePath ||
+      activeWorktree?.prunable === true
     ) {
       if (gitStatusSnapshotRetryTimerRef.current) {
         clearTimeout(gitStatusSnapshotRetryTimerRef.current)
@@ -222,6 +223,7 @@ export function useChecksPanelStatusEffects(context: useChecksPanelGenerationFie
     activeWorktreePushTarget,
     activeWorktreeId,
     activeWorktreePath,
+    activeWorktree?.prunable,
     activeConnectionId,
     branch,
     gitStatusInvalidation,

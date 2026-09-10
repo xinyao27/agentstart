@@ -1,8 +1,8 @@
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     WorktreeLabelsServiceRegisterRequest, WorktreeLabelsServiceRegisterResponse,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::worktree_labels::{RegisterRouteRequest, TargetValidationError, WorktreeLabelError};
 

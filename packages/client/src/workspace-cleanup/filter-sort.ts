@@ -1,4 +1,4 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
+import type { WorkspaceCleanupCandidate } from '@agentstart/protocol'
 
 import type {
   WorkspaceCleanupContextFilter,
@@ -33,7 +33,7 @@ export function hasWorkspaceCleanupLocalContext(candidate: WorkspaceCleanupCandi
   )
 }
 
-export function getWorkspaceCleanupSearchText(
+function getWorkspaceCleanupSearchText(
   candidate: WorkspaceCleanupCandidate,
   reviewInfo: WorkspaceCleanupReviewInfo = EMPTY_REVIEW_INFO
 ): string {

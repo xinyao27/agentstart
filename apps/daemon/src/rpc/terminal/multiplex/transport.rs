@@ -1,12 +1,12 @@
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-use tokio::sync::watch;
-use yiru_protocol::protocol::v1::{Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     TerminalMultiplexReady, TerminalServiceMultiplexEvent, TerminalServiceMultiplexRequest,
     terminal_service_multiplex_event, terminal_service_multiplex_request,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
+use tokio::sync::watch;
 
 use super::*;
 use crate::rpc::protocol_call::{ProtocolCallContext, status};
@@ -119,7 +119,7 @@ pub(in crate::rpc::terminal) async fn run_protocol(
         queued: Arc::new(AtomicUsize::new(0)),
         close,
     };
-    let lane = if context.peer_kind() == yiru_protocol::protocol::v1::PeerKind::IosApp {
+    let lane = if context.peer_kind() == agentstart_protocol::protocol::v1::PeerKind::IosApp {
         "mobile"
     } else {
         "runtime"

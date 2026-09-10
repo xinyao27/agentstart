@@ -1,5 +1,5 @@
+import type { MarkdownDocument } from '@agentstart/protocol/files/values'
 import type { Editor } from '@tiptap/react'
-import type { MarkdownDocument } from '@yiru/protocol/files/values'
 import type React from 'react'
 
 import { stripMarkdownExtension } from '../markdown-doc-links'
@@ -34,7 +34,7 @@ const DOC_LINK_TRIGGER_REGEX = /(^|[\s(])\[\[([^[\]|\r\n]*)$/
  * auto-convert plugin) keeps undo to a single step and avoids a one-tick
  * flicker where the inline preview decoration would also run.
  */
-export function runDocLinkCommand(
+function runDocLinkCommand(
   editor: Editor,
   menu: { from: number; to: number },
   document: MarkdownDocument

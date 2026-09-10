@@ -14,17 +14,17 @@ export type GlobalWorkbenchSettings = {
   sourceControlCompareAgainstUpstream: boolean
   /** Deprecated: retained so older persisted settings remain readable. */
   showTitlebarAppName: boolean
-  /** Why: Yiru Mobile remains reachable from Settings; this only controls
+  /** Why: AgentStart Mobile remains reachable from Settings; this only controls
    *  whether the top-level sidebar shortcut is shown. */
   showMobileButton?: boolean
   /** Controls how Ctrl+Tab chooses the next visible tab. Optional for
    *  profiles saved before this setting existed; readers default to MRU. */
   ctrlTabOrderMode?: CtrlTabOrderMode
-  /** Why: Yiru-first preserves fast workspace/app control from agent TUIs.
+  /** Why: AgentStart-first preserves fast workspace/app control from agent TUIs.
    *  Terminal-first is opt-in for users who want shell/TUI bindings to win. */
   terminalShortcutPolicy?: TerminalShortcutPolicy
   /** Legacy pre-file-backed keyboard shortcut overrides. New writes go to
-   *  ~/.yiru/keybindings.json; main migrates this once when present. */
+   *  ~/.agentstart/keybindings.json; main migrates this once when present. */
   keybindings?: KeybindingOverrides
   diffDefaultView: 'inline' | 'side-by-side'
   diffWordWrap: boolean

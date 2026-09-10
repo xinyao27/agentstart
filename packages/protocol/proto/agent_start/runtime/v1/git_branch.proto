@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+import "agent_start/runtime/v1/git_common.proto";
+
+// Branch/tag pointer mutation: switching branches, checking out a detached
+// commit, creating a branch and tagging a commit. See
+// apps/daemon/src/rpc/git.rs's METHODS table (git.checkout,
+// git.checkoutCommit, git.createBranch, git.addTag).
+service GitBranchService {
+  rpc Checkout(GitBranchServiceCheckoutRequest) returns (GitBranchServiceCheckoutResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CheckoutCommit(GitBranchServiceCheckoutCommitRequest) returns (GitBranchServiceCheckoutCommitResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc CreateBranch(GitBranchServiceCreateBranchRequest) returns (GitBranchServiceCreateBranchResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc AddTag(GitBranchServiceAddTagRequest) returns (GitBranchServiceAddTagResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_WORKTREE
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_MOBILE
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_IOS_APP
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_ENVIRONMENT_ALLOWED
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message GitBranchServiceCheckoutRequest {
+  string worktree = 1;
+  string branch = 2;
+}
+
+// checkout_branch (write.rs) is not status-shaped: success is always
+// {"ok":true,"branch":...} and a git failure surfaces as an RPC error, unlike
+// every other mutation in this file.
+message GitBranchServiceCheckoutResponse {
+  bool ok = 1;
+  string branch = 2;
+}
+
+message GitBranchServiceCheckoutCommitRequest {
+  string worktree = 1;
+  string commit = 2;
+}
+
+message GitBranchServiceCheckoutCommitResponse {
+  GitWriteOutcome outcome = 1;
+  // The resolved commit oid; present only when outcome.status == GIT_WRITE_STATUS_OK.
+  optional string commit = 2;
+}
+
+message GitBranchServiceCreateBranchRequest {
+  string worktree = 1;
+  string commit = 2;
+  string name = 3;
+  bool checkout = 4;
+}
+
+message GitBranchServiceCreateBranchResponse {
+  GitWriteOutcome outcome = 1;
+  optional string branch = 2;
+  optional bool checked_out = 3;
+}
+
+message GitBranchServiceAddTagRequest {
+  string worktree = 1;
+  string commit = 2;
+  string name = 3;
+  optional string message = 4;
+  bool force = 5;
+}
+
+message GitBranchServiceAddTagResponse {
+  GitWriteOutcome outcome = 1;
+  optional string tag = 2;
+}

@@ -1,8 +1,12 @@
-import type { AgentStatusEntry } from '@yiru/protocol/agent/status-records'
-import { encodeRuntimePtyId } from '@yiru/protocol/terminal-identity'
-import { isTerminalLeafId, makePaneKey, parsePaneKey } from '@yiru/protocol/terminal/pane-identity'
-import type { TerminalLayoutSnapshot } from '@yiru/protocol/workspace/session'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+import type { AgentStatusEntry } from '@agentstart/protocol/agent/status-records'
+import { encodeRuntimePtyId } from '@agentstart/protocol/terminal-identity'
+import {
+  isTerminalLeafId,
+  makePaneKey,
+  parsePaneKey
+} from '@agentstart/protocol/terminal/pane-identity'
+import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import {
   normalizeCompatibleAgentStatusEntryForOwner,
   normalizeCompatibleAgentTitleForOwner

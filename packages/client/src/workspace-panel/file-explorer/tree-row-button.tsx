@@ -1,4 +1,4 @@
-import type { GitFileStatus } from '@yiru/protocol/git/status-types'
+import type { GitFileStatus } from '@agentstart/protocol/git/status-types'
 import React from 'react'
 import { getFileTypeIcon } from '~renderer/file-presentation/icons'
 import { translate } from '~renderer/i18n/i18n'

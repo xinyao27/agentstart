@@ -1,12 +1,12 @@
-use yiru_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     ProjectHostSetupKind, ProjectHostSetupMethod, ProjectHostSetupRevisionConflict,
     ProjectHostSetupServiceCloneRequest, ProjectHostSetupServiceCreateRequest,
     ProjectHostSetupServiceDeleteRequest, ProjectHostSetupServiceListRequest,
     ProjectHostSetupServiceMutationResponse, ProjectHostSetupServiceSetupExistingFolderRequest,
     ProjectHostSetupServiceUpdateRequest, ProjectHostSetupState,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::project_host_setups::{
     SetupClone, SetupCreate, SetupDelete, SetupExisting, SetupMethod, SetupState, SetupUpdate,
@@ -301,7 +301,7 @@ fn setup_status(error: crate::project_host_setups::ProjectHostSetupError) -> Sta
             code: StatusCode::Aborted as i32,
             message: "workspaceRevisionConflict".to_owned(),
             details: vec![ErrorDetail {
-                type_name: "yiru.runtime.v1.ProjectHostSetupRevisionConflict".to_owned(),
+                type_name: "agentstart.runtime.v1.ProjectHostSetupRevisionConflict".to_owned(),
                 value: encode(&ProjectHostSetupRevisionConflict {
                     expected_revision,
                     actual_revision,

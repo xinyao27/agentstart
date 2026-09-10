@@ -11,7 +11,7 @@ use serde::Serialize;
 use thiserror::Error;
 
 pub(super) const EXTENSION_ORIGIN: &str = "chrome-extension://mfgmfiabfncmdekmikepemddejoeihbf";
-const NATIVE_HOST_NAME: &str = "com.yiru.daemon";
+const NATIVE_HOST_NAME: &str = "com.agentstart.daemon";
 
 #[derive(Serialize)]
 struct NativeHostManifest<'a> {
@@ -57,7 +57,7 @@ pub(crate) fn install(args: &[OsString]) -> Result<(), NativeMessagingInstallErr
     let allowed_origin = format!("{EXTENSION_ORIGIN}/");
     let manifest = NativeHostManifest {
         allowed_origins: [&allowed_origin],
-        description: "Starts and connects the local Yiru daemon",
+        description: "Starts and connects the local AgentStart daemon",
         name: NATIVE_HOST_NAME,
         path: executable,
         transport_type: "stdio",
@@ -81,13 +81,13 @@ pub(crate) fn install(args: &[OsString]) -> Result<(), NativeMessagingInstallErr
             })?
         );
     } else {
-        println!("Yiru native messaging host installed: {manifest_path_text}");
+        println!("AgentStart native messaging host installed: {manifest_path_text}");
     }
     Ok(())
 }
 
 fn resolve_manifest_path() -> Result<PathBuf, NativeMessagingInstallError> {
-    if let Some(configured_root) = trimmed_environment("YIRU_NATIVE_MESSAGING_CONFIG_ROOT") {
+    if let Some(configured_root) = trimmed_environment("AGENTSTART_NATIVE_MESSAGING_CONFIG_ROOT") {
         return Ok(absolute_path(&configured_root)?.join(format!("{NATIVE_HOST_NAME}.json")));
     }
     #[cfg(target_os = "macos")]
@@ -106,7 +106,7 @@ fn resolve_manifest_path() -> Result<PathBuf, NativeMessagingInstallError> {
             .or_else(|| trimmed_environment("APPDATA"))
             .ok_or(NativeMessagingInstallError::AppDataUnavailable)?;
         Ok(PathBuf::from(app_data)
-            .join("Yiru")
+            .join("AgentStart")
             .join("NativeMessagingHosts")
             .join(format!("{NATIVE_HOST_NAME}.json")))
     }

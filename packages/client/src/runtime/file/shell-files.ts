@@ -1,4 +1,4 @@
-import type { LocalDownloadClient } from '@yiru/protocol'
+import type { LocalDownloadClient } from '@agentstart/protocol'
 
 import { openConfiguredBrowserHostLocalDownloads } from '../browser-host-runtime'
 import { requireShellFilesTarget } from '../shell-files-target'

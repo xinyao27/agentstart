@@ -30,10 +30,6 @@ impl RuntimeMobile {
         self.pairing.clone()
     }
 
-    pub(super) fn presence(&self) -> MobilePresence {
-        self.presence.clone()
-    }
-
     pub(super) fn server_config(
         &self,
         port: u16,

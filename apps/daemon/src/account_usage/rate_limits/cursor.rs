@@ -292,17 +292,17 @@ fn cursor_launch(
 }
 
 fn safe_remote_cwd() -> &'static str {
-    "yiru_rate_limit_cwd=\"${TMPDIR:-/tmp}/yiru-rate-limit-pty-cwd\" && mkdir -p \"$yiru_rate_limit_cwd\" && cd \"$yiru_rate_limit_cwd\""
+    "agentstart_rate_limit_cwd=\"${TMPDIR:-/tmp}/agentstart-rate-limit-pty-cwd\" && mkdir -p \"$agentstart_rate_limit_cwd\" && cd \"$agentstart_rate_limit_cwd\""
 }
 
 fn login_command(command: &str) -> String {
     let quoted = posix_quote(command);
     format!(
-        "_yiru_shell=$(getent passwd \"$(id -un)\" 2>/dev/null | cut -d: -f7); \
-         if [ -z \"$_yiru_shell\" ] || [ ! -x \"$_yiru_shell\" ]; then _yiru_shell=\"${{SHELL:-/bin/bash}}\"; fi; \
-         if [ -z \"$_yiru_shell\" ] || [ ! -x \"$_yiru_shell\" ]; then _yiru_shell=/bin/sh; fi; \
-         _yiru_name=$(basename \"$_yiru_shell\" | tr '[:upper:]' '[:lower:]'); \
-         case \"$_yiru_name\" in sh|dash) exec \"$_yiru_shell\" -lc {quoted} ;; bash|zsh|ksh|mksh|ash) exec \"$_yiru_shell\" -ilc {quoted} ;; *) exec /bin/sh -lc {quoted} ;; esac"
+        "_agentstart_shell=$(getent passwd \"$(id -un)\" 2>/dev/null | cut -d: -f7); \
+         if [ -z \"$_agentstart_shell\" ] || [ ! -x \"$_agentstart_shell\" ]; then _agentstart_shell=\"${{SHELL:-/bin/bash}}\"; fi; \
+         if [ -z \"$_agentstart_shell\" ] || [ ! -x \"$_agentstart_shell\" ]; then _agentstart_shell=/bin/sh; fi; \
+         _agentstart_name=$(basename \"$_agentstart_shell\" | tr '[:upper:]' '[:lower:]'); \
+         case \"$_agentstart_name\" in sh|dash) exec \"$_agentstart_shell\" -lc {quoted} ;; bash|zsh|ksh|mksh|ash) exec \"$_agentstart_shell\" -ilc {quoted} ;; *) exec /bin/sh -lc {quoted} ;; esac"
     )
 }
 

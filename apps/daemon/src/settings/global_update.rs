@@ -117,7 +117,7 @@ fn normalize_notifications(notifications: &mut Map<String, Value>) {
     let sound = match sound {
         "system" | "two-tone" | "bong" | "thump" | "blip" | "sonar" | "blop" | "ding" | "clack"
         | "beep" | "custom" => sound,
-        "yiru" | "chime" => "two-tone",
+        "agentstart" | "chime" => "two-tone",
         "pop" => "blop",
         _ if notifications
             .get("customSoundPath")

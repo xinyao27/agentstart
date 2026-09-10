@@ -1,10 +1,10 @@
-import { CLIENT_EVENTS_PROTOCOL_CAPABILITY, ClientEventsClient } from '@yiru/protocol'
+import { CLIENT_EVENTS_PROTOCOL_CAPABILITY, ClientEventsClient } from '@agentstart/protocol'
 
 import { openRuntimeProtocolTarget } from './protocol-target'
 import type { RuntimeClientTarget } from './runtime-target'
 import { readRuntimeStatus } from './status-client'
 
-export async function openClientEventsTarget(
+async function openClientEventsTarget(
   target: RuntimeClientTarget
 ): Promise<ClientEventsClient | null> {
   const status = await readRuntimeStatus(target)

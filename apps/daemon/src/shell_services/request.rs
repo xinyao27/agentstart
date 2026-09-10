@@ -1,8 +1,8 @@
 mod terminal;
 mod ui;
 
+use agentstart_protocol::runtime::v1::*;
 use serde_json::{Value, json};
-use yiru_protocol::runtime::v1::*;
 
 use super::ShellServicesError;
 use shell_host_request::Command;

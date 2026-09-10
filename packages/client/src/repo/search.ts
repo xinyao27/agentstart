@@ -1,12 +1,12 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isUtf8ByteLengthOverLimit } from '@yiru/protocol/text/utf8-length'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isUtf8ByteLengthOverLimit } from '@agentstart/protocol/text/utf8-length'
 
 // Display-name matches must always outrank path-only matches. This offset is
 // added to every path-match score so that even a path hit at index 0 scores
 // higher than the worst possible display-name hit. The value must exceed any
 // realistic displayName length.
 const PATH_SCORE_OFFSET = 1000
-export const REPO_SEARCH_QUERY_MAX_BYTES = 2 * 1024
+const REPO_SEARCH_QUERY_MAX_BYTES = 2 * 1024
 
 type RepoMatch = {
   repo: Repo
@@ -14,10 +14,7 @@ type RepoMatch = {
   index: number
 }
 
-export function isRepoSearchQueryTooLarge(
-  query: string,
-  maxBytes = REPO_SEARCH_QUERY_MAX_BYTES
-): boolean {
+function isRepoSearchQueryTooLarge(query: string, maxBytes = REPO_SEARCH_QUERY_MAX_BYTES): boolean {
   return isUtf8ByteLengthOverLimit(query, maxBytes)
 }
 

@@ -1,5 +1,5 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
-import { canQueueWorkspaceCleanupCandidate } from '@yiru/protocol/workspace/cleanup-policy'
+import type { WorkspaceCleanupCandidate } from '@agentstart/protocol'
+import { canQueueWorkspaceCleanupCandidate } from '@agentstart/protocol/workspace/cleanup-policy'
 import React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -69,7 +69,7 @@ function MetadataIconChip({
         render={
           <span
             className={cn(
-              'inline-flex h-5 shrink-0 items-center gap-1 border px-1.5 text-[11px] font-medium',
+              'inline-flex h-5 shrink-0 items-center gap-1 rounded-full border px-1.5 text-[11px] font-medium',
               'border-border bg-background text-muted-foreground',
               tone === 'ready' &&
                 'border-[color:color-mix(in_srgb,var(--git-decoration-added)_45%,transparent)] bg-[color:color-mix(in_srgb,var(--git-decoration-added)_10%,transparent)] text-[var(--git-decoration-added)]',

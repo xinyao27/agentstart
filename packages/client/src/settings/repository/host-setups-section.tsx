@@ -1,5 +1,5 @@
-import { getRepoExecutionHostId, type ExecutionHostId } from '@yiru/protocol/host/identity'
-import type { Repo } from '@yiru/protocol/project/repository'
+import { getRepoExecutionHostId, type ExecutionHostId } from '@agentstart/protocol/host/identity'
+import type { Repo } from '@agentstart/protocol/project/repository'
 import { useState } from 'react'
 import { buildExecutionHostRegistry } from '~renderer/execution-host-registry'
 import { getExecutionHostLabel } from '~renderer/execution-host/labels'
@@ -138,7 +138,7 @@ export function RepositoryHostSetupsSection({
           )}
         </p>
       </div>
-      <div className="divide-border border-border divide-y border">
+      <div className="divide-border border-border divide-y rounded-md border">
         {projectHostSetups.map((setup) => {
           const isCurrentSetup = setup.hostId === selectedHostId
           const canOpenSetup = setup.repoId.trim().length > 0

@@ -12,7 +12,7 @@ import {
   WorktreeServiceListResponseSchema,
   WorktreeServiceRestoreRequestSchema,
   WorktreeServiceRestoreResponseSchema
-} from '../generated/yiru/runtime/v1/worktree_pb.js'
+} from '../generated/agent_start/runtime/v1/worktree_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from './transport.js'
 import {
   worktreeActivate,

@@ -1,4 +1,4 @@
-import type { StatusCode } from '../generated/yiru/protocol/v1/errors_pb.js'
+import type { StatusCode } from '../generated/agent_start/protocol/v1/errors_pb.js'
 
 export class RuntimeProtocolError extends Error {
   readonly code: StatusCode

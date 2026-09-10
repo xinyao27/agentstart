@@ -206,7 +206,7 @@ export type SessionTabsAllStreamEventValue =
   | ({ type: 'updated' } & SessionTabsSnapshotValue)
   | { type: 'end' }
 
-export type SessionTabsStartupCommandDeliveryInput = 'fast' | 'shell-ready'
+type SessionTabsStartupCommandDeliveryInput = 'fast' | 'shell-ready'
 
 export type SessionTabsCreateTerminalInput = {
   worktree: string

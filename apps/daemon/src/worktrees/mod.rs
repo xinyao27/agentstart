@@ -31,8 +31,8 @@ pub(crate) fn import_legacy_metadata(
 ) -> Result<(), metadata::WorktreeMetadataError> {
     match legacy::read(user_data_path) {
         legacy::LegacyMetadata::Authoritative(entries) => {
-            records::sync_workbench(connection, &entries)
+            records::merge_workbench(connection, &entries)
         }
-        legacy::LegacyMetadata::Unavailable => Ok(()),
+        legacy::LegacyMetadata::Unavailable => records::merge_workbench(connection, &[]),
     }
 }

@@ -6,7 +6,7 @@ import {
   DeveloperPermissionsServiceGetStatusResponseSchema,
   DeveloperPermissionsServiceRequestRequestSchema,
   DeveloperPermissionsServiceRequestResponseSchema
-} from '../generated/yiru/runtime/v1/developer_permissions_pb.js'
+} from '../generated/agent_start/runtime/v1/developer_permissions_pb.js'
 import {
   developerPermissionState,
   protocolPermissionId,
@@ -43,7 +43,7 @@ export class DeveloperPermissionsClient {
 
   /**
    * Open the system surface that grants one permission and report where the
-   * permission stands once it is open. Granting happens outside Yiru, so the
+   * permission stands once it is open. Granting happens outside AgentStart, so the
    * status returned here is the status at that moment, not a final answer.
    */
   async request(

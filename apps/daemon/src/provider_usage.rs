@@ -34,9 +34,9 @@ pub(crate) enum Provider {
 impl Provider {
     fn file_name(self) -> &'static str {
         match self {
-            Self::Claude => "yiru-claude-usage.json",
-            Self::Codex => "yiru-codex-usage.json",
-            Self::OpenCode => "yiru-opencode-usage.json",
+            Self::Claude => "agentstart-claude-usage.json",
+            Self::Codex => "agentstart-codex-usage.json",
+            Self::OpenCode => "agentstart-opencode-usage.json",
         }
     }
 
@@ -156,8 +156,17 @@ impl ProviderUsageAuthority {
         let authority = self.clone();
         tokio::spawn(async move {
             let _guard = guard;
-            if let Err(error) = scan::run(&authority, provider, false).await {
-                eprintln!("Provider usage background scan failed: {error}");
+            let continue_refresh = match scan::run(&authority, provider, false).await {
+                Ok(continue_refresh) => continue_refresh,
+                Err(error) => {
+                    eprintln!("Provider usage background scan failed: {error}");
+                    false
+                }
+            };
+            drop(_guard);
+            if continue_refresh {
+                tokio::task::yield_now().await;
+                authority.refresh_background(provider);
             }
         });
     }
@@ -175,7 +184,13 @@ impl ProviderUsageAuthority {
         let authority = self.clone();
         tokio::spawn(async move {
             let _guard = guard;
-            scan::run(&authority, provider, force).await
+            let continue_refresh = scan::run(&authority, provider, force).await?;
+            drop(_guard);
+            if continue_refresh {
+                tokio::task::yield_now().await;
+                authority.refresh_background(provider);
+            }
+            Ok::<(), ProviderUsageError>(())
         })
         .await
         .map_err(|error| ProviderUsageError::Scan(error.to_string()))??;
@@ -203,7 +218,8 @@ impl ProviderUsageAuthority {
         range: &str,
         limit: Option<u64>,
     ) -> Result<Value, ProviderUsageError> {
-        if !matches!(scope, "yiru" | "all") || !matches!(range, "7d" | "30d" | "90d" | "all") {
+        if !matches!(scope, "agentstart" | "all") || !matches!(range, "7d" | "30d" | "90d" | "all")
+        {
             return Err(ProviderUsageError::Input);
         }
         let _guard = self.slot(provider).write_gate.lock().await;

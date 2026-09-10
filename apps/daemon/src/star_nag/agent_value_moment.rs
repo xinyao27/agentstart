@@ -49,7 +49,7 @@ impl StarNagAuthority {
             }
             Guard::ProceedEvaluating => {}
         }
-        let starred = self.inner.github.check_yiru_starred().await;
+        let starred = self.inner.github.check_agentstart_starred().await;
         let result = if ui_state::is_completed(&self.inner.ui.get()) {
             AgentValueMomentPreparation::Skipped
         } else {

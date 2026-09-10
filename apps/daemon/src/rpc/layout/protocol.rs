@@ -1,11 +1,11 @@
-use yiru_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
-use yiru_protocol::runtime::v1::{
+use agentstart_protocol::protocol::v1::{ErrorDetail, Status, StatusCode};
+use agentstart_protocol::runtime::v1::{
     LayoutAgentPane, LayoutAppliedPane as ProtocolLayoutAppliedPane, LayoutCommandPane,
     LayoutPane as ProtocolLayoutPane, LayoutRecipe as ProtocolLayoutRecipe, LayoutRevisionConflict,
     LayoutServiceApplyRequest, LayoutServiceApplyResponse, LayoutServiceListRequest,
     LayoutServiceListResponse, LayoutShellPane, layout_pane,
 };
-use yiru_protocol::transport::{decode, encode};
+use agentstart_protocol::transport::{decode, encode};
 
 use crate::layouts::{LayoutAppliedPane, LayoutAuthorityError, LayoutPane, LayoutRecipe};
 // Why: rpc::layout::protocol is a descendant of rpc, so it can name this module-private sibling
@@ -87,7 +87,7 @@ fn layout_status(error: LayoutAuthorityError) -> Status {
             code: StatusCode::Aborted as i32,
             message: "workspaceRevisionConflict".to_owned(),
             details: vec![ErrorDetail {
-                type_name: "yiru.runtime.v1.LayoutRevisionConflict".to_owned(),
+                type_name: "agentstart.runtime.v1.LayoutRevisionConflict".to_owned(),
                 value: encode(&LayoutRevisionConflict {
                     expected_revision,
                     actual_revision,

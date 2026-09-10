@@ -1,8 +1,8 @@
-import type { ProjectGroup } from '@yiru/protocol/project/group-model'
-import type { FolderWorkspace } from '@yiru/protocol/workspace/folder'
-import { folderWorkspaceToWorktree } from '@yiru/protocol/workspace/folder'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
-import type { Worktree } from '@yiru/protocol/worktree/model'
+import type { ProjectGroup } from '@agentstart/protocol/project/group-model'
+import type { FolderWorkspace } from '@agentstart/protocol/workspace/folder'
+import { folderWorkspaceToWorktree } from '@agentstart/protocol/workspace/folder'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
+import type { Worktree } from '@agentstart/protocol/worktree/model'
 
 import { getProjectGroupHeaderKey } from './groups'
 

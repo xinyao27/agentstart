@@ -1,4 +1,4 @@
-import type { ClientEventsSubscriptionEventValue } from '@yiru/protocol'
+import type { ClientEventsSubscriptionEventValue } from '@agentstart/protocol'
 import type { RuntimeClientEvent } from '~renderer/runtime/client-event-model'
 
 import { requireClientEventsClient } from './client-events-target'

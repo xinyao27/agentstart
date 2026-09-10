@@ -1,8 +1,8 @@
-import type { Repo } from '@yiru/protocol/project/repository'
-import { isGitRepoKind } from '@yiru/protocol/project/repository'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { SetupAgentStartupPolicy, SetupRunPolicy } from '@yiru/protocol/worktree/hooks'
-import type { YiruHooks } from '@yiru/protocol/worktree/hooks'
+import type { Repo } from '@agentstart/protocol/project/repository'
+import { isGitRepoKind } from '@agentstart/protocol/project/repository'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { SetupAgentStartupPolicy, SetupRunPolicy } from '@agentstart/protocol/worktree/hooks'
+import type { AgentStartHooks } from '@agentstart/protocol/worktree/hooks'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
@@ -37,7 +37,7 @@ export function useComposerSetup({
   const selectedRepoSettingsRef = useRef(selectedRepoSettings)
   const [hookCheckResult, setHookCheckResult] = useState<{
     repoId: string
-    hooks: YiruHooks | null
+    hooks: AgentStartHooks | null
   } | null>(null)
   const [policyDraft, setPolicyDraft] = useState<{
     repoId: string
@@ -76,7 +76,7 @@ export function useComposerSetup({
     }
   )
   const commitHookCheckIfCurrent = useEventCallback(
-    (targetRepoId: string, hooks: YiruHooks | null): boolean => {
+    (targetRepoId: string, hooks: AgentStartHooks | null): boolean => {
       if (repoIdRef.current !== targetRepoId) {
         return false
       }

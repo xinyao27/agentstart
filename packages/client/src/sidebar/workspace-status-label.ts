@@ -1,4 +1,4 @@
-import type { WorkspaceStatusDefinition } from '@yiru/protocol/workspace/status/model'
+import type { WorkspaceStatusDefinition } from '@agentstart/protocol/workspace/status/model'
 import { translate } from '~renderer/i18n/i18n'
 
 export function workspaceStatusLabel(status: WorkspaceStatusDefinition): string {

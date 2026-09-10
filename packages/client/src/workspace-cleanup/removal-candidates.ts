@@ -1,4 +1,4 @@
-import type { WorkspaceCleanupCandidate } from '@yiru/protocol'
+import type { WorkspaceCleanupCandidate } from '@agentstart/protocol'
 import type { WorktreeDeleteState } from '~renderer/worktree/state/slice'
 
 type DeletionFlagState = Pick<WorktreeDeleteState, 'isDeleting'>

@@ -1,4 +1,4 @@
-import { normalizeHostedReviewHeadRef } from '@yiru/protocol/hosted-review/refs'
+import { normalizeHostedReviewHeadRef } from '@agentstart/protocol/hosted-review/refs'
 import { toast } from 'sonner'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'

@@ -1,4 +1,4 @@
-import type { HostedReviewProvider } from '@yiru/protocol/hosted-review/types'
+import type { HostedReviewProvider } from '@agentstart/protocol/hosted-review/types'
 
 export type ManualReviewProvider = Exclude<HostedReviewProvider, 'unsupported'>
 

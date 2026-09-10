@@ -39,7 +39,7 @@ type ContentRect = RectLike
 
 const DOM_DELTA_LINE = 1
 const DOM_DELTA_PAGE = 2
-export const HID_EDGE_BOTTOM = 3
+const HID_EDGE_BOTTOM = 3
 const HOME_INDICATOR_BAND_NORM = 0.93
 
 function clampUnit(value: number): number {

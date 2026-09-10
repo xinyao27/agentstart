@@ -4,12 +4,12 @@ import {
   isResumableTuiAgent,
   type SleepingAgentLaunchConfig,
   type SleepingAgentSessionRecord
-} from '@yiru/protocol/agent/session-resume'
+} from '@agentstart/protocol/agent/session-resume'
 import {
   AGENT_STATUS_STALE_AFTER_MS,
   type AgentStatusEntry
-} from '@yiru/protocol/agent/status-records'
-import type { TerminalTab } from '@yiru/protocol/workspace/tabs'
+} from '@agentstart/protocol/agent/status-records'
+import type { TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import { isExplicitAgentStatusFresh } from '~renderer/agent/status'
 import { isCompletedAgentWithLiveRecoveryRecord } from '~renderer/settings/completed-agent-live-recovery-record'
 import { readLastTerminalInputAt } from '~renderer/terminal-pane/input-activity-coalescing'
@@ -71,7 +71,7 @@ type CollectSleepingAgentSessionRecordsOptions = {
   captureMode?: 'manual-worktree-sleep' | 'completed-agent-hibernation'
 }
 
-export function normalizeSleepingAgentSessionCollectOptions(
+function normalizeSleepingAgentSessionCollectOptions(
   options: readonly string[] | CollectSleepingAgentSessionRecordsOptions | undefined
 ): CollectSleepingAgentSessionRecordsOptions {
   if (!options) {
@@ -82,7 +82,7 @@ export function normalizeSleepingAgentSessionCollectOptions(
     : (options as CollectSleepingAgentSessionRecordsOptions)
 }
 
-export function isValidManualSleepLiveAgentEntry(
+function isValidManualSleepLiveAgentEntry(
   state: AppState,
   entry: AgentStatusEntry,
   capturedAt: number
@@ -101,7 +101,7 @@ export function isValidManualSleepLiveAgentEntry(
   return isExplicitAgentStatusFresh(entry, capturedAt, AGENT_STATUS_STALE_AFTER_MS)
 }
 
-export function isValidCompletedAgentHibernationEntry(entry: AgentStatusEntry): boolean {
+function isValidCompletedAgentHibernationEntry(entry: AgentStatusEntry): boolean {
   return entry.state === 'done' && entry.interrupted !== true
 }
 

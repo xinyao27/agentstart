@@ -1,11 +1,11 @@
-import { listCommitMessageAgentCapabilities } from '@yiru/protocol/source-control/catalog/agents'
+import { listCommitMessageAgentCapabilities } from '@agentstart/protocol/source-control/catalog/agents'
 import type {
   CommitMessageAgentCapability,
   CommitMessageModelCapability
-} from '@yiru/protocol/source-control/catalog/types'
-import { CUSTOM_PROMPT_PLACEHOLDER } from '@yiru/protocol/source-control/command/custom-prompt'
-import { CUSTOM_AGENT_ID } from '@yiru/protocol/source-control/custom-agent'
-import type { CommitMessageAiSettings } from '@yiru/protocol/source-control/legacy-settings'
+} from '@agentstart/protocol/source-control/catalog/types'
+import { CUSTOM_PROMPT_PLACEHOLDER } from '@agentstart/protocol/source-control/command/custom-prompt'
+import { CUSTOM_AGENT_ID } from '@agentstart/protocol/source-control/custom-agent'
+import type { CommitMessageAiSettings } from '@agentstart/protocol/source-control/legacy-settings'
 import type { JSX } from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
 import { translate } from '~renderer/i18n/i18n'

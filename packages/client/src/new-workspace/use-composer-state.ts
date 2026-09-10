@@ -11,20 +11,7 @@ import { createComposerActions } from './create-composer-actions'
 import { createComposerCardProps } from './create-composer-card-props'
 import { useComposerForm } from './use-composer-form'
 import { useComposerSubmissions } from './use-composer-submissions'
-export type {
-  ComposerCardProps,
-  InitialWorkspaceRunSeedInput,
-  UseComposerStateOptions,
-  UseComposerStateResult
-} from './composer-contract'
-export {
-  getInitialAutoManagedWorkspaceName,
-  isExplicitWorkspaceNameInput,
-  resolveBlankBranchCreateNames,
-  resolveInitialWorkspaceRunSeed,
-  resolveSmartGitHubCreateNames
-} from './composer-initial-state'
-
+export type { UseComposerStateOptions, UseComposerStateResult } from './composer-contract'
 // Why: a new composer instance must invalidate preflight retained by an older
 // instance; hook-trust handoffs intentionally keep using the same submission.
 const composerSubmissionGuard = createComposerSubmissionGuard()

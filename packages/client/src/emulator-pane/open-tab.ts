@@ -1,4 +1,4 @@
-import type { EmulatorAttachResultValue } from '@yiru/protocol'
+import type { EmulatorAttachResultValue } from '@agentstart/protocol'
 import { toast } from 'sonner'
 import type { EmulatorStreamInfo } from '~renderer/emulator-pane/types'
 import { translate } from '~renderer/i18n/i18n'
@@ -30,7 +30,7 @@ function dispatchPrelaunchedSession(worktreeId: string, info: EmulatorStreamInfo
   }
   window.setTimeout(() => {
     window.dispatchEvent(
-      new CustomEvent('yiru:emulator-auto-attach', {
+      new CustomEvent('agentstart:emulator-auto-attach', {
         detail: { worktreeId, info }
       })
     )

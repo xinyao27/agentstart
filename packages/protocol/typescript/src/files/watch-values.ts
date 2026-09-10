@@ -1,9 +1,9 @@
-import { StatusCode } from '../../generated/yiru/protocol/v1/errors_pb.js'
+import { StatusCode } from '../../generated/agent_start/protocol/v1/errors_pb.js'
 import {
   FileChangeKind as ProtocolFileChangeKind,
   LogTailChangeKind as ProtocolLogTailChangeKind,
   type FileChangeEvent as ProtocolFileChangeEvent
-} from '../../generated/yiru/runtime/v1/files_pb.js'
+} from '../../generated/agent_start/runtime/v1/files_pb.js'
 import { RuntimeProtocolError } from '../error.js'
 
 export type FileChangeEvent = Readonly<{

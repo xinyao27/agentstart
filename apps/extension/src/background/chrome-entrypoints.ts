@@ -4,10 +4,9 @@ import { readProjectName } from './project-groups'
 import { readRecentProjects } from './project-history'
 import { focusOrCreatePage, focusOrCreateWorkspace } from './workspace-navigation'
 
-const CONTEXT_MENU_ID = 'yiru-use-context'
-const ACTION_ACTIVITY_MENU_ID = 'yiru-action-activity'
-const ACTION_AUTOMATIONS_MENU_ID = 'yiru-action-automations'
-const ACTION_SETTINGS_MENU_ID = 'yiru-action-settings'
+const CONTEXT_MENU_ID = 'agentstart-use-context'
+const ACTION_ACTIVITY_MENU_ID = 'agentstart-action-activity'
+const ACTION_SETTINGS_MENU_ID = 'agentstart-action-settings'
 
 export async function configureChromeEntrypoints(): Promise<void> {
   await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
@@ -50,7 +49,7 @@ export function registerChromeEntrypointListeners(): void {
   })
 
   chrome.commands.onCommand.addListener((command) => {
-    if (command === 'open-yiru') {
+    if (command === 'open-agentstart') {
       void chrome.windows.getLastFocused().then((window) => {
         if (window.id === undefined) {
           return
@@ -69,12 +68,8 @@ export function registerChromeEntrypointListeners(): void {
       void focusOrCreatePage('activity')
       return
     }
-    if (info.menuItemId === ACTION_AUTOMATIONS_MENU_ID) {
-      void focusOrCreatePage('automations')
-      return
-    }
     if (info.menuItemId === ACTION_SETTINGS_MENU_ID) {
-      void chrome.runtime.openOptionsPage()
+      void focusOrCreatePage('settings')
       return
     }
     if (info.menuItemId !== CONTEXT_MENU_ID) {
@@ -121,12 +116,12 @@ export async function injectForgeAction(tab: chrome.tabs.Tab): Promise<void> {
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
     func: () => {
-      const existing = document.getElementById('yiru-forge-action')
+      const existing = document.getElementById('agentstart-forge-action')
       if (existing) {
         return
       }
       const button = document.createElement('button')
-      button.id = 'yiru-forge-action'
+      button.id = 'agentstart-forge-action'
       button.type = 'button'
       button.textContent =
         chrome.i18n.getMessage('forgeAction') || chrome.i18n.getMessage('appName')
@@ -145,17 +140,12 @@ async function configureContextMenu(): Promise<void> {
   chrome.contextMenus.create({
     contexts: ['selection', 'link', 'image'],
     id: CONTEXT_MENU_ID,
-    title: translate('useAsContext', 'Use in Yiru')
+    title: translate('useAsContext', 'Use in AgentStart')
   })
   chrome.contextMenus.create({
     contexts: ['action'],
     id: ACTION_ACTIVITY_MENU_ID,
     title: translate('openActivity', 'Open activity')
-  })
-  chrome.contextMenus.create({
-    contexts: ['action'],
-    id: ACTION_AUTOMATIONS_MENU_ID,
-    title: translate('openAutomations', 'Open automations')
   })
   chrome.contextMenus.create({
     contexts: ['action'],
@@ -175,10 +165,10 @@ async function updateActionForTab(tab: chrome.tabs.Tab): Promise<void> {
       : 'default'
   const title =
     actionKind === 'forge'
-      ? translate('forgeAction', 'Handle in Yiru')
+      ? translate('forgeAction', 'Handle in AgentStart')
       : actionKind === 'preview'
-        ? translate('previewAction', 'Inspect with Yiru')
-        : translate('openSidePanel', 'Open Yiru side panel')
+        ? translate('previewAction', 'Inspect with AgentStart')
+        : translate('openSidePanel', 'Open AgentStart side panel')
   await Promise.all([
     chrome.action.setTitle({ tabId: tab.id, title }),
     setActionIcon(tab.id, actionKind)
@@ -204,7 +194,8 @@ const actionIconCache = new Map<string, ImageData>()
 async function setActionIcon(tabId: number, kind: 'default' | 'forge' | 'preview'): Promise<void> {
   let imageData = actionIconCache.get(kind)
   if (!imageData) {
-    const response = await fetch(chrome.runtime.getURL('icons/icon-32.png'))
+    const iconPath = import.meta.env.DEV ? 'icons/dev-32.png' : 'icons/icon-32.png'
+    const response = await fetch(chrome.runtime.getURL(iconPath))
     const bitmap = await createImageBitmap(await response.blob())
     const canvas = new OffscreenCanvas(32, 32)
     const context = canvas.getContext('2d')
@@ -214,7 +205,7 @@ async function setActionIcon(tabId: number, kind: 'default' | 'forge' | 'preview
     context.drawImage(bitmap, 0, 0, 32, 32)
     if (kind !== 'default') {
       context.beginPath()
-      context.arc(25, 25, 6, 0, Math.PI * 2)
+      context.arc(25, import.meta.env.DEV ? 7 : 25, 6, 0, Math.PI * 2)
       context.fillStyle = kind === 'forge' ? '#2563eb' : '#16a34a'
       context.fill()
       context.lineWidth = 2

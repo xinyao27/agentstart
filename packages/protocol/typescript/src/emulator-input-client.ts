@@ -11,7 +11,7 @@ import {
   EmulatorServiceTapRequestSchema,
   EmulatorServiceTypeTextRequestSchema,
   EmulatorTargetSchema
-} from '../generated/yiru/runtime/v1/emulator_pb.js'
+} from '../generated/agent_start/runtime/v1/emulator_pb.js'
 import { emulatorExecResult, gesturePointKind, orientation } from './emulator-values.js'
 import type {
   EmulatorGesturePointInput,

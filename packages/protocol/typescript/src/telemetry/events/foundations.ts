@@ -45,10 +45,10 @@ export const AGENT_KIND_VALUES = [
 export const agentKindSchema = z.enum(AGENT_KIND_VALUES)
 export type AgentKind = z.infer<typeof agentKindSchema>
 
-// Trimmed to a small set of values Yiru's PTY-typed-command launch architecture
+// Trimmed to a small set of values AgentStart's PTY-typed-command launch architecture
 // can emit:
 //   - `binary_not_found` — `provider.spawn` ENOENT (the *shell* binary is
-//     missing). The agent CLI being missing is invisible: Yiru spawns a
+//     missing). The agent CLI being missing is invisible: AgentStart spawns a
 //     healthy shell and types the command, and bash/zsh's "command not found"
 //     surfaces only as terminal output.
 //   - `paste_readiness_timeout` — bracketed-paste readiness wait timed out.
@@ -58,7 +58,7 @@ export type AgentKind = z.infer<typeof agentKindSchema>
 //     unclassifiable shell-spawn errors).
 // Provider-side errors (`auth_expired`, `rate_limited`, `network_timeout`,
 // `provider_*`) happen inside the agent CLI subprocess and are not observable
-// to Yiru — see telemetry-plan.md §Decision: Defer per-incident error fields.
+// to AgentStart — see telemetry-plan.md §Decision: Defer per-incident error fields.
 // Adding a new value is additive-safe; do it when the call site lands, not in
 // anticipation.
 export const errorClassSchema = z.enum(['binary_not_found', 'paste_readiness_timeout', 'unknown'])
@@ -189,8 +189,8 @@ export type OptInVia = z.infer<typeof optInViaSchema>
 // `settings_changed`. If a setting isn't in this list, we do not emit.
 //
 // Keys are camelCase to match the actual field names in `GlobalSettings`.
-// `yiru_channel` is intentionally absent — it is a build-time common
-// property baked in from `YIRU_BUILD_IDENTITY`, not a user-togglable setting.
+// `agentstart_channel` is intentionally absent — it is a build-time common
+// property baked in from `AGENTSTART_BUILD_IDENTITY`, not a user-togglable setting.
 //
 // Intentionally does NOT include the telemetry opt-in toggle — that is
 // covered by the dedicated `telemetry_opted_in` / `telemetry_opted_out`

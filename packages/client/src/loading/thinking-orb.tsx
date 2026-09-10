@@ -71,7 +71,7 @@ export function ThinkingOrbLoader({ state }: ThinkingOrbLoaderProps): React.JSX.
       tintMaskContext.clearRect(0, 0, pixelSize, pixelSize)
       tintMaskContext.drawImage(canvas, 0, 0)
 
-      // Why: upstream paints fixed grayscale; tinting the pixels preserves its depth while honoring Yiru's semantic currentColor.
+      // Why: upstream paints fixed grayscale; tinting the pixels preserves its depth while honoring AgentStart's semantic currentColor.
       context.setTransform(1, 0, 0, 1, 0, 0)
       context.globalCompositeOperation = 'color'
       context.fillStyle = tintColor

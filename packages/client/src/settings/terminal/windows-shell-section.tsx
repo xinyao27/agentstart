@@ -1,5 +1,5 @@
-import { WINDOWS_GIT_BASH_SHELL } from '@yiru/protocol/host/windows-terminal-shell'
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
+import { WINDOWS_GIT_BASH_SHELL } from '@agentstart/protocol/host/windows-terminal-shell'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 import { ShellIcon } from '~renderer/tab-bar/shell-icons'
 

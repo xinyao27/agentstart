@@ -35,7 +35,6 @@ import {
   ChartBarBigIcon as HugeChartBarBigIcon,
   Message01Icon as HugeMessage01Icon,
   MessageUpload02Icon as HugeMessageUpload02Icon,
-  MessageNotification02Icon as HugeMessageNotification02Icon,
   SmsCodeIcon as HugeSmsCodeIcon,
   CheckIcon as HugeCheckIcon,
   CheckmarkCircle01Icon as HugeCheckmarkCircle01Icon,
@@ -44,12 +43,9 @@ import {
   UserMultipleIcon as HugeUserMultipleIcon,
   ClipboardIcon as HugeClipboardIcon,
   Clock01Icon as HugeClock01Icon,
-  Clock04Icon as HugeClock04Icon,
   Clock05Icon as HugeClock05Icon,
-  CloudIcon as HugeCloudIcon,
   CloudUploadIcon as HugeCloudUploadIcon,
   CloudCheckIcon as HugeCloudCheckIcon,
-  CloudFogIcon as HugeCloudFogIcon,
   CodeIcon as HugeCodeIcon,
   LayoutThreeColumnIcon as HugeLayoutThreeColumnIcon,
   Copy01Icon as HugeCopy01Icon,
@@ -80,7 +76,6 @@ import {
   FileVideoIcon as HugeFileVideoIcon,
   Xls02Icon as HugeXls02Icon,
   Files01Icon as HugeFiles01Icon,
-  FingerPrintIcon as HugeFingerPrintIcon,
   Flag01Icon as HugeFlag01Icon,
   TestTube01Icon as HugeTestTube01Icon,
   FloppyDiskIcon as HugeFloppyDiskIcon,
@@ -137,7 +132,6 @@ export const BellSlash = createHugeIcon(HugeNotificationOff01Icon)
 export const Bluetooth = createHugeIcon(HugeBluetoothIcon)
 export const BookOpen = createHugeIcon(HugeBookOpen01Icon)
 export const Bookmark = createHugeIcon(HugeBookmark03Icon)
-export const BracketsAngle = createHugeIcon(HugeCodeIcon)
 export const BracketsCurly = createHugeIcon(HugeThirdBracketIcon)
 export const BracketsSquare = createHugeIcon(HugeSecondBracketIcon)
 export const Briefcase = createHugeIcon(HugeBriefcase01Icon)
@@ -155,7 +149,6 @@ export const ChartBar = createHugeIcon(HugeChartBarBigIcon)
 export const Chat = createHugeIcon(HugeMessage01Icon)
 export const ChatCentered = createHugeIcon(HugeMessage01Icon)
 export const ChatCircle = createHugeIcon(HugeMessageUpload02Icon)
-export const ChatCircleDots = createHugeIcon(HugeMessageNotification02Icon)
 export const ChatText = createHugeIcon(HugeSmsCodeIcon)
 export const Check = createHugeIcon(HugeCheckIcon)
 export const CheckCircle = createHugeIcon(HugeCheckmarkCircle01Icon)
@@ -164,12 +157,9 @@ export const CircleDashed = createHugeIcon(HugeCircleDashedIcon)
 export const CirclesThree = createHugeIcon(HugeUserMultipleIcon)
 export const Clipboard = createHugeIcon(HugeClipboardIcon)
 export const Clock = createHugeIcon(HugeClock01Icon)
-export const ClockCountdown = createHugeIcon(HugeClock04Icon)
 export const ClockCounterClockwise = createHugeIcon(HugeClock05Icon)
-export const Cloud = createHugeIcon(HugeCloudIcon)
 export const CloudArrowUp = createHugeIcon(HugeCloudUploadIcon)
 export const CloudCheck = createHugeIcon(HugeCloudCheckIcon)
-export const CloudFog = createHugeIcon(HugeCloudFogIcon)
 export const Code = createHugeIcon(HugeCodeIcon)
 export const Columns = createHugeIcon(HugeLayoutThreeColumnIcon)
 export const Copy = createHugeIcon(HugeCopy01Icon)
@@ -200,7 +190,6 @@ export const FileText = createHugeIcon(HugeFile02Icon)
 export const FileVideo = createHugeIcon(HugeFileVideoIcon)
 export const FileXls = createHugeIcon(HugeXls02Icon)
 export const Files = createHugeIcon(HugeFiles01Icon)
-export const Fingerprint = createHugeIcon(HugeFingerPrintIcon)
 export const Flag = createHugeIcon(HugeFlag01Icon)
 export const Flask = createHugeIcon(HugeTestTube01Icon)
 export const FloppyDisk = createHugeIcon(HugeFloppyDiskIcon)

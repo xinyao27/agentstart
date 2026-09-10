@@ -1,17 +1,17 @@
 import {
   resolveTuiAgentLaunchArgs,
   resolveTuiAgentLaunchEnv
-} from '@yiru/protocol/agent/launch-defaults'
-import { buildAgentResumeStartupPlan } from '@yiru/protocol/agent/resume-startup'
+} from '@agentstart/protocol/agent/launch-defaults'
+import { buildAgentResumeStartupPlan } from '@agentstart/protocol/agent/resume-startup'
 import {
   isResumableTuiAgent,
   type SleepingAgentLaunchConfig
-} from '@yiru/protocol/agent/session-resume'
-import type { AgentStartupShell } from '@yiru/protocol/agent/shell-command'
-import { LOCAL_EXECUTION_HOST_ID, parseExecutionHostId } from '@yiru/protocol/host/identity'
-import { resolveWindowsShellStartupFamily } from '@yiru/protocol/host/windows-terminal-shell'
-import { parseWslUncPath } from '@yiru/protocol/host/wsl-paths'
-import { parseWorkspaceKey } from '@yiru/protocol/workspace/identity'
+} from '@agentstart/protocol/agent/session-resume'
+import type { AgentStartupShell } from '@agentstart/protocol/agent/shell-command'
+import { LOCAL_EXECUTION_HOST_ID, parseExecutionHostId } from '@agentstart/protocol/host/identity'
+import { resolveWindowsShellStartupFamily } from '@agentstart/protocol/host/windows-terminal-shell'
+import { parseWslUncPath } from '@agentstart/protocol/host/wsl-paths'
+import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import { CLIENT_PLATFORM } from '~renderer/new-workspace/workspace-creation'
 import { getLocalProjectExecutionRuntimeContext } from '~renderer/preflight/context'
 import type { AppState } from '~renderer/store/types'
@@ -160,7 +160,7 @@ function getAiVaultResumeCodexHome(
   return parseWslUncPath(codexHome)?.linuxPath ?? codexHome
 }
 
-export function getAiVaultResumePlatform(
+function getAiVaultResumePlatform(
   state: Pick<
     AppState,
     | 'activeRepoId'

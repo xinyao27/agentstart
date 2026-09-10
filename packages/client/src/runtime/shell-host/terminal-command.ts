@@ -1,4 +1,7 @@
-import type { ShellHostTerminalCreate, ShellHostTerminalReveal } from '@yiru/protocol/shell-host'
+import type {
+  ShellHostTerminalCreate,
+  ShellHostTerminalReveal
+} from '@agentstart/protocol/shell-host'
 
 import type { createTerminalTabViaShell } from '../terminal-create-shell-request'
 import type { revealTerminalSessionViaShell } from '../terminal-reveal-shell-request'

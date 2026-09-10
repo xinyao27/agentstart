@@ -123,7 +123,7 @@ function TerminalStoryboard({ phase }: { phase: NotesPhase }): JSX.Element {
           <span className="ravs-term-muted">
             {translate(
               'auto.components.feature.wall.ReviewNotesAnimatedVisual.notesLoaded',
-              'Loaded {{value0}} review notes from Yiru',
+              'Loaded {{value0}} review notes from AgentStart',
               { value0: NOTE_TARGETS.length }
             )}
           </span>

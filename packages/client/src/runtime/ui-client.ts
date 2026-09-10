@@ -1,6 +1,6 @@
-import type { GlobalSettings } from '@yiru/protocol/settings/global/model'
-import type { PersistedUIState } from '@yiru/protocol/settings/ui-state'
-import type { FeatureInteractionId } from '@yiru/protocol/telemetry/interactions/catalog'
+import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import type { PersistedUIState } from '@agentstart/protocol/settings/ui-state'
+import type { FeatureInteractionId } from '@agentstart/protocol/telemetry/interactions/catalog'
 
 import { getActiveRuntimeTarget } from './rpc-client'
 import { requireUiClient } from './ui-target'

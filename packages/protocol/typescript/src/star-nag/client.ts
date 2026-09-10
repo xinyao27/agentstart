@@ -10,15 +10,15 @@ import {
   StarNagShellServiceCompleteResponseSchema,
   StarNagShellServiceOpenWebRequestSchema,
   StarNagShellServiceOpenWebResponseSchema,
-  StarNagShellServiceStarYiruRequestSchema,
-  StarNagShellServiceStarYiruResponseSchema,
+  StarNagShellServiceStarAgentStartRequestSchema,
+  StarNagShellServiceStarAgentStartResponseSchema,
   StarNagShellServiceAgentValueMomentRequestSchema,
   StarNagShellServiceAgentValueMomentResponseSchema,
   StarNagShellServiceShowAgentValueMomentRequestSchema,
   StarNagShellServiceShowAgentValueMomentResponseSchema,
   StarNagShellServiceOnboardingCompletedRequestSchema,
   StarNagShellServiceOnboardingCompletedResponseSchema
-} from '../../generated/yiru/runtime/v1/star_nag_pb.js'
+} from '../../generated/agent_start/runtime/v1/star_nag_pb.js'
 import type { RuntimeCallOptions, RuntimeTransport } from '../transport.js'
 
 export class StarNagClient {
@@ -90,17 +90,17 @@ export class StarNagClient {
       })
     )
   }
-  async starYiru(
-    input: MessageInitShape<typeof StarNagShellServiceStarYiruRequestSchema> = {},
+  async starAgentStart(
+    input: MessageInitShape<typeof StarNagShellServiceStarAgentStartRequestSchema> = {},
     options?: RuntimeCallOptions
   ) {
     return fromBinary(
-      StarNagShellServiceStarYiruResponseSchema,
+      StarNagShellServiceStarAgentStartResponseSchema,
       await this.transport.unary({
-        method: `/${StarNagShellService.typeName}/${StarNagShellService.method.starYiru.name}`,
+        method: `/${StarNagShellService.typeName}/${StarNagShellService.method.starAgentStart.name}`,
         payload: toBinary(
-          StarNagShellServiceStarYiruRequestSchema,
-          create(StarNagShellServiceStarYiruRequestSchema, input)
+          StarNagShellServiceStarAgentStartRequestSchema,
+          create(StarNagShellServiceStarAgentStartRequestSchema, input)
         ),
         ...(options ? { options } : {})
       })
@@ -156,4 +156,4 @@ export class StarNagClient {
   }
 }
 
-export { StarNagPromptMode } from '../../generated/yiru/runtime/v1/star_nag_pb.js'
+export { StarNagPromptMode } from '../../generated/agent_start/runtime/v1/star_nag_pb.js'

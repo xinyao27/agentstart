@@ -108,7 +108,7 @@ fn collect_sync(
         "platform": platform(),
         "arch": architecture(),
         "os_release": os_release,
-        "yiru_channel": channel(),
+        "agentstart_channel": channel(),
         "collected_at": Utc::now().to_rfc3339_opts(SecondsFormat::Millis, true),
         "schema_version": 1
     });
@@ -373,7 +373,7 @@ fn architecture() -> &'static str {
 }
 
 fn channel() -> &'static str {
-    match std::env::var("YIRU_BUILD_IDENTITY").as_deref() {
+    match std::env::var("AGENTSTART_BUILD_IDENTITY").as_deref() {
         Ok("stable") => "stable",
         Ok("rc") => "rc",
         _ => "dev",
