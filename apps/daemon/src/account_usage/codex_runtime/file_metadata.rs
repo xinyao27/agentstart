@@ -363,30 +363,30 @@ pub(super) fn finish_local(
     preserve_permissions(temporary, &original.metadata)
 }
 
+#[cfg(not(target_os = "linux"))]
 fn preserve_permissions(file: &fs::File, original: &fs::Metadata) -> Result<(), CodexRuntimeError> {
+    #[cfg(unix)]
     preserve_owner(file, original)?;
     file.set_permissions(original.permissions())?;
     Ok(())
 }
 
+#[cfg(unix)]
 fn preserve_owner(file: &fs::File, original: &fs::Metadata) -> Result<(), CodexRuntimeError> {
-    #[cfg(unix)]
-    {
-        use rustix::fs::{Gid, Uid};
-        use std::os::unix::fs::MetadataExt as _;
+    use rustix::fs::{Gid, Uid};
+    use std::os::unix::fs::MetadataExt as _;
 
-        let mut created = file.metadata()?;
+    let mut created = file.metadata()?;
+    if created.uid() != original.uid() || created.gid() != original.gid() {
+        rustix::fs::fchown(
+            file,
+            Some(Uid::from_raw(original.uid())),
+            Some(Gid::from_raw(original.gid())),
+        )
+        .map_err(std::io::Error::from)?;
+        created = file.metadata()?;
         if created.uid() != original.uid() || created.gid() != original.gid() {
-            rustix::fs::fchown(
-                file,
-                Some(Uid::from_raw(original.uid())),
-                Some(Gid::from_raw(original.gid())),
-            )
-            .map_err(std::io::Error::from)?;
-            created = file.metadata()?;
-            if created.uid() != original.uid() || created.gid() != original.gid() {
-                return Err(CodexRuntimeError::InvalidConfig);
-            }
+            return Err(CodexRuntimeError::InvalidConfig);
         }
     }
     Ok(())

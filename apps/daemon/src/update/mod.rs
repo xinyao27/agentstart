@@ -528,19 +528,22 @@ fn ensure_https(value: &str) -> Result<(), UpdateError> {
     Ok(())
 }
 
+#[cfg(unix)]
 async fn sync_parent(executable: &Path) -> Result<(), UpdateError> {
-    #[cfg(unix)]
-    {
-        let parent = executable
-            .parent()
-            .ok_or(UpdateError::ExecutableDirectory)?;
-        tokio::fs::File::open(parent)
-            .await
-            .map_err(UpdateError::Io)?
-            .sync_all()
-            .await
-            .map_err(UpdateError::Io)?;
-    }
+    let parent = executable
+        .parent()
+        .ok_or(UpdateError::ExecutableDirectory)?;
+    tokio::fs::File::open(parent)
+        .await
+        .map_err(UpdateError::Io)?
+        .sync_all()
+        .await
+        .map_err(UpdateError::Io)?;
+    Ok(())
+}
+
+#[cfg(not(unix))]
+async fn sync_parent(_executable: &Path) -> Result<(), UpdateError> {
     Ok(())
 }
 

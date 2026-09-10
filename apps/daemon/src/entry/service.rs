@@ -39,6 +39,7 @@ pub(crate) enum ServiceError {
     #[cfg(not(any(target_os = "macos", target_os = "linux", target_os = "windows")))]
     #[error("daemon_service_platform_unsupported")]
     UnsupportedPlatform,
+    #[cfg(target_os = "macos")]
     #[error("daemon_service_user_id_unavailable")]
     UserIdUnavailable,
     #[error("daemon_service_path_not_unicode:{0}")]

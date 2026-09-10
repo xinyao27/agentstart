@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex, MutexGuard};
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+#[cfg(target_os = "macos")]
+use std::time::Duration;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 use base64::Engine as _;
 use serde_json::{Map, Value, json};
@@ -523,13 +525,13 @@ impl RateLimitAuthority {
     }
 
     async fn read_managed_claude_credentials(&self, account: &Map<String, Value>) -> Option<Value> {
-        let id = account
-            .get("id")
-            .and_then(Value::as_str)
-            .filter(|value| !value.is_empty())?;
         let path = self.owned_managed_path(account, "claude").await?;
         #[cfg(target_os = "macos")]
         if managed_runtime(account, "claude") == "host" {
+            let id = account
+                .get("id")
+                .and_then(Value::as_str)
+                .filter(|value| !value.is_empty())?;
             if let Some(credentials) =
                 read_macos_keychain("AgentStart Claude Code Managed Credentials", id).await
             {

@@ -82,16 +82,20 @@ fn protocol_id(id: DeveloperPermissionId) -> ProtocolPermissionId {
 
 fn protocol_status(status: DeveloperPermissionStatus) -> ProtocolPermissionStatus {
     match status {
+        #[cfg(target_os = "macos")]
         DeveloperPermissionStatus::Granted => ProtocolPermissionStatus::Granted,
+        #[cfg(target_os = "macos")]
         DeveloperPermissionStatus::Unknown => ProtocolPermissionStatus::Unknown,
         #[cfg(not(target_os = "macos"))]
         DeveloperPermissionStatus::Unsupported => ProtocolPermissionStatus::Unsupported,
+        #[cfg(target_os = "macos")]
         DeveloperPermissionStatus::Ready => ProtocolPermissionStatus::Ready,
     }
 }
 
 fn request_status(error: DeveloperPermissionsError) -> Status {
     match error {
+        #[cfg(target_os = "macos")]
         DeveloperPermissionsError::SettingsOpenFailed => status(
             StatusCode::Unavailable,
             "Could not open macOS Privacy & Security",

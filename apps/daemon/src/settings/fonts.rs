@@ -3,6 +3,7 @@ use std::process::Stdio;
 use std::sync::OnceLock;
 use std::time::Duration;
 
+#[cfg(target_os = "macos")]
 use serde_json::Value;
 use tokio::io::AsyncReadExt;
 use tokio::sync::Mutex;

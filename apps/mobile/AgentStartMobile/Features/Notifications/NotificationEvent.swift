@@ -51,17 +51,18 @@ nonisolated struct RuntimeNotificationStream: AsyncSequence, Sendable {
         }
 
         mutating func next() async throws -> Element? {
-            try await withTaskCancellationHandler {
+            let nextValue = nextValue
+            let cancellation = lifetime.cancellation
+            return try await withTaskCancellationHandler {
                 do {
                     let value = try await nextValue()
-                    if value == nil { await lifetime.cancellation.complete() }
+                    if value == nil { await cancellation.complete() }
                     return value
                 } catch {
-                    await lifetime.cancellation.complete()
+                    await cancellation.complete()
                     throw error
                 }
             } onCancel: {
-                let cancellation = lifetime.cancellation
                 Task { await cancellation.cancel() }
             }
         }

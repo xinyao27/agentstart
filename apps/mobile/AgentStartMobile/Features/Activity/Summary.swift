@@ -277,15 +277,24 @@ nonisolated private func mergeSupplementalUsage(
 nonisolated private func mergeSupplementalDaily(
     _ values: [ActivitySupplementalDailyUsage]
 ) -> [ActivitySupplementalDailyUsage] {
-    Dictionary(grouping: values, by: \.day).map { day, entries in
-        ActivitySupplementalDailyUsage(
-            day: day,
-            tokens: entries.reduce(0) { $0 + $1.tokens },
-            valueUSD: entries.contains { $0.valueUSD == nil }
-                ? nil : entries.compactMap(\.valueUSD).reduce(0, +),
-            unpricedTokens: entries.reduce(0) { $0 + $1.unpricedTokens }
+    let grouped = Dictionary(grouping: values, by: \.day)
+    var output: [ActivitySupplementalDailyUsage] = []
+    for (day, entries) in grouped {
+        let tokens = entries.reduce(0) { $0 + $1.tokens }
+        let value =
+            entries.contains { $0.valueUSD == nil }
+            ? nil : entries.compactMap(\.valueUSD).reduce(0, +)
+        let unpricedTokens = entries.reduce(0) { $0 + $1.unpricedTokens }
+        output.append(
+            ActivitySupplementalDailyUsage(
+                day: day,
+                tokens: tokens,
+                valueUSD: value,
+                unpricedTokens: unpricedTokens
+            )
         )
-    }.sorted { $0.day < $1.day }
+    }
+    return output.sorted { $0.day < $1.day }
 }
 
 nonisolated private func mergeProviders(_ values: [ActivityProviderUsage])

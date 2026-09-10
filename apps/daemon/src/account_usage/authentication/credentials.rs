@@ -1,6 +1,8 @@
 use std::io::Read as _;
 use std::path::{Path, PathBuf};
+#[cfg(target_os = "macos")]
 use std::process::Stdio;
+#[cfg(target_os = "macos")]
 use std::time::Duration;
 
 use serde_json::Value;

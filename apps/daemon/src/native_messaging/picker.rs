@@ -21,6 +21,7 @@ pub(crate) fn pick_project_directories(multiple: bool) -> Result<Vec<String>, &'
     }
     #[cfg(target_os = "windows")]
     {
+        let _ = multiple;
         let executable = find_executable("pwsh.exe")
             .or_else(|| find_executable("powershell.exe"))
             .ok_or("directory_picker_unavailable")?;

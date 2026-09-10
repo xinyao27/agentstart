@@ -17,7 +17,7 @@ pub(super) fn install() -> Result<ServiceState, ServiceError> {
             .as_nanos()
     );
     let command_line = command_line(&[
-        env::current_exe()?,
+        env::current_exe()?.into_os_string(),
         OsString::from("daemon"),
         OsString::from("--service-instance-token"),
         OsString::from(instance_token),

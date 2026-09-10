@@ -209,35 +209,46 @@ nonisolated private protocol HostedReviewMutationResult {
     var mutationError: String? { get }
 }
 
-extension AgentStart_Runtime_V1_GitHubServiceUpdatePrResponse: HostedReviewMutationResult {
-    nonisolated var mutationOK: Bool { result.ok }
-    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
-}
-
-extension AgentStart_Runtime_V1_GitHubServiceMergePrResponse: HostedReviewMutationResult {
-    nonisolated var mutationOK: Bool { result.ok }
-    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
-}
-
-extension AgentStart_Runtime_V1_GitHubServiceSetPrAutoMergeResponse: HostedReviewMutationResult {
-    nonisolated var mutationOK: Bool { result.ok }
-    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
-}
-
-extension AgentStart_Runtime_V1_GitHubServiceUpdatePrStateResponse: HostedReviewMutationResult {
-    nonisolated var mutationOK: Bool { result.ok }
-    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
-}
-
-extension AgentStart_Runtime_V1_GitHubServiceRequestPrReviewersResponse: HostedReviewMutationResult
+nonisolated extension AgentStart_Runtime_V1_GitHubServiceUpdatePrResponse:
+    HostedReviewMutationResult
 {
-    nonisolated var mutationOK: Bool { result.ok }
-    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
+    var mutationOK: Bool { result.ok }
+    var mutationError: String? { result.hasError ? result.error : nil }
 }
 
-extension AgentStart_Runtime_V1_GitHubServiceRemovePrReviewersResponse: HostedReviewMutationResult {
-    nonisolated var mutationOK: Bool { result.ok }
-    nonisolated var mutationError: String? { result.hasError ? result.error : nil }
+nonisolated extension AgentStart_Runtime_V1_GitHubServiceMergePrResponse:
+    HostedReviewMutationResult
+{
+    var mutationOK: Bool { result.ok }
+    var mutationError: String? { result.hasError ? result.error : nil }
+}
+
+nonisolated extension AgentStart_Runtime_V1_GitHubServiceSetPrAutoMergeResponse:
+    HostedReviewMutationResult
+{
+    var mutationOK: Bool { result.ok }
+    var mutationError: String? { result.hasError ? result.error : nil }
+}
+
+nonisolated extension AgentStart_Runtime_V1_GitHubServiceUpdatePrStateResponse:
+    HostedReviewMutationResult
+{
+    var mutationOK: Bool { result.ok }
+    var mutationError: String? { result.hasError ? result.error : nil }
+}
+
+nonisolated extension AgentStart_Runtime_V1_GitHubServiceRequestPrReviewersResponse:
+    HostedReviewMutationResult
+{
+    var mutationOK: Bool { result.ok }
+    var mutationError: String? { result.hasError ? result.error : nil }
+}
+
+nonisolated extension AgentStart_Runtime_V1_GitHubServiceRemovePrReviewersResponse:
+    HostedReviewMutationResult
+{
+    var mutationOK: Bool { result.ok }
+    var mutationError: String? { result.hasError ? result.error : nil }
 }
 
 nonisolated private func hostedReviewMergeMethod(_ method: String)

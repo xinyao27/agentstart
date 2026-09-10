@@ -1,6 +1,8 @@
 use std::sync::Arc;
 
-use crate::hosts::{ExecutionHost, HostCommand, HostKind, HostPlatform, HostRemoveOptions};
+#[cfg(any(target_os = "macos", windows))]
+use crate::hosts::HostKind;
+use crate::hosts::{ExecutionHost, HostCommand, HostPlatform, HostRemoveOptions};
 
 use super::ProjectHostSetupError;
 

@@ -171,7 +171,7 @@ pub(crate) fn physical_identity(path: &str, metadata: &std::fs::Metadata) -> Str
 }
 
 #[cfg(not(unix))]
-fn physical_identity(path: &str, _metadata: &std::fs::Metadata) -> String {
+pub(crate) fn physical_identity(path: &str, _metadata: &std::fs::Metadata) -> String {
     path.to_lowercase()
 }
 

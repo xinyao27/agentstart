@@ -29,10 +29,13 @@ pub(crate) enum DeveloperPermissionId {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum DeveloperPermissionStatus {
+    #[cfg(target_os = "macos")]
     Granted,
+    #[cfg(target_os = "macos")]
     Unknown,
     #[cfg(not(target_os = "macos"))]
     Unsupported,
+    #[cfg(target_os = "macos")]
     Ready,
 }
 
@@ -49,6 +52,7 @@ pub(crate) struct DeveloperPermissionRequest {
 
 #[derive(Debug, Error)]
 pub(crate) enum DeveloperPermissionsError {
+    #[cfg(target_os = "macos")]
     #[error("developer_permission_settings_open_failed")]
     SettingsOpenFailed,
     #[error(transparent)]
