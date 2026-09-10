@@ -8,8 +8,8 @@
       active legacy branding.
 - [x] Inspect the complete committed diff and verify release workflow/ref behavior and remote
       GitHub Actions state after the push.
-- [ ] Fix the in-scope CI defects, push the follow-up, and confirm its remote checks are green.
-  - [ ] Raise the Rust-native CI job budget to cover the post-rewrite release build on macOS and
+- [x] Fix the in-scope CI defects, push the follow-up, and confirm its remote checks are green.
+  - [x] Raise the Rust-native CI job budget to cover the post-rewrite release build on macOS and
         Windows, then confirm all three platforms complete.
 - [x] Record final evidence and distinguish completed repository work from unperformed external
       publishing steps.
@@ -34,4 +34,11 @@
 - No tags, GitHub releases, npm packages, Chrome Web Store submissions, TestFlight uploads, or
   notarization actions were created. External publishing remains intentionally unperformed; the
   missing npm/PostHog and Chrome Web Store secrets remain operator-owned blockers.
-- Final remote Daemon Native Builds and Mobile Checks will be recorded after the follow-up push.
+- [Mobile Checks run 34474299630](https://github.com/xinyao27/agentstart/actions/runs/34474299630)
+  passed for `b8b2fe2a3ec01b17d329a739bad9c3201dafaff1`.
+- The first daemon follow-up exposed four remaining Windows clippy diagnostics; after those were
+  fixed, the next run passed every code check but confirmed that the Rust rewrite had outgrown the
+  workflow's inherited 25-minute job limit on macOS and Windows.
+- The native-build budget now matches the 45-minute release-build budget, and
+  [Daemon Native Builds run 34477831241](https://github.com/xinyao27/agentstart/actions/runs/34477831241)
+  passed for `f6eea204a7de65c6682ef67ed3307acadb939113` on Linux, macOS, and Windows.
