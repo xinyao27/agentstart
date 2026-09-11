@@ -2199,6 +2199,8 @@
         },
         "useAddRepoLocalFolderFlow": {
           "7ab10e4974": "使用主机路径从远程运行时添加项目。",
+          "folderPickerFailed": "无法打开文件夹选择器。",
+          "folderPickerFailedDescription": "文件夹选择请求失败。",
           "skippedBatchFolders": "已跳过部分文件夹",
           "skippedBatchFoldersDescription": "请单独添加已跳过的文件夹，以便逐个查看或确认。"
         },

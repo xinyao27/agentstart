@@ -34,6 +34,11 @@ export type ShellAppApi = {
   restart: () => Promise<void>
   startupDiagnostic: (event: string, details?: Record<string, unknown>) => Promise<void>
 }
+
+// Why: native file and folder pickers are user-paced interactions, so the
+// transport deadline must outlive a normal RPC while the dialog is open.
+const INTERACTIVE_PICKER_TIMEOUT_MS = 10 * 60_000
+
 export type ShellRepoHostApi = {
   pickFolder: () => Promise<string | null>
   pickFolders: () => Promise<string[]>
@@ -84,9 +89,14 @@ export const shellAppApi: ShellAppApi = {
 }
 
 export const shellRepoHostApi: ShellRepoHostApi = {
-  pickFolder: async () => (await requireShellRepoHostClient()).pickFolder(),
-  pickFolders: async () => (await requireShellRepoHostClient()).pickFolders(),
-  pickDirectory: async () => (await requireShellRepoHostClient()).pickDirectory(),
+  pickFolder: async () =>
+    (await requireShellRepoHostClient()).pickFolder({ timeoutMs: INTERACTIVE_PICKER_TIMEOUT_MS }),
+  pickFolders: async () =>
+    (await requireShellRepoHostClient()).pickFolders({ timeoutMs: INTERACTIVE_PICKER_TIMEOUT_MS }),
+  pickDirectory: async () =>
+    (await requireShellRepoHostClient()).pickDirectory({
+      timeoutMs: INTERACTIVE_PICKER_TIMEOUT_MS
+    }),
   removeForHost: async (input) => (await requireShellRepoHostClient()).removeForHost(input),
   reorderForHost: async (input) => (await requireShellRepoHostClient()).reorderForHost(input),
   cloneAbort: async () => {

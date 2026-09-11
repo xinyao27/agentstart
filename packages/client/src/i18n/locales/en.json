@@ -2225,6 +2225,8 @@
         },
         "useAddRepoLocalFolderFlow": {
           "7ab10e4974": "Use a host path to add projects from a remote host.",
+          "folderPickerFailed": "Unable to open the folder picker.",
+          "folderPickerFailedDescription": "The folder picker request failed.",
           "skippedBatchFolders": "Some folders were skipped",
           "skippedBatchFoldersDescription": "Add skipped folders individually to review or confirm them."
         },

@@ -57,6 +57,61 @@ pub(crate) fn pick_project_directories(multiple: bool) -> Result<Vec<String>, &'
     }
 }
 
+pub(crate) async fn pick_project_directories_async(
+    multiple: bool,
+) -> Result<Vec<String>, &'static str> {
+    #[cfg(target_os = "macos")]
+    {
+        let script = if multiple {
+            "set chosenFolders to choose folder with prompt \"Choose a project for AgentStart\" with multiple selections allowed\nset resultText to \"\"\nrepeat with chosenFolder in chosenFolders\nset resultText to resultText & POSIX path of chosenFolder & linefeed\nend repeat\nreturn resultText"
+        } else {
+            "POSIX path of (choose folder with prompt \"Choose a project for AgentStart\")"
+        };
+        return run_directory_picker_async("osascript", &["-e", script]).await;
+    }
+    #[cfg(target_os = "windows")]
+    {
+        let _ = multiple;
+        let executable = find_executable("pwsh.exe")
+            .or_else(|| find_executable("powershell.exe"))
+            .ok_or("directory_picker_unavailable")?;
+        return run_directory_picker_async(
+            &executable,
+            &[
+                "-STA",
+                "-NoProfile",
+                "-Command",
+                "Add-Type -AssemblyName System.Windows.Forms; $dialog = New-Object System.Windows.Forms.FolderBrowserDialog; $dialog.Description = 'Choose a project for AgentStart'; if ($dialog.ShowDialog() -eq 'OK') { [Console]::Write($dialog.SelectedPath) }",
+            ],
+        )
+        .await;
+    }
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    {
+        if let Some(executable) = find_executable("zenity") {
+            let mut args = vec![
+                "--file-selection".to_owned(),
+                "--directory".to_owned(),
+                "--title=Choose a project for AgentStart".to_owned(),
+            ];
+            if multiple {
+                args.extend(["--multiple".to_owned(), "--separator=\n".to_owned()]);
+            }
+            return run_directory_picker_async_owned(&executable, &args).await;
+        }
+        let executable = find_executable("kdialog").ok_or("directory_picker_unavailable")?;
+        let current_directory = std::env::current_dir()
+            .map_err(|_| "directory_picker_unavailable")?
+            .to_string_lossy()
+            .into_owned();
+        run_directory_picker_async_owned(
+            &executable,
+            &["--getexistingdirectory".to_owned(), current_directory],
+        )
+        .await
+    }
+}
+
 fn run_directory_picker(
     executable: impl AsRef<Path>,
     args: &[&str],
@@ -82,6 +137,43 @@ fn run_directory_picker(
         .filter(|path| !path.is_empty())
         .map(str::to_owned)
         .collect())
+}
+
+async fn run_directory_picker_async(
+    executable: impl AsRef<Path>,
+    args: &[&str],
+) -> Result<Vec<String>, &'static str> {
+    let mut command = tokio::process::Command::new(executable.as_ref());
+    command.args(args).stderr(Stdio::null()).kill_on_drop(true);
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+
+        command.creation_flags(windows_sys::Win32::System::Threading::CREATE_NO_WINDOW);
+    }
+    let output = command
+        .output()
+        .await
+        .map_err(|_| "directory_picker_unavailable")?;
+    if !output.status.success() {
+        return Ok(Vec::new());
+    }
+    Ok(String::from_utf8_lossy(&output.stdout)
+        .lines()
+        .map(str::trim)
+        .map(trim_trailing_separator)
+        .filter(|path| !path.is_empty())
+        .map(str::to_owned)
+        .collect())
+}
+
+#[cfg(not(any(target_os = "macos", target_os = "windows")))]
+async fn run_directory_picker_async_owned(
+    executable: impl AsRef<Path>,
+    args: &[String],
+) -> Result<Vec<String>, &'static str> {
+    let args = args.iter().map(String::as_str).collect::<Vec<_>>();
+    run_directory_picker_async(executable, &args).await
 }
 
 fn trim_trailing_separator(path: &str) -> &str {

@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { projectCatalogTargetForRepo } from '~renderer/project-catalog/query'
 import { useEventCallback } from '~renderer/react/use-event-callback'
+import { extractRuntimeErrorMessage } from '~renderer/runtime/error-message'
 import { workspaceHostClient } from '~renderer/runtime/workspace-host-client'
 import { track } from '~renderer/telemetry/client'
 import { refreshWorktreeCatalog } from '~renderer/worktree/catalog-refresh'
@@ -272,6 +273,24 @@ export function useAddRepoLocalFolderFlow({
         return
       }
       await handleAddLocalPaths(paths, 'local_folder_picker', gen)
+    } catch (error) {
+      if (gen === localAddGenRef.current) {
+        toast.error(
+          translate(
+            'auto.components.sidebar.useAddRepoLocalFolderFlow.folderPickerFailed',
+            'Unable to open the folder picker.'
+          ),
+          {
+            description: extractRuntimeErrorMessage(
+              error,
+              translate(
+                'auto.components.sidebar.useAddRepoLocalFolderFlow.folderPickerFailedDescription',
+                'The folder picker request failed.'
+              )
+            )
+          }
+        )
+      }
     } finally {
       if (gen === localAddGenRef.current) {
         clearNestedScanState()

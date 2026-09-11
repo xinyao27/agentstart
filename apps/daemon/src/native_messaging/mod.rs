@@ -12,4 +12,4 @@ pub(crate) use bootstrap::{
 };
 pub(crate) use host::run as run_host;
 pub(crate) use install::{NativeMessagingInstallError, install};
-pub(crate) use picker::pick_project_directories;
+pub(crate) use picker::{pick_project_directories, pick_project_directories_async};

@@ -39,11 +39,9 @@ impl RepoHostAuthority {
     }
 
     pub(crate) async fn pick_directories(&self, multiple: bool) -> Vec<String> {
-        tokio::task::spawn_blocking(move || {
-            crate::native_messaging::pick_project_directories(multiple).unwrap_or_default()
-        })
-        .await
-        .unwrap_or_default()
+        crate::native_messaging::pick_project_directories_async(multiple)
+            .await
+            .unwrap_or_default()
     }
 
     pub(crate) async fn remove_for_host(

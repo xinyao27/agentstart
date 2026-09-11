@@ -42,3 +42,41 @@
 - The native-build budget now matches the 45-minute release-build budget, and
   [Daemon Native Builds run 34477831241](https://github.com/xinyao27/agentstart/actions/runs/34477831241)
   passed for `f6eea204a7de65c6682ef67ed3307acadb939113` on Linux, macOS, and Windows.
+
+## Manual end-to-end validation
+
+- [x] Define the local extension-to-daemon and mobile-to-daemon user journeys from product docs.
+- [x] Run the daemon and extension through a real browser session and exercise the available
+      repository, worktree, session, and agent flows without retaining a test harness.
+- [x] Build and launch the mobile app on a booted Simulator, inspect its UI and logs, and exercise
+      the available connection and session flows without retaining a test harness.
+- [x] Fix any in-scope defects discovered by the runtime exercise and re-run the affected journey.
+- [x] Record exact evidence and separate locally verified behavior from WSL, SSH, signing, store,
+      and credential-dependent paths that this environment cannot exercise.
+
+## Manual E2E review — 2026-09-11
+
+- Chrome MV3: a real `pnpm dev` daemon/WXT session was loaded into Chrome. The extension
+  completed authenticated bootstrap, rendered the Projects surface, and exercised the registered
+  repository, main worktree, session list, terminal creation, terminal output
+  (`E2E_TERMINAL_OK`), and agent-session list paths. Fresh post-reload RPC traces for status,
+  projects, worktrees, terminals, and agent sessions all completed successfully.
+- The first folder-picker exercise reproduced a real defect: the 30-second default RPC deadline
+  abandoned `ShellRepoHostService/PickFolders`, left the synchronous `osascript` child alive, and
+  surfaced an unhandled renderer rejection. The daemon now uses a cancellable async picker with
+  `kill_on_drop`, all interactive picker calls use a ten-minute deadline, and the add-project flow
+  catches failures and shows a localized toast. The patched daemon passed the full Rust gate and a
+  fresh daemon/WXT restart; the post-fix workspace/terminal journey completed without a renderer
+  crash. The current Chrome accessibility surface did not expose the native folder-dialog controls
+  for a second direct picker click, so that dialog's post-fix visual toast was not independently
+  captured.
+- iOS: `AgentStartMobile.xcodeproj` / `AgentStartMobile` built and launched on the booted iPhone 17
+  Simulator (`74387C6C-BD19-45E6-892B-AE5BA371071B`). A deep-link pairing completed the actual
+  websocket/E2EE/device-auth flow. Activity, workspace search, More actions, Settings, workspace,
+  session, and terminal screens were navigated; daemon traces recorded successful mobile peer
+  calls for repositories, worktrees, sessions, terminals, and workspace events. No product crash,
+  fatal, or assertion appeared in the runtime logs. The existing terminal was sleeping, so Resume
+  was not pressed to avoid changing external runtime state.
+- Not exercised here: WSL/SSH host adapters, signing, store uploads, notarization, external
+  credentials, and production publishing. No tests, smoke checks, E2E harnesses, or validation
+  scripts were retained.
