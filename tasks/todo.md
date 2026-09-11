@@ -115,3 +115,23 @@
   unchanged while restoring the intended top breathing room.
 - Full `pnpm check` passed, and the live Chrome Activity page confirmed the heading and summary
   strip are no longer flush with the top edge. The development session was stopped cleanly.
+
+## Fix recurring workspace session conflict
+
+- [x] Reproduce and trace the terminal-layout conflict path, including concurrent session and
+      daemon-owned layout updates.
+- [x] Fix the conflict handling at the owning session-document boundary without weakening true
+      cross-client conflict protection.
+- [x] Run repository gates and manually exercise the affected terminal/session flow in Chrome.
+- [x] Record the review evidence and the correction lesson.
+
+## Workspace session conflict review — 2026-09-11
+
+- `mergeSessionEdit` now resolves known terminal-layout fields by ownership: renderer topology and
+  visible pane state keep the local intent, while daemon PTY bindings and scrollback records keep
+  the current server value. Stale tab removals no longer block on daemon binding updates.
+- An inline merge exercise covered concurrent topology and PTY-binding changes without retaining a
+  test file or harness. A live Chrome session then created and closed a terminal split with no
+  conflict toast; the existing terminal tabs remained usable.
+- Full `pnpm check` passed after the merge change, and the dev daemon/WXT session was stopped
+  cleanly. The lockfile-only pnpm runner mutation was restored before review.

@@ -9,3 +9,6 @@
   treatment to directly related inline panels, leaving edge-to-edge panes intentionally square.
 - For page-level visual corrections, inspect the outer content wrapper before changing individual
   cards; missing inset belongs on the page shell so the entire vertical rhythm moves together.
+- When a shared session document contains both renderer-owned layout and daemon-owned terminal
+  bindings, merge those fields by ownership; otherwise a harmless PTY update can surface as a
+  recurring manual conflict even when no user edits actually collide.

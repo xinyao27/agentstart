@@ -61,6 +61,41 @@ function merge(
     conflicts.push(path.join('.'))
     return current
   }
+  if (path[0] === 'terminalLayoutsByTabId' && path.length === 2) {
+    // Why: removing a terminal tab is a deliberate local topology change. A
+    // daemon scrollback/binding update for the same stale tab must not block
+    // that removal with an unrecoverable save toast.
+    if (!isRecord(desired) || !isRecord(current)) {
+      return desired
+    }
+  }
+  const terminalLayoutField = getTerminalLayoutField(path)
+  if (terminalLayoutField === 'root') {
+    // Why: terminal topology is UI state shared with mobile and daemon-owned
+    // terminal creation. Keep the latest topology that contains the most pane
+    // identities instead of turning an otherwise recoverable layout update
+    // into a blocking save conflict.
+    return mergeTerminalLayoutRoot(desired, current)
+  }
+  if (
+    terminalLayoutField === 'activeLeafId' ||
+    terminalLayoutField === 'expandedLeafId' ||
+    terminalLayoutField === 'titlesByLeafId'
+  ) {
+    // Why: these values describe the renderer's visible layout. The local
+    // projection is the user's latest intent, so it wins when both clients
+    // changed the same field.
+    return desired
+  }
+  if (
+    terminalLayoutField === 'ptyIdsByLeafId' ||
+    terminalLayoutField === 'buffersByLeafId' ||
+    terminalLayoutField === 'scrollbackRefsByLeafId'
+  ) {
+    // Why: PTY bindings and captured scrollback are daemon-owned facts. Keep
+    // the current server value when both clients touched the same leaf.
+    return mergeTerminalLeafMap(base, desired, current)
+  }
   const recordBase = isRecord(base)
     ? base
     : base === undefined && isTerminalTabPath(path)
@@ -104,6 +139,90 @@ function merge(
   }
   conflicts.push(path.join('.'))
   return current
+}
+
+type TerminalLayoutField =
+  | 'root'
+  | 'activeLeafId'
+  | 'expandedLeafId'
+  | 'ptyIdsByLeafId'
+  | 'buffersByLeafId'
+  | 'scrollbackRefsByLeafId'
+  | 'titlesByLeafId'
+
+function getTerminalLayoutField(path: string[]): TerminalLayoutField | null {
+  if (path[0] !== 'terminalLayoutsByTabId' || path.length !== 3) {
+    return null
+  }
+  const field = path[2]
+  switch (field) {
+    case 'root':
+    case 'activeLeafId':
+    case 'expandedLeafId':
+    case 'ptyIdsByLeafId':
+    case 'buffersByLeafId':
+    case 'scrollbackRefsByLeafId':
+    case 'titlesByLeafId':
+      return field
+    default:
+      return null
+  }
+}
+
+function mergeTerminalLayoutRoot(desired: Entry, current: Entry): Entry {
+  if (!isRecord(desired) || !isRecord(current)) {
+    return desired
+  }
+  const desiredLeaves = collectTerminalLeafIds(desired)
+  const currentLeaves = collectTerminalLeafIds(current)
+  if (
+    currentLeaves.size > desiredLeaves.size &&
+    [...desiredLeaves].every((leafId) => currentLeaves.has(leafId))
+  ) {
+    return current
+  }
+  return desired
+}
+
+function collectTerminalLeafIds(value: Entry, result = new Set<string>()): Set<string> {
+  if (!isRecord(value)) {
+    return result
+  }
+  if (value.type === 'leaf' && typeof value.leafId === 'string') {
+    result.add(value.leafId)
+    return result
+  }
+  if (value.type === 'split') {
+    collectTerminalLeafIds(value.first, result)
+    collectTerminalLeafIds(value.second, result)
+  }
+  return result
+}
+
+function mergeTerminalLeafMap(base: Entry, desired: Entry, current: Entry): Entry {
+  if (!isRecord(desired) || !isRecord(current)) {
+    return current
+  }
+  const baseRecord = isRecord(base) ? base : {}
+  const result: Record<string, ShellSessionJsonValue> = {}
+  for (const key of new Set([
+    ...Object.keys(baseRecord),
+    ...Object.keys(desired),
+    ...Object.keys(current)
+  ])) {
+    const baseValue = Object.hasOwn(baseRecord, key) ? baseRecord[key] : undefined
+    const desiredValue = Object.hasOwn(desired, key) ? desired[key] : undefined
+    const currentValue = Object.hasOwn(current, key) ? current[key] : undefined
+    const value = equal(baseValue, desiredValue)
+      ? currentValue
+      : equal(baseValue, currentValue) || equal(desiredValue, currentValue)
+        ? desiredValue
+        : currentValue
+    if (value !== undefined) {
+      result[key] = value
+    }
+  }
+  return result
 }
 
 function isTerminalTabCollectionPath(path: string[]): boolean {
