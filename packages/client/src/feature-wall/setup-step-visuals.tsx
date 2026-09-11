@@ -36,7 +36,7 @@ function WorktreeGlyphPanel(props: { className?: string }): JSX.Element {
         props.className
       )}
     >
-      <span className="mt-0.5 size-2 shrink-0 rounded-full bg-emerald-500" />
+      <span className="mt-0.5 size-2 shrink-0 rounded-full bg-[color:var(--success)]" />
       <span className="flex min-w-0 flex-1 flex-col gap-1.5">
         <span className="bg-foreground/10 h-[5px] w-4/5 rounded-full" />
         <span className="bg-foreground/10 h-[5px] w-1/2 rounded-full" />
@@ -57,7 +57,7 @@ export function SetupBrowserVisual(): JSX.Element {
         </div>
         <div className="flex flex-1 flex-col gap-1.5 p-2">
           <span className="bg-foreground/10 h-[5px] w-1/2 rounded-full" />
-          <span className="relative mt-0.5 flex h-9 items-center rounded-[6px] border-[1.5px] border-emerald-500/45 bg-emerald-500/10 px-2">
+          <span className="relative mt-0.5 flex h-9 items-center rounded-[6px] border-[1.5px] border-[color-mix(in_srgb,var(--success)_45%,transparent)] bg-[color-mix(in_srgb,var(--success)_10%,transparent)] px-2">
             <span className="bg-foreground/15 h-[5px] w-3/5 rounded-full" />
             <MousePointer2 className="fill-foreground/70 text-foreground/70 absolute right-1 -bottom-1 size-3.5" />
           </span>
@@ -80,13 +80,13 @@ export function SetupMultipleReposVisual(): JSX.Element {
 
 function RepoCard(props: { nameWidth: string; worktreeWidth: string }): JSX.Element {
   return (
-    <div className="bg-muted flex flex-col gap-2 rounded-[10px] border-[1.5px] border-emerald-500/35 p-2.5">
+    <div className="bg-muted flex flex-col gap-2 rounded-[10px] border-[1.5px] border-[color-mix(in_srgb,var(--success)_35%,transparent)] p-2.5">
       <span className="flex items-center gap-1.5">
         <FolderGit2 className="text-muted-foreground size-[15px] shrink-0" />
         <span className={cn('h-[5px] bg-foreground/10 rounded-full', props.nameWidth)} />
       </span>
       <span className="flex items-center gap-1.5">
-        <span className="size-2 shrink-0 rounded-full bg-emerald-500" />
+        <span className="size-2 shrink-0 rounded-full bg-[color:var(--success)]" />
         <span className={cn('h-[5px] bg-foreground/10 rounded-full', props.worktreeWidth)} />
       </span>
     </div>

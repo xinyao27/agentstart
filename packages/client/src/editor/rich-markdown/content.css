@@ -535,7 +535,7 @@
 
 .rich-markdown-editor a,
 .rich-markdown-editor .ProseMirror a {
-  color: #0969da;
+  color: var(--info);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
   text-underline-offset: 2px;
@@ -552,7 +552,7 @@
 }
 
 .dark .rich-markdown-editor a {
-  color: #58a6ff;
+  color: var(--info);
 }
 
 .rich-markdown-editor sup[data-rich-markdown-html-superscript-link] {
@@ -560,14 +560,14 @@
 }
 
 .rich-markdown-editor .rich-markdown-html-superscript-link {
-  color: #0969da;
+  color: var(--info);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
   text-underline-offset: 2px;
 }
 
 .dark .rich-markdown-editor .rich-markdown-html-superscript-link {
-  color: #58a6ff;
+  color: var(--info);
 }
 
 .rich-markdown-mod-held
@@ -600,14 +600,14 @@
 /* ── Doc Links ───────────────────────────────────────── */
 
 .rich-markdown-editor .rich-markdown-doc-link {
-  color: #0969da;
+  color: var(--info);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
   text-underline-offset: 2px;
 }
 
 .dark .rich-markdown-editor .rich-markdown-doc-link {
-  color: #58a6ff;
+  color: var(--info);
 }
 
 .rich-markdown-editor .rich-markdown-doc-link.rich-markdown-doc-link--missing {
@@ -628,14 +628,14 @@
 /* In-progress [[target]] text while cursor is inside. Matches the committed
    doc-link styling so the visual doesn't jump when the atom node takes over. */
 .rich-markdown-editor .rich-markdown-doc-link-preview {
-  color: #0969da;
+  color: var(--info);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
   text-underline-offset: 2px;
 }
 
 .dark .rich-markdown-editor .rich-markdown-doc-link-preview {
-  color: #58a6ff;
+  color: var(--info);
 }
 
 .rich-markdown-editor .rich-markdown-doc-link-preview.rich-markdown-doc-link-preview--missing {

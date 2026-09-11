@@ -145,7 +145,7 @@ function EditorToolbar(): JSX.Element {
         </span>
       ))}
       <span className="text-muted-foreground ml-auto inline-flex items-center gap-1.5 font-mono text-[10px]">
-        <span className="size-1.5 rounded-full bg-emerald-500" />
+        <span className="size-1.5 rounded-full bg-[color:var(--success)]" />
         {translate('auto.components.feature.wall.EditorAnimatedVisual.218503f9f3', 'autosaved')}
       </span>
     </div>
@@ -157,8 +157,8 @@ function CursorIcon(): JSX.Element {
     <svg width={16} height={16} viewBox="0 0 16 16" aria-hidden focusable="false">
       <path
         d="M2 1.5 L2 12 L5 9 L7.2 14.5 L9.5 13.6 L7.3 8 L11.5 8 Z"
-        fill="#fff"
-        stroke="#18181b"
+        fill="var(--background)"
+        stroke="var(--foreground)"
         strokeWidth={1}
         strokeLinejoin="round"
       />
@@ -271,12 +271,12 @@ function CodeBlock(): JSX.Element {
       <div className="bg-background flex flex-col gap-0.5 px-3 py-2">
         <div>
           <span className="text-fuchsia-600">await</span>{' '}
-          <span className="text-blue-600">runSmokeTests</span>({'{'} env:{' '}
+          <span className="text-[color:var(--info)]">runSmokeTests</span>({'{'} env:{' '}
           <span className="text-green-600">&apos;staging&apos;</span> {'}'})
         </div>
         <div>
           <span className="text-fuchsia-600">await</span>{' '}
-          <span className="text-blue-600">publish</span>({'{'} tag:{' '}
+          <span className="text-[color:var(--info)]">publish</span>({'{'} tag:{' '}
           <span className="text-green-600">&apos;v0.4.0&apos;</span> {'}'})
         </div>
       </div>
@@ -324,8 +324,8 @@ function EditorVisualFrame({ storyboard }: { storyboard: EditorStoryboard }): JS
     <div className="border-border bg-card text-foreground relative overflow-visible rounded-xl border">
       <div className="border-border bg-muted/40 flex h-7 items-center gap-1.5 border-b px-3">
         <span className="size-2.5 rounded-full bg-rose-400/70" />
-        <span className="size-2.5 rounded-full bg-amber-400/70" />
-        <span className="size-2.5 rounded-full bg-emerald-400/70" />
+        <span className="size-2.5 rounded-full bg-[color-mix(in_srgb,var(--warning)_70%,transparent)]" />
+        <span className="size-2.5 rounded-full bg-[color-mix(in_srgb,var(--success)_70%,transparent)]" />
         <span className="text-muted-foreground ml-2 font-mono text-[11px]">
           {translate(
             'auto.components.feature.wall.EditorAnimatedVisual.cda56c5915',

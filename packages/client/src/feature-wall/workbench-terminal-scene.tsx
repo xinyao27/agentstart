@@ -91,7 +91,7 @@ export function ClaudeChecklistPane(): JSX.Element {
         )}
       </TermLine>
       <TermLine wrap>
-        <span className="mr-1.5 text-amber-600">
+        <span className="mr-1.5 text-[color:var(--warning)]">
           {translate('auto.components.feature.wall.WorkbenchAnimatedVisual.932c4b3a97', '>')}
         </span>
         {translate(
@@ -100,7 +100,7 @@ export function ClaudeChecklistPane(): JSX.Element {
         )}
       </TermLine>
       <TermLine>
-        <span className="mr-1.5 font-bold text-emerald-600">✓</span>
+        <span className="mr-1.5 font-bold text-[color:var(--success)]">✓</span>
         <span className="text-foreground">
           {translate('auto.components.feature.wall.WorkbenchAnimatedVisual.9923847785', 'Read')}
         </span>
@@ -112,7 +112,7 @@ export function ClaudeChecklistPane(): JSX.Element {
         </span>
       </TermLine>
       <TermLine>
-        <span className="mr-1.5 font-bold text-emerald-600">✓</span>
+        <span className="mr-1.5 font-bold text-[color:var(--success)]">✓</span>
         <span className="text-foreground">
           {translate('auto.components.feature.wall.WorkbenchAnimatedVisual.17cfdc3344', 'Grep')}
         </span>
@@ -159,14 +159,19 @@ export function TermLine(props: {
 
 export function Prompt(props: { children: React.ReactNode; claude?: boolean }): JSX.Element {
   return (
-    <span className={cn('mr-1.5', props.claude ? 'text-amber-600' : 'text-emerald-600')}>
+    <span
+      className={cn(
+        'mr-1.5',
+        props.claude ? 'text-[color:var(--warning)]' : 'text-[color:var(--success)]'
+      )}
+    >
       {props.children}
     </span>
   )
 }
 
 function PwCheck(): JSX.Element {
-  return <span className="mr-1.5 font-bold text-emerald-600">✓</span>
+  return <span className="mr-1.5 font-bold text-[color:var(--success)]">✓</span>
 }
 
 function PwIdx(props: { children: React.ReactNode }): JSX.Element {
@@ -227,7 +232,9 @@ export function RightPaneScrollback(props: {
         if (line.kind === 'submitted-prompt') {
           return (
             <TermLine key={i} wrap>
-              <span className={cn('mr-1.5', props.promptAccentClass ?? 'text-amber-600')}>
+              <span
+                className={cn('mr-1.5', props.promptAccentClass ?? 'text-[color:var(--warning)]')}
+              >
                 {translate('auto.components.feature.wall.WorkbenchAnimatedVisual.932c4b3a97', '>')}
               </span>
               {line.text}
@@ -253,7 +260,7 @@ export function RightPaneScrollback(props: {
               {line.working ? (
                 <RunSpinner />
               ) : (
-                <span className="mr-1.5 font-bold text-emerald-600">✓</span>
+                <span className="mr-1.5 font-bold text-[color:var(--success)]">✓</span>
               )}
               <span className="text-foreground">{line.action}</span>
               <span className="text-muted-foreground ml-1.5 truncate">{line.target}</span>
@@ -268,7 +275,7 @@ export function RightPaneScrollback(props: {
                   <CodexInlineIcon />
                 </span>
               ) : (
-                <span className="mr-1.5 text-amber-600">●</span>
+                <span className="mr-1.5 text-[color:var(--warning)]">●</span>
               )
             ) : null}
             <span

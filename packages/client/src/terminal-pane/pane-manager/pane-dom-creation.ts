@@ -69,7 +69,8 @@ export function createPaneDOM(
   linkTooltip.style.cssText =
     'display:none;position:absolute;bottom:0;left:0;z-index:40;' +
     'padding:5px 8px;border-radius:4px;font-size:11px;font-family:inherit;' +
-    'color:#a1a1aa;background:rgba(24,24,27,0.85);border:1px solid rgba(63,63,70,0.6);' +
+    'color:var(--popover-foreground);background:color-mix(in srgb, var(--popover) 85%, transparent);' +
+    'border:1px solid color-mix(in srgb, var(--popover-foreground) 60%, transparent);' +
     'pointer-events:none;max-width:80%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'
 
   const dragHandle = document.createElement('div')

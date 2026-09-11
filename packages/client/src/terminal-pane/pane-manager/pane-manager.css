@@ -99,7 +99,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.15);
+  background: color-mix(in srgb, var(--foreground) 15%, transparent);
 }
 
 /* Three-dot ellipsis indicator */
@@ -108,7 +108,7 @@
   font-size: 10px;
   letter-spacing: 1px;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.45);
+  color: color-mix(in srgb, var(--foreground) 45%, transparent);
 }
 
 /* Only show when hovering the handle itself, and only with multiple panes */

@@ -202,7 +202,7 @@ struct DesignSystemCatalogView: View {
                         SemanticBadge(
                             isConnected ? "Connected" : "Offline",
                             iconID: isConnected ? .checkCircle : .wifiSlash,
-                            tint: isConnected ? .green : .orange
+                            tint: isConnected ? Theme.Colors.success : Theme.Colors.unread
                         )
 
                         Spacer()

@@ -180,7 +180,7 @@
   gap: 8px;
   margin: 2px 0 4px 0;
   padding-left: 8px;
-  border-left: 2px solid color-mix(in srgb, #e7b10a 35%, transparent);
+  border-left: 2px solid color-mix(in srgb, var(--warning) 35%, transparent);
   color: var(--muted-foreground);
   font-size: 12.5px;
   line-height: 1.35;
@@ -273,7 +273,7 @@
 }
 
 .agentstart-diff-comment-popover-textarea::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--muted-foreground, #737373) 28%, transparent);
+  background: color-mix(in srgb, var(--muted-foreground) 28%, transparent);
   border: 3px solid transparent;
   background-clip: padding-box;
 }

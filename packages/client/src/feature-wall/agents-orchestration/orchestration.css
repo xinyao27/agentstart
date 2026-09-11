@@ -80,10 +80,10 @@
    text reads as a fresh inbound message rather than ambient text. */
 @keyframes feature-wall-msg-pop {
   0% {
-    color: rgb(180 83 9);
+    color: var(--warning);
   }
   70% {
-    color: rgb(180 83 9);
+    color: var(--warning);
   }
   100% {
     color: var(--foreground);
@@ -155,21 +155,21 @@
    "0% used" label flashes from red to green. */
 @keyframes feature-wall-meta-pulse {
   0% {
-    color: rgb(220 38 38);
+    color: var(--danger);
     transform: scale(1);
   }
   20% {
-    color: rgb(22 163 74);
+    color: var(--success);
     transform: scale(1.08);
   }
   100% {
-    color: rgb(22 163 74);
+    color: var(--success);
     transform: scale(1);
   }
 }
 
 .feature-wall-meta-pulse {
-  color: rgb(22 163 74);
+  color: var(--success);
   font-weight: 600;
   animation: feature-wall-meta-pulse 1100ms ease-out 1;
 }

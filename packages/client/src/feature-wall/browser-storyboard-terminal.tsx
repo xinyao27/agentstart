@@ -28,7 +28,7 @@ function terminalEntries(): readonly { entry: TerminalEntry; minPhase: BrowserSt
               'auto.components.feature.wall.BrowserAnimatedVisual.4fa59ca545',
               '✓ Updated'
             )}{' '}
-            <code className="text-emerald-600 dark:text-emerald-400">
+            <code className="text-[color:var(--success)]">
               {translate(
                 'auto.components.feature.wall.BrowserAnimatedVisual.051c97d15a',
                 '.pp-card[data-card="starter"] .pp-cta'
@@ -91,19 +91,19 @@ function TerminalEntryView(props: { entry: TerminalEntry }): JSX.Element {
   if (entry.kind === 'working') {
     return (
       <span className="text-muted-foreground inline-flex items-center gap-1.5">
-        <span className="size-1.5 animate-pulse bg-emerald-500 dark:bg-emerald-400" />
+        <span className="size-1.5 animate-pulse bg-[color:var(--success)]" />
         {translate('auto.components.feature.wall.BrowserAnimatedVisual.0ce7c24b4d', 'Working…')}
       </span>
     )
   }
   if (entry.kind === 'ok') {
-    return <span className="text-emerald-600 dark:text-emerald-400">{entry.content}</span>
+    return <span className="text-[color:var(--success)]">{entry.content}</span>
   }
   if (entry.kind === 'tool') {
     return (
       <span>
         <span className="text-primary">{entry.tool}</span>{' '}
-        <span className="text-emerald-600 dark:text-emerald-400">{entry.argument}</span>
+        <span className="text-[color:var(--success)]">{entry.argument}</span>
       </span>
     )
   }

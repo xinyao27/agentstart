@@ -87,7 +87,7 @@ function PricingCard(props: {
         <span
           aria-hidden
           className={cn(
-            'pointer-events-none absolute -inset-[3px] border-2 border-blue-500 bg-blue-500/10 transition-opacity duration-300',
+            'pointer-events-none absolute -inset-[3px] border-2 border-[color:var(--info)] bg-[color-mix(in_srgb,var(--info)_10%,transparent)] transition-opacity duration-300',
             ringActive ? 'opacity-100' : 'opacity-0'
           )}
         />
@@ -102,7 +102,7 @@ function PricingCard(props: {
           highlighted
             ? 'bg-foreground text-background'
             : ctaIsBranded
-              ? 'bg-blue-600 text-white'
+              ? 'bg-[color:var(--info)] text-primary-foreground'
               : 'bg-foreground/[0.07] text-foreground',
           ctaPressing ? 'scale-[0.96]' : null
         )}

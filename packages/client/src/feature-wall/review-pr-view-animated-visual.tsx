@@ -100,7 +100,7 @@ function SidebarTabs(props: {
 function StatusCell(): JSX.Element {
   return (
     <span>
-      <LoadingIndicator className="ravpr-ring size-3.5 text-amber-500" />
+      <LoadingIndicator className="ravpr-ring size-3.5 text-[color:var(--warning)]" />
       <span className="ravpr-check">
         <CheckTinyIcon />
       </span>

@@ -144,11 +144,11 @@
   }
 
   .markdown-light .markdown-body a {
-    color: #0969da;
+    color: var(--info);
   }
 
   .markdown-dark .markdown-body a {
-    color: #58a6ff;
+    color: var(--info);
   }
 
   .markdown-light .markdown-body .markdown-doc-link-broken,
@@ -163,11 +163,11 @@
   }
 
   .markdown-dark .markdown-body code {
-    background: rgba(255, 255, 255, 0.1);
+    background: color-mix(in srgb, var(--foreground) 10%, transparent);
   }
 
   .markdown-light .markdown-body code {
-    background: rgba(0, 0, 0, 0.07);
+    background: color-mix(in srgb, var(--foreground) 7%, transparent);
   }
 
   .markdown-body pre {
@@ -178,13 +178,13 @@
   }
 
   .markdown-dark .markdown-body pre {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--card);
+    border: 1px solid var(--border);
   }
 
   .markdown-light .markdown-body pre {
-    background: #f6f8fa;
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: var(--card);
+    border: 1px solid var(--border);
   }
 
   .markdown-body pre code {
@@ -274,13 +274,13 @@
   }
 
   .markdown-dark .markdown-body blockquote {
-    background: rgba(255, 255, 255, 0.025);
-    color: rgba(255, 255, 255, 0.72);
+    background: color-mix(in srgb, var(--foreground) 2.5%, transparent);
+    color: var(--muted-foreground);
   }
 
   .markdown-light .markdown-body blockquote {
-    background: rgba(0, 0, 0, 0.02);
-    color: rgba(0, 0, 0, 0.6);
+    background: color-mix(in srgb, var(--foreground) 2%, transparent);
+    color: var(--muted-foreground);
   }
 
   .markdown-body table {
@@ -305,19 +305,19 @@
   }
 
   .markdown-dark .markdown-body th {
-    background: rgba(255, 255, 255, 0.06);
+    background: color-mix(in srgb, var(--foreground) 6%, transparent);
   }
 
   .markdown-light .markdown-body th {
-    background: rgba(0, 0, 0, 0.04);
+    background: color-mix(in srgb, var(--foreground) 4%, transparent);
   }
 
   .markdown-dark .markdown-body tr:nth-child(even) td {
-    background: rgba(255, 255, 255, 0.02);
+    background: color-mix(in srgb, var(--foreground) 2%, transparent);
   }
 
   .markdown-light .markdown-body tr:nth-child(even) td {
-    background: rgba(0, 0, 0, 0.015);
+    background: color-mix(in srgb, var(--foreground) 1.5%, transparent);
   }
 
   .markdown-body hr {

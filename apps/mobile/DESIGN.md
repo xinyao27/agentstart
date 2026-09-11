@@ -46,14 +46,14 @@ AgentStart iOS 的设计语言由系统 Liquid Glass、中性纯色背景和清�
 原生实现的保真约束**行为、能力与状态语义**，不要求复制已退役客户端的页面排布。功能基准是
 runtime protocol 和各 feature 的 `INVARIANTS.md`：实现或改动页面前，确认它覆盖的能力、状态
 分支、图标语义与文案含义。历史客户端只提供迁移背景，不再是可引用的合同；需要保留的行为和
-视觉数值必须直接写在本文件或对应 feature 的 `INVARIANTS.md` 中。
+ 视觉数值必须直接写在本文件或对应 feature 的 `INVARIANTS.md` 中。
 
 - 业务页面允许使用 feature-owned 固定视觉 metric，以便准确映射既有 token；同一 metric
   必须只有一个 owner，不能散落成互不一致的 magic number。
 - 内容图标使用 Hugeicons Free 的语义图标；不在页面中
   创建逐个图片资产，也不保留 Phosphor 或 SF Symbols 作为 UI 图标 provider。
 - Header action 继承 App 默认的中性前景强调色，不在页面局部设置颜色；普通内容图标和
-  Loader 使用 `mutedForeground`。蓝色 `primary` 只保留给明确的主操作，不作为
+  Loader 使用 `mutedForeground`。橙色 `primary`（`#FF5B03`）只保留给明确的主操作，不作为
   App 的默认 tint，也不用于工作中状态。Liquid Glass 的全局 tint 使用
   `Theme.Colors.foreground`；`selection` 是表面状态色，不作为普通按钮文字 tint。
 - Glass 只改变控件表面，不改变图标尺寸或状态颜色的语义映射；页面自身的排版、分组与控件

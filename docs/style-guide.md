@@ -35,6 +35,7 @@ so product state and user work carry the visual emphasis.
 
 - surfaces: `background`, `card`, `popover`, and `sidebar`, with their foreground pairs;
 - actions: `primary`, `secondary`, `accent`, and `destructive`;
+- state: `info`, `success`, `warning`, and `danger` for product status feedback;
 - structure: `border`, `input`, `ring`, `muted`, and `muted-foreground`.
 
 Do not add another variable to `@theme inline`. Use the existing semantic role first, then a

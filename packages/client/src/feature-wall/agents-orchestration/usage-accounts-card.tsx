@@ -26,14 +26,14 @@ function ConnectionPill(props: { connected: boolean; label: string }): JSX.Eleme
       className={cn(
         'inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] font-medium',
         connected
-          ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+          ? 'border-[color-mix(in_srgb,var(--success)_40%,transparent)] bg-[color-mix(in_srgb,var(--success)_10%,transparent)] text-[color:var(--success)]'
           : 'border-border bg-background text-muted-foreground'
       )}
     >
       <span
         className={cn(
           'size-1.5 rounded-full',
-          connected ? 'bg-emerald-500' : 'bg-muted-foreground'
+          connected ? 'bg-[color:var(--success)]' : 'bg-muted-foreground'
         )}
       />
       {label}

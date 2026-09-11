@@ -102,53 +102,53 @@
     ui-monospace, 'SF Mono', SFMono-Regular, 'Cascadia Code', Menlo, Consolas, 'Liberation Mono',
     monospace;
   --radius: 0.625rem;
-  /* Why: project Cursor's core surfaces and semantic opacity ramps onto the
+  /* Why: project ChatGPT/Codex's core surfaces and semantic opacity ramps onto the
      existing shadcn roles without expanding AgentStart's closed token vocabulary. */
   /* Why: *-base holds the opaque value so a workspace theme gradient can thin
      the chrome roles without any surface losing its original color. */
-  --background-base: #f8f8f8;
+  --background-base: #ffffff;
   --background: var(--background-base);
   /* Why: tab-hosted editors share the app canvas so selected tabs connect
      visually to every content surface, including Monaco and markdown. */
   --editor-surface: var(--background);
-  --foreground: #141414;
-  --card-base: #fcfcfc;
+  --foreground: #1a1c1f;
+  --card-base: color-mix(in oklab, var(--foreground) 5%, var(--background-base));
   --card: var(--card-base);
-  --card-foreground: #141414;
-  --popover-base: #fcfcfc;
+  --card-foreground: #1a1c1f;
+  --popover-base: #ffffff;
   --popover: var(--popover-base);
-  --popover-foreground: #141414;
+  --popover-foreground: #1a1c1f;
   /* Why: single source of truth for the default brand hue — every primary role
      in both themes derives from it while custom workspace accents can still override it. */
   --brand: #ff5b03;
   --primary: var(--brand);
-  --primary-foreground: #141414;
-  --secondary: color-mix(in srgb, var(--foreground) 8%, transparent);
-  --secondary-foreground: #141414;
-  --muted: color-mix(in srgb, var(--foreground) 6%, transparent);
-  --muted-foreground: color-mix(in srgb, var(--foreground) 60%, transparent);
+  --primary-foreground: #0d0d0d;
+  --secondary: color-mix(in srgb, var(--background) 96%, transparent);
+  --secondary-foreground: #1a1c1f;
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: color-mix(in srgb, var(--foreground) 49.4%, transparent);
   /* Why: accent surfaces stay opaque in both themes; overlays opt into transparency locally. */
-  --accent: color-mix(in srgb, var(--foreground) 14%, var(--background));
-  --accent-foreground: #141414;
-  --destructive: #be1744;
-  --destructive-foreground: #fcfcfc;
+  --accent: #e5f3ff;
+  --accent-foreground: #339cff;
+  --destructive: #e02e2a;
+  --destructive-foreground: #ffffff;
   --border: color-mix(in srgb, var(--foreground) 8%, transparent);
-  --input: color-mix(in srgb, var(--foreground) 12%, transparent);
+  --input: color-mix(in srgb, var(--foreground) 11.8%, transparent);
   --ring: var(--brand);
   --terminal-pane-locate: var(--primary);
-  --ai-action-accent: #7565cc;
-  --chart-1: #2778c1;
-  --chart-2: #007041;
-  --chart-3: #a46700;
-  --chart-4: #92156a;
-  --chart-5: #7565cc;
-  --sidebar-base: #f3f3f3;
+  --ai-action-accent: #924ff7;
+  --chart-1: #339cff;
+  --chart-2: #00a240;
+  --chart-3: #e25507;
+  --chart-4: #924ff7;
+  --chart-5: #ffc300;
+  --sidebar-base: #f9f9f9;
   --sidebar: var(--sidebar-base);
-  --sidebar-foreground: #141414;
+  --sidebar-foreground: #1a1c1f;
   --sidebar-primary: var(--brand);
-  --sidebar-primary-foreground: #141414;
-  --sidebar-accent: color-mix(in srgb, var(--sidebar-foreground) 14%, transparent);
-  --sidebar-accent-foreground: #141414;
+  --sidebar-primary-foreground: #0d0d0d;
+  --sidebar-accent: color-mix(in srgb, var(--sidebar-foreground) 6%, transparent);
+  --sidebar-accent-foreground: #1a1c1f;
   --sidebar-border: color-mix(in srgb, var(--sidebar-foreground) 8%, transparent);
   --sidebar-ring: var(--brand);
   --git-decoration-added: #007041;
@@ -176,53 +176,60 @@
   /* Why: tab-group splits use a dedicated divider — `--border` is too faint on
      card/editor surfaces when panes are side-by-side or stacked. Default must
      meet >=3:1 against `--card`, not only the hover/drag strong state. */
-  --tab-group-split-divider: #868690;
-  --tab-group-split-divider-strong: #71717a;
+  --tab-group-split-divider: color-mix(in srgb, var(--foreground) 52%, var(--card));
+  --tab-group-split-divider-strong: color-mix(in srgb, var(--foreground) 64%, var(--card));
+  --info: #339cff;
+  --success: #00a240;
+  --success-foreground: #ffffff;
+  --warning: #e25507;
+  --warning-foreground: #ffffff;
+  --danger: #e02e2a;
+  --danger-foreground: #ffffff;
 }
 
 /* ── Dark Mode ───────────────────────────────────────── */
 
 .dark {
-  --background-base: #141414;
+  --background-base: #181818;
   --background: var(--background-base);
   --editor-surface: var(--background);
-  --foreground: #f0f0f0;
-  --card-base: #181818;
+  --foreground: #ffffff;
+  --card-base: color-mix(in oklab, var(--foreground) 5%, var(--background-base));
   --card: var(--card-base);
-  --card-foreground: #f0f0f0;
-  --popover-base: #181818;
+  --card-foreground: #ffffff;
+  --popover-base: #2d2d2d;
   --popover: var(--popover-base);
-  --popover-foreground: #f0f0f0;
+  --popover-foreground: #ffffff;
   --brand: #ff5b03;
   --primary: var(--brand);
-  --primary-foreground: #141414;
-  --secondary: color-mix(in srgb, var(--foreground) 8%, transparent);
-  --secondary-foreground: #f0f0f0;
-  --muted: color-mix(in srgb, var(--foreground) 6%, transparent);
-  --muted-foreground: color-mix(in srgb, var(--foreground) 60%, transparent);
-  --accent: color-mix(in srgb, var(--foreground) 14%, var(--background));
-  --accent-foreground: #f0f0f0;
-  --destructive: #e34671;
-  --destructive-foreground: #141414;
-  --border: color-mix(in srgb, var(--foreground) 8%, transparent);
-  --input: color-mix(in srgb, var(--foreground) 12%, transparent);
-  --ring: #f0f0f0;
+  --primary-foreground: #0d0d0d;
+  --secondary: #363636;
+  --secondary-foreground: #ffffff;
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: color-mix(in srgb, var(--foreground) 49.8%, transparent);
+  --accent: #00284d;
+  --accent-foreground: #83c3ff;
+  --destructive: #ff6764;
+  --destructive-foreground: #0d0d0d;
+  --border: color-mix(in srgb, var(--foreground) 8.2%, transparent);
+  --input: color-mix(in srgb, #000000 10%, transparent);
+  --ring: var(--brand);
   --terminal-pane-locate: var(--primary);
-  --ai-action-accent: #9386f2;
-  --chart-1: #7bafe9;
-  --chart-2: #3fa266;
-  --chart-3: #f1b467;
-  --chart-4: #b48ead;
-  --chart-5: #9386f2;
-  --sidebar-base: #181818;
+  --ai-action-accent: #ad7bf9;
+  --chart-1: #83c3ff;
+  --chart-2: #40c977;
+  --chart-3: #fb6a22;
+  --chart-4: #ad7bf9;
+  --chart-5: #ffd240;
+  --sidebar-base: #212121;
   --sidebar: var(--sidebar-base);
-  --sidebar-foreground: #f0f0f0;
+  --sidebar-foreground: #ffffff;
   --sidebar-primary: var(--brand);
-  --sidebar-primary-foreground: #141414;
-  --sidebar-accent: color-mix(in srgb, var(--sidebar-foreground) 14%, transparent);
-  --sidebar-accent-foreground: #f0f0f0;
-  --sidebar-border: color-mix(in srgb, var(--sidebar-foreground) 8%, transparent);
-  --sidebar-ring: #f0f0f0;
+  --sidebar-primary-foreground: #0d0d0d;
+  --sidebar-accent: color-mix(in srgb, var(--sidebar-foreground) 8%, transparent);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: color-mix(in srgb, var(--sidebar-foreground) 8.2%, transparent);
+  --sidebar-ring: var(--brand);
   --git-decoration-added: #70b489;
   --git-decoration-modified: #f1b467;
   --git-decoration-deleted: #fc6b83;
@@ -246,14 +253,21 @@
   --git-graph-lane-4: #81a1c1;
   --git-graph-lane-5: #9386f2;
   /* Brighter than terminal defaults so the always-visible line clears 3:1 on `--card`. */
-  --tab-group-split-divider: #71717a;
-  --tab-group-split-divider-strong: #a1a1aa;
+  --tab-group-split-divider: color-mix(in srgb, var(--foreground) 52%, var(--card));
+  --tab-group-split-divider-strong: color-mix(in srgb, var(--foreground) 64%, var(--card));
+  --info: #83c3ff;
+  --success: #40c977;
+  --success-foreground: #0d0d0d;
+  --warning: #fb6a22;
+  --warning-foreground: #0d0d0d;
+  --danger: #ff6764;
+  --danger-foreground: #0d0d0d;
 }
 
 .worktree-sidebar-theme {
-  /* Why: the workspace rail now shares Cursor's sidebar surface while keeping
+  /* Why: the workspace rail now shares the ChatGPT/Codex sidebar surface while keeping
      its interaction states inside the standard shadcn sidebar family. */
-  --sidebar-accent: color-mix(in srgb, var(--sidebar-foreground) 14%, transparent);
+  --sidebar-accent: color-mix(in srgb, var(--sidebar-foreground) 8%, transparent);
   --sidebar-accent-foreground: var(--sidebar-foreground);
   --sidebar-border: color-mix(in srgb, var(--sidebar-foreground) 8%, transparent);
   --sidebar-ring: var(--ring);
@@ -339,7 +353,7 @@
      background to the same color; keep the X readable on both AgentStart themes. */
   color: var(--popover-foreground);
   background: var(--popover);
-  border-color: rgb(0 0 0 / 0.14);
+  border-color: color-mix(in srgb, var(--popover-foreground) 14%, transparent);
 }
 
 [data-sonner-toaster][data-sonner-theme='dark']
@@ -347,11 +361,11 @@
   [data-close-button] {
   color: var(--popover-foreground);
   background: var(--popover);
-  border-color: rgb(255 255 255 / 0.14);
+  border-color: color-mix(in srgb, var(--popover-foreground) 14%, transparent);
 }
 
 .dark [data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-close-button] {
-  border-color: rgb(255 255 255 / 0.14);
+  border-color: color-mix(in srgb, var(--popover-foreground) 14%, transparent);
 }
 
 [data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-close-button]:hover {
@@ -381,16 +395,16 @@
   /* Why: the theme picker visualizes color geometry, so its field, samples,
      and direct manipulation controls retain the round shapes sanctioned by DESIGN.md. */
   :root:root [data-theme-color-picker] {
-    --theme-picker-field-background: rgb(0 0 0 / 0.05);
-    --theme-picker-field-dot: rgb(0 0 0 / 0.1);
-    --theme-picker-control-foreground: rgb(0 0 0 / 0.7);
-    --theme-picker-control-hover: rgb(0 0 0 / 0.1);
-    --theme-picker-texture-dot: rgb(0 0 0 / 0.3);
-    --theme-picker-texture-handle: #757575;
+    --theme-picker-field-background: color-mix(in srgb, var(--foreground) 5%, transparent);
+    --theme-picker-field-dot: color-mix(in srgb, var(--foreground) 10%, transparent);
+    --theme-picker-control-foreground: color-mix(in srgb, var(--foreground) 70%, transparent);
+    --theme-picker-control-hover: color-mix(in srgb, var(--foreground) 10%, transparent);
+    --theme-picker-texture-dot: color-mix(in srgb, var(--foreground) 30%, transparent);
+    --theme-picker-texture-handle: var(--muted-foreground);
     --theme-picker-texture-center-background: linear-gradient(
       -45deg,
       transparent -10%,
-      rgb(0 0 0 / 0.1) 110%
+      color-mix(in srgb, var(--foreground) 10%, transparent) 110%
     );
     --theme-picker-position-easing: linear(
       0,
@@ -407,24 +421,24 @@
       0.9979,
       1
     );
-    --theme-picker-wave-strong: rgb(90 90 90);
-    --theme-picker-wave-soft: rgb(77 77 77 / 0.5);
+    --theme-picker-wave-strong: color-mix(in srgb, var(--foreground) 70%, transparent);
+    --theme-picker-wave-soft: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
 
   :root:root.dark [data-theme-color-picker] {
-    --theme-picker-field-background: rgb(255 255 255 / 0.03);
-    --theme-picker-field-dot: rgb(255 255 255 / 0.05);
-    --theme-picker-control-foreground: rgb(255 255 255 / 0.9);
-    --theme-picker-control-hover: rgb(255 255 255 / 0.1);
-    --theme-picker-texture-dot: rgb(255 255 255 / 0.3);
-    --theme-picker-texture-handle: #d1d1d1;
+    --theme-picker-field-background: color-mix(in srgb, var(--foreground) 3%, transparent);
+    --theme-picker-field-dot: color-mix(in srgb, var(--foreground) 5%, transparent);
+    --theme-picker-control-foreground: color-mix(in srgb, var(--foreground) 90%, transparent);
+    --theme-picker-control-hover: color-mix(in srgb, var(--foreground) 10%, transparent);
+    --theme-picker-texture-dot: color-mix(in srgb, var(--foreground) 30%, transparent);
+    --theme-picker-texture-handle: var(--muted-foreground);
     --theme-picker-texture-center-background: linear-gradient(
       -45deg,
       transparent -10%,
-      rgb(255 255 255 / 0.1) 110%
+      color-mix(in srgb, var(--foreground) 10%, transparent) 110%
     );
-    --theme-picker-wave-strong: rgb(161 161 161);
-    --theme-picker-wave-soft: rgb(161 161 161 / 0.5);
+    --theme-picker-wave-strong: color-mix(in srgb, var(--foreground) 70%, transparent);
+    --theme-picker-wave-soft: color-mix(in srgb, var(--foreground) 50%, transparent);
   }
 
   :root:root [data-theme-color-picker] [data-theme-color-field] {
@@ -461,18 +475,18 @@
   }
 
   :root:root [data-theme-color-picker] [data-theme-color-dot] {
-    border-color: #fff !important;
+    border-color: var(--popover-foreground) !important;
     transition:
       left 0.4s var(--theme-picker-position-easing),
       top 0.4s var(--theme-picker-position-easing);
   }
 
   :root:root.dark [data-theme-color-picker] [data-theme-color-dot] {
-    box-shadow: 0 0 0 2px rgb(0 0 0 / 0.1);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
 
   :root:root [data-theme-color-picker] [data-theme-color-swatch-fill] {
-    box-shadow: 0 0 1px 1px rgb(0 0 0 / 0.1);
+    box-shadow: 0 0 1px 1px color-mix(in srgb, var(--foreground) 10%, transparent);
   }
 
   :root:root [data-theme-color-picker] [data-theme-color-dot][data-primary='true']:hover {
@@ -569,7 +583,7 @@
 
 .scrollbar-sleek {
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--muted-foreground, #737373) 34%, transparent) transparent;
+  scrollbar-color: color-mix(in srgb, var(--muted-foreground) 34%, transparent) transparent;
 }
 
 .scrollbar-sleek::-webkit-scrollbar {
@@ -582,7 +596,7 @@
 }
 
 .scrollbar-sleek::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--muted-foreground, #737373) 28%, transparent);
+  background: color-mix(in srgb, var(--muted-foreground) 28%, transparent);
   border: 3px solid transparent;
   border-radius: 0;
   background-clip: padding-box;
@@ -605,16 +619,16 @@
 }
 
 .scrollbar-sleek::-webkit-scrollbar-thumb:hover {
-  background-color: color-mix(in srgb, var(--muted-foreground, #737373) 48%, transparent);
+  background-color: color-mix(in srgb, var(--muted-foreground) 48%, transparent);
 }
 
 .scrollbar-sleek::-webkit-scrollbar-thumb:active {
-  background-color: color-mix(in srgb, var(--foreground, #171717) 36%, transparent);
+  background-color: color-mix(in srgb, var(--foreground) 36%, transparent);
 }
 
 .scrollbar-sleek-parent:hover .scrollbar-sleek,
 .scrollbar-sleek:hover {
-  scrollbar-color: color-mix(in srgb, var(--muted-foreground, #737373) 48%, transparent) transparent;
+  scrollbar-color: color-mix(in srgb, var(--muted-foreground) 48%, transparent) transparent;
 }
 
 /* Why: no reserved `scrollbar-gutter` — paired with `overflow-y: auto`, a list
@@ -639,22 +653,22 @@
 
 .scrollbar-sleek-parent:hover .worktree-sidebar-scrollbar,
 .worktree-sidebar-scrollbar:hover {
-  scrollbar-color: color-mix(in srgb, var(--muted-foreground, #737373) 48%, transparent) transparent;
+  scrollbar-color: color-mix(in srgb, var(--muted-foreground) 48%, transparent) transparent;
 }
 
 .scrollbar-sleek-parent:hover .worktree-sidebar-scrollbar::-webkit-scrollbar-thumb,
 .worktree-sidebar-scrollbar:hover::-webkit-scrollbar-thumb {
-  background-color: color-mix(in srgb, var(--muted-foreground, #737373) 28%, transparent);
+  background-color: color-mix(in srgb, var(--muted-foreground) 28%, transparent);
 }
 
 .scrollbar-sleek-parent:hover .worktree-sidebar-scrollbar::-webkit-scrollbar-thumb:hover,
 .worktree-sidebar-scrollbar:hover::-webkit-scrollbar-thumb:hover {
-  background-color: color-mix(in srgb, var(--muted-foreground, #737373) 48%, transparent);
+  background-color: color-mix(in srgb, var(--muted-foreground) 48%, transparent);
 }
 
 .scrollbar-sleek-parent:hover .worktree-sidebar-scrollbar::-webkit-scrollbar-thumb:active,
 .worktree-sidebar-scrollbar:hover::-webkit-scrollbar-thumb:active {
-  background-color: color-mix(in srgb, var(--foreground, #171717) 36%, transparent);
+  background-color: color-mix(in srgb, var(--foreground) 36%, transparent);
 }
 
 [data-slot='popover-content'] {
@@ -676,7 +690,7 @@
 .scrollbar-editor,
 .xterm .xterm-viewport {
   scrollbar-width: thin;
-  scrollbar-color: rgba(121, 121, 121, 0.4) transparent;
+  scrollbar-color: color-mix(in srgb, var(--muted-foreground) 40%, transparent) transparent;
 }
 
 .scrollbar-editor::-webkit-scrollbar,
@@ -691,7 +705,7 @@
 
 .scrollbar-editor::-webkit-scrollbar-thumb,
 .xterm .xterm-viewport::-webkit-scrollbar-thumb {
-  background: rgba(121, 121, 121, 0.4);
+  background: color-mix(in srgb, var(--muted-foreground) 40%, transparent);
   border: 3px solid transparent;
   border-radius: 7px;
   background-clip: padding-box;
@@ -699,7 +713,7 @@
 
 .scrollbar-editor::-webkit-scrollbar-thumb:hover,
 .xterm .xterm-viewport::-webkit-scrollbar-thumb:hover {
-  background: rgba(121, 121, 121, 0.7);
+  background: color-mix(in srgb, var(--muted-foreground) 70%, transparent);
   border: 3px solid transparent;
   background-clip: padding-box;
 }

@@ -213,3 +213,31 @@
   blank page or renderer error; the settings card visibly followed the new orange primary border.
 - The development daemon/WXT session was stopped cleanly. No tests, smoke checks, E2E harnesses, or
   validation scripts were added or retained.
+
+## ChatGPT theme palette alignment — 2026-09-11
+
+- [x] Capture local ChatGPT/Codex palette evidence from app assets and official appearance guidance.
+- [x] Inventory hardcoded browser and mobile colors and map them to semantic theme roles.
+- [x] Replace page-level background, border, and text colors with theme tokens, preserving domain and
+      status colors.
+- [x] Run formatting, typecheck, lint, builds, and manual light/dark review.
+- [x] Record review evidence, cleanup, and any external verification boundary.
+
+## ChatGPT theme palette review — 2026-09-11
+
+- Local `/Applications/ChatGPT.app` assets define the light/dark surface contract used here:
+  light `#fff` / dark `#181818` canvas, light `#f9f9f9` / dark `#212121` sidebar, dark
+  `#2d2d2d` popovers, foreground `#1a1c1f` / `#fff`, 8% borders, and 10% muted washes.
+- Local accent/chart evidence maps blue to `#339cff` / `#83c3ff`, green to `#00a240` /
+  `#40c977`, orange to `#e25507` / `#fb6a22`, purple to `#924ff7` / `#ad7bf9`, and yellow to
+  `#ffc300` / `#ffd240`. AgentStart keeps the requested `#FF5B03` as its primary brand and uses
+  the researched palette for informational, chart, and state roles.
+- Browser surfaces, markdown/editor chrome, feature-wall visuals, terminal overlays, and mobile
+  foundations now consume semantic theme variables. Git/diff, syntax highlighting, terminal themes,
+  provider marks, and user-selected tab colors remain intentionally domain-owned.
+- `vp fmt`, `pnpm check`, `vp run @agentstart/extension#build`, and `vp run agentstart-mobile#check`
+  passed. `git diff --check` is clean. The extension build only reports its pre-existing large-chunk
+  warning; no tests, smoke checks, E2E harnesses, or validation scripts were added or retained.
+- Manual browser light/dark review from the preceding primary-color pass remains the UI evidence
+  boundary; the repository gate and production extension/mobile builds verify the current source,
+  but do not replace full user-flow or external-host validation.

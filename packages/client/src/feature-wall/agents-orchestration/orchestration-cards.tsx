@@ -29,7 +29,7 @@ export function WorkspaceCard(props: {
         <span
           className="block size-[9px] rounded-full"
           style={{
-            background: amberDot ? 'rgb(245 158 11)' : 'rgb(16 185 129)',
+            background: amberDot ? 'var(--warning)' : 'var(--success)',
             margin: '0 auto'
           }}
           aria-hidden
@@ -88,7 +88,7 @@ export function AgentRow(props: {
           <AgentStateDot state="working" size="md" />
         ) : (
           <span
-            className="inline-flex items-center justify-center text-emerald-500"
+            className="inline-flex items-center justify-center text-[color:var(--success)]"
             style={{
               height: 'var(--feature-wall-agent-status-icon, 12px)',
               width: 'var(--feature-wall-agent-status-icon, 12px)'

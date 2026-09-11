@@ -238,9 +238,9 @@ function PdfViewerContent({ content = '', filePath, src }: PdfViewerProps): JSX.
               position: 'absolute',
               inset: '0',
               overflow: 'auto',
-              background: 'var(--pdf-viewer-bg, #e4e4e7)'
+              background: 'var(--pdf-viewer-bg, var(--card))'
             }}
-            className="scrollbar-editor dark:[--pdf-viewer-bg:#18181b]"
+            className="scrollbar-editor dark:[--pdf-viewer-bg:var(--card)]"
           >
             <div ref={viewerDivRef} className="pdfViewer" />
           </div>

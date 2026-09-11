@@ -115,7 +115,7 @@ export function FeatureWallRail(props: {
                   className={cn(
                     'flex size-7 shrink-0 items-center justify-center rounded-sm border font-mono text-xs',
                     isDone
-                      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+                      ? 'border-[color-mix(in_srgb,var(--success)_40%,transparent)] bg-[color-mix(in_srgb,var(--success)_10%,transparent)] text-[color:var(--success)]'
                       : 'border-border bg-card text-muted-foreground'
                   )}
                   aria-label={
@@ -163,7 +163,7 @@ export function FeatureWallRail(props: {
                               className={cn(
                                 'flex size-5 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]',
                                 isStepDone
-                                  ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+                                  ? 'border-[color-mix(in_srgb,var(--success)_40%,transparent)] bg-[color-mix(in_srgb,var(--success)_10%,transparent)] text-[color:var(--success)]'
                                   : 'border-border bg-card text-muted-foreground'
                               )}
                               aria-label={

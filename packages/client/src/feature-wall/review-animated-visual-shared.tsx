@@ -177,7 +177,7 @@ export function CodexLogo(): JSX.Element {
         'auto.components.feature.wall.review.animated.visual.shared.e7894927a2',
         'Codex'
       )}
-      style={{ color: '#111' }}
+      style={{ color: 'var(--foreground)' }}
     >
       <path
         fill="currentColor"

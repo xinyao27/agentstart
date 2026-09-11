@@ -70,7 +70,7 @@ function StatusesAnimation(props: { active: boolean; reducedMotion: boolean }): 
       <SupportedAgentsMarquee reducedMotion={reducedMotion} />
       <div className="bg-foreground/[0.05] rounded-[10px] px-2 py-2.5">
         <div className="grid grid-cols-[14px_minmax(0,1fr)] items-center gap-3 px-1.5">
-          <span className="inline-block size-[9px] rounded-full bg-emerald-500" />
+          <span className="inline-block size-[9px] rounded-full bg-[color:var(--success)]" />
           <div className="truncate text-[15.5px] leading-[1.2] font-semibold">
             {translate(
               'auto.components.feature.wall.agents.orchestration.StatusesPage.79971d1539',
@@ -159,7 +159,7 @@ function AgentRow(props: {
       <span
         className={cn(
           'truncate text-[13px] leading-[1.3]',
-          props.permission ? 'text-red-700 dark:text-red-300' : 'text-muted-foreground'
+          props.permission ? 'text-[color:var(--danger)]' : 'text-muted-foreground'
         )}
       >
         {props.children}
@@ -212,9 +212,9 @@ function SupportedAgentsMarquee(props: { reducedMotion: boolean }): JSX.Element 
         className="overflow-hidden"
         style={{
           WebkitMaskImage:
-            'linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%)',
+            'linear-gradient(to right, transparent 0, var(--foreground) 32px, var(--foreground) calc(100% - 32px), transparent 100%)',
           maskImage:
-            'linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%)'
+            'linear-gradient(to right, transparent 0, var(--foreground) 32px, var(--foreground) calc(100% - 32px), transparent 100%)'
         }}
       >
         <div

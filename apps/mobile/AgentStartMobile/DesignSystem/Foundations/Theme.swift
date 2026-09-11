@@ -4,56 +4,65 @@ import UIKit
 enum Theme {
     enum Colors {
         static let background = adaptive(
-            light: UIColor(red: 248 / 255, green: 248 / 255, blue: 248 / 255, alpha: 1),
-            dark: UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 1)
+            light: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 1),
+            dark: UIColor(red: 24 / 255, green: 24 / 255, blue: 24 / 255, alpha: 1)
         )
         static let foreground = adaptive(
-            light: UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 1),
-            dark: UIColor(red: 240 / 255, green: 240 / 255, blue: 240 / 255, alpha: 1)
+            light: UIColor(red: 26 / 255, green: 28 / 255, blue: 31 / 255, alpha: 1),
+            dark: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 1)
         )
         static let mutedForeground = adaptive(
-            light: UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 0.6),
-            dark: UIColor(red: 240 / 255, green: 240 / 255, blue: 240 / 255, alpha: 0.6)
+            light: UIColor(red: 26 / 255, green: 28 / 255, blue: 31 / 255, alpha: 0.494),
+            dark: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 0.498)
         )
         static let selection = adaptive(
-            light: UIColor(red: 216 / 255, green: 216 / 255, blue: 216 / 255, alpha: 1),
-            dark: UIColor(red: 51 / 255, green: 51 / 255, blue: 51 / 255, alpha: 1)
+            light: UIColor(red: 229 / 255, green: 243 / 255, blue: 255 / 255, alpha: 1),
+            dark: UIColor(red: 0 / 255, green: 40 / 255, blue: 77 / 255, alpha: 1)
         )
         // Why: an 8% wash, deliberately separate from `selection`, which is the stronger
         // selected-state fill. Collapsing the two makes every inactive surface look selected.
         static let secondary = adaptive(
-            light: UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 0.08),
-            dark: UIColor(red: 240 / 255, green: 240 / 255, blue: 240 / 255, alpha: 0.08)
+            light: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 0.96),
+            dark: UIColor(red: 54 / 255, green: 54 / 255, blue: 54 / 255, alpha: 0.96)
         )
-        // Why: the shortcut keycap needs #eaeaea on the light content surface. Keep it
+        // Why: the shortcut keycap follows ChatGPT's elevated secondary surface. Keep it
         // separate from general secondary controls so tuning a keycap cannot alter selection
         // or button surfaces elsewhere.
         static let keycap = adaptive(
-            light: UIColor(red: 234 / 255, green: 234 / 255, blue: 234 / 255, alpha: 1),
+            light: UIColor(red: 237 / 255, green: 237 / 255, blue: 237 / 255, alpha: 1),
             dark: UIColor(red: 45 / 255, green: 45 / 255, blue: 45 / 255, alpha: 1)
         )
         // Why: Home's usage tracks read as background quantity, so they use the light
         // secondary surface rather than the stronger selection fill that marks active tabs
         // and selected controls.
         static let usageTrack = adaptive(
-            light: UIColor(red: 216 / 255, green: 216 / 255, blue: 216 / 255, alpha: 1),
+            light: UIColor(red: 237 / 255, green: 237 / 255, blue: 237 / 255, alpha: 1),
             dark: UIColor(red: 45 / 255, green: 45 / 255, blue: 45 / 255, alpha: 1)
         )
         // Why: intentionally quieter than the system separator, so rows read as grouped
         // without drawing a second border around every settings surface.
         static let divider = adaptive(
-            light: UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 0.08),
-            dark: UIColor(red: 240 / 255, green: 240 / 255, blue: 240 / 255, alpha: 0.08)
+            light: UIColor(red: 26 / 255, green: 28 / 255, blue: 31 / 255, alpha: 0.08),
+            dark: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 0.082)
         )
         // Why: Home's four metric tiles carry their own semantic colors, intentionally
         // different from the generic status palette so a tile is not read as a health state.
-        static let homeWorking = Color(red: 34 / 255, green: 197 / 255, blue: 94 / 255)
-        static let homeAttention = Color(red: 245 / 255, green: 158 / 255, blue: 11 / 255)
-        static let homeRecent = Color(red: 167 / 255, green: 139 / 255, blue: 250 / 255)
-        // Why: settings groups need #eaeaea on their content surface. Keep this explicit
-        // token separate so a darker system separator cannot leak into these rows.
+        static let homeWorking = adaptive(
+            light: UIColor(red: 0 / 255, green: 162 / 255, blue: 64 / 255, alpha: 1),
+            dark: UIColor(red: 64 / 255, green: 201 / 255, blue: 119 / 255, alpha: 1)
+        )
+        static let homeAttention = adaptive(
+            light: UIColor(red: 226 / 255, green: 85 / 255, blue: 7 / 255, alpha: 1),
+            dark: UIColor(red: 251 / 255, green: 106 / 255, blue: 34 / 255, alpha: 1)
+        )
+        static let homeRecent = adaptive(
+            light: UIColor(red: 146 / 255, green: 79 / 255, blue: 247 / 255, alpha: 1),
+            dark: UIColor(red: 173 / 255, green: 123 / 255, blue: 249 / 255, alpha: 1)
+        )
+        // Why: settings groups use the same neutral gray scale as ChatGPT's elevated surfaces.
+        // Keep the token separate so a darker system separator cannot leak into these rows.
         static let settingsDivider = adaptive(
-            light: UIColor(red: 234 / 255, green: 234 / 255, blue: 234 / 255, alpha: 1),
+            light: UIColor(red: 237 / 255, green: 237 / 255, blue: 237 / 255, alpha: 1),
             dark: UIColor(red: 48 / 255, green: 48 / 255, blue: 48 / 255, alpha: 1)
         )
         static let primary = adaptive(
@@ -61,12 +70,12 @@ enum Theme {
             dark: UIColor(red: 255 / 255, green: 91 / 255, blue: 3 / 255, alpha: 1)
         )
         static let statusNeutral = adaptive(
-            light: UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 0.4),
-            dark: UIColor(red: 240 / 255, green: 240 / 255, blue: 240 / 255, alpha: 0.4)
+            light: UIColor(red: 26 / 255, green: 28 / 255, blue: 31 / 255, alpha: 0.4),
+            dark: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 0.4)
         )
         static let rail = adaptive(
-            light: UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 0.3),
-            dark: UIColor(red: 240 / 255, green: 240 / 255, blue: 240 / 255, alpha: 0.3)
+            light: UIColor(red: 26 / 255, green: 28 / 255, blue: 31 / 255, alpha: 0.3),
+            dark: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 0.3)
         )
         static let gitAdded = adaptive(
             light: UIColor(red: 0 / 255, green: 112 / 255, blue: 65 / 255, alpha: 1),
@@ -158,16 +167,25 @@ enum Theme {
         static let reviewCodeDeletedEmphasis = diffCodeDeletedEmphasis
         static let reviewCodeAddedGutter = diffCodeAddedGutter
         static let reviewCodeDeletedGutter = diffCodeDeletedGutter
-        static let success = Color(red: 34 / 255, green: 197 / 255, blue: 94 / 255)
-        static let attention = Color(red: 239 / 255, green: 68 / 255, blue: 68 / 255)
-        static let unread = Color(red: 245 / 255, green: 158 / 255, blue: 11 / 255)
-        static let reviewOpen = Color(red: 34 / 255, green: 197 / 255, blue: 94 / 255)
-        static let reviewMerged = Color(red: 167 / 255, green: 139 / 255, blue: 250 / 255)
+        static let success = adaptive(
+            light: UIColor(red: 0 / 255, green: 162 / 255, blue: 64 / 255, alpha: 1),
+            dark: UIColor(red: 64 / 255, green: 201 / 255, blue: 119 / 255, alpha: 1)
+        )
+        static let attention = adaptive(
+            light: UIColor(red: 224 / 255, green: 46 / 255, blue: 42 / 255, alpha: 1),
+            dark: UIColor(red: 255 / 255, green: 103 / 255, blue: 100 / 255, alpha: 1)
+        )
+        static let unread = adaptive(
+            light: UIColor(red: 226 / 255, green: 85 / 255, blue: 7 / 255, alpha: 1),
+            dark: UIColor(red: 251 / 255, green: 106 / 255, blue: 34 / 255, alpha: 1)
+        )
+        static let reviewOpen = success
+        static let reviewMerged = homeRecent
         static let accent = selection
         static let canvas = background
         static let content = adaptive(
-            light: UIColor(red: 252 / 255, green: 252 / 255, blue: 252 / 255, alpha: 1),
-            dark: UIColor(red: 24 / 255, green: 24 / 255, blue: 24 / 255, alpha: 1)
+            light: UIColor(red: 243 / 255, green: 243 / 255, blue: 243 / 255, alpha: 1),
+            dark: UIColor(red: 37 / 255, green: 37 / 255, blue: 37 / 255, alpha: 1)
         )
 
         nonisolated private static func adaptive(light: UIColor, dark: UIColor) -> Color {

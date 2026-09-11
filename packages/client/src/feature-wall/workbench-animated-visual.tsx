@@ -61,7 +61,7 @@ function WorkbenchAnimation(props: {
   const splitRowActive = phase.kind === 'menu-active' || phase.kind === 'menu-click'
   const showRipple = phase.kind === 'right-click' || phase.kind === 'menu-click'
   const running = RUN_QUEUE[runIdx] ?? RUN_QUEUE[0]
-  const promptAccentClass = isTwoAgentsChecklist ? 'text-foreground' : 'text-amber-600'
+  const promptAccentClass = isTwoAgentsChecklist ? 'text-foreground' : 'text-[color:var(--warning)]'
 
   return (
     <div
@@ -71,8 +71,8 @@ function WorkbenchAnimation(props: {
       {/* Faux titlebar — three traffic lights, nothing else. */}
       <div className="border-border bg-muted/40 flex h-7 items-center gap-1.5 border-b px-3">
         <span className="size-2.5 bg-rose-400/70" />
-        <span className="size-2.5 bg-amber-400/70" />
-        <span className="size-2.5 bg-emerald-400/70" />
+        <span className="size-2.5 bg-[color-mix(in_srgb,var(--warning)_70%,transparent)]" />
+        <span className="size-2.5 bg-[color-mix(in_srgb,var(--success)_70%,transparent)]" />
       </div>
 
       {/* Why: onboarding previews can flip theme without remounting this visual;
