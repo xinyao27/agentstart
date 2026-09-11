@@ -292,10 +292,11 @@
 - Local `vp run agentstart-web#deploy` passed after Wrangler OAuth reauthorization. Cloudflare
   uploaded 12 assets and published Worker `agentstart-web` to `agentstart.ai` and
   `www.agentstart.ai`; version ID `7566bd1f-6a88-4a72-9470-5376e9d866a7`.
-- The automatically triggered GitHub Actions run `34607301627` passed checkout, Vite+ setup,
-  dependency installation, and typecheck, then failed because the repository secret
-  `CLOUDFLARE_API_TOKEN` is empty. A live `curl` check could not resolve the custom domain from
-  this environment, so DNS/edge reachability remains externally unverified.
+- The automatically triggered GitHub Actions run `34607301627` initially failed because the
+  repository secret `CLOUDFLARE_API_TOKEN` was empty. After the secret was added, rerun job
+  `103291638967` passed checkout, Vite+ setup, dependency installation, typecheck, and Cloudflare
+  deployment. A live `curl` check could not resolve the custom domain from this environment, so
+  DNS/edge reachability remains externally unverified here.
 
 
 ## ChatGPT theme palette alignment — 2026-09-11
