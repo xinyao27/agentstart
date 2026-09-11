@@ -244,8 +244,20 @@
 
 ## Publish AgentStart 0.1.0 — 2026-09-11
 
-- [ ] Push the reviewed release commit so `main` exactly matches `origin/main`.
-- [ ] Run the release conductor preflight and verify repository/workflow credentials.
+- [x] Push the reviewed release commit so `main` exactly matches `origin/main`.
+- [x] Run the release conductor preflight and verify repository/workflow credentials.
 - [ ] Publish the enabled release targets without creating tags until preflight passes.
 - [ ] Monitor daemon, extension, and mobile workflows and record public artifact status.
-- [ ] Record blockers or completion evidence without retaining temporary validation files.
+- [x] Record blockers or completion evidence without retaining temporary validation files.
+
+## 0.1.0 release review — 2026-09-11
+
+- `main` is clean and exactly matches `origin/main` at `144b66753`; the release notes are present
+  at `docs/releases/0.1.0.md`.
+- The release conductor stopped before tag creation because the repository is missing
+  `POSTHOG_WRITE_KEY`, `NPM_TOKEN`, and the four `chrome-web-store` environment secrets:
+  `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_PUBLISHER_ID`, and `CWS_REFRESH_TOKEN`.
+- No release tags were created and no daemon, extension, or mobile workflows were started.
+- `bun upgrade` completed successfully and upgraded the local tool to Bun `1.4.2`. The release
+  conductor currently pins Bun `1.4.0` to match CI, so publishing must use that pinned toolchain
+  after the missing credentials are configured.

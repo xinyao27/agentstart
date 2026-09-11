@@ -15,3 +15,6 @@
 - Keep an outer bootstrap rejection boundary around extension startup; any error after the
   connecting surface is replaced must still render actionable connection guidance instead of
   rejecting into a blank workspace root.
+- When a release conductor pins an exact toolchain, run the user's requested upgrade command but
+  preserve the release evidence and call out when the newly installed version is newer than the
+  release gate; do not silently weaken the gate or claim the release completed.
