@@ -212,6 +212,7 @@ set_environment_secret() {
   fi
   SKIPPED+=("GitHub environment secret $CHROME_ENVIRONMENT/$name")
   warn "could not set $CHROME_ENVIRONMENT/$name"
+  return 1
 }
 
 banner "AgentStart release setup"
@@ -433,6 +434,9 @@ note "Fastlane rejects any APP_STORE_APP_ID other than iOS AgentStart record $IO
 pause "Continue to Chrome Web Store OAuth?"
 
 stage "Chrome Web Store OAuth client"
+# Why: OAuth projects in Testing only authorize accounts explicitly listed as test users.
+ask CWS_OWNER_EMAIL "Enter the Google account email that owns the Chrome Web Store item:"
+require_nonempty CWS_OWNER_EMAIL "$CWS_OWNER_EMAIL"
 if has_environment_secret CWS_CLIENT_ID && has_environment_secret CWS_CLIENT_SECRET; then
   say "Chrome OAuth client secrets already exist; leaving them unchanged."
 else
@@ -440,7 +444,8 @@ else
   open_url "https://console.cloud.google.com/apis/library/chromewebstore.googleapis.com"
   step "Select the Google Cloud project that owns the publishing integration, then enable the API."
   step "Open APIs & Services → OAuth consent screen, choose External, and complete its required app details."
-  step "Add the Web Store owner email as a test user."
+  step "In Audience, add $CWS_OWNER_EMAIL under Test users and save before authorizing."
+  step "If the app is in Testing, signing in with $CWS_OWNER_EMAIL is not enough unless it is listed as a test user."
   step "Set publishing status to In production before minting the CI token; Testing tokens expire after seven days."
   step "Open Credentials → Create Credentials → OAuth client ID → Web application."
   step "Add https://developers.google.com/oauthplayground as an authorized redirect URI."
@@ -461,7 +466,9 @@ else
   open_url "https://developers.google.com/oauthplayground"
   step "Open settings, enable Use your own OAuth credentials, and enter the client from the previous stage."
   step "Use scope https://www.googleapis.com/auth/chromewebstore and click Authorize APIs."
-  step "Sign in as the Web Store item owner, then click Exchange authorization code for tokens."
+  step "Sign in as $CWS_OWNER_EMAIL, the same account listed as a test user and authorized for the Web Store item."
+  step "If more than one Google account is signed in, explicitly choose $CWS_OWNER_EMAIL."
+  step "Then click Exchange authorization code for tokens."
   step "Copy the refresh token, not the short-lived access token."
   ask_secret CWS_REFRESH_TOKEN "Paste the refresh token:"
   open_url "https://chrome.google.com/webstore/devconsole"
