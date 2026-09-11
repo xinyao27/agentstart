@@ -272,7 +272,7 @@ if [[ "$branch_policy_state" == "custom" ]]; then
     warn "$CHROME_ENVIRONMENT has additional deployment policies; remove them manually so only the extension-v* tag policy remains."
   fi
 fi
-repository_visibility=$(gh repo view --repo "$REPOSITORY" --json visibility --jq '.visibility')
+repository_visibility=$(gh repo view "$REPOSITORY" --json visibility --jq '.visibility')
 if [[ "$repository_visibility" == "PUBLIC" ]]; then
   note "Required reviewers are available for this public repository, but no reviewer is selected automatically."
 else

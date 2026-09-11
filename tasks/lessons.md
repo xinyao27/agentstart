@@ -21,3 +21,6 @@
 - For Google OAuth projects in Testing, explicitly verify that the exact Chrome Web Store owner
   account is listed under Test users before starting OAuth Playground; telling the user to sign in
   with the owner account alone does not grant a Testing-project authorization.
+- Check subcommand-specific GitHub CLI syntax against the installed binary; `gh repo view` takes
+  the repository as a positional argument here, even though other `gh` subcommands accept
+  `--repo`.
