@@ -135,3 +135,35 @@
   conflict toast; the existing terminal tabs remained usable.
 - Full `pnpm check` passed after the merge change, and the dev daemon/WXT session was stopped
   cleanly. The lockfile-only pnpm runner mutation was restored before review.
+
+## Manual core E2E regression — 2026-09-11
+
+- [x] Exercise the Chrome bootstrap, project/worktree/session navigation, terminal I/O, and
+      terminal layout persistence against a fresh local daemon.
+- [x] Exercise Chrome reload/reconnect and confirm the session remains usable without a save
+      conflict or renderer error.
+- [x] Re-run the booted iOS Simulator core navigation and terminal/session path.
+- [x] Record exact evidence, cleanup, and any environment-dependent boundaries.
+
+## Manual core E2E review — 2026-09-11
+
+- Chrome: a fresh `pnpm dev` daemon/WXT session completed authenticated bootstrap after the
+  development extension was reloaded, then rendered the existing project, main worktree, and two
+  terminal sessions. Terminal input/output markers `E2E_CORE_OK` and `SPLIT_OK` were visible in
+  the live renderer. Creating a right split produced two panes; the temporary pane was closed;
+  the two session tabs remained usable and switchable.
+- Chrome reload/reconnect: the browser reload control restored the project/worktree/session URL,
+  both terminal tabs, and the `E2E_CORE_OK` scrollback without a save-conflict toast or renderer
+  error. Activity navigation rendered the summary and contribution history, and selecting the
+  session tab returned to the terminal surface.
+- iOS: the installed `com.xinyao27.agentstart.mobile` app launched on the booted iPhone 17
+  Simulator (`74387C6C-BD19-45E6-892B-AE5BA371071B`). Switching to a stale terminal tab surfaced
+  the expected recoverable "Couldn't start terminal" state; pressing Retry reconnected the host
+  session, and switching back to the existing `E2E terminal` rendered its prompt and scrollback.
+  The Simulator's virtual keyboard did not accept injected text in this run, so a new iOS command
+  marker was not claimed; daemon mobile traces still recorded active terminal streams and session
+  list calls.
+- Cleanup: the dev daemon/WXT process exited cleanly, the lockfile-only pnpm runner mutation was
+  restored, and no temporary tests, smoke checks, E2E harnesses, or validation scripts were kept.
+  WSL/SSH adapters, signing, store uploads, notarization, external credentials, and production
+  publishing remain outside this machine-only run.
