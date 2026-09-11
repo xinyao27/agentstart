@@ -8,11 +8,12 @@ import { Shell } from './shell'
 import { faqGraph, productGraph } from './structured-data'
 import { FaqPage } from './ui/faq/page'
 import { Home } from './ui/home'
+import { PrivacyPage, TermsPage } from './ui/legal/page'
 
 /**
  * Why: code-based routes rather than the file-based plugin. File routes buy their
  * keep at the point there are enough of them to make the boilerplate hurt; today
- * there are two, and the plugin's generated route tree is a build artifact checked
+ * there are four, and the plugin's generated route tree is a build artifact checked
  * into source that then has to be kept current. Swapping later is contained here.
  *
  * Each route owns its own head. `head().meta` carries the title, description and the
@@ -90,6 +91,22 @@ const faqMeta: RouteMeta = {
     'What an AI agent workspace is, which of the 35 coding agents AgentStart runs, why each task gets its own git worktree, how remote hosts work, and what the mobile app is for.'
 }
 
+const privacyMeta: RouteMeta = {
+  path: '/privacy',
+  file: 'privacy.html',
+  title: 'AgentStart privacy policy',
+  description:
+    'How AgentStart handles browser context, coding workspace data, telemetry, support reports, permissions, storage, and deletion.'
+}
+
+const termsMeta: RouteMeta = {
+  path: '/terms',
+  file: 'terms.html',
+  title: 'AgentStart terms of use',
+  description:
+    'The terms for using the AgentStart website, Chrome extension, Rust daemon, iOS companion, and open-source materials.'
+}
+
 const homeRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
@@ -110,10 +127,30 @@ const faqRoute = createRoute({
   })
 })
 
-const routeTree = rootRoute.addChildren([homeRoute, faqRoute])
+const privacyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/privacy',
+  component: PrivacyPage,
+  head: () => ({
+    meta: documentMeta(privacyMeta),
+    links: documentLinks(privacyMeta)
+  })
+})
+
+const termsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/terms',
+  component: TermsPage,
+  head: () => ({
+    meta: documentMeta(termsMeta),
+    links: documentLinks(termsMeta)
+  })
+})
+
+const routeTree = rootRoute.addChildren([homeRoute, faqRoute, privacyRoute, termsRoute])
 
 /** Why: the prerender step needs the list without constructing a router first. */
-export const routeMetas: readonly RouteMeta[] = [homeMeta, faqMeta]
+export const routeMetas: readonly RouteMeta[] = [homeMeta, faqMeta, privacyMeta, termsMeta]
 
 export function createAppRouter(history: RouterHistory): ReturnType<typeof createRouter> {
   return createRouter({ routeTree, history })

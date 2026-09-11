@@ -11,9 +11,9 @@ const GITHUB_REPOSITORY_URL = 'https://github.com/xinyao27/agentstart'
 const GITHUB_RELEASES_URL = `${GITHUB_REPOSITORY_URL}/releases`
 const REDIRECTED_HOSTNAMES = new Set([`www.${CANONICAL_HOSTNAME}`])
 
-// Why: old installations and links still reach /download, /privacy, and /docs/*.
-// Keeping redirects avoids soft 404s while the landing site stays intentionally
-// small.
+// Why: old installations and links still reach /download and /docs/*. Keeping
+// those redirects avoids soft 404s while the landing site stays intentionally
+// small; /privacy is now a first-class page and must fall through to assets.
 //
 // Every one is 302, never 301: a real /download page and real documentation are
 // both still on the table, and a permanent redirect is cached by browsers and
@@ -22,14 +22,9 @@ const REDIRECTED_HOSTNAMES = new Set([`www.${CANONICAL_HOSTNAME}`])
 const TEMPORARY_REDIRECT = 302
 const DOWNLOAD_PATH = '/download'
 const DOCUMENTATION_PREFIX = '/docs'
-const DOCUMENTATION_PATHS = new Set(['/privacy'])
 
 function isDocumentationPath(pathname: string): boolean {
-  return (
-    DOCUMENTATION_PATHS.has(pathname) ||
-    pathname === DOCUMENTATION_PREFIX ||
-    pathname.startsWith(`${DOCUMENTATION_PREFIX}/`)
-  )
+  return pathname === DOCUMENTATION_PREFIX || pathname.startsWith(`${DOCUMENTATION_PREFIX}/`)
 }
 
 export default {

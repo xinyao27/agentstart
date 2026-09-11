@@ -9,6 +9,11 @@ const footerLinks = [
   { label: 'Issues', href: siteLinks.issues }
 ]
 
+const legalLinks = [
+  { label: 'Privacy', to: '/privacy' },
+  { label: 'Terms', to: '/terms' }
+] as const
+
 const linkClasses =
   'decoration-copy/30 hover:text-label hover:decoration-label underline underline-offset-[3px] transition-colors'
 
@@ -48,6 +53,11 @@ export function Layout(): React.JSX.Element {
               >
                 {link.label}
               </a>
+            ))}
+            {legalLinks.map((link) => (
+              <Link key={link.label} to={link.to} className={linkClasses}>
+                {link.label}
+              </Link>
             ))}
             <span className="ml-auto">
               <ThemeToggle />

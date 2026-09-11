@@ -450,3 +450,21 @@
 - Reconciled the blocks against `apps/extension/.output/chrome-mv3/manifest.json` and the extension's
   Chrome API call sites. The dashboard still owns the final Limited Use checkboxes and review
   submission; no permissions were changed in this preparation pass.
+
+## Public legal pages — 2026-09-11
+
+- [x] Add clear, implementation-backed Privacy and Terms pages under `/privacy` and `/terms`.
+- [x] Add legal navigation, per-page metadata, prerendered outputs, and sitemap entries.
+- [x] Remove the legacy `/privacy` redirect while preserving `/docs/*` redirects.
+- [x] Run website typecheck, build, deployment dry-run, and diff checks.
+
+## Public legal pages review — 2026-09-11
+
+- Added English `/privacy` and `/terms` pages covering the actual daemon, extension, iOS, browser
+  permissions, telemetry, support reports, third-party services, user responsibilities, MIT license,
+  acceptable use, warranty, liability, retention, deletion, and contact paths.
+- Footer links now reach both legal pages. Each page owns its title, description, canonical URL, and
+  prerendered output. `sitemap.xml` includes both routes.
+- Worker handling no longer redirects `/privacy`; `/docs/*` remains a legacy redirect to GitHub.
+- `vp run agentstart-web#typecheck`, `vp run agentstart-web#build`,
+  `vp run agentstart-web#deploy:dry-run`, output metadata checks, and `git diff --check` passed.
