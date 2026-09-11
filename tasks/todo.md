@@ -241,3 +241,11 @@
 - Manual browser light/dark review from the preceding primary-color pass remains the UI evidence
   boundary; the repository gate and production extension/mobile builds verify the current source,
   but do not replace full user-flow or external-host validation.
+
+## Publish AgentStart 0.1.0 — 2026-09-11
+
+- [ ] Push the reviewed release commit so `main` exactly matches `origin/main`.
+- [ ] Run the release conductor preflight and verify repository/workflow credentials.
+- [ ] Publish the enabled release targets without creating tags until preflight passes.
+- [ ] Monitor daemon, extension, and mobile workflows and record public artifact status.
+- [ ] Record blockers or completion evidence without retaining temporary validation files.
