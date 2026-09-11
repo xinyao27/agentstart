@@ -165,16 +165,14 @@ finish() {
 # Replace the example below. Set TOTAL_STAGES to match the stages you write.
 # ──────────────────────────────────────────────────────────────────────────
 
-TOTAL_STAGES=6
+TOTAL_STAGES=4
 
 REPOSITORY="xinyao27/agentstart"
-CHROME_ENVIRONMENT="chrome-web-store"
 EXPECTED_APPLE_TEAM_ID="8H6Q2YA365"
 IOS_APP_STORE_APP_ID="6810343597"
 IOS_BUNDLE_ID="com.xinyao27.agentstart.mobile"
 MACOS_BUNDLE_ID="com.xinyao27.agentstart.macos"
 MACOS_APP_STORE_APP_ID="6810480610"
-EXTENSION_ID="mfgmfiabfncmdekmikepemddejoeihbf"
 
 require_nonempty() {
   local name="$1" value="$2"
@@ -197,27 +195,10 @@ has_repo_secret() {
     grep -Fxq "$1"
 }
 
-has_environment_secret() {
-  gh secret list --repo "$REPOSITORY" --env "$CHROME_ENVIRONMENT" \
-    --json name --jq '.[].name' 2>/dev/null | grep -Fxq "$1"
-}
-
-set_environment_secret() {
-  local name="$1" value="$2"
-  if printf '%s' "$value" |
-    gh secret set "$name" --repo "$REPOSITORY" --env "$CHROME_ENVIRONMENT" >/dev/null 2>&1; then
-    WRITTEN_SECRET+=("$CHROME_ENVIRONMENT/$name")
-    printf '  %s✓ set%s GitHub environment secret %s\n' "$GREEN" "$RESET" "$name"
-    return
-  fi
-  SKIPPED+=("GitHub environment secret $CHROME_ENVIRONMENT/$name")
-  warn "could not set $CHROME_ENVIRONMENT/$name"
-}
-
 banner "AgentStart release setup"
 
-stage "GitHub release environment"
-say "We'll verify GitHub CLI access and restrict Chrome publishing to extension-v* tags."
+stage "GitHub release access"
+say "We'll verify GitHub CLI access for release credentials."
 if ! command -v gh >/dev/null 2>&1 || ! gh auth status >/dev/null 2>&1; then
   warn "GitHub CLI is not authenticated. Run: gh auth login"
   exit 1
@@ -227,57 +208,6 @@ if [[ "$resolved_repo" != "$REPOSITORY" ]]; then
   warn "This directory resolves to $resolved_repo, expected $REPOSITORY."
   exit 1
 fi
-environment_endpoint="repos/$REPOSITORY/environments/$CHROME_ENVIRONMENT"
-environment_json=$(gh api "$environment_endpoint" 2>/dev/null || true)
-if [[ -z "$environment_json" ]]; then
-  gh api --method PUT "$environment_endpoint" \
-    -F 'deployment_branch_policy[protected_branches]=false' \
-    -F 'deployment_branch_policy[custom_branch_policies]=true' >/dev/null
-else
-  branch_policy_state=$(gh api "$environment_endpoint" --jq \
-    'if .deployment_branch_policy == null then "none" elif .deployment_branch_policy.custom_branch_policies == true and .deployment_branch_policy.protected_branches == false then "custom" else "other" end')
-  if [[ "$branch_policy_state" == "none" ]]; then
-    protection_rule_count=$(gh api "$environment_endpoint" --jq '.protection_rules | length')
-    if [[ "$protection_rule_count" == 0 ]]; then
-      gh api --method PUT "$environment_endpoint" \
-        -F 'deployment_branch_policy[protected_branches]=false' \
-        -F 'deployment_branch_policy[custom_branch_policies]=true' >/dev/null
-    else
-      SKIPPED+=("deployment tag policy for $CHROME_ENVIRONMENT")
-      warn "$CHROME_ENVIRONMENT already has protection rules; enable custom deployment branches and tags in GitHub Settings without replacing them."
-    fi
-  elif [[ "$branch_policy_state" != "custom" ]]; then
-    SKIPPED+=("deployment tag policy for $CHROME_ENVIRONMENT")
-    warn "$CHROME_ENVIRONMENT uses a different deployment policy; reconcile it manually in GitHub Settings."
-  fi
-fi
-
-branch_policy_state=$(gh api "$environment_endpoint" --jq \
-  'if .deployment_branch_policy.custom_branch_policies == true and .deployment_branch_policy.protected_branches == false then "custom" else "other" end')
-if [[ "$branch_policy_state" == "custom" ]]; then
-  policy_endpoint="$environment_endpoint/deployment-branch-policies"
-  policy_count=$(gh api "$policy_endpoint" --jq '.branch_policies | length')
-  matching_policy_count=$(gh api "$policy_endpoint" --jq \
-    '[.branch_policies[] | select(.name == "extension-v*" and .type == "tag")] | length')
-  if [[ "$policy_count" == 0 ]]; then
-    gh api --method POST "$policy_endpoint" -f name='extension-v*' -f type=tag >/dev/null
-    policy_count=1
-    matching_policy_count=1
-  fi
-  if [[ "$policy_count" == 1 && "$matching_policy_count" == 1 ]]; then
-    say "GitHub environment $CHROME_ENVIRONMENT accepts only extension-v* tags."
-  else
-    SKIPPED+=("exclusive extension-v* tag policy for $CHROME_ENVIRONMENT")
-    warn "$CHROME_ENVIRONMENT has additional deployment policies; remove them manually so only the extension-v* tag policy remains."
-  fi
-fi
-repository_visibility=$(gh repo view --repo "$REPOSITORY" --json visibility --jq '.visibility')
-if [[ "$repository_visibility" == "PUBLIC" ]]; then
-  note "Required reviewers are available for this public repository, but no reviewer is selected automatically."
-else
-  note "Required-reviewer availability for this $repository_visibility repository depends on its GitHub plan."
-fi
-note "Add a required reviewer in GitHub Settings → Environments for a human approval gate; the tag policy alone is not reviewer approval."
 pause "Continue to registry credentials?"
 
 stage "npm first publication"
@@ -430,50 +360,4 @@ else
   fi
 fi
 note "Fastlane rejects any APP_STORE_APP_ID other than iOS AgentStart record $IOS_APP_STORE_APP_ID."
-pause "Continue to Chrome Web Store OAuth?"
-
-stage "Chrome Web Store OAuth client"
-if has_environment_secret CWS_CLIENT_ID && has_environment_secret CWS_CLIENT_SECRET; then
-  say "Chrome OAuth client secrets already exist; leaving them unchanged."
-else
-  say "We'll enable Chrome Web Store API v2 and create the OAuth client used by GitHub Actions."
-  open_url "https://console.cloud.google.com/apis/library/chromewebstore.googleapis.com"
-  step "Select the Google Cloud project that owns the publishing integration, then enable the API."
-  step "Open APIs & Services → OAuth consent screen, choose External, and complete its required app details."
-  step "Add the Web Store owner email as a test user."
-  step "Set publishing status to In production before minting the CI token; Testing tokens expire after seven days."
-  step "Open Credentials → Create Credentials → OAuth client ID → Web application."
-  step "Add https://developers.google.com/oauthplayground as an authorized redirect URI."
-  step "Create the client, then copy its client ID and client secret."
-  ask CWS_CLIENT_ID "Paste the OAuth client ID:"
-  ask_secret CWS_CLIENT_SECRET "Paste the OAuth client secret:"
-  require_nonempty CWS_CLIENT_ID "$CWS_CLIENT_ID"
-  require_nonempty CWS_CLIENT_SECRET "$CWS_CLIENT_SECRET"
-  set_environment_secret CWS_CLIENT_ID "$CWS_CLIENT_ID"
-  set_environment_secret CWS_CLIENT_SECRET "$CWS_CLIENT_SECRET"
-fi
-pause "Continue to the Web Store refresh token?"
-
-stage "Chrome publisher and refresh token"
-if has_environment_secret CWS_PUBLISHER_ID && has_environment_secret CWS_REFRESH_TOKEN; then
-  say "Chrome publisher and refresh token secrets already exist; leaving them unchanged."
-else
-  open_url "https://developers.google.com/oauthplayground"
-  step "Open settings, enable Use your own OAuth credentials, and enter the client from the previous stage."
-  step "Use scope https://www.googleapis.com/auth/chromewebstore and click Authorize APIs."
-  step "Sign in as the Web Store item owner, then click Exchange authorization code for tokens."
-  step "Copy the refresh token, not the short-lived access token."
-  ask_secret CWS_REFRESH_TOKEN "Paste the refresh token:"
-  open_url "https://chrome.google.com/webstore/devconsole"
-  step "Switch to the publisher that owns item $EXTENSION_ID and confirm the item already exists."
-  step "Complete its Store listing and Privacy tabs before the first API submission."
-  step "If you changed visibility, publish that visibility once in the dashboard before using the API."
-  step "Open Publisher → Settings."
-  step "Copy the Publisher ID shown on that page."
-  ask CWS_PUBLISHER_ID "Paste the publisher ID:"
-  require_nonempty CWS_REFRESH_TOKEN "$CWS_REFRESH_TOKEN"
-  require_nonempty CWS_PUBLISHER_ID "$CWS_PUBLISHER_ID"
-  set_environment_secret CWS_REFRESH_TOKEN "$CWS_REFRESH_TOKEN"
-  set_environment_secret CWS_PUBLISHER_ID "$CWS_PUBLISHER_ID"
-fi
 finish
