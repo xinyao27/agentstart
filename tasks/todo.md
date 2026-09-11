@@ -80,3 +80,23 @@
 - Not exercised here: WSL/SSH host adapters, signing, store uploads, notarization, external
   credentials, and production publishing. No tests, smoke checks, E2E harnesses, or validation
   scripts were retained.
+
+## UI polish: rounded surfaces
+
+- [x] Inspect the reported Activity summary surface against the browser style guide and identify
+      the owning feature boundary.
+- [x] Apply component-appropriate corner radii to the summary surface and any directly related
+      square inline panels.
+- [x] Run formatting, typechecking, lint, and a visual browser sanity check at the affected page.
+- [x] Record the review result and capture the correction lesson.
+
+## UI polish review — 2026-09-11
+
+- Activity summary now uses the same `rounded-xl` outer geometry as the shared `Card` primitive;
+  `overflow-hidden` clips the four metric cells to that boundary while preserving the one-pixel
+  separators.
+- Related home inline empty states use `rounded-lg`, and the provider hover tooltip uses
+  `rounded-md`. Edge-to-edge project rows and chart/table dividers remain square by design.
+- `packages/client` formatting, typechecking, and lint passed. A live Chrome Activity page loaded
+  through the dev extension showed the summary strip with visible rounded corners and the existing
+  cards unchanged. The dev daemon/WXT session was stopped cleanly afterward.

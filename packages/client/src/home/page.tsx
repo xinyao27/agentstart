@@ -92,7 +92,7 @@ export default function HomePage(): React.JSX.Element {
           {stats === null ? <LoadingIndicator className="mt-1 size-4" /> : null}
         </header>
 
-        <div className="border-border bg-border grid gap-px border sm:grid-cols-2 lg:grid-cols-4">
+        <div className="border-border bg-border grid gap-px overflow-hidden rounded-xl border sm:grid-cols-2 lg:grid-cols-4">
           <SummaryMetric
             label={translate(
               'auto.components.home.activitySummary.agentsSpawned',

@@ -111,7 +111,7 @@ function ProjectUsage({ metric, projects }: ProjectUsageProps): React.JSX.Elemen
             ))}
           </ScrollArea>
         ) : (
-          <div className="border-border text-muted-foreground border border-dashed px-4 py-8 text-center text-sm">
+          <div className="border-border text-muted-foreground rounded-lg border border-dashed px-4 py-8 text-center text-sm">
             {projects.length === 0
               ? translate(
                   'auto.components.home.projectUsage.empty',

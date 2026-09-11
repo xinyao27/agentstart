@@ -83,7 +83,7 @@ export function ModelUsageChart({ metric, models }: ModelUsageChartProps): React
                   )
             }
           >
-            <span className="border-border text-muted-foreground block w-full border border-dashed px-4 py-8 text-center text-sm">
+            <span className="border-border text-muted-foreground block w-full rounded-lg border border-dashed px-4 py-8 text-center text-sm">
               {metric === 'tokens'
                 ? translate(
                     'auto.components.home.modelChart.tokenUnavailable',

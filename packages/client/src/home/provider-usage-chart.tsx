@@ -178,7 +178,7 @@ function ProviderTooltip({
   const tooltipLeft = Math.min(88, Math.max(12, left))
   return (
     <span
-      className="border-border bg-popover text-popover-foreground pointer-events-none absolute top-2 z-10 min-w-36 -translate-x-1/2 border px-2 py-1.5"
+      className="border-border bg-popover text-popover-foreground pointer-events-none absolute top-2 z-10 min-w-36 -translate-x-1/2 rounded-md border px-2 py-1.5"
       style={{ left: `${tooltipLeft}%` }}
     >
       <span className="text-muted-foreground block text-[10px]">{point.label}</span>
