@@ -29,10 +29,9 @@ struct HomeDashboardView: View {
                 ) {
                     HomeMetricTileView(
                         glyph: .stack,
-                        // Why: the Workspace tile uses the adaptive brand token
-                        // (#2778c1 / #599ce7). A light-only duplicate of the same value used to
-                        // live here and went stale in dark mode; `Theme.Colors.primary` is the
-                        // one adaptive token for this hue.
+                        // Why: the Workspace tile uses the shared adaptive primary token
+                        // (#FF5B03). Keeping the token here preserves the same brand color in
+                        // light and dark mode without a feature-local duplicate.
                         color: Theme.Colors.primary,
                         title: "Workspace",
                         value: snapshot.workspaceCount,

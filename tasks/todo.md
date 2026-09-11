@@ -187,3 +187,29 @@
 - Extension typecheck/lint and full `pnpm check` passed. The extension dev server was stopped,
   the lockfile-only pnpm runner mutation was restored, and no temporary test or validation files
   were retained.
+
+## Default primary color — 2026-09-11
+
+- [x] Confirm the browser and mobile primary token owners and the derived roles that should follow
+      the new default color.
+- [x] Change the default primary brand color to `#FF5B03` without changing domain-specific color
+      semantics or user-selected theme overrides.
+- [x] Run formatting, typechecking, lint, and the relevant build checks.
+- [x] Manually inspect the browser primary action in light and dark mode, then record review
+      evidence and cleanup.
+
+## Default primary color review — 2026-09-11
+
+- Browser `--brand`, `--primary`, sidebar primary, and terminal locate roles now use `#FF5B03` by
+  default in both themes. Primary foregrounds use the existing near-black text role so the orange
+  action remains readable; user-selected workspace accents still override `--brand`.
+- Mobile `Theme.Colors.primary` uses the same `#FF5B03` value in light and dark appearances, and
+  the Home tile comment now documents the shared token rather than the old blue pair.
+- `vp fmt`, client/extension typecheck and lint, full `pnpm check`, mobile Swift-format lint, and
+  the iOS Simulator Debug build all passed. The temporary pnpm runner lockfile mutation was
+  restored before review.
+- A fresh Chrome development session loaded Activity and Appearance settings in light mode, then
+  switched to dark mode and back to the original system theme. Both themes rendered without a
+  blank page or renderer error; the settings card visibly followed the new orange primary border.
+- The development daemon/WXT session was stopped cleanly. No tests, smoke checks, E2E harnesses, or
+  validation scripts were added or retained.

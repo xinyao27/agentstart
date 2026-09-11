@@ -118,11 +118,11 @@
   --popover-base: #fcfcfc;
   --popover: var(--popover-base);
   --popover-foreground: #141414;
-  /* Why: single source of truth for the brand hue — every primary/ring role in
-     the light theme derives from it, while dark mode provides its brighter counterpart. */
-  --brand: #2778c1;
+  /* Why: single source of truth for the default brand hue — every primary role
+     in both themes derives from it while custom workspace accents can still override it. */
+  --brand: #ff5b03;
   --primary: var(--brand);
-  --primary-foreground: #fcfcfc;
+  --primary-foreground: #141414;
   --secondary: color-mix(in srgb, var(--foreground) 8%, transparent);
   --secondary-foreground: #141414;
   --muted: color-mix(in srgb, var(--foreground) 6%, transparent);
@@ -146,7 +146,7 @@
   --sidebar: var(--sidebar-base);
   --sidebar-foreground: #141414;
   --sidebar-primary: var(--brand);
-  --sidebar-primary-foreground: #fcfcfc;
+  --sidebar-primary-foreground: #141414;
   --sidebar-accent: color-mix(in srgb, var(--sidebar-foreground) 14%, transparent);
   --sidebar-accent-foreground: #141414;
   --sidebar-border: color-mix(in srgb, var(--sidebar-foreground) 8%, transparent);
@@ -193,9 +193,9 @@
   --popover-base: #181818;
   --popover: var(--popover-base);
   --popover-foreground: #f0f0f0;
-  --brand: #599ce7;
+  --brand: #ff5b03;
   --primary: var(--brand);
-  --primary-foreground: #191c22;
+  --primary-foreground: #141414;
   --secondary: color-mix(in srgb, var(--foreground) 8%, transparent);
   --secondary-foreground: #f0f0f0;
   --muted: color-mix(in srgb, var(--foreground) 6%, transparent);
@@ -218,7 +218,7 @@
   --sidebar: var(--sidebar-base);
   --sidebar-foreground: #f0f0f0;
   --sidebar-primary: var(--brand);
-  --sidebar-primary-foreground: #191c22;
+  --sidebar-primary-foreground: #141414;
   --sidebar-accent: color-mix(in srgb, var(--sidebar-foreground) 14%, transparent);
   --sidebar-accent-foreground: #f0f0f0;
   --sidebar-border: color-mix(in srgb, var(--sidebar-foreground) 8%, transparent);

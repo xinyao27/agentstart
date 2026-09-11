@@ -57,8 +57,8 @@ enum Theme {
             dark: UIColor(red: 48 / 255, green: 48 / 255, blue: 48 / 255, alpha: 1)
         )
         static let primary = adaptive(
-            light: UIColor(red: 39 / 255, green: 120 / 255, blue: 193 / 255, alpha: 1),
-            dark: UIColor(red: 89 / 255, green: 156 / 255, blue: 231 / 255, alpha: 1)
+            light: UIColor(red: 255 / 255, green: 91 / 255, blue: 3 / 255, alpha: 1),
+            dark: UIColor(red: 255 / 255, green: 91 / 255, blue: 3 / 255, alpha: 1)
         )
         static let statusNeutral = adaptive(
             light: UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 0.4),
