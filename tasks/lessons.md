@@ -18,3 +18,6 @@
 - When a release conductor pins an exact toolchain, run the user's requested upgrade command but
   preserve the release evidence and call out when the newly installed version is newer than the
   release gate; do not silently weaken the gate or claim the release completed.
+- For Google OAuth projects in Testing, explicitly verify that the exact Chrome Web Store owner
+  account is listed under Test users before starting OAuth Playground; telling the user to sign in
+  with the owner account alone does not grant a Testing-project authorization.
