@@ -167,3 +167,23 @@
   restored, and no temporary tests, smoke checks, E2E harnesses, or validation scripts were kept.
   WSL/SSH adapters, signing, store uploads, notarization, external credentials, and production
   publishing remain outside this machine-only run.
+
+## Extension connection failure surface — 2026-09-11
+
+- [x] Trace the browser bootstrap rejection paths that can leave the workspace root blank.
+- [x] Ensure unexpected bootstrap failures render the existing connection guidance and recovery
+      actions instead of rejecting into a blank page.
+- [x] Re-run the client checks and a real Chrome disconnected-daemon exercise.
+- [x] Record the exact failure-state evidence and cleanup.
+
+## Extension connection failure review — 2026-09-11
+
+- `mountExtensionSurface` now contains a final bootstrap rejection boundary. Unexpected errors
+  render the existing unavailable surface with retry, connection settings, loopback guidance, and
+  diagnostic details; Retry safely unmounts that fallback before attempting a fresh mount.
+- A real Chrome development extension with the local daemon unavailable showed `AgentStart daemon
+  is not available`, the CLI install command, `Retry now`, `Connection settings`, automatic retry
+  text, and diagnostic details instead of a blank page.
+- Extension typecheck/lint and full `pnpm check` passed. The extension dev server was stopped,
+  the lockfile-only pnpm runner mutation was restored, and no temporary test or validation files
+  were retained.

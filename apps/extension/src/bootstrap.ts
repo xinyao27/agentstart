@@ -18,9 +18,19 @@ import {
 import { requestRuntimeBootstrap } from './runtime/bootstrap'
 import { createExtensionRuntimeHostFactory } from './runtime/client'
 
-type ConnectionStage = 'client-mount' | 'health-check' | 'native-bootstrap'
+type ConnectionStage = 'bootstrap' | 'client-mount' | 'health-check' | 'native-bootstrap'
 
 export async function mountExtensionSurface(surface: 'side-panel' | 'workspace'): Promise<void> {
+  // Why: startup can fail after the connecting surface is unmounted. Always replace that gap with
+  // actionable connection guidance instead of allowing an unhandled rejection to leave a blank root.
+  try {
+    await mountExtensionSurfaceInternal(surface)
+  } catch (error: unknown) {
+    mountUnexpectedFailure(surface, error)
+  }
+}
+
+async function mountExtensionSurfaceInternal(surface: 'side-panel' | 'workspace'): Promise<void> {
   Reflect.set(globalThis, '__AGENTSTART_EXTENSION_SURFACE__', surface)
   const browserWindowIdPromise = chrome.windows.getCurrent().then(
     (browserWindow) => browserWindow.id ?? null,
@@ -147,6 +157,31 @@ export async function mountExtensionSurface(surface: 'side-panel' | 'workspace')
   if (failure && unmountSurface !== null) {
     mountFailure(failure)
   }
+}
+
+function mountUnexpectedFailure(surface: 'side-panel' | 'workspace', error: unknown): void {
+  const reason = classifyUnavailableError(error)
+  let unmountFailure: (() => void) | null = null
+  const retry = async (): Promise<ExtensionUnavailableFailure | null> => {
+    unmountFailure?.()
+    unmountFailure = null
+    await mountExtensionSurface(surface)
+    return null
+  }
+  unmountFailure = mountExtensionUnavailable(reason, {
+    connectionSettings: {
+      read: readDaemonConnectionSettings,
+      reset: clearDaemonConnectionSettings,
+      save: savePermittedDaemonConnectionSettings
+    },
+    diagnostic: safeDiagnostic(reason, 'bootstrap'),
+    requestLoopbackAccess: async () => {
+      const bootstrap = await requestRuntimeBootstrap()
+      await requestRuntimeLoopbackAccess(bootstrap)
+    },
+    retry,
+    retryDelayMs: 1_500
+  })
 }
 
 function safeDiagnostic(reason: string, stage: ConnectionStage): string {

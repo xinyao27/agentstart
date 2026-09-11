@@ -12,3 +12,6 @@
 - When a shared session document contains both renderer-owned layout and daemon-owned terminal
   bindings, merge those fields by ownership; otherwise a harmless PTY update can surface as a
   recurring manual conflict even when no user edits actually collide.
+- Keep an outer bootstrap rejection boundary around extension startup; any error after the
+  connecting surface is replaced must still render actionable connection guidance instead of
+  rejecting into a blank workspace root.
