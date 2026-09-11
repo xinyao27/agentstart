@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Why: kept in step with the route table in src/routes.ts by hand, because a
+     generated sitemap would have to be written into dist by the prerender step and
+     this file is short enough that the indirection costs more than it saves.
+     The site deliberately exposes only the landing page and FAQ; product
+     installation links go directly to the repository and release pages. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://agentstart.ai/</loc>
+  </url>
+  <url>
+    <loc>https://agentstart.ai/faq</loc>
+  </url>
+</urlset>

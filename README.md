@@ -103,7 +103,12 @@ Any package task is reachable from the repository root with `vp run <package>#<t
 vp run @agentstart/daemon#build           # Compile the daemon for this platform
 vp run @agentstart/extension#build       # Build the unpacked Chrome extension
 vp run agentstart-mobile#build           # Build the native iOS companion
+vp run agentstart-web#build              # Build the AgentStart website
 ```
+
+The website is a static Cloudflare Worker app in [`apps/web`](apps/web). Its deploy workflow runs
+typechecking and publishes the `agentstart-web` Worker when `main` changes the site at
+[`agentstart.ai`](https://agentstart.ai).
 
 See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for repository conventions, platform setup, and contribution guidance.
 

@@ -1,0 +1,52 @@
+{
+  "name": "agentstart-web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "AgentStart marketing site",
+  "homepage": "https://github.com/xinyao27/agentstart#readme",
+  "bugs": {
+    "url": "https://github.com/xinyao27/agentstart/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "xinyao",
+    "email": "hi@xinyao.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xinyao27/agentstart.git",
+    "directory": "apps/web"
+  },
+  "funding": "https://github.com/sponsors/xinyao27",
+  "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "preview": "vp preview",
+    "build:workspace-deps": "vp run --filter '{.}^...' build",
+    "build": "vp run build:workspace-deps && vp build && node scripts/prerender.mjs",
+    "typecheck": "vp run build:workspace-deps && tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.worker.json",
+    "deploy": "vp run build && wrangler deploy",
+    "deploy:dry-run": "wrangler deploy --dry-run"
+  },
+  "dependencies": {
+    "@hugeicons/core-free-icons": "catalog:",
+    "@hugeicons/react": "catalog:",
+    "@tanstack/react-router": "catalog:",
+    "cnfast": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "thinking-orbs": "catalog:"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "tailwindcss": "catalog:",
+    "tw-animate-css": "catalog:",
+    "typescript": "catalog:",
+    "wrangler": "catalog:"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  // Why: the Worker name and custom domains follow the AgentStart product domain.
+  "name": "agentstart-web",
+  "main": "worker/site.ts",
+  "compatibility_date": "2026-08-01",
+  // Why: the agentstart.ai zone lives in this account, and pinning it keeps a CI
+  // deploy from landing wherever the API token's default account happens to be.
+  "account_id": "d0a04266246b5b2d59b897c8dd088776",
+  "routes": [
+    { "pattern": "agentstart.ai", "custom_domain": true },
+    { "pattern": "www.agentstart.ai", "custom_domain": true }
+  ],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // Why: the site has exactly one route, so an SPA fallback did not serve a
+    // deep link — it answered 200 with the homepage for every wrong URL, which
+    // reads as a soft 404 to a crawler and as a broken link to a visitor. The
+    // paths the product actually ships are redirected in worker/site.ts; anything
+    // else is genuinely missing and says so with a 404 status.
+    "not_found_handling": "404-page",
+    // Why: the www redirect in worker/site.ts only fires if the Worker runs
+    // before the asset router, which short-circuits every matching path.
+    "run_worker_first": ["/*"]
+  },
+  "observability": {
+    "enabled": true
+  }
+}

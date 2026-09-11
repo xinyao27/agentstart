@@ -6,6 +6,7 @@ catalog:
   '@bufbuild/buf': 1.72.0
   '@bufbuild/protobuf': 2.14.1
   '@bufbuild/protoc-gen-es': 2.14.1
+  '@cloudflare/workers-types': 5.20260911.1
   '@dnd-kit/core': ^6.3.1
   '@dnd-kit/sortable': ^10.0.0
   '@floating-ui/dom': 1.8.0
@@ -149,3 +150,4 @@ supportedArchitectures:
     - win32
 minimumReleaseAgeExclude:
   - oxlint-plugin-react-doctor@0.9.13
+  - '@cloudflare/workers-types@5.20260911.1'

@@ -46,7 +46,7 @@ class AgentStart < Formula
   def caveats
     <<~EOS
       Finish installation by adding AgentStart to Chrome:
-        https://chromewebstore.google.com/detail/agentstart/mfgmfiabfncmdekmikepemddejoeihbf
+        https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp
     EOS
   end
 end

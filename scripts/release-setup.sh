@@ -174,7 +174,7 @@ IOS_APP_STORE_APP_ID="6810343597"
 IOS_BUNDLE_ID="com.xinyao27.agentstart.mobile"
 MACOS_BUNDLE_ID="com.xinyao27.agentstart.macos"
 MACOS_APP_STORE_APP_ID="6810480610"
-EXTENSION_ID="mfgmfiabfncmdekmikepemddejoeihbf"
+EXTENSION_ID="ljgpbhfigjepmdeaggfdagchkgaogglp"
 
 require_nonempty() {
   local name="$1" value="$2"

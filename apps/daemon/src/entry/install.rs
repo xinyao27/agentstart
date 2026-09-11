@@ -13,7 +13,7 @@ use super::service::{self, ServiceError, ServiceState};
 mod computer_use;
 
 const CHROME_WEB_STORE_URL: &str =
-    "https://chromewebstore.google.com/detail/agentstart/mfgmfiabfncmdekmikepemddejoeihbf";
+    "https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp";
 
 #[derive(Debug, Error)]
 pub(crate) enum InstallError {

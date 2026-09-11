@@ -1,0 +1,54 @@
+name: AgentStart Website Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/web/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/web-deploy.yml'
+  # Why: a redeploy must be possible without an empty commit — rollbacks and
+  # Cloudflare-side incidents do not come with a source change.
+  workflow_dispatch:
+
+    # Why: two overlapping deploys race to publish the same Worker, and the loser
+    # can land last. Serialize them and let the newer commit win.
+concurrency:
+  group: agentstart-web-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # Why: `version-file` reads vite-plus out of the workspace catalog, so CI
+      # runs the same Vite+ the repository pins instead of drifting to latest.
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1
+        with:
+          node-version-file: package.json
+          version-file: pnpm-workspace.yaml
+          cache: true
+          run-install: false
+
+      - name: Install dependencies
+        run: vp install --frozen-lockfile
+
+      - name: Typecheck
+        run: vp run agentstart-web#typecheck
+
+      - name: Deploy to Cloudflare Workers
+        # Why: the target account is pinned in apps/web/wrangler.jsonc, so CI
+        # only needs the credential — one source of truth for where this lands.
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: vp run agentstart-web#deploy

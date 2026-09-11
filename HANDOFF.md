@@ -82,6 +82,16 @@ git diff --check HEAD
 如果继续修改 terminal、SessionTabs、archive 或 daemon 生命周期，必须重新用真实 workspace
 做同样的人工回归。
 
+### 官网与 Cloudflare
+
+- 已恢复 `apps/web` 和 `.github/workflows/web-deploy.yml`，官网包名与 Worker 名称均为
+  `agentstart-web`。
+- 官网内容、SEO、favicon、OG 分享图和首页标题均使用 AgentStart；favicon 与扩展共用同一枚
+  黑色机器人/闪电 Logo。
+- Wrangler 路由为 `agentstart.ai` 与 `www.agentstart.ai`，canonical origin 为
+  `https://agentstart.ai`。部署仍需 GitHub `CLOUDFLARE_API_TOKEN`，本轮只做了本地构建和
+  dry-run，没有发布到生产 Cloudflare。
+
 ## iOS Simulator 回归：已通过
 
 最新 Debug Simulator build 在 2026-09-10 18:16（Asia/Shanghai）完成，Xcode 输出
@@ -155,10 +165,14 @@ Store archive/export，不能把已经创建的 macOS App Store record 当成可
 
 Chrome Web Store：
 
-- item ID：`mfgmfiabfncmdekmikepemddejoeihbf`
+- Chrome Web Store 首个草稿 item 已创建，截图确认的 Item ID 为
+  `ljgpbhfigjepmdeaggfdagchkgaogglp`。Package 页的权威公钥尚未同步回仓库；开发版 manifest
+  仍暂时固定旧的 `mfgmfiabfncmdekmikepemddejoeihbf`，在拿到公钥前不要发布更新包。
 - `chrome-web-store` environment 已建立，required reviewer 为 `xinyao27`，tag policy 为
   `extension-v*`。
-- 公开 listing 的 canonical slug 仍显示 `empty-title`，因此 listing 和审核尚未完成。
+- 首次上传使用了不含 `manifest.key` 的 initial-upload ZIP；接下来要从 Package 页复制公钥，
+  再把公钥和 ID 同步到扩展、Native Messaging、企业策略、发布元数据和 CI。公开 listing 的
+  canonical slug 仍显示 `empty-title`，因此 listing 和审核尚未完成。
 
 ## Release conductor：仓库侧修复与 Root review 已完成
 
@@ -226,8 +240,8 @@ notarization 和 staple；现有 DMG 未完成这些外部发布步骤。
   Release 均未实际发布。
 - 本地没有已签名 `.ipa`/`.xcarchive` 作为交付证据；当前 generic iOS Release build 使用
   `CODE_SIGNING_ALLOWED=NO`。
-- 远端仍是旧 `origin/main`，因此被当前工作树删除的旧 workflow 在 push 前仍可能显示为
-  active。完成本轮 commit/push 后再复查 GitHub Actions。
+- 远端仍是旧 `origin/main`，因此本轮恢复的 AgentStart 官网与 Cloudflare workflow 在 push
+  前尚未进入远端。完成本轮 commit/push 后再复查 GitHub Actions。
 - Apple Developer/App Store Connect 中可能保留平台不允许删除的历史 identifier/record；
   它们不属于当前 shipping 产品配置，不应为了文本零命中而破坏历史记录。
 
@@ -245,6 +259,11 @@ notarization 和 staple；现有 DMG 未完成这些外部发布步骤。
    pnpm exec vp run agentstart-mobile#check
    git diff --check HEAD
    ```
+
+   如果 Chrome Web Store item 尚未创建，先运行
+   `pnpm exec vp run @agentstart/extension#package:web-store:initial` 并上传生成的
+   `agentstart-extension-<version>-initial-upload.zip`；首次 item 返回 ID 和公钥后，再同步
+   代码常量并改用普通 `package:web-store` 流程。
 
 3. 对完整候选做 secrets、证书、私钥、token、个人路径、大二进制、构建缓存、tests/smoke/
    E2E/validation scripts、allow suppress 和旧品牌 active residue 扫描。

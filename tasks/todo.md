@@ -214,6 +214,78 @@
 - The development daemon/WXT session was stopped cleanly. No tests, smoke checks, E2E harnesses, or
   validation scripts were added or retained.
 
+## OG artwork refinement — 2026-09-11
+
+- [x] Rebuild the social preview in the requested dark grid / orange edge-light style using the
+      repository's AgentStart logo artwork as the right-side subject.
+- [x] Inspect the rendered asset and verify its dimensions, metadata reference, and website build
+      output without retaining a temporary artwork-generation file.
+- [x] Record the review evidence and correction lesson.
+
+## OG artwork review — 2026-09-11
+
+- The social preview now follows the supplied reference composition: a charcoal grid workspace,
+  restrained `#FF5B03` edge lighting, and an uncluttered scene with the exact AgentStart avatar
+  placed as a small rounded badge in the lower-left corner. The logo remains an independent avatar
+  asset instead of being reinterpreted as a bodyless generated character; no text treatment is used.
+- `apps/web/public/og.jpg` is a stripped 1200×675 JPEG. The website build copies it unchanged and
+  the route metadata continues to reference `https://agentstart.ai/og.jpg`.
+- `vp run agentstart-web#typecheck`, `vp run agentstart-web#build`, and
+  `vp run agentstart-web#deploy:dry-run` passed; `git diff --check` is clean.
+- Temporary generated plates and composition files were kept outside the repository; no test,
+  smoke-check, E2E, or validation artifact was retained.
+
+## OG avatar placement correction — 2026-09-11
+
+- [x] Remove the avatar's white source background while preserving the repository logo subject.
+- [x] Place the enlarged transparent avatar in the lower-left corner at roughly one-third of the
+      canvas, then inspect the rendered result.
+- [x] Rebuild the website, verify the deployed asset path, and record the correction lesson.
+
+## OG avatar placement review — 2026-09-11
+
+- The white matte is removed from the high-resolution AgentStart avatar with a transparent cutout;
+  the source robot artwork is not regenerated or reshaped.
+- The avatar now sits in the lower-left corner at approximately 580px wide on the 1200px canvas,
+  exceeding the requested one-third scale while keeping the reference scene readable.
+- `vp run agentstart-web#typecheck`, `vp run agentstart-web#build`, and
+  `vp run agentstart-web#deploy:dry-run` passed. The built `dist/og.jpg` is byte-identical to the
+  source asset and remains 1200×675.
+
+## OG image-generation correction — 2026-09-11
+
+- The final OG was regenerated with the image-generation workflow using both the supplied scene
+  reference and the AgentStart logo reference. It now renders the complete mascot in the lower-left
+  with no white matte, on the requested dark grid / orange-light scene.
+- The resulting 1200×675 JPEG is copied into `apps/web/public/og.jpg`; the build and deployment
+  metadata continue to reference `https://agentstart.ai/og.jpg`.
+
+## OG positioning background refinement — 2026-09-11
+
+- [x] Replace the generic sci-fi background with a visual language that communicates AgentStart's
+      developer workbench, including terminal, editor, Git/worktree, and agent-status cues.
+- [x] Keep the complete AgentStart mascot large in the lower-left with no white matte or invented
+      bodyless character, then inspect the final 1200×675 asset.
+- [x] Rebuild the website and run the deployment dry-run against the updated asset.
+
+## OG positioning background review — 2026-09-11
+
+- Replaced the generic scene with a dark AgentStart workbench composition: terminal/editor panes,
+  Git and worktree connection lines, agent status cards, and restrained orange edge lighting.
+- The complete mascot remains in the lower-left at more than one-third of the canvas width, with no
+  white matte. `apps/web/public/og.jpg` and `apps/web/dist/og.jpg` are both stripped 1200×675 sRGB
+  JPEGs with identical SHA-256 `42e3a4388ee75a90d8570c2da91ca72ec8df98d83c90441e3220cadf0f7f0d93`.
+- `vp run agentstart-web#typecheck`, `vp run agentstart-web#build`,
+  `vp run agentstart-web#deploy:dry-run`, metadata checks, and `git diff --check` passed. No
+  production deployment or external upload was performed.
+
+## Commit and deploy AgentStart website — 2026-09-11
+
+- [ ] Commit the reviewed website, branding, release-setup, and workflow changes.
+- [ ] Push the commit to `origin/main` and confirm the remote revision.
+- [ ] Monitor the Cloudflare deployment workflow and verify its final result.
+
+
 ## ChatGPT theme palette alignment — 2026-09-11
 
 - [x] Capture local ChatGPT/Codex palette evidence from app assets and official appearance guidance.
@@ -242,6 +314,43 @@
   boundary; the repository gate and production extension/mobile builds verify the current source,
   but do not replace full user-flow or external-host validation.
 
+## AgentStart website rebrand investigation — 2026-09-11
+
+- [x] Trace the former `yiru.ai` website and its deployment files through repository history.
+- [x] Confirm whether the current repository contains an AgentStart website or a verified AgentStart domain.
+- [x] Choose the replacement domain and scope the rebrand before restoring or deploying a website.
+
+## Review
+
+- The former website lived in `apps/web` and was deployed to `yiru.ai` by `.github/workflows/web-deploy.yml`.
+  Both were intentionally deleted by commit `527453ed6` during the Chrome/iOS product pivot.
+- The owner confirmed `agentstart.ai` is already available in Cloudflare, so the restored site uses
+  `https://agentstart.ai` as its canonical origin and routes both apex and `www` to the AgentStart
+  Worker.
+
+## Restore and rebrand AgentStart website — 2026-09-11
+
+- [x] Restore the former `apps/web` website and its durable assets from repository history.
+- [x] Rename website package, routes, SEO metadata, links, and user-facing copy to AgentStart.
+- [x] Update Cloudflare Worker/Wrangler configuration and restore the guarded deploy workflow.
+- [x] Run website build/typecheck plus the full repository gate and inspect generated metadata.
+- [x] Record the domain ownership and deployment boundary without deploying externally.
+
+## Restore and rebrand AgentStart website review — 2026-09-11
+
+- Restored the complete former `apps/web` application and `.github/workflows/web-deploy.yml`, then
+  renamed the workspace package and workflow targets to `agentstart-web`.
+- Replaced all product-facing Yiru copy, repository links, SEO/JSON-LD metadata, theme storage key,
+  favicon, and OG image with AgentStart branding. The OG image uses the same black robot/lightning
+  icon shipped by the extension.
+- Cloudflare Wrangler now publishes `agentstart-web` to `agentstart.ai` and `www.agentstart.ai`.
+  The workflow remains guarded by `CLOUDFLARE_API_TOKEN`; no production deployment was performed.
+- `vp run agentstart-web#typecheck`, `vp run agentstart-web#build`, `vp run agentstart-web#deploy:dry-run`,
+  and `pnpm check` all passed. The generated homepage and FAQ contain AgentStart metadata and
+  `https://agentstart.ai` canonical URLs; a local Wrangler runtime served both routes, returned the
+  branded 404 page, and redirected `/download` to the AgentStart GitHub release. A direct Worker
+  invocation also confirmed `www.agentstart.ai` redirects to the apex host with status 301.
+
 ## Publish AgentStart 0.1.0 — 2026-09-11
 
 - [x] Push the reviewed release commit so `main` exactly matches `origin/main`.
@@ -261,3 +370,70 @@
 - `bun upgrade` completed successfully and upgraded the local tool to Bun `1.4.2`. The release
   conductor currently pins Bun `1.4.0` to match CI, so publishing must use that pinned toolchain
   after the missing credentials are configured.
+
+## Chrome Web Store first-item bootstrap — 2026-09-11
+
+- [x] Add a durable initial-upload package path that removes `manifest.key` only from a staged ZIP.
+- [x] Document the Web Store-generated item ID and public-key adoption step.
+- [x] Build the bootstrap ZIP and inspect its manifest before handing it to the user.
+- [ ] After the user creates the Web Store item, synchronize the generated ID and public key across
+      extension, native messaging, release metadata, and CI, then rerun the release checks.
+
+## Chrome Web Store first-item bootstrap review — 2026-09-11
+
+- The user's dashboard screenshot confirms the first draft item was created with Item ID
+  `ljgpbhfigjepmdeaggfdagchkgaogglp`. The current repository intentionally keeps the existing
+  development key and extension ID until the Package tab returns the authoritative public key;
+  changing only the ID before that response would make the development manifest inconsistent.
+- Human-facing install links in the Formula template and daemon installer, plus the release setup
+  item's selection prompt, now point to the new item page. Technical extension-origin, manifest-key,
+  enterprise-policy, and CI upload references remain on the old ID until the matching Package-tab
+  public key is available.
+- `pnpm check`, `bash -n scripts/release-setup.sh`, and `git diff --check` passed after the link
+  updates; the pnpm runner's lockfile-only mutation was restored.
+- `pnpm exec vp run @agentstart/extension#package:web-store:initial` passed and produced
+  `apps/extension/release/agentstart-extension-0.1.0-initial-upload.zip` (SHA-256
+  `819b73eb64016b9e002d30f0a6453916233443d3ad8f30a6d1d4792a4728f2ed`). The archived manifest is
+  MV3 version `0.1.0` and has no `key`; the source build still retains its pinned development key.
+- Extension typecheck and lint passed. `bun apps/extension/scripts/package-web-store.mjs` also
+  passed for the normal package path; the pnpm lockfile-only runner mutation was restored, and no
+  tests, smoke checks, E2E harnesses, or validation scripts were added or retained.
+
+## Chrome Web Store product details preparation — 2026-09-11
+
+- [x] Map every Store listing field to verified repository copy, URLs, locales, and assets.
+- [x] Add ready-to-paste English and Simplified Chinese summaries plus screenshot captions.
+- [x] Verify the checked-in listing asset dimensions and identify fields that still require an
+      external user choice or upload.
+- [x] Record the prepared field map and external handoff steps.
+
+## Chrome Web Store product details review — 2026-09-11
+
+- The Store listing guide now contains a field-by-field map for name, summaries, category, locales,
+  URLs, pricing, visibility, mature-content declaration, test instructions, screenshots, tile,
+  video, and marquee handling. Copy is aligned with the packaged English and Simplified Chinese
+  locale messages and `PRIVACY.md`.
+- Asset inspection confirmed the packaged icon is `128x128`, both screenshots are `1280x800`, and
+  the small promotional tile is `440x280`. No YouTube demo URL or marquee tile is present, so the
+  dashboard handoff calls those out instead of inventing a link or placeholder.
+- The external choices still belong to the publisher: whether to keep the item Unlisted during
+  validation, whether to add a verified Official URL, and whether the dashboard requires a video.
+
+## Chrome Web Store privacy-practices copy — 2026-09-11
+
+- [x] Prepare a copy-paste single-purpose statement for the dashboard.
+- [x] Prepare separate Chinese justifications for every required and optional permission and host
+      access entry in the packaged manifest.
+- [x] Reconcile the copy, data-use selections, and Limited Use certification with the
+      implementation, then record the external review boundary.
+
+## Chrome Web Store privacy-practices review — 2026-09-11
+
+- Added a Simplified Chinese single-purpose statement and individual copy blocks for all 9 required
+  permissions, 10 optional permissions, required loopback hosts, and optional website hosts.
+- Added the exact six data categories to select, four categories to leave clear, the remote-code
+  selection, and the Limited Use certification guidance. Google Analytics is intentionally left
+  unconfigured because the product uses no Google Analytics client.
+- Reconciled the blocks against `apps/extension/.output/chrome-mv3/manifest.json` and the extension's
+  Chrome API call sites. The dashboard still owns the final Limited Use checkboxes and review
+  submission; no permissions were changed in this preparation pass.

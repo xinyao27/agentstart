@@ -3,15 +3,62 @@
 This is the release and reviewer checklist for the AgentStart MV3 extension. The extension key in
 [`wxt.config.ts`](../../apps/extension/wxt.config.ts) pins ID
 `mfgmfiabfncmdekmikepemddejoeihbf`; changing it breaks Native Messaging and enterprise force-install
-policy.
+policy. That key is for development and subsequent updates; it must not be present in the first ZIP
+used to create the Web Store item.
+
+The first Web Store item now exists at
+`https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp`. Until its
+Package page supplies the authoritative public key, keep the development ID above in the manifest,
+Native Messaging origin, enterprise policy, and CI upload configuration. Change those technical
+references together with the public key; do not change only the item ID.
 
 ## Listing
 
 **Manifest short description:** Run coding agents across projects from Chrome.
 
-Category: Developer Tools. Homepage URL: `https://github.com/xinyao27/agentstart`. Support URL:
+Category: Developer Tools. Homepage URL: `https://agentstart.ai`. Support URL:
 `https://github.com/xinyao27/agentstart/issues`. Privacy-policy URL:
 `https://github.com/xinyao27/agentstart/blob/main/PRIVACY.md`.
+
+### Dashboard field map
+
+Use this map on the Store listing tab after the first item has been created. The English and
+Simplified Chinese descriptions below are the source text; keep their feature claims consistent.
+
+| Dashboard field | Value to enter | Notes |
+| --- | --- | --- |
+| Item name | `AgentStart` | Keep the same name as the manifest in both locales. |
+| Summary — English | `Run coding agents across projects from Chrome.` | Matches `_locales/en/messages.json`; under the 132-character limit. |
+| Summary — 简体中文 | `在 Chrome 中跨项目运行编程 agent。` | Matches `_locales/zh_CN/messages.json`. |
+| Primary category | `Developer Tools` | The extension's primary function is a coding workspace. |
+| Languages | `English` and `Chinese (Simplified)` | Add both locales because both are packaged in `_locales/`. |
+| Homepage URL | `https://agentstart.ai` | Public AgentStart product website. |
+| Support URL | `https://github.com/xinyao27/agentstart/issues` | Public issue tracker for support. |
+| Privacy policy URL | `https://github.com/xinyao27/agentstart/blob/main/PRIVACY.md` | Use the dedicated privacy-policy field, not only the description. |
+| Pricing | `Free` | AgentStart has no in-extension payment flow. |
+| Visibility | `Public` after review | Use `Unlisted` only for a temporary validation pass. |
+| Mature content | `No` | The extension has no mature content. |
+
+The store icon source is `apps/extension/public/icons/icon-128.png`; the production package copies it
+to `apps/extension/.output/chrome-mv3/icons/icon-128.png`. Upload the two checked-in `1280x800`
+screenshots in this order: `screenshot-claude-workspace.png` (projects, agents, and side-panel
+navigation; suggested caption: `Organize projects and coding agents in a focused Chrome side panel.`),
+then `screenshot-terminal-truecolor.png` (terminal and source-diff review; suggested caption:
+`Review terminal changes and source diffs without leaving your workspace.`). Upload
+`promo-tile.png` as the global `440x280` small promo tile. The current repository has no published
+YouTube demo URL; leave the video field empty when the dashboard allows it, and do not enter a
+placeholder URL. A `1400x560` marquee tile is optional and is not currently supplied.
+
+If the dashboard shows a Test instructions field, paste the following after the daemon release is
+available:
+
+> Install the AgentStart daemon from the latest release at
+> https://github.com/xinyao27/agentstart/releases, then install this extension from the Chrome Web
+> Store. Open the AgentStart side panel, choose Connection settings, and connect to the local daemon.
+> Open a local Git project, create or select a worktree, and start a terminal-based coding agent.
+> Verify that the workspace, terminal, source control, browser context, and review panels load. No
+> test account or hosted credentials are required; the extension connects to the daemon selected by
+> the reviewer.
 
 ### English copy
 
@@ -100,6 +147,68 @@ The following text is ready to paste into the permission-justification fields.
 executable code and does not download it; Chrome on-device AI is feature-detected, opt-in, and runs
 in Chrome.
 
+### 简体中文逐项粘贴版
+
+如果后台按单个字段要求填写，使用下面的短文本。每段都控制在 1,000 字符以内，并与当前
+打包 manifest 和产品行为保持一致。
+
+**单一用途**
+
+AgentStart 的唯一用途是让用户在 Chrome 侧边栏中管理编程智能体和开发工作区，并在用户主动请求时为当前页面提供浏览器上下文和调试工具。
+
+**必需权限**
+
+| 字段 | 可粘贴说明 |
+| --- | --- |
+| `contextMenus` | 为用户主动选择的文本、链接和图片提供右键操作，并将所选内容交给 AgentStart 工作区处理；不会在后台读取页面内容。 |
+| `debugger` | 仅在用户启动浏览器调试功能时连接当前标签页，用于录制或回放、网络模拟、Console/Network 检查和性能采集；操作结束或失败时立即解除连接。 |
+| `downloads` | 仅在用户主动导出 daemon 生成的文件时调用 Chrome 下载界面；不会在后台下载文件。 |
+| `nativeMessaging` | 连接用户单独安装的 AgentStart daemon，交换短期认证信息和工作区能力，让扩展能够访问用户选择的本地或远程开发环境。 |
+| `sidePanel` | 承载 AgentStart 的主要工作台和跨标签页项目导航，供用户管理项目、worktree、智能体会话、终端和审查面板。 |
+| `storage` | 保存设备本地的连接设置、托管策略、界面状态和非敏感偏好；认证令牌保存在本地或会话存储中，不写入 Chrome Sync。 |
+| `tabGroups` | 按用户选择的项目和 worktree 管理对应标签页分组，并同步分组标题、折叠状态和颜色。 |
+| `tabs` | 查找、聚焦、创建和关闭用户请求的 AgentStart 工作区或预览标签页，并维护当前标签页与项目的对应关系。 |
+| `webNavigation` | 监听用户打开的预览页导航完成事件，以便把 daemon 管理的预览标签页保持在正确的项目分组中。 |
+
+**可选权限**
+
+| 字段 | 可粘贴说明 |
+| --- | --- |
+| `activeTab` | 用户通过明确手势调用浏览器上下文功能后，临时读取当前标签页所需的页面上下文；不会在用户未操作时访问页面。 |
+| `bookmarks` | 用户启用项目书签功能并确认后，创建或更新其明确要求的 AgentStart 项目书签文件夹和链接。 |
+| `history` | 用户启用历史记录功能并确认时间范围后，只读取该限定时间段的浏览记录用于上下文选择。 |
+| `idle` | 用户启用返回摘要后，判断设备是否处于活跃状态，以决定是否延迟显示通知；不会记录用户活动内容。 |
+| `notifications` | 用户启用通知后，显示智能体进度、需要决定的事项和返回摘要；通知可在 Chrome 中撤销。 |
+| `power` | 用户启用防休眠功能期间保持设备唤醒，功能关闭或会话结束后立即释放保持唤醒请求。 |
+| `scripting` | 仅在用户主动使用页面上下文、元素选择器或已安装站点适配器时注入受限脚本；不会注入远程代码。 |
+| `system.display` | 用户选择跨显示器排列项目窗口时读取显示器工作区域，用于计算窗口位置；不会持续追踪显示器。 |
+| `tabCapture` | 仅在用户启动预览录制后捕获当前标签页媒体流；不会在后台录制或上传标签页内容。 |
+| `userScripts` | 用户安装并启用可检查的社区站点适配器后，在 Chrome 隔离的用户脚本环境中注册和移除该适配器。 |
+
+**主机访问权限**
+
+| 字段 | 可粘贴说明 |
+| --- | --- |
+| `http://127.0.0.1/*`、`http://[::1]/*`、`http://localhost/*` | 连接用户本机 AgentStart daemon 的健康检查和引导端点；访问限制在本机回环地址，不读取其他网站内容。 |
+| `http://*/*`、`https://*/*`、`https://github.com/*` | 仅在用户从浏览器上下文或站点适配器入口主动授权后访问所选网站，用于执行用户请求的上下文、调试或适配器操作；默认不启用，也不会后台收集网站数据。 |
+
+### 数据使用勾选项
+
+在“目前或未来您打算向用户收集哪些用户数据？”中勾选以下六项：
+
+- `个人身份信息` — 用户主动提交非匿名支持报告时可能包含 GitHub 登录名和电子邮件。
+- `身份验证信息` — 连接用户所选 daemon 的短期认证令牌。
+- `浏览记录` — 用户启用并确认时间范围后读取的限定历史记录。
+- `用户活动` — 用户主动触发的浏览器和工作流操作，以及不含页面内容的产品事件。
+- `网站内容` — 用户选择或捕获的页面内容、截图、录制内容和 DevTools 详情。
+- `用户生成的内容` — 用户主动提供的提示词、终端和工作区内容、附件、反馈和诊断信息。
+
+不要勾选健康信息、财务和付款信息、个人通信或位置信息。产品不使用 Google Analytics，左侧
+的 Google Analytics 页面保持未配置即可。远程代码选择“否，我未使用远程代码”。在下方的
+Limited Use 合规声明中勾选全部标准声明：数据只用于已披露功能、必要时才向提供该功能的
+服务转移、不用于个性化广告或信用/借贷判断，也不出售用户数据。提交前确认这些勾选与
+[`PRIVACY.md`](../../PRIVACY.md) 保持一致。
+
 ## Privacy disclosure copy
 
 Select these data categories in the dashboard and use the corresponding explanation. Confirm the
@@ -134,10 +243,19 @@ AgentStart 仅使用 Chrome API 数据来提供用户要求的工作区、导航
 
 ## Build and review
 
-Run `vp run @agentstart/extension#package:web-store`. It builds dependencies, validates the MV3 manifest,
-rejects source maps, keys, environment files, and dependency directories, normalizes timestamps,
-then writes a versioned ZIP and SHA-256 file under `apps/extension/release/`. Upload the ZIP without
-repacking it.
+For the first Web Store item only, run `vp run @agentstart/extension#package:web-store:initial`. It
+builds the extension and writes a staged ZIP with `manifest.key` removed; upload
+`apps/extension/release/agentstart-extension-<version>-initial-upload.zip` without repacking it.
+Chrome assigns the item's ID during this upload. In the item's Package tab, use View public key to
+copy the single-line public key into `apps/extension/wxt.config.ts`, then replace the pinned ID in
+the extension, Native Messaging, enterprise policy, release metadata, and CI before publishing any
+update. Do not skip this synchronization or the installed extension will not match the Web Store
+item.
+
+For subsequent updates, run `vp run @agentstart/extension#package:web-store`. It validates the MV3
+manifest and pinned key, rejects source maps, credential key files, environment files, and dependency directories,
+normalizes timestamps, then writes a versioned ZIP and SHA-256 file under
+`apps/extension/release/`. Upload the ZIP without repacking it.
 
 Before submission:
 

@@ -1,0 +1,328 @@
+@import 'tailwindcss';
+
+/* Why: Geist is self-hosted rather than fetched from fonts.googleapis.com. That
+   stylesheet is render-blocking on a third-party origin, so first paint waited on
+   DNS, TLS, and the CSS response *before* the font request to gstatic could even
+   begin — a serialized two-hop chain in front of every glyph. Preloading two
+   same-origin files collapses it to one hop.
+
+   Variable faces rather than static instances: these two cover 400/500/600 in
+   141 kB, where the five static weights the page uses come to 240 kB across five
+   requests. */
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/geist-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/geist-mono-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+/* Why: the demo is a fixed-geometry mock of an AgentStart workspace. It has a hard
+   min-content width — 343px as measured today, a 168px worktree rail plus 173px of
+   pane content — and the narrowest phones are below that, so it is zoomed to fit
+   rather than clipped or scrolled sideways. The demo is an illustration, so
+   shrinking it costs less than hiding any part of it.
+
+   `zoom` rather than `transform: scale()`: zoom scales layout, so the box height
+   follows the shrink and there is no dead space to reserve — and the demo's
+   height is not constant across its timeline, so there would be nothing reliable
+   to reserve.
+
+   Discrete steps rather than a fluid ratio because CSS cannot divide a length by
+   a length to get one, and a JS-measured ratio would either disagree with the
+   prerendered markup or shift the page right after hydration.
+
+   Each step is the largest value that fits that minimum into the viewport less
+   32px of gutters, so 1:1 already covers every phone from 375px up. Only the
+   narrow end needs help. These are the one place a demo-geometry number is
+   unavoidable, so they are deliberately the *approximate* half of the mechanism:
+   ui/demo/demo.tsx holds the window at min-content and keeps a scroll track, so a
+   step that a future redesign outgrows degrades to a scrollable demo rather than
+   a broken page. Below the sm breakpoint the demo goes full-bleed, which is what
+   keeps these steps this close to 1. */
+:root {
+  --demo-zoom: 1;
+}
+
+@media (max-width: 374px) {
+  :root {
+    --demo-zoom: 0.9;
+  }
+}
+
+@media (max-width: 340px) {
+  :root {
+    --demo-zoom: 0.84;
+  }
+}
+
+@media (max-width: 320px) {
+  :root {
+    --demo-zoom: 0.78;
+  }
+}
+
+@theme {
+  --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Why: 2px is the whole radius budget. react-grab keeps its boxes at 0-2px,
+     and the AgentStart work surface is rectilinear — soft corners fight both. */
+  --radius-chip: 2px;
+  --radius-control: 2px;
+  --radius-card: 2px;
+
+  --shadow-soft: 0 2px 3px #0003;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-ink: var(--ink);
+  --color-label: var(--label);
+  --color-copy: var(--copy);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-hairline: var(--hairline);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-add-ink: var(--add-ink);
+  --color-del-ink: var(--del-ink);
+  --color-add-bg: var(--add-bg);
+  --color-del-bg: var(--del-bg);
+  --color-add-emphasis: var(--add-emphasis);
+  --color-del-emphasis: var(--del-emphasis);
+  --color-add-gutter-bg: var(--add-gutter-bg);
+  --color-del-gutter-bg: var(--del-gutter-bg);
+  --color-status-active: var(--status-active);
+  --color-status-working: var(--status-working);
+  --color-status-attention: var(--status-attention);
+  --color-status-idle: var(--status-idle);
+  --color-claude: var(--claude);
+}
+
+/* Why: dark is the base declaration, but the theme script follows the system
+   preference and opts into `.light`, matching how the reference sites behave. */
+:root {
+  --page: #181818;
+  --surface: #181818;
+  --raised: #181818;
+  --ink: #c6c6c6;
+  --label: #bfbfbf;
+  --copy: #848484;
+  --muted: #848484;
+  --faint: #515151;
+  --hairline: #1b1b1b;
+  --rule: #2a2a2a;
+  --rule-strong: #3a3a3a;
+  /* Why: the orange brand keeps primary actions legible on the dark canvas. */
+  --brand: #ff5b03;
+  --accent: var(--brand);
+  --accent-ink: #181818;
+  --ok: #3fb950;
+  --warn: #d29922;
+  --add-ink: #3fa266;
+  --del-ink: #e34671;
+  --add-bg: #3fa26633;
+  --del-bg: #b8004933;
+  --add-emphasis: #3fa26622;
+  --del-emphasis: #b8004922;
+  --add-gutter-bg: #3fa2664d;
+  --del-gutter-bg: #b800494d;
+  --status-active: #10b981;
+  --status-working: #eab308;
+  --status-attention: #f59e0b;
+  --status-idle: #73737366;
+  --claude: #d97757;
+  /* Why: Claude's brand coral, as used in the desktop status-bar icons. */
+
+  /* Why: the brainless registry components ship one hardcoded terminal palette,
+     which is Claude Code's own — correct on a dark terminal, unreadable on this
+     page's light theme. Vendoring them means the constants at the top of each
+     file point here instead, so the one thing that has to change per theme is
+     the only thing that was edited. Dark keeps the shipped values verbatim. */
+  --claude-rose: #cd694a;
+  --claude-hilite: #e79475;
+  --claude-fg: #c0caf5;
+  --claude-dim: #8b8fa3;
+  --claude-gray: #949494;
+  --claude-punct: #565f89;
+  --claude-arg: #7dcfff;
+  --claude-rule: #808080;
+  --claude-ok: #4ea96f;
+  --claude-err: #f7768e;
+  --claude-pending: #e0af68;
+  --claude-user-bg: #3a3a3a;
+  --claude-user-mark: #4e4e4e;
+  --claude-user-fg: #ffffff;
+  --claude-code-bg: #101010;
+  --claude-code-border: #202022;
+  --claude-lineno: #3b3f52;
+}
+
+.light {
+  --page: #ffffff;
+  --surface: #ffffff;
+  --raised: #ffffff;
+  --ink: #242424;
+  --label: #2a2a2a;
+  --copy: #616161;
+  --muted: #616161;
+  --faint: #9a9a9a;
+  --hairline: #e4e4e4;
+  --rule: #d4d4d4;
+  --rule-strong: #bcbcbc;
+  --brand: #ff5b03;
+  --accent: var(--brand);
+  --accent-ink: #181818;
+  --ok: #1a7f37;
+  --warn: #9a6700;
+  --add-ink: #007041;
+  --del-ink: #be1744;
+  --add-bg: #00af6624;
+  --del-bg: #ff617b38;
+  --add-emphasis: #00b06838;
+  --del-emphasis: #ff617b57;
+  --add-gutter-bg: #00af6640;
+  --del-gutter-bg: #ff617b57;
+  --status-active: #10b981;
+  --status-working: #eab308;
+  --status-attention: #f59e0b;
+  --status-idle: #73737366;
+  --claude: #d97757;
+
+  /* Why: same roles as the dark set above, re-picked for a light ground. The
+     hues are held (terracotta stays terracotta, the argument colour stays
+     cyan-blue) and only the lightness is inverted, so the session still reads
+     as Claude Code rather than as a generic light code block. */
+  --claude-rose: #b8502f;
+  --claude-hilite: #d97757;
+  --claude-fg: #1f2430;
+  --claude-dim: #5b6070;
+  --claude-gray: #6b6b6b;
+  --claude-punct: #8a90a6;
+  --claude-arg: #0a6c9c;
+  --claude-rule: #b4b4b4;
+  --claude-ok: #1a7f4b;
+  --claude-err: #c1344e;
+  --claude-pending: #9a6700;
+  --claude-user-bg: #e6e6e6;
+  --claude-user-mark: #a8a8a8;
+  --claude-user-fg: #101010;
+  --claude-code-bg: #f1f1f1;
+  --claude-code-border: #e0e0e0;
+  --claude-lineno: #a3a7b8;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  html.light {
+    color-scheme: light;
+  }
+
+  /* Why: react-grab sets prose at regular and reserves weight for the one
+     title; medium throughout reads heavier than the reference. */
+  body {
+    @apply bg-page text-copy font-sans antialiased;
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.caret {
+  animation: caret-blink 1.1s steps(1) infinite;
+}
+
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.status-pulse {
+  animation: status-pulse 1.8s ease-in-out infinite;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

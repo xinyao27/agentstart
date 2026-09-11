@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!--
+      Why: a build input and a dev fallback, not the document. src/shell.tsx renders
+      the real <html> for every page — apps/web/scripts/prerender.mjs writes them
+      at build time and vite.config.ts renders them on the fly in dev. Vite still needs
+      an HTML entry to emit and hash the client assets, and this is it; the prerender
+      step lifts those tags out of what Vite emitted here and injects them into each
+      page. Nothing added here reaches production.
+    -->
+    <title>AgentStart</title>
+  </head>
+  <body>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,7 +1,8 @@
 // Why: Web Store submission needs a deterministic root-level ZIP plus a checksum and structural
 // review gate; the ordinary WXT build intentionally emits only an unpacked extension directory.
 import { createHash } from 'node:crypto'
-import { mkdirSync, readdirSync, rmSync, statSync, utimesSync } from 'node:fs'
+import { cpSync, mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, utimesSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { join, relative } from 'node:path'
 
 const packageRoot = join(import.meta.dirname, '..')
@@ -9,6 +10,7 @@ const distRoot = join(packageRoot, '.output', 'chrome-mv3')
 const releaseRoot = join(packageRoot, 'release')
 const packageJson = await Bun.file(join(packageRoot, 'package.json')).json()
 const manifest = await Bun.file(join(distRoot, 'manifest.json')).json()
+const initialUpload = process.argv.includes('--initial-upload')
 const expectedExtensionId = 'mfgmfiabfncmdekmikepemddejoeihbf'
 const devIconPaths = new Set([
   'icons/dev-16.png',
@@ -50,7 +52,18 @@ for (const required of [
   }
 }
 
-const files = listFiles(distRoot).filter((path) => !devIconPaths.has(path))
+const zipRoot = initialUpload ? mkdtempSync(join(tmpdir(), 'agentstart-cws-')) : distRoot
+if (initialUpload) {
+  // Why: Chrome Web Store creates the first item and its authoritative ID; the pinned development
+  // key is adopted only after that item exposes its public key in the Package tab.
+  cpSync(distRoot, zipRoot, { recursive: true })
+  const uploadManifestPath = join(zipRoot, 'manifest.json')
+  const uploadManifest = await Bun.file(uploadManifestPath).json()
+  delete uploadManifest.key
+  await Bun.write(uploadManifestPath, `${JSON.stringify(uploadManifest, null, 2)}\n`)
+}
+
+const files = listFiles(zipRoot).filter((path) => !devIconPaths.has(path))
 if (files.includes('settings.html')) {
   throw new Error('web_store_standalone_settings_page')
 }
@@ -66,15 +79,15 @@ if (
 
 const stableTime = new Date('2026-01-01T00:00:00.000Z')
 for (const path of files) {
-  utimesSync(join(distRoot, path), stableTime, stableTime)
+  utimesSync(join(zipRoot, path), stableTime, stableTime)
 }
 mkdirSync(releaseRoot, { recursive: true })
-const archiveName = `agentstart-extension-${packageJson.version}.zip`
+const archiveName = `agentstart-extension-${packageJson.version}${initialUpload ? '-initial-upload' : ''}.zip`
 const archivePath = join(releaseRoot, archiveName)
 rmSync(archivePath, { force: true })
 
 const zip = Bun.spawnSync(['zip', '-X', '-q', archivePath, ...files], {
-  cwd: distRoot,
+  cwd: zipRoot,
   // Why: ZIP stores DOS local timestamps; UTC keeps the same package bytes across developer and CI
   // time zones after the source mtimes above are normalized.
   env: { ...process.env, TZ: 'UTC' },
@@ -88,6 +101,9 @@ const digest = new Bun.CryptoHasher('sha256')
   .update(await Bun.file(archivePath).bytes())
   .digest('hex')
 await Bun.write(join(releaseRoot, `${archiveName}.sha256`), `${digest}  ${archiveName}\n`)
+if (initialUpload) {
+  rmSync(zipRoot, { recursive: true, force: true })
+}
 console.log(JSON.stringify({ archivePath, digest, files: files.length }))
 
 function listFiles(root) {

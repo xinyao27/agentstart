@@ -33,6 +33,9 @@ The release workflows require these GitHub repository secrets:
   product events and support reports. Every stable Rust target embeds this key at compile time; the
   workflow refuses to build when the secret is absent. Review that project's retention and deletion
   settings against `PRIVACY.md` before publishing.
+- `CLOUDFLARE_API_TOKEN` for the AgentStart website Worker deploy. Create a token scoped to the
+  Cloudflare account and `agentstart.ai` zone with the Workers deploy and DNS permissions required
+  by Wrangler, then store it as a repository secret.
 - `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_API_KEY_P8`, `APP_STORE_APP_ID`,
   `IOS_DIST_CERT_P12`, and `IOS_DIST_CERT_PASSWORD` for the iOS App Store archive. The expected
   AgentStart record is Apple ID `6810343597` with bundle ID `com.xinyao27.agentstart.mobile`.
@@ -55,10 +58,27 @@ The setup wizard restricts that environment to `extension-v*` tags. Add a requir
 GitHub Settings if publication also needs a human approval gate; the tag restriction alone does not
 provide reviewer approval.
 
-Chrome Web Store API v2 updates an existing item. Before the first tagged submission, confirm that
-publisher owns item `mfgmfiabfncmdekmikepemddejoeihbf`, complete its Store listing and Privacy tabs,
-and manually publish any changed visibility setting once. The workflow cannot create the item or
-complete those dashboard fields.
+The website deploy is independent of product releases. It runs from
+`.github/workflows/web-deploy.yml`, uses the `CLOUDFLARE_API_TOKEN` repository secret, and deploys
+the `agentstart-web` Worker configured in `apps/web/wrangler.jsonc` to the `agentstart.ai` and
+`www.agentstart.ai` custom domains. Keep those routes and `SITE_ORIGIN` in sync if the domain ever
+changes.
+
+Preview the exact upload locally without publishing it:
+
+```bash
+vp run agentstart-web#build
+vp run agentstart-web#deploy:dry-run
+```
+
+Chrome Web Store API v2 updates an existing item and cannot create one. If the item does not exist,
+run `vp run @agentstart/extension#package:web-store:initial` and upload the generated
+`agentstart-extension-<version>-initial-upload.zip` manually with `manifest.key` omitted. Chrome
+then assigns the item ID and exposes its public key in the Package tab. Adopt that public key and ID
+across the extension, Native Messaging, enterprise policy, release metadata, and CI before creating
+the first tagged update. Once the item exists, confirm that the publisher owns it, complete its Store
+listing and Privacy tabs, and manually publish any changed visibility setting once. The workflow
+cannot create the item or complete those dashboard fields.
 
 The package contains localized manifest names and short descriptions in English and Simplified
 Chinese, plus the 128-pixel store icon. The submission guide contains ready-to-paste detailed
