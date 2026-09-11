@@ -281,9 +281,21 @@
 
 ## Commit and deploy AgentStart website — 2026-09-11
 
-- [ ] Commit the reviewed website, branding, release-setup, and workflow changes.
-- [ ] Push the commit to `origin/main` and confirm the remote revision.
-- [ ] Monitor the Cloudflare deployment workflow and verify its final result.
+- [x] Commit the reviewed website, branding, release-setup, and workflow changes.
+- [x] Push the commit to `origin/main` and confirm the remote revision.
+- [x] Deploy the Worker from the authorized local Wrangler session and record the workflow
+      credential boundary.
+
+## Commit and deploy AgentStart website review — 2026-09-11
+
+- Commit `09d6240d1` was created on `main` and pushed successfully to `origin/main`.
+- Local `vp run agentstart-web#deploy` passed after Wrangler OAuth reauthorization. Cloudflare
+  uploaded 12 assets and published Worker `agentstart-web` to `agentstart.ai` and
+  `www.agentstart.ai`; version ID `7566bd1f-6a88-4a72-9470-5376e9d866a7`.
+- The automatically triggered GitHub Actions run `34607301627` passed checkout, Vite+ setup,
+  dependency installation, and typecheck, then failed because the repository secret
+  `CLOUDFLARE_API_TOKEN` is empty. A live `curl` check could not resolve the custom domain from
+  this environment, so DNS/edge reachability remains externally unverified.
 
 
 ## ChatGPT theme palette alignment — 2026-09-11
