@@ -100,3 +100,18 @@
 - `packages/client` formatting, typechecking, and lint passed. A live Chrome Activity page loaded
   through the dev extension showed the summary strip with visible rounded corners and the existing
   cards unchanged. The dev daemon/WXT session was stopped cleanly afterward.
+
+## UI polish: Activity top spacing
+
+- [x] Compare the reported screenshot with the Activity page layout and identify the missing
+      vertical inset.
+- [x] Add the page-level top padding without changing the card rhythm below the header.
+- [x] Run the client checks and confirm the rendered page in Chrome.
+- [x] Record the review result and capture the correction lesson.
+
+## UI polish review — 2026-09-11 (top spacing)
+
+- The Activity page shell now applies `pt-6`, keeping the existing horizontal inset and card gap
+  unchanged while restoring the intended top breathing room.
+- Full `pnpm check` passed, and the live Chrome Activity page confirmed the heading and summary
+  strip are no longer flush with the top edge. The development session was stopped cleanly.

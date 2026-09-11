@@ -76,7 +76,7 @@ export default function HomePage(): React.JSX.Element {
 
   return (
     <div className="scrollbar-sleek bg-background h-full overflow-y-auto">
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-8 pb-10">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-8 pt-6 pb-10">
         <header className="flex items-start justify-between gap-6">
           <div>
             <h1 className="text-foreground text-sm font-semibold">
