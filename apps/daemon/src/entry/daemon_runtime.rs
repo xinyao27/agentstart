@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::process::ExitCode;
 
 use thiserror::Error;
@@ -122,7 +123,10 @@ async fn run_traced(
     trace: &DiagnosticsTrace,
 ) -> Result<ExitCode, DaemonRunError> {
     let user_data_path = options.user_data_path.clone();
-    let allowed_origins = read_allowed_extension_origins(native_messaging::extension_origin());
+    let allowed_origins: HashSet<String> = native_messaging::extension_origins()
+        .into_iter()
+        .flat_map(read_allowed_extension_origins)
+        .collect();
     let mut startup_span = trace.start_span(
         "daemon.startup",
         trace_attributes([(

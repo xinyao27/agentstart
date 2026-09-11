@@ -11,24 +11,27 @@ use serde::Serialize;
 use thiserror::Error;
 
 pub(super) const EXTENSION_ORIGIN: &str = "chrome-extension://mfgmfiabfncmdekmikepemddejoeihbf";
+pub(super) const WEB_STORE_EXTENSION_ORIGIN: &str =
+    "chrome-extension://ljgpbhfigjepmdeaggfdagchkgaogglp";
 const NATIVE_HOST_NAME: &str = "com.agentstart.daemon";
 
 #[derive(Serialize)]
-struct NativeHostManifest<'a> {
-    allowed_origins: [&'a str; 1],
+struct NativeHostManifest {
+    allowed_origins: Vec<String>,
     description: &'static str,
     name: &'static str,
-    path: &'a str,
+    path: String,
     #[serde(rename = "type")]
     transport_type: &'static str,
 }
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
-struct InstallOutput<'a> {
+struct InstallOutput {
     ok: bool,
-    manifest_path: &'a str,
+    manifest_path: String,
     extension_origin: &'static str,
+    extension_origins: [&'static str; 2],
 }
 
 #[derive(Debug, Error)]
@@ -53,10 +56,13 @@ pub(crate) enum NativeMessagingInstallError {
 pub(crate) fn install(args: &[OsString]) -> Result<(), NativeMessagingInstallError> {
     let manifest_path = resolve_manifest_path()?;
     let executable_path = env::current_exe()?;
-    let executable = path_text(&executable_path)?;
-    let allowed_origin = format!("{EXTENSION_ORIGIN}/");
+    let executable = path_text(&executable_path)?.to_owned();
+    let allowed_origins = [EXTENSION_ORIGIN, WEB_STORE_EXTENSION_ORIGIN]
+        .into_iter()
+        .map(|origin| format!("{origin}/"))
+        .collect();
     let manifest = NativeHostManifest {
-        allowed_origins: [&allowed_origin],
+        allowed_origins,
         description: "Starts and connects the local AgentStart daemon",
         name: NATIVE_HOST_NAME,
         path: executable,
@@ -76,8 +82,9 @@ pub(crate) fn install(args: &[OsString]) -> Result<(), NativeMessagingInstallErr
             "{}",
             serde_json::to_string(&InstallOutput {
                 ok: true,
-                manifest_path: manifest_path_text,
+                manifest_path: manifest_path_text.to_owned(),
                 extension_origin: EXTENSION_ORIGIN,
+                extension_origins: [EXTENSION_ORIGIN, WEB_STORE_EXTENSION_ORIGIN],
             })?
         );
     } else {

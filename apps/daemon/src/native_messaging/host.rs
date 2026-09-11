@@ -4,7 +4,7 @@ use std::io;
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
-use super::install::EXTENSION_ORIGIN;
+use super::install::{EXTENSION_ORIGIN, WEB_STORE_EXTENSION_ORIGIN};
 
 #[derive(Debug, Deserialize)]
 struct NativeRequest {
@@ -150,7 +150,7 @@ fn validate_origin(args: &[OsString]) -> Result<(), NativeMessagingError> {
         .find(|argument| argument.starts_with("chrome-extension://"));
     if caller_origin
         .map(|origin| origin.strip_suffix('/').unwrap_or(origin))
-        .is_some_and(|origin| origin != EXTENSION_ORIGIN)
+        .is_some_and(|origin| origin != EXTENSION_ORIGIN && origin != WEB_STORE_EXTENSION_ORIGIN)
     {
         return Err(NativeMessagingError::OriginDenied);
     }

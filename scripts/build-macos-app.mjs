@@ -22,6 +22,7 @@ if (isRelease && identity === '-') {
 
 // Why: resolve the daemon first so a wrong argument fails before a multi-minute Swift build.
 const daemon = resolveDaemon()
+const extension = resolveExtension()
 const menuBar = buildMenuBar()
 
 rmSync(app, { force: true, recursive: true })
@@ -34,6 +35,7 @@ cpSync(
 cpSync(join(source, 'Info.plist'), join(contents, 'Info.plist'))
 cpSync(menuBar.executable, join(contents, 'MacOS/AgentStartMenuBar'))
 cpSync(daemon, join(contents, 'MacOS/agentstart'))
+cpSync(extension, join(contents, 'Resources/AgentStartExtension'), { recursive: true })
 cpSync(
   menuBar.resourceBundle,
   join(contents, 'Resources/AgentStartMenuBar_AgentStartMenuBar.bundle'),
@@ -106,6 +108,17 @@ function resolveDaemon() {
   return executable
 }
 
+function resolveExtension() {
+  const configured = argumentValue('--extension')
+  const extension = configured
+    ? resolve(configured)
+    : join(root, 'apps/extension/.output/chrome-mv3')
+  if (!exists(extension)) {
+    throw new Error(`Build the extension before assembling the app: ${extension}`)
+  }
+  return extension
+}
+
 // Why: package.json owns the release version, so the checked-in plist value is only a SwiftPM
 // placeholder and every assembled bundle is restamped from the package before signing.
 function stampVersion() {
@@ -156,6 +169,15 @@ function signingKind(signingIdentity) {
 function argumentValue(name) {
   const index = args.indexOf(name)
   return index === -1 ? undefined : args[index + 1]
+}
+
+function exists(path) {
+  try {
+    readFileSync(join(path, 'manifest.json'))
+    return true
+  } catch {
+    return false
+  }
 }
 
 function run(command, commandArguments) {

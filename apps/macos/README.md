@@ -15,8 +15,10 @@ pnpm exec vp run @agentstart/macos#build
 open apps/macos/dist/AgentStart.app
 ```
 
-Copy `AgentStart.app` to Applications before daily use. Launching the app installs Chrome Native Messaging
-registration for the bundled daemon at its current location; reopen the app after moving it.
+Copy `AgentStart.app` to Applications before daily use. Launching the app starts the bundled daemon,
+installs Chrome Native Messaging registration for the bundled daemon at its current location, and
+prepares the Fast extension under `~/Library/Application Support/AgentStart/ChromeExtension`.
+Reopen the app after moving it so Native Messaging points at the new location.
 A local build uses an available Apple Development identity, falling back to an ad-hoc signature.
 Neither local signature is a Developer ID signed and notarized distribution release.
 
@@ -59,9 +61,17 @@ The menu bar template images and app icon preserve the original AgentStart deskt
 from its existing distributed app resources. They are checked into this package; building does not
 read an installed copy of AgentStart.
 
-The disk image installs the daemon, not the extension. Chrome can be told to fetch an extension at
-install time, but only through an `external_update_url` pointing at a published Web Store item, and
-Chrome has forbidden external installs from a local CRX on macOS and Windows since Chrome 33/44. So
-until the AgentStart listing is published there is no auto-install path here at all, and even after it is,
-macOS and Windows still show a confirmation the user must accept. The menu opens an already installed
-extension; it does not claim to install one or infer installation from a saved flag.
+The disk image includes both browser installation channels:
+
+* **Chrome Web Store** is the stable channel. The first-launch guide opens the AgentStart listing;
+  Chrome handles installation and future store updates.
+* **Fast (Load unpacked)** is the rapid channel. The app copies the production extension to the
+  stable path above, opens `chrome://extensions`, and walks through enabling Developer mode and
+  choosing Load unpacked. Chrome remembers that path, so later app releases only require clicking
+  Reload on the AgentStart extension after the app has updated its files.
+
+Chrome does not allow a regular macOS app to silently load a local unpacked extension or install a
+local CRX. The first-launch guide therefore asks for the one manual Chrome action required by the
+browser. Use the menu bar item's **Set up Chrome extension** command to run the guide again at any
+time. Both channels share the Native Messaging registration; choose one enabled channel per Chrome
+profile so two AgentStart workspaces do not compete for the same browser events.

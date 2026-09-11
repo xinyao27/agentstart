@@ -218,6 +218,34 @@
 
 - [x] Rebuild the social preview in the requested dark grid / orange edge-light style using the
       repository's AgentStart logo artwork as the right-side subject.
+
+## macOS dual-channel browser installation
+
+- [x] Bundle the production unpacked extension into the macOS app and DMG build.
+- [x] Add a first-launch and repeatable menu-bar onboarding flow for Chrome Web Store and Fast
+      (Load unpacked) installation, including Native Messaging and connection guidance.
+- [x] Keep the Fast channel directory stable across app upgrades and document the required reload
+      step after an app update.
+- [x] Update macOS release documentation and build metadata for the bundled extension.
+- [x] Run formatting, typechecking, and macOS app/DMG build verification, then review and commit.
+
+## macOS dual-channel review — 2026-09-12
+
+- The macOS app now bundles the production extension under `Contents/Resources/AgentStartExtension`
+  and copies it atomically to `~/Library/Application Support/AgentStart/ChromeExtension`, keeping
+  the user-selected Fast channel path stable across app updates.
+- First launch and the menu bar's **Set up Chrome extension** item guide users through either the
+  Web Store flow or Developer mode / Load unpacked, open the required Chrome pages and Finder
+  folder, explain Native Messaging, and describe the Reload step after Fast updates.
+- Native Messaging registration and Daemon origin admission now accept both the Fast extension ID
+  and the current Chrome Web Store item ID. The selected channel controls which workspace URL the
+  menu bar action opens.
+- `pnpm check`, Swift release build, app assembly, code-sign verification, and `hdiutil verify`
+  passed. The built app contains the daemon and extension manifest, and the embedded daemon's
+  `native-messaging install --json` output lists both origins.
+- The macOS session was locked during this run, so GUI clicking through the onboarding dialogs and
+  Chrome's native Load unpacked picker could not be performed. No tests, smoke checks, E2E harnesses,
+  or validation scripts were retained.
 - [x] Inspect the rendered asset and verify its dimensions, metadata reference, and website build
       output without retaining a temporary artwork-generation file.
 - [x] Record the review evidence and correction lesson.
