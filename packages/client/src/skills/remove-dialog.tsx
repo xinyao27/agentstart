@@ -145,7 +145,7 @@ export function SkillRemoveDialog({
             ) : null}
 
             {run.state === 'error' ? (
-              <div className="border-destructive text-muted-foreground space-y-2 border p-3 text-xs">
+              <div className="border-destructive text-muted-foreground space-y-2 rounded-md border p-3 text-xs">
                 <p className="text-foreground flex items-center gap-2 font-medium">
                   <AlertTriangle className="text-destructive size-4" />
                   {translate(

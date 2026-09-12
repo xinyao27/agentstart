@@ -30,7 +30,7 @@ function SectionMetricsBadge({ count }: { count: number }): React.JSX.Element {
   const totalLabel = formatSectionActivityLabel(count, 'workspace')
   return (
     <span
-      className="border-sidebar-border bg-sidebar-accent text-muted-foreground/90 inline-flex h-4 shrink-0 overflow-hidden border text-[9px] leading-none font-medium"
+      className="border-sidebar-border bg-sidebar-accent text-muted-foreground/90 inline-flex h-4 shrink-0 overflow-hidden rounded-sm border text-[9px] leading-none font-medium"
       aria-label={totalLabel}
     >
       <Tooltip>

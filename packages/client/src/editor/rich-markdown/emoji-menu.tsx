@@ -25,7 +25,7 @@ export function RichMarkdownEmojiMenu({
       // Why: `rich-markdown-emoji-menu` stays a stable hook for the
       // EmojiPickerReact CSS-variable overrides in rich-markdown-content.css —
       // the picker is a third-party component with no Tailwind classNames.
-      className="rich-markdown-emoji-menu bg-popover text-popover-foreground absolute z-[31] overflow-hidden border border-[color-mix(in_srgb,var(--border)_76%,transparent)]"
+      className="rich-markdown-emoji-menu bg-popover text-popover-foreground absolute z-[31] overflow-hidden rounded-lg border border-[color-mix(in_srgb,var(--border)_76%,transparent)]"
       style={{ left, top }}
       role="dialog"
     >

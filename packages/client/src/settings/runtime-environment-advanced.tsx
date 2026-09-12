@@ -157,7 +157,7 @@ function RuntimeEnvironmentDetails({
           'Host details'
         )}
       </div>
-      <div className="border-border/50 bg-card/30 space-y-1 border p-2">
+      <div className="border-border/50 bg-card/30 space-y-1 rounded-md border p-2">
         {environments.map((environment) => {
           const details = detailsByEnvironmentId[environment.id]
           const modelSummary = getHostModelCapabilitySummary(details?.runtimeStatus)

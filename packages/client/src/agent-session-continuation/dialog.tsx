@@ -228,7 +228,7 @@ export function AgentSessionContinuationDialog({
         </DialogHeader>
 
         <div className="min-w-0 space-y-4">
-          <div className="bg-card min-w-0 border px-3 py-2">
+          <div className="bg-card min-w-0 rounded-md border px-3 py-2">
             <div className="truncate text-xs font-medium">
               {sourceName ||
                 translate('components.agentSessionContinuation.untitledSession', 'Current session')}

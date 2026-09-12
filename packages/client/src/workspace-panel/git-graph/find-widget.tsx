@@ -38,7 +38,7 @@ export function GitGraphFindWidget({
         )
 
   return (
-    <div className="border-border bg-popover absolute top-2 right-3 z-10 flex h-8 items-center gap-1 border px-1.5 shadow-sm">
+    <div className="border-border bg-popover absolute top-2 right-3 z-10 flex h-8 items-center gap-1 rounded-md border px-1.5 shadow-sm">
       <Input
         ref={inputRef}
         variant="chrome-free"

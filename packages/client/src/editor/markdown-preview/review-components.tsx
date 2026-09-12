@@ -82,7 +82,7 @@ export function MarkdownAnnotationComposer({
 
   return (
     <div
-      className="mt-0 max-w-none scroll-m-3 border border-[color-mix(in_srgb,var(--foreground)_18%,transparent)] bg-[var(--editor-surface)] p-2 @max-[760px]/markdown-preview:mt-1.5"
+      className="mt-0 max-w-none scroll-m-3 overflow-hidden rounded-md border border-[color-mix(in_srgb,var(--foreground)_18%,transparent)] bg-[var(--editor-surface)] p-2 @max-[760px]/markdown-preview:mt-1.5"
       onClick={(event) => event.stopPropagation()}
     >
       <div className="agentstart-diff-comment-popover-label">

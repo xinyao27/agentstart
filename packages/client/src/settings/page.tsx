@@ -37,9 +37,8 @@ import { useProjectHooks } from './use-project-hooks'
 import { useScrollbackMode } from './use-scrollback-mode'
 import { useSourceControlPromptGuard } from './use-source-control-prompt-guard'
 
-const SHELL_WIDTH_CLASS = '[--settings-shell-max-width:1040px]'
 const EXTENSION_SIDEBAR_BACKDROP_CLASS =
-  'worktree-sidebar-theme bg-sidebar pointer-events-none absolute inset-y-0 left-0 w-[max(var(--settings-sidebar-width),calc((100%_-_var(--settings-shell-max-width))/2_+_var(--settings-sidebar-width)))]'
+  'worktree-sidebar-theme bg-sidebar pointer-events-none absolute inset-y-0 left-0 w-[var(--settings-sidebar-width)]'
 const SETTINGS_SHELL_ANIMATION_CLASS_NAME = 'animate-[settings-shell-enter_180ms_ease-out]'
 
 function Settings(): React.JSX.Element {
@@ -192,17 +191,16 @@ function Settings(): React.JSX.Element {
       <div
         ref={setSettingsRootNode}
         className={cn(
-          'relative flex min-h-0 min-w-0 w-full flex-1 justify-center overflow-hidden bg-background',
-          SHELL_WIDTH_CLASS,
+          'relative flex min-h-0 min-w-0 w-full flex-1 overflow-hidden bg-background',
           SETTINGS_SHELL_ANIMATION_CLASS_NAME
         )}
       >
         <div aria-hidden className={EXTENSION_SIDEBAR_BACKDROP_CLASS} />
         <div
           aria-hidden
-          className="bg-background pointer-events-none absolute inset-y-0 right-0 left-[max(var(--settings-sidebar-width),calc((100%_-_var(--settings-shell-max-width))/2_+_var(--settings-sidebar-width)))]"
+          className="bg-background pointer-events-none absolute inset-y-0 right-0 left-[var(--settings-sidebar-width)]"
         />
-        <div className="relative z-10 flex min-h-0 w-full max-w-[var(--settings-shell-max-width)] overflow-hidden">
+        <div className="relative z-10 flex min-h-0 w-full overflow-hidden">
           <div
             aria-hidden
             className="worktree-sidebar-theme border-sidebar-border bg-sidebar w-[var(--settings-sidebar-width)] shrink-0 border-r"
@@ -234,24 +232,21 @@ function Settings(): React.JSX.Element {
   const isSectionMounted = (sectionId: string): boolean => neededSectionIds.has(sectionId)
   const isFocusedShortcutsPane =
     activeSectionId === 'shortcuts' && settingsSearchQuery.trim() === ''
-  const isFocusedSetupGuidePane =
-    activeSectionId === 'setup-guide' && settingsSearchQuery.trim() === ''
 
   return (
     <div
       ref={setSettingsRootNode}
       className={cn(
         'relative flex min-h-0 min-w-0 w-full flex-1 overflow-hidden bg-background',
-        SHELL_WIDTH_CLASS,
         SETTINGS_SHELL_ANIMATION_CLASS_NAME
       )}
     >
       <div aria-hidden className={EXTENSION_SIDEBAR_BACKDROP_CLASS} />
       <div
         aria-hidden
-        className="bg-background pointer-events-none absolute inset-y-0 right-0 left-[max(var(--settings-sidebar-width),calc((100%_-_var(--settings-shell-max-width))/2_+_var(--settings-sidebar-width)))]"
+        className="bg-background pointer-events-none absolute inset-y-0 right-0 left-[var(--settings-sidebar-width)]"
       />
-      <div className="absolute inset-y-0 left-[max(0px,calc((100%_-_var(--settings-shell-max-width))/2))] z-20 flex min-h-0 w-[var(--settings-sidebar-width)]">
+      <div className="absolute inset-y-0 left-0 z-20 flex min-h-0 w-[var(--settings-sidebar-width)]">
         <SettingsSidebar
           activeSectionId={activeSectionId}
           generalGroups={generalNavGroups}
@@ -271,8 +266,8 @@ function Settings(): React.JSX.Element {
         className="relative z-10 min-h-0 w-full min-w-0 flex-1"
         viewportClassName={cn('overflow-x-hidden', isFocusedShortcutsPane && 'overflow-y-hidden')}
       >
-        <div className="flex min-h-full w-full min-w-0 justify-center">
-          <div className="flex min-h-full w-full max-w-[var(--settings-shell-max-width)]">
+        <div className="flex min-h-full w-full min-w-0">
+          <div className="flex min-h-full w-full">
             <div aria-hidden className="w-[var(--settings-sidebar-width)] shrink-0" />
 
             {/* Why: only the left rail should reveal the OS material; Settings content
@@ -280,9 +275,8 @@ function Settings(): React.JSX.Element {
             <div className="bg-background flex min-h-dvh min-w-0 flex-1 flex-col">
               <div
                 className={cn(
-                  'mx-auto flex w-full min-w-0 flex-col gap-8 px-8 pt-14 pr-8 xl:pr-24',
-                  isFocusedShortcutsPane ? 'h-full pb-6' : 'pb-24',
-                  isFocusedSetupGuidePane ? 'max-w-6xl' : 'max-w-4xl'
+                  'flex w-full min-w-0 flex-col gap-8 px-8 pt-14',
+                  isFocusedShortcutsPane ? 'h-full pb-6' : 'pb-24'
                 )}
               >
                 {visibleNavSections.length === 0 ? (

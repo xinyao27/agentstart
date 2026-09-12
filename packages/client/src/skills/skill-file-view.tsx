@@ -124,7 +124,7 @@ export function SkillFileView({
       {state.status === 'markdown' ? (
         <>
           {state.frontmatter ? (
-            <pre className="border-border bg-muted text-muted-foreground border px-3 py-2.5 font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap">
+            <pre className="border-border bg-muted text-muted-foreground overflow-hidden rounded-md border px-3 py-2.5 font-mono text-[11px] leading-relaxed break-words whitespace-pre-wrap">
               {state.frontmatter}
             </pre>
           ) : null}

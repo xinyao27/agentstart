@@ -130,7 +130,7 @@ export function SetupSection({
       ) : null}
 
       {showSetupAgentStartupPolicy ? (
-        <div className="border-border/60 bg-muted/25 flex items-start justify-between gap-3 border p-3">
+        <div className="border-border/60 bg-muted/25 flex items-start justify-between gap-3 rounded-md border p-3">
           <span className="min-w-0 space-y-1">
             <span className="text-foreground block text-xs font-medium">
               {translate(

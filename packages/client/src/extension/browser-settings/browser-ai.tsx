@@ -22,7 +22,7 @@ export function BrowserAiSettings(): React.JSX.Element {
     }
   })
   return (
-    <section className="border-border mt-5 border p-4">
+    <section className="border-border mt-5 rounded-lg border p-4">
       <h2 className="font-medium">
         {translate('extension.browserSettings.browserAi', 'On-device summaries')}
       </h2>

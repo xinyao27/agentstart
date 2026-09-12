@@ -178,7 +178,7 @@ export function CodexAccountsSection({
         avoids dumping the user at the top of Accounts and making them hunt
         for the actual Codex account controls. */}
           {activeCodexAuthWarning ? (
-            <div className="border-destructive/40 bg-destructive/5 text-destructive flex items-start gap-2 border px-3 py-2 text-xs">
+            <div className="border-destructive/40 bg-destructive/5 text-destructive flex items-start gap-2 rounded-md border px-3 py-2 text-xs">
               <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
               <span>
                 {activeCodexAccountId

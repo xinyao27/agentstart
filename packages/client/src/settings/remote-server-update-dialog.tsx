@@ -149,7 +149,7 @@ function RemoteServerUpdateDialog(): React.JSX.Element {
         </DialogHeader>
 
         {eligible.length > 0 && (liveTabCount > 0 || liveLeafCount > 0) ? (
-          <div className="border-border bg-muted/40 flex gap-2 border p-3 text-xs">
+          <div className="border-border bg-muted/40 flex gap-2 rounded-md border p-3 text-xs">
             <AlertTriangle className="text-muted-foreground mt-0.5 size-4 shrink-0" />
             <p>
               {translate(

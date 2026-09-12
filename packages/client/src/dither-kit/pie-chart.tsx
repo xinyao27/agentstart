@@ -75,7 +75,7 @@ export function DitherPieChart({
           <span className="text-muted-foreground mt-1 text-[10px] uppercase">{totalLabel}</span>
         </span>
         {hoveredPoint ? (
-          <span className="border-border bg-popover text-popover-foreground pointer-events-none absolute top-2 left-1/2 z-10 block -translate-x-1/2 border px-2 py-1">
+          <span className="border-border bg-popover text-popover-foreground pointer-events-none absolute top-2 left-1/2 z-10 block -translate-x-1/2 rounded-md border px-2 py-1">
             <span className="text-muted-foreground block max-w-44 truncate text-[10px]">
               {hoveredPoint.label}
             </span>

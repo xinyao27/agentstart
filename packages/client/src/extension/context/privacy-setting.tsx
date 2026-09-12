@@ -66,7 +66,7 @@ export function BrowserContextPrivacySetting(): React.JSX.Element {
         </p>
       </div>
       {(trustedSites.data ?? []).map((origin) => (
-        <div key={origin} className="border-border flex items-center gap-3 border p-2">
+        <div key={origin} className="border-border flex items-center gap-3 rounded-md border p-2">
           <span className="min-w-0 flex-1 truncate text-xs">{origin}</span>
           <Button
             type="button"

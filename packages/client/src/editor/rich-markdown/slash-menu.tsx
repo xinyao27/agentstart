@@ -30,7 +30,7 @@ export function RichMarkdownSlashMenu({
 
   return (
     <div
-      className="bg-popover text-popover-foreground absolute z-30 flex max-h-[min(440px,calc(100vh-120px))] w-[min(300px,calc(100%-24px))] flex-col overflow-hidden border border-[color-mix(in_srgb,var(--border)_76%,transparent)]"
+      className="bg-popover text-popover-foreground absolute z-30 flex max-h-[min(440px,calc(100vh-120px))] w-[min(300px,calc(100%-24px))] flex-col overflow-hidden rounded-lg border border-[color-mix(in_srgb,var(--border)_76%,transparent)]"
       style={{ left: slashMenu.left, top: slashMenu.top }}
       role="dialog"
       aria-label={translate(

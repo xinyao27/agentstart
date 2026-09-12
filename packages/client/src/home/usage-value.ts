@@ -13,7 +13,10 @@ import {
   type UsageValueModel,
   type UsageValueSupplementalInput
 } from '@agentstart/protocol/stats/usage-value'
-import type { RuntimeStatsSupplementalUsage } from '@agentstart/protocol/stats/values'
+import type {
+  RuntimeStatsDailyProviderUsage,
+  RuntimeStatsSupplementalUsage
+} from '@agentstart/protocol/stats/values'
 import { useEffect } from 'react'
 import type { ContributionPoint } from '~renderer/contribution-heatmap/calendar'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
@@ -42,6 +45,8 @@ type UsagePreparation = {
   range: StatsUsageBoundedRange
 }
 
+const USAGE_PREPARATION_RETRY_DELAY_MS = 1_500
+
 let activeUsagePreparation: UsagePreparation | null = null
 
 export function useUsageValue(range: StatsUsageBoundedRange): UsageValue {
@@ -64,47 +69,84 @@ export function useUsageValue(range: StatsUsageBoundedRange): UsageValue {
   const openCodeModels = useAppStore((state) => state.openCodeUsageModelBreakdown)
   const openCodeProjects = useAppStore((state) => state.openCodeUsageProjectBreakdown)
   const { repos } = useProjectCatalog()
+  const summaryDailyProviderUsage = useAppStore((state) => state.statsSummary?.dailyProviderUsage)
   const supplementalUsage = useAppStore((state) => state.statsSummary?.supplementalUsage)
 
   useEffect(() => {
-    void prepareUsageSnapshots(range)
+    let disposed = false
+    let retryTimer: ReturnType<typeof setTimeout> | null = null
+
+    const prepare = (): void => {
+      const scheduleRetry = (): void => {
+        if (disposed || usageSnapshotsReady(range)) {
+          return
+        }
+        retryTimer = setTimeout(prepare, USAGE_PREPARATION_RETRY_DELAY_MS)
+      }
+      void prepareUsageSnapshots(range).then(scheduleRetry, scheduleRetry)
+    }
+
+    prepare()
+    return () => {
+      disposed = true
+      if (retryTimer !== null) {
+        clearTimeout(retryTimer)
+      }
+    }
   }, [range])
 
+  const claudeReady = claudeRange === range && claudeSnapshotReady
+  const codexReady = codexRange === range && codexSnapshotReady
+  const openCodeReady = openCodeRange === range && openCodeSnapshotReady
+  const isReady = claudeReady && codexReady && openCodeReady
+  const aggregationInput = {
+    claude: {
+      daily: claudeReady ? claudeDaily : [],
+      projectBreakdown: claudeReady ? claudeProjects : []
+    },
+    codex: {
+      daily: codexReady ? codexDaily : [],
+      projectBreakdown: codexReady ? codexProjects : []
+    },
+    openCode: {
+      daily: openCodeReady ? openCodeDaily : [],
+      projectBreakdown: openCodeReady ? openCodeProjects : []
+    }
+  }
   const supplemental = (() =>
     supplementalUsage ? mapSupplementalUsage(supplementalUsage, range) : undefined)()
   const usage = (() =>
     buildUsageValueSnapshot({
       claude: {
-        daily: claudeDaily,
-        modelBreakdown: claudeModels
+        daily: claudeReady ? claudeDaily : [],
+        modelBreakdown: claudeReady ? claudeModels : []
       },
       codex: {
-        daily: codexDaily,
-        modelBreakdown: codexModels
+        daily: codexReady ? codexDaily : [],
+        modelBreakdown: codexReady ? codexModels : []
       },
       openCode: {
-        daily: openCodeDaily,
-        modelBreakdown: openCodeModels
+        daily: openCodeReady ? openCodeDaily : [],
+        modelBreakdown: openCodeReady ? openCodeModels : []
       },
       supplemental
     }))()
-  const isReady =
-    claudeRange === range &&
-    claudeSnapshotReady &&
-    codexRange === range &&
-    codexSnapshotReady &&
-    openCodeRange === range &&
-    openCodeSnapshotReady
-  const aggregationInput = (() => ({
-    claude: { daily: claudeDaily, projectBreakdown: claudeProjects },
-    codex: { daily: codexDaily, projectBreakdown: codexProjects },
-    openCode: { daily: openCodeDaily, projectBreakdown: openCodeProjects }
-  }))()
   const projects = (() => buildAddedProjectUsage(buildProjectUsage(aggregationInput), repos))()
-  const dailyByProvider = (() => buildDailyProviderUsage(aggregationInput))()
+  const liveDailyByProvider = (() => buildDailyProviderUsage(aggregationInput))()
+  const summaryDailyByProvider = (() =>
+    summaryDailyProviderUsage ? mapDailyProviderUsage(summaryDailyProviderUsage, range) : [])()
+  const dailyByProvider =
+    isReady && liveDailyByProvider.length > 0
+      ? liveDailyByProvider
+      : summaryDailyByProvider.length > 0
+        ? summaryDailyByProvider
+        : liveDailyByProvider
 
   return (() => ({
-    dailyByProvider: isReady ? dailyByProvider : [],
+    // Why: one provider can be temporarily unavailable while the other stores
+    // still have valid data; hiding the whole chart makes a partial runtime
+    // failure look like missing usage.
+    dailyByProvider,
     dailyTokens: isReady
       ? usage.daily.map((point) => ({ day: point.day, value: point.tokens }))
       : [],
@@ -131,6 +173,26 @@ export function useUsageValue(range: StatsUsageBoundedRange): UsageValue {
       ? {}
       : { meteredValueUsd: supplementalUsage.meteredValueUsd })
   }))()
+}
+
+function usageSnapshotsReady(range: StatsUsageBoundedRange): boolean {
+  const state = useAppStore.getState()
+  return (
+    state.claudeUsageRange === range &&
+    state.claudeUsageSnapshotReady &&
+    state.codexUsageRange === range &&
+    state.codexUsageSnapshotReady &&
+    state.openCodeUsageRange === range &&
+    state.openCodeUsageSnapshotReady
+  )
+}
+
+function mapDailyProviderUsage(
+  usage: RuntimeStatsDailyProviderUsage[],
+  range: StatsUsageBoundedRange
+): DailyProviderUsage[] {
+  const now = new Date()
+  return usage.filter((point) => dayIsInStatsUsageRange(point.day, range, now))
 }
 
 function mapSupplementalUsage(

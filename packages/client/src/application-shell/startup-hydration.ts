@@ -22,6 +22,7 @@ import { hydratePersistedUIAfterStartupRead } from './startup-ui-hydration'
 export type StartupHydrationActions = Pick<
   AppState,
   | 'completeHydratedWorktreePurge'
+  | 'fetchRateLimits'
   | 'fetchKeybindings'
   | 'fetchSettings'
   | 'fetchAgentStartProfiles'
@@ -78,6 +79,10 @@ export async function hydrateStartupSession({
   )
 
   await timeRendererStartupStep('fetch-settings', () => actions.fetchSettings())
+  // Why: the status bar owns the provider menu, but usage data is app state.
+  // Fetch it during startup so the provider segment is populated before the
+  // menu is opened; waiting for that menu creates a circular empty state.
+  void actions.fetchRateLimits()
   publishTerminalViewAttributesAtAppStart(useAppStore.getState().settings, getSystemPrefersDark())
 
   const persistedUI = await timeRendererStartupStep('ui-get', () =>

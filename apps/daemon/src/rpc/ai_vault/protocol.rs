@@ -18,6 +18,7 @@ use crate::ai_vault::model::{
     AiVaultSessionTokenUsage as AuthorityTokenUsage,
     AiVaultSubagentRunStatus as AuthoritySubagentStatus, PreviewRole,
 };
+use crate::rpc::protocol_connection::MAX_FRAME_BYTES;
 
 const DEFAULT_LIMIT: usize = 1_000;
 const MAX_LIMIT: u32 = 2_000;
@@ -30,8 +31,9 @@ pub(in crate::rpc) async fn list_sessions(
 ) -> Result<Vec<u8>, Status> {
     let request = decode::<AiVaultServiceListSessionsRequest>(payload)?;
     let input = list_input(request)?;
+    let compact = input.compact;
     let result = authority.list(input).await;
-    Ok(encode(&protocol_result(result)?))
+    encode_list_response(protocol_result(result)?, compact)
 }
 
 pub(in crate::rpc) async fn list_subagent_sessions(
@@ -133,6 +135,56 @@ fn protocol_result(
             .collect::<Result<Vec<_>, _>>()?,
         scanned_at: result.scanned_at,
     })
+}
+
+fn encode_list_response(
+    mut response: AiVaultServiceListSessionsResponse,
+    compact: bool,
+) -> Result<Vec<u8>, Status> {
+    let frame_limit = MAX_FRAME_BYTES as usize;
+    let mut encoded = encode(&response);
+    if !compact || encoded.len() <= frame_limit {
+        return Ok(encoded);
+    }
+
+    // Why: compact history is a summary surface, so previews are the safest payload to trim
+    // before dropping older sessions when a large scoped workspace still exceeds one frame.
+    for session in &mut response.sessions {
+        session.preview_messages.clear();
+    }
+    encoded = encode(&response);
+    if encoded.len() <= frame_limit {
+        return Ok(encoded);
+    }
+
+    // Keep the newest sessions first while finding the largest prefix that fits. Binary search
+    // avoids repeatedly re-encoding every intermediate session count for a large scoped result.
+    let mut lower = 0;
+    let mut upper = response.sessions.len();
+    let mut best = None;
+    while lower < upper {
+        let candidate = lower + (upper - lower).div_ceil(2);
+        response.sessions.truncate(candidate);
+        let candidate_encoded = encode(&response);
+        if candidate_encoded.len() <= frame_limit {
+            lower = candidate;
+            best = Some(candidate_encoded);
+        } else {
+            upper = candidate - 1;
+        }
+    }
+    response.sessions.truncate(lower);
+    if let Some(encoded) = best {
+        return Ok(encoded);
+    }
+    encoded = encode(&response);
+    if encoded.len() <= frame_limit {
+        return Ok(encoded);
+    }
+    Err(status(
+        StatusCode::ResourceExhausted,
+        "AI Vault history response exceeds the daemon frame limit",
+    ))
 }
 
 fn protocol_session(session: AuthoritySession) -> Result<AiVaultSession, Status> {

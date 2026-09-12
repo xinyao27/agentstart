@@ -118,7 +118,7 @@ export function WorkspaceRow({
           {worktree.path}
         </div>
         {deleteError ? (
-          <div className="border-destructive/35 bg-destructive/8 text-destructive mt-2 flex min-w-0 items-start gap-2 border px-2 py-1.5 text-[11px]">
+          <div className="border-destructive/35 bg-destructive/8 text-destructive mt-2 flex min-w-0 items-start gap-2 rounded-md border px-2 py-1.5 text-[11px]">
             <AlertTriangle className="mt-0.5 size-3 shrink-0" />
             <span className="min-w-0 flex-1 break-words" title={deleteError}>
               {deleteError}

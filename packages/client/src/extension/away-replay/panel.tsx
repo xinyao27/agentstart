@@ -72,7 +72,7 @@ export function AwayReplay(): React.JSX.Element | null {
   }
   return (
     <section className="border-sidebar-border border-b p-2">
-      <div className="border-sidebar-border bg-sidebar-accent/45 border p-2">
+      <div className="border-sidebar-border bg-sidebar-accent/45 rounded-md border p-2">
         <div className="flex items-start gap-2">
           <ClockCounterClockwise className="text-muted-foreground mt-0.5 size-4 shrink-0" />
           <div className="min-w-0 flex-1">

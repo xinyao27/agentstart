@@ -129,7 +129,7 @@ export function WorkspaceSpaceOverview({
       </div>
 
       {scanError ? (
-        <div className="border-destructive/35 bg-destructive/8 text-destructive flex items-start gap-2 border px-3 py-2 text-xs">
+        <div className="border-destructive/35 bg-destructive/8 text-destructive flex items-start gap-2 rounded-md border px-3 py-2 text-xs">
           <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
           <span className="min-w-0 break-words">
             {scanError}
@@ -143,7 +143,7 @@ export function WorkspaceSpaceOverview({
         </div>
       ) : null}
       {repoErrors.length > 0 ? (
-        <div className="border-border/70 bg-muted/20 text-muted-foreground space-y-1.5 border px-3 py-2 text-xs">
+        <div className="border-border/70 bg-muted/20 text-muted-foreground space-y-1.5 rounded-md border px-3 py-2 text-xs">
           {repoErrors.map((repo) => (
             <div key={repo.repoId} className="flex items-start gap-2">
               <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />

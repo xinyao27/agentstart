@@ -4,7 +4,6 @@ import {
 } from '@agentstart/protocol/hosted-review/agentstart-repository'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
-import logo from '~renderer/assets/brand/agentstart-wordmark.png?url'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -22,6 +21,7 @@ import {
 } from '~renderer/icons/hugeicons'
 import { useShortcutKeyDetails } from '~renderer/keyboard-input/use-shortcut-label'
 import { LoadingIndicator } from '~renderer/loading/indicator'
+import logo from '~renderer/public/favicon.png?url'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { useAppStore } from '~renderer/store/state'
@@ -251,7 +251,12 @@ export function SidebarSettingsHelpMenu(): React.JSX.Element {
             </DropdownMenuItem>
             {showMilestones ? (
               <DropdownMenuItem onClick={openMilestones}>
-                <img src={logo} alt="" aria-hidden="true" className="size-5 object-contain" />
+                <img
+                  src={logo}
+                  alt=""
+                  aria-hidden="true"
+                  className="bg-muted size-5 rounded-md object-contain"
+                />
                 {translate(
                   'auto.components.sidebar.SidebarSettingsHelpMenu.f8a2c91d4e',
                   'Milestones'

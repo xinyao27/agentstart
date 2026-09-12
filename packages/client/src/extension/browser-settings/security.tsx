@@ -21,7 +21,7 @@ export function DangerousApprovalSettings(): React.JSX.Element {
       queryClient.invalidateQueries({ queryKey: DANGEROUS_APPROVAL_STATUS_QUERY_KEY })
   })
   return (
-    <section className="border-border mt-5 border p-4">
+    <section className="border-border mt-5 rounded-lg border p-4">
       <h2 className="font-medium">
         {translate('extension.browserSettings.dangerousApproval', 'Dangerous operation approval')}
       </h2>

@@ -134,7 +134,7 @@ export function SettingsSegmentedControl<T extends string | number>({
       role="radiogroup"
       aria-label={ariaLabel}
       className={cn(
-        'inline-flex items-center border border-border bg-background/50 p-0.5',
+        'inline-flex items-center overflow-hidden rounded-lg border border-border bg-background/50 p-0.5',
         equalWidth && 'w-full'
       )}
     >

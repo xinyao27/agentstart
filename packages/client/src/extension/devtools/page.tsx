@@ -189,7 +189,7 @@ export function DevToolsPage({
         </Button>
       </div>
       {changes.length > 0 ? (
-        <section className="border-border mt-4 border p-3">
+        <section className="border-border mt-4 rounded-md border p-3">
           <p className="text-sm">
             {translate('extension.devtools.changeCount', '{{count}} stylesheets changed', {
               count: changes.length
@@ -214,7 +214,7 @@ export function DevToolsPage({
           </div>
         </section>
       ) : null}
-      <section className="border-border mt-4 border p-3">
+      <section className="border-border mt-4 rounded-md border p-3">
         <div className="flex items-center justify-between gap-2">
           <p className="flex items-center gap-2 text-sm font-medium">
             <Bug />

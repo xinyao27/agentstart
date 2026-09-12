@@ -47,7 +47,7 @@ export function mountExtensionConnecting(): () => void {
   root.render(
     <CSPProvider disableStyleElements>
       <main className="bg-background text-foreground grid h-dvh place-items-center p-6">
-        <div className="border-border bg-card w-full max-w-sm border p-5" role="status">
+        <div className="border-border bg-card w-full max-w-sm rounded-lg border p-5" role="status">
           <h1 className="text-base font-semibold">
             {translate('extension.runtime.connecting', 'Connecting to AgentStart…')}
           </h1>
@@ -184,7 +184,7 @@ function ExtensionUnavailable({
 
   return (
     <main className="bg-background text-foreground grid h-dvh place-items-center p-6">
-      <div className="border-border bg-card max-h-[calc(100dvh-3rem)] max-w-sm overflow-y-auto border p-5">
+      <div className="border-border bg-card max-h-[calc(100dvh-3rem)] max-w-sm overflow-y-auto rounded-lg border p-5">
         <h1 className="text-base font-semibold">
           {translate('extension.unavailable.title', 'AgentStart daemon is not available')}
         </h1>
@@ -192,7 +192,7 @@ function ExtensionUnavailable({
           {unavailableDescription(failure.reason)}
         </p>
         {failure.reason === 'missing-cli' ? (
-          <pre className="bg-muted mt-3 overflow-x-auto p-2 text-xs">
+          <pre className="bg-muted mt-3 overflow-x-auto rounded-md p-2 text-xs">
             bunx @agentstart/cli install
           </pre>
         ) : null}
@@ -285,7 +285,7 @@ function ExtensionUnavailable({
             <summary className="text-muted-foreground cursor-pointer select-none">
               {translate('extension.unavailable.diagnostic', 'Diagnostic details')}
             </summary>
-            <pre className="bg-muted mt-2 max-h-32 overflow-auto p-2 whitespace-pre-wrap">
+            <pre className="bg-muted mt-2 max-h-32 overflow-auto rounded-md p-2 whitespace-pre-wrap">
               {failure.diagnostic}
             </pre>
             <Button

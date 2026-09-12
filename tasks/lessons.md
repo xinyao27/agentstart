@@ -57,3 +57,26 @@
 - When the owner asks for product-positioning imagery, replace generic sci-fi scenery with
   domain-specific visual cues such as terminal/editor panes, Git worktrees, and agent status while
   preserving the logo placement and scale constraints.
+- For compact logo surfaces, use the shared gray-backed favicon on an opaque semantic muted surface
+  with a component-appropriate radius; the square matte of the wordmark bitmap is visibly wrong in
+  dark menus and tooltips.
+- Keep shared browser controls on the stable AgentStart primary token; a native system accent can
+  be an unrelated user-selected color and should not override product theming. Workspace palettes
+  remain the explicit scoped override.
+- For repeated corner-radius feedback, audit the shared group/segmented primitives and nearby
+  standalone cards together; round and clip the owning boundary, while leaving edge-to-edge panes
+  and divider-only layouts intentionally square.
+- For settings layouts, keep the navigation rail anchored to the viewport edge and let the content
+  pane consume the remaining width; avoid centering a capped shell that creates asymmetric blank
+  space on wide windows.
+- For large AI Vault history lists, request compact records at the browser boundary and keep a
+  daemon-side frame-budget fallback; a verbose unary response can exceed the 1 MiB transport limit
+  even when the individual session records are valid.
+- When product primary changes, audit the separate `accent` pair too: hover and selected rows often
+  consume `--accent-foreground` directly, so updating only `--primary` leaves a visible legacy hue.
+- Keep provider usage presentation independent per provider: a transient failure in one usage store
+  must not blank valid data from the other stores, and initial runtime reads need a reconnect retry
+  instead of relying on a one-shot effect.
+- When a status-bar surface is gated by data it is supposed to fetch, initialize that data from app
+  startup or another reachable path; a dropdown that only appears after providers exist cannot be
+  the first refresh trigger.

@@ -230,7 +230,7 @@ export function SkillFreshnessUpdateDialog(): React.JSX.Element {
             ) : null}
 
             {run.state === 'error' ? (
-              <div className="border-destructive text-muted-foreground space-y-2 border p-3 text-xs">
+              <div className="border-destructive text-muted-foreground space-y-2 rounded-md border p-3 text-xs">
                 <p className="text-foreground font-medium">
                   {translate(
                     'auto.components.skills.SkillFreshnessUpdateDialog.errorTitle',

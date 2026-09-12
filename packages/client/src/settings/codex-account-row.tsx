@@ -79,7 +79,7 @@ export function CodexAccountRow({
   return (
     <div
       className={cn(
-        'flex w-full items-center justify-between gap-3 border px-3 py-2.5 text-left transition-colors',
+        'flex w-full items-center justify-between gap-3 rounded-md border px-3 py-2.5 text-left transition-colors',
         needsReauthentication
           ? 'border-destructive/50 bg-destructive/5'
           : isActive

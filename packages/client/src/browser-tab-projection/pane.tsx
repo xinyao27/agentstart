@@ -30,7 +30,7 @@ export function BrowserTabProjectionPane({
   return (
     <div className="flex size-full items-center justify-center p-8">
       <div className="flex max-w-md flex-col items-center gap-4 text-center">
-        <div className="border-border bg-muted/40 flex size-12 items-center justify-center border">
+        <div className="border-border bg-muted/40 flex size-12 items-center justify-center rounded-md border">
           <Globe className="size-5 text-blue-500" aria-hidden />
         </div>
         <div className="space-y-1">

@@ -126,7 +126,7 @@ export function AgentStartProfileProjectTransferConfirmDialog({
         </DialogHeader>
 
         {lines.length > 0 ? (
-          <div className="border-border bg-muted/40 border px-3 py-2 text-sm">
+          <div className="border-border bg-muted/40 rounded-md border px-3 py-2 text-sm">
             <div className="text-foreground mb-1 font-medium">
               {translate(
                 'auto.components.agentstart.profiles.project.transfer.confirm.live.work',

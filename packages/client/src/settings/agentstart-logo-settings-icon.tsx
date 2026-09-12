@@ -1,6 +1,6 @@
 import { createElement } from 'react'
-import logo from '~renderer/assets/brand/agentstart-wordmark.png?url'
 import type { IconProps } from '~renderer/icons/hugeicons'
+import logo from '~renderer/public/favicon.png?url'
 import { cn } from '~renderer/ui/class-names'
 
 export function AgentStartLogoSettingsIcon({ className }: IconProps): React.JSX.Element {
@@ -8,6 +8,6 @@ export function AgentStartLogoSettingsIcon({ className }: IconProps): React.JSX.
     src: logo,
     alt: '',
     'aria-hidden': true,
-    className: cn('object-contain', className)
+    className: cn('bg-muted rounded-md object-contain', className)
   })
 }

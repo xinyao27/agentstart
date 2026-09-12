@@ -93,7 +93,7 @@ export function WorkspaceTreemap({
       <div className="absolute top-2 right-2 z-10 flex max-w-[calc(100%-1rem)] items-center gap-2">
         {zoomedWorktree ? (
           <>
-            <div className="border-border/70 bg-background max-w-56 truncate border px-2 py-1 text-[11px] font-medium">
+            <div className="border-border/70 bg-background max-w-56 truncate rounded-md border px-2 py-1 text-[11px] font-medium">
               {zoomedWorktree.displayName}
             </div>
             <Button

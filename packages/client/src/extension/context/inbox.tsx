@@ -73,7 +73,7 @@ function ContextReview(props: {
 }): React.JSX.Element {
   const running = props.sessions.filter((session) => session.status === AgentSessionStatus.RUNNING)
   return (
-    <div className="border-sidebar-border border p-2">
+    <div className="border-sidebar-border rounded-md border p-2">
       <p className="truncate text-xs font-semibold">{props.context.pageTitle}</p>
       {props.context.pageUrl ? (
         <p className="text-muted-foreground truncate text-[11px]">{props.context.pageUrl}</p>

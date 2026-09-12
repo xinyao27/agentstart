@@ -118,8 +118,8 @@
   --popover-base: #ffffff;
   --popover: var(--popover-base);
   --popover-foreground: #1a1c1f;
-  /* Why: single source of truth for the default brand hue — every primary role
-     in both themes derives from it while custom workspace accents can still override it. */
+  /* Why: AgentStart's product accent is the stable default for every semantic primary role;
+     a selected workspace theme may still override --brand within its workspace scope. */
   --brand: #ff5b03;
   --primary: var(--brand);
   --primary-foreground: #0d0d0d;
@@ -127,9 +127,10 @@
   --secondary-foreground: #1a1c1f;
   --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
   --muted-foreground: color-mix(in srgb, var(--foreground) 49.4%, transparent);
-  /* Why: accent surfaces stay opaque in both themes; overlays opt into transparency locally. */
-  --accent: #e5f3ff;
-  --accent-foreground: #339cff;
+  /* Why: selected and hover rows are product chrome, so they follow AgentStart orange instead
+     of inheriting the old blue ChatGPT accent; the mix remains opaque for stable contrast. */
+  --accent: color-mix(in srgb, var(--brand) 10%, var(--background));
+  --accent-foreground: color-mix(in srgb, var(--brand) 72%, var(--foreground));
   --destructive: #e02e2a;
   --destructive-foreground: #ffffff;
   --border: color-mix(in srgb, var(--foreground) 8%, transparent);
@@ -207,8 +208,8 @@
   --secondary-foreground: #ffffff;
   --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
   --muted-foreground: color-mix(in srgb, var(--foreground) 49.8%, transparent);
-  --accent: #00284d;
-  --accent-foreground: #83c3ff;
+  --accent: color-mix(in srgb, var(--brand) 18%, var(--background));
+  --accent-foreground: color-mix(in srgb, var(--brand) 65%, var(--foreground));
   --destructive: #ff6764;
   --destructive-foreground: #0d0d0d;
   --border: color-mix(in srgb, var(--foreground) 8.2%, transparent);
@@ -285,12 +286,20 @@
 [data-theme-gradient='on'],
 [data-theme-accent='on'] {
   /* Why: aliases declared on :root resolve before a local --brand override,
-     so rebind them with either the system accent or a picked workspace hue. */
+     so rebind them to the selected workspace hue for themed portals. */
   --primary: var(--brand);
+  --accent: color-mix(in srgb, var(--brand) 10%, var(--background));
+  --accent-foreground: color-mix(in srgb, var(--brand) 72%, var(--foreground));
   --ring: var(--brand);
   --sidebar-primary: var(--brand);
   --sidebar-ring: var(--brand);
   --terminal-pane-locate: var(--primary);
+}
+
+.dark[data-theme-accent='on'],
+.dark [data-theme-gradient='on'] {
+  --accent: color-mix(in srgb, var(--brand) 18%, var(--background));
+  --accent-foreground: color-mix(in srgb, var(--brand) 65%, var(--foreground));
 }
 
 [data-theme-gradient='on'] {

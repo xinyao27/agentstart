@@ -106,7 +106,7 @@ export function AutomationsSection(): React.JSX.Element {
             onRun={() => ritual.mutate('end-day')}
           />
         </div>
-        <section className="border-border mt-5 border p-4">
+        <section className="border-border mt-5 rounded-lg border p-4">
           <h2 className="font-medium">
             {translate('extension.automations.browserLayout', 'Browser window layouts')}
           </h2>
@@ -187,7 +187,7 @@ export function AutomationsSection(): React.JSX.Element {
         </section>
         <RitualScheduleSettings />
         {ritual.data ? (
-          <section className="border-border mt-5 border p-4">
+          <section className="border-border mt-5 rounded-lg border p-4">
             <p className="text-sm font-medium">{ritual.data.summary}</p>
             <ul className="text-muted-foreground mt-2 grid gap-1 text-sm">
               {ritual.data.projects.map((project) => (
@@ -230,7 +230,7 @@ function RitualCard({
   title: string
 }): React.JSX.Element {
   return (
-    <section className="border-border bg-card border p-4">
+    <section className="border-border bg-card rounded-lg border p-4">
       <Icon className="text-primary size-5" />
       <h2 className="mt-3 font-medium">{title}</h2>
       <p className="text-muted-foreground mt-1 min-h-10 text-sm">{description}</p>

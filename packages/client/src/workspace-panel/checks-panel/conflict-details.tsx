@@ -149,7 +149,7 @@ function MergeabilityRecalculationCommandBox({
   }
 
   return (
-    <div className="border-border bg-accent/20 mt-3 border p-2.5">
+    <div className="border-border bg-accent/20 mt-3 rounded-md border p-2.5">
       <div className="flex items-center justify-between gap-2">
         <div className="text-muted-foreground text-[10px] font-medium">
           {translate(
@@ -177,7 +177,7 @@ function MergeabilityRecalculationCommandBox({
               )}
         </Button>
       </div>
-      <pre className="scrollbar-sleek border-border bg-background text-foreground mt-2 max-h-28 overflow-auto border px-2 py-1.5 font-mono text-[10px] leading-4 break-all whitespace-pre-wrap">
+      <pre className="scrollbar-sleek border-border bg-background text-foreground mt-2 max-h-28 overflow-auto rounded-md border px-2 py-1.5 font-mono text-[10px] leading-4 break-all whitespace-pre-wrap">
         {commands}
       </pre>
     </div>

@@ -1,5 +1,192 @@
 # AgentStart 0.1.0 handoff completion
 
+## Restore workspace provider status — 2026-09-12
+
+- [x] Trace the lower-left provider surface to its runtime state and initial-load path.
+- [x] Load provider usage during startup hydration so the provider area cannot stay empty until an
+      already-visible usage menu is opened.
+- [x] Run formatting, typechecking, repository checks, extension build, and local runtime
+      verification.
+- [x] Record the root cause and verification evidence.
+
+## Review
+
+- The lower-left Provider surface is the status bar's usage segment. Its visibility is derived from
+  `rateLimits`, which starts with every provider set to `null`; the only previous refresh trigger
+  lived inside the usage dropdown, which itself could not render while the provider list was empty.
+  This created a circular empty state.
+- Startup hydration now calls `fetchRateLimits()` immediately after settings load. The daemon's
+  rate-limit refresh returns a record for each provider, including unavailable/error statuses, so
+  configured providers can render without requiring the user to open a menu first.
+- `vp run @agentstart/client#typecheck`, `pnpm check`, `vp run @agentstart/extension#build`, and
+  `git diff --check` passed. The local daemon reports `running` and the WXT development server
+  remains active at `http://127.0.0.1:3100`. A live Chrome screenshot check was unavailable in this
+  environment; no tests or validation harnesses were added.
+
+## Restore provider usage display — 2026-09-12
+
+- [x] Trace the provider usage chart and breakdowns to the authoritative runtime data.
+- [x] Restore provider usage rendering without reintroducing AI Vault frame-limit failures.
+- [x] Run formatting, typechecking, repository checks, and local development verification.
+- [x] Record the root cause, repair evidence, and any intentionally retained loading behavior.
+
+## Review
+
+- The Home provider chart was gated on all three independent provider snapshots being ready. A
+  transient failure in any one provider therefore replaced valid data from the other providers with
+  an empty chart, and the one-shot preparation effect never retried after the runtime reconnected.
+- The chart uses fresh live provider snapshots whenever all three are ready, falls back to the
+  authoritative stats summary (filtered to the selected range) during partial reconnects, and keeps
+  whatever provider data is available visible. Snapshot preparation retries after transient failures
+  and stops once all three snapshots are ready. Cached contribution metrics no longer clear the live
+  provider series during that window.
+- `vp run @agentstart/client#typecheck`, `pnpm check`, `vp run @agentstart/extension#build`, and
+  `git diff --check` passed. The local daemon reports `running` and the WXT development server
+  remains active at `http://127.0.0.1:3100`. The production build retained only its existing chunk
+  size warning; no tests or validation harnesses were added.
+
+## Replace residual blue interaction accents — 2026-09-12
+
+- [x] Trace the blue surfaces in the reported settings and side-panel screenshot to shared tokens.
+- [x] Replace generic blue accent tokens with AgentStart-orange theme-derived selection surfaces
+      while keeping primary actions and domain status colors intact.
+- [x] Run formatting, typechecking, repository checks, and extension development rebuild validation.
+- [x] Record the visual review and any intentionally retained semantic colors.
+
+## Review
+
+- The reported blue selected rows and segmented controls came from the global `--accent` and
+  `--accent-foreground` pair, not from the already-correct `--primary` token.
+- Light and dark accent surfaces now derive from `--brand` (`#ff5b03` by default), and themed
+  workspace scopes rebind the same pair so selected rows follow a chosen workspace hue.
+- Semantic blue values remain only where blue communicates a real domain state, such as info/chart
+  data, Git decorations, terminal palettes, and browser automation overlays.
+- `pnpm exec vp fmt packages/client/src/assets/main.css`, `vp run @agentstart/client#typecheck`,
+  `pnpm check`, and `git diff --check` passed. The running WXT dev server emitted an HMR update for
+  the stylesheet; daemon status remains `running`.
+
+## Fix daemon frame-limit failures in Agent history — 2026-09-12
+
+- [x] Confirm the compact projection preserves every field the browser history panel uses.
+- [x] Make browser history requests use the compact projection and add a daemon-side byte guard.
+- [x] Run formatting, typechecking, repository checks, extension build, and diff validation.
+- [x] Record the repair evidence and any remaining limitations.
+
+## Review
+
+- Browser history now requests `compact: true`, retaining resumable metadata, previews, and recovery
+  counters while omitting the token arrays that caused the 1 MiB unary response to overflow.
+- The daemon's compact AI Vault response encoder now enforces the same frame budget before delivery:
+  it drops previews first, then oldest sessions, and returns a typed resource-exhausted status only
+  if even the compact metadata cannot fit. Full-detail callers retain their existing behavior.
+- `vp run @agentstart/daemon#fmt`, `vp run @agentstart/daemon#typecheck`,
+  `vp run @agentstart/client#typecheck`, `pnpm check`, `vp run @agentstart/extension#build`, and
+  `git diff --check` passed. The extension build retained only its existing chunk-size warning.
+- No tests, smoke checks, E2E harnesses, or validation scripts were added. A live browser/daemon
+  session was not exercised in this pass; the fix is verified through the compiled client and daemon
+  paths and the existing protocol frame guard.
+
+## Diagnose daemon frame-limit error — 2026-09-12
+
+- [x] Trace the exact error string to its daemon response-delivery guard.
+- [x] Map the failing UI request to the AI Vault session-history RPC and inspect its parameters.
+- [x] Compare the 1 MiB protocol limit with the session-history payload projection and local traces.
+- [x] Record the root cause, evidence, and repair options without changing behavior during diagnosis.
+
+## Review
+
+- `apps/daemon/src/rpc/protocol_calls.rs` rejects any unary response whose encoded payload exceeds
+  `MAX_FRAME_BYTES` (1 MiB), returning `Response exceeds the daemon frame limit`.
+- The red notice is rendered by the browser AI Vault panel after
+  `AiVaultService/ListSessions` fails. `packages/client/src/workspace-panel/ai-vault/session-refresh.ts`
+  requests up to 500 sessions but does not set `compact`; the protocol client therefore sends
+  `compact = false`, retaining per-session token-usage arrays and other verbose fields. In a scoped
+  view, the daemon can also append up to 2,000 older in-scope sessions beyond that recency limit.
+- The daemon's compact projection explicitly removes token usage, daily token breakdowns, last
+  prompts, and subagent metadata, and bounds preview text. The non-compact 500-session response can
+  therefore cross the 1 MiB single-frame limit as the local vault grows. Local trace evidence shows
+  1,607 discovered transcripts and `AiVaultService/ListSessions` requests at the reported time;
+  trace spans remain transport-successful because the status is emitted as the RPC result, while the
+  response-size rejection happens in the delivery layer.
+- No code was changed in this diagnostic pass. The durable fix should make the history list request
+  compact records (or introduce paginated/streamed history), not hide the error or raise the global
+  frame limit without a payload budget review.
+
+## Settings full-width split layout — 2026-09-12
+
+- [x] Map the centered shell, absolute navigation rail, and content max-width constraints.
+- [x] Make the settings navigation rail and content pane span the full available viewport.
+- [x] Preserve readable in-pane padding while removing outer centering and asymmetric max-width gaps.
+- [x] Run formatting, typechecking, repository checks, extension build, and diff validation.
+- [x] Record the visual review and correction lesson.
+
+## Review
+
+- Settings now uses a full-width split shell. The navigation rail is anchored at `left: 0`, the
+  content pane starts immediately after the fixed rail, and the old centered 1040px shell plus
+  content `max-width`/wide-screen right padding are gone.
+- The content pane keeps its internal `px-8` and vertical rhythm for readability, while the outer
+  layout no longer creates blank space on either side of the settings surface.
+- `pnpm exec vp fmt packages/client/src/settings/page.tsx`, client typecheck, `pnpm check`,
+  extension production build, and `git diff --check` passed. The extension build retains only its
+  existing chunk-size warning; the lockfile-only runner mutation was restored.
+
+## Theme-token audit — switch and accent surfaces — 2026-09-12
+
+- [x] Trace the reported switch color from the shared primitive through the document theme inputs.
+- [x] Make checked controls use the AgentStart theme primary while preserving workspace theme
+      overrides, and remove only unrelated system-accent leakage.
+- [x] Audit neighboring interactive accent surfaces and leave status, syntax, and domain palettes
+      semantic where they are intentionally not primary actions.
+- [x] Run formatting, typechecking, repository checks, extension build, and diff validation.
+- [x] Record the visual review and correction lesson.
+
+## Review
+
+- The reported switch uses the shared `packages/client/src/ui/switch.tsx` primitive and already
+  resolves its checked track through `bg-primary`; the brown color came from
+  `useThemeGradientStyleVariables` replacing `--brand` with the native macOS accent fetched from
+  the daemon.
+- Browser `--brand`/`--primary` now stays on AgentStart orange `#FF5B03` by default. A selected
+  workspace theme still supplies its own scoped `--brand`, including Base UI portals through the
+  existing root variable bridge. The native system-accent read path no longer overrides product
+  controls.
+- The shared checkbox, slider, progress, button, badge, input-selection, and onboarding selection
+  surfaces already consume semantic primary tokens. Warning, success, diff, syntax, Git, and
+  browser-domain colors remain intentionally semantic instead of being recolored as primary
+  actions.
+- `pnpm exec vp fmt` passed for the touched CSS/TypeScript files; client typecheck, `pnpm check`,
+  extension production build, and `git diff --check` passed. The extension build retained only its
+  existing chunk-size warning. No tests, smoke checks, E2E harnesses, or validation scripts were
+  added or retained.
+
+## Rounded-corner consistency audit — 2026-09-12
+
+- [x] Map the two reported controls to their owning feature components and shared primitives.
+- [x] Correct missing or inconsistent radii at group boundaries while preserving edge-to-edge panes.
+- [x] Run formatting, client typechecking, repository checks, extension build, and diff validation.
+- [x] Record the visual review, verification evidence, and the correction lesson.
+
+## Review
+
+- The first screenshot maps to the workspace sidebar activity groups and toggle boundary in
+  `packages/client/src/workspace-panel/sidebar-frame.tsx`; both grouped activity controls and the
+  standalone toggle now have clipped, bordered `rounded-lg` shells so their outer corners are not
+  inherited from square titlebar seams.
+- The second screenshot maps to `SettingsSegmentedControl`; its bordered track now clips the
+  segmented buttons inside a consistent `rounded-lg` boundary.
+- The audit also corrected independent bordered surfaces that were visibly square: connection and
+  unavailable-extension cards, inline popups, profile/account/runtime cards, onboarding and
+  composer notices, source-control conflict notices, workspace cleanup warnings, browser settings
+  sections, markdown review surfaces, workspace-space warnings, and sidebar badges. Edge-to-edge
+  panes, tables, status rows, and divider-only regions remain square by design.
+- `pnpm exec vp run @agentstart/client#typecheck` passed.
+- `pnpm check` passed, including repository formatting/lint/typecheck, daemon cargo check and
+  clippy, and the macOS Swift build.
+- `pnpm exec vp run @agentstart/extension#build` passed; the existing chunk-size warning remains
+  informational only.
+- `git diff --check` passed. No test, smoke, or E2E harness was added or retained.
+
 - [x] Read `HANDOFF.md`, repository instructions, and current git state.
 - [x] Confirm the handoff commit is already on `origin/main` and the worktree starts clean.
 - [x] Re-run the repository gate, extension Web Store packaging, mobile check, and diff check.
@@ -496,3 +683,42 @@
 - Worker handling no longer redirects `/privacy`; `/docs/*` remains a legacy redirect to GitHub.
 - `vp run agentstart-web#typecheck`, `vp run agentstart-web#build`,
   `vp run agentstart-web#deploy:dry-run`, output metadata checks, and `git diff --check` passed.
+
+## Compact AgentStart logo surface correction — 2026-09-12
+
+- [x] Replace opaque wordmark artwork in compact settings/help logo surfaces with the gray-backed
+      favicon asset.
+- [x] Add a component-sized semantic muted surface and modest radius to both related logo uses.
+- [x] Run formatting, client typechecking, repository checks, and diff validation.
+- [x] Record the visual review and verification boundary.
+
+## Compact AgentStart logo surface correction review — 2026-09-12
+
+- Settings navigation and the Help menu now use `packages/client/src/public/favicon.png`, whose
+  transparent corners and gray-backed artwork remain legible over dark floating surfaces.
+- Both render paths add `bg-muted rounded-md`, keeping the backing opaque and the radius aligned
+  with the compact icon size.
+- `pnpm exec vp run @agentstart/client#typecheck`, `pnpm check`,
+  `pnpm exec vp run @agentstart/extension#build`, and `git diff --check` passed. The extension build
+  emitted the new `favicon-*.png` asset; no tests or validation harnesses were added.
+
+## System primary color fallback correction — 2026-09-12
+
+- [x] Remove the fixed orange fallback from the browser client's primary token.
+- [x] Keep native system-accent and workspace-palette overrides working while using the semantic
+      ChatGPT/Codex accent token when a host cannot expose a native accent.
+- [x] Run formatting, client typechecking, repository checks, and extension build validation.
+- [x] Record the visual review and verification boundary.
+
+## System primary color fallback correction review — 2026-09-12
+
+- Superseded by the later Theme-token audit below after visual review showed that the native accent
+  could override AgentStart's product primary with an unrelated brown system color.
+- Browser `--brand` now defaults to the semantic `--accent-foreground` token instead of a fixed
+  orange value. A connected local daemon still replaces it with the normalized native system
+  accent, and a selected workspace palette still owns its local brand override.
+- `pnpm exec vp fmt packages/client/src/assets/main.css`,
+  `pnpm exec vp run @agentstart/client#typecheck`, `pnpm check`,
+  `pnpm exec vp run @agentstart/extension#build`, and `git diff --check` passed. The extension
+  production build completed with the updated token path; no tests or validation harnesses were
+  added.

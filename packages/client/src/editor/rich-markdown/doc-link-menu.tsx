@@ -25,7 +25,7 @@ export function RichMarkdownDocLinkMenu({
   const overflow = totalMatches > rows.length
   return (
     <div
-      className="bg-popover text-popover-foreground absolute z-30 flex max-h-[320px] w-[min(360px,calc(100%-24px))] flex-col overflow-y-auto border border-[color-mix(in_srgb,var(--border)_76%,transparent)]"
+      className="bg-popover text-popover-foreground absolute z-30 flex max-h-[320px] w-[min(360px,calc(100%-24px))] flex-col overflow-y-auto rounded-lg border border-[color-mix(in_srgb,var(--border)_76%,transparent)]"
       style={{ left: menu.left, top: menu.top }}
       role="listbox"
       aria-label={translate(

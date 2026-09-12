@@ -91,6 +91,9 @@ export function useAiVaultSessionRefresh(
     const scanKey = `${hostScope}\n${scopeKey}`
     try {
       const result = await listAiVaultSessions({
+        // Why: the history panel only needs resumable session metadata and previews;
+        // full token usage arrays can push a unary response beyond the daemon frame limit.
+        compact: true,
         limit: SESSION_LIMIT,
         scopePaths: [...scopePathsRef.current],
         executionHostScope: hostScope,

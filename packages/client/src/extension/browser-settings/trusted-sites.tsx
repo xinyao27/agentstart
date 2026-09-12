@@ -19,7 +19,7 @@ export function TrustedSitesSettings(): React.JSX.Element {
   })
 
   return (
-    <section className="border-border mt-5 border p-4">
+    <section className="border-border mt-5 rounded-lg border p-4">
       <h2 className="font-medium">
         {translate('extension.settings.siteTrust', 'Trusted browser sites')}
       </h2>
@@ -36,7 +36,10 @@ export function TrustedSitesSettings(): React.JSX.Element {
       ) : sites.data?.length ? (
         <div className="mt-3 grid gap-2">
           {sites.data.map((origin) => (
-            <div className="border-border flex items-center gap-3 border p-2" key={origin}>
+            <div
+              className="border-border flex items-center gap-3 rounded-md border p-2"
+              key={origin}
+            >
               <span className="min-w-0 flex-1 truncate text-sm">{origin}</span>
               <Button
                 disabled={revoke.isPending}

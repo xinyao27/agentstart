@@ -58,7 +58,7 @@ export function RuntimeEnvironmentDialogs(
             </DialogDescription>
           </DialogHeader>
           {props.pendingSwitchValue ? (
-            <div className="border-border/70 bg-muted/35 border px-3 py-2 text-xs">
+            <div className="border-border/70 bg-muted/35 rounded-md border px-3 py-2 text-xs">
               <div className="text-muted-foreground">
                 {translate(
                   'auto.components.settings.RuntimeEnvironmentsPane.05e0fc3ebf',
@@ -116,7 +116,7 @@ export function RuntimeEnvironmentDialogs(
             </DialogDescription>
           </DialogHeader>
           {props.pendingRemove ? (
-            <div className="border-border/70 bg-muted/35 border px-3 py-2 text-xs">
+            <div className="border-border/70 bg-muted/35 rounded-md border px-3 py-2 text-xs">
               <div className="truncate font-medium">{props.pendingRemove.name}</div>
               <div className="text-muted-foreground mt-0.5 truncate font-mono">
                 {props.pendingRemove.endpoints[0]?.endpoint ??

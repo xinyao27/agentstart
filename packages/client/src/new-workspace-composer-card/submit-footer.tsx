@@ -36,7 +36,7 @@ export function SubmitFooter({
       {createError ? (
         <div
           role="alert"
-          className="border-destructive/30 bg-destructive/10 text-destructive border px-3 py-2 text-xs"
+          className="border-destructive/30 bg-destructive/10 text-destructive rounded-md border px-3 py-2 text-xs"
         >
           {createError.help ? (
             <div className="space-y-1">
@@ -79,7 +79,7 @@ export function SubmitFooter({
         >
           {creating ? <LoadingIndicator className="size-4" /> : null}
           {primaryActionLabel}
-          <span className="ml-1 inline-flex items-center gap-0.5 border border-current/20 px-1.5 py-0.5 text-[10px] leading-none font-medium text-current/80">
+          <span className="ml-1 inline-flex items-center gap-0.5 rounded-sm border border-current/20 px-1.5 py-0.5 text-[10px] leading-none font-medium text-current/80">
             <span>{submitShortcutModifierLabel}</span>
             <CornerDownLeft className="size-3" />
           </span>

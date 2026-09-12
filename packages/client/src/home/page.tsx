@@ -47,7 +47,10 @@ export default function HomePage(): React.JSX.Element {
       ? liveUsageValue
       : {
           ...cachedUsage,
-          dailyByProvider: [],
+          // Why: cached contribution metrics can be displayed while provider
+          // snapshots reconnect; keep any live provider series visible during
+          // that partial-loading window.
+          dailyByProvider: liveUsageValue.dailyByProvider,
           isReady: false,
           isScanning: liveUsageValue.isScanning
         })()

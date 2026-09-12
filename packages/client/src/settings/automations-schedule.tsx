@@ -35,7 +35,7 @@ export function RitualScheduleSettings(): React.JSX.Element {
   )
   const value = schedule.data
   return (
-    <section className="border-border mt-5 border p-4">
+    <section className="border-border mt-5 rounded-lg border p-4">
       <h2 className="font-medium">
         {translate('extension.automations.schedule', 'Daemon schedule')}
       </h2>

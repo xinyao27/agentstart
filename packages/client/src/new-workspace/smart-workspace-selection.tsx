@@ -41,7 +41,7 @@ export function SmartWorkspaceSelection({
         event.preventDefault()
         onPlainEnter?.()
       }}
-      className="border-input focus-within:border-ring flex h-9 w-full min-w-0 items-center gap-2 border bg-transparent px-2.5 text-sm outline-none"
+      className="border-input focus-within:border-ring flex h-9 w-full min-w-0 items-center gap-2 rounded-md border bg-transparent px-2.5 text-sm outline-none"
     >
       <SmartWorkspaceSelectionIcon kind={selection.kind} />
       <span className="text-foreground min-w-0 flex-1 truncate leading-none font-medium">

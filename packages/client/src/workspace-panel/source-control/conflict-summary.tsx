@@ -41,7 +41,7 @@ export function ConflictSummaryCard({
           : 'Conflicts'
 
   return (
-    <div className="border border-amber-500/25 bg-amber-500/5 px-3 py-2">
+    <div className="rounded-md border border-amber-500/25 bg-amber-500/5 px-3 py-2">
       <div className="flex items-start gap-2">
         <TriangleAlert className="mt-0.5 size-4 shrink-0 text-amber-600 dark:text-amber-400" />
         <div className="min-w-0 flex-1">
@@ -131,7 +131,7 @@ export function OperationBanner({
   const Icon = conflictOperation === 'rebase' ? GitPullRequestArrow : GitMerge
 
   return (
-    <div className="border border-amber-500/25 bg-amber-500/5 px-3 py-2">
+    <div className="rounded-md border border-amber-500/25 bg-amber-500/5 px-3 py-2">
       <div className="flex items-center justify-center gap-2">
         <Icon className="size-4 shrink-0 text-amber-600 dark:text-amber-400" />
         <span className="text-foreground text-xs font-medium">{label}</span>
@@ -159,7 +159,7 @@ export function OperationBanner({
 
 export function TooManyChangesBanner({ limit }: { limit: number }): React.JSX.Element {
   return (
-    <div className="border border-amber-500/25 bg-amber-500/5 px-3 py-2">
+    <div className="rounded-md border border-amber-500/25 bg-amber-500/5 px-3 py-2">
       <div className="flex items-center gap-2">
         <AlertTriangle className="size-4 shrink-0 text-amber-600 dark:text-amber-400" />
         <span className="text-foreground text-xs">

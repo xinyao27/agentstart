@@ -41,7 +41,7 @@ export function CommunityAdaptersSettings(): React.JSX.Element {
   )
 
   return (
-    <section className="border-border mt-5 border p-4">
+    <section className="border-border mt-5 rounded-lg border p-4">
       <h2 className="font-medium">
         {translate('extension.settings.adapters', 'Community site adapters')}
       </h2>
@@ -136,10 +136,10 @@ function InstalledAdapter({
   onRemove: (id: string) => void
 }): React.JSX.Element {
   return (
-    <details className="border-border border p-3">
+    <details className="border-border rounded-md border p-3">
       <summary className="cursor-pointer text-sm font-medium">{adapter.name}</summary>
       <p className="text-muted-foreground mt-2 text-xs">{adapter.match}</p>
-      <pre className="border-border mt-2 max-h-40 overflow-auto border p-2 text-xs whitespace-pre-wrap">
+      <pre className="border-border mt-2 max-h-40 overflow-auto rounded-md border p-2 text-xs whitespace-pre-wrap">
         {adapter.code}
       </pre>
       <Button

@@ -185,7 +185,7 @@ export function MiniMaxAccountsSection({
       </div>
       <div
         className={cn(
-          'flex items-start gap-3 border bg-muted/20 p-3',
+          'flex items-start gap-3 rounded-md border bg-muted/20 p-3',
           isConfigured ? 'border-border/60' : 'border-border/40'
         )}
       >
@@ -310,7 +310,7 @@ export function MiniMaxAccountsSection({
           )}
         </p>
       </SearchableSetting>
-      <div className="border-border/60 bg-muted/20 space-y-3 border p-3">
+      <div className="border-border/60 bg-muted/20 space-y-3 rounded-md border p-3">
         <div className="space-y-1">
           <h4 className="text-muted-foreground text-xs font-semibold">
             {translate('auto.components.settings.AccountsPane.9dd50d3f75', 'Advanced')}

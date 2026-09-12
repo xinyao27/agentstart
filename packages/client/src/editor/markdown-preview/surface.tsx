@@ -181,7 +181,7 @@ function SearchButton({
 
 function ReviewToolbar({ review }: { review: MarkdownPreviewReviewSurface }): React.JSX.Element {
   return (
-    <div className="border-border/72 relative z-[15] mb-2 ml-auto flex w-fit max-w-full items-center gap-1 border bg-[color-mix(in_srgb,var(--background)_94%,var(--editor-surface))] p-1">
+    <div className="border-border/72 relative z-[15] mb-2 ml-auto flex w-fit max-w-full items-center gap-1 overflow-hidden rounded-md border bg-[color-mix(in_srgb,var(--background)_94%,var(--editor-surface))] p-1">
       <Button
         variant="quiet"
         size="xs"

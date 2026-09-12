@@ -149,7 +149,10 @@ export function WorkspaceSidebarFrame({
         >
           {/* Why: collapsed chrome keeps the panel destinations reachable; selecting
               one uses the same route as the expanded activity bar and opens the sidebar. */}
-          <ButtonGroup presentation="titlebar" className="h-full">
+          <ButtonGroup
+            presentation="titlebar"
+            className="border-border/70 h-full overflow-hidden rounded-lg border"
+          >
             {items.map((item, itemIndex) => (
               <ActivityBarButton
                 key={item.id}
@@ -189,7 +192,9 @@ export function WorkspaceSidebarFrame({
                         onSelectView={onSelectView}
                       />
                     </div>
-                    <div className="h-full shrink-0">{sidebarToggle}</div>
+                    <div className="border-border/70 h-full shrink-0 overflow-hidden rounded-lg border">
+                      {sidebarToggle}
+                    </div>
                   </div>
                 }
               />
@@ -207,7 +212,9 @@ export function WorkspaceSidebarFrame({
               <span className="text-foreground truncate text-[11px] font-semibold tracking-wider uppercase">
                 {activeTitle}
               </span>
-              <div className="h-full">{sidebarToggle}</div>
+              <div className="border-border/70 h-full overflow-hidden rounded-lg border">
+                {sidebarToggle}
+              </div>
             </div>
           )}
 
@@ -295,7 +302,10 @@ function TopActivityItems({
 }): React.JSX.Element {
   return (
     <div className="flex h-full min-w-0 flex-1 shrink">
-      <ButtonGroup presentation="titlebar" className="min-w-0 shrink-0">
+      <ButtonGroup
+        presentation="titlebar"
+        className="border-border/70 min-w-0 shrink-0 overflow-hidden rounded-lg border"
+      >
         {layout.visibleItems.map((item, itemIndex) => (
           <ActivityBarButton
             key={item.id}

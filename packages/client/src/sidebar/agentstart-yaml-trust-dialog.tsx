@@ -140,7 +140,7 @@ const AgentStartYamlTrustDialog = function AgentStartYamlTrustDialog() {
         </DialogHeader>
 
         {scriptContent && (
-          <div className="border-border/70 bg-muted/35 border px-3 py-2">
+          <div className="border-border/70 bg-muted/35 rounded-md border px-3 py-2">
             <div className="text-muted-foreground mb-1 text-[11px] font-medium tracking-wide uppercase">
               {previouslyApproved
                 ? translate(
@@ -162,7 +162,7 @@ const AgentStartYamlTrustDialog = function AgentStartYamlTrustDialog() {
 
         <label
           className={cn(
-            'flex cursor-pointer items-center gap-2.5 border px-3 py-2 transition-colors',
+            'flex cursor-pointer items-center gap-2.5 rounded-md border px-3 py-2 transition-colors',
             alwaysTrust
               ? 'border-primary/60 bg-primary/5'
               : 'border-border/70 bg-muted/25 hover:border-border hover:bg-muted/40'

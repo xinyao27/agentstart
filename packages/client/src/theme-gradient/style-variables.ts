@@ -3,10 +3,8 @@ import { useEffect } from 'react'
 import { useAppStore } from '~renderer/store/state'
 
 import { resolveDocumentTheme } from '../editor/document-theme'
-import { systemAccentColor } from './accent-color'
 import { buildThemeGradientStyle } from './gradient-css'
 import { resolveThemeGradient } from './state'
-import { useSystemAccentColor } from './system-accent'
 
 export type ThemeGradientStyleVariables = Record<string, string>
 
@@ -33,7 +31,7 @@ function resolveThemeGradientStyleVariables(
 
 /**
  * Style variables for the active workspace's theme, or `undefined` when no
- * palette applies. The system accent only changes the document's brand color.
+ * palette applies. The product accent remains the default outside that scope.
  */
 export function useThemeGradientStyleVariables(
   systemPrefersDark: boolean
@@ -49,9 +47,8 @@ export function useThemeGradientStyleVariables(
   const isDarkMode = resolveDocumentTheme(themePreference ?? 'system', () => ({
     matches: systemPrefersDark
   }))
-  const nativeAccent = useSystemAccentColor(theme === null)
   const styleVariables = resolveThemeGradientStyleVariables(theme, isDarkMode)
-  const brand = styleVariables?.['--brand'] ?? systemAccentColor(nativeAccent, isDarkMode)
+  const brand = styleVariables?.['--brand']
   useEffect(() => {
     if (!brand) {
       return
