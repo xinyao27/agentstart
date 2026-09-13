@@ -1,3 +1,5 @@
+
+
 <h1 align="center">
   <a href="https://github.com/xinyao27/agentstart"><img src="apps/extension/public/icon.png" alt="AgentStart" width="64" valign="middle" /></a> AgentStart
 </h1>
@@ -77,7 +79,7 @@ Install the mobile app, then pair it directly with the daemon.
 
 ## Develop locally
 
-AgentStart is a pnpm monorepo. Development requires Rust 1.95, Node.js 24, pnpm 12.1.0, and Bun 1.4 for the build scripts.
+AgentStart is a pnpm monorepo. Development requires Rust 1.95, Node.js 24, pnpm 12.1.0, and Bun 1.4.0 for the build scripts.
 
 ```bash
 pnpm install
