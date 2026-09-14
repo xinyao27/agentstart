@@ -3,36 +3,6 @@ import { platformBindings } from './platform.js'
 
 export const KEYBINDING_DEFINITIONS_1: readonly KeybindingDefinition[] = [
   {
-    id: 'worktree.quickOpen',
-    title: 'Legacy file search shortcut',
-    group: 'Global',
-    scope: 'global',
-    searchKeywords: ['shortcut', 'global', 'file', 'quick open', 'legacy'],
-    defaultBindings: platformBindings([])
-  },
-  {
-    id: 'app.settings',
-    title: 'Open Settings',
-    group: 'Global',
-    scope: 'global',
-    searchKeywords: ['shortcut', 'settings', 'preferences'],
-    // Why: Mod+Comma is the browser's own settings chord, so the workbench
-    // ships the shifted variant it can actually own.
-    defaultBindings: platformBindings(['Mod+Shift+Comma']),
-    conflictGroup: 'menu'
-  },
-  {
-    id: 'app.forceReload',
-    title: 'Force Reload',
-    group: 'Global',
-    scope: 'global',
-    searchKeywords: ['shortcut', 'reload', 'refresh', 'force'],
-    // Why: Mod+Shift+R hard-reloads the browser page itself; users can bind
-    // this row explicitly, but the workbench no longer claims the chord.
-    defaultBindings: platformBindings([]),
-    conflictGroup: 'menu'
-  },
-  {
     id: 'app.commandPalette',
     title: 'Open Command Palette',
     group: 'Global',

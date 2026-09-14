@@ -18,7 +18,8 @@ import {
 } from '../navigation-row-projection'
 import {
   setHasWorktreeNavigationTargets,
-  subscribeToWorktreeNavigationRequests
+  subscribeToWorktreeNavigationRequests,
+  type WorktreeNavigationRequest
 } from '../worktree-navigation-request'
 import { getPreferredWorktreeRows } from '../worktree-sidebar-row-preference'
 import {
@@ -54,7 +55,7 @@ export function useWorktreeNavigation(args: {
   keybindings: AppState['keybindings']
   markDirectScrollInput: () => void
 }): (event: React.KeyboardEvent) => void {
-  const navigate = (direction: 'up' | 'down') => {
+  const resolveNavigationRows = () => {
     // Why: cycling uses the all-expanded model so collapsed Pinned/All or lineage
     // sections cannot make keyboard navigation skip a workspace.
     const allWorktreeRows = buildRows({
@@ -74,7 +75,29 @@ export function useWorktreeNavigation(args: {
       projectGrouping: args.projectGrouping
     }).filter((row): row is Extract<RenderRow, { type: 'item' }> => row.type === 'item')
     const pinnedPolicy = getPinnedWorktreeDisplayPolicy(args.settings)
-    const rows = getPreferredWorktreeRows(allWorktreeRows, pinnedPolicy)
+    return { rows: getPreferredWorktreeRows(allWorktreeRows, pinnedPolicy), pinnedPolicy }
+  }
+
+  const revealWorktree = (
+    worktreeId: string,
+    pinnedPolicy: ReturnType<typeof getPinnedWorktreeDisplayPolicy>
+  ): void => {
+    activateAndRevealWorktree(worktreeId)
+    const rowIndex = findPreferredRenderRowIndexForWorktree(
+      args.renderRows,
+      worktreeId,
+      pinnedPolicy === 'duplicate-in-groups'
+    )
+    if (rowIndex !== -1) {
+      void args.legendListRef.current?.scrollIndexIntoView({
+        index: workspaceIndexForLocalRowIndex(args.workspaceRows, rowIndex),
+        animated: false
+      })
+    }
+  }
+
+  const navigate = (direction: 'up' | 'down') => {
+    const { rows, pinnedPolicy } = resolveNavigationRows()
     if (rows.length === 0) {
       return
     }
@@ -90,24 +113,27 @@ export function useWorktreeNavigation(args: {
         nextIndex = 0
       }
     }
-    const nextWorktreeId = rows[nextIndex].worktree.id
-    activateAndRevealWorktree(nextWorktreeId)
-    const rowIndex = findPreferredRenderRowIndexForWorktree(
-      args.renderRows,
-      nextWorktreeId,
-      pinnedPolicy === 'duplicate-in-groups'
-    )
-    if (rowIndex !== -1) {
-      void args.legendListRef.current?.scrollIndexIntoView({
-        index: workspaceIndexForLocalRowIndex(args.workspaceRows, rowIndex),
-        animated: false
-      })
-    }
+    revealWorktree(rows[nextIndex].worktree.id, pinnedPolicy)
   }
 
-  const handleDirectNavigation = useEventCallback((direction: 'up' | 'down') => {
+  // Why: the digit shortcuts number the same rows the sidebar renders, so they
+  // resolve their target here instead of rebuilding the visibility pipeline.
+  const selectByIndex = (index: number) => {
+    const { rows, pinnedPolicy } = resolveNavigationRows()
+    const target = rows[index]
+    if (!target) {
+      return
+    }
+    revealWorktree(target.worktree.id, pinnedPolicy)
+  }
+
+  const handleDirectNavigation = useEventCallback((request: WorktreeNavigationRequest) => {
     args.markDirectScrollInput()
-    navigate(direction)
+    if (request === 'up' || request === 'down') {
+      navigate(request)
+      return
+    }
+    selectByIndex(request.index)
   })
   useEffect(() => {
     setHasWorktreeNavigationTargets(args.worktrees.length > 0)

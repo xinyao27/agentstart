@@ -3,10 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { translate } from '~renderer/i18n/i18n'
-import {
-  useOptionalShortcutLabel,
-  useShortcutLabel
-} from '~renderer/keyboard-input/use-shortcut-label'
+import { useShortcutLabel } from '~renderer/keyboard-input/use-shortcut-label'
 import { useAppStore } from '~renderer/store/state'
 import { focusTerminalTabSurface } from '~renderer/tab-bar/focus-terminal-surface'
 import { DropdownMenuSeparator } from '~renderer/ui/dropdown-menu'
@@ -64,7 +61,6 @@ export function TabCreateMenu(props: TabBarProps): React.JSX.Element {
   const newBrowserShortcut = useShortcutLabel('tab.newBrowser')
   const newSimulatorShortcut = useShortcutLabel('tab.newSimulator')
   const newFileShortcut = useShortcutLabel('tab.newMarkdown')
-  const openMarkdownShortcut = useOptionalShortcutLabel('tab.openMarkdown')
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const pendingFocusRef = useRef<(() => void) | null>(null)
@@ -239,7 +235,6 @@ export function TabCreateMenu(props: TabBarProps): React.JSX.Element {
           newFileShortcut={newFileShortcut}
           newSimulatorShortcut={newSimulatorShortcut}
           newTerminalShortcut={newTerminalShortcut}
-          onOpenMarkdownShortcut={openMarkdownShortcut ?? null}
           pwshAvailable={runtime.pwshAvailable}
           queueNewTerminalFocus={queueNewTerminalFocus}
           showMobileEmulatorIntroCallout={runtime.showMobileEmulatorIntroCallout}

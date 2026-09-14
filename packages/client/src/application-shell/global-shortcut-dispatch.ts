@@ -1,14 +1,18 @@
 import {
   keybindingMatchesAction,
+  matchKeybindingDigitIndex,
   type KeybindingActionId,
   type KeybindingContext,
   type PhysicalModifierToken
 } from '@agentstart/protocol/keybindings'
 
+import { openWorkspaceCreationComposerWithTourHandoff } from '../contextual-tours/workspace-creation-tour-handoff'
 import { getSelectedTextForFileSearch } from '../editor/file-search-selection'
 import { isEditableTarget } from '../keyboard-input/editable-target'
 import { getRendererAppPlatform } from '../settings/renderer-app-platform'
+import { runWorktreeDelete } from '../sidebar/delete-worktree/flow'
 import { requestScrollToCurrentWorkspaceRevealAndRename } from '../sidebar/scroll-to-current-workspace-status'
+import { requestWorktreeByIndex } from '../sidebar/worktree-navigation-request'
 import { useAppStore } from '../store/state'
 import type { AppState } from '../store/types'
 import { showTerminalShortcutCaptureNotification } from '../terminal-workspace/terminal-shortcut-capture-notification'
@@ -51,6 +55,17 @@ function getKeybindingContext(target: EventTarget | null): KeybindingContext {
   return target instanceof HTMLElement && target.classList.contains('xterm-helper-textarea')
     ? 'terminal'
     : 'app'
+}
+
+/** The active group's canonical visual tab order, for the digit-index shortcuts. */
+function orderedActiveGroupTabIds(state: GlobalShortcutState): readonly string[] {
+  const worktreeId = state.activeWorktreeId
+  if (!worktreeId) {
+    return []
+  }
+  const groupId = state.activeGroupIdByWorktree[worktreeId]
+  const group = state.groupsByWorktree[worktreeId]?.find((candidate) => candidate.id === groupId)
+  return group?.tabOrder ?? []
 }
 
 export function dispatchGlobalShortcut(
@@ -148,6 +163,17 @@ export function dispatchGlobalShortcut(
     }
     return
   }
+  if (matchShortcut('workspace.create')) {
+    // Why: the sidebar create control is disabled without a project, so the
+    // shortcut must not open a composer the UI would refuse to.
+    if (useAppStore.getState().repos.length === 0) {
+      return
+    }
+    input.preventDefault()
+    notifyTerminalCapture('workspace.create')
+    openWorkspaceCreationComposerWithTourHandoff()
+    return
+  }
   if (matchShortcut('sidebar.left.toggle')) {
     input.preventDefault()
     notifyTerminalCapture('sidebar.left.toggle')
@@ -174,11 +200,49 @@ export function dispatchGlobalShortcut(
       return
     }
   }
+  if (state.workspaceChromeActive) {
+    const tabIndex = matchKeybindingDigitIndex(
+      'tab.selectByIndex',
+      input,
+      shortcutPlatform,
+      state.keybindings,
+      { context, terminalShortcutPolicy: state.terminalShortcutPolicy }
+    )
+    const tabId = tabIndex === null ? undefined : orderedActiveGroupTabIds(state)[tabIndex]
+    if (tabId) {
+      input.preventDefault()
+      notifyTerminalCapture('tab.selectByIndex')
+      useAppStore.getState().activateTab(tabId)
+      return
+    }
+  }
   if (state.workspaceChromeActive && matchShortcut('workspace.rename') && state.activeWorktreeId) {
     input.preventDefault()
     notifyTerminalCapture('workspace.rename')
     useAppStore.getState().setSidebarOpen(true)
     requestScrollToCurrentWorkspaceRevealAndRename()
+    return
+  }
+  if (matchShortcut('workspace.delete') && state.activeWorktreeId) {
+    input.preventDefault()
+    notifyTerminalCapture('workspace.delete')
+    runWorktreeDelete(state.activeWorktreeId)
+    return
+  }
+  // Why: the digit range belongs to the sidebar's own visibility pipeline, so the
+  // request carries only the index and the sidebar resolves it against the rows
+  // it is rendering.
+  const workspaceIndex = matchKeybindingDigitIndex(
+    'workspace.selectByIndex',
+    input,
+    shortcutPlatform,
+    state.keybindings,
+    { context, terminalShortcutPolicy: state.terminalShortcutPolicy }
+  )
+  if (workspaceIndex !== null) {
+    input.preventDefault()
+    notifyTerminalCapture('workspace.selectByIndex')
+    requestWorktreeByIndex(workspaceIndex)
     return
   }
   if (!canOpenWorkspacePanel) {

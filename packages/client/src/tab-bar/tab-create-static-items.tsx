@@ -28,7 +28,6 @@ type TabCreateStaticItemsProps = Pick<
   newFileShortcut: string
   newSimulatorShortcut: string
   newTerminalShortcut: string
-  onOpenMarkdownShortcut: string | null
   pwshAvailable: boolean
   queueNewTerminalFocus: () => void
   showMobileEmulatorIntroCallout: boolean
@@ -51,7 +50,6 @@ export function TabCreateStaticItems(props: TabCreateStaticItemsProps): React.JS
     onNewTerminalTab,
     onNewTerminalWithShell,
     onOpenFileTab,
-    onOpenMarkdownShortcut,
     pwshAvailable,
     queueNewTerminalFocus,
     showMobileEmulatorIntroCallout,
@@ -121,9 +119,6 @@ export function TabCreateStaticItems(props: TabCreateStaticItemsProps): React.JS
         >
           <FileText className="text-muted-foreground size-4" />
           {translate('auto.components.tab.bar.TabBar.4f327c8b3d', 'Open Markdown...')}
-          {onOpenMarkdownShortcut ? (
-            <DropdownMenuShortcut>{onOpenMarkdownShortcut}</DropdownMenuShortcut>
-          ) : null}
         </DropdownMenuItem>
       ) : null}
     </>

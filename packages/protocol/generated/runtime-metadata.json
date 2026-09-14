@@ -7,44 +7,6 @@
   },
   "keybindings": [
     {
-      "id": "worktree.quickOpen",
-      "title": "Legacy file search shortcut",
-      "scope": "global",
-      "defaultBindings": {
-        "darwin": [],
-        "linux": [],
-        "win32": []
-      }
-    },
-    {
-      "id": "app.settings",
-      "title": "Open Settings",
-      "scope": "global",
-      "conflictGroup": "menu",
-      "defaultBindings": {
-        "darwin": [
-          "Mod+Shift+Comma"
-        ],
-        "linux": [
-          "Mod+Shift+Comma"
-        ],
-        "win32": [
-          "Mod+Shift+Comma"
-        ]
-      }
-    },
-    {
-      "id": "app.forceReload",
-      "title": "Force Reload",
-      "scope": "global",
-      "conflictGroup": "menu",
-      "defaultBindings": {
-        "darwin": [],
-        "linux": [],
-        "win32": []
-      }
-    },
-    {
       "id": "app.commandPalette",
       "title": "Open Command Palette",
       "scope": "global",
@@ -421,18 +383,6 @@
       }
     },
     {
-      "id": "tab.openMarkdown",
-      "title": "Open markdown tab",
-      "scope": "tabs",
-      "defaultBindings": {
-        "darwin": [
-          "Mod+Alt+O"
-        ],
-        "linux": [],
-        "win32": []
-      }
-    },
-    {
       "id": "tab.close",
       "title": "Close active tab",
       "scope": "tabs",
@@ -620,84 +570,6 @@
       "title": "Toggle Quick Commands menu",
       "scope": "tabs",
       "conflictGroup": "global",
-      "defaultBindings": {
-        "darwin": [],
-        "linux": [],
-        "win32": []
-      }
-    },
-    {
-      "id": "browser.find",
-      "title": "Find in Browser",
-      "scope": "browser",
-      "defaultBindings": {
-        "darwin": [
-          "Mod+F"
-        ],
-        "linux": [
-          "Mod+F"
-        ],
-        "win32": [
-          "Mod+F"
-        ]
-      }
-    },
-    {
-      "id": "browser.back",
-      "title": "Go Back in Browser",
-      "scope": "browser",
-      "defaultBindings": {
-        "darwin": [],
-        "linux": [],
-        "win32": []
-      }
-    },
-    {
-      "id": "browser.forward",
-      "title": "Go Forward in Browser",
-      "scope": "browser",
-      "defaultBindings": {
-        "darwin": [],
-        "linux": [],
-        "win32": []
-      }
-    },
-    {
-      "id": "browser.reload",
-      "title": "Reload Browser Page",
-      "scope": "browser",
-      "defaultBindings": {
-        "darwin": [],
-        "linux": [],
-        "win32": []
-      }
-    },
-    {
-      "id": "browser.hardReload",
-      "title": "Hard Reload Browser Page",
-      "scope": "browser",
-      "defaultBindings": {
-        "darwin": [],
-        "linux": [],
-        "win32": []
-      }
-    },
-    {
-      "id": "browser.focusAddressBar",
-      "title": "Focus Browser Address Bar",
-      "scope": "browser",
-      "defaultBindings": {
-        "darwin": [
-          "Mod+Alt+L"
-        ],
-        "linux": [],
-        "win32": []
-      }
-    },
-    {
-      "id": "browser.grabElement",
-      "title": "Grab Page Element",
-      "scope": "browser",
       "defaultBindings": {
         "darwin": [],
         "linux": [],

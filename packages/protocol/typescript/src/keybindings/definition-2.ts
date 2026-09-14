@@ -121,20 +121,6 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     }
   },
   {
-    id: 'tab.openMarkdown',
-    title: 'Open markdown tab',
-    group: 'Tabs',
-    scope: 'tabs',
-    searchKeywords: ['shortcut', 'tab', 'markdown', 'file', 'open'],
-    // Why: Mod+Shift+O opens the browser's bookmark manager, so the chord is
-    // macOS-only here; Windows/Linux bind it explicitly in Settings.
-    defaultBindings: {
-      darwin: ['Mod+Alt+O'],
-      linux: [],
-      win32: []
-    }
-  },
-  {
     id: 'tab.close',
     title: 'Close active tab',
     group: 'Tabs',
