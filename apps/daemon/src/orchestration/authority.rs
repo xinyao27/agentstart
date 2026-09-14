@@ -1,4 +1,4 @@
-#[path = "authority/agent-context.rs"]
+#[path = "authority/agent_context.rs"]
 mod agent_context;
 mod workers;
 

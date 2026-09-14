@@ -92,24 +92,28 @@ pub(in crate::rpc) fn protocol_status_response(
     })
 }
 
-fn protocol_update_support(support: &crate::updater::DaemonUpdaterSupport) -> RemoteUpdateSupport {
+fn protocol_update_support(
+    support: &crate::update::service::DaemonUpdaterSupport,
+) -> RemoteUpdateSupport {
     let install_mode = match support.install_mode {
-        crate::updater::DaemonUpdaterInstallMode::SupervisedHeadlessServe => {
+        crate::update::service::DaemonUpdaterInstallMode::SupervisedHeadlessServe => {
             RemoteUpdateInstallMode::SupervisedHeadlessServe
         }
-        crate::updater::DaemonUpdaterInstallMode::UnsupportedHeadlessServe => {
+        crate::update::service::DaemonUpdaterInstallMode::UnsupportedHeadlessServe => {
             RemoteUpdateInstallMode::UnsupportedHeadlessServe
         }
     };
     let reason = match support.reason {
-        crate::updater::DaemonUpdaterSupportReason::Available => RemoteUpdateReason::Available,
-        crate::updater::DaemonUpdaterSupportReason::ManualServiceUpdateRequired => {
+        crate::update::service::DaemonUpdaterSupportReason::Available => {
+            RemoteUpdateReason::Available
+        }
+        crate::update::service::DaemonUpdaterSupportReason::ManualServiceUpdateRequired => {
             RemoteUpdateReason::ManualServiceUpdateRequired
         }
-        crate::updater::DaemonUpdaterSupportReason::UnpackagedBuild => {
+        crate::update::service::DaemonUpdaterSupportReason::UnpackagedBuild => {
             RemoteUpdateReason::UnpackagedBuild
         }
-        crate::updater::DaemonUpdaterSupportReason::UpdaterUnavailable => {
+        crate::update::service::DaemonUpdaterSupportReason::UpdaterUnavailable => {
             RemoteUpdateReason::UpdaterUnavailable
         }
     };

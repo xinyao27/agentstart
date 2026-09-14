@@ -65,7 +65,7 @@ use crate::telemetry::TelemetryAuthority;
 use crate::terminal_session::{TerminalRuntimeContext, TerminalSessionAuthority};
 use crate::ui::UiAuthority;
 use crate::update::UpdateChecker;
-use crate::updater::DaemonUpdater;
+use crate::update::service::DaemonUpdater;
 use crate::workspace_cleanup::WorkspaceCleanupAuthority;
 use crate::workspace_ports::WorkspacePortsRegistry;
 use crate::workspace_session::WorkspaceSessionAuthority;

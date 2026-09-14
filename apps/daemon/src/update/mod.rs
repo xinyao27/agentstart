@@ -2,6 +2,7 @@ mod download;
 mod install_command;
 mod model;
 pub(crate) mod restart;
+pub(crate) mod service;
 #[cfg(target_os = "macos")]
 mod signature;
 mod target;

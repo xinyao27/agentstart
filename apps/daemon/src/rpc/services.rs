@@ -49,7 +49,7 @@ use crate::skills::SkillsAuthority;
 use crate::telemetry::TelemetryAuthority;
 use crate::terminal_session::TerminalSessionAuthority;
 use crate::ui::UiAuthority;
-use crate::updater::DaemonUpdater;
+use crate::update::service::DaemonUpdater;
 use crate::workspace_cleanup::WorkspaceCleanupAuthority;
 use crate::workspace_paths::WorkspacePathAuthority;
 use crate::workspace_ports::WorkspacePortsRegistry;

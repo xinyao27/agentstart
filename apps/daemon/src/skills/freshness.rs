@@ -1,6 +1,6 @@
 #[path = "freshness/artifacts.rs"]
 mod artifacts;
-#[path = "freshness/git-tree.rs"]
+#[path = "freshness/git_tree.rs"]
 mod git_tree;
 #[path = "freshness/identity.rs"]
 mod identity;

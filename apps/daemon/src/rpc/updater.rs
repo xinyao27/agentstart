@@ -1,4 +1,4 @@
-use crate::updater::DaemonUpdater;
+use crate::update::service::DaemonUpdater;
 
 pub(super) mod protocol;
 

@@ -3,7 +3,7 @@ use std::sync::Arc;
 use crate::protocol::ProtocolCompatibility;
 use crate::session_tabs::{SessionTabsAuthority, SessionTabsGraphStatus};
 use crate::settings::SettingsAuthority;
-use crate::updater::{DaemonUpdater, DaemonUpdaterSupport};
+use crate::update::service::{DaemonUpdater, DaemonUpdaterSupport};
 
 use super::RuntimeIdentity;
 

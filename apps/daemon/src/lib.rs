@@ -79,7 +79,6 @@ mod terminal_session;
 mod truncate_reason;
 mod ui;
 mod update;
-mod updater;
 mod workspace_cleanup;
 mod workspace_paths;
 mod workspace_session;

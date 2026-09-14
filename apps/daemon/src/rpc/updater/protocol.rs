@@ -14,12 +14,12 @@ use agentstart_protocol::runtime::v1::{
 };
 use agentstart_protocol::transport::{decode, encode};
 
-use crate::update::{UpdateCheckOptions, UpdateError};
-use crate::updater::{
+use crate::update::service::{
     DaemonUpdaterChangelog, DaemonUpdaterChangelogRelease, DaemonUpdaterError,
     DaemonUpdaterInstallMode, DaemonUpdaterSnapshot, DaemonUpdaterStatus, DaemonUpdaterSupport,
     DaemonUpdaterSupportReason,
 };
+use crate::update::{UpdateCheckOptions, UpdateError};
 
 use super::UpdaterRpc;
 use crate::rpc::protocol_call::{

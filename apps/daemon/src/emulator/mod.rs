@@ -1,6 +1,6 @@
 mod actions;
 mod devices;
-#[path = "serve-sim.rs"]
+#[path = "serve_sim.rs"]
 mod serve_sim;
 mod sessions;
 mod stream;
