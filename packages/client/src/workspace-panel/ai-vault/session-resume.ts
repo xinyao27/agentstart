@@ -221,12 +221,12 @@ export function aiVaultSessionResumeLabel(
 ): string {
   if (state.usesSessionWorktree) {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionDetails.resumeInWorktree',
+      'auto.components.workspacePanel.AiVaultSessionDetails.resumeInWorktree',
       'Resume in Worktree'
     )
   }
   return translate(
-    'auto.components.right.sidebar.AiVaultSessionRow.resumeInNewTab',
+    'auto.components.workspacePanel.AiVaultSessionRow.resumeInNewTab',
     'Resume in New Tab'
   )
 }

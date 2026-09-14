@@ -32,12 +32,11 @@ import {
 } from '~renderer/sidebar/setup-script-prompt'
 
 import type { AppState } from '../../store/types'
-import { normalizeRightSidebarRoute } from '../../workspace-panel/right-sidebar-route'
+import { normalizeWorkspacePanelRoute } from '../../workspace-panel/workspace-panel-route'
 import {
   DEFAULT_ON_PORTS_STATUS_BAR_ITEM,
   normalizeHydratedVisibleWorkspaceHostIds,
-  MAX_LEFT_SIDEBAR_WIDTH,
-  MAX_RIGHT_SIDEBAR_WIDTH,
+  MAX_NAVIGATION_SIDEBAR_WIDTH,
   sanitizePersistedRepoIds,
   hydrateTrustedAgentStartHooks,
   sanitizeShowDotfilesByWorktree,
@@ -47,7 +46,6 @@ import {
   hydratedUIPartialMatchesState
 } from './persistence-model'
 import type { UISlice } from './slice'
-import { sanitizeHydratedActiveView } from './view-model'
 
 const FIXED_WORKSPACE_GROUP_BY: UISlice['groupBy'] = 'repo'
 
@@ -56,7 +54,7 @@ export function createUIHydrationActions(
   get: Parameters<StateCreator<AppState, [], [], UISlice>>[1]
 ): Pick<UISlice, 'hydratePersistedUI'> {
   return {
-    hydratePersistedUI: (ui, source = 'sync') => {
+    hydratePersistedUI: (ui, _source = 'sync') => {
       const catalogState = readProjectCatalogRuntimeState()
       set((s) => {
         const manualRepoOrder = normalizeManualRepoOrder(ui.manualRepoOrder)
@@ -102,9 +100,9 @@ export function createUIHydrationActions(
             _grokStatusBarDefaultAdded: true
           }).catch(console.error)
         }
-        const rightSidebarRoute = normalizeRightSidebarRoute(
-          ui.rightSidebarTab,
-          ui.rightSidebarExplorerView
+        const workspacePanelRoute = normalizeWorkspacePanelRoute(
+          ui.workspacePanelTab,
+          ui.workspacePanelExplorerView
         )
         const hydrated = {
           // Why: persisted UI data comes from disk and may be stale, corrupted,
@@ -114,21 +112,17 @@ export function createUIHydrationActions(
           sidebarWidth: sanitizePersistedSidebarWidth(
             ui.sidebarWidth,
             s.sidebarWidth,
-            MAX_LEFT_SIDEBAR_WIDTH
-          ),
-          rightSidebarWidth: sanitizePersistedSidebarWidth(
-            ui.rightSidebarWidth,
-            s.rightSidebarWidth,
-            MAX_RIGHT_SIDEBAR_WIDTH
+            MAX_NAVIGATION_SIDEBAR_WIDTH
           ),
           markdownTocPanelWidth: clampMarkdownTocPanelWidth(
             ui.markdownTocPanelWidth,
             undefined,
             s.markdownTocPanelWidth
           ),
-          rightSidebarOpen: typeof ui.rightSidebarOpen === 'boolean' ? ui.rightSidebarOpen : true,
-          rightSidebarTab: rightSidebarRoute.rightSidebarTab,
-          rightSidebarExplorerView: rightSidebarRoute.rightSidebarExplorerView,
+          workspacePanelOpen:
+            typeof ui.workspacePanelOpen === 'boolean' ? ui.workspacePanelOpen : false,
+          workspacePanelTab: workspacePanelRoute.workspacePanelTab,
+          workspacePanelExplorerView: workspacePanelRoute.workspacePanelExplorerView,
           // Why: Project -> Workspace is the single list hierarchy on every client;
           // ignore legacy persisted grouping modes instead of reviving the old switcher.
           groupBy: FIXED_WORKSPACE_GROUP_BY,
@@ -223,12 +217,6 @@ export function createUIHydrationActions(
           workspaceCleanupDismissals: sanitizeWorkspaceCleanupDismissals(
             ui.workspaceCleanup?.dismissals
           ),
-          // Why: restore the view only from the startup hydration. Runtime UI
-          // invalidations also hydrate with source 'sync'; re-applying activeView
-          // there would yank the user's current
-          // per-window view (navigation state, not a synced preference).
-          activeView:
-            source === 'startup' ? sanitizeHydratedActiveView(ui.activeView) : s.activeView,
           persistedUIReady: true
         }
         // Why: the runtime publishes UI written by any client. Identical hydration must

@@ -93,11 +93,11 @@ export function useSourceControlActionModel(scope: SourceControlCreateReviewInte
         ...action,
         title: prGenerating
           ? translate(
-              'auto.components.right.sidebar.SourceControl.createPrIntentGeneratingDetails',
+              'auto.components.workspacePanel.SourceControl.createPrIntentGeneratingDetails',
               'Generating review details…'
             )
           : translate(
-              'auto.components.right.sidebar.SourceControl.fe5bd1a610',
+              'auto.components.workspacePanel.SourceControl.fe5bd1a610',
               'Creating {{value0}}...',
               { value0: hostedReviewCreateCopy.reviewLabel }
             ),

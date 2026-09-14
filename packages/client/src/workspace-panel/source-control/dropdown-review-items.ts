@@ -26,7 +26,7 @@ export function resolveDropdownReviewItems(
   const createItem: DropdownItem = {
     kind: 'create_pr',
     label: translate(
-      'auto.components.right.sidebar.source.control.dropdown.items.9e779995dd',
+      'auto.components.workspacePanel.source.control.dropdown.items.9e779995dd',
       'Create {{value0}}',
       { value0: copy.shortLabel }
     ),

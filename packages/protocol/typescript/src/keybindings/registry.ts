@@ -46,3 +46,4 @@ export {
   matchKeybindingDigitIndex
 } from './matching.js'
 export { findKeybindingConflicts, formatKeybinding, formatKeybindingList } from './format.js'
+export { parseKeybinding } from './syntax.js'

@@ -72,6 +72,10 @@ export function createTabLifecycleActions(
         const nextTabs = (current.unifiedTabsByWorktree[worktreeId] ?? []).filter(
           (item) => item.id !== tabId
         )
+        const nextUnifiedTabsByWorktree = {
+          ...current.unifiedTabsByWorktree,
+          [worktreeId]: nextTabs
+        }
         // Why: closeUnifiedTab can be invoked without going through terminals.closeTab
         // (e.g., close-to-right / close-others gestures via closeOtherTabs and
         // closeTabsToRight). The unread-flag map is keyed by terminal entityId and
@@ -112,7 +116,7 @@ export function createTabLifecycleActions(
           (current.browserTabsByWorktree[worktreeId] ?? []).length === 0 &&
           !current.openFiles.some((file) => file.worktreeId === worktreeId)
         return {
-          unifiedTabsByWorktree: { ...current.unifiedTabsByWorktree, [worktreeId]: nextTabs },
+          unifiedTabsByWorktree: nextUnifiedTabsByWorktree,
           groupsByWorktree: {
             ...current.groupsByWorktree,
             [worktreeId]: nextGroups
@@ -161,10 +165,7 @@ export function createTabLifecycleActions(
             ? buildActiveSurfacePatch(
                 {
                   ...current,
-                  unifiedTabsByWorktree: {
-                    ...current.unifiedTabsByWorktree,
-                    [worktreeId]: nextTabs
-                  },
+                  unifiedTabsByWorktree: nextUnifiedTabsByWorktree,
                   groupsByWorktree: {
                     ...current.groupsByWorktree,
                     [worktreeId]: nextGroups

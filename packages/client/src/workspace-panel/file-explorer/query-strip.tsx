@@ -1,11 +1,11 @@
-import type { RightSidebarExplorerView } from '@agentstart/protocol/settings/ui-state'
+import type { WorkspacePanelExplorerView } from '@agentstart/protocol/settings/ui-state'
 import React from 'react'
 
 import { FileExplorerViewSwitch } from './view-switch'
 
 type FileExplorerQueryStripProps = {
-  view: RightSidebarExplorerView
-  onSelectView: (view: RightSidebarExplorerView) => void
+  view: WorkspacePanelExplorerView
+  onSelectView: (view: WorkspacePanelExplorerView) => void
   children: React.ReactNode
 }
 

@@ -24,7 +24,7 @@ export const WAKE_HIBERNATED_AGENTS_WORKTREE_EVENT = 'agentstart-wake-hibernated
 // terminal fit synchronously before paint — so the new width and the
 // reflowed terminal land on the same frame with no visible transient.
 //
-// Continuous drags (sidebar-width drag, tab-group split drag) use the
+// Continuous drags (navigation-sidebar width drag, tab-group split drag) use the
 // per-pane ResizeObserver path instead.
 export const SYNC_FIT_PANES_EVENT = 'agentstart-sync-fit-panes'
 

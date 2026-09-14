@@ -8,7 +8,7 @@ import { getRepoOwnerRoutedSettings } from '~renderer/repo/runtime-owner'
 import { useRepoById, useWorktreeById } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
 
-import { showWorkspaceSidebar } from '../show-sidebar'
+import { showWorkspacePanel } from '../show-workspace-panel'
 import type { SourceControlRowOpenEvent } from '../source-control/split-open'
 import { useGitHistoryCommitActions } from '../use-git-history-commit-actions'
 import { collectGitGraphBranchOptions, filterGitGraphItemsByBranches } from './branch-filter'
@@ -244,7 +244,7 @@ export function useGitGraphView({ worktreeId, tabId }: { worktreeId: string; tab
     setGitGraphColumnWidths(worktreeId, widths)
 
   const close = () => closeUnifiedTab(tabId)
-  const openUncommittedChanges = () => showWorkspaceSidebar({ view: 'source-control', worktreeId })
+  const openUncommittedChanges = () => showWorkspacePanel({ view: 'source-control', worktreeId })
 
   return {
     graphState,

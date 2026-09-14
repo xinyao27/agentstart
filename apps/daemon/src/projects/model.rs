@@ -24,12 +24,6 @@ impl ProjectKind {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ProjectLocation {
-    pub host_id: String,
-    pub path: String,
-}
-
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Project {
@@ -65,23 +59,4 @@ impl ProjectWorktreeVisibility {
             _ => None,
         }
     }
-}
-
-pub struct ProjectRegistration {
-    pub display_name: String,
-    pub kind: ProjectKind,
-    pub location: ProjectLocation,
-    pub remotes: Vec<GitRemoteIdentity>,
-}
-
-pub struct WorkbenchProject {
-    pub added_at: i64,
-    pub badge_color: String,
-    pub display_name: String,
-    pub git_remote_identity: Option<GitRemoteIdentity>,
-    pub host_id: Option<String>,
-    pub id: String,
-    pub kind: Option<ProjectKind>,
-    pub path: String,
-    pub worktree_base_path: Option<String>,
 }

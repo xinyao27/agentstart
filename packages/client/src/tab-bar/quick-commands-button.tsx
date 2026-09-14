@@ -32,6 +32,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
 import { getDropIndicatorClasses } from '../workspace-panel/titlebar-drop-indicator'
 import type { WorkspacePanelTitlebarModel } from '../workspace-panel/use-workspace-panel-titlebar-model'
+import { DisabledTitlebarIcon, noWorkspaceReason } from './disabled-titlebar-icon'
 import type { DropIndicator } from './drop-indicator'
 import { useTabBarQuickCommandsShortcut } from './quick-commands-shortcut'
 
@@ -42,11 +43,16 @@ type TabBarQuickCommandsButtonProps = {
   moreMenuOpen?: boolean
   onMoreMenuOpenChange?: (open: boolean) => void
   separatorAfter?: boolean
-  mergeNextSeam?: boolean
   titlebarModel?: WorkspacePanelTitlebarModel | null
   titlebarIndex?: number
   titlebarSource?: 'visible' | 'overflow'
   dropIndicator?: DropIndicator
+  /**
+   * Why: quick commands are repo-scoped, so with no workspace there is nothing
+   * to run. The titlebar control stays in place and goes inert rather than
+   * unmounting and shifting the buttons around it.
+   */
+  disabled?: boolean
 }
 
 export function TabBarQuickCommandsButton({
@@ -56,11 +62,11 @@ export function TabBarQuickCommandsButton({
   moreMenuOpen = false,
   onMoreMenuOpenChange,
   separatorAfter = false,
-  mergeNextSeam = false,
   titlebarModel = null,
   titlebarIndex,
   titlebarSource = 'visible',
-  dropIndicator = null
+  dropIndicator = null,
+  disabled = false
 }: TabBarQuickCommandsButtonProps): React.JSX.Element | null {
   const allCommands = useAppStore((state) => state.settings?.terminalQuickCommands)
   const updateSettings = useAppStore((state) => state.updateSettings)
@@ -74,7 +80,7 @@ export function TabBarQuickCommandsButton({
   // Why: the keybinding should open the command picker whether Command is pinned
   // on the strip or still living in More — toggling More alone is not enough.
   useTabBarQuickCommandsShortcut({
-    enabled: true,
+    enabled: !disabled,
     menuOpen: pickerOpen,
     onOpenChange: setPickerOpen
   })
@@ -99,6 +105,10 @@ export function TabBarQuickCommandsButton({
     return { repoCommands: repoList, globalCommands: globalList }
   })()
   const visibleCommands = (() => [...repoCommands, ...globalCommands])()
+
+  if (disabled && presentation === 'titlebar-icon') {
+    return <DisabledTitlebarIcon icon={<Play className="size-3.5" />} label={noWorkspaceReason()} />
+  }
 
   if (!repoId) {
     return null
@@ -280,9 +290,8 @@ export function TabBarQuickCommandsButton({
             render={
               <Button
                 type="button"
-                variant="titlebar-segment"
-                size="icon-titlebar-wide"
-                seam={mergeNextSeam ? 'merge-next' : 'default'}
+                variant="ghost"
+                size="icon-sm"
                 data-workspace-titlebar-slot={
                   titlebarIndex != null ? String(titlebarIndex) : undefined
                 }

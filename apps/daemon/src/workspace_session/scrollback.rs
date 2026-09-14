@@ -80,6 +80,7 @@ pub(super) fn prune_renderer_buffers(session: &mut Value, owners: &ProjectOwners
                 .is_none_or(|worktree| worktree.starts_with(EPHEMERAL_SETUP_PREFIX))
             {
                 changed |= layout.remove("scrollbackRefsByLeafId").is_some();
+                changed |= layout.remove("scrollbackGridsByLeafId").is_some();
             }
         }
     }

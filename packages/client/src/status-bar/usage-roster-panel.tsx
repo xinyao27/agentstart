@@ -8,6 +8,7 @@ import { LoadingIndicator } from '~renderer/loading/indicator'
 import { SettingsSegmentedControl } from '~renderer/settings/form-controls'
 import { Badge } from '~renderer/ui/badge'
 import { Button } from '~renderer/ui/button'
+import { cn } from '~renderer/ui/class-names'
 import { DropdownMenuItem, DropdownMenuSeparator } from '~renderer/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
@@ -25,6 +26,10 @@ import {
 import { useResetCountdownClock } from './use-reset-countdown-clock'
 
 type ProviderId = ProviderRateLimits['provider']
+
+// Why: this popup is full-bleed (p-0), so a row highlight is an edge-to-edge band
+// between full-width separators — rounding it nests a second radius inside the popup.
+const rosterItemClass = 'w-full rounded-none'
 
 function UsageRow({
   provider,
@@ -204,7 +209,7 @@ export function UsageRosterPanel({
             <DropdownMenuItem
               key={provider.provider}
               onClick={() => onSignIn(provider.provider)}
-              className="w-full"
+              className={rosterItemClass}
             >
               {row}
             </DropdownMenuItem>
@@ -218,25 +223,31 @@ export function UsageRosterPanel({
           <DropdownMenuItem
             key={provider.provider}
             onClick={() => onOpenProvider(provider.provider)}
-            className="w-full"
+            className={rosterItemClass}
           >
             {row}
           </DropdownMenuItem>
         )
       })}
       <DropdownMenuSeparator className="my-0" />
-      <DropdownMenuItem onClick={onUsageDetails} className="w-full justify-between">
+      <DropdownMenuItem onClick={onUsageDetails} className={cn(rosterItemClass, 'justify-between')}>
         {translate('auto.components.status.bar.UsageRosterPanel.usageDetails', 'Usage overview')}
         <CaretRight className="text-muted-foreground" />
       </DropdownMenuItem>
-      <DropdownMenuItem onClick={onStatusBarSettings} className="w-full justify-between">
+      <DropdownMenuItem
+        onClick={onStatusBarSettings}
+        className={cn(rosterItemClass, 'justify-between')}
+      >
         {translate(
           'auto.components.status.bar.UsageRosterPanel.statusBarSettings',
           'Status bar settings…'
         )}
         <CaretRight className="text-muted-foreground" />
       </DropdownMenuItem>
-      <DropdownMenuItem onClick={onManageAccounts} className="w-full justify-between">
+      <DropdownMenuItem
+        onClick={onManageAccounts}
+        className={cn(rosterItemClass, 'justify-between')}
+      >
         {translate('auto.components.status.bar.StatusBar.75ded02687', 'Manage Accounts…')}
         <CaretRight className="text-muted-foreground" />
       </DropdownMenuItem>

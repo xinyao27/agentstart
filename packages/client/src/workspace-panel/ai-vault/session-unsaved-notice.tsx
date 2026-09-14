@@ -26,7 +26,7 @@ export function SessionUnsavedConversationNotice({
         <Archive className="text-muted-foreground/80 size-3" />
         <span>
           {translate(
-            'auto.components.right.sidebar.AiVaultSessionDetails.conversationNotSaved',
+            'auto.components.workspacePanel.AiVaultSessionDetails.conversationNotSaved',
             'Conversation not saved'
           )}
         </span>
@@ -34,17 +34,17 @@ export function SessionUnsavedConversationNotice({
       <div className="border-border/70 bg-foreground/[0.04] text-muted-foreground rounded-md border border-dashed px-2.5 py-2 text-[11px] leading-4">
         {recoverable
           ? translate(
-              'auto.components.right.sidebar.AiVaultSessionDetails.recoverableEmptyDetail',
+              'auto.components.workspacePanel.AiVaultSessionDetails.recoverableEmptyDetail',
               'This session has no saved conversation, but {{value0}} recoverable item(s) survive.',
               { value0: aiVaultSessionRecoverableSignalCount(session) }
             )
           : translate(
-              'auto.components.right.sidebar.AiVaultSessionDetails.emptyConversationDetail',
+              'auto.components.workspacePanel.AiVaultSessionDetails.emptyConversationDetail',
               'This session has no saved conversation and cannot be resumed.'
             )}
         {recoverable && logAvailable
           ? ` ${translate(
-              'auto.components.right.sidebar.AiVaultSessionDetails.recoverableEmptyOpenLogHint',
+              'auto.components.workspacePanel.AiVaultSessionDetails.recoverableEmptyOpenLogHint',
               'Open the log to recover them.'
             )}`
           : null}
@@ -71,7 +71,7 @@ function SessionRecoverableSignalLines({
       {queuedMessageCount > 0 ? (
         <li>
           {translate(
-            'auto.components.right.sidebar.AiVaultSessionDetails.queuedMessages',
+            'auto.components.workspacePanel.AiVaultSessionDetails.queuedMessages',
             '{{value0}} queued message(s)',
             { value0: queuedMessageCount }
           )}
@@ -80,7 +80,7 @@ function SessionRecoverableSignalLines({
       {subagentTranscriptCount > 0 ? (
         <li>
           {translate(
-            'auto.components.right.sidebar.AiVaultSessionDetails.subagentTranscripts',
+            'auto.components.workspacePanel.AiVaultSessionDetails.subagentTranscripts',
             '{{value0}} subagent transcript(s)',
             { value0: subagentTranscriptCount }
           )}

@@ -1,6 +1,5 @@
 import type { GrokAccountStatus } from '@agentstart/protocol/accounts-values'
 import { useEffect, useState } from 'react'
-import { AgentIcon } from '~renderer/agent/catalog'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
 import {
@@ -68,20 +67,8 @@ export function GrokAccountsSection(): React.JSX.Element {
   const usageWindow = grokUsage?.weekly ?? grokUsage?.monthly ?? null
 
   return (
-    <section id="accounts-grok" className="scroll-mt-6 space-y-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="space-y-1">
-          <h3 className="flex items-center gap-2 text-sm font-semibold">
-            <AgentIcon agent="grok" size={16} />
-            {translate('auto.components.settings.GrokAccountsSection.a1b2c3d4e5', 'Grok (xAI)')}
-          </h3>
-          <p className="text-muted-foreground text-xs">
-            {translate(
-              'auto.components.settings.GrokAccountsSection.f6e5d4c3b2',
-              'Shows weekly credit usage from your Grok CLI sign-in (session file ~/.grok/auth.json).'
-            )}
-          </p>
-        </div>
+    <div id="accounts-grok" className="scroll-mt-6 space-y-4">
+      <div className="pb-2">
         <a
           href={GROK_CLI_DOCS_URL}
           target="_blank"
@@ -209,6 +196,6 @@ export function GrokAccountsSection(): React.JSX.Element {
           </div>
         </SearchableSetting>
       ) : null}
-    </section>
+    </div>
   )
 }

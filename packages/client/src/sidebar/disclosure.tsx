@@ -15,7 +15,7 @@ type SidebarDisclosureProps = {
 }
 
 const DISCLOSURE_CLASS_NAME =
-  'flex size-5 shrink-0 items-center justify-center text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none'
+  'flex size-5 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none'
 
 export function SidebarDisclosure({
   expanded,

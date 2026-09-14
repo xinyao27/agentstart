@@ -6,7 +6,7 @@ import {
 import type { GitHubPRRefreshCandidate } from '@agentstart/protocol/hosted-review/pull-request-types'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
-import { rightSidebarShowsPullRequestData } from '~renderer/workspace-panel/right-sidebar-visibility'
+import { workspacePanelShowsPullRequestData } from '~renderer/workspace-panel/workspace-panel-visibility'
 
 import {
   CACHE_TTL_MS as CACHE_TTL,
@@ -56,7 +56,7 @@ export function createGitHubRefreshTriggerActions(
       const isPRStatusGrouping = state.groupBy === 'pr-status'
       const shouldRefreshPRs =
         isPRStatusGrouping ||
-        rightSidebarShowsPullRequestData(state) ||
+        workspacePanelShowsPullRequestData(state) ||
         cardProps.includes('status')
 
       for (const worktrees of Object.values(state.worktreesByRepo)) {
@@ -209,7 +209,7 @@ export function createGitHubRefreshTriggerActions(
       const shouldRefreshPR =
         state.groupBy === 'pr-status' ||
         (state.worktreeCardProperties ?? []).includes('status') ||
-        rightSidebarShowsPullRequestData(state)
+        workspacePanelShowsPullRequestData(state)
       const branch = worktree.branch.replace(/^refs\/heads\//, '')
       if (!shouldRefreshPR || worktree.isBare || !branch) {
         return

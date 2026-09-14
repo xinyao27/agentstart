@@ -63,8 +63,8 @@ export async function finishCreateReviewIntent({
       tone: 'muted',
       message: translate(
         eligibility.blockedReason === 'needs_sync'
-          ? 'auto.components.right.sidebar.SourceControl.createPrIntentNeedsSync'
-          : 'auto.components.right.sidebar.SourceControl.createPrIntentBranchNotReady',
+          ? 'auto.components.workspacePanel.SourceControl.createPrIntentNeedsSync'
+          : 'auto.components.workspacePanel.SourceControl.createPrIntentBranchNotReady',
         eligibility.blockedReason === 'needs_sync'
           ? 'Sync this branch before creating a review.'
           : 'Branch is not ready to create a review yet.'
@@ -77,12 +77,12 @@ export async function finishCreateReviewIntent({
     tone: 'muted',
     message: translate(
       remoteStep === 'publish'
-        ? 'auto.components.right.sidebar.SourceControl.createPrIntentPublishing'
+        ? 'auto.components.workspacePanel.SourceControl.createPrIntentPublishing'
         : remoteStep === 'force_push'
-          ? 'auto.components.right.sidebar.SourceControl.createPrIntentForcePushing'
+          ? 'auto.components.workspacePanel.SourceControl.createPrIntentForcePushing'
           : remoteStep === 'fast_forward'
-            ? 'auto.components.right.sidebar.SourceControl.createPrIntentFastForwarding'
-            : 'auto.components.right.sidebar.SourceControl.createPrIntentPushing',
+            ? 'auto.components.workspacePanel.SourceControl.createPrIntentFastForwarding'
+            : 'auto.components.workspacePanel.SourceControl.createPrIntentPushing',
       remoteStep === 'publish'
         ? 'Publishing branch…'
         : remoteStep === 'force_push'
@@ -103,7 +103,7 @@ export async function finishCreateReviewIntent({
     setCreatePrIntentNoticeForWorktree(token.worktreeId, {
       tone: 'destructive',
       message: translate(
-        'auto.components.right.sidebar.SourceControl.createPrIntentRemoteFailed',
+        'auto.components.workspacePanel.SourceControl.createPrIntentRemoteFailed',
         'Could not update the remote branch. Retry Create PR.'
       )
     })
@@ -132,7 +132,7 @@ export async function finishCreateReviewIntent({
   setCreatePrIntentNoticeForWorktree(token.worktreeId, {
     tone: 'muted',
     message: translate(
-      'auto.components.right.sidebar.SourceControl.995c5e67ec',
+      'auto.components.workspacePanel.SourceControl.995c5e67ec',
       'Review setup needs attention.'
     )
   })

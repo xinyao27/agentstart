@@ -1,6 +1,6 @@
 import type { RefObject } from 'react'
 
-import type { WorkspaceSidebarProjectedRow } from '../workspace-sidebar-row-projection'
+import type { NavigationProjectedRow } from '../navigation-row-projection'
 import { createNativeDragHandlers } from './native-drag-handlers'
 import { createPointerDragStartHandlers } from './pointer-drag-start'
 import { useWorktreeDragCore } from './use-drag-core'
@@ -34,7 +34,7 @@ type DragProps = Pick<
 
 export function useViewportDrag(args: {
   props: DragProps
-  workspaceRows: readonly WorkspaceSidebarProjectedRow[]
+  workspaceRows: readonly NavigationProjectedRow[]
   primaryActiveRowKey?: string
   scrollRef: RefObject<HTMLDivElement | null>
   markScrollMovement: () => void

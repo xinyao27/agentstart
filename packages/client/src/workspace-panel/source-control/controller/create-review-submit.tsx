@@ -49,7 +49,7 @@ export function useSourceControlCreateReviewSubmit(scope: SourceControlCreateRev
       setCreatePrIntentNoticeForWorktree(token.worktreeId, {
         tone: 'destructive',
         message: translate(
-          'auto.components.right.sidebar.SourceControl.ae743199cd',
+          'auto.components.workspacePanel.SourceControl.ae743199cd',
           'Choose a different base branch before creating a {{value0}}.',
           { value0: hostedReviewCreateCopy.reviewLabel }
         )
@@ -77,7 +77,7 @@ export function useSourceControlCreateReviewSubmit(scope: SourceControlCreateRev
       setCreatePrIntentNoticeForWorktree(token.worktreeId, {
         tone: 'muted',
         message: translate(
-          'auto.components.right.sidebar.SourceControl.createPrIntentGeneratingDetails',
+          'auto.components.workspacePanel.SourceControl.createPrIntentGeneratingDetails',
           'Generating review details…'
         )
       })
@@ -92,7 +92,7 @@ export function useSourceControlCreateReviewSubmit(scope: SourceControlCreateRev
           setCreatePrIntentNoticeForWorktree(token.worktreeId, {
             tone: 'muted',
             message: translate(
-              'auto.components.right.sidebar.SourceControl.createPrIntentBranchChangedDuringDetails',
+              'auto.components.workspacePanel.SourceControl.createPrIntentBranchChangedDuringDetails',
               'Branch changed while generating review details. Retry Create PR.'
             )
           })
@@ -124,7 +124,7 @@ export function useSourceControlCreateReviewSubmit(scope: SourceControlCreateRev
       setCreatePrIntentNoticeForWorktree(token.worktreeId, {
         tone: 'destructive',
         message: translate(
-          'auto.components.right.sidebar.SourceControl.f3a8b2c1d0e5',
+          'auto.components.workspacePanel.SourceControl.f3a8b2c1d0e5',
           'Enter a {{value0}} title.',
           { value0: hostedReviewCreateCopy.reviewLabel }
         )
@@ -135,7 +135,7 @@ export function useSourceControlCreateReviewSubmit(scope: SourceControlCreateRev
     setCreatePrIntentNoticeForWorktree(token.worktreeId, {
       tone: 'muted',
       message: translate(
-        'auto.components.right.sidebar.SourceControl.createPrIntentCreatingReview',
+        'auto.components.workspacePanel.SourceControl.createPrIntentCreatingReview',
         'Creating review…'
       )
     })
@@ -207,7 +207,7 @@ export function useSourceControlCreateReviewSubmit(scope: SourceControlCreateRev
         error instanceof Error
           ? error.message
           : translate(
-              'auto.components.right.sidebar.SourceControl.e2b7a1c0d9f4',
+              'auto.components.workspacePanel.SourceControl.e2b7a1c0d9f4',
               'Failed to create {{value0}}',
               { value0: hostedReviewCreateCopy.reviewLabel }
             )

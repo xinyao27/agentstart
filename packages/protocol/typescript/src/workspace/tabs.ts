@@ -30,6 +30,11 @@ export type TabContentType =
   | 'check-details'
   | 'browser'
   | 'simulator'
+  // Why: top-level pages (home/skills/settings/mobile) are tabs, not a separate
+  // surface layer. Giving them a content type is what lets them ride the same
+  // queue, drag, split, and persistence path as every other tab instead of
+  // being synthetic ids with no backing record.
+  | 'page'
   | GitGraphTabContentType
 
 export type WorkspaceVisibleTabType = 'terminal' | 'editor' | 'browser' | 'simulator'

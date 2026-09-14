@@ -1,6 +1,7 @@
 import React from 'react'
 import { lazyWithRetry } from '~renderer/application-shell/lazy-with-retry'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
+import { SidebarStatusFooter } from '~renderer/status-bar/sidebar-footer'
 import { useAppStore } from '~renderer/store/state'
 import { cn } from '~renderer/ui/class-names'
 import { TooltipProvider } from '~renderer/ui/tooltip'
@@ -9,7 +10,6 @@ import { SidebarResizeOverlay, useSidebarResize } from '~renderer/ui/use-resizab
 import SidebarHeader from './header'
 import SidebarNav from './nav'
 import SetupScriptPromptCard from './setup-script-prompt-card'
-import SidebarToolbar from './toolbar'
 import WorktreeList from './worktree-list'
 
 const WorktreeMetaDialog = lazyWithRetry(() => import('./worktree-meta-dialog'))
@@ -19,7 +19,7 @@ const AgentStartYamlTrustDialog = lazyWithRetry(() => import('./agentstart-yaml-
 const MIN_WIDTH = 240
 const MAX_WIDTH = 500
 const WORKTREE_SIDEBAR_RESIZE_HANDLE_CLASS_NAME =
-  'group absolute -top-[var(--titlebar-height)] bottom-0 z-10 flex w-3 cursor-col-resize items-stretch justify-center'
+  'group absolute bottom-0 z-10 flex w-3 cursor-col-resize items-stretch justify-center'
 const WORKTREE_SIDEBAR_RESIZE_HANDLE_LINE_CLASS_NAME =
   'h-full w-px bg-transparent transition-colors group-hover:bg-ring/50 group-active:bg-ring'
 
@@ -65,13 +65,14 @@ function Sidebar({
     <TooltipProvider>
       <div
         ref={containerRef}
-        // Why: the outer seam matches the standard hairlines used by adjacent app panels.
+        // Why: no background of its own — the panel is a zone on whatever
+        // surface hosts it (the big island's white in the workbench), and the
+        // inner island's hairline is its separation. Sticky list headers
+        // occlude via --worktree-sidebar-surface, which follows that host.
         className={cn(
-          'worktree-sidebar-theme bg-sidebar scrollbar-sleek-parent relative flex min-h-0 flex-shrink-0 flex-col',
+          'worktree-sidebar-theme scrollbar-sleek-parent relative flex min-h-0 flex-shrink-0 flex-col',
           isNavigationSurface && 'h-full',
-          isOpen &&
-            !isBrowserNavigationSurface &&
-            (placement === 'left' ? 'border-border border-r' : 'border-border border-l')
+          isEmbeddedNavigationSurface && '[--worktree-sidebar-surface:var(--background)]'
         )}
         style={{ ...appearanceStyle, width: isBrowserNavigationSurface ? '100%' : renderedWidth }}
       >
@@ -96,8 +97,8 @@ function Sidebar({
 
               <SetupScriptPromptCard />
 
-              {/* Fixed bottom toolbar */}
-              {!isProjectWorkspaceSurface ? <SidebarToolbar /> : null}
+              {/* Status footer */}
+              {!isProjectWorkspaceSurface ? <SidebarStatusFooter /> : null}
             </>
           )}
         </div>
@@ -108,6 +109,7 @@ function Sidebar({
             data-sidebar-resize-handle=""
             className={cn(
               WORKTREE_SIDEBAR_RESIZE_HANDLE_CLASS_NAME,
+              isEmbeddedNavigationSurface ? 'top-0' : '-top-[var(--titlebar-height)]',
               placement === 'left' ? '-right-1.5' : '-left-1.5',
               isResizing && 'bg-ring/10'
             )}

@@ -47,14 +47,14 @@ export function ConflictSummaryCard({
         <div className="min-w-0 flex-1">
           <div className="text-foreground text-xs font-medium" aria-live="polite">
             {translate(
-              'auto.components.right.sidebar.SourceControl.d7a5942e41',
+              'auto.components.workspacePanel.SourceControl.d7a5942e41',
               '{{value0}}: {{value1}} unresolved',
               { value0: operationLabel, value1: unresolvedCount }
             )}
           </div>
           <div className="text-muted-foreground mt-1 text-[11px]">
             {translate(
-              'auto.components.right.sidebar.SourceControl.3eeccbb221',
+              'auto.components.workspacePanel.SourceControl.3eeccbb221',
               'Resolved files move back to normal changes after they leave the live conflict state.'
             )}
           </div>
@@ -75,7 +75,10 @@ export function ConflictSummaryCard({
             ) : (
               <Sparkles className="size-3.5" />
             )}
-            {translate('auto.components.right.sidebar.SourceControl.f6cb48b6fe', 'Resolve with AI')}
+            {translate(
+              'auto.components.workspacePanel.SourceControl.f6cb48b6fe',
+              'Resolve with AI'
+            )}
           </Button>
         ) : null}
         <Button
@@ -86,7 +89,7 @@ export function ConflictSummaryCard({
           onClick={onReview}
         >
           <GitMerge className="size-3.5" />
-          {translate('auto.components.right.sidebar.SourceControl.27a50fe970', 'Review conflicts')}
+          {translate('auto.components.workspacePanel.SourceControl.27a50fe970', 'Review conflicts')}
         </Button>
         {(conflictOperation === 'merge' || conflictOperation === 'rebase') && onAbortOperation ? (
           <Button
@@ -101,8 +104,8 @@ export function ConflictSummaryCard({
           >
             {isAbortingOperation ? <LoadingIndicator className="size-3.5" /> : null}
             {conflictOperation === 'rebase'
-              ? translate('auto.components.right.sidebar.SourceControl.425f138269', 'Abort rebase')
-              : translate('auto.components.right.sidebar.SourceControl.540ca8f78c', 'Abort merge')}
+              ? translate('auto.components.workspacePanel.SourceControl.425f138269', 'Abort rebase')
+              : translate('auto.components.workspacePanel.SourceControl.540ca8f78c', 'Abort merge')}
           </Button>
         ) : null}
       </div>
@@ -149,8 +152,8 @@ export function OperationBanner({
         >
           {isAbortingOperation ? <LoadingIndicator className="size-3.5" /> : null}
           {conflictOperation === 'rebase'
-            ? translate('auto.components.right.sidebar.SourceControl.425f138269', 'Abort rebase')
-            : translate('auto.components.right.sidebar.SourceControl.540ca8f78c', 'Abort merge')}
+            ? translate('auto.components.workspacePanel.SourceControl.425f138269', 'Abort rebase')
+            : translate('auto.components.workspacePanel.SourceControl.540ca8f78c', 'Abort merge')}
         </Button>
       ) : null}
     </div>
@@ -164,7 +167,7 @@ export function TooManyChangesBanner({ limit }: { limit: number }): React.JSX.El
         <AlertTriangle className="size-4 shrink-0 text-amber-600 dark:text-amber-400" />
         <span className="text-foreground text-xs">
           {translate(
-            'auto.components.right.sidebar.SourceControl.tooManyChanges',
+            'auto.components.workspacePanel.SourceControl.tooManyChanges',
             'Too many changes detected. Only the first {{value0}} are shown.',
             { value0: limit.toLocaleString() }
           )}

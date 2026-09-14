@@ -8,21 +8,21 @@ export const EMPTY_BRANCH_CHANGE_ENTRIES: GitBranchChangeEntry[] = []
 
 export const SECTION_LABELS: Record<SourceControlSectionArea, { key: string; fallback: string }> = {
   staged: {
-    key: 'auto.components.right.sidebar.SourceControl.48a003c1b1',
+    key: 'auto.components.workspacePanel.SourceControl.48a003c1b1',
     fallback: 'Staged Changes'
   },
   unstaged: {
-    key: 'auto.components.right.sidebar.SourceControl.d4ef4bafc5',
+    key: 'auto.components.workspacePanel.SourceControl.d4ef4bafc5',
     fallback: 'Changes'
   },
   untracked: {
-    key: 'auto.components.right.sidebar.SourceControl.522f44dce5',
+    key: 'auto.components.workspacePanel.SourceControl.522f44dce5',
     fallback: 'Untracked Files'
   }
 }
 
 export const CONFLICTS_SECTION_LABEL = {
-  key: 'auto.components.right.sidebar.SourceControl.conflictsSection',
+  key: 'auto.components.workspacePanel.SourceControl.conflictsSection',
   fallback: 'Conflicts'
 }
 

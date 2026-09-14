@@ -1,35 +1,24 @@
 import { isFolderRepo } from '@agentstart/protocol/project/repository'
+import { isWorkspaceBodyVisible } from '~renderer/application-shell/state/visible-surface'
 import type { AppState } from '~renderer/store/types'
 
-type ActiveView = AppState['activeView']
-
-const RIGHT_SIDEBAR_SUPPRESSED_VIEWS = new Set<ActiveView>([
-  'home',
-  'settings',
-  'space',
-  'skills',
-  'mobile'
-])
-
-function canShowRightSidebarForView(activeView: ActiveView): boolean {
-  return !RIGHT_SIDEBAR_SUPPRESSED_VIEWS.has(activeView)
-}
-
-export function rightSidebarShowsPullRequestData(
+export function workspacePanelShowsPullRequestData(
   state: Pick<
     AppState,
-    | 'activeView'
+    | 'activeGroupIdByWorktree'
     | 'activeWorktreeId'
+    | 'groupsByWorktree'
     | 'repos'
-    | 'rightSidebarOpen'
-    | 'rightSidebarTab'
+    | 'unifiedTabsByWorktree'
+    | 'workspacePanelOpen'
+    | 'workspacePanelTab'
     | 'worktreesByRepo'
   >
 ): boolean {
   if (
-    !canShowRightSidebarForView(state.activeView) ||
-    !state.rightSidebarOpen ||
-    state.rightSidebarTab !== 'source-control'
+    !isWorkspaceBodyVisible(state) ||
+    !state.workspacePanelOpen ||
+    state.workspacePanelTab !== 'source-control'
   ) {
     return false
   }

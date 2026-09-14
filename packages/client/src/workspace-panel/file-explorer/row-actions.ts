@@ -48,13 +48,13 @@ export async function downloadRemoteEntry(
       : await downloadRuntimeFile(runtimeContext, node.path, node.name)
     toast.success(
       translate(
-        'auto.components.right.sidebar.FileExplorerRow.bce4d4e44f',
+        'auto.components.workspacePanel.FileExplorerRow.bce4d4e44f',
         "Downloaded '{{value0}}'",
         { value0: node.name }
       ),
       {
         action: {
-          label: translate('auto.components.right.sidebar.FileExplorerRow.1a3df04ae1', 'Open'),
+          label: translate('auto.components.workspacePanel.FileExplorerRow.1a3df04ae1', 'Open'),
           onClick: () => {
             void shellClient.shell.openPath(result.destinationPath)
           }
@@ -66,7 +66,7 @@ export async function downloadRemoteEntry(
       extractRuntimeErrorMessage(
         error,
         translate(
-          'auto.components.right.sidebar.FileExplorerRow.b3e288bf41',
+          'auto.components.workspacePanel.FileExplorerRow.b3e288bf41',
           "Failed to download '{{value0}}'.",
           { value0: node.name }
         )
@@ -77,7 +77,7 @@ export async function downloadRemoteEntry(
 
 export async function copyFileToOsClipboard(node: TreeNode): Promise<void> {
   const failureMessage = translate(
-    'auto.components.right.sidebar.FileExplorerRow.b234ab25b4',
+    'auto.components.workspacePanel.FileExplorerRow.b234ab25b4',
     'Could not copy the file to the clipboard'
   )
   try {

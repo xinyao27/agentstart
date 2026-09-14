@@ -138,7 +138,7 @@ export function SourceControlFixSplitButton({
             >
               <SlidersHorizontal className="text-muted-foreground size-4" />
               {translate(
-                'auto.components.right.sidebar.SourceControl.f0a2dc9e46',
+                'auto.components.workspacePanel.SourceControl.f0a2dc9e46',
                 'Customize launch...'
               )}
             </DropdownMenuItem>

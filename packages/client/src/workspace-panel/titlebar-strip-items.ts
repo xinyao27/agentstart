@@ -1,9 +1,9 @@
-import type { ActiveRightSidebarTab } from '~renderer/editor/state'
+import type { ActiveWorkspacePanelTab } from '~renderer/editor/state'
 
 import type { ActivityBarItem } from './activity-bar-buttons'
 
 export type WorkspaceTitlebarStripItem =
-  | { id: ActiveRightSidebarTab; kind: 'panel'; panel: ActivityBarItem }
+  | { id: ActiveWorkspacePanelTab; kind: 'panel'; panel: ActivityBarItem }
   | { id: 'open-in'; kind: 'open-in'; title: string }
   | { id: 'commands'; kind: 'commands'; title: string }
 

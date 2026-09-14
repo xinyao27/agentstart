@@ -145,7 +145,7 @@ export function ChecksList({
           loading: false,
           details: null,
           error: translate(
-            'auto.components.right.sidebar.checks.panel.content.e15a8b77ef',
+            'auto.components.workspacePanel.checks.panel.content.e15a8b77ef',
             'No inline details are available for this check.'
           )
         }
@@ -159,7 +159,7 @@ export function ChecksList({
           loading: false,
           details: null,
           error: translate(
-            'auto.components.right.sidebar.checks.panel.content.e15a8b77ef',
+            'auto.components.workspacePanel.checks.panel.content.e15a8b77ef',
             'No inline details are available for this check.'
           )
         }
@@ -270,7 +270,7 @@ export function ChecksList({
       ) : checks.length === 0 ? (
         <div className="text-muted-foreground px-4 py-8 text-[11px]">
           {translate(
-            'auto.components.right.sidebar.checks.panel.content.991f50c7e4',
+            'auto.components.workspacePanel.checks.panel.content.991f50c7e4',
             'No checks configured'
           )}
         </div>
@@ -317,7 +317,7 @@ export function ChecksList({
                                 size="icon-xs"
                                 className="size-6"
                                 aria-label={translate(
-                                  'auto.components.right.sidebar.checks.panel.content.0dca6bfab5',
+                                  'auto.components.workspacePanel.checks.panel.content.0dca6bfab5',
                                   'Open check details'
                                 )}
                                 onClick={(event) => {
@@ -334,7 +334,7 @@ export function ChecksList({
                           />
                           <TooltipContent side="left" sideOffset={4}>
                             {translate(
-                              'auto.components.right.sidebar.checks.panel.content.0dca6bfab5',
+                              'auto.components.workspacePanel.checks.panel.content.0dca6bfab5',
                               'Open check details'
                             )}
                           </TooltipContent>
@@ -359,7 +359,7 @@ export function ChecksList({
           {checks.length >= 100 && (
             <div className="border-border text-muted-foreground border-b px-3 py-1.5 text-[10px]">
               {translate(
-                'auto.components.right.sidebar.checks.panel.content.cbcc4ab3db',
+                'auto.components.workspacePanel.checks.panel.content.cbcc4ab3db',
                 'Showing first 100 checks'
               )}
             </div>

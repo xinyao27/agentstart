@@ -1,4 +1,8 @@
 import type { GitHubWorkItem } from '@agentstart/protocol/hosted-review/review-types'
+import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
+import type { parseGitHubPullRequestLink } from '~renderer/github/links'
+
+import type { SmartWorkspaceRepo } from './github-repo-match'
 
 // Why: the smart-name field's GitHub search has three mutually exclusive
 // fetch shapes (resolve a pasted cross-repo link, look an issue/PR number up
@@ -14,6 +18,17 @@ export type SmartWorkspaceGithubSearchRequest =
   | { kind: 'link-lookup'; query: string; targetRepoIds: readonly string[] }
   | { kind: 'single-repo'; query: string; repoId: string }
   | { kind: 'multi-repo'; query: string; targetRepoIds: readonly string[] }
+
+export type CrossRepoPrompt = {
+  query: string
+  link: NonNullable<ReturnType<typeof parseGitHubPullRequestLink>>
+  matchingRepo: SmartWorkspaceRepo | null
+}
+
+export type GithubSearchTarget = {
+  repo: SmartWorkspaceRepo
+  githubSourceContext: ProjectSourceContext | null
+}
 
 // Why: plain (not readonly) to match buildSmartWorkspaceSourceRows's existing
 // githubItems: GitHubWorkItem[] parameter shape.

@@ -12,14 +12,14 @@ export function handleNavigationMessage(message: object, respond: Respond): bool
   const type = Reflect.get(message, 'type')
   if (type === 'open-workspace') {
     return respondToNavigation(
-      parseWorkspaceTarget(Reflect.get(message, 'target')),
+      parseWorkspaceNavigation(message),
       respond,
-      (target) => focusOrCreateWorkspace(target)
+      ({ sourceWindowId, target }) => focusOrCreateWorkspace(target, sourceWindowId)
     )
   }
   if (type === 'open-page') {
-    return respondToNavigation(parseGlobalPage(Reflect.get(message, 'page')), respond, (page) =>
-      focusOrCreatePage(page)
+    return respondToNavigation(parsePageNavigation(message), respond, ({ page, sourceWindowId }) =>
+      focusOrCreatePage(page, sourceWindowId)
     )
   }
   if (type === 'open-external-url') {
@@ -28,6 +28,26 @@ export function handleNavigationMessage(message: object, respond: Respond): bool
     )
   }
   return null
+}
+
+function parsePageNavigation(
+  message: object
+): { page: GlobalPage; sourceWindowId?: number } | null {
+  const page = parseGlobalPage(Reflect.get(message, 'page'))
+  const sourceWindowId = parseSourceWindowId(Reflect.get(message, 'sourceWindowId'))
+  return page && sourceWindowId !== null
+    ? { page, ...(sourceWindowId === undefined ? {} : { sourceWindowId }) }
+    : null
+}
+
+function parseWorkspaceNavigation(
+  message: object
+): { sourceWindowId?: number; target: WorkspaceNavigationTarget } | null {
+  const target = parseWorkspaceTarget(Reflect.get(message, 'target'))
+  const sourceWindowId = parseSourceWindowId(Reflect.get(message, 'sourceWindowId'))
+  return target && sourceWindowId !== null
+    ? { target, ...(sourceWindowId === undefined ? {} : { sourceWindowId }) }
+    : null
 }
 
 function respondToNavigation<T>(
@@ -48,31 +68,23 @@ function respondToNavigation<T>(
 }
 
 function parseWorkspaceTarget(value: unknown): WorkspaceNavigationTarget | null {
-  if (
-    typeof value !== 'object' ||
-    value === null ||
-    typeof Reflect.get(value, 'projectId') !== 'string'
-  ) {
+  if (typeof value !== 'object' || value === null) {
     return null
   }
+  const projectId = Reflect.get(value, 'projectId')
   const sessionId = Reflect.get(value, 'sessionId')
   const worktreeId = Reflect.get(value, 'worktreeId')
-  const dedicated = Reflect.get(value, 'dedicated')
+  if (typeof projectId !== 'string' || projectId.length === 0) {
+    return null
+  }
   if (sessionId !== undefined && typeof sessionId !== 'string') {
     return null
   }
-  if (worktreeId !== undefined && typeof worktreeId !== 'string') {
-    return null
-  }
-  if (
-    (dedicated !== undefined && typeof dedicated !== 'boolean') ||
-    (dedicated === true && typeof worktreeId !== 'string')
-  ) {
+  if (worktreeId !== undefined && (typeof worktreeId !== 'string' || worktreeId.length === 0)) {
     return null
   }
   return {
-    ...(dedicated === true ? { dedicated: true } : {}),
-    projectId: Reflect.get(value, 'projectId'),
+    projectId,
     ...(typeof sessionId === 'string' ? { sessionId } : {}),
     ...(typeof worktreeId === 'string' ? { worktreeId } : {})
   }
@@ -88,11 +100,14 @@ function parseExternalTarget(value: object): { projectId?: string; url: string }
 }
 
 function parseGlobalPage(value: unknown): GlobalPage | null {
-  return value === 'activity' ||
-    value === 'mobile' ||
-    value === 'search' ||
-    value === 'skills' ||
-    value === 'settings'
+  return value === 'activity' || value === 'mobile' || value === 'skills' || value === 'settings'
     ? value
     : null
+}
+
+function parseSourceWindowId(value: unknown): number | null | undefined {
+  if (value === undefined) {
+    return undefined
+  }
+  return Number.isInteger(value) && Number(value) >= 0 ? Number(value) : null
 }

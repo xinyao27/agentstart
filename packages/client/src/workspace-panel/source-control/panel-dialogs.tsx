@@ -77,7 +77,7 @@ export function SourceControlPanelDialogs({
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="text-sm">
-              {translate('auto.components.right.sidebar.SourceControl.574d2f4413', 'Clear Notes')}
+              {translate('auto.components.workspacePanel.SourceControl.574d2f4413', 'Clear Notes')}
             </DialogTitle>
             <DialogDescription className="text-xs">
               {pendingDiffCommentsClearDescription}
@@ -90,7 +90,7 @@ export function SourceControlPanelDialogs({
               onClick={() => setPendingDiffCommentsClear(null)}
               disabled={isClearingDiffComments}
             >
-              {translate('auto.components.right.sidebar.SourceControl.05bb8f4a48', 'Cancel')}
+              {translate('auto.components.workspacePanel.SourceControl.05bb8f4a48', 'Cancel')}
             </Button>
             <Button
               type="button"
@@ -99,7 +99,7 @@ export function SourceControlPanelDialogs({
               disabled={isClearingDiffComments || pendingDiffCommentsClearCount === 0}
             >
               <Trash2 className="size-4" />
-              {translate('auto.components.right.sidebar.SourceControl.574d2f4413', 'Clear Notes')}
+              {translate('auto.components.workspacePanel.SourceControl.574d2f4413', 'Clear Notes')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -116,13 +116,13 @@ export function SourceControlPanelDialogs({
           <DialogHeader className="shrink-0">
             <DialogTitle className="text-sm">
               {translate(
-                'auto.components.right.sidebar.SourceControl.476b77745b',
+                'auto.components.workspacePanel.SourceControl.476b77745b',
                 'Change Base Ref'
               )}
             </DialogTitle>
             <DialogDescription className="text-xs">
               {translate(
-                'auto.components.right.sidebar.SourceControl.c9ad22888e',
+                'auto.components.workspacePanel.SourceControl.c9ad22888e',
                 'Pick the branch compare target for this repository.'
               )}
             </DialogDescription>
@@ -161,11 +161,11 @@ export function SourceControlPanelDialogs({
         onOpenChange={setResolveConflictsComposerOpen}
         actionId="resolveConflicts"
         title={translate(
-          'auto.components.right.sidebar.SourceControl.19652ddd76',
+          'auto.components.workspacePanel.SourceControl.19652ddd76',
           'Resolve Conflicts With AI'
         )}
         description={translate(
-          'auto.components.right.sidebar.SourceControl.901140f47d',
+          'auto.components.workspacePanel.SourceControl.901140f47d',
           'Review and edit the full command input before starting an agent.'
         )}
         baseCommandInput={resolveConflictsPrompt}
@@ -188,7 +188,7 @@ export function SourceControlPanelDialogs({
         onLaunched={() =>
           toast.success(
             translate(
-              'auto.components.right.sidebar.SourceControl.e48caaf0dd',
+              'auto.components.workspacePanel.SourceControl.e48caaf0dd',
               'Started an AI agent for the conflicts.'
             )
           )
@@ -200,11 +200,11 @@ export function SourceControlPanelDialogs({
         onOpenChange={setCommitGenerationDialogOpen}
         actionId="commitMessage"
         title={translate(
-          'auto.components.right.sidebar.SourceControl.6b122529d4',
+          'auto.components.workspacePanel.SourceControl.6b122529d4',
           'Generate Commit Message'
         )}
         description={translate(
-          'auto.components.right.sidebar.SourceControl.f4c766f1ca',
+          'auto.components.workspacePanel.SourceControl.f4c766f1ca',
           'Choose the agent and command template for this run.'
         )}
         generateLabel="Generate"
@@ -219,11 +219,11 @@ export function SourceControlPanelDialogs({
         onOpenChange={setPullRequestGenerationDialogOpen}
         actionId="pullRequest"
         title={translate(
-          'auto.components.right.sidebar.SourceControl.1a6a6e0bc5',
+          'auto.components.workspacePanel.SourceControl.1a6a6e0bc5',
           'Generate Hosted Review Details'
         )}
         description={translate(
-          'auto.components.right.sidebar.SourceControl.f4c766f1ca',
+          'auto.components.workspacePanel.SourceControl.f4c766f1ca',
           'Choose the agent and command template for this run.'
         )}
         generateLabel="Generate"

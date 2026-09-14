@@ -20,6 +20,7 @@ import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-o
 
 import { getDropIndicatorClasses } from '../workspace-panel/titlebar-drop-indicator'
 import type { WorkspacePanelTitlebarModel } from '../workspace-panel/use-workspace-panel-titlebar-model'
+import { DisabledTitlebarIcon, noWorkspaceReason } from './disabled-titlebar-icon'
 
 export type TabBarOpenInMenuButtonProps = {
   worktreeId: string
@@ -28,6 +29,12 @@ export type TabBarOpenInMenuButtonProps = {
   titlebarIndex?: number
   titlebarSource?: 'visible' | 'overflow'
   dropIndicator?: DropIndicator
+  /**
+   * Why: with no workspace there is no path to open, but the control is part of
+   * the titlebar's resident right-hand group — it goes inert in place rather
+   * than unmounting and moving the buttons beside it.
+   */
+  disabled?: boolean
 }
 
 export function TabBarOpenInMenuButton({
@@ -35,7 +42,8 @@ export function TabBarOpenInMenuButton({
   titlebarModel = null,
   titlebarIndex,
   titlebarSource = 'visible',
-  dropIndicator = null
+  dropIndicator = null,
+  disabled = false
 }: TabBarOpenInMenuButtonProps): React.JSX.Element | null {
   const worktree = useAppStore((state) => state.getKnownWorktreeById(worktreeId) ?? null)
   const runtimeEnvironmentId = useAppStore((state) =>
@@ -46,6 +54,18 @@ export function TabBarOpenInMenuButton({
   const updateSettings = useAppStore((state) => state.updateSettings)
   const entries = getWorktreeOpenInEntries(openInApplications, getLocalFileManagerLabel())
   const preferredEntry = getPreferredWorktreeOpenInEntry(entries, lastOpenInTargetKey)
+  const inertLabel = noWorkspaceReason()
+
+  if (disabled) {
+    return (
+      <div className="relative flex items-center">
+        <div className="flex items-center">
+          <DisabledTitlebarIcon icon={<FolderOpen />} label={inertLabel} />
+          <DisabledTitlebarIcon icon={<CaretDown />} label={inertLabel} />
+        </div>
+      </div>
+    )
+  }
 
   if (!worktree || !preferredEntry) {
     return null
@@ -89,13 +109,12 @@ export function TabBarOpenInMenuButton({
   }
 
   return (
-    // Why: Open in is two chrome buttons but one pin slot. The wrapper owns the
-    // ButtonGroup L/R seams; inner buttons stay borderless so icon + caret read
-    // as one control with no mid seam.
+    // Why: Open in is two chrome buttons but one pin slot; the controls stay
+    // centered at their intrinsic size and let the icons define the grouping.
     <div
       data-workspace-titlebar-slot={titlebarIndex != null ? String(titlebarIndex) : undefined}
       className={cn(
-        'relative flex h-full items-stretch border border-y-0 border-border dark:border-input',
+        'relative flex items-center',
         pinDraggable && 'cursor-grab active:cursor-grabbing',
         getDropIndicatorClasses(dropIndicator)
       )}
@@ -104,54 +123,49 @@ export function TabBarOpenInMenuButton({
       onPointerDown={pinDraggable ? startPinDrag : undefined}
     >
       <DropdownMenu modal={false}>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Button
-                type="button"
-                variant="outline-transparent"
-                size="icon-titlebar-compact"
-                className="text-muted-foreground border-0"
-                aria-label={openLabel}
-                onClick={() => openEntry(preferredEntry)}
-              >
-                {preferredEntry.target === 'file-manager' ? (
-                  <FolderOpen />
-                ) : (
-                  <OpenInApplicationIcon
-                    application={{ command: preferredEntry.command ?? '' }}
-                    size={16}
-                  />
-                )}
-              </Button>
-            }
-          />
-          <TooltipContent side="bottom" sideOffset={6}>
-            {openLabel}
-          </TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <DropdownMenuTrigger
-                render={
-                  <Button
-                    type="button"
-                    variant="outline-transparent"
-                    size="icon-titlebar-compact"
-                    className="text-muted-foreground border-0"
-                    aria-label={chooseLabel}
-                  >
-                    <CaretDown />
-                  </Button>
-                }
-              />
-            }
-          />
-          <TooltipContent side="bottom" sideOffset={6}>
-            {chooseLabel}
-          </TooltipContent>
-        </Tooltip>
+        <div className="flex items-center">
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={openLabel}
+                  onClick={() => openEntry(preferredEntry)}
+                >
+                  {preferredEntry.target === 'file-manager' ? (
+                    <FolderOpen />
+                  ) : (
+                    <OpenInApplicationIcon
+                      application={{ command: preferredEntry.command ?? '' }}
+                      size={16}
+                    />
+                  )}
+                </Button>
+              }
+            />
+            <TooltipContent side="bottom" sideOffset={6}>
+              {openLabel}
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <DropdownMenuTrigger
+                  render={
+                    <Button type="button" variant="ghost" size="icon-sm" aria-label={chooseLabel}>
+                      <CaretDown />
+                    </Button>
+                  }
+                />
+              }
+            />
+            <TooltipContent side="bottom" sideOffset={6}>
+              {chooseLabel}
+            </TooltipContent>
+          </Tooltip>
+        </div>
         <DropdownMenuContent align="end" side="bottom" sideOffset={4} className="w-52">
           <WorktreeOpenInMenuContent
             worktreePath={worktree.path}

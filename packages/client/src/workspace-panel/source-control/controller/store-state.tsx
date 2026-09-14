@@ -227,7 +227,7 @@ export function useSourceControlStoreState(scope: SourceControlControllerInput) 
       } else {
         toast.error(
           translate(
-            'auto.components.right.sidebar.SourceControl.eae7a1da5f',
+            'auto.components.workspacePanel.SourceControl.eae7a1da5f',
             'Failed to clear notes.'
           )
         )

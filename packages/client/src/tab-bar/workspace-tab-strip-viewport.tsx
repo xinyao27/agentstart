@@ -53,21 +53,16 @@ export function WorkspaceTabStripViewport({
           onPointerLeave={tabStripDragScroll.onDragScrollLeave}
         />
       ) : null}
-      {/* Why: the viewport owns the leading seam; its trailing seam appears
-          only while the edge mask hides a tab divider. */}
-      <div
-        className={cn(
-          'relative flex min-h-0 max-w-full min-w-0 flex-[0_1_auto]',
-          tabStripOverflowState.hasOverflow && 'border-l border-border',
-          tabStripOverflowState.canScrollEnd &&
-            "after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:z-10 after:w-px after:bg-border after:content-['']"
-        )}
-      >
+      {/* Why: the edge masks provide overflow feedback without adding divider lines beside the
+          icon controls, keeping the scroll shoulders visually open. */}
+      <div className="relative flex min-h-0 max-w-full min-w-0 flex-[0_1_auto]">
         <div
           {...stripProps}
           ref={tabStripRef}
           className={cn(
-            'terminal-tab-strip flex h-full min-w-0 max-w-full flex-1 items-stretch overflow-x-auto overflow-y-hidden',
+            // Why: the scrolling content reserves the same 12px as each shoulder,
+            // keeping first/last selected corners inside the clipping viewport.
+            'terminal-tab-strip flex h-full min-w-0 max-w-full flex-1 items-stretch overflow-x-auto overflow-y-hidden px-3',
             getTabStripScrollMaskClassName(tabStripOverflowState),
             stripClassName
           )}
@@ -110,26 +105,31 @@ function TabStripScrollButton({
     : translate('auto.components.tab.bar.TabBar.232e075b07', 'Scroll tabs right')
   const Icon = isStart ? ChevronLeft : ChevronRight
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <Button
-            variant="tab-strip-scroll"
-            size="icon-tab-strip"
-            aria-label={label}
-            aria-disabled={!canScroll}
-            disabled={!isTabDragActive && !canScroll}
-            onClick={onClick}
-            onPointerEnter={onPointerEnter}
-            onPointerLeave={onPointerLeave}
-          >
-            <Icon className="size-3.5" />
-          </Button>
-        }
-      />
-      <TooltipContent side="bottom" sideOffset={6}>
-        {label}
-      </TooltipContent>
-    </Tooltip>
+    // Why: intrinsic icon buttons need a full-height flex wrapper to stay vertically centered
+    // without putting `h-full` back on the button itself; mirrored margins keep both shoulders
+    // separated from the viewport and neighboring Header controls by the same amount.
+    <div className="mx-1 flex h-full shrink-0 items-center">
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              variant="tab-strip-scroll"
+              size="icon-sm"
+              aria-label={label}
+              aria-disabled={!canScroll}
+              disabled={!isTabDragActive && !canScroll}
+              onClick={onClick}
+              onPointerEnter={onPointerEnter}
+              onPointerLeave={onPointerLeave}
+            >
+              <Icon className="size-3.5" />
+            </Button>
+          }
+        />
+        <TooltipContent side="bottom" sideOffset={6}>
+          {label}
+        </TooltipContent>
+      </Tooltip>
+    </div>
   )
 }

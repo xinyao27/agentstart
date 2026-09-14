@@ -1,3 +1,4 @@
+use super::model::TerminalScrollbackGrid;
 use super::{TerminalSessionError, identity};
 use serde_json::Value;
 
@@ -9,6 +10,15 @@ pub(super) struct WakePane {
     pub(super) agent: Option<String>,
     pub(super) record: Option<Value>,
     pub(super) buffer: Option<String>,
+    /// Grid the buffer was recorded at, when the daemon recorded it itself.
+    pub(super) buffer_grid: Option<TerminalScrollbackGrid>,
+}
+
+fn scrollback_grid(value: &Value) -> Option<TerminalScrollbackGrid> {
+    Some(TerminalScrollbackGrid {
+        cols: u16::try_from(value.get("cols")?.as_u64()?).ok()?,
+        rows: u16::try_from(value.get("rows")?.as_u64()?).ok()?,
+    })
 }
 
 pub(super) fn panes(
@@ -86,6 +96,10 @@ pub(super) fn panes(
                     .and_then(Value::as_str)
                     .map(str::to_owned),
                 record,
+                buffer_grid: layout
+                    .get("scrollbackGridsByLeafId")
+                    .and_then(|grids| grids.get(leaf_id))
+                    .and_then(scrollback_grid),
                 buffer: layout
                     .get("buffersByLeafId")
                     .and_then(|buffers| buffers.get(leaf_id))

@@ -38,9 +38,12 @@ export function SourceControlCommitComposer({
         value={commitMessage}
         disabled={isDisabled}
         onChange={(event) => onCommitMessageChange(event.target.value)}
-        placeholder={translate('auto.components.right.sidebar.SourceControl.0d0a8359d3', 'Message')}
+        placeholder={translate(
+          'auto.components.workspacePanel.SourceControl.0d0a8359d3',
+          'Message'
+        )}
         aria-label={translate(
-          'auto.components.right.sidebar.SourceControl.b94112eb9e',
+          'auto.components.workspacePanel.SourceControl.b94112eb9e',
           'Commit message'
         )}
         aria-describedby={describedBy}
@@ -61,11 +64,11 @@ export function SourceControlCommitComposer({
                   type="button"
                   onClick={onCancelGenerate}
                   title={translate(
-                    'auto.components.right.sidebar.SourceControl.527e130b6f',
+                    'auto.components.workspacePanel.SourceControl.527e130b6f',
                     'Stop generating'
                   )}
                   aria-label={translate(
-                    'auto.components.right.sidebar.SourceControl.ddc1fbd690',
+                    'auto.components.workspacePanel.SourceControl.ddc1fbd690',
                     'Stop generating commit message'
                   )}
                   className="group absolute top-1.5 right-1.5"
@@ -77,7 +80,7 @@ export function SourceControlCommitComposer({
             />
             <TooltipContent side="left" sideOffset={6}>
               {translate(
-                'auto.components.right.sidebar.SourceControl.37a81f29ad',
+                'auto.components.workspacePanel.SourceControl.37a81f29ad',
                 'Generating commit message. Click to stop.'
               )}
             </TooltipContent>
@@ -101,12 +104,12 @@ export function SourceControlCommitComposer({
                   title={
                     generateDisabledReason ??
                     translate(
-                      'auto.components.right.sidebar.SourceControl.b16b8f0e4b',
+                      'auto.components.workspacePanel.SourceControl.b16b8f0e4b',
                       'ai commit msg'
                     )
                   }
                   aria-label={translate(
-                    'auto.components.right.sidebar.SourceControl.461575b9bc',
+                    'auto.components.workspacePanel.SourceControl.461575b9bc',
                     'Generate commit message with AI'
                   )}
                   className={cn(
@@ -122,7 +125,7 @@ export function SourceControlCommitComposer({
             <TooltipContent side="left" sideOffset={6}>
               {generateDisabledReason ??
                 translate(
-                  'auto.components.right.sidebar.SourceControl.b16b8f0e4b',
+                  'auto.components.workspacePanel.SourceControl.b16b8f0e4b',
                   'ai commit msg'
                 )}
             </TooltipContent>

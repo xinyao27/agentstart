@@ -7,12 +7,12 @@ import { useAppStore } from '~renderer/store/state'
 
 import { useHostHeaderDrag } from '../host-header-drag'
 import type { HostHeaderRow, HostSectionRow } from '../host-section-rows'
+import { projectNavigationRows } from '../navigation-row-projection'
 import { useProjectGroupHeaderDrag } from '../project-group-header-drag'
 import { getSidebarOrderedProjectGroupHeaderIdsByBucket } from '../project-group-header-drop'
 import { useRepoHeaderDrag } from '../project-header-drag'
 import { getSidebarOrderedRepoHeaderIdsByBucket } from '../project-header-drop'
 import { getProjectWorkspaceRails } from '../project-workspace-rail'
-import { projectWorkspaceSidebarRows } from '../workspace-sidebar-row-projection'
 import {
   getProjectGroupHeaderSectionEndByGroupId,
   getRepoHeaderSectionEndByRepoId
@@ -74,7 +74,7 @@ export function useHeaderModel(args: {
   useEffect(() => () => onHostDragActiveChange(false), [onHostDragActiveChange])
 
   const renderRows = buildRenderableRows(args.rows)
-  const workspaceRows = projectWorkspaceSidebarRows({
+  const workspaceRows = projectNavigationRows({
     localRows: renderRows,
     getLocalRowKey: getRenderRowKey
   })

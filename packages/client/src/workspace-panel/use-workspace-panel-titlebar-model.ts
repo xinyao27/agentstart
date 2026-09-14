@@ -1,5 +1,5 @@
 import type { WorkspaceTitlebarActionId } from '@agentstart/protocol/settings/ui-state'
-import type { ActiveRightSidebarTab } from '~renderer/editor/state'
+import type { ActiveWorkspacePanelTab } from '~renderer/editor/state'
 import type { ShortcutKeyComboDetails } from '~renderer/keyboard-input/use-shortcut-label'
 
 import type { ActivityBarItem } from './activity-bar-buttons'
@@ -14,13 +14,13 @@ export type WorkspacePanelTitlebarModel = {
   groupId: string
   visibleItems: WorkspaceTitlebarStripItem[]
   overflowItems: WorkspaceTitlebarStripItem[]
-  activePanelId: ActiveRightSidebarTab | null
+  activePanelId: ActiveWorkspacePanelTab | null
   dropTarget: WorkspacePanelTitlebarDropTarget
   isPanelDragActive: boolean
   resolvePanelIcon: (item: ActivityBarItem, active: boolean) => ActivityBarItem['icon']
   resolveItemIcon: (item: WorkspaceTitlebarStripItem, active: boolean) => ActivityBarItem['icon']
-  shortcutFor: (id: ActiveRightSidebarTab) => ShortcutKeyComboDetails | null
-  togglePanel: (id: ActiveRightSidebarTab) => void
+  shortcutFor: (id: ActiveWorkspacePanelTab) => ShortcutKeyComboDetails | null
+  togglePanel: (id: ActiveWorkspacePanelTab) => void
   activateItem: (item: WorkspaceTitlebarStripItem) => void
   handleItemPointerDown: (
     event: React.PointerEvent,

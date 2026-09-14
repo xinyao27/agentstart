@@ -23,7 +23,18 @@ so product state and user work carry the visual emphasis.
    use the existing radius scale, while edge-to-edge work panes retain their straight edges.
    Preserve each component's intended shape; avoid blanket radius resets or rounding sweeps.
    Use opaque backgrounds and one-pixel borders. Do not add shadows, decorative gradients, blur,
-   or alpha-wash backgrounds.
+   or alpha-wash backgrounds. The one sanctioned elevation is the workspace figure-ground: the
+   content area (`.workspace-content-card`) floats on the `sidebar` chrome plane, which shows as
+   the gutters around it and as the header row itself — the header paints no surface of its own,
+   so the plane reads behind the tabs and the content card starts on the strip's baseline. The
+   selected tab merges across that baseline: its body ends where the card begins and two inverse
+   quarter arcs flare it outward into the plane, so the tab and the card read as one surface with
+   no divider, border, or shadow at the join. With the navigation panel open the tab content
+   nests as an inner island (`.workspace-inner-island`) on the content card's surface. A
+   pane-local strip that sits on the card itself has no plane to flare into, so there the
+   selected tab keeps the recessed control surface (filled `card`, hairline border, shallow
+   shadow) the workspace tool island uses. Every pane inside still separates with borders and
+   spacing only.
 3. **Dense but legible.** Body copy is 14px; compact navigation and metadata use 12px. Preserve clear
    spacing around the primary action instead of enlarging every control.
 4. **Stable interaction.** Hover, focus, loading, and selected states must not resize or move the

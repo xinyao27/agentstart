@@ -115,7 +115,7 @@ export function WorkflowSections({
               customPromptDiscardSignal={sourceControlAiPromptDiscardSignal}
               settingsSearchQuery={settingsSearchQuery}
             />
-            <GitProviderApiBudgetPane settingsSearchQuery={settingsSearchQuery} />
+            <GitProviderApiBudgetPane />
           </>
         ) : null}
       </SettingsSection>

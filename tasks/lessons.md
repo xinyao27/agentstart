@@ -1,5 +1,42 @@
 # Lessons
 
+- When top-level pages move from URL-owned routes into the unified tab queue, migrate external host
+  navigation and browser-tab selection in the same change. A `?view=` parameter may remain as
+  cold-start intent, but it must not also remain the persistent Chrome Tab identity.
+
+- When a screenshot shows hover paint touching a neighboring selected tab, do not tune the selected
+  silhouette alone. Keep hover paint in a separate inset layer with explicit horizontal breathing
+  room, and account for any pseudo-elements already owned by drag/drop affordances.
+
+- When a tab appears to shift during activation, compare active and inactive box geometry before
+  changing transitions; state classes must preserve the same hit-area width and content alignment.
+
+- Keep tab close affordances on the neutral icon-button surface: do not reuse the accent background
+  or accent resting text color for a control that is only revealed by hover.
+
+- Keep tab hover surfaces on the neutral `muted` token as well; the product accent is reserved for
+  explicit primary actions and should not tint passive tab navigation.
+
+- For a shared Header row, use the existing common icon size for scroll and create controls instead
+  of adding a full-height custom variant; keep smaller sizes only for an explicitly bounded island.
+
+- When an intrinsic Header icon replaces a full-height variant, center it through a full-height
+  wrapper and mirror the wrapper's horizontal gutters so both sides keep the same breathing room.
+
+- When overflow controls are visually separated by gutters, use the edge mask alone for scroll
+  feedback; explicit divider lines beside the icon buttons add unintended rails to the Header.
+
+- When a right navigation column must sit below a content-owned Header, reserve the Header band in
+  the column's layout and keep its resize affordance inside the lower panel instead of extending a
+  negative top hit area across the shared Header.
+
+- When extending a content Header over a sibling column, carry its surface and seam into the
+  reserved band; matching only the vertical offset leaves a visually empty, disconnected strip.
+
+- When a product owner identifies a historical name as semantically wrong, do not preserve it as a
+  compatibility alias. Rename the state, routes, files, and callers together so the code's names
+  continue to describe the rendered location and ownership after the UI migration.
+
 - Do not describe repository gates, cross-platform builds, or compile-only simulator checks as
   complete end-to-end validation. State the exact verification boundary, explicitly note that this
   repository forbids retained tests, smoke checks, and E2E harnesses, and separate repository-ready
@@ -80,3 +117,81 @@
 - When a status-bar surface is gated by data it is supposed to fetch, initialize that data from app
   startup or another reachable path; a dropdown that only appears after providers exist cannot be
   the first refresh trigger.
+
+- When a visual reference calls for a tab/content transition, audit the shared tab boundary rather
+  than only changing individual labels: the selected tab needs an intentional rounded edge and a
+  deliberate seam into the content surface, while the leading tool controls need their own clearly
+  bounded island.
+- Treat a concurrent session edit discovered during a startup read as recoverable state. Preserve
+  the newer external snapshot and the local pending edit, but do not let an expected merge conflict
+  escape the hydration promise as an unhandled renderer rejection.
+- When renaming a localization namespace, migrate source IDs and locale trees together; otherwise
+  non-default languages can silently fall back even though the UI still renders.
+- Keep unavailable-surface retry scheduling in one timer chain; state-driven effects can cancel and recreate timers during retry transitions, causing visible connection jitter. Preserve disclosure state when the failure surface is remounted so user-expanded diagnostics do not collapse.
+- During rolling extension reloads, daemon input schemas must normalize legacy field names at the
+  boundary; otherwise an old bundle can turn a harmless UI persistence write into a renderer crash.
+- Best-effort telemetry and UI interaction persistence must always consume their Promise rejection;
+  expected validation failures should be logged and surfaced through state, never as unhandled errors.
+- When a compact toolbar is embedded in a taller titlebar, use intrinsic shared icon sizing and
+  centering; a dedicated `h-full` size or radius makes the hit area read as an unintended tab cell.
+- Never report a UI correction from intent alone: inspect the rendered call site's actual diff after
+  each follow-up, because a shared style can remain overridden by a stale size or variant at the
+  component boundary.
+- If the requested control explicitly has no grouping treatment, do not introduce a new ButtonGroup
+  while trying to fix its edge geometry; use the existing default button style and plain layout.
+- When a visual reference explicitly calls for an inset shadow, keep it shallow and scoped to the
+  owning island; reduce an over-large pill radius at the same boundary instead of rounding children.
+- Treat corner-radius feedback as iterative visual calibration: change only the owning boundary's
+  radius while preserving the requested depth and button geometry.
+- When an island radius changes, retune child control radii in the shared Button variant; leaving a
+  larger child radius in place can make active backgrounds visually protrude through the shell.
+- Mirror leading and trailing chrome insets at the owning pane frame so edge spacing stays balanced
+  without adding padding to individual icon buttons.
+- Treat a tab island and content-tab strip as separate layout groups: own their inter-group gap in
+  the parent flex layout, and let selected-state contrast carry the active surface without shadows.
+- For a selected tab that should merge into content, extend its visual box across the seam instead
+  of drawing a divider; keep any requested shadow shallow and on the outer edge only.
+- When reviewing a screenshot against a reference, distinguish a state tint from structural chrome;
+  call out the remaining seam, boundary shape, and active-surface geometry before claiming parity.
+- When a user asks for a surface to match an adjacent panel, reuse that panel's semantic background
+  token at the owning frame instead of approximating the color in child tabs.
+- A full-width titlebar seam can remain visible at the selected tab/content join; remove the divider
+  at the owning pane frame and keep the selected tab's shadow on its outer top and side edges only.
+- A browser-style active tab is not a capsule with a larger radius: its lower corners are inverse
+  arcs that expand the content surface into the surrounding chrome, so model those connectors as
+  separate geometry instead of only tuning the root border radius.
+- Never simulate a shared Header by adding top padding or painting an absolutely positioned spacer
+  over a sibling Panel. Lift the actual Header host above the lower split and render its controls
+  there so the layout, hit targets, and panel boundaries share one structure.
+- Verify the arc sweep and endpoint tangents before tuning size: reducing a convex quarter-circle
+  cannot produce a concave tab shoulder. Use a scalable viewBox for path geometry and inspect actual
+  rendered first/middle/last tabs, including clipping ancestors. Build success is not visual proof.
+- A tab strip that scrolls horizontally clips vertically too (`overflow-x: auto` takes the other
+  axis off `visible`, and the shell wraps it in `overflow-hidden`), so a merge silhouette drawn
+  past the strip's baseline is never painted — the shoulders vanish and the tab looks detached
+  even though the classes are correct. Draw the whole silhouette inside the strip's box and end it
+  exactly on the baseline the content card starts on.
+- Treat a shadow on the strip row itself as paint across the tab/content join: the card starts
+  flush under that row, so a downward shadow there darkens the card's first pixels beneath the
+  selected tab and reads as a gap. Keep the join's shadow budget at zero and put elevation on the
+  card's own outer edges.
+- "This surface's color doesn't match" has two opposite fixes: unify the surfaces, or separate
+  them so each reads as its own piece. Ask which one (and which surfaces are peers) before
+  restructuring — merging the header into the content and floating the header as its own island
+  both remove the seam, but only one of them is what the reviewer meant. Render both variants and
+  show them when the cost of guessing is a layout change.
+- When a surface loses the contrast it was drawn against, its selected state has to change with
+  it: a tab merged into the content below is legible because it is white against the plane, but the
+  same tab on a white island disappears. Give the selected control the recessed treatment the
+  sibling controls on that surface already use instead of inventing a third language.
+- `mask-image` only paints inside its own box and its tile repeats, so masking a shadow on the
+  shadow's own box silently erases every side shadow that falls outside that box, and repeats the
+  transparent bottom band over the top edge. Mask a wrapper that spans the full row plus the
+  shape's own overhang, and position the shadow layer inside it back onto the shape's box.
+- When a tab silhouette is drawn from a screenshot, get the reference's pixel scale from a known
+  metric (traffic-light diameter, strip height) before trusting any measurement: a 1200px-wide
+  capture of a 1728px-wide window is 1.44 CSS px per image px, and reading it as 1:1 makes every
+  padding look 44% too large.
+- A fixed minimum tab width wider than the label's content shows up as an oversized gap between
+  neighbors even when every padding is correct, because the viewer measures glyph to glyph. Size
+  tabs to their content with a small floor, and let truncation handle a saturated strip.

@@ -14,10 +14,7 @@ pub(crate) use catalog::{
     ProjectCatalogMailbox, ProjectCatalogMailboxClosed, ProjectCatalogRequest, ProjectCatalogWorker,
 };
 pub(crate) use git_repository::is_git_repository;
-pub use model::{
-    GitRemoteIdentity, Project, ProjectKind, ProjectLocation, ProjectRegistration,
-    ProjectWorktreeVisibility, WorkbenchProject,
-};
+pub use model::{GitRemoteIdentity, Project, ProjectKind, ProjectWorktreeVisibility};
 pub(crate) use remote_resolution::RemoteProjectResolver;
 pub(crate) use wire::{
     ProjectWireUpdate, RuntimeProject, RuntimeProjectList, RuntimeProjectResult,

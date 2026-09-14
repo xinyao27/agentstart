@@ -31,6 +31,7 @@ export function useWorkspaceActivationCommands({
   const setActiveFile = useAppStore((state) => state.setActiveFile)
   const setActiveTabType = useAppStore((state) => state.setActiveTabType)
   const setActiveBrowserTab = useAppStore((state) => state.setActiveBrowserTab)
+  const setWorkspacePanelOpen = useAppStore((state) => state.setWorkspacePanelOpen)
   const projectRuntimeState = useProjectCatalogRuntimeState()
 
   const activateTerminal = (terminalId: string) => {
@@ -40,6 +41,7 @@ export function useWorkspaceActivationCommands({
     if (!item) {
       return
     }
+    setWorkspacePanelOpen(false)
     focusGroup(worktreeId, groupId)
     activateTab(item.id)
     const environmentId = getRuntimeEnvironmentIdForWorktree(projectRuntimeState, worktreeId)
@@ -74,6 +76,7 @@ export function useWorkspaceActivationCommands({
     if (!item) {
       return
     }
+    setWorkspacePanelOpen(false)
     focusGroup(worktreeId, groupId)
     activateTab(item.id)
     if (item.contentType === 'simulator') {
@@ -90,6 +93,7 @@ export function useWorkspaceActivationCommands({
     if (!item) {
       return
     }
+    setWorkspacePanelOpen(false)
     focusGroup(worktreeId, groupId)
     activateTab(item.id)
     const environmentId = getRuntimeEnvironmentIdForWorktree(projectRuntimeState, worktreeId)
@@ -109,6 +113,7 @@ export function useWorkspaceActivationCommands({
     if (!item) {
       return
     }
+    setWorkspacePanelOpen(false)
     focusGroup(worktreeId, groupId)
     activateTab(item.id)
     setActiveTabType('editor')

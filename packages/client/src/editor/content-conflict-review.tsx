@@ -4,7 +4,7 @@ import { lazyWithRetry as lazy } from '~renderer/application-shell/lazy-with-ret
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { translate } from '~renderer/i18n/i18n'
 import { joinPath } from '~renderer/path'
-import { showWorkspaceSidebar } from '~renderer/workspace-panel/show-sidebar'
+import { showWorkspacePanel } from '~renderer/workspace-panel/show-workspace-panel'
 
 import { ConflictBanner, ConflictPlaceholderView, ConflictReviewPanel } from './conflict-components'
 import {
@@ -258,7 +258,7 @@ export function renderConflictReview(context: EditorRenderContext): React.JSX.El
         )
       }
       onReturnToSourceControl={() =>
-        showWorkspaceSidebar({ view: 'source-control', worktreeId: activeFile.worktreeId })
+        showWorkspacePanel({ view: 'source-control', worktreeId: activeFile.worktreeId })
       }
     />
   )

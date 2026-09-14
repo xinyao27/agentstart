@@ -1,4 +1,12 @@
 import type { Tab } from '@agentstart/protocol/workspace/tabs'
+import { activeViewFor } from '~renderer/application-shell/state/visible-surface'
+import {
+  isPageTabId,
+  isWorkspacePageView,
+  pageTabId,
+  pageTabViewFromId
+} from '~renderer/application-shell/state/workspace-page-views'
+import { resolvePageTabLabel } from '~renderer/application-shell/state/workspace-page-views'
 import { getEditorDisplayLabel } from '~renderer/editor/labels'
 import { normalizeRelativePath } from '~renderer/path'
 import { useAppStore } from '~renderer/store/state'
@@ -27,6 +35,9 @@ function getTabDragLabel(item: TabStripItem, generatedTitlesEnabled: boolean): s
   }
   if (item.type === 'git-graph') {
     return item.data.label
+  }
+  if (item.type === 'page') {
+    return resolvePageTabLabel(item.data)
   }
   return getEditorDisplayLabel(item.data)
 }
@@ -85,6 +96,7 @@ export function useTabStripModel(props: TabBarProps) {
   const generatedTitlesEnabled = useAppStore(
     (state) => state.settings?.tabAutoGenerateTitle === true
   )
+  const activeView = useAppStore((state) => activeViewFor(state))
   const gitStatusEntries = useAppStore(
     (state) => state.gitStatusByWorktree[worktreeId] ?? EMPTY_GIT_STATUS_ENTRIES
   )
@@ -120,6 +132,16 @@ export function useTabStripModel(props: TabBarProps) {
     )
     const items: TabStripItem[] = []
     for (const id of ids) {
+      // Why: a page tab is a real unified Tab whose id is `page:<view>`, so its
+      // deterministic id doubles as the visible id. Resolve the view from the id
+      // rather than the terminal/editor/browser maps, which never hold it.
+      if (isPageTabId(id)) {
+        const view = pageTabViewFromId(id)
+        if (view) {
+          items.push({ type: 'page', id, unifiedTabId: id, isPinned: false, data: view })
+        }
+        continue
+      }
       const terminal = terminalMap.get(id)
       const file = editorMap.get(id)
       const browser = browserMap.get(id)
@@ -183,26 +205,40 @@ export function useTabStripModel(props: TabBarProps) {
     }
     return indicators
   })()
-  const activeVisibleTabId = (() =>
-    orderedItems.find((item) => {
-      if (item.type === 'terminal') {
+  // Why: a page view is what the user is looking at, so the strip's active tab
+  // is that page's entry — but only when this group actually queues it. A page
+  // opened in another worktree must not leave the active id dangling here.
+  const activePageView = isWorkspacePageView(activeView) ? activeView : null
+  const activeVisibleTabId = (() => {
+    if (activePageView) {
+      const pageId = pageTabId(activePageView)
+      if (orderedItems.some((item) => item.id === pageId)) {
+        return pageId
+      }
+    }
+    return (
+      orderedItems.find((item) => {
+        if (item.type === 'terminal') {
+          return (
+            (activeTabType === 'terminal' || activeTabType === 'simulator') &&
+            item.id === activeTabId
+          )
+        }
+        if (item.type === 'browser') {
+          return activeTabType === 'browser' && item.id === activeBrowserTabId
+        }
+        if (item.type === 'simulator') {
+          return activeTabType === 'simulator' && item.id === activeSimulatorTabId
+        }
+        if (item.type === 'git-graph') {
+          return item.id === activeGitGraphTabId
+        }
         return (
-          (activeTabType === 'terminal' || activeTabType === 'simulator') && item.id === activeTabId
+          (activeTabType === 'editor' || activeTabType === 'simulator') && activeFileId === item.id
         )
-      }
-      if (item.type === 'browser') {
-        return activeTabType === 'browser' && item.id === activeBrowserTabId
-      }
-      if (item.type === 'simulator') {
-        return activeTabType === 'simulator' && item.id === activeSimulatorTabId
-      }
-      if (item.type === 'git-graph') {
-        return item.id === activeGitGraphTabId
-      }
-      return (
-        (activeTabType === 'editor' || activeTabType === 'simulator') && activeFileId === item.id
-      )
-    })?.id ?? null)()
+      })?.id ?? null
+    )
+  })()
   const layoutKey = (() =>
     orderedItems
       .map((item) =>

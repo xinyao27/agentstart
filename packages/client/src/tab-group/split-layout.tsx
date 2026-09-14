@@ -125,9 +125,9 @@ function SplitNode({
   nodePath,
   worktreeId,
   focusedGroupId,
+  useSharedHeader,
   isWorktreeActive,
   hasSplitGroups,
-  touchesTopEdge,
   touchesRightEdge,
   touchesLeftEdge,
   touchesBottomEdge,
@@ -141,9 +141,9 @@ function SplitNode({
   nodePath: string
   worktreeId: string
   focusedGroupId?: string
+  useSharedHeader: boolean
   isWorktreeActive: boolean
   hasSplitGroups: boolean
-  touchesTopEdge: boolean
   touchesRightEdge: boolean
   touchesLeftEdge: boolean
   touchesBottomEdge: boolean
@@ -161,11 +161,16 @@ function SplitNode({
       <TabGroupPanel
         groupId={node.groupId}
         worktreeId={worktreeId}
+        useSharedHeader={useSharedHeader}
         // Why: hidden worktrees stay mounted so their PTYs and split layouts
         // survive worktree switches, but only the visible worktree may own the
         // global terminal shortcuts. If an offscreen group's pane stays
         // "focused", Cmd/Ctrl+W and split shortcuts can hit the wrong worktree.
         isFocused={isWorktreeActive && node.groupId === focusedGroupId}
+        // Why: the shared titlebar keeps hosting the focused group's strip even
+        // while a top-level page replaces the workbench body, so strip
+        // ownership must not depend on worktree visibility (isFocused does).
+        isSharedStripGroup={node.groupId === focusedGroupId}
         hasSplitGroups={hasSplitGroups}
         touchesRightEdge={touchesRightEdge}
         touchesLeftEdge={touchesLeftEdge}
@@ -173,7 +178,6 @@ function SplitNode({
         suppressLeftBorder={suppressLeftBorder}
         suppressRightBorder={suppressRightBorder}
         suppressBottomBorder={suppressBottomBorder}
-        reserveCollapsedSidebarHeaderSpace={touchesTopEdge && touchesLeftEdge}
         isTabDragActive={isTabDragActive}
         hoveredTabInsertion={
           hoveredTabInsertion?.groupId === node.groupId ? hoveredTabInsertion : null
@@ -196,9 +200,9 @@ function SplitNode({
           nodePath={nodePath.length > 0 ? `${nodePath}.first` : 'first'}
           worktreeId={worktreeId}
           focusedGroupId={focusedGroupId}
+          useSharedHeader={useSharedHeader}
           isWorktreeActive={isWorktreeActive}
           hasSplitGroups={hasSplitGroups}
-          touchesTopEdge={touchesTopEdge}
           touchesRightEdge={isHorizontal ? false : touchesRightEdge}
           touchesLeftEdge={touchesLeftEdge}
           touchesBottomEdge={isHorizontal ? touchesBottomEdge : false}
@@ -222,9 +226,9 @@ function SplitNode({
           nodePath={nodePath.length > 0 ? `${nodePath}.second` : 'second'}
           worktreeId={worktreeId}
           focusedGroupId={focusedGroupId}
+          useSharedHeader={useSharedHeader}
           isWorktreeActive={isWorktreeActive}
           hasSplitGroups={hasSplitGroups}
-          touchesTopEdge={isHorizontal ? touchesTopEdge : false}
           touchesRightEdge={touchesRightEdge}
           touchesLeftEdge={isHorizontal ? false : touchesLeftEdge}
           touchesBottomEdge={touchesBottomEdge}
@@ -243,11 +247,13 @@ export default function TabGroupSplitLayout({
   layout,
   worktreeId,
   focusedGroupId,
+  useSharedHeader = false,
   isWorktreeActive
 }: {
   layout: TabGroupLayoutNode
   worktreeId: string
   focusedGroupId?: string
+  useSharedHeader?: boolean
   isWorktreeActive: boolean
 }): React.JSX.Element {
   const {
@@ -292,9 +298,9 @@ export default function TabGroupSplitLayout({
               nodePath=""
               worktreeId={worktreeId}
               focusedGroupId={focusedGroupId}
+              useSharedHeader={useSharedHeader}
               isWorktreeActive={isWorktreeActive}
               hasSplitGroups={hasSplits}
-              touchesTopEdge={true}
               touchesRightEdge={true}
               touchesLeftEdge={true}
               touchesBottomEdge={false}

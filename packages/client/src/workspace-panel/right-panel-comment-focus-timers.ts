@@ -14,7 +14,7 @@ export function scheduleRightPanelCommentFocusTimer(
   timerRef: RightPanelCommentFocusTimerRef,
   callback: () => void
 ): void {
-  // Why: right-sidebar panels can unmount before deferred focus work runs.
+  // Why: workspace-panel panels can unmount before deferred focus work runs.
   // Replacing the pending timer keeps stale focus callbacks from surviving.
   clearRightPanelCommentFocusTimer(timerRef)
   timerRef.current = setTimeout(() => {

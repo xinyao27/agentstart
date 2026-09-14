@@ -1,12 +1,21 @@
 import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
+import {
+  FileText,
+  FolderSimple,
+  Monitor,
+  SidebarSimple,
+  Star,
+  TerminalWindow
+} from '~renderer/icons/hugeicons'
+import { ArrowClockwise } from '~renderer/icons/hugeicons'
 import { useAppStore } from '~renderer/store/state'
-import { Separator } from '~renderer/ui/separator'
 
 import { CliSection } from '../cli-section'
 import { DefaultWindowsProjectRuntimeSetting } from '../default-windows-project-runtime-setting'
-import { SettingsSubsectionHeader, SettingsSwitchRow } from '../form-controls'
+import { SettingsSwitchRow } from '../form-controls'
+import { SettingsGroupCards, type SettingsGroup } from '../group-card'
 import { RecentTabOrderControl } from '../recent-tab-order-control'
 import { matchesSettingsSearch, type SettingsSearchEntry } from '../search'
 import { SearchableSetting } from '../searchable-setting'
@@ -95,30 +104,21 @@ export function GeneralPane({
     ? getGeneralProjectRuntimeSearchEntries()
     : []
 
-  const visibleSections = [
-    matchesSettingsSearch(searchQuery, generalNavigationSearchEntries) ? (
-      <section key="navigation" className="space-y-4">
-        <SettingsSubsectionHeader
-          title={translate('auto.components.settings.GeneralPane.d58fccfd84', 'Navigation')}
-        />
-        <RecentTabOrderControl
-          ctrlTabOrderMode={settings.ctrlTabOrderMode ?? 'mru'}
-          keywords={tabOrderKeywords}
-          updateSettings={updateSettings}
-        />
-        <SearchableSetting
-          title={translate(
-            'auto.components.settings.GeneralPane.5cb5475664',
-            'Confirm before closing pinned tabs'
-          )}
-          description={translate(
-            'auto.components.settings.GeneralPane.36b2a5dc6d',
-            'Show a confirmation dialog before a pinned tab is closed.'
-          )}
-          keywords={['pinned', 'tab', 'confirm', 'close']}
-        >
-          <SettingsSwitchRow
-            label={translate(
+  const groups: SettingsGroup[] = [
+    {
+      id: 'general-navigation',
+      icon: <SidebarSimple aria-hidden="true" />,
+      title: translate('auto.components.settings.GeneralPane.d58fccfd84', 'Navigation'),
+      searchEntries: generalNavigationSearchEntries,
+      content: (
+        <div className="divide-border/40 divide-y">
+          <RecentTabOrderControl
+            ctrlTabOrderMode={settings.ctrlTabOrderMode ?? 'mru'}
+            keywords={tabOrderKeywords}
+            updateSettings={updateSettings}
+          />
+          <SearchableSetting
+            title={translate(
               'auto.components.settings.GeneralPane.5cb5475664',
               'Confirm before closing pinned tabs'
             )}
@@ -126,37 +126,57 @@ export function GeneralPane({
               'auto.components.settings.GeneralPane.36b2a5dc6d',
               'Show a confirmation dialog before a pinned tab is closed.'
             )}
-            checked={settings.confirmClosePinnedTab ?? true}
-            onChange={() =>
-              updateSettings({ confirmClosePinnedTab: !(settings.confirmClosePinnedTab ?? true) })
-            }
-          />
-        </SearchableSetting>
-      </section>
-    ) : null,
-    matchesSettingsSearch(searchQuery, getGeneralWorkspaceSearchEntries()) ? (
-      <GeneralWorkspaceSettingsSection
-        key="workspace"
-        settings={settings}
-        updateSettings={updateSettings}
-      />
-    ) : null,
-    shouldShowProjectRuntimeSection(
-      wslSupportedPlatform,
-      searchQuery,
-      projectRuntimeSearchEntries
-    ) ? (
-      <section key="project-runtime" className="space-y-4">
-        <SettingsSubsectionHeader
-          title={translate(
-            'auto.components.settings.GeneralPane.projectRuntime',
-            'Project Runtime'
-          )}
-          description={translate(
-            'auto.components.settings.GeneralPane.projectRuntimeDescription',
-            'Default runtime for local Windows projects that do not override it.'
-          )}
-        />
+            keywords={['pinned', 'tab', 'confirm', 'close']}
+          >
+            <SettingsSwitchRow
+              label={translate(
+                'auto.components.settings.GeneralPane.5cb5475664',
+                'Confirm before closing pinned tabs'
+              )}
+              description={translate(
+                'auto.components.settings.GeneralPane.36b2a5dc6d',
+                'Show a confirmation dialog before a pinned tab is closed.'
+              )}
+              checked={settings.confirmClosePinnedTab ?? true}
+              onChange={() =>
+                updateSettings({ confirmClosePinnedTab: !(settings.confirmClosePinnedTab ?? true) })
+              }
+            />
+          </SearchableSetting>
+        </div>
+      )
+    },
+    {
+      id: 'general-workspace',
+      icon: <FolderSimple aria-hidden="true" />,
+      title: translate(
+        'auto.components.settings.GeneralWorkspaceSettingsSection.7511097c5d',
+        'Workspace'
+      ),
+      summary: translate(
+        'auto.components.settings.GeneralWorkspaceSettingsSection.e2955d9ccb',
+        'Configure where new workspaces are created.'
+      ),
+      searchEntries: getGeneralWorkspaceSearchEntries(),
+      content: (
+        <GeneralWorkspaceSettingsSection settings={settings} updateSettings={updateSettings} />
+      )
+    }
+  ]
+
+  if (
+    shouldShowProjectRuntimeSection(wslSupportedPlatform, searchQuery, projectRuntimeSearchEntries)
+  ) {
+    groups.push({
+      id: 'general-project-runtime',
+      icon: <Monitor aria-hidden="true" />,
+      title: translate('auto.components.settings.GeneralPane.projectRuntime', 'Project Runtime'),
+      summary: translate(
+        'auto.components.settings.GeneralPane.projectRuntimeDescription',
+        'Default runtime for local Windows projects that do not override it.'
+      ),
+      searchEntries: projectRuntimeSearchEntries,
+      content: (
         <DefaultWindowsProjectRuntimeSetting
           settings={settings}
           updateSettings={updateSettings}
@@ -165,47 +185,72 @@ export function GeneralPane({
           wslDistros={wslDistros}
           wslCapabilitiesLoading={Boolean(wslCapabilitiesLoading)}
         />
-      </section>
-    ) : null,
-    matchesSettingsSearch(searchQuery, getGeneralEditorSearchEntries()) ? (
-      <GeneralEditorSettingsSection
-        key="editor"
-        settings={settings}
-        updateSettings={updateSettings}
-        fontSuggestions={fontSuggestions}
-        onRequestFontSuggestions={onRequestFontSuggestions}
-      />
-    ) : null,
-    matchesSettingsSearch(searchQuery, getGeneralCliSearchEntries()) ? (
-      <CliSection
-        key="cli"
-        currentPlatform={getDesktopPlatformFromUserAgent(navigator.userAgent)}
-        settings={settings}
-        wslSupportedPlatform={wslSupportedPlatform}
-        wslAvailable={wslAvailable}
-        wslCapabilitiesLoading={wslCapabilitiesLoading}
-      />
-    ) : null,
-    matchesSettingsSearch(searchQuery, getGeneralUpdateSearchEntries()) ? (
-      <GeneralUpdateSettingsSection key="updates" />
-    ) : null
-    // Note: the Support section is rendered outside this array so it can own
-    // its own loading placeholder and its own collapsing Separator. Without
-    // that separation, a dangling divider would remain above the collapsed
-    // section.
-  ].filter(Boolean)
+      )
+    })
+  }
 
-  return (
-    <div className="space-y-6">
-      {visibleSections.map((section, index) => (
-        <div key={index} className="space-y-6">
-          {index > 0 ? <Separator /> : null}
-          {section}
-        </div>
-      ))}
-      {matchesSettingsSearch(searchQuery, getGeneralSupportSearchEntries()) ? (
-        <GeneralSupportSection hasPrecedingSections={visibleSections.length > 0} />
-      ) : null}
-    </div>
+  groups.push(
+    {
+      id: 'general-editor',
+      icon: <FileText aria-hidden="true" />,
+      title: translate(
+        'auto.components.settings.GeneralEditorSettingsSection.45c6e85c4d',
+        'Editor'
+      ),
+      summary: translate(
+        'auto.components.settings.GeneralEditorSettingsSection.d21136d9ef',
+        'Configure how AgentStart persists file edits.'
+      ),
+      searchEntries: getGeneralEditorSearchEntries(),
+      content: (
+        <GeneralEditorSettingsSection
+          settings={settings}
+          updateSettings={updateSettings}
+          fontSuggestions={fontSuggestions}
+          onRequestFontSuggestions={onRequestFontSuggestions}
+        />
+      )
+    },
+    {
+      id: 'general-cli',
+      icon: <TerminalWindow aria-hidden="true" />,
+      title: translate('auto.components.settings.CliSection.c5c0f2641d', 'AgentStart CLI'),
+      summary: translate(
+        'auto.components.settings.CliSection.6930feda9e',
+        'Use AgentStart from your terminal to open the app, manage worktrees, and interact with AgentStart terminals.'
+      ),
+      searchEntries: getGeneralCliSearchEntries(),
+      content: (
+        <CliSection
+          currentPlatform={getDesktopPlatformFromUserAgent(navigator.userAgent)}
+          settings={settings}
+          wslSupportedPlatform={wslSupportedPlatform}
+          wslAvailable={wslAvailable}
+          wslCapabilitiesLoading={wslCapabilitiesLoading}
+        />
+      )
+    },
+    {
+      id: 'general-updates',
+      icon: <ArrowClockwise aria-hidden="true" />,
+      title: translate(
+        'auto.components.settings.GeneralUpdateSettingsSection.f2b1ccc12a',
+        'Updates'
+      ),
+      searchEntries: getGeneralUpdateSearchEntries(),
+      content: <GeneralUpdateSettingsSection />
+    },
+    {
+      id: 'general-support',
+      icon: <Star aria-hidden="true" />,
+      title: translate(
+        'auto.components.settings.GeneralSupportSection.55a87e5fd1',
+        'Support AgentStart'
+      ),
+      searchEntries: getGeneralSupportSearchEntries(),
+      content: <GeneralSupportSection />
+    }
   )
+
+  return <SettingsGroupCards groups={groups} defaultOpenId="general-navigation" />
 }

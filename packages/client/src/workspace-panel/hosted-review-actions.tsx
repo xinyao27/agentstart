@@ -30,12 +30,12 @@ import {
   HostedReviewActionError,
   MergedReviewActions
 } from './hosted-review-state-actions'
-import {
-  RIGHT_SIDEBAR_MERGE_PRIMARY_BUTTON_CLASS,
-  RIGHT_SIDEBAR_PRIMARY_BUTTON_LABEL_CLASS,
-  RIGHT_SIDEBAR_SPLIT_ACTION_ROW_CLASS
-} from './right-sidebar-primary-action-layout'
 import { useHostedReviewActions, type HostedReviewActionInfo } from './use-hosted-review-actions'
+import {
+  WORKSPACE_PANEL_MERGE_PRIMARY_BUTTON_CLASS,
+  WORKSPACE_PANEL_PRIMARY_BUTTON_LABEL_CLASS,
+  WORKSPACE_PANEL_SPLIT_ACTION_ROW_CLASS
+} from './workspace-panel-primary-action-layout'
 
 export default function HostedReviewActions({
   review,
@@ -103,7 +103,7 @@ export default function HostedReviewActions({
     return (
       <div className="space-y-1.5">
         <TooltipProvider>
-          <div className={RIGHT_SIDEBAR_SPLIT_ACTION_ROW_CLASS}>
+          <div className={WORKSPACE_PANEL_SPLIT_ACTION_ROW_CLASS}>
             <Tooltip>
               {/* Why: wrapping in a <span> so the tooltip trigger receives pointer
                   events even when the merge button inside is disabled. */}
@@ -120,7 +120,7 @@ export default function HostedReviewActions({
                       size="xs"
                       className={cn(
                         'px-3 text-[11px] rounded-r-none',
-                        RIGHT_SIDEBAR_MERGE_PRIMARY_BUTTON_CLASS,
+                        WORKSPACE_PANEL_MERGE_PRIMARY_BUTTON_CLASS,
                         'bg-green-600 text-white hover:bg-green-700',
                         'disabled:opacity-50 disabled:cursor-not-allowed'
                       )}
@@ -136,10 +136,10 @@ export default function HostedReviewActions({
                       ) : (
                         <GitMerge className="size-3.5" />
                       )}
-                      <span className={RIGHT_SIDEBAR_PRIMARY_BUTTON_LABEL_CLASS}>
+                      <span className={WORKSPACE_PANEL_PRIMARY_BUTTON_LABEL_CLASS}>
                         {merging
                           ? translate(
-                              'auto.components.right.sidebar.HostedReviewActions.d2ca293f3d',
+                              'auto.components.workspacePanel.HostedReviewActions.d2ca293f3d',
                               'Working...'
                             )
                           : mergePresentation.directMergeAvailable
@@ -169,12 +169,12 @@ export default function HostedReviewActions({
                     )}
                     disabled={menuDisabled}
                     aria-label={translate(
-                      'auto.components.right.sidebar.HostedReviewActions.2bfaf4379c',
+                      'auto.components.workspacePanel.HostedReviewActions.2bfaf4379c',
                       'More {{value0}} actions',
                       { value0: reviewLabel }
                     )}
                     title={translate(
-                      'auto.components.right.sidebar.HostedReviewActions.9845a71e17',
+                      'auto.components.workspacePanel.HostedReviewActions.9845a71e17',
                       'More actions'
                     )}
                   >
@@ -217,7 +217,7 @@ export default function HostedReviewActions({
                 >
                   <GitPullRequestClosed className="size-3.5" />
                   {translate(
-                    'auto.components.right.sidebar.HostedReviewActions.4d5fb5a284',
+                    'auto.components.workspacePanel.HostedReviewActions.4d5fb5a284',
                     'Close'
                   )}{' '}
                   {shortLabel}

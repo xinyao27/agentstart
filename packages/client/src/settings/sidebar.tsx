@@ -2,7 +2,7 @@ import type { GitHubRepositoryIdentity } from '@agentstart/protocol/hosted-revie
 import type { RepoIcon } from '@agentstart/protocol/project/icon'
 import type { CSSProperties, RefObject } from 'react'
 import { translate } from '~renderer/i18n/i18n'
-import { MagnifyingGlass as Search, ArrowLeft } from '~renderer/icons/hugeicons'
+import { MagnifyingGlass as Search } from '~renderer/icons/hugeicons'
 import { useShortcutKeyComboDetails } from '~renderer/keyboard-input/use-shortcut-label'
 import type { SettingsNavIcon, SettingsNavInstallStatus } from '~renderer/settings/navigation-types'
 import { cn } from '~renderer/ui/class-names'
@@ -46,7 +46,6 @@ type SettingsSidebarProps = {
   hasRepos: boolean
   searchQuery: string
   searchInputRef?: RefObject<HTMLInputElement | null>
-  onBack: () => void
   onSearchChange: (query: string) => void
   onSelectSection: (
     sectionId: string,
@@ -125,7 +124,6 @@ export function SettingsSidebar({
   hasRepos,
   searchQuery,
   searchInputRef,
-  onBack,
   onSearchChange,
   onSelectSection,
   reserveWindowChrome
@@ -187,18 +185,6 @@ export function SettingsSidebar({
       style={appearanceStyle}
     >
       <div className="px-3 pt-2 pb-1">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onBack}
-          className="text-muted-foreground w-full justify-start gap-2 text-[13px]"
-        >
-          <ArrowLeft className="size-4" />
-          {translate('auto.components.settings.SettingsSidebar.60f8a673a7', 'Back to app')}
-        </Button>
-      </div>
-
-      <div className="px-3 py-1">
         <div className="relative">
           <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
           <Input

@@ -13,6 +13,7 @@ import {
 import {
   type WorkbenchRouteSearch,
   workbenchLocationFromSearch,
+  workbenchPageIntentFromSearch,
   workbenchSearchFromLocation,
   validateWorkbenchRouteSearch
 } from './location'
@@ -41,7 +42,12 @@ configureWorkbenchNavigation((location) => {
 
 function WorkbenchRoute(): React.JSX.Element {
   const search: WorkbenchRouteSearch = workbenchRoute.useSearch()
-  return <ExtensionWorkbenchSurface location={workbenchLocationFromSearch(search)} />
+  return (
+    <ExtensionWorkbenchSurface
+      initialPage={workbenchPageIntentFromSearch(search)}
+      location={workbenchLocationFromSearch(search)}
+    />
+  )
 }
 
 export function ExtensionWorkbenchRouter(): React.JSX.Element {

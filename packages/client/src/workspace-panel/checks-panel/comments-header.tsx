@@ -30,8 +30,8 @@ const PR_COMMENT_LIST_DISPLAY_MODES: PRCommentsListDisplayMode[] = ['triage', 't
 
 function getPRCommentsListDisplayModeLabel(mode: PRCommentsListDisplayMode): string {
   return mode === 'triage'
-    ? translate('auto.components.right.sidebar.checks.panel.content.8a621a2c4f', 'Grouped')
-    : translate('auto.components.right.sidebar.checks.panel.content.b13f85d75c', 'Timeline')
+    ? translate('auto.components.workspacePanel.checks.panel.content.8a621a2c4f', 'Grouped')
+    : translate('auto.components.workspacePanel.checks.panel.content.b13f85d75c', 'Timeline')
 }
 
 type PRCommentsHeaderProps = {
@@ -90,7 +90,7 @@ export function PRCommentsHeader({
       <div className="flex min-w-0 items-center gap-2">
         <MessageSquare className="text-muted-foreground size-3.5" />
         <span className={presentation.sectionHeaderLabel}>
-          {translate('auto.components.right.sidebar.checks.panel.content.94557d68e2', 'Comments')}
+          {translate('auto.components.workspacePanel.checks.panel.content.94557d68e2', 'Comments')}
         </span>
         {commentsCount > 0 && <span className={presentation.sectionCount}>{commentsCount}</span>}
         <div className="-mr-1 ml-auto flex items-center gap-0.5">
@@ -104,7 +104,7 @@ export function PRCommentsHeader({
                       variant="quiet"
                       size="icon-xs"
                       aria-label={translate(
-                        'auto.components.right.sidebar.checks.panel.content.d7a2f9c401',
+                        'auto.components.workspacePanel.checks.panel.content.d7a2f9c401',
                         'Send unresolved {{value0}} comments',
                         { value0: 'PR' }
                       )}
@@ -124,7 +124,7 @@ export function PRCommentsHeader({
                   {resolveCommentsWithAIDisabled && resolveCommentsWithAIDisabledReason
                     ? resolveCommentsWithAIDisabledReason
                     : translate(
-                        'auto.components.right.sidebar.checks.panel.content.d7a2f9c401',
+                        'auto.components.workspacePanel.checks.panel.content.d7a2f9c401',
                         'Send unresolved {{value0}} comments',
                         { value0: 'PR' }
                       )}
@@ -141,7 +141,7 @@ export function PRCommentsHeader({
                           size="icon-xs"
                           className="relative"
                           aria-label={translate(
-                            'auto.components.right.sidebar.checks.panel.content.d91f2a6c39',
+                            'auto.components.workspacePanel.checks.panel.content.d91f2a6c39',
                             'Send {{value0}} queued comments to AI',
                             { value0: selectedCommentQueueCount }
                           )}
@@ -168,7 +168,7 @@ export function PRCommentsHeader({
                       {resolveCommentsWithAIDisabled && resolveCommentsWithAIDisabledReason
                         ? resolveCommentsWithAIDisabledReason
                         : translate(
-                            'auto.components.right.sidebar.checks.panel.content.d91f2a6c39',
+                            'auto.components.workspacePanel.checks.panel.content.d91f2a6c39',
                             'Send {{value0}} queued comments to AI',
                             { value0: selectedCommentQueueCount }
                           )}
@@ -182,7 +182,7 @@ export function PRCommentsHeader({
                           variant="quiet"
                           size="icon-xs"
                           aria-label={translate(
-                            'auto.components.right.sidebar.checks.panel.content.a6de3e5a20',
+                            'auto.components.workspacePanel.checks.panel.content.a6de3e5a20',
                             'Clear queued comments'
                           )}
                           onClick={clearSelection}
@@ -193,7 +193,7 @@ export function PRCommentsHeader({
                     />
                     <TooltipContent side="top" sideOffset={4}>
                       {translate(
-                        'auto.components.right.sidebar.checks.panel.content.a6de3e5a20',
+                        'auto.components.workspacePanel.checks.panel.content.a6de3e5a20',
                         'Clear queued comments'
                       )}
                     </TooltipContent>
@@ -211,7 +211,7 @@ export function PRCommentsHeader({
                     variant="quiet"
                     size="icon-xs"
                     aria-label={translate(
-                      'auto.components.right.sidebar.checks.panel.content.f5cf324efa',
+                      'auto.components.workspacePanel.checks.panel.content.f5cf324efa',
                       'Comment display options'
                     )}
                   >
@@ -222,7 +222,7 @@ export function PRCommentsHeader({
               <DropdownMenuContent align="end" side="bottom" sideOffset={6}>
                 <DropdownMenuLabel>
                   {translate(
-                    'auto.components.right.sidebar.checks.panel.content.5e6e5a13fa',
+                    'auto.components.workspacePanel.checks.panel.content.5e6e5a13fa',
                     'View'
                   )}
                 </DropdownMenuLabel>
@@ -250,11 +250,11 @@ export function PRCommentsHeader({
                     aria-label={
                       commentsCount === 0
                         ? translate(
-                            'auto.components.right.sidebar.checks.panel.content.7440d09d2c',
+                            'auto.components.workspacePanel.checks.panel.content.7440d09d2c',
                             'Start conversation'
                           )
                         : translate(
-                            'auto.components.right.sidebar.checks.panel.content.2b2be92919',
+                            'auto.components.workspacePanel.checks.panel.content.2b2be92919',
                             'Add comment'
                           )
                     }
@@ -271,11 +271,11 @@ export function PRCommentsHeader({
                   ? commentsDisabledReason
                   : commentsCount === 0
                     ? translate(
-                        'auto.components.right.sidebar.checks.panel.content.7440d09d2c',
+                        'auto.components.workspacePanel.checks.panel.content.7440d09d2c',
                         'Start conversation'
                       )
                     : translate(
-                        'auto.components.right.sidebar.checks.panel.content.2b2be92919',
+                        'auto.components.workspacePanel.checks.panel.content.2b2be92919',
                         'Add comment'
                       )}
               </TooltipContent>
@@ -311,7 +311,7 @@ export function PRCommentsHeader({
       {commentsCount >= 100 && (
         <div className="text-muted-foreground mt-1.5 text-[10px]">
           {translate(
-            'auto.components.right.sidebar.checks.panel.content.751f7c6e5c',
+            'auto.components.workspacePanel.checks.panel.content.751f7c6e5c',
             'Showing first 100 comments per source'
           )}
         </div>

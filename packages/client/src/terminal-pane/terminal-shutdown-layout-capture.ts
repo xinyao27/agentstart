@@ -30,10 +30,10 @@ type CaptureTerminalShutdownLayoutArgs = {
   clearedScrollbackLeafIds?: ReadonlySet<string>
 }
 
-function omitClearedLeafState(
-  record: Record<string, string> | undefined,
+function omitClearedLeafState<T>(
+  record: Record<string, T> | undefined,
   clearedLeafIds: ReadonlySet<string> | undefined
-): Record<string, string> | undefined {
+): Record<string, T> | undefined {
   if (!record || !clearedLeafIds || clearedLeafIds.size === 0) {
     return record
   }
@@ -140,6 +140,11 @@ export function captureTerminalShutdownLayout({
     fresh: {},
     currentLeafIds
   })
+  const mergedScrollbackGrids = mergeCapturedLeafState({
+    prior: omitClearedLeafState(existingLayout?.scrollbackGridsByLeafId, clearedScrollbackLeafIds),
+    fresh: {},
+    currentLeafIds
+  })
   const ptyIdsByLeafId = { ...preservedPtyIdsByLeafId, ...livePtyIdsByLeafId }
   // Why: shutdown snapshots can otherwise persist focus on a mounted pane whose
   // transport was already cleared during PTY exit/reconnect cleanup. Unlike
@@ -154,6 +159,9 @@ export function captureTerminalShutdownLayout({
   }
   if (Object.keys(mergedScrollbackRefs).length > 0) {
     layout.scrollbackRefsByLeafId = mergedScrollbackRefs
+  }
+  if (Object.keys(mergedScrollbackGrids).length > 0) {
+    layout.scrollbackGridsByLeafId = mergedScrollbackGrids
   }
   if (Object.keys(ptyIdsByLeafId).length > 0) {
     layout.ptyIdsByLeafId = ptyIdsByLeafId

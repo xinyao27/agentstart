@@ -41,7 +41,7 @@ function FileExplorerTreeContent({
   const emptyMessage =
     view.hasNameFilter && !view.nameFilterFiles.loadError
       ? translate(
-          'auto.components.right.sidebar.FileExplorer.2f4483d6c4',
+          'auto.components.workspacePanel.FileExplorer.2f4483d6c4',
           'No files match this filter'
         )
       : undefined
@@ -193,7 +193,7 @@ function FileExplorerTreeContent({
         ) : (
           <div className="text-muted-foreground flex h-full items-center justify-center text-xs">
             {translate(
-              'auto.components.right.sidebar.Search.98c8435e36',
+              'auto.components.workspacePanel.Search.98c8435e36',
               'Select a workspace to search'
             )}
           </div>

@@ -16,7 +16,7 @@ export function openGitGraphTab(worktreeId: string, targetGroupId?: string): Tab
 
   const tab = state.createUnifiedTab(worktreeId, 'git-graph', {
     entityId: `git-graph:${worktreeId}`,
-    label: translate('auto.components.right.sidebar.SourceControl.e7f8a9b0c1', 'Git Graph'),
+    label: translate('auto.components.workspacePanel.SourceControl.e7f8a9b0c1', 'Git Graph'),
     ...(targetGroupId ? { targetGroupId } : {})
   })
   state.focusGroup(worktreeId, tab.groupId)

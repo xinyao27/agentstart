@@ -9,7 +9,6 @@ import {
   selectClaudeProviderAccount
 } from '~renderer/runtime/provider-accounts-client'
 import { shellClient } from '~renderer/runtime/shell-client'
-import { ClaudeIcon } from '~renderer/status-bar/icons'
 import { Badge } from '~renderer/ui/badge'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
@@ -119,20 +118,7 @@ export function ClaudeAccountsSection({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <section id="accounts-claude" className="scroll-mt-6 space-y-4">
-        <div className="space-y-1">
-          <h3 className="flex items-center gap-2 text-sm font-semibold">
-            <ClaudeIcon size={16} />
-            {translate('auto.components.settings.AccountsPane.26ef4b55be', 'Claude')}
-          </h3>
-          <p className="text-muted-foreground text-xs">
-            {translate(
-              'auto.components.settings.AccountsPane.72b36ea174',
-              'Optional. AgentStart can use your normal Claude login; add accounts only if you want quick switching without moving chat sessions.'
-            )}
-          </p>
-        </div>
-
+      <div id="accounts-claude" className="scroll-mt-6">
         <SearchableSetting
           title={translate('auto.components.settings.AccountsPane.8bbfd74556', 'Claude Accounts')}
           description={translate(
@@ -387,7 +373,7 @@ export function ClaudeAccountsSection({
             )}
           </div>
         </SearchableSetting>
-      </section>
+      </div>
     </>
   )
 }

@@ -157,7 +157,9 @@ export function ProviderUsageSegment({
   return (
     <span className="inline-flex items-center gap-1.5">
       <ProviderIcon provider={provider} />
-      <span className="inline-flex items-center gap-2.5">
+      {/* Why: a provider whose windows outgrow the narrow sidebar footer wraps
+          them under its own icon instead of pushing the row past the clip. */}
+      <span className="inline-flex flex-wrap items-center gap-x-2.5 gap-y-0.5">
         {visibleSections.map((section, index) => (
           <UsageWindowMeter
             key={`${section.label}-${index}`}

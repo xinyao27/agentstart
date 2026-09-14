@@ -228,5 +228,5 @@ function closeSessionTab(command: Extract<UiCommandRequest, { type: 'closeSessio
 function activateEditorWorktree(store: AppState, worktreeId: string): void {
   store.setActiveWorktree(worktreeId)
   store.markWorktreeVisited(worktreeId)
-  store.setActiveView('terminal')
+  store.focusWorkspaceSurface()
 }

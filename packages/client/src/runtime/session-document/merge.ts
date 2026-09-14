@@ -1,5 +1,7 @@
 import type { ShellSessionDocumentValue, ShellSessionJsonValue } from '@agentstart/protocol'
 
+import { resolveTerminalTabField, terminalTabFieldOwner } from './terminal-tab-ownership'
+
 type Entry = ShellSessionJsonValue | undefined
 export type SessionMergeResult =
   | { ok: true; document: ShellSessionDocumentValue }
@@ -29,6 +31,15 @@ function equal(a: Entry, b: Entry, depth = 0): boolean {
   }
   if (a === b) {
     return true
+  }
+  if (a === null || a === undefined) {
+    // Why: this document treats an absent key and an explicit null as the same
+    // empty value. Comparing them by identity made a locally-null field collide
+    // with a writer that omits it, turning an equivalent payload into a conflict.
+    return b === null || b === undefined
+  }
+  if (b === null || b === undefined) {
+    return false
   }
   if (Array.isArray(a) && Array.isArray(b)) {
     return a.length === b.length && a.every((value, index) => equal(value, b[index], depth + 1))
@@ -95,6 +106,10 @@ function merge(
     // Why: PTY bindings and captured scrollback are daemon-owned facts. Keep
     // the current server value when both clients touched the same leaf.
     return mergeTerminalLeafMap(base, desired, current)
+  }
+  const terminalTabOwner = terminalTabFieldOwner(path)
+  if (terminalTabOwner) {
+    return resolveTerminalTabField(desired, current, terminalTabOwner)
   }
   const recordBase = isRecord(base)
     ? base

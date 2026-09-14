@@ -74,7 +74,7 @@ export async function getAvailableClipboardDestinationPath(
   }
   throw new Error(
     translate(
-      'auto.components.right.sidebar.fileExplorerClipboard.uniqueName',
+      'auto.components.workspacePanel.fileExplorerClipboard.uniqueName',
       "Couldn't find an available name for '{{value0}}'.",
       { value0: node.name }
     )

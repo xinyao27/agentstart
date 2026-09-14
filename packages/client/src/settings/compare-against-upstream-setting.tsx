@@ -2,6 +2,7 @@ import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { translate } from '~renderer/i18n/i18n'
 
 import { SettingsRow, SettingsSegmentedControl } from './form-controls'
+import type { SettingsSearchEntry } from './search'
 import { matchesSettingsSearch } from './search'
 import { SearchableSetting } from './searchable-setting'
 
@@ -36,12 +37,16 @@ function getCompareAgainstUpstreamDescription(): string {
   )
 }
 
-export function compareAgainstUpstreamMatchesSearch(searchQuery: string): boolean {
-  return matchesSettingsSearch(searchQuery, {
+export function getCompareAgainstUpstreamSearchEntry(): SettingsSearchEntry {
+  return {
     title: getCompareAgainstUpstreamTitle(),
     description: getCompareAgainstUpstreamDescription(),
     keywords: COMPARE_AGAINST_UPSTREAM_KEYWORDS
-  })
+  }
+}
+
+export function compareAgainstUpstreamMatchesSearch(searchQuery: string): boolean {
+  return matchesSettingsSearch(searchQuery, getCompareAgainstUpstreamSearchEntry())
 }
 
 export function CompareAgainstUpstreamSetting({

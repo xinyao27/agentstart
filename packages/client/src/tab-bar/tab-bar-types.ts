@@ -1,5 +1,6 @@
 import type { BrowserTab } from '@agentstart/protocol/workspace/browser-session'
 import type { Tab, TerminalTab, WorkspaceVisibleTabType } from '@agentstart/protocol/workspace/tabs'
+import type { WorkspacePageView } from '~renderer/application-shell/state/workspace-page-views'
 
 import type { OpenFile } from '../editor/state'
 import type { HoveredTabInsertion } from '../tab-group/use-tab-drag-split'
@@ -55,6 +56,13 @@ export type TabStripItem =
       unifiedTabId: string
       isPinned: boolean
       data: TerminalTab & { unifiedTabId?: string }
+    }
+  | {
+      type: 'page'
+      id: string
+      unifiedTabId: string
+      isPinned: boolean
+      data: WorkspacePageView
     }
   | {
       type: 'editor'

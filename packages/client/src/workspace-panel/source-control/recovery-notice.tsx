@@ -99,76 +99,79 @@ function useRecoveryCopy(recoveryKind: SourceControlRecoveryKind): {
     if (recoveryKind === 'push') {
       return {
         inlineFixLabel: translate(
-          'auto.components.right.sidebar.SourceControl.pushRecovery.60bd988f0b',
+          'auto.components.workspacePanel.SourceControl.pushRecovery.60bd988f0b',
           'AI Fix'
         ),
         dialogFixLabel: translate(
-          'auto.components.right.sidebar.SourceControl.pushRecovery.834cb3f23d',
+          'auto.components.workspacePanel.SourceControl.pushRecovery.834cb3f23d',
           'Fix with AI'
         ),
         defaultAgentTitle: translate(
-          'auto.components.right.sidebar.SourceControl.pushRecovery.4b37ae99b0',
+          'auto.components.workspacePanel.SourceControl.pushRecovery.4b37ae99b0',
           'Start the default AI agent to fix this push failure'
         ),
         fixAriaLabel: translate(
-          'auto.components.right.sidebar.SourceControl.pushRecovery.30b8d4f181',
+          'auto.components.workspacePanel.SourceControl.pushRecovery.30b8d4f181',
           'Fix push failure with AI'
         ),
         chooseAgentTitle: translate(
-          'auto.components.right.sidebar.SourceControl.pushRecovery.dd43c47089',
+          'auto.components.workspacePanel.SourceControl.pushRecovery.dd43c47089',
           'Choose an agent for this push failure'
         ),
         chooseAgentAriaLabel: translate(
-          'auto.components.right.sidebar.SourceControl.pushRecovery.ec7bfced55',
+          'auto.components.workspacePanel.SourceControl.pushRecovery.ec7bfced55',
           'Choose agent to fix push failure'
         ),
         contextUnavailable: translate(
-          'auto.components.right.sidebar.SourceControl.pushRecovery.9e5ccd00aa',
+          'auto.components.workspacePanel.SourceControl.pushRecovery.9e5ccd00aa',
           'Push failure context unavailable'
         ),
         launchDialogTitle: translate(
-          'auto.components.right.sidebar.SourceControl.pushRecovery.054ead86b1',
+          'auto.components.workspacePanel.SourceControl.pushRecovery.054ead86b1',
           'Fix Push Failure With AI'
         ),
         dialogDescription: translate(
-          'auto.components.right.sidebar.SourceControl.pushRecovery.15b7f210d7',
+          'auto.components.workspacePanel.SourceControl.pushRecovery.15b7f210d7',
           'Choose the agent and edit the full command input before launch.'
         )
       }
     }
 
     return {
-      inlineFixLabel: translate('auto.components.right.sidebar.SourceControl.60bd988f0b', 'AI Fix'),
+      inlineFixLabel: translate(
+        'auto.components.workspacePanel.SourceControl.60bd988f0b',
+        'AI Fix'
+      ),
       dialogFixLabel: translate(
-        'auto.components.right.sidebar.SourceControl.834cb3f23d',
+        'auto.components.workspacePanel.SourceControl.834cb3f23d',
         'Fix with AI'
       ),
       defaultAgentTitle: translate(
-        'auto.components.right.sidebar.SourceControl.4b37ae99b0',
+        'auto.components.workspacePanel.SourceControl.4b37ae99b0',
         'Start the default AI agent to fix this commit failure'
       ),
       fixAriaLabel: translate(
-        'auto.components.right.sidebar.SourceControl.30b8d4f181',
+        'auto.components.workspacePanel.SourceControl.30b8d4f181',
         'Fix commit failure with AI'
       ),
       chooseAgentTitle: translate(
-        'auto.components.right.sidebar.SourceControl.dd43c47089',
+        'auto.components.workspacePanel.SourceControl.dd43c47089',
         'Choose an agent for this commit failure'
       ),
       chooseAgentAriaLabel: translate(
-        'auto.components.right.sidebar.SourceControl.ec7bfced55',
+        'auto.components.workspacePanel.SourceControl.ec7bfced55',
         'Choose agent to fix commit failure'
       ),
       contextUnavailable: translate(
-        'auto.components.right.sidebar.SourceControl.9e5ccd00aa',
+        'auto.components.workspacePanel.SourceControl.9e5ccd00aa',
         'Commit failure context unavailable'
       ),
       launchDialogTitle: translate(
-        'auto.components.right.sidebar.SourceControl.054ead86b1',
+        'auto.components.workspacePanel.SourceControl.054ead86b1',
         'Fix Commit Failure With AI'
       ),
       dialogDescription: translate(
-        'auto.components.right.sidebar.SourceControl.15b7f210d7',
+        'auto.components.workspacePanel.SourceControl.15b7f210d7',
         'Choose the agent and edit the full command input before launch.'
       )
     }
@@ -296,7 +299,7 @@ export function SourceControlRecoveryNotice({
                 onClick={() => setDialogOpen(true)}
               >
                 {translate(
-                  'auto.components.right.sidebar.SourceControl.pushRecovery.03d238218c',
+                  'auto.components.workspacePanel.SourceControl.pushRecovery.03d238218c',
                   'Details'
                 )}
               </Button>
@@ -330,7 +333,7 @@ export function SourceControlRecoveryNotice({
                 render={
                   <Button type="button" variant="outline" size="sm">
                     {translate(
-                      'auto.components.right.sidebar.SourceControl.pushRecovery.783a808870',
+                      'auto.components.workspacePanel.SourceControl.pushRecovery.783a808870',
                       'Close'
                     )}
                   </Button>

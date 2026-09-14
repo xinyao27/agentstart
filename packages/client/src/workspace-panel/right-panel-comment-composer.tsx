@@ -141,7 +141,7 @@ export function RightPanelCommentComposer({
     if (bodyState.status === 'too-large-leading-whitespace') {
       setError(
         translate(
-          'auto.components.right.sidebar.right.panel.comment.composer.commentTooLarge',
+          'auto.components.workspacePanel.right.panel.comment.composer.commentTooLarge',
           'Comment is too large to submit safely.'
         )
       )
@@ -177,7 +177,7 @@ export function RightPanelCommentComposer({
     {
       action: 'bold' as const,
       label: translate(
-        'auto.components.right.sidebar.right.panel.comment.composer.256300f8ea',
+        'auto.components.workspacePanel.right.panel.comment.composer.256300f8ea',
         'Bold'
       ),
       icon: Bold
@@ -185,7 +185,7 @@ export function RightPanelCommentComposer({
     {
       action: 'italic' as const,
       label: translate(
-        'auto.components.right.sidebar.right.panel.comment.composer.542bf6a7e2',
+        'auto.components.workspacePanel.right.panel.comment.composer.542bf6a7e2',
         'Italic'
       ),
       icon: Italic
@@ -193,7 +193,7 @@ export function RightPanelCommentComposer({
     {
       action: 'code' as const,
       label: translate(
-        'auto.components.right.sidebar.right.panel.comment.composer.f49e0a21e0',
+        'auto.components.workspacePanel.right.panel.comment.composer.f49e0a21e0',
         'Code'
       ),
       icon: Code2
@@ -201,7 +201,7 @@ export function RightPanelCommentComposer({
     {
       action: 'quote' as const,
       label: translate(
-        'auto.components.right.sidebar.right.panel.comment.composer.d6d9c3c947',
+        'auto.components.workspacePanel.right.panel.comment.composer.d6d9c3c947',
         'Quote'
       ),
       icon: Quote
@@ -209,7 +209,7 @@ export function RightPanelCommentComposer({
     {
       action: 'list' as const,
       label: translate(
-        'auto.components.right.sidebar.right.panel.comment.composer.cf5a7aba6f',
+        'auto.components.workspacePanel.right.panel.comment.composer.cf5a7aba6f',
         'List'
       ),
       icon: List
@@ -270,7 +270,7 @@ export function RightPanelCommentComposer({
         {onCancel && (
           <Button type="button" variant="ghost" size="xs" disabled={submitting} onClick={onCancel}>
             {translate(
-              'auto.components.right.sidebar.right.panel.comment.composer.9bca633dee',
+              'auto.components.workspacePanel.right.panel.comment.composer.9bca633dee',
               'Cancel'
             )}
           </Button>
@@ -287,7 +287,7 @@ export function RightPanelCommentComposer({
               >
                 {submitting
                   ? translate(
-                      'auto.components.right.sidebar.right.panel.comment.composer.87aff03d63',
+                      'auto.components.workspacePanel.right.panel.comment.composer.87aff03d63',
                       'Sending...'
                     )
                   : submitLabel}

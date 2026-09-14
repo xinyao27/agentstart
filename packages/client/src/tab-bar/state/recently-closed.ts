@@ -84,7 +84,8 @@ export type RecentlyClosedTabsSlice = {
   /** Newest-first snapshots of user-closed terminal tabs, per worktree. */
   recentlyClosedTerminalTabsByWorktree: Record<string, ClosedTerminalTabSnapshot[]>
   /** Newest-first close order across the terminal/editor reopen stacks
-   *  so Cmd+Shift+T pops true cross-type MRU (Chrome/Ghostty semantics). */
+   *  so the reopen-closed-tab shortcut pops true cross-type MRU
+   *  (Chrome/Ghostty semantics). */
   recentlyClosedTabKindsByWorktree: Record<string, RecentlyClosedTabKind[]>
   reopenClosedTerminalTab: (worktreeId: string) => boolean
   reopenClosedTab: (worktreeId: string) => boolean
@@ -111,7 +112,7 @@ export const createRecentlyClosedTabsSlice: StateCreator<
       return false
     }
     // Why: read and pop atomically inside set() to prevent a TOCTOU race where
-    // two rapid Cmd+Shift+T presses both restore the same entry (mirrors
+    // two rapid reopen-chord presses both restore the same entry (mirrors
     // terminal snapshot stack.
     let snapshot: ClosedTerminalTabSnapshot | undefined
     set((s) => {

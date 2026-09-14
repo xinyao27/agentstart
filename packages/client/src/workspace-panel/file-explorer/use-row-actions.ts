@@ -62,7 +62,7 @@ export function useFileExplorerRowActions({
   const collapseAllDirs = useAppStore((state) => state.collapseAllDirs)
   const collapseDirSubtree = useAppStore((state) => state.collapseDirSubtree)
   const openModal = useAppStore((state) => state.openModal)
-  const showRightSidebarSearch = useAppStore((state) => state.showRightSidebarSearch)
+  const showWorkspacePanelSearch = useAppStore((state) => state.showWorkspacePanelSearch)
   const toggleShowDotfilesForWorktree = useAppStore((state) => state.toggleShowDotfilesForWorktree)
 
   const handleContextMenuDelete = (node: TreeNode) => {
@@ -80,7 +80,7 @@ export function useFileExplorerRowActions({
   }
   const handleFindInFolder = (node: TreeNode) => {
     if (activeWorktreeId && node.isDirectory) {
-      showRightSidebarSearch({
+      showWorkspacePanelSearch({
         includePattern: folderRelativePathToIncludeGlob(node.relativePath)
       })
     }

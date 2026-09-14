@@ -23,13 +23,13 @@ export function useWorkspaceMenuActions(args: {
     shellClient.ui.writeClipboardText(worktree.path)
   }
 
-  const handleOpenDedicatedTab = () => {
+  const handleOpenInNewTab = () => {
     if (!repo) {
       return
     }
     setMenuOpenState(false)
     openSidebarWorkspace({
-      dedicated: true,
+      openInNewTab: true,
       projectId: repo.id,
       worktreeId: worktree.id
     })
@@ -93,13 +93,13 @@ export function useWorkspaceMenuActions(args: {
   }
 
   return {
-    canOpenDedicatedTab: repo !== undefined && hasSidebarHostNavigation(),
+    canOpenInNewTab: repo !== undefined && hasSidebarHostNavigation(),
     createGroupDialogOpen,
     handleAssignWorkspaceStatus,
     handleCopyPath,
     handleCreateGroupFromRepo,
     handleMoveProjectToGroup,
-    handleOpenDedicatedTab,
+    handleOpenInNewTab,
     handleRemoveProjectFromGroup,
     handleRename,
     handleSubmitNewProjectGroup,

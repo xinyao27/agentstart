@@ -1,15 +1,13 @@
-import type { UISlice } from '~renderer/application-shell/state/slice'
-
 export type WorktreeCreationSurfaceInput = {
-  activeView: UISlice['activeView']
+  workspaceBodyVisible: boolean
   activePendingCreationId: string | null
   hasActivePendingCreation: boolean
 }
 
 export function shouldShowWorktreeCreationSurface({
-  activeView,
+  workspaceBodyVisible,
   activePendingCreationId,
   hasActivePendingCreation
 }: WorktreeCreationSurfaceInput): boolean {
-  return activeView === 'terminal' && activePendingCreationId !== null && hasActivePendingCreation
+  return workspaceBodyVisible && activePendingCreationId !== null && hasActivePendingCreation
 }

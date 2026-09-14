@@ -64,14 +64,14 @@ export function PRTriageStrip({
             <div className="text-foreground truncate text-[11px] font-medium">
               {failingCount}{' '}
               {translate(
-                'auto.components.right.sidebar.checks.panel.content.b652f38caf',
+                'auto.components.workspacePanel.checks.panel.content.b652f38caf',
                 'failing check'
               )}
               {failingCount === 1 ? '' : 's'}
             </div>
             <div className="text-muted-foreground truncate text-[10px]">
               {translate(
-                'auto.components.right.sidebar.checks.panel.content.5d4ebf9391',
+                'auto.components.workspacePanel.checks.panel.content.5d4ebf9391',
                 'Inspect details or start an AI fix pass.'
               )}
             </div>
@@ -89,7 +89,7 @@ export function PRTriageStrip({
             ) : (
               <Sparkles className="size-3" />
             )}
-            {translate('auto.components.right.sidebar.checks.panel.content.b45db92d0e', 'Fix')}
+            {translate('auto.components.workspacePanel.checks.panel.content.b45db92d0e', 'Fix')}
           </Button>
         </div>
       </div>
@@ -104,16 +104,16 @@ export function PRTriageStrip({
           <div className="min-w-0 flex-1">
             <div className="text-foreground truncate text-[11px] font-medium">
               {pendingCount}{' '}
-              {translate('auto.components.right.sidebar.checks.panel.content.5341023167', 'check')}
+              {translate('auto.components.workspacePanel.checks.panel.content.5341023167', 'check')}
               {pendingCount === 1 ? '' : 's'}{' '}
               {translate(
-                'auto.components.right.sidebar.checks.panel.content.9ad98f2a17',
+                'auto.components.workspacePanel.checks.panel.content.9ad98f2a17',
                 'pending'
               )}
             </div>
             <div className="text-muted-foreground truncate text-[10px]">
               {translate(
-                'auto.components.right.sidebar.checks.panel.content.5856874b59',
+                'auto.components.workspacePanel.checks.panel.content.5856874b59',
                 'AgentStart will refresh checks while this panel stays open.'
               )}
             </div>
@@ -130,13 +130,13 @@ export function PRTriageStrip({
         <div className="min-w-0 flex-1">
           <div className="text-foreground truncate text-[11px] font-medium">
             {translate(
-              'auto.components.right.sidebar.checks.panel.content.9d0e7bcefc',
+              'auto.components.workspacePanel.checks.panel.content.9d0e7bcefc',
               'No blocking PR action'
             )}
           </div>
           <div className="text-muted-foreground truncate text-[10px]">
             {translate(
-              'auto.components.right.sidebar.checks.panel.content.c16762ac8c',
+              'auto.components.workspacePanel.checks.panel.content.c16762ac8c',
               'Checks and comments below show the current fetched context.'
             )}
           </div>
@@ -164,14 +164,14 @@ function ConflictTriageStrip({
         <div className="min-w-0 flex-1">
           <div className="text-foreground truncate text-[11px] font-medium">
             {translate(
-              'auto.components.right.sidebar.checks.panel.content.60186d8498',
+              'auto.components.workspacePanel.checks.panel.content.60186d8498',
               'Conflicts block this'
             )}{' '}
             PR
           </div>
           <div className="text-muted-foreground truncate text-[10px]">
             {translate(
-              'auto.components.right.sidebar.checks.panel.content.3a71a6ed0b',
+              'auto.components.workspacePanel.checks.panel.content.3a71a6ed0b',
               'Resolve conflicts before checks and merge can complete.'
             )}
           </div>
@@ -189,7 +189,7 @@ function ConflictTriageStrip({
           ) : (
             <Sparkles className="size-3" />
           )}
-          {translate('auto.components.right.sidebar.checks.panel.content.0c96cd25e5', 'Resolve')}
+          {translate('auto.components.workspacePanel.checks.panel.content.0c96cd25e5', 'Resolve')}
         </Button>
       </div>
     </div>

@@ -124,7 +124,7 @@ export function FileExplorerTreeRowButton({
       ) : isIgnored ? (
         <CircleSlash
           aria-label={translate(
-            'auto.components.right.sidebar.FileExplorerRow.e26010014a',
+            'auto.components.workspacePanel.FileExplorerRow.e26010014a',
             'Ignored by .gitignore'
           )}
           className="mr-2 ml-auto size-3 shrink-0"

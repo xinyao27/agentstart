@@ -102,31 +102,31 @@ export type BuildParentPrChecksRowsArgs = {
 export const PARENT_PR_CHECKS_GROUP_LABELS: Record<ParentPrChecksGroupKey, string> = {
   get needsAttention() {
     return translate(
-      'auto.components.rightSidebar.parentPrChecks.groups.needsAttention',
+      'auto.components.workspacePanel.parentPrChecks.groups.needsAttention',
       'Needs attention'
     )
   },
   get pending() {
-    return translate('auto.components.rightSidebar.parentPrChecks.groups.pending', 'Pending')
+    return translate('auto.components.workspacePanel.parentPrChecks.groups.pending', 'Pending')
   },
   get merged() {
-    return translate('auto.components.rightSidebar.parentPrChecks.groups.merged', 'Merged')
+    return translate('auto.components.workspacePanel.parentPrChecks.groups.merged', 'Merged')
   },
   get passing() {
-    return translate('auto.components.rightSidebar.parentPrChecks.groups.passing', 'Passing')
+    return translate('auto.components.workspacePanel.parentPrChecks.groups.passing', 'Passing')
   },
   get draftOrNoChecks() {
     return translate(
-      'auto.components.rightSidebar.parentPrChecks.groups.draftOrNoChecks',
+      'auto.components.workspacePanel.parentPrChecks.groups.draftOrNoChecks',
       'Draft / no checks'
     )
   },
   get noPr() {
-    return translate('auto.components.rightSidebar.parentPrChecks.groups.noPr', 'No PR')
+    return translate('auto.components.workspacePanel.parentPrChecks.groups.noPr', 'No PR')
   },
   get unavailable() {
     return translate(
-      'auto.components.rightSidebar.parentPrChecks.groups.unavailable',
+      'auto.components.workspacePanel.parentPrChecks.groups.unavailable',
       'Unavailable'
     )
   }

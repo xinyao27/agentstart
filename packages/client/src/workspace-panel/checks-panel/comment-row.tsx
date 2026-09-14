@@ -138,7 +138,7 @@ export function CommentRow({
           title={
             replyDisabled
               ? replyDisabledReason
-              : translate('auto.components.right.sidebar.checks.panel.content.c1f6fc006a', 'Reply')
+              : translate('auto.components.workspacePanel.checks.panel.content.c1f6fc006a', 'Reply')
           }
           disabled={replyDisabled}
           onClick={(event) => {
@@ -146,7 +146,7 @@ export function CommentRow({
             onReply(comment)
           }}
         >
-          {translate('auto.components.right.sidebar.checks.panel.content.c1f6fc006a', 'Reply')}
+          {translate('auto.components.workspacePanel.checks.panel.content.c1f6fc006a', 'Reply')}
         </Button>
       )}
       <CopyButton text={buildCopyText(comment)} />
@@ -179,7 +179,7 @@ export function CommentRow({
         {relativeTime ? <span>{relativeTime}</span> : null}
         {automated ? (
           <span className={presentation.botBadge}>
-            {translate('auto.components.right.sidebar.checks.panel.content.2ba0a32bdd', 'bot')}
+            {translate('auto.components.workspacePanel.checks.panel.content.2ba0a32bdd', 'bot')}
           </span>
         ) : null}
         {comment.path ? (
@@ -225,7 +225,7 @@ export function CommentRow({
         ) : null}
         {automated && (
           <span className={presentation.botBadge}>
-            {translate('auto.components.right.sidebar.checks.panel.content.2ba0a32bdd', 'bot')}
+            {translate('auto.components.workspacePanel.checks.panel.content.2ba0a32bdd', 'bot')}
           </span>
         )}
         {!isReply && comment.path && (
@@ -288,7 +288,7 @@ export function CommentRow({
                 onClick={handleCancelEdit}
               >
                 {translate(
-                  'auto.components.right.sidebar.checks.panel.content.b062f55f29',
+                  'auto.components.workspacePanel.checks.panel.content.b062f55f29',
                   'Cancel'
                 )}
               </Button>
@@ -298,7 +298,10 @@ export function CommentRow({
                 disabled={!canSaveEdit}
                 onClick={(event) => void handleSaveEdit(event)}
               >
-                {translate('auto.components.right.sidebar.checks.panel.content.f6a40263ff', 'Save')}
+                {translate(
+                  'auto.components.workspacePanel.checks.panel.content.f6a40263ff',
+                  'Save'
+                )}
               </Button>
             </div>
           </div>

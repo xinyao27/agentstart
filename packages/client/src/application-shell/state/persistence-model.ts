@@ -32,12 +32,7 @@ export function normalizeHydratedVisibleWorkspaceHostIds(
 }
 
 const MIN_SIDEBAR_WIDTH = 240
-export const MAX_LEFT_SIDEBAR_WIDTH = 500
-// Why: the right sidebar drag-resize is window-relative (see right-sidebar
-// component), so persisted widths can legitimately be well above the old 500px
-// cap on wide displays. Use a large hard ceiling purely as a safety net for
-// corrupted/manually-edited values rather than as a product limit.
-export const MAX_RIGHT_SIDEBAR_WIDTH = 4000
+export const MAX_NAVIGATION_SIDEBAR_WIDTH = 500
 // Why: bound disk growth for acknowledgedAgentsByPaneKey across hard quits —
 // in-session cleanup (agent-status.ts) prunes on pane lifecycle, but crash/
 // forced-kill paths leave entries pinned. Mirrors HYDRATE_MAX_AGE_MS in

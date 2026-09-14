@@ -20,8 +20,8 @@ function getEntryDecorationParts(
     parts.push({
       text:
         target.entry.conflictStatus === 'unresolved'
-          ? translate('auto.components.right.sidebar.SourceControl.31f6d46278', 'Unresolved')
-          : translate('auto.components.right.sidebar.SourceControl.2c417432b7', 'Resolved locally')
+          ? translate('auto.components.workspacePanel.SourceControl.31f6d46278', 'Unresolved')
+          : translate('auto.components.workspacePanel.SourceControl.2c417432b7', 'Resolved locally')
     })
   }
   if (
@@ -35,7 +35,7 @@ function getEntryDecorationParts(
   if (commentCount > 0) {
     parts.push({
       text: translate(
-        'auto.components.right.sidebar.SourceControl.657e0c90ad',
+        'auto.components.workspacePanel.SourceControl.657e0c90ad',
         '{{value0}} note{{value1}}',
         { value0: commentCount, value1: commentCount === 1 ? '' : 's' }
       )

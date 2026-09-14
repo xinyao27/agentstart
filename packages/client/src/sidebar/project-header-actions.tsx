@@ -6,7 +6,10 @@ import { cn } from '~renderer/ui/class-names'
 const PROJECT_HEADER_ACTIONS_CLASS_NAME = cn(
   'flex shrink-0 items-center gap-0.5',
   'can-hover:absolute can-hover:right-1 can-hover:top-1/2 can-hover:z-10 can-hover:-translate-y-1/2',
-  'can-hover: can-hover:bg-sidebar can-hover:pl-1',
+  // Why: the hover-revealed group paints its own surface over the row, so it
+  // needs the same radius as the icon buttons it hosts instead of ending in
+  // square corners against the row's accent fill.
+  'can-hover: can-hover:bg-sidebar can-hover:pl-1 can-hover:rounded-md',
   'can-hover:pointer-events-none can-hover:opacity-0 can-hover:transition-opacity',
   'group-hover:pointer-events-auto group-hover:opacity-100',
   'has-[:focus-visible]:pointer-events-auto has-[:focus-visible]:opacity-100',

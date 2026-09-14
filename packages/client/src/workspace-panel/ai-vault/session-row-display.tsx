@@ -52,7 +52,7 @@ export function SessionMetadata({
         <span className="min-w-0 shrink-[2] truncate">{agentLabel(session.agent)}</span>
         <span className="shrink-0 tabular-nums">
           {translate(
-            'auto.components.right.sidebar.AiVaultSessionRow.messageCount',
+            'auto.components.workspacePanel.AiVaultSessionRow.messageCount',
             '{{value0}} msgs',
             { value0: session.messageCount }
           )}
@@ -63,11 +63,11 @@ export function SessionMetadata({
             <span className="shrink-0 tabular-nums">
               {session.subagentTranscriptCount === 1
                 ? translate(
-                    'auto.components.right.sidebar.AiVaultSessionRow.subagentCountSingular',
+                    'auto.components.workspacePanel.AiVaultSessionRow.subagentCountSingular',
                     '1 subagent'
                   )
                 : translate(
-                    'auto.components.right.sidebar.AiVaultSessionRow.subagentCountPlural',
+                    'auto.components.workspacePanel.AiVaultSessionRow.subagentCountPlural',
                     '{{value0}} subagents',
                     { value0: session.subagentTranscriptCount }
                   )}
@@ -79,7 +79,7 @@ export function SessionMetadata({
             <span className="text-muted-foreground/55 shrink-0">·</span>
             <span className="border-border/70 text-muted-foreground shrink-0 rounded-sm border border-dashed px-1 py-0 text-[10px] leading-4 font-medium">
               {translate(
-                'auto.components.right.sidebar.AiVaultSessionRow.recoverableBadge',
+                'auto.components.workspacePanel.AiVaultSessionRow.recoverableBadge',
                 'Not saved'
               )}
             </span>
@@ -148,16 +148,16 @@ export function conversationRoleLabel(
   role: AiVaultSession['previewMessages'][number]['role']
 ): string {
   if (role === 'user') {
-    return translate('auto.components.right.sidebar.AiVaultSessionRow.userRole', 'You')
+    return translate('auto.components.workspacePanel.AiVaultSessionRow.userRole', 'You')
   }
   if (role === 'assistant') {
-    return translate('auto.components.right.sidebar.AiVaultSessionRow.agentRole', 'Agent')
+    return translate('auto.components.workspacePanel.AiVaultSessionRow.agentRole', 'Agent')
   }
   if (role === 'tool') {
-    return translate('auto.components.right.sidebar.AiVaultSessionRow.toolRole', 'Tool')
+    return translate('auto.components.workspacePanel.AiVaultSessionRow.toolRole', 'Tool')
   }
   if (role === 'system') {
-    return translate('auto.components.right.sidebar.AiVaultSessionRow.systemRole', 'System')
+    return translate('auto.components.workspacePanel.AiVaultSessionRow.systemRole', 'System')
   }
-  return translate('auto.components.right.sidebar.AiVaultSessionRow.sessionRole', 'Session')
+  return translate('auto.components.workspacePanel.AiVaultSessionRow.sessionRole', 'Session')
 }

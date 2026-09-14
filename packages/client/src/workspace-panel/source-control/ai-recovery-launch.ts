@@ -38,37 +38,37 @@ export function getDefaultSourceControlRecoveryLaunchCopy(
   const subject = recoveryKind === 'push' ? 'push' : 'commit'
   return {
     promptUnavailable: translate(
-      'auto.components.right.sidebar.source.control.ai.recovery.launch.4f4e0418a0',
+      'auto.components.workspacePanel.source.control.ai.recovery.launch.4f4e0418a0',
       'Could not build the agent prompt.'
     ),
     emptyPrompt:
       recoveryKind === 'push'
         ? translate(
-            'auto.components.right.sidebar.source.control.ai.recovery.launch.push.empty',
+            'auto.components.workspacePanel.source.control.ai.recovery.launch.push.empty',
             'Push failure prompt is empty. Update Source Control AI settings.'
           )
         : translate(
-            'auto.components.right.sidebar.source.control.ai.recovery.launch.commit.empty',
+            'auto.components.workspacePanel.source.control.ai.recovery.launch.commit.empty',
             'Commit failure prompt is empty. Update Source Control AI settings.'
           ),
     savedAgentUnavailable: translate(
-      'auto.components.right.sidebar.source.control.ai.recovery.launch.d481ab22f9',
+      'auto.components.workspacePanel.source.control.ai.recovery.launch.d481ab22f9',
       'Saved AI agent is unavailable. Use Customize launch to choose another agent.'
     ),
     noEnabledAgent: translate(
-      'auto.components.right.sidebar.source.control.ai.recovery.launch.9bbd9077a2',
+      'auto.components.workspacePanel.source.control.ai.recovery.launch.9bbd9077a2',
       'No enabled AI agents. Configure agents in Settings.'
     ),
     launchCommandUnavailable: translate(
-      'auto.components.right.sidebar.source.control.ai.recovery.launch.5540ff50cc',
+      'auto.components.workspacePanel.source.control.ai.recovery.launch.5540ff50cc',
       'Could not build the agent launch command.'
     ),
     connectionUnavailable: translate(
-      'auto.components.right.sidebar.source.control.ai.recovery.launch.216f762bd7',
+      'auto.components.workspacePanel.source.control.ai.recovery.launch.216f762bd7',
       'Unable to resolve the workspace connection.'
     ),
     success: translate(
-      'auto.components.right.sidebar.source.control.ai.recovery.launch.success',
+      'auto.components.workspacePanel.source.control.ai.recovery.launch.success',
       'Started an AI agent for the {{value0}} failure.',
       { value0: subject }
     )

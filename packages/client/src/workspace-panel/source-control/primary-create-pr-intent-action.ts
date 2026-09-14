@@ -73,7 +73,7 @@ function buildCreatePrHeaderAction(
   return {
     kind: 'create_pr',
     label: translate(
-      'auto.components.right.sidebar.source.control.primary.action.e7ffa46946',
+      'auto.components.workspacePanel.source.control.primary.action.e7ffa46946',
       'Create {{value0}}',
       { value0: copy.shortLabel }
     ),
@@ -100,17 +100,17 @@ function resolveDisabledCreatePrHeaderAction(
   let title: string
   if (inputs.isCommitting) {
     title = translate(
-      'auto.components.right.sidebar.source.control.primary.action.16aee3a5c1',
+      'auto.components.workspacePanel.source.control.primary.action.16aee3a5c1',
       'Commit in progress…'
     )
   } else if (inputs.isRemoteOperationActive) {
     title = translate(
-      'auto.components.right.sidebar.source.control.primary.action.b8e4f2a901',
+      'auto.components.workspacePanel.source.control.primary.action.b8e4f2a901',
       'Wait for the remote operation to finish.'
     )
   } else if (inputs.hasUnresolvedConflicts) {
     title = translate(
-      'auto.components.right.sidebar.source.control.primary.action.c9f3a1b802',
+      'auto.components.workspacePanel.source.control.primary.action.c9f3a1b802',
       'Resolve conflicts before creating a {{value0}}.',
       { value0: copy.reviewLabel }
     )
@@ -118,49 +118,49 @@ function resolveDisabledCreatePrHeaderAction(
     switch (hostedReviewCreation.blockedReason) {
       case 'default_branch':
         title = translate(
-          'auto.components.right.sidebar.source.control.primary.action.e3b9d5f814',
+          'auto.components.workspacePanel.source.control.primary.action.e3b9d5f814',
           'Cannot create a {{value0}} from the default branch.',
           { value0: copy.reviewLabel }
         )
         break
       case 'dirty':
         title = translate(
-          'auto.components.right.sidebar.source.control.primary.action.f4c0e6a925',
+          'auto.components.workspacePanel.source.control.primary.action.f4c0e6a925',
           'Commit changes before creating a {{value0}}.',
           { value0: copy.reviewLabel }
         )
         break
       case 'no_upstream':
         title = translate(
-          'auto.components.right.sidebar.source.control.primary.action.a5d1f7b036',
+          'auto.components.workspacePanel.source.control.primary.action.a5d1f7b036',
           'Publish commits before creating a {{value0}}.',
           { value0: copy.reviewLabel }
         )
         break
       case 'needs_push':
         title = translate(
-          'auto.components.right.sidebar.source.control.primary.action.b6e2a8c147',
+          'auto.components.workspacePanel.source.control.primary.action.b6e2a8c147',
           'Push commits before creating a {{value0}}.',
           { value0: copy.reviewLabel }
         )
         break
       case 'needs_sync':
         title = translate(
-          'auto.components.right.sidebar.source.control.primary.action.c7f3b9d258',
+          'auto.components.workspacePanel.source.control.primary.action.c7f3b9d258',
           'Sync this branch before creating a {{value0}}.',
           { value0: copy.reviewLabel }
         )
         break
       case 'auth_required':
         title = translate(
-          'auto.components.right.sidebar.source.control.primary.action.d8a4c0e369',
+          'auto.components.workspacePanel.source.control.primary.action.d8a4c0e369',
           'Authenticate before creating a {{value0}}.',
           { value0: copy.reviewLabel }
         )
         break
       case 'detached_head':
         title = translate(
-          'auto.components.right.sidebar.source.control.primary.action.e9b5d1f470',
+          'auto.components.workspacePanel.source.control.primary.action.e9b5d1f470',
           'Check out a branch before creating a {{value0}}.',
           { value0: copy.reviewLabel }
         )
@@ -171,7 +171,7 @@ function resolveDisabledCreatePrHeaderAction(
       case 'base_not_on_remote':
       case null:
         title = translate(
-          'auto.components.right.sidebar.source.control.primary.action.f0c6e2a581',
+          'auto.components.workspacePanel.source.control.primary.action.f0c6e2a581',
           'This branch is not ready for a {{value0}} yet.',
           { value0: copy.reviewLabel }
         )
@@ -195,12 +195,12 @@ function resolveCreatePrIntentInFlightPrimaryAction(
   return {
     kind: 'create_pr_intent',
     label: translate(
-      'auto.components.right.sidebar.source.control.primary.action.e7ffa46946',
+      'auto.components.workspacePanel.source.control.primary.action.e7ffa46946',
       'Create {{value0}}',
       { value0: copy.shortLabel }
     ),
     title: translate(
-      'auto.components.right.sidebar.source.control.primary.action.d37e68f61d',
+      'auto.components.workspacePanel.source.control.primary.action.d37e68f61d',
       'Preparing branch for review…'
     ),
     disabled: true
@@ -227,12 +227,12 @@ function resolveCreatePrIntentPrimaryAction(inputs: PrimaryActionInputs): Primar
   return {
     kind: 'create_pr_intent',
     label: translate(
-      'auto.components.right.sidebar.source.control.primary.action.e7ffa46946',
+      'auto.components.workspacePanel.source.control.primary.action.e7ffa46946',
       'Create {{value0}}',
       { value0: copy.shortLabel }
     ),
     title: translate(
-      'auto.components.right.sidebar.source.control.primary.action.c72e5e65d1',
+      'auto.components.workspacePanel.source.control.primary.action.c72e5e65d1',
       'Prepare this branch and create a {{value0}}',
       { value0: copy.reviewLabel }
     ),
@@ -252,7 +252,7 @@ function resolveLoadingCreatePrHeaderAction(
   return buildCreatePrHeaderAction(
     hostedReviewCreation,
     translate(
-      'auto.components.right.sidebar.source.control.primary.action.h3i4j5k607',
+      'auto.components.workspacePanel.source.control.primary.action.h3i4j5k607',
       'Checking whether this branch can create a {{value0}}…',
       { value0: copy.reviewLabel }
     ),
@@ -280,12 +280,12 @@ export function resolveCreatePrHeaderAction(inputs: PrimaryActionInputs): Primar
     return {
       kind: 'create_pr',
       label: translate(
-        'auto.components.right.sidebar.source.control.primary.action.e7ffa46946',
+        'auto.components.workspacePanel.source.control.primary.action.e7ffa46946',
         'Create {{value0}}',
         { value0: copy.shortLabel }
       ),
       title: translate(
-        'auto.components.right.sidebar.source.control.primary.action.946a8a05ea',
+        'auto.components.workspacePanel.source.control.primary.action.946a8a05ea',
         'Create a {{value0}} for this branch',
         { value0: copy.reviewLabel }
       ),

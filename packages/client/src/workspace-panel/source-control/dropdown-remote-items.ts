@@ -145,11 +145,11 @@ export function resolveDropdownRemoteItems(context: DropdownActionContext): Drop
   const fetchItem: DropdownItem = {
     kind: 'fetch',
     label: translate(
-      'auto.components.right.sidebar.source.control.dropdown.items.226b85a3a7',
+      'auto.components.workspacePanel.source.control.dropdown.items.226b85a3a7',
       'Fetch'
     ),
     title: translate(
-      'auto.components.right.sidebar.source.control.dropdown.items.04d709801d',
+      'auto.components.workspacePanel.source.control.dropdown.items.04d709801d',
       'Fetch from remote without merging'
     ),
     disabled: globalBusy

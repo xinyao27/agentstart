@@ -5,6 +5,10 @@ use std::path::{Path, PathBuf};
 
 const SNAPSHOT_DIRECTORY: &str = "terminal-scrollback";
 
+/// Bytes of a stored checkpoint the reader can return. Callers format payloads to
+/// this budget so a stored checkpoint is never silently truncated on read.
+pub(crate) const REPLAY_BYTE_LIMIT: usize = storage::REPLAY_BYTE_LIMIT;
+
 #[derive(Clone)]
 pub(crate) struct TerminalScrollbackSnapshots {
     fallback_root: Option<PathBuf>,

@@ -2,7 +2,7 @@ import type { DiscoveredSkill, SkillDiscoveryResult } from '@agentstart/protocol
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
-import { BookOpen, ArrowClockwise as RefreshCw, X } from '~renderer/icons/hugeicons'
+import { ArrowClockwise as RefreshCw } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
@@ -139,63 +139,6 @@ export default function SkillsPage(): React.JSX.Element {
 
   return (
     <main className="bg-background text-foreground relative flex h-full min-h-0 flex-col">
-      <header className="flex shrink-0 items-center justify-between py-2.5 pr-5 pl-2">
-        <div className="flex items-center gap-2">
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  onClick={closeSkillsPage}
-                  aria-label={translate(
-                    'auto.components.skills.SkillsPage.closeSkills',
-                    'Close skills'
-                  )}
-                >
-                  <X className="size-4" />
-                </Button>
-              }
-            />
-            <TooltipContent side="bottom" sideOffset={6}>
-              {translate('auto.components.skills.SkillsPage.closeShortcut', 'Close · Esc')}
-            </TooltipContent>
-          </Tooltip>
-          <div className="bg-border/50 mx-1 h-5 w-px" aria-hidden />
-          <BookOpen className="text-muted-foreground size-4" />
-          <h1 className="text-sm font-semibold">
-            {translate('auto.components.skills.SkillsPage.f43ad6edf3', 'Skills')}
-          </h1>
-        </div>
-        <div className="flex items-center gap-2">
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  variant="outline"
-                  size="icon-sm"
-                  aria-label={translate(
-                    'auto.components.skills.SkillsPage.refreshSkills',
-                    'Refresh skills'
-                  )}
-                  onClick={() => void loadSkills()}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <LoadingIndicator className="size-4" />
-                  ) : (
-                    <RefreshCw className="size-4" />
-                  )}
-                </Button>
-              }
-            />
-            <TooltipContent side="bottom" sideOffset={6}>
-              {translate('auto.components.skills.SkillsPage.refreshSkills', 'Refresh skills')}
-            </TooltipContent>
-          </Tooltip>
-        </div>
-      </header>
-
       <Tabs
         value={view}
         onValueChange={(value) => setView(value as SkillsPageView)}
@@ -210,12 +153,39 @@ export default function SkillsPage(): React.JSX.Element {
               {translate('auto.components.skills.SkillsPage.marketplaceTab', 'Browse marketplace')}
             </TabsTrigger>
           </TabsList>
-          {view === 'marketplace' ? (
-            <SkillsMarketplaceActions
-              installTarget={skillsMarketplaceInstallTarget(marketplaceUrl)}
-              onInstall={setInstallRequest}
-            />
-          ) : null}
+          <div className="flex items-center gap-2">
+            {view === 'marketplace' ? (
+              <SkillsMarketplaceActions
+                installTarget={skillsMarketplaceInstallTarget(marketplaceUrl)}
+                onInstall={setInstallRequest}
+              />
+            ) : null}
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="icon-sm"
+                    aria-label={translate(
+                      'auto.components.skills.SkillsPage.refreshSkills',
+                      'Refresh skills'
+                    )}
+                    onClick={() => void loadSkills()}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <LoadingIndicator className="size-4" />
+                    ) : (
+                      <RefreshCw className="size-4" />
+                    )}
+                  </Button>
+                }
+              />
+              <TooltipContent side="bottom" sideOffset={6}>
+                {translate('auto.components.skills.SkillsPage.refreshSkills', 'Refresh skills')}
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
 
         <TabsContent value="installed" className="flex min-h-0 flex-col">

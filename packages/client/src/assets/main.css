@@ -118,17 +118,20 @@
   --popover-base: #ffffff;
   --popover: var(--popover-base);
   --popover-foreground: #1a1c1f;
-  /* Why: AgentStart's product accent is the stable default for every semantic primary role;
-     a selected workspace theme may still override --brand within its workspace scope. */
-  --brand: #ff5b03;
+  /* Why: AgentStart's product accent is the stable default for every semantic primary role, and
+     a selected workspace theme may still override --brand within its workspace scope. The value is
+     the logo mark's own body black: product chrome stays neutral beside the provider marks it frames. */
+  --brand: #1b1b1a;
   --primary: var(--brand);
-  --primary-foreground: #0d0d0d;
+  /* Why: white is the only ink that clears the black primary, and it is the reference the
+     workspace theme accent is already darkened against in `readableAccentColor`. */
+  --primary-foreground: #ffffff;
   --secondary: color-mix(in srgb, var(--background) 96%, transparent);
   --secondary-foreground: #1a1c1f;
   --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
   --muted-foreground: color-mix(in srgb, var(--foreground) 49.4%, transparent);
-  /* Why: selected and hover rows are product chrome, so they follow AgentStart orange instead
-     of inheriting the old blue ChatGPT accent; the mix remains opaque for stable contrast. */
+  /* Why: selected and hover rows are product chrome, so they follow the product neutral rather
+     than a hue; the mix remains opaque for stable contrast. */
   --accent: color-mix(in srgb, var(--brand) 10%, var(--background));
   --accent-foreground: color-mix(in srgb, var(--brand) 72%, var(--foreground));
   --destructive: #e02e2a;
@@ -147,7 +150,7 @@
   --sidebar: var(--sidebar-base);
   --sidebar-foreground: #1a1c1f;
   --sidebar-primary: var(--brand);
-  --sidebar-primary-foreground: #0d0d0d;
+  --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: color-mix(in srgb, var(--sidebar-foreground) 6%, transparent);
   --sidebar-accent-foreground: #1a1c1f;
   --sidebar-border: color-mix(in srgb, var(--sidebar-foreground) 8%, transparent);
@@ -201,7 +204,8 @@
   --popover-base: #2d2d2d;
   --popover: var(--popover-base);
   --popover-foreground: #ffffff;
-  --brand: #ff5b03;
+  /* Why: the mark's own light gray inverts its black, so primary chrome still clears the canvas. */
+  --brand: #e5e5e5;
   --primary: var(--brand);
   --primary-foreground: #0d0d0d;
   --secondary: #363636;
@@ -272,10 +276,45 @@
   --sidebar-accent-foreground: var(--sidebar-foreground);
   --sidebar-border: color-mix(in srgb, var(--sidebar-foreground) 8%, transparent);
   --sidebar-ring: var(--ring);
+  /* Why: sticky list headers occlude with the surface the panel sits on —
+     chrome gray in the browser side panel; in the workbench the panel sits on
+     the big island, so panel.tsx overrides this to --background. */
+  --worktree-sidebar-surface: var(--sidebar);
 }
 
-.workspace-native-material-frame {
+/* Why: the big island — one rounded card floating on the chrome plane, which
+   shows as the gutters around it and as the header row above it. The header is
+   not an island: it is the plane's own top row, flush on this card's baseline,
+   so the selected tab's silhouette can cross that baseline and fuse with this
+   surface instead of ending on a band.
+   This shadow is the sanctioned elevation exception in docs/style-guide.md
+   and stays black-based so dark mode never gets a glow.
+   Borderless on purpose: a border would draw a hairline around the piece.
+   Zero-offset ambient layers so all four sides of the card carry shadow. */
+.workspace-content-card {
   background: var(--background);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 0 4px color-mix(in srgb, black 5%, transparent),
+    0 0 24px color-mix(in srgb, black 9%, transparent);
+}
+
+/* Why: island-in-island — with the navigation panel open the workbench
+   content nests as an inner island on the big island's surface; with the
+   panel closed the wrapper omits this class and fills the island edge to
+   edge, so the window reads as one surface again. */
+.workspace-inner-island {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 2px color-mix(in srgb, black 5%, transparent);
+}
+
+/* Why: the window root is the chrome plane itself — the status bar and any
+   region outside floating islands show this surface instead of the browser's
+   default white. Declared before the gradient block so a workspace theme
+   gradient keeps winning the background cascade on the same element. */
+.app-chrome-plane {
+  background-color: var(--sidebar);
 }
 
 /* Why: the opt-in workspace theme gradient (Settings → Appearance) is the one

@@ -4,8 +4,8 @@ import {
   relativePathInsideRoot
 } from '@agentstart/protocol/host/path'
 import type {
-  ActiveRightSidebarTab,
-  RightSidebarExplorerView
+  ActiveWorkspacePanelTab,
+  WorkspacePanelExplorerView
 } from '@agentstart/protocol/settings/ui-state'
 import { useEffect } from 'react'
 import { isWindowVisible } from '~renderer/application-shell/window-visibility-interval'
@@ -30,9 +30,9 @@ type UseGitStatusFileWatchRefreshParams = {
   gitStatusHugeByWorktree: Record<string, unknown> | undefined
   isConnectionReady: (connectionId: string | null | undefined) => boolean
   openFiles: OpenFile[]
-  rightSidebarExplorerView?: RightSidebarExplorerView
-  rightSidebarOpen: boolean
-  rightSidebarTab: ActiveRightSidebarTab
+  workspacePanelExplorerView?: WorkspacePanelExplorerView
+  workspacePanelOpen: boolean
+  workspacePanelTab: ActiveWorkspacePanelTab
   worktreePath: string | null
 }
 
@@ -67,9 +67,9 @@ export function useGitStatusFileWatchRefresh({
   gitStatusHugeByWorktree,
   isConnectionReady,
   openFiles,
-  rightSidebarExplorerView,
-  rightSidebarOpen,
-  rightSidebarTab,
+  workspacePanelExplorerView,
+  workspacePanelOpen,
+  workspacePanelTab,
   worktreePath
 }: UseGitStatusFileWatchRefreshParams): void {
   const activeRuntimeEnvironmentId = useAppStore((state) =>
@@ -84,9 +84,9 @@ export function useGitStatusFileWatchRefresh({
     shouldPollActiveGitStatus({
       activeWorktreeId,
       worktreePath,
-      rightSidebarOpen,
-      rightSidebarTab,
-      rightSidebarExplorerView,
+      workspacePanelOpen,
+      workspacePanelTab,
+      workspacePanelExplorerView,
       openFiles
     }) &&
     isConnectionReady(activeConnectionId) &&

@@ -1,7 +1,9 @@
-export type ExtensionPage = 'activity' | 'browser' | 'mobile' | 'search' | 'settings' | 'skills'
+export type ExtensionPage = 'activity' | 'mobile' | 'search' | 'settings' | 'skills'
+
+export type ExtensionPageSubscription = (listener: (page: ExtensionPage) => void) => () => void
 
 export type ExtensionWorkspaceTarget = {
-  dedicated?: boolean
+  openInNewTab?: boolean
   projectId: string
   sessionId?: string
   worktreeId?: string

@@ -189,13 +189,15 @@ export function diagnosticBundle(
 }
 
 export function rendererErrorInput(input: RendererErrorReportArgs) {
+  // Why: crash-report protobuf field names are wire-compatible legacy names;
+  // the renderer-facing context stays truthful to the workspace panel.
   return {
     ...input,
     kind: reportKinds[input.kind],
     surface: reportSurfaces[input.surface],
     activeModal: nullableString(input.activeModal),
     activeTabType: nullableString(input.activeTabType),
-    activeRightSidebarTab: nullableString(input.activeRightSidebarTab)
+    activeRightSidebarTab: nullableString(input.activeWorkspacePanelTab)
   }
 }
 
@@ -219,7 +221,7 @@ const reportSurfaces = {
   'workspace-shell': RendererErrorSurface.WORKSPACE_SHELL,
   sidebar: RendererErrorSurface.SIDEBAR,
   'terminal-workbench': RendererErrorSurface.TERMINAL_WORKBENCH,
-  'right-sidebar': RendererErrorSurface.RIGHT_SIDEBAR,
+  'workspace-panel': RendererErrorSurface.RIGHT_SIDEBAR,
   page: RendererErrorSurface.PAGE,
   modal: RendererErrorSurface.MODAL,
   overlay: RendererErrorSurface.OVERLAY,

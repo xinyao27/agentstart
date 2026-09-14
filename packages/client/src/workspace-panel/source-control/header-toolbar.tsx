@@ -8,7 +8,7 @@ import { cn } from '~renderer/ui/class-names'
 import { Input } from '~renderer/ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
-import { RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME } from '../right-sidebar-button-styles'
+import { WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME } from '../workspace-panel-button-styles'
 import { SourceControlHeaderOverflowMenu } from './header-overflow-menu'
 import { SOURCE_CONTROL_PANEL_GUTTER_CLASS_NAME } from './panel-constants'
 
@@ -101,16 +101,16 @@ export function SourceControlHeaderToolbar({
   }, [filterExpanded])
 
   const filterToggleTitle = normalizedFilter
-    ? translate('auto.components.right.sidebar.SourceControl.c8e4a1f902', 'Filter: {{value0}}', {
+    ? translate('auto.components.workspacePanel.SourceControl.c8e4a1f902', 'Filter: {{value0}}', {
         value0: filterQuery
       })
-    : translate('auto.components.right.sidebar.SourceControl.b3c8f1a902', 'Filter files by name')
+    : translate('auto.components.workspacePanel.SourceControl.b3c8f1a902', 'Filter files by name')
   const gitGraphToggleTitle = translate(
-    'auto.components.right.sidebar.SourceControl.e7f8a9b0c1',
+    'auto.components.workspacePanel.SourceControl.e7f8a9b0c1',
     'Git Graph'
   )
   const clearFilterTitle = translate(
-    'auto.components.right.sidebar.SourceControl.d4f8c2a901',
+    'auto.components.workspacePanel.SourceControl.d4f8c2a901',
     'Clear and close filter'
   )
 
@@ -138,7 +138,7 @@ export function SourceControlHeaderToolbar({
                     size="icon-toolbar"
                     data-testid="source-control-git-graph-toggle"
                     className={cn(
-                      RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME,
+                      WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME,
                       isGitGraphOpen && 'bg-muted'
                     )}
                     onClick={onToggleGitGraph}
@@ -162,7 +162,7 @@ export function SourceControlHeaderToolbar({
                     size="icon-toolbar"
                     data-testid="source-control-filter-toggle"
                     className={cn(
-                      RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME,
+                      WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME,
                       'relative',
                       normalizedFilter && 'bg-muted'
                     )}
@@ -204,12 +204,12 @@ export function SourceControlHeaderToolbar({
                   }
                 }}
                 placeholder={translate(
-                  'auto.components.right.sidebar.SourceControl.c35baf2f1e',
+                  'auto.components.workspacePanel.SourceControl.c35baf2f1e',
                   'Filter files…'
                 )}
                 className="flex-1"
                 aria-label={translate(
-                  'auto.components.right.sidebar.SourceControl.c35baf2f1e',
+                  'auto.components.workspacePanel.SourceControl.c35baf2f1e',
                   'Filter files…'
                 )}
               />

@@ -26,9 +26,10 @@ export function createWorktreeFolderActivationActions(
       const reconciledActiveTabId =
         get().reconcileWorktreeTabModel(workspaceKey).activeRenderableTabId
       set((s) => {
-        const restoredRightSidebarTab = s.rightSidebarTabByWorktree?.[workspaceKey] ?? 'explorer'
-        const restoredRightSidebarExplorerView =
-          s.rightSidebarExplorerViewByWorktree?.[workspaceKey] ?? 'files'
+        const restoredWorkspacePanelTab =
+          s.workspacePanelTabByWorktree?.[workspaceKey] ?? 'explorer'
+        const restoredWorkspacePanelExplorerView =
+          s.workspacePanelExplorerViewByWorktree?.[workspaceKey] ?? 'files'
         const restoredFileId = s.activeFileIdByWorktree[workspaceKey] ?? null
         const restoredBrowserTabId = s.activeBrowserTabIdByWorktree[workspaceKey] ?? null
         const restoredTabType = s.activeTabTypeByWorktree[workspaceKey] ?? 'terminal'
@@ -114,8 +115,8 @@ export function createWorktreeFolderActivationActions(
             s.activeTabTypeByWorktree[workspaceKey] === activeTabType
               ? s.activeTabTypeByWorktree
               : { ...s.activeTabTypeByWorktree, [workspaceKey]: activeTabType },
-          rightSidebarTab: restoredRightSidebarTab,
-          rightSidebarExplorerView: restoredRightSidebarExplorerView,
+          workspacePanelTab: restoredWorkspacePanelTab,
+          workspacePanelExplorerView: restoredWorkspacePanelExplorerView,
           activeTabId,
           everActivatedWorktreeIds: nextEverActivated
         }

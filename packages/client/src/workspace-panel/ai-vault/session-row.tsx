@@ -81,8 +81,8 @@ export function VaultSessionRow({
   const detailsId = getSessionDetailsId(session.id)
   const latestTurn = latestSessionConversationTurn(session)
   const detailsTooltip = detailsExpanded
-    ? translate('auto.components.right.sidebar.AiVaultSessionRow.hideDetails', 'Hide Details')
-    : translate('auto.components.right.sidebar.AiVaultSessionRow.showDetails', 'Show Details')
+    ? translate('auto.components.workspacePanel.AiVaultSessionRow.hideDetails', 'Hide Details')
+    : translate('auto.components.workspacePanel.AiVaultSessionRow.showDetails', 'Show Details')
   const startResumeDrag = (event: React.DragEvent<HTMLElement>): void => {
     event.stopPropagation()
     const target = event.target
@@ -179,7 +179,7 @@ export function VaultSessionRow({
                     </>
                   ) : (
                     translate(
-                      'auto.components.right.sidebar.AiVaultSessionRow.noPreviewAvailable',
+                      'auto.components.workspacePanel.AiVaultSessionRow.noPreviewAvailable',
                       'No conversation preview available'
                     )
                   )}

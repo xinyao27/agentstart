@@ -1,17 +1,17 @@
-import type { RightSidebarExplorerView } from '@agentstart/protocol/settings/ui-state'
+import type { WorkspacePanelExplorerView } from '@agentstart/protocol/settings/ui-state'
 
 export function getVisibleFileExplorerWorktreePath({
   explorerView,
-  rightSidebarOpen,
+  workspacePanelOpen,
   worktreePath
 }: {
-  explorerView: RightSidebarExplorerView
-  rightSidebarOpen: boolean
+  explorerView: WorkspacePanelExplorerView
+  workspacePanelOpen: boolean
   worktreePath: string | null
 }): string | null {
   // Why: Contents search keeps the file pane mounted, but hidden file trees
   // must not trigger passive file loads or macOS app-data probes.
-  return rightSidebarOpen && explorerView === 'files' ? worktreePath : null
+  return workspacePanelOpen && explorerView === 'files' ? worktreePath : null
 }
 
 export function shouldResetFileExplorerForVisibleWorktree(

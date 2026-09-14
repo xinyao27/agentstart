@@ -47,21 +47,21 @@ export function ChecksSummary({
         <span className="flex items-center gap-1">
           <CircleCheck className="size-3 text-emerald-500" />
           {passingCount}{' '}
-          {translate('auto.components.right.sidebar.checks.panel.content.02ca4f9074', 'passing')}
+          {translate('auto.components.workspacePanel.checks.panel.content.02ca4f9074', 'passing')}
         </span>
       )}
       {failingCount > 0 && (
         <span className="flex items-center gap-1">
           <CircleX className="size-3 text-rose-500" />
           {failingCount}{' '}
-          {translate('auto.components.right.sidebar.checks.panel.content.5e52f4ef7f', 'failing')}
+          {translate('auto.components.workspacePanel.checks.panel.content.5e52f4ef7f', 'failing')}
         </span>
       )}
       {pendingCount > 0 && (
         <span className="flex items-center gap-1">
           <LoadingIndicator className="size-3 text-amber-500" />
           {pendingCount}{' '}
-          {translate('auto.components.right.sidebar.checks.panel.content.9ad98f2a17', 'pending')}
+          {translate('auto.components.workspacePanel.checks.panel.content.9ad98f2a17', 'pending')}
         </span>
       )}
       <span className="flex-1" />

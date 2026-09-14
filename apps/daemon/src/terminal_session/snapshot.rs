@@ -11,10 +11,11 @@ use serde_json::json;
 use tokio::sync::{mpsc, oneshot};
 
 use super::TerminalSessionAuthority;
-use super::model::TerminalReadResult;
+use super::model::{TerminalReadResult, TerminalScrollbackGrid, TerminalScrollbackHistory};
 use super::process::{ProcessEvent, TerminalClear, TerminalEvent};
 use super::read_handler::ReadHandler;
 use super::state::TerminalDisplayMode;
+use crate::terminal_scrollback::REPLAY_BYTE_LIMIT;
 
 const DEFAULT_SNAPSHOT_BYTES: usize = 2 * 1024 * 1024;
 const HARD_SNAPSHOT_BYTES: usize = 8 * 1024 * 1024;
@@ -22,6 +23,14 @@ const MODEL_QUEUE_DEPTH: usize = 256;
 const MODEL_SCROLLBACK_BYTES: usize = 64 * 1024 * 1024;
 const MODEL_SCROLLBACK_ROWS: usize = 5_000;
 const PARTIAL_ESCAPE_TAIL_BYTES: usize = 4_096;
+// Why: the storage reader only ever returns the trailing REPLAY_BYTE_LIMIT bytes
+// of a checkpoint, so formatting more than that would be silently discarded.
+const CHECKPOINT_BYTE_LIMIT: usize = REPLAY_BYTE_LIMIT;
+
+// Why: snapshots and checkpoints replay into a terminal that may still hold the
+// source TUI's origin and margin state. Content is serialized against a
+// full-screen origin after this prefix.
+const BUFFER_PROLOGUE: &str = "\x1b[0m\x1b]8;;\x1b\\\x1b[0\"q\x1b[?6l\x1b[?69l\x1b[r\x1b[H";
 
 #[derive(Clone)]
 pub(super) struct TerminalSnapshotProvider {
@@ -57,7 +66,10 @@ pub(crate) struct TerminalSnapshot {
 }
 
 pub(super) enum ModelCommand {
-    PlainHistory(oneshot::Sender<String>),
+    Checkpoint {
+        max_bytes: usize,
+        result: oneshot::Sender<TerminalScrollbackHistory>,
+    },
     Read {
         handle: String,
         status: &'static str,
@@ -114,10 +126,10 @@ impl TerminalSnapshotProvider {
             .ok()?;
         receiver.await.ok()
     }
-    pub(super) async fn plain_history(&self) -> Option<String> {
+    pub(super) async fn checkpoint(&self, max_bytes: usize) -> Option<TerminalScrollbackHistory> {
         let (result, receiver) = oneshot::channel();
         self.commands
-            .send(ModelCommand::PlainHistory(result))
+            .send(ModelCommand::Checkpoint { max_bytes, result })
             .await
             .ok()?;
         receiver.await.ok()
@@ -277,9 +289,6 @@ pub(super) fn run_model(
                         .read(handle, status, cursor, limit, &visible),
                 );
             }
-            ModelCommand::PlainHistory(result) => {
-                let _ = result.send(model.plain_history());
-            }
             ModelCommand::Restore { text, completed } => {
                 // Why: history belongs to the new model, not its live byte sequence or event stream.
                 let sequence = model.sequence;
@@ -333,8 +342,11 @@ pub(super) fn run_model(
                     events.blocking_send(TerminalEvent::Process(ProcessEvent::ReaderFinished {
                         observed_at,
                         pty_id: pty_id.clone(),
-                        history: model.plain_history(),
+                        history: model.checkpoint(CHECKPOINT_BYTE_LIMIT),
                     }));
+            }
+            ModelCommand::Checkpoint { max_bytes, result } => {
+                let _ = result.send(model.checkpoint(max_bytes));
             }
             ModelCommand::Snapshot { request, result } => {
                 let _ = result.send(model.snapshot(request));
@@ -370,25 +382,6 @@ impl TerminalModel {
         let Some(primary) = terminal.screens.get(ScreenKey::Primary) else {
             return String::new();
         };
-        let history_rows = primary
-            .pages
-            .total_rows()
-            .saturating_sub(terminal.rows as usize);
-        let retained_rows = history_rows.min(MODEL_SCROLLBACK_ROWS);
-        let range = Content::Range {
-            tl: if retained_rows == 0 {
-                Point::active(0, 0)
-            } else {
-                Point::history(
-                    0,
-                    u32::try_from(history_rows - retained_rows).unwrap_or(u32::MAX),
-                )
-            },
-            br: Point::active(
-                terminal.cols.saturating_sub(1),
-                u32::from(terminal.rows - 1),
-            ),
-        };
         // Why: cursor redraws operate on physical rows; the CLI tail cannot reconstruct wrapped prompts.
         primary.format(
             &FormatOptions {
@@ -396,8 +389,29 @@ impl TerminalModel {
                 ..FormatOptions::plain()
             },
             &ScreenExtra::default(),
-            range,
+            history_range(primary, MODEL_SCROLLBACK_ROWS, terminal.cols, terminal.rows),
         )
+    }
+
+    fn checkpoint(&self, max_bytes: usize) -> TerminalScrollbackHistory {
+        let terminal = &self.stream.handler.inner.terminal;
+        let Some(primary) = terminal.screens.get(ScreenKey::Primary) else {
+            return TerminalScrollbackHistory {
+                grid: None,
+                text: String::new(),
+            };
+        };
+        let text = trim_checkpoint(
+            format_checkpoint(primary, terminal.cols, terminal.rows),
+            max_bytes,
+        );
+        TerminalScrollbackHistory {
+            grid: Some(TerminalScrollbackGrid {
+                cols: terminal.cols,
+                rows: terminal.rows,
+            }),
+            text,
+        }
     }
     fn new(cols: u16, rows: u16) -> Self {
         let mut terminal = Terminal::new(TerminalOptions {
@@ -549,7 +563,7 @@ impl TerminalModel {
             } else {
                 // Why: replay rebuilds the primary buffer before its own 1049 transition. Keeping
                 // the model's active-alt mode in this prefix would switch buffers too early.
-                let mut normal = buffer_prologue();
+                let mut normal = BUFFER_PROLOGUE.as_bytes().to_vec();
                 normal.extend_from_slice(
                     primary
                         .format(&FormatOptions::vt(), &screen_extras(), primary_range)
@@ -624,7 +638,7 @@ fn format_active_screen(
     rows: u16,
     include_alt_screen_modes: bool,
 ) -> Vec<u8> {
-    let mut serialized = buffer_prologue();
+    let mut serialized = BUFFER_PROLOGUE.as_bytes().to_vec();
     serialized
         .extend_from_slice(terminal_mode_prefix(terminal, include_alt_screen_modes).as_bytes());
     serialized.extend_from_slice(
@@ -642,11 +656,63 @@ fn format_active_screen(
     serialized
 }
 
-fn buffer_prologue() -> Vec<u8> {
-    // Why: snapshots replay into a terminal that may still have the source TUI's origin and
-    // margin state. Content is serialized against a full-screen origin, then source state is
-    // restored after the body by TerminalExtra.
-    b"\x1b[0m\x1b]8;;\x1b\\\x1b[0\"q\x1b[?6l\x1b[?69l\x1b[r\x1b[H".to_vec()
+// Why: a checkpoint is the pane's future restore, so it has to be replayable the
+// same way the live attach snapshot is — VT text carrying the daemon's wrap
+// joins, colors and hyperlinks, with no mode or cursor state that a fresh shell
+// has no owner for. `unwrap` keeps soft-wrapped rows joined, which is what lets
+// the replaying terminal re-wrap them at whatever grid it ends up with.
+fn format_checkpoint(screen: &Screen, cols: u16, rows: u16) -> String {
+    let mut serialized = String::from(BUFFER_PROLOGUE);
+    serialized.push_str(&screen.format(
+        &FormatOptions {
+            unwrap: true,
+            ..FormatOptions::vt()
+        },
+        &ScreenExtra::styles(),
+        history_range(screen, MODEL_SCROLLBACK_ROWS, cols, rows),
+    ));
+    serialized
+}
+
+fn history_range(screen: &Screen, retained_history_rows: usize, cols: u16, rows: u16) -> Content {
+    let history_rows = screen.pages.total_rows().saturating_sub(rows as usize);
+    let retained_rows = retained_history_rows.min(history_rows);
+    Content::Range {
+        tl: if retained_rows == 0 {
+            Point::active(0, 0)
+        } else {
+            Point::history(
+                0,
+                u32::try_from(history_rows - retained_rows).unwrap_or(u32::MAX),
+            )
+        },
+        br: Point::active(cols.saturating_sub(1), u32::from(rows.saturating_sub(1))),
+    }
+}
+
+// Why: only the tail of a checkpoint is ever read back, so an over-budget payload
+// is trimmed from the front. Re-open on a row boundary (or the next escape
+// sequence, so a joined logical line cannot start mid-CSI) and re-apply the
+// prologue, because the SGR state at the cut point is unknown.
+fn trim_checkpoint(text: String, max_bytes: usize) -> String {
+    if text.len() <= max_bytes {
+        return text;
+    }
+    let mut cut = text.len() - max_bytes;
+    while !text.is_char_boundary(cut) {
+        cut += 1;
+    }
+    let bytes = text.as_bytes();
+    let start = bytes[cut..]
+        .windows(2)
+        .position(|window| window == b"\r\n")
+        .map(|index| cut + index + 2)
+        .or_else(|| text[cut..].find('\x1b').map(|index| cut + index))
+        .unwrap_or(cut)
+        .min(text.len());
+    let mut trimmed = String::from(BUFFER_PROLOGUE);
+    trimmed.push_str(&text[start..]);
+    trimmed
 }
 
 fn terminal_mode_prefix(terminal: &Terminal, include_alt_screen_modes: bool) -> String {

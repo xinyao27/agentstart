@@ -117,8 +117,8 @@ export type GlobalTerminalSettings = {
   openInApplications?: OpenInApplication[]
   /** Last launcher chosen from the tab-bar split button. Namespacing keeps built-ins collision-free. */
   lastOpenInTargetKey?: OpenInTargetKey
-  /** Deprecated: migration/backward-compat only. Use PersistedUIState.rightSidebarOpen. */
-  rightSidebarOpenByDefault: boolean
+  /** Default visibility for the workspace tool panel on startup. */
+  workspacePanelOpenByDefault: boolean
   showGitIgnoredFiles?: boolean
   /** Preferred Source Control changes layout. Per-user, not per-workspace. */
 }

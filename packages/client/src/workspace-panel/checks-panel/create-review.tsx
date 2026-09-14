@@ -54,7 +54,7 @@ export function useChecksPanelCreateReview(context: useChecksPanelReviewCreation
     if (!title) {
       setCreatePrError(
         translate(
-          'auto.components.right.sidebar.SourceControl.f3a8b2c1d0e5',
+          'auto.components.workspacePanel.SourceControl.f3a8b2c1d0e5',
           'Enter a {{value0}} title.',
           {
             value0: hostedReviewCreateCopy.reviewLabel
@@ -66,7 +66,7 @@ export function useChecksPanelCreateReview(context: useChecksPanelReviewCreation
     if (!base || stripBaseRef(base).toLowerCase() === stripBaseRef(branch).toLowerCase()) {
       setCreatePrError(
         translate(
-          'auto.components.right.sidebar.SourceControl.ae743199cd',
+          'auto.components.workspacePanel.SourceControl.ae743199cd',
           'Choose a different base branch before creating a {{value0}}.',
           { value0: hostedReviewCreateCopy.reviewLabel }
         )
@@ -127,19 +127,19 @@ export function useChecksPanelCreateReview(context: useChecksPanelReviewCreation
         toast.success(
           number
             ? translate(
-                'auto.components.right.sidebar.ChecksPanel.b6ce28da5b',
+                'auto.components.workspacePanel.ChecksPanel.b6ce28da5b',
                 '{{value0}} #{{value1}} is already open',
                 { value0: hostedReviewCreateCopy.titleLabel, value1: number }
               )
             : translate(
-                'auto.components.right.sidebar.ChecksPanel.cf9e69f3be',
+                'auto.components.workspacePanel.ChecksPanel.cf9e69f3be',
                 '{{value0}} is already open',
                 { value0: hostedReviewCreateCopy.titleLabel }
               ),
           {
             action: {
               label: translate(
-                'auto.components.right.sidebar.ChecksPanel.192e686e57',
+                'auto.components.workspacePanel.ChecksPanel.192e686e57',
                 'Open on {{value0}}',
                 { value0: hostedReviewCreateCopy.providerName }
               ),
@@ -169,7 +169,7 @@ export function useChecksPanelCreateReview(context: useChecksPanelReviewCreation
         error instanceof Error
           ? error.message
           : translate(
-              'auto.components.right.sidebar.SourceControl.e2b7a1c0d9f4',
+              'auto.components.workspacePanel.SourceControl.e2b7a1c0d9f4',
               'Failed to create {{value0}}',
               { value0: hostedReviewCreateCopy.reviewLabel }
             )

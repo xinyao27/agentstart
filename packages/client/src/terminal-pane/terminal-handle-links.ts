@@ -131,7 +131,7 @@ function focusRendererTerminalHandle(
 
   store.setActiveWorktree(target.worktreeId)
   store.markWorktreeVisited(target.worktreeId)
-  store.setActiveView('terminal')
+  store.focusWorkspaceSurface()
   store.setActiveTabType('terminal')
   store.revealWorktreeInSidebar(target.worktreeId)
   if (target.leafId) {

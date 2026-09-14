@@ -16,8 +16,8 @@ import {
   folderRelativePathToIncludeGlob,
   selectedExplorerFolderRelativePath
 } from '../workspace-panel/file-explorer/file-search-include-pattern'
-import { showWorkspaceSidebar, toggleWorkspaceSidebar } from '../workspace-panel/show-sidebar'
-import { shouldShowWorktreeHistoryControls } from './titlebar-worktree-history-controls'
+import { showWorkspacePanel, toggleWorkspacePanel } from '../workspace-panel/show-workspace-panel'
+import { isWorkspaceBodyVisible } from './state/visible-surface'
 
 const shortcutPlatform = getRendererAppPlatform()
 
@@ -36,7 +36,11 @@ export type ShortcutDispatchInput = {
 
 export type GlobalShortcutState = Pick<
   AppState,
-  'activeView' | 'activeWorktreeId' | 'keybindings'
+  | 'activeGroupIdByWorktree'
+  | 'activeWorktreeId'
+  | 'groupsByWorktree'
+  | 'keybindings'
+  | 'unifiedTabsByWorktree'
 > & {
   creationLayoutActive: boolean
   terminalShortcutPolicy: NonNullable<AppState['settings']>['terminalShortcutPolicy'] | undefined
@@ -81,28 +85,28 @@ export function dispatchGlobalShortcut(
       })
     }
   }
-  const canOpenWorkspaceSidebar =
+  const canOpenWorkspacePanel =
     !state.creationLayoutActive &&
-    state.activeView === 'terminal' &&
+    isWorkspaceBodyVisible(state) &&
     state.activeWorktreeId !== null &&
     state.workspaceChromeActive
-  const toggleSearchSidebar = (query: string | null): void => {
-    toggleWorkspaceSidebar({
+  const toggleSearchPanel = (query: string | null): void => {
+    toggleWorkspacePanel({
       view: 'explorer',
       explorerDestination: { view: 'search', ...(query ? { query } : {}) }
     })
   }
 
-  if (matchShortcut('sourceControl.sendReviewNotes') && canOpenWorkspaceSidebar) {
+  if (matchShortcut('sourceControl.sendReviewNotes') && canOpenWorkspacePanel) {
     if (useAppStore.getState().openDiffNotesSendMenuForActiveWorktree()) {
       input.preventDefault()
       notifyTerminalCapture('sourceControl.sendReviewNotes')
-      showWorkspaceSidebar({ view: 'source-control' })
+      showWorkspacePanel({ view: 'source-control' })
       return
     }
   }
 
-  if (matchShortcut('sidebar.search.toggle') && canOpenWorkspaceSidebar) {
+  if (matchShortcut('sidebar.search.toggle') && canOpenWorkspacePanel) {
     const selectedFolderRelativePath =
       document.activeElement instanceof Element
         ? selectedExplorerFolderRelativePath(document.activeElement)
@@ -110,7 +114,7 @@ export function dispatchGlobalShortcut(
     if (selectedFolderRelativePath !== null && state.activeWorktreeId) {
       input.preventDefault()
       notifyTerminalCapture('sidebar.search.toggle')
-      toggleWorkspaceSidebar({
+      toggleWorkspacePanel({
         view: 'explorer',
         explorerDestination: {
           view: 'search',
@@ -123,7 +127,7 @@ export function dispatchGlobalShortcut(
     if (selectedText) {
       input.preventDefault()
       notifyTerminalCapture('sidebar.search.toggle')
-      toggleSearchSidebar(selectedText)
+      toggleSearchPanel(selectedText)
       return
     }
   }
@@ -132,7 +136,7 @@ export function dispatchGlobalShortcut(
     return
   }
   if (matchShortcut('worktree.history.back') || matchShortcut('worktree.history.forward')) {
-    if (state.creationLayoutActive || !shouldShowWorktreeHistoryControls(state.activeView)) {
+    if (state.creationLayoutActive || !isWorkspaceBodyVisible(state)) {
       return
     }
     input.preventDefault()
@@ -177,26 +181,26 @@ export function dispatchGlobalShortcut(
     requestScrollToCurrentWorkspaceRevealAndRename()
     return
   }
-  if (!canOpenWorkspaceSidebar) {
+  if (!canOpenWorkspacePanel) {
     return
   }
   if (matchShortcut('sidebar.right.toggle')) {
     input.preventDefault()
     notifyTerminalCapture('sidebar.right.toggle')
     const store = useAppStore.getState()
-    store.setRightSidebarOpen(!store.rightSidebarOpen)
+    store.setWorkspacePanelOpen(!store.workspacePanelOpen)
     return
   }
   if (matchShortcut('sidebar.explorer.toggle')) {
     input.preventDefault()
     notifyTerminalCapture('sidebar.explorer.toggle')
-    toggleWorkspaceSidebar({ view: 'explorer', explorerDestination: { view: 'files' } })
+    toggleWorkspacePanel({ view: 'explorer', explorerDestination: { view: 'files' } })
     return
   }
   if (matchShortcut('sidebar.search.toggle')) {
     input.preventDefault()
     notifyTerminalCapture('sidebar.search.toggle')
-    toggleSearchSidebar(null)
+    toggleSearchPanel(null)
     return
   }
   if (matchShortcut('sidebar.sourceControl.toggle')) {
@@ -205,18 +209,18 @@ export function dispatchGlobalShortcut(
     }
     input.preventDefault()
     notifyTerminalCapture('sidebar.sourceControl.toggle')
-    toggleWorkspaceSidebar({ view: 'source-control' })
+    toggleWorkspacePanel({ view: 'source-control' })
     return
   }
   if (matchShortcut('sidebar.checks.toggle')) {
     input.preventDefault()
     notifyTerminalCapture('sidebar.checks.toggle')
-    toggleWorkspaceSidebar({ view: 'source-control', sourceControlView: 'review' })
+    toggleWorkspacePanel({ view: 'source-control', sourceControlView: 'review' })
     return
   }
   if (matchShortcut('sidebar.ports.toggle')) {
     input.preventDefault()
     notifyTerminalCapture('sidebar.ports.toggle')
-    toggleWorkspaceSidebar({ view: 'ports' })
+    toggleWorkspacePanel({ view: 'ports' })
   }
 }

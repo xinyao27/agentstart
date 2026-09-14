@@ -1,5 +1,5 @@
 import { isGitRepoKind } from '@agentstart/protocol/project/repository'
-import type { RightSidebarExplorerView } from '@agentstart/protocol/settings/ui-state'
+import type { WorkspacePanelExplorerView } from '@agentstart/protocol/settings/ui-state'
 import { useState } from 'react'
 import { basename } from '~renderer/path'
 import { useRuntimeFileListForWorktree } from '~renderer/quick-open/file-list'
@@ -26,21 +26,21 @@ export function useFileExplorerModel({
   isVisible: boolean
   workspacePanelTabId?: string
 }) {
-  const explorerView = useAppStore((state) => state.rightSidebarExplorerView)
-  const showRightSidebarFiles = useAppStore((state) => state.showRightSidebarFiles)
-  const showRightSidebarSearch = useAppStore((state) => state.showRightSidebarSearch)
+  const explorerView = useAppStore((state) => state.workspacePanelExplorerView)
+  const showWorkspacePanelFiles = useAppStore((state) => state.showWorkspacePanelFiles)
+  const showWorkspacePanelSearch = useAppStore((state) => state.showWorkspacePanelSearch)
   const [nameFilterQuery, setNameFilterQuery] = useState('')
   const [nameFilterCollapsedPaths, setNameFilterCollapsedPaths] = useState<Set<string>>(
     () => new Set()
   )
   const searchPanel = useFileSearchPanel(explorerView, workspacePanelTabId)
-  const handleSelectExplorerView = (view: RightSidebarExplorerView) => {
+  const handleSelectExplorerView = (view: WorkspacePanelExplorerView) => {
     if (view === 'files') {
-      showRightSidebarFiles()
+      showWorkspacePanelFiles()
       return
     }
     const trimmedQuery = nameFilterQuery.trim()
-    showRightSidebarSearch(trimmedQuery ? { query: trimmedQuery } : undefined)
+    showWorkspacePanelSearch(trimmedQuery ? { query: trimmedQuery } : undefined)
   }
   const handleClearNameFilter = () => setNameFilterQuery('')
 
@@ -69,7 +69,7 @@ export function useFileExplorerModel({
   const isFilesViewActive = explorerView === 'files'
   const visibleFilesWorktreePath = getVisibleFileExplorerWorktreePath({
     explorerView,
-    rightSidebarOpen: isVisible,
+    workspacePanelOpen: isVisible,
     worktreePath
   })
   const repoName = activeRepo?.displayName ?? (worktreePath ? basename(worktreePath) : '')

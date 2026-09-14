@@ -17,7 +17,6 @@ import type { SourceControlAiRepoUpdate } from '~renderer/source-control/ai-reci
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
 
-import { getSettingOwnershipSummary } from '../setting-ownership'
 import { getRepositorySourceControlAiSectionId } from './settings-targets'
 import { RepositorySourceControlAiActionRows } from './source-control-ai-action-rows'
 import { RepositorySourceControlAiCustomCommand } from './source-control-ai-custom-command'
@@ -55,7 +54,6 @@ export function RepositorySourceControlAiSection({
 }: RepositorySourceControlAiSectionProps): React.JSX.Element {
   const mountedRef = useMountedRef()
   const settings = useAppStore((state) => state.settings)
-  const ownership = getSettingOwnershipSummary('repositorySourceControlAi')
   const source = normalizeSourceControlAiSettings(
     settings?.sourceControlAi,
     settings?.commitMessageAi
@@ -308,16 +306,11 @@ export function RepositorySourceControlAiSection({
       className="space-y-4"
     >
       <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0 space-y-1">
-          <h3 className="text-sm font-semibold">
-            {translate(
-              'auto.components.settings.RepositorySourceControlAiSection.71b003b62b',
-              'Source Control AI'
-            )}
-          </h3>
-          <p className="text-muted-foreground text-xs">{ownership.description}</p>
-          {saveError ? <p className="text-destructive text-xs">{saveError}</p> : null}
-        </div>
+        {saveError ? (
+          <p className="text-destructive text-xs">{saveError}</p>
+        ) : (
+          <div className="min-w-0" />
+        )}
         <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
           <span className="text-muted-foreground text-[11px]">
             {isDirty

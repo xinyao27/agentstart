@@ -20,7 +20,7 @@ export type SourceControlScopeOption = {
 }
 
 const BRANCH_SCOPE_LABEL = {
-  key: 'auto.components.right.sidebar.SourceControl.d7ae61269b',
+  key: 'auto.components.workspacePanel.SourceControl.d7ae61269b',
   fallback: 'Committed on Branch'
 }
 

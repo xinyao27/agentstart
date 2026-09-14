@@ -23,14 +23,14 @@ export function SearchFilters({
     <div className="flex flex-col gap-1">
       <label className="flex flex-col gap-0.5">
         <span className="text-muted-foreground text-[10px] tracking-wide uppercase">
-          {translate('auto.components.right.sidebar.SearchFilters.a69ee1bd0e', 'Files To Include')}
+          {translate('auto.components.workspacePanel.SearchFilters.a69ee1bd0e', 'Files To Include')}
         </span>
         <Input
           ref={includeInputRef}
           type="text"
           size="xs"
           placeholder={translate(
-            'auto.components.right.sidebar.SearchFilters.8a77efcbd1',
+            'auto.components.workspacePanel.SearchFilters.8a77efcbd1',
             'files to include (e.g. *.ts, src/**)'
           )}
           value={includePattern}
@@ -40,14 +40,14 @@ export function SearchFilters({
       </label>
       <label className="flex flex-col gap-0.5">
         <span className="text-muted-foreground text-[10px] tracking-wide uppercase">
-          {translate('auto.components.right.sidebar.SearchFilters.0a6412a895', 'Files To Exclude')}
+          {translate('auto.components.workspacePanel.SearchFilters.0a6412a895', 'Files To Exclude')}
         </span>
         <Input
           ref={excludeInputRef}
           type="text"
           size="xs"
           placeholder={translate(
-            'auto.components.right.sidebar.SearchFilters.01e4671ccf',
+            'auto.components.workspacePanel.SearchFilters.01e4671ccf',
             'files to exclude (e.g. *.min.js, dist/**)'
           )}
           value={excludePattern}

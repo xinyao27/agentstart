@@ -16,11 +16,11 @@ import { useActiveWorktree, useRepoById } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~renderer/ui/tabs'
 import ChecksPanel from '~renderer/workspace-panel/checks-panel'
-import {
-  LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
-  type RightSidebarPanelSource
-} from '~renderer/workspace-panel/right-sidebar-panel-source'
 import SourceControl from '~renderer/workspace-panel/source-control'
+import {
+  LOCAL_WORKSPACE_PANEL_SOURCE,
+  type WorkspacePanelSource
+} from '~renderer/workspace-panel/workspace-panel-source'
 import { getWorktreeGitIdentityDisplay } from '~renderer/worktree/git-identity-display'
 
 import { DiffLineCounts } from '../entry-details'
@@ -28,7 +28,7 @@ import { useAutoOpenAllDiffs } from './auto-open-all-diffs'
 import type { SourceControlPanelView } from './state'
 
 type SourceControlWorkspacePanelProps = {
-  source?: RightSidebarPanelSource
+  source?: WorkspacePanelSource
   isVisible?: boolean
   workspacePanelTabId?: string
   view?: SourceControlPanelView
@@ -46,7 +46,7 @@ type ChangeLineCounts = {
 }
 
 export default function SourceControlWorkspacePanel({
-  source = LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
+  source = LOCAL_WORKSPACE_PANEL_SOURCE,
   isVisible = true,
   workspacePanelTabId,
   view: controlledView,

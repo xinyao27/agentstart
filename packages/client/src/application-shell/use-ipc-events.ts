@@ -23,8 +23,11 @@ export function focusTerminalInitiatedTab(tabId: string, leafId?: string | null)
 }
 
 export function activateTerminalInitiatedWorktree(store: AppState, worktreeId: string): void {
-  store.setActiveView('terminal')
+  // Why: activate the scope first — the workspace surface is whatever tab the
+  // newly-active worktree has selected, so landing before the switch would
+  // target the worktree we are leaving.
   store.setActiveWorktree(worktreeId)
+  store.focusWorkspaceSurface()
   // Why: CLI/runtime terminal focus is user-visible worktree navigation, so it
   // must feed both Command Palette recency and the titlebar back/forward stack.
   store.markWorktreeVisited(worktreeId)

@@ -141,7 +141,7 @@ export function PRCommentsList({
     return (
       <Checkbox
         aria-label={translate(
-          'auto.components.right.sidebar.checks.panel.content.5dc3af25c0',
+          'auto.components.workspacePanel.checks.panel.content.5dc3af25c0',
           'Select comment'
         )}
         checked={checked}
@@ -195,11 +195,11 @@ export function PRCommentsList({
         placeholder={
           empty
             ? translate(
-                'auto.components.right.sidebar.checks.panel.content.ea9fd5ed6a',
+                'auto.components.workspacePanel.checks.panel.content.ea9fd5ed6a',
                 'Start conversation...'
               )
             : translate(
-                'auto.components.right.sidebar.checks.panel.content.3fff651d32',
+                'auto.components.workspacePanel.checks.panel.content.3fff651d32',
                 'Add a PR comment'
               )
         }
@@ -213,7 +213,7 @@ export function PRCommentsList({
           (async () => ({
             ok: false,
             error: translate(
-              'auto.components.right.sidebar.checks.panel.content.b37ebdc51c',
+              'auto.components.workspacePanel.checks.panel.content.b37ebdc51c',
               'Commenting unavailable.'
             )
           }))
@@ -257,7 +257,7 @@ export function PRCommentsList({
         !onAddComment && (
           <div className="text-muted-foreground flex items-center justify-center py-5 text-[11px]">
             {translate(
-              'auto.components.right.sidebar.checks.panel.content.755be805f6',
+              'auto.components.workspacePanel.checks.panel.content.755be805f6',
               'No comments'
             )}
           </div>
@@ -276,7 +276,7 @@ export function PRCommentsList({
                 <>
                   <div className={presentation.sectionTriageLabel}>
                     {translate(
-                      'auto.components.right.sidebar.checks.panel.content.c3a8e5d710',
+                      'auto.components.workspacePanel.checks.panel.content.c3a8e5d710',
                       'Needs review · {{value0}}',
                       { value0: triageGroups.open.length }
                     )}

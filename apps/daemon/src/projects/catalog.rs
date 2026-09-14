@@ -11,8 +11,8 @@ use crate::repo_host::{RepoHostRequest, RepoHostWorker};
 use crate::repositories::{RepositoryRequest, RepositoryWorker};
 
 use super::{
-    GitRemoteIdentity, Project, ProjectCatalogError, ProjectRegistration, ProjectWireUpdate,
-    RuntimeProjectList, RuntimeProjectResult, WorkbenchProject, records, wire_records,
+    GitRemoteIdentity, Project, ProjectCatalogError, ProjectWireUpdate, RuntimeProjectList,
+    RuntimeProjectResult, records, wire_records,
 };
 
 #[derive(Clone)]
@@ -40,10 +40,6 @@ enum ProjectCatalogCommand {
         input: ProjectWireUpdate,
         response: oneshot::Sender<Result<RuntimeProjectResult, ProjectCatalogError>>,
     },
-    Register {
-        input: ProjectRegistration,
-        response: oneshot::Sender<Result<Project, ProjectCatalogError>>,
-    },
     ReplaceRemotes {
         project_id: String,
         remotes: Vec<GitRemoteIdentity>,
@@ -52,10 +48,6 @@ enum ProjectCatalogCommand {
     ResolveByRemote {
         canonical_key: String,
         response: oneshot::Sender<Result<Vec<Project>, ProjectCatalogError>>,
-    },
-    SyncWorkbench {
-        projects: Vec<WorkbenchProject>,
-        response: oneshot::Sender<Result<(), ProjectCatalogError>>,
     },
     ProjectGroups(Box<ProjectGroupRequest>),
     FolderWorkspaces(Box<FolderWorkspaceRequest>),
@@ -157,17 +149,6 @@ impl ProjectCatalog {
         receive(result).await
     }
 
-    pub async fn register(
-        &self,
-        input: ProjectRegistration,
-    ) -> Result<Project, ProjectCatalogError> {
-        let _mutation = self.mutation_guard().await;
-        let (response, result) = oneshot::channel();
-        self.send(ProjectCatalogCommand::Register { input, response })
-            .await?;
-        receive(result).await
-    }
-
     pub async fn replace_remotes(
         &self,
         project_id: String,
@@ -194,17 +175,6 @@ impl ProjectCatalog {
             response,
         })
         .await?;
-        receive(result).await
-    }
-
-    pub async fn sync_workbench(
-        &self,
-        projects: Vec<WorkbenchProject>,
-    ) -> Result<(), ProjectCatalogError> {
-        let _mutation = self.mutation_guard().await;
-        let (response, result) = oneshot::channel();
-        self.send(ProjectCatalogCommand::SyncWorkbench { projects, response })
-            .await?;
         receive(result).await
     }
 
@@ -296,9 +266,6 @@ impl ProjectCatalogWorker {
                 }
                 let _ = response.send(result);
             }
-            ProjectCatalogCommand::Register { input, response } => {
-                let _ = response.send(records::register(connection, input));
-            }
             ProjectCatalogCommand::ReplaceRemotes {
                 project_id,
                 remotes,
@@ -311,9 +278,6 @@ impl ProjectCatalogWorker {
                 response,
             } => {
                 let _ = response.send(records::resolve_by_remote(connection, &canonical_key));
-            }
-            ProjectCatalogCommand::SyncWorkbench { projects, response } => {
-                let _ = response.send(records::sync_workbench(connection, &projects));
             }
             ProjectCatalogCommand::ProjectGroups(request) => {
                 ProjectGroupWorker::handle(connection, *request, on_committed);

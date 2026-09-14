@@ -19,7 +19,7 @@ import {
 } from '~renderer/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
-import { RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME } from '../right-sidebar-button-styles'
+import { WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME } from '../workspace-panel-button-styles'
 
 export function SourceControlHeaderOverflowMenu({
   sourceControlViewMode,
@@ -42,8 +42,8 @@ export function SourceControlHeaderOverflowMenu({
 }): React.JSX.Element {
   const viewModeLabel =
     sourceControlViewMode === 'tree'
-      ? translate('auto.components.right.sidebar.SourceControl.a91f8e2b01', 'View as list')
-      : translate('auto.components.right.sidebar.SourceControl.b82e9f3c12', 'View as tree')
+      ? translate('auto.components.workspacePanel.SourceControl.a91f8e2b01', 'View as list')
+      : translate('auto.components.workspacePanel.SourceControl.b82e9f3c12', 'View as tree')
 
   return (
     <DropdownMenu>
@@ -57,9 +57,9 @@ export function SourceControlHeaderOverflowMenu({
                     type="button"
                     variant="outline"
                     size="icon-toolbar"
-                    className={RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME}
+                    className={WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME}
                     aria-label={translate(
-                      'auto.components.right.sidebar.SourceControl.f71c4a8d90',
+                      'auto.components.workspacePanel.SourceControl.f71c4a8d90',
                       'More source control actions'
                     )}
                   >
@@ -72,7 +72,7 @@ export function SourceControlHeaderOverflowMenu({
         />
         <TooltipContent side="bottom" sideOffset={6}>
           {translate(
-            'auto.components.right.sidebar.SourceControl.f71c4a8d90',
+            'auto.components.workspacePanel.SourceControl.f71c4a8d90',
             'More source control actions'
           )}
         </TooltipContent>
@@ -88,12 +88,12 @@ export function SourceControlHeaderOverflowMenu({
         </DropdownMenuItem>
         <DropdownMenuItem onClick={onChangeBaseRef}>
           <Settings2 className="size-3.5" />
-          {translate('auto.components.right.sidebar.SourceControl.476b77745b', 'Change Base Ref')}…
+          {translate('auto.components.workspacePanel.SourceControl.476b77745b', 'Change Base Ref')}…
         </DropdownMenuItem>
         <DropdownMenuItem disabled={branchCompareRefreshDisabled} onClick={onRefreshBranchCompare}>
           <RefreshCw className="size-3.5" />
           {translate(
-            'auto.components.right.sidebar.SourceControl.ed34038d0d',
+            'auto.components.workspacePanel.SourceControl.ed34038d0d',
             'Refresh branch compare'
           )}
         </DropdownMenuItem>
@@ -102,7 +102,7 @@ export function SourceControlHeaderOverflowMenu({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={onExpandNotes}>
               <MessageSquare className="size-3.5" />
-              {translate('auto.components.right.sidebar.SourceControl.cc474e0b8c', 'Notes')}
+              {translate('auto.components.workspacePanel.SourceControl.cc474e0b8c', 'Notes')}
               <span className="text-muted-foreground ml-auto text-[11px] tabular-nums">
                 {diffCommentCount}
               </span>

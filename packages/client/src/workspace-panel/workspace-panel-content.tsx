@@ -1,12 +1,9 @@
 import { Suspense } from 'react'
 import { lazyWithRetry as lazy } from '~renderer/application-shell/lazy-with-retry'
-import type { ActiveRightSidebarTab } from '~renderer/editor/state'
+import type { ActiveWorkspacePanelTab } from '~renderer/editor/state'
 
-import {
-  LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
-  type RightSidebarPanelSource
-} from './right-sidebar-panel-source'
 import type { SourceControlPanelView } from './source-control/workspace-panel/state'
+import { LOCAL_WORKSPACE_PANEL_SOURCE, type WorkspacePanelSource } from './workspace-panel-source'
 
 const FileExplorer = lazy(() => import('./file-explorer'))
 const SourceControlWorkspacePanel = lazy(() => import('./source-control/workspace-panel/panel'))
@@ -15,26 +12,26 @@ const AiVaultPanel = lazy(() => import('./ai-vault/panel'))
 const FolderWorkspaceWorktreesPanel = lazy(() => import('./folder-workspace-worktrees-panel'))
 const FolderWorkspacePrChecksPanel = lazy(() => import('./folder-workspace-pr-checks-panel'))
 
-type RightSidebarPanelContentProps = {
-  effectiveTab: ActiveRightSidebarTab
-  rightSidebarOpen: boolean
+type WorkspacePanelContentProps = {
+  effectiveTab: ActiveWorkspacePanelTab
+  workspacePanelOpen: boolean
   isVisible?: boolean
-  source?: RightSidebarPanelSource
+  source?: WorkspacePanelSource
   workspacePanelTabId?: string
   sourceControlView?: SourceControlPanelView
   onSourceControlViewChange?: (view: SourceControlPanelView) => void
 }
 
-export function RightSidebarPanelContent({
+export function WorkspacePanelContent({
   effectiveTab,
-  rightSidebarOpen,
+  workspacePanelOpen,
   isVisible,
-  source = LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
+  source = LOCAL_WORKSPACE_PANEL_SOURCE,
   workspacePanelTabId,
   sourceControlView,
   onSourceControlViewChange
-}: RightSidebarPanelContentProps): React.JSX.Element {
-  const panelVisible = isVisible ?? rightSidebarOpen
+}: WorkspacePanelContentProps): React.JSX.Element {
+  const panelVisible = isVisible ?? workspacePanelOpen
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <Suspense fallback={null}>

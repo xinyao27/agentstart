@@ -112,14 +112,14 @@ export function useSourceControlStatusRefresh(scope: SourceControlInteractionSta
         const folderName = folders[0]
         toast.warning(
           translate(
-            'auto.components.right.sidebar.SourceControl.hugeRepoIgnorePrompt',
+            'auto.components.workspacePanel.SourceControl.hugeRepoIgnorePrompt',
             'This repository has too many active changes. Add "{{value0}}" to .gitignore?',
             { value0: folderName }
           ),
           {
             action: {
               label: translate(
-                'auto.components.right.sidebar.SourceControl.hugeRepoIgnoreAction',
+                'auto.components.workspacePanel.SourceControl.hugeRepoIgnoreAction',
                 'Add to .gitignore'
               ),
               onClick: () => {

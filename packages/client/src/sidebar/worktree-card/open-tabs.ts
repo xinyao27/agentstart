@@ -1,4 +1,5 @@
 import type { Tab, TabGroup, TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
+import { pageViewFromTab } from '~renderer/application-shell/state/workspace-page-views'
 
 export type SidebarOpenTab = {
   tab: Tab
@@ -20,7 +21,8 @@ function appendGroupTabs(
   seenTabIds: Set<string>,
   tabs: readonly Tab[],
   group: TabGroup,
-  activeGroupId: string | undefined
+  activeGroupId: string | undefined,
+  isCurrentWorktree: boolean
 ): void {
   const tabsById = new Map(
     tabs.filter((tab) => tab.groupId === group.id).map((tab) => [tab.id, tab])
@@ -42,7 +44,9 @@ function appendGroupTabs(
     seenTabIds.add(tab.id)
     rows.push({
       tab,
-      isActive: group.id === activeGroupId && group.activeTabId === tab.id
+      // Why: every worktree keeps its own active tab so switching back restores
+      // it, but only the current worktree's tab may render as selected.
+      isActive: isCurrentWorktree && group.id === activeGroupId && group.activeTabId === tab.id
     })
   }
 }
@@ -52,6 +56,7 @@ export function projectSidebarOpenTabs(args: {
   groups: readonly TabGroup[]
   layout: TabGroupLayoutNode | undefined
   activeGroupId: string | undefined
+  isCurrentWorktree: boolean
 }): SidebarOpenTab[] {
   const rows: SidebarOpenTab[] = []
   const seenTabIds = new Set<string>()
@@ -64,7 +69,14 @@ export function projectSidebarOpenTabs(args: {
   for (const groupId of orderedGroupIds) {
     const group = groupsById.get(groupId)
     if (group) {
-      appendGroupTabs(rows, seenTabIds, args.tabs, group, args.activeGroupId)
+      appendGroupTabs(
+        rows,
+        seenTabIds,
+        args.tabs,
+        group,
+        args.activeGroupId,
+        args.isCurrentWorktree
+      )
       groupsById.delete(groupId)
     }
   }
@@ -74,5 +86,8 @@ export function projectSidebarOpenTabs(args: {
       rows.push({ tab, isActive: false })
     }
   }
-  return rows
+  // Why: page tabs are opened from their own navigation entry and already live
+  // on the titlebar strip, so the card lists only the workspace surfaces the user
+  // actually opened in this worktree.
+  return rows.filter((row) => pageViewFromTab(row.tab) === null)
 }

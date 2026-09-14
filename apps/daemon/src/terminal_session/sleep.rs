@@ -119,15 +119,19 @@ impl TerminalSessionAuthority {
                 )
             })
             .ok_or(TerminalSessionError::NotFound)?;
-        let buffer = provider.plain_history().await.ok_or_else(|| {
-            TerminalSessionError::Process("could not read terminal sleep history".to_owned())
-        })?;
-        if buffer.is_empty() {
+        let checkpoint = provider
+            .checkpoint(crate::terminal_scrollback::REPLAY_BYTE_LIMIT)
+            .await
+            .ok_or_else(|| {
+                TerminalSessionError::Process("could not read terminal sleep history".to_owned())
+            })?;
+        if checkpoint.text.is_empty() {
             return Ok(());
         }
         let snapshots = self.snapshots.clone();
         let snapshot_tab = tab_id.clone();
         let snapshot_leaf = leaf_id.clone();
+        let buffer = checkpoint.text;
         let reference = tokio::task::spawn_blocking(move || {
             snapshots.store_blocking(&snapshot_tab, &snapshot_leaf, &buffer)
         })
@@ -137,6 +141,7 @@ impl TerminalSessionAuthority {
         ))?;
         self.workspace_session
             .bind_pty_scrollback(crate::workspace_session::PtyScrollback {
+                grid: checkpoint.grid,
                 host_id,
                 tab_id,
                 leaf_id,

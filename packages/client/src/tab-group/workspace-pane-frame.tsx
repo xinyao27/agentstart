@@ -2,15 +2,13 @@ import type React from 'react'
 import { cn } from '~renderer/ui/class-names'
 
 import { TAB_CONTENT_SURFACE_CLASSES } from '../tab-bar/tab-chrome-classes'
-import { WorkspaceSidebarChromeSpacer } from '../workspace-panel/sidebar-chrome'
 
 type WorkspacePaneFrameProps = {
   worktreeId: string
   stripId: string
   tabBar: React.ReactNode
   trailingActions?: React.ReactNode
-  trailingActionsConnected?: boolean
-  reserveCollapsedSidebarHeaderSpace?: boolean
+  hideHeader?: boolean
   rootClassName?: string
   rootProps?: Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'className'>
   bodyClassName?: string
@@ -27,8 +25,7 @@ export function WorkspacePaneFrame({
   stripId,
   tabBar,
   trailingActions,
-  trailingActionsConnected = false,
-  reserveCollapsedSidebarHeaderSpace = false,
+  hideHeader = false,
   rootClassName,
   rootProps,
   bodyClassName,
@@ -44,39 +41,24 @@ export function WorkspacePaneFrame({
         rootClassName
       )}
     >
-      <div
-        className="bg-background relative h-[var(--titlebar-height)] shrink-0"
-        data-tab-group-strip-id={stripId}
-        data-worktree-id={worktreeId}
-      >
-        {/* Why: inactive tabs reveal this seam while the opaque active tab covers it,
-            visually connecting the selected tab to the workbench below. */}
+      {!hideHeader ? (
+        // Why: the pane-local strip paints no surface of its own either — it
+        // sits on whatever backs the frame, which in the workbench is the
+        // content card the whole frame lives on.
         <div
-          aria-hidden="true"
-          className="bg-border pointer-events-none absolute inset-x-0 bottom-0 h-px"
-        />
-        {/* Why: the trailing titlebar action owns the pane edge without an inset gutter. */}
-        <div className="relative flex h-full items-stretch">
-          {reserveCollapsedSidebarHeaderSpace ? <WorkspaceSidebarChromeSpacer /> : null}
-          <div className="h-full min-w-0 flex-1">{tabBar}</div>
-          {trailingActions ? (
-            <div
-              className={cn(
-                'flex shrink-0 items-center',
-                trailingActionsConnected ? 'gap-0' : 'ml-1.5 gap-0.5'
-              )}
-            >
-              {trailingActions}
-            </div>
-          ) : null}
+          className="relative h-[var(--titlebar-height)] shrink-0"
+          data-tab-group-strip-id={stripId}
+          data-worktree-id={worktreeId}
+        >
+          <WorkspacePaneFrameHeader tabBar={tabBar} trailingActions={trailingActions} />
         </div>
-      </div>
+      ) : null}
 
       <div
         {...bodyProps}
         ref={bodyRef}
-        // Why: tab content and the selected tab share the app canvas so the two
-        // read as one continuous plane across every workspace content type.
+        // Why: tab content is the interior of the floating workspace content
+        // card, so every workspace content type shares the card's canvas.
         className={cn(
           'relative min-h-0 flex-1 overflow-hidden',
           TAB_CONTENT_SURFACE_CLASSES,
@@ -85,6 +67,33 @@ export function WorkspacePaneFrame({
       >
         {children}
       </div>
+    </div>
+  )
+}
+
+export function WorkspacePaneFrameHeader({
+  tabBar,
+  trailingActions,
+  stripId,
+  worktreeId
+}: {
+  tabBar: React.ReactNode
+  trailingActions?: React.ReactNode
+  stripId?: string
+  worktreeId?: string
+}): React.JSX.Element {
+  return (
+    // Why: flex-1 keeps the trailing workspace actions pinned to the right edge
+    // of the shared titlebar while the tab strip itself scrolls.
+    <div
+      className="relative flex h-full min-w-0 flex-1 items-stretch"
+      data-tab-group-strip-id={stripId}
+      data-worktree-id={worktreeId}
+    >
+      <div className="h-full min-w-0 flex-1">{tabBar}</div>
+      {trailingActions ? (
+        <div className="mr-1.5 flex shrink-0 items-center gap-0">{trailingActions}</div>
+      ) : null}
     </div>
   )
 }

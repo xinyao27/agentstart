@@ -130,10 +130,13 @@ export function ResolveButton({
         >
           {isResolved
             ? translate(
-                'auto.components.right.sidebar.checks.panel.content.365254cc1b',
+                'auto.components.workspacePanel.checks.panel.content.365254cc1b',
                 'Unresolve'
               )
-            : translate('auto.components.right.sidebar.checks.panel.content.0c96cd25e5', 'Resolve')}
+            : translate(
+                'auto.components.workspacePanel.checks.panel.content.0c96cd25e5',
+                'Resolve'
+              )}
         </Button>
       )}
     </span>
@@ -198,11 +201,11 @@ export function CommentMoreMenu({
             type="button"
             className="/40 h-auto border-0 p-1"
             aria-label={translate(
-              'auto.components.right.sidebar.checks.panel.content.74c6885b8a',
+              'auto.components.workspacePanel.checks.panel.content.74c6885b8a',
               'More comment actions'
             )}
             title={translate(
-              'auto.components.right.sidebar.checks.panel.content.1abb17aac9',
+              'auto.components.workspacePanel.checks.panel.content.1abb17aac9',
               'More'
             )}
             onClick={(event) => event.stopPropagation()}
@@ -216,7 +219,7 @@ export function CommentMoreMenu({
           <DropdownMenuItem onClick={() => onQueueForAgent?.()}>
             <Sparkles />
             {translate(
-              'auto.components.right.sidebar.checks.panel.content.f8a2c91d04',
+              'auto.components.workspacePanel.checks.panel.content.f8a2c91d04',
               'Queue for agent'
             )}
           </DropdownMenuItem>
@@ -226,7 +229,7 @@ export function CommentMoreMenu({
           <DropdownMenuItem onClick={(event) => openHttpLink(comment.url, { event })}>
             <ExternalLink />
             {translate(
-              'auto.components.right.sidebar.checks.panel.content.d3923d18fe',
+              'auto.components.workspacePanel.checks.panel.content.d3923d18fe',
               'Go to comment'
             )}
           </DropdownMenuItem>
@@ -241,13 +244,13 @@ export function CommentMoreMenu({
             closeOnClick={false}
           >
             <Pencil />
-            {translate('auto.components.right.sidebar.checks.panel.content.03ca88f623', 'Edit')}
+            {translate('auto.components.workspacePanel.checks.panel.content.03ca88f623', 'Edit')}
           </DropdownMenuItem>
         ) : null}
         {hasDelete ? (
           <DropdownMenuItem variant="destructive" onClick={() => void onDelete?.()}>
             <Trash />
-            {translate('auto.components.right.sidebar.checks.panel.content.6cc6eace26', 'Delete')}
+            {translate('auto.components.workspacePanel.checks.panel.content.6cc6eace26', 'Delete')}
           </DropdownMenuItem>
         ) : null}
         {hasMarkAsBot ? (
@@ -259,11 +262,11 @@ export function CommentMoreMenu({
               <Bot />
               {isOverriddenBot
                 ? translate(
-                    'auto.components.right.sidebar.checks.panel.content.b3195cba33',
+                    'auto.components.workspacePanel.checks.panel.content.b3195cba33',
                     'Unmark author as bot'
                   )
                 : translate(
-                    'auto.components.right.sidebar.checks.panel.content.f588b46a6c',
+                    'auto.components.workspacePanel.checks.panel.content.f588b46a6c',
                     'Mark author as bot'
                   )}
             </DropdownMenuItem>
@@ -292,7 +295,7 @@ export function QueueForAgentButton({
   onQueueForAgent: () => void
 }): React.JSX.Element {
   const label = translate(
-    'auto.components.right.sidebar.checks.panel.content.f8a2c91d04',
+    'auto.components.workspacePanel.checks.panel.content.f8a2c91d04',
     'Queue for agent'
   )
   // Why: always-visible row action, but ghost styling keeps it from reading as a card-level CTA.
@@ -313,7 +316,7 @@ export function QueueForAgentButton({
       }}
     >
       <Sparkles className="size-3 shrink-0" />
-      {translate('auto.components.right.sidebar.checks.panel.content.a7f0c7e8d1', 'Queue')}
+      {translate('auto.components.workspacePanel.checks.panel.content.a7f0c7e8d1', 'Queue')}
     </Button>
   )
 }
@@ -330,14 +333,14 @@ export function PRCommentActionBadge({
   if (isQueued) {
     return (
       <span className={presentation.statusBadgeQueued}>
-        {translate('auto.components.right.sidebar.checks.panel.content.b4e8a1c902', 'Queued')}
+        {translate('auto.components.workspacePanel.checks.panel.content.b4e8a1c902', 'Queued')}
       </span>
     )
   }
   if (actionState === 'resolved') {
     return (
       <span className={presentation.statusBadgeResolved}>
-        {translate('auto.components.right.sidebar.checks.panel.content.8987d5a3dd', 'Resolved')}
+        {translate('auto.components.workspacePanel.checks.panel.content.8987d5a3dd', 'Resolved')}
       </span>
     )
   }

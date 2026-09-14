@@ -31,11 +31,11 @@ function FileExplorerFiles({
       <div className="text-muted-foreground flex h-full items-center justify-center px-4 text-center text-[11px]">
         {view.explorerView === 'search'
           ? translate(
-              'auto.components.right.sidebar.Search.98c8435e36',
+              'auto.components.workspacePanel.Search.98c8435e36',
               'Select a workspace to search'
             )
           : translate(
-              'auto.components.right.sidebar.FileExplorer.79b1537dd3',
+              'auto.components.workspacePanel.FileExplorer.79b1537dd3',
               'Select a workspace to browse files'
             )}
       </div>

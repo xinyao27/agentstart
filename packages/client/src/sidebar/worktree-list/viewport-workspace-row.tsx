@@ -3,8 +3,8 @@ import type React from 'react'
 import type { AppState } from '~renderer/store/types'
 import { cn } from '~renderer/ui/class-names'
 
+import type { NavigationProjectedRow } from '../navigation-row-projection'
 import { ProjectWorkspaceRailRow } from '../project-workspace-rail'
-import type { WorkspaceSidebarProjectedRow } from '../workspace-sidebar-row-projection'
 import { getWorkspaceStatus } from '../workspace-status'
 import type { ActiveSurfaceVariant } from '../worktree-card'
 import { getWorktreeLegendRowTransform } from './drag-state'
@@ -29,7 +29,7 @@ type WorkspaceCallbacks = Pick<
 
 export function ViewportWorkspaceRow(
   props: WorkspaceCallbacks & {
-    projected: WorkspaceSidebarProjectedRow
+    projected: NavigationProjectedRow
     index: number
     projectRail?: {
       leftPx: number
@@ -176,7 +176,9 @@ export function ViewportWorkspaceRow(
         data-worktree-virtual-row-key={props.projected.key}
         data-index={props.index}
         className={cn(
-          'relative',
+          // Why: cards paint their own rounded surfaces, so each row keeps a 1px
+          // gutter below it — without it neighbouring cards read as one block.
+          'relative pb-px',
           props.draggingWorktreeId !== null &&
             'transition-transform duration-150 ease-out will-change-transform'
         )}
@@ -263,7 +265,9 @@ export function ViewportWorkspaceRow(
       data-workspace-status-drop-target={workspaceStatus ? '' : undefined}
       data-workspace-status={workspaceStatus ?? undefined}
       className={cn(
-        'relative',
+        // Why: cards paint their own rounded surfaces, so each row keeps a 1px
+        // gutter below it — without it neighbouring cards read as one block.
+        'relative pb-px',
         props.draggingWorktreeId !== null &&
           'transition-transform duration-150 ease-out will-change-transform'
       )}

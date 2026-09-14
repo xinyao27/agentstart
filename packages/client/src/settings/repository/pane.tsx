@@ -7,18 +7,26 @@ import type { AgentStartHooks } from '@agentstart/protocol/worktree/hooks'
 import { useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { translate } from '~renderer/i18n/i18n'
-import { Trash as Trash2 } from '~renderer/icons/hugeicons'
+import {
+  FolderSimple,
+  Gear,
+  ListDashes,
+  Play,
+  Robot,
+  Trash as Trash2,
+  Link
+} from '~renderer/icons/hugeicons'
 import { getRepoKindLabel } from '~renderer/project-catalog/kind-label'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
 import { Label } from '~renderer/ui/label'
-import { Separator } from '~renderer/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
+import { SettingsGroupCards, type SettingsGroup } from '../group-card'
 import { McpConfigSection } from '../mcp-config-section'
-import { matchesSettingsSearch } from '../search'
 import { SearchableSetting } from '../searchable-setting'
+import { getSettingOwnershipSummary } from '../setting-ownership'
 import { SparsePresetSettingsSection } from '../sparse-preset-settings-section'
 import { WorktreeSymlinksSection } from '../worktree-symlinks-section'
 import { RepositoryForkSyncSection } from './fork-sync-section'
@@ -27,7 +35,7 @@ import { RepositoryHostSetupsSection } from './host-setups-section'
 import { RepositoryIconPicker } from './icon-picker'
 import { matchesRepositoryIdentitySearch } from './identity-search'
 import { getProjectRuntimeSessionSummary } from './runtime-session-summary'
-import { getRepositoryPaneSearchEntries } from './search'
+import { getRepositoryPaneSearchEntries, sliceRepositoryPaneSearchEntries } from './search'
 import { RepoSettingsDraftInput } from './settings-draft-input'
 import { getRepositoryIconSectionId } from './settings-targets'
 import { RepositorySourceControlAiSection } from './source-control-ai-section'
@@ -149,233 +157,269 @@ export function RepositoryPane({
     }, 1500)
   }
 
-  const allEntries = getRepositoryPaneSearchEntries(repo, { isLocalWindowsProject })
-  const identityEntryTitles = new Set([
-    translate('auto.components.settings.repository.search.7e1e456a95', 'Display Name'),
-    translate('auto.components.settings.repository.search.b24f00294a', 'Project Icon'),
-    translate(
-      'auto.components.settings.repository.search.keepForkUpToDate',
-      'Keep Fork Up to Date'
-    ),
-    translate('auto.components.settings.repository.search.094adbe930', 'Default Worktree Base'),
-    translate('auto.components.settings.repository.search.443d127b5a', 'Worktree Location'),
-    translate('auto.components.settings.repository.search.projectRuntime', 'Project Runtime'),
-    translate('auto.components.settings.repository.search.c5266c2c9d', 'Remove Project')
-  ])
-  const identityEntries = allEntries.filter((entry) => identityEntryTitles.has(entry.title))
-  const sparsePresetEntries = allEntries.filter((entry) =>
-    ['Sparse Checkout Presets'].includes(entry.title)
+  const {
+    identityEntries,
+    sparsePresetEntries,
+    hooksEntries,
+    mcpEntries,
+    symlinkEntries,
+    sourceControlAiEntries,
+    hostSetupEntries,
+    projectRuntimeEntries
+  } = sliceRepositoryPaneSearchEntries(
+    getRepositoryPaneSearchEntries(repo, { isLocalWindowsProject })
   )
-  const hooksEntries = allEntries.filter((entry) =>
-    ['Setup Script', 'Archive Script', 'Advanced', 'When to Run Setup'].includes(entry.title)
-  )
-  const mcpEntries = allEntries.filter((entry) => entry.title === 'MCP Configs')
-  const symlinkEntries = allEntries.filter((entry) => entry.title === 'Worktree Shared Paths')
-  const sourceControlAiEntries = allEntries.filter((entry) => entry.title === 'Git AI Author')
-  const hostSetupEntries = allEntries.filter((entry) => entry.title === 'Available Hosts')
-  const projectRuntimeEntries = allEntries.filter((entry) => entry.title === 'Project Runtime')
   const removeProjectLabel =
     confirmingRemove === repo.id ? 'Confirm Remove Project' : 'Remove Project'
-
-  const hooksSection =
-    !isFolder && (forceFullPaneForRepoMatch || matchesSettingsSearch(searchQuery, hooksEntries)) ? (
-      <RepositoryHooksSection
-        key="hooks"
-        repo={repo}
-        yamlHooks={yamlHooks}
-        hasHooksFile={hasHooksFile}
-        hooksInspectionReady={hooksInspectionReady}
-        mayNeedUpdate={mayNeedUpdate}
-        copiedTemplate={copiedTemplate}
-        forceVisible={forceFullPaneForRepoMatch}
-        onCopyTemplate={() => void handleCopyTemplate()}
-        onUpdateHookSettings={updateSelectedRepoHookSettings}
-      />
-    ) : null
 
   // Why: Identity (name, icon, base ref) stays at the top so it's the first
   // thing a user sees. Setup commands follow immediately because they're the
   // most-edited surface and should beat MCP/symlinks/sparse-presets.
-  const visibleSections = [
-    forceFullPaneForRepoMatch || matchesSettingsSearch(searchQuery, identityEntries) ? (
-      <section key="identity" className="relative space-y-8">
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-1 pr-12">
-            <h3 className="text-sm font-semibold">
-              {translate('auto.components.settings.RepositoryPane.499a437335', 'Identity')}
-            </h3>
-            <p className="text-muted-foreground text-xs">
-              {translate(
+  const groups: SettingsGroup[] = [
+    {
+      id: 'repo-identity',
+      icon: <FolderSimple aria-hidden="true" />,
+      title: translate('auto.components.settings.RepositoryPane.499a437335', 'Identity'),
+      summary: translate(
+        'auto.components.settings.RepositoryPane.b0a0c14a1c',
+        'Project-specific display details for the sidebar and tabs.'
+      ),
+      searchEntries: identityEntries,
+      content: (
+        <div className="relative">
+          <div className="flex items-start justify-between gap-4">
+            <div className="space-y-1 pr-12">
+              <p className="text-muted-foreground text-xs">
+                {translate('auto.components.settings.RepositoryPane.323debba71', 'Type:')}
+                <span className="text-foreground">{getRepoKindLabel(repo)}</span>
+              </p>
+              {isFolder ? (
+                <p className="text-muted-foreground text-xs">
+                  {translate(
+                    'auto.components.settings.RepositoryPane.ee5a290616',
+                    'Opened as folder. Git features are unavailable for this workspace.'
+                  )}
+                </p>
+              ) : null}
+            </div>
+            <SearchableSetting
+              title={translate(
+                'auto.components.settings.RepositoryPane.0909e5d650',
+                'Remove Project'
+              )}
+              description={translate(
+                'auto.components.settings.RepositoryPane.removeProjectAllHosts',
+                'Remove this project from AgentStart on all configured hosts.'
+              )}
+              keywords={[repo.displayName, 'delete', 'project', 'repository']}
+              className="absolute top-0 right-0 z-10 w-auto max-w-none"
+              forceVisible={forceFullPaneForRepoMatch}
+            >
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      type="button"
+                      variant={confirmingRemove === repo.id ? 'destructive' : 'outline'}
+                      size="icon-sm"
+                      onClick={() => handleRemoveProject(repo.id)}
+                      onBlur={() => setConfirmingRemove(null)}
+                      aria-label={removeProjectLabel}
+                    >
+                      <Trash2 className="size-3.5" />
+                    </Button>
+                  }
+                />
+                <TooltipContent side="top" sideOffset={4}>
+                  {removeProjectLabel}
+                </TooltipContent>
+              </Tooltip>
+            </SearchableSetting>
+          </div>
+
+          <div className="mt-6 space-y-8">
+            <SearchableSetting
+              title={translate(
+                'auto.components.settings.RepositoryPane.c7ef4415de',
+                'Display Name'
+              )}
+              description={translate(
                 'auto.components.settings.RepositoryPane.b0a0c14a1c',
                 'Project-specific display details for the sidebar and tabs.'
               )}
-            </p>
-            <p className="text-muted-foreground text-xs">
-              {translate('auto.components.settings.RepositoryPane.323debba71', 'Type:')}
-              <span className="text-foreground">{getRepoKindLabel(repo)}</span>
-            </p>
-            {isFolder ? (
-              <p className="text-muted-foreground text-xs">
-                {translate(
-                  'auto.components.settings.RepositoryPane.ee5a290616',
-                  'Opened as folder. Git features are unavailable for this workspace.'
-                )}
-              </p>
+              keywords={[repo.displayName, repo.path, 'project name', 'repository name']}
+              className="space-y-2"
+              forceVisible={forceFullPaneForRepoMatch}
+            >
+              <Label htmlFor={`repo-display-name-${repo.id}`} className="text-sm font-semibold">
+                {translate('auto.components.settings.RepositoryPane.c7ef4415de', 'Display Name')}
+              </Label>
+              <RepoSettingsDraftInput
+                id={`repo-display-name-${repo.id}`}
+                repoId={repo.id}
+                storeValue={repo.displayName}
+                onTextChange={(text) => updateSelectedRepo(repo.id, { displayName: text })}
+                className="h-9 text-sm"
+              />
+            </SearchableSetting>
+
+            <SearchableSetting
+              title={translate(
+                'auto.components.settings.RepositoryPane.26fef02bf3',
+                'Project Icon'
+              )}
+              description={translate(
+                'auto.components.settings.RepositoryPane.e641c359de',
+                'Project icon and color used in the sidebar and tabs.'
+              )}
+              keywords={[
+                repo.displayName,
+                repo.path,
+                'project icon',
+                'repository icon',
+                'color',
+                'badge',
+                'emoji',
+                'favicon'
+              ]}
+              className="space-y-2"
+              id={getRepositoryIconSectionId(repo.id)}
+              forceVisible={forceFullPaneForRepoMatch}
+            >
+              <RepositoryIconPicker repo={repo} updateRepo={updateSelectedRepo} />
+            </SearchableSetting>
+
+            {!isFolder ? (
+              <>
+                <RepositoryHostSetupsSection
+                  repo={repo}
+                  forceVisible={forceFullPaneForRepoMatch}
+                  searchQuery={searchQuery}
+                  searchEntries={hostSetupEntries}
+                />
+
+                <RepositoryWindowsRuntimeSection
+                  repoDisplayName={repo.displayName}
+                  project={project}
+                  settings={settings}
+                  isLocalWindowsProject={isLocalWindowsProject}
+                  wslAvailable={wslAvailable}
+                  wslDistros={wslDistros}
+                  wslCapabilitiesLoading={wslCapabilitiesLoading}
+                  runtimeSessionSummary={runtimeSessionSummary}
+                  updateProject={updateProject}
+                  forceVisible={forceFullPaneForRepoMatch}
+                  searchQuery={searchQuery}
+                  searchEntries={projectRuntimeEntries}
+                />
+
+                <RepositoryForkSyncSection
+                  repo={repo}
+                  updateRepo={updateSelectedRepo}
+                  forceVisible={forceFullPaneForRepoMatch}
+                />
+
+                <RepositoryWorktreeDefaultsSection
+                  repo={repo}
+                  settings={settings}
+                  updateRepo={updateSelectedRepo}
+                  forceVisible={forceFullPaneForRepoMatch}
+                />
+              </>
             ) : null}
           </div>
-          <SearchableSetting
-            title={translate(
-              'auto.components.settings.RepositoryPane.0909e5d650',
-              'Remove Project'
-            )}
-            description={translate(
-              'auto.components.settings.RepositoryPane.removeProjectAllHosts',
-              'Remove this project from AgentStart on all configured hosts.'
-            )}
-            keywords={[repo.displayName, 'delete', 'project', 'repository']}
-            className="absolute top-0 right-0 z-10 w-auto max-w-none"
-            forceVisible={forceFullPaneForRepoMatch}
-          >
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <Button
-                    type="button"
-                    variant={confirmingRemove === repo.id ? 'destructive' : 'outline'}
-                    size="icon-sm"
-                    onClick={() => handleRemoveProject(repo.id)}
-                    onBlur={() => setConfirmingRemove(null)}
-                    aria-label={removeProjectLabel}
-                  >
-                    <Trash2 className="size-3.5" />
-                  </Button>
-                }
-              />
-              <TooltipContent side="top" sideOffset={4}>
-                {removeProjectLabel}
-              </TooltipContent>
-            </Tooltip>
-          </SearchableSetting>
         </div>
+      )
+    }
+  ]
 
-        <SearchableSetting
-          title={translate('auto.components.settings.RepositoryPane.c7ef4415de', 'Display Name')}
-          description={translate(
-            'auto.components.settings.RepositoryPane.b0a0c14a1c',
-            'Project-specific display details for the sidebar and tabs.'
-          )}
-          keywords={[repo.displayName, repo.path, 'project name', 'repository name']}
-          className="space-y-2"
-          forceVisible={forceFullPaneForRepoMatch}
-        >
-          <Label htmlFor={`repo-display-name-${repo.id}`} className="text-sm font-semibold">
-            {translate('auto.components.settings.RepositoryPane.c7ef4415de', 'Display Name')}
-          </Label>
-          <RepoSettingsDraftInput
-            id={`repo-display-name-${repo.id}`}
-            repoId={repo.id}
-            storeValue={repo.displayName}
-            onTextChange={(text) => updateSelectedRepo(repo.id, { displayName: text })}
-            className="h-9 text-sm"
+  if (!isFolder) {
+    groups.push(
+      {
+        id: 'repo-hooks',
+        icon: <Play aria-hidden="true" />,
+        title: translate(
+          'auto.components.settings.RepositoryHooksSection.ff082fe7c6',
+          'Worktree Hooks'
+        ),
+        summary: translate(
+          'auto.components.settings.RepositoryHooksSection.8567127a40',
+          'Scripts that run when worktrees are created or archived. Local scripts are stored on this machine; `agentstart.yaml` scripts are shared with your team.'
+        ),
+        searchEntries: hooksEntries,
+        content: (
+          <RepositoryHooksSection
+            repo={repo}
+            yamlHooks={yamlHooks}
+            hasHooksFile={hasHooksFile}
+            hooksInspectionReady={hooksInspectionReady}
+            mayNeedUpdate={mayNeedUpdate}
+            copiedTemplate={copiedTemplate}
+            forceVisible={forceFullPaneForRepoMatch}
+            onCopyTemplate={() => void handleCopyTemplate()}
+            onUpdateHookSettings={updateSelectedRepoHookSettings}
           />
-        </SearchableSetting>
-
-        <SearchableSetting
-          title={translate('auto.components.settings.RepositoryPane.26fef02bf3', 'Project Icon')}
-          description={translate(
-            'auto.components.settings.RepositoryPane.e641c359de',
-            'Project icon and color used in the sidebar and tabs.'
-          )}
-          keywords={[
-            repo.displayName,
-            repo.path,
-            'project icon',
-            'repository icon',
-            'color',
-            'badge',
-            'emoji',
-            'favicon'
-          ]}
-          className="space-y-2"
-          id={getRepositoryIconSectionId(repo.id)}
-          forceVisible={forceFullPaneForRepoMatch}
-        >
-          <RepositoryIconPicker repo={repo} updateRepo={updateSelectedRepo} />
-        </SearchableSetting>
-
-        {!isFolder ? (
-          <>
-            <RepositoryHostSetupsSection
-              repo={repo}
-              forceVisible={forceFullPaneForRepoMatch}
-              searchQuery={searchQuery}
-              searchEntries={hostSetupEntries}
-            />
-
-            <RepositoryWindowsRuntimeSection
-              repoDisplayName={repo.displayName}
-              project={project}
-              settings={settings}
-              isLocalWindowsProject={isLocalWindowsProject}
-              wslAvailable={wslAvailable}
-              wslDistros={wslDistros}
-              wslCapabilitiesLoading={wslCapabilitiesLoading}
-              runtimeSessionSummary={runtimeSessionSummary}
-              updateProject={updateProject}
-              forceVisible={forceFullPaneForRepoMatch}
-              searchQuery={searchQuery}
-              searchEntries={projectRuntimeEntries}
-            />
-
-            <RepositoryForkSyncSection
-              repo={repo}
-              updateRepo={updateSelectedRepo}
-              forceVisible={forceFullPaneForRepoMatch}
-            />
-
-            <RepositoryWorktreeDefaultsSection
-              repo={repo}
-              settings={settings}
-              updateRepo={updateSelectedRepo}
-              forceVisible={forceFullPaneForRepoMatch}
-            />
-          </>
-        ) : null}
-      </section>
-    ) : null,
-    hooksSection,
-    !isFolder &&
-    (forceFullPaneForRepoMatch || matchesSettingsSearch(searchQuery, sourceControlAiEntries)) ? (
-      <RepositorySourceControlAiSection
-        key="source-control-ai"
-        repo={repo}
-        updateRepo={updateSelectedRepo}
-      />
-    ) : null,
-    // Why: Repo.connectionId is dead — nothing sets it since remote hosts were
-    // removed (#63) — symlinks are always local now, so the SSH exclusion
-    // that used to gate this section never fires.
-    !isFolder &&
-    (forceFullPaneForRepoMatch || matchesSettingsSearch(searchQuery, symlinkEntries)) ? (
-      <WorktreeSymlinksSection key="symlinks" repo={repo} updateRepo={updateSelectedRepo} />
-    ) : null,
-    !isFolder &&
-    (forceFullPaneForRepoMatch || matchesSettingsSearch(searchQuery, sparsePresetEntries)) ? (
-      <SparsePresetSettingsSection key="sparse-presets" repoId={repo.id} />
-    ) : null,
-    !isFolder && (forceFullPaneForRepoMatch || matchesSettingsSearch(searchQuery, mcpEntries)) ? (
-      <McpConfigSection key="mcp-configs" repo={repo} />
-    ) : null
-  ].filter(Boolean)
+        )
+      },
+      {
+        id: 'repo-source-control-ai',
+        icon: <Robot aria-hidden="true" />,
+        title: translate(
+          'auto.components.settings.RepositorySourceControlAiSection.71b003b62b',
+          'Source Control AI'
+        ),
+        summary: getSettingOwnershipSummary('repositorySourceControlAi').description,
+        searchEntries: sourceControlAiEntries,
+        content: <RepositorySourceControlAiSection repo={repo} updateRepo={updateSelectedRepo} />
+      },
+      // Why: Repo.connectionId is dead — nothing sets it since remote hosts were
+      // removed (#63) — symlinks are always local now, so the SSH exclusion
+      // that used to gate this section never fires.
+      {
+        id: 'repo-symlinks',
+        icon: <Link aria-hidden="true" />,
+        title: translate(
+          'auto.components.settings.WorktreeSymlinksSection.4755f120b6',
+          'Worktree Shared Paths'
+        ),
+        summary: translate(
+          'auto.components.settings.WorktreeSymlinksSection.b07ef5a8b6',
+          'Paths to materialize from the primary checkout into newly created worktrees.'
+        ),
+        searchEntries: symlinkEntries,
+        content: <WorktreeSymlinksSection repo={repo} updateRepo={updateSelectedRepo} />
+      },
+      {
+        id: 'repo-sparse-presets',
+        icon: <ListDashes aria-hidden="true" />,
+        title: translate(
+          'auto.components.settings.SparsePresetSettingsSection.388513be2d',
+          'Sparse Checkout Presets'
+        ),
+        summary: translate(
+          'auto.components.settings.SparsePresetSettingsSection.17f8c4ce10',
+          'Manage saved directory sets for sparse worktree creation.'
+        ),
+        searchEntries: sparsePresetEntries,
+        content: <SparsePresetSettingsSection repoId={repo.id} />
+      },
+      {
+        id: 'repo-mcp-configs',
+        icon: <Gear aria-hidden="true" />,
+        title: translate('auto.components.settings.McpConfigSection.55eea3ef47', 'MCP Configs'),
+        summary: translate(
+          'auto.components.settings.McpConfigSection.96f5609b04',
+          'Inspect MCP server definitions that agents can use while working in this repo.'
+        ),
+        searchEntries: mcpEntries,
+        content: <McpConfigSection repo={repo} />
+      }
+    )
+  }
 
   return (
-    <div ref={setRepositoryPaneRootRef} className="space-y-8">
-      {visibleSections.map((section, index) => (
-        <div key={index} className="space-y-8">
-          {index > 0 ? <Separator /> : null}
-          {section}
-        </div>
-      ))}
+    <div ref={setRepositoryPaneRootRef}>
+      <SettingsGroupCards groups={groups} defaultOpenId="repo-identity" />
     </div>
   )
 }

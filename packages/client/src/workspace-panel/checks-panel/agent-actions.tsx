@@ -51,11 +51,11 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     setAgentComposerState({
       actionId: 'resolveConflicts',
       title: translate(
-        'auto.components.right.sidebar.ChecksPanel.4ede779461',
+        'auto.components.workspacePanel.ChecksPanel.4ede779461',
         'Resolve Review Conflicts With AI'
       ),
       description: translate(
-        'auto.components.right.sidebar.ChecksPanel.abf59262fb',
+        'auto.components.workspacePanel.ChecksPanel.abf59262fb',
         'Review and edit the full command input before starting an agent.'
       ),
       prompt: buildResolvePullRequestConflictsPrompt({
@@ -83,7 +83,7 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     if (selectedGroups.length === 0) {
       toast.message(
         translate(
-          'auto.components.right.sidebar.ChecksPanel.f316a8ca2b',
+          'auto.components.workspacePanel.ChecksPanel.f316a8ca2b',
           'No unresolved comments selected.'
         )
       )
@@ -92,12 +92,12 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     setAgentComposerState({
       actionId: 'resolveComments',
       title: translate(
-        'auto.components.right.sidebar.ChecksPanel.d00ebdc402',
+        'auto.components.workspacePanel.ChecksPanel.d00ebdc402',
         'Resolve {{value0}} Comments With AI',
         { value0: 'PR' }
       ),
       description: translate(
-        'auto.components.right.sidebar.ChecksPanel.ed3f79c031',
+        'auto.components.workspacePanel.ChecksPanel.ed3f79c031',
         'Review the prompt before starting an agent. Selected threads are marked resolved after launch.'
       ),
       prompt: buildPRCommentsResolutionPrompt({
@@ -144,7 +144,7 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     if (resolution.selectedThreadIds.length === 0) {
       toast.success(
         translate(
-          'auto.components.right.sidebar.ChecksPanel.3c3ad3a1d2',
+          'auto.components.workspacePanel.ChecksPanel.3c3ad3a1d2',
           'Started the agent. No selected comments can be marked resolved on the host.'
         )
       )
@@ -178,7 +178,7 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     if (failed > 0) {
       toast.error(
         translate(
-          'auto.components.right.sidebar.ChecksPanel.f273f2271c',
+          'auto.components.workspacePanel.ChecksPanel.f273f2271c',
           'Started the agent. Marked {{value0}} resolved, skipped {{value1}}, failed {{value2}}.',
           { value0: resolved, value1: skipped, value2: failed }
         )
@@ -187,7 +187,7 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     }
     toast.success(
       translate(
-        'auto.components.right.sidebar.ChecksPanel.aa95b81a3a',
+        'auto.components.workspacePanel.ChecksPanel.aa95b81a3a',
         'Started the agent. Marked {{value0}} resolved, skipped {{value1}}, failed {{value2}}.',
         { value0: resolved, value1: skipped, value2: failed }
       )
@@ -208,7 +208,7 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
     if (broken.length === 0) {
       toast.message(
         translate(
-          'auto.components.right.sidebar.ChecksPanel.5594400d73',
+          'auto.components.workspacePanel.ChecksPanel.5594400d73',
           'No broken checks to fix.'
         )
       )
@@ -265,7 +265,7 @@ export function useChecksPanelAgentActions(context: useChecksPanelCommentActions
       if (started) {
         toast.success(
           translate(
-            'auto.components.right.sidebar.ChecksPanel.2ef90c9819',
+            'auto.components.workspacePanel.ChecksPanel.2ef90c9819',
             'Started an AI agent for the broken checks.'
           )
         )

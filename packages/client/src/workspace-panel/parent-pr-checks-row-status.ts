@@ -126,12 +126,12 @@ export function getRowSummary(
   if (detailNames.length > 0 && (status === 'failing' || status === 'pending')) {
     return status === 'failing'
       ? translate(
-          'auto.components.rightSidebar.parentPrChecks.rowSummary.failingCount',
+          'auto.components.workspacePanel.parentPrChecks.rowSummary.failingCount',
           '{{value0}} failing',
           { value0: detailNames.length }
         )
       : translate(
-          'auto.components.rightSidebar.parentPrChecks.rowSummary.pendingCount',
+          'auto.components.workspacePanel.parentPrChecks.rowSummary.pendingCount',
           '{{value0}} pending',
           { value0: detailNames.length }
         )
@@ -139,79 +139,79 @@ export function getRowSummary(
   switch (status) {
     case 'failing':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.checksFailing',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.checksFailing',
         'Checks failing'
       )
     case 'conflict':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.mergeConflicts',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.mergeConflicts',
         'Merge conflicts'
       )
     case 'pending':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.checksPending',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.checksPending',
         'Checks pending'
       )
     case 'success':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.checksPassing',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.checksPassing',
         'Checks passing'
       )
     case 'merged':
-      return translate('auto.components.rightSidebar.parentPrChecks.rowSummary.merged', 'Merged')
+      return translate('auto.components.workspacePanel.parentPrChecks.rowSummary.merged', 'Merged')
     case 'closed':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.closedWithoutMerge',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.closedWithoutMerge',
         'Closed without merge'
       )
     case 'draft':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.draftReview',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.draftReview',
         'Draft review'
       )
     case 'neutral':
       return review
         ? translate(
-            'auto.components.rightSidebar.parentPrChecks.rowSummary.noCheckSignal',
+            'auto.components.workspacePanel.parentPrChecks.rowSummary.noCheckSignal',
             'No check signal'
           )
         : translate(
-            'auto.components.rightSidebar.parentPrChecks.rowSummary.reviewUnavailable',
+            'auto.components.workspacePanel.parentPrChecks.rowSummary.reviewUnavailable',
             'Review status unavailable'
           )
     case 'noReview':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.noPrLinked',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.noPrLinked',
         'No PR linked'
       )
     case 'linkedDetailsUnavailable':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.detailsUnavailable',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.detailsUnavailable',
         'Review details unavailable'
       )
     case 'refreshError':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.refreshFailed',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.refreshFailed',
         'Refresh failed'
       )
     case 'loading':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.checking',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.checking',
         'Checking review status…'
       )
     case 'notFetched':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.notFetched',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.notFetched',
         'Status not fetched yet'
       )
     case 'unavailable':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.reviewUnavailable',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.reviewUnavailable',
         'Review status unavailable'
       )
     case 'unsupported':
       return translate(
-        'auto.components.rightSidebar.parentPrChecks.rowSummary.unavailableWorktree',
+        'auto.components.workspacePanel.parentPrChecks.rowSummary.unavailableWorktree',
         'Unavailable for this worktree'
       )
   }

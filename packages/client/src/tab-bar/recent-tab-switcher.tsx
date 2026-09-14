@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { isWorkspaceBodyVisible } from '~renderer/application-shell/state/visible-surface'
 import { translate } from '~renderer/i18n/i18n'
 import {
   FileText,
@@ -67,7 +68,7 @@ export default function RecentTabSwitcher(): React.JSX.Element | null {
 
   const openOrAdvance = useEventCallback((direction: 1 | -1): void => {
     const store = useAppStore.getState()
-    if (store.activeView !== 'terminal' || !store.activeWorktreeId) {
+    if (!isWorkspaceBodyVisible(store) || !store.activeWorktreeId) {
       return
     }
 
@@ -123,7 +124,11 @@ export default function RecentTabSwitcher(): React.JSX.Element | null {
       }
     }
     const onKeyUp = (event: KeyboardEvent): void => {
-      if (!switcherRef.current || !isRecentTabSwitcherCommitRelease(event)) {
+      const store = useAppStore.getState()
+      if (
+        !switcherRef.current ||
+        !isRecentTabSwitcherCommitRelease(event, getShortcutPlatform(), store.keybindings)
+      ) {
         return
       }
       consumeKeyboardEvent(event)

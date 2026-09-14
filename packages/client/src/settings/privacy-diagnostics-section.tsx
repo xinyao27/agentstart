@@ -7,7 +7,6 @@ import { useEventCallback } from '~renderer/react/use-event-callback'
 import { shellClient } from '~renderer/runtime/shell-client'
 
 import { Label } from '../ui/label'
-import { Separator } from '../ui/separator'
 import {
   getDiagnosticBundleDescription,
   PrivacyDiagnosticBundleControls
@@ -211,7 +210,6 @@ export function PrivacyDiagnosticsSection(): React.JSX.Element {
       {status?.disabledReason ? (
         <DiagnosticsDisabledStateNote reason={status.disabledReason} />
       ) : null}
-      <Separator />
       <PrivacyDiagnosticsRow
         icon={<FileText className="size-4" />}
         title={translate(

@@ -10,11 +10,8 @@ import { useAppStore } from '~renderer/store/state'
 
 import { getSidebarRuntimeLabel } from '../host-navigation'
 import { LEGEND_LIST_SCROLL_AREA_PROPS } from '../list-scroll-area'
-import {
-  getWorkspaceSidebarRowKey,
-  type WorkspaceSidebarProjectedRow
-} from '../workspace-sidebar-row-projection'
-import { areWorkspaceSidebarRowsEqual, getLegendListRowType } from './row-model'
+import { getNavigationRowKey, type NavigationProjectedRow } from '../navigation-row-projection'
+import { areWorkspacePanelRowsEqual, getLegendListRowType } from './row-model'
 import { useActiveRow } from './use-active-row'
 import { useFolderPathStatus } from './use-folder-path-status'
 import { useHeaderModel } from './use-header-model'
@@ -97,7 +94,7 @@ export function LegendWorktreeViewport({
   const settings = useAppStore((state) => state.settings)
   const {
     renderRows,
-    workspaceRows: workspaceSidebarRows,
+    workspaceRows: navigationRows,
     projectWorkspaceRails,
     folderBackedProjectGroupIds,
     orderedHostIds,
@@ -148,7 +145,7 @@ export function LegendWorktreeViewport({
       activeWorktreeId,
       currentWorktreeId
     },
-    workspaceRows: workspaceSidebarRows,
+    workspaceRows: navigationRows,
     primaryActiveRowKey: activeRow.primaryRowKey,
     scrollRef,
     markScrollMovement
@@ -215,7 +212,7 @@ export function LegendWorktreeViewport({
     settings,
     keybindings,
     renderRows,
-    workspaceRows: workspaceSidebarRows,
+    workspaceRows: navigationRows,
     legendListRef,
     scrollRef,
     clearWorktreeDrag,
@@ -249,14 +246,14 @@ export function LegendWorktreeViewport({
           y: worktreeDragState.dropIndicatorY
         }}
       />
-      <LegendList<WorkspaceSidebarProjectedRow>
+      <LegendList<NavigationProjectedRow>
         {...LEGEND_LIST_SCROLL_AREA_PROPS}
         ref={legendListRef}
         refScrollView={setLegendListScrollRootRef}
-        data={workspaceSidebarRows}
-        keyExtractor={getWorkspaceSidebarRowKey}
+        data={navigationRows}
+        keyExtractor={getNavigationRowKey}
         getItemType={getLegendListRowType}
-        itemsAreEqual={areWorkspaceSidebarRowsEqual}
+        itemsAreEqual={areWorkspacePanelRowsEqual}
         initialScrollOffset={scrollOffset}
         maintainVisibleContentPosition={false}
         stickyHeaderIndices={stickyHeaderIndexes}
@@ -264,7 +261,7 @@ export function LegendWorktreeViewport({
         renderItem={({
           item: projected,
           index
-        }: LegendListRenderItemProps<WorkspaceSidebarProjectedRow>) =>
+        }: LegendListRenderItemProps<NavigationProjectedRow>) =>
           projected.row.type === 'host-header' || projected.row.type === 'header' ? (
             <ViewportHeaderRow
               projected={projected}

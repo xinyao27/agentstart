@@ -1,11 +1,8 @@
-import {
-  estimateWorkspaceSidebarRowSize,
-  type WorkspaceSidebarProjectedRow
-} from './workspace-sidebar-row-projection'
+import { estimateNavigationRowSize, type NavigationProjectedRow } from './navigation-row-projection'
 import type { RenderRow } from './worktree-list/virtual-rows'
 
 function getEstimatedWorkspaceRowStarts(
-  rows: readonly WorkspaceSidebarProjectedRow[],
+  rows: readonly NavigationProjectedRow[],
   localRows: readonly RenderRow[],
   firstLocalHeaderIndex: number
 ): number[] {
@@ -13,7 +10,7 @@ function getEstimatedWorkspaceRowStarts(
   let offset = 0
   for (let index = 0; index < rows.length; index++) {
     starts[index] = offset
-    offset += estimateWorkspaceSidebarRowSize({
+    offset += estimateNavigationRowSize({
       rows,
       localRows,
       index,
@@ -25,14 +22,11 @@ function getEstimatedWorkspaceRowStarts(
   return starts
 }
 
-function localRowAt(row: WorkspaceSidebarProjectedRow | undefined): RenderRow | undefined {
+function localRowAt(row: NavigationProjectedRow | undefined): RenderRow | undefined {
   return row?.kind === 'local' ? row.row : undefined
 }
 
-function findRepoHeaderRowIndex(
-  rows: readonly WorkspaceSidebarProjectedRow[],
-  repoId: string
-): number {
+function findRepoHeaderRowIndex(rows: readonly NavigationProjectedRow[], repoId: string): number {
   return rows.findIndex((projected) => {
     const row = localRowAt(projected)
     return row?.type === 'header' && row.repo?.id === repoId
@@ -40,7 +34,7 @@ function findRepoHeaderRowIndex(
 }
 
 function findProjectGroupHeaderRowIndex(
-  rows: readonly WorkspaceSidebarProjectedRow[],
+  rows: readonly NavigationProjectedRow[],
   groupId: string
 ): number {
   return rows.findIndex((projected) => {
@@ -55,7 +49,7 @@ function findProjectGroupHeaderRowIndex(
 }
 
 function findNextHeaderRowIndex(
-  rows: readonly WorkspaceSidebarProjectedRow[],
+  rows: readonly NavigationProjectedRow[],
   startIndex: number
 ): number {
   for (let index = startIndex; index < rows.length; index++) {
@@ -68,7 +62,7 @@ function findNextHeaderRowIndex(
 }
 
 function findProjectGroupSectionEndIndex(
-  rows: readonly WorkspaceSidebarProjectedRow[],
+  rows: readonly NavigationProjectedRow[],
   startIndex: number,
   depth: number
 ): number {
@@ -92,7 +86,7 @@ function findProjectGroupSectionEndIndex(
 }
 
 export function getRepoHeaderSectionEndByRepoId(args: {
-  rows: readonly WorkspaceSidebarProjectedRow[]
+  rows: readonly NavigationProjectedRow[]
   localRows: readonly RenderRow[]
   firstLocalHeaderIndex: number
   sidebarRepoHeaderIdsByBucket: ReadonlyMap<string, readonly string[]>
@@ -126,7 +120,7 @@ export function getRepoHeaderSectionEndByRepoId(args: {
 }
 
 export function getProjectGroupHeaderSectionEndByGroupId(args: {
-  rows: readonly WorkspaceSidebarProjectedRow[]
+  rows: readonly NavigationProjectedRow[]
   localRows: readonly RenderRow[]
   firstLocalHeaderIndex: number
   sidebarProjectGroupHeaderIdsByBucket: ReadonlyMap<string, readonly string[]>

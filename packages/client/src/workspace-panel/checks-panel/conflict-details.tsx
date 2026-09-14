@@ -33,10 +33,10 @@ export function ConflictingFilesSection({ pr }: { pr: ConflictReview }): React.J
     <div className="border-border border-b px-3 py-3">
       <div className="text-muted-foreground text-[11px]">
         {pr.conflictSummary!.commitsBehind}{' '}
-        {translate('auto.components.right.sidebar.checks.panel.content.6fa7f8723f', 'commit')}
+        {translate('auto.components.workspacePanel.checks.panel.content.6fa7f8723f', 'commit')}
         {pr.conflictSummary!.commitsBehind === 1 ? '' : 's'}{' '}
         {translate(
-          'auto.components.right.sidebar.checks.panel.content.3916814392',
+          'auto.components.workspacePanel.checks.panel.content.3916814392',
           'behind (base commit:'
         )}{' '}
         <span className="font-mono text-[10px]">{pr.conflictSummary!.baseCommit}</span>)
@@ -45,7 +45,7 @@ export function ConflictingFilesSection({ pr }: { pr: ConflictReview }): React.J
         <Files className="text-muted-foreground size-3.5 shrink-0" />
         <div className="text-muted-foreground text-[11px]">
           {translate(
-            'auto.components.right.sidebar.checks.panel.content.0975eeaaef',
+            'auto.components.workspacePanel.checks.panel.content.0975eeaaef',
             'Conflicting files'
           )}
         </div>
@@ -76,17 +76,17 @@ export function MergeConflictNotice({
   }
   const locallyClean = pr.conflictSummary?.localMergeState === 'clean'
   let noticeBody = translate(
-    'auto.components.right.sidebar.checks.panel.content.ae8a04ef17',
+    'auto.components.workspacePanel.checks.panel.content.ae8a04ef17',
     'Conflict file details are unavailable'
   )
   if (isRefreshingConflictDetails) {
     noticeBody = translate(
-      'auto.components.right.sidebar.checks.panel.content.73d0675356',
+      'auto.components.workspacePanel.checks.panel.content.73d0675356',
       'Refreshing conflict details…'
     )
   } else if (locallyClean) {
     noticeBody = translate(
-      'auto.components.right.sidebar.checks.panel.content.f5bc5c4cf1',
+      'auto.components.workspacePanel.checks.panel.content.f5bc5c4cf1',
       'The hosting provider reports conflicts, but local Git did not reproduce them. Refresh the review or push the branch to recalculate mergeability.'
     )
   }
@@ -96,7 +96,7 @@ export function MergeConflictNotice({
     <div className="border-border border-t px-3 py-3">
       <div className="text-foreground text-[11px] font-medium">
         {translate(
-          'auto.components.right.sidebar.checks.panel.content.87cd07c69a',
+          'auto.components.workspacePanel.checks.panel.content.87cd07c69a',
           'This branch has conflicts that must be resolved'
         )}
       </div>
@@ -153,7 +153,7 @@ function MergeabilityRecalculationCommandBox({
       <div className="flex items-center justify-between gap-2">
         <div className="text-muted-foreground text-[10px] font-medium">
           {translate(
-            'auto.components.right.sidebar.checks.panel.content.5bc9bda2af',
+            'auto.components.workspacePanel.checks.panel.content.5bc9bda2af',
             'Run from this worktree'
           )}
         </div>
@@ -164,15 +164,15 @@ function MergeabilityRecalculationCommandBox({
           size="xs"
           onClick={copyCommands}
           aria-label={translate(
-            'auto.components.right.sidebar.checks.panel.content.e87fb3d929',
+            'auto.components.workspacePanel.checks.panel.content.e87fb3d929',
             'Copy mergeability refresh commands'
           )}
         >
           {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
           {copied
-            ? translate('auto.components.right.sidebar.checks.panel.content.1e53e45072', 'Copied')
+            ? translate('auto.components.workspacePanel.checks.panel.content.1e53e45072', 'Copied')
             : translate(
-                'auto.components.right.sidebar.checks.panel.content.084c516efb',
+                'auto.components.workspacePanel.checks.panel.content.084c516efb',
                 'Copy commands'
               )}
         </Button>

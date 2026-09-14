@@ -16,7 +16,6 @@ import { shellClient } from '~renderer/runtime/shell-client'
 import { useAppStore } from '~renderer/store/state'
 import { cn } from '~renderer/ui/class-names'
 
-import { MiniMaxIcon } from '../status-bar/icons'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -155,20 +154,8 @@ export function MiniMaxAccountsSection({
   }
 
   return (
-    <section id="accounts-minimax" className="scroll-mt-6 space-y-4">
-      <div className="flex items-start justify-between gap-3">
-        <div className="space-y-1">
-          <h3 className="flex items-center gap-2 text-sm font-semibold">
-            <MiniMaxIcon size={16} />
-            {translate('auto.components.settings.AccountsPane.5d63bbfbec', 'MiniMax')}
-          </h3>
-          <p className="text-muted-foreground text-xs">
-            {translate(
-              'auto.components.settings.AccountsPane.15e831350e',
-              'Configure MiniMax usage tracking from platform.minimax.io.'
-            )}
-          </p>
-        </div>
+    <div id="accounts-minimax" className="scroll-mt-6 space-y-4">
+      <div className="pb-2">
         <a
           href={MINIMAX_CONSOLE_URL}
           target="_blank"
@@ -368,6 +355,6 @@ export function MiniMaxAccountsSection({
           />
         </SearchableSetting>
       </div>
-    </section>
+    </div>
   )
 }

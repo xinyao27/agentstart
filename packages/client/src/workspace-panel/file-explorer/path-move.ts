@@ -7,7 +7,7 @@ import { renameRuntimePath } from '~renderer/runtime/file-client'
 import { useAppStore } from '~renderer/store/state'
 
 import { remapOpenEditorTabsForPathChange } from '../remap-open-editor-tabs-for-path-change'
-import { getRightSidebarWorktreeRuntimeSettings } from './runtime-owner'
+import { getWorkspacePanelWorktreeRuntimeSettings } from './runtime-owner'
 import { commitFileExplorerOp } from './undo-redo'
 
 export function useFileExplorerPathMove({
@@ -60,7 +60,7 @@ export function useFileExplorerPathMove({
       try {
         const connectionId = getConnectionId(activeWorktreeId) ?? undefined
         const fileContext = {
-          settings: getRightSidebarWorktreeRuntimeSettings(activeWorktreeId),
+          settings: getWorkspacePanelWorktreeRuntimeSettings(activeWorktreeId),
           worktreeId: activeWorktreeId,
           worktreePath,
           connectionId

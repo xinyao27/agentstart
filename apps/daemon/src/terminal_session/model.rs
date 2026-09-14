@@ -29,6 +29,25 @@ pub(crate) enum TerminalStartupCommandDelivery {
     ShellReady,
 }
 
+/// The grid a recorded terminal history was laid out at. Restoring against a
+/// grid of another size is what turns recorded rows into re-wrapped debris, so
+/// every replayable payload carries the size it was produced for.
+#[derive(Clone, Copy, Eq, PartialEq)]
+pub(crate) struct TerminalScrollbackGrid {
+    pub(crate) cols: u16,
+    pub(crate) rows: u16,
+}
+
+/// Terminal history as replayed content: VT text, plus the grid it was recorded
+/// at when it came from the daemon's own screen model. `grid` stays `None` for
+/// plain-text history, which carries no layout information and must be replayed
+/// at whatever size the pane happens to have.
+#[derive(Clone)]
+pub(crate) struct TerminalScrollbackHistory {
+    pub(crate) grid: Option<TerminalScrollbackGrid>,
+    pub(crate) text: String,
+}
+
 #[derive(Clone)]
 pub(crate) struct TerminalCreateRequest {
     pub(crate) activate: bool,

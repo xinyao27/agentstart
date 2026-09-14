@@ -1,9 +1,9 @@
 import type {
-  ActiveRightSidebarTab,
-  RightSidebarExplorerView
+  ActiveWorkspacePanelTab,
+  WorkspacePanelExplorerView
 } from '@agentstart/protocol/settings/ui-state'
 
-import type { ActivityBarPosition, EditorViewMode, MarkdownViewMode } from './file-model'
+import type { EditorViewMode, MarkdownViewMode } from './file-model'
 
 export type EditorAppearanceSlice = {
   // Why: #300 originally kept EditorPanel mounted while hidden so unsaved
@@ -40,26 +40,22 @@ export type EditorAppearanceSlice = {
   markdownTocPanelWidth: number
   setMarkdownTocPanelWidth: (width: number) => void
 
-  // Right sidebar
-  rightSidebarOpen: boolean
-  rightSidebarWidth: number
-  rightSidebarTab: ActiveRightSidebarTab
-  rightSidebarExplorerView: RightSidebarExplorerView
-  rightSidebarRouteRequestId: number
-  rightSidebarTabByWorktree: Record<string, ActiveRightSidebarTab>
-  rightSidebarExplorerViewByWorktree: Record<string, RightSidebarExplorerView>
-  activityBarPosition: ActivityBarPosition
-  toggleRightSidebar: () => void
-  setRightSidebarOpen: (open: boolean) => void
-  setRightSidebarWidth: (width: number) => void
-  setRightSidebarTab: (tab: ActiveRightSidebarTab) => void
-  setRightSidebarExplorerView: (view: RightSidebarExplorerView) => void
-  showRightSidebarFiles: () => void
-  showRightSidebarSearch: (payload?: {
+  // Workspace tool panel state
+  workspacePanelOpen: boolean
+  workspacePanelTab: ActiveWorkspacePanelTab
+  workspacePanelExplorerView: WorkspacePanelExplorerView
+  workspacePanelRouteRequestId: number
+  workspacePanelTabByWorktree: Record<string, ActiveWorkspacePanelTab>
+  workspacePanelExplorerViewByWorktree: Record<string, WorkspacePanelExplorerView>
+  toggleWorkspacePanel: () => void
+  setWorkspacePanelOpen: (open: boolean) => void
+  setWorkspacePanelTab: (tab: ActiveWorkspacePanelTab) => void
+  setWorkspacePanelExplorerView: (view: WorkspacePanelExplorerView) => void
+  showWorkspacePanelFiles: () => void
+  showWorkspacePanelSearch: (payload?: {
     query?: string | null
     includePattern?: string | null
   }) => void
-  setActivityBarPosition: (position: ActivityBarPosition) => void
 
   // File explorer state
   expandedDirs: Record<string, Set<string>> // worktreeId -> set of expanded dir paths

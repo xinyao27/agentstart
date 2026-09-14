@@ -7,6 +7,7 @@ import type { TabDragItemData } from '../tab-group/use-tab-drag-split'
 import BrowserTab from './browser-tab'
 import EditorFileTab from './editor-file-tab'
 import { GitGraphTab } from './git-graph-tab'
+import { WorkspacePageStripTab } from './page-tab'
 import SortableTab from './sortable-tab'
 import type { TabBarProps } from './tab-bar-types'
 import { getTabStripDragLabel, useTabStripModel } from './use-tab-strip-model'
@@ -64,6 +65,21 @@ export function TabStrip(props: TabBarProps): React.JSX.Element {
           }
           const hasTabsToRight = index < model.orderedItems.length - 1
           const dropIndicator = model.dropIndicatorByVisibleId.get(item.id) ?? null
+
+          // Why: page tabs render inside the strip queue and are drag
+          // participants like any other tab, so they take the same drag payload
+          // and drop indicator the workspace tabs do.
+          if (item.type === 'page') {
+            return (
+              <WorkspacePageStripTab
+                key={item.id}
+                view={item.data}
+                active={item.id === model.activeVisibleTabId}
+                dragData={dragData}
+                dropIndicator={dropIndicator}
+              />
+            )
+          }
 
           if (item.type === 'terminal') {
             const terminalTab = {

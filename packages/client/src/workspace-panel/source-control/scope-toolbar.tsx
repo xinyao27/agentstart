@@ -45,7 +45,7 @@ export function SourceControlScopeToolbarActions({
   return (
     <SourceControlHeaderIconButton
       icon={GitDiff}
-      label={translate('auto.components.right.sidebar.SourceControl.48db37cca9', 'View all')}
+      label={translate('auto.components.workspacePanel.SourceControl.48db37cca9', 'View all')}
       onClick={() => {
         if (activeScope.id === 'branch') {
           if (branchSummary?.status !== 'ready') {

@@ -1,3 +1,4 @@
+import { isWorkspaceBodyVisible } from '~renderer/application-shell/state/visible-surface'
 import { focusRuntimeTerminalSurface } from '~renderer/runtime/sync-runtime-graph'
 import { useAppStore } from '~renderer/store/state'
 import { focusTerminalTabSurface } from '~renderer/tab-bar/focus-terminal-surface'
@@ -13,7 +14,7 @@ function resolveCreatedWorkspaceTerminalTabId(
   }
   if (
     state.activeWorktreeId !== worktreeId ||
-    state.activeView !== 'terminal' ||
+    !isWorkspaceBodyVisible(state) ||
     state.activeTabType !== 'terminal'
   ) {
     return null
@@ -34,7 +35,7 @@ export function queueNewWorkspaceTerminalFocus(
     const state = useAppStore.getState()
     if (
       state.activeWorktreeId !== worktreeId ||
-      state.activeView !== 'terminal' ||
+      !isWorkspaceBodyVisible(state) ||
       state.activeTabType !== 'terminal' ||
       state.activeTabId !== tabId
     ) {

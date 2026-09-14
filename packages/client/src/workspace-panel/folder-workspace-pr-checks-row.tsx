@@ -42,17 +42,17 @@ export function FolderWorkspacePrChecksRow({
   const reviewProviderLabel = 'PR'
   const toggleDetailsLabel = expanded
     ? translate(
-        'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.hideDetails',
+        'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.hideDetails',
         'Hide {{value0}} PR check details',
         { value0: row.worktree.displayName }
       )
     : translate(
-        'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.showDetails',
+        'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.showDetails',
         'Show {{value0}} PR check details',
         { value0: row.worktree.displayName }
       )
   const openReviewLabel = translate(
-    'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.openReview',
+    'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.openReview',
     'Open {{value0}} link',
     { value0: reviewProviderLabel }
   )

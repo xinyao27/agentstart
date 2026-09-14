@@ -62,11 +62,11 @@ export function SourceControlCommitActions({
 }): React.JSX.Element {
   const PrimaryIcon = PRIMARY_ICONS[primaryAction.kind]
   const moreCommitAndRemoteActionsLabel = translate(
-    'auto.components.right.sidebar.SourceControl.cc199ccc5f',
+    'auto.components.workspacePanel.SourceControl.cc199ccc5f',
     'More commit and remote actions'
   )
   const moreActionsLabel = translate(
-    'auto.components.right.sidebar.SourceControl.4d6e1fd7f3',
+    'auto.components.workspacePanel.SourceControl.4d6e1fd7f3',
     'More actions'
   )
 

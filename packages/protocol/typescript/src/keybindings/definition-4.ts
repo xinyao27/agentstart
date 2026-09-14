@@ -81,7 +81,9 @@ export const KEYBINDING_DEFINITIONS_4: readonly KeybindingDefinition[] = [
     group: 'Terminal Panes',
     scope: 'terminal',
     searchKeywords: ['shortcut', 'terminal', 'copy', 'selection'],
-    defaultBindings: platformBindings(['Mod+Shift+C'])
+    // Why: Ctrl+Shift+C opens DevTools inspect in the browser, so this ships
+    // unbound; the native Mod+C / Ctrl+Shift+C clipboard paths still copy.
+    defaultBindings: platformBindings([])
   },
   {
     id: 'terminal.paste',
@@ -117,7 +119,14 @@ export const KEYBINDING_DEFINITIONS_4: readonly KeybindingDefinition[] = [
     group: 'Terminal Panes',
     scope: 'terminal',
     searchKeywords: ['shortcut', 'pane', 'focus', 'next'],
-    defaultBindings: platformBindings(['Mod+BracketRight'])
+    // Why: Cmd+] is Chrome's history-forward chord on macOS, so darwin moves
+    // to Cmd+Alt+]; Windows/Linux keep Ctrl+]/[, which no browser default
+    // claims. In terminal focus this wins over the same tab-switch chord.
+    defaultBindings: {
+      darwin: ['Mod+Alt+BracketRight'],
+      linux: ['Mod+BracketRight'],
+      win32: ['Mod+BracketRight']
+    }
   },
   {
     id: 'terminal.focusPreviousPane',
@@ -125,7 +134,11 @@ export const KEYBINDING_DEFINITIONS_4: readonly KeybindingDefinition[] = [
     group: 'Terminal Panes',
     scope: 'terminal',
     searchKeywords: ['shortcut', 'pane', 'focus', 'previous'],
-    defaultBindings: platformBindings(['Mod+BracketLeft'])
+    defaultBindings: {
+      darwin: ['Mod+Alt+BracketLeft'],
+      linux: ['Mod+BracketLeft'],
+      win32: ['Mod+BracketLeft']
+    }
   },
   {
     id: 'terminal.equalizePaneSizes',
@@ -165,7 +178,10 @@ export const KEYBINDING_DEFINITIONS_4: readonly KeybindingDefinition[] = [
     group: 'Terminal Panes',
     scope: 'terminal',
     searchKeywords: ['shortcut', 'pane', 'close'],
-    defaultBindings: platformBindings(['Mod+W'])
+    // Why: Mod+W closes the whole browser tab and is reserved by the browser,
+    // so panes close on Mod+Shift+X (Mod+Backspace is taken by tab.close and
+    // by the kill-line terminal input translation).
+    defaultBindings: platformBindings(['Mod+Shift+X'])
   },
   {
     id: 'terminal.splitRight',
@@ -173,11 +189,10 @@ export const KEYBINDING_DEFINITIONS_4: readonly KeybindingDefinition[] = [
     group: 'Terminal Panes',
     scope: 'terminal',
     searchKeywords: ['shortcut', 'pane', 'split', 'right'],
-    defaultBindings: {
-      darwin: ['Mod+D'],
-      linux: ['Mod+Shift+D'],
-      win32: ['Mod+Shift+D']
-    }
+    // Why: Mod+D bookmarks the browser page and Mod+Shift+D bookmarks all
+    // tabs, so the split chords move to the backslash family (VS Code split
+    // muscle memory) on every platform.
+    defaultBindings: platformBindings(['Mod+Backslash'])
   },
   {
     id: 'terminal.splitDown',
@@ -185,8 +200,11 @@ export const KEYBINDING_DEFINITIONS_4: readonly KeybindingDefinition[] = [
     group: 'Terminal Panes',
     scope: 'terminal',
     searchKeywords: ['shortcut', 'pane', 'split', 'down'],
+    // Why: darwin pairs with splitRight on Mod+Shift+Backslash (the old
+    // Mod+Shift+D bookmarked all browser tabs); Alt+Shift+D was already
+    // browser-free on Windows/Linux.
     defaultBindings: {
-      darwin: ['Mod+Shift+D'],
+      darwin: ['Mod+Shift+Backslash'],
       linux: ['Alt+Shift+D'],
       win32: ['Alt+Shift+D']
     }

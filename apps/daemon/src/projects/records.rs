@@ -2,14 +2,9 @@ use rusqlite::{Connection, OptionalExtension, Transaction};
 use std::collections::HashSet;
 
 use super::{
-    GitRemoteIdentity, Project, ProjectCatalogError, ProjectKind, ProjectRegistration,
-    WorkbenchProject,
-    identity::{now_millis, random_uuid},
-    model::ProjectWorktreeVisibility,
+    GitRemoteIdentity, Project, ProjectCatalogError, ProjectKind, model::ProjectWorktreeVisibility,
     remotes,
 };
-
-const DEFAULT_BADGE_COLOR: &str = "#737373";
 
 type ProjectRow = (
     String,
@@ -92,65 +87,6 @@ pub(crate) fn resolve_id(
     hydrate_project(first)
 }
 
-pub(super) fn register(
-    connection: &mut Connection,
-    input: ProjectRegistration,
-) -> Result<Project, ProjectCatalogError> {
-    if let Some(existing) =
-        find_location(connection, &input.location.host_id, &input.location.path)?
-    {
-        return Ok(existing);
-    }
-    let primary_remote = input
-        .remotes
-        .iter()
-        .find(|remote| remote.remote_name == "origin")
-        .or_else(|| input.remotes.first());
-    let storage_id = random_uuid()?;
-    let project = Project {
-        added_at: now_millis()?,
-        badge_color: DEFAULT_BADGE_COLOR.to_owned(),
-        display_name: input.display_name,
-        execution_host_id: input.location.host_id,
-        external_worktree_visibility: ProjectWorktreeVisibility::Hide,
-        external_worktree_visibility_legacy: Some(false),
-        git_remote_identity: primary_remote.cloned(),
-        id: storage_id.clone(),
-        kind: input.kind,
-        path: input.location.path,
-        storage_id,
-        worktree_base_path: None,
-    };
-    connection
-        .execute(
-            "INSERT INTO project(
-               id, wire_id, path, host_id, display_name, badge_color, kind, remote_url, added_at
-             ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
-            rusqlite::params![
-                project.storage_id,
-                project.id,
-                project.path,
-                project.execution_host_id,
-                project.display_name,
-                project.badge_color,
-                project.kind.database_value(),
-                primary_remote.map(|remote| remote.remote_url.as_str()),
-                project.added_at,
-            ],
-        )
-        .map_err(ProjectCatalogError::storage)?;
-    connection
-        .execute(
-            "INSERT INTO project_repo_state(
-               project_id,external_worktree_visibility,external_worktree_visibility_legacy
-             ) VALUES (?1,'hide',0)",
-            [&project.storage_id],
-        )
-        .map_err(ProjectCatalogError::storage)?;
-    replace_remotes(connection, &project.storage_id, &input.remotes)?;
-    Ok(project)
-}
-
 pub(super) fn replace_remotes(
     connection: &mut Connection,
     project_id: &str,
@@ -186,90 +122,6 @@ pub(super) fn resolve_by_remote(
         .into_iter()
         .filter(|project| ids.contains(&project.storage_id))
         .collect())
-}
-
-pub(super) fn sync_workbench(
-    connection: &mut Connection,
-    projects: &[WorkbenchProject],
-) -> Result<(), ProjectCatalogError> {
-    let project_ids = projects
-        .iter()
-        .map(|project| {
-            (
-                project.host_id.as_deref().unwrap_or("local"),
-                project.id.as_str(),
-            )
-        })
-        .collect::<HashSet<_>>();
-    let transaction = connection
-        .transaction()
-        .map_err(ProjectCatalogError::storage)?;
-    let previous = super::wire_records::list_projects(&transaction)?;
-    for project in projects {
-        let host_id = project.host_id.as_deref().unwrap_or("local");
-        let kind = project.kind.unwrap_or(ProjectKind::Git);
-        let storage_id = storage_id_for_wire(&transaction, host_id, &project.id)?;
-        transaction
-            .execute(
-                "INSERT INTO project(
-                   id, wire_id, path, host_id, display_name, badge_color, kind, remote_url, added_at,
-                   authority
-                 ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, 'workbench')
-                 ON CONFLICT(id) DO UPDATE SET
-                   wire_id = excluded.wire_id,
-                   path = excluded.path,
-                   host_id = excluded.host_id,
-                   display_name = excluded.display_name,
-                   badge_color = excluded.badge_color,
-                   kind = excluded.kind,
-                   remote_url = excluded.remote_url,
-                   added_at = excluded.added_at,
-                   authority = 'workbench'",
-                rusqlite::params![
-                    storage_id,
-                    project.id,
-                    project.path,
-                    host_id,
-                    project.display_name,
-                    project.badge_color,
-                    kind.database_value(),
-                    project
-                        .git_remote_identity
-                        .as_ref()
-                        .map(|identity| identity.remote_url.as_str()),
-                    project.added_at,
-                ],
-            )
-            .map_err(ProjectCatalogError::storage)?;
-        replace_projected_remote(&transaction, &storage_id, project)?;
-    }
-    let mut statement = transaction
-        .prepare("SELECT id,host_id,wire_id FROM project WHERE authority = 'workbench'")
-        .map_err(ProjectCatalogError::storage)?;
-    let rows = statement
-        .query_map([], |row| {
-            Ok((
-                row.get::<_, String>(0)?,
-                row.get::<_, String>(1)?,
-                row.get::<_, String>(2)?,
-            ))
-        })
-        .map_err(ProjectCatalogError::storage)?;
-    let mut removed = Vec::new();
-    for row in rows {
-        let (storage_id, host_id, wire_id) = row.map_err(ProjectCatalogError::storage)?;
-        if !project_ids.contains(&(host_id.as_str(), wire_id.as_str())) {
-            removed.push(storage_id);
-        }
-    }
-    drop(statement);
-    for id in removed {
-        transaction
-            .execute("DELETE FROM project WHERE id = ?1", [id])
-            .map_err(ProjectCatalogError::storage)?;
-    }
-    super::independent::reconcile(&transaction, previous)?;
-    transaction.commit().map_err(ProjectCatalogError::storage)
 }
 
 pub(crate) fn find_location(
@@ -383,15 +235,6 @@ pub(crate) fn replace_all_remotes(
     Ok(())
 }
 
-fn replace_projected_remote(
-    transaction: &Transaction<'_>,
-    storage_id: &str,
-    project: &WorkbenchProject,
-) -> Result<(), ProjectCatalogError> {
-    let remotes = project.git_remote_identity.as_slice();
-    replace_all_remotes(transaction, storage_id, remotes)
-}
-
 fn read_project(row: &rusqlite::Row<'_>) -> Result<ProjectRow, rusqlite::Error> {
     Ok((
         row.get(0)?,
@@ -454,32 +297,4 @@ fn hydrate_project(row: ProjectRow) -> Result<Project, ProjectCatalogError> {
         storage_id,
         worktree_base_path,
     })
-}
-
-fn storage_id_for_wire(
-    connection: &Connection,
-    host_id: &str,
-    wire_id: &str,
-) -> Result<String, ProjectCatalogError> {
-    if let Some(storage_id) = connection
-        .query_row(
-            "SELECT id FROM project WHERE host_id=?1 AND wire_id=?2",
-            [host_id, wire_id],
-            |row| row.get::<_, String>(0),
-        )
-        .optional()
-        .map_err(ProjectCatalogError::storage)?
-    {
-        return Ok(storage_id);
-    }
-    let storage_id_available = !connection
-        .prepare("SELECT 1 FROM project WHERE id=?1")
-        .map_err(ProjectCatalogError::storage)?
-        .exists([wire_id])
-        .map_err(ProjectCatalogError::storage)?;
-    if storage_id_available {
-        Ok(wire_id.to_owned())
-    } else {
-        random_uuid()
-    }
 }

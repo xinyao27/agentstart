@@ -11,7 +11,7 @@ import { useAppStore } from '~renderer/store/state'
 
 import type { InlineInput } from './row'
 import type { FileExplorerRowProjection } from './row-projection'
-import { getRightSidebarWorktreeRuntimeSettings } from './runtime-owner'
+import { getWorkspacePanelWorktreeRuntimeSettings } from './runtime-owner'
 import type { TreeNode } from './types'
 import { commitFileExplorerOp } from './undo-redo'
 
@@ -106,7 +106,7 @@ export function useFileExplorerInlineInput({
     const run = async (): Promise<void> => {
       const connectionId = getConnectionId(activeWorktreeId ?? null) ?? undefined
       const fileContext = {
-        settings: getRightSidebarWorktreeRuntimeSettings(activeWorktreeId),
+        settings: getWorkspacePanelWorktreeRuntimeSettings(activeWorktreeId),
         worktreeId: activeWorktreeId,
         worktreePath,
         connectionId

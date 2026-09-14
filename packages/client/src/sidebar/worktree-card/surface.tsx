@@ -26,7 +26,11 @@ export function WorktreeCardSurface({
   return (
     <div
       className={cn(
-        'relative flex cursor-pointer flex-col transition-[background-color,border-color,opacity] duration-200 outline-none select-none',
+        // Why: a highlighted card paints a surface over the sidebar plane, so it
+        // takes the shared control radius instead of ending in square corners.
+        // The clip keeps its inner rows' own fills inside that contour — without
+        // it their straight edges overdraw the rounded corners.
+        'relative flex cursor-pointer flex-col overflow-hidden rounded-md transition-[background-color,border-color,opacity] duration-200 outline-none select-none',
         'data-[worktree-card-active=primary]:border-[color:color-mix(in_srgb,var(--sidebar-border)_40%,transparent)] data-[worktree-card-active=primary]:bg-[color-mix(in_srgb,var(--sidebar-foreground)_8%,transparent)] dark:data-[worktree-card-active=primary]:bg-[color-mix(in_srgb,var(--sidebar-foreground)_10%,transparent)]',
         'data-[worktree-card-active=secondary]:border-[color:color-mix(in_srgb,var(--sidebar-ring)_25%,transparent)] data-[worktree-card-active=secondary]:bg-[color-mix(in_srgb,var(--sidebar-accent)_45%,transparent)] dark:data-[worktree-card-active=secondary]:border-[color:color-mix(in_srgb,var(--sidebar-ring)_28%,transparent)] dark:data-[worktree-card-active=secondary]:bg-[color-mix(in_srgb,var(--sidebar-accent)_34%,transparent)]',
         trailing ? 'pr-7' : 'pr-1.5',

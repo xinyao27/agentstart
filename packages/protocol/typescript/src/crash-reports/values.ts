@@ -70,7 +70,7 @@ export type ReactErrorBoundaryReportArgs = {
   activeView?: string
   activeModal?: string | null
   activeTabType?: string | null
-  activeRightSidebarTab?: string | null
+  activeWorkspacePanelTab?: string | null
   hasActiveWorktree?: boolean
 }
 

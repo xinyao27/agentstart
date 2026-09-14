@@ -30,14 +30,14 @@ export function FileExplorerBackgroundMenu({
         <ContextMenuItem onClick={() => onStartNew('file', worktreePath, 0)}>
           <FilePlus />
           {translate(
-            'auto.components.right.sidebar.FileExplorerBackgroundMenu.21fe46ed36',
+            'auto.components.workspacePanel.FileExplorerBackgroundMenu.21fe46ed36',
             'New File'
           )}
         </ContextMenuItem>
         <ContextMenuItem onClick={() => onStartNew('folder', worktreePath, 0)}>
           <FolderPlus />
           {translate(
-            'auto.components.right.sidebar.FileExplorerBackgroundMenu.3b5e2dcb8d',
+            'auto.components.workspacePanel.FileExplorerBackgroundMenu.3b5e2dcb8d',
             'New Folder'
           )}
         </ContextMenuItem>

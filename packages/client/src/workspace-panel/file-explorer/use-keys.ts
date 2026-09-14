@@ -53,7 +53,7 @@ export function useFileExplorerKeys(opts: {
   worktreePath: string | null
   nativeTreeNavigation?: boolean
 }): void {
-  const rightSidebarExplorerView = useAppStore((s) => s.rightSidebarExplorerView)
+  const workspacePanelExplorerView = useAppStore((s) => s.workspacePanelExplorerView)
   const keybindings = useAppStore((s) => s.keybindings)
 
   const rowProjectionRef = useRef(opts.rowProjection)
@@ -166,7 +166,7 @@ export function useFileExplorerKeys(opts: {
     }
 
     const onKeyDown = (e: KeyboardEvent): void => {
-      if (rightSidebarExplorerView !== 'files') {
+      if (workspacePanelExplorerView !== 'files') {
         return
       }
       if (inlineInputRef.current) {
@@ -207,7 +207,7 @@ export function useFileExplorerKeys(opts: {
             err instanceof Error
               ? err.message
               : translate(
-                  'auto.components.right.sidebar.useFileExplorerKeys.8adb953095',
+                  'auto.components.workspacePanel.useFileExplorerKeys.8adb953095',
                   'Operation failed'
                 )
           )
@@ -302,5 +302,5 @@ export function useFileExplorerKeys(opts: {
     return () => {
       window.removeEventListener('keydown', onKeyDown, { capture: true })
     }
-  }, [keybindings, opts.containerElement, opts.nativeTreeNavigation, rightSidebarExplorerView])
+  }, [keybindings, opts.containerElement, opts.nativeTreeNavigation, workspacePanelExplorerView])
 }

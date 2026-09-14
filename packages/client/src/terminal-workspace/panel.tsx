@@ -1,6 +1,7 @@
 import { hasFeatureInteraction } from '@agentstart/protocol/telemetry/interactions/state'
 import { folderWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import React, { useEffect } from 'react'
+import { activeViewFor } from '~renderer/application-shell/state/visible-surface'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useAppStore } from '~renderer/store/state'
 import { setForegroundTerminalTabIds } from '~renderer/tab-bar/foreground-terminals'
@@ -23,12 +24,18 @@ import { useTerminalProviderSnapshotCapability } from './use-terminal-provider-s
 import { useWorktreeActivationBootstrap } from './worktree-activation-bootstrap'
 import { WorktreeSplitSurface } from './worktree-split-surface'
 
+type TerminalWorkspacePanelProps = {
+  useSharedHeader?: boolean
+}
+
 // Why: the workspace panel owns the top-level terminal/editor/browser surface
 // for the active worktree, plus the tab bar portal that renders into the
 // titlebar. Its lifecycle concerns (worktree mounting, tab actions, keyboard
 // shortcuts, and editor-close guarding) are split into sibling hooks in this
 // folder; this file only composes them and renders the surface.
-function TerminalWorkspacePanel(): React.JSX.Element | null {
+function TerminalWorkspacePanel({
+  useSharedHeader = false
+}: TerminalWorkspacePanelProps): React.JSX.Element | null {
   const { allWorktrees, folderWorkspaces } = useProjectCatalog()
   const workspaceSurfaces = (() => [
     ...allWorktrees.map((worktree) => ({ id: worktree.id, path: worktree.path })),
@@ -38,7 +45,7 @@ function TerminalWorkspacePanel(): React.JSX.Element | null {
     }))
   ])()
   const activeWorktreeId = useAppStore((s) => s.activeWorktreeId)
-  const activeView = useAppStore((s) => s.activeView)
+  const activeView = useAppStore((s) => activeViewFor(s))
   const tabsByWorktree = useAppStore((s) => s.tabsByWorktree)
   const activeTabId = useAppStore((s) => s.activeTabId)
   const activeTabIdByWorktree = useAppStore((s) => s.activeTabIdByWorktree)
@@ -48,6 +55,7 @@ function TerminalWorkspacePanel(): React.JSX.Element | null {
   const openFiles = useAppStore((s) => s.openFiles)
   const activeBrowserTabId = useAppStore((s) => s.activeBrowserTabId)
   const activeTabType = useAppStore((s) => s.activeTabType)
+  const workspacePanelOpen = useAppStore((s) => s.workspacePanelOpen)
   const setActiveTabType = useAppStore((s) => s.setActiveTabType)
   const browserTabsByWorktree = useAppStore((s) => s.browserTabsByWorktree)
   const setActiveBrowserTab = useAppStore((s) => s.setActiveBrowserTab)
@@ -58,7 +66,12 @@ function TerminalWorkspacePanel(): React.JSX.Element | null {
 
   const foregroundTerminalTabIds = (() => {
     const ids = new Set<string>()
-    if (activeView === 'terminal' && activeTabType === 'terminal' && activeTabId) {
+    if (
+      activeView === 'terminal' &&
+      activeTabType === 'terminal' &&
+      activeTabId &&
+      !workspacePanelOpen
+    ) {
       ids.add(activeTabId)
     }
     return Array.from(ids)
@@ -260,7 +273,11 @@ function TerminalWorkspacePanel(): React.JSX.Element | null {
                 return null
               }
               // Why: strict equality keeps preserved workspace surfaces hidden
-              // behind every non-terminal top-level view.
+              // behind every non-terminal top-level view. The strip owner check
+              // is view-independent on purpose: a top-level page keeps the
+              // workspace tab strip hosted in the shared titlebar beside the
+              // page tabs, so the active worktree must keep portaling there
+              // even while its panes are hidden.
               const isVisible = activeView === 'terminal' && workspace.id === activeWorktreeId
               const shouldMeasureHiddenWorktree =
                 !isVisible && measurableBackgroundWorktreeIds.has(workspace.id)
@@ -275,6 +292,7 @@ function TerminalWorkspacePanel(): React.JSX.Element | null {
                   worktreePath={workspace.path}
                   layout={layout}
                   focusedGroupId={activeGroupIdByWorktree[workspace.id]}
+                  useSharedHeader={useSharedHeader && workspace.id === activeWorktreeId}
                   isVisible={isVisible}
                   shouldMeasureHiddenWorktree={shouldMeasureHiddenWorktree}
                   shouldColdParkTerminalPanes={shouldColdParkTerminalPanes}

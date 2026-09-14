@@ -1,3 +1,5 @@
+import { isPageTabId } from '~renderer/application-shell/state/workspace-page-views'
+
 /**
  * Reconcile stored tab bar order with the current set of tab IDs.
  * Keeps items that still exist in their stored positions, appends new items
@@ -27,7 +29,12 @@ export function reconcileTabOrder(
   const result: string[] = []
   const inResult = new Set<string>()
   for (const id of storedOrder ?? []) {
-    if (validIds.has(id) && !inResult.has(id)) {
+    // Why: callers enumerate only the id kinds they own — terminal/editor/
+    // browser/simulator/git-graph — while the stored order can also hold page
+    // tabs. Those are real unified tabs now, but no caller's list derives them,
+    // so dropping an id this pass simply cannot see would silently lose the
+    // page tab's queued position.
+    if ((validIds.has(id) || isPageTabId(id)) && !inResult.has(id)) {
       result.push(id)
       inResult.add(id)
     }

@@ -16,7 +16,10 @@ export const KEYBINDING_DEFINITIONS_3: readonly KeybindingDefinition[] = [
     group: 'Tab Navigation',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'tab', 'recent', 'mru', 'switch', 'last used'],
-    defaultBindings: platformBindings(['Ctrl+Tab']),
+    // Why: Ctrl+Tab switches browser tabs and never reaches the page, so the
+    // held-key switcher ships on a chord the browser leaves to the page.
+    // Shift still reverses direction while the chord is held.
+    defaultBindings: platformBindings(['Mod+Alt+PageDown']),
     allowInTerminal: true
   },
   {
@@ -25,7 +28,9 @@ export const KEYBINDING_DEFINITIONS_3: readonly KeybindingDefinition[] = [
     group: 'Tab Navigation',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'tab', 'terminal', 'next', 'switch'],
-    defaultBindings: platformBindings(['Ctrl+PageDown']),
+    // Why: Ctrl+PageDown/PageUp switch browser tabs on Windows/Linux, so the
+    // terminal-tab chords use Alt, which no browser default claims.
+    defaultBindings: platformBindings(['Alt+PageDown']),
     allowInTerminal: true
   },
   {
@@ -34,7 +39,7 @@ export const KEYBINDING_DEFINITIONS_3: readonly KeybindingDefinition[] = [
     group: 'Tab Navigation',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'tab', 'terminal', 'previous', 'switch'],
-    defaultBindings: platformBindings(['Ctrl+PageUp']),
+    defaultBindings: platformBindings(['Alt+PageUp']),
     allowInTerminal: true
   },
   {
@@ -81,11 +86,10 @@ export const KEYBINDING_DEFINITIONS_3: readonly KeybindingDefinition[] = [
     group: 'Browser',
     scope: 'browser',
     searchKeywords: ['shortcut', 'browser', 'history', 'back', 'previous'],
-    defaultBindings: {
-      darwin: ['Mod+BracketLeft'],
-      linux: ['Alt+ArrowLeft'],
-      win32: ['Alt+ArrowLeft']
-    }
+    // Why: Cmd+[ and Alt+ArrowLeft navigate the real browser's history — the
+    // chords belong to Chrome now, so this ships unbound and the pane's
+    // toolbar buttons own the action.
+    defaultBindings: platformBindings([])
   },
   {
     id: 'browser.forward',
@@ -93,11 +97,7 @@ export const KEYBINDING_DEFINITIONS_3: readonly KeybindingDefinition[] = [
     group: 'Browser',
     scope: 'browser',
     searchKeywords: ['shortcut', 'browser', 'history', 'forward', 'next'],
-    defaultBindings: {
-      darwin: ['Mod+BracketRight'],
-      linux: ['Alt+ArrowRight'],
-      win32: ['Alt+ArrowRight']
-    }
+    defaultBindings: platformBindings([])
   },
   {
     id: 'browser.reload',
@@ -105,7 +105,9 @@ export const KEYBINDING_DEFINITIONS_3: readonly KeybindingDefinition[] = [
     group: 'Browser',
     scope: 'browser',
     searchKeywords: ['shortcut', 'browser', 'reload', 'refresh'],
-    defaultBindings: platformBindings(['Mod+R'])
+    // Why: Mod+R reloads the workbench page itself in a browser; the in-app
+    // pane's toolbar owns reload and users can bind a chord in Settings.
+    defaultBindings: platformBindings([])
   },
   {
     id: 'browser.hardReload',
@@ -113,7 +115,9 @@ export const KEYBINDING_DEFINITIONS_3: readonly KeybindingDefinition[] = [
     group: 'Browser',
     scope: 'browser',
     searchKeywords: ['shortcut', 'browser', 'reload', 'refresh', 'cache'],
-    defaultBindings: platformBindings(['Mod+Shift+R'])
+    // Why: Mod+Shift+R hard-reloads the workbench page itself; same reasoning
+    // as browser.reload.
+    defaultBindings: platformBindings([])
   },
   {
     id: 'browser.focusAddressBar',
@@ -121,7 +125,13 @@ export const KEYBINDING_DEFINITIONS_3: readonly KeybindingDefinition[] = [
     group: 'Browser',
     scope: 'browser',
     searchKeywords: ['shortcut', 'browser', 'address', 'url', 'location'],
-    defaultBindings: platformBindings(['Mod+L'])
+    // Why: Mod+L focuses the browser's own address bar, so the chord is
+    // macOS-only here; Windows/Linux bind it explicitly in Settings.
+    defaultBindings: {
+      darwin: ['Mod+Alt+L'],
+      linux: [],
+      win32: []
+    }
   },
   {
     id: 'browser.grabElement',
@@ -129,7 +139,9 @@ export const KEYBINDING_DEFINITIONS_3: readonly KeybindingDefinition[] = [
     group: 'Browser',
     scope: 'browser',
     searchKeywords: ['shortcut', 'browser', 'grab', 'copy', 'element'],
-    defaultBindings: platformBindings(['Mod+C'])
+    // Why: Mod+C copies the selected text of the page under the cursor in a
+    // browser, so grab stays on its toolbar toggle and user bindings.
+    defaultBindings: platformBindings([])
   },
   {
     id: 'editor.find',
@@ -146,11 +158,12 @@ export const KEYBINDING_DEFINITIONS_3: readonly KeybindingDefinition[] = [
     scope: 'editor',
     searchKeywords: ['shortcut', 'editor', 'replace', 'find', 'search'],
     // Why: match the source editor's native replace shortcut — Cmd+Alt+F on
-    // macOS, Ctrl+H on Linux/Windows.
+    // macOS; Ctrl+H on Linux/Windows opens the browser's history page, so
+    // those platforms use Ctrl+Shift+H instead.
     defaultBindings: {
       darwin: ['Mod+Alt+F'],
-      linux: ['Mod+H'],
-      win32: ['Mod+H']
+      linux: ['Mod+Shift+H'],
+      win32: ['Mod+Shift+H']
     }
   },
   {

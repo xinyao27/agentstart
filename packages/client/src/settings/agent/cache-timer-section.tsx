@@ -5,7 +5,7 @@ import { useAppStore } from '~renderer/store/state'
 import { Label } from '~renderer/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~renderer/ui/select'
 
-import { SettingsSubsectionHeader, SettingsSwitch } from '../form-controls'
+import { SettingsSwitch } from '../form-controls'
 import { SearchableSetting } from '../searchable-setting'
 import { getAgentCacheTimerSearchEntries } from './cache-timer-search'
 
@@ -19,18 +19,7 @@ export function AgentCacheTimerSection({
   updateSettings
 }: AgentCacheTimerSectionProps): React.JSX.Element {
   return (
-    <section className="space-y-4">
-      <SettingsSubsectionHeader
-        title={translate(
-          'auto.components.settings.AgentCacheTimerSection.a137f8854d',
-          'Prompt Cache Timer'
-        )}
-        description={translate(
-          'auto.components.settings.AgentCacheTimerSection.fe590653c1',
-          'Claude caches your conversation to reduce costs. When idle too long the cache expires and the next message resends full context at higher cost. This shows a countdown so you know when to resume.'
-        )}
-      />
-
+    <div className="divide-border/40 divide-y">
       <SearchableSetting
         title={translate(
           'auto.components.settings.AgentCacheTimerSection.b4e7302944',
@@ -122,6 +111,6 @@ export function AgentCacheTimerSection({
           </Select>
         </SearchableSetting>
       )}
-    </section>
+    </div>
   )
 }

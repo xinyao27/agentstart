@@ -17,9 +17,9 @@ import type {
 } from '~renderer/workspace-panel/ai-vault/session/providers'
 
 import {
-  RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME,
-  RIGHT_SIDEBAR_INPUT_BUTTON_SURFACE_CLASS_NAME
-} from '../right-sidebar-button-styles'
+  WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME,
+  WORKSPACE_PANEL_INPUT_BUTTON_SURFACE_CLASS_NAME
+} from '../workspace-panel-button-styles'
 import type { AiVaultHostScopeOption } from './host-scope'
 import { VaultHostScopeMenu, VaultScopeSwitch, VaultViewMenu } from './panel-controls'
 
@@ -84,12 +84,12 @@ export function AiVaultPanelHeader({
             {/* Why: below 300px the header competes with fixed controls, so compact copy prevents overlap. */}
             <span className="@max-[300px]/ai-vault:hidden">
               {translate(
-                'auto.components.right.sidebar.AiVaultPanel.sessionHistory',
+                'auto.components.workspacePanel.AiVaultPanel.sessionHistory',
                 'Agent Session History'
               )}
             </span>
             <span className="hidden @max-[300px]/ai-vault:inline">
-              {translate('auto.components.right.sidebar.AiVaultPanel.agents', 'Agents')}
+              {translate('auto.components.workspacePanel.AiVaultPanel.agents', 'Agents')}
             </span>
           </div>
           <div className="text-muted-foreground truncate text-[11px]">
@@ -97,14 +97,14 @@ export function AiVaultPanelHeader({
               <>
                 <span className="@max-[300px]/ai-vault:hidden">
                   {translate(
-                    'auto.components.right.sidebar.AiVaultPanel.shownRecent',
+                    'auto.components.workspacePanel.AiVaultPanel.shownRecent',
                     '{{value0}} shown · {{value1}} recent',
                     { value0: shownCount, value1: sessionCount }
                   )}
                 </span>
                 <span className="hidden @max-[300px]/ai-vault:inline">
                   {translate(
-                    'auto.components.right.sidebar.AiVaultPanel.sessionsShownCompact',
+                    'auto.components.workspacePanel.AiVaultPanel.sessionsShownCompact',
                     '{{value0}} shown',
                     { value0: shownCount }
                   )}
@@ -112,7 +112,7 @@ export function AiVaultPanelHeader({
               </>
             ) : (
               translate(
-                'auto.components.right.sidebar.AiVaultPanel.resumePastSessions',
+                'auto.components.workspacePanel.AiVaultPanel.resumePastSessions',
                 'Resume past sessions'
               )
             )}
@@ -141,13 +141,13 @@ export function AiVaultPanelHeader({
             variant="outline"
             size="icon-xs"
             aria-label={translate(
-              'auto.components.right.sidebar.AiVaultPanel.refreshSessionHistory',
+              'auto.components.workspacePanel.AiVaultPanel.refreshSessionHistory',
               'Refresh Session History'
             )}
             onClick={onRefresh}
             disabled={loading}
             aria-busy={loading}
-            className={cn(RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME, 'size-6')}
+            className={cn(WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME, 'size-6')}
           >
             {loading ? <LoadingIndicator className="size-3" /> : <RefreshCw className="size-3" />}
           </Button>
@@ -171,7 +171,7 @@ export function AiVaultPanelHeader({
           variant="chrome-free"
           size="xs"
           placeholder={translate(
-            'auto.components.right.sidebar.AiVaultPanel.searchSessions',
+            'auto.components.workspacePanel.AiVaultPanel.searchSessions',
             'Search sessions'
           )}
           className="flex-1"
@@ -183,10 +183,10 @@ export function AiVaultPanelHeader({
             type="button"
             variant="ghost"
             size="icon-xs"
-            className={cn(RIGHT_SIDEBAR_INPUT_BUTTON_SURFACE_CLASS_NAME, 'size-5 rounded-sm')}
+            className={cn(WORKSPACE_PANEL_INPUT_BUTTON_SURFACE_CLASS_NAME, 'size-5 rounded-sm')}
             onClick={() => onQueryChange('')}
             aria-label={translate(
-              'auto.components.right.sidebar.AiVaultPanel.clearSearch',
+              'auto.components.workspacePanel.AiVaultPanel.clearSearch',
               'Clear search'
             )}
           >

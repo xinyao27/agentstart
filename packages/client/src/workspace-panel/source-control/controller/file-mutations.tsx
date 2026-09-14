@@ -169,7 +169,7 @@ export function useSourceControlFileMutations(scope: SourceControlHistoryControl
       if (result.aborted) {
         toast.error(
           translate(
-            'auto.components.right.sidebar.SourceControl.a5e5a11090',
+            'auto.components.workspacePanel.SourceControl.a5e5a11090',
             'Discard all failed — unable to unstage files before discard'
           ),
           {
@@ -184,14 +184,14 @@ export function useSourceControlFileMutations(scope: SourceControlHistoryControl
         const more = result.failed.length > 3 ? `, +${result.failed.length - 3} more` : ''
         toast.error(
           translate(
-            'auto.components.right.sidebar.SourceControl.8eb3782a0c',
+            'auto.components.workspacePanel.SourceControl.8eb3782a0c',
             'Failed to discard {{value0}} file{{value1}}',
             { value0: result.failed.length, value1: result.failed.length === 1 ? '' : 's' }
           ),
           {
             description: firstMsg
               ? translate(
-                  'auto.components.right.sidebar.SourceControl.dc5a6465fc',
+                  'auto.components.workspacePanel.SourceControl.dc5a6465fc',
                   '{{value0}} (e.g. {{value1}}{{value2}})',
                   { value0: firstMsg, value1: sample, value2: more }
                 )

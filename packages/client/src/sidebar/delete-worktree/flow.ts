@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { getWorktreeMapFromState } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
-import { showWorkspaceSidebar } from '~renderer/workspace-panel/show-sidebar'
+import { showWorkspacePanel } from '~renderer/workspace-panel/show-workspace-panel'
 import { activateAndRevealWorktree } from '~renderer/worktree/activation'
 
 import { prepareActiveWorktreeFocusAfterDelete } from '../active-worktree-focus-after-delete'
@@ -34,7 +34,7 @@ type WorktreeDeleteWithToastOptions = {
 // blocking work is visible.
 function viewWorktreeDiff(worktreeId: string): void {
   activateAndRevealWorktree(worktreeId)
-  showWorkspaceSidebar({ view: 'source-control', worktreeId })
+  showWorkspacePanel({ view: 'source-control', worktreeId })
 }
 
 function isStrictDescendantPath(parentPath: string, childPath: string): boolean {

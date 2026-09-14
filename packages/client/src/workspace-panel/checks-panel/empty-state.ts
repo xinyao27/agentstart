@@ -26,12 +26,12 @@ export function getChecksPanelEmptyStateCopy(
   if (input.operationLabel) {
     return {
       title: translate(
-        'auto.components.right.sidebar.checks.panel.empty.state.d77c513c1e',
+        'auto.components.workspacePanel.checks.panel.empty.state.d77c513c1e',
         '{{value0}} in progress',
         { value0: input.operationLabel }
       ),
       description: translate(
-        'auto.components.right.sidebar.checks.panel.empty.state.05e4aec17b',
+        'auto.components.workspacePanel.checks.panel.empty.state.05e4aec17b',
         '{{value0}} checks will be available after the operation completes',
         { value0: 'PR' }
       )
@@ -50,22 +50,22 @@ export function getChecksPanelEmptyStateCopy(
     if (input.prRefreshStatus === 'error') {
       return {
         title: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.5f478ab3d3',
+          'auto.components.workspacePanel.checks.panel.empty.state.5f478ab3d3',
           'Could not refresh pull request'
         ),
         description: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.2bdd7aaf2d',
+          'auto.components.workspacePanel.checks.panel.empty.state.2bdd7aaf2d',
           'GitHub status could not be refreshed. Existing cached data was preserved.'
         )
       }
     }
     return {
       title: translate(
-        'auto.components.right.sidebar.checks.panel.empty.state.3322603418',
+        'auto.components.workspacePanel.checks.panel.empty.state.3322603418',
         'Pull request status unavailable'
       ),
       description: translate(
-        'auto.components.right.sidebar.checks.panel.empty.state.b597440265',
+        'auto.components.workspacePanel.checks.panel.empty.state.b597440265',
         'Refresh GitHub status for this branch to load checks and review.'
       )
     }
@@ -82,11 +82,11 @@ export function getChecksPanelEmptyStateCopy(
     // refresh error here makes a normal pre-publish state look broken.
     return {
       title: translate(
-        'auto.components.right.sidebar.checks.panel.empty.state.41252bc53f',
+        'auto.components.workspacePanel.checks.panel.empty.state.41252bc53f',
         'Branch not published'
       ),
       description: translate(
-        'auto.components.right.sidebar.checks.panel.empty.state.f8543140cc',
+        'auto.components.workspacePanel.checks.panel.empty.state.f8543140cc',
         'Publish this branch before creating a {{value0}}.',
         { value0: 'pull request' }
       )
@@ -96,11 +96,11 @@ export function getChecksPanelEmptyStateCopy(
   if (blockedReason === 'needs_push') {
     return {
       title: translate(
-        'auto.components.right.sidebar.checks.panel.empty.state.76e15946a9',
+        'auto.components.workspacePanel.checks.panel.empty.state.76e15946a9',
         'Branch has unpushed commits'
       ),
       description: translate(
-        'auto.components.right.sidebar.checks.panel.empty.state.6ce9d4e069',
+        'auto.components.workspacePanel.checks.panel.empty.state.6ce9d4e069',
         'Push your branch before creating a {{value0}}.',
         { value0: 'pull request' }
       )
@@ -111,44 +111,44 @@ export function getChecksPanelEmptyStateCopy(
     case 'error':
       return {
         title: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.5f478ab3d3',
+          'auto.components.workspacePanel.checks.panel.empty.state.5f478ab3d3',
           'Could not refresh pull request'
         ),
         description: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.2bdd7aaf2d',
+          'auto.components.workspacePanel.checks.panel.empty.state.2bdd7aaf2d',
           'GitHub status could not be refreshed. Existing cached data was preserved.'
         )
       }
     case 'queued':
       return {
         title: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.938b5606a6',
+          'auto.components.workspacePanel.checks.panel.empty.state.938b5606a6',
           'Checking for pull request'
         ),
         description: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.6ba2440770',
+          'auto.components.workspacePanel.checks.panel.empty.state.6ba2440770',
           'Waiting to refresh GitHub status for this branch'
         )
       }
     case 'in-flight':
       return {
         title: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.938b5606a6',
+          'auto.components.workspacePanel.checks.panel.empty.state.938b5606a6',
           'Checking for pull request'
         ),
         description: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.3d4af82ff4',
+          'auto.components.workspacePanel.checks.panel.empty.state.3d4af82ff4',
           'Refreshing GitHub status for this branch'
         )
       }
     case 'paused':
       return {
         title: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.7c299df37b',
+          'auto.components.workspacePanel.checks.panel.empty.state.7c299df37b',
           'No pull request found'
         ),
         description: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.d372072df1',
+          'auto.components.workspacePanel.checks.panel.empty.state.d372072df1',
           'GitHub refresh is paused by the current rate-limit budget'
         )
       }
@@ -156,12 +156,12 @@ export function getChecksPanelEmptyStateCopy(
     case undefined:
       return {
         title: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.13e1c7d5ed',
+          'auto.components.workspacePanel.checks.panel.empty.state.13e1c7d5ed',
           'No {{value0}} found',
           { value0: 'pull request' }
         ),
         description: translate(
-          'auto.components.right.sidebar.checks.panel.empty.state.5b0cfae9a5',
+          'auto.components.workspacePanel.checks.panel.empty.state.5b0cfae9a5',
           'Create a {{value0}} to start checks and review.',
           { value0: 'pull request' }
         )

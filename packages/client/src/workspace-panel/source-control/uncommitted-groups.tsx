@@ -61,10 +61,10 @@ export function SourceControlUncommittedGroupActions({
           title={
             area === 'untracked'
               ? translate(
-                  'auto.components.right.sidebar.SourceControl.2f609a2e7c',
+                  'auto.components.workspacePanel.SourceControl.2f609a2e7c',
                   'Delete all untracked'
                 )
-              : translate('auto.components.right.sidebar.SourceControl.ce41708855', 'Discard all')
+              : translate('auto.components.workspacePanel.SourceControl.ce41708855', 'Discard all')
           }
           onClick={() => requestDiscardAllInArea(area, discardAllPaths)}
           disabled={isExecutingBulk}
@@ -74,7 +74,7 @@ export function SourceControlUncommittedGroupActions({
         <ActionButton
           surface="row"
           icon={Plus}
-          title={translate('auto.components.right.sidebar.SourceControl.24d2598eff', 'Stage all')}
+          title={translate('auto.components.workspacePanel.SourceControl.24d2598eff', 'Stage all')}
           onClick={() => void handleStageAllPaths(stageAllPaths)}
           disabled={isExecutingBulk}
         />
@@ -83,7 +83,10 @@ export function SourceControlUncommittedGroupActions({
         <ActionButton
           surface="row"
           icon={Minus}
-          title={translate('auto.components.right.sidebar.SourceControl.9339382454', 'Unstage all')}
+          title={translate(
+            'auto.components.workspacePanel.SourceControl.9339382454',
+            'Unstage all'
+          )}
           onClick={() => void handleUnstagePaths(unstageAllPaths)}
           disabled={isExecutingBulk}
         />
@@ -92,7 +95,7 @@ export function SourceControlUncommittedGroupActions({
         <ActionButton
           surface="row"
           icon={GitDiff}
-          title={translate('auto.components.right.sidebar.SourceControl.48db37cca9', 'View all')}
+          title={translate('auto.components.workspacePanel.SourceControl.48db37cca9', 'View all')}
           onClick={() => {
             if (viewAction.kind === 'conflict-review') {
               openConflictReview(

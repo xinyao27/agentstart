@@ -12,7 +12,6 @@ import {
   selectCodexProviderAccount
 } from '~renderer/runtime/provider-accounts-client'
 import { shellClient } from '~renderer/runtime/shell-client'
-import { OpenAIIcon } from '~renderer/status-bar/icons'
 import { Badge } from '~renderer/ui/badge'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
@@ -129,31 +128,19 @@ export function CodexAccountsSection({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <section id="accounts-codex" className="scroll-mt-6 space-y-4">
-        <div className="space-y-1">
-          <h3 className="flex items-center gap-2 text-sm font-semibold">
-            <OpenAIIcon size={16} />
-            {translate('auto.components.settings.AccountsPane.ef91cfa06b', 'Codex')}
-          </h3>
-          <p className="text-muted-foreground text-xs">
-            {translate(
-              'auto.components.settings.AccountsPane.cedfab35ab',
-              'Optional. AgentStart can use your normal Codex login; add accounts only if you want quick switching in AgentStart.'
-            )}
-          </p>
-          <p className="text-muted-foreground text-xs">
-            {isRemoteAccountScope
-              ? translate(
-                  'auto.components.settings.AccountsPane.remoteScopeAuthContext',
-                  'Each account keeps its own sign-in context on {{value0}}.',
-                  { value0: accountRuntimeSentenceLabel }
-                )
-              : translate(
-                  'auto.components.settings.AccountsPane.340d6f7a85',
-                  'Each account keeps its own local sign-in context in AgentStart. Account auth stays on this device.'
-                )}
-          </p>
-        </div>
+      <div id="accounts-codex" className="scroll-mt-6">
+        <p className="text-muted-foreground pb-2 text-xs">
+          {isRemoteAccountScope
+            ? translate(
+                'auto.components.settings.AccountsPane.remoteScopeAuthContext',
+                'Each account keeps its own sign-in context on {{value0}}.',
+                { value0: accountRuntimeSentenceLabel }
+              )
+            : translate(
+                'auto.components.settings.AccountsPane.340d6f7a85',
+                'Each account keeps its own local sign-in context in AgentStart. Account auth stays on this device.'
+              )}
+        </p>
 
         <SearchableSetting
           title={translate('auto.components.settings.AccountsPane.3180536c7a', 'Codex Accounts')}
@@ -350,7 +337,7 @@ export function CodexAccountsSection({
             )}
           </div>
         </SearchableSetting>
-      </section>
+      </div>
     </>
   )
 }

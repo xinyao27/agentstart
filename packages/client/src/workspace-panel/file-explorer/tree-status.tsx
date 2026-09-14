@@ -27,7 +27,7 @@ export function FileExplorerTreeStatus({
     return (
       <div className="text-muted-foreground flex h-full items-center justify-center px-4 text-center text-[11px]">
         {translate(
-          'auto.components.right.sidebar.FileExplorerTreeStatus.c76693e456',
+          'auto.components.workspacePanel.FileExplorerTreeStatus.c76693e456',
           'Could not load files for this workspace:'
         )}
         {error}
@@ -40,7 +40,7 @@ export function FileExplorerTreeStatus({
       <div className="text-muted-foreground flex h-full items-center justify-center px-4 text-center text-[11px]">
         {emptyMessage ??
           translate(
-            'auto.components.right.sidebar.FileExplorerTreeStatus.ce03835e1f',
+            'auto.components.workspacePanel.FileExplorerTreeStatus.ce03835e1f',
             'No files in this workspace'
           )}
       </div>

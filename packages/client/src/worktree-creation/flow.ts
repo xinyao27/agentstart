@@ -1,5 +1,6 @@
 import type { CreateWorktreeResult } from '@agentstart/protocol/worktree/create-result'
 import { toast } from 'sonner'
+import { isWorkspaceBodyVisible } from '~renderer/application-shell/state/visible-surface'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import {
   formatWorkspaceCreateError,
@@ -24,7 +25,7 @@ function getWorktreeCreationIndeterminate(request: WorktreeCreationRequest): boo
 // switches app views; only the terminal route renders the creation panel.
 function isPendingCreationSurfaceVisible(creationId: string): boolean {
   const state = useAppStore.getState()
-  return state.activeView === 'terminal' && state.activePendingCreationId === creationId
+  return isWorkspaceBodyVisible(state) && state.activePendingCreationId === creationId
 }
 
 function revealPendingCreation(
@@ -47,7 +48,7 @@ function revealPendingCreation(
   })
   // Why: the creation panel only renders under the terminal view (App content
   // router), so force it active so the panel is what fills the content area.
-  store.setActiveView('terminal')
+  store.focusWorkspaceSurface()
   store.setSidebarOpen(true)
 }
 
@@ -129,7 +130,7 @@ export function retryBackgroundWorktreeCreation(creationId: string): void {
     error: undefined
   })
   store.setActivePendingWorktreeCreation(creationId)
-  store.setActiveView('terminal')
+  store.focusWorkspaceSurface()
   store.setSidebarOpen(true)
   void executeWorktreeCreation(creationId, entry.request)
 }

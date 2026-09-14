@@ -4,6 +4,7 @@ import { parsePaneKey } from '@agentstart/protocol/terminal/pane-identity'
 import type { Tab, TerminalTab } from '@agentstart/protocol/workspace/tabs'
 import React from 'react'
 import { AgentIcon } from '~renderer/agent/catalog'
+import { pageViewFromTab } from '~renderer/application-shell/state/workspace-page-views'
 import DashboardAgentRow from '~renderer/dashboard/agent-row'
 import { isDismissibleAgentRow } from '~renderer/dashboard/agent-row-dismissible'
 import type { DashboardAgentRow as DashboardAgentRowData } from '~renderer/dashboard/use-dashboard-data'
@@ -23,6 +24,7 @@ import {
 import { useAppStore } from '~renderer/store/state'
 import { activateTabAndFocusPane } from '~renderer/tab-bar/activate-and-focus-pane'
 import { focusTerminalTabSurface } from '~renderer/tab-bar/focus-terminal-surface'
+import { PageTabIcon } from '~renderer/tab-bar/page-tab'
 import { resolveUnifiedTabLabel } from '~renderer/tab-title-resolution'
 import { cn } from '~renderer/ui/class-names'
 import { activateAndRevealWorktree } from '~renderer/worktree/activation'
@@ -71,6 +73,12 @@ function activateSidebarTab(tab: Tab): void {
   const runtimeEnvironmentId = getRuntimeEnvironmentIdForWorktree(state, tab.worktreeId)
 
   switch (currentTab.contentType) {
+    // Why: a page tab has no legacy per-worktree surface slot — `activateTab`
+    // above already moved the top-level view to the page — so this switch has
+    // nothing to write for it and the clause is listed first to keep the other
+    // clauses' terminal `return`s meaningful.
+    case 'page':
+      return
     case 'terminal':
       if (isRemoteRuntimeSessionActive(runtimeEnvironmentId)) {
         void activateRemoteRuntimeSessionTab({
@@ -138,6 +146,14 @@ function SidebarTabIcon(props: {
       return <GitDiff className={className} aria-hidden />
     case 'editor':
       return <FileText className={className} aria-hidden />
+    case 'page': {
+      const pageView = pageViewFromTab(tab)
+      return pageView ? (
+        <PageTabIcon view={pageView} className={className} />
+      ) : (
+        <FileText className={className} aria-hidden />
+      )
+    }
   }
 }
 

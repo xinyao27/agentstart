@@ -7,8 +7,12 @@ use super::{Issues, parse_boolean, parse_enum, parse_number, parse_string, unrec
 const FIELDS: &[&str] = &[
     "lastActiveRepoId",
     "lastActiveWorktreeId",
-    "activeView",
     "sidebarWidth",
+    "workspacePanelOpen",
+    "workspacePanelTab",
+    "workspacePanelExplorerView",
+    // Why: older extension bundles can remain connected during a rolling
+    // reload. Accept their wire names and normalize them before persistence.
     "rightSidebarOpen",
     "rightSidebarTab",
     "rightSidebarExplorerView",
@@ -97,7 +101,7 @@ pub(super) fn parse(object: &Map<String, Value>) -> Result<Map<String, Value>, I
         };
         let path = [Value::String((*field).to_owned())];
         if let Some(value) = parse_field(field, value, &path, &mut issues) {
-            parsed.insert((*field).to_owned(), value);
+            parsed.insert(canonical_field(field).to_owned(), value);
         }
     }
     let unknown = object
@@ -112,6 +116,16 @@ pub(super) fn parse(object: &Map<String, Value>) -> Result<Map<String, Value>, I
         Ok(parsed)
     } else {
         Err(issues)
+    }
+}
+
+fn canonical_field(field: &str) -> &str {
+    match field {
+        "rightSidebarOpen" => "workspacePanelOpen",
+        "rightSidebarTab" => "workspacePanelTab",
+        "rightSidebarExplorerView" => "workspacePanelExplorerView",
+        "rightSidebarWidth" => "sidebarWidth",
+        _ => field,
     }
 }
 
@@ -138,7 +152,8 @@ fn parse_field(field: &str, value: &Value, path: &[Value], issues: &mut Issues) 
         "lastUpdateCheckAt" | "starNagBaselineAgents" | "starNagDeferredUntil" => {
             nullable(value, |value| parse_number(value, path, issues))
         }
-        "rightSidebarOpen"
+        "workspacePanelOpen"
+        | "rightSidebarOpen"
         | "showWorkspaceLineage"
         | "showActiveOnly"
         | "hideSleepingWorkspaces"
@@ -171,13 +186,7 @@ fn parse_field(field: &str, value: &Value, path: &[Value], issues: &mut Issues) 
         | "usagePercentageDisplayChangeNoticeDismissed"
         | "usageEmptyStateDismissed"
         | "contextualToursAutoEligible" => parse_boolean(value, path, issues),
-        "activeView" => parse_enum(
-            value,
-            path,
-            &["home", "terminal", "settings", "space", "skills", "mobile"],
-            issues,
-        ),
-        "rightSidebarTab" => {
+        "workspacePanelTab" | "rightSidebarTab" => {
             let normalized;
             let value = if value.as_str() == Some("checks") {
                 normalized = Value::String("source-control".to_owned());
@@ -200,7 +209,9 @@ fn parse_field(field: &str, value: &Value, path: &[Value], issues: &mut Issues) 
                 issues,
             )
         }
-        "rightSidebarExplorerView" => parse_enum(value, path, &["files", "search"], issues),
+        "workspacePanelExplorerView" | "rightSidebarExplorerView" => {
+            parse_enum(value, path, &["files", "search"], issues)
+        }
         "groupBy" => parse_enum(
             value,
             path,

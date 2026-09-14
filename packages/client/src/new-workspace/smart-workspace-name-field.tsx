@@ -3,18 +3,19 @@ import {
   buildProjectSourceContextFromRepo,
   type ProjectSourceContext
 } from '@agentstart/protocol/project/source-context'
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import type { RepoSlug } from '~renderer/github/links'
 import { lookupGitHubWorkItemByOwnerRepoForSource } from '~renderer/github/work-item-source-lookup'
 import { useAppStore } from '~renderer/store/state'
 
 import { CrossRepoPromptDialog } from './cross-repo-prompt-dialog'
 import { getRepoSlugCached, sameRepoSlug, type SmartWorkspaceRepo } from './github-repo-match'
+import type { CrossRepoPrompt } from './smart-workspace-github-search'
 import type { SmartWorkspaceNameSelection } from './smart-workspace-name-rows'
 import { SmartWorkspaceNameView } from './smart-workspace-name-view'
 import { buildSmartWorkspaceSourceRows, type SmartNameMode } from './smart-workspace-source-results'
 import { useSmartBranchSearch } from './use-smart-branch-search'
-import { type CrossRepoPrompt, useSmartGithubSearch } from './use-smart-github-search'
+import { useSmartGithubSearch } from './use-smart-github-search'
 import { useSmartWorkspaceInput } from './use-smart-workspace-input'
 
 type RepoOption = SmartWorkspaceRepo
@@ -72,8 +73,13 @@ export default function SmartWorkspaceNameField({
   onActiveSourceModeChange
 }: SmartWorkspaceNameFieldProps): React.JSX.Element {
   const addRepo = useAppStore((state) => state.addRepo)
-  const selectedRepo = (() => repos.find((repo) => repo.id === repoId) ?? null)()
-  const githubSourceContext = (() => {
+  // Why: both feed the search hooks' effect dependencies — freshly allocated
+  // per render, they would re-run those effects (and their fetches) endlessly.
+  const selectedRepo = useMemo(
+    () => repos.find((repo) => repo.id === repoId) ?? null,
+    [repoId, repos]
+  )
+  const githubSourceContext = useMemo(() => {
     if (githubSourceContextOverride?.provider === 'github') {
       return githubSourceContextOverride
     }
@@ -84,24 +90,27 @@ export default function SmartWorkspaceNameField({
           repo: selectedRepo
         })
       : null
-  })()
-  const repoBackedSearchTargets = (() =>
-    (repoBackedSearchRepos.length > 0
-      ? repoBackedSearchRepos
-      : selectedRepo
-        ? [selectedRepo]
-        : []
-    ).map((repo) => ({
-      repo,
-      githubSourceContext:
-        repo.id === selectedRepo?.id && githubSourceContext?.provider === 'github'
-          ? githubSourceContext
-          : buildProjectSourceContextFromRepo({
-              provider: 'github',
-              projectId: repo.id,
-              repo
-            })
-    })))()
+  }, [githubSourceContextOverride, selectedRepo])
+  const repoBackedSearchTargets = useMemo(
+    () =>
+      (repoBackedSearchRepos.length > 0
+        ? repoBackedSearchRepos
+        : selectedRepo
+          ? [selectedRepo]
+          : []
+      ).map((repo) => ({
+        repo,
+        githubSourceContext:
+          repo.id === selectedRepo?.id && githubSourceContext?.provider === 'github'
+            ? githubSourceContext
+            : buildProjectSourceContextFromRepo({
+                provider: 'github',
+                projectId: repo.id,
+                repo
+              })
+      })),
+    [githubSourceContext, repoBackedSearchRepos, selectedRepo]
+  )
   const repoSlugCacheRef = useRef<Map<string, RepoSlug | null>>(new Map())
   const [handledCrossRepoUrl, setHandledCrossRepoUrl] = useState<string | null>(null)
   const [crossRepoPromptState, setCrossRepoPromptState] = useState<CrossRepoPrompt | null>(null)

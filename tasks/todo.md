@@ -1,5 +1,35 @@
 # AgentStart 0.1.0 handoff completion
 
+## Complete the page-tab navigation migration — 2026-09-14
+
+- [ ] Define one typed page-open command from the Chrome Side Panel to a specific workbench host.
+- [ ] Reuse the originating window's existing workbench tab and open the page in its unified queue.
+- [ ] Keep `?view=` only for cold-start deep links and remove it from browser-tab identity matching.
+- [ ] Audit and remove remaining old page-route ownership and stale URL assumptions.
+- [ ] Format and run client/extension typechecks, the full repository gate, extension build, and diff checks.
+- [ ] Record the final architecture, runtime evidence, and any intentionally retained deep-link behavior.
+
+## Diagnose top-level sidebar view navigation — 2026-09-14
+
+- [x] Review relevant navigation lessons and current worktree state.
+- [x] Trace Sidebar navigation for Settings, Skills, Mobile, and other top-level surfaces.
+- [x] Compare URL state, Chrome tab identity, and internal workbench tab ownership.
+- [x] Record the architectural conclusion and a minimal correction direction without changing behavior.
+
+## Review
+
+- `?view=` is valid as a cold-start deep link, but the Side Panel background path still uses it as
+  the Chrome Tab identity. Different page values therefore create or focus different browser tabs.
+- The current client migration models Activity, Settings, Skills, and Mobile as real unified page
+  tabs in the same queue as workspace tabs. Workbench-local Sidebar navigation already uses that
+  queue, while Side Panel navigation still uses the old page-per-browser-tab model.
+- The URL remains stale after an internal page-tab switch, yet the background continues matching
+  browser tabs from that URL. Multi-window lookup is also global and can focus a matching page tab
+  in another Chrome window.
+- The correction boundary is the extension host navigation: focus a workbench in the originating
+  window and deliver an internal page-open command; use `workspace.html?view=...` only when a new
+  workbench must be bootstrapped. No runtime behavior was changed in this diagnostic pass.
+
 ## Restore workspace provider status — 2026-09-12
 
 - [x] Trace the lower-left provider surface to its runtime state and initial-load path.
@@ -722,3 +752,515 @@
   `pnpm exec vp run @agentstart/extension#build`, and `git diff --check` passed. The extension
   production build completed with the updated token path; no tests or validation harnesses were
   added.
+
+# Workspace tool tabs and sidebar removal — 2026-09-12
+
+## Plan
+
+- [x] Inventory the current workspace sidebar terminology, state, routes, shortcuts, and panel
+      ownership; record every historical `rightSidebar`/`WorkspaceSidebar` name that lies about the
+      rendered position or new responsibility.
+- [x] Rename the workspace panel state, route helpers, activity items, runtime-owner helpers, and
+      component files to truthful `workspacePanel`/tool-panel names with no compatibility aliases.
+- [x] Model Files, Changes, and Agents as fixed workspace tool tabs at the leading edge of every
+      center tab strip, while preserving the existing terminal/editor/browser tab records and pane
+      behavior.
+- [x] Remove the left sidebar shell, width persistence, resize chrome, and collapsed-sidebar spacer;
+      keep the independent right navigation sidebar intact.
+- [x] Apply the reference chrome: a distinct rounded island around the three leading tool tabs, a
+      seamless active tab/body surface for selected content tabs, and stable overflow/keyboard
+      behavior.
+- [x] Migrate callers, URLs, crash context, polling gates, localization namespaces where needed,
+      and verify formatting, typechecking, repository checks, and the extension build.
+
+## Review
+
+- Renamed the historical `rightSidebar`/`WorkspaceSidebar` state, routes, files, and callers to
+  truthful `workspacePanel`/workspace-tool-panel names. Persisted daemon UI keys now use the same
+  vocabulary; the generated crash-report wire field remains mapped explicitly for compatibility.
+- Removed the left workspace-panel shell and its width/resize persistence. The independent
+  right-side navigation (`SidePanelNavigation`) remains the only sidebar surface.
+- Added a fixed rounded island containing Agents, Changes, and Files at the leading edge of every
+  center tab strip. Selecting a tool tab swaps the focused pane body into the workspace panel;
+  activating a normal terminal/editor/browser tab closes the tool panel and restores its content.
+  Terminal overlays are gated while the tool panel is visible.
+- Existing content-tab chrome keeps the selected tab and body on the same background surface, while
+  the new tool island has its own border, muted fill, and pill-shaped segmented buttons.
+- Verification boundary: the full `pnpm check` gate (including daemon clippy and Swift build) was
+  green for the preceding workspace-panel migration; after the crash, style, and localization
+  edits, the client typecheck, targeted formatting/lint, extension production build (with its
+  existing chunk-size warning), and `git diff --check` passed. No tests or validation harnesses
+  were added, per repository policy.
+
+# Session document conflict on startup — 2026-09-12
+
+## Plan
+
+- [x] Trace the `SessionDocumentClient.get` conflict path and identify which startup sync races
+      with the external Claude Code client.
+- [x] Make the read/sync boundary tolerate a recoverable concurrent edit without creating an
+      unhandled renderer rejection or discarding the external client's changes.
+- [x] Verify the fix with the repository gates that cover the touched package and record the exact
+      validation boundary.
+
+## Review
+
+- Root cause: workbench `SidePanelNavigation` and app startup both hydrated the same session, and
+  `SessionDocumentClient.get` escalated a pending-edit merge conflict into a rejected startup
+  promise. Workbench presentation now leaves hydration to the app startup owner; browser side-panel
+  hydration remains independent. Reads retain the newer external snapshot and local pending value,
+  while epoch replacement remains a hard conflict.
+- Verification: `pnpm exec vp run @agentstart/client#typecheck` passed after the conflict fix;
+  `git diff --check` passed after the visual changes. The full repository gate and extension build
+  were already green for the preceding workspace-panel migration; no tests or validation harnesses
+  were added, per repository policy.
+- Final visual polish moved the workspace-tool button geometry into the shared Button primitive so
+  the rounded island, selected state, and focus treatment remain consistent at every call site.
+- Historical localization IDs were migrated with the locale tree: all workspace-panel callers now
+  resolve through the `workspacePanel` namespace, while crash-report protocol compatibility names
+  remain explicitly mapped rather than being renamed in the wire contract.
+
+# UI input validation crash — 2026-09-12
+
+## Plan
+
+- [x] Trace the invalid UI input fields across old extension bundles and the daemon schema.
+- [x] Normalize legacy workspace-panel fields at the daemon boundary.
+- [x] Consume best-effort feature persistence failures so expected validation errors cannot become
+      renderer-wide unhandled rejections.
+- [x] Verify the client and daemon formatting/type boundaries.
+
+## Review
+
+- Root cause: an older extension bundle could still send `rightSidebar*` fields during reload after
+  the canonical state moved to `workspacePanel*`; the daemon rejected those fields as unknown.
+- The daemon now accepts those legacy wire names only as an input migration and persists canonical
+  `workspacePanel*` keys. Feature-interaction persistence remains local-first and logs validation
+  failures without crashing the renderer.
+- Verification: client TypeScript typecheck, daemon `cargo fmt --check`, and `git diff --check`
+  passed. No tests or validation harnesses were added.
+
+# Titlebar icon sizing correction — 2026-09-12
+
+## Plan
+
+- [x] Remove full-height sizing from the trailing titlebar icon actions.
+- [x] Use the shared default Ghost/Icon button treatment without a titlebar-specific radius or seam.
+- [x] Recheck the rounded active tab and transparent inactive tab classes alongside the correction.
+
+## Review
+
+- Trailing Open in, quick-command, and split-close actions now use intrinsic `icon-sm` buttons with
+  the shared `ghost` variant; their plain flex wrappers no longer stretch them across the titlebar
+  or impose ButtonGroup edge treatment.
+- The active content tab remains a fully rounded surface and inactive tabs remain transparent.
+- Verification: client TypeScript typecheck and `git diff --check` passed. No tests were added.
+
+# Tab bar surface alignment — 2026-09-12
+
+## Plan
+
+- [x] Match the full center tab bar background to the right navigation panel surface token.
+- [x] Keep the active content tab on the contrasting content surface.
+- [x] Verify the pane frame and affected client package.
+
+## Review
+
+- The complete titlebar/tab strip now uses `bg-sidebar`, matching the right navigation panel while
+  the content body remains on `bg-background` and the selected tab keeps its surface contrast.
+- Verification: client TypeScript typecheck and `git diff --check` passed. No tests were added.
+
+# Trailing action edge inset — 2026-09-12
+
+## Plan
+
+- [x] Match the trailing action group's edge gap to the leading tool island inset.
+- [x] Keep the change as a layout margin without changing button geometry or interactions.
+- [x] Verify the workspace pane frame and affected client package.
+
+## Review
+
+- The trailing action wrapper now applies `mr-1`, matching the leading island's `ml-1` so the
+  rightmost icon no longer touches the pane edge.
+- Verification: client TypeScript typecheck and `git diff --check` passed. No tests were added.
+
+# Tab strip spacing and selected surface — 2026-09-12
+
+## Plan
+
+- [x] Add a visible gap between the leading tool island and the content-tab strip.
+- [x] Remove the selected tab's heavy border/shadow treatment while retaining full rounded corners.
+- [x] Verify the shared tab classes and panel layout.
+
+## Review
+
+- The center strip now uses `gap-2` between the tool island and content tabs, matching the reference
+  separation instead of allowing the two groups to touch.
+- Selected content tabs now use a clean `rounded-2xl` surface with no border or heavy drop shadow;
+  inactive tabs remain transparent and the selected surface still contrasts with the content plane.
+- Verification: client TypeScript typecheck and `git diff --check` passed. No tests were added.
+
+## Follow-up
+
+- Selected tabs now overlap the titlebar seam by 1px so their lower rounded edge blends into the
+  content plane; only a shallow outer shadow remains around the selected surface.
+
+# Selected tab/content merge refinement — 2026-09-12
+
+## Plan
+
+- [x] Remove the full-width titlebar divider that leaks through the selected tab/content join.
+- [x] Keep the selected tab's lower overlap while limiting its shadow to the top and side edges.
+- [x] Run formatting, client typecheck, and diff validation.
+
+## Review
+
+- The pane frame no longer paints an independent bottom seam; the selected tab can now extend into
+  the content plane without a divider or shadow at the connection.
+- The selected tab keeps its rounded lower edge and now drops four pixels into the body, while its
+  outer shadow is limited to a barely visible top/left/right contour.
+
+## Final visual calibration
+
+- The selected tab now uses inverse quarter-arc connectors at both lower corners, giving the white
+  surface the outward browser-tab transition while keeping the connection free of a divider and
+  bottom shadow.
+- Verification: targeted formatting, client TypeScript typecheck, and `git diff --check` passed.
+
+# Browser-style tab corner connectors — 2026-09-12
+
+## Plan
+
+- [x] Replace the selected tab's ordinary lower capsule corners with inverse quarter-arc connectors.
+- [x] Keep the content surface continuous and leave drag insertion indicators available.
+- [x] Run formatting, client typecheck, and extension production build.
+
+## Review
+
+- Selected content tabs now end on the content-plane boundary with square lower edges; a shared
+  `TabContentMerge` layer supplies the left/right inverse arcs that expand outward into the chrome.
+- The connector layer uses real content background with no bottom border or shadow, while the
+  existing drag-indicator pseudo-elements remain available on every tab root.
+- Verification: `vp fmt`, client TypeScript typecheck, extension production build, generated CSS
+  inspection for both clip-path arcs, and `git diff --check` passed. The build retains its existing
+  chunk-size warning.
+
+## Follow-up calibration
+
+- Reduced both inverse connectors from 20px to 12px so the lower corner arc matches the reference
+  at the rendered device scale instead of becoming an oversized semicircle.
+
+## Correct arc direction and verify rendered chrome
+
+- [ ] Replace the convex corner paths with concave paths tangent to the tab sides and content baseline.
+- [ ] Keep corner scaling and scroll-viewport gutters consistent so the first and last shoulders remain visible.
+- [ ] Inspect the actual rendered workspace and source-driven light/dark, narrow/wide examples; run package checks.
+
+The previous size-only adjustment left the incorrect arc sweep intact. Build success did not verify
+the requested contour; the preceding visual completion claims were premature.
+
+# Workspace tool island depth — 2026-09-12
+
+## Plan
+
+- [x] Reduce the tool island's oversized pill radius to a restrained control radius.
+- [x] Add the requested shallow inset edge treatment while keeping the icon-only buttons intact.
+- [x] Verify the feature file and preserve the prior plain Ghost trailing-action treatment.
+
+## Review
+
+- The leading Agents / Changes / Files island now uses `rounded-lg` with a subtle inset edge shadow,
+  matching the reference's recessed capsule without the previous full-pill geometry.
+- Right-side actions remain plain default Ghost buttons outside any ButtonGroup.
+- Verification: client TypeScript typecheck and `git diff --check` passed. No tests were added.
+
+## Follow-up
+
+- Reduced the island radius one step further to `rounded-lg` at the user's request; the inset edge
+  treatment remains unchanged.
+- Reduced the inner workspace-tool buttons to `!rounded-sm` and removed their duplicate size-level
+  radius so the controls stay inside the island contour.
+- UI persistence input now accepts legacy `rightSidebar*` payloads from older extension bundles,
+  canonicalizes them to `workspacePanel*`, and prevents rolling-reload clients from triggering
+  `UI input validation failed`.
+
+# Tab hover separation — 2026-09-12
+
+## Plan
+
+- [x] Move inactive-tab hover paint into an inset surface so it cannot touch the selected tab.
+- [x] Preserve drag insertion pseudo-elements and keep tab text/icon positions unchanged.
+- [x] Run the focused client checks and verify the generated extension includes the inset surface.
+
+## Review
+
+- Inactive tabs now render an independent inset hover surface with six-pixel horizontal breathing
+  room and a small vertical inset. The root tab only changes text color, so adjacent tab chrome no
+  longer becomes one continuous highlighted block.
+- The hover surface is rendered as a child instead of a root pseudo-element because the tab roots
+  already reserve `::before` and `::after` for drag insertion indicators.
+- `vp lint` (focused tab files), client typecheck, full workspace typecheck, extension build, and
+  `git diff --check` passed. The live extension reload currently remains on its existing connecting
+  surface, so no unobserved browser screenshot is being presented as visual proof.
+
+# Tab close inset and switch stability — 2026-09-12
+
+## Plan
+
+- [x] Trace the close-button edge spacing and the active-state layout transition.
+- [x] Remove any state-dependent geometry or transition that moves tab content on activation.
+- [x] Apply the smallest shared fix and run the focused checks.
+
+## Review
+
+- The shared close-button overlay now uses `right-2`, moving its 20px hit area eight pixels inside
+  the tab edge without changing tab width.
+- Active and inactive tab roots now share the same full-height flex box. The selected silhouette's
+  visual layer supplies its four-pixel top inset independently, so switching state cannot move the
+  icon, label, or close control.
+- Focused lint, client typecheck, extension build, and `git diff --check` passed. The live page was
+  reloaded for inspection but remained on its existing connection surface, so no screenshot claim
+  is being made beyond the compiled verification.
+
+# Neutral tab close affordance — 2026-09-12
+
+## Review
+
+- Removed the accent background and resting accent text from the close overlay. It now uses the
+  shared muted gray icon color while retaining the default Ghost hover/focus feedback.
+
+# Neutral tab hover affordance — 2026-09-12
+
+## Review
+
+- Tab Hover now uses the neutral `muted` surface and foreground text on hover/focus instead of the
+  themed Primary/Accent pair, preserving the existing inset spacing.
+
+# Header button size consistency — 2026-09-12
+
+## Plan
+
+- [x] Trace the tab-strip scroll buttons and every regular Header icon control.
+- [x] Replace the custom full-height scroll size and align the new-tab control with the shared
+      intrinsic icon size.
+- [x] Run focused formatting, lint, typecheck, extension build, and generated-bundle checks.
+
+## Review
+
+- Tab strip scroll controls now use the shared `icon-sm` size instead of the custom full-height
+  `icon-tab-strip` variant; the unused variant was removed from the Button size map.
+- The new-tab control also uses `icon-sm`, matching Open in, Quick Commands, and split-close
+  controls. The 28px WorkspaceToolTabs controls remain intentionally scoped to their recessed
+  island and are not mixed into the regular Header control row.
+- Verification: `vp fmt`, focused `vp lint`, client TypeScript typecheck, extension production
+  build, source/generated custom-size searches, and `git diff --check` passed. The extension build
+  retains its existing chunk-size warning; no tests or validation harnesses were added.
+
+# Tab scroll button centering — 2026-09-12
+
+## Plan
+
+- [x] Trace the vertical alignment and asymmetric gutters introduced by the intrinsic scroll-button
+      size.
+- [x] Center both scroll buttons through one shared full-height wrapper and mirror their horizontal
+      spacing.
+- [x] Run formatting, focused lint, client typecheck, and diff validation.
+
+## Review
+
+- Both scroll buttons now sit in matching full-height `items-center` wrappers with `mx-1`, so the
+  intrinsic `icon-sm` hit areas are vertically centered and separated from the viewport and the
+  neighboring Header controls symmetrically.
+- Verification: `vp fmt`, focused `vp lint`, client TypeScript typecheck, and `git diff --check`
+  passed. No tests or validation harnesses were added.
+
+# Remove scroll-button divider rails — 2026-09-12
+
+## Plan
+
+- [x] Trace the vertical rails that appear only while the tab strip overflows.
+- [x] Remove the leading border and trailing pseudo-element divider while preserving edge masks.
+- [x] Run formatting, focused lint, client typecheck, and diff validation.
+
+## Review
+
+- The overflow viewport no longer adds a leading `border-l` or trailing pseudo-element rail, so the
+  centered scroll buttons remain visually open on both sides while the existing fade masks continue
+  to signal hidden tabs.
+- Verification: `vp fmt`, focused `vp lint`, client TypeScript typecheck, and `git diff --check`
+  passed. No tests or validation harnesses were added.
+
+# Align right navigation below shared Header — 2026-09-12
+
+## Plan
+
+- [x] Trace the shell, workbench Header, and right navigation column hierarchy.
+- [x] Identify that the first implementation only reserved Header height with a spacer.
+- [x] Keep the right-panel resize affordance below the Header instead of extending into it.
+- [x] Replace the spacer with a true shared Header host above the lower content row.
+
+## Review
+
+- Superseded by `# True shared workbench Header — 2026-09-12`. The earlier
+  `pt-[var(--titlebar-height)]` implementation was a visual spacer, not a shared Header, and was
+  removed after review.
+
+# Extend Header surface across right navigation — 2026-09-12
+
+## Plan
+
+- [x] Identify the blank reserved Header band left above the shifted right Panel.
+- [x] Remove the spacer and move the actual Header host above both lower columns.
+- [x] Run formatting, focused lint, client typecheck, and diff validation.
+
+## Review
+
+- Superseded: painting a surface over a reserved blank band still left the layout structurally
+  split. The replacement task below portals the focused tab Header into a shell-level host.
+
+# True shared workbench Header — 2026-09-12
+
+## Plan
+
+- [x] Remove the spacer-only right Panel treatment and keep the resize handle inside the lower row.
+- [x] Add a shell-level Header host above the main content and right navigation columns.
+- [x] Render the focused split group's real tab Header in that host and hide pane-local duplicates.
+- [x] Run formatting, focused lint, client typecheck, extension build, and diff validation.
+
+## Review
+
+- The shell now owns one real Header slot above the lower content row. The focused split group's
+  Header is portaled into that slot, while pane-local Header rows are hidden only after the slot is
+  mounted. The right navigation column remains a sibling of the main content below the Header, with
+  its resize handle scoped to that lower row. The worktree-creation faux tab uses the same slot, so
+  it does not reintroduce a content-only Header during creation.
+- `vp run @agentstart/client#typecheck`, `vp run @agentstart/client#lint`, and
+  `vp run @agentstart/extension#build` passed; the extension build was rerun after the shared
+  creation Header was added and retains its existing chunk-size warning. `pnpm check` and
+  `git diff --check` also passed; no tests or validation harnesses were added.
+
+# Renderer crash: undefined workspace visibility symbol — 2026-09-13
+
+## Plan
+
+- [x] Trace every `isWorkspaceBodyVisible` reference and inspect the active shell migration diff.
+- [x] Confirm whether the current working tree already contains the missing binding fix.
+- [x] Apply the smallest application-shell correction only if the crash remains reproducible in source.
+- [x] Run focused format, lint, typecheck, extension build, and diff validation.
+
+## Review
+
+- Root cause: the workspace-surface migration briefly saved the new
+  `isWorkspaceBodyVisible(...)` call before its import. WXT HMR evaluated that intermediate module,
+  and the root error boundary captured the resulting bare-identifier `ReferenceError`.
+- The report was created at 13:05:22 local time; `shell.tsx` was saved at 13:07:49 with the missing
+  import from `state/visible-surface`. The current source therefore already contains the minimal
+  repair, and no duplicate compatibility or fallback code was added.
+- `vp run @agentstart/client#typecheck`, full client lint, the extension production build,
+  `pnpm check`, and `git diff --check` passed. The extension build retained its existing chunk-size
+  warning. Browser-level localhost verification was blocked by the in-app browser policy, so it is
+  not claimed as completed; no tests or validation harnesses were added.
+
+# Header island and tab/content join — 2026-09-14
+
+## Plan
+
+- [x] Trace why the selected tab read as a pill detached from the content card.
+- [x] Remove the band painted across the join and correct the merge silhouette's clipped geometry.
+- [x] After review, split the header off into its own island and give the selected tab a legible surface.
+- [x] Align the worktree-creation faux tab with the same chrome, then run the gates.
+
+## Review
+
+### Round 1 — the join itself
+
+- Root cause 1: `WorkspaceSharedHeaderSlot` carried its own downward shadow
+  (`0 4px 14px -4px black 9%`). The content card started flush beneath that row, so the shadow
+  painted a soft band exactly across the join — the tab ended on the strip's baseline while the
+  card's first pixels were darkened.
+- Root cause 2: `TabContentMerge` painted its surface 20px past the strip's bottom edge and placed
+  both concave shoulders on that far edge. The strip is a horizontal scroll container
+  (`overflow-x-auto` + `overflow-y-hidden`) inside two `overflow-hidden` wrappers, so everything
+  below the baseline was clipped — the shoulders never rendered and the silhouette could never
+  bridge the join.
+- Geometry proof (session-scoped static harness, scratchpad only, nothing added to the repository):
+  loaded the built `client-*.css`, rebuilt the real DOM chain, and measured rects. Pre-fix the
+  shoulders sat at y 46–58 inside a 38px strip (outside the clip, so never painted) with the
+  surface overshooting 20px; after the fix they occupied y 26–38 and the surface's bottom edge
+  equaled the card's top edge with a 0px gap. A red-fill probe confirmed the inverse-corner paths.
+
+### Round 2 — the structure the review asked for
+
+- The first round made the strip and the content one surface. Review rejected that: the header must
+  be *distinguished* from the content and read as **a piece of content floating on the background**.
+- `workspace-shell-layout.tsx` now owns the gutters: the chrome plane row carries
+  `p-1.5 gap-1.5` with the header island and the content island as its two children, so the plane
+  itself separates them. The content island dropped its `mx-1.5 mb-1.5` for that padding.
+- `WorkspaceSharedHeaderSlot` is that header island: it wears the shared
+  `workspace-content-card` surface (radius + sanctioned shadow), which is what makes it read as a
+  piece rather than as a background band.
+- `TabContentMerge` is replaced by `TabActiveSurface`: the header has no content below it to merge
+  into, so the selected tab is a control on the island and carries the same recessed treatment the
+  workspace tool island uses (filled `card`, hairline border, shallow shadow). All six call sites
+  were renamed with it.
+- The worktree-creation faux tab renders that same surface, so an in-progress create reads as the
+  selected tab on the header island.
+- `docs/style-guide.md` and the `.workspace-content-card` comment now describe the two-island
+  figure-ground and the tab's recessed surface.
+- Verification: `vp fmt`, `vp lint` (0 warnings, 0 errors), the workspace typecheck graph
+  (`vp run --cache -r typecheck`, extension and client both cache-missed and passed),
+  `vp run @agentstart/extension#build`, generated-CSS inspection (the selected surface's
+  `border`/`card`/shadow classes are present in the rebuilt bundle), a `git diff --check` pass, and
+  an A/B harness capture of both candidate tab treatments against the rebuilt CSS.
+- Real Chrome rendering of the running extension was not verified in this session; the harness
+  reproduces the markup and CSS but not the app's state. No tests or validation harnesses were
+  added to the repository.
+
+# Real Chrome page-tab verification — 2026-09-13
+
+## Plan
+
+- [ ] Verify the no-workspace tool island and trailing controls are visible, disabled, and explain why.
+- [ ] Activate the existing workspace and verify selected-tab/content fusion without dual selection.
+- [ ] Verify page-tab persistence across a real extension reload.
+- [ ] Verify dragging a page tab into a split in the Chrome extension runtime.
+- [ ] Record observed results and run repository validation if a correction is required.
+
+## Review
+
+- Pending real Chrome verification.
+
+# Restore the tab/content merge across the header — 2026-09-14
+
+## Plan
+
+- [x] Recover the merge-era geometry (inverse arcs, baseline join, zero shadow at the join) from the
+      Round-1 record and the lessons file; rebuild it in source.
+- [x] Put the header back on the chrome plane and start the content card on the row's baseline, so
+      the selected tab's silhouette can cross the join instead of ending on its own island.
+- [x] Add the reference tab's top-and-sides shadow as a masked layer that keeps the join clean.
+- [x] Match the reference tab metrics: full-width fill, 12px padding, content-hugging widths, and no
+      extra gap between the tool island and the strip.
+
+## Review
+
+- Measured from the reference screenshot (1728px-wide window, 1 image px ≈ 1.44 CSS px): strip height
+  ≈ 37.5px, tab top inset ≈ 3px, tab corner radius ≈ 9-10px, fill edge → glyph ≈ 12px, glyph → glyph
+  ≈ 23px, shadow ≈ 2-3px around the top and sides.
+- `TabActiveSurface` now resolves through a plane/card scope: on the plane it renders the merge
+  silhouette (full-width body ending on the baseline, two 12px inverse arcs, masked top-and-sides
+  shadow), and on the content card — a pane-local strip in a split, which has no plane to flare into
+  — it keeps the recessed control surface, because a white tab on a white card disappears.
+- Tab padding moved to the reference's 12px (`TAB_ROOT_CLASSES`), the neighbor gap is the two
+  paddings (24px), and the tab container floor dropped from 128px to 56px so a short title no longer
+  leaves a trailing box that reads as an oversized gap. The 8px gap beside the tool island is gone;
+  the strip's own 12px gutter is the separation, and it is exactly what a selected first tab's outer
+  arc flares into.
+- Verification: `vp fmt`, client lint, client typecheck, extension build, and a scratchpad harness
+  that loads the built `client-*.css` and reproduces the DOM chain. Measured in that render: body
+  bottom → card top = 0px, 12px content padding on both sides, shoulders 12x12 at -12..+12, first
+  tab's shoulder flush with the strip's padding edge (unclipped), top shadow fading 248 → 231 toward
+  the tab edge, side shadows 248 → 237, and the join under the tab a clean 255 with no band. Live
+  Chrome rendering of the running extension was not verified in this session; the harness reproduces
+  the markup and CSS but not the app's state. No tests or validation harnesses were added to the
+  repository.

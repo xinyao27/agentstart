@@ -7,17 +7,15 @@ import type { AppState } from '../store/types'
 type PersistedUiState = Pick<
   AppState,
   | 'acknowledgedAgentsByPaneKey'
-  | 'activeView'
   | 'filterRepoIds'
   | 'groupBy'
   | 'hideDefaultBranchWorkspace'
   | 'markdownTocPanelWidth'
   | 'persistedUIReady'
   | 'projectOrderBy'
-  | 'rightSidebarExplorerView'
-  | 'rightSidebarOpen'
-  | 'rightSidebarTab'
-  | 'rightSidebarWidth'
+  | 'workspacePanelExplorerView'
+  | 'workspacePanelOpen'
+  | 'workspacePanelTab'
   | 'showDotfilesByWorktree'
   | 'showSleepingWorkspaces'
   | 'sidebarWidth'
@@ -32,10 +30,9 @@ export function usePersistedUi(state: PersistedUiState): void {
     const timer = window.setTimeout(() => {
       void setRuntimeUIState(useAppStore.getState().settings, {
         sidebarWidth: state.sidebarWidth,
-        rightSidebarOpen: state.rightSidebarOpen,
-        rightSidebarTab: state.rightSidebarTab,
-        rightSidebarExplorerView: state.rightSidebarExplorerView,
-        rightSidebarWidth: state.rightSidebarWidth,
+        workspacePanelOpen: state.workspacePanelOpen,
+        workspacePanelTab: state.workspacePanelTab,
+        workspacePanelExplorerView: state.workspacePanelExplorerView,
         markdownTocPanelWidth: state.markdownTocPanelWidth,
         groupBy: state.groupBy,
         sortBy: state.sortBy,
@@ -46,24 +43,21 @@ export function usePersistedUi(state: PersistedUiState): void {
         hideDefaultBranchWorkspace: state.hideDefaultBranchWorkspace,
         showDotfilesByWorktree: state.showDotfilesByWorktree,
         filterRepoIds: state.filterRepoIds,
-        activeView: state.activeView,
         acknowledgedAgentsByPaneKey: state.acknowledgedAgentsByPaneKey
       })
     }, 150)
     return () => window.clearTimeout(timer)
   }, [
     state.acknowledgedAgentsByPaneKey,
-    state.activeView,
     state.filterRepoIds,
     state.groupBy,
     state.hideDefaultBranchWorkspace,
     state.markdownTocPanelWidth,
     state.persistedUIReady,
     state.projectOrderBy,
-    state.rightSidebarExplorerView,
-    state.rightSidebarOpen,
-    state.rightSidebarTab,
-    state.rightSidebarWidth,
+    state.workspacePanelExplorerView,
+    state.workspacePanelOpen,
+    state.workspacePanelTab,
     state.showDotfilesByWorktree,
     state.showSleepingWorkspaces,
     state.sidebarWidth,

@@ -3,6 +3,7 @@ import {
   mountExtensionConnecting,
   mountExtensionUnavailable,
   preloadExtensionClient,
+  type ExtensionPageSubscription,
   type ExtensionUnavailableFailure
 } from '@agentstart/client/extension-bootstrap'
 
@@ -17,6 +18,7 @@ import {
 } from './connection-settings'
 import { requestRuntimeBootstrap } from './runtime/bootstrap'
 import { createExtensionRuntimeHostFactory } from './runtime/client'
+import { createWorkbenchPageCommandInbox } from './workspace/page-commands'
 
 type ConnectionStage = 'bootstrap' | 'client-mount' | 'health-check' | 'native-bootstrap'
 
@@ -36,6 +38,17 @@ async function mountExtensionSurfaceInternal(surface: 'side-panel' | 'workspace'
     (browserWindow) => browserWindow.id ?? null,
     () => null
   )
+  const browserTabIdPromise =
+    surface === 'workspace'
+      ? chrome.tabs.getCurrent().then(
+          (tab) => tab?.id ?? null,
+          () => null
+        )
+      : Promise.resolve(null)
+  // Why: a discarded workbench must retain page-open commands while the daemon
+  // reconnects. Install the host-owned inbox before any bootstrap round trip.
+  const subscribePageOpen: ExtensionPageSubscription =
+    surface === 'workspace' ? createWorkbenchPageCommandInbox(browserTabIdPromise) : () => () => {}
   // Why: start parsing the full client while Native Messaging starts the daemon. Keeping it out
   // of the synchronous entry chunk gets the connecting surface on screen first without moving
   // this work behind the connection round trip.
@@ -82,10 +95,24 @@ async function mountExtensionSurfaceInternal(surface: 'side-panel' | 'workspace'
         }
       },
       openPage: (page) => {
-        void chrome.runtime.sendMessage({ page, type: 'open-page' })
+        void chrome.runtime.sendMessage({
+          page,
+          ...(browserWindowId === null ? {} : { sourceWindowId: browserWindowId }),
+          type: 'open-page'
+        })
       },
       openWorkspace: (target) => {
-        void chrome.runtime.sendMessage({ target, type: 'open-workspace' })
+        void chrome.runtime.sendMessage({
+          ...(browserWindowId === null ? {} : { sourceWindowId: browserWindowId }),
+          // Why: the background only navigates; the new-tab intent is resolved
+          // by the client before this boundary and must not reach the wire.
+          target: {
+            projectId: target.projectId,
+            ...(target.sessionId ? { sessionId: target.sessionId } : {}),
+            ...(target.worktreeId ? { worktreeId: target.worktreeId } : {})
+          },
+          type: 'open-workspace'
+        })
       },
       publishAgentAttention: (count) => {
         void chrome.runtime.sendMessage({ count, type: 'agent-attention' })
@@ -107,6 +134,7 @@ async function mountExtensionSurfaceInternal(surface: 'side-panel' | 'workspace'
         requestRuntimeBootstrap,
         browserCapabilities.executeBrowserCommand
       ),
+      subscribePageOpen,
       surface
     })
   }

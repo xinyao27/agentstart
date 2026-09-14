@@ -1,4 +1,4 @@
-import { showWorkspaceSidebar } from '../show-sidebar'
+import { showWorkspacePanel } from '../show-workspace-panel'
 import type { useChecksPanelReviewMutationsState } from './review-mutations'
 
 export function useChecksPanelReviewCreation(context: useChecksPanelReviewMutationsState) {
@@ -83,7 +83,7 @@ export function useChecksPanelReviewCreation(context: useChecksPanelReviewMutati
     if (!repo || !branch) {
       return
     }
-    showWorkspaceSidebar({
+    showWorkspacePanel({
       view: 'source-control',
       worktreeId: activeWorktreeId,
       sourceControlView: 'review'

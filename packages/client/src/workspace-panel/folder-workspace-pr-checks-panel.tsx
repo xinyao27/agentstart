@@ -19,7 +19,7 @@ import {
   runLimitedParentPrChecksRefreshes
 } from './parent-pr-checks-refresh'
 import type { ParentPrChecksRefreshOutcome, ParentPrChecksRow } from './parent-pr-checks-rows'
-import { RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME } from './right-sidebar-button-styles'
+import { WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME } from './workspace-panel-button-styles'
 
 type FolderWorkspacePrChecksPanelProps = {
   isVisible?: boolean
@@ -168,7 +168,7 @@ export default function FolderWorkspacePrChecksPanel({
     return (
       <div className="text-muted-foreground flex min-h-0 flex-1 items-center justify-center p-6 text-center text-sm">
         {translate(
-          'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.unavailable',
+          'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.unavailable',
           'PR checks are only shown for folder workspaces.'
         )}
       </div>
@@ -182,7 +182,7 @@ export default function FolderWorkspacePrChecksPanel({
           <div className="min-w-0 flex-1">
             <div className="text-foreground truncate text-sm font-medium">
               {translate(
-                'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.reviewChecks',
+                'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.reviewChecks',
                 'Review checks'
               )}
             </div>
@@ -197,11 +197,11 @@ export default function FolderWorkspacePrChecksPanel({
                   type="button"
                   variant="outline"
                   size="icon-xs"
-                  className={RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME}
+                  className={WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME}
                   onClick={() => setManualRefreshGeneration((generation) => generation + 1)}
                   disabled={childWorktrees.length === 0 || isRefreshing}
                   aria-label={translate(
-                    'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.refresh',
+                    'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.refresh',
                     'Refresh PR checks'
                   )}
                 >
@@ -215,7 +215,7 @@ export default function FolderWorkspacePrChecksPanel({
             />
             <TooltipContent side="bottom">
               {translate(
-                'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.refresh',
+                'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.refresh',
                 'Refresh PR checks'
               )}
             </TooltipContent>
@@ -227,13 +227,13 @@ export default function FolderWorkspacePrChecksPanel({
         <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
           <div className="text-foreground text-sm font-medium">
             {translate(
-              'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.emptyTitle',
+              'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.emptyTitle',
               'No attached worktrees yet'
             )}
           </div>
           <div className="text-muted-foreground mt-2 max-w-[16rem] text-xs leading-5">
             {translate(
-              'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.emptyCopy',
+              'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.emptyCopy',
               'PR checks will appear here after worktrees are attached to this folder workspace.'
             )}
           </div>
@@ -279,7 +279,7 @@ function formatReviewChecksHeaderSummary(summary: {
     return [
       worktreeCount,
       translate(
-        'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.allChecksPassing',
+        'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.allChecksPassing',
         'all checks passing'
       )
     ].join(' · ')
@@ -290,11 +290,11 @@ function formatReviewChecksHeaderSummary(summary: {
 function formatWorktreeCount(count: number): string {
   return count === 1
     ? translate(
-        'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.oneWorktree',
+        'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.oneWorktree',
         '1 worktree'
       )
     : translate(
-        'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.worktreeCount',
+        'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.worktreeCount',
         '{{value0}} worktrees',
         { value0: count }
       )
@@ -302,9 +302,12 @@ function formatWorktreeCount(count: number): string {
 
 function formatFailingCount(count: number): string {
   return count === 1
-    ? translate('auto.components.rightSidebar.FolderWorkspacePrChecksPanel.oneFailing', '1 failing')
+    ? translate(
+        'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.oneFailing',
+        '1 failing'
+      )
     : translate(
-        'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.failingCount',
+        'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.failingCount',
         '{{value0}} failing',
         { value0: count }
       )
@@ -312,9 +315,12 @@ function formatFailingCount(count: number): string {
 
 function formatPendingCount(count: number): string {
   return count === 1
-    ? translate('auto.components.rightSidebar.FolderWorkspacePrChecksPanel.onePending', '1 pending')
+    ? translate(
+        'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.onePending',
+        '1 pending'
+      )
     : translate(
-        'auto.components.rightSidebar.FolderWorkspacePrChecksPanel.pendingCount',
+        'auto.components.workspacePanel.FolderWorkspacePrChecksPanel.pendingCount',
         '{{value0}} pending',
         { value0: count }
       )

@@ -17,11 +17,8 @@ import { useAppStore } from '~renderer/store/state'
 import type { AiVaultScope } from '~renderer/workspace-panel/ai-vault/session/providers'
 import type { AiVaultSession } from '~renderer/workspace-panel/ai-vault/session/record'
 
-import {
-  LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
-  type RightSidebarPanelSource
-} from '../right-sidebar-panel-source'
 import { usePersistedAiVaultViewOptions } from '../use-persisted-ai-vault-view-options'
+import { LOCAL_WORKSPACE_PANEL_SOURCE, type WorkspacePanelSource } from '../workspace-panel-source'
 import {
   buildAiVaultHostScopeOptions,
   buildRuntimeAiVaultHostScopeOptions,
@@ -198,7 +195,7 @@ function LocalAiVaultPanel(): React.JSX.Element {
   const copyText = async (text: string, label: string): Promise<void> => {
     await shellClient.ui.writeClipboardText(text)
     toast.success(
-      translate('auto.components.right.sidebar.AiVaultPanel.valueCopied', '{{value0}} copied', {
+      translate('auto.components.workspacePanel.AiVaultPanel.valueCopied', '{{value0}} copied', {
         value0: label
       })
     )
@@ -280,7 +277,7 @@ function LocalAiVaultPanel(): React.JSX.Element {
       {scanResult && scanResult.issues.length > 0 ? (
         <AiVaultPanelNotice>
           {translate(
-            'auto.components.right.sidebar.AiVaultPanel.transcriptsSkipped',
+            'auto.components.workspacePanel.AiVaultPanel.transcriptsSkipped',
             '{{count}} transcript skipped',
             { count: scanResult.issues.length }
           )}
@@ -312,13 +309,13 @@ function LocalAiVaultPanel(): React.JSX.Element {
         onCopyId={(session) =>
           void copyText(
             session.sessionId,
-            translate('auto.components.right.sidebar.AiVaultPanel.sessionId', 'Session ID')
+            translate('auto.components.workspacePanel.AiVaultPanel.sessionId', 'Session ID')
           )
         }
         onCopyPath={(session) =>
           void copyText(
             session.filePath,
-            translate('auto.components.right.sidebar.AiVaultPanel.logPath', 'Log path')
+            translate('auto.components.workspacePanel.AiVaultPanel.logPath', 'Log path')
           )
         }
         onOpenLog={(session) => void openAiVaultSessionLogInAgentStart(session)}
@@ -341,9 +338,9 @@ function LocalAiVaultPanel(): React.JSX.Element {
 }
 
 export default function AiVaultPanel({
-  source = LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE
+  source = LOCAL_WORKSPACE_PANEL_SOURCE
 }: {
-  source?: RightSidebarPanelSource
+  source?: WorkspacePanelSource
 }): React.JSX.Element {
   void source
   return <LocalAiVaultPanel />

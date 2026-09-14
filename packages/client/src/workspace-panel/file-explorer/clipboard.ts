@@ -186,7 +186,7 @@ export function pasteFileExplorerClipboard(args: {
       throw new Error(
         route
           ? translate(
-              'auto.components.right.sidebar.fileExplorerClipboard.sameWorkspace',
+              'auto.components.workspacePanel.fileExplorerClipboard.sameWorkspace',
               'Files can only be pasted into the workspace they were copied from.'
             )
           : getFileExplorerOwnerUnresolvedMessage()
@@ -204,7 +204,7 @@ export function pasteFileExplorerClipboard(args: {
     ) {
       throw new Error(
         translate(
-          'auto.components.right.sidebar.fileExplorerClipboard.insideItself',
+          'auto.components.workspacePanel.fileExplorerClipboard.insideItself',
           "A folder can't be pasted into itself."
         )
       )
@@ -276,7 +276,7 @@ export function pasteFileExplorerClipboard(args: {
       extractRuntimeErrorMessage(
         error,
         translate(
-          'auto.components.right.sidebar.fileExplorerClipboard.failed',
+          'auto.components.workspacePanel.fileExplorerClipboard.failed',
           'Could not paste the selected files.'
         )
       )

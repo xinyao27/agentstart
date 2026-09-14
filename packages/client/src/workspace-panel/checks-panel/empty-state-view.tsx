@@ -66,13 +66,13 @@ export function ChecksPanelEmptyStateView({
       <div className="px-4 py-6">
         <div className="text-foreground text-sm font-medium">
           {translate(
-            'auto.components.right.sidebar.ChecksPanel.a4ef4e0832',
+            'auto.components.workspacePanel.ChecksPanel.a4ef4e0832',
             'No workspace selected'
           )}
         </div>
         <div className="text-muted-foreground mt-1 text-xs">
           {translate(
-            'auto.components.right.sidebar.ChecksPanel.b5dd73a105',
+            'auto.components.workspacePanel.ChecksPanel.b5dd73a105',
             'Select a workspace to view checks'
           )}
         </div>
@@ -83,11 +83,11 @@ export function ChecksPanelEmptyStateView({
     return (
       <div className="px-4 py-6">
         <div className="text-foreground text-sm font-medium">
-          {translate('auto.components.right.sidebar.ChecksPanel.976cefd02f', 'Checks unavailable')}
+          {translate('auto.components.workspacePanel.ChecksPanel.976cefd02f', 'Checks unavailable')}
         </div>
         <div className="text-muted-foreground mt-1 text-xs">
           {translate(
-            'auto.components.right.sidebar.ChecksPanel.dda5924a40',
+            'auto.components.workspacePanel.ChecksPanel.dda5924a40',
             'Checks require a Git branch and hosted review context'
           )}
         </div>
@@ -164,12 +164,12 @@ export function ChecksPanelEmptyStateView({
                 disabled: isCreatingPr || isPublishingBranch || isRemoteOperationActive,
                 title: shouldPushBeforeCreateReview
                   ? translate(
-                      'auto.components.right.sidebar.ChecksPanel.98f4c37b33',
+                      'auto.components.workspacePanel.ChecksPanel.98f4c37b33',
                       'Push & Create {{value0}}',
                       { value0: 'PR' }
                     )
                   : translate(
-                      'auto.components.right.sidebar.ChecksPanel.889cdfba04',
+                      'auto.components.workspacePanel.ChecksPanel.889cdfba04',
                       'Create {{value0}}',
                       { value0: 'PR' }
                     )
@@ -189,9 +189,12 @@ export function ChecksPanelEmptyStateView({
                 onClick={handlePublishBranch}
               >
                 {isPublishingBranch
-                  ? translate('auto.components.right.sidebar.ChecksPanel.fdb27637f2', 'Publishing…')
+                  ? translate(
+                      'auto.components.workspacePanel.ChecksPanel.fdb27637f2',
+                      'Publishing…'
+                    )
                   : translate(
-                      'auto.components.right.sidebar.ChecksPanel.6633c7a1fb',
+                      'auto.components.workspacePanel.ChecksPanel.6633c7a1fb',
                       'Publish Branch'
                     )}
               </Button>
@@ -212,8 +215,11 @@ export function ChecksPanelEmptyStateView({
                 }}
               >
                 {emptyRefreshing
-                  ? translate('auto.components.right.sidebar.ChecksPanel.71026ca2cb', 'Refreshing…')
-                  : translate('auto.components.right.sidebar.ChecksPanel.7f4489f370', 'Refresh')}
+                  ? translate(
+                      'auto.components.workspacePanel.ChecksPanel.71026ca2cb',
+                      'Refreshing…'
+                    )
+                  : translate('auto.components.workspacePanel.ChecksPanel.7f4489f370', 'Refresh')}
               </Button>
             ) : null}
           </div>

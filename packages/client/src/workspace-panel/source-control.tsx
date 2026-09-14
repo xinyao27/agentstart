@@ -1,11 +1,8 @@
 import React from 'react'
 
-import {
-  LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
-  type RightSidebarPanelSource
-} from './right-sidebar-panel-source'
 import { useSourceControlController } from './source-control/controller'
 import { SourceControlPanel } from './source-control/panel'
+import { LOCAL_WORKSPACE_PANEL_SOURCE, type WorkspacePanelSource } from './workspace-panel-source'
 
 export { buildResolvePullRequestConflictsPrompt } from './source-control/ai-prompts'
 export { pickDefaultSourceControlAgent } from './source-control/panel-state'
@@ -21,11 +18,11 @@ function LocalSourceControl({
 }
 
 function SourceControl({
-  source = LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
+  source = LOCAL_WORKSPACE_PANEL_SOURCE,
   isVisible = true,
   workspacePanelTabId
 }: {
-  source?: RightSidebarPanelSource
+  source?: WorkspacePanelSource
   isVisible?: boolean
   workspacePanelTabId?: string
 }): React.JSX.Element | null {

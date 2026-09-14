@@ -48,7 +48,7 @@ export function buildChecksPanelGitStatusContextKey(
     worktreeId: input.worktreeId ?? '',
     worktreePath: input.worktreePath ?? '',
     branch: input.branch,
-    // Why: this key gates right-sidebar async commits too; link/unlink must
+    // Why: this key gates workspace-panel async commits too; link/unlink must
     // make pre-change PR refreshes stale even when repo/branch are unchanged.
     linkedGitHubPR: input.linkedGitHubPR ?? null,
     runtimeEnvironmentId: input.runtimeEnvironmentId ?? '',

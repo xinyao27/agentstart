@@ -21,10 +21,6 @@ pub(super) enum MobileDeviceCommand {
     ListPaired {
         response: oneshot::Sender<Result<Vec<MobileDevice>, MobileDeviceStoreError>>,
     },
-    MarkSeen {
-        device_id: String,
-        response: oneshot::Sender<Result<(), MobileDeviceStoreError>>,
-    },
     Remove {
         device_id: String,
         response: oneshot::Sender<Result<bool, MobileDeviceStoreError>>,
@@ -67,12 +63,6 @@ impl MobileDeviceWorker {
             }
             MobileDeviceCommand::ListPaired { response } => {
                 let _ = response.send(records::list_paired(connection));
-            }
-            MobileDeviceCommand::MarkSeen {
-                device_id,
-                response,
-            } => {
-                let _ = response.send(records::mark_seen(connection, &device_id));
             }
             MobileDeviceCommand::Remove {
                 device_id,

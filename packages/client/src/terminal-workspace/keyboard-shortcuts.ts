@@ -8,8 +8,8 @@ import { showTerminalShortcutCaptureNotification } from '~renderer/terminal-work
 import { matchesRecentTabSwitcherChord } from '~renderer/window-shortcut-policy'
 
 import { requestEditorCmdSave } from '../editor/autosave'
+import { isEditableTarget } from '../keyboard-input/editable-target'
 import {
-  handleSwitchRecentTab,
   handleSwitchTab,
   handleSwitchTabAcrossAllTypes,
   handleSwitchTerminalTab
@@ -73,10 +73,10 @@ export function useTerminalWorkspaceKeyboardShortcuts({
           keybindings
         })
       }
-      // Why: Cmd/Ctrl+T always opens a new terminal, regardless of which
-      // surface is active. Browser-tab creation has its own shortcut
-      // (Cmd/Ctrl+Shift+B) so users have a predictable way to spawn a
-      // terminal from anywhere in the central pane.
+      // New-terminal shortcut (macOS Cmd+Alt+T default) — always opens a new
+      // terminal, regardless of which surface is active. Browser-tab creation
+      // has its own shortcut (macOS Cmd+Alt+B default) so users have a
+      // predictable way to spawn a terminal from anywhere in the central pane.
       if (!e.repeat && matchShortcut('tab.newTerminal')) {
         e.preventDefault()
         notifyTerminalCapture('tab.newTerminal')
@@ -84,11 +84,11 @@ export function useTerminalWorkspaceKeyboardShortcuts({
         return
       }
 
-      // Cmd/Ctrl+Alt+T (macOS default) — launch the default agent in a new
+      // Cmd+Alt+Shift+T (macOS default) — launch the default agent in a new
       // tab; per-agent chords (Settings → Shortcuts → Agents) launch their
-      // specific agent. Unlike Cmd+T this never targets the floating panel:
-      // agent sessions belong to a worktree, so the launch always lands in
-      // the active workspace's tab bar.
+      // specific agent. Unlike the new-terminal shortcut this never targets
+      // the floating panel: agent sessions belong to a worktree, so the
+      // launch always lands in the active workspace's tab bar.
       if (!e.repeat) {
         const match = resolveAgentLaunchShortcut(activeWorktreeId, matchShortcut)
         if (match) {
@@ -108,9 +108,10 @@ export function useTerminalWorkspaceKeyboardShortcuts({
         }
       }
 
-      // Cmd/Ctrl+Shift+T — reopen the most recently closed tab of any kind
-      // (terminal, browser, or editor), Chrome/Ghostty-style. Repeated presses
-      // walk back through the close history.
+      // Reopen-closed-tab shortcut (macOS Cmd+Alt+Shift+R default) — reopen
+      // the most recently closed tab of any kind (terminal, browser, or
+      // editor), Chrome/Ghostty-style. Repeated presses walk back through the
+      // close history.
       if (!e.repeat && matchShortcut('tab.reopenClosed')) {
         e.preventDefault()
         notifyTerminalCapture('tab.reopenClosed')
@@ -118,7 +119,7 @@ export function useTerminalWorkspaceKeyboardShortcuts({
         return
       }
 
-      // Cmd/Ctrl+Shift+B - new browser tab
+      // New browser tab shortcut (macOS Cmd+Alt+B default).
       if (!e.repeat && matchShortcut('tab.newBrowser')) {
         e.preventDefault()
         notifyTerminalCapture('tab.newBrowser')
@@ -168,7 +169,7 @@ export function useTerminalWorkspaceKeyboardShortcuts({
         }
       }
 
-      // Cmd/Ctrl+Shift+M - new markdown file
+      // New markdown file shortcut (macOS Cmd+Alt+M default).
       if (!e.repeat && matchShortcut('tab.newMarkdown')) {
         e.preventDefault()
         notifyTerminalCapture('tab.newMarkdown')
@@ -176,12 +177,13 @@ export function useTerminalWorkspaceKeyboardShortcuts({
         return
       }
 
-      // Cmd/Ctrl+W - close active editor tab, browser tab, or terminal pane.
-      // Terminal pane/tab close is handled by the pane-level keyboard handler
-      // in keyboard-handlers.ts so it can close individual split panes and
-      // show a confirmation dialog. We still preventDefault here so the browser
-      // doesn't close the window as its default Cmd+W action.
-      if (!e.repeat && matchShortcut('tab.close')) {
+      // Close-active-tab shortcut (Mod+Backspace default) — close the active
+      // editor tab, browser tab, or terminal pane. Terminal pane/tab close is
+      // handled by the pane-level keyboard handler in keyboard-handlers.ts so
+      // it can close individual split panes and show a confirmation dialog.
+      // Why: the chord shares keys with text editing (Backspace deletes), so
+      // it only closes while focus is outside editable fields.
+      if (!e.repeat && !isEditableTarget(e.target) && matchShortcut('tab.close')) {
         const state = useAppStore.getState()
         if (state.activeTabType === 'terminal' && context === 'terminal') {
           return
@@ -201,7 +203,7 @@ export function useTerminalWorkspaceKeyboardShortcuts({
         return
       }
 
-      // Cmd/Ctrl+Alt+W - close every editor file tab in the active worktree.
+      // Close-all-editor-tabs shortcut (Mod+Alt+W default).
       // Why: reuse the context-menu close-all path so pinned and dirty-file
       // rules stay identical; terminal focus still honors shortcut policy.
       if (!e.repeat && matchShortcut('tab.closeAll')) {
@@ -211,7 +213,8 @@ export function useTerminalWorkspaceKeyboardShortcuts({
         return
       }
 
-      // Ctrl+Tab - quick-toggle to the previously focused tab in this group.
+      // Held-key MRU switcher (Mod+Alt+PageDown default): the switcher
+      // component owns the whole chord family, so only defer to it here.
       if (
         matchesRecentTabSwitcherChord(e, shortcutPlatform, keybindings, {
           context,
@@ -220,18 +223,8 @@ export function useTerminalWorkspaceKeyboardShortcuts({
       ) {
         return
       }
-      if (!e.repeat && matchShortcut('tab.previousRecent')) {
-        e.preventDefault()
-        e.stopPropagation()
-        e.stopImmediatePropagation()
-        handleSwitchRecentTab()
-        return
-      }
 
-      // Cmd/Ctrl+Shift+] and Cmd/Ctrl+Shift+[ - switch tabs (scoped to the
-      // active tab type). Cmd/Ctrl+Alt+] and Cmd/Ctrl+Alt+[ cycles across
-      // every tab type as an escape hatch from the type-scoped default, and
-      // matches the platform tab-switch chord on macOS.
+      // Tab-switch chords (Mod+Shift+]/[ same type, Mod+Alt+]/[ all types).
       // Why: use e.code instead of e.key because on macOS, Shift+[ reports '{'
       // as the key value (the shifted character), not '['. Option+[ also
       // composes to dead-key / punctuation on many layouts, so matching on
@@ -271,13 +264,10 @@ export function useTerminalWorkspaceKeyboardShortcuts({
         }
       }
 
-      // Ctrl+PageDown/PageUp - switch terminal tabs only
-      // Why: this chord intentionally uses Ctrl on every platform; on macOS,
-      // Cmd+PageUp/PageDown is an OS desktop-switch shortcut we should not steal.
-      // Why: also reject Shift so Ctrl+Shift+PageUp/PageDown stays available
-      // for focused terminal / editor consumers and matches the unshifted
-      // predicate in browser-guest-ui.ts and the chord advertised in
-      // ShortcutsPane.
+      // Terminal-tab switch shortcut (Alt+PageDown/PageUp default).
+      // Why: also reject Shift so the shifted chord stays available for
+      // focused terminal / editor consumers and matches the unshifted chord
+      // advertised in ShortcutsPane.
       const terminalTabDirection = matchShortcut('tab.nextTerminal')
         ? 1
         : matchShortcut('tab.previousTerminal')

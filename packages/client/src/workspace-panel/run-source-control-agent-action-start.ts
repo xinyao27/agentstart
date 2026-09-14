@@ -102,7 +102,7 @@ export async function runSourceControlAgentActionStart({
     if (!launchFailureNotified) {
       toast.error(
         translate(
-          'auto.components.right.sidebar.SourceControlAgentActionDialog.8e856842d1',
+          'auto.components.workspacePanel.SourceControlAgentActionDialog.8e856842d1',
           'Could not start the selected agent.'
         )
       )

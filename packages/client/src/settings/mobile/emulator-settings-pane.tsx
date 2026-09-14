@@ -2,7 +2,7 @@ import type { EmulatorAvailabilityValue, EmulatorDeviceValue } from '@agentstart
 import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
-import { ArrowClockwise as RefreshCw } from '~renderer/icons/hugeicons'
+import { ArrowClockwise as RefreshCw, Devices, Robot } from '~renderer/icons/hugeicons'
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { IosBrandIcon } from '~renderer/mobile/brand-icons'
 import { useEventCallback } from '~renderer/react/use-event-callback'
@@ -14,7 +14,7 @@ import { Label } from '~renderer/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~renderer/ui/select'
 
 import { SettingsRow, SettingsSwitchRow } from '../form-controls'
-import { SearchableSetting } from '../searchable-setting'
+import { SettingsGroupCards, type SettingsGroup } from '../group-card'
 import { MobileEmulatorAgentControlRow } from './emulator-agent-control-row'
 import { MobileEmulatorAvailabilityDetails } from './emulator-availability-details'
 import { getMobileEmulatorSearchEntries } from './emulator-search'
@@ -155,128 +155,135 @@ export function MobileEmulatorSettingsPane({
     )
   })()
 
-  return (
-    <div className="space-y-4">
-      <SearchableSetting
-        title={translate(
-          'auto.components.settings.MobileEmulatorSettingsPane.6593c9ddd3',
-          'Mobile Emulator'
-        )}
-        description={translate(
-          'auto.components.settings.MobileEmulatorSettingsPane.bc39d0f115',
-          'Configure mobile emulator support for AgentStart and coding agents.'
-        )}
-        keywords={getMobileEmulatorSearchEntries().flatMap((entry) => entry.keywords ?? [])}
-        className="divide-border/40 divide-y"
-      >
-        <SettingsSwitchRow
-          label={translate(
-            'auto.components.settings.MobileEmulatorSettingsPane.700ddbf9b1',
-            'Enable Mobile Emulator'
-          )}
-          description={translate(
-            'auto.components.settings.MobileEmulatorSettingsPane.f9af91ea26',
-            'Shows the New Mobile Emulator action and allows agents to attach to the active emulator.'
-          )}
-          checked={enabled}
-          onChange={() => updateSettings({ mobileEmulatorEnabled: !enabled })}
-        />
+  const emulatorSearchEntries = getMobileEmulatorSearchEntries()
 
-        <div className="py-2">
-          <div className="flex items-start gap-4">
-            <div className="min-w-0 flex-1 space-y-0.5">
-              <Label>
-                {translate(
-                  'auto.components.settings.MobileEmulatorSettingsPane.ae1612c58c',
-                  'Availability'
-                )}
-              </Label>
-              <p className="text-muted-foreground text-xs">{availabilityDetail(availability)}</p>
+  const groups: SettingsGroup[] = [
+    {
+      id: 'mobile-emulator-general',
+      icon: <Devices aria-hidden="true" />,
+      title: translate(
+        'auto.components.settings.MobileEmulatorSettingsPane.6593c9ddd3',
+        'Mobile Emulator'
+      ),
+      summary: translate(
+        'auto.components.settings.MobileEmulatorSettingsPane.bc39d0f115',
+        'Configure mobile emulator support for AgentStart and coding agents.'
+      ),
+      searchEntries: emulatorSearchEntries.slice(0, 3),
+      content: (
+        <div className="divide-border/40 divide-y">
+          <SettingsSwitchRow
+            label={translate(
+              'auto.components.settings.MobileEmulatorSettingsPane.700ddbf9b1',
+              'Enable Mobile Emulator'
+            )}
+            description={translate(
+              'auto.components.settings.MobileEmulatorSettingsPane.f9af91ea26',
+              'Shows the New Mobile Emulator action and allows agents to attach to the active emulator.'
+            )}
+            checked={enabled}
+            onChange={() => updateSettings({ mobileEmulatorEnabled: !enabled })}
+          />
+
+          <div className="py-2">
+            <div className="flex items-start gap-4">
+              <div className="min-w-0 flex-1 space-y-0.5">
+                <Label>
+                  {translate(
+                    'auto.components.settings.MobileEmulatorSettingsPane.ae1612c58c',
+                    'Availability'
+                  )}
+                </Label>
+                <p className="text-muted-foreground text-xs">{availabilityDetail(availability)}</p>
+              </div>
+              <div className="flex shrink-0 items-center gap-2">
+                <Badge
+                  variant="outline"
+                  className={cn('text-[11px]', statusBadgeClassName(availability, enabled))}
+                >
+                  {refreshing ? <LoadingIndicator className="size-3" /> : null}
+                  {statusText(availability, enabled)}
+                </Badge>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon-xs"
+                  aria-label={translate(
+                    'auto.components.settings.MobileEmulatorSettingsPane.8aec2f99a0',
+                    'Refresh emulator availability'
+                  )}
+                  onClick={() => void refreshAvailability()}
+                  disabled={refreshing}
+                >
+                  {refreshing ? (
+                    <LoadingIndicator className="size-3.5" />
+                  ) : (
+                    <RefreshCw className="size-3.5" />
+                  )}
+                </Button>
+              </div>
             </div>
-            <div className="flex shrink-0 items-center gap-2">
-              <Badge
-                variant="outline"
-                className={cn('text-[11px]', statusBadgeClassName(availability, enabled))}
-              >
-                {refreshing ? <LoadingIndicator className="size-3" /> : null}
-                {statusText(availability, enabled)}
-              </Badge>
-              <Button
-                type="button"
-                variant="outline"
-                size="icon-xs"
-                aria-label={translate(
-                  'auto.components.settings.MobileEmulatorSettingsPane.8aec2f99a0',
-                  'Refresh emulator availability'
-                )}
-                onClick={() => void refreshAvailability()}
-                disabled={refreshing}
-              >
-                {refreshing ? (
-                  <LoadingIndicator className="size-3.5" />
-                ) : (
-                  <RefreshCw className="size-3.5" />
-                )}
-              </Button>
-            </div>
+
+            {enabled ? <MobileEmulatorAvailabilityDetails availability={availability} /> : null}
           </div>
 
-          {enabled ? <MobileEmulatorAvailabilityDetails availability={availability} /> : null}
+          <SettingsRow
+            alignTop
+            label={translate(
+              'auto.components.settings.MobileEmulatorSettingsPane.143961d031',
+              'Default Device'
+            )}
+            description={defaultDeviceDescription}
+            control={
+              <Select
+                value={selectValue}
+                disabled={!enabled}
+                onValueChange={(value) =>
+                  updateSettings({
+                    mobileEmulatorDefaultDeviceUdid: value === AUTOMATIC_DEVICE_VALUE ? null : value
+                  })
+                }
+              >
+                <SelectTrigger size="sm" className="w-56 max-w-full">
+                  <SelectValue placeholder={AUTOMATIC_DEVICE_LABEL} />
+                </SelectTrigger>
+                <SelectContent alignItemWithTrigger={false} align="end">
+                  <SelectItem value={AUTOMATIC_DEVICE_VALUE}>{AUTOMATIC_DEVICE_LABEL}</SelectItem>
+                  {devices.map((device) => (
+                    <SelectItem
+                      key={device.udid}
+                      value={device.udid}
+                      label={deviceLabel(device)}
+                      disabled={device.isAvailable === false}
+                    >
+                      <DeviceSelectItemLabel device={device} />
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            }
+          />
         </div>
+      )
+    }
+  ]
 
-        <SettingsRow
-          alignTop
-          label={translate(
-            'auto.components.settings.MobileEmulatorSettingsPane.143961d031',
-            'Default Device'
-          )}
-          description={defaultDeviceDescription}
-          control={
-            <Select
-              value={selectValue}
-              disabled={!enabled}
-              onValueChange={(value) =>
-                updateSettings({
-                  mobileEmulatorDefaultDeviceUdid: value === AUTOMATIC_DEVICE_VALUE ? null : value
-                })
-              }
-            >
-              <SelectTrigger size="sm" className="w-56 max-w-full">
-                <SelectValue placeholder={AUTOMATIC_DEVICE_LABEL} />
-              </SelectTrigger>
-              <SelectContent alignItemWithTrigger={false} align="end">
-                <SelectItem value={AUTOMATIC_DEVICE_VALUE}>{AUTOMATIC_DEVICE_LABEL}</SelectItem>
-                {devices.map((device) => (
-                  <SelectItem
-                    key={device.udid}
-                    value={device.udid}
-                    label={deviceLabel(device)}
-                    disabled={device.isAvailable === false}
-                  >
-                    <DeviceSelectItemLabel device={device} />
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          }
-        />
-      </SearchableSetting>
+  if (enabled) {
+    groups.push({
+      id: 'mobile-emulator-agent-control',
+      icon: <Robot aria-hidden="true" />,
+      title: translate(
+        'auto.components.settings.MobileEmulatorSettingsPane.f2f8d97bb6',
+        'Agent Mobile Emulator Control'
+      ),
+      summary: translate(
+        'auto.components.settings.MobileEmulatorSettingsPane.19d39113b6',
+        'Let coding agents control the active mobile emulator with AgentStart CLI commands.'
+      ),
+      searchEntries: emulatorSearchEntries.slice(3, 4),
+      content: <MobileEmulatorAgentControlRow />
+    })
+  }
 
-      {enabled ? (
-        <SearchableSetting
-          title={translate(
-            'auto.components.settings.MobileEmulatorSettingsPane.f2f8d97bb6',
-            'Agent Mobile Emulator Control'
-          )}
-          description={translate(
-            'auto.components.settings.MobileEmulatorSettingsPane.19d39113b6',
-            'Let coding agents control the active mobile emulator with AgentStart CLI commands.'
-          )}
-          keywords={getMobileEmulatorSearchEntries()[3]?.keywords}
-        >
-          <MobileEmulatorAgentControlRow />
-        </SearchableSetting>
-      ) : null}
-    </div>
-  )
+  return <SettingsGroupCards groups={groups} defaultOpenId="mobile-emulator-general" />
 }

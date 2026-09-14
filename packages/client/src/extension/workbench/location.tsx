@@ -4,17 +4,20 @@ import { useEffect, useRef } from 'react'
 
 import { useProjectCatalog } from '../../project-catalog/provider'
 import { projectCatalogRepoKey } from '../../project-catalog/query'
-import type { WorkbenchLocation, WorkbenchPage } from '../../runtime/workbench-location'
+import type { WorkbenchLocation } from '../../runtime/workbench-location'
 import { useAppStore } from '../../store/state'
-import { showWorkspaceSidebar } from '../../workspace-panel/show-sidebar'
+import { showWorkspacePanel } from '../../workspace-panel/show-workspace-panel'
 import { activateAndRevealWorktree } from '../../worktree/activation'
-import { openCommandPalette } from '../command-palette/open'
+import type { ExtensionPage } from '../navigation'
+import { openWorkbenchPage } from './page-commands'
+
+export type WorkbenchPageIntent = Exclude<ExtensionPage, 'search'>
 
 export type WorkbenchRouteSearch = {
   panel?: WorkspacePanelTabContentType
   project?: string
   session?: string
-  view?: WorkbenchPage
+  view?: WorkbenchPageIntent
   worktree?: string
 }
 
@@ -38,13 +41,9 @@ export function validateWorkbenchRouteSearch(
 }
 
 export function workbenchLocationFromSearch(search: WorkbenchRouteSearch): WorkbenchLocation {
-  const page = search.view
-  if (page) {
-    return { kind: 'page', page }
-  }
   const projectId = search.project
   if (!projectId) {
-    return { kind: 'page', page: 'activity' }
+    return { kind: 'workbench' }
   }
   return {
     kind: 'project',
@@ -59,9 +58,6 @@ export function workbenchSearchFromLocation(location: WorkbenchLocation): Workbe
   if (location.kind === 'workbench') {
     return {}
   }
-  if (location.kind === 'page') {
-    return { view: location.page }
-  }
   return {
     project: location.projectId,
     ...(location.panel ? { panel: location.panel } : {}),
@@ -70,16 +66,20 @@ export function workbenchSearchFromLocation(location: WorkbenchLocation): Workbe
   }
 }
 
+export function workbenchPageIntentFromSearch(
+  search: WorkbenchRouteSearch
+): WorkbenchPageIntent | null {
+  return search.view ?? null
+}
+
 function parseSearchValue(value: unknown): string | null {
   return typeof value === 'string' && value.trim() ? value.trim() : null
 }
 
-function parseWorkbenchPage(value: unknown): WorkbenchPage | null {
+function parseWorkbenchPage(value: unknown): WorkbenchPageIntent | null {
   switch (value) {
     case 'activity':
-    case 'browser':
     case 'mobile':
-    case 'search':
     case 'settings':
     case 'skills':
       return value
@@ -103,13 +103,14 @@ function parseWorkbenchPanel(value: unknown): WorkspacePanelTabContentType | nul
 }
 
 export function ExtensionWorkbenchLocationBridge({
+  initialPage,
   location
 }: {
+  initialPage: WorkbenchPageIntent | null
   location: WorkbenchLocation
 }): null {
   const persistedUIReady = useAppStore((state) => state.persistedUIReady)
   const workspaceSessionReady = useAppStore((state) => state.workspaceSessionReady)
-  const activeView = useAppStore((state) => state.activeView)
   const catalog = useProjectCatalog()
   const routeRepo =
     location.kind === 'project'
@@ -121,12 +122,17 @@ export function ExtensionWorkbenchLocationBridge({
   const unifiedTabsByWorktree = useAppStore((state) => state.unifiedTabsByWorktree)
   const locationKey = workbenchLocationKey(location)
   const appliedLocationKeyRef = useRef<string | null>(null)
+  const appliedPageIntentRef = useRef(false)
   useEffect(() => {
-    if (
-      !persistedUIReady ||
-      !workspaceSessionReady ||
-      (appliedLocationKeyRef.current === locationKey && isWorkbenchPageActive(location, activeView))
-    ) {
+    if (!persistedUIReady || !workspaceSessionReady) {
+      return
+    }
+    if (initialPage && !appliedPageIntentRef.current) {
+      openWorkbenchPage(initialPage)
+      appliedPageIntentRef.current = true
+      consumePageIntent()
+    }
+    if (appliedLocationKeyRef.current === locationKey) {
       return
     }
     if (applyWorkbenchLocation(location, worktrees)) {
@@ -135,7 +141,7 @@ export function ExtensionWorkbenchLocationBridge({
   }, [
     location,
     locationKey,
-    activeView,
+    initialPage,
     persistedUIReady,
     unifiedTabsByWorktree,
     workspaceSessionReady,
@@ -144,34 +150,9 @@ export function ExtensionWorkbenchLocationBridge({
   return null
 }
 
-function isWorkbenchPageActive(
-  location: WorkbenchLocation,
-  activeView: ReturnType<typeof useAppStore.getState>['activeView']
-): boolean {
-  if (location.kind !== 'page') {
-    return true
-  }
-  switch (location.page) {
-    case 'activity':
-      return activeView === 'home'
-    case 'browser':
-    case 'settings':
-      return activeView === 'settings'
-    case 'mobile':
-      return activeView === 'mobile'
-    case 'skills':
-      return activeView === 'skills'
-    case 'search':
-      return true
-  }
-}
-
 function workbenchLocationKey(location: WorkbenchLocation): string {
   if (location.kind === 'workbench') {
     return location.kind
-  }
-  if (location.kind === 'page') {
-    return `${location.kind}:${location.page}`
   }
   return [
     location.kind,
@@ -190,29 +171,6 @@ function applyWorkbenchLocation(
     return true
   }
   const state = useAppStore.getState()
-  if (location.kind === 'page') {
-    switch (location.page) {
-      case 'activity':
-        state.openHomePage()
-        return true
-      case 'mobile':
-        state.openMobilePage()
-        return true
-      case 'search':
-        openCommandPalette()
-        return true
-      case 'settings':
-        state.openSettingsPage()
-        return true
-      case 'skills':
-        state.openSkillsPage()
-        return true
-      case 'browser':
-        state.openSettingsPage()
-        return true
-    }
-  }
-
   const requestedWorktree = location.worktreeId
     ? projectWorktrees.find((worktree) => worktree.id === location.worktreeId)
     : undefined
@@ -228,7 +186,7 @@ function applyWorkbenchLocation(
     return false
   }
   if (location.panel) {
-    showWorkspaceSidebar({ view: location.panel, worktreeId: worktree.id })
+    showWorkspacePanel({ view: location.panel, worktreeId: worktree.id })
   }
   if (!location.sessionId) {
     return true
@@ -245,4 +203,15 @@ function applyWorkbenchLocation(
   refreshed.setActiveTab(sessionTab.entityId)
   refreshed.setActiveTabType('terminal')
   return true
+}
+
+function consumePageIntent(): void {
+  const url = new URL(window.location.href)
+  if (!url.searchParams.has('view')) {
+    return
+  }
+  url.searchParams.delete('view')
+  // Why: the page is now owned by the unified tab queue. Replace only the
+  // consumed intent so launcher/new-tab identity markers and browser history survive.
+  window.history.replaceState(window.history.state, '', url)
 }

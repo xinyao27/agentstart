@@ -17,7 +17,7 @@ import {
 } from '~renderer/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
-import { RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME } from '../right-sidebar-button-styles'
+import { WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME } from '../workspace-panel-button-styles'
 import { PullRequestIcon, prStateColor } from './content'
 import type { ChecksPanelReview } from './review'
 
@@ -45,7 +45,7 @@ export function ChecksPanelReviewHeader({
   const reviewHostLabel = 'GitHub'
   const showPullRequestMenu = true
   const openTitle = translate(
-    'auto.components.right.sidebar.ChecksPanel.5c88c6db07',
+    'auto.components.workspacePanel.ChecksPanel.5c88c6db07',
     'Open on {{value0}}',
     { value0: reviewHostLabel }
   )
@@ -80,9 +80,9 @@ export function ChecksPanelReviewHeader({
               type="button"
               variant="outline"
               size="icon-toolbar"
-              className={RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME}
+              className={WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME}
               aria-label={translate(
-                'auto.components.right.sidebar.ChecksPanel.7f4489f370',
+                'auto.components.workspacePanel.ChecksPanel.7f4489f370',
                 'Refresh'
               )}
               onClick={onRefresh}
@@ -97,7 +97,7 @@ export function ChecksPanelReviewHeader({
           }
         />
         <TooltipContent side="bottom" sideOffset={4}>
-          {translate('auto.components.right.sidebar.ChecksPanel.7f4489f370', 'Refresh')}
+          {translate('auto.components.workspacePanel.ChecksPanel.7f4489f370', 'Refresh')}
         </TooltipContent>
       </Tooltip>
       {showPullRequestMenu && (
@@ -113,10 +113,10 @@ export function ChecksPanelReviewHeader({
                         variant="outline"
                         size="icon-toolbar"
                         aria-label={translate(
-                          'auto.components.right.sidebar.ChecksPanel.653c105ecc',
+                          'auto.components.workspacePanel.ChecksPanel.653c105ecc',
                           'More PR actions'
                         )}
-                        className={RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME}
+                        className={WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME}
                       >
                         <Ellipsis className="size-3.5" />
                       </Button>
@@ -126,17 +126,23 @@ export function ChecksPanelReviewHeader({
               }
             />
             <TooltipContent side="bottom" sideOffset={6}>
-              {translate('auto.components.right.sidebar.ChecksPanel.653c105ecc', 'More PR actions')}
+              {translate(
+                'auto.components.workspacePanel.ChecksPanel.653c105ecc',
+                'More PR actions'
+              )}
             </TooltipContent>
           </Tooltip>
           <DropdownMenuContent align="end" className="w-44">
             <DropdownMenuItem disabled={!canUnlinkPullRequest} onClick={onUnlinkPullRequest}>
               <Unlink className="size-3.5" />
-              {translate('auto.components.right.sidebar.ChecksPanel.7202f4a40a', 'unlink PR')}
+              {translate('auto.components.workspacePanel.ChecksPanel.7202f4a40a', 'unlink PR')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={onLinkAnotherPullRequest}>
               <Link className="size-3.5" />
-              {translate('auto.components.right.sidebar.ChecksPanel.07871c0589', 'Link another PR')}
+              {translate(
+                'auto.components.workspacePanel.ChecksPanel.07871c0589',
+                'Link another PR'
+              )}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

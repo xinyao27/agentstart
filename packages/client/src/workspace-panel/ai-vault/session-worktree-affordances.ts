@@ -28,30 +28,30 @@ export function aiVaultWorktreeJumpTooltip(
 ): string {
   if (canJumpToAiVaultSessionWorktree(worktreeInfo)) {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionWorktree.jumpToWorktree',
+      'auto.components.workspacePanel.AiVaultSessionWorktree.jumpToWorktree',
       'Jump to Worktree'
     )
   }
   if (!worktreeInfo) {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionWorktree.noRecordedWorktree',
+      'auto.components.workspacePanel.AiVaultSessionWorktree.noRecordedWorktree',
       'No worktree was recorded for this session.'
     )
   }
   if (worktreeInfo.status === 'archived') {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionWorktree.archivedJumpUnavailable',
+      'auto.components.workspacePanel.AiVaultSessionWorktree.archivedJumpUnavailable',
       'This session is in an archived worktree.'
     )
   }
   if (worktreeInfo.status === 'unavailable') {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionWorktree.noActiveWorktreeMatch',
+      'auto.components.workspacePanel.AiVaultSessionWorktree.noActiveWorktreeMatch',
       'No active worktree matches this session.'
     )
   }
   return translate(
-    'auto.components.right.sidebar.AiVaultSessionWorktree.noActiveWorktreeTarget',
+    'auto.components.workspacePanel.AiVaultSessionWorktree.noActiveWorktreeTarget',
     'No active worktree is available.'
   )
 }
@@ -98,24 +98,24 @@ export function shouldShowAiVaultWorktreeStatusBadge(
 export function aiVaultWorktreeStatusLabel(status: AiVaultSessionWorktreeStatus): string {
   if (status === 'current') {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionWorktree.currentWorktree',
+      'auto.components.workspacePanel.AiVaultSessionWorktree.currentWorktree',
       'Current worktree'
     )
   }
   if (status === 'active') {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionWorktree.activeWorktree',
+      'auto.components.workspacePanel.AiVaultSessionWorktree.activeWorktree',
       'Active worktree'
     )
   }
   if (status === 'archived') {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionWorktree.archivedWorktree',
+      'auto.components.workspacePanel.AiVaultSessionWorktree.archivedWorktree',
       'Archived worktree'
     )
   }
   return translate(
-    'auto.components.right.sidebar.AiVaultSessionWorktree.unavailableWorktree',
+    'auto.components.workspacePanel.AiVaultSessionWorktree.unavailableWorktree',
     'Unavailable worktree'
   )
 }

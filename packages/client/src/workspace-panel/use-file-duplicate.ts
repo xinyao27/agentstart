@@ -4,7 +4,7 @@ import { getConnectionId } from '~renderer/runtime/connection-context'
 import { extractRuntimeErrorMessage } from '~renderer/runtime/error-message'
 import { copyRuntimePath, runtimePathExists } from '~renderer/runtime/file-client'
 
-import { getRightSidebarWorktreeRuntimeSettings } from './file-explorer/runtime-owner'
+import { getWorkspacePanelWorktreeRuntimeSettings } from './file-explorer/runtime-owner'
 import type { TreeNode } from './file-explorer/types'
 
 type UseFileDuplicateParams = {
@@ -30,7 +30,7 @@ export function useFileDuplicate({
 
     const run = async (): Promise<void> => {
       const context = {
-        settings: getRightSidebarWorktreeRuntimeSettings(activeWorktreeId),
+        settings: getWorkspacePanelWorktreeRuntimeSettings(activeWorktreeId),
         worktreeId: activeWorktreeId,
         worktreePath,
         connectionId: getConnectionId(activeWorktreeId) ?? undefined

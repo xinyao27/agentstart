@@ -1,6 +1,6 @@
 import '../assets/main.css'
 import { CSPProvider } from '@base-ui/react/csp-provider'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { setRendererUiLanguage, translate } from '../i18n/i18n'
@@ -112,32 +112,52 @@ function ExtensionUnavailable({
   })
   const [retryCount, setRetryCount] = useState(0)
   const [retryState, setRetryState] = useState<'failed' | 'idle' | 'retrying'>('idle')
+  const [diagnosticOpen, setDiagnosticOpen] = useState(false)
+  const retryStateRef = useRef(retryState)
+  const retryTimerRef = useRef<number | null>(null)
 
   const retryConnection = useCallback(async (): Promise<void> => {
-    if (!retry || retryState === 'retrying') {
+    if (!retry || retryStateRef.current === 'retrying') {
       return
     }
+    retryStateRef.current = 'retrying'
     setRetryState('retrying')
     try {
       const nextFailure = await retry()
       if (nextFailure) {
         setFailure(nextFailure)
+        retryStateRef.current = 'failed'
         setRetryState('failed')
         setRetryCount((count) => count + 1)
+      } else {
+        retryStateRef.current = 'idle'
+        setRetryState('idle')
       }
     } catch {
+      retryStateRef.current = 'failed'
       setRetryState('failed')
       setRetryCount((count) => count + 1)
     }
-  }, [retry, retryState])
+  }, [retry])
 
   useEffect(() => {
     if (!retry || retryDelayMs === undefined) {
       return
     }
+    if (retryStateRef.current === 'retrying' || retryTimerRef.current !== null) {
+      return
+    }
     const delayMs = Math.min(retryDelayMs * 2 ** retryCount, 15_000)
-    const timer = window.setTimeout(() => void retryConnection(), delayMs)
-    return () => window.clearTimeout(timer)
+    retryTimerRef.current = window.setTimeout(() => {
+      retryTimerRef.current = null
+      void retryConnection()
+    }, delayMs)
+    return () => {
+      if (retryTimerRef.current !== null) {
+        window.clearTimeout(retryTimerRef.current)
+        retryTimerRef.current = null
+      }
+    }
   }, [retry, retryConnection, retryCount, retryDelayMs, retryState])
 
   const requestAccess = async (): Promise<void> => {
@@ -281,7 +301,11 @@ function ExtensionUnavailable({
           </p>
         ) : null}
         {failure.diagnostic ? (
-          <details className="border-border mt-4 border-t pt-3 text-xs">
+          <details
+            className="border-border mt-4 border-t pt-3 text-xs"
+            open={diagnosticOpen}
+            onToggle={(event) => setDiagnosticOpen(event.currentTarget.open)}
+          >
             <summary className="text-muted-foreground cursor-pointer select-none">
               {translate('extension.unavailable.diagnostic', 'Diagnostic details')}
             </summary>

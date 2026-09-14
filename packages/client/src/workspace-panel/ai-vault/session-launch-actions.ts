@@ -75,7 +75,7 @@ export function useAiVaultSessionLaunchActions({
     await shellClient.ui.writeClipboardText(buildResumeCommand(session, worktreeId))
     toast.success(
       translate(
-        'auto.components.right.sidebar.AiVaultPanel.resumeCommandCopied',
+        'auto.components.workspacePanel.AiVaultPanel.resumeCommandCopied',
         'Resume command copied'
       )
     )
@@ -101,7 +101,7 @@ export function useAiVaultSessionLaunchActions({
     const showQueuedToast = (): void => {
       toast.success(
         translate(
-          'auto.components.right.sidebar.AiVaultPanel.agentSessionQueued',
+          'auto.components.workspacePanel.AiVaultPanel.agentSessionQueued',
           '{{value0}} session queued',
           { value0: agentLabel(session.agent) }
         )
@@ -145,7 +145,7 @@ export function useAiVaultSessionLaunchActions({
     if (!targetWorkspacePath) {
       toast.error(
         translate(
-          'auto.components.right.sidebar.AiVaultPanel.openWorkspaceBeforeResuming',
+          'auto.components.workspacePanel.AiVaultPanel.openWorkspaceBeforeResuming',
           'Open a workspace before resuming a session.'
         )
       )
@@ -239,7 +239,7 @@ function resolveAiVaultSessionLaunchTargetOrNotify(
   if (target.status === 'missing') {
     toast.error(
       translate(
-        'auto.components.right.sidebar.AiVaultPanel.openWorkspaceBeforeResuming',
+        'auto.components.workspacePanel.AiVaultPanel.openWorkspaceBeforeResuming',
         'Open a workspace before resuming a session.'
       )
     )
@@ -259,12 +259,12 @@ function aiVaultResumeUnsupportedMessage(
   // means the session's recorded host does not match the selected workspace.
   if (targetStatus === 'local' || targetStatus === 'runtime') {
     return translate(
-      'auto.components.right.sidebar.AiVaultPanel.sessionHostMismatchUnsupported',
+      'auto.components.workspacePanel.AiVaultPanel.sessionHostMismatchUnsupported',
       'This session belongs to a different host. Open a workspace on the same host to resume it.'
     )
   }
   return translate(
-    'auto.components.right.sidebar.AiVaultPanel.openSupportedWorkspace',
+    'auto.components.workspacePanel.AiVaultPanel.openSupportedWorkspace',
     'Open a workspace before resuming a session.'
   )
 }

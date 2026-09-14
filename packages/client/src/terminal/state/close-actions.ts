@@ -89,7 +89,7 @@ export function createTerminalCloseActions(
             break
           }
         }
-        // Why: only explicit user closes feed the Cmd+Shift+T reopen stack.
+        // Why: only explicit user closes feed the reopen-closed-tab stack.
         // Cleanup and PTY-exit closes must not pollute user undo history.
         const capturedSnapshot =
           closeReason === 'user' &&

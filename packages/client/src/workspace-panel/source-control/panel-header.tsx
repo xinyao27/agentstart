@@ -127,11 +127,11 @@ export function SourceControlPanelHeader({
               title={
                 diffCommentsExpanded
                   ? translate(
-                      'auto.components.right.sidebar.SourceControl.d13edef890',
+                      'auto.components.workspacePanel.SourceControl.d13edef890',
                       'Collapse notes'
                     )
                   : translate(
-                      'auto.components.right.sidebar.SourceControl.72f2bea3f4',
+                      'auto.components.workspacePanel.SourceControl.72f2bea3f4',
                       'Expand notes'
                     )
               }
@@ -144,7 +144,7 @@ export function SourceControlPanelHeader({
               />
               <MessageSquare className="size-3.5 shrink-0" />
               <span>
-                {translate('auto.components.right.sidebar.SourceControl.cc474e0b8c', 'Notes')}
+                {translate('auto.components.workspacePanel.SourceControl.cc474e0b8c', 'Notes')}
               </span>
               <span className="text-muted-foreground text-[11px] leading-none tabular-nums">
                 {diffCommentCount}
@@ -171,7 +171,7 @@ export function SourceControlPanelHeader({
                         type="button"
                         onClick={() => void handleCopyDiffComments()}
                         aria-label={translate(
-                          'auto.components.right.sidebar.SourceControl.3baf6c77b4',
+                          'auto.components.workspacePanel.SourceControl.3baf6c77b4',
                           'Copy all notes to clipboard'
                         )}
                       >
@@ -185,7 +185,7 @@ export function SourceControlPanelHeader({
                   />
                   <TooltipContent side="bottom" sideOffset={6}>
                     {translate(
-                      'auto.components.right.sidebar.SourceControl.eae2d051af',
+                      'auto.components.workspacePanel.SourceControl.eae2d051af',
                       'Copy all notes'
                     )}
                   </TooltipContent>
@@ -203,7 +203,7 @@ export function SourceControlPanelHeader({
                               size="icon-xs"
                               type="button"
                               aria-label={translate(
-                                'auto.components.right.sidebar.SourceControl.2fe2a67580',
+                                'auto.components.workspacePanel.SourceControl.2fe2a67580',
                                 'More note actions'
                               )}
                             >
@@ -215,7 +215,7 @@ export function SourceControlPanelHeader({
                     />
                     <TooltipContent side="bottom" sideOffset={6}>
                       {translate(
-                        'auto.components.right.sidebar.SourceControl.2fe2a67580',
+                        'auto.components.workspacePanel.SourceControl.2fe2a67580',
                         'More note actions'
                       )}
                     </TooltipContent>
@@ -230,7 +230,7 @@ export function SourceControlPanelHeader({
                   >
                     <Trash2 className="size-3.5" />
                     {translate(
-                      'auto.components.right.sidebar.SourceControl.1406954883',
+                      'auto.components.workspacePanel.SourceControl.1406954883',
                       'Clear all notes...'
                     )}
                   </DropdownMenuItem>

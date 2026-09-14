@@ -63,7 +63,7 @@ export function useFileDeletion({
   const confirm = useConfirmationDialog()
   const deleteShortcutLabel = useShortcutLabel('fileExplorer.delete')
   const unresolvedDeleteOwnerError = translate(
-    'auto.components.right.sidebar.useFileDeletion.8b8ee9d22f',
+    'auto.components.workspacePanel.useFileDeletion.8b8ee9d22f',
     "Couldn't determine which host owns this file. Check the workspace connection and try again."
   )
   // Why: track in-flight deletes per-path so repeated Del presses on the same
@@ -107,21 +107,21 @@ export function useFileDeletion({
       if (isRemote && !options?.skipConfirmation) {
         const confirmed = await confirm({
           title: translate(
-            'auto.components.right.sidebar.useFileDeletion.d979a4fbb5',
+            'auto.components.workspacePanel.useFileDeletion.d979a4fbb5',
             "Permanently delete '{{value0}}'?",
             { value0: node.name }
           ),
           description: node.isDirectory
             ? translate(
-                'auto.components.right.sidebar.useFileDeletion.7fb9435c86',
+                'auto.components.workspacePanel.useFileDeletion.7fb9435c86',
                 'This permanently deletes the directory and its contents on the remote host. This cannot be undone.'
               )
             : translate(
-                'auto.components.right.sidebar.useFileDeletion.23e98f192f',
+                'auto.components.workspacePanel.useFileDeletion.23e98f192f',
                 'This permanently deletes the file on the remote host. This cannot be undone.'
               ),
           confirmLabel: translate(
-            'auto.components.right.sidebar.useFileDeletion.92276aceb7',
+            'auto.components.workspacePanel.useFileDeletion.92276aceb7',
             'Delete'
           ),
           confirmVariant: 'destructive'
@@ -222,7 +222,7 @@ export function useFileDeletion({
         error instanceof Error
           ? error.message
           : translate(
-              'auto.components.right.sidebar.useFileDeletion.72691dfebc',
+              'auto.components.workspacePanel.useFileDeletion.72691dfebc',
               "Failed to {{value0}} '{{value1}}'.",
               { value0: action, value1: node.name }
             )
@@ -272,27 +272,27 @@ export function useFileDeletion({
             // it, and the prompt should match what the user sees selected.
             title: hasLocalDelete
               ? translate(
-                  'auto.components.right.sidebar.useFileDeletion.77fdc36183',
+                  'auto.components.workspacePanel.useFileDeletion.77fdc36183',
                   'Delete {{count}} items?',
                   { count: nodes.length }
                 )
               : translate(
-                  'auto.components.right.sidebar.useFileDeletion.af1270b90d',
+                  'auto.components.workspacePanel.useFileDeletion.af1270b90d',
                   'Permanently delete {{count}} items?',
                   { count: nodes.length }
                 ),
             description: hasLocalDelete
               ? translate(
-                  'auto.components.right.sidebar.useFileDeletion.fca915a67a',
+                  'auto.components.workspacePanel.useFileDeletion.fca915a67a',
                   'Remote items are permanently deleted and cannot be undone. Local items move to the {{value0}}.',
                   { value0: trashName }
                 )
               : translate(
-                  'auto.components.right.sidebar.useFileDeletion.dd029aa5cd',
+                  'auto.components.workspacePanel.useFileDeletion.dd029aa5cd',
                   'This permanently deletes the selected items and any directory contents on the remote host. This cannot be undone.'
                 ),
             confirmLabel: translate(
-              'auto.components.right.sidebar.useFileDeletion.92276aceb7',
+              'auto.components.workspacePanel.useFileDeletion.92276aceb7',
               'Delete'
             ),
             confirmVariant: 'destructive'

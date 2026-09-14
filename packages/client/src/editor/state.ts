@@ -22,7 +22,7 @@ import { createEditorSessionHydrationActions } from './session-hydration-actions
 import { createEditorStatusActions } from './status-actions'
 import type { EditorSlice } from './store-contract'
 
-export type { ActiveRightSidebarTab } from '@agentstart/protocol/settings/ui-state'
+export type { ActiveWorkspacePanelTab } from '@agentstart/protocol/settings/ui-state'
 export type {
   ConflictReviewEntry,
   DiffSource,

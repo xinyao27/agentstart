@@ -3,11 +3,9 @@ import { HeroFlow, HeroIntro, HeroPaired, type PairedDevice } from './hero'
 import type { StepIndex } from './hero'
 import type { MobilePageStage } from './page-stage'
 import { mobilePageStyles } from './page-tailwind'
-import { MobilePageToolbar } from './page-toolbar'
 import { getMobileReleaseLink } from './release-link'
 
 type MobilePageContentProps = {
-  closeMobilePage: () => void
   copyInstallUrl: () => void
   copyPairingCode: () => void
   devices: PairedDevice[]
@@ -34,7 +32,6 @@ type MobilePageContentProps = {
 }
 
 export function MobilePageContent({
-  closeMobilePage,
   copyInstallUrl,
   copyPairingCode,
   devices,
@@ -61,7 +58,6 @@ export function MobilePageContent({
 }: MobilePageContentProps): React.JSX.Element {
   return (
     <div className={mobilePageStyles.root}>
-      <MobilePageToolbar onClose={closeMobilePage} />
       <section className={mobilePageStyles.hero}>
         <div className={mobilePageStyles.heroCopy}>
           {stage === null ? null : stage === 'intro' ? (

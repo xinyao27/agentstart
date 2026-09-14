@@ -1,15 +1,15 @@
-import type { RightSidebarExplorerView } from '@agentstart/protocol/settings/ui-state'
+import type { WorkspacePanelExplorerView } from '@agentstart/protocol/settings/ui-state'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 import { Tabs, TabsList, TabsTrigger } from '~renderer/ui/tabs'
 
 type FileExplorerViewSwitchProps = {
-  view: RightSidebarExplorerView
-  onSelectView: (view: RightSidebarExplorerView) => void
+  view: WorkspacePanelExplorerView
+  onSelectView: (view: WorkspacePanelExplorerView) => void
 }
 
 type ExplorerViewOption = {
-  view: RightSidebarExplorerView
+  view: WorkspacePanelExplorerView
   label: string
   ariaLabel: string
 }
@@ -21,20 +21,20 @@ export function FileExplorerViewSwitch({
   const options: ExplorerViewOption[] = [
     {
       view: 'files',
-      label: translate('auto.components.right.sidebar.FileExplorerViewSwitch.c4e9a2b713', 'Names'),
+      label: translate('auto.components.workspacePanel.FileExplorerViewSwitch.c4e9a2b713', 'Names'),
       ariaLabel: translate(
-        'auto.components.right.sidebar.FileExplorerViewSwitch.b3c8f1a902',
+        'auto.components.workspacePanel.FileExplorerViewSwitch.b3c8f1a902',
         'Filter files by name'
       )
     },
     {
       view: 'search',
       label: translate(
-        'auto.components.right.sidebar.FileExplorerNameFilter.7a9fb1e6aa',
+        'auto.components.workspacePanel.FileExplorerNameFilter.7a9fb1e6aa',
         'Contents'
       ),
       ariaLabel: translate(
-        'auto.components.right.sidebar.FileExplorerToolbar.c1f3f3ec70',
+        'auto.components.workspacePanel.FileExplorerToolbar.c1f3f3ec70',
         'Search file contents'
       )
     }
@@ -53,7 +53,7 @@ export function FileExplorerViewSwitch({
     >
       <TabsList
         aria-label={translate(
-          'auto.components.right.sidebar.FileExplorerViewSwitch.f8a2c4d1e0',
+          'auto.components.workspacePanel.FileExplorerViewSwitch.f8a2c4d1e0',
           'Explorer search mode'
         )}
       >

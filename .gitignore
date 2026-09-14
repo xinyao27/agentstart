@@ -83,3 +83,8 @@ docs/**
 
 # Agent hook runtime endpoints (machine-local secrets)
 /agent-hooks/
+
+# Machine-local agent tool state (settings, memory, plans)
+/.commandcode/
+/.workbuddy-ai/
+/.zcode/

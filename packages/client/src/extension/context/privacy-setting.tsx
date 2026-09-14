@@ -40,7 +40,7 @@ export function BrowserContextPrivacySetting(): React.JSX.Element {
   })
 
   return (
-    <section className="border-border space-y-2 border-b pb-2">
+    <section className="space-y-2">
       <SettingsSwitchRow
         label={translate('extension.context.settingsTitle', 'Browser project context')}
         description={translate(

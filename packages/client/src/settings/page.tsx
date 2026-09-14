@@ -5,7 +5,6 @@ import { translate } from '~renderer/i18n/i18n'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { getRepoHostIdentity } from '~renderer/repo/state/host-identity'
 import { getActiveRuntimeTarget } from '~renderer/runtime/rpc-client'
-import { navigateBackFromWorkbenchSettings } from '~renderer/runtime/workbench-location'
 import { useAppStore } from '~renderer/store/state'
 import { isMacUserAgent, isWindowsUserAgent } from '~renderer/terminal-pane/pane-interactions'
 import { useSystemPrefersDark } from '~renderer/terminal-pane/use-system-prefers-dark'
@@ -49,11 +48,6 @@ function Settings(): React.JSX.Element {
   const fetchSettings = useAppStore((s) => s.fetchSettings)
   const fetchKeybindings = useAppStore((s) => s.fetchKeybindings)
   const closeSettingsPage = useAppStore((s) => s.closeSettingsPage)
-  const closeSettingsPageWithLocation = (): void => {
-    if (!navigateBackFromWorkbenchSettings()) {
-      closeSettingsPage()
-    }
-  }
   const { projectHostSetups, projects, repos } = useProjectCatalog()
   const updateProject = useAppStore((s) => s.updateProject)
   const updateRepo = useAppStore((s) => s.updateRepo)
@@ -95,7 +89,7 @@ function Settings(): React.JSX.Element {
     setHasUnsavedCommitPromptChanges,
     writeSettings: writeSourceControlAiSettings
   } = useSourceControlPromptGuard({
-    closeSettingsPage: closeSettingsPageWithLocation,
+    closeSettingsPage,
     settings,
     updateSettings
   })
@@ -254,7 +248,6 @@ function Settings(): React.JSX.Element {
           hasRepos={repos.length > 0}
           searchQuery={settingsSearchInputQuery}
           searchInputRef={searchInputRef}
-          onBack={closeSettingsPageWithPromptGuard}
           onSearchChange={setSettingsSearchQuery}
           onSelectSection={scrollToSection}
           reserveWindowChrome={false}

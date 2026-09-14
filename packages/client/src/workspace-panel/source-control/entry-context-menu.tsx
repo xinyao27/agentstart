@@ -116,14 +116,14 @@ export function SourceControlEntryMenuContent({
       <ContextMenuItem onClick={onView} disabled={!onView}>
         <Eye className="size-3.5" />
         {translate(
-          'auto.components.right.sidebar.SourceControlEntryContextMenu.a1f2c8d901',
+          'auto.components.workspacePanel.SourceControlEntryContextMenu.a1f2c8d901',
           'View'
         )}
       </ContextMenuItem>
       <ContextMenuSeparator />
       <ContextMenuItem onClick={handleCopyPath} disabled={!absolutePath}>
         <Copy className="size-3.5" />
-        {translate('auto.components.right.sidebar.FileExplorerRow.b5d436aa30', 'Copy Path')}
+        {translate('auto.components.workspacePanel.FileExplorerRow.b5d436aa30', 'Copy Path')}
       </ContextMenuItem>
       <ContextMenuSeparator />
       <ContextMenuSub>
@@ -173,7 +173,7 @@ export function SourceControlEntryMenuContent({
       <ContextMenuItem onClick={handleRevealInAgentStartExplorer} disabled={!absolutePath}>
         <FolderOpen className="size-3.5" />
         {translate(
-          'auto.components.right.sidebar.SourceControl.cc05b2d088',
+          'auto.components.workspacePanel.SourceControl.cc05b2d088',
           'Open in File Explorer'
         )}
       </ContextMenuItem>

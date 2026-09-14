@@ -7,7 +7,7 @@ import { getConnectionId } from '~renderer/runtime/connection-context'
 import { abortRuntimeGitMerge, abortRuntimeGitRebase } from '~renderer/runtime/git-client'
 import { shouldForcePushWithLeaseForUpstream } from '~renderer/source-control/workflow/operation'
 import { useAppStore } from '~renderer/store/state'
-import { showWorkspaceSidebar } from '~renderer/workspace-panel/show-sidebar'
+import { showWorkspacePanel } from '~renderer/workspace-panel/show-workspace-panel'
 
 import type {
   AbortConflictOperation,
@@ -86,7 +86,7 @@ export function useSourceControlConflictActions(scope: SourceControlRemoteAction
       const message = error instanceof Error ? error.message : `Failed to abort ${label}`
       toast.error(
         translate(
-          'auto.components.right.sidebar.SourceControl.f99560ab29',
+          'auto.components.workspacePanel.SourceControl.f99560ab29',
           'Abort {{value0}} failed',
           { value0: label }
         ),
@@ -154,7 +154,7 @@ export function useSourceControlConflictActions(scope: SourceControlRemoteAction
     }
     const copy = localizedHostedReviewCopy('github')
     if (openChecks) {
-      showWorkspaceSidebar({
+      showWorkspacePanel({
         view: 'source-control',
         worktreeId,
         sourceControlView: 'review'
@@ -184,14 +184,14 @@ export function useSourceControlConflictActions(scope: SourceControlRemoteAction
     } catch {
       toast.warning(
         translate(
-          'auto.components.right.sidebar.SourceControl.0453ca3a9a',
+          'auto.components.workspacePanel.SourceControl.0453ca3a9a',
           '{{value0}} created, but AgentStart could not refresh it yet.',
           { value0: copy.titleLabel }
         ),
         {
           action: {
             label: translate(
-              'auto.components.right.sidebar.SourceControl.812cb992ee',
+              'auto.components.workspacePanel.SourceControl.812cb992ee',
               'Open on {{value0}}',
               { value0: copy.providerName }
             ),

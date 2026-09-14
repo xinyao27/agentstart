@@ -72,7 +72,7 @@ export function BranchEntryRow({
           <span
             className="text-muted-foreground flex shrink-0 items-center gap-0.5 text-[10px]"
             title={translate(
-              'auto.components.right.sidebar.SourceControl.657e0c90ad',
+              'auto.components.workspacePanel.SourceControl.657e0c90ad',
               '{{value0}} note{{value1}}',
               { value0: commentCount, value1: commentCount === 1 ? '' : 's' }
             )}

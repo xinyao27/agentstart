@@ -3,7 +3,7 @@ import { getTerminalQuickCommandScope } from '@agentstart/protocol/terminal/quic
 import type { TerminalQuickCommand } from '@agentstart/protocol/terminal/quick-commands'
 import { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
-import { Plus } from '~renderer/icons/hugeicons'
+import { Plus, Terminal } from '~renderer/icons/hugeicons'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useAppStore } from '~renderer/store/state'
 import {
@@ -13,9 +13,10 @@ import {
 import { useConfirmationDialog } from '~renderer/ui/confirmation-dialog'
 
 import { Button } from '../ui/button'
-import { Label } from '../ui/label'
+import { SettingsGroupCards } from './group-card'
 import { QuickCommandsList } from './quick-commands-list'
 import { GLOBAL_SCOPE_KEY, QuickCommandsScopeFilter } from './quick-commands-scope-filter'
+import { getQuickCommandsPaneSearchEntries } from './quick-commands-search'
 import { getSettingOwnershipSummary } from './setting-ownership'
 
 type QuickCommandsPaneProps = {
@@ -173,53 +174,68 @@ export function QuickCommandsPane({
   }
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between gap-3 py-2">
-        <div className="space-y-1">
-          <Label>
-            {translate('auto.components.settings.QuickCommandsPane.f91b649324', 'Saved Commands')}
-          </Label>
-          <p className="text-muted-foreground text-xs">{ownership.description}</p>
-        </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => setEditor({ mode: 'add', command: createDraftForCurrentFilter() })}
-        >
-          <Plus />
-          {translate('auto.components.settings.QuickCommandsPane.5aacc8f7dc', 'Add Command')}
-        </Button>
-      </div>
+    <SettingsGroupCards
+      defaultOpenId="quick-commands"
+      groups={[
+        {
+          id: 'quick-commands',
+          icon: <Terminal aria-hidden="true" />,
+          title: translate(
+            'auto.components.settings.QuickCommandsPane.f91b649324',
+            'Saved Commands'
+          ),
+          summary: ownership.description,
+          searchEntries: getQuickCommandsPaneSearchEntries(),
+          forceVisible: true,
+          content: (
+            <div className="space-y-3">
+              <div className="flex items-center justify-end">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setEditor({ mode: 'add', command: createDraftForCurrentFilter() })}
+                >
+                  <Plus />
+                  {translate(
+                    'auto.components.settings.QuickCommandsPane.5aacc8f7dc',
+                    'Add Command'
+                  )}
+                </Button>
+              </div>
 
-      <QuickCommandsScopeFilter
-        repos={repos}
-        effectiveSelection={effectiveSelection}
-        showAll={showAll}
-        scopePopoverOpen={scopePopoverOpen}
-        setScopePopoverOpen={setScopePopoverOpen}
-        handleSelectAll={handleSelectAll}
-        toggleScope={toggleScope}
-      />
+              <QuickCommandsScopeFilter
+                repos={repos}
+                effectiveSelection={effectiveSelection}
+                showAll={showAll}
+                scopePopoverOpen={scopePopoverOpen}
+                setScopePopoverOpen={setScopePopoverOpen}
+                handleSelectAll={handleSelectAll}
+                toggleScope={toggleScope}
+              />
 
-      <QuickCommandsList
-        commands={commands}
-        visibleCommands={visibleCommands}
-        repoById={repoById}
-        onEdit={(command) => setEditor({ mode: 'edit', command })}
-        onRemove={(command) => void removeCommand(command)}
-      />
+              <QuickCommandsList
+                commands={commands}
+                visibleCommands={visibleCommands}
+                repoById={repoById}
+                onEdit={(command) => setEditor({ mode: 'edit', command })}
+                onRemove={(command) => void removeCommand(command)}
+              />
 
-      {editor !== null ? (
-        <TerminalQuickCommandDialog
-          open
-          mode={editor.mode}
-          command={editor.command}
-          repos={repos}
-          onOpenChange={(open) => !open && setEditor(null)}
-          onSave={saveCommand}
-        />
-      ) : null}
-    </div>
+              {editor !== null ? (
+                <TerminalQuickCommandDialog
+                  open
+                  mode={editor.mode}
+                  command={editor.command}
+                  repos={repos}
+                  onOpenChange={(open) => !open && setEditor(null)}
+                  onSave={saveCommand}
+                />
+              ) : null}
+            </div>
+          )
+        }
+      ]}
+    />
   )
 }

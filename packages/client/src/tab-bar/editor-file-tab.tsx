@@ -38,6 +38,7 @@ import {
 import { TabCloseButton } from './tab-close-button'
 import { TabLabel } from './tab-label'
 import { useTabStripPointerActivation } from './tab-strip-pointer-activation'
+import { TabActiveSurface, TabHoverSurface } from './tab-surfaces'
 import { TAB_CONTAINER_WIDTH_CLASSES } from './tab-width-rules'
 
 export default function EditorFileTab({
@@ -259,6 +260,7 @@ export default function EditorFileTab({
         }
       }}
     >
+      {isActive ? <TabActiveSurface /> : <TabHoverSurface />}
       {isConflictReview ? (
         <ShieldAlert className={conflictIconClassName} />
       ) : isCheckDetails ? (

@@ -107,14 +107,14 @@ export function CheckJobLogTail({
       <div className="mb-1.5 flex min-w-0 items-center gap-2">
         <div className="text-muted-foreground min-w-0 flex-1 text-[10px] font-semibold tracking-wide uppercase">
           {translate(
-            'auto.components.right.sidebar.checks.panel.content.d713f500b2',
+            'auto.components.workspacePanel.checks.panel.content.d713f500b2',
             'Log excerpt'
           )}
         </div>
         <CopyButton
           text={logTail}
           title={translate(
-            'auto.components.right.sidebar.checks.panel.content.679bf2093c',
+            'auto.components.workspacePanel.checks.panel.content.679bf2093c',
             'Copy log excerpt'
           )}
         />

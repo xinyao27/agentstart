@@ -4,12 +4,13 @@ import type {
   RendererErrorSurface
 } from '@agentstart/protocol/crash-reports/renderer-error'
 import type { CrashReportRecord } from '@agentstart/protocol/crash-reports/values'
+import { activeViewFor } from '~renderer/application-shell/state/visible-surface'
 
 import { getChromeVersion } from './browser-version'
 
 type RendererErrorContext = Pick<
   RendererErrorReportArgs,
-  'activeView' | 'activeModal' | 'activeTabType' | 'activeRightSidebarTab' | 'hasActiveWorktree'
+  'activeView' | 'activeModal' | 'activeTabType' | 'activeWorkspacePanelTab' | 'hasActiveWorktree'
 >
 
 type ReportRendererErrorInput = {
@@ -47,10 +48,10 @@ async function collectRendererErrorContext(): Promise<RendererErrorContext> {
     const { useAppStore } = await import('~renderer/store/state')
     const state = useAppStore.getState()
     return {
-      activeView: state.activeView,
+      activeView: activeViewFor(state),
       activeModal: state.activeModal,
       activeTabType: state.activeTabType,
-      activeRightSidebarTab: state.rightSidebarTab,
+      activeWorkspacePanelTab: state.workspacePanelTab,
       hasActiveWorktree: state.activeWorktreeId !== null
     }
   } catch {
@@ -111,8 +112,8 @@ export async function reportRendererErrorCrash(input: ReportRendererErrorInput):
     ...(context.activeView ? { activeView: context.activeView } : {}),
     ...(context.activeModal !== undefined ? { activeModal: context.activeModal } : {}),
     ...(context.activeTabType ? { activeTabType: context.activeTabType } : {}),
-    ...(context.activeRightSidebarTab
-      ? { activeRightSidebarTab: context.activeRightSidebarTab }
+    ...(context.activeWorkspacePanelTab
+      ? { activeWorkspacePanelTab: context.activeWorkspacePanelTab }
       : {}),
     ...(context.hasActiveWorktree !== undefined
       ? { hasActiveWorktree: context.hasActiveWorktree }

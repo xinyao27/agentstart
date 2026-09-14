@@ -64,9 +64,9 @@ export function createWorktreeActivationActions(
         // Restore per-worktree editor state
         // Why: Search now lives under Explorer, so the files/search sub-route
         // must switch with the worktree instead of leaking the previous one.
-        const restoredRightSidebarExplorerView =
-          s.rightSidebarExplorerViewByWorktree?.[worktreeId] ?? 'files'
-        const restoredRightSidebarTab = s.rightSidebarTabByWorktree?.[worktreeId] ?? 'explorer'
+        const restoredWorkspacePanelExplorerView =
+          s.workspacePanelExplorerViewByWorktree?.[worktreeId] ?? 'files'
+        const restoredWorkspacePanelTab = s.workspacePanelTabByWorktree?.[worktreeId] ?? 'explorer'
         const restoredFileId = s.activeFileIdByWorktree[worktreeId] ?? null
         const restoredBrowserTabId = s.activeBrowserTabIdByWorktree[worktreeId] ?? null
         const restoredTabType = s.activeTabTypeByWorktree[worktreeId] ?? 'terminal'
@@ -245,8 +245,8 @@ export function createWorktreeActivationActions(
           s.activeFileId !== activeFileId ||
           s.activeBrowserTabId !== activeBrowserTabId ||
           s.activeTabType !== activeTabType ||
-          s.rightSidebarTab !== restoredRightSidebarTab ||
-          s.rightSidebarExplorerView !== restoredRightSidebarExplorerView ||
+          s.workspacePanelTab !== restoredWorkspacePanelTab ||
+          s.workspacePanelExplorerView !== restoredWorkspacePanelExplorerView ||
           s.activeTabId !== activeTabId ||
           nextActiveTabTypeByWorktree !== s.activeTabTypeByWorktree ||
           nextEverActivated !== s.everActivatedWorktreeIds
@@ -265,8 +265,8 @@ export function createWorktreeActivationActions(
           activeBrowserTabId,
           activeTabType,
           activeTabTypeByWorktree: nextActiveTabTypeByWorktree,
-          rightSidebarTab: restoredRightSidebarTab,
-          rightSidebarExplorerView: restoredRightSidebarExplorerView,
+          workspacePanelTab: restoredWorkspacePanelTab,
+          workspacePanelExplorerView: restoredWorkspacePanelExplorerView,
           activeTabId,
           everActivatedWorktreeIds: nextEverActivated,
           ...tabsByWorktreeUpdate

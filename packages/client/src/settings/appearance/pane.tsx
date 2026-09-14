@@ -11,6 +11,7 @@ import {
 } from '~renderer/icons/hugeicons'
 import { useAppStore } from '~renderer/store/state'
 
+import { SettingsGroupCard } from '../group-card'
 import { matchesSettingsSearch, normalizeSettingsSearchQuery } from '../search'
 import { TerminalAppearanceSection } from '../terminal/appearance-section'
 import { getTerminalAppearanceSearchEntries } from '../terminal/search'
@@ -27,7 +28,6 @@ import {
   getTypographyEntries,
   getZoomEntries
 } from './search'
-import { AppearanceSection } from './section'
 import { getLeftSidebarAppearanceEntry } from './sidebar-search'
 import { getThemeColorEntries } from './theme-color-search'
 import { AppearanceThemeColorSection } from './theme-color-section'
@@ -189,7 +189,7 @@ export function AppearancePane({
   return (
     <div className="space-y-2.5">
       {interfaceMatches ? (
-        <AppearanceSection
+        <SettingsGroupCard
           id="interface"
           icon={<AppWindow aria-hidden="true" />}
           title={interfaceTitle}
@@ -205,11 +205,11 @@ export function AppearancePane({
             onRequestFontSuggestions={onRequestFontSuggestions}
             forceVisiblePrimary={interfaceLabelMatches}
           />
-        </AppearanceSection>
+        </SettingsGroupCard>
       ) : null}
 
       {themeColorMatches ? (
-        <AppearanceSection
+        <SettingsGroupCard
           id="theme-color"
           icon={<Palette aria-hidden="true" />}
           title={themeColorTitle}
@@ -224,7 +224,7 @@ export function AppearancePane({
               applyTheme(theme)
             }}
           />
-        </AppearanceSection>
+        </SettingsGroupCard>
       ) : null}
 
       {/* Why: Code & Markdown is intentionally omitted. AgentStart has no Appearance-level
@@ -234,7 +234,7 @@ export function AppearancePane({
           rather than fabricate settings. */}
 
       {terminalMatches ? (
-        <AppearanceSection
+        <SettingsGroupCard
           id="terminal"
           icon={<TerminalSquare aria-hidden="true" />}
           title={terminalTitle}
@@ -252,11 +252,11 @@ export function AppearancePane({
             warpThemes={warpThemes}
             forceVisiblePrimary={terminalLabelMatches}
           />
-        </AppearanceSection>
+        </SettingsGroupCard>
       ) : null}
 
       {windowMatches ? (
-        <AppearanceSection
+        <SettingsGroupCard
           id="window"
           icon={<PanelLeft aria-hidden="true" />}
           title={windowSidebarTitle}
@@ -269,7 +269,7 @@ export function AppearancePane({
             updateSettings={updateSettings}
             forceVisiblePrimary={windowLabelMatches}
           />
-        </AppearanceSection>
+        </SettingsGroupCard>
       ) : null}
     </div>
   )

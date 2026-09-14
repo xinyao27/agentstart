@@ -136,24 +136,24 @@ export function FileExplorerRowMenu({
     >
       <ContextMenuItem onClick={() => onStartNew('file', targetDir, targetDepth)}>
         <FilePlus />
-        {translate('auto.components.right.sidebar.FileExplorerRow.37c875d827', 'New File')}
+        {translate('auto.components.workspacePanel.FileExplorerRow.37c875d827', 'New File')}
       </ContextMenuItem>
       <ContextMenuItem onClick={() => onStartNew('folder', targetDir, targetDepth)}>
         <FolderPlus />
-        {translate('auto.components.right.sidebar.FileExplorerRow.f61af83316', 'New Folder')}
+        {translate('auto.components.workspacePanel.FileExplorerRow.f61af83316', 'New Folder')}
       </ContextMenuItem>
       <ContextMenuSeparator />
       {shouldShowCopyFileAction(node, connectionId, selectionSize) && (
         <ContextMenuItem onClick={onCopyFile}>
           <Copy />
-          {translate('auto.components.right.sidebar.FileExplorerRow.98a79948b3', 'Copy')}
+          {translate('auto.components.workspacePanel.FileExplorerRow.98a79948b3', 'Copy')}
         </ContextMenuItem>
       )}
       <ContextMenuItem onClick={() => onCopyPaths('absolute')}>
         <Copy />
         {selectionSize > 1
-          ? translate('auto.components.right.sidebar.FileExplorerRow.f9d7ca753d', 'Copy Paths')
-          : translate('auto.components.right.sidebar.FileExplorerRow.b5d436aa30', 'Copy Path')}
+          ? translate('auto.components.workspacePanel.FileExplorerRow.f9d7ca753d', 'Copy Paths')
+          : translate('auto.components.workspacePanel.FileExplorerRow.b5d436aa30', 'Copy Path')}
         {copyPathShortcutLabel !== 'Unassigned' && (
           <ContextMenuShortcut>{copyPathShortcutLabel}</ContextMenuShortcut>
         )}
@@ -162,11 +162,11 @@ export function FileExplorerRowMenu({
         <Copy />
         {selectionSize > 1
           ? translate(
-              'auto.components.right.sidebar.FileExplorerRow.42e10cbf57',
+              'auto.components.workspacePanel.FileExplorerRow.42e10cbf57',
               'Copy Relative Paths'
             )
           : translate(
-              'auto.components.right.sidebar.FileExplorerRow.66a29dde82',
+              'auto.components.workspacePanel.FileExplorerRow.66a29dde82',
               'Copy Relative Path'
             )}
         {copyRelativePathShortcutLabel !== 'Unassigned' && (
@@ -176,14 +176,14 @@ export function FileExplorerRowMenu({
       {!node.isDirectory && (
         <ContextMenuItem onClick={() => onDuplicate(node)}>
           <Files />
-          {translate('auto.components.right.sidebar.FileExplorerRow.0fec99bfd7', 'Duplicate')}
+          {translate('auto.components.workspacePanel.FileExplorerRow.0fec99bfd7', 'Duplicate')}
         </ContextMenuItem>
       )}
       {canAddAsProject && (
         <ContextMenuItem onClick={onAddFolderAsProject}>
           <FolderPlus />
           {translate(
-            'auto.components.right.sidebar.FileExplorerRow.1bb9be455c',
+            'auto.components.workspacePanel.FileExplorerRow.1bb9be455c',
             'Add as Project...'
           )}
         </ContextMenuItem>
@@ -192,7 +192,7 @@ export function FileExplorerRowMenu({
         <ContextMenuItem onClick={onOpenInTerminal}>
           <SquareTerminal />
           {translate(
-            'auto.components.right.sidebar.FileExplorerRow.e887fa4b2e',
+            'auto.components.workspacePanel.FileExplorerRow.e887fa4b2e',
             'Open in Terminal'
           )}
         </ContextMenuItem>
@@ -200,7 +200,7 @@ export function FileExplorerRowMenu({
       {shouldShowViewFileAction(node) && (
         <ContextMenuItem onClick={onViewFile}>
           <File />
-          {translate('auto.components.right.sidebar.FileExplorerRow.1d8e182c32', 'View File')}
+          {translate('auto.components.workspacePanel.FileExplorerRow.1d8e182c32', 'View File')}
         </ContextMenuItem>
       )}
       {!node.isDirectory && activeWorktreeId && (
@@ -217,7 +217,7 @@ export function FileExplorerRowMenu({
         >
           <Globe />
           {translate(
-            'auto.components.right.sidebar.FileExplorerRow.dd112c81d2',
+            'auto.components.workspacePanel.FileExplorerRow.dd112c81d2',
             'Open in AgentStart Browser'
           )}
         </ContextMenuItem>
@@ -235,7 +235,7 @@ export function FileExplorerRowMenu({
         >
           <Eye />
           {translate(
-            'auto.components.right.sidebar.FileExplorerRow.d87a4c42e1',
+            'auto.components.workspacePanel.FileExplorerRow.d87a4c42e1',
             'Open Markdown Preview'
           )}
         </ContextMenuItem>
@@ -243,19 +243,22 @@ export function FileExplorerRowMenu({
       {showDownload && (
         <ContextMenuItem onClick={onDownload}>
           <Download />
-          {translate('auto.components.right.sidebar.FileExplorerRow.c2112579f6', 'Download')}
+          {translate('auto.components.workspacePanel.FileExplorerRow.c2112579f6', 'Download')}
         </ContextMenuItem>
       )}
       {canCollapseFolderSubtree && shouldShowCollapseFolderAction(node, isExpanded) && (
         <ContextMenuItem onClick={onCollapseFolderSubtree}>
           <ListCollapse />
-          {translate('auto.components.right.sidebar.FileExplorerRow.d6a25618aa', 'Collapse Folder')}
+          {translate(
+            'auto.components.workspacePanel.FileExplorerRow.d6a25618aa',
+            'Collapse Folder'
+          )}
         </ContextMenuItem>
       )}
       {shouldShowFindInFolderAction(node) && (
         <ContextMenuItem onClick={onFindInFolder}>
           <Search />
-          {translate('auto.components.right.sidebar.FileExplorerRow.0df0e5abac', 'Find in Folder')}
+          {translate('auto.components.workspacePanel.FileExplorerRow.0df0e5abac', 'Find in Folder')}
           {findInFolderShortcutLabel !== 'Unassigned' && (
             <ContextMenuShortcut>{findInFolderShortcutLabel}</ContextMenuShortcut>
           )}
@@ -268,16 +271,16 @@ export function FileExplorerRowMenu({
       <ContextMenuSeparator />
       <ContextMenuItem onClick={() => onStartRename(node)}>
         <Pencil />
-        {translate('auto.components.right.sidebar.FileExplorerRow.fc747429bf', 'Rename')}
+        {translate('auto.components.workspacePanel.FileExplorerRow.fc747429bf', 'Rename')}
         <ContextMenuShortcut>
           {isMac
             ? '↩'
-            : translate('auto.components.right.sidebar.FileExplorerRow.a06551beee', 'Enter')}
+            : translate('auto.components.workspacePanel.FileExplorerRow.a06551beee', 'Enter')}
         </ContextMenuShortcut>
       </ContextMenuItem>
       <ContextMenuItem variant="destructive" onClick={onRequestDelete}>
         <Trash2 />
-        {translate('auto.components.right.sidebar.FileExplorerRow.addc01145f', 'Delete')}
+        {translate('auto.components.workspacePanel.FileExplorerRow.addc01145f', 'Delete')}
         <ContextMenuShortcut>{deleteShortcutLabel}</ContextMenuShortcut>
       </ContextMenuItem>
     </ContextMenuContent>

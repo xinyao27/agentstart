@@ -1,6 +1,7 @@
 import type { TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
 import type { RefObject } from 'react'
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { activeViewFor } from '~renderer/application-shell/state/visible-surface'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useAppStore } from '~renderer/store/state'
 
@@ -52,7 +53,7 @@ export function useTerminalColdParking({
   anyMountedWorktreeHasLayout,
   getEffectiveLayoutForWorktree
 }: TerminalColdParkingArgs): TerminalColdParkingSnapshot {
-  const activeView = useAppStore((s) => s.activeView)
+  const activeView = useAppStore((s) => activeViewFor(s))
   const activeWorktreeId = useAppStore((s) => s.activeWorktreeId)
   const tabsByWorktree = useAppStore((s) => s.tabsByWorktree)
   const pendingStartupByTabId = useAppStore((s) => s.pendingStartupByTabId)

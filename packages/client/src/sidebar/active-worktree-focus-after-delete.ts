@@ -1,3 +1,4 @@
+import { isWorkspaceBodyVisible } from '~renderer/application-shell/state/visible-surface'
 import { getWorktreeMapFromState } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
 import { activateAndRevealWorktree } from '~renderer/worktree/activation'
@@ -41,7 +42,7 @@ function focusNextWorktreeAfterActiveDelete(
   // Why: a concurrent activation may have already moved focus during the delete.
   // Only hand off when deletion left the terminal workspace selection empty.
   if (
-    state.activeView !== 'terminal' ||
+    !isWorkspaceBodyVisible(state) ||
     state.activePendingCreationId !== null ||
     state.activeWorktreeId !== null
   ) {
@@ -65,7 +66,7 @@ function focusNextWorktreeAfterActiveDelete(
 export function prepareActiveWorktreeFocusAfterDelete(worktreeId: string): () => void {
   const state = useAppStore.getState()
   const wasViewing =
-    state.activeView === 'terminal' &&
+    isWorkspaceBodyVisible(state) &&
     state.activePendingCreationId === null &&
     state.activeWorktreeId === worktreeId
   const repoId = getWorktreeMapFromState(state).get(worktreeId)?.repoId ?? null

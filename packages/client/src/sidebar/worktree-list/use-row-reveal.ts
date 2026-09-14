@@ -8,8 +8,8 @@ import { translate } from '~renderer/i18n/i18n'
 
 import {
   workspaceIndexForLocalRowIndex,
-  type WorkspaceSidebarProjectedRow
-} from '../workspace-sidebar-row-projection'
+  type NavigationProjectedRow
+} from '../navigation-row-projection'
 import type { ProjectGroupingModel, WorktreeGroupBy } from './groups'
 import {
   getSidebarRowRevealAncestorKeys,
@@ -27,7 +27,7 @@ export function useRowReveal(args: {
   groupBy: WorktreeGroupBy
   toggleGroup: (key: string) => void
   renderRows: readonly RenderRow[]
-  workspaceRows: readonly WorkspaceSidebarProjectedRow[]
+  workspaceRows: readonly NavigationProjectedRow[]
   clearPending: () => void
   legendListRef: React.RefObject<LegendListRef | null>
   scrollRef: React.RefObject<HTMLDivElement | null>

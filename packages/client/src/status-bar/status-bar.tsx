@@ -2,7 +2,7 @@ import type { ProviderRateLimits } from '@agentstart/protocol/account-rate-types
 import type { StatusBarItem } from '@agentstart/protocol/settings/ui-state'
 import { normalizeStatusBarUsageMode } from '@agentstart/protocol/settings/usage-display'
 import { normalizeUsagePercentageDisplay } from '@agentstart/protocol/settings/usage-display'
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
 import { translate } from '../i18n/i18n'
 import { ActivityIcon, Plug } from '../icons/hugeicons'
@@ -43,6 +43,9 @@ const PROVIDER_ITEMS: readonly {
   { id: 'minimax', label: 'MiniMax Usage' },
   { id: 'grok', label: 'Grok Usage' }
 ]
+
+const USAGE_FETCH_RETRY_DELAY_MS = 5_000
+const USAGE_FETCH_RETRY_LIMIT = 5
 
 function visibleProviders(
   rateLimits: ReturnType<typeof useAppStore.getState>['rateLimits'],
@@ -131,10 +134,49 @@ export function StatusBar(): React.JSX.Element | null {
   const usagePercentageDisplay = normalizeUsagePercentageDisplay(
     useAppStore((state) => state.usagePercentageDisplay)
   )
-  if (!statusBarVisible) {
-    return null
-  }
   const providers = visibleProviders(rateLimits, settings, statusBarItems)
+  const usageDataPending =
+    PROVIDER_ITEMS.some(({ id }) => statusBarItems.includes(id)) && providers.length === 0
+  // Why: the usage button renders only once a provider reports data, and the
+  // startup snapshot fetch can lose its race with the daemon connection — a
+  // freshly restarted daemon answers subscribe with an empty ready snapshot.
+  // Without a retry the button stays hidden and its own open-to-fetch path
+  // can never run.
+  useEffect(() => {
+    if (!usageDataPending) {
+      return
+    }
+    let attempts = 0
+    let timer: number | undefined
+    const retry = (): void => {
+      attempts += 1
+      void fetchRateLimits()
+      if (attempts < USAGE_FETCH_RETRY_LIMIT) {
+        timer = window.setTimeout(retry, USAGE_FETCH_RETRY_DELAY_MS)
+      }
+    }
+    retry()
+    return () => {
+      if (timer !== undefined) {
+        window.clearTimeout(timer)
+      }
+    }
+  }, [usageDataPending, fetchRateLimits])
+  if (!statusBarVisible) {
+    // Why: the runtime indicator is connection health, so it stays even when
+    // the usage and tool indicators are hidden.
+    return (
+      <footer
+        aria-label={translate(
+          'auto.components.status.bar.AgentStartRuntimeStatus.footer',
+          'AgentStart Runtime status'
+        )}
+        className="mt-auto flex min-h-6 shrink-0 flex-wrap items-center justify-end px-2 py-1 text-xs"
+      >
+        <AgentStartRuntimeStatusSegment />
+      </footer>
+    )
+  }
 
   const openProvider = (provider: ProviderId): void => {
     const sectionId = getUsageProviderAccountsSectionId(provider)
@@ -164,8 +206,13 @@ export function StatusBar(): React.JSX.Element | null {
 
   return (
     <ContextMenu>
-      <ContextMenuTrigger className="border-border bg-background flex h-6 min-h-6 shrink-0 items-center border-t pr-3 text-xs">
-        {providers.length > 0 ? (
+      {/* Why: the sidebar footer is only 240–500px wide. Usage owns the left
+          column and wraps its own providers and windows instead of being
+          clipped, while the indicator cluster holds the right edge on the same
+          row — wrapping it below the meters cost the footer a whole line for
+          three icons. */}
+      <ContextMenuTrigger className="mt-auto grid min-h-6 grid-cols-[minmax(0,1fr)_auto] items-end gap-x-1.5 px-2 py-1 text-xs">
+        {providers.length > 0 || usageDataPending ? (
           <DropdownMenu
             modal={false}
             onOpenChange={(open) => {
@@ -181,7 +228,12 @@ export function StatusBar(): React.JSX.Element | null {
               render={
                 <Button
                   aria-label={translate('statusBar.usage', 'Usage')}
-                  className="gap-3"
+                  // Why: `h-full` is cyclic once this control wraps — the footer
+                  // sizes to its content, so a percentage height resolves a line
+                  // short. `justify-self-start` keeps the trigger's own width so
+                  // a short meter row does not paint a hover surface across the
+                  // empty half of its grid column.
+                  className="h-auto max-w-full flex-wrap justify-start gap-x-3 gap-y-0.5 justify-self-start"
                   size="status-bar"
                   type="button"
                   variant="status-bar"
@@ -195,6 +247,14 @@ export function StatusBar(): React.JSX.Element | null {
                       mode={statusBarUsageMode}
                     />
                   ))}
+                  {/* Why: keep the trigger visible while no provider has data
+                  yet, so the menu (and its refresh) stays reachable instead of
+                  the whole meter silently disappearing. */}
+                  {providers.length === 0 ? (
+                    <span aria-hidden className="text-muted-foreground animate-pulse">
+                      ···
+                    </span>
+                  ) : null}
                 </Button>
               }
             />
@@ -227,8 +287,10 @@ export function StatusBar(): React.JSX.Element | null {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : null}
-        <div className="flex-1" />
-        <div className="flex h-full shrink-0 items-center gap-0.5 rounded-full">
+        {/* Why: the cluster pins itself to the second column so it keeps the
+            right edge even when no provider reports usage and the first column
+            is empty. */}
+        <div className="col-start-2 flex items-center gap-0.5">
           <SkillUpdateStatusSegment />
           <RemoteServerUpdateStatusSegment iconOnly />
           <Suspense fallback={null}>

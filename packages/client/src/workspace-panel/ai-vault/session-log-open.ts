@@ -70,7 +70,7 @@ export async function openAiVaultSessionLogInAgentStart(session: AiVaultLogSessi
     if (!worktreeId) {
       toast.error(
         translate(
-          'auto.components.right.sidebar.aiVaultSessionLogOpen.workspaceGone',
+          'auto.components.workspacePanel.aiVaultSessionLogOpen.workspaceGone',
           "Couldn't open log — workspace is no longer available."
         )
       )
@@ -96,7 +96,7 @@ export async function openAiVaultSessionLogInAgentStart(session: AiVaultLogSessi
     } catch {
       toast.error(
         translate(
-          'auto.components.right.sidebar.aiVaultSessionLogOpen.notAuthorized',
+          'auto.components.workspacePanel.aiVaultSessionLogOpen.notAuthorized',
           "Couldn't open log — path not authorized."
         )
       )
@@ -107,7 +107,7 @@ export async function openAiVaultSessionLogInAgentStart(session: AiVaultLogSessi
     if (!worktreeStillExists(stateAfterAuth, worktreeId)) {
       toast.error(
         translate(
-          'auto.components.right.sidebar.aiVaultSessionLogOpen.workspaceGone',
+          'auto.components.workspacePanel.aiVaultSessionLogOpen.workspaceGone',
           "Couldn't open log — workspace is no longer available."
         )
       )
@@ -142,7 +142,7 @@ export async function openAiVaultSessionLogInAgentStart(session: AiVaultLogSessi
     if (existingWritableTab) {
       toast(
         translate(
-          'auto.components.right.sidebar.aiVaultSessionLogOpen.alreadyEditable',
+          'auto.components.workspacePanel.aiVaultSessionLogOpen.alreadyEditable',
           'Log is already open for editing.'
         )
       )

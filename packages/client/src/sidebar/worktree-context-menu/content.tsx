@@ -140,11 +140,8 @@ export function WorktreeContextMenuContent({
             runtimeEnvironmentId={runtimeEnvironmentId}
             disabled={isDeleting}
           />
-          {workspaceActions.canOpenDedicatedTab ? (
-            <ContextMenuItem
-              onClick={workspaceActions.handleOpenDedicatedTab}
-              disabled={isDeleting}
-            >
+          {workspaceActions.canOpenInNewTab ? (
+            <ContextMenuItem onClick={workspaceActions.handleOpenInNewTab} disabled={isDeleting}>
               <ArrowSquareOut className="size-3.5" />
               {translate('sidebar.worktree.openDedicatedTab', 'Open Worktree in New Tab')}
             </ContextMenuItem>

@@ -48,11 +48,11 @@ export function SearchResultsPane({
 }: SearchResultsPaneProps): React.JSX.Element {
   const notice = !query ? (
     <div className="text-muted-foreground flex h-32 items-center justify-center text-xs">
-      {translate('auto.components.right.sidebar.Search.1abfb25a66', 'Type to search in files')}
+      {translate('auto.components.workspacePanel.Search.1abfb25a66', 'Type to search in files')}
     </div>
   ) : !hasCommittedResults && !loading ? (
     <div className="text-muted-foreground flex h-32 items-center justify-center text-xs">
-      {translate('auto.components.right.sidebar.Search.d56d140747', 'Press Enter to search')}
+      {translate('auto.components.workspacePanel.Search.d56d140747', 'Press Enter to search')}
     </div>
   ) : null
 
@@ -63,14 +63,14 @@ export function SearchResultsPane({
       {results && rows.length > 0 && (
         <div className="text-muted-foreground border-border border-b px-2 py-1 text-[10px]">
           {results.totalMatches}{' '}
-          {translate('auto.components.right.sidebar.Search.6aeda362ed', 'result')}
+          {translate('auto.components.workspacePanel.Search.6aeda362ed', 'result')}
           {results.totalMatches !== 1 ? 's' : ''}{' '}
-          {translate('auto.components.right.sidebar.Search.4107975b3a', 'in')}{' '}
+          {translate('auto.components.workspacePanel.Search.4107975b3a', 'in')}{' '}
           {results.files.length}{' '}
-          {translate('auto.components.right.sidebar.Search.0b8104eaf2', 'file')}
+          {translate('auto.components.workspacePanel.Search.0b8104eaf2', 'file')}
           {results.files.length !== 1 ? 's' : ''}
           {results.truncated &&
-            translate('auto.components.right.sidebar.Search.dcc294f28d', '(results truncated)')}
+            translate('auto.components.workspacePanel.Search.dcc294f28d', '(results truncated)')}
         </div>
       )}
 

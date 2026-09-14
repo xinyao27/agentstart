@@ -17,7 +17,7 @@ function getLocalizedDiffCommentLineLabel(
 ): string {
   if (comment.startLine !== undefined && comment.startLine !== comment.lineNumber) {
     return translate(
-      'auto.components.right.sidebar.SourceControl.d97ef8f221',
+      'auto.components.workspacePanel.SourceControl.d97ef8f221',
       'lines {{value0}}-{{value1}}',
       {
         value0: comment.startLine,
@@ -25,7 +25,7 @@ function getLocalizedDiffCommentLineLabel(
       }
     )
   }
-  return translate('auto.components.right.sidebar.SourceControl.6f8bfa0eb9', 'line {{value0}}', {
+  return translate('auto.components.workspacePanel.SourceControl.6f8bfa0eb9', 'line {{value0}}', {
     value0: comment.lineNumber
   })
 }
@@ -35,19 +35,19 @@ export function getLocalizedConflictKindLabel(
 ): string {
   switch (kind) {
     case 'both_modified':
-      return translate('auto.components.right.sidebar.SourceControl.c569d29a02', 'both modified')
+      return translate('auto.components.workspacePanel.SourceControl.c569d29a02', 'both modified')
     case 'both_added':
-      return translate('auto.components.right.sidebar.SourceControl.ea7287d84f', 'both added')
+      return translate('auto.components.workspacePanel.SourceControl.ea7287d84f', 'both added')
     case 'deleted_by_us':
-      return translate('auto.components.right.sidebar.SourceControl.bd0151ef7b', 'deleted by us')
+      return translate('auto.components.workspacePanel.SourceControl.bd0151ef7b', 'deleted by us')
     case 'deleted_by_them':
-      return translate('auto.components.right.sidebar.SourceControl.44594e8c61', 'deleted by them')
+      return translate('auto.components.workspacePanel.SourceControl.44594e8c61', 'deleted by them')
     case 'added_by_us':
-      return translate('auto.components.right.sidebar.SourceControl.24773ee581', 'added by us')
+      return translate('auto.components.workspacePanel.SourceControl.24773ee581', 'added by us')
     case 'added_by_them':
-      return translate('auto.components.right.sidebar.SourceControl.c03d7c952f', 'added by them')
+      return translate('auto.components.workspacePanel.SourceControl.c03d7c952f', 'added by them')
     case 'both_deleted':
-      return translate('auto.components.right.sidebar.SourceControl.5b176fa431', 'both deleted')
+      return translate('auto.components.workspacePanel.SourceControl.5b176fa431', 'both deleted')
   }
 }
 
@@ -94,7 +94,7 @@ export function DiffCommentsInlineList({
     return (
       <div className="text-muted-foreground px-6 py-2 text-[11px]">
         {translate(
-          'auto.components.right.sidebar.SourceControl.ac8cbe3bf5',
+          'auto.components.workspacePanel.SourceControl.ac8cbe3bf5',
           'Hover over a line in the diff view and click the + to add a note.'
         )}
       </div>
@@ -118,7 +118,7 @@ export function DiffCommentsInlineList({
                 }
               }}
               title={translate(
-                'auto.components.right.sidebar.SourceControl.0d963bf982',
+                'auto.components.workspacePanel.SourceControl.0d963bf982',
                 'Open {{value0}}',
                 { value0: filePath }
               )}
@@ -132,12 +132,12 @@ export function DiffCommentsInlineList({
               className="text-muted-foreground can-hover:opacity-0 hover:text-destructive focus-visible:text-destructive focus-visible:bg-accent h-auto border-0 p-0.5 transition-opacity group-hover/file:opacity-100 focus-visible:opacity-100"
               onClick={() => onClearFile(filePath)}
               title={translate(
-                'auto.components.right.sidebar.SourceControl.59654650d3',
+                'auto.components.workspacePanel.SourceControl.59654650d3',
                 'Clear notes for {{value0}}',
                 { value0: filePath }
               )}
               aria-label={translate(
-                'auto.components.right.sidebar.SourceControl.59654650d3',
+                'auto.components.workspacePanel.SourceControl.59654650d3',
                 'Clear notes for {{value0}}',
                 { value0: filePath }
               )}
@@ -160,12 +160,12 @@ export function DiffCommentsInlineList({
                   className="focus-visible:bg-accent flex h-auto min-w-0 flex-1 justify-start gap-1.5 border-0 p-0 text-left font-normal whitespace-normal"
                   onClick={() => onOpen(c)}
                   title={translate(
-                    'auto.components.right.sidebar.SourceControl.0b5b8c234c',
+                    'auto.components.workspacePanel.SourceControl.0b5b8c234c',
                     'Open {{value0}} ({{value1}})',
                     { value0: c.filePath, value1: getLocalizedDiffCommentLineLabel(c) }
                   )}
                   aria-label={translate(
-                    'auto.components.right.sidebar.SourceControl.3eb9b2805e',
+                    'auto.components.workspacePanel.SourceControl.3eb9b2805e',
                     'Open note on {{value0}}',
                     { value0: getLocalizedDiffCommentLineLabel(c) }
                   )}
@@ -175,12 +175,15 @@ export function DiffCommentsInlineList({
                   </span>
                   <span className="bg-muted/70 text-muted-foreground shrink-0 px-1 py-0.5 text-[10px] leading-none">
                     {getDiffCommentSource(c) === 'markdown'
-                      ? translate('auto.components.right.sidebar.SourceControl.94c42b252e', 'MD')
-                      : translate('auto.components.right.sidebar.SourceControl.c56ba7fa06', 'Diff')}
+                      ? translate('auto.components.workspacePanel.SourceControl.94c42b252e', 'MD')
+                      : translate(
+                          'auto.components.workspacePanel.SourceControl.c56ba7fa06',
+                          'Diff'
+                        )}
                   </span>
                   {c.sentAt ? (
                     <span className="bg-muted/70 text-muted-foreground shrink-0 px-1 py-0.5 text-[10px] leading-none">
-                      {translate('auto.components.right.sidebar.SourceControl.655633c08a', 'Sent')}
+                      {translate('auto.components.workspacePanel.SourceControl.655633c08a', 'Sent')}
                     </span>
                   ) : null}
                   <span className="text-foreground block min-w-0 flex-1 text-[11px] leading-snug break-words whitespace-pre-wrap">
@@ -194,11 +197,11 @@ export function DiffCommentsInlineList({
                   className="can-hover:opacity-0 h-auto border-0 p-0.5 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                   onClick={() => void handleCopyOne(c)}
                   title={translate(
-                    'auto.components.right.sidebar.SourceControl.1623bf4e19',
+                    'auto.components.workspacePanel.SourceControl.1623bf4e19',
                     'Copy note'
                   )}
                   aria-label={translate(
-                    'auto.components.right.sidebar.SourceControl.c085946bda',
+                    'auto.components.workspacePanel.SourceControl.c085946bda',
                     'Copy note on line {{value0}}',
                     { value0: c.lineNumber }
                   )}
@@ -212,11 +215,11 @@ export function DiffCommentsInlineList({
                   className="text-muted-foreground can-hover:opacity-0 hover:text-destructive focus-visible:text-destructive focus-visible:bg-accent h-auto border-0 p-0.5 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                   onClick={() => onDelete(c.id)}
                   title={translate(
-                    'auto.components.right.sidebar.SourceControl.b656381c18',
+                    'auto.components.workspacePanel.SourceControl.b656381c18',
                     'Delete note'
                   )}
                   aria-label={translate(
-                    'auto.components.right.sidebar.SourceControl.c321542ee2',
+                    'auto.components.workspacePanel.SourceControl.c321542ee2',
                     'Delete note on line {{value0}}',
                     { value0: c.lineNumber }
                   )}

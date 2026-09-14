@@ -116,12 +116,12 @@ export function useHostedReviewActions({
       title: `${label} PR #${review.number}?`,
       description: isClosing
         ? translate(
-            'auto.components.right.sidebar.HostedReviewActions.a3d572a4de',
+            'auto.components.workspacePanel.HostedReviewActions.a3d572a4de',
             'This will close the {{value0}}.',
             { value0: 'pull request' }
           )
         : translate(
-            'auto.components.right.sidebar.HostedReviewActions.78f5ff294c',
+            'auto.components.workspacePanel.HostedReviewActions.78f5ff294c',
             'This will reopen the {{value0}}.',
             { value0: 'pull request' }
           ),
@@ -146,12 +146,12 @@ export function useHostedReviewActions({
         toast.success(
           isClosing
             ? translate(
-                'auto.components.right.sidebar.HostedReviewActions.fa3ee9a515',
+                'auto.components.workspacePanel.HostedReviewActions.fa3ee9a515',
                 '{{value0}} closed',
                 { value0: 'PR' }
               )
             : translate(
-                'auto.components.right.sidebar.HostedReviewActions.377269db6f',
+                'auto.components.workspacePanel.HostedReviewActions.377269db6f',
                 '{{value0}} reopened',
                 { value0: 'PR' }
               )

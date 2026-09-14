@@ -13,8 +13,8 @@ mod ssh;
 mod wsl;
 
 pub use filesystem::{
-    HostDirectoryEntry, HostFileKind, HostFileStat, HostFilesystem, HostFilesystemError,
-    HostFilesystemErrorKind, HostPaths, HostRemoveOptions,
+    HostDirectoryEntry, HostFileKind, HostFilesystem, HostFilesystemError, HostPaths,
+    HostRemoveOptions,
 };
 pub use local::LocalHost;
 pub use model::{

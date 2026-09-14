@@ -73,146 +73,135 @@ export function AutomationsSection(): React.JSX.Element {
     onSuccess: (next) => queryClient.setQueryData(preferencesKey, next)
   })
   return (
-    <section className="border-border border-t pt-5">
-      <div>
-        <h1 className="text-xl font-semibold">
-          {translate('extension.automations.title', 'Automations')}
-        </h1>
+    <div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <RitualCard
+          icon={Sun}
+          title={translate('extension.automations.startDay', 'Start day')}
+          description={translate(
+            'extension.automations.startDayDescription',
+            'Fast-forward projects, run configured dev servers, and open project groups.'
+          )}
+          disabled={ritual.isPending}
+          onRun={() => ritual.mutate('start-day')}
+        />
+        <RitualCard
+          icon={Moon}
+          title={translate('extension.automations.endDay', 'End day')}
+          description={translate(
+            'extension.automations.endDayDescription',
+            'Record changed-path summaries, collapse project groups, and open Activity.'
+          )}
+          disabled={ritual.isPending}
+          onRun={() => ritual.mutate('end-day')}
+        />
+      </div>
+      <section className="border-border mt-5 rounded-lg border p-4">
+        <h2 className="font-medium">
+          {translate('extension.automations.browserLayout', 'Browser window layouts')}
+        </h2>
         <p className="text-muted-foreground mt-1 text-sm">
           {translate(
-            'extension.automations.description',
-            'One explicit gesture coordinates daemon work and browser layout.'
+            'extension.automations.browserLayoutDescription',
+            'Move an existing project tab into a focus window, or arrange every project without creating duplicates.'
           )}
         </p>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          <RitualCard
-            icon={Sun}
-            title={translate('extension.automations.startDay', 'Start day')}
-            description={translate(
-              'extension.automations.startDayDescription',
-              'Fast-forward projects, run configured dev servers, and open project groups.'
-            )}
-            disabled={ritual.isPending}
-            onRun={() => ritual.mutate('start-day')}
-          />
-          <RitualCard
-            icon={Moon}
-            title={translate('extension.automations.endDay', 'End day')}
-            description={translate(
-              'extension.automations.endDayDescription',
-              'Record changed-path summaries, collapse project groups, and open Activity.'
-            )}
-            disabled={ritual.isPending}
-            onRun={() => ritual.mutate('end-day')}
-          />
+        <div className="mt-3 flex flex-wrap gap-1">
+          <Button
+            type="button"
+            size="xs"
+            variant={preferences.data?.layoutMode === 'displays' ? 'outline' : 'default'}
+            onClick={() => setLayout.mutate('cascade')}
+          >
+            {translate('extension.automations.layoutCascade', 'Cascade')}
+          </Button>
+          <Button
+            type="button"
+            size="xs"
+            variant={preferences.data?.layoutMode === 'displays' ? 'default' : 'outline'}
+            onClick={() => setLayout.mutate('displays')}
+          >
+            {translate('extension.automations.layoutDisplays', 'Across displays')}
+          </Button>
+          <Button
+            type="button"
+            size="xs"
+            variant="outline"
+            disabled={(projects.data?.repos.length ?? 0) === 0 || arrange.isPending}
+            onClick={() => arrange.mutate()}
+          >
+            {translate('extension.automations.arrange', 'Arrange projects')}
+          </Button>
         </div>
-        <section className="border-border mt-5 rounded-lg border p-4">
-          <h2 className="font-medium">
-            {translate('extension.automations.browserLayout', 'Browser window layouts')}
-          </h2>
-          <p className="text-muted-foreground mt-1 text-sm">
+        <div className="border-border mt-3 border-t pt-3">
+          <p className="text-muted-foreground text-sm">
             {translate(
-              'extension.automations.browserLayoutDescription',
-              'Move an existing project tab into a focus window, or arrange every project without creating duplicates.'
+              'extension.automations.newTabDescription',
+              'Optionally open AgentStart Activity for new tabs. This is off by default and requests tab access only when enabled.'
             )}
           </p>
-          <div className="mt-3 flex flex-wrap gap-1">
+          <Button
+            type="button"
+            size="xs"
+            className="mt-2"
+            variant={preferences.data?.useNewTabLauncher ? 'default' : 'outline'}
+            disabled={setNewTabLauncher.isPending}
+            onClick={() =>
+              setNewTabLauncher.mutate(!(preferences.data?.useNewTabLauncher ?? false))
+            }
+          >
+            {preferences.data?.useNewTabLauncher
+              ? translate(
+                  'extension.automations.disableNewTab',
+                  'Stop using AgentStart for new tabs'
+                )
+              : translate('extension.automations.enableNewTab', 'Use AgentStart for new tabs')}
+          </Button>
+        </div>
+        <div className="mt-3 flex flex-wrap gap-1">
+          {(projects.data?.repos ?? []).map((project) => (
             <Button
+              key={project.id}
               type="button"
               size="xs"
-              variant={preferences.data?.layoutMode === 'displays' ? 'outline' : 'default'}
-              onClick={() => setLayout.mutate('cascade')}
+              variant="ghost"
+              disabled={focus.isPending}
+              onClick={() => focus.mutate(project.id)}
             >
-              {translate('extension.automations.layoutCascade', 'Cascade')}
+              {translate('extension.automations.focusProject', 'Focus {{project}}', {
+                project: project.displayName
+              })}
             </Button>
-            <Button
-              type="button"
-              size="xs"
-              variant={preferences.data?.layoutMode === 'displays' ? 'default' : 'outline'}
-              onClick={() => setLayout.mutate('displays')}
-            >
-              {translate('extension.automations.layoutDisplays', 'Across displays')}
-            </Button>
-            <Button
-              type="button"
-              size="xs"
-              variant="outline"
-              disabled={(projects.data?.repos.length ?? 0) === 0 || arrange.isPending}
-              onClick={() => arrange.mutate()}
-            >
-              {translate('extension.automations.arrange', 'Arrange projects')}
-            </Button>
-          </div>
-          <div className="border-border mt-3 border-t pt-3">
-            <p className="text-muted-foreground text-sm">
-              {translate(
-                'extension.automations.newTabDescription',
-                'Optionally open AgentStart Activity for new tabs. This is off by default and requests tab access only when enabled.'
-              )}
-            </p>
-            <Button
-              type="button"
-              size="xs"
-              className="mt-2"
-              variant={preferences.data?.useNewTabLauncher ? 'default' : 'outline'}
-              disabled={setNewTabLauncher.isPending}
-              onClick={() =>
-                setNewTabLauncher.mutate(!(preferences.data?.useNewTabLauncher ?? false))
-              }
-            >
-              {preferences.data?.useNewTabLauncher
-                ? translate(
-                    'extension.automations.disableNewTab',
-                    'Stop using AgentStart for new tabs'
-                  )
-                : translate('extension.automations.enableNewTab', 'Use AgentStart for new tabs')}
-            </Button>
-          </div>
-          <div className="mt-3 flex flex-wrap gap-1">
-            {(projects.data?.repos ?? []).map((project) => (
-              <Button
-                key={project.id}
-                type="button"
-                size="xs"
-                variant="ghost"
-                disabled={focus.isPending}
-                onClick={() => focus.mutate(project.id)}
-              >
-                {translate('extension.automations.focusProject', 'Focus {{project}}', {
-                  project: project.displayName
+          ))}
+        </div>
+      </section>
+      <RitualScheduleSettings />
+      {ritual.data ? (
+        <section className="border-border mt-5 rounded-lg border p-4">
+          <p className="text-sm font-medium">{ritual.data.summary}</p>
+          <ul className="text-muted-foreground mt-2 grid gap-1 text-sm">
+            {ritual.data.projects.map((project) => (
+              <li key={project.projectId}>
+                {project.status === 'ready' ? '✓' : '·'}{' '}
+                {translate('extension.automations.projectResult', '{{project}}: {{detail}}', {
+                  detail: project.detail,
+                  project: project.projectId
                 })}
-              </Button>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
-        <RitualScheduleSettings />
-        {ritual.data ? (
-          <section className="border-border mt-5 rounded-lg border p-4">
-            <p className="text-sm font-medium">{ritual.data.summary}</p>
-            <ul className="text-muted-foreground mt-2 grid gap-1 text-sm">
-              {ritual.data.projects.map((project) => (
-                <li key={project.projectId}>
-                  {project.status === 'ready' ? '✓' : '·'}{' '}
-                  {translate('extension.automations.projectResult', '{{project}}: {{detail}}', {
-                    detail: project.detail,
-                    project: project.projectId
-                  })}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-        {ritual.isError ||
-        focus.isError ||
-        arrange.isError ||
-        setLayout.isError ||
-        setNewTabLauncher.isError ? (
-          <p className="text-destructive mt-4 text-sm">
-            {translate('extension.automations.failed', 'The ritual could not complete.')}
-          </p>
-        ) : null}
-      </div>
-    </section>
+      ) : null}
+      {ritual.isError ||
+      focus.isError ||
+      arrange.isError ||
+      setLayout.isError ||
+      setNewTabLauncher.isError ? (
+        <p className="text-destructive mt-4 text-sm">
+          {translate('extension.automations.failed', 'The ritual could not complete.')}
+        </p>
+      ) : null}
+    </div>
   )
 }
 

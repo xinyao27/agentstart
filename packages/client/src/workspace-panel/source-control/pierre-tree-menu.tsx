@@ -33,13 +33,13 @@ function getUncommittedActions(
           {entry.area === 'untracked' ? <Trash /> : <Undo2 />}
           {entry.area === 'untracked'
             ? translate(
-                'auto.components.right.sidebar.SourceControl.11463f7a98',
+                'auto.components.workspacePanel.SourceControl.11463f7a98',
                 'Delete untracked file'
               )
             : entry.status === 'deleted'
-              ? translate('auto.components.right.sidebar.SourceControl.989f3d5e34', 'Restore file')
+              ? translate('auto.components.workspacePanel.SourceControl.989f3d5e34', 'Restore file')
               : translate(
-                  'auto.components.right.sidebar.SourceControl.d54dd48b0b',
+                  'auto.components.workspacePanel.SourceControl.d54dd48b0b',
                   'Discard changes'
                 )}
         </ContextMenuItem>
@@ -47,13 +47,13 @@ function getUncommittedActions(
       {canStage ? (
         <ContextMenuItem onClick={() => void controller.handleStage(entry.path)}>
           <Plus />
-          {translate('auto.components.right.sidebar.SourceControl.8cde1a2fb0', 'Stage')}
+          {translate('auto.components.workspacePanel.SourceControl.8cde1a2fb0', 'Stage')}
         </ContextMenuItem>
       ) : null}
       {canUnstage ? (
         <ContextMenuItem onClick={() => void controller.handleUnstage(entry.path)}>
           <Minus />
-          {translate('auto.components.right.sidebar.SourceControl.df5040e3c3', 'Unstage')}
+          {translate('auto.components.workspacePanel.SourceControl.df5040e3c3', 'Unstage')}
         </ContextMenuItem>
       ) : null}
     </>
@@ -93,10 +93,13 @@ function getDirectoryActions(
           {node.area === 'untracked' ? <Trash /> : <Undo2 />}
           {node.area === 'untracked'
             ? translate(
-                'auto.components.right.sidebar.SourceControl.9b367363b6',
+                'auto.components.workspacePanel.SourceControl.9b367363b6',
                 'Delete untracked in folder'
               )
-            : translate('auto.components.right.sidebar.SourceControl.6d7f2a47e5', 'Discard folder')}
+            : translate(
+                'auto.components.workspacePanel.SourceControl.6d7f2a47e5',
+                'Discard folder'
+              )}
         </ContextMenuItem>
       ) : null}
       {canStage ? (
@@ -105,7 +108,7 @@ function getDirectoryActions(
           onClick={() => void controller.handleStageAllPaths(actionPaths.stagePaths)}
         >
           <Plus />
-          {translate('auto.components.right.sidebar.SourceControl.bfe9011a0e', 'Stage folder')}
+          {translate('auto.components.workspacePanel.SourceControl.bfe9011a0e', 'Stage folder')}
         </ContextMenuItem>
       ) : null}
       {canUnstage ? (
@@ -114,7 +117,7 @@ function getDirectoryActions(
           onClick={() => void controller.handleUnstagePaths(actionPaths.unstagePaths)}
         >
           <Minus />
-          {translate('auto.components.right.sidebar.SourceControl.ab31221779', 'Unstage folder')}
+          {translate('auto.components.workspacePanel.SourceControl.ab31221779', 'Unstage folder')}
         </ContextMenuItem>
       ) : null}
     </>

@@ -24,7 +24,7 @@ export function resolveDropdownCommitItems(
   const commitItem: DropdownItem = {
     kind: 'commit',
     label: translate(
-      'auto.components.right.sidebar.source.control.dropdown.items.2b8e6595fd',
+      'auto.components.workspacePanel.source.control.dropdown.items.2b8e6595fd',
       'Commit'
     ),
     title: commitDisabledReason ?? 'Commit staged changes',
@@ -65,7 +65,7 @@ export function resolveDropdownCommitItems(
   const commitSyncItem: DropdownItem = {
     kind: 'commit_sync',
     label: translate(
-      'auto.components.right.sidebar.source.control.dropdown.items.323bb614aa',
+      'auto.components.workspacePanel.source.control.dropdown.items.323bb614aa',
       'Commit & Sync'
     ),
     title: commitSyncTitle,

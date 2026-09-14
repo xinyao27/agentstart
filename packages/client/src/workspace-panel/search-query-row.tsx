@@ -55,10 +55,10 @@ export function SearchQueryRow({
         size="xs"
         className="flex-1"
         aria-label={translate(
-          'auto.components.right.sidebar.SearchQueryRow.queryLabel',
+          'auto.components.workspacePanel.SearchQueryRow.queryLabel',
           'Search files'
         )}
-        placeholder={translate('auto.components.right.sidebar.SearchHeader.693cbeadd0', 'Search')}
+        placeholder={translate('auto.components.workspacePanel.SearchHeader.693cbeadd0', 'Search')}
         value={query}
         onChange={onQueryChange}
         onKeyDown={onKeyDown}
@@ -72,7 +72,7 @@ export function SearchQueryRow({
           size="icon-xs"
           className="hover:bg-muted h-auto w-auto p-0.5"
           aria-label={translate(
-            'auto.components.right.sidebar.SearchQueryRow.clearLabel',
+            'auto.components.workspacePanel.SearchQueryRow.clearLabel',
             'Clear search'
           )}
           onClick={onClearSearch}
@@ -83,7 +83,7 @@ export function SearchQueryRow({
       <ToggleButton
         active={caseSensitive}
         onClick={onToggleCaseSensitive}
-        title={translate('auto.components.right.sidebar.SearchHeader.464ae3974f', 'Match Case')}
+        title={translate('auto.components.workspacePanel.SearchHeader.464ae3974f', 'Match Case')}
       >
         <CaseSensitive className="size-3.5" />
       </ToggleButton>
@@ -91,7 +91,7 @@ export function SearchQueryRow({
         active={wholeWord}
         onClick={onToggleWholeWord}
         title={translate(
-          'auto.components.right.sidebar.SearchHeader.4567e6e0b6',
+          'auto.components.workspacePanel.SearchHeader.4567e6e0b6',
           'Match Whole Word'
         )}
       >
@@ -101,7 +101,7 @@ export function SearchQueryRow({
         active={useRegex}
         onClick={onToggleRegex}
         title={translate(
-          'auto.components.right.sidebar.SearchHeader.6234a5ef85',
+          'auto.components.workspacePanel.SearchHeader.6234a5ef85',
           'Use Regular Expression'
         )}
       >

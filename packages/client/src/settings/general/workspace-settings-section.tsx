@@ -2,7 +2,7 @@ import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
 
-import { SettingsSubsectionHeader, SettingsSwitchRow } from '../form-controls'
+import { SettingsSwitchRow } from '../form-controls'
 import { OpenInMenuSetting } from '../open-in-menu-setting'
 import { SearchableSetting } from '../searchable-setting'
 import { WorkspaceDirectorySetting } from '../workspace-directory-setting'
@@ -17,19 +17,10 @@ export function GeneralWorkspaceSettingsSection({
   updateSettings
 }: GeneralWorkspaceSettingsSectionProps): React.JSX.Element {
   return (
-    <section key="workspace" className="space-y-4">
-      <SettingsSubsectionHeader
-        title={translate(
-          'auto.components.settings.GeneralWorkspaceSettingsSection.7511097c5d',
-          'Workspace'
-        )}
-        description={translate(
-          'auto.components.settings.GeneralWorkspaceSettingsSection.e2955d9ccb',
-          'Configure where new workspaces are created.'
-        )}
-      />
-
-      <WorkspaceDirectorySetting settings={settings} updateSettings={updateSettings} />
+    <div className="divide-border/40 divide-y">
+      <div className="py-3">
+        <WorkspaceDirectorySetting settings={settings} updateSettings={updateSettings} />
+      </div>
 
       <SearchableSetting
         title={translate(
@@ -93,7 +84,7 @@ export function GeneralWorkspaceSettingsSection({
       <div
         id="general-open-in-apps"
         data-settings-section="general-open-in-apps"
-        className="scroll-mt-6"
+        className="scroll-mt-6 py-3"
       >
         <SearchableSetting
           title={translate(
@@ -124,6 +115,6 @@ export function GeneralWorkspaceSettingsSection({
           />
         </SearchableSetting>
       </div>
-    </section>
+    </div>
   )
 }

@@ -2,12 +2,11 @@ import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
-import { FileAudio, Upload, SpeakerHigh as Volume2 } from '~renderer/icons/hugeicons'
+import { Upload, SpeakerHigh as Volume2 } from '~renderer/icons/hugeicons'
 import { getNotificationSoundOptions } from '~renderer/notifications/sound-options'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { shellClient } from '~renderer/runtime/shell-client'
 
-import { Label } from '../ui/label'
 import {
   Select,
   SelectContent,
@@ -105,24 +104,7 @@ export function NotificationSoundSection({
   }))
 
   return (
-    <div className="space-y-2 py-2">
-      <div className="space-y-0.5">
-        <div className="flex items-center gap-2">
-          <FileAudio className="size-4" />
-          <Label>
-            {translate(
-              'auto.components.settings.NotificationsPane.88686e6ca8',
-              'Notification Sound'
-            )}
-          </Label>
-        </div>
-        <p className="text-muted-foreground text-xs">
-          {translate(
-            'auto.components.settings.NotificationsPane.2a2033c388',
-            'Choose the alert AgentStart plays when a system notification is delivered.'
-          )}
-        </p>
-      </div>
+    <div className="space-y-2">
       <Select
         items={soundSelectItems}
         value={selectedSoundId}

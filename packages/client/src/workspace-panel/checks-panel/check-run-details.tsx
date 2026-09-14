@@ -78,9 +78,12 @@ export function CheckRunDetails({
   // so the sticky button does not resize mid-fetch.
   const fullDetailsLabel =
     !state?.loading && hasLogTail
-      ? translate('auto.components.right.sidebar.checks.panel.content.b8c4e2a1f7', 'View full logs')
+      ? translate(
+          'auto.components.workspacePanel.checks.panel.content.b8c4e2a1f7',
+          'View full logs'
+        )
       : translate(
-          'auto.components.right.sidebar.checks.panel.content.e4e3af15ee',
+          'auto.components.workspacePanel.checks.panel.content.e4e3af15ee',
           'View full details'
         )
 
@@ -131,7 +134,7 @@ export function CheckRunDetails({
           <div className="text-muted-foreground flex items-center gap-2 text-[12px]">
             <LoadingIndicator className="size-3.5" />
             {translate(
-              'auto.components.right.sidebar.checks.panel.content.1f2b980522',
+              'auto.components.workspacePanel.checks.panel.content.1f2b980522',
               'Loading check details…'
             )}
           </div>
@@ -141,7 +144,7 @@ export function CheckRunDetails({
           <div className="text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px]">
             <span>
               {translate(
-                'auto.components.right.sidebar.checks.panel.content.a54ae21c6f',
+                'auto.components.workspacePanel.checks.panel.content.a54ae21c6f',
                 'Status:'
               )}{' '}
               {details ? getCheckStatusLabel(detailsStatusCheck) : getCheckStatusLabel(check)}
@@ -149,7 +152,7 @@ export function CheckRunDetails({
             {startedAt && (
               <span>
                 {translate(
-                  'auto.components.right.sidebar.checks.panel.content.fd46a70f1a',
+                  'auto.components.workspacePanel.checks.panel.content.fd46a70f1a',
                   'Started'
                 )}
                 {startedAt}
@@ -158,7 +161,7 @@ export function CheckRunDetails({
             {completedAt && (
               <span>
                 {translate(
-                  'auto.components.right.sidebar.checks.panel.content.00e1c1658a',
+                  'auto.components.workspacePanel.checks.panel.content.00e1c1658a',
                   'Completed'
                 )}
                 {completedAt}
@@ -167,7 +170,7 @@ export function CheckRunDetails({
             {check.checkRunId && (
               <span className="font-mono">
                 {translate(
-                  'auto.components.right.sidebar.checks.panel.content.aa8494ae3c',
+                  'auto.components.workspacePanel.checks.panel.content.aa8494ae3c',
                   'check #'
                 )}
                 {check.checkRunId}
@@ -176,7 +179,7 @@ export function CheckRunDetails({
             {check.workflowRunId && (
               <span className="font-mono">
                 {translate(
-                  'auto.components.right.sidebar.checks.panel.content.2dd5ddabc4',
+                  'auto.components.workspacePanel.checks.panel.content.2dd5ddabc4',
                   'workflow #'
                 )}
                 {check.workflowRunId}
@@ -212,7 +215,7 @@ export function CheckRunDetails({
             <div className="border-border/60 min-w-0 border-t pt-2">
               <div className="text-muted-foreground mb-1.5 text-[10px] font-semibold tracking-wide uppercase">
                 {translate(
-                  'auto.components.right.sidebar.checks.panel.content.f2fe8a4e8f',
+                  'auto.components.workspacePanel.checks.panel.content.f2fe8a4e8f',
                   'Annotations'
                 )}
               </div>
@@ -223,7 +226,7 @@ export function CheckRunDetails({
                       <span className="text-muted-foreground min-w-0 truncate font-mono text-[11px]">
                         {annotation.path ??
                           translate(
-                            'auto.components.right.sidebar.checks.panel.content.cdbfda4dec',
+                            'auto.components.workspacePanel.checks.panel.content.cdbfda4dec',
                             'Annotation'
                           )}
                         {annotation.startLine ? `:${annotation.startLine}` : ''}
@@ -253,7 +256,7 @@ export function CheckRunDetails({
               {details!.annotations.length >= 20 && (
                 <div className="text-muted-foreground mt-1.5 text-[10px]">
                   {translate(
-                    'auto.components.right.sidebar.checks.panel.content.df137989b3',
+                    'auto.components.workspacePanel.checks.panel.content.df137989b3',
                     'Showing first 20 annotations'
                   )}
                 </div>
@@ -266,11 +269,11 @@ export function CheckRunDetails({
               <div className="text-muted-foreground mb-1.5 text-[10px] font-semibold tracking-wide uppercase">
                 {failedJobs.length > 0
                   ? translate(
-                      'auto.components.right.sidebar.checks.panel.content.066fedd446',
+                      'auto.components.workspacePanel.checks.panel.content.066fedd446',
                       'Failed jobs'
                     )
                   : translate(
-                      'auto.components.right.sidebar.checks.panel.content.49731703ea',
+                      'auto.components.workspacePanel.checks.panel.content.49731703ea',
                       'Jobs'
                     )}
               </div>
@@ -285,7 +288,7 @@ export function CheckRunDetails({
                         {job.conclusion ??
                           job.status ??
                           translate(
-                            'auto.components.right.sidebar.checks.panel.content.ee07b33924',
+                            'auto.components.workspacePanel.checks.panel.content.ee07b33924',
                             'unknown'
                           )}
                       </span>
@@ -314,7 +317,7 @@ export function CheckRunDetails({
               {(details?.jobs.length ?? 0) >= 100 && (
                 <div className="text-muted-foreground mt-1.5 text-[10px]">
                   {translate(
-                    'auto.components.right.sidebar.checks.panel.content.a2fb3f4408',
+                    'auto.components.workspacePanel.checks.panel.content.a2fb3f4408',
                     'Showing first 100 jobs'
                   )}
                 </div>
@@ -325,7 +328,7 @@ export function CheckRunDetails({
           {hasLogTail && (
             <div className="text-muted-foreground text-[11px]">
               {translate(
-                'auto.components.right.sidebar.checks.panel.content.2524d1fb83',
+                'auto.components.workspacePanel.checks.panel.content.2524d1fb83',
                 'Log tail available in full details.'
               )}
             </div>
@@ -335,11 +338,11 @@ export function CheckRunDetails({
             <div className="text-muted-foreground text-[12px]">
               {getCheckConclusion(detailsStatusCheck) === 'action_required'
                 ? translate(
-                    'auto.components.right.sidebar.checks.panel.content.actionRequiredHint',
+                    'auto.components.workspacePanel.checks.panel.content.actionRequiredHint',
                     'Needs a manual action on GitHub (e.g. approving the run) to unblock merging.'
                   )
                 : translate(
-                    'auto.components.right.sidebar.checks.panel.content.e15a8b77ef',
+                    'auto.components.workspacePanel.checks.panel.content.e15a8b77ef',
                     'No inline details are available for this check.'
                   )}
             </div>

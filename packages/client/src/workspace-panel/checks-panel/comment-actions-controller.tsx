@@ -71,7 +71,7 @@ export function useChecksPanelCommentActions(context: useChecksPanelEntryAndEdit
       if (notifyOnFailure) {
         toast.error(
           translate(
-            'auto.components.right.sidebar.ChecksPanel.5788d1059d',
+            'auto.components.workspacePanel.ChecksPanel.5788d1059d',
             'Could not update review thread. Check the GitHub API budget.'
           )
         )

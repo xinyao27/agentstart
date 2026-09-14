@@ -1,4 +1,6 @@
-use super::model::{TerminalCreateRequest, TerminalLaunchConfig, TerminalPresentation};
+use super::model::{
+    TerminalCreateRequest, TerminalLaunchConfig, TerminalPresentation, TerminalScrollbackHistory,
+};
 use super::{TerminalSessionAuthority, TerminalSessionError, scope, wake_plan};
 use crate::agent_arguments::{Shell, quote, tokenize};
 use serde_json::Value;
@@ -137,8 +139,12 @@ impl TerminalSessionAuthority {
                     "agent session resume identity is unavailable",
                 ));
             }
+            let restore = pane.buffer.map(|text| TerminalScrollbackHistory {
+                grid: pane.buffer_grid,
+                text,
+            });
             let created = self
-                .create_while_worktree_locked(request, &guard, pane.buffer)
+                .create_while_worktree_locked(request, &guard, restore)
                 .await?;
             if let Some(record) = pane.record {
                 self.state.with_mut(&created.handle, |terminal| {

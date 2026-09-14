@@ -101,7 +101,7 @@ export function SourceControlTextGenerationDialog({
       : {
           ok: false as const,
           error: translate(
-            'auto.components.right.sidebar.SourceControlTextGenerationDialog.d054d5e0a0',
+            'auto.components.workspacePanel.SourceControlTextGenerationDialog.d054d5e0a0',
             'Settings are not loaded.'
           )
         })()
@@ -117,7 +117,7 @@ export function SourceControlTextGenerationDialog({
         {
           target: { type: 'repo', repoId: repo.id },
           label: translate(
-            'auto.components.right.sidebar.SourceControlTextGenerationDialog.5959da1e4d',
+            'auto.components.workspacePanel.SourceControlTextGenerationDialog.5959da1e4d',
             'Save for this repository only'
           ),
           successMessage: `Saved ${recipeLabel} for this repository.`
@@ -125,7 +125,7 @@ export function SourceControlTextGenerationDialog({
         {
           target: { type: 'global' },
           label: translate(
-            'auto.components.right.sidebar.SourceControlTextGenerationDialog.7f1ec309a4',
+            'auto.components.workspacePanel.SourceControlTextGenerationDialog.7f1ec309a4',
             'Save as default for all repositories'
           ),
           successMessage: `Saved ${recipeLabel} as a global default.`
@@ -135,7 +135,7 @@ export function SourceControlTextGenerationDialog({
         {
           target: { type: 'global' },
           label: translate(
-            'auto.components.right.sidebar.SourceControlTextGenerationDialog.c5b7fa7cb6',
+            'auto.components.workspacePanel.SourceControlTextGenerationDialog.c5b7fa7cb6',
             'Save as global default'
           ),
           successMessage: `Saved ${recipeLabel} as a global default.`

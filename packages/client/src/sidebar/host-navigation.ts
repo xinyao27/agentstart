@@ -1,7 +1,7 @@
-export type SidebarGlobalPage = 'activity' | 'browser' | 'mobile' | 'search' | 'settings' | 'skills'
+export type SidebarGlobalPage = 'activity' | 'mobile' | 'search' | 'settings' | 'skills'
 
 export type SidebarWorkspaceTarget = {
-  dedicated?: boolean
+  openInNewTab?: boolean
   projectId: string
   sessionId?: string
   worktreeId?: string

@@ -1,12 +1,12 @@
-import type { ActiveRightSidebarTab } from '@agentstart/protocol/settings/ui-state'
+import type { ActiveWorkspacePanelTab } from '@agentstart/protocol/settings/ui-state'
 
 const TOP_ACTIVITY_BUTTON_WIDTH = 36
 const TOP_ACTIVITY_MORE_BUTTON_WIDTH = 36
 
-export function getTopActivityBarLayout<T extends { id: ActiveRightSidebarTab }>(
+export function getTopActivityBarLayout<T extends { id: ActiveWorkspacePanelTab }>(
   items: readonly T[],
   availableWidth: number | null,
-  activeId: ActiveRightSidebarTab
+  activeId: ActiveWorkspacePanelTab
 ): { visibleItems: T[]; overflowItems: T[] } {
   if (!availableWidth || !Number.isFinite(availableWidth)) {
     return { visibleItems: [...items], overflowItems: [] }

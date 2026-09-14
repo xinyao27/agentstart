@@ -110,3 +110,30 @@ export function placementTopologyDescription(topology: SkillInstallationTopology
 export function shortRootLabel(placement: SkillPlacement): string {
   return placement.rootLabel.replace(/\s+home$/i, '')
 }
+
+/** Segments kept whole when a path has to give up room. */
+const PINNED_PATH_SEGMENTS = 2
+
+/**
+ * A directory split so an over-long row elides its middle rather than its tail.
+ *
+ * The tail is what sets one install apart from the next — the version and the
+ * folder that holds the skill — while the head only repeats the root the row
+ * already names, so the head is the end worth cutting. The tail carries its own
+ * separator so the two parts rejoin as one readable path.
+ */
+export function splitPathForDisplay(path: string): { head: string; tail: string } {
+  let cut = path.length
+  let separators = 0
+  while (separators < PINNED_PATH_SEGMENTS) {
+    const separator = Math.max(path.lastIndexOf('/', cut - 1), path.lastIndexOf('\\', cut - 1))
+    if (separator < 0) {
+      break
+    }
+    cut = separator
+    separators += 1
+  }
+  return separators === 0
+    ? { head: '', tail: path }
+    : { head: path.slice(0, cut), tail: path.slice(cut) }
+}

@@ -46,6 +46,7 @@ export function restoreTerminalPaneLayout({
   restoreScrollbackBuffers(
     manager,
     restoredBuffers,
+    initialLayoutRef.current.scrollbackGridsByLeafId,
     restoredPaneByLeafId,
     replayingPanesRef,
     restoredViewportBlankingPanesRef

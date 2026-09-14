@@ -149,7 +149,8 @@ function orderByMru(
   const activeIndex = activeKey ? ordered.findIndex((item) => item.key === activeKey) : -1
   if (activeIndex > 0) {
     // Why: if persisted MRU data is stale, the active tab still belongs at
-    // the top so the first Ctrl+Tab press quick-toggles to the previous tab.
+    // the top so the first switcher-chord press quick-toggles to the
+    // previous tab.
     const [active] = ordered.splice(activeIndex, 1)
     ordered.unshift(active)
   }

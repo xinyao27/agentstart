@@ -24,7 +24,7 @@ export function AccountLocation({
   wslDistros
 }: AccountLocationProps): React.JSX.Element {
   return (
-    <section id="accounts-runtime" className="scroll-mt-6 space-y-3">
+    <div id="accounts-runtime" className="scroll-mt-6">
       <SearchableSetting
         title={translate('auto.components.settings.AccountsPane.f54b4fbd71', 'Account Location')}
         description={translate(
@@ -109,6 +109,6 @@ export function AccountLocation({
           }
         />
       </SearchableSetting>
-    </section>
+    </div>
   )
 }

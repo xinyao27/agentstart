@@ -128,7 +128,7 @@ export function ChecksPanelReviewView({
                 variant="ghost"
                 size="xs"
                 className="focus-visible:bg-accent h-auto border-0 p-1 text-emerald-500 transition-colors hover:text-emerald-400 focus-visible:text-emerald-400 disabled:cursor-default"
-                title={translate('auto.components.right.sidebar.ChecksPanel.2ab7fd4b6d', 'Save')}
+                title={translate('auto.components.workspacePanel.ChecksPanel.2ab7fd4b6d', 'Save')}
                 onClick={() => void handleSaveTitle()}
                 disabled={titleSaving}
               >
@@ -142,7 +142,7 @@ export function ChecksPanelReviewView({
                 variant="quiet"
                 size="xs"
                 className="h-auto border-0 p-1 disabled:cursor-default"
-                title={translate('auto.components.right.sidebar.ChecksPanel.058039787c', 'Cancel')}
+                title={translate('auto.components.workspacePanel.ChecksPanel.058039787c', 'Cancel')}
                 onClick={handleCancelEdit}
                 disabled={titleSaving}
               >
@@ -170,7 +170,7 @@ export function ChecksPanelReviewView({
               {activeReview.updatedAt && (
                 <span className="text-muted-foreground/60 max-w-[45%] min-w-0 truncate text-right text-[11px]">
                   {reviewShortLabel}{' '}
-                  {translate('auto.components.right.sidebar.ChecksPanel.34464d00b9', 'updated')}{' '}
+                  {translate('auto.components.workspacePanel.ChecksPanel.34464d00b9', 'updated')}{' '}
                   {new Date(activeReview.updatedAt).toLocaleString()}
                 </span>
               )}
@@ -261,7 +261,7 @@ export function ChecksPanelReviewView({
           actionId={agentComposerState?.actionId ?? 'fixChecks'}
           title={
             agentComposerState?.title ??
-            translate('auto.components.right.sidebar.ChecksPanel.7fad8509fe', 'Fix With AI')
+            translate('auto.components.workspacePanel.ChecksPanel.7fad8509fe', 'Fix With AI')
           }
           description={agentComposerState?.description ?? ''}
           baseCommandInput={agentComposerState?.prompt ?? ''}
@@ -310,7 +310,7 @@ export function ChecksPanelReviewView({
                   console.warn('Failed to resolve selected review comments after AI launch:', err)
                   toast.error(
                     translate(
-                      'auto.components.right.sidebar.ChecksPanel.495b2f8c4b',
+                      'auto.components.workspacePanel.ChecksPanel.495b2f8c4b',
                       'Started the agent, but could not mark the selected comments resolved.'
                     )
                   )
@@ -319,14 +319,14 @@ export function ChecksPanelReviewView({
             } else if (launchedState?.actionId === 'resolveConflicts') {
               toast.success(
                 translate(
-                  'auto.components.right.sidebar.ChecksPanel.a0181a8d76',
+                  'auto.components.workspacePanel.ChecksPanel.a0181a8d76',
                   'Started an AI agent for the conflicts.'
                 )
               )
             } else {
               toast.success(
                 translate(
-                  'auto.components.right.sidebar.ChecksPanel.2ef90c9819',
+                  'auto.components.workspacePanel.ChecksPanel.2ef90c9819',
                   'Started an AI agent for the broken checks.'
                 )
               )

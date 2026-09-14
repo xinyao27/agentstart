@@ -75,11 +75,11 @@ export function SourceControlCommitNotices({
           id="commit-area-error"
           recoveryKind="commit"
           title={translate(
-            'auto.components.right.sidebar.SourceControl.011f9713fc',
+            'auto.components.workspacePanel.SourceControl.011f9713fc',
             'Commit blocked'
           )}
           detailsTitle={translate(
-            'auto.components.right.sidebar.SourceControl.a9bf7c171a',
+            'auto.components.workspacePanel.SourceControl.a9bf7c171a',
             'Commit Failed'
           )}
           summary={commitFailureSummary}
@@ -105,11 +105,11 @@ export function SourceControlCommitNotices({
           id="commit-area-push-error"
           recoveryKind="push"
           title={translate(
-            'auto.components.right.sidebar.SourceControl.pushRecovery.011f9713fc',
+            'auto.components.workspacePanel.SourceControl.pushRecovery.011f9713fc',
             'Push blocked'
           )}
           detailsTitle={translate(
-            'auto.components.right.sidebar.SourceControl.pushRecovery.a9bf7c171a',
+            'auto.components.workspacePanel.SourceControl.pushRecovery.a9bf7c171a',
             'Push Failed'
           )}
           summary={pushRecovery.summary}
@@ -167,7 +167,7 @@ export function SourceControlCommitNotices({
               onClick={onOpenSourceControlAiSettings}
             >
               {translate(
-                'auto.components.right.sidebar.SourceControl.473f18758e',
+                'auto.components.workspacePanel.SourceControl.473f18758e',
                 'Source Control AI settings'
               )}
             </Button>

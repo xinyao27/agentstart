@@ -1,5 +1,6 @@
 import type { TabGroupLayoutNode } from '@agentstart/protocol/workspace/tabs'
 import { useEffect, type RefObject } from 'react'
+import { activeViewFor } from '~renderer/application-shell/state/visible-surface'
 import { useAppStore } from '~renderer/store/state'
 
 import { selectEvictionExemptTerminalTabIds } from '../terminal-pane/eviction-exempt-tabs'
@@ -34,7 +35,7 @@ export function useLegacyColdParkingWatchers({
   forceParkedTerminalWorktreeIds
 }: LegacyColdParkingWatchersArgs): void {
   const activeTabId = useAppStore((state) => state.activeTabId)
-  const activeView = useAppStore((state) => state.activeView)
+  const activeView = useAppStore((state) => activeViewFor(state))
   const activeWorktreeId = useAppStore((state) => state.activeWorktreeId)
   const activeTabIdByWorktree = useAppStore((state) => state.activeTabIdByWorktree)
   const groupsByWorktree = useAppStore((state) => state.groupsByWorktree)

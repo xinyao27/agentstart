@@ -110,16 +110,6 @@ impl MobileDeviceStore {
         Ok(removed)
     }
 
-    pub async fn mark_seen(&self, device_id: String) -> Result<(), MobileDeviceStoreError> {
-        let (response, result) = oneshot::channel();
-        self.submit(MobileDeviceCommand::MarkSeen {
-            device_id,
-            response,
-        })
-        .await?;
-        receive(result).await
-    }
-
     pub(super) async fn authorize_token(
         &self,
         token: String,

@@ -1,6 +1,6 @@
 import type { CheckStatus } from '@agentstart/protocol/hosted-review/pull-request-types'
 import React from 'react'
-import type { ActiveRightSidebarTab } from '~renderer/editor/state'
+import type { ActiveWorkspacePanelTab } from '~renderer/editor/state'
 import { translate } from '~renderer/i18n/i18n'
 import { DotsThree as MoreHorizontal } from '~renderer/icons/hugeicons'
 import { Button } from '~renderer/ui/button'
@@ -15,7 +15,7 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
 export type ActivityBarItem = {
-  id: ActiveRightSidebarTab
+  id: ActiveWorkspacePanelTab
   icon: React.ComponentType<{
     size?: number
     className?: string
@@ -42,8 +42,8 @@ export function TopActivityOverflowMenu({
   checksStatus
 }: {
   items: ActivityBarItem[]
-  activeTab: ActiveRightSidebarTab
-  onSelect: (tab: ActiveRightSidebarTab) => void
+  activeTab: ActiveWorkspacePanelTab
+  onSelect: (tab: ActiveWorkspacePanelTab) => void
   checksStatus?: CheckStatus | null
 }): React.JSX.Element {
   const hiddenChecksStatus =
@@ -61,7 +61,7 @@ export function TopActivityOverflowMenu({
             size="icon-titlebar-wide"
             className="relative"
             aria-label={translate(
-              'auto.components.right.sidebar.activity.bar.buttons.1fd284e931',
+              'auto.components.workspacePanel.activity.bar.buttons.1fd284e931',
               'More sidebar tabs'
             )}
           >

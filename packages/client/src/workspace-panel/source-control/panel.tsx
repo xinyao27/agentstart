@@ -16,7 +16,7 @@ export function SourceControlPanel({
     return (
       <div className="text-muted-foreground flex h-full items-center justify-center px-4 text-center text-xs">
         {translate(
-          'auto.components.right.sidebar.SourceControl.c07b236287',
+          'auto.components.workspacePanel.SourceControl.c07b236287',
           'Select a workspace to view changes'
         )}
       </div>
@@ -26,7 +26,7 @@ export function SourceControlPanel({
     return (
       <div className="text-muted-foreground flex h-full items-center justify-center px-4 text-center text-xs">
         {translate(
-          'auto.components.right.sidebar.SourceControl.e131cd7128',
+          'auto.components.workspacePanel.SourceControl.e131cd7128',
           'Source Control is only available for Git repositories'
         )}
       </div>

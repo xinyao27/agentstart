@@ -125,21 +125,6 @@ export function RepositoryHooksSection({
 
   return (
     <section ref={flushScriptDraftOnUnmount} className="space-y-6">
-      <div className="space-y-1">
-        <h2 className="text-sm font-semibold">
-          {translate(
-            'auto.components.settings.RepositoryHooksSection.ff082fe7c6',
-            'Worktree Hooks'
-          )}
-        </h2>
-        <p className="text-muted-foreground text-xs">
-          {translate(
-            'auto.components.settings.RepositoryHooksSection.8567127a40',
-            'Scripts that run when worktrees are created or archived. Local scripts are stored on this machine; `agentstart.yaml` scripts are shared with your team.'
-          )}
-        </p>
-      </div>
-
       <SearchableSetting
         title={translate(
           'auto.components.settings.RepositoryHooksSection.52b31baf02',

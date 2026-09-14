@@ -19,4 +19,3 @@ pub mod method_metadata {
 pub mod transport;
 
 pub const CURRENT_PROTOCOL_VERSION: u32 = protocol::v1::ProtocolVersion::V2 as u32;
-pub const MIN_COMPATIBLE_PROTOCOL_VERSION: u32 = protocol::v1::ProtocolVersion::V2 as u32;

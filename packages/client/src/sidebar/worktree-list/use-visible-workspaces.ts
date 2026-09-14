@@ -5,9 +5,9 @@ import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { projectCatalogRepoBuckets } from '~renderer/project-catalog/repo-buckets'
 import { useEventCallback } from '~renderer/react/use-event-callback'
 import { useAppStore } from '~renderer/store/state'
-import { rightSidebarShowsPullRequestData } from '~renderer/workspace-panel/right-sidebar-visibility'
+import { workspacePanelShowsPullRequestData } from '~renderer/workspace-panel/workspace-panel-visibility'
 
-import type { WorkspaceSidebarProjectedRow } from '../workspace-sidebar-row-projection'
+import type { NavigationProjectedRow } from '../navigation-row-projection'
 import type { WorktreeGroupBy } from './groups'
 import {
   getActiveDescendantOptionId,
@@ -20,12 +20,10 @@ export function useVisibleWorkspaces(args: {
   currentWorktreeId: string | null
   worktreeMap: Map<string, Worktree>
   groupBy: WorktreeGroupBy
-  workspaceRows: readonly WorkspaceSidebarProjectedRow[]
+  workspaceRows: readonly NavigationProjectedRow[]
 }): {
   activeDescendantId: string | undefined
-  handleViewableItemsChanged: (
-    info: OnViewableItemsChangedInfo<WorkspaceSidebarProjectedRow>
-  ) => void
+  handleViewableItemsChanged: (info: OnViewableItemsChangedInfo<NavigationProjectedRow>) => void
 } {
   const [visibleIndexes, setVisibleIndexes] = useState<readonly number[]>([])
   const [visibilityRevision, setVisibilityRevision] = useState(0)
@@ -33,19 +31,22 @@ export function useVisibleWorkspaces(args: {
   const reportVisibleRef = useRef<(indexes: readonly number[]) => void>(() => {})
   const reportCandidates = useAppStore((state) => state.reportVisibleGitHubPRRefreshCandidates)
   const cardProperties = useAppStore((state) => state.worktreeCardProperties)
-  const activeView = useAppStore((state) => state.activeView)
   const activeWorktreeId = useAppStore((state) => state.activeWorktreeId)
-  const rightSidebarOpen = useAppStore((state) => state.rightSidebarOpen)
-  const rightSidebarTab = useAppStore((state) => state.rightSidebarTab)
+  const workspacePanelOpen = useAppStore((state) => state.workspacePanelOpen)
+  const workspacePanelTab = useAppStore((state) => state.workspacePanelTab)
   const catalog = useProjectCatalog()
-  const rightSidebarShowsPR = rightSidebarShowsPullRequestData({
-    activeView,
-    activeWorktreeId,
-    repos: catalog.repos,
-    rightSidebarOpen,
-    rightSidebarTab,
-    worktreesByRepo: projectCatalogRepoBuckets(catalog).worktreesByRepo
-  })
+  const workspacePanelShowsPR = useAppStore((state) =>
+    workspacePanelShowsPullRequestData({
+      activeGroupIdByWorktree: state.activeGroupIdByWorktree,
+      activeWorktreeId,
+      groupsByWorktree: state.groupsByWorktree,
+      repos: catalog.repos,
+      unifiedTabsByWorktree: state.unifiedTabsByWorktree,
+      workspacePanelOpen,
+      workspacePanelTab,
+      worktreesByRepo: projectCatalogRepoBuckets(catalog).worktreesByRepo
+    })
+  )
   const sshGeneration = useAppStore((state) => state.sshConnectedGeneration)
   const prGeneration = useAppStore((state) => state.prVisibleRefreshGeneration)
 
@@ -70,7 +71,7 @@ export function useVisibleWorkspaces(args: {
       ? (args.worktreeMap.get(args.currentWorktreeId) ?? null)
       : null
     const hasGitHubReview = currentWorktree !== null
-    const tracksSidebarWorktree = rightSidebarShowsPR && hasGitHubReview
+    const tracksSidebarWorktree = workspacePanelShowsPR && hasGitHubReview
     const tracksVisibleRows = args.groupBy === 'pr-status' || cardProperties.includes('status')
     if (!tracksVisibleRows && !tracksSidebarWorktree) {
       if (lastRefreshKeyRef.current !== '__hidden__') {
@@ -111,9 +112,7 @@ export function useVisibleWorkspaces(args: {
     reportVisibleRef.current = reportVisible
   }, [reportVisible])
 
-  const handleViewableItemsChanged = (
-    info: OnViewableItemsChangedInfo<WorkspaceSidebarProjectedRow>
-  ) => {
+  const handleViewableItemsChanged = (info: OnViewableItemsChangedInfo<NavigationProjectedRow>) => {
     const indexes = info.viewableItems.map((item) => item.index).sort((left, right) => left - right)
     setVisibleIndexes((current) =>
       current.length === indexes.length &&

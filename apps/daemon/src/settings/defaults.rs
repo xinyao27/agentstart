@@ -142,7 +142,7 @@ pub(super) fn document(home_path: &Path) -> Map<String, Value> {
         "localhostWorktreeLabelsEnabled": false,
         "openInApplications": [{ "id": "vscode", "label": "VS Code", "command": "code" }],
         "lastOpenInTargetKey": "application:vscode",
-        "rightSidebarOpenByDefault": true,
+        "workspacePanelOpenByDefault": false,
         "showGitIgnoredFiles": true,
         "sourceControlViewMode": "list",
         "sourceControlGroupOrder": "changes-first",

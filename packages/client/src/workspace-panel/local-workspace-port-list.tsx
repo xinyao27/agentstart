@@ -137,7 +137,7 @@ function LocalWorkspacePortRow({
         ? 'Container or forwarded service'
         : 'Unassigned'
   const openBrowserLabel = translate(
-    'auto.components.right.sidebar.PortsPanel.b22b128b2a',
+    'auto.components.workspacePanel.PortsPanel.b22b128b2a',
     'Open in Browser'
   )
   const confidenceLabel =
@@ -153,7 +153,7 @@ function LocalWorkspacePortRow({
               className="flex min-w-0 flex-1 items-center gap-2 focus:outline-none"
               tabIndex={0}
               aria-label={translate(
-                'auto.components.right.sidebar.PortsPanel.5be4f7f727',
+                'auto.components.workspacePanel.PortsPanel.5be4f7f727',
                 'Port {{value0}} menu',
                 { value0: port.port }
               )}
@@ -190,12 +190,12 @@ function LocalWorkspacePortRow({
             </PortActionButton>
             <PortActionButton
               label={translate(
-                'auto.components.right.sidebar.PortsPanel.1004af16ab',
+                'auto.components.workspacePanel.PortsPanel.1004af16ab',
                 'Copy {{value0}}',
                 { value0: address }
               )}
               ariaLabel={translate(
-                'auto.components.right.sidebar.PortsPanel.fe2730d050',
+                'auto.components.workspacePanel.PortsPanel.fe2730d050',
                 'Copy {{value0}}',
                 { value0: address }
               )}
@@ -206,7 +206,7 @@ function LocalWorkspacePortRow({
             {canStopProcess && (
               <PortActionButton
                 label={translate(
-                  'auto.components.right.sidebar.PortsPanel.f9528da632',
+                  'auto.components.workspacePanel.PortsPanel.f9528da632',
                   'Stop Process'
                 )}
                 onClick={handleStopButtonClick}
@@ -226,18 +226,18 @@ function LocalWorkspacePortRow({
         </ContextMenuItem>
         <ContextMenuItem className={MENU_ITEM_CLASS} onClick={handleCopy}>
           <Copy size={13} />
-          {translate('auto.components.right.sidebar.PortsPanel.792baeb7ed', 'Copy Address')}
+          {translate('auto.components.workspacePanel.PortsPanel.792baeb7ed', 'Copy Address')}
         </ContextMenuItem>
         <ContextMenuItem
           className={MENU_ITEM_CLASS}
           onClick={() => void shellClient.ui.writeClipboardText(JSON.stringify(port, null, 2))}
         >
           <Copy size={13} />
-          {translate('auto.components.right.sidebar.PortsPanel.bdac206faf', 'Copy Details')}
+          {translate('auto.components.workspacePanel.PortsPanel.bdac206faf', 'Copy Details')}
         </ContextMenuItem>
         <ContextMenuItem className={MENU_ITEM_CLASS} onClick={() => onShowDetails(port)}>
           <Info size={13} />
-          {translate('auto.components.right.sidebar.PortsPanel.a223459512', 'Show Details')}
+          {translate('auto.components.workspacePanel.PortsPanel.a223459512', 'Show Details')}
         </ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuItem
@@ -247,7 +247,7 @@ function LocalWorkspacePortRow({
           onClick={() => onStop(port)}
         >
           <Trash2 size={13} />
-          {translate('auto.components.right.sidebar.PortsPanel.f9528da632', 'Stop Process')}
+          {translate('auto.components.workspacePanel.PortsPanel.f9528da632', 'Stop Process')}
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

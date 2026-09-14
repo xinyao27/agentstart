@@ -5,6 +5,7 @@ import { translate } from '~renderer/i18n/i18n'
 import { activateRuntimeWorktree } from '~renderer/runtime/worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 
+import { isWorkspaceBodyVisible } from '../application-shell/state/visible-surface'
 import { readProjectCatalogRuntimeState } from '../project-catalog/runtime-state'
 import { useAppStore } from '../store/state'
 import { activateAndRevealFolderWorkspace } from '../workspace/activation'
@@ -51,14 +52,14 @@ export function activateAndRevealKnownWorktree(
     !hasActivationWork &&
     state.activeRepoId === worktree.repoId &&
     state.activeWorktreeId === worktreeId &&
-    state.activeView === 'terminal'
+    isWorkspaceBodyVisible(state)
   if (worktree.repoId !== state.activeRepoId) {
     state.setActiveRepo(worktree.repoId)
   }
-  if (state.activeView !== 'terminal') {
-    state.setActiveView('terminal')
-  }
   state.setActiveWorktree(worktreeId)
+  // Why: after the scope switch, so the landing tab belongs to this worktree
+  // rather than the one being left.
+  state.focusWorkspaceSurface()
   notifyHostRuntimeOfWorktreeActivation(runtimeState, worktreeId, options?.notifyHostRuntime)
   // Why: focus recency lands synchronously with selection so later startup or
   // reveal failures cannot leave Command Palette ordering behind what the user saw.
@@ -93,7 +94,11 @@ function notifyHostRuntimeOfWorktreeActivation(
   const environmentId = getRuntimeEnvironmentIdForWorktree(runtimeState, worktreeId)
   void activateRuntimeWorktree(
     environmentId ? { kind: 'environment', environmentId } : { kind: 'local' },
-    { worktree: toRuntimeWorktreeSelector(worktreeId), notifyClients: false }
+    // Why: the daemon is the cross-client authority for the active workspace. A
+    // side panel that only navigated the host tab never applies this activation
+    // locally, so suppressing the client event left its sidebar on the old
+    // worktree. The sending client's echo re-runs an idempotent activation.
+    { worktree: toRuntimeWorktreeSelector(worktreeId), notifyClients: true }
   ).catch((error: unknown) => {
     toast.error(translate('worktree.activation.failed', 'Failed to activate workspace'), {
       description: error instanceof Error ? error.message : String(error)

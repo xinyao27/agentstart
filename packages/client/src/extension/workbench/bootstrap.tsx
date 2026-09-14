@@ -17,12 +17,15 @@ import { ProjectCatalogProvider } from '../../project-catalog/provider'
 import { startShellEventStream } from '../../runtime/shell-events-client'
 import { getWorkbenchLocation, navigateWorkbench } from '../../runtime/workbench-location'
 import { configureSidebarHostNavigation } from '../../sidebar/host-navigation'
-import { openCommandPalette } from '../command-palette/open'
-import { getExtensionHostNavigation } from '../navigation'
+import { getExtensionHostNavigation, type ExtensionPageSubscription } from '../navigation'
 import { EXTENSION_QUERY_CACHE_KEY, extensionQueryCacheBuster } from '../runtime/query-cache'
+import { openWorkbenchPage, WorkbenchPageCommandBridge } from './page-commands'
 import { ExtensionWorkbenchRouter } from './router'
 
-export function mountExtensionWorkbench(runtimeQueryCacheBuster: string): void {
+export function mountExtensionWorkbench(
+  runtimeQueryCacheBuster: string,
+  subscribePageOpen: ExtensionPageSubscription
+): void {
   recordRendererCrashBreadcrumb('extension_workbench_bootstrap_started', {
     dev: import.meta.env.DEV
   })
@@ -30,15 +33,9 @@ export function mountExtensionWorkbench(runtimeQueryCacheBuster: string): void {
   startBrowserTabProjectionBridge()
   const extensionNavigation = getExtensionHostNavigation()
   configureSidebarHostNavigation({
-    openPage: (page) => {
-      if (page === 'search') {
-        openCommandPalette()
-        return
-      }
-      navigateWorkbench({ kind: 'page', page })
-    },
+    openPage: openWorkbenchPage,
     openWorkspace: (target) => {
-      if (target.dedicated) {
+      if (target.openInNewTab) {
         extensionNavigation.openWorkspace(target)
         return
       }
@@ -90,6 +87,7 @@ export function mountExtensionWorkbench(runtimeQueryCacheBuster: string): void {
               }}
             >
               <ProjectCatalogProvider>
+                <WorkbenchPageCommandBridge subscribe={subscribePageOpen} />
                 <ExtensionWorkbenchRouter />
               </ProjectCatalogProvider>
             </PersistQueryClientProvider>

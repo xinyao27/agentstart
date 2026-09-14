@@ -1,6 +1,6 @@
 import type {
-  ActiveRightSidebarTab,
-  RightSidebarExplorerView
+  ActiveWorkspacePanelTab,
+  WorkspacePanelExplorerView
 } from '@agentstart/protocol/settings/ui-state'
 
 const MAC_APP_DATA_SEGMENT_RE = /(^|\/)Library\/(Containers|Group Containers)\//
@@ -22,9 +22,9 @@ export function isMacAppDataPath(path: string | null | undefined, userAgent?: st
 export type ActiveGitStatusPollingArgs = {
   activeWorktreeId: string | null
   worktreePath: string | null
-  rightSidebarOpen: boolean
-  rightSidebarTab: ActiveRightSidebarTab
-  rightSidebarExplorerView?: RightSidebarExplorerView
+  workspacePanelOpen: boolean
+  workspacePanelTab: ActiveWorkspacePanelTab
+  workspacePanelExplorerView?: WorkspacePanelExplorerView
   openFiles?: readonly { worktreeId: string }[]
   userAgent?: string
 }
@@ -34,9 +34,9 @@ export function hasInteractiveActiveGitStatusConsumer(args: ActiveGitStatusPolli
     return false
   }
   if (
-    args.rightSidebarOpen &&
-    (args.rightSidebarTab === 'source-control' ||
-      (args.rightSidebarTab === 'explorer' && args.rightSidebarExplorerView !== 'search'))
+    args.workspacePanelOpen &&
+    (args.workspacePanelTab === 'source-control' ||
+      (args.workspacePanelTab === 'explorer' && args.workspacePanelExplorerView !== 'search'))
   ) {
     return true
   }

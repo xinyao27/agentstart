@@ -18,7 +18,7 @@ import {
 } from '~renderer/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
-import { RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME } from '../right-sidebar-button-styles'
+import { WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME } from '../workspace-panel-button-styles'
 
 type FileExplorerToolbarProps = {
   repoName: string
@@ -75,12 +75,12 @@ export function FileExplorerToolbar({
                 variant="quiet"
                 size="icon-xs"
                 className={cn(
-                  RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME,
+                  WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME,
                   ' ',
                   !canCollapseAll && 'cursor-not-allowed opacity-50'
                 )}
                 aria-label={translate(
-                  'auto.components.right.sidebar.FileExplorerToolbar.6026b16950',
+                  'auto.components.workspacePanel.FileExplorerToolbar.6026b16950',
                   'Collapse All'
                 )}
                 aria-disabled={!canCollapseAll}
@@ -99,7 +99,7 @@ export function FileExplorerToolbar({
           />
           <TooltipContent side="bottom" sideOffset={4}>
             {translate(
-              'auto.components.right.sidebar.FileExplorerToolbar.6026b16950',
+              'auto.components.workspacePanel.FileExplorerToolbar.6026b16950',
               'Collapse All'
             )}
           </TooltipContent>
@@ -112,12 +112,12 @@ export function FileExplorerToolbar({
                 variant="quiet"
                 size="icon-xs"
                 className={cn(
-                  RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME,
+                  WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME,
                   ' ',
                   !canRefresh && 'cursor-not-allowed opacity-50'
                 )}
                 aria-label={translate(
-                  'auto.components.right.sidebar.FileExplorerToolbar.d95e30fe28',
+                  'auto.components.workspacePanel.FileExplorerToolbar.d95e30fe28',
                   'Refresh Explorer'
                 )}
                 aria-disabled={!canRefresh || refresh.isRefreshing}
@@ -140,7 +140,7 @@ export function FileExplorerToolbar({
           />
           <TooltipContent side="bottom" sideOffset={4}>
             {translate(
-              'auto.components.right.sidebar.FileExplorerToolbar.d95e30fe28',
+              'auto.components.workspacePanel.FileExplorerToolbar.d95e30fe28',
               'Refresh Explorer'
             )}
           </TooltipContent>
@@ -156,7 +156,7 @@ export function FileExplorerToolbar({
                       variant="ghost"
                       size="icon-xs"
                       aria-label={translate(
-                        'auto.components.right.sidebar.FileExplorerToolbar.31b4c3195d',
+                        'auto.components.workspacePanel.FileExplorerToolbar.31b4c3195d',
                         'More Explorer Actions'
                       )}
                     >
@@ -168,7 +168,7 @@ export function FileExplorerToolbar({
             />
             <TooltipContent side="bottom" sideOffset={4}>
               {translate(
-                'auto.components.right.sidebar.FileExplorerToolbar.31b4c3195d',
+                'auto.components.workspacePanel.FileExplorerToolbar.31b4c3195d',
                 'More Explorer Actions'
               )}
             </TooltipContent>
@@ -176,7 +176,7 @@ export function FileExplorerToolbar({
           <DropdownMenuContent align="end" className="min-w-[12rem]">
             <DropdownMenuCheckboxItem checked={showDotfiles} onCheckedChange={onToggleDotfiles}>
               {translate(
-                'auto.components.right.sidebar.FileExplorerToolbar.78f133232c',
+                'auto.components.workspacePanel.FileExplorerToolbar.78f133232c',
                 'Show Dotfiles'
               )}
             </DropdownMenuCheckboxItem>
@@ -186,7 +186,7 @@ export function FileExplorerToolbar({
                 onCheckedChange={onToggleGitIgnoredFiles}
               >
                 {translate(
-                  'auto.components.right.sidebar.FileExplorerToolbar.d238264654',
+                  'auto.components.workspacePanel.FileExplorerToolbar.d238264654',
                   'Show Git Ignored Files'
                 )}
               </DropdownMenuCheckboxItem>

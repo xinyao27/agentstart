@@ -208,7 +208,8 @@ export function useTerminalPaneLifecycle(deps: UseTerminalPaneLifecycleDeps): vo
     // into ptyDeps.startup right before splitting and clear it immediately after
     // — connectPanePty receives a spread copy (`{...ptyDeps}`), so mutations
     // inside connectPanePty don't propagate back to ptyDeps. Without clearing
-    // here, any later user-initiated split (e.g. Cmd+D) would re-run the setup
+    // here, any later user-initiated split (e.g. the split-right shortcut)
+    // would re-run the setup
     // command in the newly created pane.
     // Why: capture the main shell pane *before* any splits mutate the pane list.
     // The setup path restores focus after creating its split, so save the main pane rather

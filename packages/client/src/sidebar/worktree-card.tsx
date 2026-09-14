@@ -23,7 +23,7 @@ import { getWorktreeGitIdentityDisplay } from '../worktree/git-identity-display'
 import { AutoRenameFailedDialog } from './auto-rename-failed-dialog'
 import { runWorktreeDelete } from './delete-worktree/flow'
 import { writeWorkspaceDragData } from './workspace-status'
-import { activateWorktreeFromSidebar } from './worktree-activation'
+import { activateWorktreeFromSidebar, openWorktreeInNewTabFromSidebar } from './worktree-activation'
 import { isEventTargetInsideCurrentTarget } from './worktree-card/dom-events'
 import type { WorktreeCardPrDisplay } from './worktree-card/pr-display'
 import { WorktreeCardStatusSlot } from './worktree-card/status-slot'
@@ -106,6 +106,7 @@ function WorktreeCard({
   repo,
   isActive,
   isActiveSurface = isActive,
+  isCurrentWorktree = isActive,
   activeSurfaceVariant = 'primary',
   isMultiSelected = false,
   revealHighlight = false,
@@ -186,6 +187,21 @@ function WorktreeCard({
     onActivate?.()
   }
 
+  // Why: middle click is the browser's own "open in another tab" gesture. The
+  // keyboard variant cannot follow it — the sidebar reserves Cmd/Ctrl click for
+  // multi-selection.
+  const openInNewTab = (event: React.MouseEvent<HTMLDivElement>): void => {
+    if (event.button !== 1 || isDeleting) {
+      return
+    }
+    if (!isEventTargetInsideCurrentTarget(event.currentTarget, event.target)) {
+      return
+    }
+    if (openWorktreeInNewTabFromSidebar(worktree.id)) {
+      event.preventDefault()
+    }
+  }
+
   const drag = (event: React.DragEvent<HTMLDivElement>): void => {
     const ids =
       isMultiSelected && selectedWorktrees && selectedWorktrees.length > 1
@@ -213,6 +229,7 @@ function WorktreeCard({
       flush={flushSurface}
       multiSelected={isMultiSelected}
       onClick={activate}
+      onAuxClick={openInNewTab}
       onDragEnd={onCardDragEnd}
       onDragStart={drag}
       style={cardPaddingLeft ? { paddingLeft: cardPaddingLeft } : undefined}
@@ -284,6 +301,7 @@ function WorktreeCard({
             <WorktreeCardTabs
               displayMode={agentActivityDisplayMode}
               hasLeadingStatusIcon={showStatus}
+              isCurrentWorktree={isCurrentWorktree}
               tabs={openTabs}
               terminalTabs={terminalTabs}
               worktreeId={worktree.id}

@@ -12,11 +12,13 @@ import { ConnectionStatus } from '../runtime/connection-status'
 import { WorkspaceEventBridge } from '../runtime/event-bridge'
 import { RuntimeSnapshotSurface } from '../runtime/snapshot-surface'
 import { WorkspacePortClaimsBridge } from '../workspace-port-claims-bridge'
-import { ExtensionWorkbenchLocationBridge } from './location'
+import { ExtensionWorkbenchLocationBridge, type WorkbenchPageIntent } from './location'
 
 export function ExtensionWorkbenchSurface({
+  initialPage,
   location
 }: {
+  initialPage: WorkbenchPageIntent | null
   location: WorkbenchLocation
 }): React.JSX.Element {
   useUiLocale()
@@ -39,7 +41,7 @@ export function ExtensionWorkbenchSurface({
         <WorkspacePortClaimsBridge />
         <ProjectGroupCatalogBridge />
         <CommandPalette includeWorkspaceFiles />
-        <ExtensionWorkbenchLocationBridge location={location} />
+        <ExtensionWorkbenchLocationBridge initialPage={initialPage} location={location} />
         <App />
       </RuntimeSnapshotSurface>
     </RecoverableRenderErrorBoundary>

@@ -147,8 +147,8 @@ export function createEditorFileCloseActions(
         let nextRecentlyClosedKinds = s.recentlyClosedTabKindsByWorktree
         const wtRecent = closedFile?.worktreeId
         // Why: untitled files that were never edited will be deleted from disk
-        // after close. Adding them to the reopen stack would let Cmd+Shift+T
-        // try to reopen a path that no longer exists. Preview tabs are also
+        // after close. Adding them to the reopen stack would let the
+        // reopen shortcut try a path that no longer exists. Preview tabs are also
         // excluded — they are ephemeral views, not user-opened files.
         if (
           closedFile &&

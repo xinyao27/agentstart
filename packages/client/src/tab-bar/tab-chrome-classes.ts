@@ -1,19 +1,26 @@
-// Why: the strip owns its outer edges; the canonical border keeps tab
-// dividers consistent while inactive tabs avoid duplicate left borders.
+// Why: inactive tabs belong to the titlebar plane and should reveal their
+// shape through typography and an inset hover surface, not root backgrounds;
+// scroll margin keeps a selected tab's pill inside the padded viewport.
+// The 12px horizontal padding is the reference chrome's own tab padding: it
+// puts the fill's edge 12px from the glyphs and two neighbors' glyphs 24px
+// apart, and it matches the strip's 12px shoulder gutter, so the first tab's
+// outer arc lands exactly on the viewport's padding edge.
 export const TAB_ROOT_CLASSES =
-  'group relative flex h-full items-center border-r border-border px-3 text-xs cursor-pointer select-none outline-none transition-[background,color] duration-100 motion-reduce:transition-none focus:outline-none focus-visible:bg-accent'
+  'group relative isolate flex h-full items-center scroll-mx-3 px-3 text-xs cursor-pointer select-none outline-none transition-[color] duration-150 ease-out motion-reduce:transition-none focus:outline-none'
 
 // Why: the reference chrome uses compact 14px identity glyphs with an 8px
 // title gap; sharing the rule keeps every tab content type aligned.
 export const TAB_LEADING_ICON_CLASSES = 'mr-2 size-3.5 shrink-0'
 
-// Why: selected tabs and their bodies share the canonical app canvas as one plane.
+// Why: tab bodies are the interior of the floating workspace content card,
+// so they share the card's canvas across every workspace content type.
 export const TAB_CONTENT_SURFACE_CLASSES = 'bg-background text-foreground'
 
 export function getTitlebarTabStateClasses(isActive: boolean): string {
-  // Why: active tabs own matching side seams and overlap the preceding divider
-  // by 1px, while their opaque surface masks the strip seam below.
+  // Why: the selected tab's merge silhouette paints behind the label, so the
+  // root only carries color and stacking — switching tabs cannot move its
+  // contents.
   return isActive
-    ? '-ml-px w-[calc(100%+1px)] border-l bg-background text-foreground'
-    : 'bg-transparent text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-within:bg-accent focus-within:text-accent-foreground'
+    ? 'relative z-10 text-foreground'
+    : 'text-muted-foreground hover:text-foreground focus-within:text-foreground'
 }

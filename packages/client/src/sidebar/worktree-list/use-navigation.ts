@@ -14,8 +14,8 @@ import { activateAndRevealWorktree } from '~renderer/worktree/activation'
 
 import {
   workspaceIndexForLocalRowIndex,
-  type WorkspaceSidebarProjectedRow
-} from '../workspace-sidebar-row-projection'
+  type NavigationProjectedRow
+} from '../navigation-row-projection'
 import {
   setHasWorktreeNavigationTargets,
   subscribeToWorktreeNavigationRequests
@@ -47,7 +47,7 @@ export function useWorktreeNavigation(args: {
   projectGrouping?: ProjectGroupingModel
   activeWorktreeId: string | null
   renderRows: readonly RenderRow[]
-  workspaceRows: readonly WorkspaceSidebarProjectedRow[]
+  workspaceRows: readonly NavigationProjectedRow[]
   legendListRef: React.RefObject<LegendListRef | null>
   scrollRef: React.RefObject<HTMLDivElement | null>
   activeModal: string

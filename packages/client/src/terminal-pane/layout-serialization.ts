@@ -2,10 +2,12 @@ import { isTerminalLeafId } from '@agentstart/protocol/terminal/pane-identity'
 import type {
   TerminalLayoutSnapshot,
   TerminalPaneLayoutNode,
-  TerminalPaneSplitDirection
+  TerminalPaneSplitDirection,
+  TerminalScrollbackGrid
 } from '@agentstart/protocol/workspace/session'
 import { recordRendererCrashBreadcrumb } from '~renderer/crash-report/breadcrumb-recorder'
-import type { PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
+import { MIN_PANE_FIT_COLS, MIN_PANE_FIT_ROWS } from '~renderer/terminal-pane/pane-manager/pane-fit'
+import type { ManagedPane, PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
 import { isXtermInstanceDisposed } from '~renderer/terminal-pane/pane-manager/xterm-instance-disposed'
 import {
   getLeftmostLeafId,
@@ -237,6 +239,27 @@ export function serializeTerminalLayout(
   }
 }
 
+// Why: the live attach replay sizes the terminal to the snapshot's grid before
+// writing it, and a restored checkpoint needs the same treatment — its rows were
+// produced for a specific width, and xterm can only re-flow them correctly if the
+// text is parsed at that width first. Clamped to the fit minimums so a corrupt
+// record cannot shrink a pane below a usable grid; the pane's own fit still owns
+// the final size.
+function resizePaneToRecordedGrid(
+  pane: ManagedPane,
+  grid: TerminalScrollbackGrid | undefined
+): void {
+  if (!grid) {
+    return
+  }
+  const cols = Math.max(Math.floor(grid.cols), MIN_PANE_FIT_COLS)
+  const rows = Math.max(Math.floor(grid.rows), MIN_PANE_FIT_ROWS)
+  if (pane.terminal.cols === cols && pane.terminal.rows === rows) {
+    return
+  }
+  pane.terminal.resize(cols, rows)
+}
+
 /**
  * Write saved scrollback buffers into the restored panes so the user sees
  * their previous terminal output after an app restart.  If a buffer was
@@ -247,6 +270,7 @@ export function serializeTerminalLayout(
 export function restoreScrollbackBuffers(
   manager: PaneManager,
   savedBuffers: Record<string, string> | undefined,
+  savedGrids: Record<string, TerminalScrollbackGrid> | undefined,
   restoredPaneByLeafId: Map<string, number>,
   replayingPanesRef: ReplayingPanesRef,
   restoredViewportBlankingPanesRef?: RestoredViewportBlankingPanesRef
@@ -276,6 +300,7 @@ export function restoreScrollbackBuffers(
       })
       continue
     }
+    resizePaneToRecordedGrid(pane, savedGrids?.[oldLeafId])
     try {
       const renderOptions = {
         shouldRefreshViewportSynchronously: () => !manager.hasWebglRenderer(pane.id)

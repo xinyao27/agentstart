@@ -1,5 +1,7 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 import { installWindowVisibilityInterval } from '~renderer/application-shell/window-visibility-interval'
+import { useWorkspaceSharedHeaderTarget } from '~renderer/application-shell/workspace-shared-header'
 import { translate } from '~renderer/i18n/i18n'
 import {
   Warning as AlertTriangle,
@@ -10,9 +12,13 @@ import {
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
+import { cn } from '~renderer/ui/class-names'
 import { retryBackgroundWorktreeCreation } from '~renderer/worktree-creation/flow'
 import { getCreationProgressLabel } from '~renderer/worktree-creation/pending'
 
+import { getTitlebarTabStateClasses, TAB_ROOT_CLASSES } from '../tab-bar/tab-chrome-classes'
+import { TabActiveSurface, TabSurfaceProvider } from '../tab-bar/tab-surfaces'
+import { WorkspacePaneFrameHeader } from '../tab-group/workspace-pane-frame'
 import { WorktreeCreationProgressChecklist } from './progress-checklist'
 
 /**
@@ -26,12 +32,13 @@ import { WorktreeCreationProgressChecklist } from './progress-checklist'
  */
 export default function WorktreeCreationPanel({
   creationId,
-  reserveCollapsedSidebarHeaderSpace = false
+  useSharedHeader = false
 }: {
   creationId: string
-  reserveCollapsedSidebarHeaderSpace?: boolean
+  useSharedHeader?: boolean
 }): React.JSX.Element | null {
   const entry = useAppStore((s) => s.pendingWorktreeCreations[creationId])
+  const sharedHeaderTarget = useWorkspaceSharedHeaderTarget()
   const [now, setNow] = React.useState(() => Date.now())
   // Why: depend on the primitive status only, so a fresh `entry` reference does
   // not tear down and recreate this interval before it can fire.
@@ -53,18 +60,17 @@ export default function WorktreeCreationPanel({
   const title = entry.request.displayName || entry.request.name
   const elapsedLabel = formatElapsedTime(now - entry.startedAt)
 
-  return (
-    <div className="workspace-native-material-frame absolute inset-0 flex flex-col">
-      {/* Faux tab strip: mirrors the real tab row (height, border, bg) so the
-          create reads as a workspace tab. Carries only the worktree name + a
-          cancel control — the live status lives in the body below. */}
-      <div className="border-border bg-background flex h-[var(--titlebar-height)] shrink-0 items-stretch border-b">
-        {reserveCollapsedSidebarHeaderSpace ? (
-          // Why: collapsed sidebar chrome floats above this strip, so reserve
-          // the same measured width real tabs use to keep title/cancel clear.
-          <div className="shrink-0" style={{ width: 'var(--collapsed-sidebar-header-width)' }} />
-        ) : null}
-        <div className="border-border flex h-full max-w-[240px] min-w-32 items-center gap-2 border-x border-t px-3 text-xs">
+  const header = (
+    // Why: the faux tab wears the real tab chrome — no strip surface of its own,
+    // just the shared merge silhouette on the card's baseline — so an
+    // in-progress create fuses with the content exactly as a selected tab does.
+    // A border or a painted band here would draw the seam that the silhouette
+    // prevents. The row carries the strip's own 12px leading gutter so the
+    // silhouette's outer arc has room to flare instead of being clipped.
+    <div className="flex h-[var(--titlebar-height)] shrink-0 items-stretch pl-3">
+      <div className={cn(TAB_ROOT_CLASSES, getTitlebarTabStateClasses(true), 'min-w-32 max-w-60')}>
+        <TabActiveSurface />
+        <div className="flex h-full min-w-0 items-center gap-2 text-xs">
           {isError ? (
             <AlertTriangle className="text-destructive size-3.5 shrink-0" />
           ) : (
@@ -92,67 +98,95 @@ export default function WorktreeCreationPanel({
           </Button>
         </div>
       </div>
+    </div>
+  )
+  const shouldUseSharedHeader = useSharedHeader
+  const sharedHeader =
+    shouldUseSharedHeader && sharedHeaderTarget
+      ? createPortal(
+          <TabSurfaceProvider scope="plane">
+            <WorkspacePaneFrameHeader tabBar={header} />
+          </TabSurfaceProvider>,
+          sharedHeaderTarget
+        )
+      : null
 
-      {/* Body: a quiet top-left annotation on the surface the terminal will
-          fill — the same spot terminal output appears — so creation → terminal
-          reads as one frame filling in. */}
-      <div className="min-h-0 flex-1 p-3">
-        {isError ? (
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-            <span className="text-destructive font-medium">
-              {translate(
-                'auto.components.worktree.creation.WorktreeCreationPanel.ed2a664f8b',
-                'Couldn’t create worktree'
-              )}
-            </span>
-            <span className="text-muted-foreground">
-              {entry.error ??
-                translate(
-                  'auto.components.worktree.creation.WorktreeCreationPanel.767951265d',
-                  'Something went wrong while creating the worktree.'
-                )}
-            </span>
-            <Button
-              variant="ghost"
-              size="xs"
-              type="button"
-              onClick={() => retryBackgroundWorktreeCreation(creationId)}
-              className="text-foreground focus-visible:bg-accent h-auto border-0 p-0 hover:underline"
-            >
-              <RotateCcw className="size-3" />
-              {translate(
-                'auto.components.worktree.creation.WorktreeCreationPanel.34dd5ee38b',
-                'Retry'
-              )}
-            </Button>
-            <Button
-              variant="ghost"
-              size="xs"
-              type="button"
-              onClick={dismiss}
-              className="text-muted-foreground hover:text-foreground focus-visible:text-foreground focus-visible:bg-accent h-auto border-0 p-0 hover:underline"
-            >
-              {translate(
-                'auto.components.worktree.creation.WorktreeCreationPanel.dabd226118',
-                'Dismiss'
-              )}
-            </Button>
-          </div>
-        ) : (
-          <div className="text-muted-foreground flex min-h-0 max-w-3xl flex-col gap-2 text-xs">
-            <div className="flex items-center gap-2">
-              <span className="text-foreground font-medium">{getCreationProgressLabel(entry)}</span>
-              <span className="text-muted-foreground/70">{elapsedLabel}</span>
-            </div>
-            {entry.indeterminate ? (
-              <LoadingIndicator className="size-3.5" />
+  return (
+    <>
+      {sharedHeader}
+      {/* Why: no surface of its own — the shell's workspace-content-card is the
+          frame it fills, so a nested card would double the rounding. */}
+      <div className="absolute inset-0 flex flex-col">
+        {/* Faux tab strip: mirrors the real tab row (height, border, bg) so the
+          create reads as a workspace tab. Carries only the worktree name + a
+          cancel control — the live status lives in the body below. */}
+        {!shouldUseSharedHeader ? header : null}
+
+        <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden">
+          {/* Body: a quiet top-left annotation on the surface the terminal will
+            fill — the same spot terminal output appears — so creation → terminal
+            reads as one frame filling in. */}
+          <div className="min-h-0 min-w-0 flex-1 p-3">
+            {isError ? (
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                <span className="text-destructive font-medium">
+                  {translate(
+                    'auto.components.worktree.creation.WorktreeCreationPanel.ed2a664f8b',
+                    'Couldn’t create worktree'
+                  )}
+                </span>
+                <span className="text-muted-foreground">
+                  {entry.error ??
+                    translate(
+                      'auto.components.worktree.creation.WorktreeCreationPanel.767951265d',
+                      'Something went wrong while creating the worktree.'
+                    )}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  type="button"
+                  onClick={() => retryBackgroundWorktreeCreation(creationId)}
+                  className="text-foreground focus-visible:bg-accent h-auto border-0 p-0 hover:underline"
+                >
+                  <RotateCcw className="size-3" />
+                  {translate(
+                    'auto.components.worktree.creation.WorktreeCreationPanel.34dd5ee38b',
+                    'Retry'
+                  )}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  type="button"
+                  onClick={dismiss}
+                  className="text-muted-foreground hover:text-foreground focus-visible:text-foreground focus-visible:bg-accent h-auto border-0 p-0 hover:underline"
+                >
+                  {translate(
+                    'auto.components.worktree.creation.WorktreeCreationPanel.dabd226118',
+                    'Dismiss'
+                  )}
+                </Button>
+              </div>
             ) : (
-              <WorktreeCreationProgressChecklist entry={entry} />
+              <div className="text-muted-foreground flex min-h-0 max-w-3xl flex-col gap-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-foreground font-medium">
+                    {getCreationProgressLabel(entry)}
+                  </span>
+                  <span className="text-muted-foreground/70">{elapsedLabel}</span>
+                </div>
+                {entry.indeterminate ? (
+                  <LoadingIndicator className="size-3.5" />
+                ) : (
+                  <WorktreeCreationProgressChecklist entry={entry} />
+                )}
+              </div>
             )}
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

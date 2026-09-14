@@ -63,14 +63,14 @@ export function SourceControlDiscardDialog({
           <DialogTitle className="text-sm">
             {pendingDiscardCopy?.title ??
               translate(
-                'auto.components.right.sidebar.source.control.discard.dialog.1551c14668',
+                'auto.components.workspacePanel.source.control.discard.dialog.1551c14668',
                 'Discard changes?'
               )}
           </DialogTitle>
           <DialogDescription className="text-xs">
             {pendingDiscardCopy?.description ??
               translate(
-                'auto.components.right.sidebar.source.control.discard.dialog.0d2d88cba5',
+                'auto.components.workspacePanel.source.control.discard.dialog.0d2d88cba5',
                 'This cannot be undone.'
               )}
           </DialogDescription>
@@ -80,11 +80,11 @@ export function SourceControlDiscardDialog({
             {pendingDiscard.paths.length}{' '}
             {pendingDiscard.paths.length === 1
               ? translate(
-                  'auto.components.right.sidebar.source.control.discard.dialog.e7611dca35',
+                  'auto.components.workspacePanel.source.control.discard.dialog.e7611dca35',
                   'file'
                 )
               : translate(
-                  'auto.components.right.sidebar.source.control.discard.dialog.42f89dd030',
+                  'auto.components.workspacePanel.source.control.discard.dialog.42f89dd030',
                   'files'
                 )}
           </div>
@@ -96,7 +96,7 @@ export function SourceControlDiscardDialog({
         <DialogFooter>
           <Button type="button" variant="outline" onClick={onCancel}>
             {translate(
-              'auto.components.right.sidebar.source.control.discard.dialog.3bc61dc989',
+              'auto.components.workspacePanel.source.control.discard.dialog.3bc61dc989',
               'Cancel'
             )}
           </Button>
@@ -110,7 +110,7 @@ export function SourceControlDiscardDialog({
             <PendingDiscardIcon className="size-4" />
             {pendingDiscardCopy?.confirmLabel ??
               translate(
-                'auto.components.right.sidebar.source.control.discard.dialog.15efa778e3',
+                'auto.components.workspacePanel.source.control.discard.dialog.15efa778e3',
                 'Discard'
               )}
           </Button>

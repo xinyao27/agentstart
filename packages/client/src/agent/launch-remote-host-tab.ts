@@ -14,7 +14,7 @@ function removeStaleLocalAgentTabsForRemoteHostLaunch(worktreeId: string): void 
   for (const tab of state.tabsByWorktree[worktreeId] ?? []) {
     if (tab.launchAgent && !isRemoteTerminalSurfaceTabId(tab.id)) {
       // Why: pruning a stale local agent tab is a system close — keep it out of
-      // the Cmd+Shift+T reopen stack.
+      // the reopen-closed-tab stack.
       state.closeTab(tab.id, { reason: 'cleanup' })
     }
   }

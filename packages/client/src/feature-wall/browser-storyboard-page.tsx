@@ -102,7 +102,7 @@ function PricingCard(props: {
           highlighted
             ? 'bg-foreground text-background'
             : ctaIsBranded
-              ? 'bg-[color:var(--info)] text-primary-foreground'
+              ? 'bg-[color:var(--info)] text-zinc-950'
               : 'bg-foreground/[0.07] text-foreground',
           ctaPressing ? 'scale-[0.96]' : null
         )}

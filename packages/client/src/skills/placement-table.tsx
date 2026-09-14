@@ -2,6 +2,7 @@ import type { SkillPlacement } from '@agentstart/protocol'
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 import { ArrowRight, FolderOpen } from '~renderer/icons/hugeicons'
+import { dirname } from '~renderer/path'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { Badge } from '~renderer/ui/badge'
 import { Button } from '~renderer/ui/button'
@@ -12,7 +13,8 @@ import { formatUpdatedAt, providerLabels } from './labels'
 import {
   placementTopologyDescription,
   placementTopologyIcons,
-  placementTopologyLabel
+  placementTopologyLabel,
+  splitPathForDisplay
 } from './placement-labels'
 
 export type SkillPlacementTableProps = {
@@ -28,14 +30,40 @@ async function revealPlacement(placement: SkillPlacement): Promise<void> {
   }
 }
 
+/**
+ * Where a copy lives, as one line: the folder that holds it leaves its name to
+ * the pane title, so the row spends its width on the location instead. The head
+ * elides when room runs short, the tail never does, and the whole path stays on
+ * the row as its title.
+ */
+function PlacementPathLine({
+  path,
+  leading,
+  className
+}: {
+  path: string
+  leading?: React.ReactNode
+  className: string
+}): React.JSX.Element {
+  const { head, tail } = splitPathForDisplay(dirname(path))
+  return (
+    <p className={className} title={path}>
+      {leading}
+      <span className="text-muted-foreground min-w-0 truncate">{head}</span>
+      <span className="shrink-0">{tail}</span>
+    </p>
+  )
+}
+
 function SkillPlacementRow({ placement }: { placement: SkillPlacement }): React.JSX.Element {
   const TopologyIcon = placementTopologyIcons[placement.topology]
   return (
     <li className="border-border/60 flex min-w-0 items-start gap-3 border-t px-3 py-2 first:border-t-0">
       <div className="min-w-0 flex-1 space-y-0.5">
-        <p className="truncate font-mono text-[11px]" title={placement.directoryPath}>
-          {placement.directoryPath}
-        </p>
+        <PlacementPathLine
+          path={placement.directoryPath}
+          className="flex min-w-0 font-mono text-[11px]"
+        />
         <p className="text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-2 text-[11px]">
           <span className="truncate">{placement.rootLabel}</span>
           <span aria-hidden>·</span>
@@ -46,13 +74,11 @@ function SkillPlacementRow({ placement }: { placement: SkillPlacement }): React.
           <span>{formatUpdatedAt(placement.updatedAt)}</span>
         </p>
         {placement.linkTargetPath ? (
-          <p
+          <PlacementPathLine
+            path={placement.linkTargetPath}
+            leading={<ArrowRight className="size-3 shrink-0" />}
             className="text-muted-foreground flex min-w-0 items-center gap-1 font-mono text-[11px]"
-            title={placement.linkTargetPath}
-          >
-            <ArrowRight className="size-3 shrink-0" />
-            <span className="truncate">{placement.linkTargetPath}</span>
-          </p>
+          />
         ) : null}
       </div>
       <Tooltip>

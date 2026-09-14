@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useSyncExternalStore } from 'react'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 
 import Sidebar from '../../sidebar/panel'
@@ -7,6 +7,7 @@ import { AwayReplay } from '../away-replay/panel'
 import { ContextInbox } from '../context/inbox'
 import { ContextProjects } from '../context/projects'
 import { hydrateSidePanelNavigation } from './hydration'
+import { getSidePanelPresenceSnapshot, subscribeSidePanelPresence } from './presence'
 
 type SidePanelNavigationProps = {
   presentation: 'browser' | 'workbench'
@@ -17,12 +18,20 @@ export function SidePanelNavigation({ presentation }: SidePanelNavigationProps):
   const hasHydratedRef = useRef(false)
   const projectCatalog = useProjectCatalog()
   useEffect(() => {
-    if (projectCatalog.isPending || hasHydratedRef.current) {
+    // Why: the workbench shell owns startup session hydration. Running the
+    // side-panel read here as well races that restore and can observe its
+    // first pending write as a false startup conflict.
+    if (presentation !== 'browser' || projectCatalog.isPending || hasHydratedRef.current) {
       return
     }
     hasHydratedRef.current = true
     void hydrateSidePanelNavigation(projectCatalog.repos, projectCatalog.runtimeEnvironments)
-  }, [projectCatalog.isPending, projectCatalog.repos, projectCatalog.runtimeEnvironments])
+  }, [
+    presentation,
+    projectCatalog.isPending,
+    projectCatalog.repos,
+    projectCatalog.runtimeEnvironments
+  ])
 
   return (
     <Sidebar
@@ -39,4 +48,14 @@ export function SidePanelNavigation({ presentation }: SidePanelNavigationProps):
       }
     />
   )
+}
+
+export function EmbeddedSidePanelNavigation(): React.JSX.Element | null {
+  const extensionSidePanelOpen = useSyncExternalStore(
+    subscribeSidePanelPresence,
+    getSidePanelPresenceSnapshot,
+    getSidePanelPresenceSnapshot
+  )
+
+  return extensionSidePanelOpen ? null : <SidePanelNavigation presentation="workbench" />
 }

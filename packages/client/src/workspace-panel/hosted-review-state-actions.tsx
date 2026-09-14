@@ -39,11 +39,11 @@ export function ClosedReviewActions({
         )}
         {stateUpdating === 'open'
           ? translate(
-              'auto.components.right.sidebar.HostedReviewActions.6645ac7dd1',
+              'auto.components.workspacePanel.HostedReviewActions.6645ac7dd1',
               'Reopening...'
             )
           : translate(
-              'auto.components.right.sidebar.HostedReviewActions.3ce211ece6',
+              'auto.components.workspacePanel.HostedReviewActions.3ce211ece6',
               'Reopen {{value0}}',
               { value0: shortLabel }
             )}
@@ -77,9 +77,9 @@ export function MergedReviewActions({
         <Trash2 className="size-3.5" />
       )}
       {isDeletingWorktree
-        ? translate('auto.components.right.sidebar.HostedReviewActions.eefd50457e', 'Deleting...')
+        ? translate('auto.components.workspacePanel.HostedReviewActions.eefd50457e', 'Deleting...')
         : translate(
-            'auto.components.right.sidebar.HostedReviewActions.e4aca40024',
+            'auto.components.workspacePanel.HostedReviewActions.e4aca40024',
             'Delete Workspace'
           )}
     </Button>

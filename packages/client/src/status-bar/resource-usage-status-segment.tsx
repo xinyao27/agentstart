@@ -3,6 +3,7 @@ import { isFolderRepo } from '@agentstart/protocol/project/repository'
 import { ORPHAN_WORKTREE_ID } from '@agentstart/protocol/terminal/session-identity'
 import { isWorkspaceOldForCleanup } from '@agentstart/protocol/workspace/cleanup-policy'
 import React, { useEffect, useState } from 'react'
+import { activePageView } from '~renderer/application-shell/state/visible-surface'
 import { useNow } from '~renderer/dashboard/use-now'
 import { useProjectCatalog } from '~renderer/project-catalog/provider'
 import { useEventCallback } from '~renderer/react/use-event-callback'
@@ -58,11 +59,11 @@ export function ResourceUsageStatusSegment({
   const fetchSnapshot = useAppStore((s) => s.fetchMemorySnapshot)
   const workspaceSessionReady = useAppStore((s) => s.workspaceSessionReady)
   const closedSessionCount = useAppStore(selectClosedResourceSessionCount)
-  const setActiveView = useAppStore((s) => s.setActiveView)
+  const focusWorkspaceSurface = useAppStore((s) => s.focusWorkspaceSurface)
   const openModal = useAppStore((s) => s.openModal)
   const openSpacePage = useAppStore((s) => s.openSpacePage)
   const recordFeatureInteraction = useAppStore((s) => s.recordFeatureInteraction)
-  const activeView = useAppStore((s) => s.activeView)
+  const spacePageVisible = useAppStore((state) => activePageView(state) === 'space')
   const activeWorktreeId = useAppStore((s) => s.activeWorktreeId)
   const workspaceSpaceScannedAt = useAppStore((s) => s.workspaceSpaceAnalysis?.scannedAt ?? null)
   const workspaceSpaceScanning = useAppStore((s) => s.workspaceSpaceScanning)
@@ -152,7 +153,7 @@ export function ResourceUsageStatusSegment({
   const nextSpaceScanSnapshot = resolveResourceUsageSpaceScanReady({
     snapshot: spaceScanSnapshot,
     open,
-    activeView,
+    spacePageVisible,
     scannedAt: workspaceSpaceScannedAt,
     scanning: workspaceSpaceScanning
   })
@@ -328,7 +329,7 @@ export function ResourceUsageStatusSegment({
     navigateResourceSessionToTab(tabId, paneKey, {
       tabsByWorktree,
       setOpen,
-      setActiveView,
+      focusWorkspaceSurface,
       activateAndRevealWorktree,
       activateTabAndFocusPane
     })

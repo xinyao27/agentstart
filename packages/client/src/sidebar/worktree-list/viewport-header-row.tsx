@@ -3,10 +3,10 @@ import type React from 'react'
 import { cn } from '~renderer/ui/class-names'
 
 import type { useHostHeaderDrag } from '../host-header-drag'
+import type { NavigationProjectedRow } from '../navigation-row-projection'
 import type { useProjectGroupHeaderDrag } from '../project-group-header-drag'
 import type { useRepoHeaderDrag } from '../project-header-drag'
 import type { getProjectWorkspaceRails } from '../project-workspace-rail'
-import type { WorkspaceSidebarProjectedRow } from '../workspace-sidebar-row-projection'
 import { getWorkspaceStatusFromGroupKey } from '../workspace-status'
 import type { ImportedWorktreesCardCandidate } from './groups'
 import { HeaderRow } from './header-row'
@@ -34,7 +34,7 @@ type HeaderCallbacks = Pick<
 
 export function ViewportHeaderRow(
   props: HeaderCallbacks & {
-    projected: WorkspaceSidebarProjectedRow
+    projected: NavigationProjectedRow
     index: number
     renderRows: readonly RenderRow[]
     firstHeaderIndex: number
@@ -89,7 +89,10 @@ export function ViewportHeaderRow(
         data-worktree-virtual-row-key={props.projected.key}
         data-worktree-sticky-header=""
         data-index={props.index}
-        className={cn('relative z-30 bg-sidebar', hasTopSpacing && 'pt-1')}
+        className={cn(
+          'relative z-30 bg-[var(--worktree-sidebar-surface)]',
+          hasTopSpacing && 'pt-1'
+        )}
       >
         <HostSectionHeader
           row={row}

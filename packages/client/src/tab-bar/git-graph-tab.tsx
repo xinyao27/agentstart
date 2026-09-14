@@ -14,6 +14,7 @@ import {
 import { TabCloseButton } from './tab-close-button'
 import { TabLabel } from './tab-label'
 import { useTabStripPointerActivation } from './tab-strip-pointer-activation'
+import { TabActiveSurface, TabHoverSurface } from './tab-surfaces'
 import { TAB_CONTAINER_WIDTH_CLASSES } from './tab-width-rules'
 
 export function GitGraphTab({
@@ -70,6 +71,7 @@ export function GitGraphTab({
           }
         }}
       >
+        {isActive ? <TabActiveSurface /> : <TabHoverSurface />}
         <GitBranch className={TAB_LEADING_ICON_CLASSES} />
         <TabLabel label={label} />
         <TabCloseButton

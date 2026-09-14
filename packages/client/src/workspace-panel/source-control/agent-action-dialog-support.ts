@@ -25,7 +25,7 @@ export function buildSourceControlAgentSaveTargets(repoId?: string | null): {
     {
       value: 'none',
       label: translate(
-        'auto.components.right.sidebar.SourceControlAgentActionDialog.994cddd1f7',
+        'auto.components.workspacePanel.SourceControlAgentActionDialog.994cddd1f7',
         "Don't save"
       )
     }
@@ -34,7 +34,7 @@ export function buildSourceControlAgentSaveTargets(repoId?: string | null): {
     targets.push({
       value: 'repo',
       label: translate(
-        'auto.components.right.sidebar.SourceControlAgentActionDialog.808cfe0a3b',
+        'auto.components.workspacePanel.SourceControlAgentActionDialog.808cfe0a3b',
         'This repository'
       )
     })
@@ -42,7 +42,7 @@ export function buildSourceControlAgentSaveTargets(repoId?: string | null): {
   targets.push({
     value: 'global',
     label: translate(
-      'auto.components.right.sidebar.SourceControlAgentActionDialog.38b899cc02',
+      'auto.components.workspacePanel.SourceControlAgentActionDialog.38b899cc02',
       'All repositories'
     )
   })
@@ -53,7 +53,7 @@ export function buildSourceControlAgentConnectionErrorPlan(): SourceControlAgent
   return {
     status: 'error',
     error: translate(
-      'auto.components.right.sidebar.SourceControlAgentActionDialog.c075d00de1',
+      'auto.components.workspacePanel.SourceControlAgentActionDialog.c075d00de1',
       'Unable to resolve the workspace connection.'
     )
   }

@@ -9,6 +9,8 @@ import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
+const EMPTY_TUI_AGENTS: TuiAgent[] = []
+
 type AgentSectionProps = {
   quickAgent: TuiAgent | null
   onQuickAgentChange: (agent: TuiAgent | null) => void
@@ -27,14 +29,14 @@ export function AgentSection({
   onCreate
 }: AgentSectionProps): React.JSX.Element {
   const defaultTuiAgent = useAppStore((s) => s.settings?.defaultTuiAgent ?? null)
-  const disabledTuiAgents = useAppStore((s) => s.settings?.disabledTuiAgents ?? [])
+  const disabledTuiAgents = useAppStore((s) => s.settings?.disabledTuiAgents)
   const updateSettings = useAppStore((s) => s.updateSettings)
 
   const visibleQuickAgents = (() => {
     const enabledIds = new Set(
       filterEnabledTuiAgents(
         getAgentCatalog().map((agent) => agent.id),
-        disabledTuiAgents
+        disabledTuiAgents ?? EMPTY_TUI_AGENTS
       )
     )
     return getAgentCatalog().filter(

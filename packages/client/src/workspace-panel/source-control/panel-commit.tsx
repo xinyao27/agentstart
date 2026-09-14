@@ -90,14 +90,14 @@ export function SourceControlPanelCommit({
         <div
           className="text-muted-foreground flex items-center gap-1.5 px-1 text-[11px]"
           title={translate(
-            'auto.components.right.sidebar.SourceControl.c05fe04839',
+            'auto.components.workspacePanel.SourceControl.c05fe04839',
             'Pushes to the fork at {{value0}} (not origin)',
             { value0: activeWorktree.pushTarget.remoteName }
           )}
         >
           <GitFork className="size-3 shrink-0" aria-hidden="true" />
           <span className="truncate">
-            {translate('auto.components.right.sidebar.SourceControl.78ce2d37ac', 'Pushes to fork')}
+            {translate('auto.components.workspacePanel.SourceControl.78ce2d37ac', 'Pushes to fork')}
             {describeForkPushTarget(activeWorktree.pushTarget)}
           </span>
         </div>

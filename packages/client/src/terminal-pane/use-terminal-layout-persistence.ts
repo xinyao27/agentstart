@@ -81,6 +81,17 @@ export function useTerminalLayoutPersistence({
     if (Object.keys(mergedScrollbackRefs).length > 0) {
       layout.scrollbackRefsByLeafId = mergedScrollbackRefs
     }
+    // Why: setTabLayout replaces the stored layout, so the daemon-recorded
+    // checkpoint grids have to be carried forward or the next save silently
+    // drops the width a restore needs.
+    const mergedScrollbackGrids = mergeCapturedLeafState({
+      prior: existing?.scrollbackGridsByLeafId,
+      fresh: {},
+      currentLeafIds: preservedScrollbackLeafIds
+    })
+    if (Object.keys(mergedScrollbackGrids).length > 0) {
+      layout.scrollbackGridsByLeafId = mergedScrollbackGrids
+    }
     const livePtyEntries = currentPanes
       .map(
         (pane) => [pane.leafId, paneTransportsRef.current.get(pane.id)?.getPtyId() ?? null] as const

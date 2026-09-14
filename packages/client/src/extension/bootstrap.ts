@@ -2,7 +2,11 @@ import {
   configureExtensionBrowserCapabilities,
   type ExtensionBrowserCapabilities
 } from './browser-capabilities'
-import type { ExtensionPage, ExtensionWorkspaceTarget } from './navigation'
+import type {
+  ExtensionPage,
+  ExtensionPageSubscription,
+  ExtensionWorkspaceTarget
+} from './navigation'
 import { configureExtensionHostNavigation } from './navigation'
 import type { ExtensionRuntimeHostFactory } from './runtime/host'
 import type {
@@ -45,6 +49,7 @@ export type ExtensionClientOptions = {
   publishAgentAttention: (count: number) => void
   readActivePageUrl: () => Promise<string | null>
   runtimeHost: ExtensionRuntimeHostFactory
+  subscribePageOpen: ExtensionPageSubscription
   surface: ExtensionSurface
 }
 
@@ -64,7 +69,10 @@ export async function mountExtensionClient(options: ExtensionClientOptions): Pro
       import('./workbench/bootstrap')
     ])
     runtimeSession.configureExtensionRuntime(options.runtimeHost)
-    mountExtensionWorkbench(runtimeSession.getExtensionRuntimeQueryCacheBuster())
+    mountExtensionWorkbench(
+      runtimeSession.getExtensionRuntimeQueryCacheBuster(),
+      options.subscribePageOpen
+    )
     return
   }
   const [runtimeSession, { mountExtensionSidePanel }] = await Promise.all([
@@ -88,6 +96,7 @@ export type {
   BrowserWorkspacePreferences,
   ExtensionBrowserCapabilities
 } from './browser-capabilities'
+export type { ExtensionPage, ExtensionPageSubscription } from './navigation'
 export type {
   ExtensionConnectionState,
   ExtensionRuntimeHost,

@@ -168,7 +168,7 @@ export function PierreFileExplorerTree({
         ? {
             text: 'C',
             title: translate(
-              'auto.components.right.sidebar.PierreFileExplorerTree.copied',
+              'auto.components.workspacePanel.PierreFileExplorerTree.copied',
               'Copied'
             )
           }

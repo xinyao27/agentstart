@@ -10,7 +10,7 @@ import { useEffectiveMacOptionAsAlt } from '~renderer/keyboard-layout/use-effect
 // Why: registry lives in a leaf module so the store slice can import it
 // without re-entering the `slice → TerminalPane → store → slice` cycle
 // that otherwise leaves createTerminalSlice undefined at store-init time.
-import { showWorkspaceSidebar } from '~renderer/workspace-panel/show-sidebar'
+import { showWorkspacePanel } from '~renderer/workspace-panel/show-workspace-panel'
 
 import { createTerminalExternalDrop } from './create-terminal-external-drop'
 import { createTerminalPtyLayoutBindings } from './create-terminal-pty-layout-bindings'
@@ -195,7 +195,7 @@ export default function TerminalPane({
   })
 
   const handleSearchSelectedText = (selectedText: string): void => {
-    showWorkspaceSidebar({
+    showWorkspacePanel({
       view: 'explorer',
       worktreeId,
       explorerDestination: { view: 'search', query: selectedText }

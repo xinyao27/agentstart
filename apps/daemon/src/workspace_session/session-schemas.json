@@ -78,6 +78,18 @@
                   "propertyNames": { "type": "string" },
                   "additionalProperties": { "type": "string" }
                 },
+                "scrollbackGridsByLeafId": {
+                  "type": "object",
+                  "propertyNames": { "type": "string" },
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "cols": { "type": "integer" },
+                      "rows": { "type": "integer" }
+                    },
+                    "required": ["cols", "rows"]
+                  }
+                },
                 "titlesByLeafId": {
                   "type": "object",
                   "propertyNames": { "type": "string" },
@@ -294,6 +306,7 @@
                       "check-details",
                       "browser",
                       "simulator",
+                      "page",
                       "git-graph"
                     ]
                   },
@@ -576,6 +589,18 @@
               "propertyNames": { "type": "string" },
               "additionalProperties": { "type": "string" }
             },
+            "scrollbackGridsByLeafId": {
+              "type": "object",
+              "propertyNames": { "type": "string" },
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "cols": { "type": "integer" },
+                  "rows": { "type": "integer" }
+                },
+                "required": ["cols", "rows"]
+              }
+            },
             "titlesByLeafId": {
               "type": "object",
               "propertyNames": { "type": "string" },
@@ -792,6 +817,7 @@
                   "check-details",
                   "browser",
                   "simulator",
+                  "page",
                   "git-graph"
                 ]
               },

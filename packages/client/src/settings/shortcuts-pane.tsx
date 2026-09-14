@@ -10,13 +10,13 @@ import {
 } from '@agentstart/protocol/keybindings'
 import React, { useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
+import { Keyboard } from '~renderer/icons/hugeicons'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { useAppStore } from '~renderer/store/state'
 
-import { SettingsSubsectionHeader } from './form-controls'
+import { SettingsGroupCards } from './group-card'
 import {
   hasCommonBindingOverride,
-  hasOwnBindingOverride,
   removeBindingOverride,
   sameBindings
 } from './keybinding-override-edits'
@@ -37,16 +37,19 @@ import {
   type ShortcutFilter,
   type ShortcutRowsByGroup
 } from './shortcut/filter-rail'
-import {
-  EMPTY_DISABLED_TUI_AGENTS,
-  disabledAgentTabActionIds,
-  groupDefinitions
-} from './shortcut/groups'
+import { EMPTY_DISABLED_TUI_AGENTS } from './shortcut/groups'
 import { clearRecordingActionForShortcutMutation } from './shortcut/recording-state'
+import {
+  buildShortcutConflictByAction,
+  buildShortcutConflictIgnoredIds,
+  buildShortcutRowsByGroup
+} from './shortcut/row-model'
 import { ShortcutRowsList } from './shortcut/rows-list'
 import { ShortcutTerminalPolicyControl } from './shortcut/terminal-policy-control'
-import { getShortcutTerminalStatus } from './shortcut/terminal-status'
-import { getTerminalShortcutPolicySearchEntry } from './shortcuts-search'
+import {
+  getShortcutsPaneSearchEntries,
+  getTerminalShortcutPolicySearchEntry
+} from './shortcuts-search'
 
 const isMac = navigator.userAgent.includes('Mac')
 const platform: NodeJS.Platform = isMac
@@ -83,46 +86,19 @@ export function ShortcutsPane(): React.JSX.Element {
   const [shortcutQuery, setShortcutQuery] = useState('')
   const [shortcutFilter, setShortcutFilter] = useState<ShortcutFilter>('all')
 
-  const groups = (() => groupDefinitions(disabledTuiAgents))()
-  const ignoredConflictActionIds = (() => disabledAgentTabActionIds(disabledTuiAgents))()
-  const conflictByAction = (() => {
-    const result = new Map<KeybindingActionId, string[]>()
-    for (const conflict of findKeybindingConflicts(platform, keybindings, {
-      ignoredActionIds: ignoredConflictActionIds
-    })) {
-      const labels = conflict.actionIds
-        .map((id) => getKeybindingDefinition(id)?.title ?? id)
-        .join(', ')
-      for (const actionId of conflict.actionIds) {
-        result.set(actionId, [
-          ...(result.get(actionId) ?? []),
-          `${formatKeybindingList([conflict.binding], platform)} conflicts with ${labels}.`
-        ])
-      }
-    }
-    return result
-  })()
-  const shortcutGroups = (() =>
-    groups.map((group) => ({
-      title: group.title,
-      rows: group.items.map((item) => {
-        const effective = getEffectiveKeybindingsForAction(item.id, platform, keybindings)
-        const modified = hasOwnBindingOverride(keybindings, item.id)
-        const warnings = conflictByAction.get(item.id) ?? []
-        return {
-          item,
-          groupTitle: group.title,
-          effective,
-          modified,
-          warnings,
-          terminalStatus: getShortcutTerminalStatus(
-            item,
-            terminalShortcutPolicy,
-            effective.length > 0
-          )
-        }
-      })
-    })))()
+  const ignoredConflictActionIds = buildShortcutConflictIgnoredIds(disabledTuiAgents)
+  const conflictByAction = buildShortcutConflictByAction(
+    platform,
+    keybindings,
+    ignoredConflictActionIds
+  )
+  const shortcutGroups = buildShortcutRowsByGroup({
+    disabledTuiAgents,
+    platform,
+    keybindings,
+    terminalShortcutPolicy,
+    conflictByAction
+  })
   const shortcutSearchQuery = normalizeShortcutLocalSearchQuery(shortcutQuery)
   const shortcutRows = shortcutGroups.flatMap((group) => group.rows)
   const matchesShortcutGlobalSearch = buildShortcutGlobalSearchMatcher(shortcutRows, searchQuery)
@@ -279,128 +255,155 @@ export function ShortcutsPane(): React.JSX.Element {
   const showPolicy = matchesSettingsSearch(searchQuery, getTerminalShortcutPolicySearchEntry())
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-6 overflow-hidden">
-      <section className="flex min-h-0 flex-1 flex-col space-y-3">
-        {showPolicy ? (
-          <ShortcutTerminalPolicyControl
-            terminalShortcutPolicy={terminalShortcutPolicy}
-            keywords={getTerminalShortcutPolicySearchEntry().keywords}
-            updateSettings={updateSettings}
-          />
-        ) : null}
-
-        <SettingsSubsectionHeader
-          title={translate(
+    <SettingsGroupCards
+      defaultOpenId="shortcuts"
+      className="h-full min-h-0"
+      groups={[
+        {
+          id: 'shortcuts',
+          icon: <Keyboard aria-hidden="true" />,
+          title: translate(
             'auto.components.settings.ShortcutsPane.47f8f7aef9',
             'Keyboard Shortcuts'
-          )}
-          description={
-            <>
-              {translate(
-                'auto.components.settings.ShortcutsPane.38e86e206a',
-                'Customize shortcuts visually or edit'
-              )}{' '}
-              <span className="font-mono text-[11px]">
-                {keybindingSnapshot?.path ??
-                  translate(
-                    'auto.components.settings.ShortcutsPane.d8c988dab4',
-                    '~/.agentstart/keybindings.json'
-                  )}
-              </span>{' '}
-              {translate('auto.components.settings.ShortcutsPane.4b7ae34062', 'directly.')}
-            </>
-          }
-          action={<KeybindingsFileActions />}
-        />
+          ),
+          searchEntries: getShortcutsPaneSearchEntries(),
+          forceVisible: true,
+          fill: true,
+          bodyClassName: 'min-h-0 overflow-hidden',
+          content: (
+            <div className="flex h-full min-h-0 flex-col gap-6 overflow-hidden">
+              <section className="flex min-h-0 flex-1 flex-col space-y-3">
+                {showPolicy ? (
+                  <ShortcutTerminalPolicyControl
+                    terminalShortcutPolicy={terminalShortcutPolicy}
+                    keywords={getTerminalShortcutPolicySearchEntry().keywords}
+                    updateSettings={updateSettings}
+                  />
+                ) : null}
 
-        {keybindingSnapshot?.diagnostics.length ? (
-          <div className="space-y-1">
-            {keybindingSnapshot.diagnostics.map((diagnostic, index) => (
-              <p
-                key={`${diagnostic.section ?? 'root'}-${diagnostic.actionId ?? index}`}
-                className={
-                  diagnostic.severity === 'error'
-                    ? 'text-destructive text-xs'
-                    : 'text-muted-foreground text-xs'
-                }
-              >
-                {diagnostic.message}
-              </p>
-            ))}
-          </div>
-        ) : null}
+                <div className="flex items-start justify-between gap-3">
+                  <p className="text-muted-foreground text-xs">
+                    {translate(
+                      'auto.components.settings.ShortcutsPane.38e86e206a',
+                      'Customize shortcuts visually or edit'
+                    )}{' '}
+                    <span className="font-mono text-[11px]">
+                      {keybindingSnapshot?.path ??
+                        translate(
+                          'auto.components.settings.ShortcutsPane.d8c988dab4',
+                          '~/.agentstart/keybindings.json'
+                        )}
+                    </span>{' '}
+                    {translate('auto.components.settings.ShortcutsPane.4b7ae34062', 'directly.')}
+                  </p>
+                  <div className="shrink-0">
+                    <KeybindingsFileActions />
+                  </div>
+                </div>
 
-        <div className="grid min-h-0 flex-1 gap-6 xl:grid-cols-[16rem_minmax(0,1fr)]">
-          <ShortcutFilterRail
-            query={shortcutQuery}
-            onQueryChange={setShortcutQuery}
-            filter={shortcutFilter}
-            onFilterChange={setShortcutFilter}
-            filterCounts={filterCounts}
-            visibleCount={visibleShortcutCount}
-            totalCount={shortcutRows.length}
-          />
+                {keybindingSnapshot?.diagnostics.length ? (
+                  <div className="space-y-1">
+                    {keybindingSnapshot.diagnostics.map((diagnostic, index) => (
+                      <p
+                        key={`${diagnostic.section ?? 'root'}-${diagnostic.actionId ?? index}`}
+                        className={
+                          diagnostic.severity === 'error'
+                            ? 'text-destructive text-xs'
+                            : 'text-muted-foreground text-xs'
+                        }
+                      >
+                        {diagnostic.message}
+                      </p>
+                    ))}
+                  </div>
+                ) : null}
 
-          <ShortcutRowsList
-            // overflow-x-hidden is explicit: overflow-y-auto alone makes the
-            // browser compute overflow-x to auto, which produced the phantom
-            // horizontal scroll when long edit-time content popped in.
-            className="scrollbar-sleek min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto pr-1"
-            groups={visibleShortcutGroups}
-            platform={platform}
-            errors={errors}
-            disableMemory={disableMemory}
-            recordingActionId={recordingActionId}
-            recordingBindingIndex={recordingBindingIndex}
-            onStartRecordingAt={(actionId, index) => {
-              setRecordingActionId(actionId)
-              setRecordingBindingIndex(index)
-              clearError(actionId)
-            }}
-            onAppendBinding={(actionId) => {
-              const current = getEffectiveKeybindingsForAction(actionId, platform, keybindings)
-              setRecordingActionId(actionId)
-              setRecordingBindingIndex(current.length)
-              clearError(actionId)
-            }}
-            onCancelRecording={() => {
-              setRecordingActionId(null)
-              setRecordingBindingIndex(null)
-            }}
-            onCapture={(actionId, input) => void captureBinding(actionId, input)}
-            onClearError={clearError}
-            onRemoveBindingAt={(actionId, index) => {
-              // Keep a pending capture aimed at the right row after the removal
-              // shifts indices (or clear it if the recorded row itself is gone).
-              if (recordingActionId === actionId) {
-                const nextIndex = adjustRecordingIndexAfterRemove(recordingBindingIndex, index)
-                setRecordingBindingIndex(nextIndex)
-                if (nextIndex === null) {
-                  setRecordingActionId(null)
-                }
-              }
-              void removeBinding(actionId, index)
-            }}
-            onResetAction={(actionId) => {
-              clearRecordingForAction(actionId)
-              void resetBinding(actionId)
-            }}
-            onDisableAction={(actionId) => {
-              // Remember the current bindings first so "Enable" can restore them.
-              const current = getEffectiveKeybindingsForAction(actionId, platform, keybindings)
-              setDisableMemory((memory) => ({ ...memory, [actionId]: current }))
-              clearRecordingForAction(actionId)
-              void disableBinding(actionId)
-            }}
-            onEnableAction={(actionId) => {
-              const remembered = disableMemory[actionId]
-              if (remembered && remembered.length > 0) {
-                void saveBindings(actionId, remembered)
-              }
-            }}
-          />
-        </div>
-      </section>
-    </div>
+                <div className="grid min-h-0 flex-1 gap-6 xl:grid-cols-[16rem_minmax(0,1fr)]">
+                  <ShortcutFilterRail
+                    query={shortcutQuery}
+                    onQueryChange={setShortcutQuery}
+                    filter={shortcutFilter}
+                    onFilterChange={setShortcutFilter}
+                    filterCounts={filterCounts}
+                    visibleCount={visibleShortcutCount}
+                    totalCount={shortcutRows.length}
+                  />
+
+                  <ShortcutRowsList
+                    // overflow-x-hidden is explicit: overflow-y-auto alone makes the
+                    // browser compute overflow-x to auto, which produced the phantom
+                    // horizontal scroll when long edit-time content popped in.
+                    className="scrollbar-sleek min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto pr-1"
+                    groups={visibleShortcutGroups}
+                    platform={platform}
+                    errors={errors}
+                    disableMemory={disableMemory}
+                    recordingActionId={recordingActionId}
+                    recordingBindingIndex={recordingBindingIndex}
+                    onStartRecordingAt={(actionId, index) => {
+                      setRecordingActionId(actionId)
+                      setRecordingBindingIndex(index)
+                      clearError(actionId)
+                    }}
+                    onAppendBinding={(actionId) => {
+                      const current = getEffectiveKeybindingsForAction(
+                        actionId,
+                        platform,
+                        keybindings
+                      )
+                      setRecordingActionId(actionId)
+                      setRecordingBindingIndex(current.length)
+                      clearError(actionId)
+                    }}
+                    onCancelRecording={() => {
+                      setRecordingActionId(null)
+                      setRecordingBindingIndex(null)
+                    }}
+                    onCapture={(actionId, input) => void captureBinding(actionId, input)}
+                    onClearError={clearError}
+                    onRemoveBindingAt={(actionId, index) => {
+                      // Keep a pending capture aimed at the right row after the removal
+                      // shifts indices (or clear it if the recorded row itself is gone).
+                      if (recordingActionId === actionId) {
+                        const nextIndex = adjustRecordingIndexAfterRemove(
+                          recordingBindingIndex,
+                          index
+                        )
+                        setRecordingBindingIndex(nextIndex)
+                        if (nextIndex === null) {
+                          setRecordingActionId(null)
+                        }
+                      }
+                      void removeBinding(actionId, index)
+                    }}
+                    onResetAction={(actionId) => {
+                      clearRecordingForAction(actionId)
+                      void resetBinding(actionId)
+                    }}
+                    onDisableAction={(actionId) => {
+                      // Remember the current bindings first so "Enable" can restore them.
+                      const current = getEffectiveKeybindingsForAction(
+                        actionId,
+                        platform,
+                        keybindings
+                      )
+                      setDisableMemory((memory) => ({ ...memory, [actionId]: current }))
+                      clearRecordingForAction(actionId)
+                      void disableBinding(actionId)
+                    }}
+                    onEnableAction={(actionId) => {
+                      const remembered = disableMemory[actionId]
+                      if (remembered && remembered.length > 0) {
+                        void saveBindings(actionId, remembered)
+                      }
+                    }}
+                  />
+                </div>
+              </section>
+            </div>
+          )
+        }
+      ]}
+    />
   )
 }

@@ -25,6 +25,11 @@ export type TerminalPaneLayoutNode =
       ratio?: number
     }
 
+export type TerminalScrollbackGrid = {
+  cols: number
+  rows: number
+}
+
 export type TerminalLayoutSnapshot = {
   root: TerminalPaneLayoutNode | null
   activeLeafId: string | null
@@ -35,6 +40,10 @@ export type TerminalLayoutSnapshot = {
   buffersByLeafId?: Record<string, string>
 
   scrollbackRefsByLeafId?: Record<string, string>
+
+  // Why: a stored checkpoint's rows only re-lay-out correctly at the grid they
+  // were recorded at, so the daemon records that grid next to the reference.
+  scrollbackGridsByLeafId?: Record<string, TerminalScrollbackGrid>
 
   titlesByLeafId?: Record<string, string>
 }

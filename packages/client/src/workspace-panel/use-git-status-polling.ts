@@ -16,7 +16,7 @@ import {
 import { useAppStore } from '~renderer/store/state'
 import { getExecutionHostIdForWorktree } from '~renderer/worktree/runtime-owner'
 
-import { getRightSidebarWorktreeRuntimeSettings } from './file-explorer/runtime-owner'
+import { getWorkspacePanelWorktreeRuntimeSettings } from './file-explorer/runtime-owner'
 import { useGitStatusFileWatchRefresh } from './git-status-file-watch-refresh'
 import { useGitStatusPushSignalRefresh } from './git-status-push-signal-refresh'
 import { refreshGitStatusForWorktree } from './git-status-refresh'
@@ -56,9 +56,9 @@ export function useGitStatusPolling(options: { enabled?: boolean } = {}): void {
   const setConflictOperation = useAppStore((s) => s.setConflictOperation)
   const conflictOperationByWorktree = useAppStore((s) => s.gitConflictOperationByWorktree)
   const sshConnectionStates = useAppStore((s) => s.sshConnectionStates)
-  const rightSidebarOpen = useAppStore((s) => s.rightSidebarOpen)
-  const rightSidebarTab = useAppStore((s) => s.rightSidebarTab)
-  const rightSidebarExplorerView = useAppStore((s) => s.rightSidebarExplorerView)
+  const workspacePanelOpen = useAppStore((s) => s.workspacePanelOpen)
+  const workspacePanelTab = useAppStore((s) => s.workspacePanelTab)
+  const workspacePanelExplorerView = useAppStore((s) => s.workspacePanelExplorerView)
   const openFiles = useAppStore((s) => s.openFiles)
   const repoMap = useRepoMap()
 
@@ -75,9 +75,9 @@ export function useGitStatusPolling(options: { enabled?: boolean } = {}): void {
   const activeGitStatusPollingArgs = {
     activeWorktreeId,
     worktreePath,
-    rightSidebarOpen,
-    rightSidebarTab,
-    rightSidebarExplorerView,
+    workspacePanelOpen,
+    workspacePanelTab,
+    workspacePanelExplorerView,
     openFiles
   }
   const isActiveConnectionReady = isConnectionReady(activeConnectionId)
@@ -126,7 +126,7 @@ export function useGitStatusPolling(options: { enabled?: boolean } = {}): void {
     try {
       const connectionId = getConnectionId(activeWorktreeId) ?? undefined
       await refreshGitStatusForWorktree({
-        settings: getRightSidebarWorktreeRuntimeSettings(activeWorktreeId),
+        settings: getWorkspacePanelWorktreeRuntimeSettings(activeWorktreeId),
         worktreeId: activeWorktreeId,
         worktreePath,
         connectionId,
@@ -264,9 +264,9 @@ export function useGitStatusPolling(options: { enabled?: boolean } = {}): void {
     gitStatusHugeByWorktree,
     isConnectionReady,
     openFiles,
-    rightSidebarExplorerView,
-    rightSidebarOpen,
-    rightSidebarTab,
+    workspacePanelExplorerView,
+    workspacePanelOpen,
+    workspacePanelTab,
     worktreePath
   })
 

@@ -31,7 +31,7 @@ export function ManageSessionsSection(): React.JSX.Element {
 
   const tabsByWorktree = useAppStore((s) => s.tabsByWorktree)
   const ptyIdsByTabId = useAppStore((s) => s.ptyIdsByTabId)
-  const setActiveView = useAppStore((s) => s.setActiveView)
+  const focusWorkspaceSurface = useAppStore((s) => s.focusWorkspaceSurface)
   const closeSettingsPage = useAppStore((s) => s.closeSettingsPage)
 
   const ptyIdToTabId = (() => {
@@ -59,7 +59,7 @@ export function ManageSessionsSection(): React.JSX.Element {
     if (worktreeId) {
       activateAndRevealWorktree(worktreeId)
     }
-    setActiveView('terminal')
+    focusWorkspaceSurface()
     activateTabAndFocusPane(tabId, null)
     closeSettingsPage()
   }
@@ -177,22 +177,7 @@ export function ManageSessionsSection(): React.JSX.Element {
   const isBusy = busyKind !== null || daemonActions.isBusy
 
   return (
-    <section className="space-y-4">
-      <div className="space-y-1">
-        <h3 className="text-sm font-semibold">
-          {translate(
-            'auto.components.settings.ManageSessionsSection.d1b80fd5cd',
-            'Manage Sessions'
-          )}
-        </h3>
-        <p className="text-muted-foreground text-xs">
-          {translate(
-            'auto.components.settings.ManageSessionsSection.7c4889a724',
-            'Recover from a frozen or misbehaving terminal by killing sessions or restarting the underlying daemon.'
-          )}
-        </p>
-      </div>
-
+    <div className="divide-border/40 divide-y">
       <SearchableSetting
         title={getManageSessionsSearchEntries()[0].title}
         description={getManageSessionsSearchEntries()[0].description}
@@ -222,6 +207,6 @@ export function ManageSessionsSection(): React.JSX.Element {
         onConfirm={runConfirmed}
       />
       <DaemonActionDialog api={daemonActions} />
-    </section>
+    </div>
   )
 }

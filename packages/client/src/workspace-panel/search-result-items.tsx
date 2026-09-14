@@ -115,7 +115,7 @@ export function FileResultRow({
               >
                 <Copy className="size-3.5" />
                 {translate(
-                  'auto.components.right.sidebar.SearchResultItems.3596b9668d',
+                  'auto.components.workspacePanel.SearchResultItems.3596b9668d',
                   'Copy Path'
                 )}
               </ContextMenuItem>
@@ -210,7 +210,7 @@ export function MatchResultRow({
         >
           <Copy className="size-3.5" />
           {translate(
-            'auto.components.right.sidebar.SearchResultItems.cc06595a3b',
+            'auto.components.workspacePanel.SearchResultItems.cc06595a3b',
             'Copy Line Path'
           )}
         </ContextMenuItem>

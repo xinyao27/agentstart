@@ -226,3 +226,46 @@ export function getRepositoryPaneSearchEntries(
       : [...getRepositoryGitAuthorSearchEntries(repo), ...getRepositoryGitHooksSearchEntries(repo)])
   ]
 }
+
+export type RepositoryPaneSearchSlices = {
+  identityEntries: SettingsSearchEntry[]
+  sparsePresetEntries: SettingsSearchEntry[]
+  hooksEntries: SettingsSearchEntry[]
+  mcpEntries: SettingsSearchEntry[]
+  symlinkEntries: SettingsSearchEntry[]
+  sourceControlAiEntries: SettingsSearchEntry[]
+  hostSetupEntries: SettingsSearchEntry[]
+  projectRuntimeEntries: SettingsSearchEntry[]
+}
+
+/** Splits the pane's flat entry list into per-card slices for the accordion. */
+export function sliceRepositoryPaneSearchEntries(
+  allEntries: SettingsSearchEntry[]
+): RepositoryPaneSearchSlices {
+  const identityEntryTitles = new Set([
+    translate('auto.components.settings.repository.search.7e1e456a95', 'Display Name'),
+    translate('auto.components.settings.repository.search.b24f00294a', 'Project Icon'),
+    translate(
+      'auto.components.settings.repository.search.keepForkUpToDate',
+      'Keep Fork Up to Date'
+    ),
+    translate('auto.components.settings.repository.search.094adbe930', 'Default Worktree Base'),
+    translate('auto.components.settings.repository.search.443d127b5a', 'Worktree Location'),
+    translate('auto.components.settings.repository.search.projectRuntime', 'Project Runtime'),
+    translate('auto.components.settings.repository.search.c5266c2c9d', 'Remove Project')
+  ])
+  return {
+    identityEntries: allEntries.filter((entry) => identityEntryTitles.has(entry.title)),
+    sparsePresetEntries: allEntries.filter((entry) =>
+      ['Sparse Checkout Presets'].includes(entry.title)
+    ),
+    hooksEntries: allEntries.filter((entry) =>
+      ['Setup Script', 'Archive Script', 'Advanced', 'When to Run Setup'].includes(entry.title)
+    ),
+    mcpEntries: allEntries.filter((entry) => entry.title === 'MCP Configs'),
+    symlinkEntries: allEntries.filter((entry) => entry.title === 'Worktree Shared Paths'),
+    sourceControlAiEntries: allEntries.filter((entry) => entry.title === 'Git AI Author'),
+    hostSetupEntries: allEntries.filter((entry) => entry.title === 'Available Hosts'),
+    projectRuntimeEntries: allEntries.filter((entry) => entry.title === 'Project Runtime')
+  }
+}

@@ -112,6 +112,7 @@ export function pruneLocalTerminalScrollbackBuffers(
     const layoutWithoutBuffers = { ...layout }
     delete layoutWithoutBuffers.buffersByLeafId
     delete layoutWithoutBuffers.scrollbackRefsByLeafId
+    delete layoutWithoutBuffers.scrollbackGridsByLeafId
     terminalLayoutsByTabId[tabId] = layoutWithoutBuffers
   }
 

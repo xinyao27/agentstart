@@ -1,5 +1,6 @@
 import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useEffect, useState } from 'react'
+import { ShareNetwork } from '~renderer/icons/hugeicons'
 import type { PublicKnownRuntimeEnvironment } from '~renderer/runtime/environment-model'
 import { useAppStore } from '~renderer/store/state'
 import {
@@ -7,12 +8,12 @@ import {
   getUpdateCheckHint
 } from '~renderer/updates/check-click-options'
 
+import { SettingsGroupCards } from './group-card'
 import { RuntimeEnvironmentAdvanced } from './runtime-environment-advanced'
 import { RuntimeEnvironmentDialogs } from './runtime-environment-dialogs'
 import { RuntimeEnvironmentList } from './runtime-environment-list'
 import { LOCAL_RUNTIME_VALUE, NO_RUNTIME_VALUE } from './runtime-environment-status'
 import { getRuntimeEnvironmentsSearchEntry } from './runtime-environments-search'
-import { SearchableSetting } from './searchable-setting'
 import { useRuntimeEnvironmentActions } from './use-runtime-environment-actions'
 import { useRuntimeEnvironmentList } from './use-runtime-environment-list'
 
@@ -67,81 +68,91 @@ export function RuntimeEnvironmentsPane({
   }
 
   return (
-    <SearchableSetting
-      title={searchEntry.title}
-      description={searchEntry.description}
-      keywords={searchEntry.keywords}
-      className="space-y-4 py-2"
-    >
-      <RuntimeEnvironmentList
-        environments={list.environments}
-        detailsByEnvironmentId={list.detailsByEnvironmentId}
-        activeEnvironmentId={settings.activeRuntimeEnvironmentId ?? null}
-        updates={remoteServerUpdates}
-        updatesChecking={remoteServerUpdatesChecking}
-        updatesRunning={remoteServerUpdatesRunning}
-        updateCheckHint={getUpdateCheckHint()}
-        connectingId={actions.connectingId}
-        switchingValue={actions.switchingValue}
-        disconnectingId={actions.disconnectingId}
-        removingId={actions.removingId}
-        isBusy={actions.isBusy}
-        onCheckUpdates={(event) => {
-          setRemoteServerUpdateDialogOpen(true)
-          void refreshRemoteServerUpdates(getUpdateCheckClickOptions(event))
-        }}
-        onOpenUpdates={() => setRemoteServerUpdateDialogOpen(true)}
-        onConnect={(environment) => void actions.connectEnvironment(environment)}
-        onDisconnect={(environment) => void actions.disconnectEnvironment(environment)}
-        onRemove={(environment) => {
-          actions.setRemoveError(null)
-          setPendingRemove(environment)
-        }}
-      />
-      <RuntimeEnvironmentAdvanced
-        open={advancedOpen}
-        onOpenChange={setAdvancedOpen}
-        allowLocalRuntime={allowLocalRuntime}
-        activeValue={activeValue}
-        environments={list.environments}
-        detailsByEnvironmentId={list.detailsByEnvironmentId}
-        isBusy={actions.isBusy}
-        isLoading={list.isLoading}
-        onSelect={(value) => {
-          if (value && value !== activeValue) {
-            actions.setSwitchError(null)
-            setPendingSwitchValue(value)
-          }
-        }}
-        onRefresh={() => void list.loadEnvironments()}
-      />
-      <RuntimeEnvironmentDialogs
-        pendingSwitchValue={pendingSwitchValue}
-        pendingRemove={pendingRemove}
-        switchingValue={actions.switchingValue}
-        removingId={actions.removingId}
-        switchError={actions.switchError}
-        removeError={actions.removeError}
-        removingActiveHost={pendingRemove?.id === settings.activeRuntimeEnvironmentId}
-        allowLocalRuntime={allowLocalRuntime}
-        getEnvironmentLabel={actions.getEnvironmentLabel}
-        onCancelSwitch={cancelSwitch}
-        onConfirmSwitch={(value) => {
-          void actions.switchToValue(value).then((switched) => {
-            if (switched && list.mountedRef.current) {
-              setPendingSwitchValue(null)
-            }
-          })
-        }}
-        onCancelRemove={cancelRemove}
-        onConfirmRemove={(environment) => {
-          void actions.removeEnvironment(environment).then((removed) => {
-            if (removed && list.mountedRef.current) {
-              setPendingRemove(null)
-            }
-          })
-        }}
-      />
-    </SearchableSetting>
+    <SettingsGroupCards
+      defaultOpenId="runtime-hosts"
+      groups={[
+        {
+          id: 'runtime-hosts',
+          icon: <ShareNetwork aria-hidden="true" />,
+          title: searchEntry.title,
+          summary: searchEntry.description,
+          searchEntries: [searchEntry],
+          forceVisible: true,
+          content: (
+            <div className="space-y-3 py-1">
+              <RuntimeEnvironmentList
+                environments={list.environments}
+                detailsByEnvironmentId={list.detailsByEnvironmentId}
+                activeEnvironmentId={settings.activeRuntimeEnvironmentId ?? null}
+                updates={remoteServerUpdates}
+                updatesChecking={remoteServerUpdatesChecking}
+                updatesRunning={remoteServerUpdatesRunning}
+                updateCheckHint={getUpdateCheckHint()}
+                connectingId={actions.connectingId}
+                switchingValue={actions.switchingValue}
+                disconnectingId={actions.disconnectingId}
+                removingId={actions.removingId}
+                isBusy={actions.isBusy}
+                onCheckUpdates={(event) => {
+                  setRemoteServerUpdateDialogOpen(true)
+                  void refreshRemoteServerUpdates(getUpdateCheckClickOptions(event))
+                }}
+                onOpenUpdates={() => setRemoteServerUpdateDialogOpen(true)}
+                onConnect={(environment) => void actions.connectEnvironment(environment)}
+                onDisconnect={(environment) => void actions.disconnectEnvironment(environment)}
+                onRemove={(environment) => {
+                  actions.setRemoveError(null)
+                  setPendingRemove(environment)
+                }}
+              />
+              <RuntimeEnvironmentAdvanced
+                open={advancedOpen}
+                onOpenChange={setAdvancedOpen}
+                allowLocalRuntime={allowLocalRuntime}
+                activeValue={activeValue}
+                environments={list.environments}
+                detailsByEnvironmentId={list.detailsByEnvironmentId}
+                isBusy={actions.isBusy}
+                isLoading={list.isLoading}
+                onSelect={(value) => {
+                  if (value && value !== activeValue) {
+                    actions.setSwitchError(null)
+                    setPendingSwitchValue(value)
+                  }
+                }}
+                onRefresh={() => void list.loadEnvironments()}
+              />
+              <RuntimeEnvironmentDialogs
+                pendingSwitchValue={pendingSwitchValue}
+                pendingRemove={pendingRemove}
+                switchingValue={actions.switchingValue}
+                removingId={actions.removingId}
+                switchError={actions.switchError}
+                removeError={actions.removeError}
+                removingActiveHost={pendingRemove?.id === settings.activeRuntimeEnvironmentId}
+                allowLocalRuntime={allowLocalRuntime}
+                getEnvironmentLabel={actions.getEnvironmentLabel}
+                onCancelSwitch={cancelSwitch}
+                onConfirmSwitch={(value) => {
+                  void actions.switchToValue(value).then((switched) => {
+                    if (switched && list.mountedRef.current) {
+                      setPendingSwitchValue(null)
+                    }
+                  })
+                }}
+                onCancelRemove={cancelRemove}
+                onConfirmRemove={(environment) => {
+                  void actions.removeEnvironment(environment).then((removed) => {
+                    if (removed && list.mountedRef.current) {
+                      setPendingRemove(null)
+                    }
+                  })
+                }}
+              />
+            </div>
+          )
+        }
+      ]}
+    />
   )
 }

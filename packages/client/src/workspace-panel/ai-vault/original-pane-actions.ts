@@ -46,7 +46,7 @@ export function useAiVaultOriginalPaneActions(): {
     if (!target) {
       toast.error(
         translate(
-          'auto.components.right.sidebar.AiVaultPanel.originalPaneUnavailable',
+          'auto.components.workspacePanel.AiVaultPanel.originalPaneUnavailable',
           'Original pane is no longer available.'
         )
       )
@@ -56,7 +56,7 @@ export function useAiVaultOriginalPaneActions(): {
     if (!activateAndRevealWorktree(target.worktreeId)) {
       toast.error(
         translate(
-          'auto.components.right.sidebar.AiVaultPanel.worktreeUnavailable',
+          'auto.components.workspacePanel.AiVaultPanel.worktreeUnavailable',
           'Worktree is no longer available.'
         )
       )
@@ -74,7 +74,7 @@ export function useAiVaultOriginalPaneActions(): {
     if (!activateAndRevealWorktree(worktreeId)) {
       toast.error(
         translate(
-          'auto.components.right.sidebar.AiVaultPanel.worktreeUnavailable',
+          'auto.components.workspacePanel.AiVaultPanel.worktreeUnavailable',
           'Worktree is no longer available.'
         )
       )

@@ -23,13 +23,13 @@
       "conflictGroup": "menu",
       "defaultBindings": {
         "darwin": [
-          "Mod+Comma"
+          "Mod+Shift+Comma"
         ],
         "linux": [
-          "Mod+Comma"
+          "Mod+Shift+Comma"
         ],
         "win32": [
-          "Mod+Comma"
+          "Mod+Shift+Comma"
         ]
       }
     },
@@ -39,15 +39,9 @@
       "scope": "global",
       "conflictGroup": "menu",
       "defaultBindings": {
-        "darwin": [
-          "Mod+Shift+R"
-        ],
-        "linux": [
-          "Mod+Shift+R"
-        ],
-        "win32": [
-          "Mod+Shift+R"
-        ]
+        "darwin": [],
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -104,17 +98,10 @@
       "scope": "global",
       "defaultBindings": {
         "darwin": [
-          "Mod+N",
-          "Mod+Shift+N"
+          "Mod+Alt+Shift+N"
         ],
-        "linux": [
-          "Mod+N",
-          "Mod+Shift+N"
-        ],
-        "win32": [
-          "Mod+N",
-          "Mod+Shift+N"
-        ]
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -146,13 +133,13 @@
       "scope": "global",
       "defaultBindings": {
         "darwin": [
-          "Mod+1"
+          "Mod+Alt+1"
         ],
         "linux": [
-          "Mod+1"
+          "Alt+Shift+1"
         ],
         "win32": [
-          "Mod+1"
+          "Alt+Shift+1"
         ]
       }
     },
@@ -178,13 +165,13 @@
       "scope": "global",
       "defaultBindings": {
         "darwin": [
-          "Mod+L"
+          "Mod+Shift+L"
         ],
         "linux": [
-          "Mod+L"
+          "Mod+Shift+L"
         ],
         "win32": [
-          "Mod+L"
+          "Mod+Shift+L"
         ]
       }
     },
@@ -347,13 +334,13 @@
       "scope": "global",
       "defaultBindings": {
         "darwin": [
-          "Mod+Alt+ArrowLeft"
+          "Mod+Shift+ArrowLeft"
         ],
         "linux": [
-          "Mod+Alt+ArrowLeft"
+          "Mod+Shift+ArrowLeft"
         ],
         "win32": [
-          "Mod+Alt+ArrowLeft"
+          "Mod+Shift+ArrowLeft"
         ]
       }
     },
@@ -363,13 +350,13 @@
       "scope": "global",
       "defaultBindings": {
         "darwin": [
-          "Mod+Alt+ArrowRight"
+          "Mod+Shift+ArrowRight"
         ],
         "linux": [
-          "Mod+Alt+ArrowRight"
+          "Mod+Shift+ArrowRight"
         ],
         "win32": [
-          "Mod+Alt+ArrowRight"
+          "Mod+Shift+ArrowRight"
         ]
       }
     },
@@ -379,14 +366,10 @@
       "scope": "tabs",
       "defaultBindings": {
         "darwin": [
-          "Mod+T"
+          "Mod+Alt+T"
         ],
-        "linux": [
-          "Mod+T"
-        ],
-        "win32": [
-          "Mod+T"
-        ]
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -395,7 +378,7 @@
       "scope": "tabs",
       "defaultBindings": {
         "darwin": [
-          "Mod+Alt+T"
+          "Mod+Alt+Shift+T"
         ],
         "linux": [],
         "win32": []
@@ -407,14 +390,10 @@
       "scope": "tabs",
       "defaultBindings": {
         "darwin": [
-          "Mod+Shift+B"
+          "Mod+Alt+B"
         ],
-        "linux": [
-          "Mod+Shift+B"
-        ],
-        "win32": [
-          "Mod+Shift+B"
-        ]
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -435,14 +414,10 @@
       "scope": "tabs",
       "defaultBindings": {
         "darwin": [
-          "Mod+Shift+M"
+          "Mod+Alt+M"
         ],
-        "linux": [
-          "Mod+Shift+M"
-        ],
-        "win32": [
-          "Mod+Shift+M"
-        ]
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -451,14 +426,10 @@
       "scope": "tabs",
       "defaultBindings": {
         "darwin": [
-          "Mod+Shift+O"
+          "Mod+Alt+O"
         ],
-        "linux": [
-          "Mod+Shift+O"
-        ],
-        "win32": [
-          "Mod+Shift+O"
-        ]
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -467,13 +438,13 @@
       "scope": "tabs",
       "defaultBindings": {
         "darwin": [
-          "Mod+W"
+          "Mod+Backspace"
         ],
         "linux": [
-          "Mod+W"
+          "Mod+Backspace"
         ],
         "win32": [
-          "Mod+W"
+          "Mod+Backspace"
         ]
       }
     },
@@ -499,9 +470,7 @@
       "scope": "tabs",
       "conflictGroup": "workspace-shell",
       "defaultBindings": {
-        "darwin": [
-          "Mod+R"
-        ],
+        "darwin": [],
         "linux": [],
         "win32": []
       }
@@ -512,14 +481,10 @@
       "scope": "tabs",
       "defaultBindings": {
         "darwin": [
-          "Mod+Shift+T"
+          "Mod+Alt+Shift+R"
         ],
-        "linux": [
-          "Mod+Shift+T"
-        ],
-        "win32": [
-          "Mod+Shift+T"
-        ]
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -592,13 +557,13 @@
       "scope": "tabs",
       "defaultBindings": {
         "darwin": [
-          "Ctrl+Tab"
+          "Mod+Alt+PageDown"
         ],
         "linux": [
-          "Ctrl+Tab"
+          "Mod+Alt+PageDown"
         ],
         "win32": [
-          "Ctrl+Tab"
+          "Mod+Alt+PageDown"
         ]
       }
     },
@@ -608,13 +573,13 @@
       "scope": "tabs",
       "defaultBindings": {
         "darwin": [
-          "Ctrl+PageDown"
+          "Alt+PageDown"
         ],
         "linux": [
-          "Ctrl+PageDown"
+          "Alt+PageDown"
         ],
         "win32": [
-          "Ctrl+PageDown"
+          "Alt+PageDown"
         ]
       }
     },
@@ -624,13 +589,13 @@
       "scope": "tabs",
       "defaultBindings": {
         "darwin": [
-          "Ctrl+PageUp"
+          "Alt+PageUp"
         ],
         "linux": [
-          "Ctrl+PageUp"
+          "Alt+PageUp"
         ],
         "win32": [
-          "Ctrl+PageUp"
+          "Alt+PageUp"
         ]
       }
     },
@@ -682,15 +647,9 @@
       "title": "Go Back in Browser",
       "scope": "browser",
       "defaultBindings": {
-        "darwin": [
-          "Mod+BracketLeft"
-        ],
-        "linux": [
-          "Alt+ArrowLeft"
-        ],
-        "win32": [
-          "Alt+ArrowLeft"
-        ]
+        "darwin": [],
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -698,15 +657,9 @@
       "title": "Go Forward in Browser",
       "scope": "browser",
       "defaultBindings": {
-        "darwin": [
-          "Mod+BracketRight"
-        ],
-        "linux": [
-          "Alt+ArrowRight"
-        ],
-        "win32": [
-          "Alt+ArrowRight"
-        ]
+        "darwin": [],
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -714,15 +667,9 @@
       "title": "Reload Browser Page",
       "scope": "browser",
       "defaultBindings": {
-        "darwin": [
-          "Mod+R"
-        ],
-        "linux": [
-          "Mod+R"
-        ],
-        "win32": [
-          "Mod+R"
-        ]
+        "darwin": [],
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -730,15 +677,9 @@
       "title": "Hard Reload Browser Page",
       "scope": "browser",
       "defaultBindings": {
-        "darwin": [
-          "Mod+Shift+R"
-        ],
-        "linux": [
-          "Mod+Shift+R"
-        ],
-        "win32": [
-          "Mod+Shift+R"
-        ]
+        "darwin": [],
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -747,14 +688,10 @@
       "scope": "browser",
       "defaultBindings": {
         "darwin": [
-          "Mod+L"
+          "Mod+Alt+L"
         ],
-        "linux": [
-          "Mod+L"
-        ],
-        "win32": [
-          "Mod+L"
-        ]
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -762,15 +699,9 @@
       "title": "Grab Page Element",
       "scope": "browser",
       "defaultBindings": {
-        "darwin": [
-          "Mod+C"
-        ],
-        "linux": [
-          "Mod+C"
-        ],
-        "win32": [
-          "Mod+C"
-        ]
+        "darwin": [],
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -798,10 +729,10 @@
           "Mod+Alt+F"
         ],
         "linux": [
-          "Mod+H"
+          "Mod+Shift+H"
         ],
         "win32": [
-          "Mod+H"
+          "Mod+Shift+H"
         ]
       }
     },
@@ -1053,15 +984,9 @@
       "title": "Copy terminal selection",
       "scope": "terminal",
       "defaultBindings": {
-        "darwin": [
-          "Mod+Shift+C"
-        ],
-        "linux": [
-          "Mod+Shift+C"
-        ],
-        "win32": [
-          "Mod+Shift+C"
-        ]
+        "darwin": [],
+        "linux": [],
+        "win32": []
       }
     },
     {
@@ -1122,7 +1047,7 @@
       "scope": "terminal",
       "defaultBindings": {
         "darwin": [
-          "Mod+BracketRight"
+          "Mod+Alt+BracketRight"
         ],
         "linux": [
           "Mod+BracketRight"
@@ -1138,7 +1063,7 @@
       "scope": "terminal",
       "defaultBindings": {
         "darwin": [
-          "Mod+BracketLeft"
+          "Mod+Alt+BracketLeft"
         ],
         "linux": [
           "Mod+BracketLeft"
@@ -1200,13 +1125,13 @@
       "scope": "terminal",
       "defaultBindings": {
         "darwin": [
-          "Mod+W"
+          "Mod+Shift+X"
         ],
         "linux": [
-          "Mod+W"
+          "Mod+Shift+X"
         ],
         "win32": [
-          "Mod+W"
+          "Mod+Shift+X"
         ]
       }
     },
@@ -1216,13 +1141,13 @@
       "scope": "terminal",
       "defaultBindings": {
         "darwin": [
-          "Mod+D"
+          "Mod+Backslash"
         ],
         "linux": [
-          "Mod+Shift+D"
+          "Mod+Backslash"
         ],
         "win32": [
-          "Mod+Shift+D"
+          "Mod+Backslash"
         ]
       }
     },
@@ -1232,7 +1157,7 @@
       "scope": "terminal",
       "defaultBindings": {
         "darwin": [
-          "Mod+Shift+D"
+          "Mod+Shift+Backslash"
         ],
         "linux": [
           "Alt+Shift+D"

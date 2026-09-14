@@ -187,7 +187,7 @@ export function CommandPalette({
                 value={`${command.label} ${command.page}`}
                 onSelect={() =>
                   run(() => {
-                    if (command.page === 'settings' && openSidebarPage('settings')) {
+                    if (openSidebarPage(command.page)) {
                       return
                     }
                     navigation.openPage(command.page)

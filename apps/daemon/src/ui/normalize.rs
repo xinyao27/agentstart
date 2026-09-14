@@ -10,6 +10,7 @@ pub(crate) use feature::BucketEvent;
 pub(crate) use feature::IDS as FEATURE_INTERACTION_IDS;
 
 const RESERVED_KEYS: &[&str] = &[
+    "activeView",
     "featureInteractionTelemetryBuckets",
     "_worktreeCardModeDefaulted",
     "trayMinimizeNoticeShown",
@@ -82,23 +83,36 @@ fn normalize_fields(
         "projectOrderBy",
         enum_value(source("projectOrderBy"), &["manual", "recent"], "manual"),
     );
-    let right_tab = right_sidebar_tab(source("rightSidebarTab"));
-    set(ui, "rightSidebarTab", Value::String(right_tab.to_owned()));
-    let right_view = if let Some(updates) = updates {
-        if updates.contains_key("rightSidebarExplorerView") {
-            right_sidebar_view(updates.get("rightSidebarExplorerView"), right_tab)
-        } else if updates.get("rightSidebarTab").and_then(Value::as_str) == Some("search") {
+    let workspace_panel_tab = workspace_panel_tab(source("workspacePanelTab"));
+    set(
+        ui,
+        "workspacePanelTab",
+        Value::String(workspace_panel_tab.to_owned()),
+    );
+    let normalized_workspace_panel_view = if let Some(updates) = updates {
+        if updates.contains_key("workspacePanelExplorerView") {
+            workspace_panel_view(
+                updates.get("workspacePanelExplorerView"),
+                workspace_panel_tab,
+            )
+        } else if updates.get("workspacePanelTab").and_then(Value::as_str) == Some("search") {
             "search"
         } else {
-            right_sidebar_view(current.get("rightSidebarExplorerView"), right_tab)
+            workspace_panel_view(
+                current.get("workspacePanelExplorerView"),
+                workspace_panel_tab,
+            )
         }
     } else {
-        right_sidebar_view(current.get("rightSidebarExplorerView"), right_tab)
+        workspace_panel_view(
+            current.get("workspacePanelExplorerView"),
+            workspace_panel_tab,
+        )
     };
     set(
         ui,
-        "rightSidebarExplorerView",
-        Value::String(right_view.to_owned()),
+        "workspacePanelExplorerView",
+        Value::String(normalized_workspace_panel_view.to_owned()),
     );
     set(
         ui,
@@ -216,7 +230,7 @@ fn stripped(value: Option<&Value>) -> Map<String, Value> {
         .unwrap_or_default()
 }
 
-fn right_sidebar_tab(value: Option<&Value>) -> &'static str {
+fn workspace_panel_tab(value: Option<&Value>) -> &'static str {
     match value.and_then(Value::as_str) {
         Some("checks" | "source-control") => "source-control",
         Some("explorer") => "explorer",
@@ -228,7 +242,7 @@ fn right_sidebar_tab(value: Option<&Value>) -> &'static str {
     }
 }
 
-fn right_sidebar_view(value: Option<&Value>, tab: &str) -> &'static str {
+fn workspace_panel_view(value: Option<&Value>, tab: &str) -> &'static str {
     if tab == "search" || value.and_then(Value::as_str) == Some("search") {
         "search"
     } else {

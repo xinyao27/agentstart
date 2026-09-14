@@ -3,7 +3,7 @@ import type { Icon } from '~renderer/icons/hugeicons'
 import { Button } from '~renderer/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
-import { RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME } from '../right-sidebar-button-styles'
+import { WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME } from '../workspace-panel-button-styles'
 
 export function SourceControlHeaderIconButton({
   icon: Icon,
@@ -26,7 +26,7 @@ export function SourceControlHeaderIconButton({
             type="button"
             variant={variant}
             size="icon-toolbar"
-            className={RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME}
+            className={WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME}
             aria-label={label}
             onClick={onClick}
             disabled={disabled}

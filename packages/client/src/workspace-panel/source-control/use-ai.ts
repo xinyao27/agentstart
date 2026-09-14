@@ -147,7 +147,7 @@ export function useSourceControlAi({
     if (unresolvedConflicts.length === 0) {
       toast.message(
         translate(
-          'auto.components.right.sidebar.use.source.control.ai.cfafa92509',
+          'auto.components.workspacePanel.use.source.control.ai.cfafa92509',
           'No unresolved conflicts to send.'
         )
       )

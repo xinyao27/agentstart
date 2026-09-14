@@ -4,7 +4,7 @@ export type RendererErrorSurface =
   | 'workspace-shell'
   | 'sidebar'
   | 'terminal-workbench'
-  | 'right-sidebar'
+  | 'workspace-panel'
   | 'page'
   | 'modal'
   | 'overlay'
@@ -26,7 +26,7 @@ export type RendererErrorReportArgs = {
   activeView?: string
   activeModal?: string | null
   activeTabType?: string | null
-  activeRightSidebarTab?: string | null
+  activeWorkspacePanelTab?: string | null
   hasActiveWorktree?: boolean
   chromeVersion?: string
 }

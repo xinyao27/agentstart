@@ -18,11 +18,7 @@ import {
 } from '../auto-save-delay-draft'
 import { EditorFontFamilySetting } from '../editor-font-family-setting'
 import { EditorWordWrapSetting } from '../editor-word-wrap-setting'
-import {
-  SettingsSegmentedControl,
-  SettingsSubsectionHeader,
-  SettingsSwitchRow
-} from '../form-controls'
+import { SettingsSegmentedControl, SettingsSwitchRow } from '../form-controls'
 import { RichMarkdownSpellcheckSetting } from '../rich-markdown-spellcheck-setting'
 import { SearchableSetting } from '../searchable-setting'
 
@@ -85,18 +81,7 @@ export function GeneralEditorSettingsSection({
   }
 
   return (
-    <section key="editor" className="space-y-4">
-      <SettingsSubsectionHeader
-        title={translate(
-          'auto.components.settings.GeneralEditorSettingsSection.45c6e85c4d',
-          'Editor'
-        )}
-        description={translate(
-          'auto.components.settings.GeneralEditorSettingsSection.d21136d9ef',
-          'Configure how AgentStart persists file edits.'
-        )}
-      />
-
+    <div className="divide-border/40 divide-y">
       <SearchableSetting
         title={translate(
           'auto.components.settings.GeneralEditorSettingsSection.0df2e4fd12',
@@ -338,6 +323,6 @@ export function GeneralEditorSettingsSection({
           }
         />
       </SearchableSetting>
-    </section>
+    </div>
   )
 }

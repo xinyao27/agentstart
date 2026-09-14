@@ -7,7 +7,7 @@ use crate::workspace_session::PtyBinding;
 use super::authority::TerminalSessionAuthority;
 use super::model::{
     TerminalCreateRequest, TerminalCreateResult, TerminalPresentation, TerminalRestore,
-    TerminalStartupCwdFallback,
+    TerminalScrollbackHistory, TerminalStartupCwdFallback,
 };
 use super::path_provenance::TerminalPathProvenance;
 use super::state::TerminalRecord;
@@ -41,16 +41,16 @@ impl TerminalSessionAuthority {
         &self,
         request: TerminalCreateRequest,
         _guard: &tokio::sync::OwnedMutexGuard<()>,
-        restore_buffer: Option<String>,
+        restore: Option<TerminalScrollbackHistory>,
     ) -> Result<TerminalCreateResult, TerminalSessionError> {
-        self.create_inner(request, false, restore_buffer).await
+        self.create_inner(request, false, restore).await
     }
 
     async fn create_inner(
         &self,
         mut request: TerminalCreateRequest,
         serialize: bool,
-        restore_buffer: Option<String>,
+        restore: Option<TerminalScrollbackHistory>,
     ) -> Result<TerminalCreateResult, TerminalSessionError> {
         let selector = match request.worktree.as_deref() {
             Some(selector) => selector.to_owned(),
@@ -184,9 +184,16 @@ impl TerminalSessionAuthority {
         let mut spawned =
             process::spawn(launch, request.cols, request.rows, self.events.clone()).await?;
         let mut tail = super::tail::TerminalTail::new();
-        if let Some(buffer) = restore_buffer {
-            // Why: persisted scrollback is visible text, never terminal input or replayed attention.
-            let history = format!("{}\n", super::tail_control::plain_text(&buffer));
+        if let Some(history) = restore {
+            // Why: a checkpoint recorded from the daemon's own screen model is already
+            // replayable text with its wrap joins intact, so it seeds the new model
+            // as-is. Everything else is visible text only — the fresh shell must never
+            // receive replayed terminal input or attention.
+            let history = if history.grid.is_some() {
+                history.text
+            } else {
+                format!("{}\n", super::tail_control::plain_text(&history.text))
+            };
             tail.append(&history);
             spawned.start.release_model();
             if !spawned.snapshot_provider.restore(history).await {
@@ -225,7 +232,7 @@ impl TerminalSessionAuthority {
             process_exit_code: None,
             pty_id: pty_id.clone(),
             reader_finished: false,
-            final_history: None,
+            final_checkpoint: None,
             raw_output: std::collections::VecDeque::new(),
             raw_output_bytes: 0,
             rows: request.rows,

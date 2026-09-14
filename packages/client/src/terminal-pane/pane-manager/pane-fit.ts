@@ -19,8 +19,8 @@ import type { ManagedPane, ManagedPaneInternal, ScrollState } from './types'
 
 const MIN_PANE_FIT_WIDTH_PX = 48
 const MIN_PANE_FIT_HEIGHT_PX = 24
-const MIN_PANE_FIT_COLS = 8
-const MIN_PANE_FIT_ROWS = 4
+export const MIN_PANE_FIT_COLS = 8
+export const MIN_PANE_FIT_ROWS = 4
 
 export type SafeFitContinuationHandle = {
   completion: Promise<boolean>

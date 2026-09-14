@@ -10,23 +10,23 @@ const PULL_POLICY_ERROR_PREFIX = 'Pull needs a Git pull policy for divergent bra
 
 const PULL_POLICY_OPTIONS = [
   {
-    labelKey: 'auto.components.right.sidebar.pull.policy.notice.merge',
+    labelKey: 'auto.components.workspacePanel.pull.policy.notice.merge',
     labelFallback: 'Merge',
-    descriptionKey: 'auto.components.right.sidebar.pull.policy.notice.mergeDescription',
+    descriptionKey: 'auto.components.workspacePanel.pull.policy.notice.mergeDescription',
     descriptionFallback: 'Create a merge commit when local and remote both changed.',
     command: 'git config pull.rebase false'
   },
   {
-    labelKey: 'auto.components.right.sidebar.pull.policy.notice.rebase',
+    labelKey: 'auto.components.workspacePanel.pull.policy.notice.rebase',
     labelFallback: 'Rebase',
-    descriptionKey: 'auto.components.right.sidebar.pull.policy.notice.rebaseDescription',
+    descriptionKey: 'auto.components.workspacePanel.pull.policy.notice.rebaseDescription',
     descriptionFallback: 'Replay local commits on top of the remote branch.',
     command: 'git config pull.rebase true'
   },
   {
-    labelKey: 'auto.components.right.sidebar.pull.policy.notice.fastForwardOnly',
+    labelKey: 'auto.components.workspacePanel.pull.policy.notice.fastForwardOnly',
     labelFallback: 'Fast-forward only',
-    descriptionKey: 'auto.components.right.sidebar.pull.policy.notice.fastForwardOnlyDescription',
+    descriptionKey: 'auto.components.workspacePanel.pull.policy.notice.fastForwardOnlyDescription',
     descriptionFallback: 'Only pull when no merge or rebase is needed.',
     command: 'git config pull.ff only'
   }
@@ -75,17 +75,20 @@ export function PullPolicyRemoteActionNotice({
             <div className="flex min-w-0 flex-wrap items-center gap-1.5">
               <span className="text-foreground text-xs font-semibold">
                 {translate(
-                  'auto.components.right.sidebar.pull.policy.notice.title',
+                  'auto.components.workspacePanel.pull.policy.notice.title',
                   'Pull needs a policy'
                 )}
               </span>
               <span className="bg-destructive/10 text-destructive shrink-0 rounded-full px-1.5 py-px text-[10px] leading-4 font-semibold">
-                {translate('auto.components.right.sidebar.pull.policy.notice.diverged', 'Diverged')}
+                {translate(
+                  'auto.components.workspacePanel.pull.policy.notice.diverged',
+                  'Diverged'
+                )}
               </span>
             </div>
             <p className="text-muted-foreground text-[11px] leading-4">
               {translate(
-                'auto.components.right.sidebar.pull.policy.notice.body',
+                'auto.components.workspacePanel.pull.policy.notice.body',
                 'This branch has local and remote commits. Run one command in this worktree, then try Pull or Sync again.'
               )}
             </p>
@@ -117,7 +120,7 @@ export function PullPolicyRemoteActionNotice({
                           size="icon-xs"
                           className="mt-0.5 shrink-0"
                           aria-label={translate(
-                            'auto.components.right.sidebar.pull.policy.notice.copyAria',
+                            'auto.components.workspacePanel.pull.policy.notice.copyAria',
                             'Copy {{value0}} pull policy command',
                             { value0: label.toLowerCase() }
                           )}
@@ -134,11 +137,11 @@ export function PullPolicyRemoteActionNotice({
                     <TooltipContent side="top" sideOffset={4}>
                       {copied
                         ? translate(
-                            'auto.components.right.sidebar.pull.policy.notice.copied',
+                            'auto.components.workspacePanel.pull.policy.notice.copied',
                             'Copied'
                           )
                         : translate(
-                            'auto.components.right.sidebar.pull.policy.notice.copyCommand',
+                            'auto.components.workspacePanel.pull.policy.notice.copyCommand',
                             'Copy command'
                           )}
                     </TooltipContent>

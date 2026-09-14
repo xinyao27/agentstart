@@ -24,7 +24,7 @@ import { getRuntimeEnvironmentIdForWorktree } from '~renderer/worktree/runtime-o
 import { LocalWorkspacePortDetailsDialog } from './local-workspace-port-details-dialog'
 import { LocalWorkspacePortSection } from './local-workspace-port-list'
 import { getLocalWorkspacePortSections } from './local-workspace-port-sections'
-import { RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME } from './right-sidebar-button-styles'
+import { WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME } from './workspace-panel-button-styles'
 
 export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }): React.JSX.Element {
   const activeWorktree = useActiveWorktree()
@@ -69,14 +69,14 @@ export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }):
         const message = error instanceof Error ? error.message : String(error)
         toast.error(
           translate(
-            'auto.components.right.sidebar.PortsPanel.a00f3a2840',
+            'auto.components.workspacePanel.PortsPanel.a00f3a2840',
             'Failed to refresh ports'
           ),
           {
             description:
               message ||
               translate(
-                'auto.components.right.sidebar.PortsPanel.740aca88ab',
+                'auto.components.workspacePanel.PortsPanel.740aca88ab',
                 'Workspace port scan failed.'
               )
           }
@@ -105,7 +105,7 @@ export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }):
     }
     toast.success(
       translate(
-        'auto.components.right.sidebar.PortsPanel.97b562d21d',
+        'auto.components.workspacePanel.PortsPanel.97b562d21d',
         'Stopped process on :{{value0}}',
         { value0: port.port }
       )
@@ -119,7 +119,10 @@ export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }):
     })
     if (!refreshResult.ok) {
       toast.error(
-        translate('auto.components.right.sidebar.PortsPanel.a00f3a2840', 'Failed to refresh ports'),
+        translate(
+          'auto.components.workspacePanel.PortsPanel.a00f3a2840',
+          'Failed to refresh ports'
+        ),
         { description: refreshResult.reason }
       )
     }
@@ -138,7 +141,7 @@ export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }):
     })
     if (!result.ok) {
       toast.error(
-        translate('auto.components.right.sidebar.PortsPanel.98e9a414f8', 'Failed to open browser'),
+        translate('auto.components.workspacePanel.PortsPanel.98e9a414f8', 'Failed to open browser'),
         { description: result.reason }
       )
     }
@@ -165,7 +168,7 @@ export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }):
       {displayScan?.unavailableReason ? (
         <div className="text-muted-foreground border-border border-b px-3 py-2 text-xs">
           {translate(
-            'auto.components.right.sidebar.PortsPanel.f59c783b7a',
+            'auto.components.workspacePanel.PortsPanel.f59c783b7a',
             'Port scan unavailable on {{value0}}: {{value1}}',
             { value0: displayScan.platform, value1: displayScan.unavailableReason }
           )}
@@ -175,15 +178,15 @@ export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }):
           <LocalWorkspacePortSection
             id="active"
             title={translate(
-              'auto.components.right.sidebar.PortsPanel.935dda7718',
+              'auto.components.workspacePanel.PortsPanel.935dda7718',
               'Active Workspace'
             )}
             ports={sections.activePorts}
             emptyText={
               refreshing && !displayScan
-                ? translate('auto.components.right.sidebar.PortsPanel.0d63d94db3', 'Scanning...')
+                ? translate('auto.components.workspacePanel.PortsPanel.0d63d94db3', 'Scanning...')
                 : translate(
-                    'auto.components.right.sidebar.PortsPanel.38b16cfbef',
+                    'auto.components.workspacePanel.PortsPanel.38b16cfbef',
                     'No ports detected'
                   )
             }
@@ -194,7 +197,7 @@ export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }):
           <LocalWorkspacePortSection
             id="other"
             title={translate(
-              'auto.components.right.sidebar.PortsPanel.4db4b5e435',
+              'auto.components.workspacePanel.PortsPanel.4db4b5e435',
               'Other Workspaces'
             )}
             ports={sections.otherWorkspacePorts}
@@ -204,7 +207,7 @@ export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }):
           />
           <LocalWorkspacePortSection
             id="external"
-            title={translate('auto.components.right.sidebar.PortsPanel.d32820d3e2', 'External')}
+            title={translate('auto.components.workspacePanel.PortsPanel.d32820d3e2', 'External')}
             ports={sections.externalPorts}
             collapsed={collapsedSections.external ?? false}
             onToggle={() => toggleSection('external')}
@@ -220,13 +223,13 @@ export function LocalWorkspacePortsPanel({ isVisible }: { isVisible: boolean }):
 
 function PortsHeader({ refreshing, onRefresh }: { refreshing: boolean; onRefresh: () => void }) {
   const refreshLabel = translate(
-    'auto.components.right.sidebar.PortsPanel.7822e3edc6',
+    'auto.components.workspacePanel.PortsPanel.7822e3edc6',
     'Refresh Ports'
   )
   return (
     <div className="border-border flex items-center justify-between border-b px-3 py-2">
       <span className="text-muted-foreground text-[11px] font-semibold tracking-wider uppercase">
-        {translate('auto.components.right.sidebar.PortsPanel.6bc058dbe1', 'Ports')}
+        {translate('auto.components.workspacePanel.PortsPanel.6bc058dbe1', 'Ports')}
       </span>
       <Tooltip>
         <TooltipTrigger
@@ -235,7 +238,7 @@ function PortsHeader({ refreshing, onRefresh }: { refreshing: boolean; onRefresh
               type="button"
               variant="outline"
               size="icon-xs"
-              className={RIGHT_SIDEBAR_BUTTON_SURFACE_CLASS_NAME}
+              className={WORKSPACE_PANEL_BUTTON_SURFACE_CLASS_NAME}
               onClick={onRefresh}
               disabled={refreshing}
               aria-label={refreshLabel}
@@ -257,7 +260,7 @@ function NoWorkspaceSelected(): React.JSX.Element {
     <div className="text-muted-foreground flex h-full flex-col items-center justify-center px-4 text-center">
       <Server size={32} className="mb-3 opacity-50" />
       <p className="text-sm">
-        {translate('auto.components.right.sidebar.PortsPanel.c1b115c375', 'No workspace selected')}
+        {translate('auto.components.workspacePanel.PortsPanel.c1b115c375', 'No workspace selected')}
       </p>
     </div>
   )
@@ -269,7 +272,7 @@ function NoLocalPorts(): React.JSX.Element {
       <Server size={32} className="mb-3 opacity-50" />
       <p className="text-sm">
         {translate(
-          'auto.components.right.sidebar.PortsPanel.a2a9fc6899',
+          'auto.components.workspacePanel.PortsPanel.a2a9fc6899',
           'No local ports detected'
         )}
       </p>

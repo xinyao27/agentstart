@@ -4,6 +4,7 @@ import {
   type KeybindingInput
 } from '@agentstart/protocol/keybindings'
 import { useEffect } from 'react'
+import { activeViewFor } from '~renderer/application-shell/state/visible-surface'
 import { getShortcutPlatform } from '~renderer/keyboard-input/shortcut-platform'
 import {
   ModifierDoubleTapDetector,
@@ -42,7 +43,7 @@ export function useTabBarQuickCommandsShortcut({
   const terminalShortcutPolicy = useAppStore(
     (s) => s.settings?.terminalShortcutPolicy ?? 'agentstart-first'
   )
-  const activeView = useAppStore((s) => s.activeView)
+  const activeView = useAppStore((s) => activeViewFor(s))
 
   // Why: this hook only runs in the focused tab group's menu component, so the
   // listener naturally scopes to the active group with no extra coordination.

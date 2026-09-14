@@ -76,7 +76,7 @@ export function SessionInlineDetails({
           <SessionReceiptSection
             icon={<MessageSquare className="size-3" />}
             label={translate(
-              'auto.components.right.sidebar.AiVaultSessionDetails.latestTurns',
+              'auto.components.workspacePanel.AiVaultSessionDetails.latestTurns',
               'Latest turns'
             )}
           >
@@ -93,7 +93,7 @@ export function SessionInlineDetails({
             ) : (
               <SessionDetailEmptyState
                 message={translate(
-                  'auto.components.right.sidebar.AiVaultSessionDetails.noPreviewAvailable',
+                  'auto.components.workspacePanel.AiVaultSessionDetails.noPreviewAvailable',
                   'No conversation preview available'
                 )}
               />
@@ -113,7 +113,7 @@ export function SessionInlineDetails({
           <SessionReceiptSection
             icon={<FolderGit2 className="size-3" />}
             label={translate(
-              'auto.components.right.sidebar.AiVaultSessionDetails.worktree',
+              'auto.components.workspacePanel.AiVaultSessionDetails.worktree',
               'Worktree'
             )}
           >
@@ -158,7 +158,7 @@ export function SessionInlineDetails({
             >
               <Play className="size-3.5" />
               {translate(
-                'auto.components.right.sidebar.AiVaultSessionDetails.resumeInWorktree',
+                'auto.components.workspacePanel.AiVaultSessionDetails.resumeInWorktree',
                 'Resume in Worktree'
               )}
             </Button>
@@ -178,7 +178,7 @@ export function SessionInlineDetails({
             >
               <Play className="size-3.5" />
               {translate(
-                'auto.components.right.sidebar.AiVaultSessionRow.resumeInNewTab',
+                'auto.components.workspacePanel.AiVaultSessionRow.resumeInNewTab',
                 'Resume in New Tab'
               )}
             </Button>
@@ -196,7 +196,10 @@ export function SessionInlineDetails({
               className="text-muted-foreground h-7 shrink-0 px-2.5 text-[11px]"
             >
               <FileJson className="size-3.5" />
-              {translate('auto.components.right.sidebar.AiVaultSessionDetails.viewLog', 'View Log')}
+              {translate(
+                'auto.components.workspacePanel.AiVaultSessionDetails.viewLog',
+                'View Log'
+              )}
             </Button>
           ) : null}
         </div>
@@ -332,7 +335,7 @@ export function SessionTime({
     return (
       <span className={cn('shrink-0 text-[11px] text-muted-foreground', className)}>
         {translate(
-          'auto.components.right.sidebar.AiVaultSessionDetails.unknownTime',
+          'auto.components.workspacePanel.AiVaultSessionDetails.unknownTime',
           'Unknown time'
         )}
       </span>
@@ -350,12 +353,12 @@ export function SessionTime({
 function formatTimeAgo(timestamp: number): string {
   const diffMs = Date.now() - timestamp
   if (diffMs < 60_000) {
-    return translate('auto.components.right.sidebar.AiVaultSessionDetails.justNow', 'Just now')
+    return translate('auto.components.workspacePanel.AiVaultSessionDetails.justNow', 'Just now')
   }
   const minutes = Math.floor(diffMs / 60_000)
   if (minutes < 60) {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionDetails.minutesAgo',
+      'auto.components.workspacePanel.AiVaultSessionDetails.minutesAgo',
       '{{value0}}m ago',
       { value0: minutes }
     )
@@ -363,7 +366,7 @@ function formatTimeAgo(timestamp: number): string {
   const hours = Math.floor(minutes / 60)
   if (hours < 24) {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionDetails.hoursAgo',
+      'auto.components.workspacePanel.AiVaultSessionDetails.hoursAgo',
       '{{value0}}h ago',
       { value0: hours }
     )
@@ -371,7 +374,7 @@ function formatTimeAgo(timestamp: number): string {
   const days = Math.floor(hours / 24)
   if (days < 30) {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionDetails.daysAgo',
+      'auto.components.workspacePanel.AiVaultSessionDetails.daysAgo',
       '{{value0}}d ago',
       { value0: days }
     )
@@ -379,13 +382,13 @@ function formatTimeAgo(timestamp: number): string {
   const months = Math.floor(days / 30)
   if (months < 12) {
     return translate(
-      'auto.components.right.sidebar.AiVaultSessionDetails.monthsAgo',
+      'auto.components.workspacePanel.AiVaultSessionDetails.monthsAgo',
       '{{value0}}mo ago',
       { value0: months }
     )
   }
   return translate(
-    'auto.components.right.sidebar.AiVaultSessionDetails.yearsAgo',
+    'auto.components.workspacePanel.AiVaultSessionDetails.yearsAgo',
     '{{value0}}y ago',
     { value0: Math.floor(months / 12) }
   )
@@ -393,16 +396,16 @@ function formatTimeAgo(timestamp: number): string {
 
 function conversationRoleLabel(role: AiVaultSession['previewMessages'][number]['role']): string {
   if (role === 'user') {
-    return translate('auto.components.right.sidebar.AiVaultSessionDetails.userRole', 'You')
+    return translate('auto.components.workspacePanel.AiVaultSessionDetails.userRole', 'You')
   }
   if (role === 'assistant') {
-    return translate('auto.components.right.sidebar.AiVaultSessionDetails.agentRole', 'Agent')
+    return translate('auto.components.workspacePanel.AiVaultSessionDetails.agentRole', 'Agent')
   }
   if (role === 'tool') {
-    return translate('auto.components.right.sidebar.AiVaultSessionDetails.toolRole', 'Tool')
+    return translate('auto.components.workspacePanel.AiVaultSessionDetails.toolRole', 'Tool')
   }
   if (role === 'system') {
-    return translate('auto.components.right.sidebar.AiVaultSessionDetails.systemRole', 'System')
+    return translate('auto.components.workspacePanel.AiVaultSessionDetails.systemRole', 'System')
   }
-  return translate('auto.components.right.sidebar.AiVaultSessionDetails.sessionRole', 'Session')
+  return translate('auto.components.workspacePanel.AiVaultSessionDetails.sessionRole', 'Session')
 }

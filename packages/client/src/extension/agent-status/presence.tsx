@@ -1,18 +1,20 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
-import { agentPhaseLabel } from '~renderer/agent-session/phase'
 import { useAgentPresence } from '~renderer/agent-session/presence'
 import { translate } from '~renderer/i18n/i18n'
 import faviconImage from '~renderer/public/favicon.png?inline'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
+import { useActiveWorktree } from '~renderer/store/selectors'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
 import { getExtensionHostNavigation } from '../navigation'
 import { terminalsQuery } from '../runtime/queries'
 import { confirmDangerousOperation } from '../security/passkey'
+import { composeDocumentTitle } from './document-title'
 
 export function AgentPresence(): null {
   const terminals = useQuery(terminalsQuery)
+  const worktreeName = useActiveWorktree()?.displayName ?? null
   const projectId = new URLSearchParams(window.location.search).get('project')
   const presence = useAgentPresence(projectId)
   const phase = presence.phase
@@ -52,9 +54,11 @@ export function AgentPresence(): null {
     }
     publishPresence()
     const heartbeat = window.setInterval(publishPresence, 15_000)
-    document.title = phase
-      ? `${agentPhaseLabel(phase)} · ${translate('extension.productName', 'AgentStart')}`
-      : translate('extension.productName', 'AgentStart')
+    document.title = composeDocumentTitle({
+      phase,
+      productName: translate('extension.productName', 'AgentStart'),
+      worktreeName
+    })
     const existingFavicon = document.head.querySelector<HTMLLinkElement>('link[rel="icon"]')
     const favicon =
       phase === 'waiting-decision' ? (existingFavicon ?? createFavicon()) : existingFavicon
@@ -74,7 +78,7 @@ export function AgentPresence(): null {
         favicon.setAttribute('href', previousFavicon)
       }
     }
-  }, [activeCount, activeProjectKey, activeTerminalKey, phase, waiting, waitingCount])
+  }, [activeCount, activeProjectKey, activeTerminalKey, phase, waiting, waitingCount, worktreeName])
   useEffect(() => {
     const capabilities = getExtensionBrowserCapabilities()
     void capabilities.consumePendingAgentApproval().then(async (terminal) => {

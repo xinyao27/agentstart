@@ -36,6 +36,7 @@ import {
 import { TabCloseButton } from './tab-close-button'
 import { TabLabel } from './tab-label'
 import { useTabStripPointerActivation } from './tab-strip-pointer-activation'
+import { TabActiveSurface, TabHoverSurface } from './tab-surfaces'
 import { TAB_CONTAINER_WIDTH_CLASSES } from './tab-width-rules'
 import { TabWorkspaceLayoutMenuSection } from './tab-workspace-layout-menu-section'
 
@@ -212,6 +213,7 @@ export default function BrowserTab({
         }
       }}
     >
+      {isActive ? <TabActiveSurface /> : <TabHoverSurface />}
       {/* Why: the browser tab icon is the only non-terminal, non-editor
           surface in the tab strip. Coloring the Globe blue (matching the
           in-app browser's identity and the default tab insertion bar)

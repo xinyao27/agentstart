@@ -65,18 +65,18 @@ export function CompareUnavailable({
       <div className="text-foreground font-medium">
         {summary.status === 'error'
           ? translate(
-              'auto.components.right.sidebar.SourceControl.97d8b03cdf',
+              'auto.components.workspacePanel.SourceControl.97d8b03cdf',
               'Branch compare failed'
             )
           : translate(
-              'auto.components.right.sidebar.SourceControl.715d229c86',
+              'auto.components.workspacePanel.SourceControl.715d229c86',
               'Branch compare unavailable'
             )}
       </div>
       <div className="text-muted-foreground mt-1">
         {summary.errorMessage ??
           translate(
-            'auto.components.right.sidebar.SourceControl.b6922abb13',
+            'auto.components.workspacePanel.SourceControl.b6922abb13',
             'Unable to load branch compare.'
           )}
       </div>
@@ -90,12 +90,15 @@ export function CompareUnavailable({
             onClick={onChangeBaseRef}
           >
             <Settings2 className="size-3.5" />
-            {translate('auto.components.right.sidebar.SourceControl.476b77745b', 'Change Base Ref')}
+            {translate(
+              'auto.components.workspacePanel.SourceControl.476b77745b',
+              'Change Base Ref'
+            )}
           </Button>
         )}
         <Button type="button" variant="ghost" size="sm" className="h-7 text-xs" onClick={onRetry}>
           <RefreshCw className="size-3.5" />
-          {translate('auto.components.right.sidebar.SourceControl.286dbda4d6', 'Retry')}
+          {translate('auto.components.workspacePanel.SourceControl.286dbda4d6', 'Retry')}
         </Button>
       </div>
     </div>

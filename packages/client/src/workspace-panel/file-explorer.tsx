@@ -1,17 +1,14 @@
 import React from 'react'
 
 import { FileExplorerFilesMemo } from './file-explorer/files'
-import {
-  LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
-  type RightSidebarPanelSource
-} from './right-sidebar-panel-source'
+import { LOCAL_WORKSPACE_PANEL_SOURCE, type WorkspacePanelSource } from './workspace-panel-source'
 
 function FileExplorer({
-  source = LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
+  source = LOCAL_WORKSPACE_PANEL_SOURCE,
   isVisible = true,
   workspacePanelTabId
 }: {
-  source?: RightSidebarPanelSource
+  source?: WorkspacePanelSource
   isVisible?: boolean
   workspacePanelTabId?: string
 }): React.JSX.Element {

@@ -17,7 +17,7 @@ import { Button } from '~renderer/ui/button'
 import { Label } from '~renderer/ui/label'
 import { Slider } from '~renderer/ui/slider'
 
-import { SettingsSubsectionHeader, SettingsSwitchRow } from '../form-controls'
+import { SettingsSwitchRow } from '../form-controls'
 import { matchesSettingsSearch } from '../search'
 import { SearchableSetting } from '../searchable-setting'
 import { getTerminalRightClickToPasteSearchEntry } from './windows-search'
@@ -116,163 +116,154 @@ export function TerminalInteractionSection({
         'Right-click pastes the clipboard. Ctrl+right-click opens the context menu.'
       )
   return (
-    <section key="pane-interaction" className="space-y-3">
-      <SettingsSubsectionHeader
-        title={translate(
-          'auto.components.settings.TerminalPane.45721f3e67',
-          'Terminal Interaction'
-        )}
+    <div className="divide-border/40 divide-y">
+      <SearchableSetting
+        title={translate('auto.components.settings.TerminalPane.scrollSpeed.title', 'Scroll Speed')}
         description={translate(
-          'auto.components.settings.TerminalPane.96fe15def8',
-          'Mouse and clipboard behavior for terminal panes.'
+          'auto.components.settings.TerminalPane.scrollSpeed.description',
+          'Tune normal terminal scrollback, fast modifier scrolling, and full-screen TUI wheel speed.'
         )}
-      />
-
-      <div className="divide-border/40 divide-y">
-        <SearchableSetting
-          title={translate(
-            'auto.components.settings.TerminalPane.scrollSpeed.title',
-            'Scroll Speed'
-          )}
-          description={translate(
-            'auto.components.settings.TerminalPane.scrollSpeed.description',
-            'Tune normal terminal scrollback, fast modifier scrolling, and full-screen TUI wheel speed.'
-          )}
-          keywords={[
-            'terminal',
-            'scroll',
-            'scrolling',
-            'speed',
-            'wheel',
-            'mouse',
-            'trackpad',
-            'tui',
-            'opencode',
-            'fast scroll'
-          ]}
-        >
-          <div className="space-y-3 py-3">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div className="space-y-0.5">
-                <Label>
-                  {translate(
-                    'auto.components.settings.TerminalPane.scrollSpeed.title',
-                    'Scroll Speed'
-                  )}
-                </Label>
-                <p className="text-muted-foreground max-w-xl text-xs">
-                  {translate(
-                    'auto.components.settings.TerminalPane.scrollSpeed.helper',
-                    'Adjust how wheel input feels in scrollback and in mouse-aware terminal apps.'
-                  )}
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-1.5"
-                onClick={() =>
-                  updateSettings({
-                    terminalScrollSensitivity: DEFAULT_TERMINAL_SCROLL_SENSITIVITY,
-                    terminalFastScrollSensitivity: DEFAULT_TERMINAL_FAST_SCROLL_SENSITIVITY,
-                    terminalTuiScrollSensitivity: TERMINAL_TUI_MOUSE_WHEEL_MULTIPLIER
-                  })
-                }
-              >
-                <RotateCcw className="size-3.5" />
-                {translate('auto.components.settings.TerminalPane.scrollSpeed.reset', 'Reset')}
-              </Button>
+        keywords={[
+          'terminal',
+          'scroll',
+          'scrolling',
+          'speed',
+          'wheel',
+          'mouse',
+          'trackpad',
+          'tui',
+          'opencode',
+          'fast scroll'
+        ]}
+      >
+        <div className="space-y-3 py-3">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="space-y-0.5">
+              <Label>
+                {translate(
+                  'auto.components.settings.TerminalPane.scrollSpeed.title',
+                  'Scroll Speed'
+                )}
+              </Label>
+              <p className="text-muted-foreground max-w-xl text-xs">
+                {translate(
+                  'auto.components.settings.TerminalPane.scrollSpeed.helper',
+                  'Adjust how wheel input feels in scrollback and in mouse-aware terminal apps.'
+                )}
+              </p>
             </div>
-            <div className="grid gap-3 md:grid-cols-3">
-              <ScrollSpeedSlider
-                label={translate(
-                  'auto.components.settings.TerminalPane.scrollSpeed.normal',
-                  'Normal'
-                )}
-                description={translate(
-                  'auto.components.settings.TerminalPane.scrollSpeed.normalDescription',
-                  'Scrollback wheel multiplier.'
-                )}
-                value={normalizeTerminalScrollSensitivity(settings.terminalScrollSensitivity)}
-                min={0.5}
-                max={3}
-                step={0.05}
-                suffix="x"
-                onChange={(value) =>
-                  updateSettings({
-                    terminalScrollSensitivity: normalizeTerminalScrollSensitivity(value)
-                  })
-                }
-              />
-              <ScrollSpeedSlider
-                label={translate('auto.components.settings.TerminalPane.scrollSpeed.fast', 'Fast')}
-                description={translate(
-                  'auto.components.settings.TerminalPane.scrollSpeed.fastDescription',
-                  'Extra multiplier while scrolling with a modifier key.'
-                )}
-                value={normalizeTerminalFastScrollSensitivity(
-                  settings.terminalFastScrollSensitivity
-                )}
-                min={1}
-                max={10}
-                step={0.5}
-                suffix="x"
-                onChange={(value) =>
-                  updateSettings({
-                    terminalFastScrollSensitivity: normalizeTerminalFastScrollSensitivity(value)
-                  })
-                }
-              />
-              <ScrollSpeedSlider
-                label={translate('auto.components.settings.TerminalPane.scrollSpeed.tui', 'TUI')}
-                description={translate(
-                  'auto.components.settings.TerminalPane.scrollSpeed.tuiDescription',
-                  'Discrete wheel reports for full-screen terminal apps.'
-                )}
-                value={normalizeTerminalTuiMouseWheelMultiplier(
-                  settings.terminalTuiScrollSensitivity
-                )}
-                min={1}
-                max={10}
-                step={1}
-                suffix="x"
-                onChange={(value) =>
-                  updateSettings({
-                    terminalTuiScrollSensitivity: normalizeTerminalTuiMouseWheelMultiplier(value)
-                  })
-                }
-              />
-            </div>
-          </div>
-        </SearchableSetting>
-
-        {matchesSettingsSearch(searchQuery, getTerminalRightClickToPasteSearchEntry()) ? (
-          <SearchableSetting
-            title={translate(
-              'auto.components.settings.TerminalPane.9c178cf8aa',
-              'Right-click to paste'
-            )}
-            description={rightClickPasteDescription}
-            keywords={['terminal', 'right click', 'paste', 'context menu']}
-          >
-            <SettingsSwitchRow
-              label={translate(
-                'auto.components.settings.TerminalPane.9c178cf8aa',
-                'Right-click to paste'
-              )}
-              description={rightClickPasteSwitchDescription}
-              checked={settings.terminalRightClickToPaste}
-              onChange={() =>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-1.5"
+              onClick={() =>
                 updateSettings({
-                  terminalRightClickToPaste: !settings.terminalRightClickToPaste
+                  terminalScrollSensitivity: DEFAULT_TERMINAL_SCROLL_SENSITIVITY,
+                  terminalFastScrollSensitivity: DEFAULT_TERMINAL_FAST_SCROLL_SENSITIVITY,
+                  terminalTuiScrollSensitivity: TERMINAL_TUI_MOUSE_WHEEL_MULTIPLIER
+                })
+              }
+            >
+              <RotateCcw className="size-3.5" />
+              {translate('auto.components.settings.TerminalPane.scrollSpeed.reset', 'Reset')}
+            </Button>
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            <ScrollSpeedSlider
+              label={translate(
+                'auto.components.settings.TerminalPane.scrollSpeed.normal',
+                'Normal'
+              )}
+              description={translate(
+                'auto.components.settings.TerminalPane.scrollSpeed.normalDescription',
+                'Scrollback wheel multiplier.'
+              )}
+              value={normalizeTerminalScrollSensitivity(settings.terminalScrollSensitivity)}
+              min={0.5}
+              max={3}
+              step={0.05}
+              suffix="x"
+              onChange={(value) =>
+                updateSettings({
+                  terminalScrollSensitivity: normalizeTerminalScrollSensitivity(value)
                 })
               }
             />
-          </SearchableSetting>
-        ) : null}
+            <ScrollSpeedSlider
+              label={translate('auto.components.settings.TerminalPane.scrollSpeed.fast', 'Fast')}
+              description={translate(
+                'auto.components.settings.TerminalPane.scrollSpeed.fastDescription',
+                'Extra multiplier while scrolling with a modifier key.'
+              )}
+              value={normalizeTerminalFastScrollSensitivity(settings.terminalFastScrollSensitivity)}
+              min={1}
+              max={10}
+              step={0.5}
+              suffix="x"
+              onChange={(value) =>
+                updateSettings({
+                  terminalFastScrollSensitivity: normalizeTerminalFastScrollSensitivity(value)
+                })
+              }
+            />
+            <ScrollSpeedSlider
+              label={translate('auto.components.settings.TerminalPane.scrollSpeed.tui', 'TUI')}
+              description={translate(
+                'auto.components.settings.TerminalPane.scrollSpeed.tuiDescription',
+                'Discrete wheel reports for full-screen terminal apps.'
+              )}
+              value={normalizeTerminalTuiMouseWheelMultiplier(
+                settings.terminalTuiScrollSensitivity
+              )}
+              min={1}
+              max={10}
+              step={1}
+              suffix="x"
+              onChange={(value) =>
+                updateSettings({
+                  terminalTuiScrollSensitivity: normalizeTerminalTuiMouseWheelMultiplier(value)
+                })
+              }
+            />
+          </div>
+        </div>
+      </SearchableSetting>
 
+      {matchesSettingsSearch(searchQuery, getTerminalRightClickToPasteSearchEntry()) ? (
         <SearchableSetting
           title={translate(
+            'auto.components.settings.TerminalPane.9c178cf8aa',
+            'Right-click to paste'
+          )}
+          description={rightClickPasteDescription}
+          keywords={['terminal', 'right click', 'paste', 'context menu']}
+        >
+          <SettingsSwitchRow
+            label={translate(
+              'auto.components.settings.TerminalPane.9c178cf8aa',
+              'Right-click to paste'
+            )}
+            description={rightClickPasteSwitchDescription}
+            checked={settings.terminalRightClickToPaste}
+            onChange={() =>
+              updateSettings({
+                terminalRightClickToPaste: !settings.terminalRightClickToPaste
+              })
+            }
+          />
+        </SearchableSetting>
+      ) : null}
+
+      <SearchableSetting
+        title={translate('auto.components.settings.TerminalPane.8eefeaa3da', 'Focus Follows Mouse')}
+        description={translate(
+          'auto.components.settings.TerminalPane.9129b7e805',
+          'Hovering a terminal pane activates it without needing to click.'
+        )}
+        keywords={['focus', 'follows', 'mouse', 'hover', 'pane', 'ghostty', 'active']}
+      >
+        <SettingsSwitchRow
+          label={translate(
             'auto.components.settings.TerminalPane.8eefeaa3da',
             'Focus Follows Mouse'
           )}
@@ -280,103 +271,91 @@ export function TerminalInteractionSection({
             'auto.components.settings.TerminalPane.9129b7e805',
             'Hovering a terminal pane activates it without needing to click.'
           )}
-          keywords={['focus', 'follows', 'mouse', 'hover', 'pane', 'ghostty', 'active']}
-        >
-          <SettingsSwitchRow
-            label={translate(
-              'auto.components.settings.TerminalPane.8eefeaa3da',
-              'Focus Follows Mouse'
-            )}
-            description={translate(
-              'auto.components.settings.TerminalPane.9129b7e805',
-              'Hovering a terminal pane activates it without needing to click.'
-            )}
-            checked={settings.terminalFocusFollowsMouse}
-            onChange={() =>
-              updateSettings({
-                terminalFocusFollowsMouse: !settings.terminalFocusFollowsMouse
-              })
-            }
-          />
-        </SearchableSetting>
+          checked={settings.terminalFocusFollowsMouse}
+          onChange={() =>
+            updateSettings({
+              terminalFocusFollowsMouse: !settings.terminalFocusFollowsMouse
+            })
+          }
+        />
+      </SearchableSetting>
 
-        <SearchableSetting
-          title={translate('auto.components.settings.TerminalPane.902f5dee1f', 'Copy on Select')}
+      <SearchableSetting
+        title={translate('auto.components.settings.TerminalPane.902f5dee1f', 'Copy on Select')}
+        description={translate(
+          'auto.components.settings.TerminalPane.4729c645fc',
+          'Automatically copy terminal selections to the clipboard.'
+        )}
+        keywords={[
+          'clipboard',
+          'copy',
+          'select',
+          'selection',
+          'auto',
+          'automatic',
+          'x11',
+          'linux',
+          'gnome',
+          'paste'
+        ]}
+      >
+        <SettingsSwitchRow
+          label={translate('auto.components.settings.TerminalPane.902f5dee1f', 'Copy on Select')}
           description={translate(
             'auto.components.settings.TerminalPane.4729c645fc',
             'Automatically copy terminal selections to the clipboard.'
           )}
-          keywords={[
-            'clipboard',
-            'copy',
-            'select',
-            'selection',
-            'auto',
-            'automatic',
-            'x11',
-            'linux',
-            'gnome',
-            'paste'
-          ]}
-        >
-          <SettingsSwitchRow
-            label={translate('auto.components.settings.TerminalPane.902f5dee1f', 'Copy on Select')}
-            description={translate(
-              'auto.components.settings.TerminalPane.4729c645fc',
-              'Automatically copy terminal selections to the clipboard.'
-            )}
-            checked={settings.terminalClipboardOnSelect}
-            onChange={() =>
-              updateSettings({
-                terminalClipboardOnSelect: !settings.terminalClipboardOnSelect
-              })
-            }
-          />
-        </SearchableSetting>
+          checked={settings.terminalClipboardOnSelect}
+          onChange={() =>
+            updateSettings({
+              terminalClipboardOnSelect: !settings.terminalClipboardOnSelect
+            })
+          }
+        />
+      </SearchableSetting>
 
-        <SearchableSetting
-          id={OSC52_CLIPBOARD_SETTING_ID}
-          title={translate(
+      <SearchableSetting
+        id={OSC52_CLIPBOARD_SETTING_ID}
+        title={translate(
+          'auto.components.settings.TerminalPane.3338dcf8c1',
+          'Allow TUI Clipboard Writes (OSC 52)'
+        )}
+        description={translate(
+          'auto.components.settings.TerminalPane.69c64a479c',
+          'Let Grok, tmux, Neovim, and fzf copy to the system clipboard over the PTY (including over SSH).'
+        )}
+        keywords={[
+          'osc 52',
+          'osc52',
+          'clipboard',
+          'tmux',
+          'neovim',
+          'nvim',
+          'fzf',
+          'grok',
+          'ssh',
+          'remote',
+          'copy',
+          'paste'
+        ]}
+      >
+        <SettingsSwitchRow
+          label={translate(
             'auto.components.settings.TerminalPane.3338dcf8c1',
             'Allow TUI Clipboard Writes (OSC 52)'
           )}
           description={translate(
-            'auto.components.settings.TerminalPane.69c64a479c',
-            'Let Grok, tmux, Neovim, and fzf copy to the system clipboard over the PTY (including over SSH).'
+            'auto.components.settings.TerminalPane.6e6480a7df',
+            'Let programs in the terminal (Grok, tmux, Neovim, fzf, SSH) copy to your system clipboard.'
           )}
-          keywords={[
-            'osc 52',
-            'osc52',
-            'clipboard',
-            'tmux',
-            'neovim',
-            'nvim',
-            'fzf',
-            'grok',
-            'ssh',
-            'remote',
-            'copy',
-            'paste'
-          ]}
-        >
-          <SettingsSwitchRow
-            label={translate(
-              'auto.components.settings.TerminalPane.3338dcf8c1',
-              'Allow TUI Clipboard Writes (OSC 52)'
-            )}
-            description={translate(
-              'auto.components.settings.TerminalPane.6e6480a7df',
-              'Let programs in the terminal (Grok, tmux, Neovim, fzf, SSH) copy to your system clipboard.'
-            )}
-            checked={settings.terminalAllowOsc52Clipboard}
-            onChange={() =>
-              updateSettings({
-                terminalAllowOsc52Clipboard: !settings.terminalAllowOsc52Clipboard
-              })
-            }
-          />
-        </SearchableSetting>
-      </div>
-    </section>
+          checked={settings.terminalAllowOsc52Clipboard}
+          onChange={() =>
+            updateSettings({
+              terminalAllowOsc52Clipboard: !settings.terminalAllowOsc52Clipboard
+            })
+          }
+        />
+      </SearchableSetting>
+    </div>
   )
 }

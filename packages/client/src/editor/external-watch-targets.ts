@@ -16,9 +16,9 @@ export type EditorExternalWatchTargetState = Pick<
   | 'repos'
   | 'activeWorktreeId'
   | 'settings'
-  | 'rightSidebarOpen'
-  | 'rightSidebarTab'
-  | 'rightSidebarExplorerView'
+  | 'workspacePanelOpen'
+  | 'workspacePanelTab'
+  | 'workspacePanelExplorerView'
   | 'gitStatusHugeByWorktree'
 >
 
@@ -27,9 +27,9 @@ let cachedWorktreesByRepo: AppState['worktreesByRepo'] | null = null
 let cachedRepos: AppState['repos'] | null = null
 let cachedActiveWorktreeId: string | null = null
 let cachedRuntimeEnvironmentId: string | undefined
-let cachedRightSidebarOpen: boolean | null = null
-let cachedRightSidebarTab: AppState['rightSidebarTab'] | null = null
-let cachedRightSidebarExplorerView: AppState['rightSidebarExplorerView'] | null = null
+let cachedWorkspacePanelOpen: boolean | null = null
+let cachedWorkspacePanelTab: AppState['workspacePanelTab'] | null = null
+let cachedWorkspacePanelExplorerView: AppState['workspacePanelExplorerView'] | null = null
 let cachedGitStatusHugeByWorktree: AppState['gitStatusHugeByWorktree'] | null = null
 let cachedSnapshot: WatchedTargetsSnapshot = { targets: [], targetsKey: '' }
 
@@ -106,9 +106,9 @@ function addSidebarWatchOwner(
     !!worktreeId && !!repo && isGitRepoKind(repo) && !state.gitStatusHugeByWorktree[worktreeId]
   const needsWatch =
     worktreeId !== null &&
-    state.rightSidebarOpen &&
-    ((state.rightSidebarTab === 'explorer' && state.rightSidebarExplorerView === 'files') ||
-      (state.rightSidebarTab === 'source-control' && canWatchSourceControl))
+    state.workspacePanelOpen &&
+    ((state.workspacePanelTab === 'explorer' && state.workspacePanelExplorerView === 'files') ||
+      (state.workspacePanelTab === 'source-control' && canWatchSourceControl))
   if (!needsWatch) {
     return
   }
@@ -130,9 +130,9 @@ function isCachedState(
     cachedRepos === state.repos &&
     cachedActiveWorktreeId === state.activeWorktreeId &&
     cachedRuntimeEnvironmentId === runtimeEnvironmentId &&
-    cachedRightSidebarOpen === state.rightSidebarOpen &&
-    cachedRightSidebarTab === state.rightSidebarTab &&
-    cachedRightSidebarExplorerView === state.rightSidebarExplorerView &&
+    cachedWorkspacePanelOpen === state.workspacePanelOpen &&
+    cachedWorkspacePanelTab === state.workspacePanelTab &&
+    cachedWorkspacePanelExplorerView === state.workspacePanelExplorerView &&
     cachedGitStatusHugeByWorktree === state.gitStatusHugeByWorktree
   )
 }
@@ -146,8 +146,8 @@ function updateCache(
   cachedRepos = state.repos
   cachedActiveWorktreeId = state.activeWorktreeId
   cachedRuntimeEnvironmentId = runtimeEnvironmentId
-  cachedRightSidebarOpen = state.rightSidebarOpen
-  cachedRightSidebarTab = state.rightSidebarTab
-  cachedRightSidebarExplorerView = state.rightSidebarExplorerView
+  cachedWorkspacePanelOpen = state.workspacePanelOpen
+  cachedWorkspacePanelTab = state.workspacePanelTab
+  cachedWorkspacePanelExplorerView = state.workspacePanelExplorerView
   cachedGitStatusHugeByWorktree = state.gitStatusHugeByWorktree
 }

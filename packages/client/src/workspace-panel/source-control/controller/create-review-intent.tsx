@@ -88,7 +88,7 @@ export function useSourceControlCreateReviewIntent(
     setCreatePrIntentNoticeForWorktree(token.worktreeId, {
       tone: 'muted',
       message: translate(
-        'auto.components.right.sidebar.SourceControl.d37e68f61d',
+        'auto.components.workspacePanel.SourceControl.d37e68f61d',
         'Preparing branch for review…'
       )
     })
@@ -141,7 +141,7 @@ export function useSourceControlCreateReviewIntent(
           setCreatePrIntentNoticeForWorktree(token.worktreeId, {
             tone: 'muted',
             message: translate(
-              'auto.components.right.sidebar.SourceControl.createPrIntentFastForwarding',
+              'auto.components.workspacePanel.SourceControl.createPrIntentFastForwarding',
               'Updating branch…'
             )
           })
@@ -154,7 +154,7 @@ export function useSourceControlCreateReviewIntent(
         setCreatePrIntentNoticeForWorktree(token.worktreeId, {
           tone: 'destructive',
           message: translate(
-            'auto.components.right.sidebar.SourceControl.createPrIntentRemoteFailed',
+            'auto.components.workspacePanel.SourceControl.createPrIntentRemoteFailed',
             'Could not update the remote branch. Retry Create PR.'
           )
         })
@@ -170,7 +170,7 @@ export function useSourceControlCreateReviewIntent(
           setCreatePrIntentNoticeForWorktree(token.worktreeId, {
             tone: 'muted',
             message: translate(
-              'auto.components.right.sidebar.SourceControl.8d8f5c6c94',
+              'auto.components.workspacePanel.SourceControl.8d8f5c6c94',
               'Generating commit message…'
             )
           })
@@ -183,8 +183,8 @@ export function useSourceControlCreateReviewIntent(
               tone: generated.reason === 'settings' ? 'muted' : 'destructive',
               message: translate(
                 generated.reason === 'settings'
-                  ? 'auto.components.right.sidebar.SourceControl.createPrIntentConfigureAi'
-                  : 'auto.components.right.sidebar.SourceControl.createPrIntentGenerateFailed',
+                  ? 'auto.components.workspacePanel.SourceControl.createPrIntentConfigureAi'
+                  : 'auto.components.workspacePanel.SourceControl.createPrIntentGenerateFailed',
                 generated.reason === 'settings'
                   ? 'Add a commit message or configure Source Control AI settings.'
                   : 'Could not generate a commit message. Add one and retry.'
@@ -201,7 +201,7 @@ export function useSourceControlCreateReviewIntent(
             setCreatePrIntentNoticeForWorktree(token.worktreeId, {
               tone: 'muted',
               message: translate(
-                'auto.components.right.sidebar.SourceControl.fda060d6ce',
+                'auto.components.workspacePanel.SourceControl.fda060d6ce',
                 'Review the commit message, then retry Create PR.'
               )
             })
@@ -214,7 +214,7 @@ export function useSourceControlCreateReviewIntent(
         setCreatePrIntentNoticeForWorktree(token.worktreeId, {
           tone: 'muted',
           message: translate(
-            'auto.components.right.sidebar.SourceControl.b75cb1fd0c',
+            'auto.components.workspacePanel.SourceControl.b75cb1fd0c',
             'Committing changes…'
           )
         })
@@ -240,12 +240,12 @@ export function useSourceControlCreateReviewIntent(
             tone: 'destructive',
             message: getCreatePrIntentCommitFailureNoticeMessage(commitFailure, {
               fallback: translate(
-                'auto.components.right.sidebar.SourceControl.createPrIntentCommitFailed',
+                'auto.components.workspacePanel.SourceControl.createPrIntentCommitFailed',
                 'Could not commit changes. Fix the issue, then retry Create PR.'
               ),
               withSummary: (summary) =>
                 translate(
-                  'auto.components.right.sidebar.SourceControl.createPrIntentCommitBlockedSummary',
+                  'auto.components.workspacePanel.SourceControl.createPrIntentCommitBlockedSummary',
                   'Commit blocked: {{value0}} Fix the issue, then retry Create PR.',
                   { value0: summary }
                 )
@@ -273,7 +273,7 @@ export function useSourceControlCreateReviewIntent(
         setCreatePrIntentNoticeForWorktree(token.worktreeId, {
           tone: 'destructive',
           message: translate(
-            'auto.components.right.sidebar.SourceControl.d7492cafce',
+            'auto.components.workspacePanel.SourceControl.d7492cafce',
             'Could not refresh Source Control. Retry Create PR.'
           )
         })

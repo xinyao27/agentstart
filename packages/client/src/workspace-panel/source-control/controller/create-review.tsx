@@ -60,7 +60,7 @@ export function useSourceControlCreateReview(scope: SourceControlReviewDialogCon
       setCreatePrIntentNoticeForWorktree(activeWorktreeId, {
         tone: 'destructive',
         message: translate(
-          'auto.components.right.sidebar.SourceControl.f3a8b2c1d0e5',
+          'auto.components.workspacePanel.SourceControl.f3a8b2c1d0e5',
           'Enter a {{value0}} title.',
           { value0: hostedReviewCreateCopy.reviewLabel }
         )
@@ -72,7 +72,7 @@ export function useSourceControlCreateReview(scope: SourceControlReviewDialogCon
       setCreatePrIntentNoticeForWorktree(activeWorktreeId, {
         tone: 'destructive',
         message: translate(
-          'auto.components.right.sidebar.SourceControl.ae743199cd',
+          'auto.components.workspacePanel.SourceControl.ae743199cd',
           'Choose a different base branch before creating a {{value0}}.',
           { value0: hostedReviewCreateCopy.reviewLabel }
         )
@@ -114,19 +114,19 @@ export function useSourceControlCreateReview(scope: SourceControlReviewDialogCon
         toast.success(
           number
             ? translate(
-                'auto.components.right.sidebar.SourceControl.eef5446523',
+                'auto.components.workspacePanel.SourceControl.eef5446523',
                 '{{value0}} #{{value1}} is already open',
                 { value0: hostedReviewCreateCopy.titleLabel, value1: number }
               )
             : translate(
-                'auto.components.right.sidebar.SourceControl.d6fb1df5fe',
+                'auto.components.workspacePanel.SourceControl.d6fb1df5fe',
                 '{{value0}} is already open',
                 { value0: hostedReviewCreateCopy.titleLabel }
               ),
           {
             action: {
               label: translate(
-                'auto.components.right.sidebar.SourceControl.812cb992ee',
+                'auto.components.workspacePanel.SourceControl.812cb992ee',
                 'Open on {{value0}}',
                 { value0: hostedReviewCreateCopy.providerName }
               ),
@@ -160,7 +160,7 @@ export function useSourceControlCreateReview(scope: SourceControlReviewDialogCon
           error instanceof Error
             ? error.message
             : translate(
-                'auto.components.right.sidebar.SourceControl.e2b7a1c0d9f4',
+                'auto.components.workspacePanel.SourceControl.e2b7a1c0d9f4',
                 'Failed to create {{value0}}',
                 { value0: hostedReviewCreateCopy.reviewLabel }
               )

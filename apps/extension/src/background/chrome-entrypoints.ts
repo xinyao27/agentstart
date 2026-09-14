@@ -1,4 +1,5 @@
 import { translate } from '../i18n/translate'
+import { clearWorkbenchPageCommands } from '../workspace/page-commands'
 import { isClaimedPreviewUrl } from './preview-claim'
 import { readProjectName } from './project-groups'
 import { readRecentProjects } from './project-history'
@@ -58,18 +59,18 @@ export function registerChromeEntrypointListeners(): void {
         // The workspace page is the reliable keyboard-entry fallback.
         return chrome.sidePanel
           .open({ windowId: window.id })
-          .catch(() => focusOrCreatePage('activity'))
+          .catch(() => focusOrCreatePage('activity', window.id))
       })
     }
   })
 
   chrome.contextMenus.onClicked.addListener((info, tab) => {
     if (info.menuItemId === ACTION_ACTIVITY_MENU_ID) {
-      void focusOrCreatePage('activity')
+      void focusOrCreatePage('activity', tab?.windowId)
       return
     }
     if (info.menuItemId === ACTION_SETTINGS_MENU_ID) {
-      void focusOrCreatePage('settings')
+      void focusOrCreatePage('settings', tab?.windowId)
       return
     }
     if (info.menuItemId !== CONTEXT_MENU_ID) {
@@ -84,12 +85,18 @@ export function registerChromeEntrypointListeners(): void {
       }
     })
     if (tab?.id !== undefined) {
-      void chrome.sidePanel.open({ tabId: tab.id }).catch(() => focusOrCreatePage('activity'))
+      void chrome.sidePanel
+        .open({ tabId: tab.id })
+        .catch(() => focusOrCreatePage('activity', tab.windowId))
     }
   })
 
   chrome.tabs.onActivated.addListener(({ tabId }) => {
     void chrome.tabs.get(tabId).then(updateActionForTab)
+  })
+
+  chrome.tabs.onRemoved.addListener((tabId) => {
+    void clearWorkbenchPageCommands(tabId)
   })
 
   chrome.tabs.onUpdated.addListener((_tabId, change, tab) => {

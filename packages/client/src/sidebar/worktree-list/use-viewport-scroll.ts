@@ -4,7 +4,7 @@ import type { RefObject } from 'react'
 import type { AppState } from '~renderer/store/types'
 
 import { getLegendListScrollElement } from '../list-scroll-area'
-import type { WorkspaceSidebarProjectedRow } from '../workspace-sidebar-row-projection'
+import type { NavigationProjectedRow } from '../navigation-row-projection'
 import { markWorktreeLegendScrollRoot } from '../worktree-legend-scroll-root'
 import type { ProjectGroupingModel } from './groups'
 import { useWorktreeNavigation } from './use-navigation'
@@ -44,7 +44,7 @@ export function useViewportScroll(args: {
   settings: AppState['settings']
   keybindings: AppState['keybindings']
   renderRows: readonly RenderRow[]
-  workspaceRows: readonly WorkspaceSidebarProjectedRow[]
+  workspaceRows: readonly NavigationProjectedRow[]
   legendListRef: RefObject<LegendListRef | null>
   scrollRef: RefObject<HTMLDivElement | null>
   clearWorktreeDrag: () => void

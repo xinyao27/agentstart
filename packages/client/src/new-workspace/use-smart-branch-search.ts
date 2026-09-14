@@ -1,6 +1,6 @@
 import type { BaseRefSearchResult } from '@agentstart/protocol/git/worktree-source'
 import { getRepoExecutionHostId } from '@agentstart/protocol/host/identity'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getRepoOwnerRoutedSettings } from '~renderer/repo/runtime-owner'
 import {
   getRuntimeRepoBaseRefDefault,
@@ -42,17 +42,36 @@ export function useSmartBranchSearch({
   const [items, setItems] = useState<BaseRefSearchResult[]>([])
   const [defaultBaseRef, setDefaultBaseRef] = useState<string | null>(null)
   const [resultSource, setResultSource] = useState<{ repoId: string; query: string } | null>(null)
-  const request = getBranchSearchRequest({
-    disabled,
-    branchesEnabled: branchesEnabled && !repoBackedSourcesDisabled,
-    textOnly,
-    mode,
-    selectedRepoId: selectedRepo?.id ?? null,
-    query: debouncedQuery,
-    limit: RESULT_LIMIT
-  })
-  const ownerSettings = getRepoOwnerRoutedSettings(settings, selectedRepo)
+  // Why: both derivations allocate a fresh object per call, and they feed the
+  // fetch effect's dependency list — unmemoized, every render would re-run the
+  // effect and fire another branch search.
+  const ownerSettings = useMemo(
+    () => getRepoOwnerRoutedSettings(settings, selectedRepo),
+    [selectedRepo, settings]
+  )
   const hostId = selectedRepo ? getRepoExecutionHostId(selectedRepo) : undefined
+  const selectedRepoId = selectedRepo?.id ?? null
+  const request = useMemo(
+    () =>
+      getBranchSearchRequest({
+        disabled,
+        branchesEnabled: branchesEnabled && !repoBackedSourcesDisabled,
+        textOnly,
+        mode,
+        selectedRepoId,
+        query: debouncedQuery,
+        limit: RESULT_LIMIT
+      }),
+    [
+      branchesEnabled,
+      debouncedQuery,
+      disabled,
+      mode,
+      repoBackedSourcesDisabled,
+      selectedRepoId,
+      textOnly
+    ]
+  )
   const isLoading =
     request !== null &&
     (resultSource === null ||

@@ -14,9 +14,7 @@ import {
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 import { Label } from '~renderer/ui/label'
-import { Separator } from '~renderer/ui/separator'
 
-import { SettingsSubsectionHeader } from '../form-controls'
 import { SearchableSetting } from '../searchable-setting'
 
 type SupportState =
@@ -28,13 +26,7 @@ type SupportState =
   | 'starred'
   | 'hidden'
 
-type GeneralSupportSectionProps = {
-  hasPrecedingSections: boolean
-}
-
-export function GeneralSupportSection({
-  hasPrecedingSections
-}: GeneralSupportSectionProps): React.JSX.Element {
+export function GeneralSupportSection(): React.JSX.Element {
   const mountedRef = useMountedRef()
   // Why: the star state is derived from gh, not from settings, so it does not
   // live in the global settings store. 'hidden' covers already-starred users
@@ -91,33 +83,22 @@ export function GeneralSupportSection({
     await completeShellStarNag()
   }
 
-  return (
-    <SupportSection
-      state={starState}
-      hasPrecedingSections={hasPrecedingSections}
-      onStarClick={handleStarClick}
-    />
-  )
+  return <SupportSection state={starState} onStarClick={handleStarClick} />
 }
 
 type SupportSectionProps = {
   state: SupportState
-  hasPrecedingSections: boolean
   onStarClick: (event: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>
 }
 
-function SupportSection({
-  state,
-  hasPrecedingSections,
-  onStarClick
-}: SupportSectionProps): React.JSX.Element {
+function SupportSection({ state, onStarClick }: SupportSectionProps): React.JSX.Element {
   // Why: 'hidden' means gh is unavailable or the user had already starred on a
-  // previous session. Collapse the whole section, including its leading
-  // Separator, so the settings pane doesn't carry an empty strip.
+  // previous session. Collapse the whole section so the settings card doesn't
+  // carry an empty strip.
   const collapsed = state === 'hidden'
 
   return (
-    <section
+    <div
       className={cn(
         'grid transition-[grid-template-rows,opacity] duration-300 ease-out',
         collapsed ? 'grid-rows-[0fr] opacity-0' : 'grid-rows-[1fr] opacity-100'
@@ -125,23 +106,12 @@ function SupportSection({
       aria-hidden={collapsed}
     >
       <div className="min-h-0 overflow-hidden">
-        <div className="space-y-8">
-          {hasPrecedingSections ? <Separator /> : null}
-          <div className="space-y-4">
-            <SettingsSubsectionHeader
-              title={translate(
-                'auto.components.settings.GeneralSupportSection.55a87e5fd1',
-                'Support AgentStart'
-              )}
-            />
-            {state === 'loading' ? <SupportRowSkeleton /> : null}
-            {state !== 'loading' && state !== 'hidden' ? (
-              <SupportRow state={state} onStarClick={onStarClick} />
-            ) : null}
-          </div>
-        </div>
+        {state === 'loading' ? <SupportRowSkeleton /> : null}
+        {state !== 'loading' && state !== 'hidden' ? (
+          <SupportRow state={state} onStarClick={onStarClick} />
+        ) : null}
       </div>
-    </section>
+    </div>
   )
 }
 

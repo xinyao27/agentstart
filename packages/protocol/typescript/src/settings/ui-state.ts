@@ -33,11 +33,11 @@ export type StatusBarItem =
   | 'grok'
   | 'resource-usage'
   | 'ports'
-export type RightSidebarTab = WorkspacePanelTabContentType | 'search'
-export type ActiveRightSidebarTab = WorkspacePanelTabContentType
+export type WorkspacePanelTab = WorkspacePanelTabContentType | 'search'
+export type ActiveWorkspacePanelTab = WorkspacePanelTabContentType
 /** Titlebar strip actions: workspace panels, Open in, and Command. */
-export type WorkspaceTitlebarActionId = ActiveRightSidebarTab | 'open-in' | 'commands'
-export type RightSidebarExplorerView = 'files' | 'search'
+export type WorkspaceTitlebarActionId = ActiveWorkspacePanelTab | 'open-in' | 'commands'
+export type WorkspacePanelExplorerView = 'files' | 'search'
 
 export type ProjectOrderBy = 'manual' | 'recent'
 export type WorkspaceHostScope = 'all' | ExecutionHostId
@@ -54,16 +54,10 @@ export type TopLevelView = 'home' | 'terminal' | 'settings' | 'space' | 'skills'
 export type PersistedUIState = {
   lastActiveRepoId: string | null
   lastActiveWorktreeId: string | null
-  /** Active top-level view at save time, restored on reload/relaunch so the app
-   *  reopens where the user left off instead of snapping back to the terminal.
-   *  Sanitized on hydration (unknown value or a now-gated view falls back to
-   *  'terminal'). */
-  activeView: TopLevelView
   sidebarWidth: number
-  rightSidebarOpen: boolean
-  rightSidebarTab: RightSidebarTab
-  rightSidebarExplorerView: RightSidebarExplorerView
-  rightSidebarWidth: number
+  workspacePanelOpen: boolean
+  workspacePanelTab: WorkspacePanelTab
+  workspacePanelExplorerView: WorkspacePanelExplorerView
   markdownTocPanelWidth?: number
   groupBy: 'none' | 'workspace-status' | 'repo' | 'pr-status'
   sortBy: 'name' | 'smart' | 'recent' | 'repo' | 'manual'
@@ -76,11 +70,11 @@ export type PersistedUIState = {
   showActiveOnly: boolean
   /** Hide sleeping/inactive workspaces from workspace navigation. Off by default. */
   hideSleepingWorkspaces?: boolean
-  /** Which execution hosts the workspace sidebar shows. `all` keeps the mixed
+  /** Which execution hosts the navigation sidebar shows. `all` keeps the mixed
    *  command-center view; specific host IDs focus the sidebar without tearing
    *  down sessions owned by other hosts. */
   workspaceHostScope?: WorkspaceHostScope
-  /** Which execution hosts the workspace sidebar shows. `null` means sticky
+  /** Which execution hosts the navigation sidebar shows. `null` means sticky
    *  all-hosts so newly-added hosts appear automatically. */
   visibleWorkspaceHostIds?: VisibleWorkspaceHostIds
   /** User-defined sidebar order for host sections. Missing/new hosts append in

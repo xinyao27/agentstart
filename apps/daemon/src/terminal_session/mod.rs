@@ -42,9 +42,9 @@ pub(crate) use model::{
     TerminalCreateResult, TerminalDriverSnapshot, TerminalDriverState, TerminalFitOverrideMode,
     TerminalFitOverrideSnapshot, TerminalFocusResult, TerminalHeadlessBinding,
     TerminalLaunchConfig, TerminalManagementSession, TerminalPresentation, TerminalReadResult,
-    TerminalResizeResult, TerminalSendInputKind, TerminalSendRequest, TerminalSendResult,
-    TerminalStartupCommandDelivery, TerminalStreamEvent, TerminalSummary, TerminalViewport,
-    WaitCondition,
+    TerminalResizeResult, TerminalScrollbackGrid, TerminalSendInputKind, TerminalSendRequest,
+    TerminalSendResult, TerminalStartupCommandDelivery, TerminalStreamEvent, TerminalSummary,
+    TerminalViewport, WaitCondition,
 };
 pub(crate) use multiplex_admission::TerminalMultiplexClose;
 pub(crate) use snapshot::TerminalSnapshotResult;

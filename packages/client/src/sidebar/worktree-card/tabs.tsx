@@ -16,6 +16,7 @@ const EMPTY_GROUPS: ReturnType<typeof useAppStore.getState>['groupsByWorktree'][
 
 type WorktreeCardTabsProps = {
   worktreeId: string
+  isCurrentWorktree: boolean
   tabs: readonly Tab[]
   terminalTabs: readonly TerminalTab[]
   displayMode: AgentActivityDisplayMode
@@ -100,6 +101,7 @@ export const WorktreeCardTabs = function WorktreeCardTabs(
 ): React.JSX.Element | null {
   const {
     worktreeId,
+    isCurrentWorktree,
     tabs,
     terminalTabs,
     displayMode,
@@ -113,7 +115,14 @@ export const WorktreeCardTabs = function WorktreeCardTabs(
   const generatedTitlesEnabled = useAppStore(
     (state) => state.settings?.tabAutoGenerateTitle === true
   )
-  const rows = (() => projectSidebarOpenTabs({ tabs, groups, layout, activeGroupId }))()
+  const rows = (() =>
+    projectSidebarOpenTabs({
+      tabs,
+      groups,
+      layout,
+      activeGroupId,
+      isCurrentWorktree
+    }))()
   const railRows = (() => rows.map((row) => ({ tabId: row.tab.id, visibleRowCount: 1 })))()
   const stopPropagation = (event: React.SyntheticEvent) => event.stopPropagation()
 

@@ -1,7 +1,7 @@
 import type React from 'react'
 import { cn } from '~renderer/ui/class-names'
 
-import type { WorkspaceSidebarProjectedRow } from './workspace-sidebar-row-projection'
+import type { NavigationProjectedRow } from './navigation-row-projection'
 import {
   getProjectGroupHeaderPaddingLeft,
   getProjectWorktreeCardContentIndent,
@@ -39,11 +39,11 @@ const RAIL_ELBOW_GLYPH_GAP_PX = 6
 // top by the list gap to keep the line unbroken between cards.
 const RAIL_ROW_OVERLAP_PX = 2
 
-function isSectionBoundary(row: WorkspaceSidebarProjectedRow): boolean {
+function isSectionBoundary(row: NavigationProjectedRow): boolean {
   return row.row.type === 'header' || row.row.type === 'host-header'
 }
 
-function isWorkspaceRow(row: WorkspaceSidebarProjectedRow): boolean {
+function isWorkspaceRow(row: NavigationProjectedRow): boolean {
   return (
     row.row.type === 'item' ||
     row.row.type === 'folder-workspace' ||
@@ -54,7 +54,7 @@ function isWorkspaceRow(row: WorkspaceSidebarProjectedRow): boolean {
 // Why: a lineage group renders its parent worktree card at the row top, so its
 // tick lands on the same glyph a plain workspace row would expose.
 function getRailTickCard(
-  projected: WorkspaceSidebarProjectedRow
+  projected: NavigationProjectedRow
 ): { groupDepth: number; depth: number } | undefined {
   if (projected.row.type === 'item') {
     return projected.row
@@ -62,10 +62,7 @@ function getRailTickCard(
   return projected.row.type === 'lineage-group' ? projected.row.rows[0] : undefined
 }
 
-function getRailElbowWidthPx(
-  projected: WorkspaceSidebarProjectedRow,
-  railLeftPx: number
-): number | null {
+function getRailElbowWidthPx(projected: NavigationProjectedRow, railLeftPx: number): number | null {
   const card = getRailTickCard(projected)
   if (!card) {
     return null
@@ -88,12 +85,12 @@ function getRailElbowWidthPx(
 // Why: only a plain workspace card ends where its own glyph sits. Lineage
 // groups keep descendants inside the same row, so terminating the rail at the
 // parent glyph would strand every child below the line.
-function canRowEndSection(projected: WorkspaceSidebarProjectedRow): boolean {
+function canRowEndSection(projected: NavigationProjectedRow): boolean {
   return projected.row.type === 'item'
 }
 
 export function getProjectWorkspaceRails(
-  rows: readonly WorkspaceSidebarProjectedRow[]
+  rows: readonly NavigationProjectedRow[]
 ): ReadonlyMap<number, ProjectWorkspaceRail> {
   const rails = new Map<number, ProjectWorkspaceRail>()
   let activeProject:

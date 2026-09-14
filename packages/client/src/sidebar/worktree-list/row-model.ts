@@ -3,7 +3,7 @@ import { shallow } from 'zustand/shallow'
 
 import type { HostSectionRow } from '../host-section-rows'
 import type { ImportedWorktreeCardActionState } from '../imported-worktrees-card-actions'
-import type { WorkspaceSidebarProjectedRow } from '../workspace-sidebar-row-projection'
+import type { NavigationProjectedRow } from '../navigation-row-projection'
 import type { WorktreeDragGroup } from '../worktree-manual-order'
 import { ALL_GROUP_KEY, getLineageGroupKey, PINNED_GROUP_KEY, type Row } from './groups'
 import { getWorktreeOptionId } from './reveal'
@@ -84,7 +84,7 @@ export function findPreferredRenderRowIndexForWorktree(
 export type ActiveDescendantInput = {
   activeWorktreeId: string | null
   primaryActiveRowKey?: string
-  workspaceRows: readonly WorkspaceSidebarProjectedRow[]
+  workspaceRows: readonly NavigationProjectedRow[]
 }
 
 export function getActiveDescendantOptionId(
@@ -256,13 +256,13 @@ export function getWorktreeDragIndexes(rows: readonly HostSectionRow[]): {
   return { groupKeyByRowKey, groupIndexByRowKey }
 }
 
-export function getLegendListRowType(row: WorkspaceSidebarProjectedRow): string {
+export function getLegendListRowType(row: NavigationProjectedRow): string {
   return row.kind === 'local' ? `local:${row.row.type}` : row.kind
 }
 
-export function areWorkspaceSidebarRowsEqual(
-  previous: WorkspaceSidebarProjectedRow,
-  current: WorkspaceSidebarProjectedRow
+export function areWorkspacePanelRowsEqual(
+  previous: NavigationProjectedRow,
+  current: NavigationProjectedRow
 ): boolean {
   if (previous.kind !== current.kind || previous.key !== current.key) {
     return false

@@ -84,7 +84,6 @@ export function createRepoRemoveProjectActions(
             sortEpoch: state.sortEpoch + 1,
             ...(remainingRepos.length === 0
               ? {
-                  activeView: 'terminal' as const,
                   activeWorktreeId: null,
                   activeWorkspaceKey: null,
                   activeRepoId: null

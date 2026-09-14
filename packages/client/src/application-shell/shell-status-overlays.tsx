@@ -1,12 +1,10 @@
+import type { TopLevelView } from '@agentstart/protocol/settings/ui-state'
 import { Suspense } from 'react'
 
 import { RecoverableRenderErrorBoundary } from '../error-boundaries/recoverable-render-error-boundary'
-import { translate } from '../i18n/i18n'
 import { StarNagAgentValueMomentObserver } from '../star-nag/agent-value-moment-observer'
 import { StarNagCard } from '../star-nag/card'
 import { StarNagToastHost } from '../star-nag/toast-host'
-import { AgentStartRuntimeStatusOnlyFooter } from '../status-bar/runtime-status/segment'
-import type { AppState } from '../store/types'
 import RecentTabSwitcher from '../tab-bar/recent-tab-switcher'
 import { lazyWithRetry as lazy } from './lazy-with-retry'
 import { TelemetryFirstLaunchSurface } from './telemetry-first-launch-surface'
@@ -23,41 +21,9 @@ const SkillFreshnessUpdateDialog = lazy(() =>
     default: module.SkillFreshnessUpdateDialog
   }))
 )
-const StatusBar = lazy(() =>
-  import('../status-bar/status-bar').then((module) => ({ default: module.StatusBar }))
-)
-type ShellStatusBarProps = {
-  activeView: AppState['activeView']
-  isVisible: boolean
-}
-
-export function ShellStatusBar({ activeView, isVisible }: ShellStatusBarProps): React.JSX.Element {
-  if (!isVisible) {
-    return <AgentStartRuntimeStatusOnlyFooter />
-  }
-  return (
-    <Suspense
-      fallback={<div className="border-border bg-background h-6 min-h-[24px] shrink-0 border-t" />}
-    >
-      <RecoverableRenderErrorBoundary
-        boundaryId="overlay.status-bar"
-        surface="overlay"
-        resetKey={activeView}
-        compact
-        title={translate('auto.App.2e8ff36f94', 'The status bar hit an error.')}
-        description={translate(
-          'auto.App.8a023cea1f',
-          'Retry the status bar to remount its controls.'
-        )}
-      >
-        <StatusBar />
-      </RecoverableRenderErrorBoundary>
-    </Suspense>
-  )
-}
 
 type ShellMiddleOverlaysProps = {
-  activeView: AppState['activeView']
+  activeView: TopLevelView
   shouldMountContextualTourOverlay: boolean
   telemetryOptedIn: boolean | undefined
 }
@@ -114,7 +80,7 @@ export function ShellMiddleOverlays({
 export function ShellTrailingOverlays({
   activeView
 }: {
-  activeView: AppState['activeView']
+  activeView: TopLevelView
 }): React.JSX.Element {
   return (
     <>

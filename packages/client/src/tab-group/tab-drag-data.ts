@@ -20,7 +20,7 @@ export type TabDragItemData = {
   groupId: string
   unifiedTabId: string
   visibleTabId: string
-  tabType: 'terminal' | 'editor' | 'browser' | 'simulator' | 'git-graph'
+  tabType: 'terminal' | 'editor' | 'browser' | 'simulator' | 'git-graph' | 'page'
   label: string
   iconPath?: string
   color?: string | null

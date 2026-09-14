@@ -100,7 +100,7 @@ export function SessionRowTrailingActions({
                   variant="ghost"
                   size="icon-xs"
                   aria-label={translate(
-                    'auto.components.right.sidebar.AiVaultSessionRow.jumpToOriginalPane',
+                    'auto.components.workspacePanel.AiVaultSessionRow.jumpToOriginalPane',
                     'Jump to Original Pane'
                   )}
                   draggable={false}
@@ -117,7 +117,7 @@ export function SessionRowTrailingActions({
             />
             <TooltipContent side="top" sideOffset={4}>
               {translate(
-                'auto.components.right.sidebar.AiVaultSessionRow.jumpToOriginalPane',
+                'auto.components.workspacePanel.AiVaultSessionRow.jumpToOriginalPane',
                 'Jump to Original Pane'
               )}
             </TooltipContent>
@@ -204,7 +204,7 @@ export function SessionRowTrailingActions({
               variant="ghost"
               size="icon-xs"
               aria-label={translate(
-                'auto.components.right.sidebar.AiVaultSessionRow.toggleSessionDetails',
+                'auto.components.workspacePanel.AiVaultSessionRow.toggleSessionDetails',
                 '{{value0}} session details',
                 { value0: agentLabel(session.agent) }
               )}
@@ -238,7 +238,7 @@ export function SessionRowTrailingActions({
                     variant="ghost"
                     size="icon-xs"
                     aria-label={translate(
-                      'auto.components.right.sidebar.AiVaultSessionRow.moreSessionActions',
+                      'auto.components.workspacePanel.AiVaultSessionRow.moreSessionActions',
                       'More Session Actions'
                     )}
                     draggable={false}
@@ -253,7 +253,7 @@ export function SessionRowTrailingActions({
           />
           <TooltipContent side="top" sideOffset={4}>
             {translate(
-              'auto.components.right.sidebar.AiVaultSessionRow.moreActions',
+              'auto.components.workspacePanel.AiVaultSessionRow.moreActions',
               'More Actions'
             )}
           </TooltipContent>

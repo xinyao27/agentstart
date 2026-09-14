@@ -465,13 +465,14 @@ async fn run_events(
             ProcessEvent::Output { .. } => None,
         };
         let publishes_lifecycle = matches!(event, ProcessEvent::Exited { .. });
-        if let Some((host_id, tab_id, leaf_id, buffer)) = state.accept(event) {
+        if let Some(capture) = state.accept(event) {
             if let Some(pty_id) = completed_pty_id {
                 workspace_ports.unbind_pty(&pty_id);
             }
             let snapshots = snapshots.clone();
-            let snapshot_tab_id = tab_id.clone();
-            let snapshot_leaf_id = leaf_id.clone();
+            let snapshot_tab_id = capture.tab_id.clone();
+            let snapshot_leaf_id = capture.leaf_id.clone();
+            let buffer = capture.history.text;
             let stored = tokio::task::spawn_blocking(move || {
                 snapshots.store_blocking(&snapshot_tab_id, &snapshot_leaf_id, &buffer)
             })
@@ -479,10 +480,11 @@ async fn run_events(
             if let Ok(Some(reference)) = stored {
                 let _ = workspace_session
                     .bind_pty_scrollback(PtyScrollback {
-                        host_id,
-                        leaf_id,
+                        grid: capture.history.grid,
+                        host_id: capture.host_id,
+                        leaf_id: capture.leaf_id,
                         reference,
-                        tab_id,
+                        tab_id: capture.tab_id,
                     })
                     .await;
             }

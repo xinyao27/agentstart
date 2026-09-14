@@ -7,13 +7,16 @@ export type ResourceUsageSpaceScanSnapshot = {
 export function resolveResourceUsageSpaceScanReady({
   snapshot,
   open,
-  activeView,
+  spacePageVisible,
   scannedAt,
   scanning
 }: {
   snapshot: ResourceUsageSpaceScanSnapshot
   open: boolean
-  activeView: string
+  // Why: the Space surface is a page tab now, so "is the user looking at Space"
+  // is derived from tab selection by the caller instead of compared against a
+  // route scalar here.
+  spacePageVisible: boolean
   scannedAt: number | null
   scanning: boolean
 }): ResourceUsageSpaceScanSnapshot {
@@ -25,13 +28,13 @@ export function resolveResourceUsageSpaceScanReady({
 
   if (scanCompleted) {
     return {
-      ready: !open && activeView !== 'space',
+      ready: !open && !spacePageVisible,
       previousScanning: scanning,
       lastSeenScannedAt: scannedAt
     }
   }
 
-  if (snapshot.ready && (open || activeView === 'space')) {
+  if (snapshot.ready && (open || spacePageVisible)) {
     return {
       ready: false,
       previousScanning: scanning,

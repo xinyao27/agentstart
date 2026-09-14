@@ -121,79 +121,76 @@ export function createEditorAppearanceActions(
         markdownTocPanelWidth: clampMarkdownTocPanelWidth(width, undefined, s.markdownTocPanelWidth)
       })),
 
-    // Right sidebar
-    rightSidebarOpen: false,
-    rightSidebarWidth: 280,
-    rightSidebarTab: 'explorer',
-    rightSidebarExplorerView: 'files',
-    rightSidebarRouteRequestId: 0,
-    rightSidebarTabByWorktree: {},
-    rightSidebarExplorerViewByWorktree: {},
-    activityBarPosition: 'top',
-    toggleRightSidebar: () => set((s) => ({ rightSidebarOpen: !s.rightSidebarOpen })),
-    setRightSidebarOpen: (open) => set({ rightSidebarOpen: open }),
-    setRightSidebarWidth: (width) => set({ rightSidebarWidth: width }),
-    setRightSidebarTab: (tab) =>
+    // Workspace tool panel
+    workspacePanelOpen: false,
+    workspacePanelTab: 'explorer',
+    workspacePanelExplorerView: 'files',
+    workspacePanelRouteRequestId: 0,
+    workspacePanelTabByWorktree: {},
+    workspacePanelExplorerViewByWorktree: {},
+    toggleWorkspacePanel: () => set((s) => ({ workspacePanelOpen: !s.workspacePanelOpen })),
+    setWorkspacePanelOpen: (open) => set({ workspacePanelOpen: open }),
+    setWorkspacePanelTab: (tab) =>
       set((s) => ({
-        rightSidebarTab: tab,
-        rightSidebarRouteRequestId: s.rightSidebarRouteRequestId + 1,
+        workspacePanelTab: tab,
+        workspacePanelRouteRequestId: s.workspacePanelRouteRequestId + 1,
         ...(s.activeWorktreeId
           ? {
-              rightSidebarTabByWorktree: {
-                ...s.rightSidebarTabByWorktree,
+              workspacePanelTabByWorktree: {
+                ...s.workspacePanelTabByWorktree,
                 [s.activeWorktreeId]: tab
               }
             }
           : {}),
-        ...(tab === 'explorer' ? { rightSidebarExplorerView: 'files' as const } : {})
+        ...(tab === 'explorer' ? { workspacePanelExplorerView: 'files' as const } : {})
       })),
-    setRightSidebarExplorerView: (view) =>
+    setWorkspacePanelExplorerView: (view) =>
       set((s) => ({
-        rightSidebarExplorerView: view,
-        rightSidebarRouteRequestId: s.rightSidebarRouteRequestId + 1,
+        workspacePanelExplorerView: view,
+        workspacePanelRouteRequestId: s.workspacePanelRouteRequestId + 1,
         ...(s.activeWorktreeId
           ? {
-              rightSidebarExplorerViewByWorktree: {
-                ...s.rightSidebarExplorerViewByWorktree,
+              workspacePanelExplorerViewByWorktree: {
+                ...s.workspacePanelExplorerViewByWorktree,
                 [s.activeWorktreeId]: view
               }
             }
           : {})
       })),
-    showRightSidebarFiles: () =>
+    showWorkspacePanelFiles: () =>
       set((s) => ({
-        rightSidebarOpen: true,
-        rightSidebarTab: 'explorer',
-        rightSidebarExplorerView: 'files',
-        rightSidebarRouteRequestId: s.rightSidebarRouteRequestId + 1,
+        workspacePanelOpen: true,
+        workspacePanelTab: 'explorer',
+        workspacePanelExplorerView: 'files',
+        workspacePanelRouteRequestId: s.workspacePanelRouteRequestId + 1,
         ...(s.activeWorktreeId
           ? {
-              rightSidebarTabByWorktree: {
-                ...s.rightSidebarTabByWorktree,
+              workspacePanelTabByWorktree: {
+                ...s.workspacePanelTabByWorktree,
                 [s.activeWorktreeId]: 'explorer'
               },
-              rightSidebarExplorerViewByWorktree: {
-                ...s.rightSidebarExplorerViewByWorktree,
+              workspacePanelExplorerViewByWorktree: {
+                ...s.workspacePanelExplorerViewByWorktree,
                 [s.activeWorktreeId]: 'files'
               }
             }
           : {})
       })),
-    showRightSidebarSearch: (payload) =>
+    showWorkspacePanelSearch: (payload) =>
       set((s) => {
         const next = {
-          rightSidebarOpen: true,
-          rightSidebarTab: 'explorer' as const,
-          rightSidebarExplorerView: 'search' as const,
-          rightSidebarRouteRequestId: s.rightSidebarRouteRequestId + 1,
+          workspacePanelOpen: true,
+          workspacePanelTab: 'explorer' as const,
+          workspacePanelExplorerView: 'search' as const,
+          workspacePanelRouteRequestId: s.workspacePanelRouteRequestId + 1,
           ...(s.activeWorktreeId
             ? {
-                rightSidebarTabByWorktree: {
-                  ...s.rightSidebarTabByWorktree,
+                workspacePanelTabByWorktree: {
+                  ...s.workspacePanelTabByWorktree,
                   [s.activeWorktreeId]: 'explorer' as const
                 },
-                rightSidebarExplorerViewByWorktree: {
-                  ...s.rightSidebarExplorerViewByWorktree,
+                workspacePanelExplorerViewByWorktree: {
+                  ...s.workspacePanelExplorerViewByWorktree,
                   [s.activeWorktreeId]: 'search' as const
                 }
               }
@@ -232,7 +229,6 @@ export function createEditorAppearanceActions(
           }
         }
       }),
-    setActivityBarPosition: (position) => set({ activityBarPosition: position }),
 
     // File explorer
     expandedDirs: {},
@@ -277,16 +273,16 @@ export function createEditorAppearanceActions(
     pendingExplorerReveal: null,
     revealInExplorer: (worktreeId, filePath) =>
       set((s) => ({
-        rightSidebarOpen: true,
-        rightSidebarTab: 'explorer',
-        rightSidebarExplorerView: 'files',
-        rightSidebarRouteRequestId: s.rightSidebarRouteRequestId + 1,
-        rightSidebarTabByWorktree: {
-          ...s.rightSidebarTabByWorktree,
+        workspacePanelOpen: true,
+        workspacePanelTab: 'explorer',
+        workspacePanelExplorerView: 'files',
+        workspacePanelRouteRequestId: s.workspacePanelRouteRequestId + 1,
+        workspacePanelTabByWorktree: {
+          ...s.workspacePanelTabByWorktree,
           [worktreeId]: 'explorer'
         },
-        rightSidebarExplorerViewByWorktree: {
-          ...s.rightSidebarExplorerViewByWorktree,
+        workspacePanelExplorerViewByWorktree: {
+          ...s.workspacePanelExplorerViewByWorktree,
           [worktreeId]: 'files'
         },
         pendingExplorerReveal: { worktreeId, filePath, requestId: Date.now() }

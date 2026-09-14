@@ -95,7 +95,7 @@ export function getFileExplorerOperationRoute(
 
 export function getFileExplorerOwnerUnresolvedMessage(): string {
   return translate(
-    'auto.components.right.sidebar.fileExplorerOperationOwner.unresolved',
+    'auto.components.workspacePanel.fileExplorerOperationOwner.unresolved',
     "Couldn't determine which host owns this workspace. Check the connection and try again."
   )
 }

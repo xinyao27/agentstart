@@ -226,21 +226,9 @@ export function CliSection({
   }
 
   return (
-    <section className="space-y-4" data-settings-section="cli">
-      <div className="space-y-1">
-        <h2 className="text-sm font-semibold">
-          {translate('auto.components.settings.CliSection.c5c0f2641d', 'AgentStart CLI')}
-        </h2>
-        <p className="text-muted-foreground text-xs">
-          {translate(
-            'auto.components.settings.CliSection.6930feda9e',
-            'Use AgentStart from your terminal to open the app, manage worktrees, and interact with AgentStart terminals.'
-          )}
-        </p>
-      </div>
-
-      <div className="border-border/60 bg-card/50 space-y-3 rounded-xl border p-4">
-        <div className="flex items-center justify-between gap-4">
+    <section className="space-y-3" data-settings-section="cli">
+      <div className="divide-border/40 divide-y">
+        <div className="flex items-center justify-between gap-4 pb-3">
           <div className="space-y-0.5">
             <Label>
               {translate('auto.components.settings.CliSection.38edbb5721', 'Shell command')}

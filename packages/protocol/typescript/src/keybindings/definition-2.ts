@@ -32,7 +32,10 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     group: 'Global',
     scope: 'global',
     searchKeywords: ['shortcut', 'worktree', 'history', 'back'],
-    defaultBindings: platformBindings(['Mod+Alt+ArrowLeft']),
+    // Why: the old Mod+Alt+ArrowLeft/Right defaults are Chrome's next/previous
+    // tab chord on macOS, and Ctrl+Alt+arrows switch GNOME workspaces; the
+    // Shift family mirrors worktree.navigateUp/Down instead.
+    defaultBindings: platformBindings(['Mod+Shift+ArrowLeft']),
     allowInTerminal: true
   },
   {
@@ -41,7 +44,7 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     group: 'Global',
     scope: 'global',
     searchKeywords: ['shortcut', 'worktree', 'history', 'forward'],
-    defaultBindings: platformBindings(['Mod+Alt+ArrowRight']),
+    defaultBindings: platformBindings(['Mod+Shift+ArrowRight']),
     allowInTerminal: true
   },
   {
@@ -50,7 +53,15 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     group: 'Tabs',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'tab', 'terminal', 'new'],
-    defaultBindings: platformBindings(['Mod+T'])
+    // Why: Mod+T opens a browser tab and never reaches the page. macOS gets
+    // Cmd+Alt+T; on Windows Ctrl+Alt is AltGr on many layouts and on Linux
+    // Ctrl+Alt+T is the desktop-level "open terminal" shortcut, so users bind
+    // their own chord in Settings there.
+    defaultBindings: {
+      darwin: ['Mod+Alt+T'],
+      linux: [],
+      win32: []
+    }
   },
   {
     id: 'tab.newAgent',
@@ -58,11 +69,11 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     group: 'Tabs',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'tab', 'agent', 'new', 'default', 'launch'],
-    // Why: macOS only. On Windows Ctrl+Alt is AltGr on many layouts, and on
-    // Linux Ctrl+Alt+T is the desktop-level "open terminal" shortcut, so
-    // there is no safe default chord there; users bind it in Settings.
+    // Why: the old macOS default Mod+Alt+T now belongs to tab.newTerminal and
+    // no cross-platform chord is safe from the browser or AltGr, so this ships
+    // unassigned; users bind it (or the per-agent rows) in Settings.
     defaultBindings: {
-      darwin: ['Mod+Alt+T'],
+      darwin: ['Mod+Alt+Shift+T'],
       linux: [],
       win32: []
     }
@@ -73,7 +84,13 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     group: 'Tabs',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'tab', 'browser', 'new'],
-    defaultBindings: platformBindings(['Mod+Shift+B'])
+    // Why: Mod+Shift+B toggles the browser's bookmarks bar, so the chord is
+    // macOS-only here; Windows/Linux bind it explicitly in Settings.
+    defaultBindings: {
+      darwin: ['Mod+Alt+B'],
+      linux: [],
+      win32: []
+    }
   },
   {
     id: 'tab.newSimulator',
@@ -95,7 +112,13 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     group: 'Tabs',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'tab', 'markdown', 'file', 'new'],
-    defaultBindings: platformBindings(['Mod+Shift+M'])
+    // Why: Mod+Shift+M switches Chrome profiles, so the chord is macOS-only
+    // here; Windows/Linux bind it explicitly in Settings.
+    defaultBindings: {
+      darwin: ['Mod+Alt+M'],
+      linux: [],
+      win32: []
+    }
   },
   {
     id: 'tab.openMarkdown',
@@ -103,7 +126,13 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     group: 'Tabs',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'tab', 'markdown', 'file', 'open'],
-    defaultBindings: platformBindings(['Mod+Shift+O'])
+    // Why: Mod+Shift+O opens the browser's bookmark manager, so the chord is
+    // macOS-only here; Windows/Linux bind it explicitly in Settings.
+    defaultBindings: {
+      darwin: ['Mod+Alt+O'],
+      linux: [],
+      win32: []
+    }
   },
   {
     id: 'tab.close',
@@ -111,7 +140,11 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     group: 'Tabs',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'close', 'tab', 'pane'],
-    defaultBindings: platformBindings(['Mod+W'])
+    // Why: Mod+W closes the whole browser tab and is reserved by the browser,
+    // so the workbench ships Mod+Backspace (the macOS delete-tab metaphor);
+    // the keyboard handler ignores the chord while an editable field is
+    // focused so text editing never closes a tab.
+    defaultBindings: platformBindings(['Mod+Backspace'])
   },
   {
     id: 'tab.closeAll',
@@ -128,11 +161,11 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     scope: 'tabs',
     conflictGroup: 'workspace-shell',
     searchKeywords: ['shortcut', 'tab', 'rename', 'title', 'label'],
-    // Why: macOS only. Cmd+R is free in the app/terminal focus zone (the
-    // browser pane owns its own Cmd+R reload). On Windows/Linux Ctrl+R is the
-    // shell reverse-search, so it is left unbound for explicit user binding.
+    // Why: the old macOS default Mod+R reloads the browser page, and no other
+    // chord is safe cross-platform, so this ships unbound; users bind it in
+    // Settings.
     defaultBindings: {
-      darwin: ['Mod+R'],
+      darwin: [],
       linux: [],
       win32: []
     }
@@ -143,7 +176,14 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     group: 'Tabs',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'tab', 'reopen', 'restore', 'closed'],
-    defaultBindings: platformBindings(['Mod+Shift+T'])
+    // Why: Mod+Shift+T reopens closed browser tabs and never reaches the
+    // page, so macOS ships Cmd+Alt+Shift+R; Windows/Linux bind it explicitly
+    // in Settings.
+    defaultBindings: {
+      darwin: ['Mod+Alt+Shift+R'],
+      linux: [],
+      win32: []
+    }
   },
   {
     id: 'tab.nextSameType',
@@ -151,6 +191,9 @@ export const KEYBINDING_DEFINITIONS_2: readonly KeybindingDefinition[] = [
     group: 'Tab Navigation',
     scope: 'tabs',
     searchKeywords: ['shortcut', 'tab', 'next', 'switch', 'cycle'],
+    // Why: Mod+Shift+] is also a Chrome macOS next-tab chord, but unlike
+    // Mod+W it is delivered to the page first, so the workbench owns it while
+    // focused — the same browser-alignment as the zoom chords.
     defaultBindings: platformBindings(['Mod+Shift+BracketRight'])
   },
   {

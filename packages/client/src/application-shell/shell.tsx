@@ -35,7 +35,8 @@ import { AgentHibernationGate } from './agent-hibernation-gate'
 import { installRendererCommandToasts } from './command-result-toasts'
 import { resolveMountedLazyModalIds, type LazyModalId } from './lazy-modal-mount-state'
 import { ShellLateModals, ShellPrimaryModals } from './shell-modals'
-import { ShellMiddleOverlays, ShellStatusBar, ShellTrailingOverlays } from './shell-status-overlays'
+import { ShellMiddleOverlays, ShellTrailingOverlays } from './shell-status-overlays'
+import { activeViewFor, isWorkspaceBodyVisible } from './state/visible-surface'
 import { useAutoAckViewedAgent } from './use-auto-ack-viewed-agent'
 import { useDocumentAppearance } from './use-document-appearance'
 import { useFeatureTips } from './use-feature-tips'
@@ -59,9 +60,15 @@ function App(): React.JSX.Element {
   const projectCatalog = useProjectCatalog()
   useRadixBodyPointerEventsRecovery()
   useRemoteSessionTabsSync()
-  const activeView = useAppStore((s) => s.activeView)
+  // Why: derived from the hosting scope's active tab, so the surface this shell
+  // renders is the one the tab strip shows as selected. Every child below takes it as a prop and keeps its
+  // existing `=== 'terminal'` / `=== '<page>'` comparisons.
+  const activeView = useAppStore((s) => activeViewFor(s))
   const activeModal = useAppStore((s) => s.activeModal)
   const { activeWorktreeId } = useAppStore(useShallow(selectActiveTerminalChromeState))
+  const activeGroupIdByWorktree = useAppStore((s) => s.activeGroupIdByWorktree)
+  const groupsByWorktree = useAppStore((s) => s.groupsByWorktree)
+  const unifiedTabsByWorktree = useAppStore((s) => s.unifiedTabsByWorktree)
   const activePendingCreationId = useAppStore((s) => s.activePendingCreationId)
   // Why: the creation surface owns the tab strip from the first pending frame.
   // Gating it on the delayed loader flag made the tab bar swap in mid-create.
@@ -81,7 +88,6 @@ function App(): React.JSX.Element {
   )
   const keybindings = useAppStore((s) => s.keybindings)
   const activeContextualTourId = useAppStore((s) => s.activeContextualTourId)
-  const statusBarVisible = useAppStore((s) => s.statusBarVisible)
   const terminalWorkbenchRequested = activeWorktreeId !== null || backgroundTerminalMountRequested
   const [hasMountedTerminalWorkbench, setHasMountedTerminalWorkbench] = useState(
     terminalWorkbenchRequested
@@ -97,7 +103,12 @@ function App(): React.JSX.Element {
   // the previous workspace must stay mounted for retention without rendering
   // real chrome.
   const creationLayoutActive = shouldShowWorktreeCreationSurface({
-    activeView,
+    workspaceBodyVisible: isWorkspaceBodyVisible({
+      activeGroupIdByWorktree,
+      activeWorktreeId,
+      groupsByWorktree,
+      unifiedTabsByWorktree
+    }),
     activePendingCreationId,
     hasActivePendingCreation: activePendingCreationExists
   })
@@ -122,11 +133,10 @@ function App(): React.JSX.Element {
   const persistedUIReady = useAppStore((s) => s.persistedUIReady)
   const shouldMountContextualTourOverlay = activeContextualTourId !== null
   const shouldMountSetupGuideTelemetryObserver = persistedUIReady
-  const rightSidebarWidth = useAppStore((s) => s.rightSidebarWidth)
   const markdownTocPanelWidth = useAppStore((s) => s.markdownTocPanelWidth)
-  const rightSidebarOpen = useAppStore((s) => s.rightSidebarOpen)
-  const rightSidebarTab = useAppStore((s) => s.rightSidebarTab)
-  const rightSidebarExplorerView = useAppStore((s) => s.rightSidebarExplorerView)
+  const workspacePanelOpen = useAppStore((s) => s.workspacePanelOpen)
+  const workspacePanelTab = useAppStore((s) => s.workspacePanelTab)
+  const workspacePanelExplorerView = useAppStore((s) => s.workspacePanelExplorerView)
   const settings = useAppStore((s) => s.settings)
   const systemPrefersDark = useSystemPrefersDark()
   const themeGradientVariables = useThemeGradientStyleVariables(systemPrefersDark)
@@ -212,17 +222,15 @@ function App(): React.JSX.Element {
   useSessionPersistence()
   usePersistedUi({
     acknowledgedAgentsByPaneKey,
-    activeView,
     filterRepoIds,
     groupBy,
     hideDefaultBranchWorkspace,
     markdownTocPanelWidth,
     persistedUIReady,
     projectOrderBy,
-    rightSidebarExplorerView,
-    rightSidebarOpen,
-    rightSidebarTab,
-    rightSidebarWidth,
+    workspacePanelExplorerView,
+    workspacePanelOpen,
+    workspacePanelTab,
     showDotfilesByWorktree,
     showSleepingWorkspaces,
     sidebarWidth,
@@ -249,16 +257,21 @@ function App(): React.JSX.Element {
     window.dispatchEvent(new CustomEvent(SYNC_FIT_PANES_EVENT))
   }, [extensionSidePanelOpen])
 
-  const showSidebar = !extensionSidePanelOpen
+  const showNavigationSidebar = !extensionSidePanelOpen
 
-  useGlobalShortcuts({
-    activeView,
-    activeWorktreeId,
-    creationLayoutActive,
-    keybindings,
-    terminalShortcutPolicy: settings?.terminalShortcutPolicy,
-    workspaceChromeActive
-  })
+  const globalShortcutState = useAppStore(
+    useShallow((s) => ({
+      activeGroupIdByWorktree: s.activeGroupIdByWorktree,
+      activeWorktreeId,
+      creationLayoutActive,
+      groupsByWorktree: s.groupsByWorktree,
+      keybindings,
+      terminalShortcutPolicy: settings?.terminalShortcutPolicy,
+      unifiedTabsByWorktree: s.unifiedTabsByWorktree,
+      workspaceChromeActive
+    }))
+  )
+  useGlobalShortcuts(globalShortcutState)
   const resolvedMountedLazyModalIds = resolveMountedLazyModalIds(activeModal, mountedLazyModalIds)
   if (resolvedMountedLazyModalIds !== mountedLazyModalIds) {
     // Why: lazy-load these modals only after first use, then keep them mounted
@@ -269,7 +282,7 @@ function App(): React.JSX.Element {
   return (
     <LoadingIndicatorStyleProvider
       loaderStyle={settings?.loaderStyle}
-      className="flex h-dvh w-screen flex-col overflow-hidden"
+      className="app-chrome-plane flex h-dvh w-screen flex-col overflow-hidden"
       data-theme-gradient={themeGradientVariables ? 'on' : undefined}
       style={
         {
@@ -294,11 +307,10 @@ function App(): React.JSX.Element {
               activeWorktreeId={activeWorktreeId}
               creationLayoutActive={creationLayoutActive}
               shouldMountTerminalWorkbench={shouldMountTerminalWorkbench}
-              showSidebar={showSidebar}
+              showNavigationSidebar={showNavigationSidebar}
               terminalWorkbenchVisible={terminalWorkbenchVisible}
               workspaceChromeActive={workspaceChromeActive}
             />
-            <ShellStatusBar activeView={activeView} isVisible={statusBarVisible} />
             <ShellPrimaryModals
               activeModal={activeModal}
               mountedLazyModalIds={resolvedMountedLazyModalIds}

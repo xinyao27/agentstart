@@ -93,9 +93,7 @@ function Popover(props: {
     >
       <div className="grid grid-cols-[24px_minmax(0,1fr)] items-center gap-2.5">
         <span className="bg-foreground/[0.06] text-foreground inline-flex size-6 items-center justify-center rounded-[5px]">
-          <span className="text-primary-foreground inline-flex">
-            <OpenAIIcon size={14} />
-          </span>
+          <OpenAIIcon size={14} />
         </span>
         <div>
           <div className="text-[13.5px] leading-[1.1] font-bold">
@@ -324,9 +322,7 @@ function BottomBar(props: { swapped: boolean }): JSX.Element {
         </span>
       </div>
       <div className="bg-foreground/[0.06] text-foreground -my-0.5 inline-flex items-center gap-1.5 rounded-md px-1.5 py-0.5 font-mono text-[10.5px]">
-        <span className="text-primary-foreground">
-          <OpenAIIcon size={12} />
-        </span>
+        <OpenAIIcon size={12} />
         <span className="bg-foreground/[0.12] block h-1 w-9 overflow-hidden rounded-full">
           <span
             className="block h-full rounded-full transition-[width,background] duration-[600ms] ease-out"

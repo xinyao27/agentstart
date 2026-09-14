@@ -73,7 +73,7 @@ export function PRCommentGroupView({
       <div className={cn('px-3 pb-2', group.kind === 'thread' && 'pl-6')}>
         <RightPanelCommentComposer
           placeholder={translate(
-            'auto.components.right.sidebar.checks.panel.content.ba20d1a896',
+            'auto.components.workspacePanel.checks.panel.content.ba20d1a896',
             'Reply to {{value0}}',
             { value0: comment.author }
           )}
@@ -162,7 +162,7 @@ export function PRCommentGroupView({
         <ContextMenuItem onClick={() => onQueueForAgent()}>
           <Sparkles />
           {translate(
-            'auto.components.right.sidebar.checks.panel.content.f8a2c91d04',
+            'auto.components.workspacePanel.checks.panel.content.f8a2c91d04',
             'Queue for agent'
           )}
         </ContextMenuItem>
@@ -208,7 +208,7 @@ export function ResolvedCommentGroupsSection({
           <AccordionTrigger className={presentation.resolvedSectionTrigger}>
             <span className="min-w-0 truncate">
               {translate(
-                'auto.components.right.sidebar.checks.panel.content.e8b4c1a903',
+                'auto.components.workspacePanel.checks.panel.content.e8b4c1a903',
                 'Resolved · {{value0}}',
                 { value0: groups.length }
               )}

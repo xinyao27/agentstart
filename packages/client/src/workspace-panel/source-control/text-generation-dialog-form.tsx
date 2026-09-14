@@ -194,7 +194,7 @@ export function SourceControlTextGenerationDialogForm({
         <div className="space-y-2">
           <Label className="text-xs">
             {translate(
-              'auto.components.right.sidebar.SourceControlTextGenerationDialogForm.9c14186dd2',
+              'auto.components.workspacePanel.SourceControlTextGenerationDialogForm.9c14186dd2',
               'Agent'
             )}
           </Label>
@@ -211,7 +211,7 @@ export function SourceControlTextGenerationDialogForm({
             <SelectTrigger size="sm" className="h-8 text-xs">
               <SelectValue
                 placeholder={translate(
-                  'auto.components.right.sidebar.SourceControlTextGenerationDialogForm.cce2cbd01d',
+                  'auto.components.workspacePanel.SourceControlTextGenerationDialogForm.cce2cbd01d',
                   'Choose agent'
                 )}
               />
@@ -230,7 +230,7 @@ export function SourceControlTextGenerationDialogForm({
                   <span className="flex items-center gap-2">
                     <Terminal className="text-muted-foreground size-3.5" />
                     {translate(
-                      'auto.components.right.sidebar.SourceControlTextGenerationDialogForm.914c8f6ac2',
+                      'auto.components.workspacePanel.SourceControlTextGenerationDialogForm.914c8f6ac2',
                       'Custom command'
                     )}
                   </span>
@@ -243,7 +243,7 @@ export function SourceControlTextGenerationDialogForm({
         <div className="space-y-2">
           <Label htmlFor={`source-control-${actionId}-cli-args`} className="text-xs">
             {translate(
-              'auto.components.right.sidebar.SourceControlTextGenerationDialogForm.4eab815004',
+              'auto.components.workspacePanel.SourceControlTextGenerationDialogForm.4eab815004',
               'CLI arguments'
             )}
           </Label>
@@ -252,7 +252,7 @@ export function SourceControlTextGenerationDialogForm({
             value={agentArgs}
             spellCheck={false}
             placeholder={translate(
-              'auto.components.right.sidebar.SourceControlTextGenerationDialogForm.551ffd111b',
+              'auto.components.workspacePanel.SourceControlTextGenerationDialogForm.551ffd111b',
               '--model sonnet'
             )}
             onChange={(event) => {
@@ -266,7 +266,7 @@ export function SourceControlTextGenerationDialogForm({
         <div className="space-y-2">
           <Label htmlFor={commandTemplateId} className="text-xs">
             {translate(
-              'auto.components.right.sidebar.SourceControlTextGenerationDialogForm.1f6fcfb6cf',
+              'auto.components.workspacePanel.SourceControlTextGenerationDialogForm.1f6fcfb6cf',
               'Command template'
             )}
           </Label>
@@ -297,7 +297,7 @@ export function SourceControlTextGenerationDialogForm({
           <div className="space-y-2">
             <Label className="text-xs">
               {translate(
-                'auto.components.right.sidebar.SourceControlTextGenerationDialogForm.d91b0a189d',
+                'auto.components.workspacePanel.SourceControlTextGenerationDialogForm.d91b0a189d',
                 'Save recipe'
               )}
             </Label>
@@ -345,7 +345,7 @@ export function SourceControlTextGenerationDialogForm({
               <Save className="size-4" />
             )}
             {translate(
-              'auto.components.right.sidebar.SourceControlTextGenerationDialogForm.25fcd8e49a',
+              'auto.components.workspacePanel.SourceControlTextGenerationDialogForm.25fcd8e49a',
               'Save defaults'
             )}
           </Button>

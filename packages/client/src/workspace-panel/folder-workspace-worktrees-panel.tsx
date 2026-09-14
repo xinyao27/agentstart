@@ -118,7 +118,7 @@ export default function FolderWorkspaceWorktreesPanel(): React.JSX.Element {
     return (
       <div className="text-muted-foreground flex min-h-0 flex-1 items-center justify-center p-6 text-center text-sm">
         {translate(
-          'auto.components.rightSidebar.FolderWorkspaceWorktreesPanel.unavailable',
+          'auto.components.workspacePanel.FolderWorkspaceWorktreesPanel.unavailable',
           'Workspaces are only shown for folder workspaces.'
         )}
       </div>
@@ -132,11 +132,11 @@ export default function FolderWorkspaceWorktreesPanel(): React.JSX.Element {
         <div className="text-muted-foreground mt-1 text-xs">
           {childWorktrees.length === 1
             ? translate(
-                'auto.components.rightSidebar.FolderWorkspaceWorktreesPanel.countOne',
+                'auto.components.workspacePanel.FolderWorkspaceWorktreesPanel.countOne',
                 '1 attached worktree'
               )
             : translate(
-                'auto.components.rightSidebar.FolderWorkspaceWorktreesPanel.countMany',
+                'auto.components.workspacePanel.FolderWorkspaceWorktreesPanel.countMany',
                 '{{value0}} attached worktrees',
                 { value0: childWorktrees.length }
               )}
@@ -147,13 +147,13 @@ export default function FolderWorkspaceWorktreesPanel(): React.JSX.Element {
         <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
           <div className="text-foreground text-sm font-medium">
             {translate(
-              'auto.components.rightSidebar.FolderWorkspaceWorktreesPanel.emptyTitle',
+              'auto.components.workspacePanel.FolderWorkspaceWorktreesPanel.emptyTitle',
               'No attached worktrees yet'
             )}
           </div>
           <div className="text-muted-foreground mt-2 max-w-[16rem] text-xs leading-5">
             {translate(
-              'auto.components.rightSidebar.FolderWorkspaceWorktreesPanel.emptyCopy',
+              'auto.components.workspacePanel.FolderWorkspaceWorktreesPanel.emptyCopy',
               'Worktrees created from this workspace will show up here.'
             )}
           </div>

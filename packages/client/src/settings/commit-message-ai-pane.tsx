@@ -9,11 +9,14 @@ import { normalizeSourceControlAiSettings } from '@agentstart/protocol/source-co
 import { useRef } from 'react'
 import type React from 'react'
 import { translate } from '~renderer/i18n/i18n'
+import { Sparkle } from '~renderer/icons/hugeicons'
 import { useAppStore } from '~renderer/store/state'
 import { Switch } from '~renderer/ui/switch'
 
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
+import { getCommitMessageAiPaneSearchEntries } from './commit-message-ai-search'
+import { SettingsGroupCards } from './group-card'
 import { HostedReviewCreationDefaults } from './hosted-review-creation-defaults'
 import { matchesSettingsSearch } from './search'
 import { SearchableSetting } from './searchable-setting'
@@ -263,21 +266,23 @@ export function CommitMessageAiPane({
   }
 
   return (
-    <div
-      id="source-control-ai-settings"
-      data-settings-section="source-control-ai-settings"
-      className="border-border/40 space-y-4 border-t pt-4"
-    >
-      <div className="space-y-0.5">
-        <h3 className="text-sm font-semibold">
-          {translate(
-            'auto.components.settings.CommitMessageAiPane.ad66ff886d',
-            'Source Control AI defaults'
-          )}
-        </h3>
-        <p className="text-muted-foreground text-xs">{ownership.description}</p>
-      </div>
-      {sections}
+    <div id="source-control-ai-settings" data-settings-section="source-control-ai-settings">
+      <SettingsGroupCards
+        defaultOpenId={null}
+        groups={[
+          {
+            id: 'git-ai-author',
+            icon: <Sparkle aria-hidden="true" />,
+            title: translate(
+              'auto.components.settings.CommitMessageAiPane.ad66ff886d',
+              'Source Control AI defaults'
+            ),
+            summary: ownership.description,
+            searchEntries: getCommitMessageAiPaneSearchEntries(),
+            content: <>{sections}</>
+          }
+        ]}
+      />
     </div>
   )
 }

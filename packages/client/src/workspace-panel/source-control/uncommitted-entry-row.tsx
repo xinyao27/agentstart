@@ -164,7 +164,7 @@ export const UncommittedEntryRow = function UncommittedEntryRow({
           <span
             className="text-muted-foreground flex shrink-0 items-center gap-0.5 text-[10px]"
             title={translate(
-              'auto.components.right.sidebar.SourceControl.657e0c90ad',
+              'auto.components.workspacePanel.SourceControl.657e0c90ad',
               '{{value0}} note{{value1}}',
               { value0: commentCount, value1: commentCount === 1 ? '' : 's' }
             )}
@@ -194,16 +194,16 @@ export const UncommittedEntryRow = function UncommittedEntryRow({
               title={
                 entry.area === 'untracked'
                   ? translate(
-                      'auto.components.right.sidebar.SourceControl.11463f7a98',
+                      'auto.components.workspacePanel.SourceControl.11463f7a98',
                       'Delete untracked file'
                     )
                   : entry.status === 'deleted'
                     ? translate(
-                        'auto.components.right.sidebar.SourceControl.989f3d5e34',
+                        'auto.components.workspacePanel.SourceControl.989f3d5e34',
                         'Restore file'
                       )
                     : translate(
-                        'auto.components.right.sidebar.SourceControl.d54dd48b0b',
+                        'auto.components.workspacePanel.SourceControl.d54dd48b0b',
                         'Discard changes'
                       )
               }
@@ -217,7 +217,7 @@ export const UncommittedEntryRow = function UncommittedEntryRow({
             <ActionButton
               surface="row"
               icon={Plus}
-              title={translate('auto.components.right.sidebar.SourceControl.8cde1a2fb0', 'Stage')}
+              title={translate('auto.components.workspacePanel.SourceControl.8cde1a2fb0', 'Stage')}
               onClick={(event) => {
                 event.stopPropagation()
                 void onStage(entry.path)
@@ -228,7 +228,10 @@ export const UncommittedEntryRow = function UncommittedEntryRow({
             <ActionButton
               surface="row"
               icon={Minus}
-              title={translate('auto.components.right.sidebar.SourceControl.df5040e3c3', 'Unstage')}
+              title={translate(
+                'auto.components.workspacePanel.SourceControl.df5040e3c3',
+                'Unstage'
+              )}
               onClick={(event) => {
                 event.stopPropagation()
                 void onUnstage(entry.path)
@@ -244,8 +247,8 @@ export const UncommittedEntryRow = function UncommittedEntryRow({
 function ConflictBadge({ entry }: { entry: GitStatusEntry }): React.JSX.Element {
   const isUnresolvedConflict = entry.conflictStatus === 'unresolved'
   const label = isUnresolvedConflict
-    ? translate('auto.components.right.sidebar.SourceControl.31f6d46278', 'Unresolved')
-    : translate('auto.components.right.sidebar.SourceControl.2c417432b7', 'Resolved locally')
+    ? translate('auto.components.workspacePanel.SourceControl.31f6d46278', 'Unresolved')
+    : translate('auto.components.workspacePanel.SourceControl.2c417432b7', 'Resolved locally')
   const conflictKindLabel = entry.conflictKind
     ? getLocalizedConflictKindLabel(entry.conflictKind)
     : null
@@ -256,12 +259,12 @@ function ConflictBadge({ entry }: { entry: GitStatusEntry }): React.JSX.Element 
       aria-label={
         conflictKindLabel
           ? translate(
-              'auto.components.right.sidebar.SourceControl.d206117f90',
+              'auto.components.workspacePanel.SourceControl.d206117f90',
               '{{value0}} conflict ({{value1}})',
               { value0: label, value1: conflictKindLabel }
             )
           : translate(
-              'auto.components.right.sidebar.SourceControl.05838cfdeb',
+              'auto.components.workspacePanel.SourceControl.05838cfdeb',
               '{{value0}} conflict',
               { value0: label }
             )
@@ -288,7 +291,7 @@ function ConflictBadge({ entry }: { entry: GitStatusEntry }): React.JSX.Element 
         <TooltipTrigger render={badge} />
         <TooltipContent side="left" sideOffset={6}>
           {translate(
-            'auto.components.right.sidebar.SourceControl.03194cfff4',
+            'auto.components.workspacePanel.SourceControl.03194cfff4',
             'Local session state derived from a conflict you opened here.'
           )}
         </TooltipContent>

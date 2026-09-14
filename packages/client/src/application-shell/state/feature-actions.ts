@@ -65,7 +65,12 @@ export function createUIFeatureActions(
               )
             }))
           })
-          persistPromise = persist.catch(console.error)
+          // Why: feature telemetry is best-effort UI persistence. A daemon
+          // validation response must not become a renderer-wide unhandled
+          // rejection when callers intentionally do not await this action.
+          persistPromise = persist.catch((error: unknown) => {
+            console.error('[runtime] Failed to persist feature interaction', error)
+          })
         }
         if (tourProgression === 'reveal-sidebar-and-advance') {
           // Why: the split can be triggered by keyboard/menu paths while the

@@ -124,6 +124,11 @@ export function createReconciliationActions(
         if (tab.contentType === 'git-graph') {
           return true
         }
+        // Why: pages own their content inside the renderer and need no runtime
+        // backing record; treating them like editors drops them after hydration.
+        if (tab.contentType === 'page') {
+          return true
+        }
         return liveEditorIds.has(tab.entityId)
       }
 

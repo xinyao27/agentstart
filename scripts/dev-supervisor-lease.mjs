@@ -248,8 +248,10 @@ function processBirthIdentity(pid) {
       throw new Error(`process birth lookup failed: ${error.message}`)
     }
   }
+  // Why: ps localizes lstart under a non-English locale, and only the C-locale form parses.
   const result = spawnSync('ps', ['-o', 'lstart=', '-p', String(pid)], {
     encoding: 'utf8',
+    env: { ...process.env, LC_ALL: 'C' },
     stdio: ['ignore', 'pipe', 'ignore']
   })
   if (result.status !== 0 || !result.stdout.trim()) {

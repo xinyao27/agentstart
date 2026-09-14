@@ -16,7 +16,7 @@ const buttonVariants = cva(
         // Why: toolbar controls must keep an opaque resting surface in both themes.
         outline:
           'border border-border bg-background text-foreground hover:border-muted-foreground/35 hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-background dark:hover:bg-accent',
-        // Why: right-sidebar toolbar controls need the standard outline interaction
+        // Why: workspace-panel toolbar controls need the standard outline interaction
         // states without painting a main-canvas background over the sidebar.
         'sidebar-outline':
           'border border-border bg-sidebar text-muted-foreground hover:border-muted-foreground/35 hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-sidebar dark:hover:bg-accent',
@@ -26,6 +26,13 @@ const buttonVariants = cva(
         // Why: segmented titlebar actions rest quietly and use the primary color only for current state.
         'titlebar-segment':
           'border border-y-0 border-border bg-transparent text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:border-border focus-visible:bg-accent focus-visible:text-accent-foreground aria-[current=page]:text-primary dark:border-input dark:hover:bg-accent dark:focus-visible:border-input',
+        // Why: the leading tools sit inside their own tinted track, so their
+        // segment paints a neutral wash on hover and lifts the current one onto
+        // the island's own plane rather than tinting it with the brand color;
+        // the cap's hairline rides the box-shadow so no border joins the focus
+        // state, which stays a background-only change.
+        'workspace-tool':
+          '!rounded-md border-0 bg-transparent text-muted-foreground transition-[background-color,color,box-shadow] duration-150 ease-out hover:bg-muted hover:text-foreground focus-visible:bg-muted focus-visible:text-foreground aria-[current=page]:bg-background aria-[current=page]:text-primary aria-[current=page]:shadow-[0_0_0_1px_var(--border),0_1px_2px_color-mix(in_srgb,black_7%,transparent),0_0_4px_color-mix(in_srgb,black_4%,transparent)]',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-[color-mix(in_srgb,var(--secondary)_80%,var(--background))]',
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent',
@@ -87,6 +94,9 @@ const buttonVariants = cva(
         // Why: status actions fill the footer while their content retains compact spacing.
         'status-bar': "h-full gap-1.5 px-1 py-0.5 text-xs [&_svg:not([class*='size-'])]:size-3",
         sm: 'h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5',
+        // Why: the tool cap is sized to its track's content box, so the selected
+        // surface keeps a 3px inset from the track edge instead of filling it.
+        'workspace-tool': 'size-6 p-0',
         lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
         icon: 'size-9',
         'icon-xs': "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
@@ -98,7 +108,6 @@ const buttonVariants = cva(
         'icon-status-bar-wide': "h-full w-6 [&_svg:not([class*='size-'])]:size-3",
         'icon-sm': 'size-8',
         'icon-lg': 'size-10',
-        'icon-tab-strip': "h-full w-8 [&_svg:not([class*='size-'])]:size-3.5",
         // Why: titlebar controls share the row height while retaining compact horizontal rhythm.
         'icon-titlebar': "h-full w-7 [&_svg:not([class*='size-'])]:size-4",
         'icon-titlebar-compact': "h-full w-6 [&_svg:not([class*='size-'])]:size-4",

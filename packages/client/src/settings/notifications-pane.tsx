@@ -1,7 +1,7 @@
 import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
-import { BellRinging as BellRing, Robot as Bot, Siren } from '~renderer/icons/hugeicons'
+import { FileAudio, BellRinging as BellRing, Robot as Bot } from '~renderer/icons/hugeicons'
 import {
   MacNotificationPermissionCard,
   useMacNotificationPermissionState
@@ -9,7 +9,7 @@ import {
 import { useAppStore } from '~renderer/store/state'
 
 import { Button } from '../ui/button'
-import { Separator } from '../ui/separator'
+import { SettingsGroupCards } from './group-card'
 import { NotificationSettingToggle } from './notification-setting-toggle'
 import {
   createNotificationVolumeDraftState,
@@ -17,6 +17,11 @@ import {
   sendNotificationSettingsTestNotification
 } from './notification-settings-copy'
 import { NotificationSoundSection } from './notification-sound-section'
+import {
+  getNotificationDeliverySearchEntries,
+  getNotificationEventsSearchEntries,
+  getNotificationSoundSearchEntries
+} from './notifications-search'
 export { sendNotificationSettingsTestNotification } from './notification-settings-copy'
 
 type NotificationsPaneProps = {
@@ -98,113 +103,139 @@ export function NotificationsPane({
   }
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-2.5">
       {macPermissionState !== null ? (
-        <div className="pb-3">
-          <MacNotificationPermissionCard state={macPermissionState} />
-        </div>
+        <MacNotificationPermissionCard state={macPermissionState} />
       ) : null}
-      <NotificationSettingToggle
-        label={translate(
-          'auto.components.settings.NotificationsPane.841c8c549f',
-          'Enable Notifications'
-        )}
-        description={translate(
-          'auto.components.settings.NotificationsPane.deff6d30da',
-          'Native system notifications for background events.'
-        )}
-        checked={notificationSettings.enabled}
-        onToggle={() => {
-          if (!notificationSettings.enabled) {
-            useAppStore.getState().recordFeatureInteraction('notifications')
+      <SettingsGroupCards
+        groups={[
+          {
+            id: 'notifications-delivery',
+            icon: <BellRing aria-hidden="true" />,
+            title: translate(
+              'auto.components.settings.NotificationsPane.groupDelivery',
+              'Delivery'
+            ),
+            searchEntries: getNotificationDeliverySearchEntries(),
+            content: (
+              <div className="divide-border/40 divide-y">
+                <NotificationSettingToggle
+                  label={translate(
+                    'auto.components.settings.NotificationsPane.841c8c549f',
+                    'Enable Notifications'
+                  )}
+                  description={translate(
+                    'auto.components.settings.NotificationsPane.deff6d30da',
+                    'Native system notifications for background events.'
+                  )}
+                  checked={notificationSettings.enabled}
+                  onToggle={() => {
+                    if (!notificationSettings.enabled) {
+                      useAppStore.getState().recordFeatureInteraction('notifications')
+                    }
+                    void updateNotificationSettings({ enabled: !notificationSettings.enabled })
+                  }}
+                />
+                <NotificationSettingToggle
+                  label={translate(
+                    'auto.components.settings.NotificationsPane.00cd406dbb',
+                    'Suppress While Focused'
+                  )}
+                  description={translate(
+                    'auto.components.settings.NotificationsPane.2772d2f257',
+                    'Skip notifications when the triggering worktree is already visible.'
+                  )}
+                  checked={notificationSettings.suppressWhenFocused}
+                  disabled={!notificationSettings.enabled}
+                  onToggle={() =>
+                    void updateNotificationSettings({
+                      suppressWhenFocused: !notificationSettings.suppressWhenFocused
+                    })
+                  }
+                />
+                <div className="flex flex-wrap items-center gap-2 pt-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={!notificationSettings.enabled}
+                    onClick={() => void handleSendTestNotification()}
+                    className="gap-2"
+                  >
+                    <BellRing className="size-3.5" />
+                    {translate(
+                      'auto.components.settings.NotificationsPane.906b4afebf',
+                      'Send Test Notification'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            )
+          },
+          {
+            id: 'notifications-events',
+            icon: <Bot aria-hidden="true" />,
+            title: translate('auto.components.settings.NotificationsPane.groupEvents', 'Events'),
+            searchEntries: getNotificationEventsSearchEntries(),
+            content: (
+              <div className="divide-border/40 divide-y">
+                <NotificationSettingToggle
+                  label={translate(
+                    'auto.components.settings.NotificationsPane.ca76d06fd2',
+                    'Agent Task Complete'
+                  )}
+                  description={translate(
+                    'auto.components.settings.NotificationsPane.55f901a59b',
+                    'A coding agent finishes and becomes idle.'
+                  )}
+                  checked={notificationSettings.agentTaskComplete}
+                  disabled={!notificationSettings.enabled}
+                  onToggle={() =>
+                    void updateNotificationSettings({
+                      agentTaskComplete: !notificationSettings.agentTaskComplete
+                    })
+                  }
+                />
+                <NotificationSettingToggle
+                  label={translate(
+                    'auto.components.settings.NotificationsPane.591fe605b9',
+                    'Terminal Bell'
+                  )}
+                  description={translate(
+                    'auto.components.settings.NotificationsPane.b6fc369244',
+                    'A background terminal emits a bell character.'
+                  )}
+                  checked={notificationSettings.terminalBell}
+                  disabled={!notificationSettings.enabled}
+                  onToggle={() =>
+                    void updateNotificationSettings({
+                      terminalBell: !notificationSettings.terminalBell
+                    })
+                  }
+                />
+              </div>
+            )
+          },
+          {
+            id: 'notifications-sound',
+            icon: <FileAudio aria-hidden="true" />,
+            title: translate(
+              'auto.components.settings.NotificationsPane.88686e6ca8',
+              'Notification Sound'
+            ),
+            searchEntries: getNotificationSoundSearchEntries(),
+            content: (
+              <NotificationSoundSection
+                notificationSettings={notificationSettings}
+                notificationsEnabled={notificationSettings.enabled}
+                volumeDraft={volumeDraft}
+                onVolumeDraftChange={setVolumeDraft}
+                onVolumeCommit={handleVolumeCommit}
+                onUpdateNotificationSettings={updateNotificationSettings}
+              />
+            )
           }
-          void updateNotificationSettings({ enabled: !notificationSettings.enabled })
-        }}
+        ]}
       />
-
-      <Separator />
-
-      <NotificationSettingToggle
-        icon={<Bot className="size-4" />}
-        label={translate(
-          'auto.components.settings.NotificationsPane.ca76d06fd2',
-          'Agent Task Complete'
-        )}
-        description={translate(
-          'auto.components.settings.NotificationsPane.55f901a59b',
-          'A coding agent finishes and becomes idle.'
-        )}
-        checked={notificationSettings.agentTaskComplete}
-        disabled={!notificationSettings.enabled}
-        onToggle={() =>
-          void updateNotificationSettings({
-            agentTaskComplete: !notificationSettings.agentTaskComplete
-          })
-        }
-      />
-
-      <NotificationSettingToggle
-        icon={<Siren className="size-4" />}
-        label={translate('auto.components.settings.NotificationsPane.591fe605b9', 'Terminal Bell')}
-        description={translate(
-          'auto.components.settings.NotificationsPane.b6fc369244',
-          'A background terminal emits a bell character.'
-        )}
-        checked={notificationSettings.terminalBell}
-        disabled={!notificationSettings.enabled}
-        onToggle={() =>
-          void updateNotificationSettings({
-            terminalBell: !notificationSettings.terminalBell
-          })
-        }
-      />
-
-      <Separator />
-
-      <NotificationSoundSection
-        notificationSettings={notificationSettings}
-        notificationsEnabled={notificationSettings.enabled}
-        volumeDraft={volumeDraft}
-        onVolumeDraftChange={setVolumeDraft}
-        onVolumeCommit={handleVolumeCommit}
-        onUpdateNotificationSettings={updateNotificationSettings}
-      />
-
-      <Separator />
-
-      <NotificationSettingToggle
-        label={translate(
-          'auto.components.settings.NotificationsPane.00cd406dbb',
-          'Suppress While Focused'
-        )}
-        description={translate(
-          'auto.components.settings.NotificationsPane.2772d2f257',
-          'Skip notifications when the triggering worktree is already visible.'
-        )}
-        checked={notificationSettings.suppressWhenFocused}
-        disabled={!notificationSettings.enabled}
-        onToggle={() =>
-          void updateNotificationSettings({
-            suppressWhenFocused: !notificationSettings.suppressWhenFocused
-          })
-        }
-      />
-
-      <div className="flex flex-wrap items-center gap-2 pt-3">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!notificationSettings.enabled}
-          onClick={() => void handleSendTestNotification()}
-          className="gap-2"
-        >
-          <BellRing className="size-3.5" />
-          {translate(
-            'auto.components.settings.NotificationsPane.906b4afebf',
-            'Send Test Notification'
-          )}
-        </Button>
-      </div>
     </div>
   )
 }

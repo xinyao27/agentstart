@@ -21,9 +21,7 @@ use crate::runtime_environment::server::{
     RUNTIME_PATH, RuntimeAdmissionState, RuntimeAuthenticatedChannel,
 };
 use admission::{AdmissionState, MOBILE_PATH, admit_mobile, admit_runtime};
-pub use channel::{
-    MobileAuthenticatedChannel, MobileOutbound, MobileOutboundError, MobileRpcMessage,
-};
+pub use channel::{MobileAuthenticatedChannel, MobileOutbound, MobileRpcMessage};
 use connections::MobileConnections;
 
 const ACCEPTED_CHANNEL_CAPACITY: usize = 16;
@@ -138,10 +136,5 @@ impl MobileServer {
     pub async fn wait(self) -> Result<(), MobileServerError> {
         self.task.await??;
         Ok(())
-    }
-
-    pub async fn shutdown(mut self) -> Result<(), MobileServerError> {
-        self.begin_shutdown();
-        self.wait().await
     }
 }

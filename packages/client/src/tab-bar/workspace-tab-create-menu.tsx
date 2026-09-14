@@ -34,7 +34,7 @@ export function WorkspaceTabCreateMenu({
     <Button
       type="button"
       variant="ghost"
-      size="icon-xs"
+      size="icon-sm"
       className={cn(
         'my-auto ml-1 text-muted-foreground',
         disabled && 'cursor-not-allowed opacity-50 hover:bg-background hover:text-muted-foreground'

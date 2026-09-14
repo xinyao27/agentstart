@@ -43,7 +43,7 @@ function countServers(configs: LoadedMcpConfigInspection[]): number {
 
 export function McpConfigSection({ repo }: McpConfigSectionProps): React.JSX.Element {
   const openFile = useAppStore((state) => state.openFile)
-  const setActiveView = useAppStore((state) => state.setActiveView)
+  const focusWorkspaceSurface = useAppStore((state) => state.focusWorkspaceSurface)
   const setActiveWorktree = useAppStore((state) => state.setActiveWorktree)
   const ensureWorktreeRootGroup = useAppStore((state) => state.ensureWorktreeRootGroup)
   const activeWorktreeId = useAppStore((state) => state.activeWorktreeId)
@@ -177,7 +177,7 @@ export function McpConfigSection({ repo }: McpConfigSectionProps): React.JSX.Ele
       },
       { targetGroupId }
     )
-    setActiveView('terminal')
+    focusWorkspaceSurface()
   }
 
   const handleCreateStarter = async (): Promise<void> => {
@@ -215,7 +215,7 @@ export function McpConfigSection({ repo }: McpConfigSectionProps): React.JSX.Ele
         },
         { targetGroupId }
       )
-      setActiveView('terminal')
+      focusWorkspaceSurface()
       toast.success(
         translate('auto.components.settings.McpConfigSection.1f3665e35a', 'MCP config created'),
         {

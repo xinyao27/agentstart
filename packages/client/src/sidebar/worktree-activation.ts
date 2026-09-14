@@ -22,3 +22,17 @@ export function activateWorktreeFromSidebar(worktreeId: string): void {
   // jump duplicate pinned/canonical entries back to the first mounted copy.
   activateAndRevealWorktree(worktreeId, { revealInSidebar: false })
 }
+
+// Why: one browser tab per worktree means this has to be an explicit gesture —
+// switching workspaces inside a tab stays in place.
+export function openWorktreeInNewTabFromSidebar(worktreeId: string): boolean {
+  const worktree = useAppStore.getState().getKnownWorktreeById(worktreeId)
+  if (!worktree) {
+    return false
+  }
+  return openSidebarWorkspace({
+    openInNewTab: true,
+    projectId: worktree.repoId,
+    worktreeId: worktree.id
+  })
+}

@@ -1,5 +1,6 @@
 import { TUI_AGENT_CONFIG } from '@agentstart/protocol/agent/launch/config'
 import type { CreateWorktreeResult } from '@agentstart/protocol/worktree/create-result'
+import { isWorkspaceBodyVisible } from '~renderer/application-shell/state/visible-surface'
 import { createBrowserUuid } from '~renderer/browser/uuid'
 import { ensureAgentStartupInTerminal } from '~renderer/new-workspace/workspace-creation'
 import { markAgentWorkspaceTrusted } from '~renderer/runtime/agent-trust-client'
@@ -43,7 +44,7 @@ function shouldActivate(creationId: string): boolean {
   const state = useAppStore.getState()
   return (
     state.pendingWorktreeCreations[creationId] !== undefined &&
-    state.activeView === 'terminal' &&
+    isWorkspaceBodyVisible(state) &&
     (state.activePendingCreationId === creationId || state.activePendingCreationId === null)
   )
 }

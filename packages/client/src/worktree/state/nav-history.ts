@@ -37,13 +37,13 @@ type ActivateFn = (worktreeId: string) => unknown
 // the slice itself unaware of the activation module.
 let activator: ActivateFn | null = null
 
+// Why: installed by App-level init so the slice can dispatch page entries to
+// the navigation activator without importing the UI slice directly (the UI
+// slice already transitively depends on this module via the store creator).
 export function setWorktreeNavActivator(fn: ActivateFn | null): void {
   activator = fn
 }
 
-// Why: installed by App-level init so the slice can dispatch page entries
-// to setActiveView(...) without importing the UI slice directly (the UI
-// slice already transitively depends on this module via the store creator).
 function getHistoryEntryKey(entry: WorktreeNavHistoryEntry): string {
   return `worktree:${entry}`
 }

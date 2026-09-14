@@ -9,7 +9,7 @@ import {
 } from '~renderer/runtime/file-search-bounds'
 import { useAppStore } from '~renderer/store/state'
 
-import { getRightSidebarWorktreeRuntimeSettings } from './runtime-owner'
+import { getWorkspacePanelWorktreeRuntimeSettings } from './runtime-owner'
 
 const SEARCH_DEBOUNCE_MS = 300
 const SEARCH_MAX_RESULTS = 2000
@@ -102,7 +102,7 @@ export function useFileSearchRunner({
         }
         const results = await searchRuntimeFiles(
           {
-            settings: getRightSidebarWorktreeRuntimeSettings(activeWorktreeId),
+            settings: getWorkspacePanelWorktreeRuntimeSettings(activeWorktreeId),
             worktreeId: activeWorktreeId,
             worktreePath,
             connectionId

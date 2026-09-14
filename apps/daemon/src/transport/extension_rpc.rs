@@ -94,11 +94,6 @@ impl ExtensionRpcServer {
         self.task.await??;
         Ok(())
     }
-
-    pub async fn shutdown(mut self) -> Result<(), ExtensionRpcServerError> {
-        self.begin_shutdown();
-        self.wait().await
-    }
 }
 
 pub fn generate_auth_token() -> Result<String, ExtensionRpcServerError> {

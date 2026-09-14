@@ -97,7 +97,7 @@ export function resolveDropdownItems(inputs: DropdownActionInputs): DropdownEntr
       : {
           ...entry,
           title: translate(
-            'auto.components.right.sidebar.source.control.dropdown.items.7aad2c0240',
+            'auto.components.workspacePanel.source.control.dropdown.items.7aad2c0240',
             'Hosted review operation in progress…'
           ),
           disabled: true

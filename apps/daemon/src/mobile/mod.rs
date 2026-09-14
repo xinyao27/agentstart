@@ -19,12 +19,12 @@ pub use host_pairing::{
     MobilePairingManagerError,
 };
 pub(crate) use keypair::migrate_keypair_to_installation;
-pub use keypair::{MobileKeypair, MobileKeypairError, load_or_create_keypair};
+pub use keypair::{MobileKeypair, load_or_create_keypair};
 pub use offer::{MobilePairingOffer, MobilePairingOfferError, create_pairing_offer};
-pub use pairing::{MobilePairingError, authenticate};
+pub use pairing::authenticate;
 pub(crate) use presence::MobilePresence;
 pub(crate) use server::CompanionChannel;
 pub use server::{
-    MobileAuthenticatedChannel, MobileOutbound, MobileOutboundError, MobileRpcMessage,
-    MobileServer, MobileServerConfig, MobileServerError,
+    MobileAuthenticatedChannel, MobileOutbound, MobileRpcMessage, MobileServer, MobileServerConfig,
+    MobileServerError,
 };

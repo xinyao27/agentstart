@@ -12,6 +12,7 @@ import { translate } from '~renderer/i18n/i18n'
 import {
   PersonArmsSpread as Accessibility,
   Camera,
+  Robot,
   ShieldCheck,
   ArrowSquareOut as ExternalLink,
   ArrowClockwise as RefreshCw
@@ -24,7 +25,9 @@ import { cn } from '~renderer/ui/class-names'
 
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
+import { getComputerUsePaneSearchEntries } from './computer-use-search'
 import { ComputerUseSkillSetupPanel } from './computer-use-skill-setup-panel'
+import { SettingsGroupCards, type SettingsGroup } from './group-card'
 type PermissionDefinition = {
   id: ComputerPermissionId
   labelKey: string
@@ -280,10 +283,20 @@ export function ComputerUsePane(): React.JSX.Element {
 
   const isMac = platform === null || platform === 'darwin'
 
-  return (
-    <div className="space-y-5">
-      {isMac ? (
-        <>
+  const paneSearchEntries = getComputerUsePaneSearchEntries()
+  const [paneSearchEntry] = paneSearchEntries
+
+  const groups: SettingsGroup[] = []
+
+  if (isMac) {
+    groups.push({
+      id: 'computer-use-access',
+      icon: <ShieldCheck aria-hidden="true" />,
+      title: paneSearchEntry.title,
+      summary: paneSearchEntry.description,
+      searchEntries: [paneSearchEntry],
+      content: (
+        <div className="space-y-5">
           <div className="border-border/60 bg-muted/25 flex flex-wrap items-start justify-between gap-4 rounded-lg border px-4 py-3">
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-sm font-medium">
@@ -385,10 +398,22 @@ export function ComputerUsePane(): React.JSX.Element {
                 : translate('auto.components.settings.ComputerUsePane.6b17602073', 'Reset access')}
             </Button>
           </div>
-        </>
-      ) : null}
+        </div>
+      )
+    })
+  }
 
-      <ComputerUseSkillSetupPanel />
-    </div>
-  )
+  groups.push({
+    id: 'computer-use-skill',
+    icon: <Robot aria-hidden="true" />,
+    title: translate('auto.components.settings.ComputerUsePane.93255aaf18', 'Computer Use skill'),
+    summary: translate(
+      'auto.components.settings.ComputerUsePane.1735461723',
+      'Enables agents to inspect and operate local desktop apps.'
+    ),
+    searchEntries: [paneSearchEntry],
+    content: <ComputerUseSkillSetupPanel />
+  })
+
+  return <SettingsGroupCards defaultOpenId="computer-use-access" groups={groups} />
 }

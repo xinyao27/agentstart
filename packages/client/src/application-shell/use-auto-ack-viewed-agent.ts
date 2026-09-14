@@ -7,6 +7,7 @@ import {
 import type { TerminalLayoutSnapshot } from '@agentstart/protocol/workspace/session'
 import { useEffect } from 'react'
 import type { RetainedAgentEntry } from '~renderer/agent/status-state/slice'
+import { activeViewFor } from '~renderer/application-shell/state/visible-surface'
 import { useAppStore } from '~renderer/store/state'
 
 function resolveActiveLeafId(
@@ -163,14 +164,14 @@ function acknowledgeViewedAgentAttention(
 // The effect subscribes directly to the store (not via React selectors) so it
 // sees every state change with no re-render amplification up the component
 // tree. A reference-equality guard inside the callback bails out immediately
-// when none of the seven slices we care about (activeView, activeTabId,
+// when none of the values we care about (derived active view, activeTabId,
 // agentStatusByPaneKey, retainedAgentsByPaneKey, acknowledgedAgentsByPaneKey,
 // terminalLayoutsByTabId, unreadAgentCompletionPanes)
 // have changed — so the Object.entries walk only runs for updates
 // that could legitimately affect the ack decision.
 //
 // It acks whenever:
-//   - activeView is 'terminal' (the user isn't on Settings), AND
+//   - the derived active view is 'terminal' (the workspace body is visible), AND
 //   - activeTabId identifies a live tab, AND
 //   - at least one agentStatusByPaneKey entry OR retainedAgentsByPaneKey
 //     entry matches the active tab+leaf AND its ackAt < stateStartedAt, OR
@@ -214,8 +215,11 @@ export function useAutoAckViewedAgent(): void {
 
     const maybeAck = (): void => {
       const s = useAppStore.getState()
+      // Why: "the user is looking at the workspace body" is a property of the
+      // active tab, so the derived surface is what gates this acknowledgement.
+      const activeView = activeViewFor(s)
       if (
-        s.activeView === lastActiveView &&
+        activeView === lastActiveView &&
         s.activeTabId === lastActiveTabId &&
         s.agentStatusByPaneKey === lastAgentStatus &&
         s.retainedAgentsByPaneKey === lastRetained &&
@@ -226,7 +230,7 @@ export function useAutoAckViewedAgent(): void {
         return
       }
 
-      if (s.activeView !== 'terminal') {
+      if (activeView !== 'terminal') {
         return
       }
       // Why: the auto-ack represents "the user saw this row" — but tab-active is
@@ -255,7 +259,7 @@ export function useAutoAckViewedAgent(): void {
       // Updating refs before the gates would consume the diff silently and
       // leave the user returning to cards whose bold-until-viewed rows stay
       // bold until some unrelated store change happens to bump the refs.
-      lastActiveView = s.activeView
+      lastActiveView = activeView
       lastActiveTabId = s.activeTabId
       lastAgentStatus = s.agentStatusByPaneKey
       lastRetained = s.retainedAgentsByPaneKey

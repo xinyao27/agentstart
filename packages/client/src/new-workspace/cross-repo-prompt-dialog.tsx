@@ -10,7 +10,7 @@ import {
 } from '~renderer/ui/dialog'
 
 import type { SmartWorkspaceRepo } from './github-repo-match'
-import type { CrossRepoPrompt } from './use-smart-github-search'
+import type { CrossRepoPrompt } from './smart-workspace-github-search'
 
 type CrossRepoPromptDialogProps = {
   allowProjectAdd: boolean

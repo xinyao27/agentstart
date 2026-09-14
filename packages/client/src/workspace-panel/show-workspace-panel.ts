@@ -1,7 +1,7 @@
-import type { ActiveRightSidebarTab } from '@agentstart/protocol/settings/ui-state'
+import type { ActiveWorkspacePanelTab } from '@agentstart/protocol/settings/ui-state'
 import { getWorkbenchLocation, navigateWorkbench } from '~renderer/runtime/workbench-location'
 import { useAppStore } from '~renderer/store/state'
-import { normalizeRightSidebarRoute } from '~renderer/workspace-panel/right-sidebar-route'
+import { normalizeWorkspacePanelRoute } from '~renderer/workspace-panel/workspace-panel-route'
 
 import type { SourceControlPanelView } from './source-control/workspace-panel/state'
 
@@ -13,13 +13,13 @@ type ExplorerDestination =
       includePattern?: string
     }
 
-export function showWorkspaceSidebar({
+export function showWorkspacePanel({
   view,
   worktreeId,
   explorerDestination,
   sourceControlView = 'changes'
 }: {
-  view: ActiveRightSidebarTab
+  view: ActiveWorkspacePanelTab
   worktreeId?: string | null
   explorerDestination?: ExplorerDestination
   sourceControlView?: SourceControlPanelView
@@ -31,17 +31,17 @@ export function showWorkspaceSidebar({
   }
 
   if (view === 'explorer' && explorerDestination?.view === 'search') {
-    state.showRightSidebarSearch({
+    state.showWorkspacePanelSearch({
       ...(explorerDestination.query ? { query: explorerDestination.query } : {}),
       ...(explorerDestination.includePattern
         ? { includePattern: explorerDestination.includePattern }
         : {})
     })
   } else if (view === 'explorer') {
-    state.showRightSidebarFiles()
+    state.showWorkspacePanelFiles()
   } else {
-    state.setRightSidebarTab(view)
-    state.setRightSidebarOpen(true)
+    state.setWorkspacePanelTab(view)
+    state.setWorkspacePanelOpen(true)
   }
 
   if (view === 'source-control') {
@@ -56,26 +56,29 @@ export function showWorkspaceSidebar({
   }
 }
 
-export function toggleWorkspaceSidebar(options: Parameters<typeof showWorkspaceSidebar>[0]): void {
+export function toggleWorkspacePanel(options: Parameters<typeof showWorkspacePanel>[0]): void {
   const state = useAppStore.getState()
   const resolvedWorktreeId = options.worktreeId ?? state.activeWorktreeId
   if (!resolvedWorktreeId) {
     return
   }
-  const route = normalizeRightSidebarRoute(state.rightSidebarTab, state.rightSidebarExplorerView)
+  const route = normalizeWorkspacePanelRoute(
+    state.workspacePanelTab,
+    state.workspacePanelExplorerView
+  )
   const requestedExplorerView = options.explorerDestination?.view ?? 'files'
   const requestedSourceControlView = options.sourceControlView ?? 'changes'
   const currentSourceControlView =
     state.sourceControlPanelViewByWorktree[resolvedWorktreeId] ??
     state.requestedSourceControlPanelView
   const isSameDestination =
-    route.rightSidebarTab === options.view &&
-    (options.view !== 'explorer' || route.rightSidebarExplorerView === requestedExplorerView) &&
+    route.workspacePanelTab === options.view &&
+    (options.view !== 'explorer' || route.workspacePanelExplorerView === requestedExplorerView) &&
     (options.view !== 'source-control' || currentSourceControlView === requestedSourceControlView)
 
-  if (state.rightSidebarOpen && isSameDestination) {
-    state.setRightSidebarOpen(false)
+  if (state.workspacePanelOpen && isSameDestination) {
+    state.setWorkspacePanelOpen(false)
     return
   }
-  showWorkspaceSidebar(options)
+  showWorkspacePanel(options)
 }

@@ -54,7 +54,7 @@ export function PendingWorktreeRow({
           const store = useAppStore.getState()
           store.setActivePendingWorktreeCreation(creationId)
           store.updatePendingWorktreeCreation(creationId, { loaderVisible: true })
-          store.setActiveView('terminal')
+          store.focusWorkspaceSurface()
         }}
         className="focus-visible:bg-accent flex min-w-0 flex-1 justify-start gap-2 border-0 px-2 py-1.5 text-left font-normal whitespace-normal"
       >

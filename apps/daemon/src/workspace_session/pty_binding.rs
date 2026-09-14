@@ -1,4 +1,8 @@
+use std::collections::HashSet;
+
 use serde_json::{Map, Value, json};
+
+use crate::terminal_session::TerminalScrollbackGrid;
 
 #[derive(Clone)]
 pub(crate) struct PtyBinding {
@@ -16,6 +20,7 @@ pub(crate) struct PtyBinding {
 }
 
 pub(crate) struct PtyScrollback {
+    pub(crate) grid: Option<TerminalScrollbackGrid>,
     pub(crate) host_id: Option<String>,
     pub(crate) leaf_id: String,
     pub(crate) reference: String,
@@ -46,6 +51,21 @@ pub(super) fn apply_scrollback(session: &mut Value, scrollback: &PtyScrollback) 
         scrollback.leaf_id.clone(),
         Value::String(scrollback.reference.clone()),
     );
+    // Why: the recorded grid travels with the reference so a restore can lay the
+    // replayed rows out at the size they were produced for, instead of inheriting
+    // whatever grid the fresh pane happens to open with.
+    let grids = object_field(layout, "scrollbackGridsByLeafId");
+    match scrollback.grid {
+        Some(grid) => {
+            grids.insert(
+                scrollback.leaf_id.clone(),
+                json!({ "cols": grid.cols, "rows": grid.rows }),
+            );
+        }
+        None => {
+            grids.remove(&scrollback.leaf_id);
+        }
+    }
     if let Some(buffers) = layout
         .get_mut("buffersByLeafId")
         .and_then(Value::as_object_mut)
@@ -69,6 +89,12 @@ pub(super) fn clear_scrollback(session: &mut Value, tab_id: &str, leaf_id: &str)
         .and_then(Value::as_object_mut)
     {
         references.remove(leaf_id);
+    }
+    if let Some(grids) = layout
+        .get_mut("scrollbackGridsByLeafId")
+        .and_then(Value::as_object_mut)
+    {
+        grids.remove(leaf_id);
     }
     if let Some(buffers) = layout
         .get_mut("buffersByLeafId")
@@ -125,11 +151,16 @@ fn bind_tab(session: &mut Map<String, Value>, binding: &PtyBinding) {
         let tab = tab.as_object_mut()?;
         (tab.get("id").and_then(Value::as_str) == Some(&binding.tab_id)).then_some(tab)
     }) {
+        // Why: the renderer owns a tab's labels, so a rebind (wake, resumed PTY,
+        // adopted pane) refreshes the binding and the agent association only.
+        // Rewriting title/customTitle here both froze the live title as a rename
+        // and raced the renderer's own pending title write into a save conflict.
         tab.insert("ptyId".to_owned(), Value::String(binding.pty_id.clone()));
-        apply_tab_metadata(tab, binding);
+        if let Some(agent) = &binding.launch_agent {
+            tab.insert("launchAgent".to_owned(), Value::String(agent.clone()));
+        }
     } else {
-        let ordinal = tabs.len() + 1;
-        let default_title = format!("Terminal {ordinal}");
+        let default_title = format!("Terminal {}", next_terminal_ordinal(tabs.as_slice()));
         let title = binding.title.as_ref().unwrap_or(&default_title);
         let mut tab = json!({
             "id": binding.tab_id,
@@ -182,6 +213,36 @@ fn apply_tab_metadata(tab: &mut Map<String, Value>, binding: &PtyBinding) {
         tab.insert("title".to_owned(), Value::String(title.clone()));
         tab.insert("customTitle".to_owned(), Value::String(title.clone()));
     }
+}
+
+// Why: the renderer numbers new terminals by the lowest free ordinal so a lone
+// fresh tab stays "Terminal 1" after older ones close. The daemon also creates
+// tabs (mobile, CLI, agent launches), so it must apply the same rule; a raw
+// `len() + 1` ordinal disagreed with the renderer's label for the same tab.
+fn next_terminal_ordinal(tabs: &[Value]) -> usize {
+    let mut used = HashSet::new();
+    for tab in tabs {
+        let label = tab
+            .as_object()
+            .and_then(|tab| tab.get("defaultTitle").or_else(|| tab.get("title")))
+            .and_then(Value::as_str);
+        if let Some(ordinal) = label.and_then(terminal_ordinal) {
+            used.insert(ordinal);
+        }
+    }
+    let mut next = 1;
+    while used.contains(&next) {
+        next += 1;
+    }
+    next
+}
+
+fn terminal_ordinal(label: &str) -> Option<usize> {
+    let suffix = label.strip_prefix("Terminal ")?;
+    if suffix.is_empty() || !suffix.bytes().all(|byte| byte.is_ascii_digit()) {
+        return None;
+    }
+    suffix.parse().ok()
 }
 
 fn bind_layout(session: &mut Map<String, Value>, binding: &PtyBinding) {

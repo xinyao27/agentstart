@@ -5,6 +5,7 @@ import { DEFAULT_SOURCE_CONTROL_GROUP_ORDER } from '@agentstart/protocol/source-
 import type { SourceControlGroupOrder } from '@agentstart/protocol/source-control/group-order'
 import { useEffect, useRef, useState } from 'react'
 import { translate } from '~renderer/i18n/i18n'
+import { CloudCheck, GitBranch, GithubLogo } from '~renderer/icons/hugeicons'
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
@@ -17,14 +18,14 @@ import { getAutoRenameBranchSearchEntries } from './auto-rename-branch-search'
 import { BranchPrefixFeedback } from './branch-prefix-feedback'
 import {
   CompareAgainstUpstreamSetting,
-  compareAgainstUpstreamMatchesSearch
+  getCompareAgainstUpstreamSearchEntry
 } from './compare-against-upstream-setting'
 import { SettingsRow, SettingsSegmentedControl } from './form-controls'
+import { SettingsGroupCards, type SettingsGroup } from './group-card'
 import {
   KEEP_LOCAL_MAIN_UP_TO_DATE_SECTION_ID,
   getKeepLocalMainUpToDateTitle
 } from './keep-local-main-up-to-date-setting'
-import { matchesSettingsSearch } from './search'
 import { SearchableSetting } from './searchable-setting'
 
 const KEEP_LOCAL_MAIN_UP_TO_DATE_DESCRIPTION =
@@ -51,16 +52,6 @@ const SOURCE_CONTROL_GROUP_ORDER_KEYWORDS = [
   'source control',
   'git changes'
 ]
-
-function shouldShowAutoRenameBranchSetting(
-  searchQuery: string,
-  hasUnsavedBranchPromptChanges: boolean
-): boolean {
-  return (
-    hasUnsavedBranchPromptChanges ||
-    matchesSettingsSearch(searchQuery, getAutoRenameBranchSearchEntries())
-  )
-}
 
 type GitPaneProps = {
   settings: GlobalSettings
@@ -161,207 +152,229 @@ export function GitPane({
   const branchPrefixInputValue =
     settings.branchPrefix === 'git-username' ? displayedGitUsername : customPrefixDraft
 
-  const visibleSections = [
-    matchesSettingsSearch(searchQuery, {
-      title: translate('auto.components.settings.GitPane.330f584b50', 'Branch Prefix'),
-      description: translate(
-        'auto.components.settings.GitPane.1ffaadf0a0',
-        'Prefix added to branch names when creating worktrees.'
-      ),
-      keywords: [
-        translate('auto.components.settings.GitPane.cc63fce906', 'branch naming'),
-        translate('auto.components.settings.GitPane.2351aa5a31', 'git username'),
-        translate('auto.components.settings.GitPane.813e15b346', 'custom')
-      ]
-    }) ? (
-      <SearchableSetting
-        key="branch-prefix"
-        title={translate('auto.components.settings.GitPane.330f584b50', 'Branch Prefix')}
-        description={translate(
-          'auto.components.settings.GitPane.1ffaadf0a0',
-          'Prefix added to branch names when creating worktrees.'
-        )}
-        keywords={['branch naming', 'git username', 'custom']}
-        className="space-y-3"
-      >
-        <div className="space-y-0.5">
-          <Label>{translate('auto.components.settings.GitPane.330f584b50', 'Branch Prefix')}</Label>
-          <p className="text-muted-foreground text-xs">
-            {translate(
-              'auto.components.settings.GitPane.1ec5c91e1d',
-              'Choose whether branch names use your Git username, a custom prefix, or no prefix.'
-            )}
-          </p>
-        </div>
-        <div className="border-border/50 flex w-fit gap-1 rounded-md border p-1">
-          {(['git-username', 'custom', 'none'] as const).map((option) => (
-            <Button
-              variant="quiet"
-              size="sm"
-              key={option}
-              onClick={() => updateSettings({ branchPrefix: option })}
-              className={cn(
-                'text-sm ',
-                'py-1 ',
-                settings.branchPrefix === option ? 'bg-accent text-accent-foreground' : ' '
-              )}
-            >
-              {option === 'git-username'
-                ? translate('auto.components.settings.GitPane.a182c5125e', 'Git Username')
-                : option === 'custom'
-                  ? translate('auto.components.settings.GitPane.1f32ba27a6', 'Custom')
-                  : translate('auto.components.settings.GitPane.3d172725cc', 'None')}
-            </Button>
-          ))}
-        </div>
-        {(settings.branchPrefix === 'custom' || settings.branchPrefix === 'git-username') && (
-          <Input
-            value={branchPrefixInputValue}
-            onChange={(e) => {
-              const nextPrefix = e.target.value
-              lastCommittedPrefixRef.current = nextPrefix
-              setCustomPrefixDraft(nextPrefix)
-              updateSettings({ branchPrefixCustom: nextPrefix })
-            }}
-            placeholder={
-              settings.branchPrefix === 'git-username'
-                ? translate(
-                    'auto.components.settings.GitPane.aefa1ecb59',
-                    'No git username configured'
-                  )
-                : translate('auto.components.settings.GitPane.b559bf9899', 'e.g. feature')
-            }
-            className="max-w-xs"
-            readOnly={settings.branchPrefix === 'git-username'}
-            aria-invalid={getBranchPrefixIssue(branchPrefixInputValue) !== null}
-          />
-        )}
-        {(settings.branchPrefix === 'custom' || settings.branchPrefix === 'git-username') && (
-          <BranchPrefixFeedback rawPrefix={branchPrefixInputValue} />
-        )}
-      </SearchableSetting>
-    ) : null,
-    matchesSettingsSearch(searchQuery, {
-      title: keepLocalMainUpToDateTitle,
-      description: KEEP_LOCAL_MAIN_UP_TO_DATE_DESCRIPTION,
-      keywords: KEEP_LOCAL_MAIN_UP_TO_DATE_KEYWORDS
-    }) ? (
-      <SearchableSetting
-        key="refresh-base-ref"
-        id={KEEP_LOCAL_MAIN_UP_TO_DATE_SECTION_ID}
-        title={keepLocalMainUpToDateTitle}
-        description={KEEP_LOCAL_MAIN_UP_TO_DATE_DESCRIPTION}
-        keywords={KEEP_LOCAL_MAIN_UP_TO_DATE_KEYWORDS}
-        className="flex items-center justify-between gap-4 py-2"
-      >
-        <div className="space-y-0.5">
-          <Label>{keepLocalMainUpToDateTitle}</Label>
-          <p className="text-muted-foreground text-xs">
-            {translate(
-              'auto.components.settings.GitPane.976afc6b3e',
-              'When you create a workspace, AgentStart refreshes the remote base and safely fast-forwards your matching local branch, such as'
-            )}
-            <code>{translate('auto.components.settings.GitPane.ffba483bae', 'main')}</code>{' '}
-            {translate('auto.components.settings.GitPane.5bf885be48', 'or')}
-            <code>{translate('auto.components.settings.GitPane.3ae3de8898', 'master')}</code>
-            {translate('auto.components.settings.GitPane.db3a127eb1', '. This keeps commands like')}
-            <code>
-              {translate('auto.components.settings.GitPane.d072a12995', 'git diff main...HEAD')}
-            </code>{' '}
-            {translate(
-              'auto.components.settings.GitPane.36e3de3619',
-              'from comparing against stale history. AgentStart skips the update if that branch has uncommitted changes or local-only commits.'
-            )}
-          </p>
-        </div>
-        <Switch
-          checked={settings.refreshLocalBaseRefOnWorktreeCreate}
-          onCheckedChange={(checked) =>
-            updateSettings({ refreshLocalBaseRefOnWorktreeCreate: checked })
-          }
-        />
-      </SearchableSetting>
-    ) : null,
-    matchesSettingsSearch(searchQuery, {
-      title: translate(
-        'auto.components.settings.GitPane.sourceControlGroupOrderTitle',
-        'Source Control Group Order'
-      ),
-      description: translate(
-        'auto.components.settings.GitPane.sourceControlGroupOrderDescription',
-        'Choose whether Changes, Staged Changes, or Untracked Files appear first in Source Control.'
-      ),
-      keywords: SOURCE_CONTROL_GROUP_ORDER_KEYWORDS
-    }) ? (
-      <SourceControlGroupOrderSetting
-        key="source-control-group-order"
-        settings={settings}
-        updateSettings={updateSettings}
-      />
-    ) : null,
-    compareAgainstUpstreamMatchesSearch(searchQuery) ? (
-      <CompareAgainstUpstreamSetting
-        key="compare-against-upstream"
-        settings={settings}
-        updateSettings={updateSettings}
-      />
-    ) : null,
-    shouldShowAutoRenameBranchSetting(searchQuery, hasUnsavedBranchPromptChanges) ? (
-      <AutoRenameBranchFromWorkSetting
-        key="auto-rename-branch-from-work"
-        settings={settings}
-        updateSettings={updateSettings}
-        writeSourceControlAiSettings={writeSourceControlAiSettings}
-        forceVisible={hasUnsavedBranchPromptChanges}
-        onBranchPromptDirtyChange={onBranchPromptDirtyChange}
-        branchPromptDiscardSignal={branchPromptDiscardSignal}
-        settingsSearchQuery={searchQuery}
-      />
-    ) : null,
-    matchesSettingsSearch(searchQuery, {
-      title: translate('auto.components.settings.GitPane.e02ea23a32', 'AgentStart Attribution'),
-      description: translate(
-        'auto.components.settings.GitPane.d2eede4c54',
-        'Add AgentStart attribution to commits and PRs.'
-      ),
-      keywords: [
-        translate('auto.components.settings.GitPane.32dca11189', 'github'),
-        translate('auto.components.settings.GitPane.895d3f70b8', 'gh'),
-        translate('auto.components.settings.GitPane.b4ef5428a7', 'pr'),
-        translate('auto.components.settings.GitPane.9838c921ed', 'co-author'),
-        translate('auto.components.settings.GitPane.b5f534717a', 'coauthored'),
-        translate('auto.components.settings.GitPane.b9b5771bb1', 'attribution'),
-        translate('auto.components.settings.GitPane.e71ce09c42', 'agentstart')
-      ]
-    }) ? (
-      <SearchableSetting
-        key="github-attribution"
-        title={translate('auto.components.settings.GitPane.e02ea23a32', 'AgentStart Attribution')}
-        description={translate(
-          'auto.components.settings.GitPane.d2eede4c54',
-          'Add AgentStart attribution to commits and PRs.'
-        )}
-        keywords={['github', 'gh', 'pr', 'co-author', 'coauthored', 'attribution', 'agentstart']}
-        className="flex items-center justify-between gap-4 py-2"
-      >
-        <div className="space-y-0.5">
-          <Label>
-            {translate('auto.components.settings.GitPane.e02ea23a32', 'AgentStart Attribution')}
-          </Label>
-          <p className="text-muted-foreground text-xs">
-            {translate(
-              'auto.components.settings.GitPane.d2eede4c54',
-              'Add AgentStart attribution to commits and PRs.'
-            )}
-          </p>
-        </div>
-        <Switch
-          checked={settings.enableGitHubAttribution}
-          onCheckedChange={(checked) => updateSettings({ enableGitHubAttribution: checked })}
-        />
-      </SearchableSetting>
-    ) : null
-  ].filter(Boolean)
+  // Why: cards group rows thematically so the pane matches the Appearance
+  // grammar; each card's search entries are the union of its rows' entries.
+  const branchPrefixEntry = {
+    title: translate('auto.components.settings.GitPane.330f584b50', 'Branch Prefix'),
+    description: translate(
+      'auto.components.settings.GitPane.1ffaadf0a0',
+      'Prefix added to branch names when creating worktrees.'
+    ),
+    keywords: [
+      translate('auto.components.settings.GitPane.cc63fce906', 'branch naming'),
+      translate('auto.components.settings.GitPane.2351aa5a31', 'git username'),
+      translate('auto.components.settings.GitPane.813e15b346', 'custom')
+    ]
+  }
+  const keepLocalMainEntry = {
+    title: keepLocalMainUpToDateTitle,
+    description: KEEP_LOCAL_MAIN_UP_TO_DATE_DESCRIPTION,
+    keywords: KEEP_LOCAL_MAIN_UP_TO_DATE_KEYWORDS
+  }
+  const groupOrderEntry = {
+    title: translate(
+      'auto.components.settings.GitPane.sourceControlGroupOrderTitle',
+      'Source Control Group Order'
+    ),
+    description: translate(
+      'auto.components.settings.GitPane.sourceControlGroupOrderDescription',
+      'Choose whether Changes, Staged Changes, or Untracked Files appear first in Source Control.'
+    ),
+    keywords: SOURCE_CONTROL_GROUP_ORDER_KEYWORDS
+  }
+  const attributionEntry = {
+    title: translate('auto.components.settings.GitPane.e02ea23a32', 'AgentStart Attribution'),
+    description: translate(
+      'auto.components.settings.GitPane.d2eede4c54',
+      'Add AgentStart attribution to commits and PRs.'
+    ),
+    keywords: [
+      translate('auto.components.settings.GitPane.32dca11189', 'github'),
+      translate('auto.components.settings.GitPane.895d3f70b8', 'gh'),
+      translate('auto.components.settings.GitPane.b4ef5428a7', 'pr'),
+      translate('auto.components.settings.GitPane.9838c921ed', 'co-author'),
+      translate('auto.components.settings.GitPane.b5f534717a', 'coauthored'),
+      translate('auto.components.settings.GitPane.b9b5771bb1', 'attribution'),
+      translate('auto.components.settings.GitPane.e71ce09c42', 'agentstart')
+    ]
+  }
 
-  return <div className="space-y-4">{visibleSections}</div>
+  const groups: SettingsGroup[] = [
+    {
+      id: 'git-branches',
+      icon: <GitBranch aria-hidden="true" />,
+      title: translate('auto.components.settings.GitPane.groupBranches', 'Branches'),
+      summary: branchPrefixEntry.description,
+      searchEntries: [branchPrefixEntry, groupOrderEntry, ...getAutoRenameBranchSearchEntries()],
+      forceVisible: hasUnsavedBranchPromptChanges,
+      content: (
+        <div className="divide-border/40 divide-y">
+          <div className="py-3">
+            <SearchableSetting
+              title={translate('auto.components.settings.GitPane.330f584b50', 'Branch Prefix')}
+              description={translate(
+                'auto.components.settings.GitPane.1ffaadf0a0',
+                'Prefix added to branch names when creating worktrees.'
+              )}
+              keywords={['branch naming', 'git username', 'custom']}
+              className="space-y-3"
+            >
+              <div className="space-y-0.5">
+                <Label>
+                  {translate('auto.components.settings.GitPane.330f584b50', 'Branch Prefix')}
+                </Label>
+                <p className="text-muted-foreground text-xs">
+                  {translate(
+                    'auto.components.settings.GitPane.1ec5c91e1d',
+                    'Choose whether branch names use your Git username, a custom prefix, or no prefix.'
+                  )}
+                </p>
+              </div>
+              <div className="border-border/50 flex w-fit gap-1 rounded-md border p-1">
+                {(['git-username', 'custom', 'none'] as const).map((option) => (
+                  <Button
+                    variant="quiet"
+                    size="sm"
+                    key={option}
+                    onClick={() => updateSettings({ branchPrefix: option })}
+                    className={cn(
+                      'text-sm ',
+                      'py-1 ',
+                      settings.branchPrefix === option ? 'bg-accent text-accent-foreground' : ' '
+                    )}
+                  >
+                    {option === 'git-username'
+                      ? translate('auto.components.settings.GitPane.a182c5125e', 'Git Username')
+                      : option === 'custom'
+                        ? translate('auto.components.settings.GitPane.1f32ba27a6', 'Custom')
+                        : translate('auto.components.settings.GitPane.3d172725cc', 'None')}
+                  </Button>
+                ))}
+              </div>
+              {(settings.branchPrefix === 'custom' || settings.branchPrefix === 'git-username') && (
+                <Input
+                  value={branchPrefixInputValue}
+                  onChange={(e) => {
+                    const nextPrefix = e.target.value
+                    lastCommittedPrefixRef.current = nextPrefix
+                    setCustomPrefixDraft(nextPrefix)
+                    updateSettings({ branchPrefixCustom: nextPrefix })
+                  }}
+                  placeholder={
+                    settings.branchPrefix === 'git-username'
+                      ? translate(
+                          'auto.components.settings.GitPane.aefa1ecb59',
+                          'No git username configured'
+                        )
+                      : translate('auto.components.settings.GitPane.b559bf9899', 'e.g. feature')
+                  }
+                  className="max-w-xs"
+                  readOnly={settings.branchPrefix === 'git-username'}
+                  aria-invalid={getBranchPrefixIssue(branchPrefixInputValue) !== null}
+                />
+              )}
+              {(settings.branchPrefix === 'custom' || settings.branchPrefix === 'git-username') && (
+                <BranchPrefixFeedback rawPrefix={branchPrefixInputValue} />
+              )}
+            </SearchableSetting>
+          </div>
+          <SourceControlGroupOrderSetting settings={settings} updateSettings={updateSettings} />
+          <AutoRenameBranchFromWorkSetting
+            settings={settings}
+            updateSettings={updateSettings}
+            writeSourceControlAiSettings={writeSourceControlAiSettings}
+            forceVisible={hasUnsavedBranchPromptChanges}
+            onBranchPromptDirtyChange={onBranchPromptDirtyChange}
+            branchPromptDiscardSignal={branchPromptDiscardSignal}
+            settingsSearchQuery={searchQuery}
+          />
+        </div>
+      )
+    },
+    {
+      id: 'git-upstream',
+      icon: <CloudCheck aria-hidden="true" />,
+      title: translate('auto.components.settings.GitPane.groupUpstream', 'Upstream'),
+      summary: keepLocalMainEntry.title,
+      searchEntries: [keepLocalMainEntry, getCompareAgainstUpstreamSearchEntry()],
+      content: (
+        <div className="divide-border/40 divide-y">
+          <SearchableSetting
+            id={KEEP_LOCAL_MAIN_UP_TO_DATE_SECTION_ID}
+            title={keepLocalMainUpToDateTitle}
+            description={KEEP_LOCAL_MAIN_UP_TO_DATE_DESCRIPTION}
+            keywords={KEEP_LOCAL_MAIN_UP_TO_DATE_KEYWORDS}
+            className="flex items-center justify-between gap-4 py-2"
+          >
+            <div className="space-y-0.5">
+              <Label>{keepLocalMainUpToDateTitle}</Label>
+              <p className="text-muted-foreground text-xs">
+                {translate(
+                  'auto.components.settings.GitPane.976afc6b3e',
+                  'When you create a workspace, AgentStart refreshes the remote base and safely fast-forwards your matching local branch, such as'
+                )}
+                <code>{translate('auto.components.settings.GitPane.ffba483bae', 'main')}</code>{' '}
+                {translate('auto.components.settings.GitPane.5bf885be48', 'or')}
+                <code>{translate('auto.components.settings.GitPane.3ae3de8898', 'master')}</code>
+                {translate(
+                  'auto.components.settings.GitPane.db3a127eb1',
+                  '. This keeps commands like'
+                )}
+                <code>
+                  {translate('auto.components.settings.GitPane.d072a12995', 'git diff main...HEAD')}
+                </code>{' '}
+                {translate(
+                  'auto.components.settings.GitPane.36e3de3619',
+                  'from comparing against stale history. AgentStart skips the update if that branch has uncommitted changes or local-only commits.'
+                )}
+              </p>
+            </div>
+            <Switch
+              checked={settings.refreshLocalBaseRefOnWorktreeCreate}
+              onCheckedChange={(checked) =>
+                updateSettings({ refreshLocalBaseRefOnWorktreeCreate: checked })
+              }
+            />
+          </SearchableSetting>
+          <CompareAgainstUpstreamSetting settings={settings} updateSettings={updateSettings} />
+        </div>
+      )
+    },
+    {
+      id: 'git-attribution',
+      icon: <GithubLogo aria-hidden="true" />,
+      title: translate('auto.components.settings.GitPane.groupAttribution', 'Attribution'),
+      summary: attributionEntry.description,
+      searchEntries: [attributionEntry],
+      content: (
+        <SearchableSetting
+          title={translate('auto.components.settings.GitPane.e02ea23a32', 'AgentStart Attribution')}
+          description={translate(
+            'auto.components.settings.GitPane.d2eede4c54',
+            'Add AgentStart attribution to commits and PRs.'
+          )}
+          keywords={['github', 'gh', 'pr', 'co-author', 'coauthored', 'attribution', 'agentstart']}
+          className="flex items-center justify-between gap-4 py-2"
+        >
+          <div className="space-y-0.5">
+            <Label>
+              {translate('auto.components.settings.GitPane.e02ea23a32', 'AgentStart Attribution')}
+            </Label>
+            <p className="text-muted-foreground text-xs">
+              {translate(
+                'auto.components.settings.GitPane.d2eede4c54',
+                'Add AgentStart attribution to commits and PRs.'
+              )}
+            </p>
+          </div>
+          <Switch
+            checked={settings.enableGitHubAttribution}
+            onCheckedChange={(checked) => updateSettings({ enableGitHubAttribution: checked })}
+          />
+        </SearchableSetting>
+      )
+    }
+  ]
+
+  return <SettingsGroupCards groups={groups} defaultOpenId="git-branches" />
 }

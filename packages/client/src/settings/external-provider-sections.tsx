@@ -1,7 +1,6 @@
 import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
 import { useRef } from 'react'
 import { translate } from '~renderer/i18n/i18n'
-import { GeminiIcon, OpenCodeGoIcon } from '~renderer/status-bar/icons'
 import { Button } from '~renderer/ui/button'
 import { Input } from '~renderer/ui/input'
 import { Label } from '~renderer/ui/label'
@@ -26,19 +25,7 @@ export function GeminiAccountsSection({
   updateSettings
 }: GeminiAccountsSectionProps): React.JSX.Element {
   return (
-    <section id="accounts-gemini" className="scroll-mt-6 space-y-4">
-      <div className="space-y-1">
-        <h3 className="flex items-center gap-2 text-sm font-semibold">
-          <GeminiIcon size={16} />
-          {translate('auto.components.settings.AccountsPane.0c64dc2a64', 'Gemini')}
-        </h3>
-        <p className="text-muted-foreground text-xs">
-          {translate(
-            'auto.components.settings.AccountsPane.973741a871',
-            'Configure Gemini provider settings.'
-          )}
-        </p>
-      </div>
+    <div id="accounts-gemini" className="scroll-mt-6">
       <SearchableSetting
         title={translate(
           'auto.components.settings.AccountsPane.0c7f915b01',
@@ -82,7 +69,7 @@ export function GeminiAccountsSection({
           }}
         />
       </SearchableSetting>
-    </section>
+    </div>
   )
 }
 
@@ -101,19 +88,7 @@ export function OpenCodeAccountsSection({
   }
 
   return (
-    <section id="accounts-opencode-go" className="scroll-mt-6 space-y-4">
-      <div className="space-y-1">
-        <h3 className="flex items-center gap-2 text-sm font-semibold">
-          <OpenCodeGoIcon size={16} />
-          {translate('auto.components.settings.AccountsPane.4ac10b4d08', 'OpenCode Go')}
-        </h3>
-        <p className="text-muted-foreground text-xs">
-          {translate(
-            'auto.components.settings.AccountsPane.ea631977b5',
-            'Configure OpenCode Go provider settings.'
-          )}
-        </p>
-      </div>
+    <div id="accounts-opencode-go" className="scroll-mt-6 space-y-4">
       <SearchableSetting
         title={translate(
           'auto.components.settings.AccountsPane.36223200ac',
@@ -219,6 +194,6 @@ export function OpenCodeAccountsSection({
           )}
         </p>
       </SearchableSetting>
-    </section>
+    </div>
   )
 }

@@ -96,7 +96,6 @@ pub struct RuntimeReady;
 pub struct ShutdownReport;
 
 pub enum ShutdownReason {
-    Requested,
     Restart,
     Signal,
     StartupFailure,

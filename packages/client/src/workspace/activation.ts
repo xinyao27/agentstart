@@ -45,10 +45,10 @@ export function activateAndRevealFolderWorkspace(
     })
     return false
   }
-  if (state.activeView !== 'terminal') {
-    state.setActiveView('terminal')
-  }
   state.setActiveFolderWorkspace(folderWorkspaceId)
+  // Why: after the scope switch, so the landing tab belongs to this folder
+  // workspace rather than the one being left.
+  state.focusWorkspaceSurface()
   state.markWorktreeVisited(workspaceKey)
   if (!state.isNavigatingHistory) {
     state.recordWorktreeVisit(workspaceKey)

@@ -10,7 +10,7 @@ import { getConnectionId } from '~renderer/runtime/connection-context'
 import { getRuntimeGitConflictOperation } from '~renderer/runtime/git-client'
 
 import { createCoalescedPollRunner, type SlowTaskBackoffOptions } from './coalesced-poll-runner'
-import { getRightSidebarWorktreeRuntimeSettings } from './file-explorer/runtime-owner'
+import { getWorkspacePanelWorktreeRuntimeSettings } from './file-explorer/runtime-owner'
 
 const CONFLICT_POLL_INTERVAL_MS = 3000
 
@@ -87,7 +87,7 @@ export function useStaleConflictOperationPolling(args: {
             continue
           }
           const op = (await getRuntimeGitConflictOperation({
-            settings: getRightSidebarWorktreeRuntimeSettings(id),
+            settings: getWorkspacePanelWorktreeRuntimeSettings(id),
             worktreeId: id,
             worktreePath: path,
             connectionId

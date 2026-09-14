@@ -64,10 +64,12 @@ export class SessionDocumentClient {
             existing.snapshot.session
           )
         : { ok: true as const, document: existing.snapshot.session }
-      if (!merged.ok) {
-        throw new Error(translate('session.pending', 'Your edits remain pending.'))
-      }
-      existing.input = structuredClone(merged.document)
+      // Why: a background read must not turn a recoverable pending edit into a
+      // startup failure. Keep the newer external snapshot as the conflict base
+      // while returning the user's pending value; the pending writer and its
+      // Replace-conflicts action still own conflict resolution.
+      const input = merged.ok ? merged.document : (existing.pending?.desired ?? existing.input)
+      existing.input = structuredClone(input)
     } else {
       this.states.set(hostId ?? '', {
         snapshot,

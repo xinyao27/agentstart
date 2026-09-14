@@ -6,8 +6,8 @@ use tokio::sync::{broadcast, watch};
 use super::model::{
     TerminalClient, TerminalClientType, TerminalDriverSnapshot, TerminalDriverState,
     TerminalFitOverrideMode, TerminalFitOverrideSnapshot, TerminalHeadlessBinding,
-    TerminalMobileBinding, TerminalStreamEvent, TerminalStreamOutput, TerminalStreamSubscription,
-    TerminalSummary,
+    TerminalMobileBinding, TerminalScrollbackHistory, TerminalStreamEvent, TerminalStreamOutput,
+    TerminalStreamSubscription, TerminalSummary,
 };
 use super::path_provenance::TerminalPathProvenance;
 use super::process::{ProcessControl, ProcessEvent, TerminalClear};
@@ -48,7 +48,7 @@ pub(super) struct TerminalRecord {
     pub(super) process_exit_code: Option<i32>,
     pub(super) pty_id: String,
     pub(super) reader_finished: bool,
-    pub(super) final_history: Option<String>,
+    pub(super) final_checkpoint: Option<TerminalScrollbackHistory>,
     pub(super) raw_output: VecDeque<TerminalStreamOutput>,
     pub(super) raw_output_bytes: usize,
     pub(super) rows: u16,
@@ -567,10 +567,7 @@ impl TerminalState {
         }
     }
 
-    pub(super) fn accept(
-        &self,
-        event: ProcessEvent,
-    ) -> Option<(Option<String>, String, String, String)> {
+    pub(super) fn accept(&self, event: ProcessEvent) -> Option<TerminalScrollbackCapture> {
         match event {
             ProcessEvent::Output {
                 bytes,
@@ -633,7 +630,7 @@ impl TerminalState {
                     let record = data.records.get_mut(&handle)?;
                     record.side_effects.close();
                     record.reader_finished = true;
-                    record.final_history = Some(history);
+                    record.final_checkpoint = Some(history);
                     if !record.pending_utf8.is_empty() {
                         record.tail.append("�");
                         record.path_provenance.append_invalid_marker();
@@ -650,16 +647,22 @@ impl TerminalState {
     }
 }
 
-fn snapshot(record: &TerminalRecord) -> (Option<String>, String, String, String) {
-    (
-        record.host_id.clone(),
-        record.tab_id.clone(),
-        record.leaf_id.clone(),
-        record
-            .final_history
+fn scrollback_capture(record: &TerminalRecord) -> TerminalScrollbackCapture {
+    TerminalScrollbackCapture {
+        // Why: a record that never reached the model's exit checkpoint only has the
+        // line tail, which carries no layout — the replay then keeps whatever grid
+        // the pane already has.
+        history: record
+            .final_checkpoint
             .clone()
-            .unwrap_or_else(|| record.tail.snapshot()),
-    )
+            .unwrap_or_else(|| TerminalScrollbackHistory {
+                grid: None,
+                text: record.tail.snapshot(),
+            }),
+        host_id: record.host_id.clone(),
+        leaf_id: record.leaf_id.clone(),
+        tab_id: record.tab_id.clone(),
+    }
 }
 
 fn append_utf8(record: &mut TerminalRecord, bytes: &[u8]) {
@@ -716,7 +719,7 @@ impl TerminalRecord {
     }
 }
 
-fn complete_exit(record: &mut TerminalRecord) -> Option<(Option<String>, String, String, String)> {
+fn complete_exit(record: &mut TerminalRecord) -> Option<TerminalScrollbackCapture> {
     let exit_code = record.process_exit_code?;
     if !record.reader_finished || record.exit.borrow().is_some() {
         return None;
@@ -726,13 +729,22 @@ fn complete_exit(record: &mut TerminalRecord) -> Option<(Option<String>, String,
         exit_code,
         sequence: record.sequence,
     });
-    let snapshot = snapshot(record);
+    let capture = scrollback_capture(record);
     record.path_provenance.clear_recent();
-    Some(snapshot)
+    Some(capture)
 }
 
 const MAX_RAW_OUTPUT_BYTES: usize = 2 * 1024 * 1024;
 const DISCONNECTED_RECORD_MAX: usize = 128;
+
+/// Terminal history on its way to storage, with the identity needed to record the
+/// checkpoint against the right pane.
+pub(super) struct TerminalScrollbackCapture {
+    pub(super) history: TerminalScrollbackHistory,
+    pub(super) host_id: Option<String>,
+    pub(super) leaf_id: String,
+    pub(super) tab_id: String,
+}
 
 impl TerminalState {
     pub(super) fn subscribe(

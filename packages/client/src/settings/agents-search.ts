@@ -18,6 +18,7 @@ import {
   getAgentStatusHooksSearchKeywords,
   getAgentStatusHooksTitle
 } from './agent/status-hooks-copy'
+import type { SettingsSearchEntry } from './search'
 import { searchKeywords, translateSearchKeyword, uniqueKeywords } from './search-keywords'
 
 function buildAgentSettingsKeywords(): string[] {
@@ -66,7 +67,9 @@ type AgentsPaneSearchOptions = {
 
 const AGENT_RUNTIME_SEARCH_ENTRY_ID = 'agent-runtime'
 
-const getAllAgentsPaneSearchEntries = createLocalizedCatalog(() => [
+// Why: one catalog per accordion group so the pane cards can declare their own
+// search entries while getAgentsPaneSearchEntries keeps the pane-level order.
+const getAgentsDefaultSearchEntriesCatalog = createLocalizedCatalog((): SettingsSearchEntry[] => [
   {
     title: translate('auto.components.settings.agents.search.bb9ad95777', 'Agents'),
     description: translate(
@@ -74,7 +77,12 @@ const getAllAgentsPaneSearchEntries = createLocalizedCatalog(() => [
       'Configure AI coding agents, default agent, and command overrides.'
     ),
     keywords: buildAgentSettingsKeywords()
-  },
+  }
+])
+
+// Why: the runtime entry keeps its id (no SettingsSearchEntry annotation) so
+// the includeAgentRuntime filter below can keep recognizing it.
+const getAgentsRuntimeSearchEntriesCatalog = createLocalizedCatalog(() => [
   {
     title: translate('auto.components.settings.agents.search.agentRuntime', 'Agent Runtime'),
     id: AGENT_RUNTIME_SEARCH_ENTRY_ID,
@@ -101,45 +109,99 @@ const getAllAgentsPaneSearchEntries = createLocalizedCatalog(() => [
       ),
       ...translateSearchKeyword('auto.components.settings.agents.search.719f53350c', 'path')
     ]
-  },
-  {
-    title: getAgentStatusHooksTitle(),
-    description: getAgentStatusHooksDescription(),
-    keywords: getAgentStatusHooksSearchKeywords()
-  },
-  {
-    title: getAgentGeneratedTabTitlesTitle(),
-    description: getAgentGeneratedTabTitlesDescription(),
-    keywords: getAgentGeneratedTabTitlesSearchKeywords()
-  },
+  }
+])
+
+const getAgentsStatusHooksSearchEntriesCatalog = createLocalizedCatalog(
+  (): SettingsSearchEntry[] => [
+    {
+      title: getAgentStatusHooksTitle(),
+      description: getAgentStatusHooksDescription(),
+      keywords: getAgentStatusHooksSearchKeywords()
+    }
+  ]
+)
+
+const getAgentsGeneratedTabTitlesSearchEntriesCatalog = createLocalizedCatalog(
+  (): SettingsSearchEntry[] => [
+    {
+      title: getAgentGeneratedTabTitlesTitle(),
+      description: getAgentGeneratedTabTitlesDescription(),
+      keywords: getAgentGeneratedTabTitlesSearchKeywords()
+    }
+  ]
+)
+
+const getAgentsAwakeSearchEntriesCatalog = createLocalizedCatalog((): SettingsSearchEntry[] => [
   {
     title: getAgentAwakeTitle(),
     description: getAgentAwakeDescription(),
     keywords: getAgentAwakeSearchKeywords()
-  },
-  {
-    title: translate(
-      'auto.components.settings.agents.search.agentPermissions',
-      'Agent Permissions'
-    ),
-    description: translate(
-      'auto.components.settings.agents.search.agentPermissionsDescription',
-      'Switch agent permission defaults between Yolo and Manual.'
-    ),
-    keywords: [
-      ...translateSearchKeyword('auto.components.settings.agents.search.permission', 'permission'),
-      ...translateSearchKeyword(
-        'auto.components.settings.agents.search.permissions',
-        'permissions'
+  }
+])
+
+const getAgentsPermissionsSearchEntriesCatalog = createLocalizedCatalog(
+  (): SettingsSearchEntry[] => [
+    {
+      title: translate(
+        'auto.components.settings.agents.search.agentPermissions',
+        'Agent Permissions'
       ),
-      ...translateSearchKeyword('auto.components.settings.agents.search.yolo', 'yolo'),
-      ...translateSearchKeyword('auto.components.settings.agents.search.manual', 'manual'),
-      ...translateSearchKeyword('auto.components.settings.agents.search.skip', 'skip'),
-      ...translateSearchKeyword('auto.components.settings.agents.search.checks', 'checks')
-    ]
-  },
+      description: translate(
+        'auto.components.settings.agents.search.agentPermissionsDescription',
+        'Switch agent permission defaults between Yolo and Manual.'
+      ),
+      keywords: [
+        ...translateSearchKeyword(
+          'auto.components.settings.agents.search.permission',
+          'permission'
+        ),
+        ...translateSearchKeyword(
+          'auto.components.settings.agents.search.permissions',
+          'permissions'
+        ),
+        ...translateSearchKeyword('auto.components.settings.agents.search.yolo', 'yolo'),
+        ...translateSearchKeyword('auto.components.settings.agents.search.manual', 'manual'),
+        ...translateSearchKeyword('auto.components.settings.agents.search.skip', 'skip'),
+        ...translateSearchKeyword('auto.components.settings.agents.search.checks', 'checks')
+      ]
+    }
+  ]
+)
+
+const getAllAgentsPaneSearchEntries = createLocalizedCatalog(() => [
+  ...getAgentsDefaultSearchEntriesCatalog(),
+  ...getAgentsRuntimeSearchEntriesCatalog(),
+  ...getAgentsStatusHooksSearchEntriesCatalog(),
+  ...getAgentsGeneratedTabTitlesSearchEntriesCatalog(),
+  ...getAgentsAwakeSearchEntriesCatalog(),
+  ...getAgentsPermissionsSearchEntriesCatalog(),
   ...getAgentCacheTimerSearchEntries()
 ])
+
+export function getAgentsDefaultSearchEntries(): SettingsSearchEntry[] {
+  return getAgentsDefaultSearchEntriesCatalog()
+}
+
+export function getAgentsRuntimeSearchEntries() {
+  return getAgentsRuntimeSearchEntriesCatalog()
+}
+
+export function getAgentsStatusHooksSearchEntries(): SettingsSearchEntry[] {
+  return getAgentsStatusHooksSearchEntriesCatalog()
+}
+
+export function getAgentsGeneratedTabTitlesSearchEntries(): SettingsSearchEntry[] {
+  return getAgentsGeneratedTabTitlesSearchEntriesCatalog()
+}
+
+export function getAgentsAwakeSearchEntries(): SettingsSearchEntry[] {
+  return getAgentsAwakeSearchEntriesCatalog()
+}
+
+export function getAgentsPermissionsSearchEntries(): SettingsSearchEntry[] {
+  return getAgentsPermissionsSearchEntriesCatalog()
+}
 
 export function getAgentsPaneSearchEntries({
   includeAgentRuntime = true

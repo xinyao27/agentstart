@@ -1,11 +1,10 @@
 import { useEffect } from 'react'
 import { translate } from '~renderer/i18n/i18n'
-import { HardDrive, ArrowLeft } from '~renderer/icons/hugeicons'
+import { HardDrive } from '~renderer/icons/hugeicons'
 import { useAppStore } from '~renderer/store/state'
 
 import { WorkspaceSpaceManagerPanel } from '../status-bar/workspace-space-manager-panel'
 import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
 
 export default function WorkspaceSpacePage(): React.JSX.Element {
   const closeSpacePage = useAppStore((state) => state.closeSpacePage)
@@ -57,10 +56,6 @@ export default function WorkspaceSpacePage(): React.JSX.Element {
   return (
     <div className="bg-background flex h-full min-h-0 flex-col">
       <div className="border-border flex shrink-0 items-center gap-3 border-b px-5 py-3">
-        <Button variant="outline" size="sm" onClick={closeSpacePage} className="shrink-0 gap-1.5">
-          <ArrowLeft className="size-3.5" />
-          {translate('auto.components.workspace.space.WorkspaceSpacePage.ecf72fdc3b', 'Back')}
-        </Button>
         <div className="flex min-w-0 items-center gap-3">
           <div className="border-border bg-muted/30 flex size-8 shrink-0 items-center justify-center rounded-md border">
             <HardDrive className="text-muted-foreground size-4" />

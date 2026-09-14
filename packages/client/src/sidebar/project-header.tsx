@@ -42,7 +42,10 @@ export function SidebarProjectHeader({
         // Why: project headers and workspace rows are the same sidebar row
         // role, so they share one row box: a 20px label line inside the
         // workspace card's `py-1` and 1px border.
-        'group relative flex h-[30px] w-full items-center gap-1.5 pr-2 text-left transition-all outline-none hover:bg-accent focus-visible:bg-accent',
+        // Why: the row's hover and selected fill is a surface on the sidebar
+        // plane, so it takes the same control radius as the workspace cards
+        // below it instead of ending in square corners.
+        'group relative flex h-[30px] w-full items-center gap-1.5 rounded-md pr-2 text-left transition-all outline-none hover:bg-accent focus-visible:bg-accent',
         className
       )}
       style={{ ...style, paddingLeft }}

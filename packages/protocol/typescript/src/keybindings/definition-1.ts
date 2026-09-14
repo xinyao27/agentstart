@@ -16,7 +16,9 @@ export const KEYBINDING_DEFINITIONS_1: readonly KeybindingDefinition[] = [
     group: 'Global',
     scope: 'global',
     searchKeywords: ['shortcut', 'settings', 'preferences'],
-    defaultBindings: platformBindings(['Mod+Comma']),
+    // Why: Mod+Comma is the browser's own settings chord, so the workbench
+    // ships the shifted variant it can actually own.
+    defaultBindings: platformBindings(['Mod+Shift+Comma']),
     conflictGroup: 'menu'
   },
   {
@@ -25,7 +27,9 @@ export const KEYBINDING_DEFINITIONS_1: readonly KeybindingDefinition[] = [
     group: 'Global',
     scope: 'global',
     searchKeywords: ['shortcut', 'reload', 'refresh', 'force'],
-    defaultBindings: platformBindings(['Mod+Shift+R']),
+    // Why: Mod+Shift+R hard-reloads the browser page itself; users can bind
+    // this row explicitly, but the workbench no longer claims the chord.
+    defaultBindings: platformBindings([]),
     conflictGroup: 'menu'
   },
   {
@@ -58,7 +62,14 @@ export const KEYBINDING_DEFINITIONS_1: readonly KeybindingDefinition[] = [
     group: 'Global',
     scope: 'global',
     searchKeywords: ['shortcut', 'global', 'worktree', 'create', 'new workspace'],
-    defaultBindings: platformBindings(['Mod+N', 'Mod+Shift+N'])
+    // Why: Mod+N and Mod+Shift+N open a new browser window / incognito window,
+    // so the create chord is macOS-only; Ctrl+Alt collides with AltGr on
+    // Windows/Linux layouts, so those platforms bind it explicitly in Settings.
+    defaultBindings: {
+      darwin: ['Mod+Alt+Shift+N'],
+      linux: [],
+      win32: []
+    }
   },
   {
     id: 'workspace.rename',
@@ -115,8 +126,13 @@ export const KEYBINDING_DEFINITIONS_1: readonly KeybindingDefinition[] = [
     ],
     // Why: one remappable row for the whole 1-9 range. The stored chord is a
     // representative — its digit normalizes to 1, but the modifier set is what
-    // matters and any of 1-9 fires it. mac Cmd+1-9, Windows/Linux Ctrl+1-9 → Mod+1.
-    defaultBindings: platformBindings(['Mod+1'])
+    // matters and any of 1-9 fires it. Mod+1 is reserved: Cmd/Ctrl+1-9 switch
+    // browser tabs, so macOS gets Cmd+Alt+1-9 and Windows/Linux Alt+Shift+1-9.
+    defaultBindings: {
+      darwin: ['Mod+Alt+1'],
+      linux: ['Alt+Shift+1'],
+      win32: ['Alt+Shift+1']
+    }
   },
   {
     id: 'sidebar.left.toggle',
@@ -132,7 +148,9 @@ export const KEYBINDING_DEFINITIONS_1: readonly KeybindingDefinition[] = [
     group: 'Global',
     scope: 'global',
     searchKeywords: ['shortcut', 'explorer', 'tab', 'files'],
-    defaultBindings: platformBindings(['Mod+L'])
+    // Why: Mod+L focuses the browser's address bar, so the workbench owns the
+    // shifted variant instead.
+    defaultBindings: platformBindings(['Mod+Shift+L'])
   },
   {
     id: 'sidebar.explorer.toggle',

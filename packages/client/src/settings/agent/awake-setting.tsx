@@ -22,7 +22,7 @@ export function AgentAwakeSetting({
   const description = getAgentAwakeDescription()
 
   return (
-    <section className="space-y-3">
+    <div className="divide-border/40 divide-y">
       <SearchableSetting
         title={title}
         description={description}
@@ -44,6 +44,6 @@ export function AgentAwakeSetting({
           />
         </div>
       </SearchableSetting>
-    </section>
+    </div>
   )
 }

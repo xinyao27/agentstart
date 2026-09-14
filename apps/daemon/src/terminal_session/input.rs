@@ -1,8 +1,6 @@
 use std::sync::Arc;
 use std::time::Duration;
 
-use regex::Regex;
-
 use super::TerminalSessionError;
 use super::authority::TerminalSessionAuthority;
 use super::model::{
@@ -125,8 +123,16 @@ impl TerminalSessionAuthority {
                     return Err(TerminalSessionError::NotFound);
                 }
                 if request.input_kind == Some(TerminalSendInputKind::QueryReply) {
+                    // Why: a query reply is written by the emulator of a pane that
+                    // renders this terminal, so every registered viewer may answer.
+                    // Phones keep their single designated responder because their
+                    // replies arrive from the device that also types.
                     let authorized = request.client.as_ref().is_some_and(|client| {
-                        record.query_reply_client.as_deref() == Some(client.id.as_str())
+                        if client.kind == TerminalClientType::Mobile {
+                            record.query_reply_client.as_deref() == Some(client.id.as_str())
+                        } else {
+                            record.viewers.contains_key(client.id.as_str())
+                        }
                     });
                     if !authorized {
                         return Ok(SendAdmission::Refused(None));
@@ -134,8 +140,12 @@ impl TerminalSessionAuthority {
                 }
                 if let Some(client) = &request.client
                     && client.kind != TerminalClientType::Mobile
+                    && request.input_kind != Some(TerminalSendInputKind::QueryReply)
                     && matches!(record.driver, TerminalDriver::Mobile(_))
                 {
+                    // Why: the mobile driver lock exists to keep user input with the
+                    // phone. A terminal response still has to reach the program, and
+                    // refusing it fails the agent's own capability handshake.
                     return Ok(SendAdmission::Refused(None));
                 }
                 if request.require_agent_sendable {
@@ -218,37 +228,20 @@ fn validate_query_reply(
         }
         return Ok(());
     }
-    let valid = request.text.as_deref().is_some_and(is_terminal_query_reply)
-        && !request.enter
+    // Why: a reply carries no user-input semantics, but the browser pane folds
+    // queued input into the same frame to keep wire order, so the payload cannot
+    // be matched against a fixed list of terminal response sequences. What must
+    // hold is that a responder identified itself and that a reply can never
+    // submit, interrupt, or bypass the agent gate.
+    let valid = request.client.as_ref().is_some_and(|client| {
+        client.kind != TerminalClientType::Mobile || client.id == principal_id
+    }) && !request.enter
         && !request.interrupt
-        && !request.require_agent_sendable
-        && request.client.as_ref().is_some_and(|client| {
-            client.kind == TerminalClientType::Mobile && client.id == principal_id
-        });
+        && !request.require_agent_sendable;
     if !valid {
         return Err(TerminalSessionError::InvalidInput(
             "invalid terminal query reply",
         ));
     }
     Ok(())
-}
-
-fn is_terminal_query_reply(value: &str) -> bool {
-    static PATTERNS: std::sync::LazyLock<Vec<Regex>> = std::sync::LazyLock::new(|| {
-        [
-            r"^\x1b\[\??[0-9;]*[Rn]$",
-            r"^\x1b\[[?>=]?[0-9;]*c$",
-            r"^\x1b\[[468];[0-9]+;[0-9]+t$",
-            r"^\x1b\[\??[0-9;]*\$y$",
-            r"^\x1b\[\?[0-9]+u$",
-            r"^\x1b\][0-9]+;[^\x07\x1b]*(?:\x07|\x1b\\)$",
-            r"^\x1bP(?:[01]\$r[^\x1b]*|>\|[^\x1b]*)\x1b\\$",
-        ]
-        .into_iter()
-        .filter_map(|pattern| Regex::new(pattern).ok())
-        .collect()
-    });
-    value.len() >= 3
-        && value.as_bytes().first() == Some(&0x1b)
-        && PATTERNS.iter().any(|pattern| pattern.is_match(value))
 }

@@ -31,12 +31,12 @@ pub(super) fn migrate(
     {
         migrated.insert("sortBy".to_owned(), Value::String("smart".to_owned()));
     }
-    if !raw.get("rightSidebarOpen").is_some_and(Value::is_boolean) {
+    if !raw.get("workspacePanelOpen").is_some_and(Value::is_boolean) {
         let open = settings
-            .get("rightSidebarOpenByDefault")
+            .get("workspacePanelOpenByDefault")
             .and_then(Value::as_bool)
-            .unwrap_or(true);
-        migrated.insert("rightSidebarOpen".to_owned(), Value::Bool(open));
+            .unwrap_or(false);
+        migrated.insert("workspacePanelOpen".to_owned(), Value::Bool(open));
     }
     migrate_cards(&raw, &mut migrated, settings);
     migrated.insert("workspaceStatuses".to_owned(), statuses::migrate(&raw));

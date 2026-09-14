@@ -8,7 +8,7 @@ use portable_pty::{ChildKiller, CommandBuilder, MasterPty, PtySize, native_pty_s
 use tokio::sync::{OwnedSemaphorePermit, Semaphore, mpsc, oneshot};
 
 use super::launch::{TERMINAL_ENVIRONMENT, TerminalLaunch};
-use super::model::TerminalProcessInspection;
+use super::model::{TerminalProcessInspection, TerminalScrollbackHistory};
 use super::snapshot::{TerminalSnapshotProvider, run_model};
 use super::{TerminalSessionError, identity};
 
@@ -32,7 +32,7 @@ pub(super) enum ProcessEvent {
     ReaderFinished {
         observed_at: i64,
         pty_id: String,
-        history: String,
+        history: TerminalScrollbackHistory,
     },
 }
 
@@ -82,6 +82,11 @@ struct ProcessLoop {
     master: Box<dyn MasterPty + Send>,
     snapshot_provider: TerminalSnapshotProvider,
     pid: Option<u32>,
+    // Why: clients re-claim and re-fit a pane with the size it already has. Every
+    // such resize is a real SIGWINCH, and shells answer one by reprinting their
+    // prompt into the scrollback, so the size the PTY is already at must be
+    // idempotent here.
+    size: (u16, u16),
     writer: Box<dyn Write + Send>,
 }
 
@@ -164,6 +169,7 @@ pub(super) async fn spawn(
                     master,
                     snapshot_provider: control_snapshot_provider,
                     pid,
+                    size: (cols, rows),
                     writer,
                 });
             }
@@ -444,11 +450,16 @@ fn run_process_control(mut process: ProcessLoop) {
                 let _ = result.send(outcome);
             }
             ProcessCommand::Resize { cols, result, rows } => {
+                if process.size == (cols, rows) {
+                    let _ = result.send(Ok(()));
+                    continue;
+                }
                 let outcome = process
                     .master
                     .resize(size(cols, rows))
                     .map_err(|error| error.to_string());
                 if outcome.is_ok() {
+                    process.size = (cols, rows);
                     process.snapshot_provider.resize(cols, rows);
                 }
                 let _ = result.send(outcome);

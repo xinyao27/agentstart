@@ -21,6 +21,7 @@ import { getTitlebarTabStateClasses, TAB_ROOT_CLASSES } from './tab-chrome-class
 import { TabCloseButton } from './tab-close-button'
 import { TabLabel } from './tab-label'
 import { useTabStripPointerActivation } from './tab-strip-pointer-activation'
+import { TabActiveSurface, TabHoverSurface } from './tab-surfaces'
 import { TAB_CONTAINER_WIDTH_CLASSES } from './tab-width-rules'
 import {
   hasUnreadAgentCompletionForTerminalTab,
@@ -280,6 +281,7 @@ export default function SortableTab({
         }
       }}
     >
+      {isActive ? <TabActiveSurface /> : <TabHoverSurface />}
       {showUnreadActivity && (
         // Why: a real DOM child leaves both drop-indicator pseudo-elements
         // available and keeps pointer events reaching the tab beneath it.

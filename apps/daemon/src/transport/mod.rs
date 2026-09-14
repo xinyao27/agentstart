@@ -14,5 +14,5 @@ pub use extension_rpc::{
 pub(crate) use protocol_client::LocalProtocolClient;
 pub use protocol_client::{
     FrameTransport, FrameTransportEvent, FrameTransportReader, FrameTransportWriter, PeerIdentity,
-    ProtocolClient, ProtocolPeerError, ProtocolStream, RawDuplexWriter, RawProtocolStream,
+    ProtocolClient, ProtocolPeerError, RawDuplexWriter, RawProtocolStream,
 };

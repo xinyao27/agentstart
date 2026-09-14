@@ -19,13 +19,13 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
 import { CreateHostedReviewComposerFields } from './create-hosted-review-composer-fields'
-import {
-  RIGHT_SIDEBAR_MORPHING_PRIMARY_BUTTON_CLASS,
-  RIGHT_SIDEBAR_PRIMARY_BUTTON_LABEL_CLASS,
-  RIGHT_SIDEBAR_SPLIT_ACTION_ROW_CLASS
-} from './right-sidebar-primary-action-layout'
 import type { DropdownActionKind, DropdownEntry } from './source-control/dropdown-items'
 import { stripBaseRef } from './use-create-pull-request-dialog-fields'
+import {
+  WORKSPACE_PANEL_MORPHING_PRIMARY_BUTTON_CLASS,
+  WORKSPACE_PANEL_PRIMARY_BUTTON_LABEL_CLASS,
+  WORKSPACE_PANEL_SPLIT_ACTION_ROW_CLASS
+} from './workspace-panel-primary-action-layout'
 
 const EMPTY_DROPDOWN_ITEMS: DropdownEntry[] = []
 
@@ -113,23 +113,23 @@ export function CreateHostedReviewComposer({
   let createDisabledReason: string | undefined
   if (generating) {
     createDisabledReason = translate(
-      'auto.components.right.sidebar.SourceControl.318e2a7f88',
+      'auto.components.workspacePanel.SourceControl.318e2a7f88',
       'Wait for AI generation to finish.'
     )
   } else if (title.trim().length === 0) {
     createDisabledReason = translate(
-      'auto.components.right.sidebar.SourceControl.f3a8b2c1d0e5',
+      'auto.components.workspacePanel.SourceControl.f3a8b2c1d0e5',
       'Enter a {{value0}} title.',
       { value0: copy.reviewLabel }
     )
   } else if (normalizedBase.trim().length === 0) {
     createDisabledReason = translate(
-      'auto.components.right.sidebar.SourceControl.f76307c1f7',
+      'auto.components.workspacePanel.SourceControl.f76307c1f7',
       'Choose a base branch.'
     )
   } else if (baseSameAsBranch) {
     createDisabledReason = translate(
-      'auto.components.right.sidebar.SourceControl.4f76c0a9de',
+      'auto.components.workspacePanel.SourceControl.4f76c0a9de',
       'Base branch must differ from the head branch.'
     )
   }
@@ -139,12 +139,12 @@ export function CreateHostedReviewComposer({
   // the hook still sees untouched field revisions.
   const fieldsLocked = generating
   const generateDetailsLabel = translate(
-    'auto.components.right.sidebar.SourceControl.02d8c04339',
+    'auto.components.workspacePanel.SourceControl.02d8c04339',
     'Generate {{value0}} details with AI',
     { value0: copy.reviewLabel }
   )
   const stopGeneratingDetailsLabel = translate(
-    'auto.components.right.sidebar.SourceControl.b355e740b2',
+    'auto.components.workspacePanel.SourceControl.b355e740b2',
     'Stop generating {{value0}} details',
     { value0: copy.reviewLabel }
   )
@@ -162,7 +162,7 @@ export function CreateHostedReviewComposer({
     >
       <LoadingIndicator className="size-3" />
       <span>
-        {translate('auto.components.right.sidebar.SourceControl.e868cec4e1', 'Generating…')}
+        {translate('auto.components.workspacePanel.SourceControl.e868cec4e1', 'Generating…')}
       </span>
       <Square className="size-2.5 fill-current" />
     </Button>
@@ -177,7 +177,7 @@ export function CreateHostedReviewComposer({
       aria-label={generateDetailsLabel}
     >
       <Sparkles className="size-3" />
-      {translate('auto.components.right.sidebar.SourceControl.aee92f8684', 'Generate')}
+      {translate('auto.components.workspacePanel.SourceControl.aee92f8684', 'Generate')}
     </Button>
   )
   const effectiveDropdownItems = dropdownItems ?? EMPTY_DROPDOWN_ITEMS
@@ -191,7 +191,7 @@ export function CreateHostedReviewComposer({
             <ReviewIcon className="text-muted-foreground size-3.5 shrink-0" aria-hidden="true" />
             <span className="text-foreground font-medium">
               {translate(
-                'auto.components.right.sidebar.SourceControl.e1970d327d',
+                'auto.components.workspacePanel.SourceControl.e1970d327d',
                 'New {{value0}}',
                 { value0: copy.reviewLabel }
               )}
@@ -241,7 +241,7 @@ export function CreateHostedReviewComposer({
           baseSameAsBranch={baseSameAsBranch}
         />
 
-        <div className={cn(RIGHT_SIDEBAR_SPLIT_ACTION_ROW_CLASS, 'pt-0.5')}>
+        <div className={cn(WORKSPACE_PANEL_SPLIT_ACTION_ROW_CLASS, 'pt-0.5')}>
           <Button
             type="button"
             size="xs"
@@ -250,7 +250,7 @@ export function CreateHostedReviewComposer({
             className={cn(
               'h-7 px-3 text-xs',
               showDropdown && '',
-              RIGHT_SIDEBAR_MORPHING_PRIMARY_BUTTON_CLASS
+              WORKSPACE_PANEL_MORPHING_PRIMARY_BUTTON_CLASS
             )}
             title={createDisabledReason ?? primaryAction.title}
           >
@@ -259,7 +259,7 @@ export function CreateHostedReviewComposer({
             ) : (
               <ReviewIcon className="size-3.5" />
             )}
-            <span className={RIGHT_SIDEBAR_PRIMARY_BUTTON_LABEL_CLASS}>
+            <span className={WORKSPACE_PANEL_PRIMARY_BUTTON_LABEL_CLASS}>
               {getCreateButtonLabel({
                 isCreating,
                 pushBeforeCreate,
@@ -280,12 +280,12 @@ export function CreateHostedReviewComposer({
                       createDisabled && 'opacity-50'
                     )}
                     aria-label={translate(
-                      'auto.components.right.sidebar.SourceControl.c5e4175139',
+                      'auto.components.workspacePanel.SourceControl.c5e4175139',
                       'More {{value0}} and remote actions',
                       { value0: copy.reviewLabel }
                     )}
                     title={translate(
-                      'auto.components.right.sidebar.SourceControl.4d6e1fd7f3',
+                      'auto.components.workspacePanel.SourceControl.4d6e1fd7f3',
                       'More actions'
                     )}
                   >
@@ -344,23 +344,23 @@ function getCreateButtonLabel({
   shortLabel: string
 }): string {
   if (isCreating) {
-    return translate('auto.components.right.sidebar.SourceControl.26511c22b4', 'Creating...')
+    return translate('auto.components.workspacePanel.SourceControl.26511c22b4', 'Creating...')
   }
   if (pushBeforeCreate) {
     return translate(
-      'auto.components.right.sidebar.CreateHostedReviewComposer.741ff8a0d2',
+      'auto.components.workspacePanel.CreateHostedReviewComposer.741ff8a0d2',
       'Push & Create {{value0}}',
       { value0: shortLabel }
     )
   }
   if (draft) {
     return translate(
-      'auto.components.right.sidebar.SourceControl.aaf1451654',
+      'auto.components.workspacePanel.SourceControl.aaf1451654',
       'Create draft {{value0}}',
       { value0: shortLabel }
     )
   }
-  return translate('auto.components.right.sidebar.SourceControl.5acbcedc1a', 'Create {{value0}}', {
+  return translate('auto.components.workspacePanel.SourceControl.5acbcedc1a', 'Create {{value0}}', {
     value0: shortLabel
   })
 }

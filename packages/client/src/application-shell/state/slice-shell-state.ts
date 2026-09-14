@@ -3,12 +3,12 @@ import type { ExecutionHostId } from '@agentstart/protocol/host/identity'
 import type { ProjectSourceContext } from '@agentstart/protocol/project/source-context'
 import type { ContextualTourId } from '@agentstart/protocol/settings/contextual-tours'
 import type { FeatureTipId } from '@agentstart/protocol/settings/feature-tips'
-import type { TopLevelView } from '@agentstart/protocol/settings/ui-state'
 import type { FeatureInteractionId } from '@agentstart/protocol/telemetry/interactions/catalog'
 import type { FeatureInteractionState } from '@agentstart/protocol/telemetry/interactions/state'
 import type { SettingsNavTarget } from '~renderer/settings/navigation-types'
 
 import type { AgentSendPopoverTargetMode, OpenAgentSendPopoverTargetModeArgs } from './slice'
+import type { WorkspacePageView } from './workspace-page-views'
 
 export type UIShellState = {
   sidebarOpen: boolean
@@ -34,12 +34,21 @@ export type UIShellState = {
   acknowledgedAgentsByPaneKey: Record<string, number>
   acknowledgeAgents: (paneKeys: string[]) => void
   unacknowledgeAgents: (paneKeys: string[]) => void
-  activeView: TopLevelView
-  previousViewBeforeSettings: Exclude<TopLevelView, 'settings'>
-  previousViewBeforeSpace: Exclude<TopLevelView, 'space'>
-  previousViewBeforeSkills: Exclude<TopLevelView, 'skills'>
-  previousViewBeforeMobile: Exclude<TopLevelView, 'mobile'>
-  setActiveView: (view: UIShellState['activeView']) => void
+  /**
+   * Opens (or activates) a page's titlebar tab. Presence in the hosting
+   * group's tabOrder IS the open state — page tabs queue exactly like
+   * terminal tabs because they are entries in the same queue.
+   */
+  openPageTab: (view: WorkspacePageView) => void
+  /** Closes a page's titlebar tab; navigating away only when it was active. */
+  closePageTab: (view: WorkspacePageView) => void
+  /**
+   * Show the workspace body. A tab-landing command rather than a route
+   * assignment: when a page tab owns the surface this activates the nearest
+   * workspace tab, so the strip's selection and the visible surface cannot
+   * disagree the way an imperative `activeView` write alone allowed.
+   */
+  focusWorkspaceSurface: () => void
   openHomePage: () => void
   newWorkspaceDraft: {
     repoId: string | null

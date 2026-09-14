@@ -96,7 +96,7 @@ export function useGitHistoryCommitActions({
       throw new Error(
         result.summary.errorMessage ??
           translate(
-            'auto.components.right.sidebar.SourceControl.8a5ba6a988',
+            'auto.components.workspacePanel.SourceControl.8a5ba6a988',
             'Failed to load commit diff'
           )
       )
@@ -131,7 +131,7 @@ export function useGitHistoryCommitActions({
         error instanceof Error
           ? error.message
           : translate(
-              'auto.components.right.sidebar.SourceControl.8a5ba6a988',
+              'auto.components.workspacePanel.SourceControl.8a5ba6a988',
               'Failed to load commit diff'
             )
       )
@@ -179,14 +179,14 @@ export function useGitHistoryCommitActions({
     try {
       await shellClient.ui.writeClipboardText(text)
       toast.success(
-        translate('auto.components.right.sidebar.SourceControl.bf5082de46', '{{value0}} copied', {
+        translate('auto.components.workspacePanel.SourceControl.bf5082de46', '{{value0}} copied', {
           value0: label
         })
       )
     } catch {
       toast.error(
         translate(
-          'auto.components.right.sidebar.SourceControl.c06193ef57',
+          'auto.components.workspacePanel.SourceControl.c06193ef57',
           'Failed to copy {{value0}}',
           { value0: label.toLowerCase() }
         )
@@ -234,7 +234,7 @@ export function useGitHistoryCommitActions({
           } else {
             toast.error(
               translate(
-                'auto.components.right.sidebar.SourceControl.04a5d7239b',
+                'auto.components.workspacePanel.SourceControl.04a5d7239b',
                 'This repository has no supported web remote'
               )
             )
@@ -243,7 +243,7 @@ export function useGitHistoryCommitActions({
         .catch(() => {
           toast.error(
             translate(
-              'auto.components.right.sidebar.SourceControl.15b6e834ac',
+              'auto.components.workspacePanel.SourceControl.15b6e834ac',
               'Failed to open commit in browser'
             )
           )
@@ -253,14 +253,14 @@ export function useGitHistoryCommitActions({
     if (action === 'copy-hash') {
       void copyCommitText(
         item.id,
-        translate('auto.components.right.sidebar.SourceControl.d172a4f068', 'Commit hash')
+        translate('auto.components.workspacePanel.SourceControl.d172a4f068', 'Commit hash')
       )
       return
     }
     if (action === 'copy-message') {
       void copyCommitText(
         item.message || item.subject,
-        translate('auto.components.right.sidebar.SourceControl.e283b50179', 'Commit message')
+        translate('auto.components.workspacePanel.SourceControl.e283b50179', 'Commit message')
       )
       return
     }
@@ -285,7 +285,7 @@ export function useGitHistoryCommitActions({
     if (!agent) {
       toast.error(
         translate(
-          'auto.components.right.sidebar.SourceControl.f394c6128a',
+          'auto.components.workspacePanel.SourceControl.f394c6128a',
           'No agent available to explain this commit'
         )
       )

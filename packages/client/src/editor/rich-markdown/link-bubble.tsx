@@ -380,7 +380,7 @@ export function RichMarkdownLinkBubble({
   )
 
   // Why: editor panes clip overflow at the workbench boundary, so the URL
-  // actions must portal to the app layer to remain above the right sidebar.
+  // actions must portal to the app layer to remain above the workspace panel.
   return portalToDocument ? createPortal(bubble, document.body) : bubble
 }
 

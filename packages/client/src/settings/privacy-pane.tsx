@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { BrowserContextPrivacySetting } from '~renderer/extension/context/privacy-setting'
 import { translate } from '~renderer/i18n/i18n'
-import { ShieldCheck } from '~renderer/icons/hugeicons'
+import { FileText, Globe, ShieldCheck } from '~renderer/icons/hugeicons'
 import { useMountedRef } from '~renderer/react/use-mounted-ref'
 import { useAppStore } from '~renderer/store/state'
 import {
@@ -15,8 +15,13 @@ import {
 import { Button } from '~renderer/ui/button'
 import { Switch } from '~renderer/ui/switch'
 
-import { Label } from '../ui/label'
+import { SettingsGroupCards } from './group-card'
 import { PrivacyDiagnosticsSection } from './privacy-diagnostics-section'
+import {
+  getPrivacyBrowserContextSearchEntries,
+  getPrivacyDiagnosticsSearchEntries,
+  getPrivacyTelemetrySearchEntries
+} from './privacy-search'
 
 type EnvBlockedReason = 'do_not_track' | 'agentstart_disabled' | 'ci'
 type BlockedReason = { kind: 'env'; reason: EnvBlockedReason }
@@ -93,51 +98,73 @@ export function PrivacyPane({ settings }: PrivacyPaneProps): React.JSX.Element {
   }
 
   return (
-    <div className="space-y-4">
-      <BrowserContextPrivacySetting />
-      <div className="flex items-center justify-between gap-4 py-2">
-        <div className="space-y-0.5">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="size-4" />
-            <Label>
-              {translate(
-                'auto.components.settings.PrivacyPane.fe904ac984',
-                'Share anonymous usage data'
-              )}
-            </Label>
-          </div>
-          <p className="text-muted-foreground text-xs">
-            {translate(
-              'auto.components.settings.PrivacyPane.8bfdd23a88',
-              'Help us figure out what to build next. AgentStart sends anonymous counts of which features you use and where things break.'
-            )}{' '}
-            <Button
-              variant="ghost"
-              size="xs"
-              type="button"
-              className="hover:text-foreground focus-visible:text-foreground focus-visible:bg-accent h-auto border-0 p-0 underline underline-offset-2"
-              onClick={(event) => openHttpLink(PRIVACY_URL, { event })}
-            >
-              {translate('auto.components.settings.PrivacyPane.77410e0566', 'Privacy policy')}
-            </Button>
-            .
-          </p>
-        </div>
-        <Switch
-          checked={toggleChecked}
-          aria-label={translate(
+    <SettingsGroupCards
+      groups={[
+        {
+          id: 'privacy-telemetry',
+          icon: <ShieldCheck aria-hidden="true" />,
+          title: translate(
             'auto.components.settings.PrivacyPane.fe904ac984',
             'Share anonymous usage data'
-          )}
-          aria-describedby={blocked ? PRIVACY_PANE_BLOCKED_HELPER_ID : undefined}
-          disabled={blocked !== null || inFlight}
-          onCheckedChange={handleToggle}
-        />
-      </div>
-
-      {blocked ? <BlockedHelper blocked={blocked} id={PRIVACY_PANE_BLOCKED_HELPER_ID} /> : null}
-      <PrivacyDiagnosticsSection />
-    </div>
+          ),
+          searchEntries: getPrivacyTelemetrySearchEntries(),
+          content: (
+            <div className="divide-border/40 divide-y">
+              <div className="flex items-center justify-between gap-4 py-2">
+                <div className="space-y-0.5">
+                  <p className="text-muted-foreground text-xs select-text">
+                    {translate(
+                      'auto.components.settings.PrivacyPane.8bfdd23a88',
+                      'Help us figure out what to build next. AgentStart sends anonymous counts of which features you use and where things break.'
+                    )}{' '}
+                    <Button
+                      variant="ghost"
+                      size="xs"
+                      type="button"
+                      className="hover:text-foreground focus-visible:text-foreground focus-visible:bg-accent h-auto border-0 p-0 underline underline-offset-2"
+                      onClick={(event) => openHttpLink(PRIVACY_URL, { event })}
+                    >
+                      {translate(
+                        'auto.components.settings.PrivacyPane.77410e0566',
+                        'Privacy policy'
+                      )}
+                    </Button>
+                    .
+                  </p>
+                </div>
+                <Switch
+                  checked={toggleChecked}
+                  aria-label={translate(
+                    'auto.components.settings.PrivacyPane.fe904ac984',
+                    'Share anonymous usage data'
+                  )}
+                  aria-describedby={blocked ? PRIVACY_PANE_BLOCKED_HELPER_ID : undefined}
+                  disabled={blocked !== null || inFlight}
+                  onCheckedChange={handleToggle}
+                />
+              </div>
+              {blocked ? (
+                <BlockedHelper blocked={blocked} id={PRIVACY_PANE_BLOCKED_HELPER_ID} />
+              ) : null}
+            </div>
+          )
+        },
+        {
+          id: 'privacy-browser-context',
+          icon: <Globe aria-hidden="true" />,
+          title: translate('extension.context.settingsTitle', 'Browser project context'),
+          searchEntries: getPrivacyBrowserContextSearchEntries(),
+          content: <BrowserContextPrivacySetting />
+        },
+        {
+          id: 'privacy-diagnostics',
+          icon: <FileText aria-hidden="true" />,
+          title: translate('auto.components.settings.privacy.search.6d258d2ed6', 'Diagnostics'),
+          searchEntries: getPrivacyDiagnosticsSearchEntries(),
+          content: <PrivacyDiagnosticsSection />
+        }
+      ]}
+    />
   )
 }
 

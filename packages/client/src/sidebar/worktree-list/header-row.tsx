@@ -110,7 +110,10 @@ export function HeaderRow(props: {
       data-worktree-virtual-row-key={String(props.virtualKey)}
       data-worktree-sticky-header=""
       data-index={props.index}
-      className={cn('relative z-20 bg-sidebar', props.hasTopSpacing && 'pt-1')}
+      className={cn(
+        'relative z-20 bg-[var(--worktree-sidebar-surface)]',
+        props.hasTopSpacing && 'pt-1'
+      )}
     >
       <SidebarProjectHeader
         id={getWorktreeOptionId(row.key)}

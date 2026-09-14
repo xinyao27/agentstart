@@ -6,7 +6,7 @@ import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 import { Input } from '~renderer/ui/input'
 
-import { RIGHT_SIDEBAR_INPUT_BUTTON_SURFACE_CLASS_NAME } from '../right-sidebar-button-styles'
+import { WORKSPACE_PANEL_INPUT_BUTTON_SURFACE_CLASS_NAME } from '../workspace-panel-button-styles'
 
 type FileExplorerNameFilterProps = {
   query: string
@@ -33,11 +33,11 @@ export function FileExplorerNameFilter({
         size="xs"
         className="flex-1"
         aria-label={translate(
-          'auto.components.right.sidebar.FileExplorerNameFilter.26fb73c6e3',
+          'auto.components.workspacePanel.FileExplorerNameFilter.26fb73c6e3',
           'Find files'
         )}
         placeholder={translate(
-          'auto.components.right.sidebar.FileExplorerNameFilter.26fb73c6e3',
+          'auto.components.workspacePanel.FileExplorerNameFilter.26fb73c6e3',
           'Find files'
         )}
         value={query}
@@ -51,11 +51,11 @@ export function FileExplorerNameFilter({
           variant="ghost"
           size="icon-xs"
           className={cn(
-            RIGHT_SIDEBAR_INPUT_BUTTON_SURFACE_CLASS_NAME,
+            WORKSPACE_PANEL_INPUT_BUTTON_SURFACE_CLASS_NAME,
             'h-auto w-auto p-0.5 rounded-sm'
           )}
           aria-label={translate(
-            'auto.components.right.sidebar.FileExplorerNameFilter.4d5a6b2a49',
+            'auto.components.workspacePanel.FileExplorerNameFilter.4d5a6b2a49',
             'Clear file filter'
           )}
           onClick={onClear}

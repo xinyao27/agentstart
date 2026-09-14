@@ -78,32 +78,35 @@ export function CreateHostedReviewComposerFields({
           )}
           title={
             normalizedBase ||
-            translate('auto.components.right.sidebar.SourceControl.7a09d7f9d2', 'base')
+            translate('auto.components.workspacePanel.SourceControl.7a09d7f9d2', 'base')
           }
         >
           {normalizedBase ||
-            translate('auto.components.right.sidebar.SourceControl.7a09d7f9d2', 'base')}
+            translate('auto.components.workspacePanel.SourceControl.7a09d7f9d2', 'base')}
         </span>
       </div>
 
       <div className="relative space-y-2">
         <Input
           aria-label={translate(
-            'auto.components.right.sidebar.SourceControl.a6eda33521',
+            'auto.components.workspacePanel.SourceControl.a6eda33521',
             '{{value0}} title',
             { value0: copy.titleLabel }
           )}
           value={title}
           disabled={fieldsLocked}
           onChange={(event) => setTitle(event.target.value)}
-          placeholder={translate('auto.components.right.sidebar.SourceControl.7d6a8f0082', 'Title')}
+          placeholder={translate(
+            'auto.components.workspacePanel.SourceControl.7d6a8f0082',
+            'Title'
+          )}
           size="sm"
           className="font-medium"
         />
 
         <Textarea
           aria-label={translate(
-            'auto.components.right.sidebar.SourceControl.a8873e1d62',
+            'auto.components.workspacePanel.SourceControl.a8873e1d62',
             '{{value0}} description',
             { value0: copy.titleLabel }
           )}
@@ -112,7 +115,7 @@ export function CreateHostedReviewComposerFields({
           disabled={fieldsLocked}
           onChange={(event) => setBody(event.target.value)}
           placeholder={translate(
-            'auto.components.right.sidebar.SourceControl.a0dc20fc93',
+            'auto.components.workspacePanel.SourceControl.a0dc20fc93',
             'Description (optional)'
           )}
           size="sm"
@@ -130,7 +133,7 @@ export function CreateHostedReviewComposerFields({
               <Sparkles className="text-foreground size-3 animate-pulse" />
               <span>
                 {translate(
-                  'auto.components.right.sidebar.SourceControl.9484270f45',
+                  'auto.components.workspacePanel.SourceControl.9484270f45',
                   'Generating title & description…'
                 )}
               </span>
@@ -144,12 +147,12 @@ export function CreateHostedReviewComposerFields({
           obvious; the inline label clarifies that this is the merge target. */}
       <div className="flex items-center gap-2">
         <span className="text-muted-foreground shrink-0 text-[11px]">
-          {translate('auto.components.right.sidebar.SourceControl.1f7119f604', 'Base')}
+          {translate('auto.components.workspacePanel.SourceControl.1f7119f604', 'Base')}
         </span>
         <div className="relative min-w-0 flex-1">
           <Input
             aria-label={translate(
-              'auto.components.right.sidebar.SourceControl.6055949c50',
+              'auto.components.workspacePanel.SourceControl.6055949c50',
               '{{value0}} base branch',
               { value0: copy.titleLabel }
             )}
@@ -160,7 +163,7 @@ export function CreateHostedReviewComposerFields({
               setBase(event.target.value)
             }}
             placeholder={translate(
-              'auto.components.right.sidebar.SourceControl.e64a632456',
+              'auto.components.workspacePanel.SourceControl.e64a632456',
               'main'
             )}
             size="xs"
@@ -187,7 +190,7 @@ export function CreateHostedReviewComposerFields({
           onCheckedChange={(checked) => setDraft(checked === true)}
         />
         <span className="min-w-0 flex-1 truncate">
-          {translate('auto.components.right.sidebar.SourceControl.78ddfd0bb4', 'Create as draft')}
+          {translate('auto.components.workspacePanel.SourceControl.78ddfd0bb4', 'Create as draft')}
         </span>
       </label>
 
@@ -250,7 +253,7 @@ function CreateHostedReviewComposerMessages({
       {baseSameAsBranch ? (
         <CreateHostedReviewComposerMessage>
           {translate(
-            'auto.components.right.sidebar.SourceControl.ae743199cd',
+            'auto.components.workspacePanel.SourceControl.ae743199cd',
             'Choose a different base branch before creating a {{value0}}.',
             { value0: copy.reviewLabel }
           )}

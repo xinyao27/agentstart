@@ -1,5 +1,4 @@
 import { useAppStore } from '~renderer/store/state'
-import { sanitizeRecentTabIds } from '~renderer/tab-bar/state/group-state'
 import {
   getActiveEntityIdForTabType,
   getNextTabAcrossAllTypes,
@@ -158,45 +157,7 @@ export function handleSwitchTabAcrossAllTypes(direction: number): boolean {
 }
 
 /**
- * Handle Ctrl+Tab MRU quick-toggle across every visible tab in the active group.
- * Returns true if a tab switch occurred, false otherwise.
- */
-export function handleSwitchRecentTab(): boolean {
-  const ctx = resolveCycleContext()
-  if (!ctx) {
-    return false
-  }
-  const { store, worktreeId, allTabIds, groupTabIdInNav } = ctx
-  if (!groupTabIdInNav) {
-    return false
-  }
-  const groupId = store.activeGroupIdByWorktree[worktreeId]
-  const group = groupId
-    ? (store.groupsByWorktree[worktreeId] ?? []).find((candidate) => candidate.id === groupId)
-    : undefined
-  if (!group?.recentTabIds) {
-    return false
-  }
-
-  const visibleTabIds = allTabIds.flatMap((entry) => (entry.tabId ? [entry.tabId] : []))
-  const recentTabIds = sanitizeRecentTabIds(group.recentTabIds, visibleTabIds)
-  const currentIndex = recentTabIds.lastIndexOf(groupTabIdInNav)
-  if (currentIndex <= 0) {
-    return false
-  }
-
-  const previousRecentTabId = recentTabIds[currentIndex - 1]
-  const next = allTabIds.find((entry) => entry.tabId === previousRecentTabId)
-  if (!next) {
-    return false
-  }
-
-  activateCyclableTab(store, next)
-  return true
-}
-
-/**
- * Handle Ctrl+PageUp/PageDown switching across terminal tabs only.
+ * Handle terminal-tab switching across terminal tabs only.
  * Returns true if a terminal tab switch occurred, false otherwise.
  */
 export function handleSwitchTerminalTab(direction: number): boolean {

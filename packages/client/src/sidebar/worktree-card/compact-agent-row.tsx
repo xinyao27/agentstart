@@ -140,7 +140,7 @@ export const CompactAgentRow = function CompactAgentRow({
     typeof onToggleChildAgents === 'function'
   const childDisclosureLabel = hasChildDisclosure
     ? translate(
-        'auto.components.right.sidebar.AiVaultSessionSubagents.subagentsCount',
+        'auto.components.workspacePanel.AiVaultSessionSubagents.subagentsCount',
         'Subagents ({{value0}})',
         { value0: childAgentCount }
       )

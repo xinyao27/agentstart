@@ -307,7 +307,7 @@ async fn run_traced(
     let exit_code = match &shutdown_reason {
         ShutdownReason::Restart => ExitCode::from(75),
         ShutdownReason::StartupFailure => ExitCode::FAILURE,
-        ShutdownReason::Requested | ShutdownReason::Signal => ExitCode::SUCCESS,
+        ShutdownReason::Signal => ExitCode::SUCCESS,
     };
     let mut shutdown_span = trace.start_span(
         "daemon.shutdown",
@@ -345,7 +345,6 @@ fn finish_result<T, E: std::fmt::Display>(span: &mut TraceSpan, result: &Result<
 
 fn shutdown_reason_label(reason: &ShutdownReason) -> &'static str {
     match reason {
-        ShutdownReason::Requested => "requested",
         ShutdownReason::Restart => "restart",
         ShutdownReason::Signal => "signal",
         ShutdownReason::StartupFailure => "startup_failure",

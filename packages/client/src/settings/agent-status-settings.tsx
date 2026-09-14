@@ -12,7 +12,7 @@ export function AgentStatusHooksSetting({
 }: AgentsPaneProps): React.JSX.Element {
   const enabled = settings.agentStatusHooksEnabled !== false
   return (
-    <section className="space-y-3">
+    <div className="divide-border/40 divide-y">
       <SettingsSwitchRow
         label={getAgentStatusHooksTitle()}
         description={getAgentStatusHooksDescription()}
@@ -24,7 +24,7 @@ export function AgentStatusHooksSetting({
         }
         ariaLabel={getAgentStatusHooksTitle()}
       />
-    </section>
+    </div>
   )
 }
 
@@ -34,7 +34,7 @@ export function AgentGeneratedTabTitlesSetting({
 }: AgentsPaneProps): React.JSX.Element {
   const enabled = settings.tabAutoGenerateTitle === true
   return (
-    <section className="space-y-3">
+    <div className="divide-border/40 divide-y">
       <SettingsSwitchRow
         label={getAgentGeneratedTabTitlesTitle()}
         description={getAgentGeneratedTabTitlesDescription()}
@@ -46,6 +46,6 @@ export function AgentGeneratedTabTitlesSetting({
         }
         ariaLabel={getAgentGeneratedTabTitlesTitle()}
       />
-    </section>
+    </div>
   )
 }

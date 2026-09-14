@@ -1,4 +1,5 @@
 import type { GlobalSettings } from '@agentstart/protocol/settings/global/model'
+import { activeViewFor } from '~renderer/application-shell/state/visible-surface'
 import { openCommandPalette } from '~renderer/extension/command-palette/open'
 import { translate } from '~renderer/i18n/i18n'
 import { useUiLocale } from '~renderer/i18n/use-ui-locale'
@@ -36,7 +37,7 @@ const SidebarNav = function SidebarNav() {
   const openSkillsPage = useAppStore((s) => s.openSkillsPage)
   const openMobilePage = useAppStore((s) => s.openMobilePage)
   const updateSettings = useAppStore((s) => s.updateSettings)
-  const activeView = useAppStore((s) => s.activeView)
+  const activeView = useAppStore((s) => activeViewFor(s))
   const showMobileButton = useAppStore((s) => shouldShowMobileButton(s.settings))
   const homeActive = activeView === 'home'
   const skillsActive = activeView === 'skills'

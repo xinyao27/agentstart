@@ -12,8 +12,8 @@ import type { AppState } from '~renderer/store/types'
 
 import {
   workspaceIndexForLocalRowIndex,
-  type WorkspaceSidebarProjectedRow
-} from '../workspace-sidebar-row-projection'
+  type NavigationProjectedRow
+} from '../navigation-row-projection'
 import { getFolderWorkspaceRevealGroupKeys, sidebarWorkspaceStillExists } from './folder-reveal'
 import {
   getGroupKeysForWorktree,
@@ -41,7 +41,7 @@ export function useWorktreeReveal(args: {
   lineageById: Record<string, WorktreeLineage>
   worktreeMap: Map<string, Worktree>
   renderRows: readonly RenderRow[]
-  workspaceRows: readonly WorkspaceSidebarProjectedRow[]
+  workspaceRows: readonly NavigationProjectedRow[]
   clearPending: () => void
   toggleGroup: (key: string) => void
   collapsedGroups: ReadonlySet<string>

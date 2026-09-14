@@ -75,10 +75,10 @@ export function buildWorktreePurgeState(s: AppState, worktreeIds: string[]): Par
     }
     return changed ? out : obj
   }
-  const pruneRightSidebarTabByWorktree = (): AppState['rightSidebarTabByWorktree'] => {
-    const omitted = omitByWorktree(s.rightSidebarTabByWorktree)
-    let changed = omitted !== s.rightSidebarTabByWorktree
-    const out: AppState['rightSidebarTabByWorktree'] = {}
+  const pruneWorkspacePanelTabByWorktree = (): AppState['workspacePanelTabByWorktree'] => {
+    const omitted = omitByWorktree(s.workspacePanelTabByWorktree)
+    let changed = omitted !== s.workspacePanelTabByWorktree
+    const out: AppState['workspacePanelTabByWorktree'] = {}
     for (const [id, tab] of Object.entries(omitted)) {
       if (
         tab === 'explorer' ||
@@ -265,8 +265,10 @@ export function buildWorktreePurgeState(s: AppState, worktreeIds: string[]): Par
     activeTabIdByWorktree: omitByWorktree(s.activeTabIdByWorktree),
     tabBarOrderByWorktree: omitByWorktree(s.tabBarOrderByWorktree),
     pendingReconnectTabByWorktree: omitByWorktree(s.pendingReconnectTabByWorktree),
-    rightSidebarTabByWorktree: pruneRightSidebarTabByWorktree(),
-    rightSidebarExplorerViewByWorktree: omitByWorktree(s.rightSidebarExplorerViewByWorktree ?? {}),
+    workspacePanelTabByWorktree: pruneWorkspacePanelTabByWorktree(),
+    workspacePanelExplorerViewByWorktree: omitByWorktree(
+      s.workspacePanelExplorerViewByWorktree ?? {}
+    ),
     sourceControlPanelViewByWorktree: omitByWorktree(s.sourceControlPanelViewByWorktree),
     gitGraphByWorktree: omitByWorktree(s.gitGraphByWorktree),
     gitGraphIncludeRemoteBranchesByWorktree: omitByWorktree(

@@ -12,6 +12,7 @@ type WorktreeSplitSurfaceProps = {
   worktreePath: string
   layout: TabGroupLayoutNode
   focusedGroupId?: string
+  useSharedHeader?: boolean
   isVisible: boolean
   shouldMeasureHiddenWorktree: boolean
   shouldColdParkTerminalPanes: boolean
@@ -32,6 +33,7 @@ export const WorktreeSplitSurface = function WorktreeSplitSurface({
   worktreePath,
   layout,
   focusedGroupId,
+  useSharedHeader = false,
   isVisible,
   shouldMeasureHiddenWorktree,
   shouldColdParkTerminalPanes,
@@ -58,6 +60,7 @@ export const WorktreeSplitSurface = function WorktreeSplitSurface({
         layout={layout}
         worktreeId={worktreeId}
         focusedGroupId={focusedGroupId}
+        useSharedHeader={useSharedHeader && focusedGroupId !== undefined}
         isWorktreeActive={isVisible}
       />
       <TerminalPaneOverlayLayer

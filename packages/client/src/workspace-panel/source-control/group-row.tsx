@@ -45,7 +45,7 @@ export function SourceControlGroupRow({
         {conflictCount > 0 ? (
           <span className="text-destructive/80 shrink-0 text-[11px] tabular-nums">
             {conflictCount}{' '}
-            {translate('auto.components.right.sidebar.SourceControl.413a3ba113', 'conflict')}
+            {translate('auto.components.workspacePanel.SourceControl.413a3ba113', 'conflict')}
             {conflictCount === 1 ? '' : 's'}
           </span>
         ) : null}

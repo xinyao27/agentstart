@@ -172,7 +172,7 @@ function buildAiVaultListStatus({
     return (
       <EmptyState
         title={translate(
-          'auto.components.right.sidebar.AiVaultPanel.noAgentSessionsFound',
+          'auto.components.workspacePanel.AiVaultPanel.noAgentSessionsFound',
           'No agent sessions found'
         )}
       />
@@ -182,7 +182,7 @@ function buildAiVaultListStatus({
     return (
       <EmptyState
         title={translate(
-          'auto.components.right.sidebar.AiVaultPanel.noSessionsMatchFilters',
+          'auto.components.workspacePanel.AiVaultPanel.noSessionsMatchFilters',
           'No sessions match the current filters'
         )}
       />

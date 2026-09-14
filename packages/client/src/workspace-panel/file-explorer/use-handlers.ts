@@ -94,7 +94,7 @@ async function activateFileExplorerNode(args: {
     } catch {
       toast.error(
         translate(
-          'auto.components.right.sidebar.useFileExplorerHandlers.32cd9fd991',
+          'auto.components.workspacePanel.useFileExplorerHandlers.32cd9fd991',
           'Cannot open symlink target'
         )
       )
@@ -113,7 +113,7 @@ async function activateFileExplorerNode(args: {
       } else {
         toast.error(
           translate(
-            'auto.components.right.sidebar.useFileExplorerHandlers.32cd9fd991',
+            'auto.components.workspacePanel.useFileExplorerHandlers.32cd9fd991',
             'Cannot open symlink target'
           )
         )

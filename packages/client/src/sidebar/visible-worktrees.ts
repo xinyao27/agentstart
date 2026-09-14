@@ -85,13 +85,13 @@ export function computeClearFilterActions(state: SidebarFilterState): ClearFilte
 
 /**
  * Shared pure utility that computes the ordered list of visible (non-archived,
- * non-filtered) worktree IDs. Both the App-level Cmd+1–9 handler and
+ * non-filtered) worktree IDs. Both the workspace digit-shortcut handler and
  * WorktreeList's render pipeline consume this function so the numbering and
  * card order can never diverge.
  *
  * Why a shared function: if the filter/sort pipeline lived in two places, a
  * new filter added in one but not the other would silently break the mapping
- * between badge numbers and the Cmd+N shortcut target.
+ * between badge numbers and the create-workspace shortcut target.
  */
 export function computeVisibleWorktreeIds(
   worktreesByRepo: Record<string, Worktree[]>,

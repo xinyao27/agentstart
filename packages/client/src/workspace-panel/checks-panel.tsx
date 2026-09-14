@@ -19,10 +19,7 @@ import { useChecksPanelReviewMutations } from './checks-panel/review-mutations'
 import { ChecksPanelReviewView } from './checks-panel/review-view'
 import { useChecksPanelStateCore } from './checks-panel/state-core'
 import { useChecksPanelStatusEffects } from './checks-panel/status-effects'
-import {
-  LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
-  type RightSidebarPanelSource
-} from './right-sidebar-panel-source'
+import { LOCAL_WORKSPACE_PANEL_SOURCE, type WorkspacePanelSource } from './workspace-panel-source'
 
 function LocalChecksPanel({
   isVisible,
@@ -56,11 +53,11 @@ function LocalChecksPanel({
 }
 
 export default function ChecksPanel({
-  source = LOCAL_RIGHT_SIDEBAR_PANEL_SOURCE,
+  source = LOCAL_WORKSPACE_PANEL_SOURCE,
   isVisible = true,
   workspacePanelTabId
 }: {
-  source?: RightSidebarPanelSource
+  source?: WorkspacePanelSource
   isVisible?: boolean
   workspacePanelTabId?: string
 }): React.JSX.Element | null {

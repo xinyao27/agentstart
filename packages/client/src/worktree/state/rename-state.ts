@@ -20,8 +20,8 @@ const WORKTREE_ID_KEYED_MAP_KEYS = [
   'activeTabIdByWorktree',
   'tabBarOrderByWorktree',
   'pendingReconnectTabByWorktree',
-  'rightSidebarTabByWorktree',
-  'rightSidebarExplorerViewByWorktree',
+  'workspacePanelTabByWorktree',
+  'workspacePanelExplorerViewByWorktree',
   'sourceControlPanelViewByWorktree',
   'gitGraphByWorktree',
   'gitGraphIncludeRemoteBranchesByWorktree',
@@ -98,7 +98,8 @@ export function buildWorktreeRenameState(
     files.map(withNewWorktreeId)
   )
   // Why: terminal reopen snapshots carry absolute startupCwd paths under the
-  // old worktree folder; remap them or Cmd+Shift+T respawns into a directory
+  // old worktree folder; remap them or the reopen shortcut respawns into a
+  // directory
   // that no longer exists after the rename. Paths outside the renamed folder
   // are untouched by the move and stay valid as-is.
   const oldWorktreePath = splitWorktreeIdForFilesystem(oldWorktreeId)?.worktreePath

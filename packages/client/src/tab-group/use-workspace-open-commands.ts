@@ -33,6 +33,7 @@ export function useWorkspaceOpenCommands({
   const createTab = useAppStore((state) => state.createTab)
   const setActiveTab = useAppStore((state) => state.setActiveTab)
   const setActiveTabType = useAppStore((state) => state.setActiveTabType)
+  const setWorkspacePanelOpen = useAppStore((state) => state.setWorkspacePanelOpen)
   const createBrowserTab = useAppStore((state) => state.createBrowserTab)
   const createEmptySplitGroup = useAppStore((state) => state.createEmptySplitGroup)
   const openNewBrowserTabInActiveWorkspace = useAppStore(
@@ -47,6 +48,7 @@ export function useWorkspaceOpenCommands({
   const projectRuntimeState = useProjectCatalogRuntimeState()
 
   const createSplitGroup = (direction: 'left' | 'right' | 'up' | 'down') => {
+    setWorkspacePanelOpen(false)
     focusGroup(worktreeId, groupId)
     const newGroupId = createEmptySplitGroup(worktreeId, groupId, direction)
     if (!newGroupId) {
@@ -60,6 +62,7 @@ export function useWorkspaceOpenCommands({
     setActiveTabType('terminal')
   }
   const duplicateBrowserTab = (browserTabId: string) => {
+    setWorkspacePanelOpen(false)
     void (async () => {
       const state = useAppStore.getState()
       const source = (state.browserTabsByWorktree[worktreeId] ?? []).find(
@@ -88,6 +91,7 @@ export function useWorkspaceOpenCommands({
     })()
   }
   const newTerminalWithShell = (shellOverride: string) => {
+    setWorkspacePanelOpen(false)
     void (async () => {
       if (
         await createRemoteRuntimeSessionTerminal({
@@ -107,6 +111,7 @@ export function useWorkspaceOpenCommands({
     })()
   }
   const newSimulatorTab = () => {
+    setWorkspacePanelOpen(false)
     if (getSimulatorTabForWorktree(worktreeId)) {
       void ensureSimulatorTab(worktreeId, { surfacePane: true })
       return
@@ -115,17 +120,21 @@ export function useWorkspaceOpenCommands({
     void openMobileEmulatorTab(worktreeId, { placement: 'rightSplit', targetGroupId: groupId })
   }
   const openEntry = async (args: TabCreateEntryArgs) => {
+    setWorkspacePanelOpen(false)
     await openTabBarEntry(args)
   }
   const newBrowserTab = () => {
+    setWorkspacePanelOpen(false)
     void openNewBrowserTabInActiveWorkspace(groupId)
   }
   // Why: these actions target their owning group explicitly because keyboard
   // activation can open the menu before global group focus changes.
   const newFileTab = async () => {
+    setWorkspacePanelOpen(false)
     await openNewMarkdownInActiveWorkspace(groupId)
   }
   const newTerminalTab = () => {
+    setWorkspacePanelOpen(false)
     void openNewTerminalTabInActiveWorkspace(groupId)
   }
 
