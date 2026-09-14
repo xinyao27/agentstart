@@ -121,14 +121,14 @@ export function dispatchGlobalShortcut(
     }
   }
 
-  if (matchShortcut('sidebar.search.toggle') && canOpenWorkspacePanel) {
+  if (matchShortcut('workspacePanel.search.toggle') && canOpenWorkspacePanel) {
     const selectedFolderRelativePath =
       document.activeElement instanceof Element
         ? selectedExplorerFolderRelativePath(document.activeElement)
         : null
     if (selectedFolderRelativePath !== null && state.activeWorktreeId) {
       input.preventDefault()
-      notifyTerminalCapture('sidebar.search.toggle')
+      notifyTerminalCapture('workspacePanel.search.toggle')
       toggleWorkspacePanel({
         view: 'explorer',
         explorerDestination: {
@@ -141,7 +141,7 @@ export function dispatchGlobalShortcut(
     const selectedText = getSelectedTextForFileSearch()
     if (selectedText) {
       input.preventDefault()
-      notifyTerminalCapture('sidebar.search.toggle')
+      notifyTerminalCapture('workspacePanel.search.toggle')
       toggleSearchPanel(selectedText)
       return
     }
@@ -248,43 +248,43 @@ export function dispatchGlobalShortcut(
   if (!canOpenWorkspacePanel) {
     return
   }
-  if (matchShortcut('sidebar.right.toggle')) {
+  if (matchShortcut('workspacePanel.toggle')) {
     input.preventDefault()
-    notifyTerminalCapture('sidebar.right.toggle')
+    notifyTerminalCapture('workspacePanel.toggle')
     const store = useAppStore.getState()
     store.setWorkspacePanelOpen(!store.workspacePanelOpen)
     return
   }
-  if (matchShortcut('sidebar.explorer.toggle')) {
+  if (matchShortcut('workspacePanel.explorer.toggle')) {
     input.preventDefault()
-    notifyTerminalCapture('sidebar.explorer.toggle')
+    notifyTerminalCapture('workspacePanel.explorer.toggle')
     toggleWorkspacePanel({ view: 'explorer', explorerDestination: { view: 'files' } })
     return
   }
-  if (matchShortcut('sidebar.search.toggle')) {
+  if (matchShortcut('workspacePanel.search.toggle')) {
     input.preventDefault()
-    notifyTerminalCapture('sidebar.search.toggle')
+    notifyTerminalCapture('workspacePanel.search.toggle')
     toggleSearchPanel(null)
     return
   }
-  if (matchShortcut('sidebar.sourceControl.toggle')) {
+  if (matchShortcut('workspacePanel.sourceControl.toggle')) {
     if (document.querySelector('[data-terminal-search-root]')) {
       return
     }
     input.preventDefault()
-    notifyTerminalCapture('sidebar.sourceControl.toggle')
+    notifyTerminalCapture('workspacePanel.sourceControl.toggle')
     toggleWorkspacePanel({ view: 'source-control' })
     return
   }
-  if (matchShortcut('sidebar.checks.toggle')) {
+  if (matchShortcut('workspacePanel.review.toggle')) {
     input.preventDefault()
-    notifyTerminalCapture('sidebar.checks.toggle')
+    notifyTerminalCapture('workspacePanel.review.toggle')
     toggleWorkspacePanel({ view: 'source-control', sourceControlView: 'review' })
     return
   }
-  if (matchShortcut('sidebar.ports.toggle')) {
+  if (matchShortcut('workspacePanel.ports.toggle')) {
     input.preventDefault()
-    notifyTerminalCapture('sidebar.ports.toggle')
+    notifyTerminalCapture('workspacePanel.ports.toggle')
     toggleWorkspacePanel({ view: 'ports' })
   }
 }

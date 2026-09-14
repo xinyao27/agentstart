@@ -60,7 +60,7 @@ function SidebarTabs(props: {
   interactiveReview?: boolean
   reviewHovered?: boolean
 }): JSX.Element {
-  const sourceControlShortcutLabel = useShortcutLabel('sidebar.sourceControl.toggle')
+  const sourceControlShortcutLabel = useShortcutLabel('workspacePanel.sourceControl.toggle')
   const reviewTooltip =
     sourceControlShortcutLabel === 'Unassigned'
       ? translate('auto.components.workspace.panel.sourceControl.title', 'Changes & Review')

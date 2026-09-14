@@ -156,12 +156,29 @@ pub(crate) fn definition<'a>(
         .find(|definition| definition.id == action_id)
 }
 
+// Why: action ids are persisted in the user's own keybindings file, so a renamed
+// action keeps resolving its old id instead of dropping the binding silently.
+const ACTION_ID_ALIASES: &[(&str, &str)] = &[
+    ("worktree.palette", "app.commandPalette"),
+    ("sidebar.right.toggle", "workspacePanel.toggle"),
+    ("sidebar.explorer.toggle", "workspacePanel.explorer.toggle"),
+    ("sidebar.search.toggle", "workspacePanel.search.toggle"),
+    (
+        "sidebar.sourceControl.toggle",
+        "workspacePanel.sourceControl.toggle",
+    ),
+    ("sidebar.checks.toggle", "workspacePanel.review.toggle"),
+    ("sidebar.ports.toggle", "workspacePanel.ports.toggle"),
+];
+
 pub(crate) fn normalize_action_id<'a>(
     definitions: &'a [KeybindingDescriptor],
     stored_action_id: &'a str,
 ) -> Option<&'a str> {
-    if stored_action_id == "worktree.palette" {
-        return Some("app.commandPalette");
+    for (legacy, canonical) in ACTION_ID_ALIASES {
+        if *legacy == stored_action_id {
+            return Some(canonical);
+        }
     }
     definition(definitions, stored_action_id).map(|definition| definition.id.as_str())
 }

@@ -81,7 +81,7 @@ export function matchFileSearchShortcut(
 ): boolean {
   return (
     !event.repeat &&
-    keybindingMatchesAction('sidebar.search.toggle', event, platform, keybindings, {
+    keybindingMatchesAction('workspacePanel.search.toggle', event, platform, keybindings, {
       context: 'terminal',
       terminalShortcutPolicy
     })

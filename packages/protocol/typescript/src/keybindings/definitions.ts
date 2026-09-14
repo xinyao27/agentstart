@@ -70,9 +70,22 @@ export function isKeybindingActionId(value: string): value is KeybindingActionId
   return DEFINITION_IDS.has(value as KeybindingActionId)
 }
 
+// Why: action ids are persisted in the user's own keybindings file, so a renamed
+// action keeps accepting its old id instead of dropping the binding silently.
+const LEGACY_ACTION_ID_ALIASES: Record<string, KeybindingActionId> = {
+  'worktree.palette': 'app.commandPalette',
+  'sidebar.right.toggle': 'workspacePanel.toggle',
+  'sidebar.explorer.toggle': 'workspacePanel.explorer.toggle',
+  'sidebar.search.toggle': 'workspacePanel.search.toggle',
+  'sidebar.sourceControl.toggle': 'workspacePanel.sourceControl.toggle',
+  'sidebar.checks.toggle': 'workspacePanel.review.toggle',
+  'sidebar.ports.toggle': 'workspacePanel.ports.toggle'
+}
+
 export function normalizeKeybindingActionId(value: string): KeybindingActionId | null {
-  if (value === 'worktree.palette') {
-    return 'app.commandPalette'
+  const alias = LEGACY_ACTION_ID_ALIASES[value]
+  if (alias) {
+    return alias
   }
   return isKeybindingActionId(value) ? value : null
 }

@@ -122,8 +122,8 @@
       }
     },
     {
-      "id": "sidebar.right.toggle",
-      "title": "Open Explorer Tab",
+      "id": "workspacePanel.toggle",
+      "title": "Toggle Workspace Panel",
       "scope": "global",
       "defaultBindings": {
         "darwin": [
@@ -138,7 +138,7 @@
       }
     },
     {
-      "id": "sidebar.explorer.toggle",
+      "id": "workspacePanel.explorer.toggle",
       "title": "Show Explorer",
       "scope": "global",
       "defaultBindings": {
@@ -154,7 +154,7 @@
       }
     },
     {
-      "id": "sidebar.search.toggle",
+      "id": "workspacePanel.search.toggle",
       "title": "Show Search",
       "scope": "global",
       "defaultBindings": {
@@ -170,7 +170,7 @@
       }
     },
     {
-      "id": "sidebar.sourceControl.toggle",
+      "id": "workspacePanel.sourceControl.toggle",
       "title": "Show Changes & Review",
       "scope": "global",
       "defaultBindings": {
@@ -186,7 +186,7 @@
       }
     },
     {
-      "id": "sidebar.checks.toggle",
+      "id": "workspacePanel.review.toggle",
       "title": "Show Review",
       "scope": "global",
       "defaultBindings": {
@@ -196,7 +196,7 @@
       }
     },
     {
-      "id": "sidebar.ports.toggle",
+      "id": "workspacePanel.ports.toggle",
       "title": "Show Ports",
       "scope": "global",
       "defaultBindings": {

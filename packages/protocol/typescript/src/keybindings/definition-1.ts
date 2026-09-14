@@ -113,53 +113,53 @@ export const KEYBINDING_DEFINITIONS_1: readonly KeybindingDefinition[] = [
     defaultBindings: platformBindings(['Mod+B'])
   },
   {
-    id: 'sidebar.right.toggle',
-    title: 'Open Explorer Tab',
+    id: 'workspacePanel.toggle',
+    title: 'Toggle Workspace Panel',
     group: 'Global',
     scope: 'global',
-    searchKeywords: ['shortcut', 'explorer', 'tab', 'files'],
+    searchKeywords: ['shortcut', 'panel', 'tools', 'explorer', 'files'],
     // Why: Mod+L focuses the browser's address bar, so the workbench owns the
     // shifted variant instead.
     defaultBindings: platformBindings(['Mod+Shift+L'])
   },
   {
-    id: 'sidebar.explorer.toggle',
+    id: 'workspacePanel.explorer.toggle',
     title: 'Show Explorer',
     group: 'Global',
     scope: 'global',
-    searchKeywords: ['shortcut', 'sidebar', 'explorer', 'files'],
+    searchKeywords: ['shortcut', 'panel', 'explorer', 'files'],
     defaultBindings: platformBindings(['Mod+Shift+E'])
   },
   {
-    id: 'sidebar.search.toggle',
+    id: 'workspacePanel.search.toggle',
     title: 'Show Search',
     group: 'Global',
     scope: 'global',
-    searchKeywords: ['shortcut', 'sidebar', 'search'],
+    searchKeywords: ['shortcut', 'panel', 'search'],
     defaultBindings: platformBindings(['Mod+Shift+F'])
   },
   {
-    id: 'sidebar.sourceControl.toggle',
+    id: 'workspacePanel.sourceControl.toggle',
     title: 'Show Changes & Review',
     group: 'Global',
     scope: 'global',
-    searchKeywords: ['shortcut', 'sidebar', 'source control', 'git'],
+    searchKeywords: ['shortcut', 'panel', 'source control', 'git'],
     defaultBindings: platformBindings(['Mod+Shift+G'])
   },
   {
-    id: 'sidebar.checks.toggle',
+    id: 'workspacePanel.review.toggle',
     title: 'Show Review',
     group: 'Global',
     scope: 'global',
-    searchKeywords: ['shortcut', 'sidebar', 'checks', 'ci'],
+    searchKeywords: ['shortcut', 'panel', 'review', 'checks', 'ci'],
     defaultBindings: platformBindings([])
   },
   {
-    id: 'sidebar.ports.toggle',
+    id: 'workspacePanel.ports.toggle',
     title: 'Show Ports',
     group: 'Global',
     scope: 'global',
-    searchKeywords: ['shortcut', 'sidebar', 'ports'],
+    searchKeywords: ['shortcut', 'panel', 'ports'],
     defaultBindings: {
       darwin: ['Mod+Shift+I'],
       linux: [],

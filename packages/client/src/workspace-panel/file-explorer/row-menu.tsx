@@ -113,7 +113,7 @@ export function FileExplorerRowMenu({
   const activeWorktreeId = useAppStore((state) => state.activeWorktreeId)
   const copyPathShortcutLabel = useShortcutLabel('fileExplorer.copyPath')
   const copyRelativePathShortcutLabel = useShortcutLabel('fileExplorer.copyRelativePath')
-  const findInFolderShortcutLabel = useShortcutLabel('sidebar.search.toggle')
+  const findInFolderShortcutLabel = useShortcutLabel('workspacePanel.search.toggle')
   const showDownload = shouldShowRemoteDownloadAction(runtimeDownloadContext)
 
   const handleReveal = (): void => {
