@@ -8092,25 +8092,25 @@
             "branchConfirm": "创建分支",
             "checkoutTitle": "检出提交？",
             "checkoutBody": "直接检出 {{commit}}。这会让工作树处于游离 HEAD 状态，直到你再次检出某个分支。",
-            "checkoutConfirm": "Checkout",
+            "checkoutConfirm": "检出",
             "cherryPickTitle": "拣选提交？",
             "cherryPickBody": "将 {{commit}} 的更改应用到当前分支之上。",
             "cherryPickConfirm": "拣选",
             "revertTitle": "还原提交？",
             "revertBody": "在当前分支上添加一个新提交，以撤销 {{commit}} 中的更改。",
-            "revertConfirm": "Revert",
+            "revertConfirm": "还原",
             "dropTitle": "丢弃提交？",
             "dropBody": "重写当前分支以移除 {{commit}}。其后的提交会获得新的哈希，因此任何已经共享这些提交的内容都需要更新。",
             "dropConfirm": "丢弃提交",
             "mergeTitle": "合并到当前分支",
             "mergeBody": "将 {{commit}} 合并到此工作树中检出的分支。",
-            "mergeConfirm": "Merge",
+            "mergeConfirm": "合并",
             "rebaseTitle": "将当前分支变基到该提交？",
             "rebaseBody": "将当前分支的提交重放到 {{commit}} 之上。重放的提交会获得新的哈希。",
-            "rebaseConfirm": "Rebase",
+            "rebaseConfirm": "变基",
             "resetTitle": "将当前分支重置到该提交",
             "resetBody": "将当前分支移动到 {{commit}}。硬重置还会丢弃未提交的更改。",
-            "resetConfirm": "Reset"
+            "resetConfirm": "重置"
           },
           "CommitWriteDialog": {
             "resetSoft": "软重置——保留暂存区和工作树",
@@ -8315,14 +8315,14 @@
       "fastMode": "快速模式",
       "thinking": "Thinking",
       "optionValue": {
-        "none": "None",
-        "minimal": "Minimal",
-        "low": "Low",
-        "medium": "Medium",
-        "high": "High",
+        "none": "无",
+        "minimal": "最低",
+        "low": "低",
+        "medium": "中",
+        "high": "高",
         "xhigh": "极高",
-        "max": "Max",
-        "ultra": "Ultra"
+        "max": "最高",
+        "ultra": "极限"
       }
     },
     "terminalPane": {
