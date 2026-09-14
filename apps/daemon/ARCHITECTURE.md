@@ -128,6 +128,6 @@ The runtime implementation and CLI live in this package. Capability policy and g
 cross-language bindings come from `packages/protocol`; browser effects remain in the extension.
 Each capability change updates its schema, owning authority, and actual callers together.
 
-Use `PARITY.md` for behavior evidence and remaining platform acceptance, and `HANDOFF.md` for
-current execution ownership and unfinished checks. Builds establish compilation and packaging;
+Build and lint acceptance is the repository gate defined in `AGENTS.md`; packaged-artifact
+acceptance is in `docs/reference/releasing.md`. Builds establish compilation and packaging;
 interactive acceptance must exercise the real client and destination host.

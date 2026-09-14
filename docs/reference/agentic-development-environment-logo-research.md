@@ -166,13 +166,10 @@ Before selecting a direction, compare every candidate in these conditions:
 
 ## Current AgentStart asset implications
 
-The checkout currently has three incompatible visual stories:
+The checkout's platform icons must derive from one AgentStart vector source:
 
-- [`apps/extension/public/icon.svg`](../../apps/extension/public/icon.svg) is a dark square with a purple
-  disc and white center—an orbit/target placeholder that communicates neither heterogeneity nor outcome.
-- [`apps/extension/public/icons/icon-128.png`](../../apps/extension/public/icons/icon-128.png) and
-  [`apps/mobile/AgentStartMobile/Resources/AppIcon.icon/Assets/logo.png`](../../apps/mobile/AgentStartMobile/Resources/AppIcon.icon/Assets/logo.png)
-  must derive from the same AgentStart vector source.
+- [`apps/extension/public/icons/icon-128.png`](../../apps/extension/public/icons/icon-128.png)
+- [`apps/mobile/AgentStartMobile/Resources/AppIcon.icon/Assets/logo.png`](../../apps/mobile/AgentStartMobile/Resources/AppIcon.icon/Assets/logo.png)
 
 The next identity pass should therefore establish one vector source of truth and derive every platform
 asset from it. This research does not replace or regenerate those files; it defines the brief the artwork
