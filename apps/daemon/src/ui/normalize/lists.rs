@@ -21,19 +21,20 @@ const PINNED_IDS: &[&str] = &[
     "commands",
 ];
 
+const DEFAULT_CARD_PROPERTIES: &[&str] = &["status", "unread", "comment", "ports", "inline-agents"];
+const DEFAULT_PINNED_IDS: &[&str] = &["explorer", "source-control", "vault", "open-in"];
+const CONTEXTUAL_TOUR_IDS: &[&str] = &["workspace-agent-sessions", "browser", "workspace-creation"];
+
 pub(super) fn card_properties(value: Option<&Value>) -> Value {
-    let default = json!(["status", "unread", "comment", "ports", "inline-agents"]);
-    let source = value.and_then(Value::as_array).unwrap_or_else(|| {
-        default
-            .as_array()
-            .expect("worktree card defaults are an array")
-    });
+    let source = value.and_then(Value::as_array);
     Value::Array(
         CARD_ORDER
             .iter()
             .filter(|property| {
                 matches!(**property, "status" | "unread")
-                    || source.iter().any(|value| value.as_str() == Some(property))
+                    || source.map_or(DEFAULT_CARD_PROPERTIES.contains(property), |source| {
+                        source.iter().any(|value| value.as_str() == Some(property))
+                    })
             })
             .map(|property| Value::String((*property).to_owned()))
             .collect(),
@@ -41,28 +42,20 @@ pub(super) fn card_properties(value: Option<&Value>) -> Value {
 }
 
 pub(super) fn pinned_ids(value: Option<&Value>) -> Value {
-    let default = json!(["explorer", "source-control", "vault", "open-in"]);
     let raw = value.and_then(Value::as_array);
-    let source = raw.unwrap_or_else(|| {
-        default
-            .as_array()
-            .expect("workspace titlebar defaults are an array")
-    });
+    let provided = match raw {
+        Some(values) => values.iter().filter_map(Value::as_str).collect::<Vec<_>>(),
+        None => DEFAULT_PINNED_IDS.to_vec(),
+    };
     let mut seen = HashSet::new();
     let mut normalized = Vec::new();
-    for value in source {
-        let Some(id) = value.as_str() else {
-            continue;
-        };
+    for id in provided.iter().copied() {
         let id = if id == "checks" { "source-control" } else { id };
         if PINNED_IDS.contains(&id) && seen.insert(id.to_owned()) {
             normalized.push(Value::String(id.to_owned()));
         }
     }
-    if raw.is_some()
-        && !seen.contains("open-in")
-        && !source.iter().any(|value| value.as_str() == Some("open-in"))
-    {
+    if raw.is_some() && !seen.contains("open-in") && !provided.contains(&"open-in") {
         normalized.push(Value::String("open-in".to_owned()));
     }
     Value::Array(normalized)
@@ -85,40 +78,39 @@ pub(super) fn show_dotfiles(value: Option<&Value>) -> Value {
 }
 
 pub(super) fn feature_tip_ids(value: Option<&Value>) -> Value {
-    unique_known(value, &["agentstart-cli", "command-palette"], |id| {
-        if id == "cmd-j-palette" {
-            "command-palette"
-        } else {
-            id
-        }
-    })
+    Value::Array(unique_known(
+        value,
+        &["agentstart-cli", "command-palette"],
+        |id| {
+            if id == "cmd-j-palette" {
+                "command-palette"
+            } else {
+                id
+            }
+        },
+    ))
 }
 
 pub(super) fn contextual_tour_ids(value: Option<&Value>) -> Value {
-    unique_known(
-        value,
-        &["workspace-agent-sessions", "browser", "workspace-creation"],
-        |id| id,
-    )
+    Value::Array(contextual_tour_id_list(value))
+}
+
+fn contextual_tour_id_list(value: Option<&Value>) -> Vec<Value> {
+    unique_known(value, CONTEXTUAL_TOUR_IDS, |id| id)
 }
 
 pub(super) fn merge_contextual_tours(current: Option<&Value>, incoming: Option<&Value>) -> Value {
-    let mut values = contextual_tour_ids(current)
-        .as_array()
-        .expect("normalized tours are an array")
-        .clone();
+    let mut values = contextual_tour_id_list(current);
     let mut seen = values
         .iter()
         .filter_map(Value::as_str)
         .map(str::to_owned)
         .collect::<HashSet<_>>();
-    if let Some(incoming) = contextual_tour_ids(incoming).as_array() {
-        for value in incoming {
-            if let Some(id) = value.as_str()
-                && seen.insert(id.to_owned())
-            {
-                values.push(value.clone());
-            }
+    for value in contextual_tour_id_list(incoming) {
+        if let Some(id) = value.as_str()
+            && seen.insert(id.to_owned())
+        {
+            values.push(value);
         }
     }
     Value::Array(values)
@@ -182,20 +174,18 @@ fn unique_known(
     value: Option<&Value>,
     known: &[&str],
     map: impl for<'a> Fn(&'a str) -> &'a str,
-) -> Value {
+) -> Vec<Value> {
     let Some(values) = value.and_then(Value::as_array) else {
-        return Value::Array(Vec::new());
+        return Vec::new();
     };
     let mut seen = HashSet::new();
-    Value::Array(
-        values
-            .iter()
-            .filter_map(Value::as_str)
-            .map(map)
-            .filter(|id| known.contains(id) && seen.insert((*id).to_owned()))
-            .map(|id| Value::String(id.to_owned()))
-            .collect(),
-    )
+    values
+        .iter()
+        .filter_map(Value::as_str)
+        .map(map)
+        .filter(|id| known.contains(id) && seen.insert((*id).to_owned()))
+        .map(|id| Value::String(id.to_owned()))
+        .collect()
 }
 
 fn normalize_host_id(value: &str) -> Option<String> {

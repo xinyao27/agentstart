@@ -71,21 +71,22 @@ pub(super) fn initialize(
 }
 
 fn telemetry_settings(document: &Map<String, Value>) -> TelemetrySettings {
-    let telemetry = document
-        .get("telemetry")
-        .and_then(Value::as_object)
-        .expect("telemetry is initialized");
+    // Why: a settings document written before the telemetry block existed must read as defaults
+    // rather than panic on the settings accessor path.
+    let telemetry = document.get("telemetry").and_then(Value::as_object);
     TelemetrySettings {
         existed_before_release: telemetry
-            .get("existedBeforeTelemetryRelease")
+            .and_then(|settings| settings.get("existedBeforeTelemetryRelease"))
             .and_then(Value::as_bool)
             .unwrap_or(false),
         install_id: telemetry
-            .get("installId")
+            .and_then(|settings| settings.get("installId"))
             .and_then(Value::as_str)
             .unwrap_or_default()
             .to_owned(),
-        opted_in: telemetry.get("optedIn").and_then(Value::as_bool),
+        opted_in: telemetry
+            .and_then(|settings| settings.get("optedIn"))
+            .and_then(Value::as_bool),
     }
 }
 

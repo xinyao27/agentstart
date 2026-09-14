@@ -16,8 +16,11 @@ pub(crate) enum PreviewIdentityError {
 }
 
 pub(super) fn require_local_preview(page_url: &str) -> Result<LocalPreview, PreviewIdentityError> {
-    let page =
-        url::Url::parse(page_url).expect("visual regression input validation accepts only URLs");
+    // Why: an unparseable page URL cannot be a local preview, and this runs on the request path
+    // where a panic would take the connection down instead of failing the capture.
+    let Ok(page) = url::Url::parse(page_url) else {
+        return Err(PreviewIdentityError::RequiresLocalPreview);
+    };
     if !matches!(page.scheme(), "http" | "https") || !is_allowed_host(page.host()) {
         return Err(PreviewIdentityError::RequiresLocalPreview);
     }

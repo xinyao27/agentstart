@@ -2,7 +2,7 @@ mod feature;
 mod lists;
 pub(super) mod workspace;
 
-use serde_json::{Map, Number, Value};
+use serde_json::{Map, Value};
 
 use super::defaults;
 
@@ -291,9 +291,8 @@ fn browser_zoom(value: Option<&Value>) -> Value {
 }
 
 fn number_value(value: f64) -> Value {
-    Number::from_f64(value)
-        .map(Value::Number)
-        .expect("normalized UI number is finite")
+    // Why: `Value::from` maps a non-finite float to null, keeping this total on the UI update path.
+    Value::from(value)
 }
 
 fn set(ui: &mut Map<String, Value>, field: &str, value: Value) {

@@ -16,6 +16,9 @@ const FIELDS: &[&str] = &[
     "rightSidebarOpen",
     "rightSidebarTab",
     "rightSidebarExplorerView",
+    // Why: accepted so a rolling reload's older bundle is not rejected as an unknown key, and
+    // deliberately not canonicalized. The workspace panel persists no width, and mapping this
+    // name onto `sidebarWidth` overwrote the left navigation width with the old right panel's.
     "rightSidebarWidth",
     "markdownTocPanelWidth",
     "groupBy",
@@ -124,7 +127,6 @@ fn canonical_field(field: &str) -> &str {
         "rightSidebarOpen" => "workspacePanelOpen",
         "rightSidebarTab" => "workspacePanelTab",
         "rightSidebarExplorerView" => "workspacePanelExplorerView",
-        "rightSidebarWidth" => "sidebarWidth",
         _ => field,
     }
 }
@@ -143,7 +145,6 @@ fn parse_field(field: &str, value: &Value, path: &[Value], issues: &mut Issues) 
         }
         "workspaceHostScope" => parse_string(value, path, issues),
         "sidebarWidth"
-        | "rightSidebarWidth"
         | "markdownTocPanelWidth"
         | "uiZoomLevel"
         | "editorFontZoomLevel"

@@ -119,7 +119,7 @@ impl ProjectCatalog {
 
     pub async fn resolve(&self, selector: &str) -> Result<Project, ProjectCatalogError> {
         let normalized = selector.strip_prefix("id:").unwrap_or(selector);
-        let matches = self
+        let mut matches = self
             .list()
             .await?
             .into_iter()
@@ -131,7 +131,7 @@ impl ProjectCatalog {
             .collect::<Vec<_>>();
         match matches.len() {
             0 => Err(ProjectCatalogError::NotFound),
-            1 => Ok(matches.into_iter().next().expect("one project exists")),
+            1 => matches.pop().ok_or(ProjectCatalogError::NotFound),
             _ => Err(ProjectCatalogError::AmbiguousSelector),
         }
     }

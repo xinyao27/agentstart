@@ -36,6 +36,17 @@ pub(super) fn enum_array(
     allowed: &[&str],
     issues: &mut Issues,
 ) -> Option<Value> {
+    enum_array_members(value, path, allowed, issues).map(Value::Array)
+}
+
+/// The parsed members of an enum array, so a caller that post-processes them does not have to
+/// re-assert that the parsed value is an array.
+fn enum_array_members(
+    value: &Value,
+    path: &[Value],
+    allowed: &[&str],
+    issues: &mut Issues,
+) -> Option<Vec<Value>> {
     let values = require_array(value, path, issues)?;
     let mut parsed = Vec::new();
     for (index, value) in values.iter().enumerate() {
@@ -43,7 +54,7 @@ pub(super) fn enum_array(
             parsed.push(value);
         }
     }
-    Some(Value::Array(parsed))
+    Some(parsed)
 }
 
 pub(super) fn worktree_card_properties(
@@ -51,7 +62,7 @@ pub(super) fn worktree_card_properties(
     path: &[Value],
     issues: &mut Issues,
 ) -> Option<Value> {
-    let parsed = enum_array(
+    let source = enum_array_members(
         value,
         path,
         &[
@@ -64,7 +75,6 @@ pub(super) fn worktree_card_properties(
         ],
         issues,
     )?;
-    let source = parsed.as_array().expect("parsed properties are an array");
     Some(Value::Array(
         [
             "status",
@@ -85,7 +95,7 @@ pub(super) fn worktree_card_properties(
 }
 
 pub(super) fn pinned_ids(value: &Value, path: &[Value], issues: &mut Issues) -> Option<Value> {
-    let parsed = enum_array(
+    let source = enum_array_members(
         value,
         path,
         &[
@@ -101,10 +111,9 @@ pub(super) fn pinned_ids(value: &Value, path: &[Value], issues: &mut Issues) -> 
         ],
         issues,
     )?;
-    let source = parsed.as_array().expect("parsed pinned ids are an array");
     let mut seen = HashSet::new();
     let mut normalized = Vec::new();
-    for value in source {
+    for value in &source {
         let id = match value.as_str() {
             Some("checks") => "source-control",
             Some(id) => id,

@@ -1,4 +1,4 @@
-use serde_json::{Map, Number, Value, json};
+use serde_json::{Map, Value, json};
 
 pub(crate) const IDS: &[&str] = &[
     "workspace-agent-sessions",
@@ -61,48 +61,41 @@ pub(crate) struct BucketEvent {
 }
 
 pub(super) fn interactions(value: Option<&Value>) -> Value {
+    Value::Object(interactions_object(value))
+}
+
+/// The normalized interaction map, so callers do not have to re-assert that `interactions`
+/// returned an object.
+fn interactions_object(value: Option<&Value>) -> Map<String, Value> {
     let mut normalized = Map::new();
     let Some(input) = value.and_then(Value::as_object) else {
-        return Value::Object(normalized);
+        return normalized;
     };
     for id in IDS {
         if let Some(record) = input.get(*id).and_then(normalize_record) {
             normalized.insert((*id).to_owned(), record);
         }
     }
-    Value::Object(normalized)
+    normalized
 }
 
 pub(super) fn merge(current: Option<&Value>, incoming: Option<&Value>) -> Value {
-    let mut merged = interactions(current)
-        .as_object()
-        .expect("normalized feature interactions are an object")
-        .clone();
-    let incoming = interactions(incoming);
-    for (id, incoming) in incoming
-        .as_object()
-        .expect("normalized feature interactions are an object")
-    {
-        let Some(current) = merged.get(id) else {
-            merged.insert(id.clone(), incoming.clone());
+    let mut merged = interactions_object(current);
+    for (id, incoming) in interactions_object(incoming) {
+        let Some(incoming) = incoming.as_object() else {
             continue;
         };
-        let current = current
-            .as_object()
-            .expect("normalized interaction is an object");
-        let incoming = incoming
-            .as_object()
-            .expect("normalized interaction is an object");
-        let first = current["firstInteractedAt"]
-            .as_f64()
-            .expect("normalized timestamp is a number")
-            .min(
-                incoming["firstInteractedAt"]
-                    .as_f64()
-                    .expect("normalized timestamp is a number"),
-            );
-        let count = interaction_count(current).max(interaction_count(incoming));
-        merged.insert(id.clone(), record(first, count));
+        let incoming_first = record_first_interacted_at(incoming);
+        let incoming_count = interaction_count(incoming);
+        let existing = merged.get(&id).and_then(Value::as_object);
+        let (first, count) = match existing {
+            Some(current) => (
+                record_first_interacted_at(current).min(incoming_first),
+                interaction_count(current).max(incoming_count),
+            ),
+            None => (incoming_first, incoming_count),
+        };
+        merged.insert(id, record(first, count));
     }
     Value::Object(merged)
 }
@@ -113,10 +106,7 @@ pub(super) fn record_interaction(
     id: &str,
     now_millis: i64,
 ) -> (Value, Value, Option<BucketEvent>) {
-    let mut interactions = interactions(interactions_value)
-        .as_object()
-        .expect("normalized feature interactions are an object")
-        .clone();
+    let mut interactions = interactions_object(interactions_value);
     let existing = interactions.get(id).and_then(Value::as_object);
     let previous_count = existing.map_or(0, interaction_count);
     let next_count = previous_count.saturating_add(1);
@@ -197,11 +187,16 @@ fn interaction_count(record: &Map<String, Value>) -> u64 {
 
 fn record(first: f64, count: u64) -> Value {
     json!({
-        "firstInteractedAt": Number::from_f64(first)
-            .map(Value::Number)
-            .expect("normalized timestamp is finite"),
+        "firstInteractedAt": first,
         "interactionCount": count
     })
+}
+
+fn record_first_interacted_at(record: &Map<String, Value>) -> f64 {
+    record
+        .get("firstInteractedAt")
+        .and_then(Value::as_f64)
+        .unwrap_or_default()
 }
 
 fn usage_bucket(count: u64) -> Option<&'static str> {

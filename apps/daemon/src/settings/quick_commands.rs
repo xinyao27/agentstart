@@ -50,11 +50,19 @@ pub(super) fn normalize(value: Option<&Value>) -> Vec<Value> {
         if !has_label && !has_command && !has_prompt {
             continue;
         }
-        let is_prompt = input.get("action").and_then(Value::as_str) == Some("agent-prompt");
-        let agent = input.get("agent").and_then(Value::as_str);
-        if is_prompt && !agent.is_some_and(|agent| PROMPT_AGENTS.contains(&agent)) {
-            continue;
-        }
+        let prompt_agent = match input.get("action").and_then(Value::as_str) {
+            Some("agent-prompt") => {
+                let agent = input
+                    .get("agent")
+                    .and_then(Value::as_str)
+                    .filter(|agent| PROMPT_AGENTS.contains(agent));
+                match agent {
+                    Some(agent) => Some(agent.to_owned()),
+                    None => continue,
+                }
+            }
+            _ => None,
+        };
         let id_base = if raw_id.is_empty() {
             format!("quick-command-{}", commands.len() + 1)
         } else {
@@ -80,15 +88,12 @@ pub(super) fn normalize(value: Option<&Value>) -> Vec<Value> {
             ),
             ("scope".to_owned(), scope(input.get("scope"))),
         ]);
-        if is_prompt {
+        if let Some(agent) = prompt_agent {
             command.insert(
                 "action".to_owned(),
                 Value::String("agent-prompt".to_owned()),
             );
-            command.insert(
-                "agent".to_owned(),
-                Value::String(agent.expect("prompt agent was checked").to_owned()),
-            );
+            command.insert("agent".to_owned(), Value::String(agent));
             command.insert(
                 "prompt".to_owned(),
                 Value::String(truncate(
@@ -150,7 +155,7 @@ pub(super) fn apply(
     let id = command
         .get("id")
         .and_then(Value::as_str)
-        .expect("normalized command has id");
+        .ok_or(SettingsError::QuickCommandInvalid)?;
     let existing = current
         .iter()
         .position(|candidate| candidate.get("id").and_then(Value::as_str) == Some(id));
