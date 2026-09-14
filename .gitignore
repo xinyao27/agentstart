@@ -88,3 +88,6 @@ docs/**
 /.commandcode/
 /.workbuddy-ai/
 /.zcode/
+
+# Machine-local CLI state (gh device identity and similar)
+/.local/
