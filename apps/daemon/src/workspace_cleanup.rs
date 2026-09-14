@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use futures_util::{StreamExt, stream};
@@ -9,6 +9,7 @@ use tokio::sync::broadcast;
 
 use crate::host_registry::HostRegistry;
 use crate::hosts::{HostCommand, HostCommandOutput};
+use crate::mutex_lock::lock;
 use crate::ui::UiAuthority;
 use crate::worktrees::{ResolvedWorktree, WorktreeCatalog};
 
@@ -559,10 +560,4 @@ fn system_time_millis(time: SystemTime) -> i64 {
             .as_millis(),
     )
     .unwrap_or(i64::MAX)
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

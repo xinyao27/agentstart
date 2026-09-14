@@ -1,10 +1,11 @@
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use serde_json::{Map, Value};
 
 use crate::diagnostics::{DiagnosticsTrace, TraceSpan};
+use crate::mutex_lock::lock;
 
 const FAST_SUCCESS_THRESHOLD: Duration = Duration::from_millis(250);
 const FAST_SUCCESS_WINDOW: Duration = Duration::from_secs(60);
@@ -183,10 +184,4 @@ fn global_flag(argument: &str) -> bool {
             | "--no-optional-locks"
             | "--pathspec-file-nul"
     )
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

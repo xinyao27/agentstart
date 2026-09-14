@@ -1,12 +1,13 @@
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use serde_json::{Map, Value, json};
 use thiserror::Error;
 
 use crate::atomic_file_replace;
+use crate::mutex_lock::lock;
 
 const FILE_NAME: &str = "agentstart-github-cache.json";
 const MAX_FILE_BYTES: u64 = 16 * 1024 * 1024;
@@ -143,10 +144,4 @@ fn write(path: &Path, payload: &[u8]) -> Result<(), GitHubCacheError> {
 
 fn empty() -> Value {
     json!({ "pr": {} })
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

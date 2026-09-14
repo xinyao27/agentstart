@@ -10,12 +10,13 @@ pub(crate) mod wire;
 
 use std::collections::HashSet;
 use std::path::Path;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use serde_json::{Map, Value};
 use thiserror::Error;
 use tokio::sync::{Mutex as AsyncMutex, watch};
 
+use crate::mutex_lock::lock;
 use crate::projects::{ProjectCatalog, ProjectCatalogError};
 use crate::terminal_scrollback::TerminalScrollbackSnapshots;
 use storage::SessionPersistence;
@@ -451,10 +452,4 @@ fn replace_and_commit(
 fn removed_refs(prior: HashSet<String>, document: &Map<String, Value>) -> HashSet<String> {
     let next = scrollback::collect_document_refs(document);
     prior.difference(&next).cloned().collect()
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

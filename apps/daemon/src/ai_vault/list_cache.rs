@@ -1,8 +1,9 @@
 use std::collections::HashMap;
-use std::sync::{Mutex, MutexGuard};
+use std::sync::Mutex;
 use std::time::{Duration, Instant};
 
 use super::model::AiVaultListResult;
+use crate::mutex_lock::lock;
 
 const CACHE_TTL: Duration = Duration::from_secs(15);
 const CACHE_ENTRY_LIMIT: usize = 32;
@@ -48,10 +49,4 @@ impl SessionListCache {
             },
         );
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

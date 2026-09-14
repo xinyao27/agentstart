@@ -1,5 +1,6 @@
+use crate::mutex_lock::lock;
 use std::collections::{HashMap, VecDeque};
-use std::sync::{Mutex, MutexGuard, OnceLock};
+use std::sync::{Mutex, OnceLock};
 
 use regex::Regex;
 
@@ -219,10 +220,4 @@ fn tail(value: &str, limit: usize) -> String {
         start += 1;
     }
     value[start..].to_owned()
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

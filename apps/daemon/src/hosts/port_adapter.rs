@@ -1,10 +1,11 @@
 use std::sync::Arc;
-use std::sync::{Mutex, MutexGuard};
+use std::sync::Mutex;
 
 use async_trait::async_trait;
 
 use super::model::{ExecutionHost, HostCommand, HostCommandErrorKind, HostPlatform};
 use super::{port_darwin, port_linux, port_windows};
+use crate::mutex_lock::lock;
 use crate::workspace_ports::{
     RawWorkspacePort, WorkspacePortHost, WorkspacePortHostError, WorkspacePortPlatform,
 };
@@ -113,10 +114,4 @@ fn workspace_platform(platform: HostPlatform) -> WorkspacePortPlatform {
         HostPlatform::Unknown => WorkspacePortPlatform::Unknown,
         HostPlatform::Windows => WorkspacePortPlatform::Windows,
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

@@ -3,11 +3,12 @@ mod distro;
 mod scripts;
 
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, MutexGuard, Weak};
+use std::sync::{Arc, Mutex, Weak};
 
 use tokio::sync::{Mutex as AsyncMutex, OwnedMutexGuard};
 
 use crate::host_registry::SystemHostCapabilities;
+use crate::mutex_lock::lock;
 
 use super::context::{HostPlatform, InstallContext};
 use super::inspection;
@@ -416,10 +417,4 @@ fn unsupported(reason: CliInstallUnsupportedReason, detail: &str) -> CliInstallS
         unsupported_reason: Some(reason),
         detail: Some(detail.to_owned()),
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

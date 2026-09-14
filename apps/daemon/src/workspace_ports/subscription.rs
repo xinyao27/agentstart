@@ -1,6 +1,7 @@
+use crate::mutex_lock::lock;
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard, Weak};
+use std::sync::{Arc, Mutex, Weak};
 
 use serde::Serialize;
 use tokio::sync::mpsc;
@@ -114,10 +115,4 @@ impl Drop for WorkspacePortSubscription {
             lock(&events.subscribers).remove(&self.id);
         }
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

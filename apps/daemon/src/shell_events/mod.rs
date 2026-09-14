@@ -1,12 +1,13 @@
 use std::collections::VecDeque;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use serde::Serialize;
 use serde_json::Number;
 use tokio::sync::watch;
 
 use crate::keybindings::KeybindingFileSnapshot;
+use crate::mutex_lock::lock;
 use crate::star_nag::{StarNagDomainPromptMode, StarNagSurface};
 
 const REPLAY_CAPACITY: usize = 256;
@@ -291,10 +292,4 @@ fn requires_resync(state: &State, cursor: &ShellEventCursor) -> bool {
         .history
         .front()
         .is_some_and(|oldest| cursor < oldest.sequence.saturating_sub(1) as f64)
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

@@ -1,11 +1,12 @@
 use std::collections::{HashMap, HashSet, VecDeque};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use serde_json::Value;
 use tokio::sync::{oneshot, watch};
 
 use super::RepositoryAuthority;
+use crate::mutex_lock::lock;
 
 const NO_IDENTITY_RETRY_TTL: Duration = Duration::from_secs(5 * 60);
 
@@ -162,10 +163,4 @@ async fn wait_for_shutdown(shutdown: &mut watch::Receiver<bool>) {
             return;
         }
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

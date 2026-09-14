@@ -1,6 +1,7 @@
+use crate::mutex_lock::lock;
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use serde::Serialize;
 use serde_json::Value;
@@ -229,10 +230,4 @@ impl Drop for ClientEventSubscription {
     fn drop(&mut self) {
         lock(&self.authority.inner.subscribers).remove(&self.id);
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

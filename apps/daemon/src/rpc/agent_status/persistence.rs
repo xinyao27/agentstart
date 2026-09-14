@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::io;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use serde::Serialize;
@@ -11,6 +11,7 @@ use thiserror::Error;
 use tokio::sync::{mpsc, oneshot};
 use tokio::time::{Instant, sleep_until};
 
+use crate::mutex_lock::lock;
 use crate::transport::secure_file::HardenedDirectory;
 
 const DOCUMENT_VERSION: u32 = 2;
@@ -354,10 +355,4 @@ async fn hardened_directory(storage: &mut Storage) -> io::Result<HardenedDirecto
         .map_err(io::Error::other)?;
     storage.directory = Some(directory.clone());
     Ok(directory)
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

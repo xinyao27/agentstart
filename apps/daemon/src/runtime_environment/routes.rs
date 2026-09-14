@@ -1,11 +1,12 @@
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use agentstart_protocol::method_metadata::{MethodMetadata, UnaryMethod};
 use tokio::sync::Mutex as AsyncMutex;
 
 use super::client;
 use super::records::RuntimeEnvironmentProfile;
+use crate::mutex_lock::lock;
 use crate::transport::{ProtocolClient, ProtocolPeerError, RawDuplexWriter, RawProtocolStream};
 
 #[derive(Clone)]
@@ -191,10 +192,4 @@ impl RuntimeEnvironmentRoute {
 
 fn is_connection_failure(error: &ProtocolPeerError) -> bool {
     !matches!(error, ProtocolPeerError::Remote(_))
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

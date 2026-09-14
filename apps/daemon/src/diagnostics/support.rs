@@ -1,7 +1,7 @@
 use std::collections::{HashMap, VecDeque};
 use std::io;
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, Mutex, MutexGuard, Weak};
+use std::sync::{Arc, Mutex, Weak};
 use std::time::{Duration, Instant};
 
 use base64::Engine;
@@ -10,6 +10,7 @@ use sha2::{Digest, Sha256};
 use thiserror::Error;
 use tokio::sync::Semaphore;
 
+use crate::mutex_lock::lock;
 use crate::shell_platform::ShellPlatformAuthority;
 use crate::telemetry::{SupportDiagnosticReport, SupportReportError, TelemetryAuthority};
 
@@ -419,10 +420,4 @@ fn update_preview_scope(digest: &mut Sha256, user_data_path: &Path) {
 #[cfg(not(any(unix, windows)))]
 fn update_preview_scope(digest: &mut Sha256, user_data_path: &Path) {
     digest.update(user_data_path.as_os_str().to_string_lossy().as_bytes());
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

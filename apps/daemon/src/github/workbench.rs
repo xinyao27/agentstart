@@ -5,6 +5,7 @@ use std::time::Duration;
 use serde::Deserialize;
 use serde_json::{Map, Value, json};
 
+use crate::mutex_lock::lock;
 use crate::projects::ProjectKind;
 
 use super::refresh::{epoch_millis, outcome};
@@ -885,10 +886,4 @@ fn prune(values: &mut VecDeque<u64>, now: u64, window_ms: u64) {
 
 fn now_ms() -> u64 {
     u64::try_from(epoch_millis()).unwrap_or(u64::MAX)
-}
-
-fn lock<T>(mutex: &std::sync::Mutex<T>) -> std::sync::MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

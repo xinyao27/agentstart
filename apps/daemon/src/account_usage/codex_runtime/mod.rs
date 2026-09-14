@@ -7,13 +7,14 @@ mod resources;
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use std::process::Stdio;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use serde_json::{Map, Value};
 use thiserror::Error;
 use tokio::process::Command;
 
+use crate::mutex_lock::lock;
 use crate::settings::SettingsAuthority;
 use crate::transport::secure_file;
 
@@ -722,10 +723,4 @@ fn valid_linux_absolute_path(path: &str) -> bool {
             .split('/')
             .skip(1)
             .all(|part| !part.is_empty() && !matches!(part, "." | ".."))
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

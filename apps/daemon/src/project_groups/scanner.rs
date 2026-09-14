@@ -1,9 +1,10 @@
 use std::collections::{HashMap, VecDeque};
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use crate::host_registry::{HostRegistry, HostRegistryError};
 use crate::hosts::{HostFilesystem, HostFilesystemError};
+use crate::mutex_lock::lock;
 
 use super::events::{ScanEvents, ScanSubscription};
 use super::{
@@ -127,12 +128,6 @@ fn normalized(path: &str) -> String {
     } else {
         path.to_owned()
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }
 
 #[derive(Debug, thiserror::Error)]

@@ -1,4 +1,5 @@
-use std::sync::{Arc, Mutex, MutexGuard};
+use crate::mutex_lock::lock;
+use std::sync::{Arc, Mutex};
 
 pub(crate) struct VersionedSnapshot<T> {
     pub(crate) revision: u64,
@@ -67,10 +68,4 @@ impl<T> LatestSnapshot<T> {
     pub(crate) fn has_pending(&self) -> bool {
         lock(&self.state).pending.is_some()
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 
 use tokio::sync::Mutex;
 
+use crate::identity::random_uuid;
 use crate::transport::secure_file::{self, SecureFileError};
 
 use super::codec::decode_reports;
@@ -40,7 +41,7 @@ impl CrashReportStore {
         let _guard = self.write_gate.lock().await;
         let mut reports = self.read_reports().await;
         let report = CrashReportRecord {
-            id: random_uuid(),
+            id: random_uuid().map_err(|error| SecureFileError::Io(std::io::Error::other(error)))?,
             created_at: now_iso8601(),
             status: CrashReportStatus::Pending,
             source: input.source,
@@ -176,32 +177,4 @@ fn parse_millis(created_at: &str) -> Option<i64> {
     chrono::DateTime::parse_from_rfc3339(created_at)
         .ok()
         .map(|value| value.timestamp_millis())
-}
-
-/// Random v4 UUID for a new report id. `crate::telemetry`'s equivalent is
-/// module-private, so this is a small, deliberately self-contained duplicate.
-fn random_uuid() -> String {
-    let mut bytes = [0_u8; 16];
-    getrandom::fill(&mut bytes).expect("OS random source is available");
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    format!(
-        "{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
-        bytes[0],
-        bytes[1],
-        bytes[2],
-        bytes[3],
-        bytes[4],
-        bytes[5],
-        bytes[6],
-        bytes[7],
-        bytes[8],
-        bytes[9],
-        bytes[10],
-        bytes[11],
-        bytes[12],
-        bytes[13],
-        bytes[14],
-        bytes[15]
-    )
 }

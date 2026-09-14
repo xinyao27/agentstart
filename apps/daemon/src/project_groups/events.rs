@@ -1,9 +1,10 @@
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use tokio::sync::mpsc;
 
 use super::NestedRepoScanEvent;
+use crate::mutex_lock::lock;
 
 const EVENT_QUEUE_DEPTH: usize = 8;
 
@@ -86,10 +87,4 @@ impl Drop for ScanSubscription {
     fn drop(&mut self) {
         lock(&self.events.inner.subscribers).remove(&self.id);
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

@@ -4,12 +4,13 @@ mod startup;
 mod storage;
 
 use std::path::Path;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, SystemTimeError, UNIX_EPOCH};
 
 use serde_json::{Map, Value};
 use thiserror::Error;
 
+use crate::mutex_lock::lock;
 use crate::telemetry::FeatureInteractionTelemetry;
 
 pub(crate) use normalize::FEATURE_INTERACTION_IDS;
@@ -166,10 +167,4 @@ fn commit(inner: &UiAuthorityInner, state: &mut UiState, _ui: &Map<String, Value
     inner
         .persistence
         .schedule(state.document.clone(), state.revision);
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

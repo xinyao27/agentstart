@@ -1,8 +1,9 @@
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use crate::hosts::{ExecutionHost, HostCommand, HostPlatform};
+use crate::mutex_lock::lock;
 
 use super::HostCapability;
 
@@ -139,10 +140,4 @@ fn truncate_utf16(value: &str, maximum: usize) -> String {
 
 fn nonempty(value: String) -> Option<String> {
     (!value.is_empty()).then_some(value)
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

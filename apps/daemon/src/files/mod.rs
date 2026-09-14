@@ -12,13 +12,14 @@ mod watch;
 
 use std::collections::HashMap;
 use std::sync::atomic::AtomicU64;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::Instant;
 
 use thiserror::Error;
 
 use crate::host_registry::{HostRegistry, HostRegistryError};
 use crate::hosts::{HostCommandError, HostFilesystemError};
+use crate::mutex_lock::lock;
 use crate::projects::ProjectCatalogError;
 use crate::shell_services::ShellServicesRegistry;
 use crate::terminal_session::TerminalSessionAuthority;
@@ -123,10 +124,4 @@ impl FilesAuthority {
             watches: Arc::new(Mutex::new(HashMap::new())),
         }
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

@@ -1,6 +1,7 @@
+use crate::mutex_lock::lock;
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard, Weak};
+use std::sync::{Arc, Mutex, Weak};
 
 use tokio::sync::{Mutex as AsyncMutex, OwnedMutexGuard, watch};
 
@@ -78,10 +79,4 @@ impl Drop for ActiveCloneGuard {
             active.take();
         }
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

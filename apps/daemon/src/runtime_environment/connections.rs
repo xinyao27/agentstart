@@ -1,9 +1,10 @@
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use tokio::sync::{OwnedSemaphorePermit, Semaphore, watch};
 
 use super::server::RuntimeOutbound;
+use crate::mutex_lock::lock;
 
 const MAX_ACTIVE_CONNECTIONS: usize = 64;
 const MAX_ACTIVE_CONNECTIONS_PER_PEER: usize = 4;
@@ -125,10 +126,4 @@ impl Drop for RuntimeConnectionLease {
             }
         }
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

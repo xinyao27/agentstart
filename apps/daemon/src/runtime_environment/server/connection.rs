@@ -11,6 +11,8 @@ use super::RuntimeAdmissionState;
 use super::channel::OutboundEvent;
 use super::establishment::{EstablishedRuntimeConnection, EstablishmentFailure, establish};
 
+use crate::truncate_reason::truncate_reason;
+
 const MAX_AGENTSTART_FRAME_BYTES: usize = 1024 * 1024;
 const ESTABLISHMENT_TIMEOUT: Duration = Duration::from_secs(15);
 const SOCKET_CLOSE_TIMEOUT: Duration = Duration::from_secs(2);
@@ -271,14 +273,6 @@ fn close_frame(code: u16, reason: &str) -> CloseFrame {
         code,
         reason: truncate_reason(reason).into(),
     }
-}
-
-fn truncate_reason(reason: &str) -> &str {
-    let mut end = reason.len().min(123);
-    while !reason.is_char_boundary(end) {
-        end -= 1;
-    }
-    &reason[..end]
 }
 
 fn random_connection_id() -> Result<String, ()> {

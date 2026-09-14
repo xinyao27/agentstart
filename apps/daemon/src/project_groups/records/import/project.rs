@@ -7,6 +7,7 @@ use crate::projects::{ProjectCatalogError, identity};
 use super::super::super::import_model::{
     PreparedImportProject, ProjectGroupImportProjectResult, ProjectGroupImportStatus,
 };
+use super::basename;
 use super::groups::GroupResolver;
 
 const DEFAULT_BADGE_COLOR: &str = "#737373";
@@ -170,14 +171,6 @@ fn result(
         project_id: Some(project_id),
         status,
     }
-}
-
-fn basename(path: &str) -> String {
-    path.trim_end_matches(['/', '\\'])
-        .rsplit(['/', '\\'])
-        .next()
-        .unwrap_or_default()
-        .to_owned()
 }
 
 fn normalized(path: &str) -> String {

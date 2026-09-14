@@ -1,4 +1,4 @@
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use super::advertised_input::{AdvertisedInput, ObservedUrl};
@@ -10,6 +10,7 @@ use super::{
     WorkspacePortKillRequest, WorkspacePortKillResult, WorkspacePortProbe, WorkspacePortScanResult,
     WorkspacePortSubscription,
 };
+use crate::mutex_lock::lock;
 
 const INITIAL_TIMEOUT_BACKOFF_MS: i64 = 60_000;
 const MAX_TIMEOUT_BACKOFF_MS: i64 = 5 * 60_000;
@@ -250,10 +251,4 @@ fn epoch_millis() -> i64 {
 
 fn is_safe_integer(value: f64) -> bool {
     value.is_finite() && value.fract() == 0.0 && value.abs() <= MAX_SAFE_INTEGER
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

@@ -2,13 +2,14 @@ mod renderer;
 
 use std::collections::{HashMap, VecDeque};
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 use serde_json::Value;
 use thiserror::Error;
 use tokio::sync::{Mutex as AsyncMutex, broadcast};
 
+pub(super) use crate::mutex_lock::lock;
 use crate::shell_services::{ShellServicesError, ShellServicesRegistry};
 use crate::terminal_session::TerminalSessionAuthority;
 use crate::terminal_session::TerminalSessionError;
@@ -305,12 +306,6 @@ impl SessionTabsAuthority {
     ) -> Result<Value, SessionTabsError> {
         self.headless_for_probe(host_id, worktree).await
     }
-}
-
-pub(super) fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }
 
 fn next_removed_epoch(inner: &AuthorityInner) -> String {

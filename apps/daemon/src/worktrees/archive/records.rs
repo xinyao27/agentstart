@@ -1,6 +1,7 @@
 use rusqlite::{Connection, OptionalExtension, Row, Transaction};
 
 use super::store::{BeginArchive, WorktreeArchive, WorktreeArchiveError};
+use crate::identity::random_uuid;
 
 const ARCHIVE_SELECT: &str =
     "SELECT a.id,p.wire_id,a.original_worktree_id,a.path,a.branch,a.head,a.stash_oid,
@@ -15,7 +16,7 @@ pub(super) fn begin(
     let transaction = connection
         .transaction()
         .map_err(WorktreeArchiveError::storage)?;
-    let id = random_uuid()?;
+    let id = random_uuid().map_err(WorktreeArchiveError::storage)?;
     transaction
         .execute(
             "INSERT INTO worktree_archive(
@@ -201,31 +202,6 @@ fn decode(row: &Row<'_>) -> Result<WorktreeArchive, rusqlite::Error> {
         created_at: row.get(9)?,
         restored_at: row.get(10)?,
     })
-}
-
-fn random_uuid() -> Result<String, WorktreeArchiveError> {
-    let mut bytes = [0_u8; 16];
-    getrandom::fill(&mut bytes).map_err(WorktreeArchiveError::storage)?;
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    Ok(format!(
-        "{:08x}-{:04x}-{:04x}-{:04x}-{:012x}",
-        u32::from_be_bytes(bytes[0..4].try_into().map_err(|_| {
-            WorktreeArchiveError::storage(std::io::Error::other("invalid UUID bytes"))
-        })?),
-        u16::from_be_bytes(bytes[4..6].try_into().map_err(|_| {
-            WorktreeArchiveError::storage(std::io::Error::other("invalid UUID bytes"))
-        })?),
-        u16::from_be_bytes(bytes[6..8].try_into().map_err(|_| {
-            WorktreeArchiveError::storage(std::io::Error::other("invalid UUID bytes"))
-        })?),
-        u16::from_be_bytes(bytes[8..10].try_into().map_err(|_| {
-            WorktreeArchiveError::storage(std::io::Error::other("invalid UUID bytes"))
-        })?),
-        u64::from_be_bytes([
-            0, 0, bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15]
-        ])
-    ))
 }
 
 fn unix_millis() -> i64 {

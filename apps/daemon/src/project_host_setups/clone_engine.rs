@@ -1,9 +1,10 @@
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use tokio::sync::OwnedMutexGuard;
 
 use crate::hosts::ExecutionHost;
+use crate::mutex_lock::lock;
 
 use super::{
     ProjectHostSetupAuthority, ProjectHostSetupError, clone_claim, host_effects,
@@ -158,10 +159,4 @@ impl Drop for CompletedClone {
         let claim = self.claim.clone();
         self.cleanup.schedule(host, claim);
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

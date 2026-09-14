@@ -1,5 +1,5 @@
 use std::collections::{BTreeMap, HashMap};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use serde_json::{Map, Value, json, to_value};
@@ -8,6 +8,7 @@ use tokio::sync::broadcast;
 
 use crate::client_events::{ClientEventsAuthority, WorktreeHeadIdentity};
 use crate::hosts::HostFilesystemError;
+use crate::mutex_lock::lock;
 use crate::persistence::{WorkspaceEventPayload, WorkspaceJournal, WorkspaceJournalError};
 use crate::projects::ProjectCatalogError;
 use crate::repositories::{RepositoryAuthority, hooks as repository_hooks};
@@ -1377,10 +1378,4 @@ fn unix_millis() -> i64 {
             .map_or(0, |duration| duration.as_millis()),
     )
     .unwrap_or(i64::MAX)
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

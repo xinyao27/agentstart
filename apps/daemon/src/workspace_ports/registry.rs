@@ -1,11 +1,12 @@
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, MutexGuard, Weak};
+use std::sync::{Arc, Mutex, Weak};
 
 use tokio::sync::broadcast::error::RecvError;
 use tokio::task::JoinHandle;
 
 use crate::host_registry::{HostRegistry, HostRegistryError};
 use crate::hosts::{ExecutionHost, HostWorkspacePorts};
+use crate::mutex_lock::lock;
 
 use super::subscription::EventAuthority;
 use super::{WorkspacePortSubscription, WorkspacePorts};
@@ -271,10 +272,4 @@ fn clear_pty_bindings_for_host(state: &mut RegistryState, host_id: &str) {
     state
         .pty_bindings
         .retain(|_, binding| binding.host_id != host_id);
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

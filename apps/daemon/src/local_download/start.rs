@@ -1,3 +1,4 @@
+use std::io;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::sync::atomic::AtomicBool;
@@ -183,7 +184,8 @@ impl LocalDownloadAuthority {
     ) -> Result<Option<Reservation>, LocalDownloadError> {
         path_string(&destination_path)?;
         for _ in 0..UNIQUE_DESTINATION_ATTEMPTS {
-            let transfer_id = random_uuid()?;
+            let transfer_id =
+                random_uuid().map_err(|error| LocalDownloadError::Io(io::Error::other(error)))?;
             match self.registry.reserve(
                 transfer_id,
                 owner_id,

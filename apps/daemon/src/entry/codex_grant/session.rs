@@ -1,7 +1,7 @@
 use std::future::Future;
 use std::pin::Pin;
 use std::process::Stdio;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use serde::Deserialize;
@@ -12,6 +12,7 @@ use tokio::sync::mpsc;
 use tokio::task::JoinHandle;
 
 use super::model::{AppServerInvocation, GrantError};
+use crate::mutex_lock::lock;
 
 const STDERR_TAIL_MAX_BYTES: usize = 8 * 1_024;
 const STDOUT_LINE_MAX_BYTES: usize = 1_024 * 1_024;
@@ -367,10 +368,4 @@ fn trim_ascii(mut bytes: &[u8]) -> &[u8] {
         bytes = &bytes[..bytes.len() - 1];
     }
     bytes
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

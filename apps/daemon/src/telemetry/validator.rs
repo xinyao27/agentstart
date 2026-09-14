@@ -1,5 +1,6 @@
+use crate::mutex_lock::lock;
 use std::collections::{HashMap, VecDeque};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use regex::Regex;
@@ -184,10 +185,4 @@ fn validate_number(schema: &Value, value: &Value, integer: bool) -> bool {
             .get("exclusiveMinimum")
             .and_then(Value::as_f64)
             .is_some_and(|minimum| value <= minimum)
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

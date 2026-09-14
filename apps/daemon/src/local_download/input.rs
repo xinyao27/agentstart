@@ -3,6 +3,7 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use super::{LocalDownloadError, filename};
+pub(super) use crate::identity::random_uuid;
 
 const MAX_FILE_CHUNK_BYTES: usize = 512 * 1024;
 const MAX_FOLDER_CHUNK_BYTES: usize = 512 * 1024;
@@ -120,30 +121,4 @@ pub(super) fn path_string(path: &Path) -> Result<String, LocalDownloadError> {
     path.to_str()
         .map(str::to_owned)
         .ok_or(LocalDownloadError::PathEncoding)
-}
-
-pub(super) fn random_uuid() -> Result<String, LocalDownloadError> {
-    let mut bytes = [0_u8; 16];
-    getrandom::fill(&mut bytes).map_err(|error| LocalDownloadError::Io(io::Error::other(error)))?;
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    Ok(format!(
-        "{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
-        bytes[0],
-        bytes[1],
-        bytes[2],
-        bytes[3],
-        bytes[4],
-        bytes[5],
-        bytes[6],
-        bytes[7],
-        bytes[8],
-        bytes[9],
-        bytes[10],
-        bytes[11],
-        bytes[12],
-        bytes[13],
-        bytes[14],
-        bytes[15]
-    ))
 }

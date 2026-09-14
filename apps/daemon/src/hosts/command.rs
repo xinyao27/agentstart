@@ -2,7 +2,7 @@ use std::io;
 use std::path::Path;
 use std::process::Stdio;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use tokio::io::{AsyncRead, AsyncReadExt, AsyncWriteExt};
@@ -13,6 +13,7 @@ use super::model::{
     HostCommand, HostCommandError, HostCommandErrorKind, HostCommandOutput,
     HostCommandOutputObserver, HostCommandOutputStream, HostCommandStreamControl,
 };
+use crate::mutex_lock::lock;
 
 const DEFAULT_COMMAND_TIMEOUT_MS: u64 = 30_000;
 pub(super) async fn run(request: HostCommand) -> Result<HostCommandOutput, HostCommandError> {
@@ -373,10 +374,4 @@ fn reserve_output_bytes(
 
 fn take_capture(capture: &Mutex<Vec<u8>>) -> Vec<u8> {
     std::mem::take(&mut *lock(capture))
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

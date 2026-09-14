@@ -1,11 +1,12 @@
 use std::collections::HashSet;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use regex::Regex;
 use tokio::sync::Mutex as AsyncMutex;
 
 use crate::hosts::{ExecutionHost, HostCommand, HostCommandErrorKind, HostPlatform};
+use crate::mutex_lock::lock;
 
 use super::model::{ShellHydration, ShellHydrationFailureReason};
 
@@ -268,10 +269,4 @@ fn failed(failure_reason: ShellHydrationFailureReason) -> ShellHydration {
         failure_reason,
         segments: Vec::new(),
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

@@ -1,9 +1,10 @@
 use std::path::Path;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use serde_json::{Map, Value};
 
+use crate::mutex_lock::lock;
 use crate::projects::ProjectCatalog;
 use crate::settings::TelemetryPreferences;
 
@@ -433,10 +434,4 @@ impl FeatureInteractionTelemetry {
         state.background_tasks.retain(|task| !task.is_finished());
         state.background_tasks.push(task);
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

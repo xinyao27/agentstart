@@ -1,10 +1,11 @@
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard, Weak};
+use std::sync::{Arc, Mutex, Weak};
 
 use tokio::sync::{broadcast, watch};
 
 use super::model::SessionTabsUpdate;
+use crate::mutex_lock::lock;
 
 #[derive(Clone)]
 pub(super) struct SubscriptionRegistry {
@@ -193,10 +194,4 @@ async fn close_subscriptions(subscriptions: Vec<RegisteredSubscription>) {
     for mut subscription in subscriptions {
         let _ = subscription.closed.wait_for(|closed| *closed).await;
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

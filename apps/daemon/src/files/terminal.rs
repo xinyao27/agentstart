@@ -4,6 +4,7 @@ use std::time::{Duration, Instant};
 use crate::hosts::{
     ExecutionHost, HostCommand, HostFileKind, HostFilesystem, HostKind, HostPlatform,
 };
+use crate::identity::random_uuid;
 
 use super::model::{
     FilePreviewResult, FileReadResult, MutationResult, TerminalOpenTarget, TerminalPathResolution,
@@ -657,21 +658,4 @@ fn provider(host: &dyn ExecutionHost) -> &'static str {
         HostKind::Local | HostKind::Wsl => "local",
         HostKind::Ssh => "ssh",
     }
-}
-
-fn random_uuid() -> Result<String, getrandom::Error> {
-    let mut bytes = [0_u8; 16];
-    getrandom::fill(&mut bytes)?;
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    Ok(format!(
-        "{:08x}-{:04x}-{:04x}-{:04x}-{:012x}",
-        u32::from_be_bytes(bytes[0..4].try_into().unwrap_or_default()),
-        u16::from_be_bytes(bytes[4..6].try_into().unwrap_or_default()),
-        u16::from_be_bytes(bytes[6..8].try_into().unwrap_or_default()),
-        u16::from_be_bytes(bytes[8..10].try_into().unwrap_or_default()),
-        u64::from_be_bytes([
-            0, 0, bytes[10], bytes[11], bytes[12], bytes[13], bytes[14], bytes[15],
-        ])
-    ))
 }

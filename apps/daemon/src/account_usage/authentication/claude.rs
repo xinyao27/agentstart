@@ -202,7 +202,10 @@ async fn create_staging_location(
         .host_path
         .parent()
         .ok_or(AccountsError::InvalidState)?
-        .join(format!(".login-{}", random_uuid()?));
+        .join(format!(
+            ".login-{}",
+            random_uuid().map_err(|_| AccountsError::InvalidState)?
+        ));
     secure_file::ensure_secure_directory(&host_path)?;
     Ok(ManagedLocation {
         account_id: location.account_id.clone(),

@@ -10,13 +10,14 @@ mod telemetry;
 mod warp;
 
 use std::path::Path;
-use std::sync::{Arc, Mutex as SyncMutex, MutexGuard};
+use std::sync::{Arc, Mutex as SyncMutex};
 
 use serde_json::{Map, Value, json};
 use thiserror::Error;
 use tokio::sync::Mutex;
 
 use crate::agent_status_hooks::AgentStatusHooksAuthority;
+use crate::mutex_lock::lock;
 
 pub(crate) use notifications::NotificationSettings;
 use persistence::SettingsPersistence;
@@ -629,10 +630,4 @@ fn normalize_author(value: &str) -> String {
     } else {
         value.trim().to_lowercase()
     }
-}
-
-fn lock<T>(mutex: &SyncMutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

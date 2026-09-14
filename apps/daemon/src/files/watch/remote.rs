@@ -1,5 +1,5 @@
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use tokio::sync::{mpsc, watch};
 
@@ -7,6 +7,7 @@ use crate::hosts::{
     ExecutionHost, HostCommand, HostCommandErrorKind, HostCommandOutputObserver,
     HostCommandOutputStream, HostCommandStreamControl,
 };
+use crate::mutex_lock::lock;
 
 use super::super::FilesAuthority;
 use super::super::model::{FileChangeEvent, FileWatchEvent};
@@ -707,10 +708,4 @@ fn is_ignored(root: &str, path: &str) -> bool {
 
 fn has_safe_segments(path: &str) -> bool {
     !path.split('/').any(|segment| matches!(segment, "." | ".."))
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

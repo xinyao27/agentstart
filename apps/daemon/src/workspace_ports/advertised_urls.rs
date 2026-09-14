@@ -1,11 +1,12 @@
 use std::collections::{HashMap, HashSet};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use super::advertised_cache::{AdvertisedUrlState, CacheKey, ListenerState};
 use super::advertised_url::{self, AdvertisedUrl};
 use super::subscription::{
     EventAuthority, WorkspacePortSubscription, WorkspacePortSubscriptionEvent,
 };
+use crate::mutex_lock::lock;
 
 #[derive(Clone)]
 pub(super) struct AdvertisedUrls {
@@ -198,10 +199,4 @@ impl AdvertisedUrls {
             }
         }
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

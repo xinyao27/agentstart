@@ -1,5 +1,6 @@
+use crate::mutex_lock::lock;
 use std::collections::{HashMap, VecDeque};
-use std::sync::{Mutex, MutexGuard};
+use std::sync::Mutex;
 use std::time::{Duration, Instant};
 
 const COOLDOWN: Duration = Duration::from_secs(5);
@@ -78,10 +79,4 @@ impl CooldownTracker {
             self.recent_by_key.remove(&key);
         }
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

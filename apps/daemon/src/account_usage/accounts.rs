@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard, Weak};
+use std::sync::{Arc, Mutex, Weak};
 use std::time::Duration;
 
 use serde_json::{Map, Value};
@@ -9,6 +9,7 @@ use thiserror::Error;
 use tokio::sync::{Mutex as AsyncMutex, watch};
 
 use crate::host_registry::HostRegistry;
+use crate::mutex_lock::lock;
 use crate::settings::{SettingsAuthority, SettingsError};
 
 use super::account_snapshot::{
@@ -1060,10 +1061,4 @@ pub(super) async fn delete_managed_claude_keychain(account_id: &str) -> Result<(
 #[cfg(not(target_os = "macos"))]
 pub(super) async fn delete_managed_claude_keychain(_account_id: &str) -> Result<(), AccountsError> {
     Ok(())
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use serde_json::{Map, Value};
@@ -8,6 +8,7 @@ use tokio::sync::{Mutex as AsyncMutex, OwnedMutexGuard};
 
 use crate::host_registry::{HostRegistry, HostRegistryError};
 use crate::hosts::{HostCommand, HostCommandError, HostFilesystem};
+use crate::mutex_lock::lock;
 use crate::projects::{
     Project, ProjectCatalog, ProjectCatalogError, ProjectKind, ProjectWorktreeVisibility,
 };
@@ -762,10 +763,4 @@ fn display_fallback(project: &Project, paths: &crate::hosts::HostPaths, path: &s
     } else {
         basename
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

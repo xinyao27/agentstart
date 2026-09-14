@@ -1,10 +1,11 @@
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use serde_json::{Map, Value, json};
 
 use crate::hosts::{
     HostCommandOutputObserver, HostCommandOutputStream, HostCommandStreamControl, HostFilesystem,
 };
+use crate::mutex_lock::lock;
 
 use super::runner::{GitError, GitRunOptions};
 use super::scope::{GitAuthority, GitAuthorityError, GitScope};
@@ -326,12 +327,6 @@ impl HostCommandOutputObserver for StatusObserver {
         }
         HostCommandStreamControl::Continue
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }
 
 fn changed_entry(path: &str, old_path: &str, status: char, area: &str, submodule: &str) -> Value {

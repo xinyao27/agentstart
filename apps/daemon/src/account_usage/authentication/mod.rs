@@ -8,7 +8,7 @@ mod login;
 mod minimax;
 
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use serde_json::{Map, Value, json};
@@ -16,6 +16,8 @@ use tokio::sync::watch;
 
 use super::accounts::AccountsAuthority;
 use super::{AccountsError, ProviderAccountRoster};
+use crate::identity::random_uuid;
+use crate::mutex_lock::lock;
 use claude::authenticate as authenticate_claude;
 use codex::authenticate as authenticate_codex;
 use credentials::{CredentialSnapshot, read_bounded, read_bounded_json, read_bounded_sync};
@@ -149,7 +151,7 @@ impl AccountAuthentication {
         call_cancelled: impl Future<Output = ()>,
     ) -> Result<ProviderAccountRoster, AccountsError> {
         validate_target(&target)?;
-        let account_id = random_uuid()?;
+        let account_id = random_uuid().map_err(|_| AccountsError::InvalidState)?;
         let location = create_location(&authority.root, provider, &account_id, &target).await?;
         let mut cleanup =
             LocationCleanupGuard::new(&authority.root, provider, &location, &account_id);
@@ -374,41 +376,9 @@ pub(crate) fn minimax_status() -> Result<bool, AccountsError> {
     minimax::status()
 }
 
-fn random_uuid() -> Result<String, AccountsError> {
-    let mut bytes = [0_u8; 16];
-    getrandom::fill(&mut bytes).map_err(|_| AccountsError::InvalidState)?;
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    Ok(format!(
-        "{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
-        bytes[0],
-        bytes[1],
-        bytes[2],
-        bytes[3],
-        bytes[4],
-        bytes[5],
-        bytes[6],
-        bytes[7],
-        bytes[8],
-        bytes[9],
-        bytes[10],
-        bytes[11],
-        bytes[12],
-        bytes[13],
-        bytes[14],
-        bytes[15]
-    ))
-}
-
 fn now_ms() -> Result<f64, AccountsError> {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|duration| duration.as_secs_f64() * 1_000.0)
         .map_err(|_| AccountsError::InvalidState)
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

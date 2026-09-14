@@ -1,7 +1,8 @@
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
 use crate::hosts::{ExecutionHost, HostCommand, HostPlatform};
+use crate::mutex_lock::lock;
 
 const COMMAND_TIMEOUT_MS: u64 = 5_000;
 const LIST_FAILURE_TTL: Duration = Duration::from_secs(15);
@@ -99,10 +100,4 @@ fn normalize_distros(output: &str) -> Vec<String> {
                 .then(|| line.to_owned())
         })
         .collect()
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

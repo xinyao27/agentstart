@@ -1,7 +1,8 @@
-use std::sync::{Mutex, MutexGuard};
+use std::sync::Mutex;
 use tokio::sync::watch;
 
 use crate::hosts::{HostCommandOutputObserver, HostCommandOutputStream, HostCommandStreamControl};
+use crate::mutex_lock::lock;
 
 const MAX_BUFFER_BYTES: usize = 64 * 1024;
 
@@ -65,10 +66,4 @@ fn strip_ansi(bytes: &[u8]) -> Vec<u8> {
         cursor += 1;
     }
     output
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

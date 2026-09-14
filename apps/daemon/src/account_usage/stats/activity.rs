@@ -1,12 +1,13 @@
 use std::collections::BTreeMap;
 use std::io;
 use std::path::PathBuf;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use tokio::sync::{mpsc, oneshot, watch};
 use tokio::time::Instant;
 
+use crate::mutex_lock::lock;
 use crate::transport::secure_file;
 
 use super::StatsError;
@@ -249,10 +250,4 @@ async fn wait_for_deadline(deadline: Option<Instant>) {
         Some(deadline) => tokio::time::sleep_until(deadline).await,
         None => std::future::pending().await,
     }
-}
-
-fn lock<T>(value: &Mutex<T>) -> MutexGuard<'_, T> {
-    value
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

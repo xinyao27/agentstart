@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::sync::{Arc, Mutex, MutexGuard, Weak};
+use std::sync::{Arc, Mutex, Weak};
 use std::time::Duration;
 
 use thiserror::Error;
@@ -9,6 +9,7 @@ use tokio::task::AbortHandle;
 use super::base64::is_valid_base64;
 use super::files::{ClipboardImageFileError, ClipboardImageFiles};
 use super::identity::{now_millis_or_zero, random_uuid};
+use crate::mutex_lock::lock;
 
 const MAX_CONCURRENT_UPLOADS: usize = 8;
 const UPLOAD_TTL: Duration = Duration::from_secs(5 * 60);
@@ -235,8 +236,4 @@ fn prune_expired(state: &mut UploadState, now_ms: u128) {
             upload.timer.abort();
         }
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex.lock().unwrap_or_else(|error| error.into_inner())
 }

@@ -25,12 +25,12 @@ use agentstart_protocol::runtime::v1::{
     ResolveUploadResponse,
 };
 use agentstart_protocol::transport::{decode, encode};
-use getrandom::fill;
 use prost::Message;
 use tokio::io::AsyncWriteExt;
 use tokio::time::Instant;
 
 use crate::atomic_file_replace;
+use crate::identity::random_uuid;
 use crate::reverse_protocol::{ReverseProtocolError, ReverseProtocolRegistry};
 use crate::worktrees::{ResolvedWorktree, WorktreeCatalog, WorktreeCatalogError};
 
@@ -605,7 +605,10 @@ impl StagingFile {
         let parent = destination
             .parent()
             .ok_or_else(|| status(StatusCode::InvalidArgument, "browser_download_path_invalid"))?;
-        let path = parent.join(format!(".agentstart-download-{}.part", random_uuid()?));
+        let path = parent.join(format!(
+            ".agentstart-download-{}.part",
+            random_uuid().map_err(|_| status(StatusCode::Internal, "browser_download_entropy"))?
+        ));
         let file = tokio::fs::OpenOptions::new()
             .create_new(true)
             .write(true)
@@ -632,32 +635,6 @@ impl Drop for StagingFile {
             let _ = std::fs::remove_file(&self.path);
         }
     }
-}
-
-fn random_uuid() -> Result<String, Status> {
-    let mut bytes = [0_u8; 16];
-    fill(&mut bytes).map_err(|_| status(StatusCode::Internal, "browser_download_entropy"))?;
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    Ok(format!(
-        "{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
-        bytes[0],
-        bytes[1],
-        bytes[2],
-        bytes[3],
-        bytes[4],
-        bytes[5],
-        bytes[6],
-        bytes[7],
-        bytes[8],
-        bytes[9],
-        bytes[10],
-        bytes[11],
-        bytes[12],
-        bytes[13],
-        bytes[14],
-        bytes[15]
-    ))
 }
 
 fn worktree_status(error: WorktreeCatalogError) -> Status {

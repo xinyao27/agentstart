@@ -5,6 +5,7 @@ use serde_json::{Map, Value};
 use thiserror::Error;
 
 use super::index::{ProfileError, ensure_profile_directory, validate_known};
+use crate::identity::random_uuid;
 
 const STATE_FILE: &str = "agentstart-data.json";
 const MAX_STATE_BYTES: u64 = 128 * 1024 * 1024;
@@ -476,32 +477,6 @@ fn project_id(repo: &Value) -> String {
         "repo:{}",
         repo.get("id").and_then(Value::as_str).unwrap_or_default()
     )
-}
-
-fn random_uuid() -> Result<String, TransferError> {
-    let mut bytes = [0_u8; 16];
-    getrandom::fill(&mut bytes)?;
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    Ok(format!(
-        "{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
-        bytes[0],
-        bytes[1],
-        bytes[2],
-        bytes[3],
-        bytes[4],
-        bytes[5],
-        bytes[6],
-        bytes[7],
-        bytes[8],
-        bytes[9],
-        bytes[10],
-        bytes[11],
-        bytes[12],
-        bytes[13],
-        bytes[14],
-        bytes[15]
-    ))
 }
 
 fn now_millis() -> i64 {

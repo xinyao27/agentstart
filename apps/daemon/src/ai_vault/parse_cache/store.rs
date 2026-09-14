@@ -1,7 +1,8 @@
 use std::collections::HashMap;
-use std::sync::{Mutex, MutexGuard};
+use std::sync::Mutex;
 
 use crate::hosts::HostPlatform;
+use crate::mutex_lock::lock;
 
 use super::super::footprint;
 use super::super::model::{AiVaultSession, SessionCandidate};
@@ -202,10 +203,4 @@ impl Entries {
 
 fn key(host_id: &str, path: &str) -> String {
     format!("{host_id}\0{path}")
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

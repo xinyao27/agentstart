@@ -1,12 +1,13 @@
 use std::collections::{HashMap, VecDeque};
 use std::sync::Arc;
-use std::sync::{Mutex, MutexGuard};
+use std::sync::Mutex;
 
 use thiserror::Error;
 
 use crate::agent_arguments::{Shell, quote, tokenize};
 use crate::agent_trust::{AgentTrustInput, AgentTrustPreset, AgentTrustService};
 use crate::hosts::{ExecutionHost, HostFilesystem, HostKind};
+use crate::mutex_lock::lock;
 use crate::settings::SettingsAuthority;
 use crate::terminal_session::{
     TerminalCreateRequest, TerminalLaunchConfig, TerminalPresentation, TerminalSessionAuthority,
@@ -196,10 +197,4 @@ impl AgentLauncher<'_> {
             .map_err(|error| AgentLaunchError::Terminal(Box::new(error)))?;
         Ok(result.handle)
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

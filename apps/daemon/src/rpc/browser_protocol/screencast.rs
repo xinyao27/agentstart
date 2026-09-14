@@ -53,7 +53,8 @@ pub(in crate::rpc) async fn screencast(
     } else {
         request.format.clone()
     };
-    let subscription_id = random_uuid()?;
+    let subscription_id =
+        random_uuid().map_err(|_| status(StatusCode::Internal, "browser_download_entropy"))?;
     context
         .send_stream_payload(encode(&BrowserScreencastEvent {
             event: Some(ScreencastEvent::Ready(BrowserScreencastReady {

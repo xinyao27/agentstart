@@ -1,5 +1,5 @@
 use std::collections::{HashMap, HashSet, VecDeque};
-use std::sync::{Mutex, MutexGuard};
+use std::sync::Mutex;
 
 use tokio::sync::{broadcast, watch};
 
@@ -14,6 +14,7 @@ use super::process::{ProcessControl, ProcessEvent, TerminalClear};
 use super::snapshot::TerminalSnapshotProvider;
 use super::tail::TerminalTail;
 use super::terminal_title::AgentStatus;
+use crate::mutex_lock::lock;
 
 pub(super) struct TerminalState {
     data: Mutex<TerminalStateData>,
@@ -789,12 +790,6 @@ fn resume_output(output: &TerminalStreamOutput, sequence: u64) -> Option<Termina
         end_sequence: output.end_sequence,
         start_sequence: output.start_sequence.saturating_add(offset as u64),
     })
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }
 
 fn publish_side_effects(

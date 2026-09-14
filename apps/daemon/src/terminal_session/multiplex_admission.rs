@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::sync::{Mutex, MutexGuard};
+use std::sync::Mutex;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use base64::Engine as _;
@@ -10,6 +10,7 @@ use thiserror::Error;
 use tokio::sync::watch;
 
 use crate::diagnostics::DiagnosticsTrace;
+use crate::mutex_lock::lock;
 
 const DEFAULT_MAX_FRAME_BYTES: u32 = 64 * 1024;
 const MAX_PENDING_TICKETS: usize = 1_024;
@@ -235,10 +236,4 @@ fn prune_tickets(state: &mut AdmissionState) {
 
 fn digest(ticket: &str) -> [u8; 32] {
     Sha256::digest(ticket.as_bytes()).into()
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

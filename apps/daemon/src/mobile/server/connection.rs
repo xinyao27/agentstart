@@ -10,6 +10,8 @@ use super::admission::AdmissionState;
 use super::channel::{MobileRpcMessage, OutboundEvent, QueuedMessage};
 use super::establishment::{EstablishedConnection, EstablishmentFailure, establish};
 use super::wire;
+use crate::identity::random_uuid;
+use crate::truncate_reason::truncate_reason;
 
 const ESTABLISHMENT_TIMEOUT: Duration = Duration::from_secs(15);
 const SOCKET_CLOSE_TIMEOUT: Duration = Duration::from_secs(2);
@@ -21,7 +23,7 @@ pub(super) async fn run_socket(
     pending_handshake: OwnedSemaphorePermit,
 ) {
     let mut shutdown = state.shutdown.subscribe();
-    let connection_id = match random_uuid() {
+    let connection_id = match random_uuid().map_err(|_| ()) {
         Ok(id) => id,
         Err(()) => {
             close_socket(&mut socket, close_code::ERROR, "Mobile connection failed").await;
@@ -242,38 +244,4 @@ fn close_frame(code: u16, reason: &str) -> CloseFrame {
         code,
         reason: truncate_reason(reason).into(),
     }
-}
-
-fn truncate_reason(reason: &str) -> &str {
-    let mut end = reason.len().min(123);
-    while !reason.is_char_boundary(end) {
-        end -= 1;
-    }
-    &reason[..end]
-}
-
-fn random_uuid() -> Result<String, ()> {
-    let mut bytes = [0_u8; 16];
-    getrandom::fill(&mut bytes).map_err(|_| ())?;
-    bytes[6] = (bytes[6] & 0x0f) | 0x40;
-    bytes[8] = (bytes[8] & 0x3f) | 0x80;
-    Ok(format!(
-        "{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
-        bytes[0],
-        bytes[1],
-        bytes[2],
-        bytes[3],
-        bytes[4],
-        bytes[5],
-        bytes[6],
-        bytes[7],
-        bytes[8],
-        bytes[9],
-        bytes[10],
-        bytes[11],
-        bytes[12],
-        bytes[13],
-        bytes[14],
-        bytes[15]
-    ))
 }

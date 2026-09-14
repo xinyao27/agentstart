@@ -11,6 +11,14 @@ use super::super::import_model::{
 };
 use super::{immediate, revision};
 
+fn basename(path: &str) -> String {
+    path.trim_end_matches(['/', '\\'])
+        .rsplit(['/', '\\'])
+        .next()
+        .unwrap_or_default()
+        .to_owned()
+}
+
 pub(super) fn import_nested(
     connection: &mut rusqlite::Connection,
     input: PreparedImport,

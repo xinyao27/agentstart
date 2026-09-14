@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use thiserror::Error;
@@ -9,6 +9,7 @@ use crate::hosts::{
     ExecutionHost, HostKind, HostPlatform, LocalHost, SshControlDirectory, SshHost, SshHostError,
     WslHost, WslHostError,
 };
+use crate::mutex_lock::lock;
 use crate::persistence::host_store::{HostRecord, HostStore, HostStoreError, RegisteredHostKind};
 
 use super::capabilities::HostCapabilityCache;
@@ -240,10 +241,4 @@ fn registry_kind(kind: RegisteredHostKind) -> RegistryHostKind {
 fn epoch_millis() -> Result<i64, HostRegistryError> {
     let millis = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
     Ok(i64::try_from(millis).unwrap_or(i64::MAX))
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

@@ -1,10 +1,11 @@
 use std::collections::HashMap;
-use std::sync::{Arc, LazyLock, Mutex, MutexGuard, Weak};
+use std::sync::{Arc, LazyLock, Mutex, Weak};
 
 use thiserror::Error;
 use tokio::sync::Mutex as AsyncMutex;
 
 use crate::hosts::{ExecutionHost, HostCommand, HostCommandOutput};
+use crate::mutex_lock::lock;
 
 const WORKTREE_SCAN_TIMEOUT_MS: u64 = 30_000;
 const WORKTREE_SCAN_MAX_OUTPUT_BYTES: usize = 4 * 1_024 * 1_024;
@@ -231,10 +232,4 @@ fn command_error(output: HostCommandOutput) -> GitWorktreeScanError {
     } else {
         detail.to_owned()
     })
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

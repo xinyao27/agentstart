@@ -5,7 +5,7 @@ mod session;
 mod ui_state;
 
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use serde::Serialize;
 use serde_json::{Map, Value};
@@ -13,6 +13,7 @@ use tokio::sync::OnceCell;
 
 use crate::account_usage::StatsAuthority;
 use crate::github::GitHubAuthority;
+use crate::mutex_lock::lock;
 use crate::shell_events::ShellEventAuthority;
 use crate::telemetry::TelemetryAuthority;
 use crate::ui::UiAuthority;
@@ -461,10 +462,4 @@ impl StarNagAuthority {
             .track_main("star_nag_outcome", props)
             .await;
     }
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

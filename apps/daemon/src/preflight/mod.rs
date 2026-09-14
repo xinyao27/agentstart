@@ -3,12 +3,13 @@ mod model;
 mod shell_path;
 mod target;
 
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 
 use thiserror::Error;
 
 use crate::host_registry::{HostRegistry, HostRegistryError};
 use crate::hosts::{HostCommandError, HostCommandOutput};
+use crate::mutex_lock::lock;
 
 use model::{CliAuthStatus, InstalledStatus, PreflightStatus};
 pub(crate) use model::{
@@ -220,10 +221,4 @@ fn added_segments(
         .filter(|segment| !existing.contains(segment.as_str()))
         .cloned()
         .collect()
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

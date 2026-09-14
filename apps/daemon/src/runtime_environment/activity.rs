@@ -1,7 +1,8 @@
 use std::collections::HashMap;
-use std::sync::{Mutex, MutexGuard};
+use std::sync::Mutex;
 
 use super::records::StoredEnvironment;
+use crate::mutex_lock::lock;
 
 // Why: activity is stored at one-minute granularity so routed traffic cannot rewrite the
 // authority document on every call.
@@ -185,10 +186,4 @@ pub(super) fn record(
     environment.last_used_at_unix_ms = Some(recorded_at);
     environment.updated_at_unix_ms = recorded_at;
     observed(environment)
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

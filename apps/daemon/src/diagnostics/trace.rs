@@ -1,6 +1,6 @@
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::mpsc::{Receiver, RecvTimeoutError, SyncSender, TrySendError, sync_channel};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
@@ -9,6 +9,7 @@ use serde_json::{Map, Value, json};
 use super::policy::DiagnosticsPolicy;
 use super::trace_context::SpanIdentity;
 use super::trace_file::{TRACE_MAX_BYTES, TraceFileWriter, trace_file_path};
+use crate::mutex_lock::lock;
 use crate::redaction::redact_value;
 
 const TRACE_BATCH_SIZE: usize = 32;
@@ -471,10 +472,4 @@ fn unix_nanos() -> u128 {
         .duration_since(UNIX_EPOCH)
         .unwrap_or_default()
         .as_nanos()
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }

@@ -7,6 +7,7 @@ use crate::projects::{ProjectCatalogError, identity};
 use super::super::super::import_model::ProjectGroupImportMode;
 use super::super::super::import_scope::{self, FolderScope};
 use super::super::super::model::{ProjectGroup, ProjectGroupCreatedFrom};
+use super::basename;
 
 pub(super) struct GroupResolver<'a> {
     created: HashMap<String, ProjectGroup>,
@@ -143,14 +144,6 @@ fn create_group(
         tab_order,
         updated_at: now,
     })
-}
-
-fn basename(path: &str) -> String {
-    path.trim_end_matches(['/', '\\'])
-        .rsplit(['/', '\\'])
-        .next()
-        .unwrap_or_default()
-        .to_owned()
 }
 
 fn nonempty_name(name: &str) -> String {

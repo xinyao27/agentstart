@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, SystemTimeError, UNIX_EPOCH};
 
 use futures_util::{StreamExt, stream};
@@ -11,6 +11,7 @@ use tokio::sync::{Notify, watch};
 
 use crate::host_registry::HostRegistry;
 use crate::hosts::{ExecutionHost, HostCommand, HostFileKind, HostFilesystem, HostPlatform};
+use crate::mutex_lock::lock;
 use crate::worktrees::{ResolvedWorktree, WorktreeCatalog, WorktreeCatalogError};
 
 const MAX_TOP_LEVEL_ITEMS: usize = 32;
@@ -637,10 +638,4 @@ fn now_millis() -> Result<i64, SystemTimeError> {
         i64::try_from(SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis())
             .unwrap_or(i64::MAX),
     )
-}
-
-fn lock<T>(mutex: &Mutex<T>) -> MutexGuard<'_, T> {
-    mutex
-        .lock()
-        .unwrap_or_else(std::sync::PoisonError::into_inner)
 }
