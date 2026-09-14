@@ -1,6 +1,6 @@
 import {
   isPushHookFailure,
-  sanitizePushFailureDetails
+  sanitizeHookFailureDetails
 } from '@agentstart/protocol/git/push-hook-failure'
 import {
   buildFixPushFailurePrompt,
@@ -69,7 +69,7 @@ export function deriveSourceControlPushRecovery({
   }
 
   const summary = summarizePushFailure(rawError)
-  const detailText = sanitizePushFailureDetails(rawError)
+  const detailText = sanitizeHookFailureDetails(rawError)
   return {
     rawDetailText: rawError,
     detailText,

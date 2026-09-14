@@ -51,6 +51,6 @@ export function isPushHookFailure(raw: string): boolean {
   return false
 }
 
-export function sanitizePushFailureDetails(raw: string): string {
+export function sanitizeHookFailureDetails(raw: string): string {
   return normalizePushFailure(raw)
 }

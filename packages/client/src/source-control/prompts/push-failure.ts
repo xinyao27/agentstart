@@ -1,53 +1,24 @@
-import { sanitizePushFailureDetails as normalizePushFailure } from '@agentstart/protocol/git/push-hook-failure'
+import { sanitizeHookFailureDetails } from '@agentstart/protocol/git/push-hook-failure'
 import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import { translate } from '~renderer/i18n/i18n'
 
-const PUSH_FAILURE_SUMMARY_SCAN_CODE_UNITS = 64 * 1024
+import {
+  HOOK_FAILURE_PROMPT_OUTPUT_LIMIT,
+  HOOK_FAILURE_REPLY_INSTRUCTION,
+  LINT_PATTERN,
+  appendCustomInstruction,
+  hasExpandedFailureDetails,
+  hookFailureLines,
+  truncatePromptText
+} from './hook-failure-output'
 
-const PUSH_FAILURE_PROMPT_OUTPUT_LIMIT = 12_000
 const PUSH_FAILURE_PROMPT_FILE_LIMIT = 40
-const PUSH_FAILURE_REPLY_INSTRUCTION =
-  'Reply with the root cause, files changed, validation run, final git status, and anything left for the user.'
-
-const LOW_SIGNAL_LINE_PATTERN =
-  /^(?:npm\s+(?:warn|warning)\b.*(?:env|config)|npm\s+notice\b|husky\s+-\s+deprecated\b)/i
 const PUSH_HOOK_PATTERN = /\b(?:pre-push|prepush)\b/i
 const PUSH_HOOK_RUNNER_PATTERN = /\b(?:husky|lint-staged|lefthook)\b/i
-const LINT_PATTERN = /\b(?:eslint|oxlint|lint-staged|lint)\b/i
-
-function getMeaningfulLines(raw: string): string[] {
-  const lines = getPushFailureNormalizedLines(normalizePushFailure(raw))
-  const hasSignalLine = lines.some(
-    (line) =>
-      PUSH_HOOK_PATTERN.test(line) || PUSH_HOOK_RUNNER_PATTERN.test(line) || LINT_PATTERN.test(line)
-  )
-
-  if (!hasSignalLine) {
-    return lines
-  }
-
-  const filtered = lines.filter((line) => !LOW_SIGNAL_LINE_PATTERN.test(line))
-  return filtered.length > 0 ? filtered : lines
-}
-
-function getPushFailureNormalizedLines(normalized: string): string[] {
-  const lines: string[] = []
-  let lineStart = 0
-  for (let index = 0; index <= normalized.length; index += 1) {
-    if (index < normalized.length && normalized.charCodeAt(index) !== 10) {
-      continue
-    }
-    const line = normalized.slice(lineStart, index).trim()
-    if (line.length > 0) {
-      lines.push(line)
-    }
-    lineStart = index + 1
-  }
-  return lines
-}
+const SIGNAL_PATTERNS = [PUSH_HOOK_PATTERN, PUSH_HOOK_RUNNER_PATTERN, LINT_PATTERN]
 
 export function summarizePushFailure(raw: string): string {
-  const lines = getMeaningfulLines(raw)
+  const lines = hookFailureLines(sanitizeHookFailureDetails(raw), SIGNAL_PATTERNS)
 
   if (lines.length === 0) {
     return translate('sourceControl.pushFailure.fallback', 'Push failed.')
@@ -65,70 +36,7 @@ export function summarizePushFailure(raw: string): string {
 }
 
 export function hasExpandedPushFailureDetails(raw: string, summary: string): boolean {
-  const normalizedRaw = normalizePushFailure(raw)
-  const normalizedSummary = normalizePushFailure(summary)
-
-  if (!normalizedRaw) {
-    return false
-  }
-
-  if (raw.length > PUSH_FAILURE_SUMMARY_SCAN_CODE_UNITS) {
-    return true
-  }
-
-  return (
-    foldPushFailureComparisonWhitespace(normalizedRaw) !==
-    foldPushFailureComparisonWhitespace(normalizedSummary)
-  )
-}
-
-function foldPushFailureComparisonWhitespace(value: string): string {
-  let result = ''
-  let pendingSpace = false
-  for (let index = 0; index < value.length; index += 1) {
-    const code = value.charCodeAt(index)
-    if (isPushFailureComparisonWhitespace(code)) {
-      pendingSpace = result.length > 0
-      continue
-    }
-    if (pendingSpace) {
-      result += ' '
-      pendingSpace = false
-    }
-    result += value[index]
-  }
-  return result
-}
-
-function isPushFailureComparisonWhitespace(code: number): boolean {
-  return (
-    code === 32 ||
-    (code >= 9 && code <= 13) ||
-    code === 160 ||
-    code === 5760 ||
-    (code >= 8192 && code <= 8202) ||
-    code === 8232 ||
-    code === 8233 ||
-    code === 8239 ||
-    code === 8287 ||
-    code === 12288 ||
-    code === 65279
-  )
-}
-
-function truncatePromptText(value: string, limit: number): string {
-  if (value.length <= limit) {
-    return value
-  }
-
-  const omitted = value.length - limit
-  const headLength = Math.floor(limit * 0.35)
-  const tailLength = limit - headLength
-  return [
-    value.slice(0, headLength),
-    `\n[...${omitted} characters omitted...]\n`,
-    value.slice(value.length - tailLength)
-  ].join('')
+  return hasExpandedFailureDetails(raw, summary, sanitizeHookFailureDetails)
 }
 
 function buildPushFailurePromptFileLines(
@@ -167,7 +75,7 @@ export function buildFixPushFailurePrompt({
   branchName: string | null
   customInstruction?: string
 }): string {
-  const failureOutput = truncatePromptText(error, PUSH_FAILURE_PROMPT_OUTPUT_LIMIT)
+  const failureOutput = truncatePromptText(error, HOOK_FAILURE_PROMPT_OUTPUT_LIMIT)
   const changedFileCount = Math.max(totalEntryCount ?? entries.length, entries.length)
 
   const prompt = [
@@ -191,27 +99,8 @@ export function buildFixPushFailurePrompt({
     '',
     `Failure output JSON string: ${JSON.stringify(failureOutput)}`,
     '',
-    PUSH_FAILURE_REPLY_INSTRUCTION
+    HOOK_FAILURE_REPLY_INSTRUCTION
   ].join('\n')
 
-  return appendPushFailureCustomInstruction(prompt, customInstruction ?? '')
-}
-
-function appendPushFailureCustomInstruction(prompt: string, customInstruction: string): string {
-  const trimmedInstruction = customInstruction.trim()
-  if (!trimmedInstruction) {
-    return prompt
-  }
-
-  const customInstructionBlock = [
-    '',
-    'Additional user instruction for this fix:',
-    trimmedInstruction,
-    ''
-  ].join('\n')
-  if (!prompt.endsWith(PUSH_FAILURE_REPLY_INSTRUCTION)) {
-    return `${prompt}${customInstructionBlock}`
-  }
-
-  return `${prompt.slice(0, -PUSH_FAILURE_REPLY_INSTRUCTION.length)}${customInstructionBlock}${PUSH_FAILURE_REPLY_INSTRUCTION}`
+  return appendCustomInstruction(prompt, customInstruction ?? '')
 }
