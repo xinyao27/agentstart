@@ -14,6 +14,7 @@
         "english": "English",
         "chinese": "中文（简体）"
       },
+      "sidebarLayoutTitle": "侧边栏和布局",
       "statusBar": {
         "claudeToggleDescription": "显示当前工作区的 Claude Token 与费用消耗情况。",
         "codexToggleDescription": "显示当前工作区的 Codex Token 与费用消耗情况。",
@@ -57,6 +58,18 @@
         "orbM4": "M4 · 变换",
         "orbM5": "M5 · 发散"
       }
+    },
+    "computerUsePane": {
+      "unavailable": "计算机使用需要本地 AgentStart 守护进程连接"
+    },
+    "import": {
+      "invalidField": "终端导入返回了无效的设置：{{field}}"
+    },
+    "proxy": {
+      "invalid": "请输入有效的代理 URL。",
+      "missingHost": "代理 URL 必须包含主机。",
+      "tooLong": "代理 URL 过长。",
+      "unsupportedScheme": "请使用 http、https、socks、socks4 或 socks5 代理 URL。"
     }
   },
   "auto": {
@@ -67,7 +80,6 @@
       "722d03aa62": "崩溃报告对话框出现错误。",
       "8a023cea1f": "重试状态栏以重新挂载其控件。",
       "2e8ff36f94": "状态栏出现错误。",
-      "8d1e160ed1": "重试侧边栏或切换标签页以重新加载此面板。",
       "03a14f6b5b": "重试此页面，或导航到其他 AgentStart 界面。",
       "b7a714db1e": "此页面出现错误。",
       "98d4ea2823": "此工作区中的终端、浏览器或编辑器渲染失败。请重试以重新挂载。",
@@ -78,18 +90,47 @@
       "0a9e810705": "重新启动之前不会保存更改。您以前的选项卡在磁盘上是安全的。",
       "12e77cf12b": "会话恢复失败"
     },
+    "browser": {
+      "tab": {
+        "projection": {
+          "pane": {
+            "explanation": "此页面在你真实的 Chrome 配置文件中运行，并使用你的登录状态、Cookie 和扩展程序。",
+            "missing": "此 Chrome 标签页已不可用。",
+            "show": "显示 Chrome 标签页"
+          }
+        }
+      }
+    },
+    "newWorkspace": {
+      "resolveSmartGithubSubmit": {
+        "a9f6c4d231": "创建工作区之前无法解析该 GitHub 条目。"
+      },
+      "sparse": {
+        "enterDirectory": "请至少输入一个相对于仓库的目录。",
+        "useRelativeDirectories": "请使用相对于仓库的目录，而不是根目录或父目录路径。"
+      },
+      "target": {
+        "wasBranch": "原为 {branch}",
+        "wasPr": "原为 PR #{number}"
+      }
+    },
     "runtime": {
       "remoteServerUpdateErrors": {
+        "installNotApplied": "安装连接关闭后，服务器仍停留在之前的版本。",
         "manualRequired": "必须通过服务管理器手动更新此主机。",
         "notAvailable": "主机不再报告可用更新，请重新检查。",
         "notDownloaded": "主机更新尚未下载完成。",
         "legacyServer": "请先手动更新此主机一次，以启用主机更新。",
+        "updaterStreamClosed": "服务器已停止报告更新进度。",
         "updaterTimeout": "等待主机更新程序超时。",
         "requestedVersionUnavailable": "主机更新程序未提供请求的 AgentStart 版本。",
         "updateUnavailable": "主机未报告可用更新。",
         "downloadIncomplete": "主机更新未下载完成。",
         "reconnectTimeout": "主机未以更新后的版本重新连接。",
         "runtimeChanged": "更新过程中配对主机发生变化，请重新检查后再重试。"
+      },
+      "webUiShellClient": {
+        "selectionClipboardUnavailable": "浏览器中无法使用选择剪贴板。"
       }
     },
     "store": {
@@ -163,7 +204,7 @@
           }
         },
         "github": {
-          "f129c42773": "GitHub did not return the new comment."
+          "f129c42773": "GitHub 未返回新评论。"
         }
       }
     },
@@ -296,6 +337,16 @@
           }
         }
       },
+      "pendingWorktreeCreation": {
+        "checkingSetup": "正在检查设置脚本…",
+        "copyingFiles": "正在复制环境文件…",
+        "creating": "正在创建工作树…",
+        "fetching": "正在获取基础分支…",
+        "preparing": "正在准备工作区…",
+        "runningSetup": "正在运行设置脚本…",
+        "settingUpWorkspace": "正在设置你的工作区…",
+        "startingWorkspace": "正在启动工作区…"
+      },
       "pr": {
         "comment": {
           "audience": {
@@ -416,6 +467,7 @@
     "hooks": {
       "useComposerState": {
         "7eb3f44ff7": "所选 Agent 已禁用。创建之前选择启用的 Agent。",
+        "addAttachmentFailed": "添加附件失败。",
         "b2ead86962": "无法解析 PR 基础引用。",
         "a9ff236145": "部分附件无法上传。",
         "3db83fc58a": "没有可用于附件的远程项目路径。",
@@ -483,7 +535,9 @@
         "devSearchKeywordError": "error",
         "devSearchKeywordNotification": "notification",
         "projectHostsSummary": "{{value0}} 个主机",
-        "33a5e1d597": "连接 GitHub，以使用拉取请求、检查和评审状态。"
+        "33a5e1d597": "连接 GitHub，以使用拉取请求、检查和评审状态。",
+        "runtimeEnvironmentsDescription": "连接到本机或远程主机上的 AgentStart 守护进程。",
+        "runtimeEnvironmentsTitle": "运行时主机"
       },
       "useLargeTextControlPaste": {
         "pasteTooLarge": "粘贴内容过大。"
@@ -525,7 +579,7 @@
         "ec43b38ba7": "已在 GitHub 上加星标",
         "157bb5ecbb": "打开 GitHub",
         "preflightDismiss": "关闭",
-        "73e1ad4282": "AgentStart uses the GitHub CLI (gh) to show pull requests and checks.",
+        "73e1ad4282": "AgentStart 使用 GitHub CLI（gh）来显示拉取请求和检查。",
         "createShortcut": "创建 {{value0}}",
         "previousWorkspace": "向上切换工作区",
         "nextWorkspace": "向下切换工作区"
@@ -684,6 +738,15 @@
           }
         }
       },
+      "right": {
+        "sidebar": {
+          "AiVaultSessionSubagents": {
+            "messageCount": "{{value0}} 条消息",
+            "subagentsCount": "子 Agent（{{value0}}）",
+            "viewLog": "查看日志"
+          }
+        }
+      },
       "worktree": {
         "creation": {
           "WorktreeCreationPanel": {
@@ -693,6 +756,15 @@
             "a3346fc6ed": "取消工作树创建",
             "532aea14ce": "取消",
             "767951265d": "创建工作树时出现问题。"
+          },
+          "progress": {
+            "copiedEnvironment": "已复制 {{count}} 个环境文件",
+            "copyEnvironment": "复制环境文件",
+            "createWorktree": "创建工作树",
+            "noSetup": "未配置设置脚本",
+            "prepareBase": "准备基础分支",
+            "runSetup": "运行设置脚本",
+            "startWorkspace": "启动工作区"
           }
         }
       },
@@ -701,8 +773,7 @@
           "WorkspaceSpacePage": {
             "8d0048e1cb": "工作区磁盘使用情况和可回收工作树存储。",
             "e8d6ba11ab": "测试版",
-            "45f6302dbc": "空间",
-            "ecf72fdc3b": "返回"
+            "45f6302dbc": "空间"
           }
         },
         "cleanup": {
@@ -775,7 +846,7 @@
             "error": "工作区清理失败",
             "skippedAncestor": "由于无法删除嵌套工作区，已跳过。",
             "timedOut": "删除 {{value0}} 的时间比预期长。它将在后台继续运行。",
-            "stillRemoving": "Still removing workspaces: {{value0}}",
+            "stillRemoving": "仍在移除工作区：{{value0}}",
             "skippedPendingAncestor": "已跳过，因为嵌套的工作区尚未完成移除。"
           },
           "candidateRow": {
@@ -786,6 +857,7 @@
             "expandDetails": "展开详情",
             "cleanGit": "Git 干净",
             "dirtyGit": "Git 有更改",
+            "gitLabel": "Git",
             "unpushedCommits": "未推送提交",
             "gitUnknown": "Git 未知",
             "gitStatusUnknown": "Git 状态未知",
@@ -817,7 +889,7 @@
         },
         "panel": {
           "sourceControl": {
-            "title": "Changes & Review"
+            "title": "更改与评审"
           },
           "source": {
             "control": {
@@ -966,7 +1038,11 @@
             "ac112e9036": "删除标题",
             "f984ab2a30": "删除窗格标题：{{value0}}",
             "cc5a2dc706": "编辑窗格标题：{{value0}}",
-            "7dbbfcbecc": "窗格标题"
+            "7dbbfcbecc": "窗格标题",
+            "imagePasteFailed": "图片粘贴失败：{detail}",
+            "pasteFailed": "粘贴失败。",
+            "pasteTooLarge": "粘贴失败：剪贴板文本过大，无法安全粘贴到终端。",
+            "thisRepo": "此仓库"
           },
           "TerminalSessionStateSaveFailureDialog": {
             "6bee0c8f17": "打开磁盘空间分析器",
@@ -1312,12 +1388,18 @@
             "updatedOne": "已更新 1 个主机"
           },
           "SkillUpdateStatusSegment": {
-            "successLabel": "Skills updated",
-            "errorLabel": "Skill update failed",
-            "installSuccessLabel": "Skill installed",
-            "installErrorLabel": "Skill install failed",
-            "removeSuccessLabel": "Skill removed",
-            "removeErrorLabel": "Skill removal failed"
+            "installRunningLabel": "正在安装技能",
+            "installStoppingLabel": "正在停止技能安装",
+            "removeRunningLabel": "正在移除技能",
+            "removeStoppingLabel": "正在停止技能移除",
+            "runningLabel": "正在更新技能",
+            "stoppingLabel": "正在停止技能更新",
+            "successLabel": "技能已更新",
+            "errorLabel": "技能更新失败",
+            "installSuccessLabel": "技能已安装",
+            "installErrorLabel": "技能安装失败",
+            "removeSuccessLabel": "技能已移除",
+            "removeErrorLabel": "技能移除失败"
           },
           "WorkspaceSpaceCompactPanel": {
             "a471aa9c24": "已更新",
@@ -1432,8 +1514,8 @@
             "f8f0f9d8cc": "网络问题",
             "bf2e739f18": "登录不可用",
             "f8b8dbed85": "用量不可用",
-            "e2c6a4f917": "Run Grok to refresh",
-            "f90b3d7a16": "Run Kimi to refresh"
+            "e2c6a4f917": "运行 Grok 以刷新",
+            "f90b3d7a16": "运行 Kimi 以刷新"
           },
           "usagePercentageLabel": {
             "used": "已用 {{value0}}%",
@@ -1441,16 +1523,16 @@
           },
           "UsageRosterPanel": {
             "title": "Usage",
-            "notSignedIn": "not signed in",
-            "allAgents": "visible agents",
+            "notSignedIn": "未登录",
+            "allAgents": "可见 Agent",
             "usageDetails": "用量概览",
             "statusBarSettings": "状态栏设置…",
             "loadingUsage": "Loading usage…",
-            "usageUnavailable": "Usage unavailable",
-            "noUsageData": "No usage data",
+            "usageUnavailable": "用量不可用",
+            "noUsageData": "无用量数据",
             "detailed": "Detailed",
             "compact": "Compact",
-            "footerDetailAria": "Usage footer detail"
+            "footerDetailAria": "用量页脚详情"
           },
           "DesktopRuntimeStatus": {
             "cli": "AgentStart CLI",
@@ -1460,6 +1542,7 @@
             "cliInstalled": "已安装",
             "cliNotInstalled": "未安装",
             "cliNeedsRepair": "需要修复",
+            "runtimeCheckingLabel": "正在检查 {{host}} 上的 AgentStart 运行时",
             "title": "AgentStart 运行时",
             "host": "主机",
             "runtimeChecking": "检查中",
@@ -1522,7 +1605,6 @@
           "426be2aac6": "Codex",
           "39b6998ddb": "所有提供商",
           "a68dee6a32": "搜索技能",
-          "f43ad6edf3": "技能",
           "ea72d6185b": "无法扫描本地技能",
           "dc4c3328ee": "显示文件",
           "9963dff6d3": "没有找到描述。",
@@ -1535,8 +1617,8 @@
           "35b9a724a0": "可用的",
           "0c74e7ff34": "当地的",
           "installedTab": "Installed",
-          "marketplaceTab": "Browse marketplace",
-          "refreshSkills": "Refresh skills"
+          "marketplaceTab": "浏览市场",
+          "refreshSkills": "刷新技能"
         },
         "SkillFreshnessNudge": {
           "titleOne": "已安装的 AgentStart 技能已过期",
@@ -1567,30 +1649,30 @@
           "tipReadOnly": "这里的技能位于只读位置，需更改其权限后才能更新。",
           "tipInRepo": "这里的技能位于某个项目内，而非全局技能；AgentStart 只更新全局技能。",
           "tipPluginCache": "这里的技能由插件管理；请改为更新插件。",
-          "skippedReasonUnrecognized": "The copy here doesn’t match the official version — it may be modified, or a different skill with the same name. AgentStart left it out of the update so it won’t overwrite it. Remove it if you want AgentStart to update this skill.",
-          "skippedReasonReadOnly": "This copy is in a read-only location, so AgentStart left it out of the update. Change its permissions to let AgentStart update it.",
-          "skippedReasonInaccessible": "AgentStart couldn’t read this copy, so it left the skill out of the update.",
-          "skippedReasonInRepo": "This is a project skill, not a global one — AgentStart only updates your global skills, so it left this out of the update.",
-          "skippedReasonPluginCache": "A plugin manages this skill, so AgentStart left it out of the update — update the plugin instead.",
-          "skippedReasonExternalLink": "This copy is a shortcut pointing outside AgentStart’s skill folders, so AgentStart left it out of the update.",
-          "skippedReasonBrokenLink": "This copy is a shortcut to something that no longer exists, so AgentStart left it out — you can safely delete it."
+          "skippedReasonUnrecognized": "此处的副本与官方版本不匹配——它可能已被修改，或是同名的其他技能。AgentStart 将其排除在更新之外，以免覆盖它。如果你希望 AgentStart 更新此技能，请先移除它。",
+          "skippedReasonReadOnly": "此副本位于只读位置，因此 AgentStart 将其排除在更新之外。更改其权限即可让 AgentStart 更新它。",
+          "skippedReasonInaccessible": "AgentStart 无法读取此副本，因此将该技能排除在更新之外。",
+          "skippedReasonInRepo": "这是项目技能，而非全局技能——AgentStart 只更新全局技能，因此将其排除在更新之外。",
+          "skippedReasonPluginCache": "此技能由插件管理，因此 AgentStart 将其排除在更新之外——请改为更新该插件。",
+          "skippedReasonExternalLink": "此副本是指向 AgentStart 技能文件夹之外的快捷方式，因此 AgentStart 将其排除在更新之外。",
+          "skippedReasonBrokenLink": "此副本是指向已不存在内容的快捷方式，因此 AgentStart 将其排除——你可以放心删除它。"
         },
         "SkillFreshnessUpdateDialog": {
           "stoppingHeadline": "Stopping the update…",
           "runningOne": "Updating 1 skill…",
           "runningMany": "Updating {{value0}} skills…",
-          "updatedOne": "Updated 1 skill",
+          "updatedOne": "已更新 1 个技能",
           "updatedMany": "Updated {{value0}} skills",
-          "updatedPartial": "Updated {{value0}} of {{value1}} skills",
-          "runningDescription": "You can close this window — it keeps running in the background.",
-          "errorTitle": "The update didn't finish",
+          "updatedPartial": "已更新 {{value1}} 个技能中的 {{value0}} 个",
+          "runningDescription": "你可以关闭此窗口——它会在后台继续运行。",
+          "errorTitle": "更新未完成",
           "stopping": "Stopping…",
           "stop": "Stop",
           "copied": "Copied",
-          "copyCommand": "Copy command",
+          "copyCommand": "复制命令",
           "retry": "Retry",
           "done": "Done",
-          "updateActionOne": "Update 1 skill",
+          "updateActionOne": "更新 1 个技能",
           "updateActionMany": "Update {{value0}} skills",
           "title": "更新技能",
           "checking": "正在检查已安装的 AgentStart 技能…",
@@ -1599,10 +1681,10 @@
           "success": "所有已安装的 AgentStart 技能均为最新。",
           "checkNow": "立即检查",
           "close": "关闭",
-          "launchFailed": "The update command could not start: {{value0}}",
-          "commandExitedUnknown": "The update command stopped unexpectedly.",
-          "commandExited": "The update command exited with code {{value0}}.",
-          "incomplete": "Some skills could not be updated."
+          "launchFailed": "更新命令无法启动：{{value0}}",
+          "commandExitedUnknown": "更新命令意外停止。",
+          "commandExited": "更新命令以代码 {{value0}} 退出。",
+          "incomplete": "部分技能无法更新。"
         },
         "SkillFreshnessStatusPill": {
           "updateAvailable": "有可用更新",
@@ -1610,72 +1692,74 @@
           "installed": "已安装"
         },
         "SkillInstallDialog": {
-          "title": "Install skill",
-          "description": "Runs the skills CLI against a repository source such as owner/repo.",
+          "title": "安装技能",
+          "description": "针对 owner/repo 这类仓库源运行 skills CLI。",
           "sourceLabel": "Source",
           "sourcePlaceholder": "owner/repo",
-          "skillLabel": "Skill name (optional)",
-          "skillPlaceholder": "Leave empty to install every skill in the source",
-          "scopeLabel": "Install into",
-          "scopeGlobal": "All projects (global)",
+          "skillLabel": "技能名称（可选）",
+          "skillPlaceholder": "留空则安装该源中的所有技能",
+          "scopeLabel": "安装到",
+          "scopeGlobal": "所有项目（全局）",
           "stoppingHeadline": "Stopping the install…",
           "runningHeadline": "Installing…",
-          "success": "Skill installed",
-          "errorTitle": "The install didn't finish",
+          "success": "技能已安装",
+          "errorTitle": "安装未完成",
           "stopping": "Stopping…",
           "stop": "Stop",
           "done": "Done",
           "close": "Close",
-          "retry": "Retry install",
+          "retry": "重试安装",
           "install": "Install"
         },
         "SkillsMarketplace": {
-          "installFromSource": "Install from source",
-          "installCurrent": "Install this skill"
+          "chromeSurface": "市场在 Chrome 中打开，以便使用你现有的浏览器会话。",
+          "installFromSource": "从源安装",
+          "installCurrent": "安装此技能",
+          "open": "打开技能市场"
         },
         "SkillRemoveDialog": {
-          "title": "Remove skill",
-          "description": "Deletes {{value0}} from the global skill home shared by every project.",
+          "title": "移除技能",
+          "description": "从所有项目共享的全局技能主目录中删除 {{value0}}。",
           "stoppingHeadline": "Stopping the removal…",
           "runningHeadline": "Removing…",
-          "success": "Skill removed",
-          "errorTitle": "The removal didn't finish",
+          "success": "技能已移除",
+          "errorTitle": "移除未完成",
           "stopping": "Stopping…",
           "stop": "Stop",
           "done": "Done",
           "cancel": "Cancel",
-          "retry": "Retry removal",
+          "retry": "重试移除",
           "confirm": "Remove",
-          "folderName": "Removes the skill folder {{value0}}.",
+          "folderName": "移除技能文件夹 {{value0}}。",
           "placements": "当前安装在："
         },
         "SkillRunLog": {
-          "showLog": "Show log",
-          "launchFailed": "The skills command could not start: {{value0}}",
-          "commandExitedUnknown": "The skills command stopped unexpectedly.",
-          "commandExited": "The skills command exited with code {{value0}}.",
-          "incomplete": "The command finished, but the skills did not land on disk."
+          "showLog": "显示日志",
+          "launchFailed": "skills 命令无法启动：{{value0}}",
+          "commandExitedUnknown": "skills 命令意外停止。",
+          "commandExited": "skills 命令以代码 {{value0}} 退出。",
+          "incomplete": "命令已完成，但技能未写入磁盘。"
         },
         "startRejection": {
-          "unavailable": "Could not reach the skills command.",
-          "alreadyRunning": "Another skills command is still running.",
-          "invalidNames": "That skill name is not a valid package name.",
-          "invalidSource": "Enter a source like owner/repo, a GitHub URL, or a publisher domain.",
-          "invalidScope": "That project is no longer available."
+          "unavailable": "无法连接到 skills 命令。",
+          "alreadyRunning": "另一个 skills 命令仍在运行。",
+          "invalidNames": "该技能名称不是有效的包名。",
+          "invalidSource": "请输入类似 owner/repo、GitHub URL 或发布者域名的来源。",
+          "invalidScope": "该项目已不再可用。"
         },
         "SkillDetail": {
-          "listingTruncated": "Only the first files in this skill are listed.",
-          "listingFailed": "Could not list the files in this skill.",
-          "update": "Update skill",
-          "remove": "Remove skill"
+          "listingTruncated": "仅列出此技能中的前几个文件。",
+          "listingFailed": "无法列出此技能中的文件。",
+          "update": "更新技能",
+          "remove": "移除技能"
         },
         "SkillFileView": {
-          "invalidPath": "That file is no longer part of this skill.",
-          "binary": "This looks like a binary file, so there is nothing to show here.",
-          "unreadable": "Could not read this file from disk.",
+          "invalidPath": "该文件已不再属于此技能。",
+          "binary": "这似乎是二进制文件，因此没有可显示的内容。",
+          "unreadable": "无法从磁盘读取此文件。",
           "loading": "Reading file…",
-          "emptyBody": "This file is empty.",
-          "truncated": "This file is too large to show in full. Open it from disk to read the rest."
+          "emptyBody": "此文件为空。",
+          "truncated": "此文件太大，无法完整显示。请从磁盘打开以阅读其余内容。"
         },
         "topology": {
           "canonicalCopy": "权威副本",
@@ -1791,7 +1875,8 @@
           "32a7256d85": "克隆",
           "69f5b5380d": "克隆...",
           "cloneOnHostDescription": "输入 Git URL，并选择要在 {{value0}} 上克隆到的位置。",
-          "cloneParentFolder": "父文件夹"
+          "cloneParentFolder": "父文件夹",
+          "remoteCloneParentPlaceholder": "/home/user/projects"
         },
         "AutoRenameFailedDialog": {
           "aed1623b1e": "关闭",
@@ -1874,7 +1959,8 @@
         },
         "PendingWorktreeRow": {
           "af21e953d1": "取消工作树创建",
-          "188f6922a0": "取消"
+          "188f6922a0": "取消",
+          "creationFailed": "创建失败"
         },
         "ProjectGroupDeleteDialog": {
           "ca65b78f78": "取消",
@@ -1912,9 +1998,6 @@
           "b79b39d865": "删除项目",
           "fromAgentStartSsh": "从 AgentStart 中移除。其文件保留在 {{value0}} 上 — 重新添加该 SSH 主机即可恢复。"
         },
-        "ScrollToCurrentWorkspaceToolbarButton": {
-          "23989bb663": "显示活动工作区"
-        },
         "SetupGuideSidebarEntry": {
           "b0a7bfc34c": "从侧边栏隐藏",
           "88d402b71d": "入门清单"
@@ -1949,10 +2032,13 @@
           "5bfd5c8779": "关闭安装脚本"
         },
         "SidebarHeader": {
+          "08d251dad5": "工作区",
+          "3b53bca96a": "项目",
           "92154beb7e": "新工作区",
           "5c9c7c16aa": "添加项目以创建工作区",
           "ca6f729da2": "新工作区 ({{value0}})",
-          "25a95899c9": "添加项目"
+          "25a95899c9": "添加项目",
+          "f8fa32b294": "工作树"
         },
         "SidebarNav": {
           "80611a8b10": "搜索",
@@ -2087,13 +2173,13 @@
           "0bed8727db": "它可能已被手机或删除。刷新工作区或将其从 AgentStart 中删除。",
           "3921d3d9a5": "找不到工作区文件夹。",
           "f387af445b": "工作区路径不是有效的本地路径。",
-          "localOnly": "Local only",
+          "localOnly": "仅本地",
           "checkingHost": "Checking host…",
-          "hostUnsupported": "Host unsupported",
-          "remoteSsh": "Remote SSH",
-          "remoteRuntimeUnsupported": "Opening this path in a local app is not available on this host.",
-          "remoteEditorUnsupported": "This app cannot open SSH workspaces. Choose VS Code instead.",
-          "remoteLaunchFailed": "Could not open the path in VS Code."
+          "hostUnsupported": "主机不受支持",
+          "remoteSsh": "远程 SSH",
+          "remoteRuntimeUnsupported": "此主机不支持在本地应用中打开该路径。",
+          "remoteEditorUnsupported": "此应用无法打开 SSH 工作区。请改用 VS Code。",
+          "remoteLaunchFailed": "无法在 VS Code 中打开该路径。"
         },
         "WorktreeTitleInlineRename": {
           "2f42ae024f": "未读：",
@@ -2316,34 +2402,34 @@
           "3b7e4a1c96": "隐藏外部工作树"
         },
         "WorktreeMetaDialog": {
-          "382fd11a3e": "Edit Worktree Details",
-          "65770ad0f0": "Edit the GitHub pull request link and notes for this workspace.",
-          "ad5e4e514f": "Display Name",
-          "7f21e0464f": "Custom display name...",
-          "459ad7f650": "Only changes the name shown in the sidebar — the folder on disk stays the same. Leave blank to use the branch or folder name.",
-          "1b91db7e14": "GH PR",
+          "382fd11a3e": "编辑工作树详情",
+          "65770ad0f0": "编辑此工作区的 GitHub 拉取请求链接和备注。",
+          "ad5e4e514f": "显示名称",
+          "7f21e0464f": "自定义显示名称...",
+          "459ad7f650": "仅更改侧边栏中显示的名称——磁盘上的文件夹保持不变。留空则使用分支或文件夹名称。",
+          "1b91db7e14": "GitHub PR",
           "077a4f7b5c": "PR # or GitHub URL",
-          "5ae06f40fd": "Paste a pull request URL, or enter a number. Leave blank to remove the link.",
+          "5ae06f40fd": "粘贴拉取请求 URL，或输入编号。留空则移除链接。",
           "9c1d1e9b71": "Comment",
-          "030d484fc0": "Notes about this worktree...",
-          "7f0be5e9a6": "Supports **markdown** — bold, lists, `code`, links. Press Enter or",
-          "b48c271d39": "to save, Shift+Enter for a new line.",
+          "030d484fc0": "关于此工作树的备注…",
+          "7f0be5e9a6": "支持 **markdown**——加粗、列表、`code`、链接。按 Enter 或",
+          "b48c271d39": "保存，按 Shift+Enter 换行。",
           "3db0a2a593": "Cancel",
           "61d6f612cf": "Saving...",
           "2174f17011": "Save"
         },
         "DiscoveredWorktreesAlert": {
-          "statusOne": "Review 1 discovered worktree for {{value0}}",
-          "statusMany": "Review {{value0}} discovered worktrees for {{value1}}",
-          "descriptionOne": "Git found 1 worktree created outside AgentStart. It is currently hidden from the workspace list.",
-          "descriptionMany": "Git found {{value0}} worktrees created outside AgentStart. They are currently hidden from the workspace list.",
-          "title": "Discovered worktrees",
-          "moreOne": "1 more hidden worktree",
+          "statusOne": "查看 {{value0}} 中的 1 个已发现工作树",
+          "statusMany": "查看 {{value1}} 中的 {{value0}} 个已发现工作树",
+          "descriptionOne": "Git 发现 1 个在 AgentStart 之外创建的工作树。它当前未显示在工作区列表中。",
+          "descriptionMany": "Git 发现 {{value0}} 个在 AgentStart 之外创建的工作树。它们当前未显示在工作区列表中。",
+          "title": "发现的工作树",
+          "moreOne": "另有 1 个隐藏的工作树",
           "moreMany": "{{value0}} more hidden worktrees",
-          "recoveryHint": "Keeping them hidden dismisses this notice. You can show them later from the project menu.",
-          "error": "Could not update discovered worktrees. Try again.",
-          "keepHidden": "Keep hidden",
-          "show": "Show in workspace list"
+          "recoveryHint": "保持隐藏将关闭此提示。你可以稍后从项目菜单中显示它们。",
+          "error": "无法更新已发现的工作树。请重试。",
+          "keepHidden": "保持隐藏",
+          "show": "在工作区列表中显示"
         },
         "WorktreeCardTabs": {
           "openTabs": "已打开的标签页"
@@ -2390,6 +2476,12 @@
       "settings": {
         "AccountsPane": {
           "c2d2751587": "删除账户",
+          "claudeAccountFallback": "Claude 账户",
+          "claudeSignInFailed": "Claude 登录失败。请重试。",
+          "codexAccountFallback": "Codex 账户",
+          "codexSignInFailed": "Codex 登录失败。请重试。",
+          "codexSignInTimeout": "Codex 登录耗时过长。请重试。",
+          "codexSignInUnavailable": "Codex 登录暂时不可用，请稍后一分钟再试。",
           "dbb9626ed1": "取消",
           "854ebbcc45": "AgentStart 将删除此已保存账户的托管 Claude 身份验证。如果当前处于活动状态，AgentStart 将回退到系统默认的 Claude 登录名。",
           "63843e37e2": "删除 Claude 账户？",
@@ -2491,6 +2583,8 @@
           "7492fb3bba": "在此粘贴并点击保存。",
           "9fec52de4b": "如何复制 Cookie",
           "4e32e030b2": "存储在本地。AgentStart 仅将其发送到 platform.minimax.io 以刷新使用量。",
+          "openCodeCookieHelp": "粘贴原始令牌或完整的 Cookie 请求头。你可以在浏览器的 DevTools 中找到它：网络 → 某个 opencode.ai 请求 → Cookie 请求头。OpenCode Go 授权在 Windows 和 WSL 终端之间共享。",
+          "openCodeWorkspaceHelp": "登录 opencode.ai 后可在 URL 中找到，例如 opencode.ai/workspace/wrk_…/go。",
           "remoteServerFallback": "远程 daemon",
           "loadAccountsFailed": "无法加载提供商账户。",
           "remoteScopeAccounts": "正在显示由 {{value0}} 管理的账户。请在该主机上添加或重新验证账户。",
@@ -2733,6 +2827,9 @@
           "4c17304beb": "刷新",
           "6326a4c5cc": "当 CLI、本地应用程序或自动化工具需要 macOS 隐私访问时，请使用这些控件。 AgentStart 在启动时不会询问。",
           "6f011b9bf6": "终端工具继承了 AgentStart 的 macOS 隐私信封。",
+          "actionOpenSettings": "打开设置",
+          "actionRequest": "请求",
+          "actionTriggerPrompt": "触发提示词",
           "bfa3402305": "无法请求许可",
           "66e94d6cf3": "已发送权限请求",
           "fa809e8ada": "打开 macOS 隐私和安全",
@@ -2756,7 +2853,9 @@
           "e5b5f3d6b9": "相机",
           "cc8151d9fa": "音频录制、转写、媒体采集以及 sox、ffmpeg 和 Whisper CLI。",
           "16381e040a": "麦克风",
-          "dac08ec03e": "处理中..."
+          "dac08ec03e": "处理中...",
+          "groupRequests": "权限请求",
+          "groupRequestsDescription": "为每个开发者工具请求 macOS 隐私访问权限。"
         },
         "ExperimentalPane": {
           "a20d5ea365": "在终端响铃或 Agent 完成事件后保持窗格级突出显示可见，直到您与该窗格交互。我们在调整信号时进行实验。",
@@ -2807,7 +2906,7 @@
           "4aa4d9fb73": "在差异编辑器中换行显示长行，而不是要求水平滚动。",
           "bf16ef0af2": "关闭",
           "3f6892f307": "开启",
-          "b82f86d7d2": "Rich Markdown Spellcheck",
+          "b82f86d7d2": "富 Markdown 拼写检查",
           "5195f0b9ef": "在编辑富 Markdown 时显示浏览器拼写下划线和建议。",
           "7ddd66fede": "编辑器自动换行",
           "9b18de6eea": "在文件编辑器中自动换行长行，而无需水平滚动。"
@@ -2938,11 +3037,8 @@
           "b4ef5428a7": "PR",
           "895d3f70b8": "gh",
           "32dca11189": "github",
-          "cdd793134e": "API预算",
-          "b9c011fbc2": "速率限制",
           "aa204f185f": "当前 GitHub CLI REST、搜索和 GraphQL 速率限制。",
           "612a440e57": "GitHub API 预算",
-          "2cde9044a8": "graphql",
           "36e3de3619": "避免与过时的历史记录进行比较。如果该分支有未提交的更改或仅在本地的提交，AgentStart 会跳过更新。",
           "d072a12995": "git diff main...HEAD",
           "db3a127eb1": "。这使得命令像",
@@ -2961,6 +3057,9 @@
           "3d172725cc": "没有任何",
           "1f32ba27a6": "自定义",
           "a182c5125e": "git用户名",
+          "groupAttribution": "署名",
+          "groupBranches": "分支",
+          "groupUpstream": "上游",
           "sourceControlGroupOrderTitle": "源代码管理分组顺序",
           "sourceControlGroupOrderDescription": "选择在源代码管理中优先显示“更改”、“已暂存更改”还是“未跟踪文件”。",
           "changesFirst": "更改优先",
@@ -2970,7 +3069,7 @@
           "compareAgainstUpstreamDescription": "选择源代码管理在比较已提交变更时默认使用的基准。分支上游会自动跟随当前分支；如果没有上游，则回退到仓库默认分支。你仍然可以在对应 worktree 的 Git 面板中按 worktree 更改对比基准。Pull Request 和变基目标不会改变。",
           "compareBaseRepositoryDefault": "仓库默认",
           "compareBaseBranchUpstream": "分支上游",
-          "d2eede4c54": "Add AgentStart attribution to commits and PRs."
+          "d2eede4c54": "为提交和 PR 添加 AgentStart 署名。"
         },
         "HiddenExperimentalGroup": {
           "d0f914a528": "占位符切换",
@@ -3120,7 +3219,6 @@
           "2a42dd8d6f": "通知音量",
           "4aa5085cd7": "风俗：",
           "c258cb96dc": "选择通知声音",
-          "2a2033c388": "选择发送桌面通知时 AgentStart 播放的警报。",
           "88686e6ca8": "通知声音",
           "b6fc369244": "后台终端发出响铃字符。",
           "591fe605b9": "终端响铃",
@@ -3140,7 +3238,9 @@
           "98d70fb261": "自定义通知声音无法播放",
           "c83b05a055": "该系统不支持通知",
           "6e6df3a09a": "选择自定义文件",
-          "76e02467b8": "更改自定义文件"
+          "76e02467b8": "更改自定义文件",
+          "groupDelivery": "传递",
+          "groupEvents": "事件"
         },
         "OpenInMenuSetting": {
           "03b00b1f64": "定制应用程序",
@@ -3319,10 +3419,10 @@
           "3149964b66": "已复制",
           "waitForSetupBeforeAgent": "等待设置完成后再启动 Agent",
           "waitForSetupBeforeAgentHelp": "如果设置会安装依赖、MCP 服务器或 Agent 启动时需要的配置文件，请开启此选项。",
-          "787ca433ef": "Define only the supported keys: `scripts`, `setup`, and `archive`.",
-          "af49e2a19e": "The file is present, but AgentStart could not find valid `scripts` definitions.",
-          "ca424ff135": "Shared setup and archive hooks are defined in the repo and available to everyone who uses it.",
-          "b20c5df6ca": "Add a `agentstart.yaml` file to enable shared setup and archive hooks for this repo. Example template:"
+          "787ca433ef": "仅定义受支持的键：`scripts`、`setup` 和 `archive`。",
+          "af49e2a19e": "文件存在，但 AgentStart 找不到有效的 `scripts` 定义。",
+          "ca424ff135": "共享的设置与归档钩子定义在仓库中，所有使用该仓库的人都可以使用。",
+          "b20c5df6ca": "添加 `agentstart.yaml` 文件，为此仓库启用共享的设置与归档钩子。示例模板："
         },
         "RepositoryIconPicker": {
           "2b7d27b93c": "使用 {{value0}} 仓库颜色",
@@ -3565,7 +3665,9 @@
           "65358016ea": "放弃",
           "dev": "开发工具",
           "devDescription": "仅用于调试 UI 状态的开发工具。",
-          "b07041697f": "连接 GitHub，以使用拉取请求、检查和评审状态。"
+          "b07041697f": "连接 GitHub，以使用拉取请求、检查和评审状态。",
+          "runtimeEnvironmentsDescription": "连接到本机或远程主机上的 AgentStart 守护进程。",
+          "runtimeEnvironmentsTitle": "运行时主机"
         },
         "SettingsFormControls": {
           "42a4d15a30": "没有匹配的字体。",
@@ -3588,7 +3690,6 @@
         "SettingsSidebar": {
           "5c9669ff9c": "项目",
           "dbceaa8840": "搜索设置",
-          "60f8a673a7": "返回应用",
           "6503182299": "入门清单",
           "82db1b7de4": "入门清单，已完成 {{value0}}/{{value1}}。显示设置指南。",
           "df38d612b7": "尚未添加项目。",
@@ -3833,8 +3934,10 @@
         },
         "TerminalWindowSection": {
           "1705318506": "ANSI 洋红色",
+          "00eaa6b881": "窗口外观和背景设置。",
           "03c855d15f": "重置所有颜色覆盖",
           "63f8d9336e": "颜色覆盖",
+          "b96ba13ed1": "窗口",
           "e86e09b5c7": "覆盖各个终端颜色。",
           "1d1920dc8a": "在终端中输入时隐藏鼠标光标。",
           "3530908ef9": "打字时隐藏鼠标",
@@ -3939,6 +4042,7 @@
         "accounts": {
           "search": {
             "86edc96bc9": "状态栏",
+            "d16378a88f": "minimax",
             "e949b08ffb": "速率限制",
             "7e67d7d1b6": "沃克",
             "421c6be25e": "ID",
@@ -3997,6 +4101,8 @@
             "2814401339": "已安装",
             "719f53350c": "路径",
             "839e82c81f": "检测",
+            "agentLocation": "Agent 位置",
+            "checks": "检查",
             "f622b8eb2a": "操作系统",
             "d608654c03": "wsl",
             "77c02fa3c3": "视窗",
@@ -4045,11 +4151,20 @@
             "agentPermissions": "Agent 权限",
             "agentPermissionsDescription": "在 Yolo 和手动之间切换 Agent 权限默认值。",
             "agentRuntime": "Agent 运行时",
-            "agentRuntimeDescription": "选择默认在 Windows 还是 WSL 中检测并启动 Agent。"
+            "agentRuntimeDescription": "选择默认在 Windows 还是 WSL 中检测并启动 Agent。",
+            "installedAgentsWsl": "WSL 中已安装的 Agent",
+            "manual": "手动",
+            "permission": "权限",
+            "permissions": "权限",
+            "runtime": "运行时",
+            "skip": "跳过",
+            "yolo": "Yolo"
           }
         },
         "appearance": {
           "search": {
+            "1f2880a9d5": "agentstart",
+            "36e006efc1": "应用",
             "839fb1e3ed": "工具箱",
             "ac79fe4a04": "显示",
             "648eeada79": "隐藏",
@@ -4064,6 +4179,7 @@
             "08c86bf58e": "吉蒂诺尔",
             "bce3ac317a": "git",
             "7164edf71a": "文件资源管理器中与 .gitignore 匹配的暗淡文件。",
+            "cursor": "cursor",
             "f8129fb544": "显示 Git 忽略的文件",
             "2f12e1aa3a": "用户界面",
             "5095258df2": "界面",
@@ -4134,6 +4250,10 @@
               "translation": "翻译"
             },
             "leftSidebarAppearance": {
+              "background": "背景",
+              "project": "项目",
+              "terminal": "终端",
+              "tint": "色调",
               "title": "左侧边栏外观",
               "description": "让左侧边栏匹配终端、保持默认，或使用色调。"
             },
@@ -4147,8 +4267,14 @@
             "usagePercentageDisplayTitle": "用量百分比",
             "usagePercentageDisplayDescription": "选择以已用或剩余百分比显示提供商限额。",
             "showPinnedWorktreesInGroups": {
+              "duplicate": "重复",
+              "group": "分组",
+              "original": "原始",
+              "pinned": "已固定",
               "title": "也在原来的列表中显示已固定的工作树",
-              "description": "已固定的工作树会保留在 Pinned 中，同时也显示在全部、项目、状态和评审中。"
+              "description": "已固定的工作树会保留在 Pinned 中，同时也显示在全部、项目、状态和评审中。",
+              "workspace": "工作区",
+              "worktree": "工作树"
             },
             "cursorUsage": "Cursor 使用量",
             "cursorUsageDescription": "在状态栏中显示 Cursor 套餐用量。"
@@ -4305,7 +4431,14 @@
         },
         "general": {
           "search": {
+            "5250cf0e48": "固定",
+            "641358460a": "拼写",
+            "867dddea41": "已固定",
+            "a51d23f4a1": "拼写检查",
+            "afa37a34e1": "关闭",
             "bdfb6dc21b": "喜欢",
+            "d755962089": "红色下划线",
+            "distro": "发行版",
             "e6b01c8e30": "反馈",
             "b65665703a": "支持",
             "06ea5a69a6": "GitHub",
@@ -4324,6 +4457,7 @@
             "e49e739a59": "下载",
             "c9d8c1ce66": "发行说明",
             "9e86ccd05c": "版本",
+            "execution": "执行",
             "f89a94773c": "更新",
             "79ff46776e": "检查应用程序更新并安装较新的 AgentStart 版本。",
             "e15af4eb64": "检查更新",
@@ -4335,6 +4469,7 @@
             "0a00691c06": "Shell 命令",
             "dbeb1f348e": "命令",
             "88d3df9ce9": "终端",
+            "f96cdaf37d": "拼写检查",
             "fb4f338a3d": "路径",
             "924a660a78": "CLI",
             "ca529079bf": "注册或删除 AgentStart CLI 命令。",
@@ -4414,12 +4549,16 @@
             "8e593f04fc": "关闭固定标签页前显示确认对话框。",
             "defaultProjectRuntime": "默认项目运行时",
             "defaultProjectRuntimeDescription": "选择本地 Windows 项目继承的运行时。",
-            "d2d2d929c0": "Rich Markdown Spellcheck",
+            "d2d2d929c0": "富 Markdown 拼写检查",
             "4497e2e2bb": "在编辑富 Markdown 时显示浏览器拼写下划线和建议。",
             "e61157e926": "编辑器自动换行",
             "005be5c699": "在文件编辑器中自动换行长行，而无需水平滚动。",
             "editorFontFamily": "编辑器字体",
-            "editorFontFamilyDesc": "文件编辑器和差异视图使用的字体。留空则使用终端字体。"
+            "editorFontFamilyDesc": "文件编辑器和差异视图使用的字体。留空则使用终端字体。",
+            "projectRuntime": "项目运行时",
+            "runtime": "运行时",
+            "windowsHost": "Windows 主机",
+            "wsl": "wsl"
           }
         },
         "git": {
@@ -4436,6 +4575,7 @@
             "b7e52124c7": "速率限制",
             "65b69d9f80": "Graqh QL",
             "1139f61512": "当前 GitHub CLI REST、搜索和 GraphQL 速率限制。",
+            "diffBase": "差异基准",
             "ff86e354c4": "GitHub API 预算",
             "035134fcd9": "工作树",
             "0c75583ca9": "安全地",
@@ -4476,7 +4616,7 @@
             "defaultBranch": "默认分支",
             "repositoryDefault": "仓库默认",
             "branchUpstream": "分支上游",
-            "118c23484b": "Add AgentStart attribution to commits and PRs."
+            "118c23484b": "为提交和 PR 添加 AgentStart 署名。"
           }
         },
         "integrations": {
@@ -4573,6 +4713,12 @@
           },
           "settings": {
             "search": {
+              "5bff6a2ef0": "侧边栏",
+              "5e5b8878bf": "手机",
+              "648eeada79": "隐藏",
+              "6cf5f54ce1": "按钮",
+              "74618577c7": "移动端",
+              "ac79fe4a04": "显示",
               "b730ff7049": "实验性",
               "8d4ba0ef09": "Beta",
               "7e801801ac": "偏僻的",
@@ -4714,15 +4860,21 @@
           "search": {
             "603c68b68c": "AgentStart.yaml",
             "9dc60d7f6d": "GitHub",
+            "agentRuntime": "Agent 运行时",
+            "behindUpstream": "落后于上游",
             "c5e8bdbcbb": "默认跳过",
             "a69c5cbe90": "默认运行",
             "80c490b012": "问",
+            "defaultBranch": "默认分支",
+            "distro": "发行版",
+            "execution": "执行",
             "f9d84b7971": "设置运行策略",
             "c00a549e03": "当安装脚本可用时选择默认行为。",
             "cdfe398068": "何时运行安装程序",
             "5e9445bbfd": "权威性",
             "f1e1bfa89f": "来源",
             "1d90a6cfbb": "两个都",
+            "fastForward": "快进",
             "fcb8fa8144": "共享",
             "0432d2fb7c": "当地的",
             "ed269fad69": "命令源",
@@ -4808,13 +4960,22 @@
             "92af66c7ce": "项目名称",
             "883aad2801": "侧边栏和选项卡的项目特定显示详细信息。",
             "7e1e456a95": "显示名称",
+            "fork": "派生",
             "keepForkUpToDate": "保持 Fork 最新",
             "keepForkUpToDateDescription": "从 upstream 安全地快进此 Fork。",
+            "origin": "origin",
             "projectRuntime": "项目运行时",
             "projectRuntimeDescription": "选择此项目运行在 Windows 还是 WSL。",
             "copy": "复制",
             "clone": "克隆",
-            "apfs": "apfs"
+            "apfs": "apfs",
+            "runtime": "运行时",
+            "skillRuntime": "技能运行时",
+            "syncFork": "同步派生",
+            "upstream": "上游",
+            "waitForSetupBeforeAgent": "启动 Agent 前等待设置完成",
+            "windowsHost": "Windows 主机",
+            "wsl": "wsl"
           }
         },
         "runtime": {
@@ -4877,8 +5038,15 @@
             }
           },
           "search": {
+            "39ea7c0d28": "终端",
+            "4f7f8f28ca": "透明度",
+            "a0c44061ee": "确认",
+            "agent": "Agent",
             "c047f398cc": "启动",
             "b872de3926": "位置",
+            "close_terminal": "关闭",
+            "command": "命令",
+            "f6dd9ff606": "背景",
             "fd6c24313d": "新的",
             "f44643328e": "标签页",
             "18ce996647": "垂直的",
@@ -4964,6 +5132,8 @@
             "957a0203fc": "单词分隔符",
             "56fff3d113": "记忆",
             "fffdff40a7": "缓冲",
+            "process": "进程",
+            "prompt": "提示词",
             "rows": "行",
             "f7d56b6281": "保留的桌面终端行数。",
             "7674e758e1": "回滚行数",
@@ -5037,6 +5207,13 @@
             "33031c1465": "文字大小",
             "0fe0073f0c": "新窗格和实时更新的默认终端字体大小。",
             "5930244899": "字体大小",
+            "running": "运行中",
+            "scroll": "滚动",
+            "scrolling": "滚动",
+            "speed": "速度",
+            "stop": "停止",
+            "trackpad": "触控板",
+            "tui": "TUI",
             "warp_import": {
               "title": "从 Warp 导入",
               "description": "将 Warp 主题导入为 AgentStart 终端主题。",
@@ -5045,6 +5222,7 @@
               "keyword_yaml": "yaml",
               "keyword_legacy_title": "从 Warp 导入主题"
             },
+            "wheel": "滚轮",
             "yaml_import": {
               "title": "从 YAML 导入",
               "description": "将主题 YAML 文件导入为 AgentStart 终端主题。",
@@ -5190,7 +5368,8 @@
                   "7755c28af5": "安装 GitHub CLI",
                   "6f30fc4216": "此运行时暂不支持 GitHub CLI 状态。",
                   "account_scope_prefix": "账户范围",
-                  "23cb5a0dee": "Install the GitHub CLI to enable pull requests and checks."
+                  "23cb5a0dee": "安装 GitHub CLI 以启用拉取请求和检查。",
+                  "githubDescription": "通过 GitHub CLI 查看拉取请求和检查。"
                 }
               }
             }
@@ -5398,7 +5577,7 @@
           "a8f3e2c1b4": "每周额度",
           "b7e2d9f0a3": "与终端中 grok /usage 屏幕显示的每周额度百分比相同。",
           "c6d1a8f4e2": "{{when}} 重置",
-          "e6dadc1e2b": "Monthly usage",
+          "e6dadc1e2b": "月度用量",
           "75e396bf42": "Grok 统一计费账户的月度已用额度。",
           "b36fa2c908": "已登录。AgentStart 读取存储在磁盘上的 Grok CLI 会话。",
           "f08c41de73": "会话已过期 — 在运行 AgentStart 的计算机上运行 grok 并等待其启动。如果提示，请完成登录，然后点击刷新使用量。无需发送聊天消息。"
@@ -5505,7 +5684,7 @@
           "217beb0658": "GitHub",
           "d6e5dba05a": "登录",
           "0b4a7d23ab": "登录",
-          "50db38cf4b": "Pull requests and check status."
+          "50db38cf4b": "拉取请求和检查状态。"
         },
         "NotificationStep": {
           "3bede04483": "发送测试通知",
@@ -5539,7 +5718,7 @@
           "198b148b3c": "选择默认 Agent",
           "windowsTerminalTitle": "设置 Windows 终端默认值",
           "windowsTerminalSubtitle": "为新面板选择默认 Shell，以及终端中右键单击的行为。",
-          "ae3b00ca82": "Set up GitHub reviews"
+          "ae3b00ca82": "设置 GitHub 评审"
         },
         "OnboardingFooter": {
           "ba58547306": "返回",
@@ -5646,13 +5825,15 @@
             "b3c60c2b7c": "智能",
             "fda67f0b61": "当前项目",
             "placeholderWorkspaceName": "输入工作区名称",
+            "smartPlaceholder": "输入名称、#1234 或 GitHub PR URL",
+            "smartPlaceholderWithBranches": "输入名称、#1234、分支或 GitHub PR URL",
             "unavailable": "不可用",
             "searchBranches": "搜索分支",
             "workspaceName": "工作区名称",
-            "switchProjectSourceTitle": "Switch project source?",
-            "differentProjectSource": ", which is different from the selected project source.",
-            "currentProjectSource": "current project source",
-            "searchGitHub": "Search GitHub PRs"
+            "switchProjectSourceTitle": "切换项目源？",
+            "differentProjectSource": "，与所选项目源不同。",
+            "currentProjectSource": "当前项目源",
+            "searchGitHub": "搜索 GitHub PR"
           },
           "ProjectCombobox": {
             "search": "搜索项目...",
@@ -6067,6 +6248,13 @@
             "5eca672aac": "复制技能安装命令",
             "6ff813fc1d": "复制技能命令失败。",
             "b8ad063571": "复制技能安装命令。"
+          },
+          "CommandPaletteFeatureTipVisual": {
+            "ab94e16d44": "创建工作树“{{value0}}”"
+          },
+          "CommandPaletteTipDialog": {
+            "8241897205": "可随时重新绑定快捷键：",
+            "c0bb9f869b": "设置 → 快捷键"
           },
           "FeatureTipActions": {
             "eb04abece8": "也许稍后"
@@ -6876,7 +7064,7 @@
               "uncheckDiagnostics": "取消勾选\"附加最近的诊断日志\"并重试，或复制详细信息。",
               "checkConnection": "请检查网络连接并重试，或复制详细信息。",
               "notSent": "崩溃报告未发送",
-              "copyDetails": "Copy Details",
+              "copyDetails": "复制详情",
               "sentWithoutDiagnostics": "崩溃报告已发送，但未附带诊断日志",
               "diagnosticsReason": "诊断日志未附加：{{value0}}"
             }
@@ -7290,7 +7478,7 @@
             "834cb3f23d": "使用 AI 修复",
             "783a808870": "关闭"
           },
-          "e7f8a9b0c1": "Git Graph"
+          "e7f8a9b0c1": "Git 图谱"
         },
         "SourceControlAgentActionDialog": {
           "8e856842d1": "无法启动选定的 Agent。",
@@ -7453,11 +7641,6 @@
           }
         },
         "index": {
-          "70893f017b": "边",
-          "7b415c39e9": "顶部",
-          "864111caa2": "活动栏位置",
-          "8bc2bbc3a0": "资源管理器",
-          "aiVaultSessionHistory": "Agent",
           "folderWorkspaces": "已附加的工作树",
           "parentPrChecks": "PR 检查"
         },
@@ -7829,64 +8012,64 @@
           }
         },
         "GitGraphState": {
-          "f3a2c1d0e5": "Failed to load commits",
-          "a4b5c6d7e8": "Failed to load more commits"
+          "f3a2c1d0e5": "加载提交失败",
+          "a4b5c6d7e8": "加载更多提交失败"
         },
         "git-graph": {
           "BranchFilterDropdown": {
-            "a1b2c3d4e5": "All branches",
+            "a1b2c3d4e5": "所有分支",
             "b2c3d4e5f6": "{{value0}} branches",
             "c3d4e5f6a7": "Filter branches…",
-            "d4e5f6a7b8": "Show all branches"
+            "d4e5f6a7b8": "显示所有分支"
           },
           "CommitContextMenu": {
-            "a1b2c3d4e5": "Open commit in browser",
-            "b2c3d4e5f6": "Copy commit hash",
-            "c3d4e5f6a7": "Copy commit message",
-            "d4e5f6a7b8": "Explain changes"
+            "a1b2c3d4e5": "在浏览器中打开提交",
+            "b2c3d4e5f6": "复制提交哈希",
+            "c3d4e5f6a7": "复制提交信息",
+            "d4e5f6a7b8": "解释更改"
           },
           "CommitDetails": {
-            "a1b2c3d4e5": "Failed to load commit files",
+            "a1b2c3d4e5": "加载提交文件失败",
             "b2c3d4e5f6": "Hash",
             "c3d4e5f6a7": "Parents",
             "d4e5f6a7b8": "Author",
             "e5f6a7b8c9": "Loading files…",
-            "f6a7b8c9d0": "No file changes in this commit",
-            "a7b8c9d0e1": "Open all changes together"
+            "f6a7b8c9d0": "此提交中没有文件更改",
+            "a7b8c9d0e1": "一起打开所有更改"
           },
           "CommitTable": {
             "b2c3d4e5f6": "Description",
             "c3d4e5f6a7": "Date",
             "d4e5f6a7b8": "Author",
             "e5f6a7b8c9": "Commit",
-            "a1b2c3d4e5": "Load More Commits"
+            "a1b2c3d4e5": "加载更多提交"
           },
           "ControlBar": {
-            "a1b2c3d4e5": "Show Remote Branches",
-            "b2c3d4e5f6": "Find commits",
+            "a1b2c3d4e5": "显示远程分支",
+            "b2c3d4e5f6": "查找提交",
             "c3d4e5f6a7": "Refresh",
-            "d4e5f6a7b8": "Close Git Graph"
+            "d4e5f6a7b8": "关闭 Git 图谱"
           },
           "FindWidget": {
-            "a1b2c3d4e5": "No results",
+            "a1b2c3d4e5": "无结果",
             "b2c3d4e5f6": "{{value0}} of {{value1}}",
-            "c3d4e5f6a7": "Find by subject, author, or hash…",
-            "d4e5f6a7b8": "Previous match",
-            "e5f6a7b8c9": "Next match",
-            "f6a7b8c9d0": "Close find"
+            "c3d4e5f6a7": "按主题、作者或哈希查找…",
+            "d4e5f6a7b8": "上一个匹配",
+            "e5f6a7b8c9": "下一个匹配",
+            "f6a7b8c9d0": "关闭查找"
           },
           "UncommittedRow": {
-            "a1b2c3d4e5": "Uncommitted Changes"
+            "a1b2c3d4e5": "未提交的更改"
           },
           "GitGraphView": {
             "a1b2c3d4e5": "Loading commits…",
-            "b2c3d4e5f6": "No commits yet",
-            "c3d4e5f6a7": "No matching commits in the loaded history yet — load more to keep searching.",
-            "d4e5f6a7b8": "No commits found for the selected branches in the loaded history.",
-            "e5f6a7b8c9": "Load More Commits"
+            "b2c3d4e5f6": "暂无提交",
+            "c3d4e5f6a7": "已加载的历史中尚无匹配的提交——加载更多以继续搜索。",
+            "d4e5f6a7b8": "在已加载的历史中，所选分支没有找到任何提交。",
+            "e5f6a7b8c9": "加载更多提交"
           },
           "useGitGraphView": {
-            "a1b2c3d4e6": "Could not find that commit in the loaded history"
+            "a1b2c3d4e6": "在已加载的历史中找不到该提交"
           },
           "CommitMenu": {
             "addTag": "Add Tag…",
@@ -7895,73 +8078,73 @@
             "cherryPick": "Cherry Pick…",
             "revert": "Revert…",
             "drop": "Drop…",
-            "merge": "Merge into current branch…",
-            "rebase": "Rebase current branch on this Commit…",
-            "reset": "Reset current branch to this Commit…",
-            "copySubject": "Copy commit subject"
+            "merge": "合并到当前分支…",
+            "rebase": "将当前分支变基到此提交…",
+            "reset": "将当前分支重置到此提交…",
+            "copySubject": "复制提交主题"
           },
           "CommitWrite": {
-            "tagTitle": "Add tag",
-            "tagBody": "Create a tag pointing at commit {{commit}}.",
-            "tagConfirm": "Add Tag",
-            "branchTitle": "Create branch",
-            "branchBody": "Create a branch pointing at commit {{commit}}.",
-            "branchConfirm": "Create Branch",
-            "checkoutTitle": "Check out commit?",
-            "checkoutBody": "Check out {{commit}} directly. This leaves the worktree on a detached HEAD until you check out a branch again.",
+            "tagTitle": "添加标签",
+            "tagBody": "创建指向提交 {{commit}} 的标签。",
+            "tagConfirm": "添加标签",
+            "branchTitle": "创建分支",
+            "branchBody": "创建指向提交 {{commit}} 的分支。",
+            "branchConfirm": "创建分支",
+            "checkoutTitle": "检出提交？",
+            "checkoutBody": "直接检出 {{commit}}。这会让工作树处于游离 HEAD 状态，直到你再次检出某个分支。",
             "checkoutConfirm": "Checkout",
-            "cherryPickTitle": "Cherry pick commit?",
-            "cherryPickBody": "Apply the changes from {{commit}} on top of the current branch.",
-            "cherryPickConfirm": "Cherry Pick",
-            "revertTitle": "Revert commit?",
-            "revertBody": "Add a new commit on the current branch that undoes the changes in {{commit}}.",
+            "cherryPickTitle": "拣选提交？",
+            "cherryPickBody": "将 {{commit}} 的更改应用到当前分支之上。",
+            "cherryPickConfirm": "拣选",
+            "revertTitle": "还原提交？",
+            "revertBody": "在当前分支上添加一个新提交，以撤销 {{commit}} 中的更改。",
             "revertConfirm": "Revert",
-            "dropTitle": "Drop commit?",
-            "dropBody": "Rewrite the current branch to remove {{commit}}. Commits after it get new hashes, so anything already sharing them will need to be updated.",
-            "dropConfirm": "Drop Commit",
-            "mergeTitle": "Merge into current branch",
-            "mergeBody": "Merge {{commit}} into the branch checked out in this worktree.",
+            "dropTitle": "丢弃提交？",
+            "dropBody": "重写当前分支以移除 {{commit}}。其后的提交会获得新的哈希，因此任何已经共享这些提交的内容都需要更新。",
+            "dropConfirm": "丢弃提交",
+            "mergeTitle": "合并到当前分支",
+            "mergeBody": "将 {{commit}} 合并到此工作树中检出的分支。",
             "mergeConfirm": "Merge",
-            "rebaseTitle": "Rebase current branch on commit?",
-            "rebaseBody": "Replay the current branch's commits on top of {{commit}}. The replayed commits get new hashes.",
+            "rebaseTitle": "将当前分支变基到该提交？",
+            "rebaseBody": "将当前分支的提交重放到 {{commit}} 之上。重放的提交会获得新的哈希。",
             "rebaseConfirm": "Rebase",
-            "resetTitle": "Reset current branch to commit",
-            "resetBody": "Move the current branch to {{commit}}. A hard reset also discards uncommitted changes.",
+            "resetTitle": "将当前分支重置到该提交",
+            "resetBody": "将当前分支移动到 {{commit}}。硬重置还会丢弃未提交的更改。",
             "resetConfirm": "Reset"
           },
           "CommitWriteDialog": {
-            "resetSoft": "Soft — keep the index and working tree",
-            "resetMixed": "Mixed — reset the index, keep the working tree",
-            "resetHard": "Hard — discard index and working tree changes",
-            "tagName": "Tag name",
-            "branchName": "Branch name",
-            "tagMessage": "Message (optional — creates an annotated tag)",
-            "force": "Replace an existing tag with this name",
-            "checkout": "Check out the new branch",
-            "noFf": "Always create a merge commit",
-            "squash": "Squash the merged commits into one",
-            "squashHint": "Git rejects squash together with a merge commit, so squash wins when both are set.",
-            "resetMode": "Reset mode",
-            "mainline": "Mainline parent — changes are measured against it",
+            "resetSoft": "软重置——保留暂存区和工作树",
+            "resetMixed": "混合——重置暂存区，保留工作树",
+            "resetHard": "硬重置——丢弃暂存区和工作树的更改",
+            "tagName": "标签名称",
+            "branchName": "分支名称",
+            "tagMessage": "消息（可选——创建附注标签）",
+            "force": "用此名称替换现有的标签",
+            "checkout": "检出新分支",
+            "noFf": "始终创建合并提交",
+            "squash": "将合并的提交压缩为一个",
+            "squashHint": "Git 不允许压缩与合并提交同时使用，因此两者都设置时以压缩为准。",
+            "resetMode": "重置模式",
+            "mainline": "主线父提交——更改以它为基准衡量",
             "cancel": "Cancel"
           },
           "CommitWriteRun": {
             "tagOk": "Tag {{name}} created",
-            "branchCheckedOut": "Branch {{name}} created and checked out",
+            "branchCheckedOut": "已创建并检出分支 {{name}}",
             "branchOk": "Branch {{name}} created",
             "checkoutOk": "Checked out {{commit}}",
             "cherryPickOk": "Cherry picked {{commit}}",
             "revertOk": "Reverted {{commit}}",
             "dropOk": "Dropped {{commit}}",
-            "mergeOk": "Merged {{commit}} into the current branch",
-            "rebaseOk": "Rebased the current branch onto {{commit}}",
-            "resetOk": "Reset the current branch to {{commit}}"
+            "mergeOk": "已将 {{commit}} 合并到当前分支",
+            "rebaseOk": "已将当前分支变基到 {{commit}}",
+            "resetOk": "已将当前分支重置到 {{commit}}"
           },
           "CommitWriteActions": {
-            "conflicts": "Stopped with conflicts — resolve them in Source Control",
-            "failed": "Git command failed",
-            "subjectCopied": "Commit subject copied",
-            "subjectCopyFailed": "Failed to copy commit subject"
+            "conflicts": "因冲突而停止——请在源代码管理中解决",
+            "failed": "Git 命令失败",
+            "subjectCopied": "已复制提交主题",
+            "subjectCopyFailed": "复制提交主题失败"
           }
         }
       },
@@ -7989,7 +8172,7 @@
           "monday": "Mon",
           "wednesday": "Wed",
           "friday": "Fri",
-          "tokensLabel": "Daily token usage over the past year",
+          "tokensLabel": "过去一年的每日 Token 用量",
           "valueLabel": "过去一年的每日预估 API 价值",
           "less": "Less",
           "more": "More",
@@ -8000,8 +8183,8 @@
       "home": {
         "page": {
           "title": "活动",
-          "description": "A year of agent work, with today in context.",
-          "contributions": "Contribution history",
+          "description": "一年的 Agent 工作，并以今天为背景。",
+          "contributions": "贡献历史",
           "tokenDescription": "归因到 AgentStart 工作树的 Provider 上报 Token 用量。",
           "tokens": "Tokens",
           "apiValue": "API 价值",
@@ -8014,7 +8197,7 @@
           "tokensUnavailable": "暂时没有归因到 AgentStart 工作树的 Provider Token 用量。",
           "tokenCoverage": "Token 总数使用 AgentStart 工作树中各支持 Agent 的请求级归因记录；缓存输入不会重复计算，缺少请求级归因的会话汇总会被排除。",
           "unpricedCoverage": "缺少权威定价明细的 Token 不会计入价值总额。",
-          "cursorMeteredValue": "Cursor-metered spend: {{value}} (actual plan deduction; API value above is a list-price estimate)."
+          "cursorMeteredValue": "Cursor 计费支出：{{value}}（实际套餐扣费；上方的 API 价值为按标价估算）。"
         },
         "activitySummary": {
           "agentsSpawned": "启动的 Agent",
@@ -8078,7 +8261,7 @@
                 "limit": {
                   "resume": {
                     "dispatch": {
-                      "8ec3ff2193": "The agent pane did not accept the replayed prompt."
+                      "8ec3ff2193": "Agent 面板未接受重放的提示词。"
                     }
                   }
                 }
@@ -8129,7 +8312,7 @@
       "launchOptions": "启动选项",
       "cancel": "Cancel",
       "model": "Model",
-      "fastMode": "Fast mode",
+      "fastMode": "快速模式",
       "thinking": "Thinking",
       "optionValue": {
         "none": "None",
@@ -8137,7 +8320,7 @@
         "low": "Low",
         "medium": "Medium",
         "high": "High",
-        "xhigh": "Extra high",
+        "xhigh": "极高",
         "max": "Max",
         "ultra": "Ultra"
       }
@@ -8528,6 +8711,614 @@
       "previous": "上一组配色",
       "applyNumbered": "应用第 {{value0}} 个配色预设，共 {{value1}} 个",
       "next": "下一组配色"
+    }
+  },
+  "agent": {
+    "launch": {
+      "platformUnavailable": "运行时未报告其终端平台。",
+      "runtimeUnavailable": "无法在其运行时主机上准备 Agent。"
+    },
+    "startup": {
+      "unclosedQuote": "CLI 参数包含未闭合的引号。"
+    },
+    "status": {
+      "failed": "失败",
+      "idle": "空闲",
+      "interrupted": "已中断"
+    }
+  },
+  "clipboard": {
+    "image": {
+      "tooLarge": "剪贴板图片过大"
+    },
+    "read-too-large": "剪贴板文本对此粘贴目标来说过大。",
+    "write-too-large": "剪贴板文本过大，无法安全复制。"
+  },
+  "contextual-tours": {
+    "0e5e66b764": "选择由哪个 Agent 开始工作",
+    "0ec1d9bac9": "拆分终端窗格",
+    "205dfe6b66": "拆分终端",
+    "26ef6cb9e3": "就地标记设计反馈",
+    "2955ac8398": "每个工作树都有自己的分支，因此并行工作互不干扰。",
+    "37285cd763": "选择创建工作树时要打开的 Agent。",
+    "4a9db31908": "为 Agent 抓取页面上下文",
+    "7b83a21ec3": "从关联的拉取请求开始可获得简短的 PR 名称，也可以留空，让第一条 Agent 消息自动命名。",
+    "8485743c15": "标注元素并将这些注释发送给 Agent。",
+    "875e49569a": "使用 {terminal.splitRight} 打开第二个终端窗格，或右键单击窗格以查看拆分选项。",
+    "aa239e1761": "并行开始另一项任务",
+    "ab573bd0e9": "保持登录状态",
+    "c016688c4f": "为它命名，或从现有工作开始",
+    "cc98d6cf9e": "将现有登录信息带入 AgentStart，即可立即保持登录状态。",
+    "d322379476": "AgentStart 将每项任务隔离在各自的工作树中，并从你的基础分支分叉。",
+    "eca71e5d1a": "选择项目",
+    "f54a59e067": "使用抓取工具复制页面元素的上下文，供 Agent 使用。"
+  },
+  "executionHost": {
+    "allHosts": "所有主机",
+    "localLinux": "本地 Linux",
+    "localMac": "本地 Mac",
+    "localWindows": "本地 Windows",
+    "thisComputer": "本机",
+    "wsl": "WSL · {{distribution}}"
+  },
+  "feature-tips": {
+    "0a8b4458e2": "在一个地方搜索项目和文件、切换标签页、打开设置或启动 Agent。",
+    "1b0f375850": "安装 CLI 和技能",
+    "3fe1fc9a33": "让 Agent 通过 AgentStart CLI 驱动 AgentStart",
+    "5b8027fa0e": "知道了",
+    "8d67d7764a": "让 Agent 能够协调子工作树并在工作树之间通信。",
+    "c3cab3c204": "使用 <shortcut> 打开一切",
+    "d19ceca501": "提示"
+  },
+  "feature-wall": {
+    "03d648492d": "让 Agent 能够管理和协调 AgentStart 工作区，以执行更大型的任务。",
+    "093885fbec": "多任务",
+    "0a3df4164f": "借助 AI 交付",
+    "0bb18642b7": "用量",
+    "205b4561ed": "工作区",
+    "28c64edcfe": "同时运行多个 Agent，并在各自独立的工作区中跟踪进度。",
+    "2935db9586": "在 Agent 完成、需要关注或被阻塞时立即知晓。",
+    "33157d99ae": "代码评审",
+    "3dfbfca0bb": "查看更改内容，留下有针对性的反馈，并将其发送回 Agent。",
+    "45a73aece5": "PR 检查和评论",
+    "45cdd75dbe": "AgentStart 将每项任务拆分为独立的工作区，以便 Agent 并行运行。",
+    "4ad3103d38": "在“更改和评审”中查看 PR 状态。",
+    "4ea5c3af47": "了解哪些 Agent 正在工作、等待、运行或被阻塞。",
+    "533597e2b3": "查看所有已连接账户的用量和速率限制，从而知道何时切换。",
+    "54a2cf5e63": "浏览器",
+    "5ab087ec11": "开启通知",
+    "5e568e3868": "Agent 可见性",
+    "64acf7e2a7": "Agent",
+    "6926cb0e99": "编排",
+    "69514c32e0": "将有针对性的评审注释发送给 Agent。",
+    "70440046a3": "笔记",
+    "70593204ec": "预先选好偏好的 Agent，更快开始新工作。",
+    "70930331cf": "使用类 Notion 的 Markdown 编辑器，无需离开 AgentStart 即可撰写笔记。",
+    "709b371089": "同时在两个不同的工作树中工作。每个工作树都是隔离的（即使在同一个项目中），非常适合同时开发两个功能。",
+    "72a691c081": "无需离开 AgentStart 即可浏览你的 Web 应用。一键抓取任意元素，并将其确切的源代码和样式发送给 Agent。",
+    "7d9ff4f0de": "可见性",
+    "7e1fbc831b": "使用 AgentStart 的浏览器",
+    "7e39fdc7c6": "将你的终端环境带入 AgentStart，然后拆分窗格，让服务器、测试、日志和 Agent 并排运行。",
+    "880687b1da": "笔记和差异",
+    "8de869fd7d": "PR 检查",
+    "93ef7c6368": "工作台",
+    "96402c9d0a": "在多个仓库中开始工作",
+    "9a739e27d2": "选择默认 Agent",
+    "9bf3317c89": "在 AgentStart 的浏览器中运行你的应用，将选中的 UI 元素发送给 Agent，并让 Agent 与你的网页交互。",
+    "a1f52cdcb3": "终端",
+    "a6ab426046": "自动运行安装和设置命令，让每个新工作树都可供 Agent 使用。",
+    "b50a7bd9fb": "让 AI 为你准备提交和 PR 草稿。",
+    "b56f64241a": "注册 AgentStart shell 命令，并为浏览器、计算机和编排工作流安装 Agent 技能。",
+    "c0feda1125": "启用 AgentStart CLI",
+    "c7e9fb2ea6": "编辑器",
+    "c88e5adc13": "将你的重要仓库加入 AgentStart，无需到处查找文件夹即可开始 Agent 工作。",
+    "e4457b5784": "让 Agent、测试和开发日志同时可见。",
+    "f626e0facc": "自动执行工作区设置"
+  },
+  "feature": {
+    "wall": {
+      "agentCapabilitySetupStatus": {
+        "computerUseUnavailable": "计算机使用需要本地 AgentStart 守护进程连接"
+      }
+    }
+  },
+  "newWorkspace": {
+    "forkPushRestricted": "此 PR 关闭了“允许维护者编辑”；推送到该 fork 可能会被 GitHub 拒绝。",
+    "sourceHint": {
+      "branches": "没有匹配的分支。",
+      "github": "开始输入以搜索 GitHub 拉取请求。",
+      "smart": "开始输入以创建名称或查找来源。"
+    }
+  },
+  "onboarding": {
+    "featureSetup": {
+      "computerUseUnavailable": "计算机使用需要本地 AgentStart 守护进程连接"
+    }
+  },
+  "ports": {
+    "remoteBrowserCreateFailed": "无法创建远程浏览器标签页。"
+  },
+  "project": {
+    "hostSetup": {
+      "attention": "项目设置需要注意",
+      "checking": "正在检查主机能力",
+      "incompatible": "运行时主机版本不兼容",
+      "notSetUp": "项目尚未在此主机上设置",
+      "progress": "项目设置正在进行中",
+      "tracked": "项目已在此主机上跟踪，但尚未设置",
+      "unsupported": "此主机不支持该项目",
+      "upgrade": "在此主机上更新 AgentStart 以设置项目"
+    },
+    "kind": {
+      "folder": "文件夹",
+      "git": "Git"
+    }
+  },
+  "runtime": {
+    "agent": {
+      "session": {
+        "did": {
+          "not": {
+            "accept": {
+              "the": {
+                "followup": "Agent 会话未接受后续消息"
+              }
+            }
+          }
+        }
+      }
+    },
+    "agentStatusTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "artifactTarget": {
+      "unavailable": "产物需要当前的 AgentStart 守护进程连接。"
+    },
+    "clipboardTarget": {
+      "unavailable": "保存剪贴板图片需要当前的 AgentStart 守护进程连接。"
+    },
+    "compatibility": {
+      "clientTooOld": "此 AgentStart 客户端对于所选运行时主机来说版本过旧。请在此机器上更新 AgentStart。客户端协议 {{clientVersion}}，主机要求客户端协议 {{requiredVersion}}。",
+      "compatible": "运行时客户端和主机兼容。",
+      "hostTooOld": "所选运行时主机对此客户端来说版本过旧。请在主机上更新 AgentStart。主机协议 {{hostVersion}}，客户端要求主机协议 {{requiredVersion}}。"
+    },
+    "crash": {
+      "diagnostic": {
+        "response": {
+          "is": {
+            "missing": {
+              "its": {
+                "result": "崩溃诊断响应缺少其结果"
+              }
+            }
+          }
+        }
+      },
+      "report": {
+        "detail": {
+          "value": {
+            "is": {
+              "missing": "崩溃报告缺少详情值"
+            }
+          }
+        },
+        "diagnostic": {
+          "bundle": {
+            "status": {
+              "is": {
+                "missing": "崩溃报告缺少诊断包状态"
+              }
+            }
+          }
+        },
+        "integer": {
+          "exceeds": {
+            "safe": {
+              "range": "崩溃报告整数超出安全范围"
+            }
+          }
+        },
+        "platform": {
+          "is": {
+            "unknown": "崩溃报告平台未知"
+          }
+        },
+        "source": {
+          "is": {
+            "missing": "崩溃报告缺少来源",
+            "unknown": "崩溃报告来源未知"
+          }
+        },
+        "status": {
+          "is": {
+            "missing": "崩溃报告缺少状态",
+            "unknown": "崩溃报告状态未知"
+          }
+        }
+      },
+      "submission": {
+        "response": {
+          "is": {
+            "missing": {
+              "its": {
+                "result": "崩溃提交响应缺少其结果"
+              }
+            }
+          }
+        }
+      }
+    },
+    "dangerousApprovalTarget": {
+      "unavailable": "通行密钥批准需要当前的 AgentStart 守护进程连接。"
+    },
+    "diagnostics": {
+      "invalid": {
+        "field": "运行时诊断 {{field}} 无效。"
+      },
+      "missing": {
+        "field": "运行时诊断响应缺少 {{field}}。"
+      },
+      "unsafe": {
+        "integer": "运行时诊断 {{field}} 超出 JavaScript 的安全整数范围。"
+      }
+    },
+    "emulatorTarget": {
+      "unavailable": "模拟器需要当前的 AgentStart 守护进程连接。"
+    },
+    "feedback": {
+      "submitFailed": "反馈提交失败"
+    },
+    "file": {
+      "directoryOutsideOwner": "目录位于所属运行时工作树之外",
+      "downloadStalled": "远程下载在到达 EOF 之前停滞",
+      "editorTooLarge": "远程文件过大，无法在编辑器中打开（{{bytes}} 字节）",
+      "outsideOwner": "远程文件位于所属运行时工作树之外"
+    },
+    "folderWorkspaceTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "hostModel": {
+      "projectContext": "项目和工作区上下文"
+    },
+    "invalid": {
+      "star": {
+        "prompt": {
+          "mode": "无效的星标提示模式"
+        }
+      }
+    },
+    "preflightTarget": {
+      "unavailable": "Agent 检测需要当前的 AgentStart 守护进程连接。"
+    },
+    "projectContext": {
+      "unsupported": "所选运行时主机尚不支持显式指定工作区运行主机。请在主机上更新 AgentStart 后重试。"
+    },
+    "projectGroupTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "projectHostSetupTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "projectSetup": {
+      "unsupported": "所选运行时主机尚不支持项目主机设置。请在主机上更新 AgentStart 后重试。"
+    },
+    "projectTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "renderer": {
+      "error": {
+        "response": {
+          "is": {
+            "missing": {
+              "its": {
+                "result": "渲染器错误响应缺少其结果"
+              }
+            }
+          }
+        }
+      }
+    },
+    "repoProtocolTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "ritualTarget": {
+      "unavailable": "自动化需要当前的 AgentStart 守护进程连接。"
+    },
+    "sessionTabsTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "settingsProtocolTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "shell": {
+      "telemetry": {
+        "protobuf": {
+          "v1": {
+            "capability": {
+              "is": {
+                "not": {
+                  "available": "shell.telemetry.protobuf.v1 能力不可用"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "shellAgentStartProfilesTarget": {
+      "unavailable": "配置需要当前的 AgentStart 守护进程连接。"
+    },
+    "shellHost": {
+      "closeTerminalFailed": "无法关闭终端标签页",
+      "invalidCommandValue": "无效的 shell 命令值",
+      "invalidLaunchAgent": "无效的启动 Agent",
+      "invalidTelemetryAgent": "无效的启动遥测 Agent",
+      "missingCommand": "缺少 shell 命令",
+      "missingTabMove": "缺少标签页移动命令",
+      "missingUiCommand": "缺少窗口命令",
+      "pinnedTerminal": "无法关闭固定的终端标签页"
+    },
+    "shellKeybindingsTarget": {
+      "unavailable": "键盘快捷键需要当前的 AgentStart 守护进程连接。"
+    },
+    "shellPlatformTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "shellRepoHostTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "skillsProtocolTarget": {
+      "unavailable": "技能管理需要当前的 AgentStart 守护进程连接。"
+    },
+    "status": {
+      "probeMissing": "运行时状态探测完成但未返回状态。"
+    },
+    "uiTarget": {
+      "unavailable": "此操作需要当前的 AgentStart 守护进程连接。"
+    },
+    "workspacePortsTarget": {
+      "unavailable": "工作区端口需要当前的 AgentStart 守护进程连接。"
+    }
+  },
+  "runtimeEnvironment": {
+    "duplicateEndpointIdentity": "运行时环境返回了重复的端点标识",
+    "invalidIntegerField": "运行时环境 {{field}} 超出有效的整数范围",
+    "missingField": "运行时环境 {{field}} 缺失",
+    "pairingRequired": "需要重新配对",
+    "preferredEndpointMissing": "运行时环境缺少首选端点",
+    "repairCommand": "在远程守护进程上创建新的配对邀请，然后使用此连接 ID 将其导入本地：",
+    "repairExplanation": "此保存的连接需要新的配对邀请。其原始配对文件已保留。",
+    "statusIdentityMismatch": "运行时环境状态标识与其环境不匹配",
+    "statusIncomplete": "运行时环境状态响应不完整",
+    "unsupportedEndpointKind": "运行时环境返回了不支持的端点类型"
+  },
+  "session": {
+    "busy": "工作区正在更改。你的编辑仍处于待处理状态；请重新尝试保存。",
+    "concurrentChangesScoped": "另一个客户端更改了 {{scope}}。你的编辑仍处于待处理状态。",
+    "notLoaded": "保存更改前请先加载工作区会话。",
+    "ownerChanged": "工作区会话已被替换。你的待处理编辑尚未保存。",
+    "pending": "你的编辑仍处于待处理状态。",
+    "replaceConflicts": "替换冲突的值",
+    "retrySave": "重试保存",
+    "saveFailed": "无法保存工作区更改",
+    "scope": {
+      "browserHistory": "浏览器历史记录",
+      "browserTabs": "浏览器标签页",
+      "editors": "编辑器标签页",
+      "groups": "标签组",
+      "layout": "终端布局",
+      "order": "标签页顺序",
+      "settings": "工作区会话设置",
+      "sleepingAgents": "休眠的 Agent 会话",
+      "terminalAgents": "终端 Agent 设置",
+      "terminalColors": "终端标签页颜色",
+      "terminalConnections": "终端连接",
+      "terminalOrder": "终端标签页顺序",
+      "terminalTitles": "终端标签页标题",
+      "terminals": "终端标签页"
+    },
+    "versionedUnavailable": "此运行时需要更新才能安全地保存工作区会话。"
+  },
+  "setup": {
+    "import": {
+      "unknownProvider": "不支持此设置导入来源：{{provider}}"
+    }
+  },
+  "sidebar": {
+    "worktree": {
+      "delete": "删除工作区",
+      "hideChildren": "隐藏 {{count}} 个子项",
+      "openDedicatedTab": "在新标签页中打开工作树",
+      "primary": "主",
+      "renameFailed": "查看重命名错误",
+      "showChildren": "显示 {{count}} 个子项"
+    }
+  },
+  "sourceControl": {
+    "aiAction": {
+      "branchName": "分支名称",
+      "commitMessage": "提交信息",
+      "fixChecks": "损坏检查的修复",
+      "fixCommitFailure": "提交失败的修复",
+      "fixPushFailure": "推送失败的修复",
+      "pullRequest": "拉取请求详细信息",
+      "resolveComments": "评审评论解决",
+      "resolveConflicts": "冲突解决"
+    },
+    "aiFailure": {
+      "argumentsInvalid": "CLI 参数无效：命令模板中存在未闭合的引号。",
+      "branchNames": "分支名称",
+      "chooseSourceAgent": "为此操作选择受支持的源代码控制 AI Agent。支持的 Agent：{{agents}}，或自定义命令。",
+      "commitCustomEmpty": "自定义命令为空。请在 设置 → Git → AI 提交信息 中添加一项。",
+      "commitMessages": "提交信息",
+      "configureSourceAgent": "在 设置 -> Git -> 源代码控制 AI 中为此操作选择受支持的源代码控制 AI Agent。支持的 Agent：{{agents}}，或自定义命令。",
+      "customBinaryRequired": "自定义命令必须以二进制文件名开头。",
+      "customEmpty": "自定义命令为空。",
+      "emptyTemplate": "{{operation}} 的命令模板为空。",
+      "invalidThinking": "思考级别“{{level}}”对 {{model}} 无效。",
+      "missingModel": "{{agent}} 没有可用的模型。",
+      "overrideBinaryRequired": "Agent 命令覆盖必须以二进制文件名开头。",
+      "overrideInvalid": "Agent 命令覆盖无效：命令模板中存在未闭合的引号。",
+      "pullRequestDetails": "拉取请求详细信息",
+      "sourceCustomEmpty": "自定义命令为空。请在 设置 -> Git -> 源代码控制 AI 中添加一项。",
+      "unavailableModel": "模型“{{model}}”对 {{agent}} 不可用。",
+      "unclosedQuote": "命令模板中存在未闭合的引号。",
+      "unsupportedAgent": "Agent“{{agent}}”不支持 AI 提交信息。",
+      "unsupportedSourceAgent": "Agent“{{agent}}”不支持源代码控制 AI {{operation}}。支持的 Agent：{{agents}}，或自定义命令。",
+      "unsupportedThinking": "模型“{{model}}”不支持思考强度级别。"
+    },
+    "aiVariable": {
+      "0be7f35deb": "改进源代码控制 AI 自定义",
+      "13fd9ba1a4": "main",
+      "256be5185d": "当前源代码管理分支的名称。",
+      "34a57b6c1a": "分支与基础分支之间已更改文件的摘要。",
+      "39ed17d49e": "生成开始前在编辑器中输入的 PR 标题。",
+      "3a9e28496c": "src/shared/source-control-ai-actions.ts | 24 +++++\nsrc/main/text-generation.ts | 8 +-",
+      "47d11ea83c": "生成开始前在编辑器中输入的 PR 描述。",
+      "4a6e201401": "用于生成 PR 详情时与基础分支比较的分支差异。",
+      "4b9b143d2d": "feature/source-control-ai-recipes",
+      "6d7d7022f2": "AgentStart 为此操作内置的提示词，包含 AgentStart 知道如何安全收集的上下文。",
+      "771f48bf9e": "以换行符分隔的、分支相对于基础分支的提交列表。",
+      "7ed02f2afb": "修复 CI 并提交结果",
+      "822bb26f9d": "提交信息包含已暂存差异的指引；PR 详情包含分支比较的指引；修复操作包含失败摘要。",
+      "83af417791": "为源代码管理操作添加可配置的 Agent 和命令模板。",
+      "83dde95e81": "a1b2c3d Add action recipe defaults\nd4e5f6a Render command templates",
+      "9573cb82d1": "创建 AgentStart 工作区的第一个用户请求。",
+      "9d2decf0af": "用于生成提交信息的、以换行符分隔的已暂存文件列表。",
+      "a83b20fcc9": "我将检查失败的检查项、修补问题并运行测试。",
+      "b7dbb3d22a": "M src/shared/source-control-ai.ts\nA src/shared/source-control-ai-actions.ts",
+      "c70cd28bd1": "用于生成提交信息的已暂存 git 补丁。",
+      "cce3690a92": "AgentStart 有可用内容时的初始 Agent 响应。",
+      "d42b275aaf": "在创建 PR 编辑器中选定的目标分支。",
+      "d72330a776": "diff --git a/src/app.ts b/src/app.ts\n+renderSourceControlActionCommandTemplate()",
+      "dbc856c6de": "diff --git a/src/app.ts b/src/app.ts\n+addActionRecipeDefaults()"
+    },
+    "commitFailure": {
+      "fallback": "提交失败。",
+      "lint": "提交期间 Lint 失败。",
+      "pre": "pre-commit 钩子失败。"
+    },
+    "generationPreview": {
+      "argv": "提示词作为命令参数传递。",
+      "caveat": "这仅检查 AgentStart 的规划器。它不会调用 CLI、证明 PATH 或二进制文件可用性，也不会复现主进程的 Windows .cmd 解析。",
+      "stdin": "提示词通过 stdin 管道传递给 Agent。"
+    },
+    "merge": {
+      "create": "创建合并提交",
+      "rebase": "变基并合并",
+      "squash": "压缩合并"
+    },
+    "pushFailure": {
+      "fallback": "推送失败。",
+      "lint": "推送期间 Lint 失败。",
+      "pre": "pre-push 钩子失败。"
+    },
+    "remoteError": {
+      "093c809289": "{{operationLabel}} 已阻止 — {{summary}}",
+      "0d35514cc1": "远程操作失败",
+      "163f86dca7": "强力推",
+      "20d774c610": "强力推失败。请检查你的连接并重试。",
+      "21eb744112": "变基已阻止 — 请先移动、删除或添加未跟踪文件。",
+      "248177993c": "获取失败。{{detail}}",
+      "29e110795c": "快进已阻止 — 请先移动、删除或添加未跟踪文件。",
+      "2c8c58e957": "拉取已阻止 — 请先移动、删除或添加未跟踪文件。",
+      "2f913cb2e9": "拉取因合并冲突而停止。请在源代码管理中解决这些冲突，然后提交合并。",
+      "36aaa4c08b": "变基失败。{{detail}}",
+      "3ef10426d5": "变基已阻止 — 请先提交或暂存你的本地更改。",
+      "4348e0fd51": "同步因合并冲突而停止。请在源代码管理中解决这些冲突，然后提交合并。",
+      "5b477cedc7": "同步失败。{{detail}}。请检查你的远程访问权限并重试。",
+      "663b6106ed": "强力推被拒绝 — 远程在上次获取后有变更。请先获取，然后重试。",
+      "6eb566e6b4": "同步失败 — 同步期间远程有变更。请重试。",
+      "731ce7ed80": "推",
+      "8b4fdcfb8b": "发布分支失败。请检查你的远程访问权限并重试。",
+      "8babebf1ec": "拉取已阻止 — 请先解决现有的合并冲突。",
+      "8d261a372f": "同步",
+      "8f239805b1": "变基已阻止 — 请先解决现有的冲突。",
+      "a3c9c7f99a": "同步失败。请检查你的连接并重试。",
+      "a7ba118668": "推送失败。{{detail}}。请检查你的远程访问权限并重试。",
+      "b6d05529c1": "推送失败。请检查你的连接并重试。",
+      "bb25e7fb10": "快进已阻止 — 请先提交或暂存你的本地更改。",
+      "d4b7eed02a": "推送被拒绝 — 远程有变更。请先拉取，然后重试。",
+      "e240e8af17": "{{operationLabel}} 失败。{{detail}}",
+      "ebae7922a4": "变基因冲突而停止。请在源代码管理中解决这些冲突，然后继续变基。",
+      "f1edcd3dee": "拉取已阻止 — 请先提交或暂存你的本地更改。",
+      "f7dbbf0efd": "同步已阻止 — 请先解决现有的合并冲突。",
+      "f9e3db7147": "发布分支失败。{{detail}}。请检查你的远程访问权限并重试。",
+      "fd4f5e730f": "快进失败。{{detail}}",
+      "fe4e7d8ab1": "发布分支",
+      "feda5e4961": "强力推失败。{{detail}}。请检查你的远程访问权限并重试。"
+    }
+  },
+  "statusBar": {
+    "ports": "端口",
+    "resourceManager": "资源管理器",
+    "usage": "用量"
+  },
+  "terminal": {
+    "connection": {
+      "closed": "终端连接已关闭"
+    },
+    "multiplex": {
+      "invalidClear": "无效的远程终端清除记录。",
+      "invalidEnd": "无效的远程终端结束记录。",
+      "invalidMetadata": "无效的远程终端元数据。",
+      "invalidResponse": "无效的终端多路复用响应",
+      "invalidRestore": "无效的远程终端恢复记录。",
+      "invalidSideEffects": "无效的远程终端副作用批次。",
+      "invalidTicket": "运行时主机返回了无效的终端批量票据。",
+      "invalidUtf8": "远程终端输出不是有效的 UTF-8。",
+      "snapshotTooLarge": "远程终端快照超出了 2 MiB 重放限制；实时输出将继续。",
+      "snapshotUnavailable": "远程终端快照不可用。"
+    },
+    "theme": {
+      "imported": "导入的主题"
+    }
+  },
+  "usage": {
+    "duration": {
+      "days": "{{days}}d",
+      "days-hours": "{{days}}d {{hours}}h",
+      "hours": "{{hours}}h",
+      "hours-minutes": "{{hours}}h {{minutes}}m",
+      "minutes": "{{minutes}}m",
+      "now": "现在"
+    },
+    "refreshFailed": "用量刷新失败。",
+    "refreshTimedOut": "用量刷新超时。",
+    "reset": {
+      "duration": "{{duration}}后重置",
+      "now": "现在重置"
+    }
+  },
+  "workspace": {
+    "remove": {
+      "unregistered": {
+        "description": "Git 不再跟踪此工作区。其目录和文件已保留。请恢复其 Git 注册或将目录移动到安全位置，然后重试删除。",
+        "title": "工作区目录需要注意"
+      }
+    }
+  },
+  "workspaceSpace": {
+    "detached": "游离",
+    "mainWorktree": "主工作树",
+    "scanning": "正在扫描工作区大小",
+    "status": {
+      "failed": "失败",
+      "missing": "缺失",
+      "noaccess": "无访问权限",
+      "scanned": "已扫描",
+      "unavailable": "不可用"
+    }
+  },
+  "workspaceStatus": {
+    "done": "完成",
+    "inProgress": "进行中",
+    "inReview": "评审中",
+    "todo": "待办"
+  },
+  "worktree": {
+    "activation": {
+      "failed": "激活工作区失败"
     }
   }
 }

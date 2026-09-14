@@ -14,6 +14,7 @@
         "english": "English",
         "chinese": "中文（简体）"
       },
+      "sidebarLayoutTitle": "Sidebar & Layout",
       "statusBar": {
         "claudeToggleDescription": "Show Claude token and cost usage for the active workspace.",
         "codexToggleDescription": "Show Codex token and cost usage for the active workspace.",
@@ -57,6 +58,18 @@
         "orbM4": "M4 · Transforming",
         "orbM5": "M5 · Dispersing"
       }
+    },
+    "computerUsePane": {
+      "unavailable": "Computer Use requires a local AgentStart daemon connection"
+    },
+    "import": {
+      "invalidField": "The terminal import returned an invalid setting: {{field}}"
+    },
+    "proxy": {
+      "invalid": "Enter a valid proxy URL.",
+      "missingHost": "Proxy URL must include a host.",
+      "tooLong": "Proxy URL is too long.",
+      "unsupportedScheme": "Use an http, https, socks, socks4, or socks5 proxy URL."
     }
   },
   "auto": {
@@ -67,7 +80,6 @@
       "722d03aa62": "The crash report dialog hit an error.",
       "8a023cea1f": "Retry the status bar to remount its controls.",
       "2e8ff36f94": "The status bar hit an error.",
-      "8d1e160ed1": "Retry the sidebar or switch tabs to reload this surface.",
       "03a14f6b5b": "Retry the page or navigate to another AgentStart surface.",
       "b7a714db1e": "This page hit an error.",
       "98d4ea2823": "Terminal, browser, or editor rendering failed in this workspace. Retry to remount it.",
@@ -78,18 +90,47 @@
       "0a9e810705": "Changes won't be saved until restart. Your previous tabs are safe on disk.",
       "12e77cf12b": "Session restore failed"
     },
+    "browser": {
+      "tab": {
+        "projection": {
+          "pane": {
+            "explanation": "This page runs in your real Chrome profile, with your sign-in state, cookies, and extensions.",
+            "missing": "This Chrome tab is no longer available.",
+            "show": "Show Chrome tab"
+          }
+        }
+      }
+    },
+    "newWorkspace": {
+      "resolveSmartGithubSubmit": {
+        "a9f6c4d231": "Could not resolve the GitHub item before creating the workspace."
+      },
+      "sparse": {
+        "enterDirectory": "Enter at least one repo-relative directory.",
+        "useRelativeDirectories": "Use repo-relative directories, not root or parent paths."
+      },
+      "target": {
+        "wasBranch": "was {branch}",
+        "wasPr": "was PR #{number}"
+      }
+    },
     "runtime": {
       "remoteServerUpdateErrors": {
+        "installNotApplied": "The server stayed on its previous version after the install connection closed.",
         "manualRequired": "This host must be updated manually through its service manager.",
         "notAvailable": "The host no longer reports an available update. Check again.",
         "notDownloaded": "The host update has not finished downloading.",
         "legacyServer": "Update this host manually once to enable host updates.",
+        "updaterStreamClosed": "The server stopped reporting update progress.",
         "updaterTimeout": "Timed out waiting for the host updater.",
         "requestedVersionUnavailable": "The host updater did not offer the requested AgentStart version.",
         "updateUnavailable": "The host did not report an available update.",
         "downloadIncomplete": "The host update did not finish downloading.",
         "reconnectTimeout": "The host did not reconnect on the updated version.",
         "runtimeChanged": "The paired host changed while updating. Check again before retrying."
+      },
+      "webUiShellClient": {
+        "selectionClipboardUnavailable": "Selection clipboard is unavailable in the browser."
       }
     },
     "store": {
@@ -296,6 +337,16 @@
           }
         }
       },
+      "pendingWorktreeCreation": {
+        "checkingSetup": "Checking setup script…",
+        "copyingFiles": "Copying environment files…",
+        "creating": "Creating worktree…",
+        "fetching": "Fetching base branch…",
+        "preparing": "Preparing workspace…",
+        "runningSetup": "Running setup script…",
+        "settingUpWorkspace": "Setting up your workspace…",
+        "startingWorkspace": "Starting workspace…"
+      },
       "pr": {
         "comment": {
           "audience": {
@@ -416,6 +467,7 @@
     "hooks": {
       "useComposerState": {
         "7eb3f44ff7": "Selected agent is disabled. Choose an enabled agent before creating.",
+        "addAttachmentFailed": "Failed to add attachment.",
         "b2ead86962": "Failed to resolve PR base.",
         "a9ff236145": "Some attachments could not be uploaded.",
         "3db83fc58a": "No project path is available on this host for attachments.",
@@ -483,7 +535,9 @@
         "devSearchKeywordError": "error",
         "devSearchKeywordNotification": "notification",
         "projectHostsSummary": "{{value0}} hosts",
-        "33a5e1d597": "Connect GitHub for pull requests, checks, and review status."
+        "33a5e1d597": "Connect GitHub for pull requests, checks, and review status.",
+        "runtimeEnvironmentsDescription": "Connect to AgentStart daemons on this computer or remote hosts.",
+        "runtimeEnvironmentsTitle": "Runtime Hosts"
       },
       "useLargeTextControlPaste": {
         "pasteTooLarge": "Paste is too large."
@@ -684,6 +738,15 @@
           }
         }
       },
+      "right": {
+        "sidebar": {
+          "AiVaultSessionSubagents": {
+            "messageCount": "{{value0}} msgs",
+            "subagentsCount": "Subagents ({{value0}})",
+            "viewLog": "View Log"
+          }
+        }
+      },
       "worktree": {
         "creation": {
           "WorktreeCreationPanel": {
@@ -693,6 +756,15 @@
             "a3346fc6ed": "Cancel worktree creation",
             "532aea14ce": "Cancel",
             "767951265d": "Something went wrong while creating the worktree."
+          },
+          "progress": {
+            "copiedEnvironment": "Copied {{count}} environment files",
+            "copyEnvironment": "Copy environment files",
+            "createWorktree": "Create worktree",
+            "noSetup": "No setup script configured",
+            "prepareBase": "Prepare base branch",
+            "runSetup": "Run setup script",
+            "startWorkspace": "Start workspace"
           }
         }
       },
@@ -701,8 +773,7 @@
           "WorkspaceSpacePage": {
             "8d0048e1cb": "Workspace disk usage and reclaimable worktree storage.",
             "e8d6ba11ab": "Beta",
-            "45f6302dbc": "Space",
-            "ecf72fdc3b": "Back"
+            "45f6302dbc": "Space"
           }
         },
         "cleanup": {
@@ -786,6 +857,7 @@
             "expandDetails": "Expand details",
             "cleanGit": "Clean git",
             "dirtyGit": "Dirty git",
+            "gitLabel": "Git",
             "unpushedCommits": "Unpushed commits",
             "gitUnknown": "Git unknown",
             "gitStatusUnknown": "Git status unknown",
@@ -966,7 +1038,11 @@
             "ac112e9036": "Remove title",
             "f984ab2a30": "Remove pane title: {{value0}}",
             "cc5a2dc706": "Edit pane title: {{value0}}",
-            "7dbbfcbecc": "Pane title"
+            "7dbbfcbecc": "Pane title",
+            "imagePasteFailed": "Image paste failed: {detail}",
+            "pasteFailed": "Paste failed.",
+            "pasteTooLarge": "Paste failed: clipboard text is too large for a safe terminal paste.",
+            "thisRepo": "This Repo"
           },
           "TerminalSessionStateSaveFailureDialog": {
             "6bee0c8f17": "Open Disk Space Analyzer",
@@ -1312,6 +1388,12 @@
             "updatedOne": "1 host updated"
           },
           "SkillUpdateStatusSegment": {
+            "installRunningLabel": "Installing skill",
+            "installStoppingLabel": "Stopping skill install",
+            "removeRunningLabel": "Removing skill",
+            "removeStoppingLabel": "Stopping skill removal",
+            "runningLabel": "Updating skills",
+            "stoppingLabel": "Stopping skill update",
             "successLabel": "Skills updated",
             "errorLabel": "Skill update failed",
             "installSuccessLabel": "Skill installed",
@@ -1460,6 +1542,7 @@
             "cliInstalled": "Installed",
             "cliNotInstalled": "Not installed",
             "cliNeedsRepair": "Needs repair",
+            "runtimeCheckingLabel": "Checking AgentStart Runtime on {{host}}",
             "title": "AgentStart Runtime",
             "host": "Host",
             "runtimeChecking": "Checking",
@@ -1522,7 +1605,6 @@
           "426be2aac6": "Codex",
           "39b6998ddb": "All providers",
           "a68dee6a32": "Search skills",
-          "f43ad6edf3": "Skills",
           "ea72d6185b": "Could not scan local skills",
           "dc4c3328ee": "Reveal file",
           "9963dff6d3": "No description found.",
@@ -1630,8 +1712,10 @@
           "install": "Install"
         },
         "SkillsMarketplace": {
+          "chromeSurface": "The marketplace opens in Chrome so it can use your existing browser session.",
           "installFromSource": "Install from source",
-          "installCurrent": "Install this skill"
+          "installCurrent": "Install this skill",
+          "open": "Open skills marketplace"
         },
         "SkillRemoveDialog": {
           "title": "Remove skill",
@@ -1813,7 +1897,8 @@
           "32a7256d85": "Clone",
           "69f5b5380d": "Cloning...",
           "cloneOnHostDescription": "Enter the Git URL and choose where to clone it on {{value0}}.",
-          "cloneParentFolder": "Parent folder"
+          "cloneParentFolder": "Parent folder",
+          "remoteCloneParentPlaceholder": "/home/user/projects"
         },
         "AutoRenameFailedDialog": {
           "aed1623b1e": "Close",
@@ -1896,7 +1981,8 @@
         },
         "PendingWorktreeRow": {
           "af21e953d1": "Cancel worktree creation",
-          "188f6922a0": "Cancel"
+          "188f6922a0": "Cancel",
+          "creationFailed": "Creation failed"
         },
         "ProjectGroupDeleteDialog": {
           "ca65b78f78": "Cancel",
@@ -1934,9 +2020,6 @@
           "b79b39d865": "Remove Project",
           "fromAgentStartSsh": "from AgentStart. Its files stay on {{value0}} — re-add that SSH host to recover it."
         },
-        "ScrollToCurrentWorkspaceToolbarButton": {
-          "23989bb663": "Reveal active workspace"
-        },
         "SetupGuideSidebarEntry": {
           "b0a7bfc34c": "Hide from sidebar",
           "88d402b71d": "Onboarding checklist"
@@ -1971,10 +2054,13 @@
           "5bfd5c8779": "Dismiss setup scripts"
         },
         "SidebarHeader": {
+          "08d251dad5": "Workspaces",
           "25a95899c9": "Add Project",
+          "3b53bca96a": "Projects",
           "92154beb7e": "New workspace",
           "5c9c7c16aa": "Add a project to create workspaces",
-          "ca6f729da2": "New workspace ({{value0}})"
+          "ca6f729da2": "New workspace ({{value0}})",
+          "f8fa32b294": "Worktrees"
         },
         "SidebarNav": {
           "80611a8b10": "Search",
@@ -2405,6 +2491,12 @@
         },
         "AccountsPane": {
           "c2d2751587": "Remove Account",
+          "claudeAccountFallback": "Claude account",
+          "claudeSignInFailed": "Claude sign-in failed. Please try again.",
+          "codexAccountFallback": "Codex account",
+          "codexSignInFailed": "Codex sign-in failed. Please try again.",
+          "codexSignInTimeout": "Codex sign-in took too long to finish. Please try again.",
+          "codexSignInUnavailable": "Codex sign-in is temporarily unavailable. Please try again in a minute.",
           "dbb9626ed1": "Cancel",
           "854ebbcc45": "AgentStart will delete the managed Claude auth for this saved account. If it is currently active, AgentStart falls back to the system default Claude login.",
           "63843e37e2": "Remove Claude Account?",
@@ -2506,6 +2598,8 @@
           "7492fb3bba": "Paste it here and click Save.",
           "9fec52de4b": "How to copy the cookie",
           "4e32e030b2": "Stored locally. AgentStart sends it only to platform.minimax.io for usage refreshes.",
+          "openCodeCookieHelp": "Paste the raw token or full cookie header. Find it in your browser's DevTools under Network → an opencode.ai request → Cookie header. OpenCode Go auth is shared across Windows and WSL terminals.",
+          "openCodeWorkspaceHelp": "Find this in the URL after logging into opencode.ai, for example opencode.ai/workspace/wrk_…/go.",
           "remoteServerFallback": "the remote daemon",
           "loadAccountsFailed": "Could not load provider accounts.",
           "remoteScopeAccounts": "Showing accounts managed by {{value0}}. Add or re-authenticate accounts on that host.",
@@ -2748,6 +2842,9 @@
           "4c17304beb": "Refresh",
           "6326a4c5cc": "Use these controls when a CLI, local app, or automation tool needs macOS privacy access. AgentStart does not ask at startup.",
           "6f011b9bf6": "Terminal tools inherit AgentStart's macOS privacy envelope.",
+          "actionOpenSettings": "Open Settings",
+          "actionRequest": "Request",
+          "actionTriggerPrompt": "Trigger Prompt",
           "bfa3402305": "Could not request permission",
           "66e94d6cf3": "Permission request sent",
           "fa809e8ada": "Opened macOS Privacy & Security",
@@ -2771,7 +2868,9 @@
           "e5b5f3d6b9": "Camera",
           "cc8151d9fa": "Audio recording, transcription, media capture, sox, ffmpeg, and Whisper CLIs.",
           "16381e040a": "Microphone",
-          "dac08ec03e": "Working..."
+          "dac08ec03e": "Working...",
+          "groupRequests": "Permission Requests",
+          "groupRequestsDescription": "Request macOS privacy access for each developer tool."
         },
         "ExperimentalPane": {
           "a20d5ea365": "Keeps a pane-level highlight visible after terminal bell or agent-completion events until you interact with that pane. Experimental while we tune the signal.",
@@ -2990,11 +3089,8 @@
           "b4ef5428a7": "pr",
           "895d3f70b8": "gh",
           "32dca11189": "github",
-          "cdd793134e": "api budget",
-          "b9c011fbc2": "rate limit",
           "aa204f185f": "Current GitHub CLI REST, Search, and GraphQL rate limits.",
           "612a440e57": "GitHub API Budget",
-          "2cde9044a8": "graphql",
           "36e3de3619": "from comparing against stale history. AgentStart skips the update if that branch has uncommitted changes or local-only commits.",
           "d072a12995": "git diff main...HEAD",
           "db3a127eb1": ". This keeps commands like",
@@ -3013,6 +3109,9 @@
           "3d172725cc": "None",
           "1f32ba27a6": "Custom",
           "a182c5125e": "Git Username",
+          "groupAttribution": "Attribution",
+          "groupBranches": "Branches",
+          "groupUpstream": "Upstream",
           "sourceControlGroupOrderTitle": "Source Control Group Order",
           "sourceControlGroupOrderDescription": "Choose whether Changes, Staged Changes, or Untracked Files appear first in Source Control.",
           "changesFirst": "Changes first",
@@ -3172,7 +3271,6 @@
           "2a42dd8d6f": "Notification sound volume",
           "4aa5085cd7": "Custom:",
           "c258cb96dc": "Choose notification sound",
-          "2a2033c388": "Choose the alert AgentStart plays when a system notification is delivered.",
           "88686e6ca8": "Notification Sound",
           "b6fc369244": "A background terminal emits a bell character.",
           "591fe605b9": "Terminal Bell",
@@ -3192,7 +3290,9 @@
           "98d70fb261": "Custom notification sound could not be played",
           "c83b05a055": "Notifications are not supported on this system",
           "6e6df3a09a": "Choose Custom File",
-          "76e02467b8": "Change Custom File"
+          "76e02467b8": "Change Custom File",
+          "groupDelivery": "Delivery",
+          "groupEvents": "Events"
         },
         "OpenInMenuSetting": {
           "03b00b1f64": "Custom app",
@@ -3617,7 +3717,9 @@
           "65358016ea": "Discard",
           "dev": "Dev Tools",
           "devDescription": "Dev-only tools for exercising UI states.",
-          "b07041697f": "Connect GitHub for pull requests, checks, and review status."
+          "b07041697f": "Connect GitHub for pull requests, checks, and review status.",
+          "runtimeEnvironmentsDescription": "Connect to AgentStart daemons on this computer or remote hosts.",
+          "runtimeEnvironmentsTitle": "Runtime Hosts"
         },
         "SettingsFormControls": {
           "42a4d15a30": "No matching fonts.",
@@ -3640,7 +3742,6 @@
         "SettingsSidebar": {
           "5c9669ff9c": "Projects",
           "dbceaa8840": "Search settings",
-          "60f8a673a7": "Back to app",
           "6503182299": "Onboarding checklist",
           "82db1b7de4": "Onboarding checklist, {{value0}} of {{value1}} done. Show setup guide.",
           "df38d612b7": "No projects added yet.",
@@ -3885,8 +3986,10 @@
         },
         "TerminalWindowSection": {
           "1705318506": "ANSI magenta color",
+          "00eaa6b881": "Window appearance and background settings.",
           "03c855d15f": "Reset all color overrides",
           "63f8d9336e": "Color Overrides",
+          "b96ba13ed1": "Window",
           "e86e09b5c7": "Override individual terminal colors.",
           "1d1920dc8a": "Hide the mouse cursor when typing in the terminal.",
           "3530908ef9": "Hide Mouse While Typing",
@@ -3991,6 +4094,7 @@
         "accounts": {
           "search": {
             "86edc96bc9": "status bar",
+            "d16378a88f": "minimax",
             "e949b08ffb": "rate limit",
             "7e67d7d1b6": "wrk",
             "421c6be25e": "id",
@@ -4049,6 +4153,8 @@
             "2814401339": "installed",
             "719f53350c": "path",
             "839e82c81f": "detect",
+            "agentLocation": "agent location",
+            "checks": "checks",
             "f622b8eb2a": "linux",
             "d608654c03": "wsl",
             "77c02fa3c3": "windows",
@@ -4097,11 +4203,20 @@
             "agentPermissions": "Agent Permissions",
             "agentPermissionsDescription": "Switch agent permission defaults between Yolo and Manual.",
             "agentRuntime": "Agent Runtime",
-            "agentRuntimeDescription": "Choose whether agents are detected and launched on Windows or in WSL by default."
+            "agentRuntimeDescription": "Choose whether agents are detected and launched on Windows or in WSL by default.",
+            "installedAgentsWsl": "installed agents in wsl",
+            "manual": "manual",
+            "permission": "permission",
+            "permissions": "permissions",
+            "runtime": "runtime",
+            "skip": "skip",
+            "yolo": "yolo"
           }
         },
         "appearance": {
           "search": {
+            "1f2880a9d5": "agentstart",
+            "36e006efc1": "app",
             "839fb1e3ed": "toolbox",
             "ac79fe4a04": "show",
             "648eeada79": "hide",
@@ -4116,6 +4231,7 @@
             "08c86bf58e": "gitignore",
             "bce3ac317a": "git",
             "7164edf71a": "Dim files matched by .gitignore in the file explorer.",
+            "cursor": "cursor",
             "f8129fb544": "Show Git-Ignored Files",
             "2f12e1aa3a": "ui",
             "5095258df2": "interface",
@@ -4186,6 +4302,10 @@
               "translation": "translation"
             },
             "leftSidebarAppearance": {
+              "background": "background",
+              "project": "project",
+              "terminal": "terminal",
+              "tint": "tint",
               "title": "Left Sidebar Appearance",
               "description": "Make the left sidebar match your terminal, stay default, or use a tint."
             },
@@ -4199,8 +4319,14 @@
             "usagePercentageDisplayTitle": "Usage percentages",
             "usagePercentageDisplayDescription": "Choose whether provider limits show the percentage used or remaining.",
             "showPinnedWorktreesInGroups": {
+              "duplicate": "duplicate",
+              "group": "group",
+              "original": "original",
+              "pinned": "pinned",
               "title": "Also show pinned worktrees in their original lists",
-              "description": "Pinned worktrees stay in Pinned and also appear in All, Project, Status, and Review."
+              "description": "Pinned worktrees stay in Pinned and also appear in All, Project, Status, and Review.",
+              "workspace": "workspace",
+              "worktree": "worktree"
             },
             "cursorUsage": "Cursor Usage",
             "cursorUsageDescription": "Show Cursor plan usage in the status bar."
@@ -4357,7 +4483,14 @@
         },
         "general": {
           "search": {
+            "5250cf0e48": "pin",
+            "641358460a": "spelling",
+            "867dddea41": "pinned",
+            "a51d23f4a1": "spell check",
+            "afa37a34e1": "close",
             "bdfb6dc21b": "like",
+            "d755962089": "red underline",
+            "distro": "distro",
             "e6b01c8e30": "feedback",
             "b65665703a": "support",
             "06ea5a69a6": "github",
@@ -4376,6 +4509,7 @@
             "e49e739a59": "download",
             "c9d8c1ce66": "release notes",
             "9e86ccd05c": "version",
+            "execution": "execution",
             "f89a94773c": "update",
             "79ff46776e": "Check for app updates and install a newer AgentStart version.",
             "e15af4eb64": "Check for Updates",
@@ -4387,6 +4521,7 @@
             "0a00691c06": "shell command",
             "dbeb1f348e": "command",
             "88d3df9ce9": "terminal",
+            "f96cdaf37d": "spellcheck",
             "fb4f338a3d": "path",
             "924a660a78": "cli",
             "ca529079bf": "Register or remove the AgentStart CLI command.",
@@ -4471,7 +4606,11 @@
             "e61157e926": "Editor Word Wrap",
             "005be5c699": "Wrap long lines in file editors instead of requiring horizontal scrolling.",
             "editorFontFamily": "Editor Font Family",
-            "editorFontFamilyDesc": "Font used by file editors and diff views. Leave empty to follow the terminal font."
+            "editorFontFamilyDesc": "Font used by file editors and diff views. Leave empty to follow the terminal font.",
+            "projectRuntime": "project runtime",
+            "runtime": "runtime",
+            "windowsHost": "windows host",
+            "wsl": "wsl"
           }
         },
         "git": {
@@ -4488,6 +4627,7 @@
             "b7e52124c7": "rate limit",
             "65b69d9f80": "graphql",
             "1139f61512": "Current GitHub CLI REST, Search, and GraphQL rate limits.",
+            "diffBase": "diff base",
             "ff86e354c4": "GitHub API Budget",
             "035134fcd9": "worktree",
             "0c75583ca9": "safely",
@@ -4625,6 +4765,12 @@
           },
           "settings": {
             "search": {
+              "5bff6a2ef0": "sidebar",
+              "5e5b8878bf": "phone",
+              "648eeada79": "hide",
+              "6cf5f54ce1": "button",
+              "74618577c7": "mobile",
+              "ac79fe4a04": "show",
               "b730ff7049": "experimental",
               "8d4ba0ef09": "beta",
               "7e801801ac": "remote",
@@ -4766,15 +4912,21 @@
           "search": {
             "603c68b68c": "agentstart.yaml",
             "9dc60d7f6d": "github",
+            "agentRuntime": "agent runtime",
+            "behindUpstream": "behind upstream",
             "c5e8bdbcbb": "skip by default",
             "a69c5cbe90": "run by default",
             "80c490b012": "ask",
+            "defaultBranch": "default branch",
+            "distro": "distro",
+            "execution": "execution",
             "f9d84b7971": "setup run policy",
             "c00a549e03": "Choose the default behavior when a setup script is available.",
             "cdfe398068": "When to Run Setup",
             "5e9445bbfd": "authoritative",
             "f1e1bfa89f": "source",
             "1d90a6cfbb": "both",
+            "fastForward": "fast-forward",
             "fcb8fa8144": "shared",
             "0432d2fb7c": "local",
             "ed269fad69": "command source",
@@ -4863,10 +5015,19 @@
             "92af66c7ce": "project name",
             "883aad2801": "Project-specific display details for the sidebar and tabs.",
             "7e1e456a95": "Display Name",
+            "fork": "fork",
             "keepForkUpToDate": "Keep Fork Up to Date",
             "keepForkUpToDateDescription": "Safely fast-forward this fork from upstream.",
+            "origin": "origin",
             "projectRuntime": "Project Runtime",
-            "projectRuntimeDescription": "Choose whether this project runs on Windows or WSL."
+            "projectRuntimeDescription": "Choose whether this project runs on Windows or WSL.",
+            "runtime": "runtime",
+            "skillRuntime": "skill runtime",
+            "syncFork": "sync fork",
+            "upstream": "upstream",
+            "waitForSetupBeforeAgent": "wait for setup before starting agent",
+            "windowsHost": "windows host",
+            "wsl": "wsl"
           }
         },
         "runtime": {
@@ -4929,8 +5090,15 @@
             }
           },
           "search": {
+            "39ea7c0d28": "terminal",
+            "4f7f8f28ca": "transparency",
+            "a0c44061ee": "confirm",
+            "agent": "agent",
             "c047f398cc": "launch",
             "b872de3926": "location",
+            "close_terminal": "close",
+            "command": "command",
+            "f6dd9ff606": "background",
             "fd6c24313d": "new",
             "f44643328e": "tab",
             "18ce996647": "vertical",
@@ -4987,6 +5155,15 @@
             "82b63d07fe": "ghostty",
             "73e9422f19": "One-time import of supported Ghostty terminal settings.",
             "a979df0083": "Import from Ghostty",
+            "process": "process",
+            "prompt": "prompt",
+            "running": "running",
+            "scroll": "scroll",
+            "scrolling": "scrolling",
+            "speed": "speed",
+            "stop": "stop",
+            "trackpad": "trackpad",
+            "tui": "tui",
             "warp_import": {
               "title": "Import from Warp",
               "description": "Import Warp themes as AgentStart terminal themes.",
@@ -4995,6 +5172,7 @@
               "keyword_yaml": "yaml",
               "keyword_legacy_title": "Import themes from Warp"
             },
+            "wheel": "wheel",
             "yaml_import": {
               "title": "Import from YAML",
               "description": "Import theme YAML files as AgentStart terminal themes.",
@@ -5198,7 +5376,8 @@
                   "7755c28af5": "Install GitHub CLI",
                   "6f30fc4216": "GitHub CLI status is not available in this runtime yet.",
                   "account_scope_prefix": "Account scope",
-                  "23cb5a0dee": "Install the GitHub CLI to enable pull requests and checks."
+                  "23cb5a0dee": "Install the GitHub CLI to enable pull requests and checks.",
+                  "githubDescription": "Pull requests and checks via the GitHub CLI."
                 }
               }
             }
@@ -5646,6 +5825,8 @@
             "b3c60c2b7c": "Smart",
             "fda67f0b61": "current project",
             "placeholderWorkspaceName": "Type a workspace name",
+            "smartPlaceholder": "Type a name, #1234, or GitHub PR URL",
+            "smartPlaceholderWithBranches": "Type a name, #1234, branch, or GitHub PR URL",
             "unavailable": "Unavailable",
             "searchBranches": "Search branches",
             "workspaceName": "Workspace name",
@@ -6067,6 +6248,13 @@
             "5eca672aac": "Copy skill install command",
             "6ff813fc1d": "Failed to copy skill command.",
             "b8ad063571": "Copied the skill install command."
+          },
+          "CommandPaletteFeatureTipVisual": {
+            "ab94e16d44": "Create worktree \"{{value0}}\""
+          },
+          "CommandPaletteTipDialog": {
+            "8241897205": "Rebind the shortcut anytime in",
+            "c0bb9f869b": "Settings → Shortcuts"
           },
           "FeatureTipActions": {
             "eb04abece8": "Maybe Later"
@@ -7453,11 +7641,6 @@
           }
         },
         "index": {
-          "70893f017b": "Side",
-          "7b415c39e9": "Top",
-          "864111caa2": "Activity Bar Position",
-          "8bc2bbc3a0": "Explorer",
-          "aiVaultSessionHistory": "Agents",
           "folderWorkspaces": "Attached worktrees",
           "parentPrChecks": "PR Checks"
         },
@@ -8517,11 +8700,625 @@
       "harmony": "Change color harmony"
     },
     "opacity": "Intensity",
+    "system": {
+      "description": "Without a custom palette, follow this computer’s accent color. Use the app default when unavailable.",
+      "follow": "Follow system",
+      "label": "Theme color",
+      "useDefault": "Use default color"
+    },
     "texture": "Grain",
     "presets": {
       "previous": "Previous palette row",
       "applyNumbered": "Apply palette preset {{value0}} of {{value1}}",
       "next": "Next palette row"
+    }
+  },
+  "agent": {
+    "launch": {
+      "platformUnavailable": "The runtime did not report its terminal platform.",
+      "runtimeUnavailable": "Could not prepare the agent on its runtime host."
+    },
+    "startup": {
+      "unclosedQuote": "CLI arguments contain an unclosed quote."
+    },
+    "status": {
+      "failed": "Failed",
+      "idle": "Idle",
+      "interrupted": "Interrupted"
+    }
+  },
+  "clipboard": {
+    "image": {
+      "tooLarge": "Clipboard image is too large"
+    },
+    "read-too-large": "Clipboard text is too large for this paste target.",
+    "write-too-large": "Clipboard text is too large to copy safely."
+  },
+  "contextual-tours": {
+    "0e5e66b764": "Choose what agent starts the work",
+    "0ec1d9bac9": "Split a terminal pane",
+    "205dfe6b66": "Split terminal",
+    "26ef6cb9e3": "Mark design feedback in place",
+    "2955ac8398": "Each worktree gets its own branch, so parallel work stays separate.",
+    "37285cd763": "Pick the agent that should be opened when this worktree is created.",
+    "4a9db31908": "Grab page context for agents",
+    "7b83a21ec3": "Start from a linked pull request for a short PR name. Or leave it blank to auto-name it from your first agent message.",
+    "8485743c15": "Annotate elements and send those notes to an agent.",
+    "875e49569a": "Open a second terminal pane with {terminal.splitRight}, or right-click the pane for split options.",
+    "aa239e1761": "Start another task in parallel",
+    "ab573bd0e9": "Stay logged in",
+    "c016688c4f": "Name it, or start from existing work",
+    "cc98d6cf9e": "Bring your existing logins into AgentStart to stay signed in immediately.",
+    "d322379476": "AgentStart isolates each task in its own worktree, branched off your base.",
+    "eca71e5d1a": "Pick a project",
+    "f54a59e067": "Use the grab tool to copy a page element's context for agents."
+  },
+  "executionHost": {
+    "allHosts": "All hosts",
+    "localLinux": "Local Linux",
+    "localMac": "Local Mac",
+    "localWindows": "Local Windows",
+    "thisComputer": "This computer",
+    "wsl": "WSL · {{distribution}}"
+  },
+  "feature-tips": {
+    "0a8b4458e2": "Search projects and files, switch tabs, open settings, or launch an agent from one place.",
+    "1b0f375850": "Install CLI & Skills",
+    "3fe1fc9a33": "Let agents drive AgentStart with the AgentStart CLI",
+    "5b8027fa0e": "Got it",
+    "8d67d7764a": "Enable agents to coordinate child worktrees and communicate between worktrees.",
+    "c3cab3c204": "Open everything with <shortcut>",
+    "d19ceca501": "Tip"
+  },
+  "feature-wall": {
+    "03d648492d": "Enable agents to manage and coordinate AgentStart workspaces to execute larger tasks.",
+    "093885fbec": "Multi-task",
+    "0a3df4164f": "Ship with AI",
+    "0bb18642b7": "Usage",
+    "205b4561ed": "Workspaces",
+    "28c64edcfe": "Run several agents at once and track their progress across independent workspaces.",
+    "2935db9586": "Know the moment an agent finishes, needs attention, or gets blocked.",
+    "33157d99ae": "Code Review",
+    "3dfbfca0bb": "Review what changed, leave focused feedback, and send it back to the agent.",
+    "45a73aece5": "PR checks & comments",
+    "45cdd75dbe": "AgentStart splits each task into an isolated workspace so agents can run in parallel.",
+    "4ad3103d38": "See PR status in Changes & Review.",
+    "4ea5c3af47": "Know which agents are working, waiting, live, or blocked.",
+    "533597e2b3": "Watch your usage and rate limits across every connected account, so you know when to switch.",
+    "54a2cf5e63": "Browser",
+    "5ab087ec11": "Turn on notifications",
+    "5e568e3868": "Agent Visibility",
+    "64acf7e2a7": "Agents",
+    "6926cb0e99": "Orchestration",
+    "69514c32e0": "Send focused review notes to an agent.",
+    "70440046a3": "Notes",
+    "70593204ec": "Start new work faster with your preferred agent already selected.",
+    "70930331cf": "Use our Notion-style markdown editor to write notes without leaving AgentStart.",
+    "709b371089": "Work in 2 different worktrees at once. Each one is isolated (even in the same project). Perfect for working on 2 features at once.",
+    "72a691c081": "Browse your web app without leaving AgentStart. Grab any element and send its exact source and styles to an agent with one click.",
+    "7d9ff4f0de": "Visibility",
+    "7e1fbc831b": "Use AgentStart's browser",
+    "7e39fdc7c6": "Bring your terminal setup into AgentStart, then split panes to keep servers, tests, logs, and agents running side by side.",
+    "880687b1da": "Notes & diffs",
+    "8de869fd7d": "PR checks",
+    "93ef7c6368": "Workbench",
+    "96402c9d0a": "Start work in multiple repos",
+    "9a739e27d2": "Choose your default agent",
+    "9bf3317c89": "Run your app in AgentStart's browser, send selected UI elements to agents, and let your agents interact with your webpage.",
+    "a1f52cdcb3": "Terminal",
+    "a6ab426046": "Run install and setup commands automatically so every new worktree is ready for agents.",
+    "b50a7bd9fb": "Let AI prepare commit and PR drafts for you.",
+    "b56f64241a": "Register the AgentStart shell command and install agent skills for browser, computer, and orchestration workflows.",
+    "c0feda1125": "Enable AgentStart CLI",
+    "c7e9fb2ea6": "Editor",
+    "c88e5adc13": "Bring your key repos into AgentStart so you can start agent work without hunting for folders.",
+    "e4457b5784": "Keep your agents, tests, and dev logs visible at once.",
+    "f626e0facc": "Automate workspace setup"
+  },
+  "feature": {
+    "wall": {
+      "agentCapabilitySetupStatus": {
+        "computerUseUnavailable": "Computer Use requires a local AgentStart daemon connection"
+      }
+    }
+  },
+  "newWorkspace": {
+    "forkPushRestricted": "This PR has \"Allow edits from maintainers\" off; pushing to the fork may be rejected by GitHub.",
+    "sourceHint": {
+      "branches": "No matching branches.",
+      "github": "Start typing to search GitHub pull requests.",
+      "smart": "Start typing to create a name or find a source."
+    }
+  },
+  "onboarding": {
+    "featureSetup": {
+      "computerUseUnavailable": "Computer Use requires a local AgentStart daemon connection"
+    }
+  },
+  "ports": {
+    "remoteBrowserCreateFailed": "Failed to create remote browser tab."
+  },
+  "project": {
+    "hostSetup": {
+      "attention": "Project setup needs attention",
+      "checking": "Checking host capabilities",
+      "incompatible": "Runtime host version is incompatible",
+      "notSetUp": "Project not set up on this host",
+      "progress": "Project setup is in progress",
+      "tracked": "Project tracked on this host but not set up",
+      "unsupported": "Project is unsupported on this host",
+      "upgrade": "Update AgentStart on this host to set up projects"
+    },
+    "kind": {
+      "folder": "Folder",
+      "git": "Git"
+    }
+  },
+  "runtime": {
+    "agent": {
+      "session": {
+        "did": {
+          "not": {
+            "accept": {
+              "the": {
+                "followup": "Agent session did not accept the followup"
+              }
+            }
+          }
+        }
+      }
+    },
+    "agentStatusTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "artifactTarget": {
+      "unavailable": "Artifacts need a current AgentStart daemon connection."
+    },
+    "clipboardTarget": {
+      "unavailable": "Saving the clipboard image needs a current AgentStart daemon connection."
+    },
+    "compatibility": {
+      "clientTooOld": "This AgentStart client is too old for the selected runtime host. Update AgentStart on this machine. Client protocol {{clientVersion}}, host requires client protocol {{requiredVersion}}.",
+      "compatible": "Runtime client and host are compatible.",
+      "hostTooOld": "The selected runtime host is too old for this client. Update AgentStart on the host. Host protocol {{hostVersion}}, client requires host protocol {{requiredVersion}}."
+    },
+    "crash": {
+      "diagnostic": {
+        "response": {
+          "is": {
+            "missing": {
+              "its": {
+                "result": "Crash diagnostic response is missing its result"
+              }
+            }
+          }
+        }
+      },
+      "report": {
+        "detail": {
+          "value": {
+            "is": {
+              "missing": "Crash report detail value is missing"
+            }
+          }
+        },
+        "diagnostic": {
+          "bundle": {
+            "status": {
+              "is": {
+                "missing": "Crash report diagnostic bundle status is missing"
+              }
+            }
+          }
+        },
+        "integer": {
+          "exceeds": {
+            "safe": {
+              "range": "Crash report integer exceeds safe range"
+            }
+          }
+        },
+        "platform": {
+          "is": {
+            "unknown": "Crash report platform is unknown"
+          }
+        },
+        "source": {
+          "is": {
+            "missing": "Crash report source is missing",
+            "unknown": "Crash report source is unknown"
+          }
+        },
+        "status": {
+          "is": {
+            "missing": "Crash report status is missing",
+            "unknown": "Crash report status is unknown"
+          }
+        }
+      },
+      "submission": {
+        "response": {
+          "is": {
+            "missing": {
+              "its": {
+                "result": "Crash submission response is missing its result"
+              }
+            }
+          }
+        }
+      }
+    },
+    "dangerousApprovalTarget": {
+      "unavailable": "Passkey approval needs a current AgentStart daemon connection."
+    },
+    "diagnostics": {
+      "invalid": {
+        "field": "Runtime diagnostics {{field}} is invalid."
+      },
+      "missing": {
+        "field": "Runtime diagnostics response is missing {{field}}."
+      },
+      "unsafe": {
+        "integer": "Runtime diagnostics {{field}} exceeds JavaScript's safe integer range."
+      }
+    },
+    "emulatorTarget": {
+      "unavailable": "The emulator requires a current AgentStart daemon connection."
+    },
+    "feedback": {
+      "submitFailed": "Feedback submission failed"
+    },
+    "file": {
+      "directoryOutsideOwner": "Directory is outside an owning runtime worktree",
+      "downloadStalled": "Remote download stalled before reaching EOF",
+      "editorTooLarge": "Remote file is too large to open in the editor ({{bytes}} bytes)",
+      "outsideOwner": "Remote file is outside the owning runtime worktree"
+    },
+    "folderWorkspaceTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "hostModel": {
+      "projectContext": "project and workspace context"
+    },
+    "invalid": {
+      "star": {
+        "prompt": {
+          "mode": "Invalid star prompt mode"
+        }
+      }
+    },
+    "preflightTarget": {
+      "unavailable": "Agent detection needs a current AgentStart daemon connection."
+    },
+    "projectContext": {
+      "unsupported": "The selected runtime host does not support explicit workspace run hosts yet. Update AgentStart on the host and try again."
+    },
+    "projectGroupTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "projectHostSetupTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "projectSetup": {
+      "unsupported": "The selected runtime host does not support project host setup yet. Update AgentStart on the host and try again."
+    },
+    "projectTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "renderer": {
+      "error": {
+        "response": {
+          "is": {
+            "missing": {
+              "its": {
+                "result": "Renderer error response is missing its result"
+              }
+            }
+          }
+        }
+      }
+    },
+    "repoProtocolTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "ritualTarget": {
+      "unavailable": "Automations need a current AgentStart daemon connection."
+    },
+    "sessionTabsTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "settingsProtocolTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "shell": {
+      "telemetry": {
+        "protobuf": {
+          "v1": {
+            "capability": {
+              "is": {
+                "not": {
+                  "available": "shell.telemetry.protobuf.v1 capability is not available"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "shellAgentStartProfilesTarget": {
+      "unavailable": "Profiles need a current AgentStart daemon connection."
+    },
+    "shellHost": {
+      "closeTerminalFailed": "Terminal tab could not be closed",
+      "invalidCommandValue": "Invalid shell command value",
+      "invalidLaunchAgent": "Invalid launch agent",
+      "invalidTelemetryAgent": "Invalid launch telemetry agent",
+      "missingCommand": "Shell command is missing",
+      "missingTabMove": "Tab move command is missing",
+      "missingUiCommand": "Window command is missing",
+      "pinnedTerminal": "Pinned terminal tab could not be closed"
+    },
+    "shellKeybindingsTarget": {
+      "unavailable": "Keyboard shortcuts need a current AgentStart daemon connection."
+    },
+    "shellPlatformTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "shellRepoHostTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "skillsProtocolTarget": {
+      "unavailable": "Skill management needs a current AgentStart daemon connection."
+    },
+    "status": {
+      "probeMissing": "Runtime status probe resolved without a status."
+    },
+    "uiTarget": {
+      "unavailable": "This action needs a current AgentStart daemon connection."
+    },
+    "workspacePortsTarget": {
+      "unavailable": "Workspace ports need a current AgentStart daemon connection."
+    }
+  },
+  "runtimeEnvironment": {
+    "duplicateEndpointIdentity": "Runtime environment returned duplicate endpoint identities",
+    "invalidIntegerField": "Runtime environment {{field}} is outside the valid integer range",
+    "missingField": "Runtime environment {{field}} is missing",
+    "pairingRequired": "Re-pairing required",
+    "preferredEndpointMissing": "Runtime environment preferred endpoint is missing",
+    "repairCommand": "Create a new offer on the remote daemon, then import it locally with this connection ID:",
+    "repairExplanation": "This saved connection needs a new pairing offer. Its original pairing file is preserved.",
+    "statusIdentityMismatch": "Runtime environment status identity does not match its environment",
+    "statusIncomplete": "Runtime environment status response is incomplete",
+    "unsupportedEndpointKind": "Runtime environment returned an unsupported endpoint kind"
+  },
+  "session": {
+    "busy": "The workspace is changing. Your edits remain pending; try saving again.",
+    "concurrentChangesScoped": "Another client changed {{scope}}. Your edits remain pending.",
+    "notLoaded": "Load the workspace session before saving changes.",
+    "ownerChanged": "The workspace session was replaced. Your pending edits have not been saved.",
+    "pending": "Your edits remain pending.",
+    "replaceConflicts": "Replace conflicting values",
+    "retrySave": "Retry saving",
+    "saveFailed": "Workspace changes could not be saved",
+    "scope": {
+      "browserHistory": "browser history",
+      "browserTabs": "browser tabs",
+      "editors": "editor tabs",
+      "groups": "tab groups",
+      "layout": "terminal layout",
+      "order": "tab order",
+      "settings": "workspace session settings",
+      "sleepingAgents": "sleeping agent sessions",
+      "terminalAgents": "terminal agent settings",
+      "terminalColors": "terminal tab colors",
+      "terminalConnections": "terminal connections",
+      "terminalOrder": "terminal tab order",
+      "terminalTitles": "terminal tab titles",
+      "terminals": "terminal tabs"
+    },
+    "versionedUnavailable": "This runtime needs an update to save workspace sessions safely."
+  },
+  "setup": {
+    "import": {
+      "unknownProvider": "The setup import source is not supported: {{provider}}"
+    }
+  },
+  "sidebar": {
+    "worktree": {
+      "delete": "Delete workspace",
+      "hideChildren": "Hide {{count}} children",
+      "openDedicatedTab": "Open Worktree in New Tab",
+      "primary": "primary",
+      "renameFailed": "View rename error",
+      "showChildren": "Show {{count}} children"
+    }
+  },
+  "sourceControl": {
+    "aiAction": {
+      "branchName": "Branch name",
+      "commitMessage": "Commit message",
+      "fixChecks": "Broken checks fixes",
+      "fixCommitFailure": "Commit failure fixes",
+      "fixPushFailure": "Push failure fixes",
+      "pullRequest": "Pull request details",
+      "resolveComments": "Review comment resolution",
+      "resolveConflicts": "Conflict resolution"
+    },
+    "aiFailure": {
+      "argumentsInvalid": "CLI arguments are invalid: Unclosed quote in command template.",
+      "branchNames": "branch names",
+      "chooseSourceAgent": "Choose a supported Source Control AI agent for this action. Supported agents: {{agents}}, or Custom command.",
+      "commitCustomEmpty": "Custom command is empty. Add one in Settings → Git → AI Commit Messages.",
+      "commitMessages": "commit messages",
+      "configureSourceAgent": "Choose a supported Source Control AI agent for this action in Settings -> Git -> Source Control AI. Supported agents: {{agents}}, or Custom command.",
+      "customBinaryRequired": "Custom command must start with a binary name.",
+      "customEmpty": "Custom command is empty.",
+      "emptyTemplate": "Command template is empty for {{operation}}.",
+      "invalidThinking": "Thinking level \"{{level}}\" is not valid for {{model}}.",
+      "missingModel": "No model is available for {{agent}}.",
+      "overrideBinaryRequired": "Agent command override must start with a binary name.",
+      "overrideInvalid": "Agent command override is invalid: Unclosed quote in command template.",
+      "pullRequestDetails": "pull request details",
+      "sourceCustomEmpty": "Custom command is empty. Add one in Settings -> Git -> Source Control AI.",
+      "unavailableModel": "Model \"{{model}}\" is not available for {{agent}}.",
+      "unclosedQuote": "Unclosed quote in command template.",
+      "unsupportedAgent": "Agent \"{{agent}}\" does not support AI commit messages.",
+      "unsupportedSourceAgent": "Agent \"{{agent}}\" does not support Source Control AI {{operation}}. Supported agents: {{agents}}, or Custom command.",
+      "unsupportedThinking": "Model \"{{model}}\" does not support a thinking effort level."
+    },
+    "aiVariable": {
+      "0be7f35deb": "Improve Source Control AI customization",
+      "13fd9ba1a4": "main",
+      "256be5185d": "The current source-control branch name.",
+      "34a57b6c1a": "A summary of files changed between the branch and the base branch.",
+      "39ed17d49e": "The PR title currently typed in the composer before generation starts.",
+      "3a9e28496c": "src/shared/source-control-ai-actions.ts | 24 +++++\nsrc/main/text-generation.ts | 8 +-",
+      "47d11ea83c": "The PR description currently typed in the composer before generation starts.",
+      "4a6e201401": "The branch diff against the base branch used for PR-details generation.",
+      "4b9b143d2d": "feature/source-control-ai-recipes",
+      "6d7d7022f2": "AgentStart’s built-in prompt for this action, including the context AgentStart knows how to gather safely.",
+      "771f48bf9e": "A newline-separated list of commits on the branch compared to the base.",
+      "7ed02f2afb": "Fix CI and commit the result",
+      "822bb26f9d": "Commit messages include staged diff guidance; PR details include branch comparison guidance; fix actions include the failure summary.",
+      "83af417791": "Adds configurable agents and command templates for Source Control actions.",
+      "83dde95e81": "a1b2c3d Add action recipe defaults\nd4e5f6a Render command templates",
+      "9573cb82d1": "The first user request that created the AgentStart workspace.",
+      "9d2decf0af": "A newline-separated list of staged files for commit-message generation.",
+      "a83b20fcc9": "I will inspect the failing check, patch the issue, and run tests.",
+      "b7dbb3d22a": "M src/shared/source-control-ai.ts\nA src/shared/source-control-ai-actions.ts",
+      "c70cd28bd1": "The staged git patch used for commit-message generation.",
+      "cce3690a92": "The initial agent response, when AgentStart has one available.",
+      "d42b275aaf": "The target branch selected in the Create PR composer.",
+      "d72330a776": "diff --git a/src/app.ts b/src/app.ts\n+renderSourceControlActionCommandTemplate()",
+      "dbc856c6de": "diff --git a/src/app.ts b/src/app.ts\n+addActionRecipeDefaults()"
+    },
+    "commitFailure": {
+      "fallback": "Commit failed.",
+      "lint": "Lint failed during commit.",
+      "pre": "Pre-commit hook failed."
+    },
+    "generationPreview": {
+      "argv": "Prompt is delivered as command arguments.",
+      "caveat": "This checks AgentStart’s planner only. It does not invoke the CLI, prove PATH or binary availability, or reproduce main-process Windows .cmd resolution.",
+      "stdin": "Prompt is piped to the agent over stdin."
+    },
+    "merge": {
+      "create": "Create merge commit",
+      "rebase": "Rebase and merge",
+      "squash": "Squash and merge"
+    },
+    "pushFailure": {
+      "fallback": "Push failed.",
+      "lint": "Lint failed during push.",
+      "pre": "Pre-push hook failed."
+    },
+    "remoteError": {
+      "093c809289": "{{operationLabel}} blocked — {{summary}}",
+      "0d35514cc1": "Remote operation failed",
+      "163f86dca7": "Force Push",
+      "20d774c610": "Force Push failed. Check your connection and try again.",
+      "21eb744112": "Rebase blocked — move, remove, or add untracked files first.",
+      "248177993c": "Fetch failed. {{detail}}",
+      "29e110795c": "Fast-forward blocked — move, remove, or add untracked files first.",
+      "2c8c58e957": "Pull blocked — move, remove, or add untracked files first.",
+      "2f913cb2e9": "Pull stopped with merge conflicts. Resolve them in Source Control, then commit the merge.",
+      "36aaa4c08b": "Rebase failed. {{detail}}",
+      "3ef10426d5": "Rebase blocked — commit or stash your local changes first.",
+      "4348e0fd51": "Sync stopped with merge conflicts. Resolve them in Source Control, then commit the merge.",
+      "5b477cedc7": "Sync failed. {{detail}}. Check your remote access and try again.",
+      "663b6106ed": "Force push rejected — remote changed since last fetch. Fetch first, then try again.",
+      "6eb566e6b4": "Sync failed — remote moved while syncing. Try again.",
+      "731ce7ed80": "Push",
+      "8b4fdcfb8b": "Publish Branch failed. Check your remote access and try again.",
+      "8babebf1ec": "Pull blocked — resolve existing merge conflicts first.",
+      "8d261a372f": "Sync",
+      "8f239805b1": "Rebase blocked — resolve existing conflicts first.",
+      "a3c9c7f99a": "Sync failed. Check your connection and try again.",
+      "a7ba118668": "Push failed. {{detail}}. Check your remote access and try again.",
+      "b6d05529c1": "Push failed. Check your connection and try again.",
+      "bb25e7fb10": "Fast-forward blocked — commit or stash your local changes first.",
+      "d4b7eed02a": "Push rejected — remote has changes. Pull first, then try again.",
+      "e240e8af17": "{{operationLabel}} failed. {{detail}}",
+      "ebae7922a4": "Rebase stopped with conflicts. Resolve them in Source Control, then continue the rebase.",
+      "f1edcd3dee": "Pull blocked — commit or stash your local changes first.",
+      "f7dbbf0efd": "Sync blocked — resolve existing merge conflicts first.",
+      "f9e3db7147": "Publish Branch failed. {{detail}}. Check your remote access and try again.",
+      "fd4f5e730f": "Fast-forward failed. {{detail}}",
+      "fe4e7d8ab1": "Publish Branch",
+      "feda5e4961": "Force Push failed. {{detail}}. Check your remote access and try again."
+    }
+  },
+  "statusBar": {
+    "ports": "Ports",
+    "resourceManager": "Resource Manager",
+    "usage": "Usage"
+  },
+  "terminal": {
+    "connection": {
+      "closed": "Terminal connection closed"
+    },
+    "multiplex": {
+      "invalidClear": "Invalid remote terminal clear record.",
+      "invalidEnd": "Invalid remote terminal end record.",
+      "invalidMetadata": "Invalid remote terminal metadata.",
+      "invalidResponse": "Invalid terminal multiplex response",
+      "invalidRestore": "Invalid remote terminal restore record.",
+      "invalidSideEffects": "Invalid remote terminal side-effect batch.",
+      "invalidTicket": "Runtime host returned an invalid terminal bulk ticket.",
+      "invalidUtf8": "Remote terminal output is not valid UTF-8.",
+      "snapshotTooLarge": "Remote terminal snapshot exceeded the 2 MiB replay limit; live output will continue.",
+      "snapshotUnavailable": "Remote terminal snapshot is unavailable."
+    },
+    "theme": {
+      "imported": "Imported Theme"
+    }
+  },
+  "usage": {
+    "duration": {
+      "days": "{{days}}d",
+      "days-hours": "{{days}}d {{hours}}h",
+      "hours": "{{hours}}h",
+      "hours-minutes": "{{hours}}h {{minutes}}m",
+      "minutes": "{{minutes}}m",
+      "now": "now"
+    },
+    "refreshFailed": "Usage refresh failed.",
+    "refreshTimedOut": "Usage refresh timed out.",
+    "reset": {
+      "duration": "Resets in {{duration}}",
+      "now": "Resets now"
+    }
+  },
+  "workspace": {
+    "remove": {
+      "unregistered": {
+        "description": "Git no longer tracks this workspace. Its directory and files have been kept. Restore its Git registration or move the directory to a safe location, then retry removal.",
+        "title": "Workspace directory needs attention"
+      }
+    }
+  },
+  "workspaceSpace": {
+    "detached": "detached",
+    "mainWorktree": "main worktree",
+    "scanning": "Scanning workspace sizes",
+    "status": {
+      "failed": "Failed",
+      "missing": "Missing",
+      "noaccess": "No access",
+      "scanned": "Scanned",
+      "unavailable": "Unavailable"
+    }
+  },
+  "workspaceStatus": {
+    "done": "Done",
+    "inProgress": "In progress",
+    "inReview": "In review",
+    "todo": "Todo"
+  },
+  "worktree": {
+    "activation": {
+      "failed": "Failed to activate workspace"
     }
   }
 }
