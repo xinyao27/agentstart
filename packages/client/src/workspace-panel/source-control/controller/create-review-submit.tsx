@@ -4,14 +4,14 @@ import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
 import { generateRuntimePullRequestFields } from '~renderer/runtime/git-client'
 import { resolveCreateReviewDraftTitle } from '~renderer/workspace-panel/create-review-draft-title'
-import { stripBaseRef } from '~renderer/workspace-panel/use-create-pull-request-dialog-fields'
-
+import { hasConfiguredSourceControlTextGenerationDefaults } from '~renderer/workspace-panel/source-control/ai/text-generation-defaults'
 import {
   createPrIntentRunTokenMatches,
   resolveCreatePrIntentReviewBase,
   type CreatePrIntentRunToken
-} from '../create-pr-intent-flow'
-import { hasConfiguredSourceControlTextGenerationDefaults } from '../text-generation-defaults'
+} from '~renderer/workspace-panel/source-control/review/create-pr-intent-flow'
+import { stripBaseRef } from '~renderer/workspace-panel/use-create-pull-request-dialog-fields'
+
 import type { SourceControlCreateReviewController } from './create-review'
 
 export function useSourceControlCreateReviewSubmit(scope: SourceControlCreateReviewController) {

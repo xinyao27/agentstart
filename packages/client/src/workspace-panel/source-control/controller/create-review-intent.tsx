@@ -1,13 +1,13 @@
 import { translate } from '~renderer/i18n/i18n'
 import { bulkStageRuntimeGitPaths } from '~renderer/runtime/git-client'
-
 import {
   createCreatePrIntentRunToken,
   createPrIntentGitStatusMatchesToken,
   getCreatePrIntentCommitFailureNoticeMessage,
   getCreatePrIntentStagePaths,
   prepareCreatePrIntentBeforeCommit
-} from '../create-pr-intent-flow'
+} from '~renderer/workspace-panel/source-control/review/create-pr-intent-flow'
+
 import { readCommitDraftForWorktree, writeCommitDraftForWorktree } from '../panel-state'
 import { finishCreateReviewIntent } from './create-review-intent-remote'
 import type { SourceControlCreateReviewPrerequisitesController } from './create-review-prerequisites'

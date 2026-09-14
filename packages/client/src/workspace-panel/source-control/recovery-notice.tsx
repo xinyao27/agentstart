@@ -17,8 +17,7 @@ import {
   DialogHeader,
   DialogTitle
 } from '~renderer/ui/dialog'
-
-import { SourceControlFixSplitButton } from './fix-split-button'
+import { SourceControlFixSplitButton } from '~renderer/workspace-panel/source-control/commit/fix-split-button'
 
 type SourceControlRecoveryKind = 'commit' | 'push'
 

@@ -1,7 +1,7 @@
 import type { StateCreator } from 'zustand'
 import { readProjectCatalogRuntimeState } from '~renderer/project-catalog/runtime-state'
 import { readProjectCatalogWorktree } from '~renderer/project-catalog/worktree-cache'
-import { migrateHugeRepoWarningDismissal } from '~renderer/workspace-panel/source-control/huge-repo-warning-dismissals'
+import { migrateHugeRepoWarningDismissal } from '~renderer/workspace-panel/source-control/tree/huge-repo-warning-dismissals'
 
 import type { AppState } from '../../store/types'
 import { findKnownWorktreeById } from './known-model'

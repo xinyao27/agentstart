@@ -16,14 +16,17 @@ import {
   getPullRequestGenerationRecordKey,
   getPullRequestGenerationSeedRestoreKey
 } from '~renderer/workspace-panel/pull-request-generation-state'
-
-import type { SourceControlActionError } from '../action-error'
-import { loadSessionCommitDrafts } from '../commit-draft-session'
+import { loadSessionCommitDrafts } from '~renderer/workspace-panel/source-control/commit/commit-draft-session'
+import type { PendingDiscardConfirmation } from '~renderer/workspace-panel/source-control/commit/discard-dialog'
+import type { SourceControlScopeId } from '~renderer/workspace-panel/source-control/header/scope-model'
 import {
   createPrIntentCurrentTargetConflictsWithToken,
   type CreatePrIntentRunToken
-} from '../create-pr-intent-flow'
-import type { PendingDiscardConfirmation } from '../discard-dialog'
+} from '~renderer/workspace-panel/source-control/review/create-pr-intent-flow'
+import type { SourceControlActionError } from '~renderer/workspace-panel/source-control/tree/action-error'
+import { resolveSourceControlGroupOrder } from '~renderer/workspace-panel/source-control/tree/section-order'
+import { useSourceControlSubmoduleStatus } from '~renderer/workspace-panel/source-control/tree/use-submodule-status'
+
 import { createDefaultCollapsedSections } from '../panel-constants'
 import {
   normalizeSourceControlViewMode,
@@ -37,9 +40,6 @@ import type {
   HostedReviewCreationState,
   SourceControlOperationTarget
 } from '../panel-types'
-import type { SourceControlScopeId } from '../scope-model'
-import { resolveSourceControlGroupOrder } from '../section-order'
-import { useSourceControlSubmoduleStatus } from '../use-submodule-status'
 import type { SourceControlStoreStateController } from './store-state'
 
 export function useSourceControlInteractionState(scope: SourceControlStoreStateController) {

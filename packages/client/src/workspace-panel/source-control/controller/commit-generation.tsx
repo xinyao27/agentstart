@@ -10,10 +10,10 @@ import {
   resolveCommitMessageGenerationFailure,
   resolveCommitMessageGenerationSuccess
 } from '~renderer/workspace-panel/commit-message-generation-state'
+import { hasConfiguredCommitMessageGenerationDefaults } from '~renderer/workspace-panel/source-control/ai/text-generation-defaults'
+import type { CreatePrIntentRunToken } from '~renderer/workspace-panel/source-control/review/create-pr-intent-flow'
 
-import type { CreatePrIntentRunToken } from '../create-pr-intent-flow'
 import { writeCommitDraftForWorktree } from '../panel-state'
-import { hasConfiguredCommitMessageGenerationDefaults } from '../text-generation-defaults'
 import type { SourceControlCommitActionController } from './commit-action'
 
 export function useSourceControlCommitGeneration(scope: SourceControlCommitActionController) {

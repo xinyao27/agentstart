@@ -6,13 +6,16 @@ import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { joinPath } from '~renderer/path'
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import { stageRuntimeGitPath } from '~renderer/runtime/git-client'
-import { useGitHistoryCommitActions } from '~renderer/workspace-panel/use-git-history-commit-actions'
-
 import {
   cancelSourceControlEditorRevealFrames,
   requestSourceControlEditorRevealFrame
-} from '../editor-reveal'
-import { shouldOpenSourceControlRowAsPreview, type SourceControlRowOpenEvent } from '../split-open'
+} from '~renderer/workspace-panel/source-control/tree/editor-reveal'
+import {
+  shouldOpenSourceControlRowAsPreview,
+  type SourceControlRowOpenEvent
+} from '~renderer/workspace-panel/source-control/tree/split-open'
+import { useGitHistoryCommitActions } from '~renderer/workspace-panel/use-git-history-commit-actions'
+
 import type { SourceControlBranchCompareController } from './branch-compare'
 
 export function useSourceControlHistory(scope: SourceControlBranchCompareController) {
@@ -38,7 +41,6 @@ export function useSourceControlHistory(scope: SourceControlBranchCompareControl
     setMarkdownViewMode,
     setPendingEditorReveal,
     setScrollToDiffCommentId,
-    workspacePanelTabId,
     worktreePath
   } = scope
   useEffect(() => {
@@ -99,7 +101,6 @@ export function useSourceControlHistory(scope: SourceControlBranchCompareControl
       return
     }
     const targetGroupId = resolveSplitTargetGroupId(event)
-    const embeddedTargetTabId = targetGroupId ? undefined : workspacePanelTabId
     openBranchDiff(
       activeWorktreeId,
       worktreePath,
@@ -108,7 +109,6 @@ export function useSourceControlHistory(scope: SourceControlBranchCompareControl
       detectLanguage(entry.path),
       {
         targetGroupId,
-        workspacePanelTabId: embeddedTargetTabId,
         preview: shouldOpenSourceControlRowAsPreview(event, targetGroupId)
       }
     )
@@ -118,7 +118,6 @@ export function useSourceControlHistory(scope: SourceControlBranchCompareControl
       activeWorktreeId,
       worktreePath,
       activeRepoSettings,
-      workspacePanelTabId,
       resolveSplitTargetGroupId
     })
   // Why: opening a diff can mount its viewer this frame, so wait until its
@@ -148,16 +147,13 @@ export function useSourceControlHistory(scope: SourceControlBranchCompareControl
       const language = detectLanguage(filePath)
       setEditorViewMode(absPath, 'edit')
       setMarkdownViewMode(absPath, 'source')
-      openFile(
-        {
-          filePath: absPath,
-          relativePath: filePath,
-          worktreeId: activeWorktreeId,
-          language,
-          mode: 'edit'
-        },
-        { workspacePanelTabId }
-      )
+      openFile({
+        filePath: absPath,
+        relativePath: filePath,
+        worktreeId: activeWorktreeId,
+        language,
+        mode: 'edit'
+      })
       setPendingEditorReveal(null)
       requestSourceControlEditorRevealFrame(pendingCommentEditorRevealFrameIdsRef, () => {
         requestSourceControlEditorRevealFrame(pendingCommentEditorRevealFrameIdsRef, () => {
@@ -192,16 +188,13 @@ export function useSourceControlHistory(scope: SourceControlBranchCompareControl
     // in Changes mode so its diff viewer can still honor the note scroll target.
     const absPath = joinPath(worktreePath, filePath)
     const language = detectLanguage(filePath)
-    openFile(
-      {
-        filePath: absPath,
-        relativePath: filePath,
-        worktreeId: activeWorktreeId,
-        language,
-        mode: 'edit'
-      },
-      { workspacePanelTabId }
-    )
+    openFile({
+      filePath: absPath,
+      relativePath: filePath,
+      worktreeId: activeWorktreeId,
+      language,
+      mode: 'edit'
+    })
     if (commentId) {
       setEditorViewMode(absPath, 'changes')
       setScrollToDiffCommentId(commentId)

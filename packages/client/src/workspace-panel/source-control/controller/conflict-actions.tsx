@@ -8,13 +8,13 @@ import { abortRuntimeGitMerge, abortRuntimeGitRebase } from '~renderer/runtime/g
 import { shouldForcePushWithLeaseForUpstream } from '~renderer/source-control/workflow/operation'
 import { useAppStore } from '~renderer/store/state'
 import { showWorkspacePanel } from '~renderer/workspace-panel/show-workspace-panel'
+import { refreshSourceControlAfterRemoteAction } from '~renderer/workspace-panel/source-control/review/remote-action-state'
 
 import type {
   AbortConflictOperation,
   CreatedHostedReview,
   HostedReviewCreatedContext
 } from '../panel-types'
-import { refreshSourceControlAfterRemoteAction } from '../remote-action-state'
 import type { SourceControlRemoteActionsController } from './remote-actions'
 
 export function useSourceControlConflictActions(scope: SourceControlRemoteActionsController) {

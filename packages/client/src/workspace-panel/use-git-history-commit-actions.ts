@@ -20,12 +20,12 @@ import {
 } from '~renderer/runtime/git-client'
 import { shellClient } from '~renderer/runtime/shell-client'
 import { useAppStore } from '~renderer/store/state'
-
-import type { GitHistoryCommitAction } from './git-history-commit-context-menu'
 import {
   shouldOpenSourceControlRowAsPreview,
   type SourceControlRowOpenEvent
-} from './source-control/split-open'
+} from '~renderer/workspace-panel/source-control/tree/split-open'
+
+import type { GitHistoryCommitAction } from './git-history-commit-context-menu'
 
 const EMPTY_BRANCH_CHANGE_ENTRIES: GitBranchChangeEntry[] = []
 
@@ -50,13 +50,11 @@ export function useGitHistoryCommitActions({
   activeWorktreeId,
   worktreePath,
   activeRepoSettings,
-  workspacePanelTabId,
   resolveSplitTargetGroupId
 }: {
   activeWorktreeId: string | null | undefined
   worktreePath: string | null
   activeRepoSettings: RuntimeGitContext['settings']
-  workspacePanelTabId?: string
   resolveSplitTargetGroupId: (event?: SourceControlRowOpenEvent) => string | undefined
 }): GitHistoryCommitActions {
   const openCommitAllDiffs = useAppStore((s) => s.openCommitAllDiffs)
@@ -123,8 +121,7 @@ export function useGitHistoryCommitActions({
         cached.summary,
         cached.entries,
         item.subject,
-        item.message,
-        { workspacePanelTabId }
+        item.message
       )
     } catch (error) {
       toast.error(
@@ -153,7 +150,6 @@ export function useGitHistoryCommitActions({
       return
     }
     const targetGroupId = resolveSplitTargetGroupId(event)
-    const embeddedTargetTabId = targetGroupId ? undefined : workspacePanelTabId
     openCommitDiff(
       activeWorktreeId,
       worktreePath,
@@ -169,7 +165,6 @@ export function useGitHistoryCommitActions({
       detectLanguage(entry.path),
       {
         targetGroupId,
-        workspacePanelTabId: embeddedTargetTabId,
         preview: shouldOpenSourceControlRowAsPreview(event, targetGroupId)
       }
     )

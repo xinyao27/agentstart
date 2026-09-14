@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef } from 'react'
+import { useSourceControlAi } from '~renderer/workspace-panel/source-control/ai/use-ai'
+import { saveSessionCommitDrafts } from '~renderer/workspace-panel/source-control/commit/commit-draft-session'
+import { clearRemoteActionErrorsForCompletedConflictOperations } from '~renderer/workspace-panel/source-control/review/remote-action-state'
 
-import { saveSessionCommitDrafts } from '../commit-draft-session'
 import { createDefaultCollapsedSections } from '../panel-constants'
-import { clearRemoteActionErrorsForCompletedConflictOperations } from '../remote-action-state'
-import { useSourceControlAi } from '../use-ai'
 import type { SourceControlFileModelController } from './file-model'
 
 export function useSourceControlLifecycle(scope: SourceControlFileModelController) {

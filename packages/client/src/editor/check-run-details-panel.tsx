@@ -13,8 +13,8 @@ import {
 import { LoadingIndicator } from '~renderer/loading/indicator'
 import CommentMarkdown from '~renderer/sidebar/comment-markdown'
 import { Button } from '~renderer/ui/button'
+import { SourceControlFixSplitButton } from '~renderer/workspace-panel/source-control/commit/fix-split-button'
 
-import { SourceControlFixSplitButton } from '../workspace-panel/source-control/fix-split-button'
 import { CheckRunAnnotations } from './check-run-annotations'
 import { useCheckRunDetailsFixWithAI } from './check-run-details-fix-with-ai'
 import { CheckRunJobs } from './check-run-jobs'

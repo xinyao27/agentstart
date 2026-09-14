@@ -3,17 +3,17 @@ import { cancelRuntimeGenerateCommitMessage } from '~renderer/runtime/git-client
 import { isSyncPushStageError } from '~renderer/source-control/remote-error'
 import { useAppStore } from '~renderer/store/state'
 import { resolveCommitMessageGenerationCancel } from '~renderer/workspace-panel/commit-message-generation-state'
-
+import {
+  refreshSourceControlAfterRemoteAction,
+  resolveRemoteActionError
+} from '~renderer/workspace-panel/source-control/review/remote-action-state'
 import {
   captureSourceControlRecoveryEntrySnapshot,
   type SourceControlActionError,
   type SourceControlRecoveryStatusEntry
-} from '../action-error'
+} from '~renderer/workspace-panel/source-control/tree/action-error'
+
 import type { SourceControlOperationTarget } from '../panel-types'
-import {
-  refreshSourceControlAfterRemoteAction,
-  resolveRemoteActionError
-} from '../remote-action-state'
 import type { SourceControlCommitGenerationController } from './commit-generation'
 import type { RunRemoteActionResult } from './types'
 

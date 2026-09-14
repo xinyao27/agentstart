@@ -55,7 +55,7 @@ export async function runGitGraphCommitWrite(
       return {
         status: 'ok',
         message: translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteRun.tagOk',
+          'auto.components.workspacePanel.git-graph.CommitWriteRun.tagOk',
           'Tag {{name}} created',
           { name: result.tag }
         )
@@ -74,12 +74,12 @@ export async function runGitGraphCommitWrite(
         status: 'ok',
         message: result.checkedOut
           ? translate(
-              'auto.components.workspace-panel.git-graph.CommitWriteRun.branchCheckedOut',
+              'auto.components.workspacePanel.git-graph.CommitWriteRun.branchCheckedOut',
               'Branch {{name}} created and checked out',
               { name: result.branch }
             )
           : translate(
-              'auto.components.workspace-panel.git-graph.CommitWriteRun.branchOk',
+              'auto.components.workspacePanel.git-graph.CommitWriteRun.branchOk',
               'Branch {{name}} created',
               { name: result.branch }
             )
@@ -93,7 +93,7 @@ export async function runGitGraphCommitWrite(
       return {
         status: 'ok',
         message: translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteRun.checkoutOk',
+          'auto.components.workspacePanel.git-graph.CommitWriteRun.checkoutOk',
           'Checked out {{commit}}',
           { commit }
         )
@@ -110,7 +110,7 @@ export async function runGitGraphCommitWrite(
       return {
         status: 'ok',
         message: translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteRun.cherryPickOk',
+          'auto.components.workspacePanel.git-graph.CommitWriteRun.cherryPickOk',
           'Cherry picked {{commit}}',
           { commit }
         )
@@ -127,7 +127,7 @@ export async function runGitGraphCommitWrite(
       return {
         status: 'ok',
         message: translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteRun.revertOk',
+          'auto.components.workspacePanel.git-graph.CommitWriteRun.revertOk',
           'Reverted {{commit}}',
           { commit }
         )
@@ -141,7 +141,7 @@ export async function runGitGraphCommitWrite(
       return {
         status: 'ok',
         message: translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteRun.dropOk',
+          'auto.components.workspacePanel.git-graph.CommitWriteRun.dropOk',
           'Dropped {{commit}}',
           { commit }
         )
@@ -159,7 +159,7 @@ export async function runGitGraphCommitWrite(
       return {
         status: 'ok',
         message: translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteRun.mergeOk',
+          'auto.components.workspacePanel.git-graph.CommitWriteRun.mergeOk',
           'Merged {{commit}} into the current branch',
           { commit }
         )
@@ -173,7 +173,7 @@ export async function runGitGraphCommitWrite(
       return {
         status: 'ok',
         message: translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteRun.rebaseOk',
+          'auto.components.workspacePanel.git-graph.CommitWriteRun.rebaseOk',
           'Rebased the current branch onto {{commit}}',
           { commit }
         )
@@ -190,7 +190,7 @@ export async function runGitGraphCommitWrite(
       return {
         status: 'ok',
         message: translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteRun.resetOk',
+          'auto.components.workspacePanel.git-graph.CommitWriteRun.resetOk',
           'Reset the current branch to {{commit}}',
           { commit }
         )

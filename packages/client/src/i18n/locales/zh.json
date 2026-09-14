@@ -7461,19 +7461,17 @@
           "folderWorkspaces": "已附加的工作树",
           "parentPrChecks": "PR 检查"
         },
-        "right": {
-          "panel": {
-            "comment": {
-              "composer": {
-                "9bca633dee": "取消",
-                "cf5a7aba6f": "列表",
-                "d6d9c3c947": "引用",
-                "f49e0a21e0": "代码",
-                "542bf6a7e2": "斜体",
-                "256300f8ea": "粗体",
-                "87aff03d63": "正在发送...",
-                "commentTooLarge": "评论过长，无法安全提交。"
-              }
+        "checksPanel": {
+          "comment": {
+            "composer": {
+              "9bca633dee": "取消",
+              "cf5a7aba6f": "列表",
+              "d6d9c3c947": "引用",
+              "f49e0a21e0": "代码",
+              "542bf6a7e2": "斜体",
+              "256300f8ea": "粗体",
+              "87aff03d63": "正在发送...",
+              "commentTooLarge": "评论过长，无法安全提交。"
             }
           }
         },
@@ -7829,114 +7827,7 @@
             "noPr": "无 PR",
             "unavailable": "不可用"
           }
-        }
-      },
-      "ShortcutKeyCombo": {
-        "07eb4985a1": "双击 {{value0}}"
-      },
-      "star": {
-        "nag": {
-          "StarNagToastHost": {
-            "starredThanks": "已加星，谢谢！",
-            "githubOpened": "已打开 GitHub",
-            "opening": "正在打开…",
-            "starring": "正在加星…",
-            "openGithub": "打开 GitHub",
-            "starOnGithub": "在 GitHub 上加星",
-            "onboardingCompleted": "入门流程已完成！",
-            "body": "如果你目前喜欢 AgentStart，在 GitHub 上加星可以帮助其他开发者发现它。",
-            "dismiss": "关闭",
-            "later": "稍后"
-          }
-        }
-      },
-      "contribution": {
-        "heatmap": {
-          "monday": "Mon",
-          "wednesday": "Wed",
-          "friday": "Fri",
-          "tokensLabel": "Daily token usage over the past year",
-          "valueLabel": "过去一年的每日预估 API 价值",
-          "less": "Less",
-          "more": "More",
-          "tokenCell": "{{value0}}: {{value1}} tokens",
-          "valueCell": "{{value0}}：预估 API 价值 {{value1}}"
-        }
-      },
-      "home": {
-        "page": {
-          "title": "活动",
-          "description": "A year of agent work, with today in context.",
-          "contributions": "Contribution history",
-          "tokenDescription": "归因到 AgentStart 工作树的 Provider 上报 Token 用量。",
-          "tokens": "Tokens",
-          "apiValue": "API 价值",
-          "valueDescription": "按每次请求的模型与 Token 类别计算标准全球 API 等价价值。",
-          "totalTokens": "Token 总数",
-          "valueUnavailable": "暂时没有可用于估算的已知模型价格。",
-          "valueCoverage": "标准全球 API 等价价值按每次请求的权威模型价格汇总，仅包含归因到 AgentStart 工作树的用量。未定价 Token 类别以及缺少请求级归因的会话汇总会被排除；这不是实际账单。",
-          "calculatingValue": "计算中…",
-          "valueNotAvailable": "暂不可用",
-          "tokensUnavailable": "暂时没有归因到 AgentStart 工作树的 Provider Token 用量。",
-          "tokenCoverage": "Token 总数使用 AgentStart 工作树中各支持 Agent 的请求级归因记录；缓存输入不会重复计算，缺少请求级归因的会话汇总会被排除。",
-          "unpricedCoverage": "缺少权威定价明细的 Token 不会计入价值总额。",
-          "cursorMeteredValue": "Cursor-metered spend: {{value}} (actual plan deduction; API value above is a list-price estimate)."
         },
-        "activitySummary": {
-          "agentsSpawned": "启动的 Agent",
-          "agentTime": "Agent 工作时长",
-          "prsCreated": "创建的 PR",
-          "durationMinutes": "{{value0}} 分钟",
-          "durationDaysHours": "{{value0}} 天 {{value1}} 小时",
-          "durationHoursMinutes": "{{value0}} 小时 {{value1}} 分钟"
-        },
-        "modelChart": {
-          "title": "模型分布",
-          "tokenDescription": "按模型汇总归因到 AgentStart 工作树的 Token 用量。",
-          "valueDescription": "仅对具有权威定价明细的 Token 类别汇总标准全球 API 等价价值。",
-          "tokenAriaLabel": "各模型的 Token 用量",
-          "valueAriaLabel": "各模型的预估 API 价值",
-          "tokensTotal": "Token 总数",
-          "valueTotal": "API 价值",
-          "tokenUnavailable": "暂时没有可用的模型 Token 数据。",
-          "valueUnavailable": "暂时没有可用于比较的已知模型价格。",
-          "other": "其他",
-          "refreshAriaLabel": "刷新本地用量统计",
-          "refresh": "刷新用量"
-        },
-        "projectUsage": {
-          "title": "按项目",
-          "tokenSummary": "{{tokens}} · {{projects}} 个项目 · {{sessions}} 个会话",
-          "valueSummary": "{{value}} 已知 API 价值 · {{projects}} 个项目 · {{tokens}}",
-          "filterLabel": "筛选项目",
-          "filterPlaceholder": "筛选项目",
-          "empty": "暂时没有可归属到项目的用量。",
-          "noResults": "没有符合筛选条件的项目。",
-          "unpriced": "包含无权威定价用量的项目不显示合计 API 价值。",
-          "projectDetail": "{{tokens}} · {{sessions}} 个会话"
-        },
-        "metricControls": {
-          "metricLabel": "统计指标",
-          "rangeLabel": "用量范围",
-          "sevenDays": "7 天",
-          "thirtyDays": "30 天",
-          "ninetyDays": "90 天"
-        },
-        "provider": {
-          "claude": "Claude",
-          "codex": "Codex",
-          "openCode": "OpenCode"
-        },
-        "providerChart": {
-          "title": "每日用量",
-          "tokenDescription": "所选时间范围内按供应方拆分的 Token 用量。",
-          "valueDescription": "按供应方拆分的已知 API 等价价值；不包含未定价用量。",
-          "ariaLabel": "{{days}} 天内按供应方统计的{{metric}}",
-          "tokens": "Token",
-          "value": "API 价值"
-        }
-      },
-      "workspace-panel": {
         "GitGraphState": {
           "f3a2c1d0e5": "Failed to load commits",
           "a4b5c6d7e8": "Failed to load more commits"
@@ -8072,6 +7963,111 @@
             "subjectCopied": "Commit subject copied",
             "subjectCopyFailed": "Failed to copy commit subject"
           }
+        }
+      },
+      "ShortcutKeyCombo": {
+        "07eb4985a1": "双击 {{value0}}"
+      },
+      "star": {
+        "nag": {
+          "StarNagToastHost": {
+            "starredThanks": "已加星，谢谢！",
+            "githubOpened": "已打开 GitHub",
+            "opening": "正在打开…",
+            "starring": "正在加星…",
+            "openGithub": "打开 GitHub",
+            "starOnGithub": "在 GitHub 上加星",
+            "onboardingCompleted": "入门流程已完成！",
+            "body": "如果你目前喜欢 AgentStart，在 GitHub 上加星可以帮助其他开发者发现它。",
+            "dismiss": "关闭",
+            "later": "稍后"
+          }
+        }
+      },
+      "contribution": {
+        "heatmap": {
+          "monday": "Mon",
+          "wednesday": "Wed",
+          "friday": "Fri",
+          "tokensLabel": "Daily token usage over the past year",
+          "valueLabel": "过去一年的每日预估 API 价值",
+          "less": "Less",
+          "more": "More",
+          "tokenCell": "{{value0}}: {{value1}} tokens",
+          "valueCell": "{{value0}}：预估 API 价值 {{value1}}"
+        }
+      },
+      "home": {
+        "page": {
+          "title": "活动",
+          "description": "A year of agent work, with today in context.",
+          "contributions": "Contribution history",
+          "tokenDescription": "归因到 AgentStart 工作树的 Provider 上报 Token 用量。",
+          "tokens": "Tokens",
+          "apiValue": "API 价值",
+          "valueDescription": "按每次请求的模型与 Token 类别计算标准全球 API 等价价值。",
+          "totalTokens": "Token 总数",
+          "valueUnavailable": "暂时没有可用于估算的已知模型价格。",
+          "valueCoverage": "标准全球 API 等价价值按每次请求的权威模型价格汇总，仅包含归因到 AgentStart 工作树的用量。未定价 Token 类别以及缺少请求级归因的会话汇总会被排除；这不是实际账单。",
+          "calculatingValue": "计算中…",
+          "valueNotAvailable": "暂不可用",
+          "tokensUnavailable": "暂时没有归因到 AgentStart 工作树的 Provider Token 用量。",
+          "tokenCoverage": "Token 总数使用 AgentStart 工作树中各支持 Agent 的请求级归因记录；缓存输入不会重复计算，缺少请求级归因的会话汇总会被排除。",
+          "unpricedCoverage": "缺少权威定价明细的 Token 不会计入价值总额。",
+          "cursorMeteredValue": "Cursor-metered spend: {{value}} (actual plan deduction; API value above is a list-price estimate)."
+        },
+        "activitySummary": {
+          "agentsSpawned": "启动的 Agent",
+          "agentTime": "Agent 工作时长",
+          "prsCreated": "创建的 PR",
+          "durationMinutes": "{{value0}} 分钟",
+          "durationDaysHours": "{{value0}} 天 {{value1}} 小时",
+          "durationHoursMinutes": "{{value0}} 小时 {{value1}} 分钟"
+        },
+        "modelChart": {
+          "title": "模型分布",
+          "tokenDescription": "按模型汇总归因到 AgentStart 工作树的 Token 用量。",
+          "valueDescription": "仅对具有权威定价明细的 Token 类别汇总标准全球 API 等价价值。",
+          "tokenAriaLabel": "各模型的 Token 用量",
+          "valueAriaLabel": "各模型的预估 API 价值",
+          "tokensTotal": "Token 总数",
+          "valueTotal": "API 价值",
+          "tokenUnavailable": "暂时没有可用的模型 Token 数据。",
+          "valueUnavailable": "暂时没有可用于比较的已知模型价格。",
+          "other": "其他",
+          "refreshAriaLabel": "刷新本地用量统计",
+          "refresh": "刷新用量"
+        },
+        "projectUsage": {
+          "title": "按项目",
+          "tokenSummary": "{{tokens}} · {{projects}} 个项目 · {{sessions}} 个会话",
+          "valueSummary": "{{value}} 已知 API 价值 · {{projects}} 个项目 · {{tokens}}",
+          "filterLabel": "筛选项目",
+          "filterPlaceholder": "筛选项目",
+          "empty": "暂时没有可归属到项目的用量。",
+          "noResults": "没有符合筛选条件的项目。",
+          "unpriced": "包含无权威定价用量的项目不显示合计 API 价值。",
+          "projectDetail": "{{tokens}} · {{sessions}} 个会话"
+        },
+        "metricControls": {
+          "metricLabel": "统计指标",
+          "rangeLabel": "用量范围",
+          "sevenDays": "7 天",
+          "thirtyDays": "30 天",
+          "ninetyDays": "90 天"
+        },
+        "provider": {
+          "claude": "Claude",
+          "codex": "Codex",
+          "openCode": "OpenCode"
+        },
+        "providerChart": {
+          "title": "每日用量",
+          "tokenDescription": "所选时间范围内按供应方拆分的 Token 用量。",
+          "valueDescription": "按供应方拆分的已知 API 等价价值；不包含未定价用量。",
+          "ariaLabel": "{{days}} 天内按供应方统计的{{metric}}",
+          "tokens": "Token",
+          "value": "API 价值"
         }
       },
       "rate": {

@@ -19,15 +19,14 @@ import {
   selectReviewCacheData,
   selectReviewCacheEntry
 } from '~renderer/workspace-panel/review-cache-entry-selection'
+import { useCopyFeedbackState } from '~renderer/workspace-panel/source-control/tree/copy-feedback-state'
+import { cancelSourceControlEditorRevealFrames } from '~renderer/workspace-panel/source-control/tree/editor-reveal'
 import { getWorktreeGitIdentityDisplay } from '~renderer/worktree/git-identity-display'
 
-import { useCopyFeedbackState } from '../copy-feedback-state'
-import { cancelSourceControlEditorRevealFrames } from '../editor-reveal'
 import { EMPTY_BRANCH_CHANGE_ENTRIES, EMPTY_GIT_STATUS_ENTRIES } from '../panel-constants'
 
 export type SourceControlControllerInput = {
   isVisible: boolean
-  workspacePanelTabId?: string
 }
 
 export function useSourceControlStoreState(scope: SourceControlControllerInput) {

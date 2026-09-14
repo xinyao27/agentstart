@@ -21,14 +21,8 @@ import { useSourceControlReviewGeneration } from './controller/review-generation
 import { useSourceControlStatusRefresh } from './controller/status-refresh'
 import { useSourceControlStoreState } from './controller/store-state'
 
-export function useSourceControlController({
-  isVisible,
-  workspacePanelTabId
-}: {
-  isVisible: boolean
-  workspacePanelTabId?: string
-}) {
-  const storeState = useSourceControlStoreState({ isVisible, workspacePanelTabId })
+export function useSourceControlController({ isVisible }: { isVisible: boolean }) {
+  const storeState = useSourceControlStoreState({ isVisible })
   const interactionState = useSourceControlInteractionState(storeState)
   const statusRefresh = useSourceControlStatusRefresh(interactionState)
   const hostedReviewState = useSourceControlHostedReviewState(statusRefresh)

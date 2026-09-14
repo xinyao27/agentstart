@@ -1,9 +1,15 @@
 import { translate } from '~renderer/i18n/i18n'
 import { isStageableStatusEntry } from '~renderer/workspace-panel/discard-all-sequence'
+import {
+  resolveCommitAreaPrimaryAction,
+  type PrimaryAction
+} from '~renderer/workspace-panel/source-control/commit/primary-action'
+import { resolveCreatePrHeaderAction } from '~renderer/workspace-panel/source-control/commit/primary-create-pr-intent-action'
+import {
+  resolveDropdownItems,
+  type DropdownEntry
+} from '~renderer/workspace-panel/source-control/dropdown/dropdown-items'
 
-import { resolveDropdownItems, type DropdownEntry } from '../dropdown-items'
-import { resolveCommitAreaPrimaryAction, type PrimaryAction } from '../primary-action'
-import { resolveCreatePrHeaderAction } from '../primary-create-pr-intent-action'
 import type { SourceControlCreateReviewIntentController } from './create-review-intent'
 
 export function useSourceControlActionModel(scope: SourceControlCreateReviewIntentController) {

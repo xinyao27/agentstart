@@ -19,13 +19,16 @@ import {
   DropdownMenuTrigger
 } from '~renderer/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '~renderer/ui/tooltip'
+import { SourceControlHeaderToolbar } from '~renderer/workspace-panel/source-control/header/header-toolbar'
+import {
+  SourceControlScopeToolbarActions,
+  SourceControlScopeToolbarSelect
+} from '~renderer/workspace-panel/source-control/header/scope-toolbar'
+import { DiffCommentsInlineList } from '~renderer/workspace-panel/source-control/review/diff-comments-inline-list'
 
 import { openGitGraphTab } from '../git-graph/open-tab'
 import type { SourceControlController } from './controller'
-import { DiffCommentsInlineList } from './diff-comments-inline-list'
-import { SourceControlHeaderToolbar } from './header-toolbar'
 import { SOURCE_CONTROL_PANEL_GUTTER_CLASS_NAME } from './panel-constants'
-import { SourceControlScopeToolbarActions, SourceControlScopeToolbarSelect } from './scope-toolbar'
 
 export function SourceControlPanelHeader({
   controller
@@ -34,7 +37,6 @@ export function SourceControlPanelHeader({
 }): React.JSX.Element {
   const {
     activeGroupId,
-    activeTabId,
     activeWorktreeId,
     branchSummary,
     deleteDiffComment,
@@ -57,7 +59,6 @@ export function SourceControlPanelHeader({
     setPendingDiffCommentsClear,
     settings,
     sourceControlViewMode,
-    workspacePanelTabId,
     worktreePath
   } = controller
   const activeGitGraphTabId = useAppStore((s) => {
@@ -107,13 +108,13 @@ export function SourceControlPanelHeader({
       />
 
       {detachedHeadDisplay ? (
-        <div className={cn('border-border border-b py-2', SOURCE_CONTROL_PANEL_GUTTER_CLASS_NAME)}>
+        <div className={cn('py-2', SOURCE_CONTROL_PANEL_GUTTER_CLASS_NAME)}>
           <DetachedHeadBadge display={detachedHeadDisplay} side="bottom" />
         </div>
       ) : null}
 
       {activeWorktreeId && worktreePath && diffCommentCount > 0 ? (
-        <div className="border-border border-b">
+        <div>
           <div
             className={cn('flex items-center gap-1 py-1.5', SOURCE_CONTROL_PANEL_GUTTER_CLASS_NAME)}
           >
@@ -156,10 +157,9 @@ export function SourceControlPanelHeader({
                 groupId={activeGroupId ?? activeWorktreeId}
                 comments={diffCommentsForActive}
                 triggerClassName="size-6"
-                // Why: only the focused split tab may consume the global shortcut request.
-                respondToOpenRequest={
-                  isVisible && (!workspacePanelTabId || workspacePanelTabId === activeTabId)
-                }
+                // Why: the panel is a single shell-level instance, so it is the
+                // only consumer of the global shortcut request while visible.
+                respondToOpenRequest={isVisible}
               />
               <TooltipProvider>
                 <Tooltip>

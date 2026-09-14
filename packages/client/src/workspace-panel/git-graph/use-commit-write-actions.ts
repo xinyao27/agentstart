@@ -90,7 +90,7 @@ export function useGitGraphCommitWriteActions({
         case 'conflicts':
           toast.warning(
             translate(
-              'auto.components.workspace-panel.git-graph.CommitWriteActions.conflicts',
+              'auto.components.workspacePanel.git-graph.CommitWriteActions.conflicts',
               'Stopped with conflicts — resolve them in Source Control'
             ),
             { description: outcome.paths.join(', ') }
@@ -102,7 +102,7 @@ export function useGitGraphCommitWriteActions({
         case 'error':
           toast.error(
             translate(
-              'auto.components.workspace-panel.git-graph.CommitWriteActions.failed',
+              'auto.components.workspacePanel.git-graph.CommitWriteActions.failed',
               'Git command failed'
             ),
             { description: outcome.message }
@@ -112,7 +112,7 @@ export function useGitGraphCommitWriteActions({
     } catch (error) {
       toast.error(
         translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteActions.failed',
+          'auto.components.workspacePanel.git-graph.CommitWriteActions.failed',
           'Git command failed'
         ),
         { description: error instanceof Error ? error.message : String(error) }
@@ -149,14 +149,14 @@ export function useGitGraphCommitWriteActions({
       await shellClient.ui.writeClipboardText(item.subject)
       toast.success(
         translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteActions.subjectCopied',
+          'auto.components.workspacePanel.git-graph.CommitWriteActions.subjectCopied',
           'Commit subject copied'
         )
       )
     } catch {
       toast.error(
         translate(
-          'auto.components.workspace-panel.git-graph.CommitWriteActions.subjectCopyFailed',
+          'auto.components.workspacePanel.git-graph.CommitWriteActions.subjectCopyFailed',
           'Failed to copy commit subject'
         )
       )

@@ -42,54 +42,54 @@ export function GitGraphCommitContextMenu({
     <ContextMenuContent className="w-auto whitespace-nowrap">
       <ContextMenuItem onClick={() => onAction('add-tag', item)}>
         <Tag className="size-3.5" />
-        {translate('auto.components.workspace-panel.git-graph.CommitMenu.addTag', 'Add Tag…')}
+        {translate('auto.components.workspacePanel.git-graph.CommitMenu.addTag', 'Add Tag…')}
       </ContextMenuItem>
       <ContextMenuItem onClick={() => onAction('create-branch', item)}>
         <GitBranch className="size-3.5" />
         {translate(
-          'auto.components.workspace-panel.git-graph.CommitMenu.createBranch',
+          'auto.components.workspacePanel.git-graph.CommitMenu.createBranch',
           'Create Branch…'
         )}
       </ContextMenuItem>
       <ContextMenuSeparator />
       <ContextMenuItem onClick={() => onAction('checkout', item)}>
         <SignIn className="size-3.5" />
-        {translate('auto.components.workspace-panel.git-graph.CommitMenu.checkout', 'Checkout…')}
+        {translate('auto.components.workspacePanel.git-graph.CommitMenu.checkout', 'Checkout…')}
       </ContextMenuItem>
       <ContextMenuItem onClick={() => onAction('cherry-pick', item)}>
         <GitCommit className="size-3.5" />
         {translate(
-          'auto.components.workspace-panel.git-graph.CommitMenu.cherryPick',
+          'auto.components.workspacePanel.git-graph.CommitMenu.cherryPick',
           'Cherry Pick…'
         )}
       </ContextMenuItem>
       <ContextMenuItem onClick={() => onAction('revert', item)}>
         <ArrowUUpLeft className="size-3.5" />
-        {translate('auto.components.workspace-panel.git-graph.CommitMenu.revert', 'Revert…')}
+        {translate('auto.components.workspacePanel.git-graph.CommitMenu.revert', 'Revert…')}
       </ContextMenuItem>
       <ContextMenuItem variant="destructive" onClick={() => onAction('drop', item)}>
         <Trash className="size-3.5" />
-        {translate('auto.components.workspace-panel.git-graph.CommitMenu.drop', 'Drop…')}
+        {translate('auto.components.workspacePanel.git-graph.CommitMenu.drop', 'Drop…')}
       </ContextMenuItem>
       <ContextMenuSeparator />
       <ContextMenuItem onClick={() => onAction('merge', item)}>
         <ArrowsMerge className="size-3.5" />
         {translate(
-          'auto.components.workspace-panel.git-graph.CommitMenu.merge',
+          'auto.components.workspacePanel.git-graph.CommitMenu.merge',
           'Merge into current branch…'
         )}
       </ContextMenuItem>
       <ContextMenuItem onClick={() => onAction('rebase', item)}>
         <Stack className="size-3.5" />
         {translate(
-          'auto.components.workspace-panel.git-graph.CommitMenu.rebase',
+          'auto.components.workspacePanel.git-graph.CommitMenu.rebase',
           'Rebase current branch on this Commit…'
         )}
       </ContextMenuItem>
       <ContextMenuItem variant="destructive" onClick={() => onAction('reset', item)}>
         <Rewind className="size-3.5" />
         {translate(
-          'auto.components.workspace-panel.git-graph.CommitMenu.reset',
+          'auto.components.workspacePanel.git-graph.CommitMenu.reset',
           'Reset current branch to this Commit…'
         )}
       </ContextMenuItem>
@@ -97,28 +97,28 @@ export function GitGraphCommitContextMenu({
       <ContextMenuItem onClick={(event) => onAction('open-remote', item, event)}>
         <Globe className="size-3.5" />
         {translate(
-          'auto.components.workspace-panel.git-graph.CommitContextMenu.a1b2c3d4e5',
+          'auto.components.workspacePanel.git-graph.CommitContextMenu.a1b2c3d4e5',
           'Open commit in browser'
         )}
       </ContextMenuItem>
       <ContextMenuItem onClick={() => onAction('copy-hash', item)}>
         <Hash className="size-3.5" />
         {translate(
-          'auto.components.workspace-panel.git-graph.CommitContextMenu.b2c3d4e5f6',
+          'auto.components.workspacePanel.git-graph.CommitContextMenu.b2c3d4e5f6',
           'Copy commit hash'
         )}
       </ContextMenuItem>
       <ContextMenuItem onClick={() => onAction('copy-subject', item)}>
         <TextAa className="size-3.5" />
         {translate(
-          'auto.components.workspace-panel.git-graph.CommitMenu.copySubject',
+          'auto.components.workspacePanel.git-graph.CommitMenu.copySubject',
           'Copy commit subject'
         )}
       </ContextMenuItem>
       <ContextMenuItem onClick={() => onAction('copy-message', item)}>
         <Copy className="size-3.5" />
         {translate(
-          'auto.components.workspace-panel.git-graph.CommitContextMenu.c3d4e5f6a7',
+          'auto.components.workspacePanel.git-graph.CommitContextMenu.c3d4e5f6a7',
           'Copy commit message'
         )}
       </ContextMenuItem>
@@ -126,7 +126,7 @@ export function GitGraphCommitContextMenu({
       <ContextMenuItem onClick={() => onAction('explain', item)}>
         <Sparkles className="size-3.5" />
         {translate(
-          'auto.components.workspace-panel.git-graph.CommitContextMenu.d4e5f6a7b8',
+          'auto.components.workspacePanel.git-graph.CommitContextMenu.d4e5f6a7b8',
           'Explain changes'
         )}
       </ContextMenuItem>

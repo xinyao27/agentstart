@@ -1,9 +1,8 @@
 import type { ActiveWorkspacePanelTab } from '@agentstart/protocol/settings/ui-state'
 import { getWorkbenchLocation, navigateWorkbench } from '~renderer/runtime/workbench-location'
 import { useAppStore } from '~renderer/store/state'
+import type { SourceControlPanelView } from '~renderer/workspace-panel/source-control/tab/state'
 import { normalizeWorkspacePanelRoute } from '~renderer/workspace-panel/workspace-panel-route'
-
-import type { SourceControlPanelView } from './source-control/workspace-panel/state'
 
 type ExplorerDestination =
   | { view: 'files' }

@@ -17,9 +17,12 @@ import {
   DropdownMenuTrigger
 } from '~renderer/ui/dropdown-menu'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
+import type {
+  DropdownActionKind,
+  DropdownEntry
+} from '~renderer/workspace-panel/source-control/dropdown/dropdown-items'
 
 import { CreateHostedReviewComposerFields } from './create-hosted-review-composer-fields'
-import type { DropdownActionKind, DropdownEntry } from './source-control/dropdown-items'
 import { stripBaseRef } from './use-create-pull-request-dialog-fields'
 import {
   WORKSPACE_PANEL_MORPHING_PRIMARY_BUTTON_CLASS,

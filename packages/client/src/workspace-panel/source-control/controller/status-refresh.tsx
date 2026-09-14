@@ -13,17 +13,17 @@ import {
 import { getRuntimeRepoBaseRefDefault } from '~renderer/runtime/repo-client'
 import { refreshGitStatusForWorktree } from '~renderer/workspace-panel/git-status-refresh'
 import type { PullRequestGenerationContext } from '~renderer/workspace-panel/pull-request-generation-state'
-
 import {
   resolveSourceControlBaseRef,
   resolveSourceControlCompareBaseRef,
   resolveSourceControlPickerBaseRef
-} from '../base-ref'
+} from '~renderer/workspace-panel/source-control/review/base-ref'
 import {
   beginHugeRepoWarningProbe,
   hasDismissedHugeRepoWarning,
   markHugeRepoWarningDismissed
-} from '../huge-repo-warning-dismissals'
+} from '~renderer/workspace-panel/source-control/tree/huge-repo-warning-dismissals'
+
 import type { SourceControlInteractionStateController } from './interaction-state'
 
 export function useSourceControlStatusRefresh(scope: SourceControlInteractionStateController) {

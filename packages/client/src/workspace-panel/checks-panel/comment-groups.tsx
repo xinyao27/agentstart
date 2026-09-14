@@ -25,10 +25,7 @@ import {
   getPRCommentGroupSurfaceClasses,
   type PRCommentPresentationClasses
 } from '../pr-comment-presentation'
-import {
-  RightPanelCommentComposer,
-  type RightPanelCommentSubmitResult
-} from '../right-panel-comment-composer'
+import { CommentComposer, type CommentSubmitResult } from './comment-composer'
 import { CommentRow } from './comment-row'
 
 export function PRCommentGroupView({
@@ -61,7 +58,7 @@ export function PRCommentGroupView({
   onResolve?: (threadId: string, resolve: boolean) => boolean | Promise<boolean>
   onStartReply?: (commentId: number) => void
   onCancelReply?: (commentId: number) => void
-  onReply?: (comment: PRComment, body: string) => Promise<RightPanelCommentSubmitResult>
+  onReply?: (comment: PRComment, body: string) => Promise<CommentSubmitResult>
   onEditComment?: (comment: PRComment, body: string) => Promise<boolean>
   onDeleteComment?: (comment: PRComment) => void | Promise<void>
   onQueueForAgent?: () => void
@@ -71,7 +68,7 @@ export function PRCommentGroupView({
   const renderReplyComposer = (comment: PRComment): React.ReactNode =>
     replyingCommentId === comment.id && onReply ? (
       <div className={cn('px-3 pb-2', group.kind === 'thread' && 'pl-6')}>
-        <RightPanelCommentComposer
+        <CommentComposer
           placeholder={translate(
             'auto.components.workspacePanel.checks.panel.content.ba20d1a896',
             'Reply to {{value0}}',
@@ -194,7 +191,7 @@ export function ResolvedCommentGroupsSection({
   onResolve?: (threadId: string, resolve: boolean) => boolean | Promise<boolean>
   onStartReply?: (commentId: number) => void
   onCancelReply?: (commentId: number) => void
-  onReply?: (comment: PRComment, body: string) => Promise<RightPanelCommentSubmitResult>
+  onReply?: (comment: PRComment, body: string) => Promise<CommentSubmitResult>
   onEditComment?: (comment: PRComment, body: string) => Promise<boolean>
   onDeleteComment?: (comment: PRComment) => void | Promise<void>
 }): React.JSX.Element | null {

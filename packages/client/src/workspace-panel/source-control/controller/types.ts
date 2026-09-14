@@ -1,4 +1,4 @@
-import type { SourceControlActionError } from '../action-error'
+import type { SourceControlActionError } from '~renderer/workspace-panel/source-control/tree/action-error'
 
 export type RunRemoteActionResult =
   | { status: 'ok' }

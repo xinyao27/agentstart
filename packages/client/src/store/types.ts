@@ -1,3 +1,5 @@
+import type { SourceControlPanelViewSlice } from '~renderer/workspace-panel/source-control/tab/state'
+
 import type { DetectedAgentsSlice } from '../agent/detected-state'
 import type { AgentStatusSlice } from '../agent/status-state/slice'
 import type { AgentStartProfilesSlice } from '../agentstart-profiles/state'
@@ -33,7 +35,6 @@ import type { WorkspaceCleanupSlice } from '../workspace-cleanup/state'
 import type { CommitMessageGenerationSlice } from '../workspace-panel/commit-message-generation-state'
 import type { GitGraphSlice } from '../workspace-panel/git-graph/state'
 import type { PullRequestGenerationSlice } from '../workspace-panel/pull-request-generation-state'
-import type { SourceControlPanelViewSlice } from '../workspace-panel/source-control/workspace-panel/state'
 import type { WorkspaceSpaceSlice } from '../workspace-space/state'
 import type { WorktreeNavHistorySlice } from '../worktree/state/nav-history'
 import type { WorktreeSlice } from '../worktree/state/types'

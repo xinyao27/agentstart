@@ -28,10 +28,7 @@ import {
   usePRCommentsListSelection,
   type PRCommentsListSelectionClearRequest
 } from '../pr-comments-list-selection'
-import {
-  RightPanelCommentComposer,
-  type RightPanelCommentSubmitResult
-} from '../right-panel-comment-composer'
+import { CommentComposer, type CommentSubmitResult } from './comment-composer'
 import { PRCommentGroupView, ResolvedCommentGroupsSection } from './comment-groups'
 import { scrollElementBottomIntoView } from './comment-scroll'
 import { PRCommentsHeader, type PRCommentsListDisplayMode } from './comments-header'
@@ -60,9 +57,9 @@ export function PRCommentsList({
   selectionClearRequest?: PRCommentsListSelectionClearRequest | null
   resolveCommentsWithAIDisabled?: boolean
   resolveCommentsWithAIDisabledReason?: string
-  onAddComment?: (body: string) => Promise<RightPanelCommentSubmitResult>
+  onAddComment?: (body: string) => Promise<CommentSubmitResult>
   onResolveSelectedCommentsWithAI?: (groups: PRCommentGroup[]) => void
-  onReply?: (comment: PRComment, body: string) => Promise<RightPanelCommentSubmitResult>
+  onReply?: (comment: PRComment, body: string) => Promise<CommentSubmitResult>
   onResolve?: (threadId: string, resolve: boolean) => boolean | Promise<boolean>
   onEditComment?: (comment: PRComment, body: string) => Promise<boolean>
   onDeleteComment?: (comment: PRComment) => void | Promise<void>
@@ -191,7 +188,7 @@ export function PRCommentsList({
       ref={addCommentSurfaceRef}
       className={cn(empty ? 'px-3 py-2' : 'border-t border-border px-3 py-2')}
     >
-      <RightPanelCommentComposer
+      <CommentComposer
         placeholder={
           empty
             ? translate(

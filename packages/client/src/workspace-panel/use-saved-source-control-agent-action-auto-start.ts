@@ -6,9 +6,8 @@ import type {
   SourceControlLaunchActionId
 } from '@agentstart/protocol/source-control/ai-actions'
 import { useEffect, useRef, useState } from 'react'
-
-import { sourceControlActionRecipeMatchesTarget } from './source-control/action-recipe-match'
-import { isSourceControlAgentDetectedAndEnabled } from './source-control/agent-action-dialog-support'
+import { isSourceControlAgentDetectedAndEnabled } from '~renderer/workspace-panel/source-control/agent-action/agent-action-dialog-support'
+import { sourceControlActionRecipeMatchesTarget } from '~renderer/workspace-panel/source-control/tree/action-recipe-match'
 
 type SavedSourceControlAgentActionTargetValue = 'repo' | 'global'
 

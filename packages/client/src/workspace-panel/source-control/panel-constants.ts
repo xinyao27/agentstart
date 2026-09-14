@@ -1,7 +1,6 @@
 import type { GitBranchChangeEntry } from '@agentstart/protocol/git/branch-compare-types'
 import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
-
-import type { SourceControlSectionArea } from './section-order'
+import type { SourceControlSectionArea } from '~renderer/workspace-panel/source-control/tree/section-order'
 
 export const EMPTY_GIT_STATUS_ENTRIES: GitStatusEntry[] = []
 export const EMPTY_BRANCH_CHANGE_ENTRIES: GitBranchChangeEntry[] = []

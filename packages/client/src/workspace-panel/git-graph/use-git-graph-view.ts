@@ -7,9 +7,9 @@ import { useEventCallback } from '~renderer/react/use-event-callback'
 import { getRepoOwnerRoutedSettings } from '~renderer/repo/runtime-owner'
 import { useRepoById, useWorktreeById } from '~renderer/store/selectors'
 import { useAppStore } from '~renderer/store/state'
+import type { SourceControlRowOpenEvent } from '~renderer/workspace-panel/source-control/tree/split-open'
 
 import { showWorkspacePanel } from '../show-workspace-panel'
-import type { SourceControlRowOpenEvent } from '../source-control/split-open'
 import { useGitHistoryCommitActions } from '../use-git-history-commit-actions'
 import { collectGitGraphBranchOptions, filterGitGraphItemsByBranches } from './branch-filter'
 import { DEFAULT_GIT_GRAPH_COLUMN_WIDTHS, type GitGraphColumnWidths } from './column-widths'
@@ -222,7 +222,7 @@ export function useGitGraphView({ worktreeId, tabId }: { worktreeId: string; tab
         if (!currentGraph.result?.hasMore || attempts >= MAX_PARENT_LOAD_MORE_ATTEMPTS) {
           toast.error(
             translate(
-              'auto.components.workspace-panel.git-graph.useGitGraphView.a1b2c3d4e6',
+              'auto.components.workspacePanel.git-graph.useGitGraphView.a1b2c3d4e6',
               'Could not find that commit in the loaded history'
             )
           )

@@ -12,11 +12,11 @@ import {
   DialogHeader,
   DialogTitle
 } from '~renderer/ui/dialog'
+import { SourceControlAgentActionDialog } from '~renderer/workspace-panel/source-control/agent-action/agent-action-dialog'
+import { SourceControlTextGenerationDialog } from '~renderer/workspace-panel/source-control/ai/text-generation-dialog'
+import { SourceControlDiscardDialog } from '~renderer/workspace-panel/source-control/commit/discard-dialog'
 
-import { SourceControlAgentActionDialog } from './agent-action-dialog'
 import type { SourceControlController } from './controller'
-import { SourceControlDiscardDialog } from './discard-dialog'
-import { SourceControlTextGenerationDialog } from './text-generation-dialog'
 
 export function SourceControlPanelDialogs({
   controller

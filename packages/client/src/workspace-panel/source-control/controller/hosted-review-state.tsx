@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
-
+import {
+  buildLoadingHostedReviewCreationEligibility,
+  resolveProvisionalHostedReviewProvider
+} from '~renderer/workspace-panel/source-control/commit/primary-create-pr-intent-action'
 import {
   hasPositiveHostedReviewNumberLink,
   hasResolvableHostedReviewPushTargetLink,
   hasUsableHostedReviewPushTarget,
   resolveHostedReviewActionUpstreamStatus,
   resolveHostedReviewStateForActions
-} from '../hosted-review-push-target'
-import { buildSourceControlManualReviewUrlFromContext } from '../manual-review-url'
-import {
-  buildLoadingHostedReviewCreationEligibility,
-  resolveProvisionalHostedReviewProvider
-} from '../primary-create-pr-intent-action'
+} from '~renderer/workspace-panel/source-control/review/hosted-review-push-target'
+import { buildSourceControlManualReviewUrlFromContext } from '~renderer/workspace-panel/source-control/review/manual-review-url'
+
 import type { SourceControlStatusRefreshController } from './status-refresh'
 
 export function useSourceControlHostedReviewState(scope: SourceControlStatusRefreshController) {

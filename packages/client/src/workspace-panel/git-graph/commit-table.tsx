@@ -10,8 +10,8 @@ import { useEventCallback } from '~renderer/react/use-event-callback'
 import { Button } from '~renderer/ui/button'
 import { ContextMenu, ContextMenuTrigger } from '~renderer/ui/context-menu'
 import { ScrollArea } from '~renderer/ui/scroll-area'
+import type { SourceControlRowOpenEvent } from '~renderer/workspace-panel/source-control/tree/split-open'
 
-import type { SourceControlRowOpenEvent } from '../source-control/split-open'
 import {
   clampGitGraphColumnWidth,
   type GitGraphColumnId,
@@ -31,15 +31,15 @@ function gitGraphColumnLabel(columnId: GitGraphColumnId): string {
   switch (columnId) {
     case 'description':
       return translate(
-        'auto.components.workspace-panel.git-graph.CommitTable.b2c3d4e5f6',
+        'auto.components.workspacePanel.git-graph.CommitTable.b2c3d4e5f6',
         'Description'
       )
     case 'date':
-      return translate('auto.components.workspace-panel.git-graph.CommitTable.c3d4e5f6a7', 'Date')
+      return translate('auto.components.workspacePanel.git-graph.CommitTable.c3d4e5f6a7', 'Date')
     case 'author':
-      return translate('auto.components.workspace-panel.git-graph.CommitTable.d4e5f6a7b8', 'Author')
+      return translate('auto.components.workspacePanel.git-graph.CommitTable.d4e5f6a7b8', 'Author')
     case 'commit':
-      return translate('auto.components.workspace-panel.git-graph.CommitTable.e5f6a7b8c9', 'Commit')
+      return translate('auto.components.workspacePanel.git-graph.CommitTable.e5f6a7b8c9', 'Commit')
   }
 }
 
@@ -267,7 +267,7 @@ export function GitGraphCommitTable({
                   <LoadingIndicator className="size-3" />
                 ) : (
                   translate(
-                    'auto.components.workspace-panel.git-graph.CommitTable.a1b2c3d4e5',
+                    'auto.components.workspacePanel.git-graph.CommitTable.a1b2c3d4e5',
                     'Load More Commits'
                   )
                 )}

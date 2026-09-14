@@ -9,9 +9,9 @@ import { DetachedHeadBadge } from '~renderer/source-control/detached-head-badge'
 import { Button } from '~renderer/ui/button'
 import { Input } from '~renderer/ui/input'
 import { ScrollArea } from '~renderer/ui/scroll-area'
+import { SourceControlAgentActionDialog } from '~renderer/workspace-panel/source-control/agent-action/agent-action-dialog'
 
 import HostedReviewActions from '../hosted-review-actions'
-import { SourceControlAgentActionDialog } from '../source-control/agent-action-dialog'
 import {
   ConflictingFilesSection,
   MergeConflictNotice,
@@ -24,12 +24,10 @@ import { ChecksPanelReviewHeader } from './review-header'
 
 type ChecksPanelReviewViewProps = {
   context: useChecksPanelCreateReviewState
-  workspacePanelTabId?: string
 }
 
 export function ChecksPanelReviewView({
-  context,
-  workspacePanelTabId
+  context
 }: ChecksPanelReviewViewProps): React.JSX.Element | null {
   const {
     activeConflictReview,
@@ -232,7 +230,6 @@ export function ChecksPanelReviewView({
             checksLoading={checksLoading}
             checkDetailsContextKey={stateRequestKey}
             onLoadCheckDetails={handleLoadCheckDetails}
-            workspacePanelTabId={workspacePanelTabId}
           />
         )}
         <PRCommentsList

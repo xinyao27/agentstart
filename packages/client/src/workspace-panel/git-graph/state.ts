@@ -141,7 +141,7 @@ export const createGitGraphSlice: StateCreator<AppState, [], [], GitGraphSlice> 
         error instanceof Error
           ? error.message
           : translate(
-              'auto.components.workspace-panel.GitGraphState.f3a2c1d0e5',
+              'auto.components.workspacePanel.GitGraphState.f3a2c1d0e5',
               'Failed to load commits'
             )
       set((current) => {
@@ -220,7 +220,7 @@ export const createGitGraphSlice: StateCreator<AppState, [], [], GitGraphSlice> 
         error instanceof Error
           ? error.message
           : translate(
-              'auto.components.workspace-panel.GitGraphState.a4b5c6d7e8',
+              'auto.components.workspacePanel.GitGraphState.a4b5c6d7e8',
               'Failed to load more commits'
             )
       set((s) => ({

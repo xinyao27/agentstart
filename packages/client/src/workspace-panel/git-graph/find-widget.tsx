@@ -30,9 +30,9 @@ export function GitGraphFindWidget({
 
   const positionLabel =
     matchCount === 0
-      ? translate('auto.components.workspace-panel.git-graph.FindWidget.a1b2c3d4e5', 'No results')
+      ? translate('auto.components.workspacePanel.git-graph.FindWidget.a1b2c3d4e5', 'No results')
       : translate(
-          'auto.components.workspace-panel.git-graph.FindWidget.b2c3d4e5f6',
+          'auto.components.workspacePanel.git-graph.FindWidget.b2c3d4e5f6',
           '{{value0}} of {{value1}}',
           { value0: String(currentIndex + 1), value1: String(matchCount) }
         )
@@ -59,7 +59,7 @@ export function GitGraphFindWidget({
           }
         }}
         placeholder={translate(
-          'auto.components.workspace-panel.git-graph.FindWidget.c3d4e5f6a7',
+          'auto.components.workspacePanel.git-graph.FindWidget.c3d4e5f6a7',
           'Find by subject, author, or hash…'
         )}
         className="w-56"
@@ -74,7 +74,7 @@ export function GitGraphFindWidget({
         disabled={matchCount === 0}
         onClick={onPrev}
         aria-label={translate(
-          'auto.components.workspace-panel.git-graph.FindWidget.d4e5f6a7b8',
+          'auto.components.workspacePanel.git-graph.FindWidget.d4e5f6a7b8',
           'Previous match'
         )}
       >
@@ -87,7 +87,7 @@ export function GitGraphFindWidget({
         disabled={matchCount === 0}
         onClick={onNext}
         aria-label={translate(
-          'auto.components.workspace-panel.git-graph.FindWidget.e5f6a7b8c9',
+          'auto.components.workspacePanel.git-graph.FindWidget.e5f6a7b8c9',
           'Next match'
         )}
       >
@@ -99,7 +99,7 @@ export function GitGraphFindWidget({
         size="icon-xs"
         onClick={onClose}
         aria-label={translate(
-          'auto.components.workspace-panel.git-graph.FindWidget.f6a7b8c9d0',
+          'auto.components.workspacePanel.git-graph.FindWidget.f6a7b8c9d0',
           'Close find'
         )}
       >

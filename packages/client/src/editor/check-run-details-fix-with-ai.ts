@@ -20,9 +20,9 @@ import {
   type SourceControlAiWriteTarget
 } from '~renderer/source-control/ai-recipe-save'
 import { useAppStore } from '~renderer/store/state'
+import { openSourceControlAiSettingsTarget } from '~renderer/workspace-panel/source-control/ai/ai-settings-navigation'
 import { findWorktreeById } from '~renderer/worktree/state/types'
 
-import { openSourceControlAiSettingsTarget } from '../workspace-panel/source-control/ai-settings-navigation'
 import {
   buildCheckRunDetailsFixBasePrompt,
   getCheckRunDetailsFixDisabledReason,

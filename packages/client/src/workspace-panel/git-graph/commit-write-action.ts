@@ -101,16 +101,16 @@ export function describeGitGraphCommitWrite(
     case 'add-tag':
       return {
         title: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.tagTitle',
+          'auto.components.workspacePanel.git-graph.CommitWrite.tagTitle',
           'Add tag'
         ),
         description: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.tagBody',
+          'auto.components.workspacePanel.git-graph.CommitWrite.tagBody',
           'Create a tag pointing at commit {{commit}}.',
           { commit }
         ),
         confirmLabel: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.tagConfirm',
+          'auto.components.workspacePanel.git-graph.CommitWrite.tagConfirm',
           'Add Tag'
         ),
         destructive: false,
@@ -119,16 +119,16 @@ export function describeGitGraphCommitWrite(
     case 'create-branch':
       return {
         title: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.branchTitle',
+          'auto.components.workspacePanel.git-graph.CommitWrite.branchTitle',
           'Create branch'
         ),
         description: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.branchBody',
+          'auto.components.workspacePanel.git-graph.CommitWrite.branchBody',
           'Create a branch pointing at commit {{commit}}.',
           { commit }
         ),
         confirmLabel: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.branchConfirm',
+          'auto.components.workspacePanel.git-graph.CommitWrite.branchConfirm',
           'Create Branch'
         ),
         destructive: false,
@@ -137,16 +137,16 @@ export function describeGitGraphCommitWrite(
     case 'checkout':
       return {
         title: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.checkoutTitle',
+          'auto.components.workspacePanel.git-graph.CommitWrite.checkoutTitle',
           'Check out commit?'
         ),
         description: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.checkoutBody',
+          'auto.components.workspacePanel.git-graph.CommitWrite.checkoutBody',
           'Check out {{commit}} directly. This leaves the worktree on a detached HEAD until you check out a branch again.',
           { commit }
         ),
         confirmLabel: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.checkoutConfirm',
+          'auto.components.workspacePanel.git-graph.CommitWrite.checkoutConfirm',
           'Checkout'
         ),
         destructive: false,
@@ -155,16 +155,16 @@ export function describeGitGraphCommitWrite(
     case 'cherry-pick':
       return {
         title: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.cherryPickTitle',
+          'auto.components.workspacePanel.git-graph.CommitWrite.cherryPickTitle',
           'Cherry pick commit?'
         ),
         description: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.cherryPickBody',
+          'auto.components.workspacePanel.git-graph.CommitWrite.cherryPickBody',
           'Apply the changes from {{commit}} on top of the current branch.',
           { commit }
         ),
         confirmLabel: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.cherryPickConfirm',
+          'auto.components.workspacePanel.git-graph.CommitWrite.cherryPickConfirm',
           'Cherry Pick'
         ),
         destructive: false,
@@ -173,16 +173,16 @@ export function describeGitGraphCommitWrite(
     case 'revert':
       return {
         title: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.revertTitle',
+          'auto.components.workspacePanel.git-graph.CommitWrite.revertTitle',
           'Revert commit?'
         ),
         description: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.revertBody',
+          'auto.components.workspacePanel.git-graph.CommitWrite.revertBody',
           'Add a new commit on the current branch that undoes the changes in {{commit}}.',
           { commit }
         ),
         confirmLabel: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.revertConfirm',
+          'auto.components.workspacePanel.git-graph.CommitWrite.revertConfirm',
           'Revert'
         ),
         destructive: false,
@@ -191,16 +191,16 @@ export function describeGitGraphCommitWrite(
     case 'drop':
       return {
         title: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.dropTitle',
+          'auto.components.workspacePanel.git-graph.CommitWrite.dropTitle',
           'Drop commit?'
         ),
         description: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.dropBody',
+          'auto.components.workspacePanel.git-graph.CommitWrite.dropBody',
           'Rewrite the current branch to remove {{commit}}. Commits after it get new hashes, so anything already sharing them will need to be updated.',
           { commit }
         ),
         confirmLabel: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.dropConfirm',
+          'auto.components.workspacePanel.git-graph.CommitWrite.dropConfirm',
           'Drop Commit'
         ),
         destructive: true,
@@ -209,16 +209,16 @@ export function describeGitGraphCommitWrite(
     case 'merge':
       return {
         title: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.mergeTitle',
+          'auto.components.workspacePanel.git-graph.CommitWrite.mergeTitle',
           'Merge into current branch'
         ),
         description: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.mergeBody',
+          'auto.components.workspacePanel.git-graph.CommitWrite.mergeBody',
           'Merge {{commit}} into the branch checked out in this worktree.',
           { commit }
         ),
         confirmLabel: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.mergeConfirm',
+          'auto.components.workspacePanel.git-graph.CommitWrite.mergeConfirm',
           'Merge'
         ),
         destructive: false,
@@ -227,16 +227,16 @@ export function describeGitGraphCommitWrite(
     case 'rebase':
       return {
         title: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.rebaseTitle',
+          'auto.components.workspacePanel.git-graph.CommitWrite.rebaseTitle',
           'Rebase current branch on commit?'
         ),
         description: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.rebaseBody',
+          'auto.components.workspacePanel.git-graph.CommitWrite.rebaseBody',
           "Replay the current branch's commits on top of {{commit}}. The replayed commits get new hashes.",
           { commit }
         ),
         confirmLabel: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.rebaseConfirm',
+          'auto.components.workspacePanel.git-graph.CommitWrite.rebaseConfirm',
           'Rebase'
         ),
         destructive: true,
@@ -245,16 +245,16 @@ export function describeGitGraphCommitWrite(
     case 'reset':
       return {
         title: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.resetTitle',
+          'auto.components.workspacePanel.git-graph.CommitWrite.resetTitle',
           'Reset current branch to commit'
         ),
         description: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.resetBody',
+          'auto.components.workspacePanel.git-graph.CommitWrite.resetBody',
           'Move the current branch to {{commit}}. A hard reset also discards uncommitted changes.',
           { commit }
         ),
         confirmLabel: translate(
-          'auto.components.workspace-panel.git-graph.CommitWrite.resetConfirm',
+          'auto.components.workspacePanel.git-graph.CommitWrite.resetConfirm',
           'Reset'
         ),
         destructive: true,

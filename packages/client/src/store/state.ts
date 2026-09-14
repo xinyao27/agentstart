@@ -4,6 +4,7 @@ import {
   summarizeStateCollectionSizes
 } from '~renderer/crash-report/memory-profile'
 import { registerHttpLinkStoreAccessor } from '~renderer/editor/http-link-store-access'
+import { createSourceControlPanelViewSlice } from '~renderer/workspace-panel/source-control/tab/state'
 
 import { createDetectedAgentsSlice } from '../agent/detected-state'
 import { createAgentStatusSlice } from '../agent/status-state/slice'
@@ -40,7 +41,6 @@ import { createWorkspaceCleanupSlice } from '../workspace-cleanup/state'
 import { createCommitMessageGenerationSlice } from '../workspace-panel/commit-message-generation-state'
 import { createGitGraphSlice } from '../workspace-panel/git-graph/state'
 import { createPullRequestGenerationSlice } from '../workspace-panel/pull-request-generation-state'
-import { createSourceControlPanelViewSlice } from '../workspace-panel/source-control/workspace-panel/state'
 import { createWorkspaceSpaceSlice } from '../workspace-space/state'
 import { createWorktreeNavHistorySlice } from '../worktree/state/nav-history'
 import { createWorktreeSlice } from '../worktree/state/slice'

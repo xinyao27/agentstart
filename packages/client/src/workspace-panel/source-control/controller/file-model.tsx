@@ -1,38 +1,41 @@
 import { useEffect, useState } from 'react'
-
-import type { GitStatusSourceControlTreeNode } from '../directory-action-paths'
+import {
+  buildSourceControlScopeOptions,
+  resolveSourceControlActiveScope
+} from '~renderer/workspace-panel/source-control/header/scope-model'
+import { deriveSourceControlPushRecovery } from '~renderer/workspace-panel/source-control/review/push-recovery'
+import type { GitStatusSourceControlTreeNode } from '~renderer/workspace-panel/source-control/tree/directory-action-paths'
 import {
   filterSourceControlGroupedPathEntries,
   filterSourceControlPathEntries,
   getSourceControlFileFilterState
-} from '../file-filter'
-import {
-  EMPTY_BRANCH_CHANGE_ENTRIES,
-  SUBMODULE_EMPTY_LABEL,
-  SUBMODULE_LOADING_LABEL
-} from '../panel-constants'
-import { deriveSourceControlPushRecovery } from '../push-recovery'
-import { buildSourceControlScopeOptions, resolveSourceControlActiveScope } from '../scope-model'
+} from '~renderer/workspace-panel/source-control/tree/file-filter'
 import {
   buildSourceControlDisplaySections,
   SOURCE_CONTROL_AREAS,
   type SourceControlDisplaySectionId,
   type SourceControlEntryGroups
-} from '../section-order'
-import { compareGitStatusEntries } from '../status-sort'
+} from '~renderer/workspace-panel/source-control/tree/section-order'
+import { compareGitStatusEntries } from '~renderer/workspace-panel/source-control/tree/status-sort'
 import {
   injectExpandedSubmoduleEntries,
   injectExpandedSubmoduleRows,
   type RenderableSourceControlNode,
   type RenderableSubmoduleListItem
-} from '../submodule-expansion'
+} from '~renderer/workspace-panel/source-control/tree/submodule-expansion'
 import {
   buildGitStatusSourceControlTree,
   buildSourceControlTree,
   applyGitStatusEntryAreasToSourceControlTree,
   flattenSourceControlTree,
   namespaceSourceControlTreeDirectoryKeys
-} from '../tree'
+} from '~renderer/workspace-panel/source-control/tree/tree'
+
+import {
+  EMPTY_BRANCH_CHANGE_ENTRIES,
+  SUBMODULE_EMPTY_LABEL,
+  SUBMODULE_LOADING_LABEL
+} from '../panel-constants'
 import type { SourceControlHostedReviewStateController } from './hosted-review-state'
 
 export function useSourceControlFileModel(scope: SourceControlHostedReviewStateController) {

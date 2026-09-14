@@ -2,8 +2,8 @@ import type { HostedReviewCreationEligibility } from '@agentstart/protocol/hoste
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import { getRuntimeGitBranchCompare } from '~renderer/runtime/git-client'
 import { refreshGitStatusForWorktreeStrict } from '~renderer/workspace-panel/git-status-refresh'
+import type { CreatePrIntentRunToken } from '~renderer/workspace-panel/source-control/review/create-pr-intent-flow'
 
-import type { CreatePrIntentRunToken } from '../create-pr-intent-flow'
 import type { SourceControlCreateReviewSubmitController } from './create-review-submit'
 
 export function useSourceControlCreateReviewPrerequisites(

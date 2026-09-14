@@ -2,15 +2,18 @@ import type { GitStatusEntry } from '@agentstart/protocol/git/status-types'
 import { detectLanguage } from '~renderer/file-presentation/language-detect'
 import { joinPath } from '~renderer/path'
 import { useAppStore } from '~renderer/store/state'
-
-import { buildActiveOpenFileSignature, buildActiveOpenRowKeys } from '../active-open-file-keys'
-import type { DropdownActionKind } from '../dropdown-items'
-import { getNextSourceControlViewMode } from '../header-toolbar'
+import type { DropdownActionKind } from '~renderer/workspace-panel/source-control/dropdown/dropdown-items'
+import { getNextSourceControlViewMode } from '~renderer/workspace-panel/source-control/header/header-toolbar'
+import {
+  buildActiveOpenFileSignature,
+  buildActiveOpenRowKeys
+} from '~renderer/workspace-panel/source-control/tree/active-open-file-keys'
 import {
   isSourceControlSplitOpenModifier,
   shouldOpenSourceControlRowAsPreview,
   type SourceControlRowOpenEvent
-} from '../split-open'
+} from '~renderer/workspace-panel/source-control/tree/split-open'
+
 import type { SourceControlActionModelController } from './action-model'
 
 export function useSourceControlFileOpen(scope: SourceControlActionModelController) {
@@ -37,7 +40,6 @@ export function useSourceControlFileOpen(scope: SourceControlActionModelControll
     trackConflictPath,
     updateSettings,
     visibleFileRowKeys,
-    workspacePanelTabId,
     worktreePath
   } = scope
   const handleActionInvoke = (kind: DropdownActionKind): void => {
@@ -114,7 +116,6 @@ export function useSourceControlFileOpen(scope: SourceControlActionModelControll
       return
     }
     const targetGroupId = resolveSplitTargetGroupId(event)
-    const embeddedTargetTabId = targetGroupId ? undefined : workspacePanelTabId
     const openAsPreview = shouldOpenSourceControlRowAsPreview(event, targetGroupId)
     if (entry.conflictKind && entry.conflictStatus) {
       if (entry.conflictStatus === 'unresolved') {
@@ -122,7 +123,6 @@ export function useSourceControlFileOpen(scope: SourceControlActionModelControll
       }
       openConflictFile(activeWorktreeId, worktreePath, entry, detectLanguage(entry.path), {
         targetGroupId,
-        workspacePanelTabId: embeddedTargetTabId,
         preview: openAsPreview
       })
       return
@@ -131,7 +131,6 @@ export function useSourceControlFileOpen(scope: SourceControlActionModelControll
     const filePath = joinPath(worktreePath, entry.path)
     openDiff(activeWorktreeId, filePath, entry.path, language, entry.area === 'staged', {
       targetGroupId,
-      workspacePanelTabId: embeddedTargetTabId,
       preview: openAsPreview
     })
   }

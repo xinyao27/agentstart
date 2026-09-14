@@ -88,7 +88,7 @@ function GitGraphView({
             <LoadingIndicator className="size-3" />
             <span>
               {translate(
-                'auto.components.workspace-panel.git-graph.GitGraphView.a1b2c3d4e5',
+                'auto.components.workspacePanel.git-graph.GitGraphView.a1b2c3d4e5',
                 'Loading commits…'
               )}
             </span>
@@ -98,7 +98,7 @@ function GitGraphView({
         ) : view.items.length === 0 && !view.hasLoadedItems ? (
           <div className="text-muted-foreground px-3 py-2 text-[11px]">
             {translate(
-              'auto.components.workspace-panel.git-graph.GitGraphView.b2c3d4e5f6',
+              'auto.components.workspacePanel.git-graph.GitGraphView.b2c3d4e5f6',
               'No commits yet'
             )}
           </div>
@@ -111,11 +111,11 @@ function GitGraphView({
             <span>
               {view.hasMore
                 ? translate(
-                    'auto.components.workspace-panel.git-graph.GitGraphView.c3d4e5f6a7',
+                    'auto.components.workspacePanel.git-graph.GitGraphView.c3d4e5f6a7',
                     'No matching commits in the loaded history yet — load more to keep searching.'
                   )
                 : translate(
-                    'auto.components.workspace-panel.git-graph.GitGraphView.d4e5f6a7b8',
+                    'auto.components.workspacePanel.git-graph.GitGraphView.d4e5f6a7b8',
                     'No commits found for the selected branches in the loaded history.'
                   )}
             </span>
@@ -131,7 +131,7 @@ function GitGraphView({
                   <LoadingIndicator className="size-3" />
                 ) : (
                   translate(
-                    'auto.components.workspace-panel.git-graph.GitGraphView.e5f6a7b8c9',
+                    'auto.components.workspacePanel.git-graph.GitGraphView.e5f6a7b8c9',
                     'Load More Commits'
                   )
                 )}

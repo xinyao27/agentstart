@@ -2,9 +2,9 @@ import { normalizeHostedReviewHeadRef } from '@agentstart/protocol/hosted-review
 import { toast } from 'sonner'
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
+import { resolveBlockedCreateReviewNoticeMessage } from '~renderer/workspace-panel/source-control/review/create-review-blocked-action'
 import { stripBaseRef } from '~renderer/workspace-panel/use-create-pull-request-dialog-fields'
 
-import { resolveBlockedCreateReviewNoticeMessage } from '../create-review-blocked-action'
 import type { SourceControlReviewDialogController } from './review-dialog'
 
 export function useSourceControlCreateReview(scope: SourceControlReviewDialogController) {

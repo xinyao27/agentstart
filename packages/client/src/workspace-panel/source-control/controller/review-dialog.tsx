@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { markCommitMessageGenerationHydrated } from '~renderer/workspace-panel/commit-message-generation-state'
 import { shouldHydratePullRequestGenerationResult } from '~renderer/workspace-panel/pull-request-generation-state'
+import { hasConfiguredSourceControlTextGenerationDefaults } from '~renderer/workspace-panel/source-control/ai/text-generation-defaults'
 
 import { writeCommitDraftForWorktree } from '../panel-state'
-import { hasConfiguredSourceControlTextGenerationDefaults } from '../text-generation-defaults'
 import type { SourceControlReviewGenerationController } from './review-generation'
 
 export function useSourceControlReviewDialog(scope: SourceControlReviewGenerationController) {

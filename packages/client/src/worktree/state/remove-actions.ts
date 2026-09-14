@@ -8,8 +8,8 @@ import { disposeRemovedWorktreeParkedTerminalWatchers } from '~renderer/runtime/
 import { removeRuntimeWorktree } from '~renderer/runtime/worktree-lifecycle-target'
 import { toRuntimeWorktreeSelector } from '~renderer/runtime/worktree-selector'
 import { ensureHooksConfirmed } from '~renderer/sidebar/agentstart-hook-confirmation'
-import { clearSessionCommitDraftForWorktree } from '~renderer/workspace-panel/source-control/commit-draft-session'
-import { forgetHugeRepoWarningDismissalsForWorktrees } from '~renderer/workspace-panel/source-control/huge-repo-warning-dismissals'
+import { clearSessionCommitDraftForWorktree } from '~renderer/workspace-panel/source-control/commit/commit-draft-session'
+import { forgetHugeRepoWarningDismissalsForWorktrees } from '~renderer/workspace-panel/source-control/tree/huge-repo-warning-dismissals'
 import {
   classifyWorktreeForceDeleteReason,
   getLockedWorktreeRemovalReason,

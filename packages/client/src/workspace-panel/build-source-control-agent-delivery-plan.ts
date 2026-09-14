@@ -1,9 +1,8 @@
 import type { TuiAgent } from '@agentstart/protocol/agent/types'
 import { useAppStore } from '~renderer/store/state'
-
-import type { SourceControlAgentActionDeliveryPlanState } from './source-control/agent-action-dialog-form'
-import { buildSourceControlAgentConnectionErrorPlan } from './source-control/agent-action-dialog-support'
-import { planSourceControlAgentActionLaunch } from './source-control/agent-action-plan'
+import type { SourceControlAgentActionDeliveryPlanState } from '~renderer/workspace-panel/source-control/agent-action/agent-action-dialog-form'
+import { buildSourceControlAgentConnectionErrorPlan } from '~renderer/workspace-panel/source-control/agent-action/agent-action-dialog-support'
+import { planSourceControlAgentActionLaunch } from '~renderer/workspace-panel/source-control/agent-action/agent-action-plan'
 
 type BuildSourceControlAgentDeliveryPlanArgs = {
   selectedAgent: TuiAgent | null

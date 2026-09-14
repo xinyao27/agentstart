@@ -11,13 +11,12 @@ import {
 } from '~renderer/icons/hugeicons'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
-
 import {
   buildSourceControlTree,
   compactSourceControlTree,
   flattenSourceControlTree,
   type SourceControlTreeNode
-} from '../workspace-panel/source-control/tree'
+} from '~renderer/workspace-panel/source-control/tree/tree'
 
 type ConflictReviewTreeEntry = ConflictReviewEntry & {
   liveEntry?: GitStatusEntry

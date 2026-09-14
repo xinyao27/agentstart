@@ -4,12 +4,12 @@ import { useEventCallback } from '~renderer/react/use-event-callback'
 import { getConnectionId } from '~renderer/runtime/connection-context'
 import { getRuntimeGitBranchCompare } from '~renderer/runtime/git-client'
 import { useAppStore } from '~renderer/store/state'
-
-import { shouldClearBranchCompareForMissingBase } from '../base-ref'
+import { shouldClearBranchCompareForMissingBase } from '~renderer/workspace-panel/source-control/review/base-ref'
 import {
   shouldRefreshBranchCompareForRemoteStatus,
   shouldRefreshBranchCompareForStatusHead
-} from '../compare-summary'
+} from '~renderer/workspace-panel/source-control/review/compare-summary'
+
 import { BRANCH_REFRESH_INTERVAL_MS } from '../panel-constants'
 import type { SourceControlBulkActionsController } from './bulk-actions'
 

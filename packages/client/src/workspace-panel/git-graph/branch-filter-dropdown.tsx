@@ -46,11 +46,11 @@ export function GitGraphBranchFilterDropdown({
   const label =
     showingAll || selectedSet.size === options.length
       ? translate(
-          'auto.components.workspace-panel.git-graph.BranchFilterDropdown.a1b2c3d4e5',
+          'auto.components.workspacePanel.git-graph.BranchFilterDropdown.a1b2c3d4e5',
           'All branches'
         )
       : translate(
-          'auto.components.workspace-panel.git-graph.BranchFilterDropdown.b2c3d4e5f6',
+          'auto.components.workspacePanel.git-graph.BranchFilterDropdown.b2c3d4e5f6',
           '{{value0}} branches',
           { value0: String(selectedSet.size) }
         )
@@ -75,7 +75,7 @@ export function GitGraphBranchFilterDropdown({
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
             placeholder={translate(
-              'auto.components.workspace-panel.git-graph.BranchFilterDropdown.c3d4e5f6a7',
+              'auto.components.workspacePanel.git-graph.BranchFilterDropdown.c3d4e5f6a7',
               'Filter branches…'
             )}
             className="flex-1"
@@ -97,7 +97,7 @@ export function GitGraphBranchFilterDropdown({
           >
             <Checkbox checked={showingAll} tabIndex={-1} className="pointer-events-none" />
             {translate(
-              'auto.components.workspace-panel.git-graph.BranchFilterDropdown.d4e5f6a7b8',
+              'auto.components.workspacePanel.git-graph.BranchFilterDropdown.d4e5f6a7b8',
               'Show all branches'
             )}
           </div>

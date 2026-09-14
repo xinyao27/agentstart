@@ -11,9 +11,8 @@ import { launchAgentInNewTab } from '~renderer/agent/launch-in-new-tab'
 import { translate } from '~renderer/i18n/i18n'
 import type { SourceControlAiWriteTarget } from '~renderer/source-control/ai-recipe-save'
 import { focusTerminalTabSurface } from '~renderer/tab-bar/focus-terminal-surface'
-
-import { sourceControlActionRecipeMatchesTarget } from './source-control/action-recipe-match'
-import { resolveSourceControlAgentSaveTarget } from './source-control/agent-action-dialog-support'
+import { resolveSourceControlAgentSaveTarget } from '~renderer/workspace-panel/source-control/agent-action/agent-action-dialog-support'
+import { sourceControlActionRecipeMatchesTarget } from '~renderer/workspace-panel/source-control/tree/action-recipe-match'
 
 type RunSourceControlAgentActionStartArgs = {
   selectedAgent: TuiAgent

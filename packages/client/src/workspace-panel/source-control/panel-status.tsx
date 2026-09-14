@@ -1,8 +1,12 @@
 import { cn } from '~renderer/ui/class-names'
+import {
+  ConflictSummaryCard,
+  OperationBanner,
+  TooManyChangesBanner
+} from '~renderer/workspace-panel/source-control/review/conflict-summary'
+import { EmptyState } from '~renderer/workspace-panel/source-control/tree/empty-state'
 
-import { ConflictSummaryCard, OperationBanner, TooManyChangesBanner } from './conflict-summary'
 import type { SourceControlController } from './controller'
-import { EmptyState } from './empty-state'
 import { SOURCE_CONTROL_PANEL_GUTTER_CLASS_NAME } from './panel-constants'
 
 export function SourceControlPanelStatus({
@@ -31,7 +35,6 @@ export function SourceControlPanelStatus({
     resolveConflictsComposerOpen,
     sourceControlAiActionsVisible,
     unresolvedConflictReviewEntries,
-    workspacePanelTabId,
     worktreePath
   } = controller
 
@@ -53,8 +56,7 @@ export function SourceControlPanelStatus({
                   activeWorktreeId,
                   worktreePath,
                   unresolvedConflictReviewEntries,
-                  'live-summary',
-                  { workspacePanelTabId }
+                  'live-summary'
                 )
               }
             }}

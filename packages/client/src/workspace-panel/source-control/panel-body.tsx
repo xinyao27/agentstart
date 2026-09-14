@@ -1,13 +1,13 @@
 import { ScrollArea } from '~renderer/ui/scroll-area'
+import { SourceControlPanelCommit } from '~renderer/workspace-panel/source-control/commit/panel-commit'
+import { SourceControlUncommittedGroupsMemo } from '~renderer/workspace-panel/source-control/commit/uncommitted-groups'
+import { shouldShowSourceControlCompareUnavailableCard } from '~renderer/workspace-panel/source-control/header/header-toolbar'
+import { CompareUnavailable } from '~renderer/workspace-panel/source-control/review/compare-summary'
+import { SourceControlListView } from '~renderer/workspace-panel/source-control/tree/list-view'
+import { SourceControlPierreBranchTree } from '~renderer/workspace-panel/source-control/tree/pierre-tree'
 
-import { CompareUnavailable } from './compare-summary'
 import type { SourceControlController } from './controller'
-import { shouldShowSourceControlCompareUnavailableCard } from './header-toolbar'
-import { SourceControlListView } from './list-view'
-import { SourceControlPanelCommit } from './panel-commit'
 import { SourceControlPanelStatus } from './panel-status'
-import { SourceControlPierreBranchTree } from './pierre-tree'
-import { SourceControlUncommittedGroupsMemo } from './uncommitted-groups'
 
 export function SourceControlPanelBody({
   controller

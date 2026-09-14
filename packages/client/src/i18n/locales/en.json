@@ -7461,19 +7461,17 @@
           "folderWorkspaces": "Attached worktrees",
           "parentPrChecks": "PR Checks"
         },
-        "right": {
-          "panel": {
-            "comment": {
-              "composer": {
-                "9bca633dee": "Cancel",
-                "cf5a7aba6f": "List",
-                "d6d9c3c947": "Quote",
-                "f49e0a21e0": "Code",
-                "542bf6a7e2": "Italic",
-                "256300f8ea": "Bold",
-                "87aff03d63": "Sending...",
-                "commentTooLarge": "Comment is too large to submit safely."
-              }
+        "checksPanel": {
+          "comment": {
+            "composer": {
+              "9bca633dee": "Cancel",
+              "cf5a7aba6f": "List",
+              "d6d9c3c947": "Quote",
+              "f49e0a21e0": "Code",
+              "542bf6a7e2": "Italic",
+              "256300f8ea": "Bold",
+              "87aff03d63": "Sending...",
+              "commentTooLarge": "Comment is too large to submit safely."
             }
           }
         },
@@ -7829,114 +7827,7 @@
             "noPr": "No PR",
             "unavailable": "Unavailable"
           }
-        }
-      },
-      "ShortcutKeyCombo": {
-        "07eb4985a1": "Double-tap {{value0}}"
-      },
-      "star": {
-        "nag": {
-          "StarNagToastHost": {
-            "starredThanks": "Starred — thank you!",
-            "githubOpened": "GitHub opened",
-            "opening": "Opening…",
-            "starring": "Starring…",
-            "openGithub": "Open GitHub",
-            "starOnGithub": "Star on GitHub",
-            "onboardingCompleted": "Onboarding completed!",
-            "body": "If you’re enjoying AgentStart so far, a GitHub star helps other developers discover it.",
-            "dismiss": "Dismiss",
-            "later": "Later"
-          }
-        }
-      },
-      "contribution": {
-        "heatmap": {
-          "monday": "Mon",
-          "wednesday": "Wed",
-          "friday": "Fri",
-          "tokensLabel": "Daily token usage over the past year",
-          "valueLabel": "Daily estimated API value over the past year",
-          "less": "Less",
-          "more": "More",
-          "tokenCell": "{{value0}}: {{value1}} tokens",
-          "valueCell": "{{value0}}: {{value1}} estimated API value"
-        }
-      },
-      "home": {
-        "page": {
-          "title": "Activity",
-          "description": "A year of agent work, with today in context.",
-          "contributions": "Contribution history",
-          "tokenDescription": "Provider-reported token usage attributed to AgentStart worktrees.",
-          "tokens": "Tokens",
-          "apiValue": "API value",
-          "valueDescription": "Standard global API-equivalent value calculated per request from its model and token categories.",
-          "totalTokens": "Total tokens",
-          "valueUnavailable": "No known model pricing is available for this estimate yet.",
-          "valueCoverage": "Standard global API-equivalent value sums authoritative per-request model pricing for usage attributed to AgentStart worktrees. Unpriced token categories and session totals without request attribution are excluded; this is not a bill.",
-          "calculatingValue": "Calculating…",
-          "valueNotAvailable": "Not available",
-          "tokensUnavailable": "No provider-reported token usage attributed to AgentStart worktrees is available yet.",
-          "tokenCoverage": "Token totals use request-attributed records from supported agents in AgentStart worktrees; cached input is not counted twice, and session totals without request attribution are excluded.",
-          "unpricedCoverage": "Tokens without authoritative pricing details are excluded from value totals.",
-          "cursorMeteredValue": "Cursor-metered spend: {{value}} (actual plan deduction; API value above is a list-price estimate)."
         },
-        "activitySummary": {
-          "agentsSpawned": "Agents spawned",
-          "agentTime": "Time agents worked",
-          "prsCreated": "PRs created",
-          "durationMinutes": "{{value0}}m",
-          "durationDaysHours": "{{value0}}d {{value1}}h",
-          "durationHoursMinutes": "{{value0}}h {{value1}}m"
-        },
-        "modelChart": {
-          "title": "Model mix",
-          "tokenDescription": "Token usage attributed to AgentStart worktrees, grouped by model.",
-          "valueDescription": "Standard global API-equivalent value for token categories with authoritative pricing.",
-          "tokenAriaLabel": "Token usage by model",
-          "valueAriaLabel": "Estimated API value by model",
-          "tokensTotal": "total tokens",
-          "valueTotal": "API value",
-          "tokenUnavailable": "No model token data is available yet.",
-          "valueUnavailable": "No known model pricing is available for comparison yet.",
-          "other": "Other",
-          "refreshAriaLabel": "Refresh local usage statistics",
-          "refresh": "Refresh usage"
-        },
-        "projectUsage": {
-          "title": "By project",
-          "tokenSummary": "{{tokens}} · {{projects}} projects · {{sessions}} sessions",
-          "valueSummary": "{{value}} known API value · {{projects}} projects · {{tokens}}",
-          "filterLabel": "Filter projects",
-          "filterPlaceholder": "Filter projects",
-          "empty": "No project-attributed usage is available yet.",
-          "noResults": "No projects match this filter.",
-          "unpriced": "Projects containing usage without authoritative pricing show no combined API value.",
-          "projectDetail": "{{tokens}} · {{sessions}} sessions"
-        },
-        "metricControls": {
-          "metricLabel": "Statistic",
-          "rangeLabel": "Usage range",
-          "sevenDays": "7 days",
-          "thirtyDays": "30 days",
-          "ninetyDays": "90 days"
-        },
-        "provider": {
-          "claude": "Claude",
-          "codex": "Codex",
-          "openCode": "OpenCode"
-        },
-        "providerChart": {
-          "title": "Daily usage",
-          "tokenDescription": "Token volume by provider across the selected range.",
-          "valueDescription": "Known API-equivalent value by provider; unpriced usage is excluded.",
-          "ariaLabel": "{{metric}} by provider over {{days}} days",
-          "tokens": "Tokens",
-          "value": "API value"
-        }
-      },
-      "workspace-panel": {
         "GitGraphState": {
           "f3a2c1d0e5": "Failed to load commits",
           "a4b5c6d7e8": "Failed to load more commits"
@@ -8072,6 +7963,111 @@
             "subjectCopied": "Commit subject copied",
             "subjectCopyFailed": "Failed to copy commit subject"
           }
+        }
+      },
+      "ShortcutKeyCombo": {
+        "07eb4985a1": "Double-tap {{value0}}"
+      },
+      "star": {
+        "nag": {
+          "StarNagToastHost": {
+            "starredThanks": "Starred — thank you!",
+            "githubOpened": "GitHub opened",
+            "opening": "Opening…",
+            "starring": "Starring…",
+            "openGithub": "Open GitHub",
+            "starOnGithub": "Star on GitHub",
+            "onboardingCompleted": "Onboarding completed!",
+            "body": "If you’re enjoying AgentStart so far, a GitHub star helps other developers discover it.",
+            "dismiss": "Dismiss",
+            "later": "Later"
+          }
+        }
+      },
+      "contribution": {
+        "heatmap": {
+          "monday": "Mon",
+          "wednesday": "Wed",
+          "friday": "Fri",
+          "tokensLabel": "Daily token usage over the past year",
+          "valueLabel": "Daily estimated API value over the past year",
+          "less": "Less",
+          "more": "More",
+          "tokenCell": "{{value0}}: {{value1}} tokens",
+          "valueCell": "{{value0}}: {{value1}} estimated API value"
+        }
+      },
+      "home": {
+        "page": {
+          "title": "Activity",
+          "description": "A year of agent work, with today in context.",
+          "contributions": "Contribution history",
+          "tokenDescription": "Provider-reported token usage attributed to AgentStart worktrees.",
+          "tokens": "Tokens",
+          "apiValue": "API value",
+          "valueDescription": "Standard global API-equivalent value calculated per request from its model and token categories.",
+          "totalTokens": "Total tokens",
+          "valueUnavailable": "No known model pricing is available for this estimate yet.",
+          "valueCoverage": "Standard global API-equivalent value sums authoritative per-request model pricing for usage attributed to AgentStart worktrees. Unpriced token categories and session totals without request attribution are excluded; this is not a bill.",
+          "calculatingValue": "Calculating…",
+          "valueNotAvailable": "Not available",
+          "tokensUnavailable": "No provider-reported token usage attributed to AgentStart worktrees is available yet.",
+          "tokenCoverage": "Token totals use request-attributed records from supported agents in AgentStart worktrees; cached input is not counted twice, and session totals without request attribution are excluded.",
+          "unpricedCoverage": "Tokens without authoritative pricing details are excluded from value totals.",
+          "cursorMeteredValue": "Cursor-metered spend: {{value}} (actual plan deduction; API value above is a list-price estimate)."
+        },
+        "activitySummary": {
+          "agentsSpawned": "Agents spawned",
+          "agentTime": "Time agents worked",
+          "prsCreated": "PRs created",
+          "durationMinutes": "{{value0}}m",
+          "durationDaysHours": "{{value0}}d {{value1}}h",
+          "durationHoursMinutes": "{{value0}}h {{value1}}m"
+        },
+        "modelChart": {
+          "title": "Model mix",
+          "tokenDescription": "Token usage attributed to AgentStart worktrees, grouped by model.",
+          "valueDescription": "Standard global API-equivalent value for token categories with authoritative pricing.",
+          "tokenAriaLabel": "Token usage by model",
+          "valueAriaLabel": "Estimated API value by model",
+          "tokensTotal": "total tokens",
+          "valueTotal": "API value",
+          "tokenUnavailable": "No model token data is available yet.",
+          "valueUnavailable": "No known model pricing is available for comparison yet.",
+          "other": "Other",
+          "refreshAriaLabel": "Refresh local usage statistics",
+          "refresh": "Refresh usage"
+        },
+        "projectUsage": {
+          "title": "By project",
+          "tokenSummary": "{{tokens}} · {{projects}} projects · {{sessions}} sessions",
+          "valueSummary": "{{value}} known API value · {{projects}} projects · {{tokens}}",
+          "filterLabel": "Filter projects",
+          "filterPlaceholder": "Filter projects",
+          "empty": "No project-attributed usage is available yet.",
+          "noResults": "No projects match this filter.",
+          "unpriced": "Projects containing usage without authoritative pricing show no combined API value.",
+          "projectDetail": "{{tokens}} · {{sessions}} sessions"
+        },
+        "metricControls": {
+          "metricLabel": "Statistic",
+          "rangeLabel": "Usage range",
+          "sevenDays": "7 days",
+          "thirtyDays": "30 days",
+          "ninetyDays": "90 days"
+        },
+        "provider": {
+          "claude": "Claude",
+          "codex": "Codex",
+          "openCode": "OpenCode"
+        },
+        "providerChart": {
+          "title": "Daily usage",
+          "tokenDescription": "Token volume by provider across the selected range.",
+          "valueDescription": "Known API-equivalent value by provider; unpriced usage is excluded.",
+          "ariaLabel": "{{metric}} by provider over {{days}} days",
+          "tokens": "Tokens",
+          "value": "API value"
         }
       },
       "rate": {

@@ -40,7 +40,7 @@ export function GitGraphControlBar({
       <label className="text-muted-foreground flex shrink-0 items-center gap-1.5 text-[11px]">
         <Switch checked={includeRemoteBranches} onCheckedChange={onIncludeRemoteBranchesChange} />
         {translate(
-          'auto.components.workspace-panel.git-graph.ControlBar.a1b2c3d4e5',
+          'auto.components.workspacePanel.git-graph.ControlBar.a1b2c3d4e5',
           'Show Remote Branches'
         )}
       </label>
@@ -54,7 +54,7 @@ export function GitGraphControlBar({
               size="icon-xs"
               onClick={onToggleFind}
               aria-label={translate(
-                'auto.components.workspace-panel.git-graph.ControlBar.b2c3d4e5f6',
+                'auto.components.workspacePanel.git-graph.ControlBar.b2c3d4e5f6',
                 'Find commits'
               )}
             >
@@ -64,7 +64,7 @@ export function GitGraphControlBar({
         />
         <TooltipContent side="bottom" sideOffset={6}>
           {translate(
-            'auto.components.workspace-panel.git-graph.ControlBar.b2c3d4e5f6',
+            'auto.components.workspacePanel.git-graph.ControlBar.b2c3d4e5f6',
             'Find commits'
           )}
         </TooltipContent>
@@ -79,7 +79,7 @@ export function GitGraphControlBar({
               onClick={onRefresh}
               disabled={isRefreshing}
               aria-label={translate(
-                'auto.components.workspace-panel.git-graph.ControlBar.c3d4e5f6a7',
+                'auto.components.workspacePanel.git-graph.ControlBar.c3d4e5f6a7',
                 'Refresh'
               )}
             >
@@ -92,7 +92,7 @@ export function GitGraphControlBar({
           }
         />
         <TooltipContent side="bottom" sideOffset={6}>
-          {translate('auto.components.workspace-panel.git-graph.ControlBar.c3d4e5f6a7', 'Refresh')}
+          {translate('auto.components.workspacePanel.git-graph.ControlBar.c3d4e5f6a7', 'Refresh')}
         </TooltipContent>
       </Tooltip>
       <Button
@@ -101,11 +101,11 @@ export function GitGraphControlBar({
         size="icon-xs"
         onClick={onClose}
         aria-label={translate(
-          'auto.components.workspace-panel.git-graph.ControlBar.d4e5f6a7b8',
+          'auto.components.workspacePanel.git-graph.ControlBar.d4e5f6a7b8',
           'Close Git Graph'
         )}
         title={translate(
-          'auto.components.workspace-panel.git-graph.ControlBar.d4e5f6a7b8',
+          'auto.components.workspacePanel.git-graph.ControlBar.d4e5f6a7b8',
           'Close Git Graph'
         )}
       >

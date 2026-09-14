@@ -3,11 +3,11 @@ import { getConnectionId } from '~renderer/runtime/connection-context'
 import { bulkStageRuntimeGitPaths, bulkUnstageRuntimeGitPaths } from '~renderer/runtime/git-client'
 import { shouldForcePushWithLeaseForUpstream } from '~renderer/source-control/workflow/operation'
 import { getStageAllPaths } from '~renderer/workspace-panel/discard-all-sequence'
-
 import type {
   BranchCompareRemoteStatusSnapshot,
   BranchCompareStatusHeadSnapshot
-} from '../compare-summary'
+} from '~renderer/workspace-panel/source-control/review/compare-summary'
+
 import type { SourceControlFileOpenController } from './file-open'
 
 export function useSourceControlBulkActions(scope: SourceControlFileOpenController) {

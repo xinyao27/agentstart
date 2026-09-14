@@ -21,7 +21,7 @@ export function GitGraphUncommittedRow({
   onOpen: () => void
 }): React.JSX.Element {
   const label = translate(
-    'auto.components.workspace-panel.git-graph.UncommittedRow.a1b2c3d4e5',
+    'auto.components.workspacePanel.git-graph.UncommittedRow.a1b2c3d4e5',
     'Uncommitted Changes'
   )
 

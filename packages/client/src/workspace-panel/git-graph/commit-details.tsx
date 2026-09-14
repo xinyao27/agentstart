@@ -9,13 +9,13 @@ import { LoadingIndicator } from '~renderer/loading/indicator'
 import { basename, dirname } from '~renderer/path'
 import { Button } from '~renderer/ui/button'
 import { ScrollArea } from '~renderer/ui/scroll-area'
-
-import { DiffLineCounts } from '../source-control/entry-details'
-import type { SourceControlRowOpenEvent } from '../source-control/split-open'
+import { DiffLineCounts } from '~renderer/workspace-panel/source-control/tree/entry-details'
+import type { SourceControlRowOpenEvent } from '~renderer/workspace-panel/source-control/tree/split-open'
 import {
   toPermanentSourceControlRowOpenEvent,
   toSourceControlRowOpenEvent
-} from '../source-control/split-open'
+} from '~renderer/workspace-panel/source-control/tree/split-open'
+
 import { STATUS_COLORS, STATUS_LABELS } from '../status-display'
 import { formatGitGraphFullDate, formatGitGraphMessageBody } from './format'
 import { GIT_GRAPH_EXPAND_HEIGHT } from './layout'
@@ -110,7 +110,7 @@ export function GitGraphCommitDetails({
                 error instanceof Error
                   ? error.message
                   : translate(
-                      'auto.components.workspace-panel.git-graph.CommitDetails.a1b2c3d4e5',
+                      'auto.components.workspacePanel.git-graph.CommitDetails.a1b2c3d4e5',
                       'Failed to load commit files'
                     )
             }
@@ -134,7 +134,7 @@ export function GitGraphCommitDetails({
           <dl className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-2 gap-y-1">
             <dt className="text-muted-foreground">
               {translate(
-                'auto.components.workspace-panel.git-graph.CommitDetails.b2c3d4e5f6',
+                'auto.components.workspacePanel.git-graph.CommitDetails.b2c3d4e5f6',
                 'Hash'
               )}
             </dt>
@@ -143,7 +143,7 @@ export function GitGraphCommitDetails({
               <>
                 <dt className="text-muted-foreground">
                   {translate(
-                    'auto.components.workspace-panel.git-graph.CommitDetails.c3d4e5f6a7',
+                    'auto.components.workspacePanel.git-graph.CommitDetails.c3d4e5f6a7',
                     'Parents'
                   )}
                 </dt>
@@ -167,7 +167,7 @@ export function GitGraphCommitDetails({
               <>
                 <dt className="text-muted-foreground">
                   {translate(
-                    'auto.components.workspace-panel.git-graph.CommitDetails.d4e5f6a7b8',
+                    'auto.components.workspacePanel.git-graph.CommitDetails.d4e5f6a7b8',
                     'Author'
                   )}
                 </dt>
@@ -190,7 +190,7 @@ export function GitGraphCommitDetails({
                 <LoadingIndicator className="size-3" />
                 <span>
                   {translate(
-                    'auto.components.workspace-panel.git-graph.CommitDetails.e5f6a7b8c9',
+                    'auto.components.workspacePanel.git-graph.CommitDetails.e5f6a7b8c9',
                     'Loading files…'
                   )}
                 </span>
@@ -202,7 +202,7 @@ export function GitGraphCommitDetails({
             {state.status === 'ready' && state.entries.length === 0 && (
               <div className="text-muted-foreground px-3 py-1.5">
                 {translate(
-                  'auto.components.workspace-panel.git-graph.CommitDetails.f6a7b8c9d0',
+                  'auto.components.workspacePanel.git-graph.CommitDetails.f6a7b8c9d0',
                   'No file changes in this commit'
                 )}
               </div>
@@ -222,7 +222,7 @@ export function GitGraphCommitDetails({
                   <ArrowUpRight className="size-3 shrink-0" />
                   <span>
                     {translate(
-                      'auto.components.workspace-panel.git-graph.CommitDetails.a7b8c9d0e1',
+                      'auto.components.workspacePanel.git-graph.CommitDetails.a7b8c9d0e1',
                       'Open all changes together'
                     )}
                   </span>

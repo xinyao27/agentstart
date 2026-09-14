@@ -2,7 +2,7 @@ import { parseWorkspaceKey } from '@agentstart/protocol/workspace/identity'
 import { forgetForegroundTerminalTabs } from '~renderer/tab-bar/foreground-terminals'
 import { forgetAgentHibernationTabOutput } from '~renderer/terminal-pane/agent/hibernation-output-activity'
 import { forgetAgentStartupDeliveriesForTabs } from '~renderer/terminal-pane/agent/startup-delivery-guards'
-import { forgetHugeRepoWarningDismissalsForWorktrees } from '~renderer/workspace-panel/source-control/huge-repo-warning-dismissals'
+import { forgetHugeRepoWarningDismissalsForWorktrees } from '~renderer/workspace-panel/source-control/tree/huge-repo-warning-dismissals'
 
 import type { AppState } from '../../store/types'
 import { collectWorktreePurgeTabPtyIds } from './purge-terminal-state'
