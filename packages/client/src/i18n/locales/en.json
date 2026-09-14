@@ -1536,8 +1536,6 @@
           "0c74e7ff34": "Local",
           "installedTab": "Installed",
           "marketplaceTab": "Browse marketplace",
-          "closeSkills": "Close skills",
-          "closeShortcut": "Close · Esc",
           "refreshSkills": "Refresh skills"
         },
         "SkillFreshnessNudge": {
@@ -1972,23 +1970,6 @@
           "822ff300ad": "Dismiss",
           "5bfd5c8779": "Dismiss setup scripts"
         },
-        "SidebarFeedbackDialog": {
-          "8bf619e4cf": "Cancel",
-          "8de03e23c5": "Submit with your typed feedback only, or connect `gh` to include GitHub identity.",
-          "d20439c560": "Checking GitHub identity…",
-          "5b120b9634": "Submit anonymously",
-          "c9e5ea0791": "GitHub:",
-          "d46ddd66fc": "What could we improve?",
-          "9b33530b3d": "Report bugs and request features",
-          "a828fa4aee": "Share what's working, what's broken, or what AgentStart should do next.",
-          "0eb643f07f": "Send Feedback",
-          "60b721e857": "Failed to submit feedback. Please try again.",
-          "7a46c228b8": "Thanks for the feedback.",
-          "a2fd890d9e": "Please enter feedback before submitting.",
-          "f2e42e1307": "Send",
-          "69969ba364": "Sending…",
-          "d245c4ef6c": "GitHub issues"
-        },
         "SidebarHeader": {
           "25a95899c9": "Add Project",
           "92154beb7e": "New workspace",
@@ -2013,21 +1994,6 @@
           "5a273fbfce": "Add project...",
           "4815c70605": "No projects match",
           "bbbc6e8e3b": "No unselected projects match"
-        },
-        "SidebarSettingsHelpMenu": {
-          "ad3d3ed7f1": "Restart AgentStart",
-          "29c56f30ee": "Check for Updates",
-          "5687ab246a": "GitHub",
-          "5f83d86d92": "Changelog",
-          "cdc87f897e": "Docs",
-          "e565171a7c": "Keyboard Shortcuts",
-          "4cf5b868d7": "Send Feedback",
-          "a428c25998": "Settings",
-          "2991a0106c": "Help",
-          "4e8f5710d3": "Couldn't restart AgentStart.",
-          "5161eef55d": "Restarting AgentStart…",
-          "f8a2c91d4e": "Milestones",
-          "b7e4d2a19c": "Onboarding"
         },
         "SidebarWorkspaceFilterSection": {
           "c3fa13dc2e": "Hide default branch",
@@ -5745,10 +5711,6 @@
           "4e1eb5d55c": "Failed to revoke device",
           "255372e6e8": "Device revoked"
         },
-        "MobilePageToolbar": {
-          "ad2284a9e2": "Close · Esc",
-          "9883b58693": "Close AgentStart Mobile"
-        },
         "mobile": {
           "platform": {
             "copy": {
@@ -7888,77 +7850,6 @@
           }
         }
       },
-      "agentstart": {
-        "profiles": {
-          "switcher": {
-            "16e3681072": "New local profile",
-            "e3b91a3d90": "Create an empty profile for separate projects and worktrees.",
-            "f322e1f4d6": "Profile name",
-            "cfa59f8ad1": "Create and Switch",
-            "b4f9d1125d": "Local",
-            "4815f7d163": "Switch profile",
-            "d00d853e2a": "Manage profiles",
-            "c106c674fe": "New local profile"
-          },
-          "management": {
-            "04e7bd2a23": "Transfer",
-            "128c7dfe64": "Copy to",
-            "df8b7d876b": "Move to",
-            "9aa26347b3": "Project moved",
-            "816ce624b6": "Project copied",
-            "2c45bda8d3": "Manage profiles",
-            "2db945e4a0": "Copy or move projects from the active profile to another local profile.",
-            "8668cb2946": "No projects in this profile.",
-            "93034915ab": "Create another profile before copying projects.",
-            "projectCountSingular": "{{count}} project",
-            "projectCountPlural": "{{count}} projects"
-          },
-          "project": {
-            "transfer": {
-              "confirm": {
-                "move": {
-                  "title": "Move project?",
-                  "description": "Move {{repoName}} to {{targetName}}. AgentStart removes it from {{activeProfileName}}, keeps files in place, and relaunches into {{targetName}}.",
-                  "action": "Move project"
-                },
-                "copy": {
-                  "title": "Copy project?",
-                  "description": "Copy {{repoName}} to {{targetName}}. Both profiles will point at the same files with separate AgentStart metadata.",
-                  "action": "Copy project"
-                },
-                "live": {
-                  "work": "Live work in this project"
-                },
-                "cancel": "Cancel",
-                "terminalSingular": "{{count}} live terminal tab",
-                "terminalPlural": "{{count}} live terminal tabs",
-                "agentSingular": "{{count}} active agent",
-                "agentPlural": "{{count}} active agents",
-                "browserSingular": "{{count}} browser workspace",
-                "browserPlural": "{{count}} browser workspaces"
-              }
-            }
-          },
-          "switch": {
-            "confirm": {
-              "target": "the selected profile",
-              "title": "Switch profiles?",
-              "description": "Switching to {{targetName}} will relaunch AgentStart and reload the workspace for {{activeProfileName}}.",
-              "live": {
-                "work": "Live work in this profile"
-              },
-              "cancel": "Cancel",
-              "switch": "Switch profile",
-              "terminalSingular": "{{count}} live terminal tab",
-              "terminalPlural": "{{count}} live terminal tabs",
-              "agentSingular": "{{count}} active agent",
-              "agentPlural": "{{count}} active agents",
-              "browserSingular": "{{count}} browser workspace",
-              "browserPlural": "{{count}} browser workspaces"
-            }
-          }
-        }
-      },
       "contribution": {
         "heatmap": {
           "monday": "Mon",
@@ -8267,6 +8158,309 @@
           "githubPullRequestNumber": "PR #{{value0}}"
         }
       }
+    }
+  },
+  "extension": {
+    "agent": {
+      "monitorRow": "{{title}} — {{phase}}",
+      "monitorTitle": "AgentStart agent monitor",
+      "openMonitor": "Open floating agent monitor",
+      "phase": {
+        "complete": "Complete",
+        "executing": "Executing",
+        "thinking": "Thinking",
+        "waitingDecision": "Waiting for you"
+      },
+      "untitled": "Agent"
+    },
+    "automations": {
+      "arrange": "Arrange projects",
+      "browserLayout": "Browser window layouts",
+      "browserLayoutDescription": "Move an existing project tab into a focus window, or arrange every project without creating duplicates.",
+      "description": "Start and end your workday, schedule daemon routines, and arrange project windows.",
+      "disableNewTab": "Stop using AgentStart for new tabs",
+      "disableSchedule": "Disable",
+      "enableNewTab": "Use AgentStart for new tabs",
+      "endDay": "End day",
+      "endDayDescription": "Record changed-path summaries, collapse project groups, and open Activity.",
+      "endTime": "End time",
+      "failed": "The ritual could not complete.",
+      "focusProject": "Focus {{project}}",
+      "lastFailure": "Last scheduled run: {{detail}}",
+      "layoutCascade": "Cascade",
+      "layoutDisplays": "Across displays",
+      "newTabDescription": "Optionally open AgentStart Activity for new tabs. This is off by default and requests tab access only when enabled.",
+      "projectResult": "{{project}}: {{detail}}",
+      "run": "Run",
+      "saveArchiveSchedule": "Enable and archive non-main worktrees at end day",
+      "saveSchedule": "Enable schedule",
+      "schedule": "Daemon schedule",
+      "scheduleDescription": "The daemon runs these in the selected time zone even when Chrome is closed. Browser layout catches up from durable events when AgentStart reconnects.",
+      "scheduleFailed": "The schedule was not changed. Check the times, weekdays, and IANA time zone.",
+      "scheduleSaved": "Schedule saved in the daemon.",
+      "startDay": "Start day",
+      "startDayDescription": "Fast-forward projects, run configured dev servers, and open project groups.",
+      "startTime": "Start time",
+      "timezone": "IANA time zone",
+      "title": "Automations",
+      "weekdays": "Weekdays (0=Sun … 6=Sat)"
+    },
+    "awayReplay": {
+      "archivedWorktrees": "{{project}}: {{count}} workspace(s) were archived.",
+      "browserActivity": "{{project}}: {{count}} browser task(s) completed.",
+      "browserIssues": "{{project}}: {{count}} browser issue(s) were captured.",
+      "changedFiles": "{{project}} now has {{count}} changed file(s).",
+      "completed": "{{project}}: {{count}} agent(s) completed.",
+      "createdWorktrees": "{{project}}: {{count}} workspace(s) became ready.",
+      "dismiss": "Dismiss",
+      "rituals": "{{project}}: {{count}} work ritual(s) completed.",
+      "title": "While you were away",
+      "viewActivity": "View activity",
+      "waiting": "{{project}}: {{count}} agent(s) are waiting for your decision."
+    },
+    "bookmarks": {
+      "dashboard": "dashboard",
+      "description": "Keep this page in the project bookmark folder",
+      "documentation": "documentation",
+      "failed": "The bookmark could not be saved. Chrome may still need permission.",
+      "pullRequest": "pull request",
+      "saveAs": "Save as {{kind}}",
+      "staging": "staging"
+    },
+    "browserSettings": {
+      "browserAi": "On-device summaries",
+      "browserAiAvailable": "Available on this device",
+      "browserAiDescription": "Use Chrome's local Summarizer for optional activity digests. AgentStart always falls back to a deterministic summary.",
+      "browserAiDownloadable": "Chrome can download the local model",
+      "browserAiDownloading": "Chrome is downloading the model",
+      "browserAiFailed": "The browser AI preference could not be changed.",
+      "browserAiUnavailable": "Unavailable on this device",
+      "dangerousApproval": "Dangerous operation approval",
+      "dangerousApprovalDescription": "Optionally require a passkey, Touch ID, Windows Hello, or security key before agent permission approvals.",
+      "description": "Preferences that only apply to AgentStart running inside this browser.",
+      "disableBrowserAi": "Disable local summaries",
+      "enableBrowserAi": "Enable local summaries",
+      "enrollPasskey": "Set up passkey approval",
+      "keywordBrowserAi": "browser AI",
+      "keywordChrome": "Chrome",
+      "keywordLocalSummaries": "local summaries",
+      "keywordPasskey": "passkey",
+      "keywordSecurityKey": "security key",
+      "loadingAdapters": "Loading site adapters…",
+      "loadingTrustedSites": "Loading trusted sites…",
+      "passkeyFailed": "The passkey ceremony did not complete; no security setting was changed.",
+      "removePasskey": "Remove passkey requirement",
+      "title": "Browser settings",
+      "trustedSitesFailed": "Trusted site permissions could not be updated."
+    },
+    "commandPalette": {
+      "actions": "Actions",
+      "browserContext": "Browser context",
+      "description": "Open a project, worktree, session, or AgentStart page.",
+      "empty": "No matching command.",
+      "fileLoadError": "Could not load files: {{value0}}",
+      "files": "Files",
+      "launchAgent": "Launch {{value0}}",
+      "loadingFiles": "Loading files…",
+      "newFile": "New file",
+      "newTerminal": "New terminal",
+      "noMatchingFiles": "No matching files.",
+      "openTabs": "Open tabs",
+      "pages": "Pages",
+      "placeholder": "Search AgentStart…",
+      "projects": "Projects",
+      "title": "AgentStart commands"
+    },
+    "consoleSensor": {
+      "active": "Errors stream to Activity and an agent claims them.",
+      "failed": "The Console sensor stopped unexpectedly.",
+      "ready": "Ready when you turn on Console monitoring.",
+      "start": "Watch Console errors",
+      "stop": "Stop Console sensor"
+    },
+    "context": {
+      "alwaysSite": "Always allow this site",
+      "captureDescription": "AgentStart will read visible page text and show it for review before anything is sent to an agent.",
+      "captureFailed": "The page could not be read. Check Chrome site access and try again.",
+      "captureReady": "Page context is ready to review.",
+      "captureTab": "Only this time",
+      "captureTitle": "Use the current page in AgentStart?",
+      "dismiss": "Dismiss",
+      "dismissFailed": "Context could not be dismissed.",
+      "empty": "No readable text",
+      "historyFailed": "Recent browsing was not read. Check Chrome history permission and try again.",
+      "historyReady": "Recent browsing is ready to review.",
+      "matches": "{{page}} belongs to",
+      "noAgent": "Start an agent session to send this context.",
+      "recentHistory": "Review last 30 min",
+      "search": {
+        "browser": "browser",
+        "context": "context",
+        "localhost": "localhost",
+        "permissions": "permissions",
+        "siteAccess": "site access",
+        "tabs": "tabs"
+      },
+      "sendFailed": "Context could not be sent. Check the agent connection and try again.",
+      "sendTo": "Send to {{agent}}",
+      "sent": "Context sent to the selected agent.",
+      "settingsDenied": "Chrome did not grant the requested tab access.",
+      "settingsDescription": "Show project actions only when the current URL or local development port matches daemon facts exactly. AgentStart never guesses.",
+      "settingsSiteAccess": "Sites with persistent browser access are listed here.",
+      "settingsTitle": "Browser project context",
+      "untitledAgent": "agent",
+      "untrustedReview": "Review before sending. Page content is treated as untrusted data.",
+      "useCurrentPage": "Use current page"
+    },
+    "devtools": {
+      "captureBaseline": "Capture baseline",
+      "captureChanges": "Capture DevTools changes",
+      "changeCount": "{{count}} stylesheets changed",
+      "description": "Capture a baseline, adjust CSS in Elements, then let an agent write the delta into source.",
+      "diagnosticAgentTitle": "Browser diagnostic",
+      "diagnostics": "Console and failed network requests",
+      "failed": "No exact local workspace or stylesheet delta was available.",
+      "noDiagnostics": "No captured errors or failed requests.",
+      "refreshDiagnostics": "Refresh",
+      "sendDiagnostic": "Ask agent in {{project}}",
+      "title": "AgentStart DevTools writeback",
+      "writeTo": "Write to {{project}}",
+      "writebackUnverified": "The agent finished, but the live stylesheet did not match the captured delta.",
+      "writebackVerified": "The source change is visible in the live preview."
+    },
+    "elementPicker": {
+      "failed": "The element could not be sent to an agent.",
+      "start": "Pick element and ask agent",
+      "waiting": "Pick an element…"
+    },
+    "eyeDropper": {
+      "applying": "Adding token…",
+      "failed": "EyeDropper is unavailable or the agent could not start.",
+      "pick": "Pick color for design tokens",
+      "picked": "Picked {{color}}"
+    },
+    "forge": {
+      "creating": "Creating worktree…",
+      "failed": "The worktree could not be created.",
+      "handle": "Create worktree and handle"
+    },
+    "githubDraft": {
+      "create": "Draft GitHub comment",
+      "drafting": "Drafting…",
+      "failed": "The draft could not be created or the comment box was not found.",
+      "filled": "Draft filled for review",
+      "safety": "Uses the local diff and session context. AgentStart never submits it."
+    },
+    "install": {
+      "browserControlDescription": "Operate the page you choose through the same Chrome DevTools Protocol as DevTools.",
+      "browserControlTitle": "Native browser control",
+      "capabilitiesTitle": "What this unlocks",
+      "continue": "Continue to AgentStart",
+      "debuggerBoundary": "AgentStart attaches only while an action or sensor needs it, then detaches when that work stops or fails.",
+      "debuggerDescription": "Chrome requires this permission at install time. It is the foundation for browser-use, CDP recording and replay, network simulation, Console sensors, and performance capture.",
+      "debuggerTitle": "Why Chrome lists “debugger”",
+      "developmentEvidenceDescription": "Record and replay interactions, simulate network conditions, and inspect Console signals.",
+      "developmentEvidenceTitle": "Development evidence",
+      "eyebrow": "AgentStart for Chrome",
+      "introduction": "AgentStart brings the complete coding workspace into Chrome and connects it to the daemon that owns your agents, terminals, files, and worktrees.",
+      "permissionTimingDescription": "Read page content, history, capture, and site origins only when you activate that feature.",
+      "permissionTimingTitle": "Permissions at the moment of use",
+      "privacy": "Page context is treated as untrusted data and is sent only to the daemon and agent you explicitly choose. AgentStart has no advertising or developer-operated stateful backend. Anonymous product telemetry starts enabled on new installations and can be turned off in Privacy & Telemetry.",
+      "title": "Your browser workbench is ready."
+    },
+    "networkMock": {
+      "empty": "Empty",
+      "failed": "The network simulation could not start.",
+      "pattern": "Request URL contains",
+      "slow": "Slow",
+      "stop": "Stop mock"
+    },
+    "performance": {
+      "download": "Download performance report",
+      "failed": "The exact preview tab could not be traced.",
+      "run": "Run performance trace",
+      "running": "Reloading and tracing…",
+      "saved": "{{count}} metrics saved"
+    },
+    "productName": "AgentStart",
+    "replay": {
+      "downloadVideo": "Download recording video",
+      "eventCount": "{{count}} steps",
+      "failed": "Chrome could not complete the recording action.",
+      "ready": "Local preview",
+      "record": "Record flow",
+      "recording": "Recording this local preview",
+      "stop": "Stop and save",
+      "untitled": "Recorded flow"
+    },
+    "runtime": {
+      "connecting": "Connecting to AgentStart…",
+      "connectionFailed": "Failed to connect to the AgentStart daemon.",
+      "connectionTimedOut": "Timed out while connecting to the AgentStart daemon.",
+      "reconnecting": "Reconnecting to the AgentStart daemon…",
+      "startingDaemon": "Starting the local daemon and restoring your workspace."
+    },
+    "settings": {
+      "adapterCode": "Reviewed JavaScript",
+      "adapterCodePlaceholder": "document.documentElement.dataset.agentstartContext = document.title",
+      "adapterFailed": "Nothing was installed. Use one exact HTTP(S) origin ending in /*, grant access, and enable Chrome’s Allow User Scripts toggle.",
+      "adapterMatch": "Exact site match",
+      "adapterMatchPlaceholder": "https://jira.example.com/*",
+      "adapterName": "Adapter name",
+      "adapters": "Community site adapters",
+      "adaptersDescription": "Reviewable scripts run in Chrome’s isolated user-script world. They may add bounded context through document.documentElement.dataset.agentstartContext, but never choose a project or execute an agent action.",
+      "adaptersManaged": "Disabled by enterprise policy.",
+      "endpoint": "WebSocket endpoint",
+      "endpointPlaceholder": "wss://host.example/rpc",
+      "installAdapter": "Review and install",
+      "invalid": "Enter a ws:// or wss:// endpoint, a token, and a positive protocol version.",
+      "noTrustedSites": "No sites are always allowed.",
+      "protocolVersion": "Protocol version",
+      "removeAdapter": "Remove adapter",
+      "revokeSite": "Remove",
+      "save": "Save connection",
+      "siteTrust": "Trusted browser sites",
+      "siteTrustDescription": "These origins may be read without another prompt. Removing one does not affect one-time tab access.",
+      "token": "Access token",
+      "useLocal": "Use local daemon",
+      "userScriptsToggle": "Open Chrome permission toggle"
+    },
+    "sidePanel": {
+      "daemonOwner": "Owned by daemon {{value0}}",
+      "errorDescription": "Reconnect the AgentStart daemon, then retry this panel.",
+      "errorTitle": "AgentStart side panel hit an error."
+    },
+    "terminal": {
+      "untitled": "Terminal"
+    },
+    "unavailable": {
+      "automaticRetry": "AgentStart will retry automatically.",
+      "checkLoopback": "Check local connection",
+      "connectionSaved": "Saved. AgentStart will retry this connection.",
+      "connectionSettings": "Connection settings",
+      "copied": "Copied",
+      "copyDiagnostic": "Copy diagnostic",
+      "copyFailed": "Could not copy the diagnostic. Select the text above to copy it manually.",
+      "daemonStopped": "The local daemon stopped or could not start. Run “agentstart daemon” in a terminal, then retry here.",
+      "description": "AgentStart could not finish connecting. Open connection settings or the diagnostic details below, then retry.",
+      "diagnostic": "Diagnostic details",
+      "incompatible": "The extension and daemon use incompatible protocol versions. Update the older component, then retry.",
+      "loadingSettings": "Loading connection settings…",
+      "loopbackCheckFailed": "AgentStart could not check the local daemon. Make sure it is running, then check the local connection permission or firewall settings below.",
+      "missingCli": "The AgentStart CLI or Native Messaging host is missing. Run the install command below; AgentStart will reconnect when installation finishes.",
+      "retry": "Retry now",
+      "retryFailed": "The connection still is not available. Check the guidance above and try again.",
+      "retrying": "Retrying…",
+      "settingsFailed": "Connection settings could not be loaded.",
+      "title": "AgentStart daemon is not available",
+      "waitingForChrome": "Waiting for Chrome…"
+    },
+    "visualRegression": {
+      "capture": "Capture visual baseline",
+      "capturing": "Comparing…",
+      "changed": "{{percent}}% pixels changed",
+      "failed": "The visible tab could not be compared.",
+      "noBaseline": "The first capture becomes baseline."
     }
   },
   "rateLimitResume": {

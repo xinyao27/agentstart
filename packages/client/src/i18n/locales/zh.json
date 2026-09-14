@@ -1536,8 +1536,6 @@
           "0c74e7ff34": "当地的",
           "installedTab": "Installed",
           "marketplaceTab": "Browse marketplace",
-          "closeSkills": "Close skills",
-          "closeShortcut": "Close · Esc",
           "refreshSkills": "Refresh skills"
         },
         "SkillFreshnessNudge": {
@@ -1950,23 +1948,6 @@
           "822ff300ad": "关闭",
           "5bfd5c8779": "关闭安装脚本"
         },
-        "SidebarFeedbackDialog": {
-          "8bf619e4cf": "取消",
-          "8de03e23c5": "仅提交您输入的反馈，或连接“gh”以包含 GitHub 身份。",
-          "d20439c560": "检查 GitHub 身份...",
-          "5b120b9634": "匿名提交",
-          "c9e5ea0791": "GitHub：",
-          "d46ddd66fc": "我们可以改进什么？",
-          "9b33530b3d": "报告问题并请求新功能",
-          "a828fa4aee": "分享什么是有效的、什么是有问题的，或者 AgentStart 接下来应该做什么。",
-          "0eb643f07f": "发送反馈",
-          "60b721e857": "提交反馈失败。请再试一次。",
-          "7a46c228b8": "感谢您的反馈。",
-          "a2fd890d9e": "请在提交前输入反馈。",
-          "f2e42e1307": "发送",
-          "69969ba364": "正在发送...",
-          "d245c4ef6c": "GitHub issues"
-        },
         "SidebarHeader": {
           "92154beb7e": "新工作区",
           "5c9c7c16aa": "添加项目以创建工作区",
@@ -1991,21 +1972,6 @@
           "5a273fbfce": "添加项目...",
           "4815c70605": "没有匹配的项目",
           "bbbc6e8e3b": "没有匹配的未选择项目"
-        },
-        "SidebarSettingsHelpMenu": {
-          "ad3d3ed7f1": "重启 AgentStart",
-          "29c56f30ee": "检查更新",
-          "5687ab246a": "GitHub",
-          "5f83d86d92": "变更日志",
-          "cdc87f897e": "文档",
-          "e565171a7c": "键盘快捷键",
-          "4cf5b868d7": "发送反馈",
-          "a428c25998": "设置",
-          "2991a0106c": "帮助",
-          "4e8f5710d3": "无法重新启动 AgentStart。",
-          "5161eef55d": "正在重启 AgentStart…",
-          "f8a2c91d4e": "里程碑",
-          "b7e4d2a19c": "入门引导"
         },
         "SidebarWorkspaceFilterSection": {
           "c3fa13dc2e": "隐藏默认分支",
@@ -5745,10 +5711,6 @@
           "4e1eb5d55c": "撤销设备失败",
           "255372e6e8": "设备已撤销"
         },
-        "MobilePageToolbar": {
-          "ad2284a9e2": "关闭 · Esc",
-          "9883b58693": "关闭 AgentStart 手机"
-        },
         "mobile": {
           "platform": {
             "copy": {
@@ -7888,77 +7850,6 @@
           }
         }
       },
-      "agentstart": {
-        "profiles": {
-          "switcher": {
-            "16e3681072": "新建本地配置文件",
-            "e3b91a3d90": "创建一个空配置文件，用于分开管理项目和工作树。",
-            "f322e1f4d6": "配置文件名称",
-            "cfa59f8ad1": "创建并切换",
-            "b4f9d1125d": "本地",
-            "4815f7d163": "切换配置文件",
-            "d00d853e2a": "管理配置文件",
-            "c106c674fe": "新建本地配置文件"
-          },
-          "management": {
-            "04e7bd2a23": "转移",
-            "128c7dfe64": "复制到",
-            "df8b7d876b": "移动到",
-            "9aa26347b3": "项目已移动",
-            "816ce624b6": "项目已复制",
-            "2c45bda8d3": "管理配置文件",
-            "2db945e4a0": "将项目从当前配置文件复制或移动到另一个本地配置文件。",
-            "8668cb2946": "此配置文件中没有项目。",
-            "93034915ab": "复制项目前，请先创建另一个配置文件。",
-            "projectCountSingular": "{{count}} 个项目",
-            "projectCountPlural": "{{count}} 个项目"
-          },
-          "project": {
-            "transfer": {
-              "confirm": {
-                "move": {
-                  "title": "移动项目？",
-                  "description": "将 {{repoName}} 移动到 {{targetName}}。AgentStart 会将其从 {{activeProfileName}} 中移除，保留文件原位，并重新启动进入 {{targetName}}。",
-                  "action": "移动项目"
-                },
-                "copy": {
-                  "title": "复制项目？",
-                  "description": "将 {{repoName}} 复制到 {{targetName}}。两个配置文件将指向相同的文件，但使用各自独立的 AgentStart 元数据。",
-                  "action": "复制项目"
-                },
-                "live": {
-                  "work": "此项目中正在进行的工作"
-                },
-                "cancel": "取消",
-                "terminalSingular": "{{count}} 个正在运行的终端选项卡",
-                "terminalPlural": "{{count}} 个正在运行的终端选项卡",
-                "agentSingular": "{{count}} 个活动的 Agent",
-                "agentPlural": "{{count}} 个活动的 Agent",
-                "browserSingular": "{{count}} 个浏览器工作区",
-                "browserPlural": "{{count}} 个浏览器工作区"
-              }
-            }
-          },
-          "switch": {
-            "confirm": {
-              "target": "所选配置文件",
-              "title": "切换配置文件？",
-              "description": "切换到 {{targetName}} 将重新启动 AgentStart 并重新加载 {{activeProfileName}} 的工作区。",
-              "live": {
-                "work": "此配置文件中正在进行的工作"
-              },
-              "cancel": "取消",
-              "switch": "切换配置文件",
-              "terminalSingular": "{{count}} 个正在运行的终端选项卡",
-              "terminalPlural": "{{count}} 个正在运行的终端选项卡",
-              "agentSingular": "{{count}} 个活动的 Agent",
-              "agentPlural": "{{count}} 个活动的 Agent",
-              "browserSingular": "{{count}} 个浏览器工作区",
-              "browserPlural": "{{count}} 个浏览器工作区"
-            }
-          }
-        }
-      },
       "contribution": {
         "heatmap": {
           "monday": "Mon",
@@ -8267,6 +8158,309 @@
           "githubPullRequestNumber": "PR #{{value0}}"
         }
       }
+    }
+  },
+  "extension": {
+    "agent": {
+      "monitorRow": "{{title}} — {{phase}}",
+      "monitorTitle": "AgentStart Agent 监视器",
+      "openMonitor": "打开浮动 Agent 监视器",
+      "phase": {
+        "complete": "已完成",
+        "executing": "执行中",
+        "thinking": "思考中",
+        "waitingDecision": "等待你处理"
+      },
+      "untitled": "Agent"
+    },
+    "automations": {
+      "arrange": "排列项目",
+      "browserLayout": "浏览器窗口布局",
+      "browserLayoutDescription": "将现有的项目标签页移入聚焦窗口，或在不创建重复项的情况下排列每个项目。",
+      "description": "开始和结束你的工作日、安排守护进程例程，并排列项目窗口。",
+      "disableNewTab": "停止将 AgentStart 用于新标签页",
+      "disableSchedule": "停用",
+      "enableNewTab": "将 AgentStart 用于新标签页",
+      "endDay": "结束一天",
+      "endDayDescription": "记录已更改路径的摘要、折叠项目分组，并打开“活动”。",
+      "endTime": "结束时间",
+      "failed": "该例程未能完成。",
+      "focusProject": "聚焦 {{project}}",
+      "lastFailure": "上次计划运行：{{detail}}",
+      "layoutCascade": "层叠",
+      "layoutDisplays": "跨显示器",
+      "newTabDescription": "可选地为新标签页打开 AgentStart 活动。此功能默认关闭，仅在启用时才请求标签页访问权限。",
+      "projectResult": "{{project}}：{{detail}}",
+      "run": "运行",
+      "saveArchiveSchedule": "在结束一天时启用并归档非主工作树",
+      "saveSchedule": "启用日程",
+      "schedule": "守护进程日程",
+      "scheduleDescription": "即使 Chrome 已关闭，守护进程也会在所选时区中运行这些任务。AgentStart 重新连接后，浏览器布局会根据持久化事件进行同步。",
+      "scheduleFailed": "日程未更改。请检查时间、星期和 IANA 时区。",
+      "scheduleSaved": "日程已保存到守护进程。",
+      "startDay": "开始一天",
+      "startDayDescription": "快进项目、运行已配置的开发服务器，并打开项目分组。",
+      "startTime": "开始时间",
+      "timezone": "IANA 时区",
+      "title": "自动化",
+      "weekdays": "星期（0=周日 … 6=周六）"
+    },
+    "awayReplay": {
+      "archivedWorktrees": "{{project}}：{{count}} 个工作区已归档。",
+      "browserActivity": "{{project}}：{{count}} 个浏览器任务已完成。",
+      "browserIssues": "{{project}}：捕获到 {{count}} 个浏览器问题。",
+      "changedFiles": "{{project}} 现有 {{count}} 个已更改文件。",
+      "completed": "{{project}}：{{count}} 个 Agent 已完成。",
+      "createdWorktrees": "{{project}}：{{count}} 个工作区已就绪。",
+      "dismiss": "忽略",
+      "rituals": "{{project}}：{{count}} 个工作例程已完成。",
+      "title": "你离开期间",
+      "viewActivity": "查看活动",
+      "waiting": "{{project}}：{{count}} 个 Agent 正在等待你的决定。"
+    },
+    "bookmarks": {
+      "dashboard": "仪表盘",
+      "description": "将此页面保留在项目书签文件夹中",
+      "documentation": "文档",
+      "failed": "无法保存书签。Chrome 可能仍需要权限。",
+      "pullRequest": "拉取请求",
+      "saveAs": "另存为 {{kind}}",
+      "staging": "预发布"
+    },
+    "browserSettings": {
+      "browserAi": "设备端摘要",
+      "browserAiAvailable": "此设备可用",
+      "browserAiDescription": "使用 Chrome 的本地摘要器生成可选的活动摘要。AgentStart 始终会回退到确定性摘要。",
+      "browserAiDownloadable": "Chrome 可以下载本地模型",
+      "browserAiDownloading": "Chrome 正在下载模型",
+      "browserAiFailed": "无法更改浏览器 AI 偏好设置。",
+      "browserAiUnavailable": "此设备不可用",
+      "dangerousApproval": "危险操作审批",
+      "dangerousApprovalDescription": "可选地在 Agent 权限批准前要求通行密钥、Touch ID、Windows Hello 或安全密钥。",
+      "description": "仅适用于在此浏览器内运行的 AgentStart 的偏好设置。",
+      "disableBrowserAi": "停用本地摘要",
+      "enableBrowserAi": "启用本地摘要",
+      "enrollPasskey": "设置通行密钥批准",
+      "keywordBrowserAi": "浏览器 AI",
+      "keywordChrome": "Chrome",
+      "keywordLocalSummaries": "本地摘要",
+      "keywordPasskey": "通行密钥",
+      "keywordSecurityKey": "安全密钥",
+      "loadingAdapters": "正在加载站点适配器…",
+      "loadingTrustedSites": "正在加载受信任网站…",
+      "passkeyFailed": "通行密钥验证未完成；未更改任何安全设置。",
+      "removePasskey": "移除通行密钥要求",
+      "title": "浏览器设置",
+      "trustedSitesFailed": "无法更新受信任站点的权限。"
+    },
+    "commandPalette": {
+      "actions": "操作",
+      "browserContext": "浏览器上下文",
+      "description": "打开项目、工作树、会话或 AgentStart 页面。",
+      "empty": "没有匹配的命令。",
+      "fileLoadError": "无法加载文件：{{value0}}",
+      "files": "文件",
+      "launchAgent": "启动 {{value0}}",
+      "loadingFiles": "正在加载文件…",
+      "newFile": "新建文件",
+      "newTerminal": "新建终端",
+      "noMatchingFiles": "没有匹配的文件。",
+      "openTabs": "打开的标签页",
+      "pages": "页面",
+      "placeholder": "搜索 AgentStart…",
+      "projects": "项目",
+      "title": "AgentStart 命令"
+    },
+    "consoleSensor": {
+      "active": "错误会流入“活动”，并由 Agent 认领处理。",
+      "failed": "控制台传感器意外停止。",
+      "ready": "在你开启控制台监控后即可就绪。",
+      "start": "监控控制台错误",
+      "stop": "停止控制台传感器"
+    },
+    "context": {
+      "alwaysSite": "始终允许此网站",
+      "captureDescription": "AgentStart 会读取页面上可见的文本，并在发送给 Agent 之前先显示出来供你审阅。",
+      "captureFailed": "无法读取页面。请检查 Chrome 的站点访问权限后重试。",
+      "captureReady": "页面上下文已就绪，可供审阅。",
+      "captureTab": "仅此一次",
+      "captureTitle": "在 AgentStart 中使用当前页面？",
+      "dismiss": "忽略",
+      "dismissFailed": "无法忽略该上下文。",
+      "empty": "无可读文本",
+      "historyFailed": "未能读取最近的浏览记录。请检查 Chrome 历史记录权限后重试。",
+      "historyReady": "最近的浏览记录已就绪，可供审阅。",
+      "matches": "{{page}} 属于",
+      "noAgent": "启动一个 Agent 会话来发送此上下文。",
+      "recentHistory": "审阅最近 30 分钟",
+      "search": {
+        "browser": "浏览器",
+        "context": "上下文",
+        "localhost": "localhost",
+        "permissions": "权限",
+        "siteAccess": "站点访问",
+        "tabs": "标签页"
+      },
+      "sendFailed": "无法发送上下文。请检查 Agent 连接后重试。",
+      "sendTo": "发送给 {{agent}}",
+      "sent": "上下文已发送到所选 Agent。",
+      "settingsDenied": "Chrome 未授予所请求的标签页访问权限。",
+      "settingsDescription": "仅当当前 URL 或本地开发端口与守护进程的信息完全匹配时才显示项目操作。AgentStart 绝不猜测。",
+      "settingsSiteAccess": "具有持久浏览器访问权限的网站会列在此处。",
+      "settingsTitle": "浏览器项目上下文",
+      "untitledAgent": "Agent",
+      "untrustedReview": "发送前请审阅。页面内容被视为不受信任的数据。",
+      "useCurrentPage": "使用当前页面"
+    },
+    "devtools": {
+      "captureBaseline": "捕获基准",
+      "captureChanges": "捕获 DevTools 变更",
+      "changeCount": "{{count}} 个样式表已更改",
+      "description": "捕获基准，在 Elements 中调整 CSS，然后让 Agent 将差异写回源码。",
+      "diagnosticAgentTitle": "浏览器诊断",
+      "diagnostics": "控制台和失败的网络请求",
+      "failed": "未找到精确的本地工作区或样式表差异。",
+      "noDiagnostics": "没有捕获到错误或失败的请求。",
+      "refreshDiagnostics": "刷新",
+      "sendDiagnostic": "在 {{project}} 中询问 Agent",
+      "title": "AgentStart DevTools 写回",
+      "writeTo": "写入 {{project}}",
+      "writebackUnverified": "Agent 已完成，但实时样式表与捕获的差异不一致。",
+      "writebackVerified": "源码变更已在实时预览中生效。"
+    },
+    "elementPicker": {
+      "failed": "无法将该元素发送给 Agent。",
+      "start": "选取元素并询问 Agent",
+      "waiting": "选取元素…"
+    },
+    "eyeDropper": {
+      "applying": "正在添加令牌…",
+      "failed": "EyeDropper 不可用，或 Agent 无法启动。",
+      "pick": "为设计令牌取色",
+      "picked": "已取色 {{color}}"
+    },
+    "forge": {
+      "creating": "正在创建工作树…",
+      "failed": "无法创建工作树。",
+      "handle": "创建工作树并处理"
+    },
+    "githubDraft": {
+      "create": "起草 GitHub 评论",
+      "drafting": "正在起草…",
+      "failed": "无法创建草稿，或未找到评论输入框。",
+      "filled": "草稿已填入，等待审阅",
+      "safety": "使用本地差异和会话上下文。AgentStart 绝不会提交它。"
+    },
+    "install": {
+      "browserControlDescription": "通过和 DevTools 相同的 Chrome DevTools 协议操作你选择的页面。",
+      "browserControlTitle": "原生浏览器控制",
+      "capabilitiesTitle": "解锁的能力",
+      "continue": "继续前往 AgentStart",
+      "debuggerBoundary": "AgentStart 仅在某个操作或传感器需要时才附加，并在该工作停止或失败时断开。",
+      "debuggerDescription": "Chrome 要求在安装时授予此权限。它是浏览器操作、CDP 录制与回放、网络模拟、控制台传感器和性能捕获的基础。",
+      "debuggerTitle": "Chrome 为何列出“debugger”",
+      "developmentEvidenceDescription": "录制并回放交互、模拟网络状况，并检查控制台信号。",
+      "developmentEvidenceTitle": "开发证据",
+      "eyebrow": "适用于 Chrome 的 AgentStart",
+      "introduction": "AgentStart 将完整的编码工作区带入 Chrome，并连接到掌管你的 Agent、终端、文件和工作树的守护进程。",
+      "permissionTimingDescription": "仅当你启用相应功能时，才会读取页面内容、历史记录、捕获数据和站点源。",
+      "permissionTimingTitle": "使用时才请求的权限",
+      "privacy": "页面上下文被视为不受信任的数据，只会发送给你明确选择的守护进程和 Agent。AgentStart 没有广告，也没有由开发者运营的有状态后端。新的安装默认启用匿名产品遥测，可在“隐私与遥测”中关闭。",
+      "title": "你的浏览器工作台已就绪。"
+    },
+    "networkMock": {
+      "empty": "空",
+      "failed": "无法启动网络模拟。",
+      "pattern": "请求 URL 包含",
+      "slow": "缓慢",
+      "stop": "停止模拟"
+    },
+    "performance": {
+      "download": "下载性能报告",
+      "failed": "无法跟踪到确切的预览标签页。",
+      "run": "运行性能跟踪",
+      "running": "正在重新加载并跟踪…",
+      "saved": "已保存 {{count}} 项指标"
+    },
+    "productName": "AgentStart",
+    "replay": {
+      "downloadVideo": "下载录制视频",
+      "eventCount": "{{count}} 个步骤",
+      "failed": "Chrome 无法完成录制操作。",
+      "ready": "本地预览",
+      "record": "录制流程",
+      "recording": "正在录制此本地预览",
+      "stop": "停止并保存",
+      "untitled": "已录制的流程"
+    },
+    "runtime": {
+      "connecting": "正在连接 AgentStart…",
+      "connectionFailed": "无法连接到 AgentStart 守护进程。",
+      "connectionTimedOut": "连接 AgentStart 守护进程时超时。",
+      "reconnecting": "正在重新连接 AgentStart 守护进程…",
+      "startingDaemon": "正在启动本地守护进程并恢复你的工作区。"
+    },
+    "settings": {
+      "adapterCode": "已审阅的 JavaScript",
+      "adapterCodePlaceholder": "document.documentElement.dataset.agentstartContext = document.title",
+      "adapterFailed": "未安装任何内容。请使用一个以 /* 结尾的精确 HTTP(S) 源站，授予访问权限，并启用 Chrome 的“允许用户脚本”开关。",
+      "adapterMatch": "精确站点匹配",
+      "adapterMatchPlaceholder": "https://jira.example.com/*",
+      "adapterName": "适配器名称",
+      "adapters": "社区网站适配器",
+      "adaptersDescription": "可审阅的脚本在 Chrome 隔离的用户脚本环境中运行。它们可以通过 document.documentElement.dataset.agentstartContext 添加有限的上下文，但绝不会选择项目或执行 Agent 操作。",
+      "adaptersManaged": "已被企业策略禁用。",
+      "endpoint": "WebSocket 端点",
+      "endpointPlaceholder": "wss://host.example/rpc",
+      "installAdapter": "审阅并安装",
+      "invalid": "请输入 ws:// 或 wss:// 端点、令牌以及正数协议版本。",
+      "noTrustedSites": "没有始终允许的网站。",
+      "protocolVersion": "协议版本",
+      "removeAdapter": "移除适配器",
+      "revokeSite": "移除",
+      "save": "保存连接",
+      "siteTrust": "受信任的浏览器网站",
+      "siteTrustDescription": "这些源站无需再次提示即可被读取。移除某项不会影响一次性的标签页访问。",
+      "token": "访问令牌",
+      "useLocal": "使用本地守护进程",
+      "userScriptsToggle": "打开 Chrome 权限开关"
+    },
+    "sidePanel": {
+      "daemonOwner": "由守护进程 {{value0}} 拥有",
+      "errorDescription": "请重新连接 AgentStart 守护进程，然后重试此面板。",
+      "errorTitle": "AgentStart 侧边栏遇到错误。"
+    },
+    "terminal": {
+      "untitled": "终端"
+    },
+    "unavailable": {
+      "automaticRetry": "AgentStart 将自动重试。",
+      "checkLoopback": "检查本地连接",
+      "connectionSaved": "已保存。AgentStart 将重试此连接。",
+      "connectionSettings": "连接设置",
+      "copied": "已复制",
+      "copyDiagnostic": "复制诊断信息",
+      "copyFailed": "无法复制诊断信息。请选中上方文本手动复制。",
+      "daemonStopped": "本地守护进程已停止或无法启动。请在终端中运行“agentstart daemon”，然后在此重试。",
+      "description": "AgentStart 未能完成连接。请打开下方的连接设置或诊断详情，然后重试。",
+      "diagnostic": "诊断详情",
+      "incompatible": "扩展程序与守护进程使用的协议版本不兼容。请更新较旧的组件，然后重试。",
+      "loadingSettings": "正在加载连接设置…",
+      "loopbackCheckFailed": "AgentStart 无法检查本地守护进程。请确认它正在运行，然后检查下方的本地连接权限或防火墙设置。",
+      "missingCli": "AgentStart CLI 或原生消息主机缺失。请运行下方的安装命令；安装完成后 AgentStart 会重新连接。",
+      "retry": "立即重试",
+      "retryFailed": "连接仍不可用。请查看上方的指引后重试。",
+      "retrying": "正在重试…",
+      "settingsFailed": "无法加载连接设置。",
+      "title": "AgentStart 守护进程不可用",
+      "waitingForChrome": "正在等待 Chrome…"
+    },
+    "visualRegression": {
+      "capture": "捕获视觉基准",
+      "capturing": "正在对比…",
+      "changed": "{{percent}}% 像素已更改",
+      "failed": "无法对比可见标签页。",
+      "noBaseline": "首次捕获将作为基准。"
     }
   },
   "rateLimitResume": {
