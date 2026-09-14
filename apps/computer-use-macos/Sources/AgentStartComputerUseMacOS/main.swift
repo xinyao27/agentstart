@@ -1233,7 +1233,13 @@ private func focusedElement(appElement: AXUIElement) -> AXUIElement? {
 
 private func copyElement(_ element: AXUIElement, _ attribute: String) -> AXUIElement? {
     var value: CFTypeRef?
-    guard AXUIElementCopyAttributeValue(element, attribute as CFString, &value) == .success, let value else {
+    // Why: an application can answer an element-valued attribute with another CF
+    // type, and a CF cast is not a runtime check — compare type IDs so a malformed
+    // response returns nil instead of being reinterpreted as an element.
+    guard AXUIElementCopyAttributeValue(element, attribute as CFString, &value) == .success,
+          let value,
+          CFGetTypeID(value) == AXUIElementGetTypeID()
+    else {
         return nil
     }
     return (value as! AXUIElement)
@@ -1310,7 +1316,9 @@ private func absoluteFrame(_ element: AXUIElement) -> CGRect? {
     guard AXUIElementCopyAttributeValue(element, kAXPositionAttribute as CFString, &positionValue) == .success,
           AXUIElementCopyAttributeValue(element, kAXSizeAttribute as CFString, &sizeValue) == .success,
           let positionValue,
-          let sizeValue
+          let sizeValue,
+          CFGetTypeID(positionValue) == AXValueGetTypeID(),
+          CFGetTypeID(sizeValue) == AXValueGetTypeID()
     else {
         return nil
     }
@@ -1842,7 +1850,9 @@ private final class AXSnapshotReader {
 
     private func absoluteFrame(_ element: AXUIElement) -> CGRect? {
         guard let positionValue = copyAttribute(element, kAXPositionAttribute as String),
-              let sizeValue = copyAttribute(element, kAXSizeAttribute as String)
+              let sizeValue = copyAttribute(element, kAXSizeAttribute as String),
+              CFGetTypeID(positionValue) == AXValueGetTypeID(),
+              CFGetTypeID(sizeValue) == AXValueGetTypeID()
         else {
             return nil
         }
