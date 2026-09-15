@@ -147,8 +147,6 @@ async fn run_directory_picker_async(
     command.args(args).stderr(Stdio::null()).kill_on_drop(true);
     #[cfg(windows)]
     {
-        use std::os::windows::process::CommandExt;
-
         command.creation_flags(windows_sys::Win32::System::Threading::CREATE_NO_WINDOW);
     }
     let output = command
