@@ -639,19 +639,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Why: the extension ZIP and the installers ride the daemon release so one published URL can
-      # stage every channel. The ZIP is built with the plain package task and never
-      # `--initial-upload`, because the pinned manifest.key is what keeps the unpacked extension ID
-      # equal to the Native Messaging allowed origin; the task normalizes mtimes, so these bytes are
-      # identical to the ones the Web Store job uploads.
-      - name: Package browser extension and installers
-        run: |
-          set -euo pipefail
-          version="${GITHUB_REF_NAME#v}"
-          pnpm exec vp run @agentstart/extension#package:web-store
-          cp "apps/extension/release/agentstart-extension-${version}.zip" apps/daemon/dist/
-          cp scripts/install.sh scripts/install.ps1 apps/daemon/dist/
-
       - name: Download computer-use helper
         uses: actions/download-artifact@v8
         with:
@@ -670,6 +657,22 @@ jobs:
           pattern: agentstart-rust-*
           path: apps/daemon/dist
           merge-multiple: true
+
+      # Why: the extension ZIP and the installers ride the daemon release so one published URL can
+      # stage every channel. The ZIP is built with the plain package task and never
+      # `--initial-upload`, because the pinned manifest.key is what keeps the unpacked extension ID
+      # equal to the Native Messaging allowed origin; the task normalizes mtimes, so these bytes are
+      # identical to the ones the Web Store job uploads.
+      #
+      # Why: these copies follow the downloads because the artifact steps above are what create
+      # apps/daemon/dist; the extension build never does.
+      - name: Package browser extension and installers
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          pnpm exec vp run @agentstart/extension#package:web-store
+          cp "apps/extension/release/agentstart-extension-${version}.zip" apps/daemon/dist/
+          cp scripts/install.sh scripts/install.ps1 apps/daemon/dist/
 
       # Why: release checksums must cover the exact bytes attested by the target build jobs, not
       # merely whatever files happened to match an upload glob in this aggregation job.
