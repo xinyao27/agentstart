@@ -191,6 +191,22 @@ def signed_entitlements(bundle_path)
   entitlements
 end
 
+# Why: Xcode writes the archive's Info.plist as a binary plist, and `Plist.parse_xml` only reads XML —
+# it raises "invalid byte sequence in UTF-8" on the binary form. `plutil` normalizes either form, so
+# verification reads the same values whichever way the build wrote them.
+def bundle_info_plist(bundle_path)
+  path = File.join(bundle_path, "Info.plist")
+  stdout, stderr, status = Open3.capture3("plutil", "-convert", "xml1", "-o", "-", path)
+  unless status.success?
+    UI.user_error!("Could not read Info.plist for #{bundle_path}: #{stderr.strip}")
+  end
+  info = Plist.parse_xml(stdout)
+  unless info.is_a?(Hash)
+    UI.user_error!("Info.plist is missing from #{bundle_path}")
+  end
+  info
+end
+
 def verify_signed_bundle(
   bundle_path:,
   bundle_id:,
@@ -200,7 +216,7 @@ def verify_signed_bundle(
   needs_app_group:
 )
   sh("codesign", "--verify", "--strict", bundle_path)
-  info = Plist.parse_xml(File.join(bundle_path, "Info.plist"))
+  info = bundle_info_plist(bundle_path)
   unless info.is_a?(Hash) && info["CFBundleIdentifier"] == bundle_id
     UI.user_error!("Signed bundle identifier mismatch for #{bundle_path}; expected #{bundle_id}")
   end
