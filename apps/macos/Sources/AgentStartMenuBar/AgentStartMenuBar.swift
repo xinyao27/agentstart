@@ -6,8 +6,7 @@ private enum BrowserChannel: String {
 }
 
 private enum AgentStartBrowser {
-  static let fastExtensionId = "mfgmfiabfncmdekmikepemddejoeihbf"
-  static let webStoreExtensionId = "ljgpbhfigjepmdeaggfdagchkgaogglp"
+  static let extensionId = "ljgpbhfigjepmdeaggfdagchkgaogglp"
   static let webStoreItemURL =
     "https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp"
 }
@@ -38,7 +37,6 @@ final class MenuBarApplication: NSObject, NSApplicationDelegate, NSMenuDelegate 
   private var polling: Task<Void, Never>?
   private var startup: Task<Void, Never>?
 
-  private static let browserChannelKey = "browserChannel"
   private static let browserOnboardingShownKey = "browserOnboardingShown"
 
   func applicationDidFinishLaunching(_ notification: Notification) {
@@ -174,12 +172,8 @@ final class MenuBarApplication: NSObject, NSApplicationDelegate, NSMenuDelegate 
         ))
       return
     }
-    let channel = BrowserChannel(
-      rawValue: UserDefaults.standard.string(forKey: Self.browserChannelKey) ?? ""
-    ) ?? .fast
-    let extensionId =
-      channel == .webStore ? AgentStartBrowser.webStoreExtensionId : AgentStartBrowser.fastExtensionId
-    guard let url = URL(string: "chrome-extension://\(extensionId)/workspace.html") else { return }
+    guard let url = URL(string: "chrome-extension://\(AgentStartBrowser.extensionId)/workspace.html")
+    else { return }
     NSWorkspace.shared.open([url], withApplicationAt: browser, configuration: .init()) {
       [weak self] _, error in
       guard let error else { return }
@@ -222,7 +216,6 @@ final class MenuBarApplication: NSObject, NSApplicationDelegate, NSMenuDelegate 
   }
 
   private func showWebStoreSetup() {
-    UserDefaults.standard.set(BrowserChannel.webStore.rawValue, forKey: Self.browserChannelKey)
     let alert = NSAlert()
     alert.messageText = translate("Install from Chrome Web Store")
     alert.informativeText = translate(
@@ -259,7 +252,6 @@ final class MenuBarApplication: NSObject, NSApplicationDelegate, NSMenuDelegate 
   }
 
   private func showFastExtensionSetup() {
-    UserDefaults.standard.set(BrowserChannel.fast.rawValue, forKey: Self.browserChannelKey)
     guard let directory = prepareFastExtension() else { return }
 
     let manager = NSAlert()

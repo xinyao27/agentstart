@@ -10,12 +10,5 @@ pub(crate) use bootstrap::{
     read_connection_if_exists as read_bootstrap_connection_if_exists, write as write_bootstrap,
 };
 pub(crate) use host::run as run_host;
-pub(crate) use install::{NativeMessagingInstallError, install};
+pub(crate) use install::{EXTENSION_ORIGIN, NativeMessagingInstallError, install};
 pub(crate) use picker::{pick_project_directories, pick_project_directories_async};
-
-pub(crate) fn extension_origins() -> [&'static str; 2] {
-    [
-        install::EXTENSION_ORIGIN,
-        install::WEB_STORE_EXTENSION_ORIGIN,
-    ]
-}

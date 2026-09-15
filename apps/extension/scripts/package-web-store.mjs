@@ -22,7 +22,7 @@ const releaseRoot = join(packageRoot, 'release')
 const packageJson = JSON.parse(await readFile(join(packageRoot, 'package.json'), 'utf8'))
 const manifest = JSON.parse(await readFile(join(distRoot, 'manifest.json'), 'utf8'))
 const initialUpload = process.argv.includes('--initial-upload')
-const expectedExtensionId = 'mfgmfiabfncmdekmikepemddejoeihbf'
+const expectedExtensionId = 'ljgpbhfigjepmdeaggfdagchkgaogglp'
 const devIconPaths = new Set([
   'icons/dev-16.png',
   'icons/dev-32.png',

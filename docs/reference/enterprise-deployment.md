@@ -1,6 +1,6 @@
 # Enterprise deployment
 
-AgentStart's Chrome extension ID is `mfgmfiabfncmdekmikepemddejoeihbf`. Administrators can force-install
+AgentStart's Chrome extension ID is `ljgpbhfigjepmdeaggfdagchkgaogglp`. Administrators can force-install
 the Web Store build with Chrome's `ExtensionInstallForcelist` policy and configure the extension
 through its [managed-storage schema](../../apps/extension/public/managed-storage-schema.json).
 Verify applied values at `chrome://policy`; AgentStart never treats policy configuration as
@@ -11,7 +11,7 @@ authentication.
 Set this `ExtensionInstallForcelist` entry after the Web Store listing has its final update URL:
 
 ```text
-mfgmfiabfncmdekmikepemddejoeihbf;https://clients2.google.com/service/update2/crx
+ljgpbhfigjepmdeaggfdagchkgaogglp;https://clients2.google.com/service/update2/crx
 ```
 
 Chrome documents the platform policy locations. In short:

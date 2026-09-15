@@ -56,7 +56,7 @@ and [MV3 packaged-code requirement](https://developer.chrome.com/docs/extensions
 ## AgentStart compatibility constraints
 
 - The public key in [`wxt.config.ts`](../../apps/extension/wxt.config.ts) must remain unchanged. It
-  pins extension ID `mfgmfiabfncmdekmikepemddejoeihbf`, which is part of Native Messaging and
+  pins extension ID `ljgpbhfigjepmdeaggfdagchkgaogglp`, which is part of Native Messaging and
   enterprise policy configuration.
 - Production and development manifests come from one WXT configuration. WXT's development-only
   reload support must never leak a localhost script or extra required permission into the Web Store

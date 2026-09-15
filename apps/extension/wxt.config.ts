@@ -2,7 +2,7 @@ import { createClientVitePreset } from '@agentstart/client/vite'
 import { createLogger, type Plugin } from 'vite'
 import { defineConfig } from 'wxt'
 
-const EXTENSION_ORIGIN = 'chrome-extension://mfgmfiabfncmdekmikepemddejoeihbf'
+const EXTENSION_ORIGIN = 'chrome-extension://ljgpbhfigjepmdeaggfdagchkgaogglp'
 
 const extensionDevOriginPlugin: Plugin = {
   name: 'agentstart-extension-dev-origin',
@@ -99,7 +99,7 @@ export default defineConfig({
       48: 'icons/icon-48.png',
       128: 'icons/icon-128.png'
     },
-    key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu9Mn4TblyzESw2t/T/jRik7eEIdoBuSrwfPXCaA7v15bU0UBjoVR2jYercVGtNnkD1zlS2A6SvDKLGT2JwHK5Tbwoz7TLyylOE1kNCckj+Yeb9rTUFKKEC7EtvHnkeqj07TiPWZ7IA+OtCFP9FfNh9oBvpT1MfMl/2UNiPgwgsnOeZGCfc2YzThViNgCnp+12tFDfERtF9vys9xsk8CQDqfFWHI4ff9NuvMXiIubl5tl54NUHTUlqOe+KvSgAoaEpPzS0oaYcyCAg3Lrj98r7pDYza4hpg7KcmkBGzGAGyb64ZWlYeb5jsTheR95uy9ThUSo8DnS9PcBM6ZBAHGRmQIDAQAB',
+    key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsyFGScJilSHqAlnSrum5LDoy4D6gN271QRmroTXVAsctUiKG88wDFLZlmZn+Y95w/tzcZKbqsORAVbmWsBgUnXwNU4sXcxw7H1mb3VLuKlJC6BjGlDjBHNxyrhNuWsVrB4KxYXmZ+0ZxvSIpknI2zUrXROFhsauosX08LQReRA+MRRKR1Ql/rKdnUHxfglVdt11kZFLrVqtM6DygSQZh5xdtDPqeqxQLt1aG4RuXrbXeKc8x/uUYraI+U6Osy4RaCFL+0JDeQMEeplbdHEuFwHAxJ3swSEozLHDY/4bCDSCTv2goLOhE4FdR8ZdiIBEJg9WTYUlNr8ZIoRgydwkQZwIDAQAB',
     minimum_chrome_version: '120',
     name: '__MSG_appName__',
     omnibox: { keyword: 'agentstart' },

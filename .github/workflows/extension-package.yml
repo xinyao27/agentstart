@@ -82,7 +82,7 @@ jobs:
       CWS_CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
       CWS_PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
       CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
-      EXTENSION_ID: mfgmfiabfncmdekmikepemddejoeihbf
+      EXTENSION_ID: ljgpbhfigjepmdeaggfdagchkgaogglp
     steps:
       - name: Checkout tag
         uses: actions/checkout@v7

@@ -1,16 +1,16 @@
 # Chrome Web Store submission
 
-This is the release and reviewer checklist for the AgentStart MV3 extension. The extension key in
-[`wxt.config.ts`](../../apps/extension/wxt.config.ts) pins ID
-`mfgmfiabfncmdekmikepemddejoeihbf`; changing it breaks Native Messaging and enterprise force-install
-policy. That key is for development and subsequent updates; it must not be present in the first ZIP
-used to create the Web Store item.
+This is the release and reviewer checklist for the AgentStart MV3 extension. The public key in
+[`wxt.config.ts`](../../apps/extension/wxt.config.ts) is the Web Store item's authoritative key and
+pins ID `ljgpbhfigjepmdeaggfdagchkgaogglp`; changing it breaks Native Messaging and enterprise
+force-install policy. The same ID is pinned in the daemon's Native Messaging origin, the enterprise
+policy, the macOS host, and the CI upload configuration, and those references change together with
+the key.
 
-The first Web Store item now exists at
-`https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp`. Until its
-Package page supplies the authoritative public key, keep the development ID above in the manifest,
-Native Messaging origin, enterprise policy, and CI upload configuration. Change those technical
-references together with the public key; do not change only the item ID.
+The Web Store item is
+`https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp`. Its Package
+tab remains the source of truth for the public key; re-copy the single-line key from there before
+changing the pinned key.
 
 ## Listing
 

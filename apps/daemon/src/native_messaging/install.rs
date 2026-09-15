@@ -10,9 +10,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use serde::Serialize;
 use thiserror::Error;
 
-pub(super) const EXTENSION_ORIGIN: &str = "chrome-extension://mfgmfiabfncmdekmikepemddejoeihbf";
-pub(super) const WEB_STORE_EXTENSION_ORIGIN: &str =
-    "chrome-extension://ljgpbhfigjepmdeaggfdagchkgaogglp";
+pub(crate) const EXTENSION_ORIGIN: &str = "chrome-extension://ljgpbhfigjepmdeaggfdagchkgaogglp";
 const NATIVE_HOST_NAME: &str = "com.agentstart.daemon";
 
 #[derive(Serialize)]
@@ -31,7 +29,6 @@ struct InstallOutput {
     ok: bool,
     manifest_path: String,
     extension_origin: &'static str,
-    extension_origins: [&'static str; 2],
 }
 
 #[derive(Debug, Error)]
@@ -57,10 +54,7 @@ pub(crate) fn install(args: &[OsString]) -> Result<(), NativeMessagingInstallErr
     let manifest_path = resolve_manifest_path()?;
     let executable_path = env::current_exe()?;
     let executable = path_text(&executable_path)?.to_owned();
-    let allowed_origins = [EXTENSION_ORIGIN, WEB_STORE_EXTENSION_ORIGIN]
-        .into_iter()
-        .map(|origin| format!("{origin}/"))
-        .collect();
+    let allowed_origins = vec![format!("{EXTENSION_ORIGIN}/")];
     let manifest = NativeHostManifest {
         allowed_origins,
         description: "Starts and connects the local AgentStart daemon",
@@ -84,7 +78,6 @@ pub(crate) fn install(args: &[OsString]) -> Result<(), NativeMessagingInstallErr
                 ok: true,
                 manifest_path: manifest_path_text.to_owned(),
                 extension_origin: EXTENSION_ORIGIN,
-                extension_origins: [EXTENSION_ORIGIN, WEB_STORE_EXTENSION_ORIGIN],
             })?
         );
     } else {
