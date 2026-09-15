@@ -160,7 +160,7 @@ export function SkillDetailToolbar({
         ·
       </span>
       <PlacementPicker placements={placements} />
-      <span className="text-muted-foreground ml-auto shrink-0 truncate pr-2 text-[11px]">
+      <span className="text-muted-foreground ml-auto min-w-0 truncate pr-2 text-[11px]">
         {sourceLabel} · {formatUpdatedAt(updatedAt)}
       </span>
     </div>

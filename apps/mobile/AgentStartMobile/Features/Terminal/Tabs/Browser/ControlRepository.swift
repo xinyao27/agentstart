@@ -54,4 +54,11 @@ nonisolated protocol WorkspaceBrowserRepository: Sendable {
         pageID: String,
         accepts: Bool
     ) async throws
+    // Why: the host keeps an emulated viewport until it is replaced, so leaving Mobile view mode
+    // needs an explicit clear — a subscribe that omits the viewport would leave the page emulated.
+    func clearBrowserViewport(
+        for hostID: String,
+        worktreeID: String,
+        pageID: String
+    ) async throws
 }

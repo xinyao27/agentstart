@@ -137,6 +137,7 @@ function App(): React.JSX.Element {
   const workspacePanelOpen = useAppStore((s) => s.workspacePanelOpen)
   const workspacePanelTab = useAppStore((s) => s.workspacePanelTab)
   const workspacePanelExplorerView = useAppStore((s) => s.workspacePanelExplorerView)
+  const workspacePanelWidth = useAppStore((s) => s.workspacePanelWidth)
   const settings = useAppStore((s) => s.settings)
   const systemPrefersDark = useSystemPrefersDark()
   const themeGradientVariables = useThemeGradientStyleVariables(systemPrefersDark)
@@ -231,6 +232,7 @@ function App(): React.JSX.Element {
     workspacePanelExplorerView,
     workspacePanelOpen,
     workspacePanelTab,
+    workspacePanelWidth,
     showDotfilesByWorktree,
     showSleepingWorkspaces,
     sidebarWidth,
@@ -308,6 +310,7 @@ function App(): React.JSX.Element {
               creationLayoutActive={creationLayoutActive}
               shouldMountTerminalWorkbench={shouldMountTerminalWorkbench}
               showNavigationSidebar={showNavigationSidebar}
+              showWorkspaceToolPanel={workspaceChromeActive && workspacePanelOpen}
               terminalWorkbenchVisible={terminalWorkbenchVisible}
               workspaceChromeActive={workspaceChromeActive}
             />

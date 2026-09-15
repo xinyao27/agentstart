@@ -274,13 +274,12 @@ const TerminalPaneOverlayLayer = function TerminalPaneOverlayLayer({
    *  coverage; targeted mounts keep their existing delayed parking policy. */
   activationDeferredMountTabIds?: ReadonlySet<string> | null
 }): React.JSX.Element | null {
-  const { terminalTabs, unifiedTabs, groups, activeGroupId, workspacePanelOpen } = useAppStore(
+  const { terminalTabs, unifiedTabs, groups, activeGroupId } = useAppStore(
     useShallow((state) => ({
       terminalTabs: state.tabsByWorktree[worktreeId] ?? EMPTY_TERMINAL_TABS,
       unifiedTabs: state.unifiedTabsByWorktree[worktreeId] ?? EMPTY_UNIFIED_TABS,
       groups: state.groupsByWorktree[worktreeId] ?? EMPTY_GROUPS,
-      activeGroupId: state.activeGroupIdByWorktree[worktreeId],
-      workspacePanelOpen: state.workspacePanelOpen
+      activeGroupId: state.activeGroupIdByWorktree[worktreeId]
     }))
   )
   const focusGroup = useAppStore((state) => state.focusGroup)
@@ -352,9 +351,7 @@ const TerminalPaneOverlayLayer = function TerminalPaneOverlayLayer({
         )
         .map((terminalTab) => {
           const assignment = assignments.get(terminalTab.id)
-          const isVisible = Boolean(
-            isWorktreeActive && !workspacePanelOpen && assignment && assignment.isActiveInGroup
-          )
+          const isVisible = Boolean(isWorktreeActive && assignment && assignment.isActiveInGroup)
           const isActive = Boolean(isVisible && assignment && assignment.groupId === activeGroupId)
           // Why: parking unmounts only the view; the parked watcher owns exit
           // and side-effect handling until this tab is eligible to remount.

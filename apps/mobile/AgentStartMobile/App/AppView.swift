@@ -174,6 +174,7 @@ struct AppView: View {
             workspaceRepository: model.dependencies.workspaceRepository,
             accountsRepository: model.dependencies.accountsRepository,
             activityRepository: model.dependencies.activityRepository,
+            browserTabsRepository: model.dependencies.browserTabsRepository,
             widgetSnapshotWriter: model.dependencies.widgetSnapshotWriter,
             recentWorkspaceStore: model.dependencies.recentWorkspaceStore,
             snapshotCache: model.dependencies.homeSnapshotCache,
@@ -187,6 +188,7 @@ struct AppView: View {
             showActivityInsights: model.showActivityInsights,
             showSettings: model.showSettings,
             showAccounts: model.showAccounts,
+            showBrowser: model.showBrowser,
             editHost: model.showEditHost,
             hostsChanged: model.hostsDidChange
         )

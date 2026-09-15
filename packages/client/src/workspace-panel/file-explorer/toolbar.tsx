@@ -58,7 +58,7 @@ export function FileExplorerToolbar({
   onToggleDotfiles
 }: FileExplorerToolbarProps): React.JSX.Element {
   return (
-    <div className="border-border flex h-8 min-h-8 items-center gap-2 border-b px-2">
+    <div className="flex h-8 min-h-8 items-center gap-2 px-2">
       <span
         className="text-foreground min-w-0 flex-1 truncate text-xs font-medium"
         title={repoName}

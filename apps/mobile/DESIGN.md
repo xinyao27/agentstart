@@ -94,6 +94,17 @@ Terminal 的基准由 `Features/Terminal/ChromeMetrics.swift` 持有：Tab Strip
 按钮是 36pt 中性实色圆形和 44pt 点击区，不使用会在 Terminal 边缘形成分隔阴影的 Glass。
 Tab Strip、Add Button 外层与 Terminal 使用同一个连续 `background`。Terminal 内容左右保留
 12pt。连接与恢复状态显示为不参与布局的顶部浮层，始终可以关闭，关闭提示不取消后台重连。
+Browser pane 的上下 Action 区是例外：每块 Action 区（顶部一整行；底部按键行与文本行合为一块）
+各自只画**一层** `glassEffect`，面板内的控件不再单独叠 glass 或 material —— 背面是实色 chip：
+图标按钮 32×32、按键与文本动作按 36pt 高、圆角 `Radius.control`，用 `keycap`（禁用态用
+`content`，选中态用 `selection`），图标与文字用 `foreground`；底部文本行是消息输入框的形态：
+输入框与其主操作共用同一个 `content` 胶囊，`ProminentCircleButton` 的 36pt 实心圆上箭头嵌在
+胶囊内部右端，圆钮外围那圈 44pt 命中区就是它与胶囊边缘之间的间距。这里用实心圆而不是
+`.glassProminent`：玻璃主操作面比布局框大，塞进胶囊会压到胶囊边缘。和被移除
+的逐控件玻璃不同——它是实心主操作面，不是第二层模糊。逐控件上玻璃会让相邻两行各画一层
+模糊与阴影，界面读起来是叠在一起的多层而不是一条 bar；而面板本身是浅色面时，透明的控件
+又完全失去按钮形状。这两块浮起的面板距屏幕左右各 12pt，页面内容从面板下方穿过。
+
 Session 右上角 More 只承载页面级导航：Terminal / Chat 视图切换、Quick commands、
 文件浏览、Source Control、Agent History 和 Checks，并按 capability 隐藏不可用项。Terminal
 尺寸切换、Rename、Clear 和 Close 属于当前 Terminal Tab 的长按菜单；尺寸切换同时保留底部

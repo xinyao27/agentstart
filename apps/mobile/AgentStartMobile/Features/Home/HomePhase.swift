@@ -6,6 +6,7 @@ nonisolated struct HomeHostWorkspaceSnapshot: Sendable {
     let workspaces: [WorkspaceSummary]
     let accounts: AccountsSnapshot?
     let activityStats: ActivityStatsSummary?
+    let browserTabCount: Int
 }
 
 nonisolated struct HomeSnapshot: Sendable {
@@ -26,6 +27,7 @@ nonisolated struct HomeSnapshot: Sendable {
             count + host.workspaces.filter { $0.activity == .permission }.count
         }
     }
+    var browserTabCount: Int { hosts.reduce(0) { $0 + $1.browserTabCount } }
     var resumeTarget: (host: HostProfile, workspace: WorkspaceSummary)? {
         if let recentWorkspace,
             let host = hosts.first(where: {

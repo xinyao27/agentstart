@@ -1,8 +1,6 @@
 import type { Tab, TabGroup, WorkspaceVisibleTabType } from '@agentstart/protocol/workspace/tabs'
-import type { StoreApi } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 
-import type { WorkspacePanelEditorOpenOptions } from './file-model'
 import type { EditorSlice } from './store-contract'
 
 export function openWorkspaceEditorItem(
@@ -36,29 +34,6 @@ export function openWorkspaceEditorItem(
     ...(resolvedGroupId ? { targetGroupId: resolvedGroupId } : {})
   })
   return created?.id ?? fileId
-}
-
-export function setWorkspacePanelEditorTarget(
-  set: StoreApi<AppState>['setState'],
-  panelTabId: string | undefined,
-  fileId: string
-): boolean {
-  if (!panelTabId) {
-    return false
-  }
-  set((state) => ({
-    workspacePanelEditorFileIdByTab: {
-      ...state.workspacePanelEditorFileIdByTab,
-      [panelTabId]: fileId
-    }
-  }))
-  return true
-}
-
-export function resolveSourceControlWorkspacePanelTabId(
-  requestedTarget?: WorkspacePanelEditorOpenOptions
-): string | undefined {
-  return requestedTarget?.workspacePanelTabId
 }
 
 export function isEditorTabContentType(contentType: Tab['contentType']): boolean {

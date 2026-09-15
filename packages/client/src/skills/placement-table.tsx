@@ -33,8 +33,9 @@ async function revealPlacement(placement: SkillPlacement): Promise<void> {
 /**
  * Where a copy lives, as one line: the folder that holds it leaves its name to
  * the pane title, so the row spends its width on the location instead. The head
- * elides when room runs short, the tail never does, and the whole path stays on
- * the row as its title.
+ * gives up room first and the tail keeps the two segments that tell one install
+ * from the next, but both stay truncatable, so a path can never widen the row
+ * past the surface holding it.
  */
 function PlacementPathLine({
   path,
@@ -47,10 +48,10 @@ function PlacementPathLine({
 }): React.JSX.Element {
   const { head, tail } = splitPathForDisplay(dirname(path))
   return (
-    <p className={className} title={path}>
+    <p className={className}>
       {leading}
       <span className="text-muted-foreground min-w-0 truncate">{head}</span>
-      <span className="shrink-0">{tail}</span>
+      <span className="max-w-[70%] shrink-0 truncate">{tail}</span>
     </p>
   )
 }
@@ -123,7 +124,15 @@ export function SkillPlacementTable({ placements }: SkillPlacementTableProps): R
     // Why: the cap sits on the viewport — with only a max-height, the root has no
     // definite height for the viewport's h-full to resolve against, so a skill
     // installed in a dozen homes would overflow instead of scrolling.
-    <ScrollArea viewportClassName="max-h-80">
+    // Why: rows lead with absolute paths, and base-ui floors the content at
+    // fit-content, so the longest path would otherwise set the content width and
+    // push each row's own controls out of the surface — reachable only by a
+    // sideways swipe. Shrinking with the viewport is what lets the rows truncate.
+    <ScrollArea
+      viewportClassName="max-h-80"
+      viewportProps={{ style: { overflowX: 'hidden' } }}
+      contentProps={{ style: { minWidth: 0 } }}
+    >
       <ul className="py-1">
         {placements.map((placement) => (
           <SkillPlacementRow key={placement.id} placement={placement} />

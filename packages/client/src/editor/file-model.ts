@@ -137,13 +137,10 @@ export const MAX_RECENT_CLOSED_EDITOR_TABS = 10
 
 export type EditorOpenTargetOptions = {
   targetGroupId?: string
-  workspacePanelTabId?: string
   preview?: boolean
   runtimeEnvironmentId?: string | null
   forceContentReload?: boolean
 }
-
-export type WorkspacePanelEditorOpenOptions = Pick<EditorOpenTargetOptions, 'workspacePanelTabId'>
 
 export type GitRuntimeOperationOptions = {
   runtimeTargetSettings?: Pick<GlobalSettings, 'activeRuntimeEnvironmentId'> | null

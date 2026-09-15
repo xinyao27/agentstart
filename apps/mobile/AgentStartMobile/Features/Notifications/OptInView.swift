@@ -13,11 +13,6 @@ struct NotificationOptInView: View {
                     AgentStartIcon(.bellRinging, size: Theme.Spacing.huge)
                         .frame(width: Theme.Spacing.huge * 2, height: Theme.Spacing.huge * 2)
                         .padding(.bottom, Theme.Spacing.extraLarge)
-                    Text("NOTIFICATIONS")
-                        .font(.system(size: Theme.Typography.metadata, weight: .semibold))
-                        .tracking(0.5)
-                        .foregroundStyle(Theme.Colors.mutedForeground)
-                        .padding(.bottom, Theme.Spacing.small)
                     Text("Stay updated while connected")
                         .font(.system(size: Theme.Typography.emphasis, weight: .semibold))
                         .multilineTextAlignment(.center)
@@ -41,16 +36,19 @@ struct NotificationOptInView: View {
                             .multilineTextAlignment(.center)
                             .accessibilityLabel(errorMessage)
                     }
-                    choiceButton(
-                        title: "Enable notifications",
-                        choice: .enable,
-                        isProminent: true
-                    )
-                    choiceButton(title: "Not now", choice: .skip, isProminent: false)
+                    StackedGlassActionGroup {
+                        choiceButton(
+                            title: "Enable notifications",
+                            choice: .enable,
+                            isProminent: true
+                        )
+                        choiceButton(title: "Not now", choice: .skip, isProminent: false)
+                    }
                     Text("You can change this any time in Settings.")
                         .font(.system(size: Theme.Typography.metadata))
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .multilineTextAlignment(.center)
+                        .padding(.top, Theme.Spacing.small)
                 }
                 .frame(maxWidth: 448)
                 .frame(maxWidth: .infinity)

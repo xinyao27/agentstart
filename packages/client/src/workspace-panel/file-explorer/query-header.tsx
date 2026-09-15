@@ -68,9 +68,8 @@ function FileExplorerQueryHeader({
       </FileExplorerQueryStrip>
       <div
         className={cn(
-          'border-b border-border px-2 pb-1.5',
-          view.explorerView !== 'search' &&
-            'pointer-events-none invisible h-0 overflow-hidden border-b-0 p-0'
+          'px-2 pb-1.5',
+          view.explorerView !== 'search' && 'pointer-events-none invisible h-0 overflow-hidden p-0'
         )}
       >
         <SearchFilters {...view.searchPanel.filtersProps} />

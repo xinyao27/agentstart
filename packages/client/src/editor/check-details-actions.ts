@@ -15,7 +15,7 @@ import {
   removeEditorStateForReplacedPreview
 } from './preview-replacement'
 import type { EditorSlice } from './store-contract'
-import { openWorkspaceEditorItem, setWorkspacePanelEditorTarget } from './workspace-editor-target'
+import { openWorkspaceEditorItem } from './workspace-editor-target'
 
 type EditorCheckDetailsActions = Pick<
   EditorFileSlice,
@@ -30,7 +30,6 @@ export function createEditorCheckDetailsActions(
     openCheckRunDetails: (worktreeId, contextKey, check, state, options) => {
       const id = buildCheckRunDetailsTabId(worktreeId, check)
       const label = getCheckRunDetailsTabLabel(check)
-      const workspacePanelTabId = options?.workspacePanelTabId
       const isPreview = options?.preview ?? false
       const checkRunDetails: OpenCheckRunDetailsState = {
         contextKey,
@@ -79,8 +78,7 @@ export function createEditorCheckDetailsActions(
           const replaceablePreviewId = getReplaceablePreviewFileId(
             s,
             worktreeId,
-            options?.targetGroupId,
-            workspacePanelTabId
+            options?.targetGroupId
           )
           const replaceablePreviewIndex = s.openFiles.findIndex(
             (file) => file.id === replaceablePreviewId
@@ -107,9 +105,6 @@ export function createEditorCheckDetailsActions(
           activeTabTypeByWorktree: { ...s.activeTabTypeByWorktree, [worktreeId]: 'editor' }
         }
       })
-      if (setWorkspacePanelEditorTarget(set, workspacePanelTabId, id)) {
-        return
-      }
       void openWorkspaceEditorItem(
         get(),
         id,

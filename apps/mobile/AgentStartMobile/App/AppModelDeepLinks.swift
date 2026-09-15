@@ -56,19 +56,39 @@ extension AppModel {
             let root = AppRoute.workspaces(host, .standard)
             switch detail {
             case .accounts: routes = [root, .accounts(host)]
+            case .browser: routes = [root, .browser(host)]
             case .edit: routes = [root, .editHost(host)]
             }
+        case .hostBrowserNewTab(let hostID, let url):
+            isActivityInsightsPresented = false
+            guard let host = await host(hostID) else { return }
+            routes = [.workspaces(host, .standard), .browserNewTab(host, url)]
+        case .hostBrowserTab(let hostID, let pageID):
+            isActivityInsightsPresented = false
+            guard let host = await host(hostID) else { return }
+            // Why: a tab link names only the page. The browser list resolves the title and URL,
+            // and the stream's ready event fills the address bar once it attaches.
+            routes = [
+                .workspaces(host, .standard),
+                .browser(host),
+                .browserTab(
+                    host,
+                    BrowserTabSummary(
+                        pageID: pageID,
+                        title: "",
+                        url: "",
+                        isActive: false,
+                        worktreeID: nil
+                    )
+                ),
+            ]
         case .workspace(let hostID, let worktreeID, let destination):
             isActivityInsightsPresented = false
-            guard
-                let host = await host(hostID),
-                let snapshot = try? await dependencies.workspaceRepository.workspaces(for: host.id),
-                let workspace = snapshot.workspaces.first(where: {
-                    Self.matchesDeepLinkWorkspace($0, worktreeID: worktreeID)
-                })
+            guard let resolved = await resolveWorkspace(hostID: hostID, worktreeID: worktreeID)
             else {
                 return
             }
+            let (host, workspace) = resolved
             let root = AppRoute.workspaces(host, .standard)
             switch destination {
             case .session:
@@ -90,6 +110,37 @@ extension AppModel {
 
     func host(_ id: String) async -> HostProfile? {
         try? await dependencies.hostRepository.hosts().first { $0.id == id }
+    }
+
+    // Why: a launch-time deep link is delivered before the first host connection exists, so
+    // the workspace snapshot it needs cannot be read yet. Retrying across the cold-start
+    // window keeps an explicit navigation request from being dropped silently.
+    private func resolveWorkspace(
+        hostID: String,
+        worktreeID: String
+    ) async -> (host: HostProfile, workspace: WorkspaceSummary)? {
+        for delay in [0, 400, 1_200, 2_500, 4_000] {
+            if delay > 0 {
+                do {
+                    try await Task.sleep(for: .milliseconds(delay))
+                } catch {
+                    return nil
+                }
+            }
+            guard
+                let host = await host(hostID),
+                let snapshot = try? await dependencies.workspaceRepository.workspaces(
+                    for: host.id
+                ),
+                let workspace = snapshot.workspaces.first(where: {
+                    Self.matchesDeepLinkWorkspace($0, worktreeID: worktreeID)
+                })
+            else {
+                continue
+            }
+            return (host, workspace)
+        }
+        return nil
     }
 
     private static func matchesDeepLinkWorkspace(

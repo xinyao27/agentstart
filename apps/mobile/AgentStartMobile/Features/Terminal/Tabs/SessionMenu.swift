@@ -8,6 +8,7 @@ struct TerminalWorkspaceMenu: View {
     let showFiles: () -> Void
     let showSourceControl: () -> Void
     let showAgentHistory: () -> Void
+    let showBrowser: () -> Void
 
     var body: some View {
         Menu {
@@ -28,6 +29,9 @@ struct TerminalWorkspaceMenu: View {
                         Label("Agent History", iconID: .history)
                     }
                 }
+            }
+            Button(action: showBrowser) {
+                Label("Remote browser", iconID: .globe)
             }
         } label: {
             AgentStartToolbarIcon(.more)

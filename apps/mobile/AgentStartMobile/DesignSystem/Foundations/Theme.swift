@@ -15,9 +15,12 @@ enum Theme {
             light: UIColor(red: 26 / 255, green: 28 / 255, blue: 31 / 255, alpha: 0.494),
             dark: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 0.498)
         )
+        // Why: a selected surface is a neutral grey step, not an accent. The blue-tinted
+        // value read as a second control family next to the orange primary, and it left the
+        // selected tab pill indistinguishable from a tinted Glass control.
         static let selection = adaptive(
-            light: UIColor(red: 229 / 255, green: 243 / 255, blue: 255 / 255, alpha: 1),
-            dark: UIColor(red: 0 / 255, green: 40 / 255, blue: 77 / 255, alpha: 1)
+            light: UIColor(red: 229 / 255, green: 229 / 255, blue: 229 / 255, alpha: 1),
+            dark: UIColor(red: 64 / 255, green: 64 / 255, blue: 64 / 255, alpha: 1)
         )
         // Why: an 8% wash, deliberately separate from `selection`, which is the stronger
         // selected-state fill. Collapsing the two makes every inactive surface look selected.
@@ -254,8 +257,8 @@ enum Theme {
 
     enum Glass {
         static let groupSpacing: CGFloat = Spacing.small
-        // Why: stacked glass actions stay on the same 8pt rhythm as horizontal groups; a
-        // 12pt vertical gap makes compact action pairs visibly taller than their row form.
-        static let stackedActionSpacing: CGFloat = Spacing.small
+        // Why: vertical pairs are full-width capsules, not compact row actions; at the 8pt
+        // horizontal rhythm the two surfaces meet and read as one segmented control.
+        static let stackedActionSpacing: CGFloat = Spacing.standard
     }
 }

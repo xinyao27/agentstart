@@ -114,7 +114,7 @@ export function AiVaultSessionVirtualList({
   })
 
   return (
-    <div className="min-h-0 flex-1">
+    <div className="min-h-0 w-full min-w-0 flex-1">
       <LegendList<AiVaultListRow>
         {...LEGEND_LIST_SCROLL_AREA_PROPS}
         data={model.rows}

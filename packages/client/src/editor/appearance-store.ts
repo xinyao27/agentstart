@@ -44,6 +44,8 @@ export type EditorAppearanceSlice = {
   workspacePanelOpen: boolean
   workspacePanelTab: ActiveWorkspacePanelTab
   workspacePanelExplorerView: WorkspacePanelExplorerView
+  workspacePanelWidth: number
+  setWorkspacePanelWidth: (width: number) => void
   workspacePanelRouteRequestId: number
   workspacePanelTabByWorktree: Record<string, ActiveWorkspacePanelTab>
   workspacePanelExplorerViewByWorktree: Record<string, WorkspacePanelExplorerView>

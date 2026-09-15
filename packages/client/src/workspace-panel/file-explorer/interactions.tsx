@@ -19,7 +19,6 @@ import { useFileExplorerWatch } from './use-watch'
 
 export function useFileExplorerInteractions(
   model: FileExplorerModel,
-  workspacePanelTabId: string | undefined,
   elements: {
     explorerShellElement: HTMLDivElement | null
     pierreTree: PierreFileExplorerTreeHandle | null
@@ -131,7 +130,6 @@ export function useFileExplorerInteractions(
   const handlers = useFileExplorerHandlers({
     activeWorktreeId: owner.activeWorktreeId,
     runtimeEnvironmentId: owner.activeRuntimeEnvironmentId,
-    workspacePanelTabId,
     openFile,
     makePreviewFilePermanent,
     toggleDir: view.hasNameFilter ? actions.handleToggleNameFilterDir : toggleDir,

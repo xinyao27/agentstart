@@ -20,10 +20,9 @@ export function openMatchResult(params: {
       language: string
       mode: 'edit'
     },
-    options?: { preview?: boolean; workspacePanelTabId?: string }
+    options?: { preview?: boolean }
   ) => void
   preview: boolean
-  workspacePanelTabId?: string
   setPendingEditorReveal: (
     reveal: {
       filePath: string
@@ -41,7 +40,6 @@ export function openMatchResult(params: {
     match,
     openFile,
     preview,
-    workspacePanelTabId,
     setPendingEditorReveal,
     revealRafRef,
     revealInnerRafRef
@@ -55,7 +53,7 @@ export function openMatchResult(params: {
       language: detectLanguage(fileResult.relativePath),
       mode: 'edit'
     },
-    { preview, workspacePanelTabId }
+    { preview }
   )
 
   cancelRevealFrame(revealRafRef)

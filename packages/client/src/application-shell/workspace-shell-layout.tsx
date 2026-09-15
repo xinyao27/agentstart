@@ -5,6 +5,7 @@ import { cn } from '~renderer/ui/class-names'
 import { RecoverableRenderErrorBoundary } from '../error-boundaries/recoverable-render-error-boundary'
 import { SidePanelNavigation } from '../extension/side-panel/navigation'
 import { translate } from '../i18n/i18n'
+import { WorkspacePanelColumn } from '../workspace-panel/panel-column'
 import { lazyWithRetry as lazy } from './lazy-with-retry'
 import { isWorkspacePageView } from './state/workspace-page-views'
 import { WorkspaceSharedHeaderProvider, WorkspaceSharedHeaderSlot } from './workspace-shared-header'
@@ -25,6 +26,7 @@ type WorkspaceShellLayoutProps = {
   creationLayoutActive: boolean
   shouldMountTerminalWorkbench: boolean
   showNavigationSidebar: boolean
+  showWorkspaceToolPanel: boolean
   terminalWorkbenchVisible: boolean
   workspaceChromeActive: boolean
 }
@@ -36,6 +38,7 @@ export function WorkspaceShellLayout({
   creationLayoutActive,
   shouldMountTerminalWorkbench,
   showNavigationSidebar,
+  showWorkspaceToolPanel,
   terminalWorkbenchVisible,
   workspaceChromeActive
 }: WorkspaceShellLayoutProps): React.JSX.Element {
@@ -58,6 +61,9 @@ export function WorkspaceShellLayout({
   // while the row is there, and owns all four when the plane has the top to
   // itself.
   const headerVisible = workspaceChromeActive || creationLayoutActive || pageViewActive
+  // Why: the content area sheds its island treatment only when nothing sits
+  // beside it — either side column is what its edge is drawn against.
+  const hasSideColumns = showNavigationSidebar || showWorkspaceToolPanel
   return (
     <RecoverableRenderErrorBoundary
       boundaryId="app.workspace-shell"
@@ -86,12 +92,13 @@ export function WorkspaceShellLayout({
               )}
             >
               {/* Why: island-in-island — the big island hosts the workbench
-                  content and, when open, the navigation panel beside it; with
-                  the panel closed the inner island sheds its own treatment and
-                  fills the big island, so one surface reads again. */}
+                  content between its two side panels; with both closed the inner
+                  island sheds its own treatment and fills the big island, so one
+                  surface reads again. */}
+              {showWorkspaceToolPanel ? <WorkspacePanelColumn /> : null}
               <div
                 className={
-                  showNavigationSidebar
+                  hasSideColumns
                     ? 'workspace-inner-island m-1.5 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden'
                     : 'flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden'
                 }

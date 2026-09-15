@@ -94,13 +94,24 @@ export async function deleteCookie(
 }
 
 export async function setViewport(tabId: number, input: Record<string, unknown>) {
+  await keepEnvironmentCdp(tabId)
+  const width = optionalNumber(input, 'width')
+  const height = optionalNumber(input, 'height')
+  // Why: an absent size is the caller asking for the tab's own viewport back. The mobile pane's
+  // Web/Mobile switch sends no size to undo the phone viewport it emulated, and a viewport can
+  // only be replaced, never left half-applied.
+  if (width === undefined || height === undefined) {
+    await sendCdp(tabId, 'Emulation.clearDeviceMetricsOverride', undefined)
+    // Why: the wire result always carries the applied metrics, and a cleared override has none.
+    // Zero reports "no emulated viewport" without inventing a size the tab does not have.
+    return { deviceScaleFactor: 0, height: 0, mobile: false, width: 0 }
+  }
   const metrics = {
     deviceScaleFactor: optionalNumber(input, 'deviceScaleFactor') ?? 1,
-    height: requiredNumber(input, 'height'),
+    height,
     mobile: Reflect.get(input, 'mobile') === true,
-    width: requiredNumber(input, 'width')
+    width
   }
-  await keepEnvironmentCdp(tabId)
   await sendCdp(tabId, 'Emulation.setDeviceMetricsOverride', metrics)
   return metrics
 }

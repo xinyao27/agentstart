@@ -34,10 +34,7 @@ export type FileSearchPanelModel = {
   focusQueryInput: () => void
 }
 
-export function useFileSearchPanel(
-  explorerView: 'files' | 'search',
-  workspacePanelTabId?: string
-): FileSearchPanelModel {
+export function useFileSearchPanel(explorerView: 'files' | 'search'): FileSearchPanelModel {
   const activeWorktree = useActiveWorktree()
   const activeWorktreeId = useAppStore((s) => s.activeWorktreeId)
   const openFile = useAppStore((s) => s.openFile)
@@ -221,7 +218,6 @@ export function useFileSearchPanel(
       match,
       openFile,
       preview,
-      workspacePanelTabId,
       setPendingEditorReveal,
       revealRafRef,
       revealInnerRafRef

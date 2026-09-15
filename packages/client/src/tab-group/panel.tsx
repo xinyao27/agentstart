@@ -6,7 +6,6 @@ import { useWorkspaceSharedHeaderTarget } from '~renderer/application-shell/work
 import { BrowserTabProjectionPane } from '~renderer/browser-tab-projection/pane'
 import { translate } from '~renderer/i18n/i18n'
 import { X } from '~renderer/icons/hugeicons'
-import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
 import { cn } from '~renderer/ui/class-names'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
@@ -16,7 +15,6 @@ import { TabBarQuickCommandsButton } from '../tab-bar/quick-commands-button'
 import TabBar from '../tab-bar/tab-bar'
 import { TabSurfaceProvider } from '../tab-bar/tab-surfaces'
 import { closeTerminalTab } from '../terminal/tab-actions'
-import { WorkspacePanelContent } from '../workspace-panel/workspace-panel-content'
 import { WorkspaceToolTabs } from '../workspace-panel/workspace-tool-tabs'
 import { tabGroupBodyAnchorName } from './body-anchor'
 import { getTabPaneBodyDroppableId, type HoveredTabInsertion } from './use-tab-drag-split'
@@ -61,9 +59,6 @@ export default function TabGroupPanel({
   const model = useTabGroupWorkspaceModel({ groupId, worktreeId })
   const { activeTab, browserItems, commands, editorItems, tabBarOrder, terminalTabs } = model
   const sharedHeaderTarget = useWorkspaceSharedHeaderTarget()
-  const workspacePanelOpen = useAppStore((state) => state.workspacePanelOpen)
-  const workspacePanelTab = useAppStore((state) => state.workspacePanelTab)
-  const workspacePanelVisible = isFocused && workspacePanelOpen
   const activeGitGraphTabId = activeTab?.contentType === 'git-graph' ? activeTab.id : null
   const { setNodeRef: setBodyDropRef } = useDroppable({
     id: getTabPaneBodyDroppableId(groupId),
@@ -89,7 +84,7 @@ export default function TabGroupPanel({
     // leading gutter is the whole separation, so a selected first tab's outer
     // arc lands inside it instead of behind an extra gap.
     <div className="flex h-full min-w-0 items-stretch">
-      <WorkspaceToolTabs scope={{ groupId, worktreeId }} isFocused={isFocused} />
+      <WorkspaceToolTabs scope={{ worktreeId }} />
       <div className="min-w-0 flex-1">
         <TabBar
           tabs={terminalTabs}
@@ -316,18 +311,7 @@ export default function TabGroupPanel({
             data-contextual-tour-target="workspace-agent-terminal-tip"
           />
         ) : null}
-        {workspacePanelVisible ? (
-          <div className="absolute inset-0 flex min-h-0 min-w-0">
-            <WorkspacePanelContent
-              effectiveTab={workspacePanelTab}
-              workspacePanelOpen={workspacePanelOpen}
-              isVisible
-              workspacePanelTabId={groupId}
-            />
-          </div>
-        ) : null}
         {activeTab &&
-          !workspacePanelVisible &&
           activeTab.contentType !== 'terminal' &&
           activeTab.contentType !== 'browser' &&
           activeTab.contentType !== 'simulator' &&
@@ -353,7 +337,7 @@ export default function TabGroupPanel({
             </div>
           )}
 
-        {!workspacePanelVisible && activeTab?.contentType === 'git-graph' ? (
+        {activeTab?.contentType === 'git-graph' ? (
           <div className="absolute inset-0 flex min-h-0 min-w-0">
             <Suspense fallback={null}>
               <GitGraphView worktreeId={worktreeId} tabId={activeTab.id} />
@@ -361,7 +345,7 @@ export default function TabGroupPanel({
           </div>
         ) : null}
 
-        {!workspacePanelVisible && activeTab?.contentType === 'browser' ? (
+        {activeTab?.contentType === 'browser' ? (
           <div className="absolute inset-0 flex min-h-0 min-w-0">
             <BrowserTabProjectionPane workspaceId={activeTab.entityId} worktreeId={worktreeId} />
           </div>

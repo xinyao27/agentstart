@@ -1,6 +1,11 @@
 import type { ShellSessionDocumentValue, ShellSessionJsonValue } from '@agentstart/protocol'
 
-import { resolveTerminalTabField, terminalTabFieldOwner } from './terminal-tab-ownership'
+import {
+  resolveRootField,
+  resolveTerminalTabField,
+  rootFieldRule,
+  terminalTabFieldOwner
+} from './session-field-ownership'
 
 type Entry = ShellSessionJsonValue | undefined
 export type SessionMergeResult =
@@ -151,6 +156,17 @@ function merge(
   }
   if (force) {
     return desired
+  }
+  const rule = rootFieldRule(path)
+  if (rule) {
+    return resolveRootField(desired, current, rule)
+  }
+  if (current === undefined) {
+    // Why: the authority also deletes. A removed worktree, tab, or open file
+    // leaves the document while a stale client still asserts the value it read,
+    // and reporting that as a conflict both blocks the save and offers a
+    // "Replace conflicting values" action that resurrects pruned state.
+    return current
   }
   conflicts.push(path.join('.'))
   return current

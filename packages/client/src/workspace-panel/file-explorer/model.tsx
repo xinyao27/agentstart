@@ -19,13 +19,7 @@ import { useFileExplorerManualRefresh } from './use-manual-refresh'
 import { useFileExplorerTree } from './use-tree'
 import { useFileExplorerVisibleRowProjection } from './use-visible-row-projection'
 
-export function useFileExplorerModel({
-  isVisible,
-  workspacePanelTabId
-}: {
-  isVisible: boolean
-  workspacePanelTabId?: string
-}) {
+export function useFileExplorerModel({ isVisible }: { isVisible: boolean }) {
   const explorerView = useAppStore((state) => state.workspacePanelExplorerView)
   const showWorkspacePanelFiles = useAppStore((state) => state.showWorkspacePanelFiles)
   const showWorkspacePanelSearch = useAppStore((state) => state.showWorkspacePanelSearch)
@@ -33,7 +27,7 @@ export function useFileExplorerModel({
   const [nameFilterCollapsedPaths, setNameFilterCollapsedPaths] = useState<Set<string>>(
     () => new Set()
   )
-  const searchPanel = useFileSearchPanel(explorerView, workspacePanelTabId)
+  const searchPanel = useFileSearchPanel(explorerView)
   const handleSelectExplorerView = (view: WorkspacePanelExplorerView) => {
     if (view === 'files') {
       showWorkspacePanelFiles()

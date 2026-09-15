@@ -55,7 +55,6 @@ function TerminalWorkspacePanel({
   const openFiles = useAppStore((s) => s.openFiles)
   const activeBrowserTabId = useAppStore((s) => s.activeBrowserTabId)
   const activeTabType = useAppStore((s) => s.activeTabType)
-  const workspacePanelOpen = useAppStore((s) => s.workspacePanelOpen)
   const setActiveTabType = useAppStore((s) => s.setActiveTabType)
   const browserTabsByWorktree = useAppStore((s) => s.browserTabsByWorktree)
   const setActiveBrowserTab = useAppStore((s) => s.setActiveBrowserTab)
@@ -66,12 +65,7 @@ function TerminalWorkspacePanel({
 
   const foregroundTerminalTabIds = (() => {
     const ids = new Set<string>()
-    if (
-      activeView === 'terminal' &&
-      activeTabType === 'terminal' &&
-      activeTabId &&
-      !workspacePanelOpen
-    ) {
+    if (activeView === 'terminal' && activeTabType === 'terminal' && activeTabId) {
       ids.add(activeTabId)
     }
     return Array.from(ids)

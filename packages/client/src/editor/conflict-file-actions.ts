@@ -10,12 +10,7 @@ import {
   removeEditorStateForReplacedPreview
 } from './preview-replacement'
 import type { EditorSlice } from './store-contract'
-import {
-  openWorkspaceEditorItem,
-  resolveEditorOpenTargetGroupId,
-  resolveSourceControlWorkspacePanelTabId,
-  setWorkspacePanelEditorTarget
-} from './workspace-editor-target'
+import { openWorkspaceEditorItem, resolveEditorOpenTargetGroupId } from './workspace-editor-target'
 
 type EditorConflictFileActions = Pick<
   EditorFileSlice,
@@ -28,7 +23,6 @@ export function createEditorConflictFileActions(
 ): EditorConflictFileActions {
   return {
     openConflictFile: (worktreeId, worktreePath, entry, language, options) => {
-      const workspacePanelTabId = options?.workspacePanelTabId
       const absolutePath = joinPath(worktreePath, entry.path)
       const isPreview = options?.preview ?? false
       let editorItemTargetGroupId = options?.targetGroupId
@@ -94,12 +88,7 @@ export function createEditorConflictFileActions(
         }
 
         if (isPreview) {
-          const replaceablePreviewId = getReplaceablePreviewFileId(
-            s,
-            worktreeId,
-            targetGroupId,
-            workspacePanelTabId
-          )
+          const replaceablePreviewId = getReplaceablePreviewFileId(s, worktreeId, targetGroupId)
           const replaceablePreviewIndex = s.openFiles.findIndex(
             (file) => file.id === replaceablePreviewId
           )
@@ -133,12 +122,6 @@ export function createEditorConflictFileActions(
               : { ...s.trackedConflictPathsByWorktree, [worktreeId]: nextTracked }
         }
       })
-      if (
-        get().openFiles.some((file) => file.id === absolutePath) &&
-        setWorkspacePanelEditorTarget(set, workspacePanelTabId, absolutePath)
-      ) {
-        return
-      }
       void openWorkspaceEditorItem(
         get(),
         absolutePath,
@@ -150,8 +133,7 @@ export function createEditorConflictFileActions(
       )
     },
 
-    openConflictReviewFile: (reviewFileId, worktreeId, worktreePath, entry, language, options) => {
-      const workspacePanelTabId = resolveSourceControlWorkspacePanelTabId(options)
+    openConflictReviewFile: (reviewFileId, worktreeId, worktreePath, entry, language) => {
       const absolutePath = joinPath(worktreePath, entry.path)
       const reviewTab = (get().unifiedTabsByWorktree?.[worktreeId] ?? []).find(
         (tab) => tab.entityId === reviewFileId && tab.contentType === 'conflict-review'
@@ -232,16 +214,9 @@ export function createEditorConflictFileActions(
         }
       })
 
-      // Why: an embedded conflict review renders and saves its selected OpenFile
-      // itself; creating a backing tab would navigate away from Changes & Review.
-      if (
-        workspacePanelTabId &&
-        get().workspacePanelEditorFileIdByTab[workspacePanelTabId] === reviewFileId
-      ) {
-        return
-      }
-      // Why: top-level conflict review still needs a normal editor backing tab
-      // for save/close flows while keeping the review tab visible.
+      // Why: the conflict review tab renders and saves its own selected OpenFile,
+      // so the file still needs a backing editor tab for save/close flows while
+      // keeping the review tab visible.
       void openWorkspaceEditorItem(
         get(),
         absolutePath,

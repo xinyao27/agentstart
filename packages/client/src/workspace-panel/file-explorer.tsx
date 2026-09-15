@@ -5,15 +5,13 @@ import { LOCAL_WORKSPACE_PANEL_SOURCE, type WorkspacePanelSource } from './works
 
 function FileExplorer({
   source = LOCAL_WORKSPACE_PANEL_SOURCE,
-  isVisible = true,
-  workspacePanelTabId
+  isVisible = true
 }: {
   source?: WorkspacePanelSource
   isVisible?: boolean
-  workspacePanelTabId?: string
 }): React.JSX.Element {
   void source
-  return <FileExplorerFilesMemo isVisible={isVisible} workspacePanelTabId={workspacePanelTabId} />
+  return <FileExplorerFilesMemo isVisible={isVisible} />
 }
 
 export default FileExplorer

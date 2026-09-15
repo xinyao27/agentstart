@@ -15,6 +15,13 @@ export function sessionConflictScope(paths: readonly string[]): string {
         return translate('session.scope.groups', 'tab groups')
       case 'openFilesByWorktree':
         return translate('session.scope.editors', 'editor tabs')
+      case 'browserTabsByWorktree':
+      case 'browserPagesByWorkspace':
+        return translate('session.scope.browserTabs', 'browser tabs')
+      case 'browserUrlHistory':
+        return translate('session.scope.browserHistory', 'browser history')
+      case 'sleepingAgentSessionsByPaneKey':
+        return translate('session.scope.sleepingAgents', 'sleeping agent sessions')
       default:
         return translate('session.scope.settings', 'workspace session settings')
     }

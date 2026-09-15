@@ -70,7 +70,7 @@ export function AppScopeStrip(): React.JSX.Element | null {
         // gutter is the separation, the same one a selected first tab's arc
         // flares into.
         <div className="flex h-full min-w-0 items-stretch">
-          <WorkspaceToolTabs scope={null} isFocused={false} />
+          <WorkspaceToolTabs scope={null} />
           <div className="flex h-full min-w-0 flex-1 items-stretch overflow-hidden">
             <WorkspaceTabStripViewport
               activeTabId={activePageId}

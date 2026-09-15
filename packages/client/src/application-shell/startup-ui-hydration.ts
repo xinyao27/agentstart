@@ -39,6 +39,7 @@ export function getStartupErrorFallbackUI(uiHydrated: boolean): PersistedUIState
     workspacePanelOpen: false,
     workspacePanelTab: 'explorer',
     workspacePanelExplorerView: 'files',
+    workspacePanelWidth: 320,
     markdownTocPanelWidth: 240,
     groupBy: 'repo',
     sortBy: 'name',

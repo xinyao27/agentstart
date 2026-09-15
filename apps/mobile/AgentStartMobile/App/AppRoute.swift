@@ -10,6 +10,9 @@ enum AppRoute: Hashable {
     case about
     case editHost(HostProfile)
     case accounts(HostProfile)
+    case browser(HostProfile)
+    case browserNewTab(HostProfile, String?)
+    case browserTab(HostProfile, BrowserTabSummary)
     case agentHistory(HostProfile, WorkspaceSummary)
     case files(HostProfile, WorkspaceSummary)
     case filePreview(HostProfile, WorkspaceSummary, WorkspaceFilePreviewTarget)
@@ -27,7 +30,8 @@ enum AppRoute: Hashable {
 extension AppRoute {
     var hostID: String? {
         switch self {
-        case .editHost(let host), .accounts(let host), .agentHistory(let host, _),
+        case .editHost(let host), .accounts(let host), .browser(let host),
+            .browserNewTab(let host, _), .browserTab(let host, _), .agentHistory(let host, _),
             .files(let host, _), .filePreview(let host, _, _),
             .sourceControl(let host, _, _), .sourceReview(let host, _, _),
             .sourceDiff(let host, _, _, _, _), .workspaces(let host, _),

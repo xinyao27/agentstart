@@ -14,6 +14,7 @@ import {
 } from '@agentstart/protocol/settings/theme-gradient'
 import { normalizeStatusBarUsageMode } from '@agentstart/protocol/settings/usage-display'
 import { normalizeUsagePercentageDisplay } from '@agentstart/protocol/settings/usage-display'
+import { clampWorkspacePanelWidth } from '@agentstart/protocol/settings/workspace-panel'
 import {
   DEFAULT_HIDE_SLEEPING_WORKSPACES,
   normalizeAgentActivityDisplayMode
@@ -123,6 +124,11 @@ export function createUIHydrationActions(
             typeof ui.workspacePanelOpen === 'boolean' ? ui.workspacePanelOpen : false,
           workspacePanelTab: workspacePanelRoute.workspacePanelTab,
           workspacePanelExplorerView: workspacePanelRoute.workspacePanelExplorerView,
+          workspacePanelWidth: clampWorkspacePanelWidth(
+            ui.workspacePanelWidth,
+            undefined,
+            s.workspacePanelWidth
+          ),
           // Why: Project -> Workspace is the single list hierarchy on every client;
           // ignore legacy persisted grouping modes instead of reviving the old switcher.
           groupBy: FIXED_WORKSPACE_GROUP_BY,

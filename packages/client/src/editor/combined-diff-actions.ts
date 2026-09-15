@@ -6,11 +6,7 @@ import { resolveDiffRuntimeEnvironmentId } from './diff-runtime-owner'
 import type { OpenFile } from './file-model'
 import type { EditorFileSlice } from './file-store'
 import type { EditorSlice } from './store-contract'
-import {
-  openWorkspaceEditorItem,
-  resolveSourceControlWorkspacePanelTabId,
-  setWorkspacePanelEditorTarget
-} from './workspace-editor-target'
+import { openWorkspaceEditorItem } from './workspace-editor-target'
 
 type EditorCombinedDiffActions = Pick<EditorFileSlice, 'openBranchAllDiffs' | 'openCommitAllDiffs'>
 
@@ -19,8 +15,7 @@ export function createEditorCombinedDiffActions(
   get: Parameters<StateCreator<AppState, [], [], EditorSlice>>[1]
 ): EditorCombinedDiffActions {
   return {
-    openBranchAllDiffs: (worktreeId, worktreePath, compare, alternate, options) => {
-      const workspacePanelTabId = resolveSourceControlWorkspacePanelTabId(options)
+    openBranchAllDiffs: (worktreeId, worktreePath, compare, alternate) => {
       const branchCompare = toBranchCompareSnapshot(compare)
       const id = `${worktreeId}::all-diffs::branch::${compare.baseRef}::${branchCompare.compareVersion}`
       set((s) => {
@@ -74,9 +69,6 @@ export function createEditorCombinedDiffActions(
           activeTabTypeByWorktree: { ...s.activeTabTypeByWorktree, [worktreeId]: 'editor' }
         }
       })
-      if (setWorkspacePanelEditorTarget(set, workspacePanelTabId, id)) {
-        return
-      }
       void openWorkspaceEditorItem(
         get(),
         id,
@@ -86,8 +78,7 @@ export function createEditorCombinedDiffActions(
       )
     },
 
-    openCommitAllDiffs: (worktreeId, worktreePath, compare, entries, subject, message, options) => {
-      const workspacePanelTabId = resolveSourceControlWorkspacePanelTabId(options)
+    openCommitAllDiffs: (worktreeId, worktreePath, compare, entries, subject, message) => {
       const commitCompare = toCommitCompareSnapshot(compare, subject, message)
       const id = `${worktreeId}::all-diffs::commit::${commitCompare.commitOid}`
       const label = subject
@@ -143,9 +134,6 @@ export function createEditorCombinedDiffActions(
           activeTabTypeByWorktree: { ...s.activeTabTypeByWorktree, [worktreeId]: 'editor' }
         }
       })
-      if (setWorkspacePanelEditorTarget(set, workspacePanelTabId, id)) {
-        return
-      }
       void openWorkspaceEditorItem(get(), id, worktreeId, label, 'diff')
     }
 

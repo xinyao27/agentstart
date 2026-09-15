@@ -115,7 +115,7 @@ export function VaultSessionRow({
         render={
           <div
             className={cn(
-              'group/session-row flex w-full min-w-0 flex-col border-b border-sidebar-border px-3 py-2 text-left transition-colors hover:bg-accent',
+              'group/session-row flex w-full min-w-0 flex-col px-3 py-2 text-left transition-colors hover:bg-accent',
               resumeDisabled ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing',
               !detailsExpanded && 'min-h-[98px]'
             )}

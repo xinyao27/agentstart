@@ -12,6 +12,7 @@ function ScrollArea({
   viewportRef,
   viewportTabIndex,
   viewportProps,
+  contentProps,
   children,
   ...props
 }: ScrollAreaPrimitive.Root.Props & {
@@ -24,6 +25,9 @@ function ScrollArea({
   /** Set e.g. -1 so the viewport can receive programmatic focus (explorer keyboard shortcuts after inline rename). */
   viewportTabIndex?: number
   viewportProps?: ScrollAreaPrimitive.Viewport.Props
+  /** Overrides for the content wrapper. base-ui floors it at `fit-content`, so a
+   *  list of truncating rows opts out of that floor to shrink with its viewport. */
+  contentProps?: ScrollAreaPrimitive.Content.Props
 }) {
   return (
     <ScrollAreaPrimitive.Root
@@ -41,7 +45,7 @@ function ScrollArea({
         )}
         {...viewportProps}
       >
-        <ScrollAreaPrimitive.Content>{children}</ScrollAreaPrimitive.Content>
+        <ScrollAreaPrimitive.Content {...contentProps}>{children}</ScrollAreaPrimitive.Content>
       </ScrollAreaPrimitive.Viewport>
       {hasVerticalScrollBar ? <ScrollBar /> : null}
       {horizontalScrollBar ? <ScrollBar orientation="horizontal" /> : null}

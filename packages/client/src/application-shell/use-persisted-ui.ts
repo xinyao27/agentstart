@@ -16,6 +16,7 @@ type PersistedUiState = Pick<
   | 'workspacePanelExplorerView'
   | 'workspacePanelOpen'
   | 'workspacePanelTab'
+  | 'workspacePanelWidth'
   | 'showDotfilesByWorktree'
   | 'showSleepingWorkspaces'
   | 'sidebarWidth'
@@ -32,6 +33,7 @@ export function usePersistedUi(state: PersistedUiState): void {
         sidebarWidth: state.sidebarWidth,
         workspacePanelOpen: state.workspacePanelOpen,
         workspacePanelTab: state.workspacePanelTab,
+        workspacePanelWidth: state.workspacePanelWidth,
         workspacePanelExplorerView: state.workspacePanelExplorerView,
         markdownTocPanelWidth: state.markdownTocPanelWidth,
         groupBy: state.groupBy,
@@ -58,6 +60,7 @@ export function usePersistedUi(state: PersistedUiState): void {
     state.workspacePanelExplorerView,
     state.workspacePanelOpen,
     state.workspacePanelTab,
+    state.workspacePanelWidth,
     state.showDotfilesByWorktree,
     state.showSleepingWorkspaces,
     state.sidebarWidth,

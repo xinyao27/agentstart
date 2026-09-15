@@ -49,6 +49,10 @@
 - When a shared session document contains both renderer-owned layout and daemon-owned terminal
   bindings, merge those fields by ownership; otherwise a harmless PTY update can surface as a
   recurring manual conflict even when no user edits actually collide.
+- Carry that ownership rule to every field the authority also writes, and keep the accepted write as
+  the next merge base: a base left on the writer's own optimistic document turns the authority's own
+  normalization, activation, and owner pruning into the same manual conflict, and it never clears
+  until the user replaces values by hand.
 - Keep an outer bootstrap rejection boundary around extension startup; any error after the
   connecting surface is replaced must still render actionable connection guidance instead of
   rejecting into a blank workspace root.
@@ -190,8 +194,12 @@
   shape's own overhang, and position the shadow layer inside it back onto the shape's box.
 - When a tab silhouette is drawn from a screenshot, get the reference's pixel scale from a known
   metric (traffic-light diameter, strip height) before trusting any measurement: a 1200px-wide
-  capture of a 1728px-wide window is 1.44 CSS px per image px, and reading it as 1:1 makes every
+  capture of a 1728px-wide window is 1.44 CSS px per image pixel, and reading it as 1:1 makes every
   padding look 44% too large.
+- For a scroll area whose rows lead with an absolute path, lift base-ui's `fit-content` floor on
+  the scroll content. With the floor in place `truncate` never engages, the row renders its path in
+  full, its own badge and controls slide past the surface edge, and a sideways swipe becomes the
+  only way to reach them — a purely visual symptom with a layout-floor cause.
 - A fixed minimum tab width wider than the label's content shows up as an oversized gap between
   neighbors even when every padding is correct, because the viewer measures glyph to glyph. Size
   tabs to their content with a small floor, and let truncation handle a saturated strip.

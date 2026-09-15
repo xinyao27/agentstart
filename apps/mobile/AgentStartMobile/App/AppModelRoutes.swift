@@ -59,6 +59,14 @@ extension AppModel {
         routes.append(.accounts(host))
     }
 
+    func showBrowser(_ host: HostProfile) {
+        routes.append(.browser(host))
+    }
+
+    func showBrowserTab(host: HostProfile, tab: BrowserTabSummary) {
+        routes.append(.browserTab(host, tab))
+    }
+
     func showAgentHistory(host: HostProfile, workspace: WorkspaceSummary) {
         routes.append(.agentHistory(host, workspace))
     }

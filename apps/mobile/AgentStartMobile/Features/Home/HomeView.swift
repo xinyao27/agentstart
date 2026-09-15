@@ -14,6 +14,7 @@ struct HomeView: View {
     private let showActivityInsights: () -> Void
     private let showSettings: () -> Void
     private let showAccounts: (HostProfile) -> Void
+    private let showBrowser: (HostProfile) -> Void
     private let editHost: (HostProfile) -> Void
     private let hostsChanged: () -> Void
 
@@ -23,6 +24,7 @@ struct HomeView: View {
         workspaceRepository: any WorkspaceRepository,
         accountsRepository: any AccountsRepository,
         activityRepository: any ActivityStatsRepository,
+        browserTabsRepository: any BrowserTabsRepository,
         widgetSnapshotWriter: WidgetSnapshotWriter,
         recentWorkspaceStore: RecentWorkspaceStore,
         snapshotCache: HomeSnapshotCache,
@@ -34,6 +36,7 @@ struct HomeView: View {
         showActivityInsights: @escaping () -> Void,
         showSettings: @escaping () -> Void,
         showAccounts: @escaping (HostProfile) -> Void,
+        showBrowser: @escaping (HostProfile) -> Void,
         editHost: @escaping (HostProfile) -> Void,
         hostsChanged: @escaping () -> Void
     ) {
@@ -44,6 +47,7 @@ struct HomeView: View {
                 workspaceRepository: workspaceRepository,
                 accountsRepository: accountsRepository,
                 activityRepository: activityRepository,
+                browserTabsRepository: browserTabsRepository,
                 widgetSnapshotWriter: widgetSnapshotWriter,
                 recentWorkspaceStore: recentWorkspaceStore,
                 snapshotCache: snapshotCache
@@ -57,6 +61,7 @@ struct HomeView: View {
         self.showActivityInsights = showActivityInsights
         self.showSettings = showSettings
         self.showAccounts = showAccounts
+        self.showBrowser = showBrowser
         self.editHost = editHost
         self.hostsChanged = hostsChanged
     }
@@ -78,6 +83,7 @@ struct HomeView: View {
                         showWorkspace: showWorkspace,
                         showPairing: showPairing,
                         showAccounts: showAccounts,
+                        showBrowser: showBrowser,
                         editHost: editHost,
                         reconnect: { host in Task { await model.reconnect(hostID: host.id) } },
                         disconnect: { host in Task { await model.disconnect(hostID: host.id) } },

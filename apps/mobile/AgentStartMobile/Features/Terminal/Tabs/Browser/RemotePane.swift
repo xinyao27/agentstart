@@ -61,7 +61,7 @@ struct WorkspaceBrowserPane: View {
                 if let pageID = descriptor.pageID {
                     browserCanvas(pageID: pageID, size: geometry.size)
                 } else {
-                    Theme.Colors.background
+                    browserUnavailableCanvas
                 }
                 VStack(spacing: 0) {
                     browserChrome(pageID: descriptor.pageID)
@@ -266,6 +266,12 @@ struct WorkspaceBrowserPane: View {
         .clipped()
     }
 
+    // Why: the state overlay lives inside the interactive canvas, so a tab that never got a
+    // page handle drew nothing at all. Attach-less tabs have to explain themselves.
+    private var browserUnavailableCanvas: some View {
+        Theme.Colors.background.overlay { browserStateOverlay }
+    }
+
     @ViewBuilder
     private var browserStateOverlay: some View {
         if descriptor.pageID == nil {
@@ -292,7 +298,7 @@ struct WorkspaceBrowserPane: View {
                 Theme.Colors.background.opacity(0.82)
                     .overlay { AgentStartLoader(size: Theme.Control.largeIcon) }
             case .ready:
-                if model.isCommandRunning {
+                if model.isCommandRunning || model.renderedFrame == nil {
                     Theme.Colors.background.opacity(0.82)
                         .overlay { AgentStartLoader(size: Theme.Control.largeIcon) }
                 }

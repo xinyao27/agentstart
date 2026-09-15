@@ -8,18 +8,12 @@ import type { PierreFileExplorerTreeHandle } from './pierre-file-explorer-tree'
 import { FileExplorerQueryHeaderMemo } from './query-header'
 import { FileExplorerTreeContentMemo } from './tree-content'
 
-function FileExplorerFiles({
-  isVisible,
-  workspacePanelTabId
-}: {
-  isVisible: boolean
-  workspacePanelTabId?: string
-}): React.JSX.Element {
-  const model = useFileExplorerModel({ isVisible, workspacePanelTabId })
+function FileExplorerFiles({ isVisible }: { isVisible: boolean }): React.JSX.Element {
+  const model = useFileExplorerModel({ isVisible })
   const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>(null)
   const [pierreTree, setPierreTree] = useState<PierreFileExplorerTreeHandle | null>(null)
   const [explorerShellElement, setExplorerShellElement] = useState<HTMLDivElement | null>(null)
-  const interactions = useFileExplorerInteractions(model, workspacePanelTabId, {
+  const interactions = useFileExplorerInteractions(model, {
     explorerShellElement,
     pierreTree,
     scrollElement

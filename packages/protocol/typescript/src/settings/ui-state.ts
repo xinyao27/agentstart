@@ -58,6 +58,9 @@ export type PersistedUIState = {
   workspacePanelOpen: boolean
   workspacePanelTab: WorkspacePanelTab
   workspacePanelExplorerView: WorkspacePanelExplorerView
+  /** Width of the workspace tool panel column sitting left of the content area.
+   *  Missing means the default; clamped on hydration. */
+  workspacePanelWidth?: number
   markdownTocPanelWidth?: number
   groupBy: 'none' | 'workspace-status' | 'repo' | 'pr-status'
   sortBy: 'name' | 'smart' | 'recent' | 'repo' | 'manual'

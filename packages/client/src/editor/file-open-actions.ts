@@ -19,14 +19,12 @@ import type { EditorSlice } from './store-contract'
 import {
   buildEditorActiveResult,
   openWorkspaceEditorItem,
-  resolveEditorOpenTargetGroupId,
-  setWorkspacePanelEditorTarget
+  resolveEditorOpenTargetGroupId
 } from './workspace-editor-target'
 
 type EditorFileOpenActions = Pick<
   EditorFileSlice,
   | 'openFiles'
-  | 'workspacePanelEditorFileIdByTab'
   | 'activeFileId'
   | 'activeFileIdByWorktree'
   | 'activeTabTypeByWorktree'
@@ -43,7 +41,6 @@ export function createEditorFileOpenActions(
   return {
     // Open files
     openFiles: [],
-    workspacePanelEditorFileIdByTab: {},
     activeFileId: null,
     activeFileIdByWorktree: {},
     activeTabTypeByWorktree: {},
@@ -61,7 +58,6 @@ export function createEditorFileOpenActions(
       }),
 
     openFile: (file, options) => {
-      const workspacePanelTabId = options?.workspacePanelTabId
       let editorItemWorktreeId = file.worktreeId
       let editorItemFileId = file.filePath
       let editorItemLabel = file.relativePath
@@ -176,12 +172,7 @@ export function createEditorFileOpenActions(
         // matching the prior behavior.
         let newFiles = s.openFiles
         if (isPreview) {
-          const replaceablePreviewId = getReplaceablePreviewFileId(
-            s,
-            worktreeId,
-            targetGroupId,
-            workspacePanelTabId
-          )
+          const replaceablePreviewId = getReplaceablePreviewFileId(s, worktreeId, targetGroupId)
           const existingPreviewIdx = s.openFiles.findIndex((f) => f.id === replaceablePreviewId)
           if (existingPreviewIdx !== -1) {
             const replacedPreview = s.openFiles[existingPreviewIdx]
@@ -296,9 +287,6 @@ export function createEditorFileOpenActions(
           ...activeResult
         }
       })
-      if (setWorkspacePanelEditorTarget(set, workspacePanelTabId, editorItemFileId)) {
-        return
-      }
       void openWorkspaceEditorItem(
         get(),
         editorItemFileId,

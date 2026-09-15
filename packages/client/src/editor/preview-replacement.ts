@@ -5,35 +5,11 @@ import type { EditorSlice } from './store-contract'
 import { isEditorTabContentType } from './workspace-editor-target'
 
 export function getReplaceablePreviewFileId(
-  state: Pick<AppState, 'openFiles' | 'unifiedTabsByWorktree' | 'workspacePanelEditorFileIdByTab'>,
+  state: Pick<AppState, 'openFiles' | 'unifiedTabsByWorktree'>,
   worktreeId: string,
-  targetGroupId: string | undefined,
-  workspacePanelTabId?: string
+  targetGroupId: string | undefined
 ): string | null {
   const tabsForWorktree = state.unifiedTabsByWorktree?.[worktreeId] ?? []
-  if (workspacePanelTabId) {
-    const previewFileId = state.workspacePanelEditorFileIdByTab[workspacePanelTabId]
-    if (!previewFileId) {
-      return null
-    }
-    // Why: embedded preview replacement must not remove an OpenFile that is
-    // simultaneously rendered by a top-level tab or another workspace panel.
-    const isSharedEntity =
-      tabsForWorktree.some(
-        (tab) => tab.entityId === previewFileId && isEditorTabContentType(tab.contentType)
-      ) ||
-      Object.entries(state.workspacePanelEditorFileIdByTab).some(
-        ([tabId, fileId]) => tabId !== workspacePanelTabId && fileId === previewFileId
-      )
-    if (isSharedEntity) {
-      return null
-    }
-    return (
-      state.openFiles.find(
-        (file) => file.id === previewFileId && file.worktreeId === worktreeId && file.isPreview
-      )?.id ?? null
-    )
-  }
   if (targetGroupId) {
     const previewTab = tabsForWorktree.find(
       (tab) =>

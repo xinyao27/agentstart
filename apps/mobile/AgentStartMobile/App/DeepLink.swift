@@ -5,10 +5,13 @@ nonisolated enum AppDeepLink {
     case staticRoute(AppRoute)
     case host(String, WorkspaceListPresentation)
     case hostDetail(String, HostDetail)
+    case hostBrowserTab(String, String)
+    case hostBrowserNewTab(String, String?)
     case workspace(String, String, WorkspaceDestination)
 
     enum HostDetail: Sendable {
         case accounts
+        case browser
         case edit
     }
 
@@ -44,6 +47,16 @@ nonisolated enum AppDeepLink {
         }
         switch segments[2] {
         case "accounts": self = .hostDetail(hostID, .accounts)
+        case "browser":
+            if query["action"] == "newTab" {
+                self = .hostBrowserNewTab(hostID, query["url"])
+                return
+            }
+            guard segments.count >= 4 else {
+                self = .hostDetail(hostID, .browser)
+                return
+            }
+            self = .hostBrowserTab(hostID, segments[3...].joined(separator: "/"))
         case "edit": self = .hostDetail(hostID, .edit)
         case "session":
             guard segments.count >= 4 else { return nil }

@@ -194,6 +194,18 @@ extension RuntimeClient: WorkspaceBrowserRepository {
         _ = try await executeMobile(hostID: hostID, command: command)
     }
 
+    func clearBrowserViewport(
+        for hostID: String,
+        worktreeID: String,
+        pageID: String
+    ) async throws {
+        // Why: a viewport command without a size is the wire's "restore the tab's own viewport";
+        // the host keeps an emulated one until it is replaced.
+        var command = AgentStart_Runtime_V1_ViewportCommand()
+        command.target = browserTarget(worktreeID: worktreeID, pageID: pageID)
+        _ = try await executeMobile(hostID: hostID, command: .viewport(command))
+    }
+
     func browserTabCreate(
         hostID: String,
         worktreeID: String,
@@ -210,9 +222,70 @@ extension RuntimeClient: WorkspaceBrowserRepository {
         }
         return page.browserPageID
     }
+}
 
-    // ─── ExecuteMobile plumbing ─────────────────────────────────────────────────
+// ─── Remote browser tabs ────────────────────────────────────────────────────────
 
+extension RuntimeClient: BrowserTabsRepository {
+    // Why: the daemon exposes no tab-list stream to a mobile client, so this surface lists on
+    // demand and treats the returned page id as the tab's identity.
+    func browserTabs(for hostID: String) async throws -> [BrowserTabSummary] {
+        let result = try await executeMobile(
+            hostID: hostID,
+            command: .tabList(targetCommand(AgentStart_Runtime_V1_BrowserTarget()))
+        )
+        guard case .tabList(let list) = result else {
+            throw RuntimeServiceError.unexpectedResponse
+        }
+        return list.tabs.map(BrowserTabSummary.init(tab:))
+    }
+
+    func switchBrowserTab(hostID: String, pageID: String) async throws {
+        var command = AgentStart_Runtime_V1_TabSwitchCommand()
+        command.target = browserTarget(worktreeID: "", pageID: pageID)
+        command.focus = true
+        let result = try await executeMobile(hostID: hostID, command: .tabSwitch(command))
+        guard case .tabSwitch = result else { throw RuntimeServiceError.unexpectedResponse }
+    }
+
+    func closeBrowserTab(hostID: String, pageID: String) async throws {
+        var command = AgentStart_Runtime_V1_TabCloseCommand()
+        command.target = browserTarget(worktreeID: "", pageID: pageID)
+        let result = try await executeMobile(hostID: hostID, command: .tabClose(command))
+        guard case .tabClose(let closed) = result, closed.value else {
+            throw RuntimeServiceError.unexpectedResponse
+        }
+    }
+
+    func createBrowserTab(hostID: String, url: String?) async throws -> String {
+        // Why: a tab opened from the browser list belongs to no worktree, and an absent URL leaves
+        // the new-tab page to the browser instead of inventing one here.
+        var command = AgentStart_Runtime_V1_TabCreateCommand()
+        command.target = AgentStart_Runtime_V1_BrowserTarget()
+        command.url = url ?? ""
+        let result = try await executeMobile(hostID: hostID, command: .tabCreate(command))
+        guard case .tabCreate(let page) = result else {
+            throw RuntimeServiceError.unexpectedResponse
+        }
+        return page.browserPageID
+    }
+}
+
+nonisolated extension BrowserTabSummary {
+    init(tab: AgentStart_Runtime_V1_BrowserTab) {
+        self.init(
+            pageID: tab.browserPageID,
+            title: tab.title,
+            url: tab.url,
+            isActive: tab.active,
+            worktreeID: tab.hasWorktreeID ? tab.worktreeID : nil
+        )
+    }
+}
+
+// ─── ExecuteMobile plumbing ─────────────────────────────────────────────────────
+
+extension RuntimeClient {
     private func executeMobile(
         hostID: String,
         command: AgentStart_Runtime_V1_ExecuteMobileRequest.OneOf_Command
@@ -260,7 +333,11 @@ extension RuntimeClient: WorkspaceBrowserRepository {
         pageID: String?
     ) -> AgentStart_Runtime_V1_BrowserTarget {
         var target = AgentStart_Runtime_V1_BrowserTarget()
-        target.worktree = browserWorktreeSelector(worktreeID)
+        // Why: a tab that belongs to no worktree has no selector to send. The extension resolves
+        // the target from the page id alone and ignores an absent worktree.
+        if !worktreeID.isEmpty {
+            target.worktree = browserWorktreeSelector(worktreeID)
+        }
         if let pageID {
             target.page = pageID
         }
@@ -319,7 +396,8 @@ nonisolated private func navigationURL(
     case .goto(let value), .back(let value), .forward(let value), .reload(let value):
         navigation = value
     case .keypress, .insertText, .mouseClick, .mouseMove, .mouseDown, .mouseUp, .mouseWheel,
-        .tabCreate, .dialogAccept, .dialogDismiss, .viewport:
+        .tabCreate, .dialogAccept, .dialogDismiss, .viewport, .tabList, .tabShow, .tabSwitch,
+        .tabClose:
         navigation = nil
     }
     guard let navigation else { throw RuntimeServiceError.unexpectedResponse }

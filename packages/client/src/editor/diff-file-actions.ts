@@ -12,11 +12,7 @@ import {
   removeEditorStateForReplacedPreview
 } from './preview-replacement'
 import type { EditorSlice } from './store-contract'
-import {
-  openWorkspaceEditorItem,
-  resolveEditorOpenTargetGroupId,
-  setWorkspacePanelEditorTarget
-} from './workspace-editor-target'
+import { openWorkspaceEditorItem, resolveEditorOpenTargetGroupId } from './workspace-editor-target'
 
 type EditorDiffFileActions = Pick<EditorFileSlice, 'openDiff' | 'openBranchDiff'>
 
@@ -26,7 +22,6 @@ export function createEditorDiffFileActions(
 ): EditorDiffFileActions {
   return {
     openDiff: (worktreeId, filePath, relativePath, language, staged, options) => {
-      const workspacePanelTabId = options?.workspacePanelTabId
       const isPreview = options?.preview ?? false
       let editorItemTargetGroupId = options?.targetGroupId
       let editorItemFileId = ''
@@ -79,12 +74,7 @@ export function createEditorDiffFileActions(
           runtimeEnvironmentId
         }
         if (isPreview) {
-          const replaceablePreviewId = getReplaceablePreviewFileId(
-            s,
-            worktreeId,
-            targetGroupId,
-            workspacePanelTabId
-          )
+          const replaceablePreviewId = getReplaceablePreviewFileId(s, worktreeId, targetGroupId)
           const replaceablePreviewIndex = s.openFiles.findIndex(
             (file) => file.id === replaceablePreviewId
           )
@@ -109,9 +99,6 @@ export function createEditorDiffFileActions(
           activeTabTypeByWorktree: { ...s.activeTabTypeByWorktree, [worktreeId]: 'editor' }
         }
       })
-      if (setWorkspacePanelEditorTarget(set, workspacePanelTabId, editorItemFileId)) {
-        return
-      }
       void openWorkspaceEditorItem(
         get(),
         editorItemFileId,
@@ -124,7 +111,6 @@ export function createEditorDiffFileActions(
     },
 
     openBranchDiff: (worktreeId, worktreePath, entry, compare, language, options) => {
-      const workspacePanelTabId = options?.workspacePanelTabId
       const branchCompare = toBranchCompareSnapshot(compare)
       const id = `${worktreeId}::diff::branch::${compare.baseRef}::${branchCompare.compareVersion}::${entry.path}`
       const isPreview = options?.preview ?? false
@@ -179,12 +165,7 @@ export function createEditorDiffFileActions(
           runtimeEnvironmentId
         }
         if (isPreview) {
-          const replaceablePreviewId = getReplaceablePreviewFileId(
-            s,
-            worktreeId,
-            targetGroupId,
-            workspacePanelTabId
-          )
+          const replaceablePreviewId = getReplaceablePreviewFileId(s, worktreeId, targetGroupId)
           const replaceablePreviewIndex = s.openFiles.findIndex(
             (file) => file.id === replaceablePreviewId
           )
@@ -209,9 +190,6 @@ export function createEditorDiffFileActions(
           activeTabTypeByWorktree: { ...s.activeTabTypeByWorktree, [worktreeId]: 'editor' }
         }
       })
-      if (setWorkspacePanelEditorTarget(set, workspacePanelTabId, id)) {
-        return
-      }
       void openWorkspaceEditorItem(
         get(),
         id,

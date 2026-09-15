@@ -69,6 +69,31 @@ struct AppRouteDestinationView: View {
                 repository: model.dependencies.accountsRepository,
                 connectionRuntime: model.dependencies.hostConnectionRuntime
             )
+        case .browser(let host):
+            BrowserTabsView(
+                host: host,
+                hostRepository: model.dependencies.hostRepository,
+                repository: model.dependencies.browserTabsRepository,
+                connectionRuntime: model.dependencies.hostConnectionRuntime,
+                showTab: { tab in model.showBrowserTab(host: host, tab: tab) }
+            )
+        case .browserNewTab(let host, let url):
+            BrowserTabsView(
+                host: host,
+                hostRepository: model.dependencies.hostRepository,
+                repository: model.dependencies.browserTabsRepository,
+                connectionRuntime: model.dependencies.hostConnectionRuntime,
+                createsTabOnAppear: true,
+                initialTabURL: url,
+                showTab: { tab in model.showBrowserTab(host: host, tab: tab) }
+            )
+        case .browserTab(let host, let tab):
+            BrowserTabDetailView(
+                host: host,
+                tab: tab,
+                repository: model.dependencies.browserRepository,
+                connectionRuntime: model.dependencies.hostConnectionRuntime
+            )
         case .agentHistory(let host, let workspace):
             AgentHistoryView(
                 host: host,
@@ -216,6 +241,7 @@ struct AppRouteDestinationView: View {
                 showAgentHistory: {
                     model.showAgentHistory(host: host, workspace: workspace)
                 },
+                showBrowser: { model.showBrowser(host) },
                 openTerminalFile: {
                     model.openTerminalFile($0, host: host, workspace: workspace)
                 },

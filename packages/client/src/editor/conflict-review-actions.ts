@@ -4,11 +4,7 @@ import type { AppState } from '~renderer/store/types'
 import type { ConflictReviewState, OpenFile } from './file-model'
 import type { EditorFileSlice } from './file-store'
 import type { EditorSlice } from './store-contract'
-import {
-  openWorkspaceEditorItem,
-  resolveSourceControlWorkspacePanelTabId,
-  setWorkspacePanelEditorTarget
-} from './workspace-editor-target'
+import { openWorkspaceEditorItem } from './workspace-editor-target'
 
 type EditorConflictReviewActions = Pick<EditorFileSlice, 'openConflictReview'>
 
@@ -17,8 +13,7 @@ export function createEditorConflictReviewActions(
   get: Parameters<StateCreator<AppState, [], [], EditorSlice>>[1]
 ): EditorConflictReviewActions {
   return {
-    openConflictReview: (worktreeId, worktreePath, entries, source, options) => {
-      const workspacePanelTabId = resolveSourceControlWorkspacePanelTabId(options)
+    openConflictReview: (worktreeId, worktreePath, entries, source) => {
       const id = `${worktreeId}::conflict-review`
       set((s) => {
         const conflictReview: ConflictReviewState = {
@@ -70,13 +65,10 @@ export function createEditorConflictReviewActions(
           activeTabTypeByWorktree: { ...s.activeTabTypeByWorktree, [worktreeId]: 'editor' }
         }
       })
-      if (setWorkspacePanelEditorTarget(set, workspacePanelTabId, id)) {
-        return
-      }
       void openWorkspaceEditorItem(get(), id, worktreeId, 'Conflict Review', 'conflict-review')
     }
 
     // Why: the checks panel only has room for inline summaries; full logs and
-    // annotations belong in its embedded editor when available, or a normal tab otherwise.
+    // annotations open as their own tab.
   }
 }

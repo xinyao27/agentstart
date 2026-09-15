@@ -40,14 +40,12 @@ type WorkspaceToolTabsProps = {
    * on: the island stays in place, inert, so the strip's left edge — and with
    * it every tab's silhouette — never shifts between the two cases.
    */
-  scope: { groupId: string; worktreeId: string } | null
-  isFocused: boolean
+  scope: { worktreeId: string } | null
 }
 
-export function WorkspaceToolTabs({ scope, isFocused }: WorkspaceToolTabsProps): React.JSX.Element {
+export function WorkspaceToolTabs({ scope }: WorkspaceToolTabsProps): React.JSX.Element {
   const workspacePanelOpen = useAppStore((state) => state.workspacePanelOpen)
   const workspacePanelTab = useAppStore((state) => state.workspacePanelTab)
-  const focusGroup = useAppStore((state) => state.focusGroup)
   const setWorkspacePanelOpen = useAppStore((state) => state.setWorkspacePanelOpen)
   const inert = scope === null
   // Why: same string the tab bar's inert controls use, keyed once so the
@@ -57,13 +55,14 @@ export function WorkspaceToolTabs({ scope, isFocused }: WorkspaceToolTabsProps):
     'Create a workspace first'
   )
 
+  // Why: the panel is a shell-level column, so picking a tool here decides
+  // which panel that column shows — it must not move split focus or open a tab.
   const handleSelect = (tab: WorkspaceToolTab): void => {
     if (!scope) {
       return
     }
     returnToWorkspaceView()
-    focusGroup(scope.worktreeId, scope.groupId)
-    if (isFocused && workspacePanelOpen && workspacePanelTab === tab.id) {
+    if (workspacePanelOpen && workspacePanelTab === tab.id) {
       setWorkspacePanelOpen(false)
       return
     }
@@ -82,7 +81,7 @@ export function WorkspaceToolTabs({ scope, isFocused }: WorkspaceToolTabsProps):
     >
       {TOOL_TABS.map((tab) => {
         const Icon = tab.icon
-        const active = !inert && isFocused && workspacePanelOpen && workspacePanelTab === tab.id
+        const active = !inert && workspacePanelOpen && workspacePanelTab === tab.id
         const label = inert ? inertLabel : tab.label
         return (
           <Tooltip key={tab.id}>

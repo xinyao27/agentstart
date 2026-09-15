@@ -21,13 +21,7 @@ import { useChecksPanelStateCore } from './checks-panel/state-core'
 import { useChecksPanelStatusEffects } from './checks-panel/status-effects'
 import { LOCAL_WORKSPACE_PANEL_SOURCE, type WorkspacePanelSource } from './workspace-panel-source'
 
-function LocalChecksPanel({
-  isVisible,
-  workspacePanelTabId
-}: {
-  isVisible: boolean
-  workspacePanelTabId?: string
-}): React.JSX.Element | null {
+function LocalChecksPanel({ isVisible }: { isVisible: boolean }): React.JSX.Element | null {
   const core = useChecksPanelStateCore(isVisible)
   const reviewIdentity = useChecksPanelReviewIdentity(core)
   const reviewContext = useChecksPanelReviewContext(reviewIdentity)
@@ -49,18 +43,16 @@ function LocalChecksPanel({
   if (!context.activeWorktree || context.isFolder || !context.activeReview) {
     return <ChecksPanelEmptyStateView context={context} />
   }
-  return <ChecksPanelReviewView context={context} workspacePanelTabId={workspacePanelTabId} />
+  return <ChecksPanelReviewView context={context} />
 }
 
 export default function ChecksPanel({
   source = LOCAL_WORKSPACE_PANEL_SOURCE,
-  isVisible = true,
-  workspacePanelTabId
+  isVisible = true
 }: {
   source?: WorkspacePanelSource
   isVisible?: boolean
-  workspacePanelTabId?: string
 }): React.JSX.Element | null {
   void source
-  return <LocalChecksPanel isVisible={isVisible} workspacePanelTabId={workspacePanelTabId} />
+  return <LocalChecksPanel isVisible={isVisible} />
 }

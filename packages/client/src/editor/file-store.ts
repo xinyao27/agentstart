@@ -15,17 +15,13 @@ import type {
   ConflictReviewEntry,
   ConflictReviewState,
   EditorOpenTargetOptions,
-  OpenFile,
-  WorkspacePanelEditorOpenOptions
+  OpenFile
 } from './file-model'
 import type { HttpLinkSourceOwner } from './http-link-routing'
 
 export type EditorFileSlice = {
   // Open files / editor tabs
   openFiles: OpenFile[]
-  // Why: Explorer and Source Control own an editor inside their workspace tab;
-  // keep that nested selection separate from top-level editor-tab activation.
-  workspacePanelEditorFileIdByTab: Record<string, string>
   activeFileId: string | null
   activeFileIdByWorktree: Record<string, string | null> // worktreeId -> last active file
   activeTabTypeByWorktree: Record<string, WorkspaceVisibleTabType> // worktreeId -> last active tab type
@@ -39,7 +35,6 @@ export type EditorFileSlice = {
       recordReplacedPreview?: boolean
       suppressActiveRuntimeFallback?: boolean
       forceContentReload?: boolean
-      workspacePanelTabId?: string
     }
   ) => void
   openNewMarkdownInActiveWorkspace: (groupId: string) => Promise<void>
@@ -108,8 +103,7 @@ export type EditorFileSlice = {
     worktreePath: string,
     alternate?: CombinedDiffAlternate,
     areaFilter?: string,
-    entriesSnapshot?: GitStatusEntry[],
-    options?: WorkspacePanelEditorOpenOptions
+    entriesSnapshot?: GitStatusEntry[]
   ) => void
   openConflictFile: (
     worktreeId: string,
@@ -123,15 +117,13 @@ export type EditorFileSlice = {
     worktreeId: string,
     worktreePath: string,
     entry: GitStatusEntry,
-    language: string,
-    options?: WorkspacePanelEditorOpenOptions
+    language: string
   ) => void
   openConflictReview: (
     worktreeId: string,
     worktreePath: string,
     entries: ConflictReviewEntry[],
-    source: ConflictReviewState['source'],
-    options?: WorkspacePanelEditorOpenOptions
+    source: ConflictReviewState['source']
   ) => void
   openCheckRunDetails: (
     worktreeId: string,
@@ -151,8 +143,7 @@ export type EditorFileSlice = {
     worktreeId: string,
     worktreePath: string,
     compare: GitBranchCompareSummary,
-    alternate?: CombinedDiffAlternate,
-    options?: WorkspacePanelEditorOpenOptions
+    alternate?: CombinedDiffAlternate
   ) => void
   openCommitAllDiffs: (
     worktreeId: string,
@@ -160,7 +151,6 @@ export type EditorFileSlice = {
     compare: GitCommitCompareSummary,
     entries: GitBranchChangeEntry[],
     subject?: string,
-    message?: string,
-    options?: WorkspacePanelEditorOpenOptions
+    message?: string
   ) => void
 }

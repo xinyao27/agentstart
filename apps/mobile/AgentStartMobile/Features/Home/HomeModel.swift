@@ -18,6 +18,8 @@ final class HomeModel {
     @ObservationIgnored
     private let activityRepository: any ActivityStatsRepository
     @ObservationIgnored
+    private let browserTabsRepository: any BrowserTabsRepository
+    @ObservationIgnored
     private let widgetSnapshotWriter: WidgetSnapshotWriter
     @ObservationIgnored
     private let recentWorkspaceStore: RecentWorkspaceStore
@@ -34,6 +36,8 @@ final class HomeModel {
     @ObservationIgnored
     private var activityStats: [String: ActivityStatsSummary] = [:]
     @ObservationIgnored
+    private var browserTabCounts: [String: Int] = [:]
+    @ObservationIgnored
     private var accountSubscriptionTasks: [String: Task<Void, Never>] = [:]
     @ObservationIgnored
     private var didHydrateCache = false
@@ -44,6 +48,7 @@ final class HomeModel {
         workspaceRepository: any WorkspaceRepository,
         accountsRepository: any AccountsRepository,
         activityRepository: any ActivityStatsRepository,
+        browserTabsRepository: any BrowserTabsRepository,
         widgetSnapshotWriter: WidgetSnapshotWriter,
         recentWorkspaceStore: RecentWorkspaceStore,
         snapshotCache: HomeSnapshotCache
@@ -53,6 +58,7 @@ final class HomeModel {
         self.workspaceRepository = workspaceRepository
         self.accountsRepository = accountsRepository
         self.activityRepository = activityRepository
+        self.browserTabsRepository = browserTabsRepository
         self.widgetSnapshotWriter = widgetSnapshotWriter
         self.recentWorkspaceStore = recentWorkspaceStore
         self.snapshotCache = snapshotCache
@@ -194,15 +200,38 @@ final class HomeModel {
             }
             return values
         }
-        let (nextWorkspaces, nextAccounts, nextStats) = await (
+        // Why: the Browser tile is an entry point, so one tab count per connected host rides the
+        // existing refresh instead of giving Home its own browser polling loop.
+        async let loadedBrowserTabs = withTaskGroup(of: (String, Int?).self) { group in
+            for host in profiles where hostIDs.contains(host.id) {
+                group.addTask { [browserTabsRepository] in
+                    // Why: this fetch is started while the host session is still coming up on a
+                    // cold launch, so one retry keeps the tile from pinning a false zero.
+                    if let tabs = try? await browserTabsRepository.browserTabs(for: host.id) {
+                        return (host.id, tabs.count)
+                    }
+                    try? await Task.sleep(for: .milliseconds(800))
+                    let retry = try? await browserTabsRepository.browserTabs(for: host.id)
+                    return (host.id, retry?.count)
+                }
+            }
+            var values: [String: Int] = [:]
+            for await (hostID, count) in group {
+                if let count { values[hostID] = count }
+            }
+            return values
+        }
+        let (nextWorkspaces, nextAccounts, nextStats, nextBrowserTabs) = await (
             loadedWorkspaces,
             loadedAccounts,
-            loadedStats
+            loadedStats,
+            loadedBrowserTabs
         )
         guard !Task.isCancelled else { return }
         for (hostID, snapshot) in nextWorkspaces { workspaces[hostID] = snapshot }
         for (hostID, snapshot) in nextAccounts { accounts[hostID] = snapshot }
         for (hostID, summary) in nextStats { activityStats[hostID] = summary }
+        for (hostID, count) in nextBrowserTabs { browserTabCounts[hostID] = count }
         publish()
         persistCurrentSnapshot()
     }
@@ -216,7 +245,8 @@ final class HomeModel {
                         connection: connections[$0.id],
                         workspaces: workspaces[$0.id] ?? [],
                         accounts: accounts[$0.id],
-                        activityStats: activityStats[$0.id]
+                        activityStats: activityStats[$0.id],
+                        browserTabCount: browserTabCounts[$0.id] ?? 0
                     )
                 },
                 recentWorkspace: recentWorkspaceStore.load()

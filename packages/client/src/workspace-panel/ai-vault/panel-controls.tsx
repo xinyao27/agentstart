@@ -65,9 +65,12 @@ export function VaultGroupHeader({
   return (
     <Button
       variant="outline"
-      size="sm"
+      // Why: `sm` ships `has-[>svg]:px-2.5`, and the leading chevron makes that
+      // the winning padding — a group header read tighter than the rows under
+      // it. `list-row` keeps the row's own px-3.
+      size="list-row"
       type="button"
-      className="border-sidebar-border bg-sidebar-accent/60 focus-visible:bg-accent flex w-full justify-start gap-2 border-y text-left text-xs font-semibold whitespace-normal transition-colors"
+      className="border-sidebar-border bg-sidebar-accent/60 focus-visible:bg-accent flex w-full justify-start gap-2 border-y px-3 text-left text-xs font-semibold whitespace-normal transition-colors"
       onClick={onToggle}
       aria-expanded={!collapsed}
     >
@@ -144,7 +147,7 @@ export function VaultScopeSwitch({
         }
       }}
       variant="outline"
-      className="border-sidebar-border bg-sidebar h-7 w-full border-x border-t"
+      className="border-sidebar-border bg-sidebar h-7 w-full border"
       aria-label={translate(
         'auto.components.workspacePanel.AiVaultPanelControls.scopeAriaLabel',
         'Session History scope: {{value0}}',

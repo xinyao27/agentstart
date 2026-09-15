@@ -33,6 +33,7 @@ struct TerminalWorkspaceView: View {
     private let showFiles: () -> Void
     private let showSourceControl: () -> Void
     private let showAgentHistory: () -> Void
+    private let showBrowser: () -> Void
     private let openTerminalFile: (TerminalFileOpenRequest) -> Void
     private let openWorkspaceFile: (String, String) -> Void
     private let openSourceReview: (SourceFileEntry) -> Void
@@ -60,6 +61,7 @@ struct TerminalWorkspaceView: View {
         showFiles: @escaping () -> Void,
         showSourceControl: @escaping () -> Void,
         showAgentHistory: @escaping () -> Void,
+        showBrowser: @escaping () -> Void,
         openTerminalFile: @escaping (TerminalFileOpenRequest) -> Void,
         openWorkspaceFile: @escaping (String, String) -> Void,
         openSourceReview: @escaping (SourceFileEntry) -> Void
@@ -84,6 +86,7 @@ struct TerminalWorkspaceView: View {
         self.showFiles = showFiles
         self.showSourceControl = showSourceControl
         self.showAgentHistory = showAgentHistory
+        self.showBrowser = showBrowser
         self.openTerminalFile = openTerminalFile
         self.openWorkspaceFile = openWorkspaceFile
         self.openSourceReview = openSourceReview
@@ -243,7 +246,8 @@ struct TerminalWorkspaceView: View {
                         showQuickCommands: { isQuickCommandsPresented = true },
                         showFiles: showFiles,
                         showSourceControl: showSourceControl,
-                        showAgentHistory: showAgentHistory
+                        showAgentHistory: showAgentHistory,
+                        showBrowser: showBrowser
                     )
                 }
             }

@@ -19,7 +19,10 @@ struct HomeAccountUsageSection: View {
                     VStack(spacing: 0) {
                         ForEach(Array(usageHosts.enumerated()), id: \.element.host.id) {
                             index, item in
-                            if index > 0 { Divider() }
+                            if index > 0 {
+                                Divider()
+                                    .padding(.vertical, HomeDashboardMetrics.hostDividerPadding)
+                            }
                             hostUsage(item)
                         }
                     }
@@ -44,7 +47,6 @@ struct HomeAccountUsageSection: View {
                     providerRow(section)
                 }
             }
-            .padding(.vertical, HomeDashboardMetrics.hostVerticalPadding)
             .contentShape(Rectangle())
         }
         .buttonStyle(.appPlain)

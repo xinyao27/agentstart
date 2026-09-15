@@ -1,5 +1,9 @@
 import { isPathInsideOrEqual } from '@agentstart/protocol/host/path'
 import { clampMarkdownTocPanelWidth } from '@agentstart/protocol/settings/markdown-toc'
+import {
+  WORKSPACE_PANEL_DEFAULT_WIDTH,
+  clampWorkspacePanelWidth
+} from '@agentstart/protocol/settings/workspace-panel'
 import type { StateCreator } from 'zustand'
 import type { AppState } from '~renderer/store/types'
 
@@ -125,6 +129,11 @@ export function createEditorAppearanceActions(
     workspacePanelOpen: false,
     workspacePanelTab: 'explorer',
     workspacePanelExplorerView: 'files',
+    workspacePanelWidth: WORKSPACE_PANEL_DEFAULT_WIDTH,
+    setWorkspacePanelWidth: (width) =>
+      set((s) => ({
+        workspacePanelWidth: clampWorkspacePanelWidth(width, undefined, s.workspacePanelWidth)
+      })),
     workspacePanelRouteRequestId: 0,
     workspacePanelTabByWorktree: {},
     workspacePanelExplorerViewByWorktree: {},

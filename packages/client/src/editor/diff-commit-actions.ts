@@ -12,12 +12,7 @@ import {
   removeEditorStateForReplacedPreview
 } from './preview-replacement'
 import type { EditorSlice } from './store-contract'
-import {
-  openWorkspaceEditorItem,
-  resolveEditorOpenTargetGroupId,
-  resolveSourceControlWorkspacePanelTabId,
-  setWorkspacePanelEditorTarget
-} from './workspace-editor-target'
+import { openWorkspaceEditorItem, resolveEditorOpenTargetGroupId } from './workspace-editor-target'
 
 type EditorDiffCommitActions = Pick<EditorFileSlice, 'openCommitDiff' | 'openAllDiffs'>
 
@@ -27,7 +22,6 @@ export function createEditorDiffCommitActions(
 ): EditorDiffCommitActions {
   return {
     openCommitDiff: (worktreeId, worktreePath, entry, compare, language, options) => {
-      const workspacePanelTabId = options?.workspacePanelTabId
       const commitCompare = toCommitCompareSnapshot(compare)
       const id = `${worktreeId}::diff::commit::${commitCompare.compareVersion}::${entry.path}`
       const isPreview = options?.preview ?? false
@@ -82,12 +76,7 @@ export function createEditorDiffCommitActions(
           runtimeEnvironmentId
         }
         if (isPreview) {
-          const replaceablePreviewId = getReplaceablePreviewFileId(
-            s,
-            worktreeId,
-            targetGroupId,
-            workspacePanelTabId
-          )
+          const replaceablePreviewId = getReplaceablePreviewFileId(s, worktreeId, targetGroupId)
           const replaceablePreviewIndex = s.openFiles.findIndex(
             (file) => file.id === replaceablePreviewId
           )
@@ -112,9 +101,6 @@ export function createEditorDiffCommitActions(
           activeTabTypeByWorktree: { ...s.activeTabTypeByWorktree, [worktreeId]: 'editor' }
         }
       })
-      if (setWorkspacePanelEditorTarget(set, workspacePanelTabId, id)) {
-        return
-      }
       void openWorkspaceEditorItem(
         get(),
         id,
@@ -126,8 +112,7 @@ export function createEditorDiffCommitActions(
       )
     },
 
-    openAllDiffs: (worktreeId, worktreePath, alternate, areaFilter, entriesSnapshot, options) => {
-      const workspacePanelTabId = resolveSourceControlWorkspacePanelTabId(options)
+    openAllDiffs: (worktreeId, worktreePath, alternate, areaFilter, entriesSnapshot) => {
       const id = areaFilter
         ? `${worktreeId}::all-diffs::uncommitted::${areaFilter}`
         : `${worktreeId}::all-diffs::uncommitted`
@@ -223,9 +208,6 @@ export function createEditorDiffCommitActions(
           activeTabTypeByWorktree: { ...s.activeTabTypeByWorktree, [worktreeId]: 'editor' }
         }
       })
-      if (setWorkspacePanelEditorTarget(set, workspacePanelTabId, id)) {
-        return
-      }
       void openWorkspaceEditorItem(get(), id, worktreeId, label, 'diff')
     }
   }

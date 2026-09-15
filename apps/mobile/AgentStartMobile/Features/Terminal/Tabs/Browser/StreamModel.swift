@@ -73,6 +73,16 @@ final class WorkspaceBrowserModel {
                 resetFramePresentation()
             }
         }
+        // Why: Mobile view mode leaves an emulated device viewport on the tab and the host keeps
+        // it until it is replaced, so a Web-mode attach asks for the tab's own viewport back
+        // before subscribing — otherwise switching back from Mobile renders the phone layout.
+        if configuration.viewMode == .web {
+            try? await repository.clearBrowserViewport(
+                for: hostID,
+                worktreeID: worktreeID,
+                pageID: pageID
+            )
+        }
         while !Task.isCancelled, activeStreamID == streamID {
             resetFramePresentation()
             // Why: mark every new subscription busy, including one that has a cached frame,
@@ -325,7 +335,7 @@ final class WorkspaceBrowserModel {
                 phase = frame == nil ? .waiting : .ready
                 return
             }
-            phase = .failed(message)
+            phase = .failed(workspaceBrowserDisplayMessage(message))
         }
     }
 
@@ -459,7 +469,29 @@ nonisolated func workspaceBrowserURL(_ value: String) -> String? {
 
 nonisolated func workspaceBrowserErrorMessage(_ error: Error, fallback: String) -> String {
     let detail = error.localizedDescription.trimmingCharacters(in: .whitespacesAndNewlines)
-    return detail.isEmpty ? fallback : detail
+    return detail.isEmpty ? fallback : workspaceBrowserDisplayMessage(detail)
+}
+
+// Why: the daemon answers a screencast with a machine token, and the pane shows the reason in a
+// glass chip. Known tokens get product copy; anything else stays verbatim so nothing is hidden.
+nonisolated func workspaceBrowserDisplayMessage(_ message: String) -> String {
+    let normalized = message.lowercased()
+    if normalized.contains("browser_extension_connection_unavailable") {
+        return "Desktop browser is offline."
+    }
+    if normalized.contains("browser_tab_not_found") {
+        return "This page is no longer open on the desktop."
+    }
+    if normalized.contains("_response_invalid")
+        || normalized.contains("does not match its request")
+        || normalized.contains("browser_command_value_missing")
+    {
+        return "The browser bridge returned an unexpected response."
+    }
+    if normalized.contains("deadline exceeded") {
+        return "The desktop browser did not answer in time."
+    }
+    return message
 }
 
 nonisolated func shouldSurfaceWorkspaceBrowserError(_ message: String) -> Bool {

@@ -61,7 +61,7 @@ export function SearchResultsPane({
       {/* Why: the summary is rendered outside the list so it stays pinned at the
          top while the user scrolls through results. */}
       {results && rows.length > 0 && (
-        <div className="text-muted-foreground border-border border-b px-2 py-1 text-[10px]">
+        <div className="text-muted-foreground px-2 py-1 text-[10px]">
           {results.totalMatches}{' '}
           {translate('auto.components.workspacePanel.Search.6aeda362ed', 'result')}
           {results.totalMatches !== 1 ? 's' : ''}{' '}

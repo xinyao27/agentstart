@@ -123,7 +123,7 @@ export function SessionInlineDetails({
       </div>
 
       {showResumeInWorktree || showResumeInNewTab || onContinueInNewSession || onOpenLog ? (
-        <div className="border-sidebar-border/80 bg-sidebar-accent/15 flex flex-wrap items-center gap-1.5 border-t px-3 py-2">
+        <div className="bg-sidebar-accent/15 flex flex-wrap items-center gap-1.5 px-3 py-2">
           {onContinueInNewSession ? (
             <Button
               type="button"

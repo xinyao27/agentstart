@@ -8,6 +8,7 @@ import {
 import { toast } from 'sonner'
 import { translate } from '~renderer/i18n/i18n'
 
+import { adoptAuthoritativeBase } from './authoritative-base'
 import { sessionConflictScope } from './conflict-copy'
 import { mergeSessionEdit } from './merge'
 import { flushPendingSessionWrites } from './projection-scope'
@@ -259,6 +260,7 @@ export class SessionDocumentClient {
           if (state.failedPending === edit) {
             state.failedPending = null
           }
+          adoptAuthoritativeBase(state)
           toast.dismiss(this.toastId(hostId))
           if (state.pending) {
             void this.enqueue(state, hostId).catch(() => {})

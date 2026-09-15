@@ -4,6 +4,7 @@ struct AppDependencies {
     let activityRepository: any ActivityStatsRepository
     let agentHistoryRepository: any AgentHistoryRepository
     let browserRepository: any WorkspaceBrowserRepository
+    let browserTabsRepository: any BrowserTabsRepository
     let connectionDiagnosticsRepository: any ConnectionDiagnosticsRepository
     let filesRepository: any WorkspaceFilesRepository
     let hostRepository: any HostRepository
@@ -44,6 +45,7 @@ struct AppDependencies {
             activityRepository: runtime,
             agentHistoryRepository: runtime,
             browserRepository: runtime,
+            browserTabsRepository: runtime,
             connectionDiagnosticsRepository: runtime,
             filesRepository: runtime,
             hostRepository: hosts,

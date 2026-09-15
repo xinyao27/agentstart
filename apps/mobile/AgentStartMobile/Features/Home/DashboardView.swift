@@ -8,6 +8,7 @@ struct HomeDashboardView: View {
     let showWorkspace: (HostProfile, WorkspaceSummary) -> Void
     let showPairing: () -> Void
     let showAccounts: (HostProfile) -> Void
+    let showBrowser: (HostProfile) -> Void
     let editHost: (HostProfile) -> Void
     let reconnect: (HostProfile) -> Void
     let disconnect: (HostProfile) -> Void
@@ -64,6 +65,18 @@ struct HomeDashboardView: View {
                             { showWorkspace(target.host, target.workspace) }
                         }
                     )
+                    HomeMetricTileView(
+                        // Why: the browser lives on the desktop, so this tile is an entry point
+                        // into that surface rather than a Home status metric; it stays neutral
+                        // instead of taking a fifth tile color.
+                        glyph: .globe,
+                        color: Theme.Colors.mutedForeground,
+                        title: "Browser",
+                        value: snapshot.browserTabCount,
+                        action: snapshot.primaryConnectedHost.map { host in
+                            { showBrowser(host) }
+                        }
+                    )
                 }
 
                 HomeAccountUsageSection(
@@ -112,7 +125,10 @@ enum HomeDashboardMetrics {
     // every Home section drift down the screen.
     static let contentTop = Theme.Spacing.large
     static let usageSectionTop: CGFloat = 0
-    static let hostVerticalPadding = Theme.Spacing.medium
+    // Why: ContentSurface owns the 16pt inset at the card's own edges. This padding belongs
+    // only to the boundary between two hosts, so a single-host card does not read looser
+    // than every other surface on Home.
+    static let hostDividerPadding = Theme.Spacing.medium
 }
 
 private struct HomeMetricTileView: View {

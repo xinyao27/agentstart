@@ -12,7 +12,11 @@ export const PIERRE_FILE_TREE_STYLE = {
   '--trees-font-size-override': '12px',
   '--trees-item-margin-x-override': '0px',
   '--trees-item-padding-x-override': '8px',
-  '--trees-padding-inline-override': '0px',
+  // Why: rows used to run edge-to-edge, which left the tree hugging the panel's
+  // left edge while the scrollbar gutter kept a gap on the right. The inline
+  // padding is what insets a row's own background, so the selection bar now has
+  // the same breathing room on both sides.
+  '--trees-padding-inline-override': '8px',
   '--trees-git-added-color-override': 'var(--git-decoration-added)',
   '--trees-git-modified-color-override': 'var(--git-decoration-modified)',
   '--trees-git-deleted-color-override': 'var(--git-decoration-deleted)',

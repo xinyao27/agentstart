@@ -224,6 +224,12 @@ function LegendListScrollArea({
       )}
       viewportRef={viewportRef}
       viewportProps={resolvedViewportProps}
+      // Why: base-ui floors the content wrapper at `fit-content`, which lets a
+      // single unshrinkable row push the whole list wider than its viewport —
+      // the viewport then clips it (overflow-x-hidden) instead of the row
+      // shrinking to fit. Lists that scroll sideways keep the floor so their
+      // content can actually overflow; vertical-only lists opt out of it.
+      contentProps={showHorizontalScrollBar ? undefined : { style: { minWidth: 0 } }}
     >
       {refreshControl}
       <div

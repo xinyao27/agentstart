@@ -52,7 +52,14 @@ export function SkillFileTree({
     // Why: the cap must sit on the viewport — with only a max-height, the root has
     // no definite height for the viewport's h-full to resolve against, so the
     // content would overflow the root instead of scrolling.
-    <ScrollArea viewportClassName="max-h-52">
+    // Why: base-ui floors the content at fit-content, and a long file name is
+    // wider than this popover — without lifting that floor the row pushes its own
+    // size column out of the surface and the list scrolls sideways.
+    <ScrollArea
+      viewportClassName="max-h-52"
+      viewportProps={{ style: { overflowX: 'hidden' } }}
+      contentProps={{ style: { minWidth: 0 } }}
+    >
       <div role="tree" className="py-1">
         {rows.map((node) =>
           node.kind === 'directory' ? (
