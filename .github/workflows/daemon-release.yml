@@ -259,7 +259,10 @@ jobs:
       contents: read
       id-token: write
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 45
+    # Why: macos-26-intel is by far the slowest target — its cargo build, notarization, and
+    # pnpm cache save together measured 45 minutes at the v0.1.2 attempt, so a 45 minute cap
+    # cancelled the leg after every build and upload step had already succeeded.
+    timeout-minutes: 75
     strategy:
       fail-fast: false
       matrix:
