@@ -220,7 +220,11 @@ def verify_signed_bundle(
   unless info.is_a?(Hash) && info["CFBundleIdentifier"] == bundle_id
     UI.user_error!("Signed bundle identifier mismatch for #{bundle_path}; expected #{bundle_id}")
   end
-  unless info["CFBundleShortVersionString"] == version && info["CFBundleVersion"] == build_number
+  # Why: the bundle records both version fields as strings, while `next_testflight_build_number`
+  # returns the build number as an Integer and `resolve_requested_version` returns a String. Compare
+  # the string forms so the check reads what the archive actually contains.
+  unless info["CFBundleShortVersionString"].to_s == version.to_s &&
+      info["CFBundleVersion"].to_s == build_number.to_s
     UI.user_error!(
       "Signed bundle version mismatch for #{bundle_id}; expected #{version} (#{build_number})",
     )
