@@ -39,6 +39,23 @@ service ComputerService {
     };
   }
 
+  // Why: window recovery inside `getAppState`/`click` re-opens a bundle that has no window, but
+  // nothing could start an app that is not running at all — so an agent asked to test a native app
+  // or a browser had no way to put it on screen first.
+  rpc OpenApp(ComputerServiceOpenAppRequest) returns (ComputerServiceOpenAppResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
   rpc Permissions(ComputerServicePermissionsRequest) returns (ComputerServicePermissionsResponse) {
     option (agent_start.protocol.v1.method_policy) = {
       scope: ACCESS_SCOPE_HOST
@@ -550,6 +567,18 @@ message ComputerServiceListAppsRequest {}
 
 message ComputerServiceListAppsResponse {
   repeated ComputerListedApp apps = 1;
+}
+
+message ComputerServiceOpenAppRequest {
+  // A bundle identifier (`com.apple.Safari`) or an absolute path to an app bundle.
+  string app = 1;
+}
+
+message ComputerServiceOpenAppResponse {
+  // The target that was launched, echoed back.
+  string app = 1;
+  // The app's `ListApps` row once it registers as running; absent when it has not yet.
+  optional ComputerListedApp launched = 2;
 }
 
 message ComputerServicePermissionsRequest {

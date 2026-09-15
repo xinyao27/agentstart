@@ -94,6 +94,36 @@ public nonisolated struct AgentStart_Runtime_V1_ResolveTargetRequest: Sendable {
   fileprivate var _worktree: String? = nil
 }
 
+public nonisolated struct AgentStart_Runtime_V1_BrowserServiceCapabilitiesRequest: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public nonisolated struct AgentStart_Runtime_V1_BrowserServiceCapabilitiesResponse: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// Whether a browser host is connected, so an Execute call would be served rather than refused.
+  public var available: Bool = false
+
+  /// How the connected host reaches the browser; empty when none is connected.
+  public var backend: String = String()
+
+  /// How many browser hosts are connected. The daemon routes an Execute to the most recently
+  /// registered host, so this says whether that choice is even ambiguous.
+  public var hosts: Int64 = 0
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public nonisolated struct AgentStart_Runtime_V1_ResolveTargetResponse: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -2115,6 +2145,38 @@ public nonisolated struct AgentStart_Runtime_V1_ExecuteMobileRequest: Sendable {
     set {command = .viewport(newValue)}
   }
 
+  public var tabList: AgentStart_Runtime_V1_TargetCommand {
+    get {
+      if case .tabList(let v)? = command {return v}
+      return AgentStart_Runtime_V1_TargetCommand()
+    }
+    set {command = .tabList(newValue)}
+  }
+
+  public var tabShow: AgentStart_Runtime_V1_TargetCommand {
+    get {
+      if case .tabShow(let v)? = command {return v}
+      return AgentStart_Runtime_V1_TargetCommand()
+    }
+    set {command = .tabShow(newValue)}
+  }
+
+  public var tabSwitch: AgentStart_Runtime_V1_TabSwitchCommand {
+    get {
+      if case .tabSwitch(let v)? = command {return v}
+      return AgentStart_Runtime_V1_TabSwitchCommand()
+    }
+    set {command = .tabSwitch(newValue)}
+  }
+
+  public var tabClose: AgentStart_Runtime_V1_TabCloseCommand {
+    get {
+      if case .tabClose(let v)? = command {return v}
+      return AgentStart_Runtime_V1_TabCloseCommand()
+    }
+    set {command = .tabClose(newValue)}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public nonisolated enum OneOf_Command: Equatable, Sendable {
@@ -2133,6 +2195,10 @@ public nonisolated struct AgentStart_Runtime_V1_ExecuteMobileRequest: Sendable {
     case dialogAccept(AgentStart_Runtime_V1_OptionalTextCommand)
     case dialogDismiss(AgentStart_Runtime_V1_TargetCommand)
     case viewport(AgentStart_Runtime_V1_ViewportCommand)
+    case tabList(AgentStart_Runtime_V1_TargetCommand)
+    case tabShow(AgentStart_Runtime_V1_TargetCommand)
+    case tabSwitch(AgentStart_Runtime_V1_TabSwitchCommand)
+    case tabClose(AgentStart_Runtime_V1_TabCloseCommand)
 
   }
 
@@ -2266,6 +2332,38 @@ public nonisolated struct AgentStart_Runtime_V1_ExecuteMobileResponse: Sendable 
     set {result = .viewport(newValue)}
   }
 
+  public var tabList: AgentStart_Runtime_V1_TabListResult {
+    get {
+      if case .tabList(let v)? = result {return v}
+      return AgentStart_Runtime_V1_TabListResult()
+    }
+    set {result = .tabList(newValue)}
+  }
+
+  public var tabShow: AgentStart_Runtime_V1_TabResult {
+    get {
+      if case .tabShow(let v)? = result {return v}
+      return AgentStart_Runtime_V1_TabResult()
+    }
+    set {result = .tabShow(newValue)}
+  }
+
+  public var tabSwitch: AgentStart_Runtime_V1_TabSwitchResult {
+    get {
+      if case .tabSwitch(let v)? = result {return v}
+      return AgentStart_Runtime_V1_TabSwitchResult()
+    }
+    set {result = .tabSwitch(newValue)}
+  }
+
+  public var tabClose: AgentStart_Runtime_V1_BoolResult {
+    get {
+      if case .tabClose(let v)? = result {return v}
+      return AgentStart_Runtime_V1_BoolResult()
+    }
+    set {result = .tabClose(newValue)}
+  }
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public nonisolated enum OneOf_Result: Equatable, Sendable {
@@ -2284,6 +2382,10 @@ public nonisolated struct AgentStart_Runtime_V1_ExecuteMobileResponse: Sendable 
     case dialogAccept(AgentStart_Runtime_V1_ValueResult)
     case dialogDismiss(AgentStart_Runtime_V1_ValueResult)
     case viewport(AgentStart_Runtime_V1_ViewportResult)
+    case tabList(AgentStart_Runtime_V1_TabListResult)
+    case tabShow(AgentStart_Runtime_V1_TabResult)
+    case tabSwitch(AgentStart_Runtime_V1_TabSwitchResult)
+    case tabClose(AgentStart_Runtime_V1_BoolResult)
 
   }
 
@@ -3361,9 +3463,23 @@ public nonisolated struct AgentStart_Runtime_V1_ViewportCommand: Sendable {
   /// Clears the value of `target`. Subsequent reads from it will return its default value.
   public mutating func clearTarget() {self._target = nil}
 
-  public var width: Double = 0
+  public var width: Double {
+    get {_width ?? 0}
+    set {_width = newValue}
+  }
+  /// Returns true if `width` has been explicitly set.
+  public var hasWidth: Bool {self._width != nil}
+  /// Clears the value of `width`. Subsequent reads from it will return its default value.
+  public mutating func clearWidth() {self._width = nil}
 
-  public var height: Double = 0
+  public var height: Double {
+    get {_height ?? 0}
+    set {_height = newValue}
+  }
+  /// Returns true if `height` has been explicitly set.
+  public var hasHeight: Bool {self._height != nil}
+  /// Clears the value of `height`. Subsequent reads from it will return its default value.
+  public mutating func clearHeight() {self._height = nil}
 
   public var deviceScaleFactor: Double {
     get {_deviceScaleFactor ?? 0}
@@ -3388,6 +3504,8 @@ public nonisolated struct AgentStart_Runtime_V1_ViewportCommand: Sendable {
   public init() {}
 
   fileprivate var _target: AgentStart_Runtime_V1_BrowserTarget? = nil
+  fileprivate var _width: Double? = nil
+  fileprivate var _height: Double? = nil
   fileprivate var _deviceScaleFactor: Double? = nil
   fileprivate var _mobile: Bool? = nil
 }
@@ -4604,6 +4722,65 @@ nonisolated extension AgentStart_Runtime_V1_ResolveTargetRequest: SwiftProtobuf.
     if lhs._worktree != rhs._worktree {return false}
     if lhs.currentDirectory != rhs.currentDirectory {return false}
     if lhs.requireWorktree != rhs.requireWorktree {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension AgentStart_Runtime_V1_BrowserServiceCapabilitiesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".BrowserServiceCapabilitiesRequest"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    // Load everything into unknown fields
+    while try decoder.nextFieldNumber() != nil {}
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: AgentStart_Runtime_V1_BrowserServiceCapabilitiesRequest, rhs: AgentStart_Runtime_V1_BrowserServiceCapabilitiesRequest) -> Bool {
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension AgentStart_Runtime_V1_BrowserServiceCapabilitiesResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".BrowserServiceCapabilitiesResponse"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}available\0\u{1}backend\0\u{1}hosts\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.available) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.backend) }()
+      case 3: try { try decoder.decodeSingularInt64Field(value: &self.hosts) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.available != false {
+      try visitor.visitSingularBoolField(value: self.available, fieldNumber: 1)
+    }
+    if !self.backend.isEmpty {
+      try visitor.visitSingularStringField(value: self.backend, fieldNumber: 2)
+    }
+    if self.hosts != 0 {
+      try visitor.visitSingularInt64Field(value: self.hosts, fieldNumber: 3)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: AgentStart_Runtime_V1_BrowserServiceCapabilitiesResponse, rhs: AgentStart_Runtime_V1_BrowserServiceCapabilitiesResponse) -> Bool {
+    if lhs.available != rhs.available {return false}
+    if lhs.backend != rhs.backend {return false}
+    if lhs.hosts != rhs.hosts {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -8110,7 +8287,7 @@ nonisolated extension AgentStart_Runtime_V1_DetectedBrowsersResult: SwiftProtobu
 
 nonisolated extension AgentStart_Runtime_V1_ExecuteMobileRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ExecuteMobileRequest"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}goto\0\u{1}back\0\u{1}forward\0\u{1}reload\0\u{1}keypress\0\u{3}insert_text\0\u{3}mouse_click\0\u{3}mouse_move\0\u{3}mouse_down\0\u{3}mouse_up\0\u{3}mouse_wheel\0\u{3}tab_create\0\u{3}dialog_accept\0\u{3}dialog_dismiss\0\u{1}viewport\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}goto\0\u{1}back\0\u{1}forward\0\u{1}reload\0\u{1}keypress\0\u{3}insert_text\0\u{3}mouse_click\0\u{3}mouse_move\0\u{3}mouse_down\0\u{3}mouse_up\0\u{3}mouse_wheel\0\u{3}tab_create\0\u{3}dialog_accept\0\u{3}dialog_dismiss\0\u{1}viewport\0\u{3}tab_list\0\u{3}tab_show\0\u{3}tab_switch\0\u{3}tab_close\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8313,6 +8490,58 @@ nonisolated extension AgentStart_Runtime_V1_ExecuteMobileRequest: SwiftProtobuf.
           self.command = .viewport(v)
         }
       }()
+      case 16: try {
+        var v: AgentStart_Runtime_V1_TargetCommand?
+        var hadOneofValue = false
+        if let current = self.command {
+          hadOneofValue = true
+          if case .tabList(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.command = .tabList(v)
+        }
+      }()
+      case 17: try {
+        var v: AgentStart_Runtime_V1_TargetCommand?
+        var hadOneofValue = false
+        if let current = self.command {
+          hadOneofValue = true
+          if case .tabShow(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.command = .tabShow(v)
+        }
+      }()
+      case 18: try {
+        var v: AgentStart_Runtime_V1_TabSwitchCommand?
+        var hadOneofValue = false
+        if let current = self.command {
+          hadOneofValue = true
+          if case .tabSwitch(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.command = .tabSwitch(v)
+        }
+      }()
+      case 19: try {
+        var v: AgentStart_Runtime_V1_TabCloseCommand?
+        var hadOneofValue = false
+        if let current = self.command {
+          hadOneofValue = true
+          if case .tabClose(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.command = .tabClose(v)
+        }
+      }()
       default: break
       }
     }
@@ -8384,6 +8613,22 @@ nonisolated extension AgentStart_Runtime_V1_ExecuteMobileRequest: SwiftProtobuf.
       guard case .viewport(let v)? = self.command else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
     }()
+    case .tabList?: try {
+      guard case .tabList(let v)? = self.command else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 16)
+    }()
+    case .tabShow?: try {
+      guard case .tabShow(let v)? = self.command else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
+    }()
+    case .tabSwitch?: try {
+      guard case .tabSwitch(let v)? = self.command else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 18)
+    }()
+    case .tabClose?: try {
+      guard case .tabClose(let v)? = self.command else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 19)
+    }()
     case nil: break
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -8398,7 +8643,7 @@ nonisolated extension AgentStart_Runtime_V1_ExecuteMobileRequest: SwiftProtobuf.
 
 nonisolated extension AgentStart_Runtime_V1_ExecuteMobileResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = _protobuf_package + ".ExecuteMobileResponse"
-  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}goto\0\u{1}back\0\u{1}forward\0\u{1}reload\0\u{1}keypress\0\u{3}insert_text\0\u{3}mouse_click\0\u{3}mouse_move\0\u{3}mouse_down\0\u{3}mouse_up\0\u{3}mouse_wheel\0\u{3}tab_create\0\u{3}dialog_accept\0\u{3}dialog_dismiss\0\u{1}viewport\0")
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}goto\0\u{1}back\0\u{1}forward\0\u{1}reload\0\u{1}keypress\0\u{3}insert_text\0\u{3}mouse_click\0\u{3}mouse_move\0\u{3}mouse_down\0\u{3}mouse_up\0\u{3}mouse_wheel\0\u{3}tab_create\0\u{3}dialog_accept\0\u{3}dialog_dismiss\0\u{1}viewport\0\u{3}tab_list\0\u{3}tab_show\0\u{3}tab_switch\0\u{3}tab_close\0")
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
     while let fieldNumber = try decoder.nextFieldNumber() {
@@ -8601,6 +8846,58 @@ nonisolated extension AgentStart_Runtime_V1_ExecuteMobileResponse: SwiftProtobuf
           self.result = .viewport(v)
         }
       }()
+      case 16: try {
+        var v: AgentStart_Runtime_V1_TabListResult?
+        var hadOneofValue = false
+        if let current = self.result {
+          hadOneofValue = true
+          if case .tabList(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.result = .tabList(v)
+        }
+      }()
+      case 17: try {
+        var v: AgentStart_Runtime_V1_TabResult?
+        var hadOneofValue = false
+        if let current = self.result {
+          hadOneofValue = true
+          if case .tabShow(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.result = .tabShow(v)
+        }
+      }()
+      case 18: try {
+        var v: AgentStart_Runtime_V1_TabSwitchResult?
+        var hadOneofValue = false
+        if let current = self.result {
+          hadOneofValue = true
+          if case .tabSwitch(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.result = .tabSwitch(v)
+        }
+      }()
+      case 19: try {
+        var v: AgentStart_Runtime_V1_BoolResult?
+        var hadOneofValue = false
+        if let current = self.result {
+          hadOneofValue = true
+          if case .tabClose(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.result = .tabClose(v)
+        }
+      }()
       default: break
       }
     }
@@ -8671,6 +8968,22 @@ nonisolated extension AgentStart_Runtime_V1_ExecuteMobileResponse: SwiftProtobuf
     case .viewport?: try {
       guard case .viewport(let v)? = self.result else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 15)
+    }()
+    case .tabList?: try {
+      guard case .tabList(let v)? = self.result else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 16)
+    }()
+    case .tabShow?: try {
+      guard case .tabShow(let v)? = self.result else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 17)
+    }()
+    case .tabSwitch?: try {
+      guard case .tabSwitch(let v)? = self.result else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 18)
+    }()
+    case .tabClose?: try {
+      guard case .tabClose(let v)? = self.result else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 19)
     }()
     case nil: break
     }
@@ -10190,8 +10503,8 @@ nonisolated extension AgentStart_Runtime_V1_ViewportCommand: SwiftProtobuf.Messa
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularMessageField(value: &self._target) }()
-      case 2: try { try decoder.decodeSingularDoubleField(value: &self.width) }()
-      case 3: try { try decoder.decodeSingularDoubleField(value: &self.height) }()
+      case 2: try { try decoder.decodeSingularDoubleField(value: &self._width) }()
+      case 3: try { try decoder.decodeSingularDoubleField(value: &self._height) }()
       case 4: try { try decoder.decodeSingularDoubleField(value: &self._deviceScaleFactor) }()
       case 5: try { try decoder.decodeSingularBoolField(value: &self._mobile) }()
       default: break
@@ -10207,12 +10520,12 @@ nonisolated extension AgentStart_Runtime_V1_ViewportCommand: SwiftProtobuf.Messa
     try { if let v = self._target {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
     } }()
-    if self.width.bitPattern != 0 {
-      try visitor.visitSingularDoubleField(value: self.width, fieldNumber: 2)
-    }
-    if self.height.bitPattern != 0 {
-      try visitor.visitSingularDoubleField(value: self.height, fieldNumber: 3)
-    }
+    try { if let v = self._width {
+      try visitor.visitSingularDoubleField(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._height {
+      try visitor.visitSingularDoubleField(value: v, fieldNumber: 3)
+    } }()
     try { if let v = self._deviceScaleFactor {
       try visitor.visitSingularDoubleField(value: v, fieldNumber: 4)
     } }()
@@ -10224,8 +10537,8 @@ nonisolated extension AgentStart_Runtime_V1_ViewportCommand: SwiftProtobuf.Messa
 
   public static func ==(lhs: AgentStart_Runtime_V1_ViewportCommand, rhs: AgentStart_Runtime_V1_ViewportCommand) -> Bool {
     if lhs._target != rhs._target {return false}
-    if lhs.width != rhs.width {return false}
-    if lhs.height != rhs.height {return false}
+    if lhs._width != rhs._width {return false}
+    if lhs._height != rhs._height {return false}
     if lhs._deviceScaleFactor != rhs._deviceScaleFactor {return false}
     if lhs._mobile != rhs._mobile {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

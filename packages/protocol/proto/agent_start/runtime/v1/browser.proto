@@ -47,6 +47,19 @@ service BrowserRuntimeService {
 }
 
 service BrowserHostService {
+  // Why: every other command fails with `browser_extension_connection_unavailable` when no host is
+  // connected, so a caller asking "can I drive a browser right now?" had to attempt a real command
+  // to find out.
+  rpc Capabilities(BrowserServiceCapabilitiesRequest) returns (BrowserServiceCapabilitiesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_HOST tier: ACCESS_TIER_READ callers: CALLER_CLASS_LOCAL
+      peer_kinds: PEER_KIND_CLI peer_kinds: PEER_KIND_CHROME_EXTENSION
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
   rpc Execute(ExecuteRequest) returns (ExecuteResponse) {
     option (agent_start.protocol.v1.method_policy) = {
       scope: ACCESS_SCOPE_HOST tier: ACCESS_TIER_HOST callers: CALLER_CLASS_LOCAL
@@ -84,6 +97,17 @@ message ResolveTargetRequest {
   optional string worktree = 2;
   string current_directory = 3;
   bool require_worktree = 4;
+}
+message BrowserServiceCapabilitiesRequest {}
+
+message BrowserServiceCapabilitiesResponse {
+  // Whether a browser host is connected, so an Execute call would be served rather than refused.
+  bool available = 1;
+  // How the connected host reaches the browser; empty when none is connected.
+  string backend = 2;
+  // How many browser hosts are connected. The daemon routes an Execute to the most recently
+  // registered host, so this says whether that choice is even ambiguous.
+  int64 hosts = 3;
 }
 message ResolveTargetResponse { BrowserTarget target = 1; }
 message ResolveUploadRequest {
@@ -328,6 +352,10 @@ message ExecuteMobileRequest {
     OptionalTextCommand dialog_accept = 13;
     TargetCommand dialog_dismiss = 14;
     ViewportCommand viewport = 15;
+    TargetCommand tab_list = 16;
+    TargetCommand tab_show = 17;
+    TabSwitchCommand tab_switch = 18;
+    TabCloseCommand tab_close = 19;
   }
 }
 message ExecuteMobileResponse {
@@ -347,6 +375,10 @@ message ExecuteMobileResponse {
     ValueResult dialog_accept = 13;
     ValueResult dialog_dismiss = 14;
     ViewportResult viewport = 15;
+    TabListResult tab_list = 16;
+    TabResult tab_show = 17;
+    TabSwitchResult tab_switch = 18;
+    BoolResult tab_close = 19;
   }
 }
 
@@ -386,7 +418,7 @@ message TabProfileCommand { BrowserTarget target = 1; string profile_id = 2; }
 message CookieGetCommand { BrowserTarget target = 1; optional string url = 2; }
 message CookieSetCommand { BrowserTarget target = 1; string name = 2; string value = 3; optional string domain = 4; optional string path = 5; optional bool secure = 6; optional bool http_only = 7; optional string same_site = 8; optional double expires = 9; }
 message CookieDeleteCommand { BrowserTarget target = 1; string name = 2; optional string domain = 3; optional string url = 4; }
-message ViewportCommand { BrowserTarget target = 1; double width = 2; double height = 3; optional double device_scale_factor = 4; optional bool mobile = 5; }
+message ViewportCommand { BrowserTarget target = 1; optional double width = 2; optional double height = 3; optional double device_scale_factor = 4; optional bool mobile = 5; }
 message GeolocationCommand { BrowserTarget target = 1; double latitude = 2; double longitude = 3; optional double accuracy = 4; }
 message NameCommand { BrowserTarget target = 1; string name = 2; }
 message StateCommand { BrowserTarget target = 1; optional string state = 2; }

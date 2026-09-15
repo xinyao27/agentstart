@@ -1020,6 +1020,49 @@ export declare type ComputerServiceListAppsResponse = Message<"agent_start.runti
 export declare const ComputerServiceListAppsResponseSchema: GenMessage<ComputerServiceListAppsResponse>;
 
 /**
+ * @generated from message agent_start.runtime.v1.ComputerServiceOpenAppRequest
+ */
+export declare type ComputerServiceOpenAppRequest = Message<"agent_start.runtime.v1.ComputerServiceOpenAppRequest"> & {
+  /**
+   * A bundle identifier (`com.apple.Safari`) or an absolute path to an app bundle.
+   *
+   * @generated from field: string app = 1;
+   */
+  app: string;
+};
+
+/**
+ * Describes the message agent_start.runtime.v1.ComputerServiceOpenAppRequest.
+ * Use `create(ComputerServiceOpenAppRequestSchema)` to create a new message.
+ */
+export declare const ComputerServiceOpenAppRequestSchema: GenMessage<ComputerServiceOpenAppRequest>;
+
+/**
+ * @generated from message agent_start.runtime.v1.ComputerServiceOpenAppResponse
+ */
+export declare type ComputerServiceOpenAppResponse = Message<"agent_start.runtime.v1.ComputerServiceOpenAppResponse"> & {
+  /**
+   * The target that was launched, echoed back.
+   *
+   * @generated from field: string app = 1;
+   */
+  app: string;
+
+  /**
+   * The app's `ListApps` row once it registers as running; absent when it has not yet.
+   *
+   * @generated from field: optional agent_start.runtime.v1.ComputerListedApp launched = 2;
+   */
+  launched?: ComputerListedApp | undefined;
+};
+
+/**
+ * Describes the message agent_start.runtime.v1.ComputerServiceOpenAppResponse.
+ * Use `create(ComputerServiceOpenAppResponseSchema)` to create a new message.
+ */
+export declare const ComputerServiceOpenAppResponseSchema: GenMessage<ComputerServiceOpenAppResponse>;
+
+/**
  * @generated from message agent_start.runtime.v1.ComputerServicePermissionsRequest
  */
 export declare type ComputerServicePermissionsRequest = Message<"agent_start.runtime.v1.ComputerServicePermissionsRequest"> & {
@@ -1942,6 +1985,18 @@ export declare const ComputerService: GenService<{
     methodKind: "unary";
     input: typeof ComputerServiceListAppsRequestSchema;
     output: typeof ComputerServiceListAppsResponseSchema;
+  },
+  /**
+   * Why: window recovery inside `getAppState`/`click` re-opens a bundle that has no window, but
+   * nothing could start an app that is not running at all — so an agent asked to test a native app
+   * or a browser had no way to put it on screen first.
+   *
+   * @generated from rpc agent_start.runtime.v1.ComputerService.OpenApp
+   */
+  openApp: {
+    methodKind: "unary";
+    input: typeof ComputerServiceOpenAppRequestSchema;
+    output: typeof ComputerServiceOpenAppResponseSchema;
   },
   /**
    * @generated from rpc agent_start.runtime.v1.ComputerService.Permissions

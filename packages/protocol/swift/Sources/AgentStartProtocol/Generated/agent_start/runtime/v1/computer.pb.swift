@@ -1573,6 +1573,44 @@ public nonisolated struct AgentStart_Runtime_V1_ComputerServiceListAppsResponse:
   public init() {}
 }
 
+public nonisolated struct AgentStart_Runtime_V1_ComputerServiceOpenAppRequest: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// A bundle identifier (`com.apple.Safari`) or an absolute path to an app bundle.
+  public var app: String = String()
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public nonisolated struct AgentStart_Runtime_V1_ComputerServiceOpenAppResponse: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  /// The target that was launched, echoed back.
+  public var app: String = String()
+
+  /// The app's `ListApps` row once it registers as running; absent when it has not yet.
+  public var launched: AgentStart_Runtime_V1_ComputerListedApp {
+    get {_launched ?? AgentStart_Runtime_V1_ComputerListedApp()}
+    set {_launched = newValue}
+  }
+  /// Returns true if `launched` has been explicitly set.
+  public var hasLaunched: Bool {self._launched != nil}
+  /// Clears the value of `launched`. Subsequent reads from it will return its default value.
+  public mutating func clearLaunched() {self._launched = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _launched: AgentStart_Runtime_V1_ComputerListedApp? = nil
+}
+
 public nonisolated struct AgentStart_Runtime_V1_ComputerServicePermissionsRequest: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3983,6 +4021,75 @@ nonisolated extension AgentStart_Runtime_V1_ComputerServiceListAppsResponse: Swi
 
   public static func ==(lhs: AgentStart_Runtime_V1_ComputerServiceListAppsResponse, rhs: AgentStart_Runtime_V1_ComputerServiceListAppsResponse) -> Bool {
     if lhs.apps != rhs.apps {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension AgentStart_Runtime_V1_ComputerServiceOpenAppRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ComputerServiceOpenAppRequest"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}app\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.app) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.app.isEmpty {
+      try visitor.visitSingularStringField(value: self.app, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: AgentStart_Runtime_V1_ComputerServiceOpenAppRequest, rhs: AgentStart_Runtime_V1_ComputerServiceOpenAppRequest) -> Bool {
+    if lhs.app != rhs.app {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+nonisolated extension AgentStart_Runtime_V1_ComputerServiceOpenAppResponse: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = _protobuf_package + ".ComputerServiceOpenAppResponse"
+  public static let _protobuf_nameMap = SwiftProtobuf._NameMap(bytecode: "\0\u{1}app\0\u{1}launched\0")
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self.app) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._launched) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if !self.app.isEmpty {
+      try visitor.visitSingularStringField(value: self.app, fieldNumber: 1)
+    }
+    try { if let v = self._launched {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: AgentStart_Runtime_V1_ComputerServiceOpenAppResponse, rhs: AgentStart_Runtime_V1_ComputerServiceOpenAppResponse) -> Bool {
+    if lhs.app != rhs.app {return false}
+    if lhs._launched != rhs._launched {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

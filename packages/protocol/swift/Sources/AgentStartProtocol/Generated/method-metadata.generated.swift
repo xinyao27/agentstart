@@ -123,6 +123,8 @@ public enum AgentStartRuntimeV1BrowserCommandServiceMethods {
 }
 
 public enum AgentStartRuntimeV1BrowserHostServiceMethods {
+  public static let capabilities =
+    "/agent_start.runtime.v1.BrowserHostService/Capabilities"
   public static let download =
     "/agent_start.runtime.v1.BrowserHostService/Download"
   public static let execute =
@@ -211,6 +213,8 @@ public enum AgentStartRuntimeV1ComputerServiceMethods {
     "/agent_start.runtime.v1.ComputerService/ListApps"
   public static let listWindows =
     "/agent_start.runtime.v1.ComputerService/ListWindows"
+  public static let openApp =
+    "/agent_start.runtime.v1.ComputerService/OpenApp"
   public static let pasteText =
     "/agent_start.runtime.v1.ComputerService/PasteText"
   public static let performSecondaryAction =
@@ -813,6 +817,15 @@ public enum AgentStartRuntimeV1ProjectHostSetupServiceMethods {
     "/agent_start.runtime.v1.ProjectHostSetupService/SetupExistingFolder"
   public static let update =
     "/agent_start.runtime.v1.ProjectHostSetupService/Update"
+}
+
+public enum AgentStartRuntimeV1ProjectMemoryServiceMethods {
+  public static let append =
+    "/agent_start.runtime.v1.ProjectMemoryService/Append"
+  public static let list =
+    "/agent_start.runtime.v1.ProjectMemoryService/List"
+  public static let read =
+    "/agent_start.runtime.v1.ProjectMemoryService/Read"
 }
 
 public enum AgentStartRuntimeV1ProjectServiceMethods {
@@ -1705,6 +1718,13 @@ public enum AgentStartMethodMetadata {
       clientStreaming: false,
       serverStreaming: false
     ),
+    "/agent_start.runtime.v1.BrowserHostService/Capabilities": AgentStartMethodTransportMetadata(
+      procedure: "/agent_start.runtime.v1.BrowserHostService/Capabilities",
+      route: .localOnly,
+      streamReconnect: .fail,
+      clientStreaming: false,
+      serverStreaming: false
+    ),
     "/agent_start.runtime.v1.BrowserHostService/Download": AgentStartMethodTransportMetadata(
       procedure: "/agent_start.runtime.v1.BrowserHostService/Download",
       route: .localOnly,
@@ -1924,6 +1944,13 @@ public enum AgentStartMethodMetadata {
     ),
     "/agent_start.runtime.v1.ComputerService/ListWindows": AgentStartMethodTransportMetadata(
       procedure: "/agent_start.runtime.v1.ComputerService/ListWindows",
+      route: .localOnly,
+      streamReconnect: .fail,
+      clientStreaming: false,
+      serverStreaming: false
+    ),
+    "/agent_start.runtime.v1.ComputerService/OpenApp": AgentStartMethodTransportMetadata(
+      procedure: "/agent_start.runtime.v1.ComputerService/OpenApp",
       route: .localOnly,
       streamReconnect: .fail,
       clientStreaming: false,
@@ -3695,6 +3722,27 @@ public enum AgentStartMethodMetadata {
     ),
     "/agent_start.runtime.v1.ProjectHostSetupService/Update": AgentStartMethodTransportMetadata(
       procedure: "/agent_start.runtime.v1.ProjectHostSetupService/Update",
+      route: .localOnly,
+      streamReconnect: .fail,
+      clientStreaming: false,
+      serverStreaming: false
+    ),
+    "/agent_start.runtime.v1.ProjectMemoryService/Append": AgentStartMethodTransportMetadata(
+      procedure: "/agent_start.runtime.v1.ProjectMemoryService/Append",
+      route: .localOnly,
+      streamReconnect: .fail,
+      clientStreaming: false,
+      serverStreaming: false
+    ),
+    "/agent_start.runtime.v1.ProjectMemoryService/List": AgentStartMethodTransportMetadata(
+      procedure: "/agent_start.runtime.v1.ProjectMemoryService/List",
+      route: .localOnly,
+      streamReconnect: .fail,
+      clientStreaming: false,
+      serverStreaming: false
+    ),
+    "/agent_start.runtime.v1.ProjectMemoryService/Read": AgentStartMethodTransportMetadata(
+      procedure: "/agent_start.runtime.v1.ProjectMemoryService/Read",
       route: .localOnly,
       streamReconnect: .fail,
       clientStreaming: false,

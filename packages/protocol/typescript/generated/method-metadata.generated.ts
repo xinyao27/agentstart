@@ -328,6 +328,13 @@ export const METHOD_TRANSPORT_METADATA = {
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
   },
+  '/agent_start.runtime.v1.BrowserHostService/Capabilities': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.BrowserHostService/Capabilities',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
   '/agent_start.runtime.v1.BrowserHostService/Download': {
     clientStreaming: false,
     procedure: '/agent_start.runtime.v1.BrowserHostService/Download',
@@ -548,6 +555,13 @@ export const METHOD_TRANSPORT_METADATA = {
   '/agent_start.runtime.v1.ComputerService/ListWindows': {
     clientStreaming: false,
     procedure: '/agent_start.runtime.v1.ComputerService/ListWindows',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ComputerService/OpenApp': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ComputerService/OpenApp',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL
@@ -2319,6 +2333,27 @@ export const METHOD_TRANSPORT_METADATA = {
   '/agent_start.runtime.v1.ProjectHostSetupService/Update': {
     clientStreaming: false,
     procedure: '/agent_start.runtime.v1.ProjectHostSetupService/Update',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectMemoryService/Append': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectMemoryService/Append',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectMemoryService/List': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectMemoryService/List',
+    route: RuntimeRoutePolicy.LOCAL_ONLY,
+    serverStreaming: false,
+    streamReconnect: StreamReconnectPolicy.FAIL
+  },
+  '/agent_start.runtime.v1.ProjectMemoryService/Read': {
+    clientStreaming: false,
+    procedure: '/agent_start.runtime.v1.ProjectMemoryService/Read',
     route: RuntimeRoutePolicy.LOCAL_ONLY,
     serverStreaming: false,
     streamReconnect: StreamReconnectPolicy.FAIL

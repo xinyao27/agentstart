@@ -44,6 +44,51 @@ export declare type ResolveTargetRequest = Message<"agent_start.runtime.v1.Resol
 export declare const ResolveTargetRequestSchema: GenMessage<ResolveTargetRequest>;
 
 /**
+ * @generated from message agent_start.runtime.v1.BrowserServiceCapabilitiesRequest
+ */
+export declare type BrowserServiceCapabilitiesRequest = Message<"agent_start.runtime.v1.BrowserServiceCapabilitiesRequest"> & {
+};
+
+/**
+ * Describes the message agent_start.runtime.v1.BrowserServiceCapabilitiesRequest.
+ * Use `create(BrowserServiceCapabilitiesRequestSchema)` to create a new message.
+ */
+export declare const BrowserServiceCapabilitiesRequestSchema: GenMessage<BrowserServiceCapabilitiesRequest>;
+
+/**
+ * @generated from message agent_start.runtime.v1.BrowserServiceCapabilitiesResponse
+ */
+export declare type BrowserServiceCapabilitiesResponse = Message<"agent_start.runtime.v1.BrowserServiceCapabilitiesResponse"> & {
+  /**
+   * Whether a browser host is connected, so an Execute call would be served rather than refused.
+   *
+   * @generated from field: bool available = 1;
+   */
+  available: boolean;
+
+  /**
+   * How the connected host reaches the browser; empty when none is connected.
+   *
+   * @generated from field: string backend = 2;
+   */
+  backend: string;
+
+  /**
+   * How many browser hosts are connected. The daemon routes an Execute to the most recently
+   * registered host, so this says whether that choice is even ambiguous.
+   *
+   * @generated from field: int64 hosts = 3;
+   */
+  hosts: bigint;
+};
+
+/**
+ * Describes the message agent_start.runtime.v1.BrowserServiceCapabilitiesResponse.
+ * Use `create(BrowserServiceCapabilitiesResponseSchema)` to create a new message.
+ */
+export declare const BrowserServiceCapabilitiesResponseSchema: GenMessage<BrowserServiceCapabilitiesResponse>;
+
+/**
  * @generated from message agent_start.runtime.v1.ResolveTargetResponse
  */
 export declare type ResolveTargetResponse = Message<"agent_start.runtime.v1.ResolveTargetResponse"> & {
@@ -1482,6 +1527,30 @@ export declare type ExecuteMobileRequest = Message<"agent_start.runtime.v1.Execu
      */
     value: ViewportCommand;
     case: "viewport";
+  } | {
+    /**
+     * @generated from field: agent_start.runtime.v1.TargetCommand tab_list = 16;
+     */
+    value: TargetCommand;
+    case: "tabList";
+  } | {
+    /**
+     * @generated from field: agent_start.runtime.v1.TargetCommand tab_show = 17;
+     */
+    value: TargetCommand;
+    case: "tabShow";
+  } | {
+    /**
+     * @generated from field: agent_start.runtime.v1.TabSwitchCommand tab_switch = 18;
+     */
+    value: TabSwitchCommand;
+    case: "tabSwitch";
+  } | {
+    /**
+     * @generated from field: agent_start.runtime.v1.TabCloseCommand tab_close = 19;
+     */
+    value: TabCloseCommand;
+    case: "tabClose";
   } | { case: undefined; value?: undefined };
 };
 
@@ -1588,6 +1657,30 @@ export declare type ExecuteMobileResponse = Message<"agent_start.runtime.v1.Exec
      */
     value: ViewportResult;
     case: "viewport";
+  } | {
+    /**
+     * @generated from field: agent_start.runtime.v1.TabListResult tab_list = 16;
+     */
+    value: TabListResult;
+    case: "tabList";
+  } | {
+    /**
+     * @generated from field: agent_start.runtime.v1.TabResult tab_show = 17;
+     */
+    value: TabResult;
+    case: "tabShow";
+  } | {
+    /**
+     * @generated from field: agent_start.runtime.v1.TabSwitchResult tab_switch = 18;
+     */
+    value: TabSwitchResult;
+    case: "tabSwitch";
+  } | {
+    /**
+     * @generated from field: agent_start.runtime.v1.BoolResult tab_close = 19;
+     */
+    value: BoolResult;
+    case: "tabClose";
   } | { case: undefined; value?: undefined };
 };
 
@@ -2480,14 +2573,14 @@ export declare type ViewportCommand = Message<"agent_start.runtime.v1.ViewportCo
   target?: BrowserTarget | undefined;
 
   /**
-   * @generated from field: double width = 2;
+   * @generated from field: optional double width = 2;
    */
-  width: number;
+  width?: number | undefined;
 
   /**
-   * @generated from field: double height = 3;
+   * @generated from field: optional double height = 3;
    */
-  height: number;
+  height?: number | undefined;
 
   /**
    * @generated from field: optional double device_scale_factor = 4;
@@ -3873,6 +3966,18 @@ export declare const BrowserRuntimeService: GenService<{
  * @generated from service agent_start.runtime.v1.BrowserHostService
  */
 export declare const BrowserHostService: GenService<{
+  /**
+   * Why: every other command fails with `browser_extension_connection_unavailable` when no host is
+   * connected, so a caller asking "can I drive a browser right now?" had to attempt a real command
+   * to find out.
+   *
+   * @generated from rpc agent_start.runtime.v1.BrowserHostService.Capabilities
+   */
+  capabilities: {
+    methodKind: "unary";
+    input: typeof BrowserServiceCapabilitiesRequestSchema;
+    output: typeof BrowserServiceCapabilitiesResponseSchema;
+  },
   /**
    * @generated from rpc agent_start.runtime.v1.BrowserHostService.Execute
    */

@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package agent_start.runtime.v1;
+
+import "agent_start/protocol/v1/annotations.proto";
+
+// Project memory is the durable, agent-writable context a project accumulates across every
+// worktree and agent: how the codebase is tested, decisions already made, pitfalls already hit.
+// It is scoped to the project (repo), not to a worktree, because that is the only identity
+// shared by every checkout of the same codebase.
+//
+// Why: the sibling ProjectContextService answers "which project is this canonical key?", a
+// different question about the same noun. This service owns memory *content*.
+service ProjectMemoryService {
+  rpc Read(ProjectMemoryServiceReadRequest) returns (ProjectMemoryServiceReadResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc Append(ProjectMemoryServiceAppendRequest) returns (ProjectMemoryServiceAppendResponse) {
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_CONTROL
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+
+  rpc List(ProjectMemoryServiceListRequest) returns (ProjectMemoryServiceListResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    option (agent_start.protocol.v1.method_policy) = {
+      scope: ACCESS_SCOPE_PROJECT
+      tier: ACCESS_TIER_READ
+      callers: CALLER_CLASS_LOCAL
+      callers: CALLER_CLASS_RUNTIME
+      peer_kinds: PEER_KIND_CHROME_EXTENSION
+      peer_kinds: PEER_KIND_CLI
+      peer_kinds: PEER_KIND_DAEMON
+    };
+    option (agent_start.protocol.v1.method_transport_policy) = {
+      route: RUNTIME_ROUTE_POLICY_LOCAL_ONLY
+      stream_reconnect: STREAM_RECONNECT_POLICY_FAIL
+    };
+  }
+}
+
+message ProjectMemoryServiceReadRequest {
+  // A worktree selector; the memory belongs to the project that worktree checks out.
+  string worktree = 1;
+}
+
+message ProjectMemoryServiceReadResponse {
+  string project_id = 1;
+  string display_name = 2;
+  // The on-disk memory file, so a caller can point an agent straight at it.
+  string path = 3;
+  string content = 4;
+  // Number of recorded entries; changes whenever an append lands.
+  int64 revision = 5;
+}
+
+message ProjectMemoryServiceAppendRequest {
+  string worktree = 1;
+  // Heading the entry belongs under; blank files it under "Notes".
+  optional string section = 2;
+  string text = 3;
+}
+
+message ProjectMemoryServiceAppendResponse {
+  string project_id = 1;
+  string path = 2;
+  int64 revision = 3;
+  // False when the text was already present, so a retry is a no-op.
+  bool appended = 4;
+}
+
+message ProjectMemoryServiceListRequest {}
+
+message ProjectMemoryServiceListResponse {
+  repeated ProjectMemoryRecord projects = 1;
+}
+
+message ProjectMemoryRecord {
+  string project_id = 1;
+  string display_name = 2;
+  string project_path = 3;
+  // Empty until the project has recorded its first entry.
+  string memory_path = 4;
+  int64 revision = 5;
+  int64 byte_count = 6;
+}
