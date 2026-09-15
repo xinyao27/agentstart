@@ -1,6 +1,6 @@
 {
   "name": "@agentstart/macos",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Native macOS menu bar host for the AgentStart daemon",
   "scripts": {
