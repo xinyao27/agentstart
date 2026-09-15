@@ -9,5 +9,5 @@ export const siteLinks = {
   releases: `${GITHUB_REPOSITORY_URL}/releases`,
   issues: `${GITHUB_REPOSITORY_URL}/issues`,
   license: `${GITHUB_REPOSITORY_URL}/blob/main/LICENSE`,
-  testflight: 'https://testflight.apple.com/join/67PVx1Se'
+  testflight: 'https://testflight.apple.com/join/9Cq3j7hR'
 } as const

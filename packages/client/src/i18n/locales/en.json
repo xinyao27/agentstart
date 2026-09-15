@@ -3262,7 +3262,7 @@
           "1de96ec8a6": "Show AgentStart Mobile Button",
           "682293cadf": "Show the AgentStart Mobile button at the top of the left sidebar.",
           "d4f2b65f30": "Show the AgentStart Mobile shortcut in the sidebar.",
-          "testFlight": "App Store"
+          "testFlight": "TestFlight"
         },
         "NotificationsPane": {
           "906b4afebf": "Send Test Notification",
@@ -5896,7 +5896,7 @@
           "platform": {
             "copy": {
               "testflight": {
-                "cta": "Open App Store"
+                "cta": "Open TestFlight"
               }
             }
           }

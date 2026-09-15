@@ -3210,7 +3210,7 @@
           "1de96ec8a6": "显示 AgentStart 手机端按钮",
           "682293cadf": "在左侧边栏顶部显示 AgentStart 手机端按钮。",
           "d4f2b65f30": "在边栏中显示 AgentStart 手机端 快捷入口。",
-          "testFlight": "App Store"
+          "testFlight": "TestFlight"
         },
         "NotificationsPane": {
           "906b4afebf": "发送测试通知",

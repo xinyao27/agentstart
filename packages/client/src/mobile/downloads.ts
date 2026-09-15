@@ -1,1 +1,1 @@
-export const AGENTSTART_IOS_APP_STORE_URL = 'https://apps.apple.com/app/id6810343597'
+export const AGENTSTART_IOS_TESTFLIGHT_URL = 'https://testflight.apple.com/join/9Cq3j7hR'

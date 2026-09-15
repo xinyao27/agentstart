@@ -106,12 +106,12 @@ struct WorkspaceProtocolBlockView: View {
     }
 
     private var primaryActionTitle: LocalizedStringResource {
-        isMobileTooOld ? "Open App Store" : "Open GitHub Releases"
+        isMobileTooOld ? "Open TestFlight" : "Open GitHub Releases"
     }
 
     private var primaryActionURL: URL? {
         if isMobileTooOld {
-            return URL(string: "https://apps.apple.com/app/id6810343597")
+            return URL(string: "https://testflight.apple.com/join/9Cq3j7hR")
         }
         return URL(string: "https://github.com/xinyao27/agentstart/releases")
     }

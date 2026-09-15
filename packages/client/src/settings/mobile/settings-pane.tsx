@@ -1,7 +1,7 @@
 import { openHttpLink } from '~renderer/editor/http-link-routing'
 import { translate } from '~renderer/i18n/i18n'
 import { DeviceMobile, QrCode } from '~renderer/icons/hugeicons'
-import { AGENTSTART_IOS_APP_STORE_URL } from '~renderer/mobile/downloads'
+import { AGENTSTART_IOS_TESTFLIGHT_URL } from '~renderer/mobile/downloads'
 import { useAppStore } from '~renderer/store/state'
 import { Button } from '~renderer/ui/button'
 
@@ -42,10 +42,13 @@ export function MobileSettingsPane(): React.JSX.Element {
                   variant="ghost"
                   size="xs"
                   type="button"
-                  onClick={(event) => openHttpLink(AGENTSTART_IOS_APP_STORE_URL, { event })}
+                  onClick={(event) => openHttpLink(AGENTSTART_IOS_TESTFLIGHT_URL, { event })}
                   className="hover:text-foreground focus-visible:text-foreground focus-visible:bg-accent h-auto border-0 p-0 underline underline-offset-2"
                 >
-                  {translate('auto.components.settings.MobileSettingsPane.testFlight', 'App Store')}
+                  {translate(
+                    'auto.components.settings.MobileSettingsPane.testFlight',
+                    'TestFlight'
+                  )}
                 </Button>
                 .
               </p>
