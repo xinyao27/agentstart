@@ -38,17 +38,48 @@ AgentStart works with terminal-based coding agents installed on the daemon host.
 
 The workspace does not require every agent to expose the same capabilities. AgentStart keeps provider-specific behavior isolated while presenting sessions, worktrees, files, terminals, and reviews through a consistent interface.
 
-## Run from source
+## Install
 
-AgentStart 0.1.0 is still being prepared. The signed and notarized macOS DMG, curl installer,
-Homebrew formula, and npm CLI are not available until the daemon release is published. The Chrome
-Web Store listing has its own submission and review timeline. Run the current version from source:
+One command installs the daemon, registers the browser connection, and hands over the mobile app:
+
+```bash
+curl -fsSL https://agentstart.ai/install.sh | sh
+```
+
+Windows uses PowerShell:
+
+```powershell
+irm https://agentstart.ai/install.ps1 | iex
+```
+
+The installer opens the Chrome Web Store listing, waits for the extension to connect, and prints the
+TestFlight link with a scannable code for the iOS companion. Each step has an environment variable;
+`sh install.sh --help` lists them.
+
+| Piece | Install channel | Who updates it |
+| --- | --- | --- |
+| `agentstart` daemon | Latest GitHub release, checksum-verified | `agentstart update`, Homebrew, or npm |
+| Chrome extension | Chrome Web Store, or a staged unpacked bundle via `AGENTSTART_EXTENSION_CHANNEL=unpacked` | Chrome updates the store listing; the daemon refreshes the unpacked bundle |
+| iOS companion | TestFlight | TestFlight |
+
+`npx @agentstart/cli`, `bunx @agentstart/cli`, the Homebrew formula, and the signed `AgentStart.dmg`
+come from [all releases](https://github.com/xinyao27/agentstart/releases). The extension keeps its
+own Chrome Web Store submission and review timeline.
+
+### Mobile companion
+
+Install the mobile app, then pair it directly with the daemon.
+
+- **iOS:** [join the TestFlight beta](https://testflight.apple.com/join/9Cq3j7hR)
+- **Private networking:**
+  [Set up direct cross-network access](docs/reference/mobile-cross-network.md)
+
+## Run from source
 
 ```bash
 pnpm install
 vp run @agentstart/daemon#build
-apps/daemon/target/release/agentstart service install
-apps/daemon/target/release/agentstart native-messaging install
+apps/daemon/target/release/agentstart install
 ```
 
 Then build the extension and load `apps/extension/.output/chrome-mv3` from
@@ -58,22 +89,7 @@ Then build the extension and load `apps/extension/.output/chrome-mv3` from
 vp run @agentstart/extension#build
 ```
 
-Clicking the AgentStart toolbar icon opens the side panel; there is no popup. See [all releases](https://github.com/xinyao27/agentstart/releases) for packaged binaries.
-
-After 0.1.0 is published, the release page will provide `AgentStart.dmg` and standalone daemon
-binaries for Darwin arm64/x64, Linux glibc and musl arm64/x64, and Windows x64. The curl, Homebrew,
-`npx @agentstart/cli`, and `bunx @agentstart/cli` installation paths will become available from that
-daemon release. The extension remains a separate Chrome Web Store installation and becomes
-available only after its independent submission and review finish.
-
-### Mobile companion
-
-Install the mobile app, then pair it directly with the daemon.
-
-- **iOS:** App Store and TestFlight availability will be linked here after the AgentStart beta is
-  ready.
-- **Private networking:**
-  [Set up direct cross-network access](docs/reference/mobile-cross-network.md)
+Clicking the AgentStart toolbar icon opens the side panel; there is no popup.
 
 ## Develop locally
 

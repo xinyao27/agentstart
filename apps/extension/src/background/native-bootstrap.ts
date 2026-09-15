@@ -3,8 +3,10 @@ const NATIVE_BOOTSTRAP_TIMEOUT_MS = 12_000
 
 export type NativeBootstrapResult = {
   authToken: string
+  daemonVersion: string | null
   endpoint: string
   expectedRuntimeId: string | null
+  extensionBundleVersion: string | null
   protocolVersion: number
   rpcProtocol: 'agentstart-protobuf-v2'
 }
@@ -59,8 +61,10 @@ function requestNativeBootstrapOnce(): Promise<NativeBootstrapResult> {
       }
       resolve({
         authToken: message.result.authToken,
+        daemonVersion: readOptionalString(message.result.daemonVersion),
         endpoint: message.result.endpoint,
         expectedRuntimeId: message.result.runtimeId,
+        extensionBundleVersion: readOptionalString(message.result.extensionBundleVersion),
         protocolVersion: message.result.protocolVersion,
         rpcProtocol: message.result.rpcProtocol
       })
@@ -142,7 +146,9 @@ type NativeBootstrapResponse =
       ok: true
       result: {
         authToken: string
+        daemonVersion?: unknown
         endpoint: string
+        extensionBundleVersion?: unknown
         protocolVersion: number
         rpcProtocol: 'agentstart-protobuf-v2'
         runtimeId: string
@@ -178,6 +184,10 @@ function isNativeBootstrapResponse(value: unknown): value is NativeBootstrapResp
     rpcProtocol === 'agentstart-protobuf-v2' &&
     typeof Reflect.get(result, 'runtimeId') === 'string'
   )
+}
+
+function readOptionalString(value: unknown): string | null {
+  return typeof value === 'string' ? value : null
 }
 
 function readRuntimeErrorMessage(): string {

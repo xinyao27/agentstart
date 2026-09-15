@@ -52,9 +52,11 @@ placeholder URL. A `1400x560` marquee tile is optional and is not currently supp
 If the dashboard shows a Test instructions field, paste the following after the daemon release is
 available:
 
-> Install the AgentStart daemon from the latest release at
-> https://github.com/xinyao27/agentstart/releases, then install this extension from the Chrome Web
-> Store. Open the AgentStart side panel, choose Connection settings, and connect to the local daemon.
+> Install the AgentStart daemon with `curl -fsSL https://agentstart.ai/install.sh | sh` (macOS and
+> Linux) or `irm https://agentstart.ai/install.ps1 | iex` (Windows). Both one-liners resolve to the
+> latest release at https://github.com/xinyao27/agentstart/releases. Then install this extension from
+> the Chrome Web Store. Open the AgentStart side panel, choose Connection settings, and connect to
+> the local daemon.
 > Open a local Git project, create or select a worktree, and start a terminal-based coding agent.
 > Verify that the workspace, terminal, source control, browser context, and review panels load. No
 > test account or hosted credentials are required; the extension connects to the daemon selected by

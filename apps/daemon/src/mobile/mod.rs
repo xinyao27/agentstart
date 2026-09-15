@@ -9,6 +9,7 @@ mod pairing;
 mod presence;
 mod qr;
 mod server;
+mod terminal_qr;
 pub(crate) mod windows_firewall;
 
 pub use authorization::MobileAuthorization;
@@ -28,3 +29,4 @@ pub use server::{
     MobileAuthenticatedChannel, MobileOutbound, MobileRpcMessage, MobileServer, MobileServerConfig,
     MobileServerError,
 };
+pub(crate) use terminal_qr::render as render_terminal_qr;

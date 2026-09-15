@@ -48,7 +48,7 @@ pub(super) fn is_prerelease(value: &str) -> bool {
         .is_some_and(|version| version.prerelease.is_some())
 }
 
-pub(super) fn is_valid(value: &str) -> bool {
+pub(crate) fn is_valid(value: &str) -> bool {
     parse(value.strip_prefix('v').unwrap_or(value)).is_some()
 }
 

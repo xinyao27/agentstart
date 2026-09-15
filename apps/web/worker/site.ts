@@ -23,6 +23,11 @@ const TEMPORARY_REDIRECT = 302
 const DOWNLOAD_PATH = '/download'
 const DOCUMENTATION_PREFIX = '/docs'
 
+// Why: the one-command installers are release assets rather than site files. Serving them by
+// redirect keeps exactly one copy of each script and ties the bytes to the release the user is
+// about to install, so a published installer can never name an asset that does not exist yet.
+const INSTALLER_PATHS = new Set(['/install.sh', '/install.ps1'])
+
 function isDocumentationPath(pathname: string): boolean {
   return pathname === DOCUMENTATION_PREFIX || pathname.startsWith(`${DOCUMENTATION_PREFIX}/`)
 }
@@ -41,6 +46,13 @@ export default {
 
     if (pathname === DOWNLOAD_PATH) {
       return Response.redirect(`${GITHUB_RELEASES_URL}/latest`, TEMPORARY_REDIRECT)
+    }
+
+    if (INSTALLER_PATHS.has(pathname)) {
+      return Response.redirect(
+        `${GITHUB_RELEASES_URL}/latest/download${pathname}`,
+        TEMPORARY_REDIRECT
+      )
     }
 
     if (isDocumentationPath(pathname)) {

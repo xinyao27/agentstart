@@ -25,6 +25,9 @@ import {
   injectForgeAction,
   registerChromeEntrypointListeners
 } from '../background/chrome-entrypoints'
+// Why: an upgraded daemon stages new code on disk, and only the extension that is running can make
+// Chrome pick it up. See extension-update.ts.
+import { applyExtensionVersionChange } from '../background/extension-update'
 import { handleGitHubCommentMessage } from '../background/github-comment'
 import {
   provisionFirstInstallLauncher,
@@ -206,7 +209,19 @@ export default defineBackground({
         return false
       }
       void readCustomRuntimeBootstrap()
-        .then((custom) => custom ?? requestNativeBootstrap())
+        .then(async (custom) => {
+          if (custom) {
+            return custom
+          }
+          const result = await requestNativeBootstrap()
+          // Why: deliberately not awaited. Applying an update can reload the extension, and the
+          // surface that asked for this bootstrap still needs its answer before that happens.
+          void applyExtensionVersionChange({
+            bundleVersion: result.extensionBundleVersion,
+            daemonVersion: result.daemonVersion
+          }).catch(() => undefined)
+          return result
+        })
         .then(
           (result) => respond({ ok: true, result }),
           (error: unknown) =>

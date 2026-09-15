@@ -636,6 +636,19 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Why: the extension ZIP and the installers ride the daemon release so one published URL can
+      # stage every channel. The ZIP is built with the plain package task and never
+      # `--initial-upload`, because the pinned manifest.key is what keeps the unpacked extension ID
+      # equal to the Native Messaging allowed origin; the task normalizes mtimes, so these bytes are
+      # identical to the ones the Web Store job uploads.
+      - name: Package browser extension and installers
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          pnpm exec vp run @agentstart/extension#package:web-store
+          cp "apps/extension/release/agentstart-extension-${version}.zip" apps/daemon/dist/
+          cp scripts/install.sh scripts/install.ps1 apps/daemon/dist/
+
       - name: Download computer-use helper
         uses: actions/download-artifact@v8
         with:
@@ -681,7 +694,17 @@ jobs:
             echo "Release asset sets must contain 7 Rust and 4 Homebrew binaries." >&2
             exit 1
           fi
-          assets=(AgentStart.dmg agentstart-computer-use-macos.zip "${rust_assets[@]}")
+          # Why: the extension ZIP is checksummed but not individually attested; it is built here
+          # rather than downloaded from the extension workflow, and the checksum manifest is what
+          # the published installer verifies it against.
+          version="${GITHUB_REF_NAME#v}"
+          payload_assets=(
+            AgentStart.dmg
+            agentstart-computer-use-macos.zip
+            "agentstart-extension-${version}.zip"
+            "${rust_assets[@]}"
+          )
+          assets=("${payload_assets[@]}")
           if ! printf '%s\n' "${assets[@]}" | awk 'seen[$0]++ { exit 1 }'; then
             echo "Release asset names must be unique." >&2
             exit 1
@@ -730,10 +753,16 @@ jobs:
           payload_assets=(
             AgentStart.dmg
             agentstart-computer-use-macos.zip
+            "agentstart-extension-${version}.zip"
             "${rust_assets[@]}"
           )
+          # Why: install.sh and install.ps1 are deliberately outside payload_assets. They are served
+          # by agentstart.ai to bootstrap the install, so every checksum assertion below must stay
+          # restricted to the bytes that are actually installed.
           assets=(
             "${payload_assets[@]}"
+            install.sh
+            install.ps1
             agentstart-checksums.txt
           )
           release_dir="$RUNNER_TEMP/agentstart-release-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"

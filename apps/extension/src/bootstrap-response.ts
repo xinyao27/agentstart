@@ -9,8 +9,10 @@ type ExtensionBootstrapResponse =
 
 export type ExtensionBootstrapResult = {
   authToken: string
+  daemonVersion?: string | null
   endpoint: string
   expectedRuntimeId: string | null
+  extensionBundleVersion?: string | null
   protocolVersion: number
   rpcProtocol: 'agentstart-protobuf-v2'
 }
@@ -64,9 +66,17 @@ function isExtensionBootstrapResult(result: unknown): result is ExtensionBootstr
     typeof result === 'object' &&
     result !== null &&
     typeof Reflect.get(result, 'authToken') === 'string' &&
+    isOptionalString(Reflect.get(result, 'daemonVersion')) &&
     typeof Reflect.get(result, 'endpoint') === 'string' &&
     (expectedRuntimeId === null || typeof expectedRuntimeId === 'string') &&
+    isOptionalString(Reflect.get(result, 'extensionBundleVersion')) &&
     typeof Reflect.get(result, 'protocolVersion') === 'number' &&
     rpcProtocol === 'agentstart-protobuf-v2'
   )
+}
+
+// Why: a daemon older than these fields must still connect. Absence means "the daemon cannot say",
+// which every reader already treats the same as the null it sends when it can.
+function isOptionalString(value: unknown): boolean {
+  return value === undefined || value === null || typeof value === 'string'
 }

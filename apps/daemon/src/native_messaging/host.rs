@@ -54,7 +54,9 @@ struct NativeBootstrapResponse<'a> {
 struct NativeBootstrapResult {
     auth_token: String,
     daemon_started: bool,
+    daemon_version: &'static str,
     endpoint: String,
+    extension_bundle_version: Option<String>,
     extension_origin: &'static str,
     protocol_version: serde_json::Number,
     rpc_protocol: String,
@@ -115,19 +117,34 @@ pub(crate) fn run(args: &[OsString]) -> Result<(), NativeMessagingError> {
 
 fn bootstrap_response(id: &str) -> NativeResponse<'_> {
     match super::bootstrap::read_or_start() {
-        Ok(live) => NativeResponse::Bootstrap(NativeBootstrapResponse {
-            id,
-            ok: true,
-            result: NativeBootstrapResult {
-                auth_token: live.bootstrap.auth_token,
-                daemon_started: live.daemon_started,
-                endpoint: live.bootstrap.endpoint,
-                extension_origin: super::bootstrap::extension_origin(),
-                protocol_version: live.bootstrap.protocol_version,
-                rpc_protocol: live.bootstrap.rpc_protocol,
-                runtime_id: live.bootstrap.runtime_id,
-            },
-        }),
+        Ok(live) => {
+            // Why: both of these are advisory. The marker only feeds the installer's wait loop and
+            // the version only tells the extension to reload itself, so neither may cost the
+            // extension the connection it just asked for.
+            let _ = super::bootstrap::record_extension_connection(
+                &live.user_data_path,
+                super::bootstrap::extension_origin(),
+            );
+            NativeResponse::Bootstrap(NativeBootstrapResponse {
+                id,
+                ok: true,
+                result: NativeBootstrapResult {
+                    auth_token: live.bootstrap.auth_token,
+                    daemon_started: live.daemon_started,
+                    // Why: the daemon and the extension are released from one version, so a daemon
+                    // that is ahead tells a Web Store install that an update should exist.
+                    daemon_version: env!("CARGO_PKG_VERSION"),
+                    endpoint: live.bootstrap.endpoint,
+                    extension_bundle_version: crate::extension_bundle::installed_version()
+                        .ok()
+                        .flatten(),
+                    extension_origin: super::bootstrap::extension_origin(),
+                    protocol_version: live.bootstrap.protocol_version,
+                    rpc_protocol: live.bootstrap.rpc_protocol,
+                    runtime_id: live.bootstrap.runtime_id,
+                },
+            })
+        }
         Err(error) => error_response(id, error.to_string()),
     }
 }

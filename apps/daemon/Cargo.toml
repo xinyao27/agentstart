@@ -79,6 +79,9 @@ tokio-tungstenite = { version = "0.29.0", default-features = false, features = [
 ] }
 url = { version = "2.5.8", default-features = false, features = ["std"] }
 x25519-dalek = { version = "3.0.0", default-features = false }
+# Why: the unpacked browser-extension bundle is published as a ZIP, and the daemon has to stage it
+# on Windows and musl as well, where shelling out to ditto or unzip is not available.
+zip = { version = "8.6.0", default-features = false, features = ["deflate"] }
 agentstart-protocol = { path = "../../packages/protocol/rust" }
 
 [target.'cfg(unix)'.dependencies]

@@ -20,6 +20,7 @@ use tokio::sync::{Mutex, OnceCell};
 
 use model::{CachedRelease, GitHubRelease, ReleaseDownload};
 pub(crate) use model::{PreparedUpdate, UpdateInstallResult, UpdateStatus};
+pub(crate) use version::is_valid as is_release_version;
 
 const CACHE_TTL_MS: i128 = 6 * 60 * 60 * 1_000;
 const CHECKSUM_ASSET_NAME: &str = "agentstart-checksums.txt";

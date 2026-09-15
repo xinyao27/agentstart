@@ -27,6 +27,7 @@ mod dangerous_approval;
 mod developer_permissions;
 mod diagnostics;
 mod emulator;
+mod extension_bundle;
 mod external_paths;
 mod feedback;
 mod file_identity;

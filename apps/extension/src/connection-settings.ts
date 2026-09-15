@@ -40,7 +40,11 @@ export async function readCustomRuntimeBootstrap(): Promise<NativeBootstrapResul
   validateSettings(settings)
   return {
     ...settings,
+    // Why: a configured endpoint is not the local daemon, so it can report neither its version nor
+    // an unpacked bundle this machine staged.
+    daemonVersion: null,
     expectedRuntimeId: null,
+    extensionBundleVersion: null,
     rpcProtocol: RPC_PROTOCOL
   }
 }

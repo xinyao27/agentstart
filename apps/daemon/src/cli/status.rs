@@ -12,6 +12,8 @@ struct StatusOutput<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     reachable: Option<bool>,
     endpoint: Option<&'a str>,
+    extension_connected: bool,
+    extension_connected_at: Option<&'a str>,
     pid: Option<u32>,
     runtime_id: Option<&'a str>,
     state: &'static str,
@@ -37,10 +39,16 @@ pub(super) fn run(args: &[OsString]) -> Result<(), CliError> {
             })
         })
     });
+    let extension_connection = crate::native_messaging::read_extension_connection(&user_data_path)?;
+    let extension_connected_at = extension_connection
+        .as_ref()
+        .map(|connection| connection.connected_at.as_str());
     let output = match (metadata.as_ref(), bootstrap.as_ref()) {
         (Some(metadata), Some(bootstrap)) => StatusOutput {
             reachable,
             endpoint: Some(&bootstrap.endpoint),
+            extension_connected: extension_connection.is_some(),
+            extension_connected_at,
             pid: Some(metadata.pid),
             runtime_id: Some(metadata.runtime_id()),
             state: "running",
@@ -48,6 +56,8 @@ pub(super) fn run(args: &[OsString]) -> Result<(), CliError> {
         _ => StatusOutput {
             reachable,
             endpoint: None,
+            extension_connected: extension_connection.is_some(),
+            extension_connected_at,
             pid: None,
             runtime_id: None,
             state: "not_running",

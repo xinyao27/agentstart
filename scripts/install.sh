@@ -1,13 +1,47 @@
-# Why: curl installs need platform detection, checksum verification, Native Messaging registration,
-# and service activation; no package-manager one-liner can own that sequence safely.
+# Why: this file is the product's one-command installer, served at agentstart.ai/install.sh. It needs
+# platform detection, checksum verification, Native Messaging registration, service activation, the
+# browser-extension handoff, and the mobile link; no package-manager one-liner can own that sequence
+# safely. It lives at the repository root because it spans the daemon, the extension, and iOS.
 set -eu
 
 repository="xinyao27/agentstart"
 install_directory="${AGENTSTART_INSTALL_DIR:-${HOME}/.local/bin}"
 release_version="${AGENTSTART_VERSION:-latest}"
 skip_service_install="${AGENTSTART_SKIP_SERVICE_INSTALL:-0}"
+extension_channel="${AGENTSTART_EXTENSION_CHANNEL:-web-store}"
+no_mobile="${AGENTSTART_NO_MOBILE:-0}"
 max_binary_bytes=268435456
 max_checksum_bytes=1048576
+extension_connect_deadline_seconds=120
+chrome_web_store_url="https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp"
+
+write_help() {
+  cat <<'HELP'
+Install AgentStart, its Chrome extension, and the AgentStart Mobile link.
+
+Usage: install.sh [--help]
+
+Environment:
+  AGENTSTART_INSTALL_DIR           where the agentstart binary is installed
+  AGENTSTART_VERSION               release tag to install, or "latest"
+  AGENTSTART_EXTENSION_CHANNEL     web-store (default), unpacked, or skip
+  AGENTSTART_SKIP_SERVICE_INSTALL  1 to leave the login service alone
+  AGENTSTART_NO_MOBILE             1 to omit the iOS TestFlight link and code
+HELP
+}
+
+for argument in "$@"; do
+  case "$argument" in
+    -h | --help)
+      write_help
+      exit 0
+      ;;
+    *)
+      echo "Unsupported argument: ${argument}. Run with --help." >&2
+      exit 1
+      ;;
+  esac
+done
 
 case "$skip_service_install" in
   0 | 1) ;;
@@ -17,11 +51,27 @@ case "$skip_service_install" in
     ;;
 esac
 
+case "$extension_channel" in
+  web-store | unpacked | skip) ;;
+  *)
+    echo "AGENTSTART_EXTENSION_CHANNEL must be web-store, unpacked, or skip." >&2
+    exit 1
+    ;;
+esac
+
+case "$no_mobile" in
+  0 | 1) ;;
+  *)
+    echo "AGENTSTART_NO_MOBILE must be 0 or 1." >&2
+    exit 1
+    ;;
+esac
+
 case "$(uname -s)" in
   Darwin) platform="darwin" ;;
   Linux) platform="linux" ;;
   *)
-    echo "AgentStart's shell installer supports macOS and Linux; use npm on Windows." >&2
+    echo "AgentStart's shell installer supports macOS and Linux; on Windows run install.ps1." >&2
     exit 1
     ;;
 esac
@@ -558,6 +608,35 @@ run_setup() {
   return "$setup_status"
 }
 
+# Why: the installer is the one place a user sees the whole setup finish or not, and the daemon
+# cannot open a browser it has no display for. Mirrors the daemon's own headless rules so the wait
+# below never blocks a terminal that could not have opened the store page in the first place.
+is_headless() {
+  if [ -n "${SSH_CONNECTION:-}" ] || [ -n "${SSH_TTY:-}" ]; then
+    return 0
+  fi
+  if [ "$platform" = "linux" ]; then
+    [ -n "${DISPLAY:-}" ] || [ -n "${WAYLAND_DISPLAY:-}" ] || return 0
+  fi
+  return 1
+}
+
+# Why: the extension announces itself to the daemon over Native Messaging, so the marker the native
+# host leaves is the only signal that the user finished adding it. Polling it here is what turns the
+# one-liner into a finished setup instead of leaving an open store tab and no verdict.
+wait_for_extension() {
+  deadline_seconds="$1"
+  elapsed_seconds=0
+  while [ "$elapsed_seconds" -lt "$deadline_seconds" ]; do
+    if "${executable}" status --json 2>/dev/null | grep -q '"extensionConnected":true'; then
+      return 0
+    fi
+    sleep 2
+    elapsed_seconds=$((elapsed_seconds + 2))
+  done
+  return 1
+}
+
 download "${release_base}/${asset}" "${temporary_directory}/${asset}" "$max_binary_bytes" 180
 download "${release_base}/agentstart-checksums.txt" \
   "${temporary_directory}/agentstart-checksums.txt" "$max_checksum_bytes" 30
@@ -775,17 +854,22 @@ fi
 replacement_installed=1
 mv -f "$candidate_path" "$executable"
 
+setup_arguments="--extension ${extension_channel}"
 if [ "$skip_service_install" = "1" ]; then
-  if ! run_setup "${install_directory}/agentstart" install --no-browser --no-service; then
-    echo "AgentStart setup failed; restoring the previous installation." >&2
-    exit 1
-  fi
+  setup_arguments="${setup_arguments} --no-service"
 else
   service_setup_attempted=1
-  if ! run_setup "${install_directory}/agentstart" install --no-browser; then
-    echo "AgentStart setup failed; restoring the previous installation." >&2
-    exit 1
-  fi
+fi
+if [ "$no_mobile" = "1" ]; then
+  setup_arguments="${setup_arguments} --no-mobile"
+fi
+
+# Why: the unquoted expansion is deliberate. Each token is either a fixed literal or a channel name
+# already constrained to one of three whitespace-free values, so nothing here can split surprisingly.
+# shellcheck disable=SC2086
+if ! run_setup "${install_directory}/agentstart" install $setup_arguments; then
+  echo "AgentStart setup failed; restoring the previous installation." >&2
+  exit 1
 fi
 
 transaction_committed=1
@@ -794,3 +878,14 @@ case ":${PATH}:" in
   *":${install_directory}:"*) ;;
   *) echo "Add ${install_directory} to PATH." ;;
 esac
+
+if [ "$extension_channel" = "web-store" ] && ! is_headless; then
+  echo "Waiting for the Chrome extension to connect..."
+  if wait_for_extension "$extension_connect_deadline_seconds"; then
+    echo "The Chrome extension is connected."
+  else
+    echo "The Chrome extension has not connected yet." >&2
+    echo "Finish it at ${chrome_web_store_url}, then open the AgentStart side panel." >&2
+    echo "The extension connects on its own once it is installed." >&2
+  fi
+fi

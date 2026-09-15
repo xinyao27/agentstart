@@ -15,6 +15,15 @@ import {
 export type { ExtensionUnavailableReason } from './unavailable-guidance'
 export type { DaemonConnectionSettings } from './settings/connection-form'
 
+// Why: the daemon can be missing on the machine this browser is running on, so the panel offers the
+// one command that installs everything rather than only the npm form of the daemon alone. Host
+// platform is deliberately not guessed here: the daemon may live on an SSH host, not on this machine.
+const MISSING_CLI_INSTALL_COMMANDS = [
+  'curl -fsSL https://agentstart.ai/install.sh | sh',
+  'irm https://agentstart.ai/install.ps1 | iex',
+  'npx @agentstart/cli install'
+].join('\n')
+
 export type ExtensionUnavailableFailure = {
   diagnostic: string
   reason: ExtensionUnavailableReason
@@ -213,7 +222,7 @@ function ExtensionUnavailable({
         </p>
         {failure.reason === 'missing-cli' ? (
           <pre className="bg-muted mt-3 overflow-x-auto rounded-md p-2 text-xs">
-            bunx @agentstart/cli install
+            {MISSING_CLI_INSTALL_COMMANDS}
           </pre>
         ) : null}
         {failure.reason === 'loopback-check-failed' && requestLoopbackAccess ? (

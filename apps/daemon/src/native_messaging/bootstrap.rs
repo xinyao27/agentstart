@@ -1,11 +1,11 @@
 use std::fs;
 use std::io;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::thread;
 use std::time::{Duration, Instant};
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use serde_json::Number;
 use thiserror::Error;
 
@@ -15,6 +15,10 @@ use crate::transport::secure_file::{self, SecureFileError};
 use super::install::EXTENSION_ORIGIN;
 
 const EXTENSION_BOOTSTRAP_FILE_NAME: &str = "extension-bootstrap.json";
+// Why: nothing else in the daemon can observe whether the browser half is installed, because a
+// bootstrap request is served by this short-lived native host rather than by the runtime. Leaving a
+// marker here is what lets `agentstart status` and the installer tell "installed" from "not yet".
+const EXTENSION_CONNECTED_FILE_NAME: &str = "extension-connected.json";
 const DEV_SUPERVISOR_DIRECTORY_NAME: &str = "dev-daemon-supervisor";
 const DEV_SUPERVISOR_LEASE_FILE_NAME: &str = "lease.json";
 pub(crate) const RPC_PROTOCOL: &str = "agentstart-protobuf-v2";
@@ -36,6 +40,14 @@ pub(super) struct ExtensionBootstrap {
 pub(super) struct LiveBootstrap {
     pub bootstrap: ExtensionBootstrap,
     pub daemon_started: bool,
+    pub user_data_path: PathBuf,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct ExtensionConnection {
+    pub(crate) extension_origin: String,
+    pub(crate) connected_at: String,
 }
 
 pub(crate) struct BootstrapConnection {
@@ -144,7 +156,37 @@ pub(super) fn read_or_start() -> Result<LiveBootstrap, BootstrapError> {
     Ok(LiveBootstrap {
         bootstrap,
         daemon_started,
+        user_data_path,
     })
+}
+
+/// Record that the browser half reached the daemon, so a later `agentstart status` can report it.
+/// The marker is informational, so a failed write is deliberately not an error here: a bootstrap
+/// that succeeded must not be turned into a failure by a bookkeeping file.
+pub(crate) fn record_extension_connection(
+    user_data_path: &Path,
+    extension_origin: &str,
+) -> Result<(), BootstrapError> {
+    let connection = ExtensionConnection {
+        extension_origin: extension_origin.to_owned(),
+        connected_at: chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Millis, true),
+    };
+    let path = extension_connected_path(user_data_path);
+    if let Some(parent) = path.parent() {
+        fs::create_dir_all(parent)?;
+    }
+    fs::write(path, serde_json::to_vec(&connection)?)?;
+    Ok(())
+}
+
+pub(crate) fn read_extension_connection(
+    user_data_path: &Path,
+) -> Result<Option<ExtensionConnection>, BootstrapError> {
+    match fs::read_to_string(extension_connected_path(user_data_path)) {
+        Ok(contents) => Ok(serde_json::from_str(&contents).ok()),
+        Err(error) if error.kind() == io::ErrorKind::NotFound => Ok(None),
+        Err(error) => Err(error.into()),
+    }
 }
 
 fn start_daemon_and_wait(user_data_path: &Path) -> Result<RuntimeMetadata, BootstrapError> {
@@ -326,6 +368,10 @@ fn extension_bootstrap_path(user_data_path: &Path, pid: u32) -> std::path::PathB
         .join("rh")
         .join(pid.to_string())
         .join(EXTENSION_BOOTSTRAP_FILE_NAME)
+}
+
+fn extension_connected_path(user_data_path: &Path) -> PathBuf {
+    user_data_path.join(EXTENSION_CONNECTED_FILE_NAME)
 }
 
 fn string_field(

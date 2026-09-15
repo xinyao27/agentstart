@@ -18,7 +18,7 @@ const MAX_HELPER_ARCHIVE_BYTES: u64 = 256 * 1024 * 1024;
 const MAX_CHECKSUM_BYTES: u64 = 1024 * 1024;
 
 pub(super) async fn prepare(version: &str) -> Result<PathBuf, ComputerUseInstallError> {
-    if !is_release_version(version) {
+    if !crate::update::is_release_version(version) {
         return Err(ComputerUseInstallError::ReleaseVersionUnavailable);
     }
     let release_root = format!("{RELEASE_ROOT}/v{version}");
@@ -156,23 +156,6 @@ fn release_checksum(checksums: &str) -> Result<String, ComputerUseInstallError> 
         })
         .map(str::to_ascii_lowercase)
         .ok_or(ComputerUseInstallError::ChecksumMissing)
-}
-
-fn is_release_version(version: &str) -> bool {
-    let delimiter = version.find(['-', '+']);
-    let core = delimiter.map_or(version, |index| &version[..index]);
-    let suffix_is_valid = delimiter.is_none_or(|index| {
-        let suffix = &version[index + 1..];
-        !suffix.is_empty()
-            && suffix
-                .bytes()
-                .all(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'_' | b'.' | b'-'))
-    });
-    suffix_is_valid
-        && core.split('.').count() == 3
-        && core
-            .split('.')
-            .all(|part| !part.is_empty() && part.bytes().all(|byte| byte.is_ascii_digit()))
 }
 
 async fn create_staging_directory() -> Result<PathBuf, ComputerUseInstallError> {

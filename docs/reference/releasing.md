@@ -129,6 +129,25 @@ from the tagged template and exact downloaded artifacts, and finally creates or 
 that live formula does not exist. Reruns leave a newer formula untouched and treat an identical
 formula as complete. npm, Homebrew, and the curl installer all select `agentstart-rust-*`.
 
+The same release carries the one-command installers and the unpacked extension bundle:
+
+| Asset | Source | Checksummed |
+| --- | --- | --- |
+| `install.sh` | `scripts/install.sh` | no |
+| `install.ps1` | `scripts/install.ps1` | no |
+| `agentstart-extension-<version>.zip` | `vp run @agentstart/extension#package:web-store` | yes |
+
+Both installers are deliberately outside `agentstart-checksums.txt`: they are the thing that
+verifies everything else, so they cannot verify themselves. The extension ZIP must be built with the
+plain `package:web-store` task and never `package:web-store:initial`, because `--initial-upload`
+strips `manifest.key`, and that key is what keeps the unpacked extension ID equal to
+`ljgpbhfigjepmdeaggfdagchkgaogglp` and therefore equal to the Native Messaging `allowed_origins`.
+
+`https://agentstart.ai/install.sh` and `https://agentstart.ai/install.ps1` are 302 redirects in
+`apps/web/worker/site.ts` to `releases/latest/download/<name>`. **Renaming either release asset is a
+breaking change for the published one-liner.** The redirect has to be updated in the same commit as
+the workflow that uploads it, and the website deploy has to land before the release is announced.
+
 The native macOS app is the Developer ID distributed `AgentStart.dmg`, identified by
 `com.xinyao27.agentstart.macos`. CI builds a universal app around the notarized daemon, signs the
 nested executables and enclosing app, notarizes and staples the app, then signs, notarizes, and

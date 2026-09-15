@@ -157,7 +157,7 @@ fn path_from_output(output: std::process::Output) -> Option<PathBuf> {
     (!path.as_os_str().is_empty() && path.is_absolute()).then_some(path)
 }
 
-fn trimmed_environment(name: &str) -> Option<String> {
+pub(crate) fn trimmed_environment(name: &str) -> Option<String> {
     env::var(name)
         .ok()
         .map(|value| value.trim().to_owned())
