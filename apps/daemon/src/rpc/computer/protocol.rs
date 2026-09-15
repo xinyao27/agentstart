@@ -3,10 +3,11 @@ use agentstart_protocol::runtime::v1::{
     ComputerServiceCapabilitiesRequest, ComputerServiceClickRequest, ComputerServiceDragRequest,
     ComputerServiceGetAppStateRequest, ComputerServiceHotkeyRequest,
     ComputerServiceListAppsRequest, ComputerServiceListWindowsRequest,
-    ComputerServicePasteTextRequest, ComputerServicePerformSecondaryActionRequest,
-    ComputerServicePermissionsRequest, ComputerServicePermissionsResetRequest,
-    ComputerServicePermissionsStatusRequest, ComputerServicePressKeyRequest,
-    ComputerServiceScrollRequest, ComputerServiceSetValueRequest, ComputerServiceTypeTextRequest,
+    ComputerServiceOpenAppRequest, ComputerServicePasteTextRequest,
+    ComputerServicePerformSecondaryActionRequest, ComputerServicePermissionsRequest,
+    ComputerServicePermissionsResetRequest, ComputerServicePermissionsStatusRequest,
+    ComputerServicePressKeyRequest, ComputerServiceScrollRequest, ComputerServiceSetValueRequest,
+    ComputerServiceTypeTextRequest,
 };
 use agentstart_protocol::transport::{decode, encode};
 use serde_json::json;
@@ -39,6 +40,16 @@ pub(in crate::rpc) async fn list_apps(
         .await
         .map_err(computer_status)?;
     Ok(encode(&response::list_apps_response(&value)))
+}
+
+pub(in crate::rpc) async fn open_app(rpc: &ComputerRpc, payload: &[u8]) -> Result<Vec<u8>, Status> {
+    let input = decode::<ComputerServiceOpenAppRequest>(payload)?;
+    let body = request::open_app(&input)?;
+    let value = rpc
+        .invoke_typed("computer.openApp", body)
+        .await
+        .map_err(computer_status)?;
+    Ok(encode(&response::open_app_response(&value)))
 }
 
 pub(in crate::rpc) async fn permissions(

@@ -213,6 +213,8 @@ final class Provider {
             return providerHandshake()
         case "listApps":
             return ["apps": listApps().map(renderListedApp)]
+        case "openApp":
+            return try openApp(params: params)
         case "listWindows":
             return try listWindows(params: params)
         case "getAppState":
@@ -460,6 +462,68 @@ final class Provider {
                 }
                 return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
             }
+    }
+
+    /// Why: `open` is the only launch path that accepts both a bundle identifier and an explicit
+    /// `.app` path, and it is synchronous — so a caller learns immediately whether the target
+    /// exists, instead of the failure surfacing later as a missing window.
+    private func openApp(params: [String: JSONValue]) throws -> [String: Any] {
+        let target = try requiredString(params, "app")
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/open")
+        process.arguments = target.hasPrefix("/") ? ["-a", target] : ["-b", target]
+        let diagnostics = Pipe()
+        process.standardOutput = Pipe()
+        process.standardError = diagnostics
+        do {
+            try process.run()
+        } catch {
+            throw ProviderError.coded("app_launch_failed", error.localizedDescription)
+        }
+        process.waitUntilExit()
+        guard process.terminationStatus == 0 else {
+            let data = diagnostics.fileHandleForReading.readDataToEndOfFile()
+            let message =
+                String(data: data, encoding: .utf8)?
+                .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            throw ProviderError.coded(
+                "app_launch_failed",
+                message.isEmpty ? "open exited with status \(process.terminationStatus)" : message
+            )
+        }
+        var response: [String: Any] = ["app": target]
+        // Why: `open` returns before the app finishes registering, and an agent's next call is
+        // almost always `getAppState`. A short bounded wait turns that race into a usable answer,
+        // and an app that still has not appeared simply leaves `launched` absent.
+        let deadline = Date().addingTimeInterval(3)
+        repeat {
+            if let running = runningApplication(matching: target) {
+                response["launched"] = renderListedApp(
+                    AppDescriptor(
+                        name: running.localizedName ?? target,
+                        bundleId: running.bundleIdentifier,
+                        pid: running.processIdentifier,
+                        app: running
+                    )
+                )
+                break
+            }
+            Thread.sleep(forTimeInterval: 0.1)
+        } while Date() < deadline
+        return response
+    }
+
+    private func runningApplication(matching target: String) -> NSRunningApplication? {
+        let candidates = NSWorkspace.shared.runningApplications.filter {
+            !$0.isTerminated && $0.activationPolicy == .regular
+        }
+        if target.hasPrefix("/") {
+            let path = target.hasSuffix("/") ? String(target.dropLast()) : target
+            return candidates.first { $0.bundleURL?.path == path }
+        }
+        return candidates.first {
+            $0.bundleIdentifier?.caseInsensitiveCompare(target) == .orderedSame
+        }
     }
 
     private func renderListedApp(_ app: AppDescriptor) -> [String: Any] {

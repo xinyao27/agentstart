@@ -8,15 +8,24 @@ use agentstart_protocol::runtime::v1::{
     ComputerMouseButton, ComputerObserveTarget, ComputerPermissionId, ComputerPoint,
     ComputerScrollDirection, ComputerServiceClickRequest, ComputerServiceDragRequest,
     ComputerServiceGetAppStateRequest, ComputerServiceHotkeyRequest,
-    ComputerServiceListWindowsRequest, ComputerServicePasteTextRequest,
-    ComputerServicePerformSecondaryActionRequest, ComputerServicePermissionsRequest,
-    ComputerServicePressKeyRequest, ComputerServiceScrollRequest, ComputerServiceSetValueRequest,
-    ComputerServiceTypeTextRequest, computer_observe_target, computer_service_click_request,
-    computer_service_drag_request, computer_service_scroll_request,
+    ComputerServiceListWindowsRequest, ComputerServiceOpenAppRequest,
+    ComputerServicePasteTextRequest, ComputerServicePerformSecondaryActionRequest,
+    ComputerServicePermissionsRequest, ComputerServicePressKeyRequest,
+    ComputerServiceScrollRequest, ComputerServiceSetValueRequest, ComputerServiceTypeTextRequest,
+    computer_observe_target, computer_service_click_request, computer_service_drag_request,
+    computer_service_scroll_request,
 };
 use serde_json::{Map, Value, json};
 
 use crate::rpc::protocol_call::status;
+
+pub(super) fn open_app(input: &ComputerServiceOpenAppRequest) -> Result<Value, Status> {
+    let app = input.app.trim();
+    if app.is_empty() {
+        return Err(invalid("Missing app"));
+    }
+    Ok(json!({ "app": app }))
+}
 
 pub(super) fn required<T>(value: Option<T>, message: &str) -> Result<T, Status> {
     value.ok_or_else(|| invalid(message))

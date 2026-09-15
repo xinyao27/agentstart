@@ -82,6 +82,10 @@ impl ComputerAuthority {
             }
             "computer.capabilities" => Ok(Some(self.provider_call("handshake", json!({})).await?)),
             "computer.listApps" => Ok(Some(self.provider_call("listApps", json!({})).await?)),
+            "computer.openApp" => {
+                validate_app(&body)?;
+                Ok(Some(self.provider_call("openApp", body).await?))
+            }
             "computer.listWindows" => {
                 validate_app(&body)?;
                 Ok(Some(self.provider_call("listWindows", body).await?))

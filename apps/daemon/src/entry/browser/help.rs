@@ -2,6 +2,7 @@ use super::BrowserCommandError;
 
 const COMMANDS: &[&str] = &[
     "back",
+    "capabilities",
     "capture start",
     "capture stop",
     "check",
@@ -80,14 +81,15 @@ const COMMANDS: &[&str] = &[
     "wait",
 ];
 
-pub(super) fn is_root(value: &str) -> bool {
-    COMMANDS
-        .iter()
-        .any(|command| command.split_once(' ').map_or(*command, |(root, _)| root) == value)
-}
-
 pub(super) fn is_command(value: &str) -> bool {
     COMMANDS.contains(&value)
+}
+
+pub(super) fn print_root() {
+    println!("Usage: agentstart browser <command> [options]");
+    for command in COMMANDS {
+        println!("  {command}");
+    }
 }
 
 pub(super) fn print(command: &str) -> Result<(), BrowserCommandError> {
@@ -100,6 +102,7 @@ pub(super) fn print(command: &str) -> Result<(), BrowserCommandError> {
 fn usage(command: &str) -> Option<&'static str> {
     Some(match command {
         "back" => "back [--page <id>] [--worktree <selector>] [--json]",
+        "capabilities" => "capabilities [--json]",
         "capture start" => "capture start [--page <id>] [--worktree <selector>] [--json]",
         "capture stop" => "capture stop [--page <id>] [--worktree <selector>] [--json]",
         "check" => "check --element <ref> [--page <id>] [--worktree <selector>] [--json]",

@@ -43,6 +43,7 @@ use crate::preflight::Preflight;
 use crate::profiles::ProfilesAuthority;
 use crate::project_groups::ProjectGroupAuthority;
 use crate::project_host_setups::ProjectHostSetupAuthority;
+use crate::project_memory::ProjectMemoryAuthority;
 use crate::projects::RemoteProjectResolver;
 use crate::provider_usage::ProviderUsageAuthority;
 use crate::repositories::RepositoryAuthority;
@@ -149,6 +150,7 @@ pub struct Runtime {
     project_host_setups: ProjectHostSetupAuthority,
     repositories: RepositoryAuthority,
     project_context: RemoteProjectResolver,
+    project_memory: ProjectMemoryAuthority,
     session_tabs: SessionTabsAuthority,
     settings: SettingsAuthority,
     shell_events: ShellEventAuthority,
@@ -446,6 +448,11 @@ impl Runtime {
             host_registry.clone(),
             database.worktree_metadata(),
         );
+        let project_memory = ProjectMemoryAuthority::new(
+            &user_data_path,
+            database.project_catalog(),
+            worktrees.clone(),
+        );
         let computer = ComputerAuthority::new(installation_data_path.clone());
         let emulator = EmulatorAuthority::new(settings.clone(), worktrees.clone());
         let github = GitHubAuthority::new(
@@ -673,6 +680,7 @@ impl Runtime {
             orchestration_database.store(),
             terminal_sessions.clone(),
             worktrees.clone(),
+            project_memory.clone(),
             identity.runtime_id().to_owned(),
         );
         let agent_phase_worker = start_agent_phase_worker(
@@ -733,6 +741,7 @@ impl Runtime {
                 project_host_setups,
                 repositories,
                 project_context,
+                project_memory,
                 session_tabs,
                 settings,
                 shell_events,
@@ -850,6 +859,7 @@ impl Runtime {
             repositories: self.repositories.clone(),
             project_catalog: self.database.project_catalog(),
             project_context: self.project_context.clone(),
+            project_memory: self.project_memory.clone(),
             session_tabs: self.session_tabs.clone(),
             settings: self.settings.clone(),
             shell_events: self.shell_events.clone(),
@@ -937,6 +947,7 @@ impl Runtime {
             project_host_setups,
             repositories,
             project_context,
+            project_memory,
             session_tabs,
             settings,
             shell_events,
@@ -1023,6 +1034,7 @@ impl Runtime {
         drop(project_host_setups);
         drop(repositories);
         drop(project_context);
+        drop(project_memory);
         drop(session_tabs);
         drop(terminal_sessions);
         drop(settings);

@@ -59,6 +59,7 @@ struct LocalWorkerLaunch<'a> {
     task: &'a Value,
     coordinator: &'a str,
     worktree_id: &'a str,
+    repo_id: &'a str,
     terminal: Option<String>,
     agent: Option<String>,
     timeout_ms: u64,
@@ -603,6 +604,7 @@ impl OrchestrationAuthority {
                     task: &task,
                     coordinator: &from,
                     worktree_id: &worktree.id,
+                    repo_id: &worktree.repo_id,
                     terminal,
                     agent,
                     timeout_ms,
@@ -656,6 +658,7 @@ impl OrchestrationAuthority {
             task,
             coordinator,
             worktree_id,
+            repo_id,
             terminal,
             agent,
             timeout_ms,
@@ -699,7 +702,7 @@ impl OrchestrationAuthority {
                         command: Some(startup.command),
                         cwd: None,
                         cwd_fallback: false,
-                        env: startup.environment,
+                        env: worker_environment(startup.environment, &self.project_memory, repo_id),
                         env_to_delete: Vec::new(),
                         focus: false,
                         launch_agent: Some(agent),
@@ -803,15 +806,18 @@ impl OrchestrationAuthority {
                 Ok(Value::Null)
             })
             .await?;
-        let preamble = super::dispatch_preamble(
-            &value_string(task, "id").unwrap_or_default(),
+        let memory_path = self.project_memory.path_for_project(repo_id);
+        let preamble = super::DispatchPreamble {
+            memory_path: Some(memory_path.as_path()),
+            task_id: &value_string(task, "id").unwrap_or_default(),
             dispatch_id,
-            &value_string(task, "spec").unwrap_or_default(),
+            spec: &value_string(task, "spec").unwrap_or_default(),
             coordinator,
-            &handle,
-            Some(&capability),
-            input.get("devMode").and_then(Value::as_bool) == Some(true),
-        );
+            worker: &handle,
+            capability: Some(&capability),
+            dev_mode: input.get("devMode").and_then(Value::as_bool) == Some(true),
+        }
+        .render();
         let sent = self
             .terminals
             .send_guarded(
@@ -1665,15 +1671,17 @@ impl OrchestrationAuthority {
             effects,
         })
         .await?;
-        let preamble = super::dispatch_preamble(
+        let preamble = super::DispatchPreamble {
+            memory_path: None,
             task_id,
             dispatch_id,
-            task_spec,
-            "Run home (relayed by AgentStart)",
-            &handle,
-            Some(&capability),
-            input.get("devMode").and_then(Value::as_bool) == Some(true),
-        );
+            spec: task_spec,
+            coordinator: "Run home (relayed by AgentStart)",
+            worker: &handle,
+            capability: Some(&capability),
+            dev_mode: input.get("devMode").and_then(Value::as_bool) == Some(true),
+        }
+        .render();
         let sent = self
             .terminals
             .send_guarded(
@@ -2535,6 +2543,24 @@ fn relay_row(row: &rusqlite::Row<'_>) -> rusqlite::Result<Value> {
         "acked_at": row.get::<_, Option<String>>(7)?,
         "created_at": row.get::<_, String>(8)?,
     }))
+}
+
+/// Why: the shared context lives in one file per project, and an agent that has to guess its
+/// path will not read it. Handing the path over in the environment keeps the preamble short —
+/// inlining the notes would type them into the agent's input box via `send_guarded`.
+fn worker_environment(
+    mut environment: Vec<(String, String)>,
+    project_memory: &crate::project_memory::ProjectMemoryAuthority,
+    repo_id: &str,
+) -> Vec<(String, String)> {
+    environment.push((
+        "AGENTSTART_PROJECT_MEMORY".to_owned(),
+        project_memory
+            .path_for_project(repo_id)
+            .to_string_lossy()
+            .into_owned(),
+    ));
+    environment
 }
 
 fn setup_not_applicable() -> Value {

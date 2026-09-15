@@ -83,6 +83,7 @@ use super::project::{ProjectRpc, protocol as project_protocol};
 use super::project_context::{ProjectContextRpc, protocol as project_context_protocol};
 use super::project_group::{ProjectGroupRpc, protocol as project_group_protocol};
 use super::project_host_setup::{ProjectHostSetupRpc, protocol as project_host_setup_protocol};
+use super::project_memory::{ProjectMemoryRpc, protocol as project_memory_protocol};
 use super::provider_usage::ProviderUsageRpc;
 use super::rate_limit_resume::RateLimitResumeRpc;
 use super::repo::{RepoRpc, protocol as repo_protocol};
@@ -245,6 +246,7 @@ pub(super) struct ProtocolRouter {
     workspace_space: WorkspaceSpaceRpc,
     client_events: ClientEventsRpc,
     project_context: ProjectContextRpc,
+    project_memory: ProjectMemoryRpc,
     notebook: NotebookRpc,
     external_editor: ExternalEditorRpc,
     shell_events: ShellEventsRpc,
@@ -324,6 +326,7 @@ pub(super) struct ProtocolRouterInputs {
     pub(super) workspace_space: WorkspaceSpaceRpc,
     pub(super) client_events: ClientEventsRpc,
     pub(super) project_context: ProjectContextRpc,
+    pub(super) project_memory: ProjectMemoryRpc,
     pub(super) notebook: NotebookRpc,
     pub(super) external_editor: ExternalEditorRpc,
     pub(super) shell_events: ShellEventsRpc,
@@ -749,6 +752,7 @@ impl ProtocolRouter {
             workspace_space,
             client_events,
             project_context,
+            project_memory,
             notebook,
             external_editor,
             shell_events,
@@ -826,6 +830,7 @@ impl ProtocolRouter {
             workspace_space,
             client_events,
             project_context,
+            project_memory,
             notebook,
             external_editor,
             shell_events,

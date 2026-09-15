@@ -240,8 +240,8 @@ async fn command_with_target(
         }),
         "viewport" => Command::Viewport(browser::ViewportCommand {
             target,
-            width: args.require_positive("width")?,
-            height: args.require_positive("height")?,
+            width: Some(args.require_positive("width")?),
+            height: Some(args.require_positive("height")?),
             device_scale_factor: args.positive("scale")?,
             mobile: args.has("mobile").then_some(true),
         }),

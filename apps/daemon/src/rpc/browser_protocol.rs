@@ -20,9 +20,9 @@ use agentstart_protocol::runtime::v1::execute_mobile_response::Result as MobileR
 use agentstart_protocol::runtime::v1::execute_request::Command as RequestCommand;
 use agentstart_protocol::runtime::v1::execute_response::Result as ResponseResult;
 use agentstart_protocol::runtime::v1::{
-    BrowserTarget, DownloadRequest, DownloadResponse, ExecuteMobileRequest, ExecuteMobileResponse,
-    ExecuteRequest, ResolveTargetRequest, ResolveTargetResponse, ResolveUploadRequest,
-    ResolveUploadResponse,
+    BrowserServiceCapabilitiesRequest, BrowserServiceCapabilitiesResponse, BrowserTarget,
+    DownloadRequest, DownloadResponse, ExecuteMobileRequest, ExecuteMobileResponse, ExecuteRequest,
+    ResolveTargetRequest, ResolveTargetResponse, ResolveUploadRequest, ResolveUploadResponse,
 };
 use agentstart_protocol::transport::{decode, encode};
 use prost::Message;
@@ -53,6 +53,25 @@ impl BrowserProtocolRpc {
     pub(super) fn new(reverse: ReverseProtocolRegistry, worktrees: WorktreeCatalog) -> Self {
         Self { reverse, worktrees }
     }
+}
+
+/// Why: this is answered by the daemon rather than forwarded, because the question is whether a
+/// host is connected at all — forwarding it would be the very failure it exists to predict.
+pub(super) async fn capabilities(
+    rpc: &BrowserProtocolRpc,
+    payload: &[u8],
+) -> Result<Vec<u8>, Status> {
+    decode::<BrowserServiceCapabilitiesRequest>(payload)?;
+    let hosts = rpc.reverse.web_connection_count();
+    Ok(encode(&BrowserServiceCapabilitiesResponse {
+        available: hosts > 0,
+        backend: if hosts > 0 {
+            "chrome-extension".to_owned()
+        } else {
+            String::new()
+        },
+        hosts,
+    }))
 }
 
 pub(super) async fn resolve_target(
@@ -523,6 +542,10 @@ fn mobile_command_to_execute(command: MobileRequestCommand) -> RequestCommand {
         MobileRequestCommand::DialogAccept(value) => RequestCommand::DialogAccept(value),
         MobileRequestCommand::DialogDismiss(value) => RequestCommand::DialogDismiss(value),
         MobileRequestCommand::Viewport(value) => RequestCommand::Viewport(value),
+        MobileRequestCommand::TabList(value) => RequestCommand::TabList(value),
+        MobileRequestCommand::TabShow(value) => RequestCommand::TabShow(value),
+        MobileRequestCommand::TabSwitch(value) => RequestCommand::TabSwitch(value),
+        MobileRequestCommand::TabClose(value) => RequestCommand::TabClose(value),
     }
 }
 
@@ -543,6 +566,10 @@ fn execute_result_to_mobile(result: ResponseResult) -> Option<MobileResponseResu
         ResponseResult::DialogAccept(value) => MobileResponseResult::DialogAccept(value),
         ResponseResult::DialogDismiss(value) => MobileResponseResult::DialogDismiss(value),
         ResponseResult::Viewport(value) => MobileResponseResult::Viewport(value),
+        ResponseResult::TabList(value) => MobileResponseResult::TabList(value),
+        ResponseResult::TabShow(value) => MobileResponseResult::TabShow(value),
+        ResponseResult::TabSwitch(value) => MobileResponseResult::TabSwitch(value),
+        ResponseResult::TabClose(value) => MobileResponseResult::TabClose(value),
         _ => return None,
     })
 }

@@ -102,7 +102,7 @@ async fn list(peer: &LocalProtocolClient, args: &[OsString]) -> Result<(), Layou
     let response = unary::<ListMethod>(
         peer,
         &LayoutServiceListRequest {
-            worktree: required_flag(args, "--worktree")?,
+            worktree: worktree_selector(args)?,
         },
     )
     .await?;
@@ -135,7 +135,7 @@ async fn apply(peer: &LocalProtocolClient, args: &[OsString]) -> Result<(), Layo
     let response = unary::<ApplyMethod>(
         peer,
         &LayoutServiceApplyRequest {
-            worktree: required_flag(args, "--worktree")?,
+            worktree: worktree_selector(args)?,
             expected_revision: nonnegative_integer(args, "--expected-revision")?,
             name: required_flag(args, "--name")?,
         },
@@ -269,12 +269,27 @@ fn javascript_number(value: &str) -> Option<f64> {
     value.parse().ok()
 }
 
-fn required_flag(args: &[OsString], name: &'static str) -> Result<String, LayoutCommandError> {
+/// Layout recipes live on a worktree's `agentstart.yaml`, and the terminal already exports the
+/// worktree it belongs to, so a command run inside an AgentStart terminal needs no flag.
+fn worktree_selector(args: &[OsString]) -> Result<String, LayoutCommandError> {
+    if let Some(worktree) = optional_flag(args, "--worktree") {
+        return Ok(worktree);
+    }
+    std::env::var("AGENTSTART_WORKTREE_ID")
+        .ok()
+        .filter(|value| !value.is_empty())
+        .ok_or(LayoutCommandError::MissingFlag("--worktree"))
+}
+
+fn optional_flag(args: &[OsString], name: &str) -> Option<String> {
     read_flag(args, name)
         .and_then(OsStr::to_str)
         .filter(|value| !value.is_empty())
         .map(str::to_owned)
-        .ok_or(LayoutCommandError::MissingFlag(name))
+}
+
+fn required_flag(args: &[OsString], name: &'static str) -> Result<String, LayoutCommandError> {
+    optional_flag(args, name).ok_or(LayoutCommandError::MissingFlag(name))
 }
 
 fn read_flag<'a>(args: &'a [OsString], name: &str) -> Option<&'a OsStr> {

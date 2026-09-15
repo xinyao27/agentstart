@@ -11,14 +11,16 @@ const FIELDS: &[&str] = &[
     "workspacePanelOpen",
     "workspacePanelTab",
     "workspacePanelExplorerView",
+    "workspacePanelWidth",
     // Why: older extension bundles can remain connected during a rolling
     // reload. Accept their wire names and normalize them before persistence.
     "rightSidebarOpen",
     "rightSidebarTab",
     "rightSidebarExplorerView",
     // Why: accepted so a rolling reload's older bundle is not rejected as an unknown key, and
-    // deliberately not canonicalized. The workspace panel persists no width, and mapping this
-    // name onto `sidebarWidth` overwrote the left navigation width with the old right panel's.
+    // deliberately not canonicalized. The retired right panel's width does not carry onto
+    // `workspacePanelWidth`, and mapping this name onto `sidebarWidth` overwrote the left
+    // navigation width with the old right panel's.
     "rightSidebarWidth",
     "markdownTocPanelWidth",
     "groupBy",
@@ -146,6 +148,7 @@ fn parse_field(field: &str, value: &Value, path: &[Value], issues: &mut Issues) 
         "workspaceHostScope" => parse_string(value, path, issues),
         "sidebarWidth"
         | "markdownTocPanelWidth"
+        | "workspacePanelWidth"
         | "uiZoomLevel"
         | "editorFontZoomLevel"
         | "browserDefaultZoomLevel"

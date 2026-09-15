@@ -47,6 +47,7 @@ impl ScriptProvider {
         match method {
             "handshake" => self.capabilities().await,
             "listApps" => self.list_apps().await,
+            "openApp" => self.open_app(&body).await,
             "listWindows" => self.list_windows(&body).await,
             "getAppState" => self.snapshot(&body).await,
             "click"
@@ -83,6 +84,11 @@ impl ScriptProvider {
         })?;
         self.capabilities = Some(capabilities.clone());
         Ok(capabilities)
+    }
+
+    async fn open_app(&self, body: &Value) -> Result<Value, ComputerError> {
+        let app = required_string(body, "app")?;
+        self.bridge(json!({ "tool": "open_app", "app": app })).await
     }
 
     async fn list_apps(&self) -> Result<Value, ComputerError> {

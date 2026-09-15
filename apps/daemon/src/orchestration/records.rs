@@ -310,15 +310,19 @@ pub(crate) fn list_messages(
     });
     let types_json = serde_json::to_string(types)
         .map_err(|error| OrchestrationError::domain("encoding_failed", error.to_string()))?;
+    let limit_value = i64::try_from(limit).unwrap_or(i64::MAX);
+    // Why: rusqlite rejects a named parameter the statement never mentions, so the binding list
+    // has to track the clauses that were actually added rather than always naming both filters.
+    let mut values: Vec<(&str, &dyn rusqlite::ToSql)> = Vec::new();
+    if let Some(to) = to.as_ref() {
+        values.push((":to", to));
+    }
+    if !types.is_empty() {
+        values.push((":types", &types_json));
+    }
+    values.push((":limit", &limit_value));
     let mut statement = connection.prepare(&sql)?;
-    let rows = statement.query_map(
-        rusqlite::named_params! {
-            ":to": to,
-            ":types": types_json,
-            ":limit": i64::try_from(limit).unwrap_or(i64::MAX),
-        },
-        message_row,
-    )?;
+    let rows = statement.query_map(values.as_slice(), message_row)?;
     rows.collect::<Result<Vec<_>, _>>().map_err(Into::into)
 }
 

@@ -14,7 +14,9 @@ mod events;
 mod host;
 mod install;
 mod layout;
+mod memory;
 mod mobile;
+mod orchestration;
 mod repo;
 mod restart_parent;
 mod service;
@@ -34,7 +36,7 @@ pub(crate) use service::{
 pub(crate) const RESTART_PARENT_ENV: &str = "AGENTSTART_RESTART_PARENT_PID";
 const CODEX_GRANT_ENTRY_COMMAND: &str = "__agentstart-codex-grant-entry";
 const WARP_THEME_PARSE_ENTRY_COMMAND: &str = "__agentstart-warp-theme-parse-entry";
-const CLI_USAGE: &str = "Usage: agentstart <install|status|service|connection|events|host|environment|repo|worktree|layout|terminal|agent|browser|computer|mobile|skills|update|daemon|native-messaging> [options]";
+const CLI_USAGE: &str = "Usage: agentstart <install|status|service|connection|events|host|environment|repo|worktree|layout|memory|terminal|agent|browser|computer|orchestration|mobile|skills|update|daemon|native-messaging> [options]";
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum InternalCommand {
@@ -132,15 +134,6 @@ async fn run_cli(args: &[OsString]) -> ExitCode {
     if args.first().and_then(|argument| argument.to_str()) == Some("update") {
         return update::run(&args[1..]).await;
     }
-    if browser::is_command(args) {
-        return match browser::run(args).await {
-            Ok(()) => ExitCode::SUCCESS,
-            Err(error) => {
-                eprintln!("AgentStart command failed: {error}");
-                ExitCode::FAILURE
-            }
-        };
-    }
     match args.first().and_then(|argument| argument.to_str()) {
         Some("install") => match install::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
@@ -212,6 +205,13 @@ async fn run_cli(args: &[OsString]) -> ExitCode {
                 ExitCode::FAILURE
             }
         },
+        Some("memory") => match memory::run(&args[1..]).await {
+            Ok(()) => ExitCode::SUCCESS,
+            Err(error) => {
+                eprintln!("AgentStart command failed: {error}");
+                ExitCode::FAILURE
+            }
+        },
         Some("layout") => match layout::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
@@ -227,6 +227,20 @@ async fn run_cli(args: &[OsString]) -> ExitCode {
             }
         },
         Some("computer") => match computer::run(&args[1..]).await {
+            Ok(()) => ExitCode::SUCCESS,
+            Err(error) => {
+                eprintln!("AgentStart command failed: {error}");
+                ExitCode::FAILURE
+            }
+        },
+        Some("orchestration") => match orchestration::run(&args[1..]).await {
+            Ok(()) => ExitCode::SUCCESS,
+            Err(error) => {
+                eprintln!("AgentStart command failed: {error}");
+                ExitCode::FAILURE
+            }
+        },
+        Some("browser") => match browser::run(&args[1..]).await {
             Ok(()) => ExitCode::SUCCESS,
             Err(error) => {
                 eprintln!("AgentStart command failed: {error}");

@@ -9,9 +9,11 @@ use std::path::PathBuf;
 use std::time::Duration;
 
 use agentstart_protocol::method_metadata::methods::{
+    AgentStartRuntimeV1BrowserHostServiceCapabilities as CapabilitiesMethod,
     AgentStartRuntimeV1BrowserHostServiceDownload as DownloadMethod,
     AgentStartRuntimeV1BrowserHostServiceExecute as ExecuteMethod,
 };
+use agentstart_protocol::runtime::v1::BrowserServiceCapabilitiesRequest as CapabilitiesRequest;
 use agentstart_protocol::runtime::v1::download_response::Event;
 use thiserror::Error;
 
@@ -53,18 +55,16 @@ pub(super) enum BrowserCommandError {
     Unicode,
 }
 
-pub(super) fn is_command(args: &[OsString]) -> bool {
-    args.first()
-        .and_then(|value| value.to_str())
-        .is_some_and(help::is_root)
-}
-
 pub(super) async fn run(args: &[OsString]) -> Result<(), BrowserCommandError> {
     let args = input::BrowserArgs::new(args)?;
     let command = args.command_path();
-    if args.has("help") || args.has_short_help() {
-        help::print(&command)?;
-        return Ok(());
+    if command.is_empty() || args.has("help") || args.has_short_help() {
+        return if help::is_command(&command) {
+            help::print(&command)
+        } else {
+            help::print_root();
+            Ok(())
+        };
     }
     if !help::is_command(&command) {
         return Err(BrowserCommandError::CommandUnsupported(command));
@@ -72,6 +72,8 @@ pub(super) async fn run(args: &[OsString]) -> Result<(), BrowserCommandError> {
     let peer = connect(&args).await?;
     let result = if command == "download" {
         run_download(&peer, &args).await
+    } else if command == "capabilities" {
+        run_capabilities(&peer, &args).await
     } else {
         run_execute(&peer, &args, &command).await
     };
@@ -118,6 +120,16 @@ async fn run_execute(
         .unary::<ExecuteMethod>(&request, COMMAND_TIMEOUT)
         .await?;
     output::write(command, response, args)
+}
+
+async fn run_capabilities(
+    peer: &LocalProtocolClient,
+    args: &input::BrowserArgs,
+) -> Result<(), BrowserCommandError> {
+    let response = peer
+        .unary::<CapabilitiesMethod>(&CapabilitiesRequest {}, COMMAND_TIMEOUT)
+        .await?;
+    output::write_capabilities(args, &response)
 }
 
 async fn run_download(

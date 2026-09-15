@@ -37,8 +37,8 @@ pub(in crate::rpc) async fn screencast(
             authority_id.clone(),
             RequestCommand::Viewport(ViewportCommand {
                 target: request.target.clone(),
-                width,
-                height,
+                width: Some(width),
+                height: Some(height),
                 device_scale_factor: request.device_scale_factor,
                 mobile: request.mobile,
             }),

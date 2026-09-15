@@ -201,7 +201,7 @@ pub(in crate::rpc) fn mutation(value: &Value) -> Option<ProtocolMutation> {
     })
 }
 
-pub(in crate::rpc) fn task_status(value: &str) -> OrchestrationTaskStatus {
+pub(crate) fn task_status(value: &str) -> OrchestrationTaskStatus {
     match value {
         "pending" => OrchestrationTaskStatus::Pending,
         "ready" => OrchestrationTaskStatus::Ready,
@@ -213,9 +213,7 @@ pub(in crate::rpc) fn task_status(value: &str) -> OrchestrationTaskStatus {
     }
 }
 
-pub(in crate::rpc) fn task_status_str(
-    value: OrchestrationTaskStatus,
-) -> Result<&'static str, Status> {
+pub(crate) fn task_status_str(value: OrchestrationTaskStatus) -> Result<&'static str, Status> {
     match value {
         OrchestrationTaskStatus::Pending => Ok("pending"),
         OrchestrationTaskStatus::Ready => Ok("ready"),
@@ -227,7 +225,7 @@ pub(in crate::rpc) fn task_status_str(
     }
 }
 
-pub(in crate::rpc) fn dispatch_status(value: &str) -> OrchestrationDispatchStatus {
+pub(crate) fn dispatch_status(value: &str) -> OrchestrationDispatchStatus {
     match value {
         "pending" => OrchestrationDispatchStatus::Pending,
         "dispatched" => OrchestrationDispatchStatus::Dispatched,
@@ -238,7 +236,18 @@ pub(in crate::rpc) fn dispatch_status(value: &str) -> OrchestrationDispatchStatu
     }
 }
 
-pub(in crate::rpc) fn gate_status(value: &str) -> OrchestrationGateStatus {
+pub(crate) fn dispatch_status_str(value: OrchestrationDispatchStatus) -> Option<&'static str> {
+    match value {
+        OrchestrationDispatchStatus::Pending => Some("pending"),
+        OrchestrationDispatchStatus::Dispatched => Some("dispatched"),
+        OrchestrationDispatchStatus::Completed => Some("completed"),
+        OrchestrationDispatchStatus::Failed => Some("failed"),
+        OrchestrationDispatchStatus::CircuitBroken => Some("circuit_broken"),
+        OrchestrationDispatchStatus::Unspecified => None,
+    }
+}
+
+pub(crate) fn gate_status(value: &str) -> OrchestrationGateStatus {
     match value {
         "pending" => OrchestrationGateStatus::Pending,
         "resolved" => OrchestrationGateStatus::Resolved,
@@ -247,7 +256,7 @@ pub(in crate::rpc) fn gate_status(value: &str) -> OrchestrationGateStatus {
     }
 }
 
-pub(in crate::rpc) fn gate_status_str(value: OrchestrationGateStatus) -> Option<&'static str> {
+pub(crate) fn gate_status_str(value: OrchestrationGateStatus) -> Option<&'static str> {
     match value {
         OrchestrationGateStatus::Pending => Some("pending"),
         OrchestrationGateStatus::Resolved => Some("resolved"),
@@ -265,7 +274,7 @@ pub(in crate::rpc) fn question_status(value: &str) -> OrchestrationQuestionStatu
     }
 }
 
-pub(in crate::rpc) fn message_type(value: &str) -> OrchestrationMessageType {
+pub(crate) fn message_type(value: &str) -> OrchestrationMessageType {
     match value {
         "status" => OrchestrationMessageType::Status,
         "dispatch" => OrchestrationMessageType::Dispatch,
@@ -280,7 +289,7 @@ pub(in crate::rpc) fn message_type(value: &str) -> OrchestrationMessageType {
     }
 }
 
-pub(in crate::rpc) fn message_type_str(value: OrchestrationMessageType) -> Option<&'static str> {
+pub(crate) fn message_type_str(value: OrchestrationMessageType) -> Option<&'static str> {
     match value {
         OrchestrationMessageType::Status => Some("status"),
         OrchestrationMessageType::Dispatch => Some("dispatch"),
@@ -295,9 +304,7 @@ pub(in crate::rpc) fn message_type_str(value: OrchestrationMessageType) -> Optio
     }
 }
 
-pub(in crate::rpc) fn message_priority_str(
-    value: OrchestrationMessagePriority,
-) -> Option<&'static str> {
+pub(crate) fn message_priority_str(value: OrchestrationMessagePriority) -> Option<&'static str> {
     match value {
         OrchestrationMessagePriority::Normal => Some("normal"),
         OrchestrationMessagePriority::High => Some("high"),
@@ -306,7 +313,7 @@ pub(in crate::rpc) fn message_priority_str(
     }
 }
 
-pub(in crate::rpc) fn message_priority(value: &str) -> OrchestrationMessagePriority {
+pub(crate) fn message_priority(value: &str) -> OrchestrationMessagePriority {
     match value {
         "normal" => OrchestrationMessagePriority::Normal,
         "high" => OrchestrationMessagePriority::High,
@@ -315,7 +322,7 @@ pub(in crate::rpc) fn message_priority(value: &str) -> OrchestrationMessagePrior
     }
 }
 
-pub(in crate::rpc) fn worker_state(value: &str) -> OrchestrationWorkerState {
+pub(crate) fn worker_state(value: &str) -> OrchestrationWorkerState {
     match value {
         "starting" => OrchestrationWorkerState::Starting,
         "ready" => OrchestrationWorkerState::Ready,
@@ -330,7 +337,22 @@ pub(in crate::rpc) fn worker_state(value: &str) -> OrchestrationWorkerState {
     }
 }
 
-pub(in crate::rpc) fn setup_mode_str(value: OrchestrationWorkerSetupMode) -> Option<&'static str> {
+pub(crate) fn worker_state_str(value: OrchestrationWorkerState) -> Option<&'static str> {
+    match value {
+        OrchestrationWorkerState::Starting => Some("starting"),
+        OrchestrationWorkerState::Ready => Some("ready"),
+        OrchestrationWorkerState::StartUnknown => Some("start_unknown"),
+        OrchestrationWorkerState::Failed => Some("failed"),
+        OrchestrationWorkerState::Succeeded => Some("succeeded"),
+        OrchestrationWorkerState::Stopping => Some("stopping"),
+        OrchestrationWorkerState::StopUnknown => Some("stop_unknown"),
+        OrchestrationWorkerState::Stopped => Some("stopped"),
+        OrchestrationWorkerState::Abandoned => Some("abandoned"),
+        OrchestrationWorkerState::Unspecified => None,
+    }
+}
+
+pub(crate) fn setup_mode_str(value: OrchestrationWorkerSetupMode) -> Option<&'static str> {
     match value {
         OrchestrationWorkerSetupMode::Run => Some("run"),
         OrchestrationWorkerSetupMode::Skip => Some("skip"),
@@ -341,7 +363,7 @@ pub(in crate::rpc) fn setup_mode_str(value: OrchestrationWorkerSetupMode) -> Opt
     }
 }
 
-pub(in crate::rpc) fn setup_mode(value: &str) -> OrchestrationWorkerSetupMode {
+pub(crate) fn setup_mode(value: &str) -> OrchestrationWorkerSetupMode {
     match value {
         "run" => OrchestrationWorkerSetupMode::Run,
         "skip" => OrchestrationWorkerSetupMode::Skip,
@@ -376,9 +398,16 @@ pub(in crate::rpc) fn setup_source_str(
     }
 }
 
-pub(in crate::rpc) fn worker_read_source_str(
-    value: OrchestrationWorkerReadSource,
-) -> Option<&'static str> {
+pub(crate) fn worker_read_source(value: &str) -> OrchestrationWorkerReadSource {
+    match value {
+        "auto" => OrchestrationWorkerReadSource::Auto,
+        "transcript" => OrchestrationWorkerReadSource::Transcript,
+        "terminal" => OrchestrationWorkerReadSource::Terminal,
+        _ => OrchestrationWorkerReadSource::Unspecified,
+    }
+}
+
+pub(crate) fn worker_read_source_str(value: OrchestrationWorkerReadSource) -> Option<&'static str> {
     match value {
         OrchestrationWorkerReadSource::Auto => Some("auto"),
         OrchestrationWorkerReadSource::Transcript => Some("transcript"),

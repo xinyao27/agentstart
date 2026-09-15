@@ -53,6 +53,7 @@ mod preflight;
 mod profiles;
 mod project_groups;
 mod project_host_setups;
+mod project_memory;
 pub mod projects;
 mod provider_usage;
 mod redaction;

@@ -7,14 +7,23 @@ use agentstart_protocol::runtime::v1::{
     ComputerMouseButton, ComputerObserveTarget, ComputerPermissionId, ComputerPoint,
     ComputerScrollDirection, ComputerServiceClickRequest, ComputerServiceDragRequest,
     ComputerServiceGetAppStateRequest, ComputerServiceHotkeyRequest,
-    ComputerServiceListWindowsRequest, ComputerServicePasteTextRequest,
-    ComputerServicePerformSecondaryActionRequest, ComputerServicePermissionsRequest,
-    ComputerServicePressKeyRequest, ComputerServiceScrollRequest, ComputerServiceSetValueRequest,
-    ComputerServiceTypeTextRequest, computer_observe_target, computer_service_click_request,
-    computer_service_drag_request, computer_service_scroll_request,
+    ComputerServiceListWindowsRequest, ComputerServiceOpenAppRequest,
+    ComputerServicePasteTextRequest, ComputerServicePerformSecondaryActionRequest,
+    ComputerServicePermissionsRequest, ComputerServicePressKeyRequest,
+    ComputerServiceScrollRequest, ComputerServiceSetValueRequest, ComputerServiceTypeTextRequest,
+    computer_observe_target, computer_service_click_request, computer_service_drag_request,
+    computer_service_scroll_request,
 };
 
 use super::ComputerCommandError;
+
+pub(super) fn open_app(
+    args: &[OsString],
+) -> Result<ComputerServiceOpenAppRequest, ComputerCommandError> {
+    Ok(ComputerServiceOpenAppRequest {
+        app: required_flag(args, "--app")?,
+    })
+}
 
 pub(super) fn list_windows(
     args: &[OsString],

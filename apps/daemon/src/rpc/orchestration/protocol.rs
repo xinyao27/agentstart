@@ -5,7 +5,7 @@ mod messages;
 mod retired;
 mod runs;
 mod tasks;
-mod values;
+pub(crate) mod values;
 mod workers;
 
 pub(in crate::rpc) use dispatch::{dispatch, dispatch_show};

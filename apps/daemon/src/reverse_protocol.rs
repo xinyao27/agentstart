@@ -63,6 +63,12 @@ impl ReverseProtocolRegistry {
             .is_ok_and(|state| !state.connections.is_empty())
     }
 
+    pub fn web_connection_count(&self) -> i64 {
+        self.inner.read().map_or(0, |state| {
+            i64::try_from(state.connections.len()).unwrap_or(i64::MAX)
+        })
+    }
+
     pub fn has_connection(&self, connection_id: &str) -> bool {
         self.inner.read().is_ok_and(|state| {
             state

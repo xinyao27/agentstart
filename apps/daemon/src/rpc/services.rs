@@ -99,6 +99,7 @@ use super::project::ProjectRpc;
 use super::project_context::ProjectContextRpc;
 use super::project_group::ProjectGroupRpc;
 use super::project_host_setup::ProjectHostSetupRpc;
+use super::project_memory::ProjectMemoryRpc;
 use super::provider_usage::ProviderUsageRpc;
 use super::rate_limit_resume::RateLimitResumeRpc;
 use super::repo::RepoRpc;
@@ -178,6 +179,7 @@ pub(crate) struct SessionServices {
     reverse_protocol: ReverseProtocolRegistry,
     project: ProjectRpc,
     project_context: ProjectContextRpc,
+    project_memory: ProjectMemoryRpc,
     project_group: ProjectGroupRpc,
     project_host_setup: ProjectHostSetupRpc,
     repo: RepoRpc,
@@ -251,6 +253,7 @@ pub(crate) struct SessionServiceInputs {
     pub(crate) reverse_protocol: ReverseProtocolRegistry,
     pub(crate) project_catalog: ProjectCatalog,
     pub(crate) project_context: RemoteProjectResolver,
+    pub(crate) project_memory: crate::project_memory::ProjectMemoryAuthority,
     pub(crate) project_groups: ProjectGroupAuthority,
     pub(crate) project_host_setups: ProjectHostSetupAuthority,
     pub(crate) repositories: RepositoryAuthority,
@@ -423,6 +426,10 @@ impl SessionServices {
 
     pub(super) fn protocol_project_context(&self) -> ProjectContextRpc {
         self.project_context.clone()
+    }
+
+    pub(super) fn protocol_project_memory(&self) -> ProjectMemoryRpc {
+        self.project_memory.clone()
     }
 
     pub(super) fn protocol_notebook(&self) -> NotebookRpc {
@@ -650,6 +657,7 @@ impl SessionServices {
             reverse_protocol,
             project_catalog,
             project_context,
+            project_memory,
             project_groups,
             project_host_setups,
             repositories,
@@ -772,6 +780,7 @@ impl SessionServices {
             reverse_protocol,
             project: ProjectRpc::new(project_catalog.clone()),
             project_context: ProjectContextRpc::new(project_context),
+            project_memory: ProjectMemoryRpc::new(project_memory),
             project_group: ProjectGroupRpc::new(project_groups),
             project_host_setup: ProjectHostSetupRpc::new(project_host_setups.clone()),
             repo: RepoRpc::new(repositories),

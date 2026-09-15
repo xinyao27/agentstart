@@ -12,10 +12,10 @@ use agentstart_protocol::runtime::v1::{
     ComputerScreenshotFailed, ComputerScreenshotMetadata, ComputerScreenshotSkipped,
     ComputerScreenshotStatus, ComputerServiceActionResponse, ComputerServiceCapabilitiesResponse,
     ComputerServiceGetAppStateResponse, ComputerServiceListAppsResponse,
-    ComputerServiceListWindowsResponse, ComputerServicePermissionsResetResponse,
-    ComputerServicePermissionsResponse, ComputerServicePermissionsStatusResponse,
-    ComputerSnapshotData, ComputerSnapshotTruncation, ComputerSurfaceSupport,
-    ComputerUnverifiedReason, ComputerVerifiedProperty, ComputerWindowInfo,
+    ComputerServiceListWindowsResponse, ComputerServiceOpenAppResponse,
+    ComputerServicePermissionsResetResponse, ComputerServicePermissionsResponse,
+    ComputerServicePermissionsStatusResponse, ComputerSnapshotData, ComputerSnapshotTruncation,
+    ComputerSurfaceSupport, ComputerUnverifiedReason, ComputerVerifiedProperty, ComputerWindowInfo,
     ComputerWindowListEntry, ComputerWindowSupport, HostPlatform, computer_action_verification,
     computer_json_value, computer_screenshot_status,
 };
@@ -432,6 +432,13 @@ pub(super) fn capabilities_response(value: &Value) -> ComputerServiceCapabilitie
             dock: flag(section("surfaces"), "dock"),
             menubar: flag(section("surfaces"), "menubar"),
         }),
+    }
+}
+
+pub(super) fn open_app_response(value: &Value) -> ComputerServiceOpenAppResponse {
+    ComputerServiceOpenAppResponse {
+        app: str(Some(value), "app"),
+        launched: value.get("launched").map(listed_app),
     }
 }
 

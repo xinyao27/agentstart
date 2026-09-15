@@ -216,6 +216,9 @@ impl From<MethodId> for Method {
             MethodId::AgentStartRuntimeV1BrowserRuntimeServiceCreateTab => {
                 Self::Browser(browser::Method::BrowserRuntimeServiceCreateTab)
             }
+            MethodId::AgentStartRuntimeV1BrowserHostServiceCapabilities => {
+                Self::Browser(browser::Method::BrowserHostServiceCapabilities)
+            }
             MethodId::AgentStartRuntimeV1BrowserHostServiceExecute => {
                 Self::Browser(browser::Method::BrowserHostServiceExecute)
             }
@@ -287,6 +290,9 @@ impl From<MethodId> for Method {
             }
             MethodId::AgentStartRuntimeV1ComputerServiceCapabilities => {
                 Self::Computer(computer::Method::ComputerServiceCapabilities)
+            }
+            MethodId::AgentStartRuntimeV1ComputerServiceOpenApp => {
+                Self::Computer(computer::Method::ComputerServiceOpenApp)
             }
             MethodId::AgentStartRuntimeV1ComputerServiceListApps => {
                 Self::Computer(computer::Method::ComputerServiceListApps)
@@ -1158,6 +1164,15 @@ impl From<MethodId> for Method {
             }
             MethodId::AgentStartRuntimeV1ProjectContextServiceResolve => {
                 Self::Projects(projects::Method::ProjectContextServiceResolve)
+            }
+            MethodId::AgentStartRuntimeV1ProjectMemoryServiceRead => {
+                Self::Projects(projects::Method::ProjectMemoryServiceRead)
+            }
+            MethodId::AgentStartRuntimeV1ProjectMemoryServiceAppend => {
+                Self::Projects(projects::Method::ProjectMemoryServiceAppend)
+            }
+            MethodId::AgentStartRuntimeV1ProjectMemoryServiceList => {
+                Self::Projects(projects::Method::ProjectMemoryServiceList)
             }
             MethodId::AgentStartRuntimeV1AppControlServiceRecordStartupDiagnostic => {
                 Self::Runtime(runtime::Method::AppControlServiceRecordStartupDiagnostic)

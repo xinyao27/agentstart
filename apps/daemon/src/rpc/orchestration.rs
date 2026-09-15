@@ -1,4 +1,4 @@
-mod protocol;
+pub(in crate::rpc) mod protocol;
 
 use std::collections::BTreeMap;
 

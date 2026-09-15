@@ -694,6 +694,28 @@ def list_windows_response(query):
     return {"app": app_json(app), "windows": [window_json(app, index, window) for index, window in windows_for(app)]}
 
 
+def open_app_response(target):
+    """Launch an app by absolute path or desktop entry id.
+
+    Why: launching is asynchronous everywhere, so this reports the target it asked the desktop
+    to start rather than pretending the app is already on screen - the next call is normally
+    list_windows/get_app_state, which sees it once it registers.
+    """
+    if not target:
+        raise RuntimeError("app not found: empty target")
+    command = ["xdg-open", target] if target.startswith("/") else ["gtk-launch", target]
+    try:
+        subprocess.Popen(
+            command,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+    except OSError as error:
+        raise RuntimeError(f"app_launch_failed: {error}") from error
+    return {"app": target}
+
+
 def handshake_response():
     is_wayland = os.environ.get("XDG_SESSION_TYPE", "").lower() == "wayland"
     has_hotkey = shutil.which("xdotool") is not None and not is_wayland
@@ -988,6 +1010,8 @@ def run_operation(operation):
         return {"ok": True, "apps": list_apps_response()}
     if tool == "list_windows":
         return {"ok": True, **list_windows_response(operation.get("app", ""))}
+    if tool == "open_app":
+        return {"ok": True, **open_app_response(operation.get("app", ""))}
     if tool == "get_app_state":
         return {
             "ok": True,

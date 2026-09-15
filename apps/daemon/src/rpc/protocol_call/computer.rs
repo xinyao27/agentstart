@@ -6,6 +6,7 @@ use super::{
 pub(super) enum Method {
     ComputerServiceCapabilities,
     ComputerServiceListApps,
+    ComputerServiceOpenApp,
     ComputerServicePermissions,
     ComputerServicePermissionsStatus,
     ComputerServicePermissionsReset,
@@ -57,6 +58,11 @@ impl ProtocolRouter {
             }
             Method::ComputerServiceListApps => {
                 computer_protocol::list_apps(&self.computer, request.payload)
+                    .await
+                    .map(ProtocolHandlerResponse::plain)
+            }
+            Method::ComputerServiceOpenApp => {
+                computer_protocol::open_app(&self.computer, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }

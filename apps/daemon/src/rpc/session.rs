@@ -144,6 +144,7 @@ pub(crate) async fn run_session(
         workspace_space: services.protocol_workspace_space(),
         client_events: services.protocol_client_events(),
         project_context: services.protocol_project_context(),
+        project_memory: services.protocol_project_memory(),
         notebook: services.protocol_notebook(),
         external_editor: services.protocol_external_editor(),
         shell_events: services.protocol_shell_events(),

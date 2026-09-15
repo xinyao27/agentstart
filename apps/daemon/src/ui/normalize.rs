@@ -163,6 +163,11 @@ fn normalize_fields(
     );
     set(
         ui,
+        "workspacePanelWidth",
+        bounded_number(source("workspacePanelWidth"), 240.0, 640.0, 320.0),
+    );
+    set(
+        ui,
         "visibleWorkspaceHostIds",
         lists::visible_host_ids(source("visibleWorkspaceHostIds")),
     );

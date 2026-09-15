@@ -1081,6 +1081,14 @@ function Invoke-AgentStartOperation($Operation) {
         $list = Get-AgentStartWindowList $Operation.app
         return [pscustomobject]@{ ok = $true; app = $list.app; windows = @($list.windows) }
     }
+    if ($Operation.tool -eq "open_app") {
+        $target = [string]$Operation.app
+        if ([string]::IsNullOrWhiteSpace($target)) { throw "app not found: empty target" }
+        # Why: launching is asynchronous everywhere, so report the target rather than claiming it
+        # is already on screen - the next call is normally list_windows/get_app_state.
+        Start-Process -FilePath $target | Out-Null
+        return [pscustomobject]@{ ok = $true; app = $target }
+    }
     if ($Operation.tool -eq "get_app_state") {
         return [pscustomobject]@{ ok = $true; snapshot = New-AgentStartSnapshot $Operation.app $includeScreenshot $Operation.windowId $Operation.windowIndex ([bool]$Operation.restoreWindow) }
     }

@@ -14,6 +14,7 @@ use agentstart_protocol::method_metadata::methods::{
     AgentStartRuntimeV1ComputerServiceHotkey as HotkeyMethod,
     AgentStartRuntimeV1ComputerServiceListApps as ListAppsMethod,
     AgentStartRuntimeV1ComputerServiceListWindows as ListWindowsMethod,
+    AgentStartRuntimeV1ComputerServiceOpenApp as OpenAppMethod,
     AgentStartRuntimeV1ComputerServicePasteText as PasteTextMethod,
     AgentStartRuntimeV1ComputerServicePerformSecondaryAction as PerformSecondaryActionMethod,
     AgentStartRuntimeV1ComputerServicePermissions as PermissionsMethod,
@@ -33,7 +34,7 @@ use thiserror::Error;
 use crate::transport::{LocalProtocolClient, ProtocolPeerError};
 
 const CALL_TIMEOUT: Duration = Duration::from_secs(30);
-const COMPUTER_USAGE: &str = "Usage: agentstart computer <capabilities|list-apps|permissions|permissions-status|permissions-reset|list-windows|get-app-state|click|perform-secondary-action|scroll|drag|type-text|press-key|hotkey|paste-text|set-value> [options]";
+const COMPUTER_USAGE: &str = "Usage: agentstart computer <capabilities|list-apps|open-app|permissions|permissions-status|permissions-reset|list-windows|get-app-state|click|perform-secondary-action|scroll|drag|type-text|press-key|hotkey|paste-text|set-value> [options]";
 
 #[derive(Debug, Error)]
 pub(super) enum ComputerCommandError {
@@ -108,6 +109,7 @@ async fn run_action(
     match args.first().and_then(|value| value.to_str()) {
         Some("capabilities") => capabilities(peer, json_mode).await,
         Some("list-apps") => list_apps(peer, json_mode).await,
+        Some("open-app") => open_app(peer, args, json_mode).await,
         Some("permissions") => permissions(peer, args, json_mode).await,
         Some("permissions-status") => permissions_status(peer, json_mode).await,
         Some("permissions-reset") => permissions_reset(peer, json_mode).await,
@@ -160,6 +162,20 @@ async fn list_apps(
             .join("\n")
     };
     output::write_output(json_mode, output::list_apps_json(&response), &summary);
+    Ok(())
+}
+
+async fn open_app(
+    peer: &LocalProtocolClient,
+    args: &[OsString],
+    json_mode: bool,
+) -> Result<(), ComputerCommandError> {
+    let response = unary::<OpenAppMethod>(peer, &request::open_app(args)?).await?;
+    let summary = match &response.launched {
+        Some(app) => format!("{}\tpid:{}", app.name, app.pid),
+        None => format!("{}\tstarting", response.app),
+    };
+    output::write_output(json_mode, output::open_app_json(&response), &summary);
     Ok(())
 }
 

@@ -9,6 +9,7 @@ pub(super) fn ui() -> Map<String, Value> {
             ("workspacePanelOpen", json!(false)),
             ("workspacePanelTab", json!("explorer")),
             ("workspacePanelExplorerView", json!("files")),
+            ("workspacePanelWidth", json!(320)),
             ("markdownTocPanelWidth", json!(240)),
             ("groupBy", json!("repo")),
             ("sortBy", json!("recent")),

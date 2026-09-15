@@ -28,6 +28,27 @@ pub(super) fn write(
     Ok(())
 }
 
+pub(super) fn write_capabilities(
+    args: &BrowserArgs,
+    response: &browser::BrowserServiceCapabilitiesResponse,
+) -> Result<(), BrowserCommandError> {
+    if args.has("json") {
+        println!(
+            "{}",
+            serde_json::to_string(&json!({
+                "available": response.available,
+                "backend": response.backend,
+                "hosts": response.hosts,
+            }))?
+        );
+    } else if response.available {
+        println!("{}\thosts={}", response.backend, response.hosts);
+    } else {
+        println!("no browser host connected");
+    }
+    Ok(())
+}
+
 pub(super) fn write_download(
     path: &str,
     _byte_length: u32,

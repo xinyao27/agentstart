@@ -8,6 +8,7 @@ pub(super) enum Method {
     BrowserCliServiceResolveTarget,
     BrowserCliServiceResolveUpload,
     BrowserRuntimeServiceCreateTab,
+    BrowserHostServiceCapabilities,
     BrowserHostServiceExecute,
     BrowserHostServiceDownload,
     LocalDownloadServiceAppendFileChunk,
@@ -53,6 +54,11 @@ impl ProtocolRouter {
             }
             Method::BrowserRuntimeServiceCreateTab => {
                 browser_protocol::create_tab(&self.browser, request.payload, context)
+                    .await
+                    .map(ProtocolHandlerResponse::plain)
+            }
+            Method::BrowserHostServiceCapabilities => {
+                browser_protocol::capabilities(&self.browser, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }

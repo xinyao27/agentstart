@@ -2,6 +2,7 @@
 mod agent_context;
 mod workers;
 
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -65,6 +66,7 @@ pub(crate) struct OrchestrationAuthority {
     pub(super) store: OrchestrationStore,
     pub(super) terminals: TerminalSessionAuthority,
     pub(super) worktrees: WorktreeCatalog,
+    pub(super) project_memory: crate::project_memory::ProjectMemoryAuthority,
     revision: Arc<watch::Sender<u64>>,
 }
 
@@ -73,6 +75,7 @@ impl OrchestrationAuthority {
         store: OrchestrationStore,
         terminals: TerminalSessionAuthority,
         worktrees: WorktreeCatalog,
+        project_memory: crate::project_memory::ProjectMemoryAuthority,
         runtime_epoch: String,
     ) -> Self {
         let (revision, _) = watch::channel(0);
@@ -81,6 +84,7 @@ impl OrchestrationAuthority {
             store,
             terminals,
             worktrees,
+            project_memory,
             revision: Arc::new(revision),
         }
     }
@@ -254,6 +258,17 @@ impl OrchestrationAuthority {
             format!("{}:{}", terminal.summary.tab_id, terminal.summary.leaf_id),
             terminal.transport_generation,
         ))
+    }
+
+    /// The project memory file a terminal's agent should read, when its worktree resolves.
+    async fn memory_path_for_handle(&self, handle: &str) -> Option<PathBuf> {
+        let terminal = self.terminals.show(handle).ok()?;
+        let worktree = self
+            .worktrees
+            .resolve_managed(&format!("id:{}", terminal.summary.worktree_id))
+            .await
+            .ok()?;
+        Some(self.project_memory.path_for_project(&worktree.repo_id))
     }
 
     async fn resolve_run(
@@ -709,12 +724,25 @@ impl OrchestrationAuthority {
             ));
         }
         let task_spec = value_string(&task, "spec").unwrap_or_default();
+        let memory_path = self
+            .memory_path_for_handle(to.as_deref().unwrap_or(&from))
+            .await;
         if dry_run {
             return Ok(json!({
                 "dispatch": null,
                 "dryRun": true,
                 "injected": false,
-                "preamble": dispatch_preamble(&task_id, "ctx_dryrun", &task_spec, &from, to.as_deref().unwrap_or("worker"), None, dev_mode),
+                "preamble": DispatchPreamble {
+                    memory_path: memory_path.as_deref(),
+                    task_id: &task_id,
+                    dispatch_id: "ctx_dryrun",
+                    spec: &task_spec,
+                    coordinator: &from,
+                    worker: to.as_deref().unwrap_or("worker"),
+                    capability: None,
+                    dev_mode,
+                }
+                .render(),
             }));
         }
         let to =
@@ -805,15 +833,17 @@ impl OrchestrationAuthority {
             })
             .await?;
         let dispatch_id = value_string(&output, "id").unwrap_or_default();
-        let preamble = dispatch_preamble(
-            &task_id,
-            &dispatch_id,
-            &task_spec,
-            &from,
-            &to,
-            capability.as_deref(),
+        let preamble = DispatchPreamble {
+            memory_path: memory_path.as_deref(),
+            task_id: &task_id,
+            dispatch_id: &dispatch_id,
+            spec: &task_spec,
+            coordinator: &from,
+            worker: &to,
+            capability: capability.as_deref(),
             dev_mode,
-        );
+        }
+        .render();
         let mut injected = false;
         if inject {
             let result = self
@@ -869,6 +899,7 @@ impl OrchestrationAuthority {
         let show_preamble = input.get("preamble").and_then(Value::as_bool) == Some(true);
         let from = string(&input, "from").unwrap_or_else(|| "coordinator".to_owned());
         let dev_mode = input.get("devMode").and_then(Value::as_bool) == Some(true);
+        let memory_path = self.memory_path_for_handle(&from).await;
         self.store
             .execute(move |connection| {
                 let dispatch = latest_dispatch_for_task(connection, &task_id)?;
@@ -876,7 +907,10 @@ impl OrchestrationAuthority {
                     return Ok(json!({ "dispatch": dispatch }));
                 }
                 let task = find_task(connection, &task_id)?.ok_or_else(|| {
-                    OrchestrationError::domain("task_not_found", format!("Task {task_id} was not found."))
+                    OrchestrationError::domain(
+                        "task_not_found",
+                        format!("Task {task_id} was not found."),
+                    )
                 })?;
                 let worker = dispatch
                     .as_ref()
@@ -888,7 +922,17 @@ impl OrchestrationAuthority {
                     .unwrap_or_else(|| "ctx_preview".to_owned());
                 Ok(json!({
                     "dispatch": dispatch,
-                    "preamble": dispatch_preamble(&task_id, &dispatch_id, &value_string(&task, "spec").unwrap_or_default(), &from, &worker, None, dev_mode),
+                    "preamble": DispatchPreamble {
+                        memory_path: memory_path.as_deref(),
+                        task_id: &task_id,
+                        dispatch_id: &dispatch_id,
+                        spec: &value_string(&task, "spec").unwrap_or_default(),
+                        coordinator: &from,
+                        worker: &worker,
+                        capability: None,
+                        dev_mode,
+                    }
+                    .render(),
                 }))
             })
             .await
@@ -2169,33 +2213,61 @@ fn abbreviate_task(task: &mut Value) {
     }
 }
 
-fn dispatch_preamble(
-    task_id: &str,
-    dispatch_id: &str,
-    spec: &str,
-    coordinator: &str,
-    worker: &str,
-    capability: Option<&str>,
+/// Everything a dispatch preamble is rendered from. Grouped rather than passed positionally so
+/// the signature reads as a description of the preamble instead of a parameter list.
+struct DispatchPreamble<'a> {
+    memory_path: Option<&'a Path>,
+    task_id: &'a str,
+    dispatch_id: &'a str,
+    spec: &'a str,
+    coordinator: &'a str,
+    worker: &'a str,
+    capability: Option<&'a str>,
     dev_mode: bool,
-) -> String {
-    let cli = if dev_mode {
-        "pnpm agentstart"
-    } else {
-        "agentstart"
-    };
-    let capability = capability
-        .map(|value| format!(" --dispatch-capability {value}"))
-        .unwrap_or_default();
-    format!(
-        "You are working inside AgentStart, a multi-agent IDE. You are a dispatched worker.\n\
+}
+
+impl DispatchPreamble<'_> {
+    fn render(&self) -> String {
+        let DispatchPreamble {
+            memory_path,
+            task_id,
+            dispatch_id,
+            spec,
+            coordinator,
+            worker,
+            capability,
+            dev_mode,
+        } = *self;
+        let cli = if dev_mode {
+            "pnpm agentstart"
+        } else {
+            "agentstart"
+        };
+        let capability = capability
+            .map(|value| format!(" --dispatch-capability {value}"))
+            .unwrap_or_default();
+        // Why: the shared context lives in one file per project, and an agent that has to guess
+        // its path will not read it. Naming the file keeps the preamble short — inlining the
+        // notes would type them into the agent's input box through `send_guarded`.
+        let memory = memory_path.map_or_else(String::new, |path| {
+            format!(
+                "Your project's shared memory is at {memory} — read it before you start, and record\n\
+what the next agent should know with:\n  \
+{cli} memory append --section \"<heading>\" --text \"<finding>\"\n\n",
+                memory = path.display()
+            )
+        });
+        format!(
+            "You are working inside AgentStart, a multi-agent IDE. You are a dispatched worker.\n\
 Your coordinator's terminal handle is: {coordinator}\n\
 Your task ID is: {task_id}\n\n\
-You talk to the coordinator only through the AgentStart CLI. Never use AskUserQuestion.\n\
+{memory}You talk to the coordinator only through the AgentStart CLI. Never use AskUserQuestion.\n\
 Report the outcome exactly once with:\n  {cli} orchestration send --from {worker}{capability} \\\n    --type worker_done --subject \"<short status>\" \\\n    --body \"<3-sentence summary: what you did, what you found, what's left>\" \\\n    --task-id {task_id} --dispatch-id {dispatch_id} --outcome succeeded\n\n\
 Send a heartbeat every 5 minutes while working:\n  {cli} orchestration send --from {worker}{capability} \\\n    --type heartbeat --subject alive --task-id {task_id} --dispatch-id {dispatch_id}\n\n\
 Ask the coordinator through:\n  {cli} orchestration ask --from {worker}{capability} --question \"<question>\" --timeout-ms 600000\n\n\
 After worker_done, stop work and return to an idle prompt.\n\n=== TASK ===\n{spec}"
-    )
+        )
+    }
 }
 
 fn random_capability() -> Result<String, OrchestrationError> {

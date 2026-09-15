@@ -1,8 +1,8 @@
 use super::{
     ProtocolCallContext, ProtocolHandlerOutcome, ProtocolHandlerResponse, ProtocolRequest,
     ProtocolRouter, folder_workspace_protocol, project_context_protocol, project_group_protocol,
-    project_host_setup_protocol, project_protocol, repo_host_protocol, repo_mutations,
-    repo_presets, repo_protocol, repository_refs_protocol,
+    project_host_setup_protocol, project_memory_protocol, project_protocol, repo_host_protocol,
+    repo_mutations, repo_presets, repo_protocol, repository_refs_protocol,
 };
 
 pub(super) enum Method {
@@ -53,6 +53,9 @@ pub(super) enum Method {
     ProjectServiceList,
     ProjectServiceUpdate,
     ProjectContextServiceResolve,
+    ProjectMemoryServiceRead,
+    ProjectMemoryServiceAppend,
+    ProjectMemoryServiceList,
 }
 
 impl ProtocolRouter {
@@ -287,6 +290,21 @@ impl ProtocolRouter {
             }
             Method::ProjectContextServiceResolve => {
                 project_context_protocol::resolve(&self.project_context, request.payload)
+                    .await
+                    .map(ProtocolHandlerResponse::plain)
+            }
+            Method::ProjectMemoryServiceRead => {
+                project_memory_protocol::read(&self.project_memory, request.payload)
+                    .await
+                    .map(ProtocolHandlerResponse::plain)
+            }
+            Method::ProjectMemoryServiceAppend => {
+                project_memory_protocol::append(&self.project_memory, request.payload)
+                    .await
+                    .map(ProtocolHandlerResponse::plain)
+            }
+            Method::ProjectMemoryServiceList => {
+                project_memory_protocol::list(&self.project_memory, request.payload)
                     .await
                     .map(ProtocolHandlerResponse::plain)
             }

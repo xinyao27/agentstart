@@ -12,11 +12,12 @@ use agentstart_protocol::runtime::v1::{
     ComputerScreenshotEngine, ComputerScreenshotMetadata, ComputerScreenshotStatus,
     ComputerServiceActionResponse, ComputerServiceCapabilitiesResponse,
     ComputerServiceGetAppStateResponse, ComputerServiceListAppsResponse,
-    ComputerServiceListWindowsResponse, ComputerServicePermissionsResetResponse,
-    ComputerServicePermissionsResponse, ComputerServicePermissionsStatusResponse,
-    ComputerSnapshotData, ComputerSnapshotTruncation, ComputerUnverifiedReason,
-    ComputerVerifiedProperty, ComputerWindowInfo, ComputerWindowListEntry, HostPlatform,
-    computer_action_verification, computer_json_value, computer_screenshot_status,
+    ComputerServiceListWindowsResponse, ComputerServiceOpenAppResponse,
+    ComputerServicePermissionsResetResponse, ComputerServicePermissionsResponse,
+    ComputerServicePermissionsStatusResponse, ComputerSnapshotData, ComputerSnapshotTruncation,
+    ComputerUnverifiedReason, ComputerVerifiedProperty, ComputerWindowInfo,
+    ComputerWindowListEntry, HostPlatform, computer_action_verification, computer_json_value,
+    computer_screenshot_status,
 };
 use base64::Engine as _;
 use chrono::{SecondsFormat, Utc};
@@ -111,6 +112,13 @@ pub(super) fn capabilities_json(response: &ComputerServiceCapabilitiesResponse) 
                 "menubar": surfaces.is_some_and(|surfaces| surfaces.menubar),
             },
         }
+    })
+}
+
+pub(super) fn open_app_json(response: &ComputerServiceOpenAppResponse) -> Value {
+    json!({
+        "app": response.app,
+        "launched": response.launched.as_ref().map(listed_app_json),
     })
 }
 
