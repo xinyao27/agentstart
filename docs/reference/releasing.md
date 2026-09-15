@@ -106,8 +106,8 @@ the Web Store API submission does not create or review them.
 
 ## Prepare a release
 
-Start from a clean `main` that exactly matches `origin/main`, with Rust 1.95, Node.js 24, and
-Bun 1.4.0 installed (`prepare` compiles the daemon locally):
+Start from a clean `main` that exactly matches `origin/main`, with Rust 1.95 and Node.js 24
+installed (`prepare` compiles the daemon locally):
 
 ```bash
 pnpm install --frozen-lockfile

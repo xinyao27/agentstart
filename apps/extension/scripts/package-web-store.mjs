@@ -1,15 +1,26 @@
 // Why: Web Store submission needs a deterministic root-level ZIP plus a checksum and structural
 // review gate; the ordinary WXT build intentionally emits only an unpacked extension directory.
+import { spawnSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import { cpSync, mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, utimesSync } from 'node:fs'
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  rmSync,
+  statSync,
+  utimesSync
+} from 'node:fs'
+import { readFile, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join, relative } from 'node:path'
 
 const packageRoot = join(import.meta.dirname, '..')
 const distRoot = join(packageRoot, '.output', 'chrome-mv3')
 const releaseRoot = join(packageRoot, 'release')
-const packageJson = await Bun.file(join(packageRoot, 'package.json')).json()
-const manifest = await Bun.file(join(distRoot, 'manifest.json')).json()
+const packageJson = JSON.parse(await readFile(join(packageRoot, 'package.json'), 'utf8'))
+const manifest = JSON.parse(await readFile(join(distRoot, 'manifest.json'), 'utf8'))
 const initialUpload = process.argv.includes('--initial-upload')
 const expectedExtensionId = 'mfgmfiabfncmdekmikepemddejoeihbf'
 const devIconPaths = new Set([
@@ -47,7 +58,7 @@ for (const required of [
   'manifest.json',
   'side-panel.html'
 ]) {
-  if (!(await Bun.file(join(distRoot, required)).exists())) {
+  if (!existsSync(join(distRoot, required))) {
     throw new Error(`web_store_required_file_missing:${required}`)
   }
 }
@@ -58,9 +69,9 @@ if (initialUpload) {
   // key is adopted only after that item exposes its public key in the Package tab.
   cpSync(distRoot, zipRoot, { recursive: true })
   const uploadManifestPath = join(zipRoot, 'manifest.json')
-  const uploadManifest = await Bun.file(uploadManifestPath).json()
+  const uploadManifest = JSON.parse(await readFile(uploadManifestPath, 'utf8'))
   delete uploadManifest.key
-  await Bun.write(uploadManifestPath, `${JSON.stringify(uploadManifest, null, 2)}\n`)
+  await writeFile(uploadManifestPath, `${JSON.stringify(uploadManifest, null, 2)}\n`)
 }
 
 const files = listFiles(zipRoot).filter((path) => !devIconPaths.has(path))
@@ -86,21 +97,21 @@ const archiveName = `agentstart-extension-${packageJson.version}${initialUpload 
 const archivePath = join(releaseRoot, archiveName)
 rmSync(archivePath, { force: true })
 
-const zip = Bun.spawnSync(['zip', '-X', '-q', archivePath, ...files], {
+const zip = spawnSync('zip', ['-X', '-q', archivePath, ...files], {
   cwd: zipRoot,
   // Why: ZIP stores DOS local timestamps; UTC keeps the same package bytes across developer and CI
   // time zones after the source mtimes above are normalized.
   env: { ...process.env, TZ: 'UTC' },
-  stderr: 'pipe',
-  stdout: 'pipe'
+  encoding: 'utf8',
+  stdio: ['ignore', 'pipe', 'pipe']
 })
-if (zip.exitCode !== 0) {
-  throw new Error(`web_store_zip_failed:${zip.stderr.toString().trim()}`)
+if (zip.status !== 0) {
+  throw new Error(`web_store_zip_failed:${zip.stderr.trim()}`)
 }
-const digest = new Bun.CryptoHasher('sha256')
-  .update(await Bun.file(archivePath).bytes())
+const digest = createHash('sha256')
+  .update(await readFile(archivePath))
   .digest('hex')
-await Bun.write(join(releaseRoot, `${archiveName}.sha256`), `${digest}  ${archiveName}\n`)
+await writeFile(join(releaseRoot, `${archiveName}.sha256`), `${digest}  ${archiveName}\n`)
 if (initialUpload) {
   rmSync(zipRoot, { recursive: true, force: true })
 }

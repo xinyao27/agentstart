@@ -112,10 +112,6 @@ function compareVersions(left, right) {
 }
 
 function assertToolchain() {
-  const bunVersion = captureRequired('bun', ['--version'])
-  if (bunVersion !== '1.4.0') {
-    fail(`Release artifacts require Bun 1.4.0 to match CI; found ${bunVersion}`)
-  }
   const nodeMajor = Number.parseInt(process.versions.node.split('.')[0], 10)
   if (nodeMajor !== 24) {
     fail(`Release commands require Node.js 24; found ${process.versions.node}`)

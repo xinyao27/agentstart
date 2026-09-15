@@ -17,7 +17,7 @@ Thanks for contributing to AgentStart.
 ## Local Setup
 
 The daemon is a Rust crate and the clients are TypeScript and Swift, so a full checkout needs
-Rust 1.95, Node.js 24, pnpm 12.1.0, and Bun 1.4 for the build scripts.
+Rust 1.95, Node.js 24, and pnpm 12.1.0.
 
 ```bash
 pnpm install

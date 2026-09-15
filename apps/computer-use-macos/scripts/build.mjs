@@ -1,4 +1,5 @@
 // Why: SwiftPM emits a binary, while macOS TCC needs a signed helper app with a stable identity.
+import { spawnSync } from 'node:child_process'
 import {
   chmodSync,
   copyFileSync,
@@ -104,14 +105,14 @@ function resolveSigningIdentity() {
   if (explicit) {
     return explicit
   }
-  const result = Bun.spawnSync(['security', 'find-identity', '-v', '-p', 'codesigning'], {
-    stderr: 'ignore',
-    stdout: 'pipe'
+  const result = spawnSync('security', ['find-identity', '-v', '-p', 'codesigning'], {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'ignore']
   })
-  if (result.exitCode !== 0) {
+  if (result.status !== 0) {
     return '-'
   }
-  const identities = result.stdout.toString()
+  const identities = result.stdout
   const development = identities.match(/"([^"]*Apple Development:[^"]+)"/)?.[1]
   const distribution =
     identities.match(/"([^"]*Developer ID Application:[^"]+)"/)?.[1] ??
@@ -122,21 +123,32 @@ function resolveSigningIdentity() {
 }
 
 function run(command) {
-  const result = Bun.spawnSync(command, { stderr: 'inherit', stdout: 'inherit' })
-  if (result.signalCode) {
-    process.kill(process.pid, result.signalCode)
+  const [executable, ...args] = command
+  const result = spawnSync(executable, args, { stdio: 'inherit' })
+  if (result.error) {
+    throw result.error
   }
-  if (result.exitCode !== 0) {
-    process.exit(result.exitCode)
+  if (result.signal) {
+    process.kill(process.pid, result.signal)
+  }
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1)
   }
 }
 
 function output(command) {
-  const result = Bun.spawnSync(command, { stderr: 'inherit', stdout: 'pipe' })
-  if (result.exitCode !== 0) {
-    process.exit(result.exitCode)
+  const [executable, ...args] = command
+  const result = spawnSync(executable, args, {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'inherit']
+  })
+  if (result.error) {
+    throw result.error
   }
-  return result.stdout.toString().trim()
+  if (result.status !== 0) {
+    process.exit(result.status ?? 1)
+  }
+  return result.stdout.trim()
 }
 
 function infoPlist() {

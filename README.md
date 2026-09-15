@@ -77,7 +77,7 @@ Install the mobile app, then pair it directly with the daemon.
 
 ## Develop locally
 
-AgentStart is a pnpm monorepo. Development requires Rust 1.95, Node.js 24, pnpm 12.1.0, and Bun 1.4 for the build scripts.
+AgentStart is a pnpm monorepo. Development requires Rust 1.95, Node.js 24, and pnpm 12.1.0.
 
 ```bash
 pnpm install

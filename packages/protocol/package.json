@@ -75,8 +75,8 @@
     "./cli-values": "./typescript/src/cli-values.ts"
   },
   "scripts": {
-    "build": "buf build && bun scripts/generate-runtime-metadata.mjs",
-    "generate": "buf generate && bun scripts/normalize-typescript-bindings.mjs && bun scripts/generate-method-metadata.mjs",
+    "build": "buf build && node scripts/run-vite-entry.mjs scripts/generate-runtime-metadata.mjs",
+    "generate": "buf generate && node scripts/normalize-typescript-bindings.mjs && node scripts/generate-method-metadata.mjs",
     "lint": "buf lint",
     "typecheck": "tsc -p typescript/tsconfig.json --noEmit"
   },
@@ -87,6 +87,7 @@
   "devDependencies": {
     "@bufbuild/buf": "catalog:",
     "@bufbuild/protoc-gen-es": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
   }
 }
