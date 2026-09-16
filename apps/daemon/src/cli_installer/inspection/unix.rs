@@ -34,23 +34,43 @@ pub(super) async fn inspect(
         }
         Err(error) => return Err(error.into()),
     };
+    // Why: the npm shim, a package manager, and the daemon's own updater install the real
+    // executable as the command, so the command can be the running launcher itself.
+    if is_same_file(command_path, launcher_path).await {
+        return Ok(base_status(
+            context,
+            command_path,
+            launcher_path,
+            CliInstallMethod::Symlink,
+            CliInstallState::Installed,
+            Some(display_path(launcher_path)),
+            format!("Registered at {}.", display_path(command_path)),
+        ));
+    }
     if !metadata.file_type().is_symlink() {
-        if metadata.is_file()
-            && let Some(target) =
-                extract_managed_launcher_target(&fs::read_to_string(command_path).await?)
-        {
-            return Ok(base_status(
-                context,
-                command_path,
-                launcher_path,
-                CliInstallMethod::Symlink,
-                CliInstallState::Stale,
-                Some(target),
-                format!(
-                    "{} contains an older AgentStart launcher.",
-                    display_path(command_path)
-                ),
-            ));
+        if metadata.is_file() {
+            match fs::read_to_string(command_path).await {
+                Ok(contents) => {
+                    if let Some(target) = extract_managed_launcher_target(&contents) {
+                        return Ok(base_status(
+                            context,
+                            command_path,
+                            launcher_path,
+                            CliInstallMethod::Symlink,
+                            CliInstallState::Stale,
+                            Some(target),
+                            format!(
+                                "{} contains an older AgentStart launcher.",
+                                display_path(command_path)
+                            ),
+                        ));
+                    }
+                }
+                // Why: a compiled binary at the command path is not a text launcher; bytes
+                // that are not UTF-8 are a different command, not an installer failure.
+                Err(error) if error.kind() == io::ErrorKind::InvalidData => {}
+                Err(error) => return Err(error.into()),
+            }
         }
         return Ok(base_status(
             context,
@@ -211,5 +231,29 @@ pub(super) async fn is_executable_file(path: &Path) -> bool {
     #[cfg(not(unix))]
     {
         true
+    }
+}
+
+/// Whether the command at `command_path` is the running executable itself rather than a link
+/// or wrapper pointing at it.
+pub(super) async fn is_running_executable(command_path: &Path, launcher_path: &Path) -> bool {
+    let Ok(metadata) = fs::symlink_metadata(command_path).await else {
+        return false;
+    };
+    !metadata.file_type().is_symlink() && is_same_file(command_path, launcher_path).await
+}
+
+async fn is_same_file(left: &Path, right: &Path) -> bool {
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::MetadataExt;
+        let (Ok(left), Ok(right)) = (fs::metadata(left).await, fs::metadata(right).await) else {
+            return false;
+        };
+        left.dev() == right.dev() && left.ino() == right.ino()
+    }
+    #[cfg(not(unix))]
+    {
+        lexical_path(left) == lexical_path(right)
     }
 }

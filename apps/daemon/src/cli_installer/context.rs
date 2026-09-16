@@ -5,6 +5,8 @@ use super::model::{CliInstallMethod, CliInstallerError};
 
 pub(super) const DEVELOPMENT_COMMAND_NAME: &str = "agentstart-dev";
 pub(super) const PRODUCTION_COMMAND_NAME: &str = "agentstart";
+/// The macOS registration directory, which /etc/paths puts on every login shell's PATH.
+pub(super) const DARWIN_SYSTEM_COMMAND_DIRECTORY: &str = "/usr/local/bin";
 
 #[derive(Clone, Copy, Eq, PartialEq)]
 pub(super) enum HostPlatform {
@@ -130,7 +132,7 @@ impl InstallContext {
     }
 
     fn mac_command_path(&self) -> Result<PathBuf, CliInstallerError> {
-        let system_path = PathBuf::from("/usr/local/bin").join(self.command_name);
+        let system_path = PathBuf::from(DARWIN_SYSTEM_COMMAND_DIRECTORY).join(self.command_name);
         if !self.is_production() || system_path.parent().is_some_and(Path::exists) {
             return Ok(system_path);
         }

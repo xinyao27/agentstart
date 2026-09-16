@@ -111,6 +111,16 @@ pub(super) async fn remove_installed(
     command_path: &Path,
     launcher_path: &Path,
 ) -> Result<(), CliInstallerError> {
+    // Why: the command can be the running runtime executable itself (the npm shim, a package
+    // manager, and the daemon's own updater own that binary), and deleting it would break the
+    // daemon instead of unregistering a command.
+    let metadata = fs::symlink_metadata(command_path).await?;
+    if !metadata.file_type().is_symlink() {
+        return Err(CliInstallerError::Refused(format!(
+            "Refusing to remove the AgentStart runtime executable at {}.",
+            display_path(command_path)
+        )));
+    }
     let raw_target = fs::read_link(command_path).await?;
     if resolve_link_target(command_path, &raw_target) != lexical_path(launcher_path) {
         return Err(ownership_changed("remove", command_path));
