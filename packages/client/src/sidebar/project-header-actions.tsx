@@ -9,7 +9,7 @@ const PROJECT_HEADER_ACTIONS_CLASS_NAME = cn(
   // Why: the hover-revealed group paints its own surface over the row, so it
   // needs the same radius as the icon buttons it hosts instead of ending in
   // square corners against the row's accent fill.
-  'can-hover: can-hover:bg-sidebar can-hover:pl-1 can-hover:rounded-md',
+  'can-hover: can-hover:bg-sidebar can-hover:px-1 can-hover:rounded-md',
   'can-hover:pointer-events-none can-hover:opacity-0 can-hover:transition-opacity',
   'group-hover:pointer-events-auto group-hover:opacity-100',
   'has-[:focus-visible]:pointer-events-auto has-[:focus-visible]:opacity-100',
