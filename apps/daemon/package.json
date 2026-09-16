@@ -1,6 +1,6 @@
 {
   "name": "@agentstart/daemon",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "description": "AgentStart runtime daemon, CLI, Native Messaging host, and host adapters",
   "scripts": {
