@@ -8,6 +8,7 @@ import { Shell } from './shell'
 import { faqGraph, productGraph } from './structured-data'
 import { FaqPage } from './ui/faq/page'
 import { Home } from './ui/home'
+import { InstallPage } from './ui/install/page'
 import { PrivacyPage, TermsPage } from './ui/legal/page'
 
 /**
@@ -83,6 +84,14 @@ const homeMeta: RouteMeta = {
     'Open-source AI agent editor IDE. Run Claude Code, Codex, and any CLI agent in isolated git worktrees — on macOS, Windows, Linux, WSL, or SSH. Review and merge from your phone.'
 }
 
+const installMeta: RouteMeta = {
+  path: '/install',
+  file: 'install.html',
+  title: 'Install AgentStart — daemon, Chrome extension, and iOS companion',
+  description:
+    'Install AgentStart on macOS, Linux, or Windows with one command. The installer verifies the release checksum, installs the Rust daemon, registers the Chrome connection, and links the iOS companion.'
+}
+
 const faqMeta: RouteMeta = {
   path: '/faq',
   file: 'faq.html',
@@ -117,6 +126,16 @@ const homeRoute = createRoute({
   })
 })
 
+const installRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/install',
+  component: InstallPage,
+  head: () => ({
+    meta: documentMeta(installMeta),
+    links: documentLinks(installMeta)
+  })
+})
+
 const faqRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/faq',
@@ -147,10 +166,22 @@ const termsRoute = createRoute({
   })
 })
 
-const routeTree = rootRoute.addChildren([homeRoute, faqRoute, privacyRoute, termsRoute])
+const routeTree = rootRoute.addChildren([
+  homeRoute,
+  installRoute,
+  faqRoute,
+  privacyRoute,
+  termsRoute
+])
 
 /** Why: the prerender step needs the list without constructing a router first. */
-export const routeMetas: readonly RouteMeta[] = [homeMeta, faqMeta, privacyMeta, termsMeta]
+export const routeMetas: readonly RouteMeta[] = [
+  homeMeta,
+  installMeta,
+  faqMeta,
+  privacyMeta,
+  termsMeta
+]
 
 export function createAppRouter(history: RouterHistory): ReturnType<typeof createRouter> {
   return createRouter({ routeTree, history })

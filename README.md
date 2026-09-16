@@ -52,9 +52,27 @@ Windows uses PowerShell:
 irm https://agentstart.ai/install.ps1 | iex
 ```
 
-The installer opens the Chrome Web Store listing, waits for the extension to connect, and prints the
-TestFlight link with a scannable code for the iOS companion. Each step has an environment variable;
-`sh install.sh --help` lists them.
+The installer verifies the release checksum, installs the daemon, registers the Chrome Native
+Messaging host, starts the daemon at login, opens the Chrome Web Store listing, waits for the
+extension to connect, and prints the iOS TestFlight link with a scannable code. macOS and Linux run
+on arm64 or x64, Windows on x64. [agentstart.ai/install](https://agentstart.ai/install) walks
+through the whole thing.
+
+| Variable | Effect |
+| --- | --- |
+| `AGENTSTART_INSTALL_DIR` | Where the daemon binary is installed, `~/.local/bin` by default |
+| `AGENTSTART_VERSION` | Release tag to install, or `latest` |
+| `AGENTSTART_EXTENSION_CHANNEL` | `web-store` (default), `unpacked`, or `skip` |
+| `AGENTSTART_SKIP_SERVICE_INSTALL` | `1` installs the binary without touching the login service |
+| `AGENTSTART_NO_MOBILE` | `1` omits the iOS link and code |
+
+`sh install.sh --help` lists the same set. An assignment applies to the command it precedes, so a
+piped install takes it on the right of the pipe:
+`curl -fsSL https://agentstart.ai/install.sh | AGENTSTART_VERSION=0.1.2 sh`.
+
+After installing, `agentstart status` reports the daemon and whether the extension is connected, and
+`agentstart update` moves a binary install to the latest release — it declines for a Homebrew or npm
+install and names the channel to update through instead.
 
 | Piece | Install channel | Who updates it |
 | --- | --- | --- |

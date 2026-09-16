@@ -1,11 +1,5 @@
-import { siteLinks } from '../site-links'
 import { Demo } from './demo/demo'
-
-const productLinks = [
-  { label: 'Rust daemon', href: siteLinks.daemon },
-  { label: 'Chrome extension', href: siteLinks.extension },
-  { label: 'iOS', href: siteLinks.testflight }
-]
+import { InstallSection } from './install/section'
 
 export function Home(): React.JSX.Element {
   return (
@@ -35,32 +29,7 @@ export function Home(): React.JSX.Element {
         iOS.
       </p>
 
-      <div className="flex flex-col gap-3">
-        <p className="max-w-[620px]">Use AgentStart:</p>
-        <div className="border-hairline rounded-card flex w-full items-center justify-between gap-3 border px-4 py-3">
-          <div className="flex min-w-0 items-center gap-5 font-mono text-[14px]">
-            {productLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-                className="text-ink hover:text-accent transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-          <a
-            href={siteLinks.license}
-            target="_blank"
-            rel="noreferrer"
-            className="text-faint hover:text-ink shrink-0 font-mono text-[12px] transition-colors"
-          >
-            MIT
-          </a>
-        </div>
-      </div>
+      <InstallSection />
 
       <Demo />
     </>
