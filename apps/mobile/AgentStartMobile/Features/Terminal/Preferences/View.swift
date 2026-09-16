@@ -88,7 +88,7 @@ struct TerminalSettingsView: View {
         if let failure = autoRestore.loadFailure {
             SettingsSection {
                 Text(failure)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .padding(Theme.Spacing.medium)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -96,7 +96,7 @@ struct TerminalSettingsView: View {
         } else if autoRestore.hosts.isEmpty {
             SettingsSection {
                 Text("No paired daemons yet. Pair one to control terminal behavior.")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .padding(Theme.Spacing.medium)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -123,10 +123,10 @@ struct TerminalSettingsView: View {
                     .frame(width: 20)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(host.name)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                     Text(autoRestore.summary(for: host.id))
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -158,10 +158,10 @@ struct TerminalSettingsView: View {
                         .frame(width: 20)
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Text size")
-                            .font(.system(size: Theme.Typography.supporting))
+                            .font(Theme.Typography.supporting)
                             .foregroundStyle(Theme.Colors.foreground)
                         Text(preferences.textSize.title)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -191,10 +191,10 @@ struct TerminalSettingsView: View {
             } label: {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Reset Defaults")
-                        .font(.system(size: Theme.Typography.supporting, weight: .regular))
+                        .font(Theme.Typography.supporting.weight(.regular))
                         .foregroundStyle(Theme.Colors.foreground)
                     Text("Show every built-in shortcut key in the original order")
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 }
                 .padding(.horizontal, Theme.Spacing.medium)
@@ -209,7 +209,7 @@ struct TerminalSettingsView: View {
         SettingsSection {
             if preferences.customKeys.isEmpty {
                 Text("No custom shortcuts defined yet.")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(Theme.Spacing.medium)
@@ -227,10 +227,10 @@ struct TerminalSettingsView: View {
                 HStack(spacing: Theme.Spacing.small) {
                     VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                         Text("Add Custom Shortcut…")
-                            .font(.system(size: Theme.Typography.supporting, weight: .regular))
+                            .font(Theme.Typography.supporting.weight(.regular))
                             .foregroundStyle(Theme.Colors.foreground)
                         Text("Create key combo or text macro")
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -250,10 +250,10 @@ struct TerminalSettingsView: View {
             TerminalSettingsKeycap(label: key.label)
             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                 Text(verbatim: key.label)
-                    .font(.system(size: Theme.Typography.supporting, weight: .regular))
+                    .font(Theme.Typography.supporting.weight(.regular))
                     .foregroundStyle(Theme.Colors.foreground)
                 Text(verbatim: TerminalCustomKeyBuilder.displayBytes(key))
-                    .font(.system(size: Theme.Typography.code, design: .monospaced))
+                    .font(Theme.Typography.code)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .lineLimit(1)
             }
@@ -307,10 +307,10 @@ private struct TerminalShortcutPreferenceRow: View {
                     Text(key.accessibilityLabel)
                 }
             }
-            // Why: an explicit preference control carries the platform switch tint. Header and
-            // content actions stay neutral; this is a state indicator, not a toolbar action.
-            .tint(Theme.Colors.primary)
-            .font(.system(size: Theme.Typography.primary))
+            // Why: a state control inherits the app's neutral tint. Tinting this one switch with
+            // the brand orange made a preference look like a second primary action on a
+            // settings screen, which is what `primary` is reserved for.
+            .font(Theme.Typography.primary)
 
             TerminalShortcutReorderHandle(
                 payload: key.rawValue,
@@ -331,7 +331,7 @@ private struct TerminalShortcutPreferenceRow: View {
         }
         .background(
             isDropTargeted ? Theme.Colors.mutedForeground.opacity(0.12) : .clear,
-            in: .rect(cornerRadius: 10)
+            in: .rect(cornerRadius: Theme.Radius.control)
         )
         .padding(.leading, 12)
         .frame(minHeight: 56)
@@ -379,17 +379,13 @@ private struct TerminalSettingsKeycap: View {
 
     var body: some View {
         label
-            .font(
-                .system(
-                    size: 12,
-                    weight: .regular,
-                    design: .monospaced
-                )
-            )
+            // Why: the same keycap the shortcut editor draws — pinned code size and the shared
+            // control radius — so the two keycaps cannot drift apart.
+            .font(Theme.Typography.code.weight(.regular))
             .foregroundStyle(Theme.Colors.mutedForeground)
             .padding(.horizontal, 8)
             .padding(.vertical, 5)
             .frame(minWidth: 64)
-            .background(Theme.Colors.keycap, in: .rect(cornerRadius: 8))
+            .background(Theme.Colors.keycap, in: .rect(cornerRadius: Theme.Radius.control))
     }
 }

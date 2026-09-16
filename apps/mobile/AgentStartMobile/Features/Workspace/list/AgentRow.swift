@@ -8,6 +8,19 @@ nonisolated enum WorkspaceAgentDotState: Equatable, Sendable {
     case done
     case idle
     case interrupted
+
+    // Why: the dot is the row's only carrier of this state — a 6pt colored square with no text — so
+    // the wording has to be shared with the row that renders it, not duplicated beside it.
+    var label: LocalizedStringResource {
+        switch self {
+        case .working: "Working"
+        case .blocked: "Blocked"
+        case .waiting: "Waiting for input"
+        case .done: "Done"
+        case .idle: "Idle"
+        case .interrupted: "Interrupted"
+        }
+    }
 }
 
 struct WorkspaceAgentRow: View {
@@ -21,14 +34,14 @@ struct WorkspaceAgentRow: View {
                 WorkspaceAgentIcon(agentID: agentType)
             }
             label
-                .font(.system(size: WorkspaceListMetrics.supportingText))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(
                     isUnvisited ? Theme.Colors.foreground : Theme.Colors.mutedForeground
                 )
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text(relativeTime)
-                .font(.system(size: WorkspaceListMetrics.metadataText))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .lineLimit(1)
             WorkspaceAgentStateDot(state: dotState)
@@ -63,16 +76,7 @@ struct WorkspaceAgentRow: View {
         }
     }
 
-    private var stateLabel: LocalizedStringResource {
-        switch dotState {
-        case .working: "Working"
-        case .blocked: "Blocked"
-        case .waiting: "Waiting for input"
-        case .done: "Done"
-        case .idle: "Idle"
-        case .interrupted: "Interrupted"
-        }
-    }
+    private var stateLabel: LocalizedStringResource { dotState.label }
 
     private var relativeTime: LocalizedStringResource {
         let seconds = max(0, Int(now.timeIntervalSince(agent.stateStartedAt)))
@@ -116,6 +120,9 @@ private struct WorkspaceAgentStateDot: View {
             }
         }
         .frame(width: WorkspaceListMetrics.agentState, height: WorkspaceListMetrics.agentState)
+        // Why: state was carried by color alone, so VoiceOver read past the dot entirely.
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(state.label))
     }
 
     private var dotColor: Color {

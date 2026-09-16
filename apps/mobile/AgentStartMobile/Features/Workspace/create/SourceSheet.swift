@@ -43,7 +43,7 @@ struct WorkspaceSourceSheet: View {
             )
 
             Text("Name or 'Create From'")
-                .font(.system(size: Theme.Typography.primary, weight: .semibold))
+                .font(Theme.Typography.primary.weight(.semibold))
                 .foregroundStyle(Theme.Colors.foreground)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -51,7 +51,7 @@ struct WorkspaceSourceSheet: View {
                 model.useWorkspaceName(model.name)
                 dismiss()
             }
-            .font(.system(size: Theme.Typography.supporting))
+            .font(Theme.Typography.supporting)
             .buttonStyle(.glass)
             .appButtonContext(.inline)
         }
@@ -62,7 +62,7 @@ struct WorkspaceSourceSheet: View {
 
     private var searchField: some View {
         TextField("Type a name or search a source", text: $model.name)
-            .font(.system(size: Theme.Typography.supporting))
+            .font(Theme.Typography.supporting)
             .foregroundStyle(Theme.Colors.foreground)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
@@ -98,7 +98,7 @@ struct WorkspaceSourceSheet: View {
                     size: Theme.Control.inlineIcon
                 )
                 Text(title)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
             }
             .foregroundStyle(
                 mode == value ? Theme.Colors.foreground : Theme.Colors.mutedForeground
@@ -118,12 +118,12 @@ struct WorkspaceSourceSheet: View {
         ContentSurface {
             VStack(alignment: .leading, spacing: Theme.Spacing.small) {
                 Text("This item lives in \(prompt.slug.owner)/\(prompt.slug.repo).")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 HStack(spacing: Theme.Spacing.small) {
                     Spacer(minLength: 0)
                     Button("Cancel") { model.dismissCrossRepoPrompt() }
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .buttonStyle(.glass)
                         .appButtonContext(.inline)
                     Button("Switch to \(prompt.repoName)") {
@@ -131,7 +131,7 @@ struct WorkspaceSourceSheet: View {
                             if await model.acceptCrossRepoSource() { dismiss() }
                         }
                     }
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .appProminentGlassButton()
                     .appButtonContext(.inline)
                 }
@@ -143,7 +143,7 @@ struct WorkspaceSourceSheet: View {
     private var sourceRows: some View {
         if let error = model.sourceError {
             Text(verbatim: error)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.attention)
                 .frame(maxWidth: .infinity, minHeight: 80)
         } else if hasRows {
@@ -176,7 +176,7 @@ struct WorkspaceSourceSheet: View {
                 .frame(maxWidth: .infinity, minHeight: 80)
         } else {
             Text(emptyHint)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .frame(maxWidth: .infinity, minHeight: 80, alignment: .leading)
                 .padding(.horizontal, Theme.Spacing.medium)
@@ -260,18 +260,18 @@ struct WorkspaceSourceSheet: View {
                     .frame(width: Theme.Spacing.large)
                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                     Text(verbatim: title)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                         .lineLimit(1)
                     Text(verbatim: subtitle)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineLimit(1)
                 }
                 Spacer(minLength: 0)
                 if let status {
                     Text(verbatim: status.capitalized)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .padding(.horizontal, Theme.Spacing.small)
                         .padding(.vertical, Theme.Spacing.extraSmall)

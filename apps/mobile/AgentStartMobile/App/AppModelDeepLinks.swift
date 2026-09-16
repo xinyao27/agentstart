@@ -3,17 +3,22 @@ import Foundation
 @MainActor
 extension AppModel {
     func handleOpenURL(_ url: URL) {
-        // Why: a deep link is an explicit navigation request and must not be
-        // hidden behind a notification or activity presentation that belongs
-        // to the previous route.
-        isActivityInsightsPresented = false
+        // Why: a deep link is an explicit navigation request and must not be hidden behind a
+        // notification presentation that belongs to the previous route.
         isNotificationOptInPresented = false
         if isPairingLink(url) {
             do {
-                routes = [.pairConfirm(try PairingCodeDecoder().decode(url.absoluteString))]
+                setRoutes(
+                    [.pairConfirm(try PairingCodeDecoder().decode(url.absoluteString))],
+                    for: .home
+                )
             } catch {
-                routes = [.pairLinkError(hasPairingCode(url) ? .invalidCode : .missingCode)]
+                setRoutes(
+                    [.pairLinkError(hasPairingCode(url) ? .invalidCode : .missingCode)],
+                    for: .home
+                )
             }
+            selectedTab = .home
             return
         }
         guard let deepLink = AppDeepLink(url: url) else { return }
@@ -37,53 +42,49 @@ extension AppModel {
         isNotificationOptInPresented = false
         switch deepLink {
         case .home:
-            routes = []
+            navigate(to: [], in: .home)
+        case .settings:
+            navigate(to: [], in: .settings)
+        case .activityInsights:
+            navigate(to: [.activityInsights], in: .home)
         case .staticRoute(let route):
-            if route == .activityInsights {
-                routes = []
-                isActivityInsightsPresented = true
-            } else {
-                isActivityInsightsPresented = false
-                routes = [route]
-            }
+            navigate(to: [route], in: route.tab)
         case .host(let hostID, let presentation):
-            isActivityInsightsPresented = false
             guard let host = await host(hostID) else { return }
-            routes = [.workspaces(host, presentation)]
+            navigate(to: [.workspaces(host, presentation)], in: .home)
         case .hostDetail(let hostID, let detail):
-            isActivityInsightsPresented = false
             guard let host = await host(hostID) else { return }
             let root = AppRoute.workspaces(host, .standard)
             switch detail {
-            case .accounts: routes = [root, .accounts(host)]
-            case .browser: routes = [root, .browser(host)]
-            case .edit: routes = [root, .editHost(host)]
+            case .accounts: navigate(to: [root, .accounts(host)], in: .home)
+            case .browser: navigate(to: [root, .browser(host)], in: .home)
+            case .edit: navigate(to: [root, .editHost(host)], in: .home)
             }
         case .hostBrowserNewTab(let hostID, let url):
-            isActivityInsightsPresented = false
             guard let host = await host(hostID) else { return }
-            routes = [.workspaces(host, .standard), .browserNewTab(host, url)]
+            navigate(to: [.workspaces(host, .standard), .browserNewTab(host, url)], in: .home)
         case .hostBrowserTab(let hostID, let pageID):
-            isActivityInsightsPresented = false
             guard let host = await host(hostID) else { return }
             // Why: a tab link names only the page. The browser list resolves the title and URL,
             // and the stream's ready event fills the address bar once it attaches.
-            routes = [
-                .workspaces(host, .standard),
-                .browser(host),
-                .browserTab(
-                    host,
-                    BrowserTabSummary(
-                        pageID: pageID,
-                        title: "",
-                        url: "",
-                        isActive: false,
-                        worktreeID: nil
-                    )
-                ),
-            ]
+            navigate(
+                to: [
+                    .workspaces(host, .standard),
+                    .browser(host),
+                    .browserTab(
+                        host,
+                        BrowserTabSummary(
+                            pageID: pageID,
+                            title: "",
+                            url: "",
+                            isActive: false,
+                            worktreeID: nil
+                        )
+                    ),
+                ],
+                in: .home
+            )
         case .workspace(let hostID, let worktreeID, let destination):
-            isActivityInsightsPresented = false
             guard let resolved = await resolveWorkspace(hostID: hostID, worktreeID: worktreeID)
             else {
                 return
@@ -93,19 +94,29 @@ extension AppModel {
             switch destination {
             case .session:
                 dependencies.recentWorkspaceStore.save(host: host, workspace: workspace)
-                routes = [root, .workspaceSession(host, workspace, nil)]
+                navigate(to: [root, .workspaceSession(host, workspace, nil)], in: .home)
             case .files:
-                routes = [root, .files(host, workspace)]
+                navigate(to: [root, .files(host, workspace)], in: .home)
             case .agentHistory:
-                routes = [root, .agentHistory(host, workspace)]
+                navigate(to: [root, .agentHistory(host, workspace)], in: .home)
             case .sourceControl(let tab):
-                routes = [root, .sourceControl(host, workspace, tab)]
+                navigate(to: [root, .sourceControl(host, workspace, tab)], in: .home)
             case .review(let target):
-                routes = [root, .sourceReview(host, workspace, target)]
+                navigate(to: [root, .sourceReview(host, workspace, target)], in: .home)
             case .filePreview(let target):
-                routes = [root, .files(host, workspace), .filePreview(host, workspace, target)]
+                navigate(
+                    to: [root, .files(host, workspace), .filePreview(host, workspace, target)],
+                    in: .home
+                )
             }
         }
+    }
+
+    // Why: a deep link replaces its target tab's history and brings that tab forward. Assigning
+    // both together is what keeps a link from landing in a stack the user cannot see.
+    private func navigate(to routes: [AppRoute], in tab: AppTab) {
+        setRoutes(routes, for: tab)
+        selectedTab = tab
     }
 
     func host(_ id: String) async -> HostProfile? {

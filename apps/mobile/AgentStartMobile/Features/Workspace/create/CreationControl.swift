@@ -3,7 +3,7 @@ import SwiftUI
 private struct WorkspaceCreationControl: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.system(size: Theme.Typography.supporting))
+            .font(Theme.Typography.supporting)
             .foregroundStyle(Theme.Colors.foreground)
             .padding(.horizontal, Theme.Spacing.medium)
             .frame(minHeight: Theme.Control.largeHeight)

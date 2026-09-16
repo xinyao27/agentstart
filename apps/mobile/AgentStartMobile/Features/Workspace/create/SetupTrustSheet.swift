@@ -16,7 +16,7 @@ struct WorkspaceSetupTrustSheet: View {
                     Text(
                         "This repository's agentstart.yaml runs before the workspace starts. Only run it if you trust this repository."
                     )
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
 
                     ContentSurface {
@@ -25,18 +25,12 @@ struct WorkspaceSetupTrustSheet: View {
                                 prompt.wasPreviouslyApproved ? "New setup script" : "Setup script"
                             )
                             .font(
-                                .system(
-                                    size: Theme.Typography.metadata,
-                                    weight: .semibold
-                                )
+                                Theme.Typography.metadata.weight(.semibold)
                             )
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             Text(verbatim: prompt.scriptContent)
                                 .font(
-                                    .system(
-                                        size: Theme.Typography.code,
-                                        design: .monospaced
-                                    )
+                                    Theme.Typography.code
                                 )
                                 .foregroundStyle(Theme.Colors.foreground)
                         }
@@ -75,7 +69,7 @@ struct WorkspaceSetupTrustSheet: View {
                     ? "\(prompt.repoName)'s setup script changed"
                     : "Run setup from \(prompt.repoName)?"
             )
-            .font(.system(size: Theme.Typography.primary, weight: .semibold))
+            .font(Theme.Typography.primary.weight(.semibold))
             .foregroundStyle(Theme.Colors.foreground)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -95,7 +89,7 @@ struct WorkspaceSetupTrustSheet: View {
                     AgentStartIcon(.check, size: Theme.Control.inlineIcon)
                 }
                 Text(title)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.foreground)
                 Spacer()
                 if isBusy {

@@ -4,6 +4,7 @@ struct AccountUsageBar: View {
     let window: AccountUsageWindow
     let now: Date
     var density: AccountUsageBarDensity = .detail
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         switch density {
@@ -23,10 +24,10 @@ struct AccountUsageBar: View {
                 // exists to report. The column stays fixed so bars in a shared row still
                 // align, but it is wide enough for a three-digit percentage.
                 Text(percentLabel)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .lineLimit(1)
-                    .frame(width: 40, height: 20, alignment: .trailing)
+                    .frame(width: compactColumnWidth(40), alignment: .trailing)
             }
         }
     }
@@ -35,18 +36,18 @@ struct AccountUsageBar: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.small) {
             HStack(spacing: Theme.Spacing.small) {
                 Text(window.label)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.foreground)
                 Spacer(minLength: 0)
                 Text("Used \(roundedPercent)%")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .monospacedDigit()
             }
             usageTrack(height: 8)
             if let resetLabel {
                 Text(resetLabel)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .lineLimit(1)
             }
@@ -58,10 +59,18 @@ struct AccountUsageBar: View {
         // real window names ("Fable" became "Fa…"). Sized for the longest label the
         // providers actually emit instead of for the narrowest one.
         Text(window.compactLabel)
-            .font(.system(size: Theme.Typography.metadata))
+            .font(Theme.Typography.metadata)
             .foregroundStyle(Theme.Colors.mutedForeground)
             .lineLimit(1)
-            .frame(width: 44, height: 20, alignment: .leading)
+            .frame(width: compactColumnWidth(44), alignment: .leading)
+    }
+
+    // Why: the columns exist so bars in a shared row line up. Above the accessibility
+    // threshold a pinned width clips the very label or percentage the column holds, so the
+    // alignment gives way to legibility; the fixed height went with it, since the text now
+    // needs the room and the track carries its own height.
+    private func compactColumnWidth(_ base: CGFloat) -> CGFloat? {
+        dynamicTypeSize.isAccessibilitySize ? nil : base
     }
 
     private func usageTrack(height: CGFloat) -> some View {

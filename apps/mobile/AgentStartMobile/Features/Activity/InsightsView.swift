@@ -2,7 +2,6 @@ import Charts
 import SwiftUI
 
 struct ActivityInsightsView: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
     @State private var model: ActivityInsightsModel
 
@@ -28,7 +27,7 @@ struct ActivityInsightsView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: Theme.Spacing.standard) {
                 Text("A year of agent work, with today in context.")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 summaryGrid
                 rangeFilter
@@ -64,13 +63,9 @@ struct ActivityInsightsView: View {
         .background { AppBackground() }
         .navigationTitle(Text("Activity insights"))
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            SheetDismissToolbarItem(
-                accessibilityLabel: "Close activity insights",
-                action: dismiss.callAsFunction
-            )
-        }
+        // Why: this is a pushed route in the Home tab, not a full-screen cover, so the system
+        // back button (with its edge swipe and long-press history) is the correct way out. A
+        // cover's X had to be replaced along with the presentation.
         .refreshable { await model.refresh() }
         .overlay {
             if case .loading = model.phase, model.summary == nil {
@@ -131,11 +126,11 @@ struct ActivityInsightsView: View {
     @ViewBuilder private var usageRangeNotice: some View {
         if model.isUsageRangePending {
             Text("Updating usage for the selected range…")
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
         } else if model.didReceiveAllTimeUsage {
             Text("A connected host reported all-time usage instead of this range.")
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
         }
     }
@@ -145,10 +140,10 @@ struct ActivityInsightsView: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.medium) {
                 Text("30-day momentum")
                     .font(
-                        .system(size: Theme.Typography.primary, weight: .semibold)
+                        Theme.Typography.primary.weight(.semibold)
                     )
                 Text(trendDescription)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 Chart(Array((model.summary?.daily ?? []).suffix(30))) { point in
                     AreaMark(
@@ -174,10 +169,10 @@ struct ActivityInsightsView: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.medium) {
                 Text("Weekly rhythm")
                     .font(
-                        .system(size: Theme.Typography.primary, weight: .semibold)
+                        Theme.Typography.primary.weight(.semibold)
                     )
                 Text("Past-year totals reveal which days carry the most work.")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 Chart(weekdayRhythm) { point in
                     BarMark(
@@ -197,7 +192,7 @@ struct ActivityInsightsView: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.medium) {
                 Text("Daily usage by provider")
                     .font(
-                        .system(size: Theme.Typography.primary, weight: .semibold)
+                        Theme.Typography.primary.weight(.semibold)
                     )
                 Chart {
                     ForEach(values) { day in
@@ -226,7 +221,7 @@ struct ActivityInsightsView: View {
                             )
                             .frame(width: 8, height: 8)
                         Text(activityProviderLabel(provider))
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                 }
@@ -237,10 +232,10 @@ struct ActivityInsightsView: View {
     private func summaryMetric(_ label: LocalizedStringResource, _ value: String) -> some View {
         VStack(spacing: Theme.Spacing.extraSmall) {
             Text(value)
-                .font(.system(size: Theme.Typography.primary))
+                .font(Theme.Typography.primary)
                 .monospacedDigit()
             Text(label)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .multilineTextAlignment(.center)
         }

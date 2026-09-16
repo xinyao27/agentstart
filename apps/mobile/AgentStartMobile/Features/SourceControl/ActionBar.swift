@@ -20,7 +20,7 @@ struct SourceControlActionBar: View {
         HStack(spacing: Theme.Spacing.medium) {
             input
             styledPrimaryButton
-                .appButtonContext(.regular)
+                .appButtonContext(.large)
             if model.snapshot?.staged.isEmpty == false || model.isGeneratingCommitMessage {
                 GlassIconButton(
                     iconName: model.isGeneratingCommitMessage ? .x : .sparkle,
@@ -59,19 +59,17 @@ struct SourceControlActionBar: View {
                         .controlSize(.small)
                 } else {
                     Text(model.primaryAction.label)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                 }
             }
-            // Why: `.controlSize(.large)` (set by `.appButtonContext(.large)`) makes the
-            // system `.glassProminent`/`.glass` button style pad out to a dominant pill next
-            // to the field, per the button-size contract's 36pt "regular" scenario for a
-            // primary action beside a peer control. Reuse that
-            // same token here instead of the field's own 44pt height. Without this floor
-            // SwiftUI still compresses the glass button when the input is empty, which makes
-            // the footer look like a different component.
+            // Why: the input is this row's size anchor at 44pt, so the primary action beside it
+            // uses the same visible height. The button-size contract requires adjacent
+            // same-level actions to match; a 36pt button between two 44pt peers read as a third
+            // control family. Without this floor SwiftUI still compresses the glass button when
+            // the input is empty, which makes the footer look like a different component.
             .frame(
                 minWidth: SourceControlActionBarLayout.primaryMinimumWidth,
-                minHeight: Theme.Control.regularHeight
+                minHeight: Theme.Control.largeHeight
             )
         }
         .buttonBorderShape(.capsule)
@@ -82,17 +80,20 @@ struct SourceControlActionBar: View {
     private var input: some View {
         if model.snapshot?.staged.isEmpty == false {
             TextField("Commit message", text: $model.commitMessage)
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .textFieldStyle(.plain)
                 .submitLabel(.done)
                 .onSubmit { Task { await model.runPrimaryAction() } }
                 .disabled(model.busyAction != nil)
                 .padding(.horizontal, Theme.Spacing.standard)
                 .frame(maxWidth: .infinity, minHeight: Theme.Size.minimumHitTarget)
-                .glassEffect(.regular, in: .capsule)
+                // Why: an editable glass field is selectable, like every other editable field
+                // in the app; without `.interactive()` this one glass surface behaved differently
+                // from the identical controls elsewhere.
+                .glassEffect(.regular.interactive(), in: .capsule)
         } else {
             Text("No staged files")
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .padding(.horizontal, Theme.Spacing.standard)
                 .frame(

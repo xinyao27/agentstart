@@ -21,10 +21,10 @@ struct BrowserSettingsView: View {
                                 .frame(width: Theme.Control.largeIcon)
                             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                                 Text("Open terminal links")
-                                    .font(.system(size: Theme.Typography.supporting))
+                                    .font(Theme.Typography.supporting)
                                     .foregroundStyle(Theme.Colors.foreground)
                                 Text(preferences.terminalLinkOpenMode.title)
-                                    .font(.system(size: Theme.Typography.metadata))
+                                    .font(Theme.Typography.metadata)
                                     .foregroundStyle(Theme.Colors.mutedForeground)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -86,7 +86,7 @@ private struct BrowserLinkModePicker: View {
                 action: { dismiss() }
             )
             Text("Open terminal links")
-                .font(.system(size: Theme.Typography.primary, weight: .semibold))
+                .font(Theme.Typography.primary.weight(.semibold))
                 .foregroundStyle(Theme.Colors.foreground)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -103,10 +103,10 @@ private struct BrowserLinkModePicker: View {
             HStack(spacing: Theme.Spacing.medium) {
                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                     Text(mode.title)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                     Text(mode.detail)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .fixedSize(horizontal: false, vertical: true)
                 }

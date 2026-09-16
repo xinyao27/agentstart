@@ -13,7 +13,7 @@ struct HomeAccountUsageSection: View {
         if !usageHosts.isEmpty {
             VStack(alignment: .leading, spacing: Theme.Spacing.medium) {
                 Text("Usage")
-                    .font(.system(size: Theme.Typography.emphasis, weight: .semibold))
+                    .font(Theme.Typography.emphasis.weight(.semibold))
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 ContentSurface {
                     VStack(spacing: 0) {
@@ -38,7 +38,7 @@ struct HomeAccountUsageSection: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.medium) {
                 if usageHosts.count > 1 {
                     Text(verbatim: item.host.name.uppercased())
-                        .font(.system(size: Theme.Typography.metadata, weight: .semibold))
+                        .font(Theme.Typography.metadata.weight(.semibold))
                         .tracking(0.4)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineLimit(1)
@@ -73,12 +73,12 @@ struct HomeAccountUsageSection: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                 HStack(spacing: Theme.Spacing.small) {
                     Text(section.provider.title)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                         .lineLimit(1)
                     if let plan = section.usage?.plan {
                         Text(verbatim: "· \(plan)")
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
                             // Why: the plan takes the flexible slot. With no plan, the reset
@@ -88,7 +88,7 @@ struct HomeAccountUsageSection: View {
                     }
                     if let reset = nearestReset(section) {
                         Text(accountResetLabel(until: reset, now: now))
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
                     }
@@ -111,7 +111,7 @@ struct HomeAccountUsageSection: View {
                     }
                 } else {
                     Text(usageStatus(section.usage))
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 }
             }

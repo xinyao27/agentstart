@@ -4,7 +4,6 @@ struct WorkspaceListView: View {
     let host: HostProfile
     @Environment(\.dismiss) private var dismiss
     @State private var model: WorkspaceListModel
-    @State private var isSearchPresented = false
     @State private var isCreationPresented = false
     @State private var actionTarget: WorkspaceSummary?
     @State private var isAgentHistoryAvailable = false
@@ -82,6 +81,7 @@ struct WorkspaceListView: View {
                         showPairing: showPairing,
                         showActions: { actionTarget = $0 },
                         requestRemoveHost: { isRemoveHostPresented = true },
+                        createWorkspace: { isCreationPresented = true },
                         selectWorkspace: selectWorkspace
                     )
                 case .failed(let message):
@@ -102,24 +102,23 @@ struct WorkspaceListView: View {
         .background { AppBackground() }
         .navigationTitle(Text(verbatim: host.name))
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(Theme.Colors.background, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        // Why: the navigation bar's material belongs to the system. Painting an opaque token
+        // behind it and pinning it visible made this the one root whose header did not blur
+        // content underneath it, and suppressed the scroll-edge effect.
+        .searchable(
+            text: Binding(
+                get: { model.searchText },
+                set: { model.setSearchText($0) }
+            ),
+            prompt: Text("Search workspaces")
+        )
         .toolbar {
             WorkspaceListToolbar(
                 model: model,
-                isSearchPresented: $isSearchPresented,
                 isCreationPresented: $isCreationPresented,
                 leaveHost: leaveHost,
                 hideSidebar: hideSidebar,
                 showAccounts: showAccounts
-            )
-        }
-        .sheet(isPresented: $isSearchPresented) {
-            WorkspaceSearchSheet(
-                searchText: Binding(
-                    get: { model.searchText },
-                    set: { value in model.setSearchText(value) }
-                )
             )
         }
         .sheet(isPresented: $isCreationPresented) {

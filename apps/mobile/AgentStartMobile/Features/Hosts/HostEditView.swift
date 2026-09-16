@@ -29,7 +29,7 @@ struct HostEditView: View {
                 Text(
                     "Change the display name or connection address. Address edits only switch where this phone connects — they do not re-pair. Use this when the same daemon is reachable at a different IP (for example home LAN vs Tailscale)."
                 )
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .lineSpacing(Theme.Spacing.extraSmall)
                 .padding(.bottom, Theme.Spacing.small)
@@ -59,7 +59,7 @@ struct HostEditView: View {
                 Text(
                     "Accepts IP, host:port, or ws:// / wss://. Missing port defaults to the current port (or 6768)."
                 )
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .lineSpacing(Theme.Spacing.extraSmall)
 
@@ -68,7 +68,7 @@ struct HostEditView: View {
 
                 if let failure = model.failure {
                     Text(failure)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.attention)
                         .padding(.top, Theme.Spacing.extraSmall)
                 }
@@ -106,13 +106,13 @@ struct HostEditView: View {
         switch model.normalizedEndpoint {
         case .valid(let endpoint):
             Text("Connects to \(endpoint)")
-                .font(.system(size: Theme.Typography.code).monospaced())
+                .font(Theme.Typography.code.monospaced())
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .lineLimit(2)
         case .invalid(let message):
             if !model.address.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 Text(message)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.attention)
             }
         }
@@ -120,7 +120,7 @@ struct HostEditView: View {
 
     private func fieldLabel(_ title: LocalizedStringKey) -> some View {
         Text(title)
-            .font(.system(size: Theme.Typography.metadata, weight: .semibold))
+            .font(Theme.Typography.metadata.weight(.semibold))
             .textCase(.uppercase)
             .tracking(0.5)
             .foregroundStyle(Theme.Colors.mutedForeground)
@@ -145,7 +145,7 @@ struct HostEditView: View {
 private struct HostFieldStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.system(size: Theme.Typography.supporting))
+            .font(Theme.Typography.supporting)
             .foregroundStyle(Theme.Colors.foreground)
             .padding(.horizontal, Theme.Spacing.standard)
             .frame(minHeight: Theme.Control.largeHeight)

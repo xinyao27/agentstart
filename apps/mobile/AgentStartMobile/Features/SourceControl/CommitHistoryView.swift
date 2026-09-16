@@ -87,15 +87,12 @@ struct SourceHistoryView: View {
                 HStack(spacing: Theme.Spacing.small) {
                     VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                         Text(verbatim: commit.subject)
-                            .font(.system(size: Theme.Typography.supporting))
+                            .font(Theme.Typography.supporting)
                             .foregroundStyle(Theme.Colors.foreground)
                             .lineLimit(1)
                         Text(verbatim: commitMetadata(commit))
                             .font(
-                                .system(
-                                    size: Theme.Typography.metadata,
-                                    design: .monospaced
-                                )
+                                Theme.Typography.metadata.monospaced()
                             )
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
@@ -113,7 +110,7 @@ struct SourceHistoryView: View {
         }
         .overlay(alignment: .bottom) {
             Rectangle()
-                .fill(Theme.Colors.rail.opacity(0.45))
+                .fill(Theme.Colors.rail)
                 .frame(height: Theme.Size.hairline)
         }
     }
@@ -126,7 +123,7 @@ struct SourceHistoryView: View {
                 .padding(.bottom, Theme.Spacing.small)
         } else if model.filesByCommit[commit.id]?.isEmpty == true {
             Text("No file changes")
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, Theme.Spacing.page)
@@ -137,10 +134,7 @@ struct SourceHistoryView: View {
                     HStack(spacing: Theme.Spacing.small) {
                         Text(verbatim: file.path)
                             .font(
-                                .system(
-                                    size: Theme.Typography.metadata,
-                                    design: .monospaced
-                                )
+                                Theme.Typography.metadata.monospaced()
                             )
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
@@ -167,7 +161,7 @@ struct SourceHistoryView: View {
                     .foregroundStyle(Theme.Colors.gitDeleted)
             }
         }
-        .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+        .font(Theme.Typography.metadata.monospaced())
     }
 
     private func commitMetadata(_ commit: SourceCommit) -> String {

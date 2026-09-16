@@ -12,7 +12,7 @@ struct SourceControlActionSheet: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: Theme.Spacing.small) {
                     Text(verbatim: branchLabel)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                     ContentSurface {
                         VStack(spacing: 0) {
@@ -63,20 +63,20 @@ struct SourceControlActionSheet: View {
                     .frame(width: Theme.Spacing.extraLarge)
                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                     Text(verbatim: action.label)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(
                             action.isDisabled
                                 ? Theme.Colors.mutedForeground : Theme.Colors.foreground
                         )
                     if let hint = action.hint {
                         Text(verbatim: hint)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .multilineTextAlignment(.leading)
                     }
                     if let progress = progress(for: action) {
                         Text(verbatim: progress.message)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                 }

@@ -3,10 +3,8 @@ import SwiftUI
 struct HomeDashboardView: View {
     let snapshot: HomeSnapshot
     let now: Date
-    @Binding var creationTarget: HomeWorkspaceCreationTarget?
     let showHost: (HostProfile) -> Void
     let showWorkspace: (HostProfile, WorkspaceSummary) -> Void
-    let showPairing: () -> Void
     let showAccounts: (HostProfile) -> Void
     let showBrowser: (HostProfile) -> Void
     let editHost: (HostProfile) -> Void
@@ -19,7 +17,11 @@ struct HomeDashboardView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: Theme.Spacing.large) {
                 Text("Home")
-                    .font(.system(size: Theme.Typography.pageTitle, weight: .semibold))
+                    .font(Theme.Typography.pageTitle.weight(.semibold))
+                    // Why: the title lives in content rather than in the navigation bar, so
+                    // VoiceOver gets no heading from the bar. Declaring it keeps the page
+                    // navigable by heading without duplicating the tab bar's own label.
+                    .accessibilityAddTraits(.isHeader)
 
                 LazyVGrid(
                     columns: [
@@ -96,26 +98,11 @@ struct HomeDashboardView: View {
             .frame(maxWidth: Theme.Size.readingWidth)
             .padding(.horizontal, Theme.Spacing.page)
             .padding(.top, HomeDashboardMetrics.contentTop)
-            .padding(.bottom, Theme.Spacing.huge * 2.5)
+            .padding(.bottom, Theme.Spacing.huge)
             .frame(maxWidth: .infinity)
         }
         .refreshable {
             await refresh()
-        }
-        .safeAreaInset(edge: .bottom) {
-            HomePrimaryAction(
-                snapshot: snapshot,
-                createWorkspace: {
-                    if let target = snapshot.primaryConnectedSnapshot {
-                        creationTarget = HomeWorkspaceCreationTarget(
-                            host: target.host,
-                            existingPaths: target.workspaces.map(\.path)
-                        )
-                    } else {
-                        showPairing()
-                    }
-                }
-            )
         }
     }
 }
@@ -147,10 +134,10 @@ private struct HomeMetricTileView: View {
                         .foregroundStyle(color)
                     HStack(spacing: Theme.Spacing.extraSmall) {
                         Text(title)
-                            .font(.system(size: Theme.Typography.primary))
+                            .font(Theme.Typography.primary)
                             .foregroundStyle(Theme.Colors.foreground)
                         Text("\(value)")
-                            .font(.system(size: Theme.Typography.supporting))
+                            .font(Theme.Typography.supporting)
                             .foregroundStyle(Theme.Colors.mutedForeground.opacity(0.7))
                             .monospacedDigit()
                     }
@@ -165,30 +152,5 @@ private struct HomeMetricTileView: View {
         // that does nothing — visually present but functionally empty.
         .disabled(action == nil)
         .accessibilityLabel("\(String(localized: title)): \(value)")
-    }
-}
-
-private struct HomePrimaryAction: View {
-    let snapshot: HomeSnapshot
-    let createWorkspace: () -> Void
-
-    var body: some View {
-        HStack {
-            Spacer(minLength: 0)
-            Button(action: createWorkspace) {
-                Label(
-                    snapshot.primaryConnectedSnapshot == nil ? "Pair daemon" : "New workspace",
-                    iconID: snapshot.primaryConnectedSnapshot == nil ? .monitor : .add
-                )
-                .padding(.horizontal, Theme.Spacing.large)
-            }
-            .buttonStyle(.glass)
-            .appButtonContext(.large)
-            Spacer(minLength: 0)
-        }
-        .frame(maxWidth: Theme.Size.readingWidth)
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, Theme.Spacing.page)
-        .padding(.bottom, Theme.Spacing.small)
     }
 }

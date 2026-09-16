@@ -7,20 +7,34 @@ struct AgentStartLoader: View {
     @Environment(\.controlSize) private var controlSize
     @State private var animationStart = Date()
     private let size: CGFloat?
+    private let accessibilityLabel: LocalizedStringResource?
 
-    init(size: CGFloat? = nil) {
+    init(size: CGFloat? = nil, accessibilityLabel: LocalizedStringResource? = nil) {
         self.size = size
+        self.accessibilityLabel = accessibilityLabel
     }
 
     var body: some View {
         let resolvedSize = resolvedSize
-        AgentStartLoaderCanvas(
+        let canvas = AgentStartLoaderCanvas(
             style: selectedStyle,
             size: resolvedSize,
             colorScheme: colorScheme,
             reducesMotion: reducesMotion,
             animationStart: animationStart
         )
+        // Why: a loader is decorative when something else in the region names the state, and it is
+        // the *only* signal when nothing else does. The caller decides; a label applied on top of a
+        // subtree that already hid itself from accessibility could never take effect.
+        Group {
+            if let accessibilityLabel {
+                canvas
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text(accessibilityLabel))
+            } else {
+                canvas.accessibilityHidden(true)
+            }
+        }
     }
 
     private var resolvedSize: CGFloat {
@@ -82,7 +96,6 @@ private struct AgentStartLoaderCanvas: View {
             }
         }
         .frame(width: size, height: size)
-        .accessibilityHidden(true)
     }
 }
 

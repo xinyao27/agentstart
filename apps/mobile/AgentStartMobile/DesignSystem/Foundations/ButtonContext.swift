@@ -31,9 +31,22 @@ enum AppButtonContext: Hashable, Sendable {
 }
 
 struct AppPlainButtonStyle: ButtonStyle {
+    // Why: `.disabled()` carries no appearance of its own, so a custom plain control looked
+    // enabled while it could not be tapped. Owning the dimming here means every `.appPlain`
+    // control gets it, instead of each call site remembering to add its own opacity.
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+        AppPlainButtonLabel(label: configuration.label)
+    }
+}
+
+private struct AppPlainButtonLabel: View {
+    let label: ButtonStyleConfiguration.Label
+    @Environment(\.isEnabled) private var isEnabled
+
+    var body: some View {
+        label
             .contentShape(.interaction, .rect)
+            .opacity(isEnabled ? 1 : 0.45)
     }
 }
 
@@ -50,13 +63,16 @@ private struct AppButtonContextModifier: ViewModifier {
     // label no longer fits that height and truncates to an unreadable "M…", and the
     // padding — derived from the same fixed number — no longer matches the capsule the
     // glass style actually draws, so adjacent controls overlap. Above the accessibility
-    // threshold the control is left to size itself; a scaled control already clears the
-    // minimum hit target on its own.
+    // threshold the control is left to size itself.
+    // Why: the floor stays in both branches. A label that grows tall does not automatically
+    // grow wide, so a short scaled label would otherwise leave the target under 44pt.
     @ViewBuilder
     func body(content: Content) -> some View {
         let sized = content.controlSize(context.controlSize)
         if dynamicTypeSize.isAccessibilitySize {
-            sized.contentShape(.rect)
+            sized
+                .frame(minHeight: Theme.Size.minimumHitTarget)
+                .contentShape(.rect)
         } else {
             sized
                 .frame(height: context.visibleHeight)

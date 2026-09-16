@@ -49,7 +49,7 @@ struct SourceBranchChanges: View {
             // part of an identifier, so they stay ungrouped.
             Text(verbatim: String(count))
         }
-        .font(.system(size: Theme.Typography.metadata))
+        .font(Theme.Typography.metadata)
         .foregroundStyle(Theme.Colors.mutedForeground)
         .padding(.horizontal, Theme.Spacing.page)
         .padding(.top, Theme.Spacing.medium)
@@ -65,7 +65,7 @@ struct SourceBranchChanges: View {
         } label: {
             HStack(spacing: Theme.Spacing.small) {
                 Text(verbatim: entry.status.label)
-                    .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                    .font(Theme.Typography.metadata.monospaced())
                     .foregroundStyle(entry.status.color)
                     .frame(width: Theme.Spacing.large)
                 // Why: same rationale as SourceFileRow — the basename identifies the file
@@ -73,21 +73,21 @@ struct SourceBranchChanges: View {
                 // directory prefix.
                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                     Text(verbatim: fileName(entry.path))
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(
                             canOpen ? Theme.Colors.foreground : Theme.Colors.mutedForeground
                         )
                         .lineLimit(1)
                     if let directory = directoryPath(entry.path) {
                         Text(verbatim: directory)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
                             .truncationMode(.head)
                     }
                     if let detail = entryDetail(entry) {
                         Text(verbatim: detail)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
                     }
@@ -113,7 +113,7 @@ struct SourceBranchChanges: View {
 
     private func stateRow<Content: View>(@ViewBuilder content: () -> Content) -> some View {
         HStack(spacing: Theme.Spacing.small, content: content)
-            .font(.system(size: Theme.Typography.metadata))
+            .font(Theme.Typography.metadata)
             .foregroundStyle(Theme.Colors.mutedForeground)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, Theme.Spacing.page)
@@ -201,7 +201,7 @@ struct SourceBranchDiffView: View {
             GeometryReader { geometry in
                 ScrollView([.horizontal, .vertical]) {
                     Text(verbatim: content)
-                        .font(.system(size: Theme.Typography.code, design: .monospaced))
+                        .font(Theme.Typography.code)
                         .textSelection(.enabled)
                         .padding(Theme.Spacing.standard)
                         .frame(

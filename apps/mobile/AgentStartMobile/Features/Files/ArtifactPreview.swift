@@ -228,14 +228,14 @@ struct TerminalArtifactPreviewView: View {
         if model.isEditing {
             ZStack(alignment: .bottomLeading) {
                 TextEditor(text: $model.draft, selection: $selection)
-                    .font(.system(size: Theme.Typography.code, design: .monospaced))
+                    .font(Theme.Typography.code)
                     .foregroundStyle(Theme.Colors.foreground)
                     .scrollContentBackground(.hidden)
                     .padding(.horizontal, Theme.Spacing.medium)
                     .padding(.vertical, Theme.Spacing.small)
                 if let message = model.errorMessage {
                     Text(message)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.attention)
                         .padding(.horizontal, Theme.Spacing.medium)
                         .frame(minHeight: Theme.Control.regularHeight)
@@ -267,8 +267,12 @@ struct TerminalArtifactPreviewView: View {
         }
         ToolbarItem(placement: .topBarTrailing) {
             if model.isSaving {
-                AgentStartLoader(size: Theme.Control.largeIcon)
-                    .accessibilityLabel("Saving file")
+                // Why: the loader is the only signal in this toolbar slot, so it carries the label
+                // itself — a label layered over an accessibility-hidden subtree never announced.
+                AgentStartLoader(
+                    size: Theme.Control.largeIcon,
+                    accessibilityLabel: "Saving file"
+                )
             } else if model.isEditing {
                 Button("Save") { Task { await model.save() } }
                     .disabled(!model.isDirty)

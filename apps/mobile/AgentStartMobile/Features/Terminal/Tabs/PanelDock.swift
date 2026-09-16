@@ -122,7 +122,7 @@ struct TerminalPanelDock: View {
         .background(Theme.Colors.background)
         .overlay(alignment: .leading) {
             Rectangle()
-                .fill(Theme.Colors.rail.opacity(0.65))
+                .fill(Theme.Colors.rail)
                 .frame(width: 0.5)
         }
         .overlay(alignment: .leading) {

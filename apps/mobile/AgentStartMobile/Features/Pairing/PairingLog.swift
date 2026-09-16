@@ -2,6 +2,15 @@ import Foundation
 import SwiftUI
 
 struct PairingLog: View {
+
+    // Why: layout motion is the app's own, so it has to honour Reduce Motion itself — the loaders
+    // already did, but a full-height slide still played.
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
+
+    private var reducedStateChange: Animation? {
+        Theme.Motion.resolved(Theme.Motion.stateChange, reduceMotion: reducesMotion)
+    }
+
     let entries: [PairingLogEntry]
 
     var body: some View {
@@ -10,11 +19,7 @@ struct PairingLog: View {
                 VStack(alignment: .leading, spacing: Theme.Spacing.small) {
                     Text("PAIRING LOG")
                         .font(
-                            .system(
-                                size: Theme.Typography.metadata,
-                                weight: .semibold,
-                                design: .monospaced
-                            )
+                            Theme.Typography.metadata.monospaced().weight(.semibold)
                         )
                         .foregroundStyle(Theme.Colors.mutedForeground)
                     ScrollViewReader { proxy in
@@ -30,7 +35,7 @@ struct PairingLog: View {
                         .frame(maxHeight: PairingLogMetrics.maxHeight)
                         .onChange(of: entries.count) {
                             guard let lastID = entries.last?.id else { return }
-                            withAnimation(Theme.Motion.stateChange) {
+                            withAnimation(reducedStateChange) {
                                 proxy.scrollTo(lastID, anchor: .bottom)
                             }
                         }
@@ -43,20 +48,20 @@ struct PairingLog: View {
     private func entryRow(_ entry: PairingLogEntry, baseDate: Date) -> some View {
         HStack(alignment: .top, spacing: Theme.Spacing.small) {
             Text(elapsedLabel(entry.date, since: baseDate))
-                .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                .font(Theme.Typography.metadata.monospaced())
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .frame(width: PairingLogMetrics.elapsedWidth, alignment: .leading)
             Text(glyph(entry.level))
-                .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                .font(Theme.Typography.metadata.monospaced())
                 .foregroundStyle(color(entry.level))
                 .frame(width: PairingLogMetrics.levelWidth)
             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                 Text(verbatim: entry.message)
-                    .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                    .font(Theme.Typography.metadata.monospaced())
                     .foregroundStyle(color(entry.level))
                 if let detail = entry.detail {
                     Text(verbatim: detail)
-                        .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                        .font(Theme.Typography.metadata.monospaced())
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineLimit(2)
                 }

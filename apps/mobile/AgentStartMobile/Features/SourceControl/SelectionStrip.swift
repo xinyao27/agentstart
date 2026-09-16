@@ -22,7 +22,7 @@ struct SourceSelectionStrip<Option: Hashable, Label: View>: View {
                     selection = option
                 } label: {
                     label(option)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                         .frame(maxWidth: .infinity)
                         .frame(height: Theme.Control.inlineHeight)

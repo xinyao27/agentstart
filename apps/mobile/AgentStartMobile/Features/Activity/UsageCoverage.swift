@@ -13,7 +13,7 @@ struct ActivityUsageCoverage: View {
                 )
             }
         }
-        .font(.system(size: Theme.Typography.metadata))
+        .font(Theme.Typography.metadata)
         .foregroundStyle(Theme.Colors.mutedForeground)
     }
 

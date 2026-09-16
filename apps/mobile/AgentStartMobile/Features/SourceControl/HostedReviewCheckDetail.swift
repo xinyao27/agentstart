@@ -49,7 +49,7 @@ struct HostedReviewCheckDetailView: View {
                 detailsView(details)
             }
         }
-        .font(.system(size: Theme.Typography.metadata))
+        .font(Theme.Typography.metadata)
         .foregroundStyle(Theme.Colors.mutedForeground)
         .padding(
             .leading,
@@ -89,10 +89,10 @@ struct HostedReviewCheckDetailView: View {
     private func annotationRow(_ annotation: HostedReviewCheckAnnotation) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
             Text(verbatim: annotationLocator(annotation))
-                .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                .font(Theme.Typography.metadata.monospaced())
             if let title = annotation.title, !title.isEmpty {
                 Text(verbatim: title)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.foreground)
             }
             Text(verbatim: annotation.message)
@@ -103,7 +103,7 @@ struct HostedReviewCheckDetailView: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
             HStack(spacing: Theme.Spacing.small) {
                 Text(verbatim: job.name)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.foreground)
                     .lineLimit(1)
                 Spacer(minLength: Theme.Spacing.small)
@@ -123,7 +123,7 @@ struct HostedReviewCheckDetailView: View {
             if let logTail = job.logTail, !logTail.isEmpty {
                 ScrollView([.horizontal, .vertical]) {
                     Text(verbatim: logTail)
-                        .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                        .font(Theme.Typography.metadata.monospaced())
                         .textSelection(.enabled)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -143,7 +143,7 @@ struct HostedReviewCheckDetailView: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.small) {
             Text(title)
-                .font(.system(size: Theme.Typography.metadata, weight: .semibold))
+                .font(Theme.Typography.metadata.weight(.semibold))
                 .textCase(.uppercase)
             content()
         }

@@ -133,6 +133,25 @@ struct LoaderAICSSRenderer {
         style == .s4 ? 1_600 : 1_700
     }
 
+    /// Why: Reduce Motion has to stop on a frame the animation actually has. The lens's arrangement
+    /// is positional, so freezing without it stacked every dot on the centre and produced a blob
+    /// that no frame of the animation looks like. These are the resting positions for that frame.
+    private func lensRestOffset(index: Int) -> (x: Double, y: Double) {
+        switch style {
+        case .b1:
+            return ([-4.5, 4.5, 4.5, -4.5][index], [-4.5, -4.5, 4.5, 4.5][index])
+        case .b2:
+            let angle = Double(index) / 3 * .pi * 2
+            return (sin(angle) * 6.5, cos(angle) * 6.5)
+        case .b3:
+            return (0, 0)
+        case .b4:
+            return index == 0 ? (0, -5) : (0, 0)
+        default:
+            return (0, 0)
+        }
+    }
+
     private func drawLens(
         context: inout GraphicsContext,
         time: TimeInterval,
@@ -150,6 +169,7 @@ struct LoaderAICSSRenderer {
             var translateY = 0.0
             if reducesMotion {
                 opacity = index == 0 ? 1 : 0.3
+                (translateX, translateY) = lensRestOffset(index: index)
             } else {
                 let phase = loaderCycle(progress, offset: lensPhaseOffset(index: index))
                 switch style {
@@ -305,7 +325,14 @@ struct LoaderAICSSRenderer {
             var dotScale = 1.0
             var translateX = 0.0
             var translateY = 0.0
-            if !reducesMotion {
+            if reducesMotion {
+                // Why: Reduce Motion keeps the ring a ring. Leaving the offsets at zero stacked all
+                // eight dots into one blob, which is not a frame the animation ever shows.
+                let angle = Double(index) / 8 * .pi * 2 - .pi / 2
+                translateX = cos(angle) * radius
+                translateY = sin(angle) * radius
+                opacity = 0.7
+            } else {
                 let angle = Double(index) / 8 * .pi * 2 - .pi / 2
                 translateX = cos(angle) * radius
                 translateY = sin(angle) * radius
@@ -393,7 +420,11 @@ struct LoaderAICSSRenderer {
         for index in 0..<8 {
             var point = (x: 0.0, y: 0.0)
             var opacity = 1.0
-            if !reducesMotion {
+            if reducesMotion {
+                // Why: Reduce Motion stops on the first keyframe the morph passes through, so the
+                // dots keep their positions instead of stacking at the origin.
+                point = morphDot(index: index).points[0]
+            } else {
                 let dot = morphDot(index: index)
                 let phase = loaderCycle(
                     progress * (style == .m2 || style == .m4 ? 2 : 1),

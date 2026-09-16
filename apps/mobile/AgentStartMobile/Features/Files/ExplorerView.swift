@@ -103,7 +103,7 @@ struct WorkspaceFileExplorerView: View {
                 Color.clear.frame(width: Theme.Control.inlineIcon)
                 AgentStartLoader(size: Theme.Control.inlineIcon)
                 Text("Loading…")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
             }
             .padding(.leading, leftInset)
@@ -113,7 +113,7 @@ struct WorkspaceFileExplorerView: View {
             HStack(spacing: Theme.Spacing.small) {
                 Color.clear.frame(width: Theme.Control.inlineIcon)
                 Text(verbatim: message)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.attention)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -150,7 +150,7 @@ struct WorkspaceFileExplorerView: View {
                     .frame(width: 16)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(verbatim: row.name)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(
                             canPreview || row.kind == .directory
                                 ? Theme.Colors.foreground : Theme.Colors.mutedForeground
@@ -158,7 +158,7 @@ struct WorkspaceFileExplorerView: View {
                         .lineLimit(1)
                     if row.kind == .binary, !canPreview {
                         Text("Unavailable on mobile")
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                 }

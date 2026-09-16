@@ -220,7 +220,7 @@ struct SourceControlView: View {
                 AgentStartIcon(.wifiSlash, size: Theme.Control.inlineIcon)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 Text("Reconnecting to daemon…")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 Spacer(minLength: Theme.Spacing.small)
                 Button("Retry") { Task { await model.retry() } }

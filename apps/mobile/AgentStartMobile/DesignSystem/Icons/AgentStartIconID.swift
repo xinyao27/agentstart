@@ -66,6 +66,7 @@ nonisolated struct AgentStartIconID: Sendable, Hashable {
     static let gripVertical = Self(Hugeicons.gripVertical)
     static let hardDrives = Self(Hugeicons.hardDrive)
     static let history = Self(Hugeicons.history)
+    static let home = Self(Hugeicons.home01)
     static let image = Self(Hugeicons.image01)
     static let info = Self(Hugeicons.informationCircle)
     static let key = Self(Hugeicons.key01)

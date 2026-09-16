@@ -109,7 +109,7 @@ struct HostedReviewReadyContent: View {
             } else {
                 HostedReviewSection(title: "Provider") {
                     Text("Detailed review actions are managed on \(review.provider.title).")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 }
             }

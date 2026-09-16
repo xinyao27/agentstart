@@ -14,7 +14,7 @@ struct SourceFileRow: View {
             Button(action: open) {
                 HStack(spacing: Theme.Spacing.small) {
                     Text(verbatim: entry.status.label)
-                        .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                        .font(Theme.Typography.metadata.monospaced())
                         .foregroundStyle(entry.status.color)
                         .frame(width: Theme.Spacing.large)
                     // Why: the basename — the part that identifies which file this is — is
@@ -24,7 +24,7 @@ struct SourceFileRow: View {
                     // repeats down the list.
                     VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                         Text(verbatim: fileName)
-                            .font(.system(size: Theme.Typography.supporting))
+                            .font(Theme.Typography.supporting)
                             .foregroundStyle(
                                 entry.canOpen
                                     ? Theme.Colors.foreground : Theme.Colors.mutedForeground
@@ -32,14 +32,14 @@ struct SourceFileRow: View {
                             .lineLimit(1)
                         if let directoryPath {
                             Text(verbatim: directoryPath)
-                                .font(.system(size: Theme.Typography.metadata))
+                                .font(Theme.Typography.metadata)
                                 .foregroundStyle(Theme.Colors.mutedForeground)
                                 .lineLimit(1)
                                 .truncationMode(.head)
                         }
                         if let detail {
                             Text(verbatim: detail)
-                                .font(.system(size: Theme.Typography.metadata))
+                                .font(Theme.Typography.metadata)
                                 .foregroundStyle(Theme.Colors.mutedForeground)
                                 .lineLimit(1)
                         }

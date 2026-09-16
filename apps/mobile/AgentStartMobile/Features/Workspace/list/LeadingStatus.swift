@@ -42,6 +42,20 @@ struct WorkspaceLeadingStatus: View {
             width: WorkspaceListMetrics.leadingColumn,
             height: WorkspaceListMetrics.leadingColumn
         )
+        // Why: this column is a loader or a colored dot, so without a label VoiceOver announced the
+        // workspace name and dropped "needs permission" entirely.
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(statusAccessibilityLabel))
+    }
+
+    private var statusAccessibilityLabel: LocalizedStringResource {
+        switch workspaceListActivity(workspace) {
+        case .working: "Working"
+        case .permission: "Waiting for permission"
+        case .active: "Active"
+        case .done: "Done"
+        case .inactive: "Inactive"
+        }
     }
 
     private func statusDot(_ color: Color) -> some View {

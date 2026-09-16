@@ -22,10 +22,10 @@ struct DockedPanelHeader: View {
             )
             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                 Text(title)
-                    .font(.system(size: Theme.Typography.supporting, weight: .semibold))
+                    .font(Theme.Typography.supporting.weight(.semibold))
                     .foregroundStyle(Theme.Colors.foreground)
                 Text(verbatim: subtitle)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
             }
             .lineLimit(1)
@@ -52,7 +52,7 @@ struct DockedPanelHeader: View {
         .background(Theme.Colors.background)
         .overlay(alignment: .bottom) {
             Rectangle()
-                .fill(Theme.Colors.rail.opacity(0.5))
+                .fill(Theme.Colors.rail)
                 .frame(height: Theme.Size.hairline)
         }
     }

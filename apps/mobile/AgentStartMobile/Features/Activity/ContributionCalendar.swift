@@ -140,13 +140,10 @@ struct ActivityContributionCard: View {
                     VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                         Text("Contribution history")
                             .font(
-                                .system(
-                                    size: Theme.Typography.primary,
-                                    weight: .semibold
-                                )
+                                Theme.Typography.primary.weight(.semibold)
                             )
                         Text(description)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                     Spacer(minLength: 0)
@@ -160,10 +157,10 @@ struct ActivityContributionCard: View {
                 }
                 ScrollViewReader { proxy in
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(alignment: .top, spacing: 4) {
+                        HStack(alignment: .top, spacing: 0) {
                             weekdayLabels
                             ForEach(weeks) { week in
-                                VStack(spacing: 4) {
+                                VStack(spacing: 0) {
                                     ForEach(week.days) { day in
                                         contributionCell(day)
                                     }
@@ -179,11 +176,11 @@ struct ActivityContributionCard: View {
                 }
                 HStack(spacing: Theme.Spacing.small) {
                     Text(footer)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text("Less")
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                     ForEach(0..<5, id: \.self) { intensity in
                         Rectangle()
@@ -197,7 +194,7 @@ struct ActivityContributionCard: View {
                             }
                     }
                     Text("More")
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 }
             }
@@ -210,14 +207,16 @@ struct ActivityContributionCard: View {
     }
 
     private var weekdayLabels: some View {
-        VStack(spacing: Theme.Spacing.extraSmall) {
+        VStack(spacing: 0) {
             ForEach(0..<7, id: \.self) { weekday in
                 Text(weekday % 2 == 1 ? Calendar.current.veryShortWeekdaySymbols[weekday] : "")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                    .frame(width: Theme.Control.inlineIcon, height: 10)
+                    .frame(
+                        width: ActivityContributionMetrics.labelColumn,
+                        height: ActivityContributionMetrics.cellPitch
+                    )
             }
         }
         .padding(.trailing, 1)
@@ -230,7 +229,10 @@ struct ActivityContributionCard: View {
         } label: {
             Rectangle()
                 .fill(day.isFuture ? .clear : color(day.intensity))
-                .frame(width: 10, height: 10)
+                .frame(
+                    width: ActivityContributionMetrics.cellSize,
+                    height: ActivityContributionMetrics.cellSize
+                )
                 .overlay {
                     Rectangle().stroke(
                         selected?.day == day.day
@@ -239,10 +241,19 @@ struct ActivityContributionCard: View {
                         lineWidth: selected?.day == day.day ? 1 : 0.5
                     )
                 }
+                // Why: the mark and the target are the same square. A 10pt visual inside a 10pt
+                // button was a precision-only target; the pitch is the largest square that
+                // still keeps a 53-week grid readable, and DESIGN.md records this grid as the
+                // one component-specific target exception rather than applying a universal 44pt.
+                .frame(
+                    width: ActivityContributionMetrics.cellPitch,
+                    height: ActivityContributionMetrics.cellPitch
+                )
         }
         .buttonStyle(.appPlain)
         .disabled(day.isFuture)
         .accessibilityLabel("\(day.day): \(formatActivityMetric(day.value, metric: metric))")
+        .accessibilityAddTraits(selected?.day == day.day ? .isSelected : [])
     }
 
     private func color(_ intensity: Int) -> Color {
@@ -270,4 +281,12 @@ struct ActivityContributionCard: View {
         case .value: "Standard global API-equivalent value calculated per request."
         }
     }
+}
+
+private enum ActivityContributionMetrics {
+    static let cellSize: CGFloat = 14
+    // Why: the 14pt mark plus its 4pt gap. The pitch is the hit target, so consecutive days are
+    // separated without a dead zone between them, and the mark and the target are the same square.
+    static let cellPitch: CGFloat = 18
+    static let labelColumn: CGFloat = Theme.Control.inlineIcon
 }

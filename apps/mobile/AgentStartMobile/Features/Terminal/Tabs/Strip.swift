@@ -19,6 +19,15 @@ extension EnvironmentValues {
 }
 
 struct TerminalTabStrip: View {
+
+    // Why: layout motion is the app's own, so it has to honour Reduce Motion itself — the loaders
+    // already did, but a full-height slide still played.
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
+
+    private var reducedStateChange: Animation? {
+        Theme.Motion.resolved(Theme.Motion.stateChange, reduceMotion: reducesMotion)
+    }
+
     @Environment(\.terminalTabContextActions) private var terminalTabContextActions
     let tabs: [TerminalWorkspaceTab]
     let activeTabID: String?
@@ -53,7 +62,7 @@ struct TerminalTabStrip: View {
                             proxy.scrollTo(tabID)
                         }
                     } else {
-                        withAnimation(Theme.Motion.stateChange) {
+                        withAnimation(reducedStateChange) {
                             proxy.scrollTo(tabID)
                         }
                     }
@@ -82,6 +91,9 @@ struct TerminalTabStrip: View {
             .contentShape(.interaction, .rect)
             .fixedSize()
             .disabled(isDisabled)
+            // Why: the strip's primary action needs a keyboard equivalent on an iPad with a
+            // Magic Keyboard. The app shipped an iPad layout with no shortcuts at all.
+            .keyboardShortcut("t", modifiers: .command)
             .accessibilityLabel("New tab")
         }
         .frame(maxWidth: .infinity)

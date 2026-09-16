@@ -11,15 +11,27 @@ struct AppView: View {
     var body: some View {
         GeometryReader { proxy in
             let layout = AgentStartLayoutMetrics(size: proxy.size)
-            Group {
-                // Why: replacing NavigationStack with NavigationSplitView at the compact/wide
-                // threshold destroys stateful Session destinations (including SwiftTerm). Keep
-                // one navigation root for the whole Workspace route so rotation only changes
-                // the column presentation and does not reopen the transport session.
-                if layout.isWideLayout, let root = splitRoot {
-                    splitNavigation(root)
-                } else {
-                    compactNavigation
+            // Why: Home and Settings are peer destinations, so each gets its own stack and keeps
+            // its history across a tab switch. Before this they shared one stack, which meant a
+            // Settings sub-page could not stay open while the user checked a workspace.
+            TabView(selection: $model.selectedTab) {
+                Tab(value: AppTab.home) {
+                    homeTab(layout: layout)
+                } label: {
+                    Label {
+                        Text(AppTab.home.title)
+                    } icon: {
+                        AgentStartIcon(AppTab.home.iconID, size: Theme.Control.tabIcon)
+                    }
+                }
+                Tab(value: AppTab.settings) {
+                    settingsTab
+                } label: {
+                    Label {
+                        Text(AppTab.settings.title)
+                    } icon: {
+                        AgentStartIcon(AppTab.settings.iconID, size: Theme.Control.tabIcon)
+                    }
                 }
             }
             .environment(\.agentstartLayoutMetrics, layout)
@@ -35,18 +47,12 @@ struct AppView: View {
             )
             await model.prepareNotificationOptIn()
         }
-        .fullScreenCover(isPresented: $model.isNotificationOptInPresented) {
+        .sheet(isPresented: $model.isNotificationOptInPresented) {
             NotificationOptInView(onFinished: model.finishNotificationOptIn)
-        }
-        .fullScreenCover(isPresented: $model.isActivityInsightsPresented) {
-            NavigationStack {
-                ActivityInsightsView(
-                    hosts: model.dependencies.hostRepository,
-                    connectionRuntime: model.dependencies.hostConnectionRuntime,
-                    repository: model.dependencies.activityRepository,
-                    snapshotCache: model.dependencies.homeSnapshotCache
-                )
-            }
+                // Why: a two-choice prompt presented from the app root is still a sheet, so it
+                // goes through the same presentation contract as every other product sheet
+                // instead of a full-screen cover.
+                .appSheetPresentation(.page)
         }
         .task(id: model.hostRevision) {
             await observeHostConnections()
@@ -79,12 +85,12 @@ struct AppView: View {
             )
             .padding(.horizontal, Theme.Spacing.medium)
             .padding(.top, Theme.Spacing.small)
-            .transition(.move(edge: .top).combined(with: .opacity))
+            .appMotionTransition(edge: .top)
         }
     }
 
     private var activeHostID: String? {
-        model.routes.last?.hostID
+        model.routes(for: .home).last?.hostID
     }
 
     private func observeHostConnections() async {
@@ -119,12 +125,40 @@ struct AppView: View {
         connectionNoticeSnapshot?.hostID
     }
 
-    private var compactNavigation: some View {
-        NavigationStack(path: $model.routes) {
-            home
-                .navigationDestination(for: AppRoute.self) { route in
-                    AppRouteDestinationView(route: route, model: model)
-                }
+    @ViewBuilder
+    private func homeTab(layout: AgentStartLayoutMetrics) -> some View {
+        // Why: replacing NavigationStack with NavigationSplitView at the compact/wide
+        // threshold destroys stateful Session destinations (including SwiftTerm). Keep
+        // one navigation root for the whole Workspace route so rotation only changes
+        // the column presentation and does not reopen the transport session.
+        if layout.isWideLayout, let root = splitRoot {
+            splitNavigation(root)
+        } else {
+            NavigationStack(path: model.binding(for: .home)) {
+                home
+                    .navigationDestination(for: AppRoute.self) { route in
+                        AppRouteDestinationView(route: route, model: model)
+                    }
+            }
+        }
+    }
+
+    private var settingsTab: some View {
+        NavigationStack(path: model.binding(for: .settings)) {
+            SettingsView(
+                credentialCleanupRepository: model.dependencies.credentialCleanupRepository,
+                showAppearance: model.showAppearanceSettings,
+                showTerminal: model.showTerminalSettings,
+                showBrowser: model.showBrowserSettings,
+                showNotifications: model.showNotificationSettings,
+                showTroubleshooting: model.showTroubleshooting,
+                showAbout: model.showAbout,
+                showDesignSystem: model.showDesignSystemCatalog,
+                showsDebugNavigation: AppModel.showsDebugNavigation
+            )
+            .navigationDestination(for: AppRoute.self) { route in
+                AppRouteDestinationView(route: route, model: model)
+            }
         }
     }
 
@@ -134,9 +168,9 @@ struct AppView: View {
                 host: root.host,
                 presentation: root.presentation,
                 model: model,
-                leaveHost: { model.routes.removeAll() },
+                leaveHost: { model.popAll(for: .home) },
                 hideSidebar: { splitVisibility = .detailOnly },
-                replaceDetail: { route in model.routes = [root.route, route] }
+                replaceDetail: { route in model.setRoutes([root.route, route], for: .home) }
             )
             .navigationSplitViewColumnWidth(min: 280, ideal: 340, max: 560)
         } detail: {
@@ -156,7 +190,7 @@ struct AppView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
-        .onChange(of: model.routes) { _, routes in
+        .onChange(of: model.routes(for: .home)) { _, routes in
             guard case .workspaces = routes.first else {
                 splitVisibility = .all
                 return
@@ -186,7 +220,6 @@ struct AppView: View {
             },
             showPairing: model.showPairing,
             showActivityInsights: model.showActivityInsights,
-            showSettings: model.showSettings,
             showAccounts: model.showAccounts,
             showBrowser: model.showBrowser,
             editHost: model.showEditHost,
@@ -195,7 +228,7 @@ struct AppView: View {
     }
 
     private var splitRoot: HostSplitRoot? {
-        guard let first = model.routes.first,
+        guard let first = model.routes(for: .home).first,
             case .workspaces(let host, let presentation) = first
         else { return nil }
         return HostSplitRoot(host: host, presentation: presentation)
@@ -203,8 +236,8 @@ struct AppView: View {
 
     private func splitDetailBinding(_ root: HostSplitRoot) -> Binding<[AppRoute]> {
         Binding(
-            get: { Array(model.routes.dropFirst()) },
-            set: { model.routes = [root.route] + $0 }
+            get: { Array(model.routes(for: .home).dropFirst()) },
+            set: { model.setRoutes([root.route] + $0, for: .home) }
         )
     }
 }

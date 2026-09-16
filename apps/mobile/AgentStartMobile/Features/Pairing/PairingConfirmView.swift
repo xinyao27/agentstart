@@ -72,11 +72,11 @@ struct PairingConfirmView: View {
     private var readyContent: some View {
         VStack(spacing: 0) {
             Text("Pair with this daemon?")
-                .font(.system(size: Theme.Typography.emphasis, weight: .semibold))
+                .font(Theme.Typography.emphasis.weight(.semibold))
                 .foregroundStyle(Theme.Colors.foreground)
                 .multilineTextAlignment(.center)
             Text("You opened a pairing link from your daemon. Confirm to add it to your hosts.")
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .multilineTextAlignment(.center)
                 .lineSpacing(4)
@@ -96,7 +96,7 @@ struct PairingConfirmView: View {
                 beginPairing()
             } label: {
                 Text("Pair")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .frame(maxWidth: .infinity)
             }
             .appProminentGlassButton()
@@ -106,7 +106,7 @@ struct PairingConfirmView: View {
                 cancelPairing()
             } label: {
                 Text("Cancel")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.glass)
@@ -119,7 +119,7 @@ struct PairingConfirmView: View {
             ProgressView()
                 .controlSize(.large)
             Text("Connecting…")
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
             PairingLog(entries: model.logEntries)
                 .frame(maxWidth: .infinity)

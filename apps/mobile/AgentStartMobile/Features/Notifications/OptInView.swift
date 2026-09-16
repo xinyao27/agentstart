@@ -14,12 +14,12 @@ struct NotificationOptInView: View {
                         .frame(width: Theme.Spacing.huge * 2, height: Theme.Spacing.huge * 2)
                         .padding(.bottom, Theme.Spacing.extraLarge)
                     Text("Stay updated while connected")
-                        .font(.system(size: Theme.Typography.emphasis, weight: .semibold))
+                        .font(Theme.Typography.emphasis.weight(.semibold))
                         .multilineTextAlignment(.center)
                     Text(
                         "See an alert on this device while AgentStart is connected to your daemon."
                     )
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .multilineTextAlignment(.center)
                     .lineSpacing(Theme.Spacing.extraSmall)
@@ -31,7 +31,7 @@ struct NotificationOptInView: View {
                 VStack(spacing: Theme.Spacing.small) {
                     if let errorMessage {
                         Text(errorMessage)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.attention)
                             .multilineTextAlignment(.center)
                             .accessibilityLabel(errorMessage)
@@ -45,7 +45,7 @@ struct NotificationOptInView: View {
                         choiceButton(title: "Not now", choice: .skip, isProminent: false)
                     }
                     Text("You can change this any time in Settings.")
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .multilineTextAlignment(.center)
                         .padding(.top, Theme.Spacing.small)

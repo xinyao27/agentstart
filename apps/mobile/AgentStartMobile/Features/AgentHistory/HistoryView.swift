@@ -67,6 +67,9 @@ struct AgentHistoryView: View {
         .background(Theme.Colors.background)
         .navigationTitle("History · \(workspaceLabel)")
         .navigationBarTitleDisplayMode(.inline)
+        // Why: filtering a list is the platform's own search field. A custom glass field inside
+        // the content pushed the query away from the results and reimplemented clear and cancel.
+        .searchable(text: $model.query, prompt: Text("Search sessions, repo:, path:"))
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -87,41 +90,12 @@ struct AgentHistoryView: View {
                 .padding(.horizontal, Theme.Spacing.medium)
                 .padding(.top, Theme.Spacing.small)
 
-            HStack(spacing: Theme.Spacing.small) {
-                AgentStartIcon(.search, size: Theme.Control.inlineIcon)
-                    .foregroundStyle(Theme.Colors.mutedForeground)
-                TextField("Search sessions, repo:, path:", text: $model.query)
-                    .font(.system(size: Theme.Typography.supporting))
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                if !model.query.isEmpty {
-                    Button {
-                        model.query = ""
-                    } label: {
-                        AgentStartIcon(.xCircle)
-                            .foregroundStyle(Theme.Colors.mutedForeground)
-                    }
-                    .buttonStyle(.appPlain)
-                    .frame(
-                        width: Theme.Size.minimumHitTarget,
-                        height: Theme.Size.minimumHitTarget
-                    )
-                    .contentShape(.interaction, .rect)
-                    .accessibilityLabel("Clear search")
-                }
-            }
-            .padding(.horizontal, Theme.Spacing.medium)
-            .frame(minHeight: Theme.Size.minimumHitTarget)
-            .glassEffect(.regular.interactive(), in: .capsule)
-            .padding(.horizontal, Theme.Spacing.medium)
-            .padding(.top, Theme.Spacing.small)
-
             if !model.snapshot.issues.isEmpty {
                 statusBanner(
                     model.snapshot.issues.count == 1
                         ? "1 transcript skipped"
                         : "\(model.snapshot.issues.count) transcripts skipped",
-                    color: Theme.Colors.unread
+                    color: Theme.Colors.unreadText
                 )
             }
             if let resumeMessage = model.resumeMessage {
@@ -151,42 +125,23 @@ struct AgentHistoryView: View {
         }
     }
 
+    // Why: a mutually exclusive choice is a segmented control. The hand-built strip reimplemented
+    // selection state and its own selected/unselected colors instead of inheriting the platform
+    // control's appearance, Increase Contrast behavior and accessibility semantics.
     private var scopeStrip: some View {
-        HStack(spacing: Theme.Spacing.extraSmall) {
-            scopeButton("Workspace", scope: .workspace)
-            scopeButton("Project", scope: .project)
-            scopeButton("All", scope: .all)
+        Picker("Agent session scope", selection: scopeSelection) {
+            Text("Workspace").tag(AgentHistoryScope.workspace)
+            Text("Project").tag(AgentHistoryScope.project)
+            Text("All").tag(AgentHistoryScope.all)
         }
-        .padding(Theme.Spacing.extraSmall)
-        .background(Theme.Colors.secondary, in: .rect(cornerRadius: Theme.Radius.control))
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel("Agent session scope")
+        .pickerStyle(.segmented)
     }
 
-    private func scopeButton(
-        _ title: LocalizedStringKey,
-        scope: AgentHistoryScope
-    ) -> some View {
-        let isSelected = model.scope == scope
-        return Button {
-            Task { await model.selectScope(scope) }
-        } label: {
-            Text(title)
-                .font(.system(size: Theme.Typography.metadata, weight: .regular))
-                .foregroundStyle(
-                    isSelected ? Theme.Colors.foreground : Theme.Colors.mutedForeground
-                )
-                .frame(maxWidth: .infinity)
-                .frame(height: Theme.Control.inlineHeight)
-                .background(
-                    isSelected ? Theme.Colors.selection : Color.clear,
-                    in: .rect(cornerRadius: Theme.Radius.control)
-                )
-        }
-        .buttonStyle(.appPlain)
-        .frame(minHeight: Theme.Size.minimumHitTarget)
-        .contentShape(.interaction, .rect)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
+    private var scopeSelection: Binding<AgentHistoryScope> {
+        Binding(
+            get: { model.scope },
+            set: { scope in Task { await model.selectScope(scope) } }
+        )
     }
 
     private func section(_ group: AgentHistoryGroup) -> some View {
@@ -197,7 +152,7 @@ struct AgentHistoryView: View {
                 Text(verbatim: "\(group.sessions.count)")
                 Spacer()
             }
-            .font(.system(size: Theme.Typography.metadata, weight: .regular))
+            .font(Theme.Typography.metadata.weight(.regular))
             .foregroundStyle(Theme.Colors.mutedForeground)
             .padding(.vertical, Theme.Spacing.small)
 
@@ -225,7 +180,7 @@ struct AgentHistoryView: View {
     private func statusBanner(_ text: String, color: Color) -> some View {
         ContentSurface {
             Text(verbatim: text)
-                .font(.system(size: Theme.Typography.metadata, weight: .regular))
+                .font(Theme.Typography.metadata.weight(.regular))
                 .foregroundStyle(color)
         }
         .padding(.horizontal, Theme.Spacing.medium)

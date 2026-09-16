@@ -30,7 +30,7 @@ struct AccountView: View {
                 accountPlaceholder {
                     AgentStartLoader(size: Theme.Control.largeIcon)
                     Text("Connecting to \(host.name)…")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 }
             } else {
@@ -39,7 +39,7 @@ struct AccountView: View {
                     accountPlaceholder {
                         AgentStartLoader(size: Theme.Control.largeIcon)
                         Text("Loading accounts…")
-                            .font(.system(size: Theme.Typography.supporting))
+                            .font(Theme.Typography.supporting)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                 case .failed(let message):
@@ -108,7 +108,7 @@ struct AccountView: View {
                 )
             }
             Text("Add or re-authenticate agent accounts on the daemon host.")
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .lineSpacing(Theme.Spacing.extraSmall)
                 .frame(maxWidth: .infinity, alignment: .leading)

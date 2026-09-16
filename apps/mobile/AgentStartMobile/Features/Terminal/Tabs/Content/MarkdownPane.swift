@@ -93,7 +93,7 @@ struct WorkspaceMarkdownPane: View {
                     set: { value in model.update(value) }
                 )
             )
-            .font(.system(size: Theme.Typography.code, design: .monospaced))
+            .font(Theme.Typography.code)
             .foregroundStyle(Theme.Colors.foreground)
             .scrollContentBackground(.hidden)
             .padding(.horizontal, Theme.Spacing.medium)
@@ -104,7 +104,7 @@ struct WorkspaceMarkdownPane: View {
                 VStack(alignment: .trailing, spacing: 4) {
                     if let statusMessage {
                         Text(verbatim: statusMessage)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(
                                 model.saveError == nil
                                     ? Theme.Colors.mutedForeground : Theme.Colors.attention

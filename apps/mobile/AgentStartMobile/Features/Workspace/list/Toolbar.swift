@@ -2,7 +2,6 @@ import SwiftUI
 
 struct WorkspaceListToolbar: ToolbarContent {
     let model: WorkspaceListModel
-    @Binding var isSearchPresented: Bool
     @Binding var isCreationPresented: Bool
     let leaveHost: (() -> Void)?
     let hideSidebar: (() -> Void)?
@@ -19,16 +18,8 @@ struct WorkspaceListToolbar: ToolbarContent {
         }
         // Why: each action gets its own circular glass target. Separate toolbar items avoid
         // SwiftUI's automatic grouped capsule, which changes both the width and the corner
-        // geometry of this header.
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                isSearchPresented = true
-            } label: {
-                AgentStartToolbarIcon(.search)
-            }
-            .accessibilityLabel("Search workspaces")
-        }
-        ToolbarSpacer(.fixed, placement: .topBarTrailing)
+        // geometry of this header. Search is not one of them — `.searchable` owns the system
+        // search field, so a magnifier button here would be a second entry point to it.
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
                 Button {
@@ -37,6 +28,9 @@ struct WorkspaceListToolbar: ToolbarContent {
                     Label("New workspace", iconID: .add)
                 }
                 .disabled(!model.canUseHost)
+                // Why: the list's primary action needs a keyboard equivalent on an iPad with a
+                // Magic Keyboard.
+                .keyboardShortcut("n", modifiers: .command)
                 Button(action: showAccounts) {
                     Label("Accounts", iconID: .account)
                 }

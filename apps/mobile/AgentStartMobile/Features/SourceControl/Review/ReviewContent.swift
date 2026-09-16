@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SourceReviewHeader: View {
     @Bindable var model: SourceReviewModel
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.medium) {
@@ -16,7 +17,7 @@ struct SourceReviewHeader: View {
                 verbatim:
                     "\(model.reviewedCount)/\(model.snapshot?.items.count ?? 0) reviewed · \(model.unsentComments.count) unsent \(model.unsentComments.count == 1 ? "note" : "notes")"
             )
-            .font(.system(size: Theme.Typography.metadata))
+            .font(Theme.Typography.metadata)
             .foregroundStyle(Theme.Colors.mutedForeground)
             Menu {
                 ForEach(SourceReviewFilter.allCases) { filter in
@@ -36,9 +37,17 @@ struct SourceReviewHeader: View {
                 HStack(spacing: Theme.Spacing.small) {
                     AgentStartIcon(.filter, size: Theme.Control.inlineIcon)
                     Text("Filter · \(filterTitle)")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                 }
-                .frame(width: Theme.Control.reviewFilterWidth, height: Theme.Control.regularHeight)
+                // Why: the measured 111pt keeps this selector aligned with the row above at the
+                // base text size. Above the accessibility threshold it has to size itself, or
+                // the label truncates inside a frame `.appButtonContext` cannot expand.
+                .frame(
+                    width: dynamicTypeSize.isAccessibilitySize
+                        ? nil : Theme.Control.reviewFilterWidth,
+                    height: dynamicTypeSize.isAccessibilitySize
+                        ? nil : Theme.Control.regularHeight
+                )
                 .glassEffect(.regular.interactive(), in: .capsule)
                 // Why: Menu labels inherit the system accent by default. This stays in the
                 // same neutral foreground as the rest of the review header — an accented
@@ -66,16 +75,16 @@ struct SourceReviewFileSummary: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.small) {
             HStack(spacing: Theme.Spacing.small) {
                 Text(verbatim: item.status.label)
-                    .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                    .font(Theme.Typography.metadata.monospaced())
                     .foregroundStyle(item.status.color)
                     .frame(width: Theme.Spacing.extraLarge)
                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                     // Why: the identifying information on this card — the file being
                     // reviewed — must never tail-truncate; this card has room for it to wrap.
                     Text(verbatim: item.filePath)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                     Text(scopeLabel)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 }
                 Spacer(minLength: Theme.Spacing.small)
@@ -89,26 +98,26 @@ struct SourceReviewFileSummary: View {
                 // thousands grouping (e.g. "1,234"), which matters because a review can hold
                 // thousands of files.
                 Text(verbatim: "File \(model.currentIndex + 1) of \(model.visibleItems.count)")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 fileNavButton("Next file", icon: .arrowRight, direction: 1)
                 Spacer(minLength: Theme.Spacing.small)
                 if item.isReviewed { reviewBadge(Text("Reviewed"), color: Theme.Colors.success) }
                 if item.changedSinceReview {
-                    reviewBadge(Text("Changed"), color: Theme.Colors.unread)
+                    reviewBadge(Text("Changed"), color: Theme.Colors.unreadText)
                 }
             }
             if item.noteCount > 0 || item.staleNoteCount > 0 {
                 HStack(spacing: Theme.Spacing.medium) {
                     if item.noteCount > 0 {
                         Text(verbatim: "\(item.noteCount) notes")
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                     if item.staleNoteCount > 0 {
                         reviewBadge(
                             Text(verbatim: "\(item.staleNoteCount) stale"),
-                            color: Theme.Colors.unread)
+                            color: Theme.Colors.unreadText)
                     }
                 }
             }
@@ -121,7 +130,7 @@ struct SourceReviewFileSummary: View {
                     model.editComment(comment)
                 } label: {
                     Text(verbatim: comment.body)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineLimit(2)
                         .frame(
@@ -155,7 +164,7 @@ struct SourceReviewFileSummary: View {
 
     private func reviewBadge(_ title: Text, color: Color) -> some View {
         title
-            .font(.system(size: Theme.Typography.metadata))
+            .font(Theme.Typography.metadata)
             .foregroundStyle(color)
     }
 

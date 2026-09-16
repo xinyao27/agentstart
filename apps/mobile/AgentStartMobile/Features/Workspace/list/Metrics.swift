@@ -13,10 +13,8 @@ nonisolated enum WorkspaceListMetrics {
     // the branch name's meaningful tail stays visible before it does.
     static let compactTitleMaximumWidth: CGFloat = 320
 
-    static let titleText: CGFloat = Theme.Typography.primary
-    static let supportingText: CGFloat = Theme.Typography.supporting
-    static let metadataText: CGFloat = Theme.Typography.metadata
-
+    // Why: this enum owns row geometry only. Row text goes through `Theme.Typography` so it
+    // follows the user's Larger Text setting; a font size held here would pin it.
     static let projectIcon: CGFloat = 20
     static let standardIcon: CGFloat = 16
     static let compactIcon: CGFloat = 12

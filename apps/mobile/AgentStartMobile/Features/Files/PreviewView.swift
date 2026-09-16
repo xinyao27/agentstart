@@ -101,7 +101,7 @@ struct FilePreviewMetadata: View {
 
     var body: some View {
         Text(verbatim: text)
-            .font(.system(size: Theme.Typography.metadata))
+            .font(Theme.Typography.metadata)
             .foregroundStyle(Theme.Colors.mutedForeground)
             .lineLimit(1)
             .frame(maxWidth: .infinity, alignment: .leading)

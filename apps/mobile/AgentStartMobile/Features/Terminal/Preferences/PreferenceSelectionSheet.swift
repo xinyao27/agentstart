@@ -107,7 +107,7 @@ private struct TerminalPreferencePickerHeader: View {
                 action: { dismiss() }
             )
             title
-                .font(.system(size: Theme.Typography.emphasis, weight: .semibold))
+                .font(Theme.Typography.emphasis.weight(.semibold))
                 .foregroundStyle(Theme.Colors.foreground)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -125,7 +125,7 @@ private struct TerminalPreferenceOptionLabel: View {
     var body: some View {
         HStack(spacing: Theme.Spacing.medium) {
             title
-                .font(.system(size: Theme.Typography.supporting, weight: .regular))
+                .font(Theme.Typography.supporting.weight(.regular))
                 .foregroundStyle(Theme.Colors.foreground)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Group {

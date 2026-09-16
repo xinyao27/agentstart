@@ -17,18 +17,18 @@ extension TerminalLiveModel {
         } catch is CancellationError {
             return
         } catch {
-            showNotice("Couldn't rename terminal")
+            showNotice("Couldn't rename terminal", kind: .failure)
         }
     }
     func clear() async {
         surface.clear()
         do {
             try await runtime.clearTerminal(hostID: hostID, terminalID: terminalID)
-            showNotice("Terminal cleared")
+            showNotice("Terminal cleared", kind: .success)
         } catch is CancellationError {
             return
         } catch {
-            showNotice("Couldn't clear terminal")
+            showNotice("Couldn't clear terminal", kind: .failure)
         }
     }
     func closeRemote() async -> Bool {
@@ -38,7 +38,7 @@ extension TerminalLiveModel {
         } catch is CancellationError {
             return false
         } catch {
-            showNotice("Couldn't close terminal")
+            showNotice("Couldn't close terminal", kind: .failure)
             return false
         }
     }
@@ -70,13 +70,7 @@ extension TerminalLiveModel {
         }
         isDisplayModeUpdating = false
     }
-    func showNotice(_ message: LocalizedStringResource) {
-        let notice = TerminalActionNotice(message: message)
-        actionNotice = notice
-        Task { [weak self] in
-            try? await Task.sleep(for: .milliseconds(1_500))
-            guard self?.actionNotice?.id == notice.id else { return }
-            self?.actionNotice = nil
-        }
+    func showNotice(_ message: LocalizedStringResource, kind: TerminalNoticeKind) {
+        noticeHandler?(TerminalActionNotice(message: message, kind: kind))
     }
 }

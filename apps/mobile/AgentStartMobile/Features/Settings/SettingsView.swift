@@ -104,9 +104,9 @@ struct SettingsView: View {
                     .frame(width: Theme.Control.largeIcon)
                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                     Text("Pairing credential cleanup")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                     Text(cleanupModel.message)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineSpacing(Theme.Spacing.extraSmall)
                 }

@@ -3,9 +3,16 @@ import SwiftUI
 struct WorkspaceCreationSheet: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.openURL) var openURL
+    // Why: the form's disclosure animation is the app's own, so it has to honour Reduce Motion
+    // itself — the loaders already did, but this slide still played.
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
     @State var model: WorkspaceCreationModel
     @State var presentedSheet: WorkspaceCreationPresentation?
     let onCreated: (WorkspaceSummary) -> Void
+
+    var reducedStateChange: Animation? {
+        Theme.Motion.resolved(Theme.Motion.stateChange, reduceMotion: reducesMotion)
+    }
 
     init(
         host: HostProfile,
@@ -89,7 +96,7 @@ struct WorkspaceCreationSheet: View {
             )
 
             Text("Create Workspace")
-                .font(.system(size: Theme.Typography.primary, weight: .semibold))
+                .font(Theme.Typography.primary.weight(.semibold))
                 .foregroundStyle(Theme.Colors.foreground)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }

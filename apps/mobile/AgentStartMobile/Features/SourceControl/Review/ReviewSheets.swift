@@ -8,10 +8,10 @@ struct SourceReviewComposerSheet: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: Theme.Spacing.medium) {
                 Text(composerLocation)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 TextEditor(text: $model.composerBody)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .scrollContentBackground(.hidden)
                     .padding(Theme.Spacing.small)
                     .background(
@@ -27,6 +27,9 @@ struct SourceReviewComposerSheet: View {
                     }
             }
             .padding(Theme.Spacing.page)
+            // Why: the sheet now fills a page. Without this the editor keeps its intrinsic
+            // height and the note field sits at the top of a mostly empty screen.
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .navigationTitle(isEditing ? "Edit Note" : "Add Note")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -58,7 +61,10 @@ struct SourceReviewComposerSheet: View {
                 }
             }
         }
-        .appSheetPresentation(.fixed(.medium))
+        // Why: this sheet's body is a `TextEditor`. A fixed detent cannot grow and shows no drag
+        // indicator, so the software keyboard would cover the field with no escape hatch; the
+        // sheet contract gives multi-line input the page presentation instead.
+        .appSheetPresentation(.page)
     }
 
     private var isEditing: Bool {
@@ -213,7 +219,7 @@ struct SourceReviewCompletionSheet: View {
                 Text(
                     "\(model.snapshot?.items.count ?? 0) files reviewed, \(model.snapshot?.comments.count ?? 0) notes"
                 )
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 HStack(spacing: Theme.Spacing.small) {
                     Button("Stage Reviewed") {

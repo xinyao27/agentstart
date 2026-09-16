@@ -11,17 +11,9 @@ struct SettingsSection<Content: View>: View {
         VStack(spacing: 0) {
             content
         }
-        .background(Theme.Colors.content)
-        .clipShape(
-            RoundedRectangle(cornerRadius: Theme.Radius.content, style: .continuous)
-        )
-        .overlay {
-            // Why: MobileContentSection keeps the semantic border around each card. Applying
-            // it after clipping preserves the same continuous 1px edge without changing the
-            // fill or making the row separators darker.
-            RoundedRectangle(cornerRadius: Theme.Radius.content, style: .continuous)
-                .stroke(Theme.Colors.divider, lineWidth: Theme.Size.hairline)
-        }
+        // Why: the card recipe has one owner. Deriving fill, radius and border here is what let
+        // settings cards and content cards drift apart.
+        .contentSurfaceBackground()
     }
 }
 
@@ -45,14 +37,12 @@ struct SettingsHeading: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.small) {
             Text(title)
-                .font(.system(size: Theme.Typography.metadata, weight: .semibold))
+                .font(Theme.Typography.metadata.weight(.semibold))
             if let detail {
                 Text(detail)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .lineSpacing(Theme.Spacing.extraSmall)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .allowsTightening(true)
-                    .minimumScaleFactor(0.9)
             }
         }
         .foregroundStyle(Theme.Colors.mutedForeground)
@@ -74,12 +64,12 @@ struct SettingsNavigationRow: View {
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .frame(width: Theme.Control.largeIcon)
                 Text(title)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.foreground)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 if let trailing {
                     Text(trailing)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 }
                 AgentStartIcon(.chevronRight, size: Theme.Control.inlineIcon)
@@ -106,7 +96,7 @@ struct SettingsLinkRow: View {
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .frame(width: Theme.Control.largeIcon)
                 Text(title)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.foreground)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }

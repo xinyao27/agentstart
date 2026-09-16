@@ -2,6 +2,15 @@ import SwiftUI
 import UIKit
 
 struct TerminalWorkspaceContentView: View {
+
+    // Why: layout motion is the app's own, so it has to honour Reduce Motion itself — the loaders
+    // already did, but a full-height slide still played.
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
+
+    private var reducedStateChange: Animation? {
+        Theme.Motion.resolved(Theme.Motion.stateChange, reduceMotion: reducesMotion)
+    }
+
     @Environment(\.agentstartLayoutMetrics) private var layoutMetrics
     let host: HostProfile
     let workspace: WorkspaceSummary
@@ -63,7 +72,7 @@ struct TerminalWorkspaceContentView: View {
                         )
                     }
                 )
-                .transition(.move(edge: .trailing).combined(with: .opacity))
+                .appMotionTransition(edge: .trailing)
             }
         }
         .onGeometryChange(for: CGFloat.self) { proxy in
@@ -77,24 +86,48 @@ struct TerminalWorkspaceContentView: View {
                 activePanel = nil
             }
         }
-        .animation(Theme.Motion.stateChange, value: activePanel)
+        .appAnimation(Theme.Motion.stateChange, value: activePanel)
         .overlay(alignment: .top) {
-            if let pendingActiveTab, !isPendingTerminalNoticeDismissed {
+            if let operation = model.operation {
+                // Why: the operation blocks every other action in the session, so it has to be
+                // visible and cancellable rather than only dimming controls.
+                TerminalOperationProgress(
+                    operation: operation,
+                    canCancel: model.isOperationCancellable,
+                    cancel: model.cancelOperation
+                )
+                .padding(.horizontal, TerminalChromeMetrics.horizontalInset)
+                .padding(.top, pendingTerminalNoticeTopPadding)
+                .appMotionTransition(edge: .top)
+            } else if let pendingActiveTab, !isPendingTerminalNoticeDismissed {
                 PendingTerminalNotice(
                     didTimeOut: model.isPendingTerminalTimedOut(pendingActiveTab.id),
                     retry: {
-                        isPendingTerminalNoticeDismissed = true
                         Task { await model.retryPendingTerminal(pendingActiveTab) }
                     },
                     dismiss: {
-                        withAnimation(Theme.Motion.stateChange) {
+                        withAnimation(reducedStateChange) {
                             isPendingTerminalNoticeDismissed = true
                         }
                     }
                 )
                 .padding(.horizontal, TerminalChromeMetrics.horizontalInset)
                 .padding(.top, pendingTerminalNoticeTopPadding)
-                .transition(.move(edge: .top).combined(with: .opacity))
+                .appMotionTransition(edge: .top)
+            }
+        }
+        // Why: one session-level notice, above whichever tab is showing. It used to live inside the
+        // terminal pane's own overlay, so switching to a markdown, file, or browser tab hid the
+        // failure along with the pane.
+        .overlay(alignment: .bottom) {
+            if let notice = model.actionNotice {
+                TerminalActionNoticeLabel(
+                    message: notice.message,
+                    dismiss: model.dismissActionNotice
+                )
+                .padding(.horizontal, TerminalChromeMetrics.horizontalInset)
+                .padding(.bottom, TerminalChromeMetrics.actionNoticeBottomInset)
+                .transition(.opacity.combined(with: .move(edge: .bottom)))
             }
         }
         .onChange(of: pendingActiveTerminalID) { _, _ in
@@ -111,7 +144,7 @@ struct TerminalWorkspaceContentView: View {
                 description: Text("Create a terminal to start working in this workspace.")
             ) {
                 Button("New Terminal", iconID: .add) {
-                    Task { await model.createTerminal() }
+                    model.runOperation { await model.createTerminal() }
                 }
                 .appProminentGlassButton()
                 .appButtonContext(.regular)
@@ -159,7 +192,8 @@ struct TerminalWorkspaceContentView: View {
                         showAgentHistory: workspace.kind == .git && agentHistoryAvailable
                             ? showAgentHistory : nil,
                         openTerminalFile: openTerminalFile,
-                        openTerminalURL: openTerminalURL
+                        openTerminalURL: openTerminalURL,
+                        reportNotice: model.publish
                     )
                     // Why: Desktop can replace a disconnected renderer mirror with the
                     // recovered PTY handle without changing the tab identity. Recreate the
@@ -198,7 +232,7 @@ struct TerminalWorkspaceContentView: View {
                 description: Text("Resume this workspace to reconnect its terminals.")
             ) {
                 Button("Resume Workspace", iconID: .play) {
-                    Task { await model.resumeWorkspace() }
+                    model.runOperation { await model.resumeWorkspace() }
                 }
                 .appProminentGlassButton()
                 .appButtonContext(.regular)
@@ -214,7 +248,7 @@ struct TerminalWorkspaceContentView: View {
                     description: Text("The host did not respond. Try again.")
                 ) {
                     Button("Retry", iconID: .refresh) {
-                        Task { await model.retryPendingTerminal(tab) }
+                        model.runOperation { await model.retryPendingTerminal(tab) }
                     }
                     .appProminentGlassButton()
                     .appButtonContext(.regular)
@@ -226,7 +260,7 @@ struct TerminalWorkspaceContentView: View {
                 VStack(spacing: Theme.Spacing.small) {
                     AgentStartLoader(size: Theme.Control.inlineIcon)
                     Text(tab.displayTitle.isEmpty ? "Loading terminal" : tab.displayTitle)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineLimit(1)
                 }
@@ -273,7 +307,7 @@ struct TerminalWorkspaceContentView: View {
             activeTabID: model.activeTabID,
             isDisabled: model.operation != nil,
             selectTab: { tab in Task { await model.select(tab) } },
-            closeTab: { tab in Task { await model.close(tab) } },
+            closeTab: { tab in model.runOperation { await model.close(tab) } },
             navigateBrowser: navigateBrowser,
             createTerminal: createTerminalTab,
             contentContextActions: TerminalContentContextActions(

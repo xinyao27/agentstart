@@ -60,12 +60,7 @@ struct MermaidDiagramView: View {
                 AgentStartLoader(size: Theme.Control.regularIcon)
             }
         }
-        .background(Theme.Colors.content)
-        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.content, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: Theme.Radius.content, style: .continuous)
-                .stroke(Theme.Colors.divider, lineWidth: Theme.Size.hairline)
-        )
+        .contentSurfaceBackground()
         .padding(.bottom, Theme.Spacing.small)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Mermaid diagram"))
@@ -83,12 +78,7 @@ private struct MermaidFallbackView: View {
                 .foregroundStyle(Theme.Colors.foreground)
                 .padding(Theme.Spacing.small)
         }
-        .background(Theme.Colors.content)
-        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.content, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: Theme.Radius.content, style: .continuous)
-                .stroke(Theme.Colors.divider, lineWidth: Theme.Size.hairline)
-        )
+        .contentSurfaceBackground()
         .padding(.bottom, Theme.Spacing.small)
     }
 }

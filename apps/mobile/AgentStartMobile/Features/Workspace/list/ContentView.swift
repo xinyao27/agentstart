@@ -1,11 +1,14 @@
 import SwiftUI
 
 struct WorkspaceListContentView: View {
+    // Why: the app's own layout motion has to honour Reduce Motion itself.
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
     let model: WorkspaceListModel
     let snapshot: WorkspaceSnapshot
     let showPairing: () -> Void
     let showActions: (WorkspaceSummary) -> Void
     let requestRemoveHost: () -> Void
+    let createWorkspace: () -> Void
     let selectWorkspace: (WorkspaceSummary, WorkspaceOpenTab?) -> Void
     @State private var didObserveInitialActiveRow = false
 
@@ -37,10 +40,28 @@ struct WorkspaceListContentView: View {
             }
 
             if model.shouldShowEmptyState {
-                Text(model.emptyStateTitle)
-                    .font(.system(size: WorkspaceListMetrics.supportingText))
-                    .foregroundStyle(Theme.Colors.mutedForeground)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                // Why: an empty destination explains itself and offers the action that fills it.
+                // The failure branch below and the session's "No open tabs" already use this
+                // surface; a single line of muted text was the odd one out.
+                AppUnavailableState(
+                    title: Text(model.emptyStateTitle),
+                    iconID: model.emptyStateIsSearching ? .search : .stack,
+                    description: Text(model.emptyStateDescription)
+                ) {
+                    if model.emptyStateIsSearching {
+                        Button("Clear search", iconID: .xCircle) {
+                            model.setSearchText("")
+                        }
+                        .buttonStyle(.glass)
+                        .appButtonContext(.regular)
+                    } else {
+                        Button("New workspace", iconID: .add, action: createWorkspace)
+                            .appProminentGlassButton()
+                            .appButtonContext(.regular)
+                            .disabled(!model.canUseHost)
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 workspaceScroll(
                     repoIconsByID: repoIconsByID,
@@ -116,7 +137,9 @@ struct WorkspaceListContentView: View {
                 }
                 Task { @MainActor in
                     await Task.yield()
-                    withAnimation(.easeInOut(duration: 0.22)) {
+                    withAnimation(
+                        Theme.Motion.resolved(Theme.Motion.stateChange, reduceMotion: reducesMotion)
+                    ) {
                         proxy.scrollTo(rowID, anchor: .center)
                     }
                 }
@@ -126,9 +149,11 @@ struct WorkspaceListContentView: View {
                     // Why: the host-level notice already owns the reconnect action. Keep this
                     // first-load indicator out of the list layout so the toolbar, back action,
                     // and any cached/empty surface remain usable while Desktop is connecting.
-                    AgentStartLoader(size: Theme.Control.regularIcon)
-                        .accessibilityLabel("Connecting to daemon")
-                        .allowsHitTesting(false)
+                    AgentStartLoader(
+                        size: Theme.Control.regularIcon,
+                        accessibilityLabel: "Connecting to daemon"
+                    )
+                    .allowsHitTesting(false)
                 }
             }
         }

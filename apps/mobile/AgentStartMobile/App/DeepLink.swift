@@ -2,6 +2,8 @@ import Foundation
 
 nonisolated enum AppDeepLink {
     case home
+    case settings
+    case activityInsights
     case staticRoute(AppRoute)
     case host(String, WorkspaceListPresentation)
     case hostDetail(String, HostDetail)
@@ -31,6 +33,18 @@ nonisolated enum AppDeepLink {
         guard let first = segments.first else {
             self = .home
             return
+        }
+        // Why: Settings is a tab root and activity insights is a route in the Home tab, so
+        // neither is a pushed destination. They are resolved before the static-route table.
+        switch first {
+        case "settings":
+            self = .settings
+            return
+        case "activity-insights":
+            self = .activityInsights
+            return
+        default:
+            break
         }
         if let route = Self.staticRoute(first) {
             self = .staticRoute(route)
@@ -138,13 +152,11 @@ nonisolated enum AppDeepLink {
     private static func staticRoute(_ path: String) -> AppRoute? {
         switch path {
         case "about": .about
-        case "activity-insights": .activityInsights
         case "appearance-settings": .appearanceSettings
         case "browser-settings": .browserSettings
         case "connection-log": .connectionLog
         case "notifications": .notificationSettings
         case "pair", "pair-scan": .pair
-        case "settings": .settings
         case "terminal-settings": .terminalSettings
         case "troubleshoot": .troubleshooting
         default: nil

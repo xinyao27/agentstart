@@ -27,11 +27,11 @@ struct SourceCreateReviewRow: View {
                     // carries `primary` rather than the neutral row color the other git actions
                     // use. It is deliberately the only such use here.
                     Text(verbatim: entry.label)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(labelColor)
                     if let hint = entry.hint {
                         Text(verbatim: hint)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(2)
                     }
@@ -48,7 +48,7 @@ struct SourceCreateReviewRow: View {
     }
 
     private var labelColor: Color {
-        entry.isEnabled ? Theme.Colors.primary : Theme.Colors.mutedForeground
+        entry.isEnabled ? Theme.Colors.primaryText : Theme.Colors.mutedForeground
     }
 }
 
@@ -114,13 +114,13 @@ struct SourceBranchCard: View {
             HStack(alignment: .top, spacing: Theme.Spacing.small) {
                 AgentStartIcon(.gitMerge, size: 15)
                 Text(verbatim: snapshot.branchLabel)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.foreground)
                     .lineLimit(2)
             }
             if let syncLabel {
                 Text(verbatim: syncLabel)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
             }
             HStack(spacing: Theme.Spacing.medium) {
@@ -138,16 +138,16 @@ struct SourceBranchCard: View {
                 }
                 if snapshot.unresolvedCount > 0 {
                     Text(verbatim: "\(snapshot.unresolvedCount) conflicts")
-                        .foregroundStyle(Theme.Colors.unread)
+                        .foregroundStyle(Theme.Colors.unreadText)
                 }
             }
-            .font(.system(size: Theme.Typography.metadata))
+            .font(Theme.Typography.metadata)
             .foregroundStyle(Theme.Colors.mutedForeground)
             if let operation = snapshot.conflictOperation {
                 HStack(spacing: Theme.Spacing.small) {
                     Text(verbatim: operation.rawValue.capitalized)
-                        .font(.system(size: Theme.Typography.metadata))
-                        .foregroundStyle(Theme.Colors.unread)
+                        .font(Theme.Typography.metadata)
+                        .foregroundStyle(Theme.Colors.unreadText)
                     Button {
                         Task { await model.abortConflict() }
                     } label: {
@@ -156,7 +156,7 @@ struct SourceBranchCard: View {
                                 .controlSize(.small)
                         } else {
                             Text("Abort \(operation.rawValue)")
-                                .font(.system(size: Theme.Typography.metadata))
+                                .font(Theme.Typography.metadata)
                         }
                     }
                     .buttonStyle(.glass)

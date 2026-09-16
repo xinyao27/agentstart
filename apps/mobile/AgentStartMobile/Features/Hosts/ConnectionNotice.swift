@@ -12,11 +12,11 @@ struct HostConnectionNotice: View {
 
             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                 Text(statusTitle)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.foreground)
                     .lineLimit(1)
                 Text(verbatim: snapshot.hostName)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .lineLimit(1)
             }
@@ -36,7 +36,7 @@ struct HostConnectionNotice: View {
                         AgentStartLoader(size: Theme.Control.inlineIcon)
                     } else {
                         Text("Retry")
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                     }
                 }
                 .buttonStyle(.appPlain)
@@ -61,7 +61,10 @@ struct HostConnectionNotice: View {
         .padding(.trailing, Theme.Spacing.extraSmall)
         .frame(minHeight: Theme.Size.minimumHitTarget)
         .glassEffect(
-            .regular,
+            // Why: the same banner role as `TerminalConnectionStatusBanner`, which is
+            // `.interactive()`. Two banners for the same job behaving differently was the
+            // inconsistency, not the modifier.
+            .regular.interactive(),
             in: .rect(cornerRadius: Theme.Radius.control)
         )
         .accessibilityElement(children: .contain)

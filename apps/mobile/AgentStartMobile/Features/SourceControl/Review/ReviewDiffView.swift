@@ -74,7 +74,7 @@ struct SourceReviewDiffView: View {
             AgentStartIcon(.trash, size: Theme.Control.inlineIcon)
                 .foregroundStyle(Theme.Colors.mutedForeground)
             Text("This file was deleted.")
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
             Spacer(minLength: Theme.Spacing.small)
         }
@@ -83,7 +83,7 @@ struct SourceReviewDiffView: View {
         .background(Theme.Colors.reviewCodeCanvas)
         .overlay(alignment: .bottom) {
             Rectangle()
-                .fill(Theme.Colors.rail.opacity(0.6))
+                .fill(Theme.Colors.rail)
                 .frame(height: Theme.Size.hairline)
         }
     }
@@ -95,10 +95,10 @@ struct SourceReviewDiffView: View {
     ) -> some View {
         VStack(spacing: Theme.Spacing.medium) {
             if let title {
-                Text(title).font(.system(size: Theme.Typography.supporting, weight: .semibold))
+                Text(title).font(Theme.Typography.supporting.weight(.semibold))
             }
             Text(verbatim: message)
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .multilineTextAlignment(.center)
             if retry {
@@ -113,6 +113,15 @@ struct SourceReviewDiffView: View {
 }
 
 private struct SourceReviewLines: View {
+
+    // Why: layout motion is the app's own, so it has to honour Reduce Motion itself — the loaders
+    // already did, but a full-height slide still played.
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
+
+    private var reducedStateChange: Animation? {
+        Theme.Motion.resolved(Theme.Motion.stateChange, reduceMotion: reducesMotion)
+    }
+
     let lines: [WorkspaceDiffLine]
     let isTruncated: Bool
     let filePath: String
@@ -146,10 +155,7 @@ private struct SourceReviewLines: View {
                             if isTruncated {
                                 Text("Diff truncated for mobile preview.")
                                     .font(
-                                        .system(
-                                            size: Theme.Typography.code,
-                                            design: .monospaced
-                                        )
+                                        Theme.Typography.code
                                     )
                                     .foregroundStyle(Theme.Colors.mutedForeground)
                                     .padding(Theme.Spacing.medium)
@@ -165,7 +171,7 @@ private struct SourceReviewLines: View {
                     }
                     .onChange(of: activeHunk) { _, value in
                         guard let value, hunks.indices.contains(value) else { return }
-                        withAnimation(Theme.Motion.stateChange) {
+                        withAnimation(reducedStateChange) {
                             proxy.scrollTo(hunks[value], anchor: .top)
                         }
                     }

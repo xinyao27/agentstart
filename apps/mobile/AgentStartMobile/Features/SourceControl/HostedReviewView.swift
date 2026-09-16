@@ -134,7 +134,7 @@ struct HostedReviewView: View {
             ProgressView()
                 .controlSize(.small)
             Text("Loading pull request…")
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -264,7 +264,7 @@ struct HostedReviewSection<Content: View, Trailing: View>: View {
             }
             if let title {
                 Text(title)
-                    .font(.system(size: Theme.Typography.supporting, weight: .semibold))
+                    .font(Theme.Typography.supporting.weight(.semibold))
             }
             Spacer(minLength: 0)
             trailing

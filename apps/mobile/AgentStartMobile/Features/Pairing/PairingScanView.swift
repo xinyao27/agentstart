@@ -141,10 +141,7 @@ struct PairingScanView: View {
                         if pastedCode.isEmpty {
                             Text("agentstart://pair?code=... or paste the code")
                                 .font(
-                                    .system(
-                                        size: Theme.Typography.code,
-                                        design: .monospaced
-                                    )
+                                    Theme.Typography.code
                                 )
                                 .foregroundStyle(Theme.Colors.mutedForeground)
                                 .padding(.horizontal, Theme.Spacing.extraSmall)
@@ -155,10 +152,7 @@ struct PairingScanView: View {
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                             .font(
-                                .system(
-                                    size: Theme.Typography.code,
-                                    design: .monospaced
-                                )
+                                Theme.Typography.code
                             )
                             .scrollContentBackground(.hidden)
                             .frame(minHeight: PairingScanMetrics.editorHeight)
@@ -182,9 +176,10 @@ struct PairingScanView: View {
                 }
             }
         }
-        // Why: a single pairing-code field is a short form, matching the other
-        // fixed-height form sheets rather than the resizable list sheets.
-        .appSheetPresentation(.fixed(.medium))
+        // Why: a pasted pairing code is multi-line input in a `TextEditor`, and the keyboard
+        // covers a fixed detent that cannot grow. The sheet contract gives multi-line input the
+        // page presentation instead of the short-form detent.
+        .appSheetPresentation(.page)
     }
 
     @ViewBuilder
@@ -195,7 +190,7 @@ struct PairingScanView: View {
                 ProgressView()
                     .controlSize(.large)
                 Text("Connecting…")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 PairingLog(entries: model.logEntries)
                     .frame(maxWidth: .infinity)
@@ -322,11 +317,11 @@ struct PairingScanView: View {
     private func pairingStep(number: Int, text: LocalizedStringKey) -> some View {
         HStack(spacing: Theme.Spacing.small) {
             Text(verbatim: String(number))
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .frame(width: Theme.Spacing.extraLarge)
             Text(text)
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
         }
     }

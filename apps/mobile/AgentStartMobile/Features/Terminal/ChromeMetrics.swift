@@ -38,4 +38,6 @@ nonisolated enum TerminalChromeMetrics {
     static let connectionCornerRadius: CGFloat = 12
     static let connectionText: CGFloat = 13
     static let connectionIndicator: CGFloat = 6
+    // Why: clears the accessory dock so a session action notice is not drawn behind the key bar.
+    static let actionNoticeBottomInset: CGFloat = 60
 }

@@ -388,7 +388,7 @@ struct WorkspaceBrowserPane: View {
 private extension View {
     func browserStateMessage() -> some View {
         self
-            .font(.system(size: Theme.Typography.metadata))
+            .font(Theme.Typography.metadata)
             .foregroundStyle(Theme.Colors.foreground)
             .multilineTextAlignment(.center)
             .padding(.horizontal, Theme.Spacing.medium)

@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ConnectionLogView: View {
     @State private var model: ConnectionLogModel
+    // Why: the log's auto-scroll is the app's own motion, so it has to honour Reduce Motion itself.
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
 
     init(hosts: any HostRepository, diagnostics: any ConnectionDiagnosticsRepository) {
         _model = State(initialValue: ConnectionLogModel(hosts: hosts, diagnostics: diagnostics))
@@ -13,7 +15,7 @@ struct ConnectionLogView: View {
             if let host = model.selectedHost {
                 HStack(spacing: Theme.Spacing.small) {
                     Text(statusLine)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                     Spacer(minLength: 0)
                     Button(action: model.copyDiagnostics) {
@@ -27,7 +29,7 @@ struct ConnectionLogView: View {
                                         ? Theme.Colors.success : Theme.Colors.mutedForeground
                                 )
                         }
-                        .font(.system(size: Theme.Typography.metadata, weight: .regular))
+                        .font(Theme.Typography.metadata.weight(.regular))
                     }
                     .buttonStyle(.glass)
                     .appButtonContext(.inline)
@@ -36,7 +38,7 @@ struct ConnectionLogView: View {
                     Text(
                         "No connection events yet this session. Events appear as the app dials this host."
                     )
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .lineSpacing(4)
                 } else {
@@ -65,7 +67,7 @@ struct ConnectionLogView: View {
             HStack(spacing: Theme.Spacing.small) {
                 ForEach(model.hosts, id: \.id) { host in
                     Button(host.name) { model.selectedHostID = host.id }
-                        .font(.system(size: Theme.Typography.metadata, weight: .regular))
+                        .font(Theme.Typography.metadata.weight(.regular))
                         .buttonStyle(.glass)
                         .buttonBorderShape(.capsule)
                         .tint(
@@ -85,7 +87,7 @@ struct ConnectionLogView: View {
         ContentSurface {
             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                 Text(host.name.uppercased())
-                    .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                    .font(Theme.Typography.metadata.monospaced())
                     .tracking(0.6)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 ScrollViewReader { proxy in
@@ -99,7 +101,9 @@ struct ConnectionLogView: View {
                     .frame(maxHeight: 200)
                     .onChange(of: model.snapshot.entries.count) { _, _ in
                         guard let lastID = model.snapshot.entries.last?.id else { return }
-                        withAnimation(.smooth) { proxy.scrollTo(lastID, anchor: .bottom) }
+                        withAnimation(
+                            Theme.Motion.resolved(Theme.Motion.gentle, reduceMotion: reducesMotion)
+                        ) { proxy.scrollTo(lastID, anchor: .bottom) }
                     }
                 }
             }
@@ -110,20 +114,20 @@ struct ConnectionLogView: View {
     private func logRow(_ entry: ConnectionLogEntry) -> some View {
         HStack(alignment: .top, spacing: Theme.Spacing.small) {
             Text(elapsedLabel(for: entry))
-                .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                .font(Theme.Typography.metadata.monospaced())
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .frame(width: 56, alignment: .leading)
             Text(logGlyph(entry.level))
-                .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                .font(Theme.Typography.metadata.monospaced())
                 .foregroundStyle(logColor(entry.level))
                 .frame(width: 12, alignment: .center)
             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                 Text(entry.message)
-                    .font(.system(size: Theme.Typography.code, design: .monospaced))
+                    .font(Theme.Typography.code)
                     .foregroundStyle(logColor(entry.level))
                 if let detail = entry.detail {
                     Text(detail)
-                        .font(.system(size: Theme.Typography.code, design: .monospaced))
+                        .font(Theme.Typography.code)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineLimit(2)
                         .textSelection(.enabled)

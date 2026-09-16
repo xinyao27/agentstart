@@ -4,14 +4,6 @@ struct AppRouteDestinationView: View {
     let route: AppRoute
     let model: AppModel
 
-    private var showsDebugNavigation: Bool {
-        #if DEBUG
-            true
-        #else
-            false
-        #endif
-    }
-
     @ViewBuilder
     var body: some View {
         switch route {
@@ -24,19 +16,6 @@ struct AppRouteDestinationView: View {
             )
         case .designSystemCatalog:
             DesignSystemCatalogView()
-        case .settings:
-            SettingsView(
-                credentialCleanupRepository: model.dependencies.credentialCleanupRepository,
-                showAppearance: model.showAppearanceSettings,
-                showTerminal: model.showTerminalSettings,
-                showBrowser: model.showBrowserSettings,
-                showNotifications: model.showNotificationSettings,
-                showTroubleshooting: model.showTroubleshooting,
-                showAbout: model.showAbout,
-                showDesignSystem: model.showDesignSystemCatalog,
-                // Why: the design-system catalog is development navigation, not a user setting.
-                showsDebugNavigation: showsDebugNavigation
-            )
         case .appearanceSettings:
             AppearanceSettingsView(preferences: model.dependencies.settingsPreferences)
         case .browserSettings:

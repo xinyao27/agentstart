@@ -20,7 +20,7 @@ struct HostedReviewReviewersCard: View {
         ) {
             if reviewers.isEmpty {
                 Text("No reviewers requested")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
             } else {
                 ForEach(reviewers) { reviewer in
@@ -30,11 +30,11 @@ struct HostedReviewReviewersCard: View {
                             verbatim: reviewer.name.map { "\($0) (\(reviewer.login))" }
                                 ?? reviewer.login
                         )
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .lineLimit(1)
                         Spacer(minLength: Theme.Spacing.small)
                         Text(verbatim: reviewer.status)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
                         if busyAction == "reviewer:\(reviewer.login)" {
@@ -82,7 +82,7 @@ struct HostedReviewChecksCard: View {
             trailing: {
                 HStack(spacing: Theme.Spacing.small) {
                     Text(checkSummary(checks))
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(checkSummaryColor(checks))
                     if failures > 0 {
                         GlassIconButton(
@@ -104,7 +104,7 @@ struct HostedReviewChecksCard: View {
                     // it here read as two different numbers 40pt apart. This banner carries
                     // the action instead.
                     Text("Expand a check to inspect it, or fix it with AI.")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -117,7 +117,7 @@ struct HostedReviewChecksCard: View {
                             )
                     } else {
                         Button("Fix", action: fix)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .appProminentGlassButton()
                             .appButtonContext(.inline)
                     }
@@ -138,12 +138,12 @@ struct HostedReviewChecksCard: View {
             }
             if let triageErrorMessage {
                 Text(verbatim: triageErrorMessage)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.attention)
             }
             if ordered.isEmpty {
                 Text("No checks")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
             } else {
                 ForEach(ordered) { check in
@@ -239,12 +239,12 @@ private struct HostedReviewCheckRow: View {
                             height: Theme.Control.statusIndicator
                         )
                     Text(verbatim: check.name)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                         .lineLimit(1)
                     Spacer(minLength: Theme.Spacing.small)
                     Text(verbatim: statusLabel)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(color)
                 }
                 .frame(minHeight: Theme.Size.minimumHitTarget)
@@ -292,7 +292,7 @@ struct HostedReviewAvatar: View {
             case .success(let image): image.resizable().scaledToFill()
             default:
                 Text(String(label.prefix(1)).uppercased())
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
             }
         }
@@ -335,11 +335,11 @@ struct HostedReviewReviewerSheet: View {
                                 HostedReviewAvatar(url: user.avatarURL, label: user.login)
                                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                                     Text(verbatim: user.name ?? user.login)
-                                        .font(.system(size: Theme.Typography.supporting))
+                                        .font(Theme.Typography.supporting)
                                         .foregroundStyle(Theme.Colors.foreground)
                                     if user.name != nil {
                                         Text(verbatim: user.login)
-                                            .font(.system(size: Theme.Typography.metadata))
+                                            .font(Theme.Typography.metadata)
                                             .foregroundStyle(Theme.Colors.mutedForeground)
                                     }
                                 }

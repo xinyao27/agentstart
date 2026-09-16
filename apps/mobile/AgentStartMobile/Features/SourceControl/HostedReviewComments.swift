@@ -13,7 +13,7 @@ struct HostedReviewDescriptionCard: View {
                     .controlSize(.small)
             } else {
                 Text("No description provided.")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .italic()
                     .foregroundStyle(Theme.Colors.mutedForeground)
             }
@@ -40,7 +40,7 @@ struct HostedReviewCommentsCard: View {
                     // Why: `verbatim` avoids the locale thousands grouping interpolation
                     // would apply to this count.
                     Text(verbatim: String(comments.count))
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .padding(.horizontal, Theme.Spacing.small)
                         .padding(.vertical, Theme.Spacing.extraSmall)
@@ -60,7 +60,7 @@ struct HostedReviewCommentsCard: View {
                 let visibleGroups = groupHostedReviewComments(filtered(comments))
                 if visibleGroups.isEmpty {
                     Text(emptyLabel)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .frame(
                             maxWidth: .infinity,
@@ -70,7 +70,7 @@ struct HostedReviewCommentsCard: View {
                         .overlay {
                             RoundedRectangle(cornerRadius: Theme.Radius.control)
                                 .stroke(
-                                    Theme.Colors.statusNeutral.opacity(0.35),
+                                    Theme.Colors.divider,
                                     style: StrokeStyle(
                                         lineWidth: Theme.Size.hairline,
                                         dash: [Theme.Spacing.extraSmall]
@@ -89,7 +89,7 @@ struct HostedReviewCommentsCard: View {
                     }
                     if visibleGroups.count > visibleCount {
                         Button("Show more") { visibleCount += 12 }
-                            .font(.system(size: Theme.Typography.supporting))
+                            .font(Theme.Typography.supporting)
                             .buttonStyle(.glass)
                             .buttonBorderShape(.capsule)
                             .frame(maxWidth: .infinity)
@@ -100,7 +100,7 @@ struct HostedReviewCommentsCard: View {
                     TextField("Add a comment…", text: $draft, axis: .vertical)
                         .lineLimit(3...8)
                         .textFieldStyle(.plain)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .padding(Theme.Spacing.medium)
                         .background(
                             Theme.Colors.background,
@@ -109,7 +109,7 @@ struct HostedReviewCommentsCard: View {
                         .overlay {
                             RoundedRectangle(cornerRadius: Theme.Radius.control)
                                 .stroke(
-                                    Theme.Colors.statusNeutral.opacity(0.35),
+                                    Theme.Colors.divider,
                                     lineWidth: Theme.Size.hairline
                                 )
                         }
@@ -126,7 +126,7 @@ struct HostedReviewCommentsCard: View {
                             }
                             Text("Comment")
                         }
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .frame(maxWidth: .infinity)
                     }
                     .appProminentGlassButton()
@@ -191,7 +191,7 @@ private struct HostedReviewCommentGroupView: View {
                         )
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         Text(summary)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
                         Spacer(minLength: 0)
@@ -270,21 +270,21 @@ private struct HostedReviewCommentCard: View {
             HStack(spacing: Theme.Spacing.small) {
                 HostedReviewAvatar(url: comment.authorAvatarURL, label: comment.author)
                 Text(verbatim: comment.author)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .lineLimit(1)
                 Text("· \(relativeTime)")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 if let path = comment.path {
                     Text(verbatim: fileLabel(path))
-                        .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                        .font(Theme.Typography.metadata.monospaced())
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineLimit(1)
                 }
                 Spacer(minLength: 0)
                 if comment.isResolved {
                     Text("resolved")
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .padding(.horizontal, Theme.Spacing.small)
                         .padding(.vertical, Theme.Spacing.extraSmall)
@@ -312,7 +312,7 @@ private struct HostedReviewCommentCard: View {
                 HStack(spacing: Theme.Spacing.small) {
                     ForEach(comment.reactions.filter { $0.count > 0 }, id: \.content) { reaction in
                         Text(verbatim: "\(reactionEmoji(reaction.content)) \(reaction.count)")
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .padding(.horizontal, Theme.Spacing.small)
                             .frame(height: Theme.Spacing.extraLarge)
                             .background(Theme.Colors.selection, in: .capsule)
@@ -341,7 +341,7 @@ private struct HostedReviewCommentCard: View {
                     TextField("Write a reply…", text: $replyDraft, axis: .vertical)
                         .lineLimit(2...6)
                         .textFieldStyle(.plain)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .padding(Theme.Spacing.medium)
                         .background(
                             Theme.Colors.content,
@@ -386,15 +386,7 @@ private struct HostedReviewCommentCard: View {
                 .padding(.bottom, Theme.Spacing.medium)
             }
         }
-        .background(Theme.Colors.background)
-        .clipShape(.rect(cornerRadius: Theme.Radius.control))
-        .overlay {
-            RoundedRectangle(cornerRadius: Theme.Radius.control)
-                .stroke(
-                    Theme.Colors.statusNeutral.opacity(0.35),
-                    lineWidth: Theme.Size.hairline
-                )
-        }
+        .contentSurfaceBackground(radius: Theme.Radius.control, fill: Theme.Colors.background)
         .opacity(comment.isResolved ? 0.6 : 1)
         .padding(.leading, isReply ? Theme.Spacing.standard : 0)
     }

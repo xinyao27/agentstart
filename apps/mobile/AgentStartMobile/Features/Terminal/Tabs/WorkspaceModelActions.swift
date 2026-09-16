@@ -54,7 +54,7 @@ extension TerminalWorkspaceModel {
             await refresh(shouldReplaceFailure: false)
             guard reportsFailure else { return }
             pendingActiveTabID = nil
-            mutationError = "AgentStart could not activate this tab."
+            mutationError = "AgentStart could not activate this tab. Try again."
         }
     }
 
@@ -109,13 +109,13 @@ extension TerminalWorkspaceModel {
         } catch is CancellationError {
             return
         } catch {
-            mutationError = "AgentStart could not create a terminal."
+            mutationError = "AgentStart could not create a terminal. Try again."
         }
     }
 
     func createMarkdown() async {
         await createNonterminal(
-            failureMessage: "AgentStart could not create a markdown note."
+            failureMessage: "AgentStart could not create a markdown note. Try again."
         ) {
             try await repository.createWorkspaceMarkdown(
                 for: hostID,
@@ -126,7 +126,7 @@ extension TerminalWorkspaceModel {
 
     func createBrowser(url: String) async {
         await createNonterminal(
-            failureMessage: "AgentStart could not create a browser tab."
+            failureMessage: "AgentStart could not create a browser tab. Try again."
         ) {
             try await repository.createWorkspaceBrowser(
                 for: hostID,
@@ -137,7 +137,8 @@ extension TerminalWorkspaceModel {
     }
 
     func reportBrowserUnavailable() {
-        mutationError = "Browser streaming is not available on this host."
+        mutationError =
+            "Browser streaming is not available on this host. Open it on the desktop instead."
     }
 
     func launchQuickCommand(_ command: TerminalQuickCommand) async -> Bool {
@@ -158,7 +159,7 @@ extension TerminalWorkspaceModel {
         } catch is CancellationError {
             return false
         } catch {
-            mutationError = "AgentStart could not run this quick command."
+            mutationError = "AgentStart could not run this quick command. Try again."
             return false
         }
     }
@@ -195,7 +196,7 @@ extension TerminalWorkspaceModel {
             return
         } catch {
             closedTabTombstones.removeValue(forKey: tab.id)
-            mutationError = "AgentStart could not close this tab."
+            mutationError = "AgentStart could not close this tab. Try again."
             await refresh(shouldReplaceFailure: false)
         }
     }

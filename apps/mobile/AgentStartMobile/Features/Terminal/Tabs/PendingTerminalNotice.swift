@@ -16,7 +16,7 @@ struct PendingTerminalNotice: View {
 
             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                 Text(didTimeOut ? "Couldn't start terminal" : "Starting terminal")
-                    .font(.system(size: Theme.Typography.metadata, weight: .regular))
+                    .font(Theme.Typography.metadata.weight(.regular))
                     .foregroundStyle(Theme.Colors.foreground)
                     .lineLimit(1)
                 Text(
@@ -24,7 +24,7 @@ struct PendingTerminalNotice: View {
                         ? "The host did not respond. Try again."
                         : "You can switch tabs while it connects."
                 )
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .lineLimit(1)
             }
@@ -33,7 +33,7 @@ struct PendingTerminalNotice: View {
 
             if didTimeOut {
                 Button("Retry", action: retry)
-                    .font(.system(size: Theme.Typography.metadata, weight: .regular))
+                    .font(Theme.Typography.metadata.weight(.regular))
                     .buttonStyle(.appPlain)
                     .foregroundStyle(Theme.Colors.foreground)
                     .frame(minHeight: Theme.Size.minimumHitTarget)

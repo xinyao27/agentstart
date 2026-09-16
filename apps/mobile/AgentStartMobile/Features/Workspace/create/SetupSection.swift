@@ -17,13 +17,13 @@ struct WorkspaceSetupSection: View {
                 HStack {
                     Text("Setup script")
                         .font(
-                            .system(size: Theme.Typography.metadata, weight: .semibold)
+                            Theme.Typography.metadata.weight(.semibold)
                         )
                         .foregroundStyle(Theme.Colors.mutedForeground)
                     Spacer()
                     if let source = model.setupDetails.source {
                         Text(source == "agentstart.yaml" ? "AGENTSTART.YAML" : "HOOKS")
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .padding(.horizontal, Theme.Spacing.small)
                             .frame(minHeight: Theme.Spacing.extraLarge)
@@ -42,11 +42,11 @@ struct WorkspaceSetupSection: View {
                         }
                     } else {
                         Toggle("Run setup command", isOn: $model.shouldRunSetup)
-                            .font(.system(size: Theme.Typography.supporting))
+                            .font(Theme.Typography.supporting)
                     }
 
                     Text(verbatim: command)
-                        .font(.system(size: Theme.Typography.code, design: .monospaced))
+                        .font(Theme.Typography.code)
                         .foregroundStyle(Theme.Colors.foreground)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, Theme.Spacing.medium)
@@ -74,7 +74,7 @@ struct WorkspaceSetupSection: View {
             model.setupDecisionChoice = decision
         } label: {
             Text(title)
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.foreground)
                 .frame(maxWidth: .infinity, minHeight: Theme.Control.inlineHeight)
         }

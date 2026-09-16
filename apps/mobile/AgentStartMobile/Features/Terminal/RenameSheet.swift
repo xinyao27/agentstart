@@ -13,24 +13,20 @@ struct TerminalRenameSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(spacing: Theme.Spacing.standard) {
-                GlassHeaderButton(
-                    iconName: .x,
-                    accessibilityLabel: "Cancel rename",
-                    action: { dismiss() }
-                )
-
-                Text("Rename Terminal")
-                    .font(.system(size: Theme.Typography.emphasis, weight: .semibold))
-                    .foregroundStyle(Theme.Colors.foreground)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(.horizontal, Theme.Spacing.standard)
-            .padding(.top, Theme.Spacing.standard)
-            .padding(.bottom, Theme.Spacing.huge)
+            // Why: the text Cancel below is this sheet's single dismiss action. A header X as
+            // well gave the same sheet two different ways to abandon an edit, which the sheet
+            // contract forbids — a form with a real draft keeps the text Cancel instead of the
+            // neutral X, not in addition to it.
+            Text("Rename Terminal")
+                .font(Theme.Typography.emphasis.weight(.semibold))
+                .foregroundStyle(Theme.Colors.foreground)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, Theme.Spacing.standard)
+                .padding(.top, Theme.Spacing.standard)
+                .padding(.bottom, Theme.Spacing.huge)
 
             TextField("Terminal name", text: $value)
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .focused($isFocused)

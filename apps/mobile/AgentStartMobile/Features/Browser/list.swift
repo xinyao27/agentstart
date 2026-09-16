@@ -40,7 +40,7 @@ struct BrowserTabsView: View {
                 placeholder {
                     AgentStartLoader(size: Theme.Control.largeIcon)
                     Text("Connecting to \(host.name)…")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 }
             } else {
@@ -49,7 +49,7 @@ struct BrowserTabsView: View {
                     placeholder {
                         AgentStartLoader(size: Theme.Control.largeIcon)
                         Text("Loading browser tabs…")
-                            .font(.system(size: Theme.Typography.supporting))
+                            .font(Theme.Typography.supporting)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                 case .failed(let message):
@@ -177,11 +177,11 @@ private struct BrowserTabRow: View {
 
                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                     Text(verbatim: tab.displayTitle)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                         .lineLimit(1)
                     Text(verbatim: tab.displayURL)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineLimit(1)
                 }
@@ -189,7 +189,7 @@ private struct BrowserTabRow: View {
 
                 if tab.isActive {
                     Text("Active")
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.foreground)
                         .padding(.horizontal, Theme.Spacing.small)
                         .padding(.vertical, Theme.Spacing.extraSmall)

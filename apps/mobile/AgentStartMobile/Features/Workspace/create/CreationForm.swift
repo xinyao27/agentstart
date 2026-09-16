@@ -6,13 +6,13 @@ extension WorkspaceCreationSheet {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 Text("Pick a repository and agent to spin up a new workspace.")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .padding(.bottom, Theme.Spacing.standard)
 
                 if model.repos.isEmpty {
                     Text("No repositories found")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, Theme.Spacing.extraLarge)
@@ -24,7 +24,7 @@ extension WorkspaceCreationSheet {
 
                     if let message = model.errorMessage {
                         Text(verbatim: message)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.attention)
                             .padding(.top, Theme.Spacing.small)
                     }
@@ -76,7 +76,7 @@ extension WorkspaceCreationSheet {
                             )
                     }
                     Text(verbatim: model.selectedRepo?.name ?? "Select a repository")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(
                             model.selectedRepo == nil
                                 ? Theme.Colors.mutedForeground : Theme.Colors.foreground
@@ -102,9 +102,9 @@ extension WorkspaceCreationSheet {
         creationField(title: workspaceNameLabel, isOptional: true) {
             if let selection = visibleSourceSelection {
                 HStack(spacing: Theme.Spacing.small) {
-                    AgentStartIcon(sourceGlyph(selection), size: Theme.Typography.supporting)
+                    AgentStartIcon(sourceGlyph(selection), size: Theme.TypeSize.supporting)
                     Text(verbatim: selection.label)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                         .lineLimit(1)
                     Spacer(minLength: 0)
@@ -136,7 +136,7 @@ extension WorkspaceCreationSheet {
                     presentedSheet = .source
                 } label: {
                     Text(model.name.isEmpty ? "Type a name or search a source" : model.name)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(
                             model.name.isEmpty
                                 ? Theme.Colors.mutedForeground : Theme.Colors.foreground
@@ -158,7 +158,7 @@ extension WorkspaceCreationSheet {
                 HStack(spacing: Theme.Spacing.small) {
                     WorkspaceAgentIcon(agentID: model.selectedAgentID)
                     Text(verbatim: model.selectedAgent?.label ?? "Blank Terminal")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                         .lineLimit(1)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -180,13 +180,13 @@ extension WorkspaceCreationSheet {
     var advancedFields: some View {
         VStack(alignment: .leading, spacing: 0) {
             Button {
-                withAnimation(Theme.Motion.stateChange) {
+                withAnimation(reducedStateChange) {
                     model.isAdvancedExpanded.toggle()
                 }
             } label: {
                 HStack(spacing: Theme.Spacing.extraSmall) {
                     Text("Advanced")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                     AgentStartIcon(
                         model.isAdvancedExpanded ? .arrowUp : .arrowDown,
                         size: Theme.Control.inlineIcon
@@ -218,10 +218,10 @@ extension WorkspaceCreationSheet {
                     Toggle(isOn: reuseBranchBinding) {
                         VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                             Text("Reuse eligible branch")
-                                .font(.system(size: Theme.Typography.supporting))
+                                .font(Theme.Typography.supporting)
                                 .foregroundStyle(Theme.Colors.foreground)
                             Text("Branch “\(reusableBranch)”")
-                                .font(.system(size: Theme.Typography.metadata))
+                                .font(Theme.Typography.metadata)
                                 .foregroundStyle(Theme.Colors.mutedForeground)
                                 .lineLimit(1)
                         }
@@ -249,13 +249,13 @@ extension WorkspaceCreationSheet {
         VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
             if isOptional {
                 Text(
-                    "\(Text(title).font(.system(size: Theme.Typography.metadata, weight: .semibold))) \(Text("[Optional]").font(.system(size: Theme.Typography.metadata)))"
+                    "\(Text(title).font(Theme.Typography.metadata.weight(.semibold))) \(Text("[Optional]").font(Theme.Typography.metadata))"
                 )
                 .foregroundStyle(Theme.Colors.mutedForeground)
             } else {
                 Text(title)
                     .font(
-                        .system(size: Theme.Typography.metadata, weight: .semibold)
+                        Theme.Typography.metadata.weight(.semibold)
                     )
                     .foregroundStyle(Theme.Colors.mutedForeground)
             }

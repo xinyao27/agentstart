@@ -8,11 +8,11 @@ struct HomeOnboardingView: View {
             LazyVStack(spacing: 0) {
                 VStack(spacing: Theme.Spacing.medium) {
                     Text("Connect to your daemon")
-                        .font(.system(size: Theme.Typography.emphasis, weight: .semibold))
+                        .font(Theme.Typography.emphasis.weight(.semibold))
                     Text(
                         "Pair directly with the AgentStart daemon to check on your agents, jump into any terminal, and drive work from your phone."
                     )
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .multilineTextAlignment(.center)
                     .lineSpacing(Theme.Spacing.extraSmall)
@@ -27,7 +27,7 @@ struct HomeOnboardingView: View {
 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("HOW IT WORKS")
-                        .font(.system(size: Theme.Typography.metadata, weight: .semibold))
+                        .font(Theme.Typography.metadata.weight(.semibold))
                         .tracking(0.4)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .padding(.horizontal, Theme.Spacing.extraSmall)
@@ -41,13 +41,10 @@ struct HomeOnboardingView: View {
                             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                                 Text(step.title)
                                     .font(
-                                        .system(
-                                            size: Theme.Typography.primary,
-                                            weight: .semibold
-                                        )
+                                        Theme.Typography.primary.weight(.semibold)
                                     )
                                 Text(step.detail)
-                                    .font(.system(size: Theme.Typography.supporting))
+                                    .font(Theme.Typography.supporting)
                                     .foregroundStyle(Theme.Colors.mutedForeground)
                                     .lineSpacing(Theme.Spacing.extraSmall)
                             }

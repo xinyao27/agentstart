@@ -39,7 +39,7 @@ struct LoaderPickerSheet: View {
                 action: { dismiss() }
             )
             Text("Loader")
-                .font(.system(size: Theme.Typography.primary, weight: .semibold))
+                .font(Theme.Typography.primary.weight(.semibold))
                 .foregroundStyle(Theme.Colors.foreground)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -60,7 +60,7 @@ struct LoaderPickerSheet: View {
                         height: Theme.Control.largeIcon
                     )
                 Text(style.title)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.foreground)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)

@@ -6,7 +6,7 @@ extension TerminalLiveModel {
         stopGeneration += 1
         let generation = stopGeneration
         guard canAcceptUserInput else {
-            showNotice("Stop not sent — terminal is reconnecting")
+            showNotice("Stop not sent — terminal is reconnecting", kind: .failure)
             return
         }
         Task { [weak self] in
@@ -14,7 +14,7 @@ extension TerminalLiveModel {
             let first = await sendConfirmedInput(Data([0x1B]))
             guard stopGeneration == generation else { return }
             guard case .accepted = first else {
-                showNotice("Stop not sent — terminal is reconnecting")
+                showNotice("Stop not sent — terminal is reconnecting", kind: .failure)
                 return
             }
             try? await Task.sleep(for: .milliseconds(80))
@@ -55,6 +55,13 @@ extension TerminalLiveModel {
                 await closeCurrentSession(connectionID: connectionID)
             }
             retryCount += 1
+            // Why: without a bound this loop only ever produced `.reconnecting`, so the banner never
+            // offered the retry that `.failed` renders and a wedged terminal reported "reconnecting"
+            // forever. The user re-arms the attempt from that banner.
+            if retryCount > TerminalReconnectPolicy.maximumAttempts {
+                phase = .failed("Connection interrupted")
+                break
+            }
             phase = .reconnecting(attempt: retryCount)
             do {
                 try await Task.sleep(for: TerminalReconnectPolicy.delay(attempt: retryCount))

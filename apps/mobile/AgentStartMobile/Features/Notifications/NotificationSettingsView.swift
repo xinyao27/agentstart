@@ -4,6 +4,7 @@ import UIKit
 struct NotificationSettingsView: View {
     @State private var model: NotificationSettingsModel
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     init() {
         _model = State(initialValue: NotificationSettingsModel())
@@ -16,16 +17,16 @@ struct NotificationSettingsView: View {
                     HStack(alignment: .center, spacing: Theme.Spacing.small) {
                         VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                             Text("Agent notifications")
-                                .font(.system(size: Theme.Typography.primary))
+                                .font(Theme.Typography.primary)
                             Text(hint)
-                                .font(.system(size: Theme.Typography.metadata))
+                                .font(Theme.Typography.metadata)
                                 .foregroundStyle(Theme.Colors.mutedForeground)
                                 // Why: this row is a compact two-line row on iPhone. Letting the
                                 // copy grow to three lines makes the card 50% taller and shifts
-                                // every following section down.
-                                .lineLimit(2)
-                                .allowsTightening(true)
-                                .minimumScaleFactor(0.82)
+                                // every following section down. At an accessibility size the two
+                                // lines are the layout that would clip, so the cap is dropped and
+                                // the card is allowed to grow instead.
+                                .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 2)
                         }
                         // Why: SwiftUI's empty-label Toggle otherwise wins the HStack's width
                         // negotiation and steals a word from the supporting copy. Giving the

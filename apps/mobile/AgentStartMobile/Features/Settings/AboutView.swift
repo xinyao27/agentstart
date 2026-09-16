@@ -4,7 +4,7 @@ struct AboutView: View {
     var body: some View {
         VStack(spacing: 0) {
             Text("Open-source agent IDE for 100x builders")
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 // Why: the navigation stack starts this content higher than the page's own
                 // rhythm calls for, so the top offset is stated explicitly.
@@ -22,7 +22,7 @@ struct AboutView: View {
             }
 
             Text(versionLabel)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .padding(.top, Theme.Spacing.standard)
 

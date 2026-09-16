@@ -22,16 +22,16 @@ struct HostedReviewEmptyView: View {
                 trailing: { createAccessory }
             ) {
                 Text(emptyTitle)
-                    .font(.system(size: Theme.Typography.primary, weight: .semibold))
+                    .font(Theme.Typography.primary.weight(.semibold))
                 Text(summaryMessage)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 if let progress {
                     HStack(spacing: Theme.Spacing.small) {
                         ProgressView()
                             .controlSize(.small)
                         Text(verbatim: progress.message)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -48,7 +48,7 @@ struct HostedReviewEmptyView: View {
                     Button("Link an existing \(eligibility.provider.shortReviewTitle)") {
                         isLinking = true
                     }
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .buttonStyle(.glass)
                     .appButtonContext(.inline)
                 }
@@ -68,12 +68,12 @@ struct HostedReviewEmptyView: View {
                 )
         } else if eligibility.provider.supportsCreation {
             Button("Create \(eligibility.provider.shortReviewTitle)", action: create)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .appProminentGlassButton()
                 .appButtonContext(.inline)
         } else if let url = eligibility.existingReviewURL {
             Button("Open review") { openURL(url) }
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .buttonStyle(.glass)
                 .appButtonContext(.inline)
         }
@@ -83,21 +83,21 @@ struct HostedReviewEmptyView: View {
         HostedReviewSection {
             HStack(spacing: Theme.Spacing.small) {
                 Text("Link existing \(eligibility.provider.reviewLabel)")
-                    .font(.system(size: Theme.Typography.primary, weight: .semibold))
+                    .font(Theme.Typography.primary.weight(.semibold))
                 Spacer(minLength: Theme.Spacing.small)
                 Button("Cancel") {
                     linkNumber = ""
                     isLinking = false
                 }
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .buttonStyle(.glass)
                 .appButtonContext(.inline)
             }
             Text(linkInputLabel)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
             TextField(linkPlaceholder, text: $linkNumber)
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .keyboardType(eligibility.provider == .github ? .URL : .numbersAndPunctuation)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
@@ -110,7 +110,7 @@ struct HostedReviewEmptyView: View {
                 link(eligibility.provider, number)
             } label: {
                 Text(linkButtonTitle)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .frame(maxWidth: .infinity)
             }
             .appProminentGlassButton()

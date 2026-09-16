@@ -13,7 +13,7 @@ struct WorkspaceSectionHeader: View {
             HStack(spacing: WorkspaceListMetrics.horizontalGap) {
                 leadingIcon
                 Text(verbatim: section.title)
-                    .font(.system(size: WorkspaceListMetrics.titleText, weight: .semibold))
+                    .font(Theme.Typography.primary.weight(.semibold))
                     .foregroundStyle(Theme.Colors.foreground)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)

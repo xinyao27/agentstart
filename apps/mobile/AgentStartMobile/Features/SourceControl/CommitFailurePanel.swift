@@ -32,9 +32,9 @@ struct SourceCommitFailureCard: View {
             HStack(spacing: Theme.Spacing.small) {
                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                     Text("Commit failed")
-                        .font(.system(size: Theme.Typography.primary, weight: .semibold))
+                        .font(Theme.Typography.primary.weight(.semibold))
                     Text(verbatim: failure.summary)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineLimit(2)
                 }
@@ -48,7 +48,7 @@ struct SourceCommitFailureCard: View {
                         )
                 } else {
                     Button("Fix", action: fix)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .appProminentGlassButton()
                         .appButtonContext(.inline)
                 }
@@ -64,21 +64,21 @@ struct SourceCommitFailureCard: View {
                         )
                         Text(isExpanded ? "Hide details" : "Show details")
                     }
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .frame(minHeight: Theme.Size.minimumHitTarget)
                 }
                 .buttonStyle(.appPlain)
                 if isExpanded {
                     Text(verbatim: failure.error.trimmingCharacters(in: .whitespacesAndNewlines))
-                        .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                        .font(Theme.Typography.metadata.monospaced())
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .textSelection(.enabled)
                 }
             }
             if let launchError {
                 Text(verbatim: launchError)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.attention)
             }
         }

@@ -67,7 +67,7 @@ struct WorkspaceNewTabChooser: View {
             }
 
             Text(isEnteringBrowser ? "New Browser" : "New Tab")
-                .font(.system(size: Theme.Typography.emphasis, weight: .semibold))
+                .font(Theme.Typography.emphasis.weight(.semibold))
                 .foregroundStyle(Theme.Colors.foreground)
                 .lineLimit(1)
             Spacer()
@@ -146,7 +146,7 @@ struct WorkspaceNewTabChooser: View {
     private var browserForm: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Enter a URL, or leave blank for a new tab.")
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .padding(.bottom, Theme.Spacing.small)
 
@@ -174,7 +174,7 @@ struct WorkspaceNewTabChooser: View {
 
             if let browserValidationMessage {
                 Text(browserValidationMessage)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.attention)
                     .padding(.top, Theme.Spacing.small)
             }
@@ -212,7 +212,7 @@ struct WorkspaceNewTabChooser: View {
             AgentStartIcon(.robot, size: 16)
                 .foregroundStyle(Theme.Colors.mutedForeground)
             title
-                .font(.system(size: Theme.Typography.supporting, weight: .regular))
+                .font(Theme.Typography.supporting.weight(.regular))
                 .foregroundStyle(Theme.Colors.mutedForeground)
             Spacer()
             if isLoading {
@@ -230,7 +230,7 @@ struct WorkspaceNewTabChooser: View {
             HStack(spacing: Theme.Spacing.small) {
                 AgentStartIcon(icon, size: 16)
                 title
-                    .font(.system(size: Theme.Typography.supporting, weight: .regular))
+                    .font(Theme.Typography.supporting.weight(.regular))
                     .foregroundStyle(Theme.Colors.foreground)
                 Spacer()
             }
@@ -255,7 +255,7 @@ struct WorkspaceNewTabChooser: View {
             HStack(spacing: Theme.Spacing.small) {
                 AgentMark(agentID: agentID, size: 16)
                 title
-                    .font(.system(size: Theme.Typography.supporting, weight: .regular))
+                    .font(Theme.Typography.supporting.weight(.regular))
                     .foregroundStyle(Theme.Colors.foreground)
                 Spacer()
             }

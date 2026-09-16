@@ -1,6 +1,15 @@
 import SwiftUI
 
 struct TroubleshootingView: View {
+
+    // Why: layout motion is the app's own, so it has to honour Reduce Motion itself — the loaders
+    // already did, but a full-height slide still played.
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
+
+    private var reducedStateChange: Animation? {
+        Theme.Motion.resolved(Theme.Motion.stateChange, reduceMotion: reducesMotion)
+    }
+
     @State private var model: TroubleshootingModel
     @State private var expandedIssueID: String?
     let showConnectionLog: () -> Void
@@ -28,7 +37,7 @@ struct TroubleshootingView: View {
                             }
                             Text(runTitle)
                         }
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .frame(minHeight: Theme.Size.minimumHitTarget)
                     }
@@ -37,7 +46,7 @@ struct TroubleshootingView: View {
 
                     Button(action: showConnectionLog) {
                         Label("View connection log", iconID: .scroll)
-                            .font(.system(size: Theme.Typography.supporting))
+                            .font(Theme.Typography.supporting)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .frame(minHeight: Theme.Size.minimumHitTarget)
                     }
@@ -57,7 +66,7 @@ struct TroubleshootingView: View {
                 }
 
                 Text("COMMON ISSUES")
-                    .font(.system(size: Theme.Typography.metadata, weight: .semibold))
+                    .font(Theme.Typography.metadata.weight(.semibold))
                     .tracking(0.4)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .padding(.horizontal, Theme.Spacing.extraSmall)
@@ -105,10 +114,10 @@ struct TroubleshootingView: View {
                 .foregroundStyle(statusColor(result.status))
                 .frame(width: Theme.Control.largeIcon)
             Text(result.label)
-                .font(.system(size: Theme.Typography.supporting, weight: .regular))
+                .font(Theme.Typography.supporting.weight(.regular))
             Spacer(minLength: Theme.Spacing.small)
             Text(result.detail)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(
                     result.status == .fail ? Theme.Colors.attention : Theme.Colors.mutedForeground
                 )
@@ -121,7 +130,7 @@ struct TroubleshootingView: View {
     private func issueRow(_ issue: TroubleshootingIssue) -> some View {
         VStack(spacing: 0) {
             Button {
-                withAnimation(Theme.Motion.stateChange) {
+                withAnimation(reducedStateChange) {
                     expandedIssueID = expandedIssueID == issue.id ? nil : issue.id
                 }
             } label: {
@@ -131,10 +140,7 @@ struct TroubleshootingView: View {
                         .frame(width: Theme.Control.largeIcon)
                     Text(issue.title)
                         .font(
-                            .system(
-                                size: Theme.Typography.supporting,
-                                weight: .regular
-                            )
+                            Theme.Typography.supporting.weight(.regular)
                         )
                         .foregroundStyle(Theme.Colors.foreground)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -160,7 +166,7 @@ struct TroubleshootingView: View {
                         }
                     }
                 }
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .lineSpacing(Theme.Spacing.extraSmall)
                 .padding(.horizontal, Theme.Spacing.medium)

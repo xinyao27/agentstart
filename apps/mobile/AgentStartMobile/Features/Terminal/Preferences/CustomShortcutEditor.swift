@@ -194,7 +194,7 @@ struct TerminalCustomShortcutEditor: View {
             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                 Text(title).foregroundStyle(Theme.Colors.foreground)
                 Text(detail)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
             }
             Spacer()
@@ -207,11 +207,7 @@ struct TerminalCustomShortcutEditor: View {
     private func keycap(_ label: String) -> some View {
         Text(verbatim: label)
             .font(
-                .system(
-                    size: Theme.Typography.code,
-                    weight: .regular,
-                    design: .monospaced
-                )
+                Theme.Typography.code.weight(.regular)
             )
             .foregroundStyle(Theme.Colors.foreground)
             .frame(
@@ -247,7 +243,7 @@ struct TerminalCustomShortcutEditor: View {
     private func specialKeyGroup(_ title: String, keys: [String], columns: Int) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.small) {
             Text(verbatim: title)
-                .font(.system(size: Theme.Typography.metadata, weight: .semibold))
+                .font(Theme.Typography.metadata.weight(.semibold))
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .tracking(0.6)
             LazyVGrid(
@@ -262,7 +258,7 @@ struct TerminalCustomShortcutEditor: View {
                         if path.last == .specialKeys { path.removeLast() }
                     } label: {
                         Text(verbatim: TerminalCustomKeyBuilder.displayLabel(for: key))
-                            .font(.system(size: Theme.Typography.code, design: .monospaced))
+                            .font(Theme.Typography.code)
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.glass)

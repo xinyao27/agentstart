@@ -29,11 +29,16 @@ struct TokenUsageTimelineProvider: TimelineProvider {
 struct TokenUsageWidgetView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.widgetFamily) private var widgetFamily
+    @Environment(\.widgetRenderingMode) private var renderingMode
     let entry: TokenUsageEntry
 
     var body: some View {
         layout
-            .containerBackground(backgroundColor, for: .widget)
+            .containerBackground(for: .widget) {
+                // Why: Tinted and Clear (locked) appearances supply their own treatment. Painting a
+                // brand fill under them would fight the system's rendering of the widget.
+                renderingMode == .fullColor ? backgroundColor : Color.clear
+            }
             .widgetURL(entry.snapshot?.openURL ?? AgentStartWidgetPresentation.fallbackURL)
             .accessibilityElement(children: .combine)
     }
@@ -68,7 +73,9 @@ struct TokenUsageWidgetView: View {
     }
 
     private var backgroundColor: Color {
-        Color(widgetHex: colorScheme == .dark ? 0x8F432B : 0xC96843)
+        // Why: the light-mode Claude orange was pale enough that its own caption text failed
+        // contrast. The darker step is the one both text colors clear 4.5:1 against.
+        Color(widgetHex: 0x8F432B)
     }
 }
 
@@ -80,7 +87,7 @@ private struct SmallTokenUsageView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: TokenWidgetMetrics.outerSpacing) {
             tokenHeader(savedAt: savedAt)
-                .frame(height: TokenWidgetMetrics.headerHeight)
+                .frame(minHeight: TokenWidgetMetrics.headerHeight)
             HStack(spacing: TokenWidgetMetrics.smallContentSpacing) {
                 TokenShareRing(
                     progress: todayShare,
@@ -97,7 +104,7 @@ private struct SmallTokenUsageView: View {
                     color: .white
                 )
             }
-            .frame(height: TokenWidgetMetrics.smallContentHeight)
+            .frame(minHeight: TokenWidgetMetrics.smallContentHeight)
             Spacer(minLength: 0)
             HStack(alignment: .firstTextBaseline, spacing: TokenWidgetMetrics.footerSpacing) {
                 HStack(
@@ -116,12 +123,11 @@ private struct SmallTokenUsageView: View {
                 Text(AgentStartWidgetPresentation.currency(snapshot?.weekValueUSD ?? 0))
                     .font(.system(size: TokenWidgetMetrics.footerCurrencyFont))
                     .monospacedDigit()
-                    .minimumScaleFactor(TokenWidgetMetrics.secondaryMinimumScale)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .foregroundStyle(Color(widgetHex: 0xFFD8A8))
-            .frame(height: TokenWidgetMetrics.footerHeight)
+            .frame(minHeight: TokenWidgetMetrics.footerHeight)
         }
         .padding(TokenWidgetMetrics.smallEdgeInset)
     }
@@ -135,7 +141,7 @@ private struct MediumTokenUsageView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: TokenWidgetMetrics.outerSpacing) {
             tokenHeader(savedAt: savedAt)
-                .frame(height: TokenWidgetMetrics.headerHeight)
+                .frame(minHeight: TokenWidgetMetrics.headerHeight)
             HStack(spacing: TokenWidgetMetrics.mediumContentSpacing) {
                 TokenShareRing(
                     progress: todayShare,
@@ -178,7 +184,6 @@ private struct TokenMetric: View {
                 .font(.system(size: valueSize))
                 .monospacedDigit()
                 .tracking(TokenWidgetMetrics.valueTracking)
-                .minimumScaleFactor(TokenWidgetMetrics.valueMinimumScale)
                 .lineLimit(1)
             Text(label)
                 .font(.system(size: TokenWidgetMetrics.labelFont))
@@ -186,7 +191,6 @@ private struct TokenMetric: View {
             Text(AgentStartWidgetPresentation.currency(valueUSD))
                 .font(.system(size: TokenWidgetMetrics.currencyFont))
                 .monospacedDigit()
-                .minimumScaleFactor(TokenWidgetMetrics.secondaryMinimumScale)
                 .lineLimit(1)
         }
         .foregroundStyle(color)
@@ -265,19 +269,17 @@ private enum TokenWidgetMetrics {
     static let mediumRingSize: CGFloat = 96
     static let smallRingLineWidth: CGFloat = 8
     static let mediumRingLineWidth: CGFloat = 10
-    static let headerFont: CGFloat = 10
-    static let timestampFont: CGFloat = 9
+    static let headerFont: CGFloat = 11
+    static let timestampFont: CGFloat = 11
     static let smallValueFont: CGFloat = 27
     static let mediumValueFont: CGFloat = 28
     static let weekValueFont: CGFloat = 17
     static let ringValueFont: CGFloat = 17
-    static let labelFont: CGFloat = 9
-    static let microFont: CGFloat = 8
+    static let labelFont: CGFloat = 11
+    static let microFont: CGFloat = 11
     static let currencyFont: CGFloat = 11
-    static let footerCurrencyFont: CGFloat = 10
+    static let footerCurrencyFont: CGFloat = 11
     static let valueTracking: CGFloat = -0.8
-    static let valueMinimumScale: CGFloat = 0.55
-    static let secondaryMinimumScale: CGFloat = 0.7
 }
 
 struct TokenUsageWidget: Widget {

@@ -10,7 +10,7 @@ enum AgentStartDiffCodeLayout {
     static let lineNumberTrailing: CGFloat = 4
     static let dividerWidth: CGFloat = 1
     static let codeHorizontalPadding: CGFloat = 6
-    static let codeFontSize: CGFloat = Theme.Typography.code
+    static let codeFontSize: CGFloat = Theme.TypeSize.code
     static let minimumLineHeight: CGFloat = 20
     // Why: a compact 26pt code rhythm. The 44pt interaction target belongs to the note action,
     // not to every source line — stretching rows makes a short review diff unreadably sparse

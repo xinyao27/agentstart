@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct TerminalQuickCommandEditor: View {
+    // Why: the disclosure animation is the app's own motion, so it has to honour Reduce Motion itself.
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
     @Environment(\.dismiss) private var dismiss
     @State private var label: String
     @State private var action: TerminalQuickCommandEditorAction
@@ -57,7 +59,7 @@ struct TerminalQuickCommandEditor: View {
         NavigationStack {
             Form {
                 Text("Save terminal commands or agent prompts for quick access.")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .fixedSize(horizontal: false, vertical: true)
 
@@ -81,7 +83,7 @@ struct TerminalQuickCommandEditor: View {
                         TerminalRawTextEditor(
                             text: $terminalCommand,
                             font: .monospacedSystemFont(
-                                ofSize: Theme.Typography.code,
+                                ofSize: Theme.TypeSize.code,
                                 weight: .regular
                             )
                         )
@@ -114,7 +116,7 @@ struct TerminalQuickCommandEditor: View {
                     Section {
                         TerminalRawTextEditor(
                             text: $prompt,
-                            font: .systemFont(ofSize: Theme.Typography.primary)
+                            font: .systemFont(ofSize: Theme.TypeSize.primary)
                         )
                         .frame(minHeight: 120)
                         .onChange(of: prompt) { _, value in
@@ -128,7 +130,10 @@ struct TerminalQuickCommandEditor: View {
                 }
                 Section {
                     Button {
-                        withAnimation(.snappy) { isAdvancedOpen.toggle() }
+                        withAnimation(
+                            Theme.Motion.resolved(
+                                Theme.Motion.stateChange, reduceMotion: reducesMotion)
+                        ) { isAdvancedOpen.toggle() }
                     } label: {
                         HStack(spacing: 8) {
                             AgentStartIcon(
@@ -137,10 +142,7 @@ struct TerminalQuickCommandEditor: View {
                             )
                             Text("Advanced")
                                 .font(
-                                    .system(
-                                        size: Theme.Typography.metadata,
-                                        weight: .regular
-                                    )
+                                    Theme.Typography.metadata.weight(.regular)
                                 )
                             Spacer(minLength: 0)
                         }
@@ -162,10 +164,7 @@ struct TerminalQuickCommandEditor: View {
                         if isProjectScoped, let repoName {
                             Text(verbatim: repoName)
                                 .font(
-                                    .system(
-                                        size: Theme.Typography.code,
-                                        design: .monospaced
-                                    )
+                                    Theme.Typography.code
                                 )
                                 .foregroundStyle(Theme.Colors.mutedForeground)
                         }

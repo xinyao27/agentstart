@@ -14,17 +14,17 @@ struct AgentHistorySessionRow: View {
             HStack(spacing: Theme.Spacing.small) {
                 AgentMark(agentID: session.agent, size: 16)
                 Text(verbatim: session.displayTitle)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.foreground)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text(verbatim: timeAgo)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
             }
             if !session.latestMessage.isEmpty {
                 Text(verbatim: session.latestMessage)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .lineLimit(isExpanded ? nil : 2)
                     .padding(.top, Theme.Spacing.extraSmall)
@@ -42,7 +42,7 @@ struct AgentHistorySessionRow: View {
                 Spacer(minLength: 0)
                 resumeButton
             }
-            .font(.system(size: Theme.Typography.metadata, weight: .regular))
+            .font(Theme.Typography.metadata.weight(.regular))
             .foregroundStyle(Theme.Colors.mutedForeground)
             .padding(.top, Theme.Spacing.extraSmall)
             if isExpanded {
@@ -79,10 +79,10 @@ struct AgentHistorySessionRow: View {
                 _, message in
                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                     Text(verbatim: message.role.uppercased())
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                     Text(verbatim: message.text)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .fixedSize(horizontal: false, vertical: true)
                 }

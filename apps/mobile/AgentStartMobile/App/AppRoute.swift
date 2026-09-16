@@ -1,7 +1,6 @@
 enum AppRoute: Hashable {
     case activityInsights
     case designSystemCatalog
-    case settings
     case appearanceSettings
     case browserSettings
     case connectionLog
@@ -28,6 +27,21 @@ enum AppRoute: Hashable {
 }
 
 extension AppRoute {
+    // Why: an exhaustive switch, so adding a route forces an explicit decision about which
+    // stack owns it instead of letting it default into whichever one is convenient.
+    var tab: AppTab {
+        switch self {
+        case .appearanceSettings, .browserSettings, .connectionLog, .notificationSettings,
+            .troubleshooting, .about, .terminalSettings:
+            .settings
+        case .activityInsights, .designSystemCatalog, .editHost, .accounts, .browser,
+            .browserNewTab, .browserTab, .agentHistory, .files, .filePreview, .sourceControl,
+            .sourceReview, .sourceDiff, .workspaces, .workspaceSession, .pair, .pairConfirm,
+            .pairLinkError:
+            .home
+        }
+    }
+
     var hostID: String? {
         switch self {
         case .editHost(let host), .accounts(let host), .browser(let host),
@@ -37,7 +51,7 @@ extension AppRoute {
             .sourceDiff(let host, _, _, _, _), .workspaces(let host, _),
             .workspaceSession(let host, _, _):
             host.id
-        case .activityInsights, .designSystemCatalog, .settings, .appearanceSettings,
+        case .activityInsights, .designSystemCatalog, .appearanceSettings,
             .browserSettings, .connectionLog, .notificationSettings,
             .troubleshooting, .about, .terminalSettings, .pair, .pairConfirm,
             .pairLinkError:

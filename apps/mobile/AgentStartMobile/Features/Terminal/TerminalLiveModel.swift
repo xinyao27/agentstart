@@ -16,9 +16,17 @@ nonisolated enum TerminalSurfaceAction: Sendable {
     case queryReply(Data)
     case resize(TerminalGridSize)
 }
+nonisolated enum TerminalNoticeKind: Sendable {
+    /// Confirms an action the user just completed; may dismiss itself.
+    case success
+    /// Reports something that did not happen. Persists until the user dismisses it, so switching
+    /// tabs cannot destroy the only record that an action failed.
+    case failure
+}
 nonisolated struct TerminalActionNotice: Identifiable, Sendable {
     let id = UUID()
     let message: LocalizedStringResource
+    let kind: TerminalNoticeKind
 }
 nonisolated struct TerminalLinkRequest: Equatable, Sendable {
     let rawValue: String
@@ -41,7 +49,10 @@ final class TerminalLiveModel {
     var connectionAttempt = 0
     var displayMode = TerminalDisplayMode.auto
     var isDisplayModeUpdating = false
-    var actionNotice: TerminalActionNotice?
+    // Why: a terminal's notices belong to the session, not to this pane. The pane is hidden the
+    // moment the user switches tabs, so a failure recorded here would be invisible exactly when it
+    // matters. The session container owns the notice and this only forwards to it.
+    @ObservationIgnored var noticeHandler: ((TerminalActionNotice) -> Void)?
     @ObservationIgnored
     let hostID: String
     @ObservationIgnored

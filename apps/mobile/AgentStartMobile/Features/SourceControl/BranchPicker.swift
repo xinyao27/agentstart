@@ -18,11 +18,11 @@ struct SourceBranchPicker: View {
                                     .foregroundStyle(Theme.Colors.mutedForeground)
                                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                                     Text(verbatim: branch)
-                                        .font(.system(size: Theme.Typography.primary))
+                                        .font(Theme.Typography.primary)
                                         .foregroundStyle(Theme.Colors.foreground)
                                     if branch == branches.current {
                                         Text("Current branch")
-                                            .font(.system(size: Theme.Typography.metadata))
+                                            .font(Theme.Typography.metadata)
                                             .foregroundStyle(Theme.Colors.mutedForeground)
                                     }
                                 }

@@ -19,7 +19,7 @@ struct WorkspaceAuthenticationBanner: View {
                     "Authentication failed — try reconnecting first; if it keeps failing, "
                         + "re-pair from the daemon."
                 )
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.attention)
 
                 GlassActionGroup {
@@ -58,14 +58,11 @@ struct WorkspaceProtocolBlockView: View {
                 VStack(alignment: .leading, spacing: Theme.Spacing.medium) {
                     Text(title)
                         .font(
-                            .system(
-                                size: Theme.Typography.primary,
-                                weight: .semibold
-                            )
+                            Theme.Typography.primary.weight(.semibold)
                         )
                         .foregroundStyle(Theme.Colors.foreground)
                     Text(bodyText)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                     VStack(spacing: Theme.Spacing.small) {
                         fullWidthButton(primaryActionTitle, isProminent: true) {
@@ -77,7 +74,7 @@ struct WorkspaceProtocolBlockView: View {
                         "Already updated? Go back to Hosts and refresh the connection. If this "
                             + "message stays, remove this host and pair it again."
                     )
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 }
             }

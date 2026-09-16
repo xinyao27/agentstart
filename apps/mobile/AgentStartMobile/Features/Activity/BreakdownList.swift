@@ -18,16 +18,16 @@ struct ActivityBreakdownList: View {
             VStack(alignment: .leading, spacing: 0) {
                 Text(title)
                     .font(
-                        .system(size: Theme.Typography.primary, weight: .semibold)
+                        Theme.Typography.primary.weight(.semibold)
                     )
                 Text(summary)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .padding(.top, Theme.Spacing.extraSmall)
                 if showsSearch, values.count > 6 {
                     TextField("Filter projects", text: $query)
                         .textFieldStyle(.plain)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .padding(.horizontal, Theme.Spacing.medium)
                         .frame(height: Theme.Control.inlineHeight)
                         .padding(
@@ -45,7 +45,7 @@ struct ActivityBreakdownList: View {
                     Button(isExpanded ? "Show less" : "Show all \(matchingValues.count) projects") {
                         isExpanded.toggle()
                     }
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.foreground)
                     .frame(
                         maxWidth: .infinity,
@@ -57,7 +57,7 @@ struct ActivityBreakdownList: View {
                 }
                 if metric == .value, values.contains(where: { $0.valueUSD == nil }) {
                     Text("Usage without authoritative pricing is shown without a combined value.")
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .padding(.top, Theme.Spacing.small)
                 }
@@ -91,18 +91,18 @@ struct ActivityBreakdownList: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.small) {
             HStack(alignment: .firstTextBaseline, spacing: Theme.Spacing.medium) {
                 Text(item.label)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .lineLimit(1)
                 Spacer(minLength: 0)
                 Text(valueLabel(item))
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .monospacedDigit()
             }
             if let sessions = item.sessions {
                 Text(
                     "\(formatActivityMetric(item.tokens, metric: .tokens)) · \(Int(sessions)) sessions"
                 )
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
             }
             if !item.providers.isEmpty { providerBar(item.providers) }

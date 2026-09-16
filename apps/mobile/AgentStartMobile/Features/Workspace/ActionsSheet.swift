@@ -16,21 +16,28 @@ struct WorkspaceActionsSheet: View {
     var body: some View {
         VStack(spacing: 0) {
             header
-            Group {
-                if isConfirmingDelete {
-                    deleteConfirmation
-                } else {
-                    actionList
-                }
-            }
-            .padding(.horizontal, Theme.Spacing.page)
-            .padding(.bottom, Theme.Spacing.standard)
+            actionList
+                .padding(.horizontal, Theme.Spacing.page)
+                .padding(.bottom, Theme.Spacing.standard)
         }
-        .appSheetPresentation(
-            .fixed(.height(isConfirmingDelete ? 250 : showsAgentHistory ? 356 : 308))
-        )
+        // Why: one fixed height. The delete confirmation used to swap the sheet's contents for a
+        // Cancel/Delete pair and grow the detent to 250pt, which is a heavier interaction than
+        // the platform dialog and inconsistent with every other destructive action in the app.
+        .appSheetPresentation(.fixed(.height(showsAgentHistory ? 356 : 308)))
         .presentationBackground(Theme.Colors.background)
         .interactiveDismissDisabled(isBusy)
+        .confirmationDialog(
+            "Delete \(displayName) (\(workspace.branch))?",
+            isPresented: $isConfirmingDelete,
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive, action: remove)
+            Button("Cancel", role: .cancel) {}
+        }
+    }
+
+    private var displayName: String {
+        workspace.name.isEmpty ? workspace.repoName : workspace.name
     }
 
     private var header: some View {
@@ -40,15 +47,11 @@ struct WorkspaceActionsSheet: View {
                 accessibilityLabel: "Close sheet",
                 action: { dismiss() }
             )
-            Text(
-                verbatim: isConfirmingDelete
-                    ? String(localized: "Delete Worktree")
-                    : workspace.name.isEmpty ? workspace.repoName : workspace.name
-            )
-            .font(.system(size: Theme.Typography.primary, weight: .semibold))
-            .foregroundStyle(Theme.Colors.foreground)
-            .lineLimit(1)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            Text(verbatim: displayName)
+                .font(Theme.Typography.primary.weight(.semibold))
+                .foregroundStyle(Theme.Colors.foreground)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.horizontal, Theme.Spacing.page)
         .padding(.top, Theme.Spacing.standard)
@@ -59,7 +62,7 @@ struct WorkspaceActionsSheet: View {
         VStack(spacing: 0) {
             if !workspace.branch.isEmpty {
                 Text(verbatim: workspace.branch)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -112,30 +115,6 @@ struct WorkspaceActionsSheet: View {
         }
     }
 
-    private var deleteConfirmation: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(
-                "Delete \(workspace.name.isEmpty ? workspace.repoName : workspace.name) (\(workspace.branch))?"
-            )
-            .font(.system(size: Theme.Typography.supporting))
-            .foregroundStyle(Theme.Colors.mutedForeground)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            HStack(spacing: Theme.Spacing.small) {
-                Button("Cancel") { isConfirmingDelete = false }
-                    .buttonStyle(.glass)
-                    .frame(maxWidth: .infinity)
-                    .appButtonContext(.regular)
-                Button("Delete", role: .destructive, action: remove)
-                    .buttonStyle(.glassProminent)
-                    .tint(Theme.Colors.attention)
-                    .frame(maxWidth: .infinity)
-                    .appButtonContext(.regular)
-            }
-        }
-        .padding(.top, Theme.Spacing.small)
-        .frame(maxHeight: .infinity, alignment: .top)
-    }
-
     private func actionButton(
         title: String,
         glyph: AgentStartIconID,
@@ -151,7 +130,7 @@ struct WorkspaceActionsSheet: View {
                 )
                 .foregroundStyle(iconColor)
                 Text(verbatim: title)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(color)
                 Spacer(minLength: 0)
             }

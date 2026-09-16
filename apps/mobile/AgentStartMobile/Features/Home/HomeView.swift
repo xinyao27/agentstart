@@ -12,7 +12,6 @@ struct HomeView: View {
     private let showWorkspace: (HostProfile, WorkspaceSummary) -> Void
     private let showPairing: () -> Void
     private let showActivityInsights: () -> Void
-    private let showSettings: () -> Void
     private let showAccounts: (HostProfile) -> Void
     private let showBrowser: (HostProfile) -> Void
     private let editHost: (HostProfile) -> Void
@@ -34,7 +33,6 @@ struct HomeView: View {
         showWorkspace: @escaping (HostProfile, WorkspaceSummary) -> Void,
         showPairing: @escaping () -> Void,
         showActivityInsights: @escaping () -> Void,
-        showSettings: @escaping () -> Void,
         showAccounts: @escaping (HostProfile) -> Void,
         showBrowser: @escaping (HostProfile) -> Void,
         editHost: @escaping (HostProfile) -> Void,
@@ -59,7 +57,6 @@ struct HomeView: View {
         self.showWorkspace = showWorkspace
         self.showPairing = showPairing
         self.showActivityInsights = showActivityInsights
-        self.showSettings = showSettings
         self.showAccounts = showAccounts
         self.showBrowser = showBrowser
         self.editHost = editHost
@@ -78,10 +75,8 @@ struct HomeView: View {
                     HomeDashboardView(
                         snapshot: snapshot,
                         now: now,
-                        creationTarget: $creationTarget,
                         showHost: showHost,
                         showWorkspace: showWorkspace,
-                        showPairing: showPairing,
                         showAccounts: showAccounts,
                         showBrowser: showBrowser,
                         editHost: editHost,
@@ -108,8 +103,6 @@ struct HomeView: View {
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            // Why: activity insights sits at the leading edge and settings at the trailing
-            // edge — two placements, not two buttons grouped on one.
             // Why: GlassHeaderButton wraps its own `.glassEffect` circle for sheet/docked-panel
             // headers that sit outside a NavigationStack toolbar. Home's actions live in the
             // real navigation bar, so — like every other root toolbar in this app (Workspace
@@ -123,11 +116,27 @@ struct HomeView: View {
                 }
                 .accessibilityLabel("Open activity insights")
             }
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(action: showSettings) {
-                    AgentStartToolbarIcon(.settings)
+            // Why: Home's primary action is a toolbar item rather than a floating pill. The pill
+            // covered the usage card's last row and the toolbar's own Liquid Glass already gives
+            // the action its prominence.
+            if let dashboardSnapshot {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: { runPrimaryAction(dashboardSnapshot) }) {
+                        AgentStartToolbarIcon(
+                            dashboardSnapshot.primaryConnectedSnapshot == nil ? .monitor : .add
+                        )
+                    }
+                    // Why: the primary action needs a keyboard equivalent on an iPad with a
+                    // Magic Keyboard; pairing is a modal flow and takes none.
+                    .keyboardShortcut(
+                        dashboardSnapshot.primaryConnectedSnapshot == nil
+                            ? nil : KeyboardShortcut("n", modifiers: .command)
+                    )
+                    .accessibilityLabel(
+                        dashboardSnapshot.primaryConnectedSnapshot == nil
+                            ? "Pair daemon" : "New workspace"
+                    )
                 }
-                .accessibilityLabel("Settings")
             }
         }
         .task(id: refreshRevision) {
@@ -201,6 +210,25 @@ struct HomeView: View {
         }
     }
 
+    // Why: the toolbar's primary action belongs to the paired-host dashboard only; the empty
+    // onboarding state carries its own Pair Daemon call to action.
+    private var dashboardSnapshot: HomeSnapshot? {
+        guard case .loaded(let snapshot) = model.phase, !snapshot.hosts.isEmpty else {
+            return nil
+        }
+        return snapshot
+    }
+
+    private func runPrimaryAction(_ snapshot: HomeSnapshot) {
+        guard let target = snapshot.primaryConnectedSnapshot else {
+            showPairing()
+            return
+        }
+        creationTarget = HomeWorkspaceCreationTarget(
+            host: target.host,
+            existingPaths: target.workspaces.map(\.path)
+        )
+    }
 }
 
 nonisolated struct HomeWorkspaceCreationTarget: Identifiable, Sendable {

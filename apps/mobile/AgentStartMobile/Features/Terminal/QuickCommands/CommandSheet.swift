@@ -102,16 +102,16 @@ struct TerminalQuickCommandSheet: View {
                 }
                 if let error = model.errorMessage {
                     Text(error)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.attention)
                 }
                 if model.availableCommands.isEmpty {
                     Text("No quick commands yet.")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 } else if model.visibleCommands.isEmpty {
                     Text("No matching quick commands.")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                 }
                 if !model.repositoryCommands.isEmpty {
@@ -142,7 +142,7 @@ struct TerminalQuickCommandSheet: View {
                 )
                 .frame(width: Theme.Control.inlineIcon)
             TextField("Search quick commands...", text: Bindable(model).query)
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.foreground)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
@@ -180,7 +180,7 @@ struct TerminalQuickCommandSheet: View {
     ) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
             Text(title)
-                .font(.system(size: Theme.Typography.metadata, weight: .semibold))
+                .font(Theme.Typography.metadata.weight(.semibold))
                 .tracking(0.7)
                 .foregroundStyle(Theme.Colors.mutedForeground)
             ContentSurface {
@@ -211,7 +211,7 @@ struct TerminalQuickCommandSheet: View {
                 AgentStartIcon(.add, size: Theme.Control.regularIcon)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 Text(model.hasReachedLimit ? "Quick command limit reached" : "New quick command")
-                    .font(.system(size: Theme.Typography.supporting, weight: .regular))
+                    .font(Theme.Typography.supporting.weight(.regular))
                     .foregroundStyle(Theme.Colors.foreground)
                 Spacer(minLength: 0)
             }
@@ -222,7 +222,6 @@ struct TerminalQuickCommandSheet: View {
         .buttonStyle(.appPlain)
         .glassEffect(.regular.interactive(), in: .rect(cornerRadius: Theme.Radius.control))
         .disabled(!model.canAdd)
-        .opacity(model.canAdd ? 1 : 0.45)
         .accessibilityLabel(
             model.hasReachedLimit ? "Quick command limit reached" : "New quick command"
         )
@@ -243,19 +242,13 @@ struct TerminalQuickCommandSheet: View {
                     VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                         Text(verbatim: command.label)
                             .font(
-                                .system(
-                                    size: Theme.Typography.supporting,
-                                    weight: .semibold
-                                )
+                                Theme.Typography.supporting.weight(.semibold)
                             )
                             .foregroundStyle(Theme.Colors.foreground)
                             .lineLimit(1)
                         Text(verbatim: command.displayPreview)
                             .font(
-                                .system(
-                                    size: Theme.Typography.metadata,
-                                    design: command.agentID == nil ? .monospaced : .default
-                                )
+                                Theme.Typography.metadata
                             )
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
@@ -271,21 +264,25 @@ struct TerminalQuickCommandSheet: View {
             .buttonStyle(.appPlain)
             .accessibilityLabel("Run \(command.label)")
 
-            HStack(spacing: Theme.Glass.groupSpacing) {
-                GlassIconButton(
-                    iconName: .edit,
-                    accessibilityLabel: "Edit \(command.label)",
-                    context: .inline
-                ) {
-                    editorTarget = TerminalQuickCommandEditorTarget(command: command)
-                }
-                GlassIconButton(
-                    iconName: .trash,
-                    accessibilityLabel: "Delete \(command.label)",
-                    context: .inline,
-                    isDestructive: true
-                ) {
-                    deleteTarget = command
+            // Why: two adjacent custom glass shapes share one container, so they blend as a pair
+            // instead of each drawing its own boundary against the other.
+            GlassEffectContainer(spacing: Theme.Glass.groupSpacing) {
+                HStack(spacing: Theme.Glass.groupSpacing) {
+                    GlassIconButton(
+                        iconName: .edit,
+                        accessibilityLabel: "Edit \(command.label)",
+                        context: .inline
+                    ) {
+                        editorTarget = TerminalQuickCommandEditorTarget(command: command)
+                    }
+                    GlassIconButton(
+                        iconName: .trash,
+                        accessibilityLabel: "Delete \(command.label)",
+                        context: .inline,
+                        isDestructive: true
+                    ) {
+                        deleteTarget = command
+                    }
                 }
             }
         }

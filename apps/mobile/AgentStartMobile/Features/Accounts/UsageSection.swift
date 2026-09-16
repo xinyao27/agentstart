@@ -15,7 +15,7 @@ struct AccountUsageSection: View {
                     usageContent
                     if let error = section.usage?.error, !error.isEmpty {
                         Text(verbatim: error)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.attention)
                             .lineLimit(2)
                     }
@@ -26,10 +26,7 @@ struct AccountUsageSection: View {
                         .padding(.top, Theme.Spacing.medium)
                     Text("Managed accounts")
                         .font(
-                            .system(
-                                size: Theme.Typography.metadata,
-                                weight: .semibold
-                            )
+                            Theme.Typography.metadata.weight(.semibold)
                         )
                         .tracking(0.4)
                         .textCase(.uppercase)
@@ -57,26 +54,23 @@ struct AccountUsageSection: View {
                 HStack(spacing: Theme.Spacing.extraSmall) {
                     Text(section.provider.title)
                         .font(
-                            .system(
-                                size: Theme.Typography.primary,
-                                weight: .semibold
-                            )
+                            Theme.Typography.primary.weight(.semibold)
                         )
                         .foregroundStyle(Theme.Colors.foreground)
                         .lineLimit(1)
                     if let plan = section.usage?.plan {
                         Text(verbatim: "· \(plan)")
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
                     }
                 }
                 Text(updatedLabel)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 HStack(spacing: Theme.Spacing.small) {
                     Text(accountModeLabel)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .lineLimit(1)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -89,7 +83,7 @@ struct AccountUsageSection: View {
                                     .controlSize(.small)
                             } else {
                                 Text("Use default")
-                                    .font(.system(size: Theme.Typography.metadata))
+                                    .font(Theme.Typography.metadata)
                                     .foregroundStyle(Theme.Colors.foreground)
                             }
                         }
@@ -117,7 +111,7 @@ struct AccountUsageSection: View {
             }
         } else {
             Text(usageStatusLabel(section.usage))
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
         }
     }
@@ -131,14 +125,14 @@ struct AccountUsageSection: View {
             HStack(spacing: Theme.Spacing.small) {
                 VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                     Text(verbatim: account.email)
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                         .foregroundStyle(Theme.Colors.foreground)
                         .lineLimit(1)
                     if let subtitle = account.subtitle?.trimmingCharacters(
                         in: .whitespacesAndNewlines
                     ), !subtitle.isEmpty {
                         Text(verbatim: subtitle)
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
                     }
@@ -182,18 +176,18 @@ struct AccountUsageSection: View {
                 ProgressView()
                     .controlSize(.mini)
                 Text("Loading usage…")
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.mutedForeground)
             }
         } else if let usage = inactiveUsage?.usage {
             Text(usageStatusLabel(usage))
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .lineLimit(1)
         }
         if let error = inactiveUsage?.usage?.error, !error.isEmpty {
             Text(verbatim: error)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.attention)
                 .lineLimit(1)
         }

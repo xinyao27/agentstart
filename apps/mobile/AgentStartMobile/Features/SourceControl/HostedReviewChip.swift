@@ -125,24 +125,24 @@ struct HostedReviewChip: View {
             ProgressView()
                 .controlSize(.small)
             Text("Loading pull request…")
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .lineLimit(1)
         case .none:
             Text("Create pull request")
-                .font(.system(size: Theme.Typography.supporting))
-                .foregroundStyle(Theme.Colors.primary)
+                .font(Theme.Typography.supporting)
+                .foregroundStyle(Theme.Colors.primaryText)
         case .unavailable(let message):
             Text(verbatim: message)
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 .lineLimit(1)
         case .ready(let number, let state, let rollup, let commentCount):
             Text(verbatim: "#\(number)")
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.foreground)
             Text(state.title)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(state.color)
                 .padding(.horizontal, Theme.Spacing.small)
                 .padding(.vertical, Theme.Spacing.extraSmall)
@@ -153,14 +153,14 @@ struct HostedReviewChip: View {
             HStack(spacing: Theme.Spacing.extraSmall) {
                 rollupIcon(rollup)
                 Text(verbatim: rollup.text)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
             }
             .foregroundStyle(rollupColor(rollup))
             if let commentCount, commentCount > 0 {
                 HStack(spacing: Theme.Spacing.extraSmall) {
-                    AgentStartIcon(.chat, size: Theme.Typography.metadata)
+                    AgentStartIcon(.chat, size: Theme.TypeSize.metadata)
                     Text(verbatim: "\(commentCount)")
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                 }
                 .foregroundStyle(Theme.Colors.mutedForeground)
             }
@@ -170,10 +170,10 @@ struct HostedReviewChip: View {
     @ViewBuilder
     private func rollupIcon(_ rollup: HostedReviewChipRollup) -> some View {
         switch rollup {
-        case .conflict: AgentStartIcon(.warning, size: Theme.Typography.metadata)
-        case .failing: AgentStartIcon(.x, size: Theme.Typography.metadata)
-        case .running: AgentStartIcon(.circle, size: Theme.Typography.metadata)
-        case .passed: AgentStartIcon(.check, size: Theme.Typography.metadata)
+        case .conflict: AgentStartIcon(.warning, size: Theme.TypeSize.metadata)
+        case .failing: AgentStartIcon(.x, size: Theme.TypeSize.metadata)
+        case .running: AgentStartIcon(.circle, size: Theme.TypeSize.metadata)
+        case .passed: AgentStartIcon(.check, size: Theme.TypeSize.metadata)
         case .none: EmptyView()
         }
     }

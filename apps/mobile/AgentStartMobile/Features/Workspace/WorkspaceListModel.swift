@@ -168,6 +168,16 @@ final class WorkspaceListModel {
         return "No workspaces"
     }
 
+    // Why: an empty state has to say what would fill it and offer that action, rather than
+    // leaving the only "new workspace" affordance inside the toolbar menu.
+    var emptyStateDescription: LocalizedStringResource {
+        if !searchText.isEmpty { return "No workspace matches this search." }
+        if hasActiveFilters { return "A list filter is hiding every workspace on this host." }
+        return "Create a workspace to start an agent session on this host."
+    }
+
+    var emptyStateIsSearching: Bool { !searchText.isEmpty }
+
     private var hasActiveFilters: Bool {
         viewSettings.hideSleeping
             || viewSettings.hideDefaultBranch

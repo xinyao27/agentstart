@@ -61,7 +61,7 @@ struct WorkspaceCreationPickerSheet: View {
             )
 
             Text(title)
-                .font(.system(size: Theme.Typography.primary, weight: .semibold))
+                .font(Theme.Typography.primary.weight(.semibold))
                 .foregroundStyle(Theme.Colors.foreground)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -116,7 +116,7 @@ struct WorkspaceCreationPickerSheet: View {
                 leading()
                     .frame(width: Theme.Spacing.extraLarge)
                 Text(verbatim: title)
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.foreground)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)

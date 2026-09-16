@@ -12,7 +12,7 @@ enum Theme {
             dark: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 1)
         )
         static let mutedForeground = adaptive(
-            light: UIColor(red: 26 / 255, green: 28 / 255, blue: 31 / 255, alpha: 0.494),
+            light: UIColor(red: 26 / 255, green: 28 / 255, blue: 31 / 255, alpha: 0.62),
             dark: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 0.498)
         )
         // Why: a selected surface is a neutral grey step, not an accent. The blue-tinted
@@ -71,6 +71,18 @@ enum Theme {
         static let primary = adaptive(
             light: UIColor(red: 255 / 255, green: 91 / 255, blue: 3 / 255, alpha: 1),
             dark: UIColor(red: 255 / 255, green: 91 / 255, blue: 3 / 255, alpha: 1)
+        )
+        // Why: `primary` and `unread` are graphic colors — they clear the 3:1 bar for a glyph
+        // or a fill, not the 4.5:1 bar text needs at 13–15pt. Anything that renders orange
+        // *text* uses these darker light-mode variants instead of dimming the graphic color
+        // locally, which left the same string at a different contrast on every screen.
+        static let primaryText = adaptive(
+            light: UIColor(red: 168 / 255, green: 60 / 255, blue: 0 / 255, alpha: 1),
+            dark: UIColor(red: 255 / 255, green: 122 / 255, blue: 51 / 255, alpha: 1)
+        )
+        static let unreadText = adaptive(
+            light: UIColor(red: 163 / 255, green: 61 / 255, blue: 5 / 255, alpha: 1),
+            dark: UIColor(red: 251 / 255, green: 106 / 255, blue: 34 / 255, alpha: 1)
         )
         static let statusNeutral = adaptive(
             light: UIColor(red: 26 / 255, green: 28 / 255, blue: 31 / 255, alpha: 0.4),
@@ -191,8 +203,17 @@ enum Theme {
             dark: UIColor(red: 37 / 255, green: 37 / 255, blue: 37 / 255, alpha: 1)
         )
 
+        // Why: Increase Contrast has to reach every token from one owner, otherwise each
+        // screen invents its own darker border. Rather than a second table per token, any
+        // sub-opaque token is pushed toward solid; opaque fills are already at full strength
+        // and are returned unchanged.
         nonisolated private static func adaptive(light: UIColor, dark: UIColor) -> Color {
-            Color(uiColor: UIColor { traits in traits.userInterfaceStyle == .dark ? dark : light })
+            Color(
+                uiColor: UIColor { traits in
+                    let base = traits.userInterfaceStyle == .dark ? dark : light
+                    guard traits.accessibilityContrast == .high else { return base }
+                    return base.increasedContrast
+                })
         }
     }
 
@@ -211,6 +232,13 @@ enum Theme {
         static let content: CGFloat = 18
         static let control: CGFloat = 14
         static let floatingSurface: CGFloat = 24
+
+        // Why: nested continuous corners only look related when the inner radius is the
+        // outer radius minus the inset between them. Repeating the outer value on the inner
+        // box makes it read as rounder than the surface it sits in.
+        static func inner(_ outer: CGFloat, inset: CGFloat) -> CGFloat {
+            max(0, outer - inset)
+        }
     }
 
     enum Opacity {
@@ -226,15 +254,35 @@ enum Theme {
         static let hairline: CGFloat = 1.0 / 3.0
     }
 
-    // Why: one compiled text scale for every role, so information density stays fixed
-    // instead of each role drifting independently as screens are tuned.
-    nonisolated enum Typography {
+    // Why: the base point sizes behind the type roles, kept as numbers for the handful of
+    // places that need geometry rather than a font — an inline glyph sized to match its
+    // label, and the terminal/diff renderers that derive column counts from a glyph width.
+    // Text must go through `Theme.Typography` so it follows the user's Larger Text setting.
+    // These are the system text styles' own sizes at the default content size, so a numeric
+    // consumer and the font it sits next to agree.
+    nonisolated enum TypeSize {
         static let metadata: CGFloat = 13
         static let supporting: CGFloat = 15
         static let primary: CGFloat = 17
-        static let emphasis: CGFloat = 19
-        static let pageTitle: CGFloat = 21
+        static let emphasis: CGFloat = 20
+        static let pageTitle: CGFloat = 22
         static let code: CGFloat = 13
+    }
+
+    // Why: one scaled text scale for every role, so information density stays consistent
+    // while still following the user's Larger Text setting. These are the system text styles
+    // themselves — `Font.system(size:)` has no `relativeTo:`, so a literal point size would
+    // be fixed, which is what made every screen ignore Larger Text.
+    nonisolated enum Typography {
+        static let metadata = Font.footnote
+        static let supporting = Font.subheadline
+        static let primary = Font.body
+        static let emphasis = Font.title3
+        static let pageTitle = Font.title2
+        // Why: the terminal grid and the diff gutter derive their column counts from this
+        // size, so scaling it would reflow the renderer instead of the text. Code is the one
+        // role that stays pinned, and it is the only monospaced entry point.
+        static let code = Font.system(size: TypeSize.code, design: .monospaced)
     }
 
     enum Control {
@@ -247,12 +295,21 @@ enum Theme {
         static let inlineIcon: CGFloat = 16
         static let regularIcon: CGFloat = 18
         static let largeIcon: CGFloat = 20
+        // Why: the system tab bar draws its glyphs larger than an in-content icon; matching
+        // Hugeicons to the platform metric keeps a tab from reading as undersized.
+        static let tabIcon: CGFloat = 24
         static let statusIndicator: CGFloat = 6
     }
 
     enum Motion {
         static let stateChange = Animation.snappy(duration: 0.32)
         static let gentle = Animation.smooth(duration: 0.42)
+
+        // Why: Reduce Motion has to reach the app's own layout motion, not just the loaders. Passing
+        // nil stops the animation while leaving the state change itself intact.
+        static func resolved(_ animation: Animation, reduceMotion: Bool) -> Animation? {
+            reduceMotion ? nil : animation
+        }
     }
 
     enum Glass {
@@ -260,5 +317,51 @@ enum Theme {
         // Why: vertical pairs are full-width capsules, not compact row actions; at the 8pt
         // horizontal rhythm the two surfaces meet and read as one segmented control.
         static let stackedActionSpacing: CGFloat = Spacing.standard
+    }
+}
+
+nonisolated private extension UIColor {
+    // Why and how: see `Theme.Colors.adaptive`. A token that is not already opaque gets
+    // stronger when the user turns on Increase Contrast; dividers, muted text and status
+    // washes all strengthen together instead of each screen picking its own darker value.
+    var increasedContrast: UIColor {
+        let alpha = cgColor.alpha
+        guard alpha < 1 else { return self }
+        return withAlphaComponent(min(1, alpha * 1.6))
+    }
+}
+
+extension View {
+    /// Applies a theme animation, except under Reduce Motion where the change is not animated.
+    func appAnimation<Value: Equatable>(_ animation: Animation, value: Value) -> some View {
+        modifier(AppAnimationModifier(animation: animation, value: value))
+    }
+
+    /// A layout entrance that respects Reduce Motion by falling back to a fade: the state change is
+    /// still signalled, without the movement.
+    func appMotionTransition(edge: Edge) -> some View {
+        modifier(AppMotionTransitionModifier(edge: edge))
+    }
+}
+
+private struct AppAnimationModifier<Value: Equatable>: ViewModifier {
+    let animation: Animation
+    let value: Value
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
+
+    func body(content: Content) -> some View {
+        content.animation(
+            Theme.Motion.resolved(animation, reduceMotion: reducesMotion), value: value)
+    }
+}
+
+private struct AppMotionTransitionModifier: ViewModifier {
+    let edge: Edge
+    @Environment(\.accessibilityReduceMotion) private var reducesMotion
+
+    func body(content: Content) -> some View {
+        content.transition(
+            reducesMotion ? .opacity : .move(edge: edge).combined(with: .opacity)
+        )
     }
 }

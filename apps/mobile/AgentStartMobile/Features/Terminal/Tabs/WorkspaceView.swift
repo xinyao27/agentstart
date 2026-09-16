@@ -118,7 +118,7 @@ struct TerminalWorkspaceView: View {
                 HStack(spacing: Theme.Spacing.small) {
                     AgentStartLoader(size: Theme.Control.largeIcon)
                     Text("Loading workspace session…")
-                        .font(.system(size: Theme.Typography.supporting))
+                        .font(Theme.Typography.supporting)
                 }
             case .loaded:
                 TerminalWorkspaceContentView(
@@ -171,7 +171,11 @@ struct TerminalWorkspaceView: View {
         // what preserves middle truncation without SwiftUI's default large-title layout.
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
+        // Why: the system back button carries the edge-swipe affordance, the long-press history
+        // menu and its own label, so it stays on the app's most-visited screen. It is replaced by
+        // the custom leading action only while a markdown draft needs a confirmation, which is
+        // the same condition that already scopes the interactive pop gesture.
+        .navigationBarBackButtonHidden(!markdownDrafts.isEmpty)
         .disablesInteractivePopGesture(!markdownDrafts.isEmpty)
         .task {
             await model.observe()
@@ -199,11 +203,12 @@ struct TerminalWorkspaceView: View {
                 repoID: workspace.repoID,
                 repository: workspaceCreationRepository,
                 createAgent: { agentID in
-                    Task { await model.createTerminal(agentID: agentID) }
+                    model.runOperation { await model.createTerminal(agentID: agentID) }
                 },
-                createTerminal: { Task { await model.createTerminal() } },
-                createMarkdown: { Task { await model.createMarkdown() } },
-                createBrowser: { url in Task { await model.createBrowser(url: url) } },
+                createTerminal: { model.runOperation { await model.createTerminal() } },
+                createMarkdown: { model.runOperation { await model.createMarkdown() } },
+                createBrowser: { url in model.runOperation { await model.createBrowser(url: url) }
+                },
                 browserSupported: hostCapabilities?.browserScreencastSupported == true,
                 browserUnavailable: model.reportBrowserUnavailable
             )
@@ -231,11 +236,16 @@ struct TerminalWorkspaceView: View {
             ToolbarItem(placement: .principal) {
                 TerminalSessionHeader(title: model.displayName)
             }
-            ToolbarItem(placement: .topBarLeading) {
-                Button(action: requestLeaveSession) {
-                    AgentStartToolbarIcon(.arrowLeft)
+            if !markdownDrafts.isEmpty {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: requestLeaveSession) {
+                        AgentStartToolbarIcon(.arrowLeft)
+                    }
+                    // Why: the native back button's keyboard equivalent on an iPad with a
+                    // Magic Keyboard.
+                    .keyboardShortcut("[", modifiers: .command)
+                    .accessibilityLabel("Back to workspaces")
                 }
-                .accessibilityLabel("Back to workspaces")
             }
             if model.activeTab?.terminalTarget == nil, case .loaded = model.phase {
                 ToolbarItem(placement: .topBarTrailing) {

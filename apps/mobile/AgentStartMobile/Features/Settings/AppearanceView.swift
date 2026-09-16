@@ -46,9 +46,9 @@ struct AppearanceSettingsView: View {
                                 .frame(width: Theme.Control.largeIcon)
                             VStack(alignment: .leading, spacing: Theme.Spacing.extraSmall) {
                                 Text("Loader")
-                                    .font(.system(size: Theme.Typography.supporting))
+                                    .font(Theme.Typography.supporting)
                                 Text(preferences.loaderStyle.title)
-                                    .font(.system(size: Theme.Typography.metadata))
+                                    .font(Theme.Typography.metadata)
                                     .foregroundStyle(Theme.Colors.mutedForeground)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)

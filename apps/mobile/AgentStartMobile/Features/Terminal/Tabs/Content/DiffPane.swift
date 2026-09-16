@@ -45,10 +45,7 @@ struct WorkspaceDiffPane: View {
                     if isTruncated {
                         Text("… diff truncated for mobile preview …")
                             .font(
-                                .system(
-                                    size: Theme.Typography.code,
-                                    design: .monospaced
-                                )
+                                Theme.Typography.code
                             )
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .padding(
@@ -96,6 +93,18 @@ private struct WorkspaceDiffLineRow: View {
         }
         .frame(minHeight: AgentStartDiffCodeLayout.minimumLineHeight, alignment: .topLeading)
         .background(agentstartDiffBackground(line.kind))
+        // Why: add/remove is a background wash and the `+`/`-` gutter is hidden from accessibility,
+        // so the line's meaning has to be stated for the row to carry it at all.
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("\(lineAccessibilityPrefix)\(line.text)"))
+    }
+
+    private var lineAccessibilityPrefix: LocalizedStringResource {
+        switch line.kind {
+        case .add: "Added: "
+        case .delete: "Removed: "
+        case .context: ""
+        }
     }
 
     private var line: WorkspaceDiffLine { renderedLine.line }

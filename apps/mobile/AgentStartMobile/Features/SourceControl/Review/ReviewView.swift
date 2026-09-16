@@ -168,7 +168,7 @@ struct SourceReviewView: View {
             ProgressView()
                 .controlSize(.small)
             Text("Loading review…")
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .foregroundStyle(Theme.Colors.mutedForeground)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -204,7 +204,7 @@ struct SourceReviewView: View {
                 Divider()
                 if let message = model.branchComparisonError {
                     Text(verbatim: message)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.foreground)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, Theme.Spacing.medium)
@@ -246,7 +246,7 @@ struct SourceReviewView: View {
                     .frame(maxHeight: .infinity)
                     .overlay(alignment: .leading) {
                         Rectangle()
-                            .fill(Theme.Colors.rail.opacity(0.65))
+                            .fill(Theme.Colors.rail)
                             .frame(width: Theme.Size.hairline)
                     }
             }

@@ -45,14 +45,7 @@ struct TerminalLivePane: View {
             )
             .padding(.horizontal, TerminalChromeMetrics.horizontalInset)
             .padding(.top, Theme.Spacing.small)
-            .transition(.move(edge: .top).combined(with: .opacity))
-        }
-        .overlay(alignment: .bottom) {
-            if let notice = model.actionNotice {
-                TerminalActionNoticeLabel(message: notice.message)
-                    .padding(.bottom, 60)
-                    .transition(.opacity.combined(with: .move(edge: .bottom)))
-            }
+            .appMotionTransition(edge: .top)
         }
         .toolbar {
             if isVisible {

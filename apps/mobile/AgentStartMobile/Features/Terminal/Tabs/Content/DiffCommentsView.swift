@@ -32,10 +32,7 @@ struct WorkspaceDiffCommentsPane: View {
                         if isTruncated {
                             Text("… diff truncated for mobile preview …")
                                 .font(
-                                    .system(
-                                        size: Theme.Typography.code,
-                                        design: .monospaced
-                                    )
+                                    Theme.Typography.code
                                 )
                                 .foregroundStyle(Theme.Colors.mutedForeground)
                                 .padding(
@@ -117,17 +114,29 @@ private struct WorkspaceDiffCommentsBar: View {
             AgentStartIcon(.chat, size: 16)
                 .foregroundStyle(Theme.Colors.mutedForeground)
             Text(commentLabel)
-                .font(.system(size: Theme.Typography.metadata, weight: .regular))
+                .font(Theme.Typography.metadata.weight(.regular))
                 .foregroundStyle(Theme.Colors.mutedForeground)
             Spacer(minLength: Theme.Spacing.small)
-            Button("Copy", iconID: .copy) { model.copyNotes() }
-                .buttonStyle(.glass)
-                .appButtonContext(.inline)
-                .disabled(model.comments.isEmpty || model.isBusy)
-            Button("Send", iconID: .upload) { model.isShowingSend = true }
-                .appProminentGlassButton()
-                .appButtonContext(.inline)
-                .disabled(model.unsentComments.isEmpty || model.isBusy)
+            // Why: the bar below draws this region's one glass surface, so its actions are solid
+            // chips on top of it. A `.glass` / `.glassProminent` button inside a glass panel
+            // renders a second blur and a second shadow in the same place, which is what the
+            // browser action bar already stopped doing.
+            WorkspaceDiffNotesAction(
+                "Copy",
+                iconID: .copy,
+                isPrimary: false,
+                isDisabled: model.comments.isEmpty || model.isBusy
+            ) {
+                model.copyNotes()
+            }
+            WorkspaceDiffNotesAction(
+                "Send",
+                iconID: .upload,
+                isPrimary: true,
+                isDisabled: model.unsentComments.isEmpty || model.isBusy
+            ) {
+                model.isShowingSend = true
+            }
         }
         .padding(.horizontal, Theme.Spacing.standard)
         .padding(.vertical, Theme.Spacing.small)
@@ -142,6 +151,46 @@ private struct WorkspaceDiffCommentsBar: View {
         case 1: "1 review note"
         default: "\(model.comments.count) review notes"
         }
+    }
+}
+
+/// The solid action chip used inside a surface that already draws the region's glass.
+private struct WorkspaceDiffNotesAction: View {
+    let title: LocalizedStringKey
+    let iconID: AgentStartIconID
+    let isPrimary: Bool
+    let isDisabled: Bool
+    let action: () -> Void
+
+    init(
+        _ title: LocalizedStringKey,
+        iconID: AgentStartIconID,
+        isPrimary: Bool,
+        isDisabled: Bool,
+        action: @escaping () -> Void
+    ) {
+        self.title = title
+        self.iconID = iconID
+        self.isPrimary = isPrimary
+        self.isDisabled = isDisabled
+        self.action = action
+    }
+
+    var body: some View {
+        Button(title, iconID: iconID, action: action)
+            .font(Theme.Typography.metadata)
+            // Why: a solid primary inverts the label, matching the browser bar's solid circular
+            // send button rather than introducing a third surface treatment.
+            .foregroundStyle(isPrimary ? Theme.Colors.background : Theme.Colors.foreground)
+            .padding(.horizontal, Theme.Spacing.medium)
+            .frame(minHeight: Theme.Control.regularHeight)
+            .background(
+                isPrimary ? Theme.Colors.foreground : Theme.Colors.keycap,
+                in: .rect(cornerRadius: Theme.Radius.control)
+            )
+            .buttonStyle(.appPlain)
+            .appButtonContext(.regular)
+            .disabled(isDisabled)
     }
 }
 
@@ -201,7 +250,7 @@ private struct WorkspaceDiffCommentLine: View {
                 AgentStartIcon(.chat, size: 14)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 Text("Line \(comment.lineNumber)")
-                    .font(.system(size: Theme.Typography.metadata, weight: .regular))
+                    .font(Theme.Typography.metadata.weight(.regular))
                     .foregroundStyle(Theme.Colors.mutedForeground)
                 Spacer(minLength: 4)
                 GlassIconButton(
@@ -213,7 +262,7 @@ private struct WorkspaceDiffCommentLine: View {
                 ) { deleteComment(comment) }
             }
             Text(verbatim: comment.body)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.foreground)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -225,7 +274,7 @@ private struct WorkspaceDiffCommentLine: View {
     private func composer(_ lineNumber: Int) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.small) {
             TextEditor(text: commentDraft)
-                .font(.system(size: Theme.Typography.code, design: .monospaced))
+                .font(Theme.Typography.code)
                 .scrollContentBackground(.hidden)
                 .frame(minHeight: 80)
                 .padding(Theme.Spacing.small)
@@ -235,22 +284,31 @@ private struct WorkspaceDiffCommentLine: View {
                 )
             HStack {
                 Spacer(minLength: 0)
-                Button("Cancel") { cancelComment() }
-                    .buttonStyle(.glass)
-                    .appButtonContext(.inline)
-                Button("Save note", iconID: .check) { saveComment(lineNumber) }
-                    .appProminentGlassButton()
-                    .appButtonContext(.inline)
-                    .disabled(
-                        commentDraft.wrappedValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                            .isEmpty
-                            || isBusy
-                    )
+                // Why: no glass layer here. This composer sits inside the diff editor surface, so
+                // the field is a solid content box and its actions are solid chips — wrapping the
+                // whole thing in glass and then putting glass buttons inside it drew two blurs.
+                WorkspaceDiffNotesAction(
+                    "Cancel",
+                    iconID: .x,
+                    isPrimary: false,
+                    isDisabled: false
+                ) {
+                    cancelComment()
+                }
+                WorkspaceDiffNotesAction(
+                    "Save note",
+                    iconID: .check,
+                    isPrimary: true,
+                    isDisabled: commentDraft.wrappedValue
+                        .trimmingCharacters(in: .whitespacesAndNewlines)
+                        .isEmpty || isBusy
+                ) {
+                    saveComment(lineNumber)
+                }
             }
         }
         .padding(Theme.Spacing.medium)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassEffect(.regular, in: .rect(cornerRadius: Theme.Radius.control))
     }
 
     private var line: WorkspaceDiffLine { renderedLine.line }

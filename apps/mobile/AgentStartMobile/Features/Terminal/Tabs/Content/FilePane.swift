@@ -168,7 +168,7 @@ private struct WorkspaceTextPreview: View {
             VStack(spacing: 0) {
                 if isTruncated {
                     Text("Preview truncated · \(byteLength.formatted()) bytes")
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, Theme.Spacing.standard)
@@ -342,7 +342,7 @@ struct WorkspaceHTMLPreview: View {
                 GeometryReader { geometry in
                     ScrollView([.horizontal, .vertical]) {
                         Text(verbatim: content)
-                            .font(.system(size: Theme.Typography.code, design: .monospaced))
+                            .font(Theme.Typography.code)
                             .foregroundStyle(Theme.Colors.foreground)
                             .textSelection(.enabled)
                             .padding(Theme.Spacing.standard)

@@ -15,7 +15,7 @@ struct HostedReviewIdentityCard: View {
             HStack(spacing: Theme.Spacing.small) {
                 HStack(spacing: Theme.Spacing.small) {
                     Text(review.state.title)
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                         .foregroundStyle(review.state.color)
                         .padding(.horizontal, Theme.Spacing.small)
                         .padding(.vertical, Theme.Spacing.extraSmall)
@@ -23,41 +23,46 @@ struct HostedReviewIdentityCard: View {
                     // Why: a review number is an identifier, not a quantity — grouping it as
                     // "#1,097" is wrong, and these routinely exceed 999.
                     Text(verbatim: "#\(review.number)")
-                        .font(.system(size: Theme.Typography.metadata))
+                        .font(Theme.Typography.metadata)
                     if let author = details?.author {
                         Text("· \(author)")
-                            .font(.system(size: Theme.Typography.metadata))
+                            .font(Theme.Typography.metadata)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                     }
                 }
                 Spacer(minLength: Theme.Spacing.small)
-                HStack(spacing: 0) {
-                    // Why: both trailing actions belong to the review as a whole, so they
-                    // share one compact hit-target group instead of leaving a second visual
-                    // gap between two already-44pt targets.
-                    if let editTitle {
-                        GlassIconButton(
-                            iconName: .edit,
-                            accessibilityLabel: "Edit pull request title",
-                            context: .regular,
-                            action: editTitle
-                        )
-                    }
-                    if let url = review.url {
-                        GlassCircleButton(
-                            accessibilityLabel: "Open pull request in browser",
-                            context: .regular
-                        ) {
-                            AgentStartIcon(.externalLink, size: Theme.Control.regularIcon)
-                        } action: {
-                            openURL(url)
+                // Why: two adjacent custom glass shapes share one container, so the pair blends
+                // as one group. The spacing is the token rhythm, which is also the gap the
+                // 36pt circles leave inside their 44pt hit frames.
+                GlassEffectContainer(spacing: Theme.Glass.groupSpacing) {
+                    HStack(spacing: 0) {
+                        // Why: both trailing actions belong to the review as a whole, so they
+                        // share one compact hit-target group instead of leaving a second visual
+                        // gap between two already-44pt targets.
+                        if let editTitle {
+                            GlassIconButton(
+                                iconName: .edit,
+                                accessibilityLabel: "Edit pull request title",
+                                context: .regular,
+                                action: editTitle
+                            )
+                        }
+                        if let url = review.url {
+                            GlassCircleButton(
+                                accessibilityLabel: "Open pull request in browser",
+                                context: .regular
+                            ) {
+                                AgentStartIcon(.externalLink, size: Theme.Control.regularIcon)
+                            } action: {
+                                openURL(url)
+                            }
                         }
                     }
                 }
             }
 
             Text(verbatim: details?.title ?? review.title)
-                .font(.system(size: Theme.Typography.emphasis, weight: .semibold))
+                .font(Theme.Typography.emphasis.weight(.semibold))
                 .foregroundStyle(Theme.Colors.foreground)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -66,7 +71,7 @@ struct HostedReviewIdentityCard: View {
             {
                 HStack(spacing: Theme.Spacing.small) {
                     branchPill(branch)
-                    AgentStartIcon(.arrowRight, size: Theme.Typography.metadata)
+                    AgentStartIcon(.arrowRight, size: Theme.TypeSize.metadata)
                         .foregroundStyle(Theme.Colors.mutedForeground)
                     branchPill(base)
                 }
@@ -86,7 +91,7 @@ struct HostedReviewIdentityCard: View {
 
     private func branchPill(_ value: String) -> some View {
         Text(verbatim: value)
-            .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+            .font(Theme.Typography.metadata.monospaced())
             .lineLimit(1)
             .padding(.horizontal, Theme.Spacing.small)
             .padding(.vertical, Theme.Spacing.extraSmall)
@@ -122,7 +127,7 @@ private struct HostedReviewActions: View {
                         set: { isEnabled in setAutoMerge(isEnabled) }
                     )
                 )
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .frame(minHeight: Theme.Size.minimumHitTarget)
                 .padding(.top, Theme.Spacing.extraSmall)
                 .disabled(isBusy)
@@ -174,7 +179,7 @@ private struct HostedReviewActions: View {
     ) -> some View {
         Button(action: action) {
             Text(title)
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
         }
         .buttonStyle(.glass)
         .buttonBorderShape(.capsule)
@@ -189,7 +194,7 @@ private struct HostedReviewActions: View {
                 ProgressView()
                     .controlSize(.small)
             }
-            Text(title).font(.system(size: Theme.Typography.supporting))
+            Text(title).font(Theme.Typography.supporting)
         }
     }
 }
@@ -206,24 +211,24 @@ struct HostedReviewConflictCard: View {
             Text(
                 "\(conflict.commitsBehind) commit\(conflict.commitsBehind == 1 ? "" : "s") behind (base commit: \(conflict.baseCommit))"
             )
-            .font(.system(size: Theme.Typography.metadata))
+            .font(Theme.Typography.metadata)
             .foregroundStyle(Theme.Colors.mutedForeground)
 
             if conflict.files.isEmpty {
                 Text("This branch has conflicts that must be resolved")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                 Text(
                     conflict.localMergeState == "clean"
                         ? "GitHub reports conflicts, but local Git did not reproduce them. Refresh the PR or push the branch to recalculate mergeability."
                         : "Conflict file details are unavailable"
                 )
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
                 if let commands = conflict.mergeabilityRefreshCommands {
                     VStack(alignment: .leading, spacing: Theme.Spacing.small) {
                         HStack(spacing: Theme.Spacing.small) {
                             Text("Run from this worktree")
-                                .font(.system(size: Theme.Typography.metadata))
+                                .font(Theme.Typography.metadata)
                                 .foregroundStyle(Theme.Colors.mutedForeground)
                             Spacer()
                             Button(didCopyCommands ? "Copied" : "Copy commands") {
@@ -238,7 +243,7 @@ struct HostedReviewConflictCard: View {
                             .appButtonContext(.inline)
                         }
                         Text(verbatim: commands)
-                            .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                            .font(Theme.Typography.metadata.monospaced())
                             .textSelection(.enabled)
                     }
                     .padding(Theme.Spacing.small)
@@ -250,17 +255,17 @@ struct HostedReviewConflictCard: View {
             } else {
                 ForEach(conflict.files, id: \.self) { path in
                     HStack(spacing: Theme.Spacing.small) {
-                        AgentStartIcon(.warning, size: Theme.Typography.metadata)
+                        AgentStartIcon(.warning, size: Theme.TypeSize.metadata)
                             .foregroundStyle(Theme.Colors.attention)
                         Text(verbatim: path)
-                            .font(.system(size: Theme.Typography.metadata, design: .monospaced))
+                            .font(Theme.Typography.metadata.monospaced())
                             .lineLimit(1)
                     }
                     .frame(minHeight: Theme.Size.minimumHitTarget)
                 }
             }
             Button(isBusy ? "Resolving…" : "Resolve conflicts with AI", action: resolve)
-                .font(.system(size: Theme.Typography.supporting))
+                .font(Theme.Typography.supporting)
                 .buttonStyle(.glass)
                 .appButtonContext(.regular)
                 .disabled(isBusy)
@@ -272,7 +277,7 @@ struct HostedReviewConflictCard: View {
             }
             if let errorMessage {
                 Text(verbatim: errorMessage)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .foregroundStyle(Theme.Colors.attention)
             }
         }
@@ -309,6 +314,9 @@ struct HostedReviewTitleSheet: View {
                 }
             }
         }
-        .appSheetPresentation(.fixed(.medium))
+        // Why: the title field is `axis: .vertical`, so it is multi-line input. A fixed detent
+        // cannot grow and shows no drag indicator, so the keyboard would cover the field; the
+        // sheet contract gives multi-line input the page presentation instead.
+        .appSheetPresentation(.page)
     }
 }

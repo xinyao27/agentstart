@@ -43,7 +43,7 @@ struct WorkspaceOpenTabs: View {
             HStack(spacing: 4) {
                 tabIcon(tab)
                 Text(verbatim: tab.title)
-                    .font(.system(size: WorkspaceListMetrics.supportingText))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(
                         workspace.isUnread
                             ? Theme.Colors.foreground : Theme.Colors.mutedForeground

@@ -18,6 +18,7 @@ private struct RetainedTerminalPaneState: View {
     let showAgentHistory: (() -> Void)?
     let openTerminalFile: (TerminalFileOpenRequest) -> Void
     let openTerminalURL: (URL) -> Void
+    let reportNotice: (TerminalActionNotice) -> Void
 
     init(
         host: HostProfile,
@@ -37,18 +38,21 @@ private struct RetainedTerminalPaneState: View {
         showSourceControl: (() -> Void)?,
         showAgentHistory: (() -> Void)?,
         openTerminalFile: @escaping (TerminalFileOpenRequest) -> Void,
-        openTerminalURL: @escaping (URL) -> Void
+        openTerminalURL: @escaping (URL) -> Void,
+        reportNotice: @escaping (TerminalActionNotice) -> Void
     ) {
-        _terminal = State(
-            initialValue: TerminalLiveModel(
-                host: host,
-                terminal: target,
-                runtime: runtime,
-                displayModeRuntime: displayModeRuntime,
-                surfaceFactory: surfaceFactory,
-                surfaceConfiguration: preferences.surfaceConfiguration
-            )
+        let live = TerminalLiveModel(
+            host: host,
+            terminal: target,
+            runtime: runtime,
+            displayModeRuntime: displayModeRuntime,
+            surfaceFactory: surfaceFactory,
+            surfaceConfiguration: preferences.surfaceConfiguration
         )
+        // Why: the pane forwards its notices to the session so they survive a tab switch; the
+        // session container is the only place a notice can be seen regardless of which tab is up.
+        live.noticeHandler = reportNotice
+        _terminal = State(initialValue: live)
         self.host = host
         self.worktreeID = worktreeID
         self.target = target
@@ -64,6 +68,7 @@ private struct RetainedTerminalPaneState: View {
         self.showAgentHistory = showAgentHistory
         self.openTerminalFile = openTerminalFile
         self.openTerminalURL = openTerminalURL
+        self.reportNotice = reportNotice
     }
 
     var body: some View {
@@ -143,6 +148,7 @@ struct RetainedTerminalPane: View {
     let showAgentHistory: (() -> Void)?
     let openTerminalFile: (TerminalFileOpenRequest) -> Void
     let openTerminalURL: (URL) -> Void
+    let reportNotice: (TerminalActionNotice) -> Void
 
     var body: some View {
         RetainedTerminalPaneState(
@@ -163,7 +169,8 @@ struct RetainedTerminalPane: View {
             showSourceControl: showSourceControl,
             showAgentHistory: showAgentHistory,
             openTerminalFile: openTerminalFile,
-            openTerminalURL: openTerminalURL
+            openTerminalURL: openTerminalURL,
+            reportNotice: reportNotice
         )
     }
 }

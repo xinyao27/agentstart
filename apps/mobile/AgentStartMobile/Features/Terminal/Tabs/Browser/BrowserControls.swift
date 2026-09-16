@@ -32,7 +32,7 @@ extension WorkspaceBrowserPane {
                 }
             }
             TextField("URL", text: $model.address, selection: $addressSelection)
-                .font(.system(size: Theme.Typography.metadata))
+                .font(Theme.Typography.metadata)
                 .keyboardType(.URL)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
@@ -101,7 +101,7 @@ extension WorkspaceBrowserPane {
 
             HStack(spacing: Theme.Spacing.extraSmall) {
                 TextField("Type into the page", text: $model.keyboardText)
-                    .font(.system(size: Theme.Typography.metadata))
+                    .font(Theme.Typography.metadata)
                     .submitLabel(.send)
                     .disabled(browserControlsDisabled)
                     .onSubmit {
@@ -173,7 +173,7 @@ extension WorkspaceBrowserPane {
             guard let pageID else { return }
             Task { await model.press(pageID: pageID, key: key) }
         }
-        .font(.system(size: Theme.Typography.code, weight: .regular, design: .monospaced))
+        .font(Theme.Typography.code.weight(.regular))
         .foregroundStyle(isDisabled ? Theme.Colors.mutedForeground : Theme.Colors.foreground)
         .buttonStyle(.appPlain)
         .frame(
@@ -192,7 +192,7 @@ extension WorkspaceBrowserPane {
         let isSelected = model.pointerModifiers.contains(modifier)
         let isDisabled = browserControlsDisabled || model.isCommandRunning
         return Button(modifier.label) { model.togglePointerModifier(modifier) }
-            .font(.system(size: Theme.Typography.code, weight: .regular, design: .monospaced))
+            .font(Theme.Typography.code.weight(.regular))
             .foregroundStyle(
                 isSelected || !isDisabled ? Theme.Colors.foreground : Theme.Colors.mutedForeground
             )

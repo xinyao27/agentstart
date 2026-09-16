@@ -8,71 +8,67 @@ extension AppModel {
     }
 
     func showDesignSystemCatalog() {
-        routes.append(.designSystemCatalog)
-    }
-
-    func showSettings() {
-        routes.append(.settings)
+        push(.designSystemCatalog)
     }
 
     func showActivityInsights() {
-        isActivityInsightsPresented = true
+        push(.activityInsights)
     }
 
     func showAppearanceSettings() {
-        routes.append(.appearanceSettings)
+        push(.appearanceSettings)
     }
 
     func showBrowserSettings() {
-        routes.append(.browserSettings)
+        push(.browserSettings)
     }
 
     func showNotificationSettings() {
-        routes.append(.notificationSettings)
+        push(.notificationSettings)
     }
 
     func showConnectionLog() {
-        routes.append(.connectionLog)
+        push(.connectionLog)
     }
 
     func showTroubleshooting() {
-        routes.append(.troubleshooting)
+        push(.troubleshooting)
     }
 
     func showAbout() {
-        routes.append(.about)
+        push(.about)
     }
 
     func showPairing() {
-        routes.append(.pair)
+        push(.pair)
     }
 
     func showWorkspaces(_ host: HostProfile) {
-        routes.append(.workspaces(host, .standard))
+        push(.workspaces(host, .standard))
     }
 
     func showEditHost(_ host: HostProfile) {
-        routes.append(.editHost(host))
+        push(.editHost(host))
     }
 
     func showAccounts(_ host: HostProfile) {
-        routes.append(.accounts(host))
+        push(.accounts(host))
     }
 
     func showBrowser(_ host: HostProfile) {
-        routes.append(.browser(host))
+        push(.browser(host))
     }
 
     func showBrowserTab(host: HostProfile, tab: BrowserTabSummary) {
-        routes.append(.browserTab(host, tab))
+        push(.browserTab(host, tab))
     }
 
     func showAgentHistory(host: HostProfile, workspace: WorkspaceSummary) {
-        routes.append(.agentHistory(host, workspace))
+        push(.agentHistory(host, workspace))
     }
 
     func showFiles(host: HostProfile, workspace: WorkspaceSummary) {
-        routes.append(.files(host, workspace))
+        push(.files(host, workspace))
     }
 
     func showSourceControl(
@@ -80,7 +76,7 @@ extension AppModel {
         workspace: WorkspaceSummary,
         initialTab: SourceControlHubTab = .changes
     ) {
-        routes.append(.sourceControl(host, workspace, initialTab))
+        push(.sourceControl(host, workspace, initialTab))
     }
 
     func showSourceReview(
@@ -88,7 +84,7 @@ extension AppModel {
         workspace: WorkspaceSummary,
         target: SourceReviewTarget = .all
     ) {
-        routes.append(.sourceReview(host, workspace, target))
+        push(.sourceReview(host, workspace, target))
     }
 
     func showFilePreview(
@@ -97,7 +93,7 @@ extension AppModel {
         relativePath: String,
         title: String
     ) {
-        routes.append(
+        push(
             .filePreview(
                 host,
                 workspace,
@@ -128,7 +124,7 @@ extension AppModel {
             switch destination {
             case .worktree(let relativePath, let absolutePath, let provider):
                 if request.tappedFile.line != nil || request.tappedFile.column != nil {
-                    routes.append(
+                    push(
                         .filePreview(
                             host,
                             workspace,
@@ -161,7 +157,7 @@ extension AppModel {
                     )
                 }
             case .artifact(let source):
-                routes.append(
+                push(
                     .filePreview(
                         host,
                         workspace,
@@ -186,12 +182,13 @@ extension AppModel {
     ) {
         let source: WorkspaceFileDiffSource = entry.area == .staged ? .staged : .unstaged
         let title = URL(fileURLWithPath: entry.path).lastPathComponent
-        routes.append(.sourceDiff(host, workspace, entry.path, title, source))
+        push(.sourceDiff(host, workspace, entry.path, title, source))
     }
 
     func finishEditingHost(_ updated: HostProfile) {
-        if !routes.isEmpty { routes.removeLast() }
-        routes = routes.map { $0.replacingWorkspaceRootHost(updated) }
+        let tab = AppRoute.editHost(updated).tab
+        popLast(for: tab)
+        setRoutes(routes(for: tab).map { $0.replacingWorkspaceRootHost(updated) }, for: tab)
         hostsDidChange()
     }
 
@@ -201,23 +198,24 @@ extension AppModel {
         initialTab: WorkspaceOpenTab? = nil
     ) {
         dependencies.recentWorkspaceStore.save(host: host, workspace: workspace)
-        routes.append(.workspaceSession(host, workspace, initialTab))
+        push(.workspaceSession(host, workspace, initialTab))
     }
 
     func showTerminalSettings() {
-        routes.append(.terminalSettings)
+        push(.terminalSettings)
     }
 
     // Why: land the user inside the host they just paired. Clearing back to Home instead
     // makes the very first thing a new user does end one tap short of the thing they
     // paired for.
     func finishPairing(_ host: HostProfile) {
-        routes = [.workspaces(host, .standard)]
+        setRoutes([.workspaces(host, .standard)], for: .home)
+        selectedTab = .home
         hostsDidChange()
     }
 
     func cancelPairing() {
-        routes.removeAll()
+        popAll(for: .home)
     }
 
     private func isHTMLPath(_ path: String) -> Bool {

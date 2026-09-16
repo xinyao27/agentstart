@@ -90,8 +90,8 @@ struct SourceControlContentView: View {
             }
             if snapshot.didHitLimit {
                 Text("Only part of this repository status could be loaded.")
-                    .font(.system(size: Theme.Typography.metadata))
-                    .foregroundStyle(Theme.Colors.unread)
+                    .font(Theme.Typography.metadata)
+                    .foregroundStyle(Theme.Colors.unreadText)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, Theme.Spacing.page)
                     .padding(.vertical, Theme.Spacing.small)
@@ -101,7 +101,7 @@ struct SourceControlContentView: View {
             }
             if isWorkingTreeClean {
                 Text("Working tree clean")
-                    .font(.system(size: Theme.Typography.supporting))
+                    .font(Theme.Typography.supporting)
                     .foregroundStyle(Theme.Colors.mutedForeground)
                     .frame(maxWidth: .infinity)
                     .padding(.top, Theme.Spacing.huge)
@@ -179,7 +179,7 @@ struct SourceControlContentView: View {
             Text(verbatim: String(section.entries.count))
                 .foregroundStyle(Theme.Colors.mutedForeground)
         }
-        .font(.system(size: Theme.Typography.metadata))
+        .font(Theme.Typography.metadata)
         .foregroundStyle(Theme.Colors.mutedForeground)
         .padding(.horizontal, Theme.Spacing.page)
         .padding(.top, Theme.Spacing.medium)

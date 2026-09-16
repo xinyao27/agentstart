@@ -118,13 +118,78 @@ struct TerminalConnectionStatusBanner: View {
 
 struct TerminalActionNoticeLabel: View {
     let message: LocalizedStringResource
+    let dismiss: () -> Void
 
     var body: some View {
-        Text(message)
-            .font(.system(size: Theme.Typography.metadata, weight: .regular))
-            .foregroundStyle(Theme.Colors.foreground)
-            .padding(.horizontal, Theme.Spacing.medium)
-            .frame(minHeight: Theme.Control.regularHeight)
-            .glassEffect(.regular, in: .capsule)
+        HStack(spacing: Theme.Spacing.small) {
+            Text(message)
+                .font(Theme.Typography.metadata.weight(.regular))
+                .foregroundStyle(Theme.Colors.foreground)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            // Why: a failure notice never dismisses itself, so it has to be closable — and by a
+            // 44pt target rather than the glyph.
+            Button(action: dismiss) {
+                AgentStartIcon(.x, size: Theme.Control.inlineIcon)
+                    .foregroundStyle(Theme.Colors.mutedForeground)
+                    .frame(
+                        width: Theme.Size.minimumHitTarget,
+                        height: Theme.Size.minimumHitTarget
+                    )
+            }
+            .buttonStyle(.appPlain)
+            .accessibilityLabel("Dismiss message")
+        }
+        .padding(.leading, Theme.Spacing.medium)
+        .frame(minHeight: Theme.Control.regularHeight)
+        .glassEffect(.regular, in: .capsule)
+    }
+}
+
+/// Progress for a workspace mutation, with the cancel the operation was missing.
+struct TerminalOperationProgress: View {
+    let operation: TerminalWorkspaceOperation
+    let canCancel: Bool
+    let cancel: () -> Void
+
+    var body: some View {
+        HStack(spacing: Theme.Spacing.small) {
+            AgentStartLoader(
+                size: Theme.Control.inlineIcon,
+                accessibilityLabel: title
+            )
+            Text(title)
+                .font(Theme.Typography.metadata.weight(.regular))
+                .foregroundStyle(Theme.Colors.foreground)
+                .lineLimit(1)
+            Spacer(minLength: Theme.Spacing.small)
+            // Why: a mutation that blocks every other action in the session needs a way out, not
+            // just a spinner. The control appears only when stopping it is actually possible.
+            if canCancel {
+                Button("Cancel", action: cancel)
+                    .font(Theme.Typography.metadata)
+                    .foregroundStyle(Theme.Colors.foreground)
+                    .buttonStyle(.appPlain)
+                    .padding(.horizontal, Theme.Spacing.medium)
+                    .frame(minHeight: Theme.Control.inlineHeight)
+                    .background(
+                        Theme.Colors.keycap,
+                        in: .rect(cornerRadius: Theme.Radius.control)
+                    )
+            }
+        }
+        .padding(.leading, Theme.Spacing.medium)
+        .padding(.trailing, Theme.Spacing.extraSmall)
+        .padding(.vertical, Theme.Spacing.extraSmall)
+        .frame(minHeight: Theme.Control.largeHeight)
+        .glassEffect(.regular, in: .capsule)
+        .accessibilityElement(children: .contain)
+    }
+
+    private var title: LocalizedStringResource {
+        switch operation {
+        case .creating: "Starting terminal…"
+        case .resuming: "Resuming workspace…"
+        case .closing: "Closing tab…"
+        }
     }
 }

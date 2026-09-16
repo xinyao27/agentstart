@@ -73,7 +73,7 @@ struct WorkspaceListRow: View {
                     title
                     if let folderMeta {
                         Text(verbatim: folderMeta)
-                            .font(.system(size: WorkspaceListMetrics.supportingText))
+                            .font(Theme.Typography.supporting)
                             .foregroundStyle(Theme.Colors.mutedForeground)
                             .lineLimit(1)
                             .frame(minHeight: 16)
@@ -112,7 +112,7 @@ struct WorkspaceListRow: View {
                 )
             }
             Text(verbatim: workspace.name.isEmpty ? workspace.repoName : workspace.name)
-                .font(.system(size: WorkspaceListMetrics.titleText))
+                .font(Theme.Typography.primary)
                 .foregroundStyle(
                     workspace.isUnread
                         ? Theme.Colors.foreground : Theme.Colors.foreground.opacity(0.8)
