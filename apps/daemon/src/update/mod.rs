@@ -1,3 +1,4 @@
+pub(crate) mod automatic;
 mod download;
 mod install_command;
 mod model;

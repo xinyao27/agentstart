@@ -66,6 +66,7 @@ use crate::telemetry::TelemetryAuthority;
 use crate::terminal_session::{TerminalRuntimeContext, TerminalSessionAuthority};
 use crate::ui::UiAuthority;
 use crate::update::UpdateChecker;
+use crate::update::automatic::spawn_startup_automatic_update;
 use crate::update::service::DaemonUpdater;
 use crate::workspace_cleanup::WorkspaceCleanupAuthority;
 use crate::workspace_ports::WorkspacePortsRegistry;
@@ -517,6 +518,9 @@ impl Runtime {
             settings.clone(),
             updater.clone(),
         );
+        // Why: the check runs beside startup rather than inside it, so a slow or failed release
+        // lookup cannot delay the daemon reaching ready.
+        spawn_startup_automatic_update(updater.clone(), ui.clone());
         let files = FilesAuthority::new(
             worktrees.clone(),
             host_registry.clone(),

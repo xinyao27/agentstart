@@ -56,6 +56,13 @@ pub(crate) enum DaemonUpdaterSupportReason {
     UpdaterUnavailable,
 }
 
+/// How an automatic run ended, so the startup task can report what it did.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum DaemonUpdaterAutomaticOutcome {
+    Installed,
+    NotAvailable,
+}
+
 #[derive(Clone, Debug)]
 pub(crate) enum DaemonUpdaterStatus {
     Idle,
@@ -221,6 +228,78 @@ impl DaemonUpdater {
             }
             Err(error) => self.fail(error.into(), Some(true)),
         }
+    }
+
+    /// Checks, downloads, installs, and restarts without a client asking, for the startup check.
+    ///
+    /// Why: this is the `check`/`download`/`begin_install` chain with the two human pauses removed,
+    /// so it runs linearly under one operation guard instead of parking a prepared update between
+    /// steps that an automatic run has nobody to confirm.
+    pub(crate) async fn run_automatic_update(
+        &self,
+        options: UpdateCheckOptions,
+    ) -> Result<DaemonUpdaterAutomaticOutcome, DaemonUpdaterError> {
+        self.require_automatic()?;
+        let _operation = self.acquire_operation()?;
+        self.clear_prepared();
+        self.clear_selection();
+        self.set_status(DaemonUpdaterStatus::Checking {
+            user_initiated: false,
+        });
+        // Why: the 20 hour gate in `spawn_startup_automatic_update` already bounds how often this
+        // runs, so the cached answer is the right one if another check just filled it.
+        let (status, selection) = match self.state.updates.check_selected(false, options).await {
+            Ok(result) => result,
+            Err(error) => return self.fail(error.into(), Some(false)),
+        };
+        if !status.update_available {
+            self.set_status(DaemonUpdaterStatus::NotAvailable {
+                user_initiated: false,
+            });
+            return Ok(DaemonUpdaterAutomaticOutcome::NotAvailable);
+        }
+        let Some(version) = status.latest_version else {
+            return self.fail(UpdateError::InvalidRelease.into(), Some(false));
+        };
+        let Some(selection) = selection.filter(|selection| selection.version() == version) else {
+            return self.fail(UpdateError::ArtifactUnavailable.into(), Some(false));
+        };
+        self.set_status(DaemonUpdaterStatus::Available {
+            changelog: None,
+            release_url: status.release_url,
+            version: version.clone(),
+        });
+        let updater = self.clone();
+        let progress_version = version.clone();
+        let prepared = match self
+            .state
+            .updates
+            .prepare_selected(selection, move |percent| {
+                updater.set_status(DaemonUpdaterStatus::Downloading {
+                    percent,
+                    version: progress_version.clone(),
+                });
+            })
+            .await
+        {
+            Ok(prepared) => prepared,
+            Err(error) => return self.fail(error.into(), Some(false)),
+        };
+        if prepared.version() != version {
+            return self.fail(DaemonUpdaterError::NotAvailable, Some(false));
+        }
+        let release_url = prepared.release_url().map(str::to_owned);
+        if let Err(error) = self.state.updates.install_prepared(prepared).await {
+            return self.fail(error.into(), Some(false));
+        }
+        self.set_status(DaemonUpdaterStatus::Downloaded {
+            release_url,
+            version,
+        });
+        if let Err(error) = request_runtime_restart(self.state.restart_mode) {
+            return self.fail(error.into(), Some(false));
+        }
+        Ok(DaemonUpdaterAutomaticOutcome::Installed)
     }
 
     pub(crate) fn download(&self) -> Result<DaemonUpdaterSnapshot, DaemonUpdaterError> {
