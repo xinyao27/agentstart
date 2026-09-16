@@ -278,6 +278,20 @@ function listKnownRuntimeHostIds(
   return [...hostIds]
 }
 
+/** A host that cannot answer the exchange still hands back its persisted session
+ *  in the same shape an unreadable runtime partition keeps: the terminal ids stay
+ *  uncanonicalized, which is a stale-handle detail rather than a lost session. */
+async function exchangeLocalSessionTerminalIds(
+  session: WorkspaceSessionState
+): Promise<WorkspaceSessionState> {
+  try {
+    return await exchangePersistedWorkspaceSessionTerminalIds(session)
+  } catch (err) {
+    console.warn('[session] keeping the persisted local session unexchanged:', err)
+    return session
+  }
+}
+
 export async function fetchWorkspaceSessionWithRuntimeHostOwners(
   api: Pick<SessionApi, 'get'>,
   repos: readonly Pick<Repo, 'connectionId' | 'executionHostId'>[],
@@ -290,9 +304,7 @@ export async function fetchWorkspaceSessionWithRuntimeHostOwners(
     ...additionalRuntimeHostIds
   ])
   const slices: HostSessionSlices = {}
-  const localRead = api
-    .get()
-    .then((session) => exchangePersistedWorkspaceSessionTerminalIds(session))
+  const localRead = api.get().then((session) => exchangeLocalSessionTerminalIds(session))
   const remoteReads = Promise.all(
     [...runtimeHostIds].map(async (hostId) => {
       try {

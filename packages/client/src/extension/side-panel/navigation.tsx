@@ -25,7 +25,14 @@ export function SidePanelNavigation({ presentation }: SidePanelNavigationProps):
       return
     }
     hasHydratedRef.current = true
-    void hydrateSidePanelNavigation(projectCatalog.repos, projectCatalog.runtimeEnvironments)
+    void hydrateSidePanelNavigation(projectCatalog.repos, projectCatalog.runtimeEnvironments).catch(
+      (error: unknown) => {
+        // Why: this read runs against a daemon that may still be starting, and the
+        // panel keeps its unhydrated surface on failure — a missed deadline here
+        // must be reported, not escape as an unhandled renderer rejection.
+        console.warn('[extension] side panel navigation hydration failed:', error)
+      }
+    )
   }, [
     presentation,
     projectCatalog.isPending,
