@@ -11,6 +11,7 @@ import { showWorkspacePanel } from '~renderer/workspace-panel/show-workspace-pan
 import { activateAndRevealWorktree } from '~renderer/worktree/activation'
 
 import { prepareActiveWorktreeFocusAfterDelete } from '../active-worktree-focus-after-delete'
+import { openSidebarShellModal, type SidebarShellModalData } from '../host-navigation'
 import { getWorkspaceDeleteLineage } from '../workspace-delete-lineage'
 import { showDeleteWorktreeFailureToast } from './failure-toast'
 
@@ -266,10 +267,24 @@ export function runWorktreeDelete(worktreeId: string): void {
     void runWorktreeDeleteWithToast(worktreeId, target.displayName)
     return
   }
-  state.openModal('delete-worktree', {
-    worktreeId,
-    ...(hasLineageChildren ? { allowSkipConfirm: false } : {})
-  })
+  openDeleteWorktreeConfirm(
+    state,
+    { worktreeId, ...(hasLineageChildren ? { allowSkipConfirm: false } : {}) },
+    undefined
+  )
+}
+
+// Why: a caller-supplied onDeleted callback cannot cross documents, and only
+// workbench surfaces pass one, so those confirmations stay in this document.
+function openDeleteWorktreeConfirm(
+  state: ReturnType<typeof useAppStore.getState>,
+  data: SidebarShellModalData,
+  onDeleted: ((worktreeIds: string[]) => void) | undefined
+): void {
+  if (onDeleted === undefined && openSidebarShellModal('delete-worktree', data)) {
+    return
+  }
+  state.openModal('delete-worktree', { ...data, ...(onDeleted ? { onDeleted } : {}) })
 }
 
 export function runWorktreeBatchDelete(
@@ -325,20 +340,23 @@ export function runWorktreeBatchDelete(
   }
 
   if (targets.length === 1) {
-    state.openModal('delete-worktree', {
-      worktreeId: targets[0].id,
-      ...(options.forceConfirm || singleTargetHasLineageChildren
-        ? { allowSkipConfirm: false }
-        : {}),
-      ...(options.onDeleted ? { onDeleted: options.onDeleted } : {})
-    })
+    openDeleteWorktreeConfirm(
+      state,
+      {
+        worktreeId: targets[0].id,
+        ...(options.forceConfirm || singleTargetHasLineageChildren
+          ? { allowSkipConfirm: false }
+          : {})
+      },
+      options.onDeleted
+    )
     return true
   }
 
-  state.openModal('delete-worktree', {
-    worktreeIds: targets.map((target) => target.id),
-    allowSkipConfirm: false,
-    ...(options.onDeleted ? { onDeleted: options.onDeleted } : {})
-  })
+  openDeleteWorktreeConfirm(
+    state,
+    { worktreeIds: targets.map((target) => target.id), allowSkipConfirm: false },
+    options.onDeleted
+  )
   return true
 }

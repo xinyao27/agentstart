@@ -54,6 +54,9 @@ export function mountExtensionSidePanel(runtimeQueryCacheBuster: string): void {
       }
       navigation.openPage(page)
     },
+    // Why: this surface mounts the navigation sidebar only, so a shell modal
+    // triggered here has no host in this document and must open in a workbench tab.
+    openShellModal: (modal, data) => navigation.openShellModal(modal, data),
     openWorkspace: navigation.openWorkspace,
     prefetchWorkspace: (target) => {
       void prefetchExtensionWorkspace(queryClient, target.projectId)

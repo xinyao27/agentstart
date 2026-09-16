@@ -1,8 +1,11 @@
+import type { ExtensionShellModalData } from '@agentstart/client/extension-bootstrap'
+
+import { parseShellModalData } from '../workspace/page-commands'
 import {
   focusOrCreateExternalUrl,
   focusOrCreatePage,
   focusOrCreateWorkspace,
-  type GlobalPage,
+  type GlobalDestination,
   type WorkspaceNavigationTarget
 } from './workspace-navigation'
 
@@ -18,8 +21,11 @@ export function handleNavigationMessage(message: object, respond: Respond): bool
     )
   }
   if (type === 'open-page') {
-    return respondToNavigation(parsePageNavigation(message), respond, ({ page, sourceWindowId }) =>
-      focusOrCreatePage(page, sourceWindowId)
+    return respondToNavigation(
+      parsePageNavigation(message),
+      respond,
+      ({ data, destination, sourceWindowId }) =>
+        focusOrCreatePage(destination, sourceWindowId, data)
     )
   }
   if (type === 'open-external-url') {
@@ -30,13 +36,20 @@ export function handleNavigationMessage(message: object, respond: Respond): bool
   return null
 }
 
-function parsePageNavigation(
-  message: object
-): { page: GlobalPage; sourceWindowId?: number } | null {
-  const page = parseGlobalPage(Reflect.get(message, 'page'))
+function parsePageNavigation(message: object): {
+  data?: ExtensionShellModalData
+  destination: GlobalDestination
+  sourceWindowId?: number
+} | null {
+  const destination = parseGlobalDestination(Reflect.get(message, 'page'))
+  const data = parseShellModalData(Reflect.get(message, 'data'))
   const sourceWindowId = parseSourceWindowId(Reflect.get(message, 'sourceWindowId'))
-  return page && sourceWindowId !== null
-    ? { page, ...(sourceWindowId === undefined ? {} : { sourceWindowId }) }
+  return destination && data !== null && sourceWindowId !== null
+    ? {
+        destination,
+        ...(data === undefined ? {} : { data }),
+        ...(sourceWindowId === undefined ? {} : { sourceWindowId })
+      }
     : null
 }
 
@@ -99,10 +112,20 @@ function parseExternalTarget(value: object): { projectId?: string; url: string }
   return { url, ...(typeof projectId === 'string' ? { projectId } : {}) }
 }
 
-function parseGlobalPage(value: unknown): GlobalPage | null {
-  return value === 'activity' || value === 'mobile' || value === 'skills' || value === 'settings'
-    ? value
-    : null
+function parseGlobalDestination(value: unknown): GlobalDestination | null {
+  switch (value) {
+    case 'activity':
+    case 'add-repo':
+    case 'delete-worktree':
+    case 'mobile':
+    case 'new-workspace-composer':
+    case 'settings':
+    case 'setup-guide':
+    case 'skills':
+      return value
+    default:
+      return null
+  }
 }
 
 function parseSourceWindowId(value: unknown): number | null | undefined {

@@ -6,6 +6,7 @@ import { Button } from '~renderer/ui/button'
 import { Tooltip, TooltipTrigger, TooltipContent } from '~renderer/ui/tooltip'
 
 import { openWorkspaceCreationComposerWithTourHandoff } from '../contextual-tours/workspace-creation-tour-handoff'
+import { openSidebarShellModal } from './host-navigation'
 import SidebarWorkspaceOptionsMenu from './workspace-options-menu'
 
 const SidebarHeader = function SidebarHeader({
@@ -50,7 +51,12 @@ const SidebarHeader = function SidebarHeader({
                     'auto.components.sidebar.SidebarHeader.25a95899c9',
                     'Add Project'
                   )}
-                  onClick={() => openModal('add-repo')}
+                  onClick={() => {
+                    if (openSidebarShellModal('add-repo')) {
+                      return
+                    }
+                    openModal('add-repo')
+                  }}
                 >
                   <FolderPlus className="size-3.5" />
                 </Button>
@@ -70,6 +76,9 @@ const SidebarHeader = function SidebarHeader({
                 size="icon-xs"
                 onClick={() => {
                   if (!canCreateWorkspace) {
+                    return
+                  }
+                  if (openSidebarShellModal('new-workspace-composer')) {
                     return
                   }
                   // Why: the parallel-work tour must click the real sidebar

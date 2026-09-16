@@ -3,7 +3,9 @@ import {
   mountExtensionConnecting,
   mountExtensionUnavailable,
   preloadExtensionClient,
+  type ExtensionPageIntent,
   type ExtensionPageSubscription,
+  type ExtensionShellModalData,
   type ExtensionUnavailableFailure
 } from '@agentstart/client/extension-bootstrap'
 
@@ -79,6 +81,16 @@ async function mountExtensionSurfaceInternal(surface: 'side-panel' | 'workspace'
     unmountSurface?.()
     unmountSurface = null
     const browserCapabilities = createBrowserCapabilities(response)
+    // Why: pages and shell modals share one wire message; the background routes
+    // them apart because only the workbench can act on a shell modal.
+    const sendPageIntent = (intent: ExtensionPageIntent, data?: ExtensionShellModalData): void => {
+      void chrome.runtime.sendMessage({
+        page: intent,
+        ...(data === undefined ? {} : { data }),
+        ...(browserWindowId === null ? {} : { sourceWindowId: browserWindowId }),
+        type: 'open-page'
+      })
+    }
     await mountExtensionClient({
       browserCapabilities,
       openExternalUrl: async (target) => {
@@ -94,13 +106,8 @@ async function mountExtensionSurfaceInternal(surface: 'side-panel' | 'workspace'
           throw new Error('extension_browser_action_failed')
         }
       },
-      openPage: (page) => {
-        void chrome.runtime.sendMessage({
-          page,
-          ...(browserWindowId === null ? {} : { sourceWindowId: browserWindowId }),
-          type: 'open-page'
-        })
-      },
+      openPage: sendPageIntent,
+      openShellModal: sendPageIntent,
       openWorkspace: (target) => {
         void chrome.runtime.sendMessage({
           ...(browserWindowId === null ? {} : { sourceWindowId: browserWindowId }),

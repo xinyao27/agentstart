@@ -19,7 +19,7 @@ import { getWorkbenchLocation, navigateWorkbench } from '../../runtime/workbench
 import { configureSidebarHostNavigation } from '../../sidebar/host-navigation'
 import { getExtensionHostNavigation, type ExtensionPageSubscription } from '../navigation'
 import { EXTENSION_QUERY_CACHE_KEY, extensionQueryCacheBuster } from '../runtime/query-cache'
-import { openWorkbenchPage, WorkbenchPageCommandBridge } from './page-commands'
+import { openWorkbenchDestination, WorkbenchPageCommandBridge } from './page-commands'
 import { ExtensionWorkbenchRouter } from './router'
 
 export function mountExtensionWorkbench(
@@ -33,7 +33,7 @@ export function mountExtensionWorkbench(
   startBrowserTabProjectionBridge()
   const extensionNavigation = getExtensionHostNavigation()
   configureSidebarHostNavigation({
-    openPage: openWorkbenchPage,
+    openPage: openWorkbenchDestination,
     openWorkspace: (target) => {
       if (target.openInNewTab) {
         extensionNavigation.openWorkspace(target)

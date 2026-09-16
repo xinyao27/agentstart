@@ -16,6 +16,7 @@ import { getFirstIncompleteFeatureWallSetupStepId } from '../feature-wall/conten
 import type { FeatureWallSetupProgress } from '../feature-wall/setup-progress'
 import { SetupGuideProgressRing } from '../setup-guide/progress-ring'
 import { useSetupGuideProgress } from '../setup-guide/use-setup-guide-progress'
+import { openSidebarShellModal } from './host-navigation'
 
 type SetupGuideEntryVisibilityInput = {
   ready: boolean
@@ -74,12 +75,16 @@ export function SetupGuideSidebarEntry(): React.JSX.Element | null {
             size="sm"
             type="button"
             data-contextual-tour-target="setup-guide-entry"
-            onClick={() =>
-              openModal('setup-guide', {
+            onClick={() => {
+              const data = {
                 setupStepId: firstUnfinishedSetupStepId,
                 telemetrySource: 'sidebar'
-              })
-            }
+              }
+              if (openSidebarShellModal('setup-guide', data)) {
+                return
+              }
+              openModal('setup-guide', data)
+            }}
             aria-current={setupActive ? 'page' : undefined}
             className={cn(
               'border-0 justify-start whitespace-normal gap-2 focus-visible:bg-accent',

@@ -1,19 +1,28 @@
 import type {
-  ExtensionPage,
-  ExtensionPageSubscription
+  ExtensionPageCommand,
+  ExtensionPageIntent,
+  ExtensionPageSubscription,
+  ExtensionShellModalData
 } from '@agentstart/client/extension-bootstrap'
 
 const PAGE_COMMAND_KEY_PREFIX = 'workbenchPageCommand.v1:'
 
-type StoredPageCommand = {
+type StoredPageCommand = ExtensionPageCommand & {
   issuedAt: number
-  page: ExtensionPage
 }
 
-export async function queueWorkbenchPageCommand(tabId: number, page: ExtensionPage): Promise<void> {
+export async function queueWorkbenchPageCommand(
+  tabId: number,
+  intent: ExtensionPageIntent,
+  data?: ExtensionShellModalData
+): Promise<void> {
   const key = `${pageCommandKeyPrefix(tabId)}${crypto.randomUUID()}`
   await chrome.storage.session.set({
-    [key]: { issuedAt: Date.now(), page } satisfies StoredPageCommand
+    [key]: {
+      issuedAt: Date.now(),
+      page: intent,
+      ...(data === undefined ? {} : { data })
+    } satisfies StoredPageCommand
   })
 }
 
@@ -47,7 +56,10 @@ export function createWorkbenchPageCommandInbox(
     pending.clear()
     for (const [key, command] of commands) {
       deliveredKeys.add(key)
-      listener(command.page)
+      listener({
+        page: command.page,
+        ...(command.data === undefined ? {} : { data: command.data })
+      })
       void chrome.storage.session.remove(key).catch((error: unknown) => {
         console.error('[workspace] Failed to consume page command', error)
       })
@@ -114,18 +126,49 @@ function parseStoredPageCommand(value: unknown): StoredPageCommand | null {
     return null
   }
   const issuedAt = Reflect.get(value, 'issuedAt')
-  const page = parseExtensionPage(Reflect.get(value, 'page'))
-  return typeof issuedAt === 'number' && Number.isFinite(issuedAt) && page
-    ? { issuedAt, page }
-    : null
+  const page = parsePageIntent(Reflect.get(value, 'page'))
+  if (typeof issuedAt !== 'number' || !Number.isFinite(issuedAt) || !page) {
+    return null
+  }
+  const data = parseShellModalData(Reflect.get(value, 'data'))
+  return data === null ? null : { issuedAt, page, ...(data === undefined ? {} : { data }) }
 }
 
-function parseExtensionPage(value: unknown): ExtensionPage | null {
+// Why: only primitives survive the storage round trip a handoff uses, so this is
+// the one gate both the background message and the stored command are read through.
+// Returns undefined when the command carries no data, null when the data is unusable.
+export function parseShellModalData(value: unknown): ExtensionShellModalData | undefined | null {
+  if (value === undefined) {
+    return undefined
+  }
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return null
+  }
+  const data: ExtensionShellModalData = {}
+  for (const [key, entry] of Object.entries(value)) {
+    if (typeof entry === 'string' || typeof entry === 'number' || typeof entry === 'boolean') {
+      data[key] = entry
+      continue
+    }
+    if (Array.isArray(entry) && entry.every((item) => typeof item === 'string')) {
+      data[key] = entry
+      continue
+    }
+    return null
+  }
+  return data
+}
+
+function parsePageIntent(value: unknown): ExtensionPageIntent | null {
   switch (value) {
     case 'activity':
+    case 'add-repo':
+    case 'delete-worktree':
     case 'mobile':
+    case 'new-workspace-composer':
     case 'search':
     case 'settings':
+    case 'setup-guide':
     case 'skills':
       return value
     default:

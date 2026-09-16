@@ -6,6 +6,7 @@ import { refreshProjectCatalogWorktrees } from '~renderer/project-catalog/refres
 import { useAppStore } from '~renderer/store/state'
 import type { AppState } from '~renderer/store/types'
 
+import { openSidebarShellModal } from '../host-navigation'
 import {
   keepImportedWorktreesHiddenCard,
   IMPORTED_WORKTREES_KEEP_HIDDEN_ERROR,
@@ -181,8 +182,13 @@ export function useExternalWorktrees(args: {
     keepInboxHidden: (repoId: string) => runInboxAction(repoId, keepNewExternalWorktreeInboxHidden),
     requestSuppress: setSuppressedRepoId,
     confirmSuppress,
-    createForRepo: (repoId: string) =>
-      openModal('new-workspace-composer', { initialRepoId: repoId, telemetrySource: 'sidebar' }),
+    createForRepo: (repoId: string) => {
+      const data = { initialRepoId: repoId, telemetrySource: 'sidebar' }
+      if (openSidebarShellModal('new-workspace-composer', data)) {
+        return
+      }
+      openModal('new-workspace-composer', data)
+    },
     openVisibility: (repoId: string) => openModal('worktree-visibility', { repoId }),
     openRepoSettings: (repoId: string, sectionId?: string) => {
       openSettingsTarget({ pane: 'repo', repoId, ...(sectionId ? { sectionId } : {}) })

@@ -2,7 +2,12 @@ import { useEffect, useRef } from 'react'
 
 import { useAppStore } from '../../store/state'
 import { openCommandPalette } from '../command-palette/open'
-import type { ExtensionPage, ExtensionPageSubscription } from '../navigation'
+import type {
+  ExtensionPageCommand,
+  ExtensionPageIntent,
+  ExtensionPageSubscription,
+  ExtensionShellModalData
+} from '../navigation'
 
 export function WorkbenchPageCommandBridge({
   subscribe
@@ -10,30 +15,33 @@ export function WorkbenchPageCommandBridge({
   subscribe: ExtensionPageSubscription
 }): null {
   const isReady = useAppStore((state) => state.persistedUIReady && state.workspaceSessionReady)
-  const pendingPagesRef = useRef<ExtensionPage[]>([])
+  const pendingCommandsRef = useRef<ExtensionPageCommand[]>([])
 
   useEffect(
     () =>
-      subscribe((page) => {
-        pendingPagesRef.current.push(page)
+      subscribe((command) => {
+        pendingCommandsRef.current.push(command)
         const state = useAppStore.getState()
         if (state.persistedUIReady && state.workspaceSessionReady) {
-          flushPendingPages(pendingPagesRef.current)
+          flushPendingCommands(pendingCommandsRef.current)
         }
       }),
     [subscribe]
   )
   useEffect(() => {
     if (isReady) {
-      flushPendingPages(pendingPagesRef.current)
+      flushPendingCommands(pendingCommandsRef.current)
     }
   }, [isReady])
   return null
 }
 
-export function openWorkbenchPage(page: ExtensionPage): void {
+export function openWorkbenchDestination(
+  intent: ExtensionPageIntent,
+  data?: ExtensionShellModalData
+): void {
   const state = useAppStore.getState()
-  switch (page) {
+  switch (intent) {
     case 'activity':
       state.openPageTab('home')
       return
@@ -48,11 +56,21 @@ export function openWorkbenchPage(page: ExtensionPage): void {
       return
     case 'skills':
       state.openPageTab('skills')
+      return
+    // Why: the sidebar reaches these through the host so a surface that cannot
+    // mount shell modals still lands the user in the workbench flow. A request
+    // from another surface is not a contextual-tour click, so it skips the
+    // workspace-creation tour handoff the sidebar takes in this document.
+    case 'add-repo':
+    case 'delete-worktree':
+    case 'new-workspace-composer':
+    case 'setup-guide':
+      state.openModal(intent, data)
   }
 }
 
-function flushPendingPages(pages: ExtensionPage[]): void {
-  for (const page of pages.splice(0)) {
-    openWorkbenchPage(page)
+function flushPendingCommands(commands: ExtensionPageCommand[]): void {
+  for (const command of commands.splice(0)) {
+    openWorkbenchDestination(command.page, command.data)
   }
 }

@@ -1,4 +1,8 @@
-import type { ExtensionPage } from '@agentstart/client/extension-bootstrap'
+import type {
+  ExtensionPage,
+  ExtensionShellModal,
+  ExtensionShellModalData
+} from '@agentstart/client/extension-bootstrap'
 
 import { queueWorkbenchPageCommand } from '../workspace/page-commands'
 import { addTabToProjectGroup } from './project-groups'
@@ -18,6 +22,10 @@ export type WorkspaceNavigationTarget = {
 }
 
 export type GlobalPage = Exclude<ExtensionPage, 'search'>
+
+// Why: a shell modal is not a location, so it reaches the workbench through the
+// command inbox instead of the cold-start `view` parameter.
+export type GlobalDestination = GlobalPage | ExtensionShellModal
 
 export async function focusOrCreateWorkspace(
   target: WorkspaceNavigationTarget,
@@ -46,21 +54,32 @@ export async function focusOrCreateWorkspace(
   }
 }
 
-export async function focusOrCreatePage(page: GlobalPage, sourceWindowId?: number): Promise<void> {
+export async function focusOrCreatePage(
+  destination: GlobalDestination,
+  sourceWindowId?: number,
+  data?: ExtensionShellModalData
+): Promise<void> {
   const resolvedWindowId = sourceWindowId ?? (await lastFocusedWindowId())
   const tabs = await queryWorkbenchTabs(resolvedWindowId)
   const matchingTab = mostRecentlyUsedTab(tabs)
   if (matchingTab?.id === undefined) {
-    await chrome.tabs.create({
+    const tab = await chrome.tabs.create({
       active: true,
       ...(resolvedWindowId === undefined ? {} : { windowId: resolvedWindowId }),
-      url: buildPageColdStartUrl(page)
+      url: hasColdStartUrl(destination)
+        ? buildPageColdStartUrl(destination)
+        : chrome.runtime.getURL('workspace.html')
     })
+    if (!hasColdStartUrl(destination) && tab.id !== undefined) {
+      // Why: a fresh tab has no URL to carry the modal, so queue the command the
+      // moment its id exists; the inbox reads it while the renderer boots.
+      await queueWorkbenchPageCommand(tab.id, destination, data)
+    }
     return
   }
   // Why: storage.session is a targeted, durable inbox for discarded extension
   // tabs. Queue before activation so a restored renderer cannot miss the command.
-  await queueWorkbenchPageCommand(matchingTab.id, page)
+  await queueWorkbenchPageCommand(matchingTab.id, destination, data)
   await chrome.tabs.update(matchingTab.id, { active: true })
   if (matchingTab.windowId !== undefined) {
     await chrome.windows.update(matchingTab.windowId, { focused: true })
@@ -100,6 +119,23 @@ export function buildWorkspaceUrl(target: WorkspaceNavigationTarget): string {
     url.searchParams.set('session', target.sessionId)
   }
   return url.href
+}
+
+// Why: the workbench route and the cold-start `view` parameter both carry
+// locations only, so a shell modal has no cold-start URL and travels by inbox.
+function hasColdStartUrl(destination: GlobalDestination): destination is GlobalPage {
+  switch (destination) {
+    case 'activity':
+    case 'mobile':
+    case 'settings':
+    case 'skills':
+      return true
+    case 'add-repo':
+    case 'delete-worktree':
+    case 'new-workspace-composer':
+    case 'setup-guide':
+      return false
+  }
 }
 
 function buildPageColdStartUrl(page: GlobalPage): string {

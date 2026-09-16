@@ -9,7 +9,7 @@ import { useAppStore } from '../../store/state'
 import { showWorkspacePanel } from '../../workspace-panel/show-workspace-panel'
 import { activateAndRevealWorktree } from '../../worktree/activation'
 import type { ExtensionPage } from '../navigation'
-import { openWorkbenchPage } from './page-commands'
+import { openWorkbenchDestination } from './page-commands'
 
 export type WorkbenchPageIntent = Exclude<ExtensionPage, 'search'>
 
@@ -128,7 +128,7 @@ export function ExtensionWorkbenchLocationBridge({
       return
     }
     if (initialPage && !appliedPageIntentRef.current) {
-      openWorkbenchPage(initialPage)
+      openWorkbenchDestination(initialPage)
       appliedPageIntentRef.current = true
       consumePageIntent()
     }

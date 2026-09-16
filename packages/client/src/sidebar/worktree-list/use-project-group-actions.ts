@@ -6,6 +6,8 @@ import { translate } from '~renderer/i18n/i18n'
 import { selectProjectGroupRemovalTargets } from '~renderer/repo/state/group-removal-targets'
 import { useAppStore } from '~renderer/store/state'
 
+import { openSidebarShellModal } from '../host-navigation'
+
 type NameDialogState =
   | { type: 'create-from-repo'; repo: Repo }
   | { type: 'rename'; groupId: string; currentName: string }
@@ -123,10 +125,14 @@ export function useProjectGroupActions(args: {
       setDeleteDialog({ groupId, groupName, removeContainedProjects: false }),
     createFolderWorkspace: (projectGroup: ProjectGroup) => {
       if (projectGroup.parentPath) {
-        openModal('new-workspace-composer', {
+        const data = {
           initialProjectGroupId: projectGroup.id,
           telemetrySource: 'sidebar'
-        })
+        }
+        if (openSidebarShellModal('new-workspace-composer', data)) {
+          return
+        }
+        openModal('new-workspace-composer', data)
       }
     },
     submitName,

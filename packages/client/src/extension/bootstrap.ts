@@ -5,6 +5,8 @@ import {
 import type {
   ExtensionPage,
   ExtensionPageSubscription,
+  ExtensionShellModal,
+  ExtensionShellModalData,
   ExtensionWorkspaceTarget
 } from './navigation'
 import { configureExtensionHostNavigation } from './navigation'
@@ -45,6 +47,7 @@ export type ExtensionClientOptions = {
   browserCapabilities: ExtensionBrowserCapabilities
   openExternalUrl: (target: { projectId?: string; url: string }) => Promise<void>
   openPage: (page: ExtensionPage) => void
+  openShellModal: (modal: ExtensionShellModal, data?: ExtensionShellModalData) => void
   openWorkspace: (target: ExtensionWorkspaceTarget) => void
   publishAgentAttention: (count: number) => void
   readActivePageUrl: () => Promise<string | null>
@@ -59,6 +62,7 @@ export async function mountExtensionClient(options: ExtensionClientOptions): Pro
   configureExtensionHostNavigation({
     openExternalUrl: options.openExternalUrl,
     openPage: options.openPage,
+    openShellModal: options.openShellModal,
     openWorkspace: options.openWorkspace,
     publishAgentAttention: options.publishAgentAttention,
     readActivePageUrl: options.readActivePageUrl
@@ -96,7 +100,14 @@ export type {
   BrowserWorkspacePreferences,
   ExtensionBrowserCapabilities
 } from './browser-capabilities'
-export type { ExtensionPage, ExtensionPageSubscription } from './navigation'
+export type {
+  ExtensionPage,
+  ExtensionPageCommand,
+  ExtensionPageIntent,
+  ExtensionPageSubscription,
+  ExtensionShellModal,
+  ExtensionShellModalData
+} from './navigation'
 export type {
   ExtensionConnectionState,
   ExtensionRuntimeHost,
