@@ -5,30 +5,30 @@
 class AgentStart < Formula
   desc "Chrome workspace daemon for coding agents"
   homepage "https://github.com/xinyao27/agentstart"
-  version "0.1.2"
+  version "0.1.3"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/xinyao27/agentstart/releases/download/v0.1.2/agentstart-rust-darwin-arm64",
+      url "https://github.com/xinyao27/agentstart/releases/download/v0.1.3/agentstart-rust-darwin-arm64",
           using: :nounzip
-      sha256 "e8a0688a4b8d7d9eaf06f5a349a6fd9f595a825b2e53b0c286e2527acb85b8a4"
+      sha256 "8d9eac643c837200345f732d4c5c163835336d4ee43667326ce9f40739468439"
     else
-      url "https://github.com/xinyao27/agentstart/releases/download/v0.1.2/agentstart-rust-darwin-x64",
+      url "https://github.com/xinyao27/agentstart/releases/download/v0.1.3/agentstart-rust-darwin-x64",
           using: :nounzip
-      sha256 "11738c05b053f19a1e1e0e6fa6a7c1eefa5d158dd1b9ba9e45a0415fa2724485"
+      sha256 "269192ffbf8ccd1f2564afcd7f98d6054015df3d47b42d3a6dd9734188f04393"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/xinyao27/agentstart/releases/download/v0.1.2/agentstart-rust-linux-arm64",
+      url "https://github.com/xinyao27/agentstart/releases/download/v0.1.3/agentstart-rust-linux-arm64",
           using: :nounzip
-      sha256 "40597460e18fff73ff50ee411309e355c1af3e0b98dedff620757e90f695008d"
+      sha256 "a82a58b328c89b50404e17cf118d001785e84531125ab7cdc3f9433f4f408ed9"
     else
-      url "https://github.com/xinyao27/agentstart/releases/download/v0.1.2/agentstart-rust-linux-x64",
+      url "https://github.com/xinyao27/agentstart/releases/download/v0.1.3/agentstart-rust-linux-x64",
           using: :nounzip
-      sha256 "a8bbe35d013f34fd196964d0718aabfdc56a243710f8c7b7968e64674004de9f"
+      sha256 "505d9c79c5250d761230a57e96c1e3f6beff62fe62a9ab7c8a3185055ca10433"
     end
   end
 
