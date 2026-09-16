@@ -80,6 +80,9 @@ impl WorktreeAuthority {
             let mut previous = BTreeMap::<String, Vec<WorktreeHeadIdentity>>::new();
             let mut previous_state = HashMap::<String, Value>::new();
             let mut interval = tokio::time::interval(Duration::from_secs(2));
+            // Why: a scan cycle over a large project set outlasts the period, and the default
+            // burst behavior would then re-run it back to back with no gap.
+            interval.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Delay);
             loop {
                 interval.tick().await;
                 let Ok(worktrees) = catalog_for_watcher.list_resolved().await else {

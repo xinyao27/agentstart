@@ -61,6 +61,7 @@ mod redaction;
 mod repo_host;
 mod repositories;
 mod repository_refs;
+mod resource_limits;
 mod ritual;
 mod rpc;
 mod runtime_environment;

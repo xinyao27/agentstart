@@ -7,7 +7,7 @@ use thiserror::Error;
 use tokio::sync::{Mutex as AsyncMutex, OwnedMutexGuard};
 
 use crate::host_registry::{HostRegistry, HostRegistryError};
-use crate::hosts::{HostCommand, HostCommandError, HostFilesystem};
+use crate::hosts::{ExecutionHost, HostCommand, HostCommandError, HostFilesystem};
 use crate::mutex_lock::lock;
 use crate::projects::{
     Project, ProjectCatalog, ProjectCatalogError, ProjectKind, ProjectWorktreeVisibility,
@@ -20,21 +20,28 @@ use super::port_probes::{WorktreeGraphEntry, workspace_port_probes};
 
 const PROBE_CACHE_TTL: Duration = Duration::from_secs(1);
 const PROBE_CACHE_ENTRIES: usize = 256;
+// Why: every selector resolution and the background head poller run a git worktree scan
+// over every project, so concurrent callers would otherwise hold one git child each.
+const SCAN_CACHE_TTL: Duration = Duration::from_secs(1);
+const SCAN_CACHE_ENTRIES: usize = 256;
+
+type ProjectCache<T> = Arc<Mutex<HashMap<(String, String), CacheEntry<T>>>>;
 
 #[derive(Clone)]
 pub(crate) struct WorktreeCatalog {
-    cache: Arc<Mutex<HashMap<(String, String), CachedProbeSet>>>,
+    cache: ProjectCache<WorktreeProbeSet>,
     hosts: HostRegistry,
     metadata: WorktreeMetadataStore,
     mutation: Arc<AsyncMutex<()>>,
     projects: ProjectCatalog,
     scanner: GitWorktreeScanner,
+    scans: ProjectCache<Vec<GitWorktreeEntry>>,
 }
 
 #[derive(Clone)]
-struct CachedProbeSet {
+struct CacheEntry<T> {
     expires_at: Instant,
-    value: WorktreeProbeSet,
+    value: T,
 }
 
 #[derive(Clone)]
@@ -105,6 +112,7 @@ impl WorktreeCatalog {
             mutation: Arc::new(AsyncMutex::new(())),
             projects,
             scanner: GitWorktreeScanner::new(),
+            scans: Arc::new(Mutex::new(HashMap::new())),
         }
     }
 
@@ -134,7 +142,7 @@ impl WorktreeCatalog {
         &self,
         project: &Project,
     ) -> Result<WorktreeProbeSet, WorktreeCatalogError> {
-        if let Some(value) = self.cached(&project.execution_host_id, &project.id) {
+        if let Some(value) = cache_read(&self.cache, &project.execution_host_id, &project.id) {
             return Ok(value);
         }
         let host = self
@@ -146,7 +154,7 @@ impl WorktreeCatalog {
         let entries = match project.kind {
             ProjectKind::Folder => folder_entries(project, metadata, &paths),
             ProjectKind::Git => {
-                let live_paths = self.scanner.scan(host, &project.path).await?;
+                let live_paths = self.scan_entries(host, project).await?;
                 git_entries(project, live_paths, metadata, &paths)
             }
         };
@@ -169,26 +177,14 @@ impl WorktreeCatalog {
             probes: workspace_port_probes(entries),
             selectors,
         };
-        let now = Instant::now();
-        let mut cache = lock(&self.cache);
-        cache.retain(|_, cached| cached.expires_at > now);
-        cache.insert(
-            (project.execution_host_id.clone(), project.id.clone()),
-            CachedProbeSet {
-                expires_at: now + PROBE_CACHE_TTL,
-                value: value.clone(),
-            },
+        cache_write(
+            &self.cache,
+            &project.execution_host_id,
+            &project.id,
+            value.clone(),
+            PROBE_CACHE_TTL,
+            PROBE_CACHE_ENTRIES,
         );
-        while cache.len() > PROBE_CACHE_ENTRIES {
-            let Some(oldest) = cache
-                .iter()
-                .min_by_key(|(_, cached)| cached.expires_at)
-                .map(|(key, _)| key.clone())
-            else {
-                break;
-            };
-            cache.remove(&oldest);
-        }
         Ok(value)
     }
 
@@ -234,7 +230,7 @@ impl WorktreeCatalog {
                 ProjectKind::Folder => {
                     resolved.extend(folder_resolved(&project, metadata, &paths, platform));
                 }
-                ProjectKind::Git => match self.scanner.scan(host, &project.path).await {
+                ProjectKind::Git => match self.scan_entries(host, &project).await {
                     Ok(entries) => {
                         resolved.extend(git_resolved(&project, entries, metadata, &paths, platform))
                     }
@@ -245,6 +241,26 @@ impl WorktreeCatalog {
             }
         }
         Ok(resolved)
+    }
+
+    async fn scan_entries(
+        &self,
+        host: Arc<dyn ExecutionHost>,
+        project: &Project,
+    ) -> Result<Vec<GitWorktreeEntry>, GitWorktreeScanError> {
+        if let Some(entries) = cache_read(&self.scans, &project.execution_host_id, &project.id) {
+            return Ok(entries);
+        }
+        let entries = self.scanner.scan(host, &project.path).await?;
+        cache_write(
+            &self.scans,
+            &project.execution_host_id,
+            &project.id,
+            entries.clone(),
+            SCAN_CACHE_TTL,
+            SCAN_CACHE_ENTRIES,
+        );
+        Ok(entries)
     }
 
     pub(crate) async fn patch_metadata(
@@ -375,7 +391,8 @@ impl WorktreeCatalog {
         ordered_ids: Vec<String>,
     ) -> Result<usize, WorktreeCatalogError> {
         let updated = self.metadata.reorder(ordered_ids).await?;
-        lock(&self.cache).clear();
+        cache_clear(&self.cache);
+        cache_clear(&self.scans);
         Ok(updated)
     }
 
@@ -449,17 +466,57 @@ impl WorktreeCatalog {
         self.mutation.clone().lock_owned().await
     }
 
-    fn cached(&self, host_id: &str, project_id: &str) -> Option<WorktreeProbeSet> {
-        let mut cache = lock(&self.cache);
-        let now = Instant::now();
-        cache.retain(|_, cached| cached.expires_at > now);
-        let key = (host_id.to_owned(), project_id.to_owned());
-        cache.get(&key).map(|cached| cached.value.clone())
-    }
-
     fn invalidate(&self, host_id: &str, project_id: &str) {
-        lock(&self.cache).remove(&(host_id.to_owned(), project_id.to_owned()));
+        cache_remove(&self.cache, host_id, project_id);
+        cache_remove(&self.scans, host_id, project_id);
     }
+}
+
+fn cache_read<V: Clone>(cache: &ProjectCache<V>, host_id: &str, project_id: &str) -> Option<V> {
+    let mut cache = lock(cache);
+    let now = Instant::now();
+    cache.retain(|_, entry| entry.expires_at > now);
+    cache
+        .get(&(host_id.to_owned(), project_id.to_owned()))
+        .map(|entry| entry.value.clone())
+}
+
+fn cache_write<V>(
+    cache: &ProjectCache<V>,
+    host_id: &str,
+    project_id: &str,
+    value: V,
+    ttl: Duration,
+    capacity: usize,
+) {
+    let now = Instant::now();
+    let mut cache = lock(cache);
+    cache.retain(|_, entry| entry.expires_at > now);
+    cache.insert(
+        (host_id.to_owned(), project_id.to_owned()),
+        CacheEntry {
+            expires_at: now + ttl,
+            value,
+        },
+    );
+    while cache.len() > capacity {
+        let Some(oldest) = cache
+            .iter()
+            .min_by_key(|(_, entry)| entry.expires_at)
+            .map(|(key, _)| key.clone())
+        else {
+            break;
+        };
+        cache.remove(&oldest);
+    }
+}
+
+fn cache_remove<V>(cache: &ProjectCache<V>, host_id: &str, project_id: &str) {
+    lock(cache).remove(&(host_id.to_owned(), project_id.to_owned()));
+}
+
+fn cache_clear<V>(cache: &ProjectCache<V>) {
+    lock(cache).clear();
 }
 
 fn resolve_from(

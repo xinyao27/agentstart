@@ -5,6 +5,7 @@ use std::process::ExitCode;
 const DAEMON_WORKER_THREADS: usize = 4;
 
 fn main() -> ExitCode {
+    agentstart_daemon::entry::raise_open_file_limit();
     let invocation = agentstart_daemon::entry::Invocation::parse(std::env::args_os());
     let restart_parent = invocation
         .waits_for_restart_parent()

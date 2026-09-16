@@ -26,6 +26,7 @@ mod update;
 mod warp_theme;
 mod worktree;
 
+pub use crate::resource_limits::raise_open_file_limit;
 pub(crate) use install::install_computer_use_helper;
 #[cfg(target_os = "windows")]
 pub(crate) use service::schedule_restart_after_exit;
