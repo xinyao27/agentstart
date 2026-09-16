@@ -536,20 +536,33 @@ nonisolated enum RuntimeServiceError: LocalizedError {
             String(localized: "Daemon returned an invalid response")
         case .unexpectedResponse:
             String(localized: "Daemon returned an unexpected response")
-        case .server(let status, let code, let message):
-            if let message = message?.trimmingCharacters(in: .whitespacesAndNewlines),
-                !message.isEmpty
-            {
-                message
-            } else if let code = code?.trimmingCharacters(in: .whitespacesAndNewlines),
-                !code.isEmpty
-            {
-                String(localized: "Daemon request failed: \(code)")
-            } else {
-                String(localized: "Daemon request failed with status \(status)")
-            }
+        case .server:
+            String(localized: "The daemon could not complete that request.")
         case .closed:
             String(localized: "The daemon connection closed")
         }
     }
+}
+
+// Why: the UI renders product copy for failed requests, but recovery heuristics, the commit
+// failure prompt, and the connection log still need the daemon's or git's own words. One
+// extractor keeps those paths working without any surface displaying the raw string.
+nonisolated func runtimeErrorDetail(_ error: any Error) -> String {
+    if let transportError = error as? RuntimeTransportError {
+        if case .serverStatus(_, let message) = transportError {
+            let trimmed = message.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !trimmed.isEmpty { return trimmed }
+        }
+        return String(describing: transportError)
+    }
+    if let serviceError = error as? RuntimeServiceError {
+        if let message = serviceError.serverMessage?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ), !message.isEmpty {
+            return message
+        }
+        return String(describing: serviceError)
+    }
+    let localized = error.localizedDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+    return localized.isEmpty ? String(describing: error) : localized
 }

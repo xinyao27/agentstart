@@ -282,6 +282,14 @@ actor RuntimeHostSession {
         } catch is CancellationError {
             throw CancellationError()
         } catch {
+            // Why: the product surfaces show product copy, so the transport's own detail
+            // (procedure, daemon status, raw git text) belongs in the connection log where
+            // "Copy diagnostics" can still reach it.
+            await publishLog(
+                .warning,
+                "Request failed",
+                "\(procedure) — \(String(describing: error))"
+            )
             if isRuntimeConnectionFailure(error) {
                 await invalidate(generation: generation)
             }

@@ -130,9 +130,11 @@ Tab 的集合保持稳定，不因某个 section 没有内容而消失。
 Native 不使用 `horizontalSizeClass` 或设备型号猜测手机/桌面布局。根导航和所有需要宽屏
 行为的 feature 读取 `AgentStartLayoutMetrics`：实际窗口宽度至少 700pt 且短边至少 600pt 才是
 `isWideLayout`。因此 iPhone 横屏和窄 iPad 分屏仍保持手机的单列导航、Session header、
-Terminal accessory 和 sheet 密度；只有有足够空间的 iPad 窗口才显示 Workspace master-detail
-分栏、右侧 dock 或 Review 的并排面板。这个判断必须由 Design System 统一提供，feature 不得
-重新写一套设备型号或 size class 条件。
+Terminal accessory 和 sheet 密度；只有有足够空间的 iPad 窗口才显示 Home 的
+hosts / workspace master-detail 分栏、右侧 dock 或 Review 的并排面板。Home tab 在 iPad 上
+**常驻**分栏：侧栏是 hosts（含 Home 概览与 Pair 入口），detail 是选中 host 的 workspace
+列表或 Home dashboard；切 tab、回到 Home 根都不拆栏。这个判断必须由 Design System 统一提供，
+feature 不得重新写一套设备型号或 size class 条件。
 
 Workspace List 的几何基准由 `Features/Workspace/list/Metrics.swift` 持有：
 项目图标 20pt，普通图标和工作区 Loader 16pt，紧凑图标 12pt，agent 状态
@@ -368,8 +370,12 @@ Terminal 的动作反馈使用 `TerminalActionNoticeLabel`，并且它是**sessi
   JS dialog）、以及需要用户接手的明确选择。一次网络动作失败不属于这一类。
 - 可重试的失败使用 notice 或 banner；失败发生在某个 region 内部且该 region 变空时，
   使用 `AppUnavailableState` 并在其中提供恢复动作。
+- 页面级动作失败使用 `ActionBanner`：单层玻璃、浮在内容顶部、44pt 关闭区，能在同一动作上
+  重试时带 "Try again"，成功类反馈用同一组件的 success 样式。每个失败状态只有一个 owner
+  （model 持有 message，view 只负责浮层），同一页面不叠两层 banner。
 - 报错文案用产品语言说明发生了什么和下一步，不直接暴露 transport 字符串或子系统名称。
-  原始信息保留在 `ConnectionLogView`，需要时通过 "Copy diagnostics" 取得。
+  `RuntimeTransportError` 自带产品文案，原始信息由 `RuntimeHostSession.protocolUnary`
+  写进 `ConnectionLogView`，需要时通过 "Copy diagnostics" 取得。
 - 取消是正常控制流，不显示成错误。
 - 需要时间的操作必须有可见进度；只把控件置灰不构成进度。同时要提供取消路径。
 - mutation 进行中必须有进度反馈，不能只有 `.disabled()`。
@@ -389,21 +395,11 @@ Terminal 的动作反馈使用 `TerminalActionNoticeLabel`，并且它是**sessi
 
 以下差距是已知且有意保留的，改动前需要先更新本节：
 
-- **iPad 的分栏仍按 route identity 出现和消失。** Home tab 只有在栈顶是 `.workspaces` 时
-  才挂载 `NavigationSplitView`，切到 Home 根或 Settings 会拆掉分栏。彻底的修法是让
-  Home tab 在 iPad 上常驻一个 master-detail 根（侧栏是 hosts），属于 Home 的 iPad 形态
-  设计，不在本轮范围内。
-- **一次网络动作失败仍然用 OK-only alert 呈现。** `WorkspaceListView`、`HomeView`、
-  `SourceView`、`HostedReviewView`、`ReviewView`、`AccountView`、`Browser/list`、
-  `PanelDock`、`DiffCommentsView` 都还是 `.alert`。上面「Alert 只用于需要用户决策的时刻」
-  是目标状态；改造需要一个跨 feature 的可关闭失败 banner（Terminal 那套是 session 专属的），
-  在那之前不要把新的失败接进 alert。
-- **部分 transport 原始文案仍会直接显示。** `HostEditModel`、`AccountModel`、`UsageSection`、
-  `CommandModel`、`RemotePane` 仍把 `localizedDescription` / `serverMessage` 交给用户。
-  目标是把原始字符串收进 `ConnectionLogView`，界面上只留产品文案和下一步。
-- Widget 的可访问性与配色仍在收敛：字符串目录尚未接入 widget target，通知还没有注册
-  `UNNotificationCategory`，图表没有显式的 accessibility chart descriptor。widget 的文字
-  已抬到 11pt 下限并放宽了固定高度，但这几张卡片仍需要真机渲染验收。
+- **widget 卡片仍需真机渲染验收。** 字符串目录已接入 widget target；
+  `UNNotificationCategory` 已按 source 注册（`.customDismissAction`，手机上清除通知会通过
+  `NotificationsService/Dismiss` 收回 daemon 端的同一条通知）；`TokenShareRing` 给出
+  accessibility label/value，provider 百分比读数由卡片合并元素读出。浅色 Claude 底色与
+  11pt 文字下限仍要在真机上确认。
 - `Workspace/list/SearchSheet.swift` 已删除，但 `CommandSheet`、`ActivityBreakdownList`
   仍保留页内过滤输入框：它们是与结果同屏的卡片级过滤，不是把查询藏到 modal 里的那种，
   因此不适用「一律 `.searchable`」这条。

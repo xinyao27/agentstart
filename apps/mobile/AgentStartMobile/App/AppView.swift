@@ -4,7 +4,7 @@ struct AppView: View {
     @Bindable var model: AppModel
     @Environment(\.scenePhase) private var scenePhase
     @State private var splitVisibility: NavigationSplitViewVisibility = .all
-    @State private var hostIDs: [String] = []
+    @State private var hosts: [HostProfile] = []
     @State private var hostConnections: [String: RuntimeConnectionSnapshot] = [:]
     @State private var dismissedConnectionHostID: String?
 
@@ -94,11 +94,13 @@ struct AppView: View {
     }
 
     private func observeHostConnections() async {
-        hostIDs = []
+        hosts = []
         hostConnections = [:]
-        guard let hosts = try? await model.dependencies.hostRepository.hosts() else { return }
-        let ids = hosts.map(\.id)
-        hostIDs = ids
+        guard let loadedHosts = try? await model.dependencies.hostRepository.hosts() else {
+            return
+        }
+        let ids = loadedHosts.map(\.id)
+        hosts = loadedHosts
         guard !ids.isEmpty else { return }
         let updates = await model.dependencies.hostConnectionRuntime
             .connectionSnapshots(forHostIDs: ids)
@@ -116,7 +118,7 @@ struct AppView: View {
         {
             return active
         }
-        return hostIDs.lazy.compactMap { hostConnections[$0] }.first {
+        return hosts.lazy.compactMap { hostConnections[$0.id] }.first {
             $0.phase != .idle && $0.phase != .connected
         }
     }
@@ -127,12 +129,13 @@ struct AppView: View {
 
     @ViewBuilder
     private func homeTab(layout: AgentStartLayoutMetrics) -> some View {
-        // Why: replacing NavigationStack with NavigationSplitView at the compact/wide
-        // threshold destroys stateful Session destinations (including SwiftTerm). Keep
-        // one navigation root for the whole Workspace route so rotation only changes
-        // the column presentation and does not reopen the transport session.
-        if layout.isWideLayout, let root = splitRoot {
-            splitNavigation(root)
+        // Why: on iPad Home always presents its master-detail shape — hosts in the sidebar and
+        // the selected host's workspaces (or the dashboard) in the detail. Mounting the split
+        // only while the workspaces route was on top used to tear both columns down whenever
+        // Home or Settings came forward. Compact widths keep the single stack, so a rotation
+        // still swaps the navigation root for the workspace route, as before.
+        if layout.isWideLayout {
+            homeSplit
         } else {
             NavigationStack(path: model.binding(for: .home)) {
                 home
@@ -162,42 +165,50 @@ struct AppView: View {
         }
     }
 
-    private func splitNavigation(_ root: HostSplitRoot) -> some View {
+    private var homeSplit: some View {
         NavigationSplitView(columnVisibility: $splitVisibility) {
-            AppWorkspaceListDestinationView(
-                host: root.host,
-                presentation: root.presentation,
-                model: model,
-                leaveHost: { model.popAll(for: .home) },
-                hideSidebar: { splitVisibility = .detailOnly },
-                replaceDetail: { route in model.setRoutes([root.route, route], for: .home) }
+            HostsSidebar(
+                hosts: hosts,
+                connections: hostConnections,
+                selectedHostID: splitRoot?.host.id,
+                selectHome: { model.setRoutes([], for: .home) },
+                selectHost: { host in
+                    model.setRoutes([.workspaces(host, .standard)], for: .home)
+                },
+                showPairing: model.showPairing
             )
-            .navigationSplitViewColumnWidth(min: 280, ideal: 340, max: 560)
+            .navigationSplitViewColumnWidth(min: 260, ideal: 320, max: 460)
         } detail: {
-            NavigationStack(path: splitDetailBinding(root)) {
-                AppUnavailableState(
-                    "Select a workspace",
-                    iconID: .arrowLeft,
-                    description: Text(
-                        "Choose a workspace from the sidebar to open its session."
-                    )
-                )
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background { AppBackground() }
-                .navigationDestination(for: AppRoute.self) { route in
-                    AppRouteDestinationView(route: route, model: model)
-                }
+            NavigationStack(path: homeDetailBinding) {
+                homeDetailRoot
+                    .navigationDestination(for: AppRoute.self) { route in
+                        AppRouteDestinationView(route: route, model: model)
+                    }
             }
         }
         .navigationSplitViewStyle(.balanced)
         .onChange(of: model.routes(for: .home)) { _, routes in
-            guard case .workspaces = routes.first else {
-                splitVisibility = .all
-                return
-            }
-            if routes.count == 1 {
+            // Why: returning to the dashboard or picking a different host should bring a
+            // user-hidden sidebar back; a workspace or session keeps the chosen columns.
+            if routes.isEmpty || routes.count == 1 {
                 splitVisibility = .all
             }
+        }
+    }
+
+    @ViewBuilder
+    private var homeDetailRoot: some View {
+        if let root = splitRoot {
+            AppWorkspaceListDestinationView(
+                host: root.host,
+                presentation: root.presentation,
+                model: model,
+                leaveHost: { model.setRoutes([], for: .home) },
+                hideSidebar: { splitVisibility = .detailOnly },
+                replaceDetail: { route in model.setRoutes([root.route, route], for: .home) }
+            )
+        } else {
+            home
         }
     }
 
@@ -234,10 +245,21 @@ struct AppView: View {
         return HostSplitRoot(host: host, presentation: presentation)
     }
 
-    private func splitDetailBinding(_ root: HostSplitRoot) -> Binding<[AppRoute]> {
+    // Why: with a workspaces root the detail stack starts below it; without one the dashboard
+    // is the detail root and every route is a normal push on top of it.
+    private var homeDetailBinding: Binding<[AppRoute]> {
         Binding(
-            get: { Array(model.routes(for: .home).dropFirst()) },
-            set: { model.setRoutes([root.route] + $0, for: .home) }
+            get: {
+                guard splitRoot != nil else { return model.routes(for: .home) }
+                return Array(model.routes(for: .home).dropFirst())
+            },
+            set: { routes in
+                guard let root = splitRoot else {
+                    model.setRoutes(routes, for: .home)
+                    return
+                }
+                model.setRoutes([root.route] + routes, for: .home)
+            }
         )
     }
 }

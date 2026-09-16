@@ -77,12 +77,13 @@ final class WorkspaceFileModel {
 
     // Why: classify each load failure distinctly — a missing file, a binary file, and a
     // transport error need different recovery, and one generic message hides which applies.
+    // The raw daemon detail rides on the failure for classification only.
     nonisolated private static func loadFailureMessage(for error: Error) -> LocalizedStringResource
     {
-        guard let runtimeError = error as? RuntimeServiceError else {
+        guard let failure = error as? WorkspaceFilesLoadFailure else {
             return "Couldn't load file preview"
         }
-        let normalized = (runtimeError.serverMessage ?? runtimeError.serverCode ?? "").lowercased()
+        let normalized = failure.message.lowercased()
         if normalized.contains("file_too_large") {
             return "File too large for mobile preview"
         }

@@ -198,9 +198,11 @@ final class BrowserTabsModel {
     }
 
     private func failureMessage(for error: Error) -> String {
-        if let message = (error as? RuntimeServiceError)?.serverMessage, !message.isEmpty {
-            return workspaceBrowserDisplayMessage(message)
-        }
-        return String(localized: "AgentStart could not reach the desktop browser.")
+        // Why: the daemon tags some failures with machine tokens. Map the ones we know and
+        // never render an unknown token or raw transport string.
+        workspaceBrowserDisplayMessage(
+            runtimeErrorDetail(error),
+            fallback: String(localized: "AgentStart could not reach the desktop browser.")
+        )
     }
 }

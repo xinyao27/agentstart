@@ -83,17 +83,13 @@ struct HostedReviewView: View {
         // loaded, so reopening the tab never re-pulls it.
         .task { await model.ensureDetails() }
         .refreshable { await model.load() }
-        .alert(
-            "Hosted review action failed",
-            isPresented: Binding(
-                get: { model.errorMessage != nil },
-                set: { if !$0 { model.clearError() } }
-            )
-        ) {
-            Button("OK", action: model.clearError)
-        } message: {
-            if let errorMessage = model.errorMessage { Text(verbatim: errorMessage) }
-        }
+        // Why: a failed hosted-review action floats over the page with a retry instead of
+        // taking an alert; the branch-card and empty-state flows stay visible underneath.
+        .actionBanner(
+            model.errorMessage.map { LocalizedStringResource(stringLiteral: $0) },
+            retry: { Task { await model.load() } },
+            dismiss: { model.clearError() }
+        )
         .confirmationDialog(
             confirmation?.title ?? "Confirm action",
             isPresented: Binding(

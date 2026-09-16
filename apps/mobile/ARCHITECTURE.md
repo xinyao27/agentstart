@@ -102,9 +102,12 @@ route-level 错误不会关闭其他 terminal，最后一个 route 释放后才�
 控制连接 generation 或后台时效失效时，所有 route 一起失败，各页面重新执行
 `show → ticket → E2EE bulk → authoritative snapshot`，不复用旧 parser sequence。
 
-Terminal 控制面的 `status/list/show/openMultiplex` 仍是待迁移切片。它们迁入
-`packages/protocol/proto` 后，Swift 客户端、Rust handler 与 frame 常量都必须由同一 schema
-生成，并同时删除 TypeScript wire generator 与旧 binary side channel。
+Terminal 控制面由 `packages/protocol/proto/agent_start/runtime/v1/terminal.proto` 的同一个
+`TerminalService` 承载：`status/list/show/openMultiplex` 等方法的 Swift 客户端与 Rust handler
+都调用 schema 生成的方法描述符，没有并行的 wire generator。bulk stream 内部的 epoch、
+flow-control、snapshot 与 PTY opcode 是刻意的紧凑二进制帧（每个输出帧都走一次 RPC 会在热路径上
+支付序列化与调度成本），只由 Rust `src/rpc/terminal/multiplex` 与 Swift
+`Platform/Terminal/Multiplex` 两端实现。
 
 Workspace session 以 `session.tabs` publication 为唯一 tab 权威源；本地只拥有 pending selection、
 短期 close tombstone 和已访问 terminal surface 集合。`publicationEpoch + snapshotVersion` 拒绝同一

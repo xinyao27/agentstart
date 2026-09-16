@@ -60,17 +60,13 @@ struct SourceControlView: View {
             .onChange(of: requestedTab) { _, tab in
                 if let tab { activeTab = tab }
             }
-            .alert(
-                "Source control action failed",
-                isPresented: Binding(
-                    get: { model.errorMessage != nil },
-                    set: { if !$0 { model.clearError() } }
-                )
-            ) {
-                Button("OK", action: model.clearError)
-            } message: {
-                if let message = model.errorMessage { Text(verbatim: message) }
-            }
+            // Why: a failed source-control action is transient. It floats over the screen and
+            // can be retried from the banner; only real decisions keep an alert.
+            .actionBanner(
+                model.errorMessage.map { LocalizedStringResource(stringLiteral: $0) },
+                retry: { Task { await model.retry() } },
+                dismiss: { model.clearError() }
+            )
             .alert(
                 "Discard changes?",
                 isPresented: Binding(

@@ -74,7 +74,7 @@ final class TerminalQuickCommandModel {
             // render its idle state until the user retries or dismisses it.
             phase = commands.isEmpty ? .idle : .ready
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = String(localized: "AgentStart could not load quick commands.")
             phase = .failed
         }
     }

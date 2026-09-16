@@ -1,0 +1,23 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "5h" : {},
+    "ChatGPT Usage" : {},
+    "Choose the subscription to show." : {},
+    "Claude Usage" : {},
+    "Open AgentStart to sync usage." : {},
+    "Provider" : {},
+    "Provider Configuration" : {},
+    "Shows cumulative token usage for today and this week." : {},
+    "Shows remaining ChatGPT subscription quota." : {},
+    "Shows remaining Claude subscription quota." : {},
+    "Today" : {},
+    "Token Usage" : {},
+    "Token usage" : {},
+    "Usage" : {},
+    "Week" : {},
+    "Weekly" : {},
+    "remaining" : {}
+  },
+  "version" : "1.0"
+}

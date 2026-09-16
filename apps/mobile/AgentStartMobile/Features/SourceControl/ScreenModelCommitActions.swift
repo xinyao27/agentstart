@@ -25,7 +25,7 @@ extension SourceControlModel {
         } catch {
             busyAction = nil
             commitFailure = SourceCommitFailure(
-                error: error.localizedDescription,
+                error: runtimeErrorDetail(error),
                 commitMessage: message,
                 stagedEntries: staged
             )
@@ -60,15 +60,14 @@ extension SourceControlModel {
         } catch {
             busyAction = nil
             if commitMessage.isEmpty {
-                let message = error.localizedDescription
-                if shouldRecoverRejectedPush(action: action, error: error, message: message) {
+                if shouldRecoverRejectedPush(action: action, error: error) {
                     try? await repository.fetchSourceRemote(for: hostID, worktreeID: worktreeID)
                     await refresh(initial: false)
                 }
-                errorMessage = message
+                errorMessage = error.localizedDescription
             } else {
                 commitFailure = SourceCommitFailure(
-                    error: error.localizedDescription,
+                    error: runtimeErrorDetail(error),
                     commitMessage: message,
                     stagedEntries: staged
                 )

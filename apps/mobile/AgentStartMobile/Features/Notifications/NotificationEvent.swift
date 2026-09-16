@@ -107,6 +107,7 @@ nonisolated protocol NotificationRuntimeRepository: Sendable {
         -> RuntimeNotificationStream
     func missedNotifications(for hostID: String, after sequence: Int64) async throws
         -> [RuntimeNotificationEvent]
+    func dismissNotifications(for hostID: String, notificationIDs: [String]) async throws
 }
 
 nonisolated struct NotificationRoute: Sendable {

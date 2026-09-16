@@ -27,6 +27,9 @@
   Foreground and network recovery are owned by the shared transport runtime.
 - Loading, empty, stale-cache, reconnecting, and failed states remain distinct. The global
   connection notice can be dismissed without removing the Home content.
-- Home header actions use the same Hugeicons IDs, neutral color, 18-point glyph, and 44-point hit
+- Home header actions use the same Hugeicons IDs, neutral color, 24-point glyph, and 44-point hit
   target as every other header. Workspace metrics, row spacing, and loader colors follow the
   shared Design System; decorative gradients are forbidden.
+- On iPad the Home tab keeps its hosts sidebar mounted across every Home route and across tab
+  switches; on iPhone the same hosts are reached through the dashboard and the pushed workspace
+  list.

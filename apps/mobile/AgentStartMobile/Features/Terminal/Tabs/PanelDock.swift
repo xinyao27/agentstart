@@ -136,17 +136,12 @@ struct TerminalPanelDock: View {
         .onChange(of: availableWidth) {
             preferredWidth = dockWidth
         }
-        .alert(
-            "Unable to open diff",
-            isPresented: Binding(
-                get: { openError != nil },
-                set: { if !$0 { openError = nil } }
-            )
-        ) {
-            Button("OK") { openError = nil }
-        } message: {
-            if let openError { Text(verbatim: openError) }
-        }
+        // Why: the entry is still in the list behind the banner, so a failed diff open needs
+        // no retry button — the user taps the row again.
+        .actionBanner(
+            openError.map { LocalizedStringResource(stringLiteral: $0) },
+            dismiss: { openError = nil }
+        )
     }
 
     private var dockWidth: CGFloat {

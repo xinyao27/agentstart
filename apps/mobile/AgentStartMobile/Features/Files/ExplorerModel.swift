@@ -181,7 +181,8 @@ final class WorkspaceFileExplorerModel {
                 cache[relativePath] = WorkspaceDirectoryState(
                     entries: cache[relativePath]?.entries ?? [],
                     error: failure.isConnectionFailure
-                        ? String(localized: "Waiting for daemon…") : failure.message
+                        ? String(localized: "Waiting for daemon…")
+                        : String(localized: "Unable to load files")
                 )
             }
         }

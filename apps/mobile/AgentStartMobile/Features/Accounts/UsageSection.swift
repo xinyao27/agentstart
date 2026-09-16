@@ -13,12 +13,6 @@ struct AccountUsageSection: View {
                 VStack(alignment: .leading, spacing: Theme.Spacing.standard) {
                     providerHeader
                     usageContent
-                    if let error = section.usage?.error, !error.isEmpty {
-                        Text(verbatim: error)
-                            .font(Theme.Typography.metadata)
-                            .foregroundStyle(Theme.Colors.attention)
-                            .lineLimit(2)
-                    }
                 }
 
                 if section.provider.supportsSelection, !section.accounts.isEmpty {
@@ -183,12 +177,6 @@ struct AccountUsageSection: View {
             Text(usageStatusLabel(usage))
                 .font(Theme.Typography.metadata)
                 .foregroundStyle(Theme.Colors.mutedForeground)
-                .lineLimit(1)
-        }
-        if let error = inactiveUsage?.usage?.error, !error.isEmpty {
-            Text(verbatim: error)
-                .font(Theme.Typography.metadata)
-                .foregroundStyle(Theme.Colors.attention)
                 .lineLimit(1)
         }
     }

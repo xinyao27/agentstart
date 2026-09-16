@@ -68,12 +68,8 @@ final class HostEditModel {
         } catch HostRepositoryError.hostNotFound {
             failure = "This host was removed from this phone."
         } catch {
-            let detail = error.localizedDescription.trimmingCharacters(in: .whitespacesAndNewlines)
-            if detail.isEmpty {
-                failure = "AgentStart could not save this host."
-            } else {
-                failure = LocalizedStringResource(stringLiteral: detail)
-            }
+            // Why: the transport's raw text belongs in the connection log, not in this form.
+            failure = "AgentStart could not save this host."
         }
         return nil
     }

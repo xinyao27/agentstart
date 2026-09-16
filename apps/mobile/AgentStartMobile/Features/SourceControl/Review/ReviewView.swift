@@ -142,17 +142,19 @@ struct SourceReviewView: View {
                 .appSheetPresentation(.page)
             }
         }
-        .alert(
-            "Review action",
-            isPresented: Binding(
-                get: { model.errorMessage != nil },
-                set: { if !$0 { model.clearError() } }
-            )
-        ) {
-            Button("OK", action: model.clearError)
-        } message: {
-            if let message = model.errorMessage { Text(verbatim: message) }
-        }
+        // Why: a failed review action and a copied-notes confirmation both float over the
+        // diff; only the destructive confirmations below stay as alerts.
+        .actionBanner(
+            (model.errorMessage ?? model.feedbackMessage).map {
+                LocalizedStringResource(stringLiteral: $0)
+            },
+            style: model.errorMessage == nil ? .success : .failure,
+            retry: model.errorMessage == nil ? nil : { Task { await model.load() } },
+            dismiss: {
+                model.clearError()
+                model.clearFeedback()
+            }
+        )
         .alert("Discard File?", isPresented: $isConfirmingDiscard) {
             Button("Cancel", role: .cancel) {}
             Button("Discard", role: .destructive) { Task { await model.discardCurrent() } }

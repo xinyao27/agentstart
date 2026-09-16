@@ -162,21 +162,6 @@ struct WorkspaceListView: View {
                 }
             )
         }
-        .alert(
-            "Workspace action failed",
-            isPresented: Binding(
-                get: { model.actionFailure != nil },
-                set: { isPresented in
-                    if !isPresented { model.clearActionFailure() }
-                }
-            )
-        ) {
-            Button("OK") { model.clearActionFailure() }
-        } message: {
-            if let failure = model.actionFailure {
-                Text(failure.message)
-            }
-        }
         .confirmationDialog(
             "Remove Host",
             isPresented: $isRemoveHostPresented,
@@ -189,19 +174,18 @@ struct WorkspaceListView: View {
         } message: {
             Text("Remove \(host.name)? You can re-pair later.")
         }
-        .alert(
-            "Could not remove host",
-            isPresented: Binding(
-                get: { hostRemovalFailure != nil },
-                set: { isPresented in
-                    if !isPresented { hostRemovalFailure = nil }
-                }
-            )
-        ) {
-            Button("OK") { hostRemovalFailure = nil }
-        } message: {
-            if let hostRemovalFailure { Text(hostRemovalFailure) }
-        }
+        // Why: a failed workspace action or host removal is transient, so it floats over the
+        // list instead of taking an alert the user must dismiss before continuing.
+        .actionBanner(
+            model.actionFailure?.message ?? hostRemovalFailure,
+            retry: model.actionFailure == nil && hostRemovalFailure != nil
+                ? { Task { await removeHost() } }
+                : nil,
+            dismiss: {
+                model.clearActionFailure()
+                hostRemovalFailure = nil
+            }
+        )
         .task {
             await model.observe()
         }

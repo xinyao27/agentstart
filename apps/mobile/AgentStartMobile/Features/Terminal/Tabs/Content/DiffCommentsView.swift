@@ -59,17 +59,15 @@ struct WorkspaceDiffCommentsPane: View {
         }
         .background(Theme.Colors.diffCodeCanvas)
         .task { await model.load() }
-        .alert(
-            "Review notes",
-            isPresented: Binding(
-                get: { model.errorMessage != nil || model.feedbackMessage != nil },
-                set: { if !$0 { model.dismissMessage() } }
-            )
-        ) {
-            Button("OK", action: model.dismissMessage)
-        } message: {
-            Text(verbatim: model.errorMessage ?? model.feedbackMessage ?? "")
-        }
+        // Why: failed note actions and a copied-notes confirmation share one floating
+        // surface; neither is a decision that should stop the user with an alert.
+        .actionBanner(
+            (model.errorMessage ?? model.feedbackMessage).map {
+                LocalizedStringResource(stringLiteral: $0)
+            },
+            style: model.errorMessage == nil ? .success : .failure,
+            dismiss: { model.dismissMessage() }
+        )
         .sheet(isPresented: $model.isShowingSend) {
             WorkspaceDiffNotesSendSheet(model: model)
         }

@@ -74,13 +74,11 @@ struct AccountView: View {
                 .accessibilityLabel("Refresh accounts")
             }
         }
-        .alert(item: Binding(get: { model.actionFailure }, set: { _ in })) { failure in
-            Alert(
-                title: Text("Could not switch account"),
-                message: Text(verbatim: failure.message),
-                dismissButton: .default(Text("OK"), action: model.clearActionFailure)
-            )
-        }
+        .actionBanner(
+            model.actionFailure.map { LocalizedStringResource(stringLiteral: $0.message) },
+            retry: { Task { await model.refresh() } },
+            dismiss: { model.clearActionFailure() }
+        )
         .task { await model.observe() }
     }
 

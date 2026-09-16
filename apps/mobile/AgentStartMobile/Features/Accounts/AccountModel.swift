@@ -74,7 +74,9 @@ final class AccountModel {
         } catch is CancellationError {
             return
         } catch {
-            actionFailure = AccountActionFailure(message: failureMessage(for: error))
+            actionFailure = AccountActionFailure(
+                message: String(localized: "AgentStart could not switch this account. Try again.")
+            )
         }
     }
 
@@ -107,7 +109,7 @@ final class AccountModel {
         } catch is CancellationError {
             return false
         } catch {
-            phase = .failed(failureMessage(for: error))
+            phase = .failed(loadFailureMessage)
             return false
         }
     }
@@ -163,7 +165,7 @@ final class AccountModel {
             return
         } catch {
             if replacingFailure {
-                phase = .failed(failureMessage(for: error))
+                phase = .failed(loadFailureMessage)
             }
         }
     }
@@ -173,10 +175,7 @@ final class AccountModel {
         phase = .loaded(snapshot)
     }
 
-    private func failureMessage(for error: Error) -> String {
-        if let message = (error as? RuntimeServiceError)?.serverMessage, !message.isEmpty {
-            return message
-        }
-        return String(localized: "AgentStart could not load accounts from this host.")
+    private var loadFailureMessage: String {
+        String(localized: "AgentStart could not load accounts from this host.")
     }
 }

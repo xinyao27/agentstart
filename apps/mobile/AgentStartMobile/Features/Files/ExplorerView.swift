@@ -65,7 +65,7 @@ struct WorkspaceFileExplorerView: View {
                 stateView(
                     title: failure.isConnectionFailure
                         ? "Waiting for daemon…"
-                        : LocalizedStringResource(stringLiteral: failure.message),
+                        : "Unable to load files",
                     iconID: failure.isConnectionFailure ? .wifiSlash : .warning,
                     retry: true,
                     description: failure.isConnectionFailure

@@ -85,7 +85,12 @@ zip = { version = "8.6.0", default-features = false, features = ["deflate"] }
 agentstart-protocol = { path = "../../packages/protocol/rust" }
 
 [target.'cfg(unix)'.dependencies]
-nix = { version = "0.31.3", default-features = false, features = ["process", "resource", "signal", "user"] }
+nix = { version = "0.31.3", default-features = false, features = [
+  "process",
+  "resource",
+  "signal",
+  "user"
+] }
 process-wrap = { version = "10.0.0", default-features = false, features = [
   "process-session",
   "std"

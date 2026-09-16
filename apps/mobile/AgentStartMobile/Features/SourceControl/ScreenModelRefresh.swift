@@ -258,12 +258,9 @@ extension SourceControlModel {
 }
 
 nonisolated private func isTransientSourceRefreshError(_ error: Error) -> Bool {
-    let code = (error as? RuntimeServiceError)?.serverCode?.lowercased()
-    let message = error.localizedDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+    let message = runtimeErrorDetail(error).trimmingCharacters(in: .whitespacesAndNewlines)
         .lowercased()
-    return code == "selector_not_found"
-        || code == "request_aborted"
-        || message == "selector_not_found"
+    return message == "selector_not_found"
         || message == "request_aborted"
         || message == "aborting"
 }

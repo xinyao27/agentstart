@@ -22,6 +22,32 @@ public enum RuntimeTransportError: Error, Sendable {
     case unsupportedVersion
 }
 
+// Why: every feature that reports a failed request renders `localizedDescription`. Without this
+// conformance that rendered Foundation's generic "operation couldn't be completed" text, and
+// features that passed the daemon's own message through leaked transport strings into the UI.
+// The raw daemon detail stays reachable through `serverStatus(code:message:)` and through the
+// mobile client's connection log; the user-facing text is product copy with a next step.
+extension RuntimeTransportError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .callBufferExceeded, .pendingCallsExceeded, .requestExceedsCredit:
+            String(localized: "The daemon is busy right now.")
+        case .closed:
+            String(localized: "The daemon connection closed.")
+        case .deadlineExceeded:
+            String(localized: "The daemon took too long to respond.")
+        case .handshakeFailed:
+            String(localized: "Could not secure the connection to the daemon.")
+        case .sequenceViolation, .unexpectedMessage:
+            String(localized: "The daemon returned an unexpected response.")
+        case .serverStatus:
+            String(localized: "The daemon could not complete that request.")
+        case .unsupportedVersion:
+            String(localized: "Update the AgentStart daemon to keep using this app.")
+        }
+    }
+}
+
 public struct RuntimeCallOptions: Sendable {
     public let timeout: Duration?
 

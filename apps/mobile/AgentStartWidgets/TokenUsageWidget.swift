@@ -229,7 +229,11 @@ private struct TokenShareRing: View {
             }
         }
         .frame(width: size, height: size)
-        .accessibilityHidden(true)
+        // Why: the ring's percentage used to be inside an accessibility-hidden subtree, so
+        // VoiceOver never heard the share. The ring is the value; expose it directly.
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Today")
+        .accessibilityValue("\(Int((progress * 100).rounded()))%")
     }
 }
 

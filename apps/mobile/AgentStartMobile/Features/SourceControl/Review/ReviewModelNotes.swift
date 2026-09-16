@@ -166,7 +166,7 @@ extension SourceReviewModel {
 
         UIPasteboard.general.string = formattedComments(comments)
 
-        errorMessage = String(localized: "Review notes copied")
+        feedbackMessage = String(localized: "Review notes copied")
 
         UINotificationFeedbackGenerator().notificationOccurred(.success)
 
@@ -203,6 +203,7 @@ extension SourceReviewModel {
     }
 
     func clearError() { errorMessage = nil }
+    func clearFeedback() { feedbackMessage = nil }
 
     func formattedComments(_ comments: [SourceReviewComment]) -> String {
         formatSourceReviewComments(comments)

@@ -68,15 +68,11 @@ extension SourceReviewModel {
     // transport error tells the user nothing they can act on. Detect that case and name the
     // fix instead of surfacing a bare RPC code.
     private func reviewLoadFailureMessage(_ error: any Error) -> String {
-        guard let serviceError = error as? RuntimeServiceError else {
-            return error.localizedDescription
-        }
+        let detail = runtimeErrorDetail(error)
         let outdatedHost =
-            serviceError.serverCode == "forbidden"
-            || serviceError.serverCode == "method_not_found"
-            || serviceError.serverMessage?.localizedCaseInsensitiveContains(
-                "not available to mobile")
-                == true
+            detail.localizedCaseInsensitiveContains("forbidden")
+            || detail.localizedCaseInsensitiveContains("method_not_found")
+            || detail.localizedCaseInsensitiveContains("not available to mobile")
         return outdatedHost
             ? String(localized: "Update the AgentStart daemon to review changes on mobile.")
             : error.localizedDescription

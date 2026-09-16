@@ -107,12 +107,14 @@ final class WorkspaceBrowserModel {
             } catch {
                 guard activeStreamID == streamID else { return }
                 cancelStreamStartupTimer()
-                let message = workspaceBrowserErrorMessage(
-                    error,
-                    fallback: String(localized: "Browser stream unavailable")
-                )
-                if shouldSurfaceWorkspaceBrowserError(message) {
-                    phase = .failed(message)
+                let detail = runtimeErrorDetail(error)
+                if shouldSurfaceWorkspaceBrowserError(detail) {
+                    phase = .failed(
+                        workspaceBrowserDisplayMessage(
+                            detail,
+                            fallback: String(localized: "Browser stream unavailable")
+                        )
+                    )
                 } else {
                     phase = frame == nil ? .waiting : .ready
                 }
@@ -335,7 +337,12 @@ final class WorkspaceBrowserModel {
                 phase = frame == nil ? .waiting : .ready
                 return
             }
-            phase = .failed(workspaceBrowserDisplayMessage(message))
+            phase = .failed(
+                workspaceBrowserDisplayMessage(
+                    message,
+                    fallback: String(localized: "The desktop browser reported an error.")
+                )
+            )
         }
     }
 
@@ -384,15 +391,17 @@ final class WorkspaceBrowserModel {
     }
 
     private func reportCommandFailure(_ error: Error) {
-        let message = workspaceBrowserErrorMessage(
-            error,
-            fallback: String(localized: "Browser command failed")
-        )
-        guard shouldSurfaceWorkspaceBrowserError(message) else {
+        let detail = runtimeErrorDetail(error)
+        guard shouldSurfaceWorkspaceBrowserError(detail) else {
             if frame != nil { phase = .ready }
             return
         }
-        phase = .failed(message)
+        phase = .failed(
+            workspaceBrowserDisplayMessage(
+                detail,
+                fallback: String(localized: "Browser command failed")
+            )
+        )
     }
 
     private func resetFramePresentation() {
@@ -467,14 +476,10 @@ nonisolated func workspaceBrowserURL(_ value: String) -> String? {
     return URL(string: "https://\(trimmed)")?.absoluteString
 }
 
-nonisolated func workspaceBrowserErrorMessage(_ error: Error, fallback: String) -> String {
-    let detail = error.localizedDescription.trimmingCharacters(in: .whitespacesAndNewlines)
-    return detail.isEmpty ? fallback : workspaceBrowserDisplayMessage(detail)
-}
-
 // Why: the daemon answers a screencast with a machine token, and the pane shows the reason in a
-// glass chip. Known tokens get product copy; anything else stays verbatim so nothing is hidden.
-nonisolated func workspaceBrowserDisplayMessage(_ message: String) -> String {
+// glass chip. Known tokens get product copy; anything else shows the caller's product copy
+// instead of the token, which the connection log keeps for diagnostics.
+nonisolated func workspaceBrowserDisplayMessage(_ message: String, fallback: String) -> String {
     let normalized = message.lowercased()
     if normalized.contains("browser_extension_connection_unavailable") {
         return "Desktop browser is offline."
@@ -491,7 +496,7 @@ nonisolated func workspaceBrowserDisplayMessage(_ message: String) -> String {
     if normalized.contains("deadline exceeded") {
         return "The desktop browser did not answer in time."
     }
-    return message
+    return fallback
 }
 
 nonisolated func shouldSurfaceWorkspaceBrowserError(_ message: String) -> Bool {

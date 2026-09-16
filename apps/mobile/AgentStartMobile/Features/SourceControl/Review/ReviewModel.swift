@@ -28,6 +28,9 @@ final class SourceReviewModel {
     var diffPhase = SourceReviewDiffPhase.idle
     var busyAction: String?
     var errorMessage: String?
+    // Why: a successful copy is feedback, not a failure. Keeping it out of `errorMessage`
+    // is what lets the review screen show the right banner style.
+    var feedbackMessage: String?
     var branchComparisonError: String?
     var terminals: [SourceReviewTerminal]?
     var isLoadingTerminals = false

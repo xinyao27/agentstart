@@ -184,19 +184,12 @@ struct TerminalWorkspaceView: View {
             guard model.isConnected else { return }
             await diffCommentsModel.load()
         }
-        .alert(
-            "Tab action failed",
-            isPresented: Binding(
-                get: { model.mutationError != nil },
-                set: { if !$0 { model.dismissMutationError() } }
-            )
-        ) {
-            Button("OK", action: model.dismissMutationError)
-        } message: {
-            if let message = model.mutationError {
-                Text(message)
-            }
-        }
+        // Why: a failed tab action is transient and the tab strip stays usable, so it floats
+        // over the session instead of interrupting with an alert.
+        .actionBanner(
+            model.mutationError,
+            dismiss: { model.dismissMutationError() }
+        )
         .sheet(isPresented: $isNewTabPresented) {
             WorkspaceNewTabChooser(
                 hostID: host.id,

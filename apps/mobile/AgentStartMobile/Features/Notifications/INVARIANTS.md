@@ -7,6 +7,9 @@
 - `NotificationCoordinator` installs the system delegate, observes every paired host's notification
   stream, schedules local notifications, handles dismiss events, and routes a tapped notification
   to the matching host/workspace after the app is ready.
+- `install()` registers one `UNNotificationCategory` per notification source plus a fallback, each
+  with `.customDismissAction`; `schedule` stamps the matching `categoryIdentifier` so a dismissal
+  is reported instead of being invisible to the app.
 
 ## Replay and persistence
 
@@ -16,6 +19,8 @@
   navigation registers a route handler, then consumed once.
 - Dismiss events remove pending and delivered requests. If a notification is being scheduled, the
   dismissal is applied after the schedule completes. Removing a host cancels its observation task.
+- A user dismissal on the phone reports to the daemon through `dismissNotifications`, so the
+  desktop retires the same notification instead of replaying it after the next reconnect.
 - Permission denial, stream errors, and cancellation are non-fatal to the rest of the app. The
   coordinator retries the host stream after a short delay without inventing an event.
 

@@ -23,7 +23,9 @@ extension SourceControlModel {
                     forceWithLease: true
                 )
             } catch {
-                throw SourceSyncPushFailure(message: error.localizedDescription)
+                // Why: the rejected-push recovery scan needs git's own words; the surface
+                // shows product copy instead.
+                throw SourceSyncPushFailure(message: runtimeErrorDetail(error))
             }
             return
         }
@@ -38,7 +40,7 @@ extension SourceControlModel {
                 forceWithLease: false
             )
         } catch {
-            throw SourceSyncPushFailure(message: error.localizedDescription)
+            throw SourceSyncPushFailure(message: runtimeErrorDetail(error))
         }
     }
 
@@ -67,7 +69,7 @@ extension SourceControlModel {
             return false
         } catch {
             let message = error.localizedDescription
-            if shouldRecoverRejectedPush(action: action, error: error, message: message) {
+            if shouldRecoverRejectedPush(action: action, error: error) {
                 try? await repository.fetchSourceRemote(for: hostID, worktreeID: worktreeID)
                 await refresh(initial: false)
             }
@@ -80,15 +82,14 @@ extension SourceControlModel {
 
     func shouldRecoverRejectedPush(
         action: String,
-        error: Error,
-        message: String
+        error: Error
     ) -> Bool {
         let isPushAction =
             action == "push" || action == "force-push" || action == "publish"
             || action == "commit-push" || action == "commit-sync"
             || action == "sync" && error is SourceSyncPushFailure
         guard isPushAction else { return false }
-        return message.range(
+        return runtimeErrorDetail(error).range(
             of:
                 #"non-fast-forward|fetch first|updates were rejected|stale info|remote contains work that you do not have|(?:Submodule '[^'\n]+'|A submodule) has remote changes"#,
             options: [.regularExpression, .caseInsensitive]

@@ -174,14 +174,7 @@ struct HomeView: View {
             Button("Remove", role: .destructive) {
                 guard let host = removalTarget else { return }
                 removalTarget = nil
-                Task {
-                    let removed = await model.remove(host)
-                    if removed {
-                        hostsChanged()
-                    } else {
-                        removalTarget = host
-                    }
-                }
+                Task { await removeHost(host) }
             }
             Button("Cancel", role: .cancel) { removalTarget = nil }
         } message: {
@@ -189,19 +182,13 @@ struct HomeView: View {
                 "This removes the paired host and its credentials from this iPhone. You can re-pair later."
             )
         }
-        .alert(
-            "Could not remove host",
-            isPresented: Binding(
-                get: { model.actionFailure != nil },
-                set: { isPresented in
-                    if !isPresented { model.clearActionFailure() }
-                }
-            )
-        ) {
-            Button("OK") { model.clearActionFailure() }
-        } message: {
-            if let message = model.actionFailure { Text(message) }
-        }
+        // Why: a failed host removal is transient; it floats over Home instead of taking an
+        // alert. The failed host is still on screen, so retrying is one tap away.
+        .actionBanner(
+            model.actionFailure,
+            retry: removalTarget.map { host in { Task { await removeHost(host) } } },
+            dismiss: { model.clearActionFailure() }
+        )
         .task {
             while !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(60))
@@ -228,6 +215,15 @@ struct HomeView: View {
             host: target.host,
             existingPaths: target.workspaces.map(\.path)
         )
+    }
+
+    private func removeHost(_ host: HostProfile) async {
+        let removed = await model.remove(host)
+        if removed {
+            hostsChanged()
+        } else {
+            removalTarget = host
+        }
     }
 }
 

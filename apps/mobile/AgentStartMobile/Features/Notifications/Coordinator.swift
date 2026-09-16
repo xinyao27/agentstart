@@ -29,6 +29,7 @@ final class NotificationCoordinator: NSObject, UNUserNotificationCenterDelegate 
 
     func install() {
         center.delegate = self
+        center.setNotificationCategories(NotificationCategory.all)
     }
 
     func start(
@@ -69,21 +70,34 @@ final class NotificationCoordinator: NSObject, UNUserNotificationCenterDelegate 
     }
 
     private func handle(_ response: UNNotificationResponse) async {
-        guard response.actionIdentifier == UNNotificationDefaultActionIdentifier else { return }
-        let responseID = response.notification.request.identifier
-        guard !handledResponses.contains(responseID) else { return }
-        handledResponses.insert(responseID)
-
         let data = response.notification.request.content.userInfo
         guard let hostID = nonEmptyString(data[NotificationUserInfo.hostID]) else { return }
-        let route = NotificationRoute(
-            hostID: hostID,
-            worktreeID: nonEmptyString(data[NotificationUserInfo.worktreeID])
-        )
-        if let routeHandler {
-            await routeHandler(route)
-        } else {
-            pendingRoute = route
+
+        switch response.actionIdentifier {
+        case UNNotificationDefaultActionIdentifier:
+            let responseID = response.notification.request.identifier
+            guard !handledResponses.contains(responseID) else { return }
+            handledResponses.insert(responseID)
+            let route = NotificationRoute(
+                hostID: hostID,
+                worktreeID: nonEmptyString(data[NotificationUserInfo.worktreeID])
+            )
+            if let routeHandler {
+                await routeHandler(route)
+            } else {
+                pendingRoute = route
+            }
+        case UNNotificationDismissActionIdentifier:
+            // Why: the daemon replays a notification until it is retired, so a swipe on the
+            // phone has to reach it or the same banner returns after the next reconnect.
+            guard let notificationID = nonEmptyString(data[NotificationUserInfo.notificationID])
+            else { return }
+            try? await runtime.dismissNotifications(
+                for: hostID,
+                notificationIDs: [notificationID]
+            )
+        default:
+            break
         }
     }
 
@@ -196,6 +210,7 @@ final class NotificationCoordinator: NSObject, UNUserNotificationCenterDelegate 
         content.title = title
         content.body = body
         content.sound = .default
+        content.categoryIdentifier = NotificationCategory.identifier(forSource: source)
         var userInfo: [String: String] = [
             NotificationUserInfo.source: source,
             NotificationUserInfo.hostID: hostID,

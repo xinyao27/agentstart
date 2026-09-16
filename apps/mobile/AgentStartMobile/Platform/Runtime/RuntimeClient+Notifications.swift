@@ -15,6 +15,18 @@ extension RuntimeClient: NotificationRuntimeRepository {
             after: max(sequence, 0)
         )
     }
+
+    func dismissNotifications(for hostID: String, notificationIDs: [String]) async throws {
+        guard !notificationIDs.isEmpty else { return }
+        var request = AgentStart_Runtime_V1_DismissRequest()
+        request.notificationIds = notificationIDs
+        _ = try await protocolUnary(
+            hostID: hostID,
+            procedure: AgentStartRuntimeV1NotificationsServiceMethods.dismiss,
+            request: request,
+            response: AgentStart_Runtime_V1_DismissResponse.self
+        )
+    }
 }
 
 nonisolated func mapProtocolSubscribeEvent(
