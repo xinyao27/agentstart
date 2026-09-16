@@ -1,5 +1,7 @@
 use serde_json::{Map, Value};
 
+use crate::ui::RESERVED_KEYS;
+
 use super::collections;
 use super::objects;
 use super::{Issues, parse_boolean, parse_enum, parse_number, parse_string, unrecognized_keys};
@@ -109,9 +111,12 @@ pub(super) fn parse(object: &Map<String, Value>) -> Result<Map<String, Value>, I
             parsed.insert(canonical_field(field).to_owned(), value);
         }
     }
+    // Why: reserved keys never reach persistence, so an older bundle that still
+    // sends one (`activeView` from a pre-0.1.1 extension) must not have its whole
+    // write rejected as an unknown-key failure.
     let unknown = object
         .keys()
-        .filter(|key| !FIELDS.contains(&key.as_str()))
+        .filter(|key| !FIELDS.contains(&key.as_str()) && !RESERVED_KEYS.contains(&key.as_str()))
         .cloned()
         .collect::<Vec<_>>();
     if !unknown.is_empty() {

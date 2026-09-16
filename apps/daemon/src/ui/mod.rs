@@ -14,6 +14,7 @@ use crate::mutex_lock::lock;
 use crate::telemetry::FeatureInteractionTelemetry;
 
 pub(crate) use normalize::FEATURE_INTERACTION_IDS;
+pub(crate) use normalize::RESERVED_KEYS;
 use storage::UiPersistence;
 
 #[derive(Clone)]

@@ -16,7 +16,9 @@ export function UIZoomControl(): React.JSX.Element {
     const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level))
     applyUIZoom(clamped)
     setZoomLevel(clamped)
-    void setRuntimeUIState(useAppStore.getState().settings, { uiZoomLevel: clamped })
+    void setRuntimeUIState(useAppStore.getState().settings, { uiZoomLevel: clamped }).catch(
+      console.error
+    )
   }
 
   const percent = zoomLevelToPercent(zoomLevel)

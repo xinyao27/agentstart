@@ -47,6 +47,10 @@ export function usePersistedUi(state: PersistedUiState): void {
         filterRepoIds: state.filterRepoIds,
         acknowledgedAgentsByPaneKey: state.acknowledgedAgentsByPaneKey
       })
+        // Why: an older bundle's write against a newer daemon can be rejected as
+        // invalid input; a debounced best-effort write must log that instead of
+        // rejecting into an app-root unhandled error.
+        .catch(console.error)
     }, 150)
     return () => window.clearTimeout(timer)
   }, [

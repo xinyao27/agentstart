@@ -9,7 +9,7 @@ use super::defaults;
 pub(crate) use feature::BucketEvent;
 pub(crate) use feature::IDS as FEATURE_INTERACTION_IDS;
 
-const RESERVED_KEYS: &[&str] = &[
+pub(crate) const RESERVED_KEYS: &[&str] = &[
     "activeView",
     "featureInteractionTelemetryBuckets",
     "_worktreeCardModeDefaulted",
