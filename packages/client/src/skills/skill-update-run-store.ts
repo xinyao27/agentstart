@@ -92,18 +92,30 @@ function setRun(next: SkillUpdateRun): void {
   emit()
 }
 
+// Why: a run this renderer never heard about — the stream replays nothing, so
+// one that started before the subscription attached, or in another client, is
+// invisible here — leaves every surface describing the previous run, and the
+// daemon answers the next start with `already-running`. Re-reading the run once
+// is what closes that gap; a live push always wins over this snapshot.
+function reconcileRunState(): void {
+  void getSkillManageUpdateRun()
+    .then((current) => {
+      // Don't clobber a live push that landed while this promise was in flight.
+      if (run.state === 'idle') {
+        setRun(current)
+      }
+    })
+    .catch((error) => {
+      console.error('Failed to read the skill run state', error)
+    })
+}
+
 function ensureSubscribed(): void {
   if (subscribed) {
     return
   }
   subscribed = true
-  subscribeSkillManageUpdateRun(setRun)
-  void getSkillManageUpdateRun().then((current) => {
-    // Don't clobber a live push that landed while this promise was in flight.
-    if (run.state === 'idle') {
-      setRun(current)
-    }
-  })
+  subscribeSkillManageUpdateRun({ onRun: setRun, onSubscribed: reconcileRunState })
 }
 
 function subscribeSkillUpdateRun(listener: () => void): () => void {
@@ -139,6 +151,7 @@ export async function startSkillUpdateRun(names: readonly string[]): Promise<voi
   } catch (error) {
     console.error('Failed to start skill update run', error)
   }
+  reconcileRunState()
 }
 
 // Install and remove report their start result instead: the caller owns a form
@@ -154,6 +167,9 @@ export async function startSkillInstallRun(request: {
   } catch (error) {
     console.error('Failed to start skill install run', error)
     return null
+  } finally {
+    // Why: a refused start means a run this renderer may never have heard of.
+    reconcileRunState()
   }
 }
 
@@ -167,6 +183,9 @@ export async function startSkillRemoveRun(request: {
   } catch (error) {
     console.error('Failed to start skill remove run', error)
     return null
+  } finally {
+    // Why: a refused start means a run this renderer may never have heard of.
+    reconcileRunState()
   }
 }
 
