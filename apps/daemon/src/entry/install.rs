@@ -62,7 +62,10 @@ impl InstallOptions {
             no_service: false,
             no_browser: false,
             no_mobile: false,
-            extension: ExtensionChannel::WebStore,
+            // Why: the unpacked bundle is cut from the release the user is installing right now,
+            // while the store listing waits on a review the release does not, so the default
+            // channel is the one that cannot serve a build older than the daemon beside it.
+            extension: ExtensionChannel::Unpacked,
         };
         let mut arguments = args.iter();
         while let Some(argument) = arguments.next() {

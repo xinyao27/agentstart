@@ -113,6 +113,8 @@ pub(crate) enum UpdateError {
     SignatureTimeout,
     #[error("daemon_update_computer_use_helper_failed:{0}")]
     ComputerUseHelper(String),
+    #[error("daemon_update_extension_bundle_failed:{0}")]
+    ExtensionBundle(String),
     #[error("daemon_update_development_build")]
     DevelopmentBuild,
     #[error("daemon_update_use_npm")]
@@ -165,6 +167,7 @@ impl UpdateError {
             #[cfg(target_os = "macos")]
             Self::SignatureTimeout => "daemon_update_signature_timeout",
             Self::ComputerUseHelper(_) => "daemon_update_computer_use_helper_failed",
+            Self::ExtensionBundle(_) => "daemon_update_extension_bundle_failed",
             Self::DevelopmentBuild => "daemon_update_development_build",
             Self::UseNpm => "daemon_update_use_npm",
             Self::AppUpdateRequired => "daemon_update_requires_app_update",
@@ -288,6 +291,12 @@ impl UpdateChecker {
             .map_err(|error| UpdateError::ComputerUseHelper(error.to_string()))?;
         #[cfg(target_os = "macos")]
         signature::verify(prepared.staging()).await?;
+        // Why: an unpacked install is only ever as current as this directory, and this is the one
+        // upgrade path that never runs `agentstart install`. Refreshing before the replacement keeps
+        // a bundle failure from leaving a daemon that updated past the extension beside it.
+        crate::extension_bundle::refresh_staged(&version)
+            .await
+            .map_err(|error| UpdateError::ExtensionBundle(error.to_string()))?;
         crate::atomic_file_replace::replace_async(prepared.staging(), prepared.executable())
             .await
             .map_err(UpdateError::Io)?;

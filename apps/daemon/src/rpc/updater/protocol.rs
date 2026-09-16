@@ -251,6 +251,7 @@ fn update_error_status(error: &UpdateError) -> StatusCode {
         #[cfg(target_os = "macos")]
         UpdateError::SignatureTimeout => StatusCode::DeadlineExceeded,
         UpdateError::ComputerUseHelper(_)
+        | UpdateError::ExtensionBundle(_)
         | UpdateError::Io(_)
         | UpdateError::Random(_)
         | UpdateError::ReplacementLaunch(_)

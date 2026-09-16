@@ -18,7 +18,7 @@ const installOptions = [
   {
     name: 'AGENTSTART_EXTENSION_CHANNEL',
     description:
-      'web-store (the default), unpacked, or skip. Choose unpacked on a machine that cannot reach the Chrome Web Store: the daemon stages the extension on disk, verifies it against the release checksums, and refreshes it on every upgrade.'
+      'unpacked (the default), web-store, or skip. The default stages the extension on disk, verifies it against the release checksums, and refreshes it on every upgrade, which keeps it level with the daemon instead of the review queue. web-store takes the listing Chrome updates on its own, and skip leaves the browser half alone.'
   },
   {
     name: 'AGENTSTART_SKIP_SERVICE_INSTALL',
@@ -67,8 +67,13 @@ export function InstallPage(): React.JSX.Element {
           a logon task on Windows.
         </li>
         <li>
-          Opens the Chrome Web Store listing, then waits up to two minutes for the extension to
-          connect and tells you whether setup is finished.
+          Stages the Chrome extension on disk, verified against the release checksums, and prints
+          the folder to load in{' '}
+          <code className="text-ink font-mono text-[14px]">chrome://extensions</code>.
+        </li>
+        <li>
+          Waits up to two minutes for the extension to connect and tells you whether setup is
+          finished.
         </li>
         <li>Prints the iOS TestFlight link with a code to scan.</li>
       </ul>
@@ -105,13 +110,15 @@ export function InstallPage(): React.JSX.Element {
           daemon and whether the Chrome extension is connected.
         </li>
         <li>
-          If the extension has not connected yet, finish the store installation and open the
-          AgentStart side panel; it connects on its own.
+          If the extension has not connected yet, load the staged folder once: open{' '}
+          <code className="text-ink font-mono text-[14px]">chrome://extensions</code>, turn on
+          Developer mode, choose Load unpacked, and pick the folder the installer printed. It
+          connects on its own after that.
         </li>
         <li>
           <code className="text-ink font-mono text-[14px]">agentstart update</code> moves the daemon
-          to the latest release, and declines when the binary came from Homebrew or npm — it names
-          the channel to update through instead.
+          to the latest release and refreshes the staged extension with it, and declines when the
+          binary came from Homebrew or npm — it names the channel to update through instead.
         </li>
       </ul>
     </>

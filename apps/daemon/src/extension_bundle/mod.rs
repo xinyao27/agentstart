@@ -1,4 +1,4 @@
-// Why: Chrome's fallback install channel is a directory the user loads unpacked, and only the daemon
+// Why: Chrome's default install channel is a directory the user loads unpacked, and only the daemon
 // can keep that directory in step with the release the user actually upgraded to. Every rule about
 // where the bundle lives, when it is stale, and how it is swapped lives here, so the install command,
 // the updater, and the native-messaging host share one definition instead of three.
@@ -25,4 +25,4 @@ pub(crate) enum ExtensionBundleError {
 }
 
 pub(crate) use directory::{installed_version, resolve_bundle_directory};
-pub(crate) use sync::sync;
+pub(crate) use sync::{refresh_staged, sync};

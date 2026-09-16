@@ -53,16 +53,16 @@ irm https://agentstart.ai/install.ps1 | iex
 ```
 
 The installer verifies the release checksum, installs the daemon, registers the Chrome Native
-Messaging host, starts the daemon at login, opens the Chrome Web Store listing, waits for the
-extension to connect, and prints the iOS TestFlight link with a scannable code. macOS and Linux run
-on arm64 or x64, Windows on x64. [agentstart.ai/install](https://agentstart.ai/install) walks
-through the whole thing.
+Messaging host, starts the daemon at login, stages the Chrome extension on disk for one manual load
+in `chrome://extensions`, waits for the extension to connect, and prints the iOS TestFlight link with
+a scannable code. macOS and Linux run on arm64 or x64, Windows on x64.
+[agentstart.ai/install](https://agentstart.ai/install) walks through the whole thing.
 
 | Variable | Effect |
 | --- | --- |
 | `AGENTSTART_INSTALL_DIR` | Where the daemon binary is installed, `~/.local/bin` by default |
 | `AGENTSTART_VERSION` | Release tag to install, or `latest` |
-| `AGENTSTART_EXTENSION_CHANNEL` | `web-store` (default), `unpacked`, or `skip` |
+| `AGENTSTART_EXTENSION_CHANNEL` | `unpacked` (default), `web-store`, or `skip` |
 | `AGENTSTART_SKIP_SERVICE_INSTALL` | `1` installs the binary without touching the login service |
 | `AGENTSTART_NO_MOBILE` | `1` omits the iOS link and code |
 
@@ -70,19 +70,28 @@ through the whole thing.
 piped install takes it on the right of the pipe:
 `curl -fsSL https://agentstart.ai/install.sh | AGENTSTART_VERSION=0.1.2 sh`.
 
+The default channel stages the extension rather than taking the Web Store listing, because a release
+cuts its extension from the same commit as its daemon while the listing waits on a review. The
+staged folder is `~/Library/Application Support/AgentStart/ChromeExtension` on macOS,
+`%LOCALAPPDATA%\AgentStart\ChromeExtension` on Windows, and
+`$XDG_DATA_HOME/AgentStart/ChromeExtension` elsewhere. Load it once with Developer mode on in
+`chrome://extensions` via **Load unpacked**; every later upgrade refreshes it in place and the
+extension reloads itself.
+
 After installing, `agentstart status` reports the daemon and whether the extension is connected, and
-`agentstart update` moves a binary install to the latest release — it declines for a Homebrew or npm
-install and names the channel to update through instead.
+`agentstart update` moves a binary install to the latest release and refreshes the staged extension
+alongside it — it declines for a Homebrew or npm install and names the channel to update through
+instead.
 
 | Piece | Install channel | Who updates it |
 | --- | --- | --- |
 | `agentstart` daemon | Latest GitHub release, checksum-verified | `agentstart update`, Homebrew, or npm |
-| Chrome extension | Chrome Web Store, or a staged unpacked bundle via `AGENTSTART_EXTENSION_CHANNEL=unpacked` | Chrome updates the store listing; the daemon refreshes the unpacked bundle |
+| Chrome extension | A staged unpacked bundle, or the Chrome Web Store via `AGENTSTART_EXTENSION_CHANNEL=web-store` | The daemon refreshes the staged bundle on install and on `agentstart update`; Chrome updates the store listing |
 | iOS companion | TestFlight | TestFlight |
 
 `npx @agentstart/cli`, `bunx @agentstart/cli`, the Homebrew formula, and the signed `AgentStart.dmg`
-come from [all releases](https://github.com/xinyao27/agentstart/releases). The extension keeps its
-own Chrome Web Store submission and review timeline.
+come from [all releases](https://github.com/xinyao27/agentstart/releases). The Chrome Web Store
+listing the `web-store` channel installs from still moves on its own review timeline.
 
 ### Mobile companion
 

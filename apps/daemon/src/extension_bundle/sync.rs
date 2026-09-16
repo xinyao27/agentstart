@@ -24,7 +24,24 @@ impl ExtensionBundleSync {
 /// installed manifest is stale. A missing bundle is not an error: the Web Store channel does not need
 /// one, and only the unpacked channel asks for this.
 pub(crate) async fn sync() -> Result<ExtensionBundleSync, ExtensionBundleError> {
-    let version = env!("CARGO_PKG_VERSION");
+    sync_to(env!("CARGO_PKG_VERSION")).await
+}
+
+/// Refresh a directory that already holds a bundle to `version`.
+///
+/// Why: a daemon update runs from the build being replaced, so the version this process was compiled
+/// with is the one being left behind, not the one it just installed. A directory with no manifest
+/// belongs to a Web Store install, and an update must not quietly drop a second copy of the
+/// extension beside the one Chrome already manages.
+pub(crate) async fn refresh_staged(version: &str) -> Result<(), ExtensionBundleError> {
+    if directory::installed_version()?.is_none() {
+        return Ok(());
+    }
+    sync_to(version).await?;
+    Ok(())
+}
+
+async fn sync_to(version: &str) -> Result<ExtensionBundleSync, ExtensionBundleError> {
     let directory = directory::resolve_bundle_directory()?;
     if directory::read_manifest_version(&directory)?.as_deref() == Some(version) {
         return Ok(ExtensionBundleSync::AlreadyCurrent);

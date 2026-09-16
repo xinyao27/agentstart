@@ -61,14 +61,17 @@ The menu bar template images and app icon preserve the original AgentStart deskt
 from its existing distributed app resources. They are checked into this package; building does not
 read an installed copy of AgentStart.
 
-The disk image includes both browser installation channels:
+The disk image includes both browser installation channels, and the first-launch guide offers them
+in this order:
 
-* **Chrome Web Store** is the stable channel. The first-launch guide opens the AgentStart listing;
-  Chrome handles installation and future store updates.
-* **Fast (Load unpacked)** is the rapid channel. The app copies the production extension to the
-  stable path above, opens `chrome://extensions`, and walks through enabling Developer mode and
-  choosing Load unpacked. Chrome remembers that path, so later app releases only require clicking
-  Reload on the AgentStart extension after the app has updated its files.
+* **Fast (Load unpacked)** is the default. The app copies the production extension to the stable
+  path above, opens `chrome://extensions`, and walks through enabling Developer mode and choosing
+  Load unpacked. Chrome remembers that path, so later app releases only require clicking Reload on
+  the AgentStart extension after the app has updated its files. This copy ships inside the same build
+  as the app, so it never waits on a review.
+* **Chrome Web Store** is the channel Chrome keeps current by itself. The first-launch guide opens
+  the AgentStart listing; Chrome handles installation and future store updates, at the listing's own
+  review pace.
 
 Chrome does not allow a regular macOS app to silently load a local unpacked extension or install a
 local CRX. The first-launch guide therefore asks for the one manual Chrome action required by the

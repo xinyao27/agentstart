@@ -44,9 +44,20 @@ class AgentStart < Formula
   end
 
   def caveats
+    directory =
+      if OS.mac?
+        "~/Library/Application Support/AgentStart/ChromeExtension"
+      else
+        "${XDG_DATA_HOME:-~/.local/share}/AgentStart/ChromeExtension"
+      end
     <<~EOS
-      Finish installation by adding AgentStart to Chrome:
-        https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp
+      AgentStart staged its Chrome extension at:
+        #{directory}
+
+      Load it once: open chrome://extensions, turn on Developer mode, choose Load unpacked, and
+      select that folder. Later upgrades refresh it in place. Set
+      AGENTSTART_EXTENSION_CHANNEL=web-store before installing to take the Chrome Web Store listing
+      instead.
     EOS
   end
 end

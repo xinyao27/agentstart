@@ -200,16 +200,18 @@ final class MenuBarApplication: NSObject, NSApplicationDelegate, NSMenuDelegate 
     choice.informativeText = translate(
       "AgentStart has started the daemon and installed the Native Messaging connection. Choose how Chrome should receive the extension."
     )
-    choice.addButton(withTitle: translate("Chrome Web Store"))
+    // Why: the staged copy is cut from this app's own build, so it is the channel that cannot be
+    // waiting on a store review, and the first button is the one macOS marks as the default.
     choice.addButton(withTitle: translate("Fast install (Load unpacked)"))
+    choice.addButton(withTitle: translate("Chrome Web Store"))
     choice.addButton(withTitle: translate("Skip for now"))
     NSApp.activate(ignoringOtherApps: true)
 
     switch choice.runModal() {
     case .alertFirstButtonReturn:
-      showWebStoreSetup()
-    case .alertSecondButtonReturn:
       showFastExtensionSetup()
+    case .alertSecondButtonReturn:
+      showWebStoreSetup()
     default:
       return
     }

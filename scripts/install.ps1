@@ -12,7 +12,7 @@ $chromeWebStoreUrl = 'https://chromewebstore.google.com/detail/agentstart/ljgpbh
 $extensionConnectDeadlineSeconds = 120
 
 $releaseVersion = if ($env:AGENTSTART_VERSION) { $env:AGENTSTART_VERSION } else { 'latest' }
-$extensionChannel = if ($env:AGENTSTART_EXTENSION_CHANNEL) { $env:AGENTSTART_EXTENSION_CHANNEL } else { 'web-store' }
+$extensionChannel = if ($env:AGENTSTART_EXTENSION_CHANNEL) { $env:AGENTSTART_EXTENSION_CHANNEL } else { 'unpacked' }
 $skipServiceInstall = if ($env:AGENTSTART_SKIP_SERVICE_INSTALL) { $env:AGENTSTART_SKIP_SERVICE_INSTALL } else { '0' }
 $noMobile = if ($env:AGENTSTART_NO_MOBILE) { $env:AGENTSTART_NO_MOBILE } else { '0' }
 
@@ -25,7 +25,7 @@ Usage: install.ps1 [-Help]
 Environment:
   AGENTSTART_INSTALL_DIR           where agentstart.exe is installed
   AGENTSTART_VERSION               release tag to install, or "latest"
-  AGENTSTART_EXTENSION_CHANNEL     web-store (default), unpacked, or skip
+  AGENTSTART_EXTENSION_CHANNEL     unpacked (default), web-store, or skip
   AGENTSTART_SKIP_SERVICE_INSTALL  1 to leave the logon task alone
   AGENTSTART_NO_MOBILE             1 to omit the iOS TestFlight link and code
 '@ | Write-Host
@@ -42,7 +42,7 @@ if ($args.Count -gt 0) {
 }
 
 if ($extensionChannel -notin @('web-store', 'unpacked', 'skip')) {
-  throw 'AGENTSTART_EXTENSION_CHANNEL must be web-store, unpacked, or skip.'
+  throw 'AGENTSTART_EXTENSION_CHANNEL must be unpacked, web-store, or skip.'
 }
 if ($skipServiceInstall -notin @('0', '1')) {
   throw 'AGENTSTART_SKIP_SERVICE_INSTALL must be 0 or 1.'
@@ -201,11 +201,13 @@ if (($userPath -split ';') -notcontains $installDirectory) {
   Write-Host "Added $installDirectory to PATH. Open a new terminal to use it."
 }
 
-if ($extensionChannel -eq 'web-store') {
+if ($extensionChannel -ne 'skip') {
   Write-Host 'Waiting for the Chrome extension to connect...'
   if (Wait-ForExtension -ExecutablePath $executable -DeadlineSeconds $extensionConnectDeadlineSeconds) {
     Write-Host 'The Chrome extension is connected.'
-  } else {
+  } elseif ($extensionChannel -eq 'web-store') {
     Write-Warning "The Chrome extension has not connected yet. Finish it at $chromeWebStoreUrl, then open the AgentStart side panel."
+  } else {
+    Write-Warning 'The Chrome extension has not connected yet. Load the folder printed above: open chrome://extensions, turn on Developer mode, choose Load unpacked, and select it.'
   }
 }

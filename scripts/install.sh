@@ -8,7 +8,7 @@ repository="xinyao27/agentstart"
 install_directory="${AGENTSTART_INSTALL_DIR:-${HOME}/.local/bin}"
 release_version="${AGENTSTART_VERSION:-latest}"
 skip_service_install="${AGENTSTART_SKIP_SERVICE_INSTALL:-0}"
-extension_channel="${AGENTSTART_EXTENSION_CHANNEL:-web-store}"
+extension_channel="${AGENTSTART_EXTENSION_CHANNEL:-unpacked}"
 no_mobile="${AGENTSTART_NO_MOBILE:-0}"
 max_binary_bytes=268435456
 max_checksum_bytes=1048576
@@ -24,7 +24,7 @@ Usage: install.sh [--help]
 Environment:
   AGENTSTART_INSTALL_DIR           where the agentstart binary is installed
   AGENTSTART_VERSION               release tag to install, or "latest"
-  AGENTSTART_EXTENSION_CHANNEL     web-store (default), unpacked, or skip
+  AGENTSTART_EXTENSION_CHANNEL     unpacked (default), web-store, or skip
   AGENTSTART_SKIP_SERVICE_INSTALL  1 to leave the login service alone
   AGENTSTART_NO_MOBILE             1 to omit the iOS TestFlight link and code
 HELP
@@ -54,7 +54,7 @@ esac
 case "$extension_channel" in
   web-store | unpacked | skip) ;;
   *)
-    echo "AGENTSTART_EXTENSION_CHANNEL must be web-store, unpacked, or skip." >&2
+    echo "AGENTSTART_EXTENSION_CHANNEL must be unpacked, web-store, or skip." >&2
     exit 1
     ;;
 esac
@@ -609,8 +609,8 @@ run_setup() {
 }
 
 # Why: the installer is the one place a user sees the whole setup finish or not, and the daemon
-# cannot open a browser it has no display for. Mirrors the daemon's own headless rules so the wait
-# below never blocks a terminal that could not have opened the store page in the first place.
+# cannot drive a browser it has no display for. Mirrors the daemon's own headless rules so the wait
+# below never blocks a terminal that could not have taken the browser half any further.
 is_headless() {
   if [ -n "${SSH_CONNECTION:-}" ] || [ -n "${SSH_TTY:-}" ]; then
     return 0
@@ -623,7 +623,7 @@ is_headless() {
 
 # Why: the extension announces itself to the daemon over Native Messaging, so the marker the native
 # host leaves is the only signal that the user finished adding it. Polling it here is what turns the
-# one-liner into a finished setup instead of leaving an open store tab and no verdict.
+# one-liner into a finished setup instead of leaving the last browser step with no verdict.
 wait_for_extension() {
   deadline_seconds="$1"
   elapsed_seconds=0
@@ -879,13 +879,18 @@ case ":${PATH}:" in
   *) echo "Add ${install_directory} to PATH." ;;
 esac
 
-if [ "$extension_channel" = "web-store" ] && ! is_headless; then
+if [ "$extension_channel" != "skip" ] && ! is_headless; then
   echo "Waiting for the Chrome extension to connect..."
   if wait_for_extension "$extension_connect_deadline_seconds"; then
     echo "The Chrome extension is connected."
   else
     echo "The Chrome extension has not connected yet." >&2
-    echo "Finish it at ${chrome_web_store_url}, then open the AgentStart side panel." >&2
+    if [ "$extension_channel" = "web-store" ]; then
+      echo "Finish it at ${chrome_web_store_url}, then open the AgentStart side panel." >&2
+    else
+      echo "Load the folder printed above: open chrome://extensions, turn on Developer mode," >&2
+      echo 'choose "Load unpacked", and select it.' >&2
+    fi
     echo "The extension connects on its own once it is installed." >&2
   fi
 fi
