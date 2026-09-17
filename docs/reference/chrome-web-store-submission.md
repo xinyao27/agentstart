@@ -1,5 +1,10 @@
 # Chrome Web Store submission
 
+The store listing is submitted best-effort on every `extension-v*` tag and never gates a release.
+The packaged extension (`agentstart-extension-<version>.zip`, attached to each daemon release) and
+the copy the macOS app stages for load-unpacked installs are the primary distribution; this document
+covers the listing materials the store reviewer sees.
+
 This is the release and reviewer checklist for the AgentStart MV3 extension. The public key in
 [`wxt.config.ts`](../../apps/extension/wxt.config.ts) is the Web Store item's authoritative key and
 pins ID `ljgpbhfigjepmdeaggfdagchkgaogglp`; changing it breaks Native Messaging and enterprise

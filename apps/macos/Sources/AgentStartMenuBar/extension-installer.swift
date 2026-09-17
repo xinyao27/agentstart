@@ -69,10 +69,10 @@ enum ExtensionInstallerFailure: LocalizedError {
       return translate("AgentStart could not find its bundled resources.")
     case .bundledExtensionMissing:
       return translate(
-        "The Fast Chrome extension is not included in this app build. Download a complete AgentStart installer and try again."
+        "The Chrome extension is not included in this app build. Download a complete AgentStart installer and try again."
       )
     case .copyFailed(let detail):
-      return translate("AgentStart could not prepare the Fast Chrome extension: %@").replacingOccurrences(
+      return translate("AgentStart could not prepare the Chrome extension: %@").replacingOccurrences(
         of: "%@",
         with: detail
       )

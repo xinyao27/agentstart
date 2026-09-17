@@ -1,14 +1,7 @@
 import AppKit
 
-private enum BrowserChannel: String {
-  case fast
-  case webStore
-}
-
 private enum AgentStartBrowser {
   static let extensionId = "ljgpbhfigjepmdeaggfdagchkgaogglp"
-  static let webStoreItemURL =
-    "https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp"
 }
 
 @main
@@ -28,8 +21,8 @@ final class MenuBarApplication: NSObject, NSApplicationDelegate, NSMenuDelegate 
   private let extensionInstaller = ExtensionInstaller()
   private var statusItem: NSStatusItem?
   private var status: DaemonStatus?
-  private var fastExtensionDirectory: URL?
-  private var fastExtensionError: String?
+  private var extensionDirectory: URL?
+  private var extensionError: String?
   private var ownsDaemon = false
   private var isBusy = false
   private var isQuitting = false
@@ -102,12 +95,12 @@ final class MenuBarApplication: NSObject, NSApplicationDelegate, NSMenuDelegate 
       try await daemon.start()
       try await daemon.installBrowserConnection()
       do {
-        fastExtensionDirectory = try extensionInstaller.syncBundledExtension().directory
-        fastExtensionError = nil
+        extensionDirectory = try extensionInstaller.syncBundledExtension().directory
+        extensionError = nil
       } catch {
-        // Why: a partial app build should not prevent the daemon from serving Web Store users.
-        fastExtensionDirectory = nil
-        fastExtensionError = error.localizedDescription
+        // Why: a partial app build should not prevent the daemon from serving a hand-loaded copy.
+        extensionDirectory = nil
+        extensionError = error.localizedDescription
       }
     } catch { lastError = error.localizedDescription }
     isBusy = false
@@ -185,81 +178,22 @@ final class MenuBarApplication: NSObject, NSApplicationDelegate, NSMenuDelegate 
 
   @objc private func setupBrowserExtension() {
     UserDefaults.standard.set(true, forKey: Self.browserOnboardingShownKey)
-    showBrowserSetup()
+    showExtensionSetup()
   }
 
   private func showStartupBrowserOnboardingIfNeeded() {
     guard !UserDefaults.standard.bool(forKey: Self.browserOnboardingShownKey) else { return }
     UserDefaults.standard.set(true, forKey: Self.browserOnboardingShownKey)
-    showBrowserSetup()
+    showExtensionSetup()
   }
 
-  private func showBrowserSetup() {
-    let choice = NSAlert()
-    choice.messageText = translate("Set up the AgentStart browser extension")
-    choice.informativeText = translate(
-      "AgentStart has started the daemon and installed the Native Messaging connection. Choose how Chrome should receive the extension."
-    )
-    // Why: the staged copy is cut from this app's own build, so it is the channel that cannot be
-    // waiting on a store review, and the first button is the one macOS marks as the default.
-    choice.addButton(withTitle: translate("Fast install (Load unpacked)"))
-    choice.addButton(withTitle: translate("Chrome Web Store"))
-    choice.addButton(withTitle: translate("Skip for now"))
-    NSApp.activate(ignoringOtherApps: true)
-
-    switch choice.runModal() {
-    case .alertFirstButtonReturn:
-      showFastExtensionSetup()
-    case .alertSecondButtonReturn:
-      showWebStoreSetup()
-    default:
-      return
-    }
-  }
-
-  private func showWebStoreSetup() {
-    let alert = NSAlert()
-    alert.messageText = translate("Install from Chrome Web Store")
-    alert.informativeText = translate(
-      "Open the AgentStart listing, click Add to Chrome, and approve the requested permissions. The store version updates automatically after review."
-    )
-    alert.addButton(withTitle: translate("Open Chrome Web Store"))
-    alert.addButton(withTitle: translate("I have installed it"))
-    alert.addButton(withTitle: translate("Cancel"))
-    NSApp.activate(ignoringOtherApps: true)
-
-    switch alert.runModal() {
-    case .alertFirstButtonReturn:
-      openWebStore()
-      showWebStoreInstallConfirmation()
-    case .alertSecondButtonReturn:
-      showConnectionInstructions(channel: .webStore)
-    default:
-      return
-    }
-  }
-
-  private func showWebStoreInstallConfirmation() {
-    let alert = NSAlert()
-    alert.messageText = translate("Finish the Chrome Web Store installation")
-    alert.informativeText = translate(
-      "After Chrome finishes adding AgentStart, return here and confirm. The app will then open the workspace so you can check the connection."
-    )
-    alert.addButton(withTitle: translate("I have installed it"))
-    alert.addButton(withTitle: translate("Not yet"))
-    NSApp.activate(ignoringOtherApps: true)
-    if alert.runModal() == .alertFirstButtonReturn {
-      showConnectionInstructions(channel: .webStore)
-    }
-  }
-
-  private func showFastExtensionSetup() {
-    guard let directory = prepareFastExtension() else { return }
+  private func showExtensionSetup() {
+    guard let directory = prepareBundledExtension() else { return }
 
     let manager = NSAlert()
-    manager.messageText = translate("Install the Fast extension once")
+    manager.messageText = translate("Install the AgentStart extension once")
     manager.informativeText = localized(
-      "Fast extension steps:\n1. Open Chrome's extension manager and turn on Developer mode.\n2. Choose Load unpacked.\n3. Select this folder:\n%@",
+      "Extension steps:\n1. Open Chrome's extension manager and turn on Developer mode.\n2. Choose Load unpacked.\n3. Select this folder:\n%@",
       directory.path
     )
     manager.addButton(withTitle: translate("Open extension manager"))
@@ -283,68 +217,42 @@ final class MenuBarApplication: NSObject, NSApplicationDelegate, NSMenuDelegate 
     switch folder.runModal() {
     case .alertFirstButtonReturn:
       NSWorkspace.shared.activateFileViewerSelecting([directory])
-      showConnectionInstructions(channel: .fast)
+      showConnectionInstructions()
     case .alertSecondButtonReturn:
-      showConnectionInstructions(channel: .fast)
+      showConnectionInstructions()
     default:
       return
     }
   }
 
-  private func prepareFastExtension() -> URL? {
-    if let fastExtensionDirectory { return fastExtensionDirectory }
+  private func prepareBundledExtension() -> URL? {
+    if let extensionDirectory { return extensionDirectory }
     do {
       let result = try extensionInstaller.syncBundledExtension()
-      fastExtensionDirectory = result.directory
-      fastExtensionError = nil
+      extensionDirectory = result.directory
+      extensionError = nil
       return result.directory
     } catch {
-      fastExtensionError = error.localizedDescription
+      extensionError = error.localizedDescription
       presentError(
-        fastExtensionError ?? translate("The Fast extension could not be prepared."),
+        extensionError ?? translate("The extension could not be prepared."),
         canRetry: true
       )
       return nil
     }
   }
 
-  private func showConnectionInstructions(channel: BrowserChannel) {
+  private func showConnectionInstructions() {
     let alert = NSAlert()
     alert.messageText = translate("Connect AgentStart to Chrome")
-    alert.informativeText =
-      channel == .fast
-      ? translate(
-        "AgentStart is ready to connect. Keep this app running, make sure the Fast extension is enabled, then open AgentStart from the extension. After a future app update, open chrome://extensions and click Reload for AgentStart."
-      )
-      : translate(
-        "AgentStart is ready to connect. Keep this app running, make sure the Web Store extension is enabled, then open AgentStart from the extension. Native Messaging is installed automatically by this app."
-      )
+    alert.informativeText = translate(
+      "AgentStart is ready to connect. Keep this app running, make sure the extension is enabled, then open AgentStart from the extension. After a future app update, open chrome://extensions and click Reload for AgentStart."
+    )
     alert.addButton(withTitle: translate("Open AgentStart"))
     alert.addButton(withTitle: translate("Done"))
     NSApp.activate(ignoringOtherApps: true)
     if alert.runModal() == .alertFirstButtonReturn {
       openBrowser()
-    }
-  }
-
-  private func openWebStore() {
-    guard let url = URL(string: AgentStartBrowser.webStoreItemURL) else { return }
-    openSupportedBrowser(url)
-  }
-
-  private func openSupportedBrowser(_ url: URL) {
-    guard let browser = NSWorkspace.shared.urlForApplication(toOpen: url),
-      let identifier = Bundle(url: browser)?.bundleIdentifier,
-      identifier == "company.thebrowser.dia" || identifier == "com.google.Chrome"
-        || identifier.hasPrefix("com.google.Chrome.")
-    else {
-      presentError(translate("Use Google Chrome or Dia to install and use the AgentStart extension."))
-      return
-    }
-    NSWorkspace.shared.open([url], withApplicationAt: browser, configuration: .init()) {
-      [weak self] _, error in
-      guard let error else { return }
-      Task { @MainActor in self?.presentError(error.localizedDescription) }
     }
   }
 

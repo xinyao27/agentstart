@@ -1,8 +1,4 @@
-use std::env;
 use std::ffi::OsString;
-#[cfg(target_os = "windows")]
-use std::path::PathBuf;
-use std::process::{Command, Stdio};
 
 use serde::Serialize;
 use thiserror::Error;
@@ -12,8 +8,6 @@ use super::service::{self, ServiceError, ServiceState};
 #[cfg(target_os = "macos")]
 mod computer_use;
 
-const CHROME_WEB_STORE_URL: &str =
-    "https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp";
 // Why: no script can install an iOS app, so handing over the TestFlight link is the whole of the
 // installer's mobile job. This constant duplicates packages/client/src/mobile/downloads.ts,
 // apps/web/src/site-links.ts, and AgentStartMobile's ConnectionStatus.swift; all four must agree.
@@ -21,7 +15,6 @@ const MOBILE_TESTFLIGHT_URL: &str = "https://testflight.apple.com/join/9Cq3j7hR"
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum ExtensionChannel {
-    WebStore,
     Unpacked,
     Skip,
 }
@@ -29,7 +22,6 @@ enum ExtensionChannel {
 impl ExtensionChannel {
     fn parse(value: &OsString) -> Result<Self, InstallError> {
         match value.to_str() {
-            Some("web-store") => Ok(Self::WebStore),
             Some("unpacked") => Ok(Self::Unpacked),
             Some("skip") => Ok(Self::Skip),
             _ => Err(InstallError::UnsupportedChannel(
@@ -40,7 +32,6 @@ impl ExtensionChannel {
 
     fn name(self) -> &'static str {
         match self {
-            Self::WebStore => "web-store",
             Self::Unpacked => "unpacked",
             Self::Skip => "skip",
         }
@@ -62,9 +53,9 @@ impl InstallOptions {
             no_service: false,
             no_browser: false,
             no_mobile: false,
-            // Why: the unpacked bundle is cut from the release the user is installing right now,
-            // while the store listing waits on a review the release does not, so the default
-            // channel is the one that cannot serve a build older than the daemon beside it.
+            // Why: the unpacked bundle is cut from the release the user is installing right now, so
+            // it is the channel that cannot serve a build older than the daemon beside it. The Web
+            // Store listing is submitted separately and is not an install path this installer owns.
             extension: ExtensionChannel::Unpacked,
         };
         let mut arguments = args.iter();
@@ -121,8 +112,6 @@ struct InstallOutput {
     extension_bundle: Option<&'static str>,
     #[serde(skip_serializing_if = "Option::is_none")]
     extension_bundle_path: Option<String>,
-    extension_page_opened: bool,
-    extension_url: &'static str,
     #[serde(skip_serializing_if = "Option::is_none")]
     mobile_install_url: Option<&'static str>,
     service: &'static str,
@@ -132,7 +121,6 @@ struct ExtensionOutcome {
     channel: ExtensionChannel,
     bundle: Option<&'static str>,
     directory: Option<String>,
-    page_opened: bool,
 }
 
 pub(super) async fn run(args: &[OsString]) -> Result<(), InstallError> {
@@ -150,8 +138,6 @@ pub(super) async fn run(args: &[OsString]) -> Result<(), InstallError> {
         extension_channel: extension.channel.name(),
         extension_bundle: extension.bundle,
         extension_bundle_path: extension.directory.clone(),
-        extension_page_opened: extension.page_opened,
-        extension_url: CHROME_WEB_STORE_URL,
         mobile_install_url: (!options.no_mobile).then_some(MOBILE_TESTFLIGHT_URL),
         service: service_state_name(service_state),
     };
@@ -165,12 +151,6 @@ pub(super) async fn run(args: &[OsString]) -> Result<(), InstallError> {
 
 async fn prepare_extension(options: &InstallOptions) -> Result<ExtensionOutcome, InstallError> {
     match options.extension {
-        ExtensionChannel::WebStore => Ok(ExtensionOutcome {
-            channel: ExtensionChannel::WebStore,
-            bundle: None,
-            directory: None,
-            page_opened: !options.no_browser && open_extension_page(),
-        }),
         ExtensionChannel::Unpacked => {
             let sync = crate::extension_bundle::sync().await?;
             let directory = crate::extension_bundle::resolve_bundle_directory()?
@@ -180,28 +160,22 @@ async fn prepare_extension(options: &InstallOptions) -> Result<ExtensionOutcome,
                 channel: ExtensionChannel::Unpacked,
                 bundle: Some(sync.name()),
                 directory: Some(directory),
-                page_opened: false,
             })
         }
         ExtensionChannel::Skip => Ok(ExtensionOutcome {
             channel: ExtensionChannel::Skip,
             bundle: None,
             directory: None,
-            page_opened: false,
         }),
     }
 }
 
 fn write_report(extension: &ExtensionOutcome, no_mobile: bool) {
-    if extension.page_opened {
-        println!("AgentStart is running. Confirm Add to Chrome in the opened Web Store page.");
-    } else if let Some(directory) = &extension.directory {
+    if let Some(directory) = &extension.directory {
         println!(
             "AgentStart is running. In chrome://extensions enable Developer mode, choose \
              \"Load unpacked\", and select {directory}."
         );
-    } else if extension.channel == ExtensionChannel::WebStore {
-        println!("AgentStart is running. Install the Chrome extension: {CHROME_WEB_STORE_URL}");
     } else {
         println!("AgentStart is running.");
     }
@@ -236,67 +210,4 @@ fn service_state_name(state: Option<ServiceState>) -> &'static str {
         Some(ServiceState::Running) => "running",
         Some(ServiceState::Stopped) => "stopped",
     }
-}
-
-fn open_extension_page() -> bool {
-    if has_nonempty_environment("SSH_CONNECTION") || has_nonempty_environment("SSH_TTY") {
-        return false;
-    }
-    #[cfg(target_os = "macos")]
-    let mut command = {
-        let mut command = Command::new("/usr/bin/open");
-        command.arg(CHROME_WEB_STORE_URL);
-        command
-    };
-    #[cfg(target_os = "linux")]
-    let mut command = {
-        if !has_nonempty_environment("DISPLAY") && !has_nonempty_environment("WAYLAND_DISPLAY") {
-            return false;
-        }
-        let mut command = Command::new("xdg-open");
-        command.arg(CHROME_WEB_STORE_URL);
-        command
-    };
-    #[cfg(target_os = "windows")]
-    let mut command = {
-        let mut command = Command::new(windows_powershell_executable());
-        command.args([
-            "-NoLogo",
-            "-NoProfile",
-            "-NonInteractive",
-            "-Command",
-            "Start-Process -FilePath $args[0]",
-            CHROME_WEB_STORE_URL,
-        ]);
-        command
-    };
-    #[cfg(not(any(target_os = "macos", target_os = "linux", target_os = "windows")))]
-    return false;
-
-    command
-        .stdin(Stdio::null())
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .status()
-        .is_ok_and(|status| status.success())
-}
-
-fn has_nonempty_environment(name: &str) -> bool {
-    env::var_os(name).is_some_and(|value| !value.is_empty())
-}
-
-#[cfg(target_os = "windows")]
-fn windows_powershell_executable() -> PathBuf {
-    env::var("SystemRoot")
-        .ok()
-        .map(|value| value.trim().to_owned())
-        .filter(|value| !value.is_empty())
-        .map(PathBuf::from)
-        .map(|root| {
-            root.join("System32")
-                .join("WindowsPowerShell")
-                .join("v1.0")
-                .join("powershell.exe")
-        })
-        .unwrap_or_else(|| PathBuf::from("powershell.exe"))
 }

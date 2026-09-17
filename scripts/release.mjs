@@ -321,27 +321,12 @@ function assertGitHubCredentials(targets) {
     }
   }
   const missing = [...required].filter((name) => !repositorySecrets.has(name))
+  // Why: the Web Store listing is submitted best-effort by extension-package.yml, so a missing store
+  // credential or an environment that is still in review never blocks a release here.
   if (targets.includes('extension')) {
-    const environment = capture('gh', [
-      'api',
-      `repos/${REPOSITORY}/environments/chrome-web-store`,
-      '--silent'
-    ])
-    if (!environment.ok) {
-      missing.push('GitHub environment: chrome-web-store')
-    } else {
-      const environmentSecrets = secretNames(['--env', 'chrome-web-store'])
-      for (const name of [
-        'CWS_CLIENT_ID',
-        'CWS_CLIENT_SECRET',
-        'CWS_PUBLISHER_ID',
-        'CWS_REFRESH_TOKEN'
-      ]) {
-        if (!environmentSecrets.has(name)) {
-          missing.push(`chrome-web-store/${name}`)
-        }
-      }
-    }
+    console.log(
+      'Chrome Web Store submission is best-effort; the packaged extension is attached to the daemon release.'
+    )
   }
 
   if (missing.length > 0) {

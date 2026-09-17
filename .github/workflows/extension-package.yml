@@ -74,6 +74,10 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/extension-v') && github.repository ==
       'xinyao27/agentstart'
     needs: package
+    # Why: the store listing is submitted on every release but never gates one; the packaged
+    # extension rides the daemon release for load-unpacked installs, so a review in progress must
+    # not fail the run.
+    continue-on-error: true
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: chrome-web-store

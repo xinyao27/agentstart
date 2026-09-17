@@ -7,6 +7,10 @@ and publishing the Homebrew formula from the signed Rust artifacts. The tagged s
 the actual artifact checksums only after the GitHub Release is public, then writes that install feed
 to `main`. Release credentials stay in GitHub and are never written into the repository.
 
+The Chrome Web Store submission is best-effort: the packaged extension rides every daemon release as
+`agentstart-extension-<version>.zip` and the macOS app stages a load-unpacked copy, so a listing that
+is mid-review never delays or fails a release.
+
 ## One-time setup
 
 Run the interactive setup once from the repository root. It opens the provider pages that require
@@ -54,9 +58,10 @@ the Chrome Web Store API and allow `https://developers.google.com/oauthplaygroun
 URI. Add the Web Store owner as a test user, then set the external OAuth app to In production before
 minting the CI refresh token; tokens issued while it remains in Testing expire after seven days.
 Generate the refresh token with the `https://www.googleapis.com/auth/chromewebstore` scope.
-The setup wizard restricts that environment to `extension-v*` tags. Add a required reviewer in
-GitHub Settings if publication also needs a human approval gate; the tag restriction alone does not
-provide reviewer approval.
+The environment holds the store credentials only: `extension-package.yml` submits every
+`extension-v*` tag with `continue-on-error`, and `release.mjs` no longer requires the environment or
+its secrets, so a missing credential or a review in progress cannot block a release. No required
+reviewer is configured; add one in GitHub Settings only if store submission should wait on a human.
 
 The website deploy is independent of product releases. It runs from
 `.github/workflows/web-deploy.yml`, uses the `CLOUDFLARE_API_TOKEN` repository secret, and deploys
@@ -101,8 +106,9 @@ descriptions, purpose, category, URL, permission, remote-code, and data-use answ
   Add localized screenshots when their visible UI language differs; promotional tiles cannot be
   localized.
 
-These dashboard materials are release blockers even when the extension package workflow succeeds;
-the Web Store API submission does not create or review them.
+These dashboard materials gate the Web Store listing, not a release: the packaged extension ships
+with every daemon release for load-unpacked installs, and the Web Store API submission does not
+create or review them.
 
 ## Prepare a release
 

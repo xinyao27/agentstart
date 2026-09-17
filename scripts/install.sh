@@ -13,7 +13,6 @@ no_mobile="${AGENTSTART_NO_MOBILE:-0}"
 max_binary_bytes=268435456
 max_checksum_bytes=1048576
 extension_connect_deadline_seconds=120
-chrome_web_store_url="https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp"
 
 write_help() {
   cat <<'HELP'
@@ -24,7 +23,7 @@ Usage: install.sh [--help]
 Environment:
   AGENTSTART_INSTALL_DIR           where the agentstart binary is installed
   AGENTSTART_VERSION               release tag to install, or "latest"
-  AGENTSTART_EXTENSION_CHANNEL     unpacked (default), web-store, or skip
+  AGENTSTART_EXTENSION_CHANNEL     unpacked (default) or skip
   AGENTSTART_SKIP_SERVICE_INSTALL  1 to leave the login service alone
   AGENTSTART_NO_MOBILE             1 to omit the iOS TestFlight link and code
 HELP
@@ -52,9 +51,9 @@ case "$skip_service_install" in
 esac
 
 case "$extension_channel" in
-  web-store | unpacked | skip) ;;
+  unpacked | skip) ;;
   *)
-    echo "AGENTSTART_EXTENSION_CHANNEL must be unpacked, web-store, or skip." >&2
+    echo "AGENTSTART_EXTENSION_CHANNEL must be unpacked or skip." >&2
     exit 1
     ;;
 esac
@@ -865,7 +864,7 @@ if [ "$no_mobile" = "1" ]; then
 fi
 
 # Why: the unquoted expansion is deliberate. Each token is either a fixed literal or a channel name
-# already constrained to one of three whitespace-free values, so nothing here can split surprisingly.
+# already constrained to one of two whitespace-free values, so nothing here can split surprisingly.
 # shellcheck disable=SC2086
 if ! run_setup "${install_directory}/agentstart" install $setup_arguments; then
   echo "AgentStart setup failed; restoring the previous installation." >&2
@@ -885,12 +884,8 @@ if [ "$extension_channel" != "skip" ] && ! is_headless; then
     echo "The Chrome extension is connected."
   else
     echo "The Chrome extension has not connected yet." >&2
-    if [ "$extension_channel" = "web-store" ]; then
-      echo "Finish it at ${chrome_web_store_url}, then open the AgentStart side panel." >&2
-    else
-      echo "Load the folder printed above: open chrome://extensions, turn on Developer mode," >&2
-      echo 'choose "Load unpacked", and select it.' >&2
-    fi
+    echo "Load the folder printed above: open chrome://extensions, turn on Developer mode," >&2
+    echo 'choose "Load unpacked", and select it.' >&2
     echo "The extension connects on its own once it is installed." >&2
   fi
 fi

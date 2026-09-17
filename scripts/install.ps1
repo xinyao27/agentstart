@@ -8,7 +8,6 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $repository = 'xinyao27/agentstart'
-$chromeWebStoreUrl = 'https://chromewebstore.google.com/detail/agentstart/ljgpbhfigjepmdeaggfdagchkgaogglp'
 $extensionConnectDeadlineSeconds = 120
 
 $releaseVersion = if ($env:AGENTSTART_VERSION) { $env:AGENTSTART_VERSION } else { 'latest' }
@@ -25,7 +24,7 @@ Usage: install.ps1 [-Help]
 Environment:
   AGENTSTART_INSTALL_DIR           where agentstart.exe is installed
   AGENTSTART_VERSION               release tag to install, or "latest"
-  AGENTSTART_EXTENSION_CHANNEL     unpacked (default), web-store, or skip
+  AGENTSTART_EXTENSION_CHANNEL     unpacked (default) or skip
   AGENTSTART_SKIP_SERVICE_INSTALL  1 to leave the logon task alone
   AGENTSTART_NO_MOBILE             1 to omit the iOS TestFlight link and code
 '@ | Write-Host
@@ -41,8 +40,8 @@ if ($args.Count -gt 0) {
   throw "Unsupported argument: $($args[0]). Run with -Help."
 }
 
-if ($extensionChannel -notin @('web-store', 'unpacked', 'skip')) {
-  throw 'AGENTSTART_EXTENSION_CHANNEL must be unpacked, web-store, or skip.'
+if ($extensionChannel -notin @('unpacked', 'skip')) {
+  throw 'AGENTSTART_EXTENSION_CHANNEL must be unpacked or skip.'
 }
 if ($skipServiceInstall -notin @('0', '1')) {
   throw 'AGENTSTART_SKIP_SERVICE_INSTALL must be 0 or 1.'
@@ -205,8 +204,6 @@ if ($extensionChannel -ne 'skip') {
   Write-Host 'Waiting for the Chrome extension to connect...'
   if (Wait-ForExtension -ExecutablePath $executable -DeadlineSeconds $extensionConnectDeadlineSeconds) {
     Write-Host 'The Chrome extension is connected.'
-  } elseif ($extensionChannel -eq 'web-store') {
-    Write-Warning "The Chrome extension has not connected yet. Finish it at $chromeWebStoreUrl, then open the AgentStart side panel."
   } else {
     Write-Warning 'The Chrome extension has not connected yet. Load the folder printed above: open chrome://extensions, turn on Developer mode, choose Load unpacked, and select it.'
   }

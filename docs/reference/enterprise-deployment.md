@@ -23,6 +23,8 @@ Chrome documents the platform policy locations. In short:
 
 For unpacked internal deployments, use the organization's own update manifest and retain the same
 extension key. Changing the key changes the extension ID and therefore the native-host allowlist.
+Store updates are submitted on every release but published only after Google's review, so operators
+that need a deterministic version should pin the release ZIP or profile the load-unpacked folder.
 
 ## Managed AgentStart policies
 
