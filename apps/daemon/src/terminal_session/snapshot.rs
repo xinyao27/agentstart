@@ -772,10 +772,17 @@ fn snapshot_bytes(sections: &[Vec<u8>; 5]) -> usize {
 }
 
 fn advance_partial_escape_tail(pending: &mut Vec<u8>, chunk: &[u8]) {
-    let mut stream = Vec::with_capacity(pending.len().saturating_add(chunk.len()));
-    stream.extend_from_slice(pending);
-    stream.extend_from_slice(chunk);
-    *pending = extract_partial_escape_tail(&stream);
+    // Why: pending is empty for every chunk that does not end mid-escape — the
+    // common case — so only pay for the concatenation when there is a carry.
+    let tail = if pending.is_empty() {
+        extract_partial_escape_tail(chunk)
+    } else {
+        let mut stream = Vec::with_capacity(pending.len().saturating_add(chunk.len()));
+        stream.extend_from_slice(pending);
+        stream.extend_from_slice(chunk);
+        extract_partial_escape_tail(&stream)
+    };
+    *pending = tail;
     if pending.len() > PARTIAL_ESCAPE_TAIL_BYTES {
         pending.clear();
     }

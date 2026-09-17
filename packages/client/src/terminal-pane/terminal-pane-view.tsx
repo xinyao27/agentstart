@@ -14,11 +14,15 @@ import {
   resolveOpaqueTerminalBackground
 } from '~renderer/terminal/theme'
 import { ContextMenu, ContextMenuTrigger } from '~renderer/ui/context-menu'
-import { WORKSPACE_FILE_PATH_MIME, WORKSPACE_FILE_PATHS_MIME } from '~renderer/workspace/file-drag'
 
 import type { AgentSessionContinuationRequest } from './agent/session-continuation'
 import CloseTerminalDialog from './close-terminal-dialog'
-import { handleInternalTerminalFileDrop } from './drop/handler'
+import {
+  carriesTerminalDropPayload,
+  handleExternalTerminalImageDrop,
+  handleInternalTerminalFileDrop
+} from './drop/handler'
+import { carriesWorkspaceFilePaths } from './drop/workspace-file-payload'
 import TerminalPaneHeaderOverlay from './header-overlay'
 import type { SearchState } from './keyboard-handlers'
 import type { ManagedPane, PaneManager } from './pane-manager/pane-manager'
@@ -196,35 +200,34 @@ export function TerminalPaneView(props: TerminalPaneViewProps): React.JSX.Elemen
         onMouseDownCapture={props.primarySelection.onMouseDown}
         onAuxClickCapture={props.primarySelection.onAuxClick}
         onDragOver={(event) => {
-          if (
-            event.dataTransfer.types.includes(WORKSPACE_FILE_PATH_MIME) ||
-            event.dataTransfer.types.includes(WORKSPACE_FILE_PATHS_MIME)
-          ) {
+          if (carriesTerminalDropPayload(event.dataTransfer)) {
             event.preventDefault()
             event.dataTransfer.dropEffect = 'copy'
           }
         }}
         onDrop={(event) => {
-          if (
-            !event.dataTransfer.types.includes(WORKSPACE_FILE_PATH_MIME) &&
-            !event.dataTransfer.types.includes(WORKSPACE_FILE_PATHS_MIME)
-          ) {
+          if (!carriesTerminalDropPayload(event.dataTransfer)) {
             return
           }
           event.preventDefault()
           event.stopPropagation()
           const manager = managerRef.current
-          if (manager) {
-            void handleInternalTerminalFileDrop({
-              manager,
-              paneTransports: paneTransportsRef.current,
-              worktreeId: props.worktreeId,
-              tabId: props.tabId,
-              cwd: props.cwd,
-              dataTransfer: event.dataTransfer,
-              dropTarget: event.target
-            })
+          if (!manager) {
+            return
           }
+          const dropArgs = {
+            manager,
+            paneTransports: paneTransportsRef.current,
+            worktreeId: props.worktreeId,
+            tabId: props.tabId,
+            cwd: props.cwd,
+            dropTarget: event.target
+          }
+          if (carriesWorkspaceFilePaths(event.dataTransfer)) {
+            void handleInternalTerminalFileDrop({ ...dropArgs, dataTransfer: event.dataTransfer })
+            return
+          }
+          void handleExternalTerminalImageDrop({ ...dropArgs, dataTransfer: event.dataTransfer })
         }}
       />
       <DaemonActionDialog api={props.daemonActions} />

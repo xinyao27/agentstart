@@ -129,7 +129,7 @@ fn remote_command(request: &TerminalCreateRequest, cwd: String) -> String {
         .join(" ");
     let invocation = request.command.as_ref().map_or_else(
         || "exec \"${SHELL:-/bin/sh}\" -l".to_owned(),
-        |command| format!("exec \"${{SHELL:-/bin/sh}}\" -lc {}", quote(command)),
+        |command| format!("exec \"${{SHELL:-/bin/sh}}\" -ilc {}", quote(command)),
     );
     format!(
         "cd -- {} && {removals} exec env {} {invocation}",
@@ -157,7 +157,11 @@ fn posix_args(
     _delivery: Option<TerminalStartupCommandDelivery>,
 ) -> Vec<String> {
     match command {
-        Some(command) => vec!["-lc".to_owned(), command.to_owned()],
+        // Why: launchd and the app hand the daemon a minimal PATH, so a plain
+        // login shell cannot resolve what installers export in .zshrc. The
+        // preflight probes the user's shell with -ilc, so launch has to run
+        // through the same startup files for a detected agent to start.
+        Some(command) => vec!["-ilc".to_owned(), command.to_owned()],
         None => vec!["-l".to_owned()],
     }
 }

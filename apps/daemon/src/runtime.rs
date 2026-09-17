@@ -521,6 +521,7 @@ impl Runtime {
         // Why: the check runs beside startup rather than inside it, so a slow or failed release
         // lookup cannot delay the daemon reaching ready.
         spawn_startup_automatic_update(updater.clone(), ui.clone());
+        spawn_startup_login_path_hydration(preflight.clone());
         let files = FilesAuthority::new(
             worktrees.clone(),
             host_registry.clone(),
@@ -1083,6 +1084,16 @@ fn report_agent_status_flush(result: Result<(), AgentStatusFlushError>) {
     if let Err(error) = result {
         eprintln!("[daemon] Agent status shutdown flush failed: {error}");
     }
+}
+
+/// Why: the daemon comes up under launchd or systemd with a minimal PATH, and
+/// every local command resolves through the login shell's PATH, so hydrating it
+/// beside startup keeps skill runs and agent launches from racing a client
+/// preflight that may never arrive.
+fn spawn_startup_login_path_hydration(preflight: Preflight) {
+    tokio::spawn(async move {
+        preflight.warm_local_path().await;
+    });
 }
 
 fn result_parts<T>(result: Result<T, RuntimeFault>) -> (Option<T>, Option<RuntimeFault>) {

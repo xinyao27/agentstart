@@ -28,6 +28,8 @@ function createBrowserShellUIApi(): ShellUiApi {
       (await import('./browser-clipboard')).readBrowserClipboardImageBase64(),
     saveClipboardImageAsTempFile: async (args) =>
       (await import('./browser-clipboard')).saveBrowserClipboardImageAsTempFile(args),
+    saveImageBlobAsTempFile: async (blob, args) =>
+      (await import('./browser-clipboard')).saveBrowserImageBlobAsTempFile(blob, args),
     writeClipboardText: async (text) => {
       await assertClipboardTextWriteWithinLimitWithYield(text)
       await (navigator.clipboard?.writeText?.(text) ?? Promise.resolve())

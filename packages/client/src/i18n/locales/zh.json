@@ -1090,6 +1090,8 @@
             "drop": {
               "handler": {
                 "0c77693641": "工作树尚未准备好 - 请稍后再试。",
+                "imageDropNotImage": "终端仅支持拖入图片文件。",
+                "imageDropSaveFailed": "图片拖放失败：{{detail}}",
                 "internalTooManyPaths": "拖放的路径过多，无法安全粘贴到终端。",
                 "internalPathsTooLarge": "拖放的路径列表过大，无法安全粘贴到终端。",
                 "writeTimeout": "文件拖放已取消：终端在安全超时前未接受路径。",

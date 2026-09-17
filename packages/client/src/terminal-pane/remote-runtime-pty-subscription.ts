@@ -144,6 +144,12 @@ export class RemoteRuntimePtySubscription {
             this.state.markTransportDisconnected()
           }
         },
+        onInputRejected: ({ errorCode }) => {
+          if (!isCurrent()) {
+            return
+          }
+          recordTerminalFreezeBreadcrumb('multiplex-input-rejected', { errorCode })
+        },
         onFitOverrideChanged: (event) => {
           if (isCurrent() && subscribedPtyId) {
             setFitOverride(subscribedPtyId, event.mode, event.cols, event.rows)

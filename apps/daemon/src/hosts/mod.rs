@@ -1,6 +1,7 @@
 mod command;
 mod filesystem;
 mod local;
+pub(crate) mod login_path;
 mod model;
 mod port_adapter;
 mod port_darwin;

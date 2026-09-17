@@ -1,3 +1,5 @@
+use std::time::{Duration, Instant};
+
 use agentstart_protocol::protocol::v1::{Status, StatusCode};
 use agentstart_protocol::runtime::v1::agent_status_service_subscribe_response::Event;
 use agentstart_protocol::runtime::v1::{
@@ -19,6 +21,7 @@ use agentstart_protocol::runtime::v1::{
 };
 use agentstart_protocol::transport::{decode, encode};
 use serde_json::Value;
+use tokio::sync::watch;
 
 use crate::rpc::protocol_call::ProtocolCallContext;
 
@@ -98,6 +101,9 @@ pub(in crate::rpc) async fn subscribe(
         if revision.changed().await.is_err() {
             return Ok(());
         }
+        if !settle_revision_burst(&mut revision).await {
+            return Ok(());
+        }
         let (next, diff) = authority.event_diff(&keyed);
         for pane_key in &diff.cleared_panes {
             context
@@ -134,6 +140,29 @@ pub(in crate::rpc) async fn subscribe(
                 .await?;
         }
         keyed = next;
+    }
+}
+
+// Why: one agent tool call can emit several hook events in a row, and every
+// revision woke every subscriber into a full-key-set diff. Status is state, not
+// a log, so waiting for the burst to quiet down folds it into one diff without
+// losing an update; the cap keeps a continuously busy fleet publishing anyway.
+const REVISION_QUIET_WINDOW: Duration = Duration::from_millis(80);
+const REVISION_MAX_LATENCY: Duration = Duration::from_millis(400);
+
+async fn settle_revision_burst(revision: &mut watch::Receiver<u64>) -> bool {
+    let deadline = Instant::now() + REVISION_MAX_LATENCY;
+    loop {
+        let remaining = deadline.saturating_duration_since(Instant::now());
+        if remaining.is_zero() {
+            return true;
+        }
+        let window = remaining.min(REVISION_QUIET_WINDOW);
+        match tokio::time::timeout(window, revision.changed()).await {
+            Err(_) => return true,
+            Ok(Err(_)) => return false,
+            Ok(Ok(())) => {}
+        }
     }
 }
 

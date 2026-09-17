@@ -69,6 +69,27 @@ impl Preflight {
         }
     }
 
+    /// Merges the login shell's PATH into the value local commands resolve
+    /// against.
+    ///
+    /// Why: the daemon starts under a service manager with a minimal PATH, so
+    /// this runs as the runtime comes up and hydrates npx, gh, and agent CLIs
+    /// before any client asks for a preflight.
+    pub(crate) async fn warm_local_path(&self) {
+        let Ok(host) = self.inner.hosts.execution_host("local").await else {
+            return;
+        };
+        self.inner
+            .shell_path
+            .refresh_windows_path(host.clone())
+            .await;
+        let platform = host.platform();
+        let hydration = self.inner.shell_path.hydrate(host, false).await;
+        if hydration.is_ok() {
+            self.inner.shell_path.merge(&hydration.segments, platform);
+        }
+    }
+
     async fn check(
         &self,
         context: &PreflightContext,

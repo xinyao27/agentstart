@@ -39,7 +39,9 @@ const HEARTBEAT: Duration = Duration::from_secs(15);
 const HEARTBEAT_BYTES: usize = 16;
 const MAX_PENDING_BYTES: usize = 8 * 1024 * 1024;
 const MAX_STREAMS: usize = 1_024;
-const OUTPUT_FRAME_BYTES: usize = 32 * 1024;
+// Why: matches the client's negotiated max frame, so one PTY read reaches the
+// renderer as one output frame instead of being split or queued as several.
+const OUTPUT_FRAME_BYTES: usize = 64 * 1024;
 const SNAPSHOT_BUILD_CONCURRENCY: usize = 4;
 
 const OP_EPOCH: u8 = 0x01;

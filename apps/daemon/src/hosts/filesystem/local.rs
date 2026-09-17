@@ -7,6 +7,7 @@ use tokio::io::{AsyncReadExt, AsyncSeekExt, AsyncWriteExt};
 use super::model::{
     HostDirectoryEntry, HostFileKind, HostFileStat, HostFilesystemError, HostRemoveOptions,
 };
+use crate::hosts::login_path;
 
 pub(super) async fn append(path: &str, content: &[u8]) -> Result<(), HostFilesystemError> {
     let mut file = OpenOptions::new()
@@ -229,9 +230,14 @@ pub(super) async fn which(command: &str) -> Result<Option<String>, HostFilesyste
 }
 
 async fn executable_directories() -> Vec<std::path::PathBuf> {
-    let mut directories = std::env::var_os("PATH")
-        .map(|paths| std::env::split_paths(&paths).collect())
-        .unwrap_or_default();
+    // Why: the login shell's PATH is what the user's terminal resolves against;
+    // the process PATH is only a seed when hydration has not run or failed.
+    let effective = login_path::effective();
+    let mut directories = if effective.is_empty() {
+        Vec::new()
+    } else {
+        std::env::split_paths(&effective).collect()
+    };
     let Some(home) = home_directory().map(std::path::PathBuf::from) else {
         return directories;
     };

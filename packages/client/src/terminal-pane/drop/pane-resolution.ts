@@ -1,6 +1,6 @@
 import type { ManagedPane, PaneManager } from '~renderer/terminal-pane/pane-manager/pane-manager'
 
-export function resolveInternalTerminalDropPane(
+export function resolveTerminalDropPane(
   manager: PaneManager,
   dropTarget: EventTarget | null | undefined
 ): ManagedPane | null {

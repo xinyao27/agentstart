@@ -27,6 +27,7 @@ export type RemoteRuntimeMultiplexedTerminalCallbacks = {
   onSubscribed?: () => void
   onEnd?: () => void
   onError?: (message: string, error?: RemoteRuntimeTerminalError) => void
+  onInputRejected?: (rejection: { errorCode: number }) => void
   onFitOverrideChanged?: (event: {
     mode: 'mobile-fit' | 'remote-desktop-fit' | 'desktop-fit'
     cols: number

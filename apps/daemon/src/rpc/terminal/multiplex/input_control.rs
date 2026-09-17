@@ -1,5 +1,10 @@
 use super::*;
 
+// Why: the wire carries the error code to the client, and a locked writer
+// (input floor, paste barrier) is not a provider that failed to write.
+const ERROR_INPUT_LOCKED: u16 = 5;
+const ERROR_PROVIDER_UNAVAILABLE: u16 = 10;
+
 impl MultiplexSession<'_> {
     pub(super) async fn handle_stream_frame(&mut self, frame: Frame) -> Result<(), SessionError> {
         if !self.streams.contains_key(&frame.route_id) {
@@ -181,12 +186,20 @@ impl MultiplexSession<'_> {
                 self.remove_stream(frame.route_id);
                 Ok(())
             }
-            Ok(_) | Err(_) => self.send_ack(
+            Err(TerminalSessionError::NotWritable) | Ok(_) => self.send_ack(
                 frame.route_id,
                 frame.correlation_id,
                 1,
                 1,
-                10,
+                ERROR_INPUT_LOCKED,
+                prior_sequence,
+            ),
+            Err(_) => self.send_ack(
+                frame.route_id,
+                frame.correlation_id,
+                1,
+                1,
+                ERROR_PROVIDER_UNAVAILABLE,
                 prior_sequence,
             ),
         }

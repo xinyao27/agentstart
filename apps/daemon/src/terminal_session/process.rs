@@ -16,7 +16,10 @@ const INPUT_QUEUE_DEPTH: usize = 128;
 const INPUT_CHUNK_BYTES: usize = 16 * 1_024;
 const INPUT_QUEUE_BUDGET_BYTES: usize = 32 * 1_024 * 1_024;
 const MAX_INPUT_BYTES: usize = 16 * 1_024 * 1_024;
-const OUTPUT_CHUNK_BYTES: usize = 16 * 1_024;
+// Why: a PTY read returns as soon as any byte is available, so a larger buffer
+// only shrinks the number of multiplex frames a flood produces — it never waits
+// to fill. 64 KiB is the client's negotiated max frame, so one read stays one frame.
+const OUTPUT_CHUNK_BYTES: usize = 64 * 1_024;
 const PROCESS_THREAD_STACK_BYTES: usize = 256 * 1_024;
 
 pub(super) enum ProcessEvent {

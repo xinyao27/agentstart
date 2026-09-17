@@ -2,6 +2,7 @@ import type { Terminal } from '@xterm/xterm'
 import { detectAgentStatusFromTitle } from '~renderer/agent/title/status'
 import { useAppStore } from '~renderer/store/state'
 
+import { resolveCommittedTitleAgentType } from '../agent/evidence'
 import {
   CURSOR_AGENT_REATTACH_HEADER,
   hasCursorAgentReattachPayloadScreenSignal,
@@ -66,7 +67,24 @@ export function createReattachAgentSignal(
     }
   }
 
-  const shouldPreserveModes = (): boolean => hasLiveStatusOrTitle() || hasCursorAgentSignal
+  // Why: OpenCode's native `OC | <task>` titles carry agent identity without a
+  // status keyword, so status detection alone reads a live pane as dead and the
+  // reattach reset strips the mouse protocols its wheel events need.
+  const hasCommittedAgentTitle = (): boolean =>
+    resolveCommittedTitleAgentType(getCurrentTitle() ?? '') !== null
+
+  // Why: a foreground agent process is process-grade proof the pane is live even
+  // before its title has been republished; a proven shell must not preserve modes.
+  const hasForegroundAgentProcess = (): boolean => {
+    const entry = useAppStore.getState().paneForegroundAgentByPaneKey[options.paneKey]
+    return entry !== undefined && entry.agent !== null && !entry.shellForeground
+  }
+
+  const shouldPreserveModes = (): boolean =>
+    hasLiveStatusOrTitle() ||
+    hasCommittedAgentTitle() ||
+    hasForegroundAgentProcess() ||
+    hasCursorAgentSignal
 
   return {
     rememberPayload: (data, rememberOptions) => {

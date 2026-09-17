@@ -201,9 +201,11 @@ export class RemoteTerminalControlSender {
         pending.resolve?.(ack.status === 0)
       }
       if (ack.status !== 0) {
+        // Why: a rejected Input was never applied — a write barrier or driver lock
+        // answered — so it is dropped, never replayed, and never a renderer fault.
         this.inputSeq = ack.cumulativeSeq
         this.inputAckSeq = ack.cumulativeSeq
-        this.options.callbacks.onError?.('Remote terminal input was rejected.')
+        this.options.callbacks.onInputRejected?.({ errorCode: ack.errorCode })
       } else if (ack.cumulativeSeq > this.inputAckSeq) {
         this.inputAckSeq = ack.cumulativeSeq
       }

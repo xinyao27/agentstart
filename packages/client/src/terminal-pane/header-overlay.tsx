@@ -15,7 +15,11 @@ import { ContextMenuTrigger } from '~renderer/ui/context-menu'
 import { Input } from '~renderer/ui/input'
 import { Tooltip, TooltipContent, TooltipTrigger } from '~renderer/ui/tooltip'
 
-import { handleInternalTerminalFileDrop } from './drop/handler'
+import {
+  carriesTerminalDropPayload,
+  handleExternalTerminalImageDrop,
+  handleInternalTerminalFileDrop
+} from './drop/handler'
 import { carriesWorkspaceFilePaths } from './drop/workspace-file-payload'
 import type { PtyTransport } from './pty/transport-types'
 
@@ -140,13 +144,13 @@ export default function TerminalPaneHeaderOverlay({
             }
             onDragOver={(event) => {
               onActivatePaneTitleInteraction(pane.id)
-              if (carriesWorkspaceFilePaths(event.dataTransfer)) {
+              if (carriesTerminalDropPayload(event.dataTransfer)) {
                 event.preventDefault()
                 event.dataTransfer.dropEffect = 'copy'
               }
             }}
             onDrop={(event) => {
-              if (!carriesWorkspaceFilePaths(event.dataTransfer)) {
+              if (!carriesTerminalDropPayload(event.dataTransfer)) {
                 return
               }
               event.preventDefault()
@@ -156,14 +160,24 @@ export default function TerminalPaneHeaderOverlay({
               if (!manager) {
                 return
               }
-              void handleInternalTerminalFileDrop({
+              const dropArgs = {
                 manager,
                 paneTransports: paneTransportsRef.current,
                 worktreeId,
                 tabId,
                 cwd,
-                dataTransfer: event.dataTransfer,
                 dropTarget: event.target
+              }
+              if (carriesWorkspaceFilePaths(event.dataTransfer)) {
+                void handleInternalTerminalFileDrop({
+                  ...dropArgs,
+                  dataTransfer: event.dataTransfer
+                })
+                return
+              }
+              void handleExternalTerminalImageDrop({
+                ...dropArgs,
+                dataTransfer: event.dataTransfer
               })
             }}
             onContextMenu={(event) => onPaneTitleContextMenu(event, pane.id)}

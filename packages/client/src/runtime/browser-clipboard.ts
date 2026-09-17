@@ -63,6 +63,14 @@ async function convertImageBlobToPng(blob: Blob): Promise<Blob> {
   }
 }
 
+async function imageBlobToPngBase64(blob: Blob): Promise<string> {
+  if (blob.size > CLIPBOARD_IMAGE_MAX_SOURCE_BYTES) {
+    throw new Error(clipboardImageTooLargeMessage())
+  }
+  const png = blob.type === 'image/png' ? blob : await convertImageBlobToPng(blob)
+  return blobToBase64(png)
+}
+
 export async function readBrowserClipboardImageBase64(): Promise<string | null> {
   const clipboard = navigator.clipboard as
     | (Clipboard & { read?: () => Promise<ClipboardItem[]> })
@@ -76,12 +84,7 @@ export async function readBrowserClipboardImageBase64(): Promise<string | null> 
     if (!imageType) {
       continue
     }
-    const source = await item.getType(imageType)
-    if (source.size > CLIPBOARD_IMAGE_MAX_SOURCE_BYTES) {
-      throw new Error(clipboardImageTooLargeMessage())
-    }
-    const png = imageType === 'image/png' ? source : await convertImageBlobToPng(source)
-    return blobToBase64(png)
+    return imageBlobToPngBase64(await item.getType(imageType))
   }
   return null
 }
@@ -95,14 +98,10 @@ export async function writeBrowserClipboardImage(dataUrl: string): Promise<void>
   await navigator.clipboard.write([new ClipboardItem({ [blob.type || 'image/png']: blob })])
 }
 
-export async function saveBrowserClipboardImageAsTempFile(args?: {
-  connectionId?: string | null
-  runtimeEnvironmentId?: string | null
-}): Promise<string | null> {
-  const contentBase64 = await readBrowserClipboardImageBase64()
-  if (!contentBase64) {
-    return null
-  }
+async function saveImageBase64AsTempFile(
+  contentBase64: string,
+  args?: { connectionId?: string | null; runtimeEnvironmentId?: string | null }
+): Promise<string> {
   if (contentBase64.length > CLIPBOARD_IMAGE_MAX_BASE64_CHARS) {
     throw new Error(clipboardImageTooLargeMessage())
   }
@@ -140,4 +139,22 @@ export async function saveBrowserClipboardImageAsTempFile(args?: {
       .catch(() => {})
     throw error
   }
+}
+
+export async function saveBrowserClipboardImageAsTempFile(args?: {
+  connectionId?: string | null
+  runtimeEnvironmentId?: string | null
+}): Promise<string | null> {
+  const contentBase64 = await readBrowserClipboardImageBase64()
+  if (!contentBase64) {
+    return null
+  }
+  return saveImageBase64AsTempFile(contentBase64, args)
+}
+
+export async function saveBrowserImageBlobAsTempFile(
+  blob: Blob,
+  args?: { connectionId?: string | null; runtimeEnvironmentId?: string | null }
+): Promise<string> {
+  return saveImageBase64AsTempFile(await imageBlobToPngBase64(blob), args)
 }

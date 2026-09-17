@@ -31,6 +31,8 @@ import type { RuntimeCall, RuntimeFrameSender, RuntimePeerInfo } from './transpo
 
 type FrameBody = Exclude<Frame['body'], { case: undefined }>
 
+type EncodedFrame = { bytes: Uint8Array; sequence: bigint }
+
 const MIN_KEEP_ALIVE_INTERVAL_MS = 1000
 const MAX_TIMER_MS = 0x7fff_ffff
 const MAX_SEQUENCE = 0xffff_ffff_ffff_ffffn
@@ -205,7 +207,11 @@ export class ProtocolSender {
   }
 
   private async sendBatch(bodies: readonly FrameBody[], signal?: AbortSignal): Promise<void> {
-    const byteLength = this.measureBatch(bodies)
+    const { frames, nextSequence } = this.encodeBatch(bodies)
+    let byteLength = 0
+    for (const frame of frames) {
+      byteLength += frame.bytes.byteLength
+    }
     if (
       this.pendingBatchCount >= MAX_PENDING_SEND_BATCHES ||
       byteLength > MAX_PENDING_SEND_BYTES - this.pendingBytes
@@ -215,11 +221,12 @@ export class ProtocolSender {
         'Runtime protocol send queue budget exceeded'
       )
     }
+    this.sequence = nextSequence
     this.pendingBatchCount += 1
     this.pendingBytes += byteLength
     const scheduled = this.tail.then(async () => {
       try {
-        await this.transmitBatch(bodies, signal)
+        await this.transmitFrames(frames, signal)
       } finally {
         this.pendingBatchCount -= 1
         this.pendingBytes -= byteLength
@@ -233,33 +240,13 @@ export class ProtocolSender {
     await scheduled
   }
 
-  private measureBatch(bodies: readonly FrameBody[]): number {
-    let byteLength = 0
-    for (const body of bodies) {
-      const bytes = encodeProtocolFrame(
-        create(FrameSchema, {
-          protocolVersion: PROTOCOL_VERSION,
-          sequence: MAX_SEQUENCE,
-          body
-        })
-      )
-      if (bytes.byteLength > this.maxFrameBytes) {
-        throw new RuntimeProtocolError(
-          StatusCode.RESOURCE_EXHAUSTED,
-          'Runtime protocol frame exceeds the negotiated limit'
-        )
-      }
-      byteLength += bytes.byteLength
-    }
-    return byteLength
-  }
-
-  private async transmitBatch(bodies: readonly FrameBody[], signal?: AbortSignal): Promise<void> {
-    if (this.isClosed) {
-      throw new RuntimeProtocolError(StatusCode.UNAVAILABLE, 'Runtime connection closed')
-    }
-    const sendSignal = signal ? AbortSignal.any([signal, this.abort.signal]) : this.abort.signal
-    sendSignal.throwIfAborted()
+  // Why: batches are serialized through `tail`, so the enqueue order is the send
+  // order and the sequence can be assigned here. Encoding once replaces the old
+  // measure-then-encode pair that protobuf-encoded every outgoing frame twice.
+  private encodeBatch(bodies: readonly FrameBody[]): {
+    frames: EncodedFrame[]
+    nextSequence: bigint
+  } {
     let sequence = this.sequence
     const frames = bodies.map((body) => {
       if (sequence === MAX_SEQUENCE) {
@@ -280,10 +267,21 @@ export class ProtocolSender {
       }
       return { bytes, sequence }
     })
+    return { frames, nextSequence: sequence }
+  }
+
+  private async transmitFrames(
+    frames: readonly EncodedFrame[],
+    signal?: AbortSignal
+  ): Promise<void> {
+    if (this.isClosed) {
+      throw new RuntimeProtocolError(StatusCode.UNAVAILABLE, 'Runtime connection closed')
+    }
+    const sendSignal = signal ? AbortSignal.any([signal, this.abort.signal]) : this.abort.signal
+    sendSignal.throwIfAborted()
     for (const frame of frames) {
       sendSignal.throwIfAborted()
       await this.sendBytes(frame.bytes, sendSignal)
-      this.sequence = frame.sequence
     }
   }
 

@@ -37,9 +37,16 @@ impl AgentActivity {
                 meaningful_at: None,
                 control_tail: Vec::new(),
             });
-        let mut content = std::mem::take(&mut record.control_tail);
-        content.extend_from_slice(bytes);
-        let (meaningful, tail) = meaningful_content(&content);
+        // Why: the tail only exists for a control sequence split across chunks,
+        // which is the rare case — concatenating every chunk into a scratch
+        // buffer would copy all terminal output once per session per read.
+        let (meaningful, tail) = if record.control_tail.is_empty() {
+            meaningful_content(bytes)
+        } else {
+            let mut content = std::mem::take(&mut record.control_tail);
+            content.extend_from_slice(bytes);
+            meaningful_content(&content)
+        };
         record.control_tail = tail;
         if record.started_at.is_some() && meaningful {
             record.meaningful_at = Some(at);

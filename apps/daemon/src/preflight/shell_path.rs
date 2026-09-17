@@ -1,12 +1,12 @@
 use std::collections::HashSet;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use regex::Regex;
 use tokio::sync::Mutex as AsyncMutex;
 
+use crate::hosts::login_path;
 use crate::hosts::{ExecutionHost, HostCommand, HostCommandErrorKind, HostPlatform};
-use crate::mutex_lock::lock;
 
 use super::model::{ShellHydration, ShellHydrationFailureReason};
 
@@ -16,24 +16,19 @@ const WINDOWS_PATH_CACHE_TTL: Duration = Duration::from_secs(30);
 
 pub(super) struct ShellPath {
     cached: AsyncMutex<Option<ShellHydration>>,
-    effective: Mutex<String>,
     windows_cached: AsyncMutex<Option<(Instant, Vec<String>)>>,
 }
 
 impl ShellPath {
     pub(super) fn new() -> Self {
-        let effective = std::env::var("PATH")
-            .or_else(|_| std::env::var("Path"))
-            .unwrap_or_default();
         Self {
             cached: AsyncMutex::new(None),
-            effective: Mutex::new(effective),
             windows_cached: AsyncMutex::new(None),
         }
     }
 
     pub(super) fn effective(&self) -> String {
-        lock(&self.effective).clone()
+        login_path::effective()
     }
 
     pub(super) async fn hydrate(
@@ -65,42 +60,11 @@ impl ShellPath {
             read_windows_path(host).await
         };
         *cached = Some((Instant::now(), segments.clone()));
-        append_windows_segments(&self.effective, &segments);
+        login_path::append(&segments);
     }
 
     pub(super) fn merge(&self, segments: &[String], platform: HostPlatform) -> Vec<String> {
-        if segments.is_empty() {
-            return Vec::new();
-        }
-        let separator = separator(platform);
-        let mut current = lock(&self.effective);
-        let current_segments: Vec<&str> = current
-            .split(separator)
-            .filter(|segment| !segment.is_empty())
-            .collect();
-        let shell_segments = ordered_unique(segments.iter().map(String::as_str));
-        let shell_set: HashSet<&str> = shell_segments.iter().copied().collect();
-        let existing: HashSet<&str> = current_segments.iter().copied().collect();
-        let added = shell_segments
-            .iter()
-            .filter(|segment| !existing.contains(**segment))
-            .map(|segment| (*segment).to_owned())
-            .collect();
-        let merged = shell_segments
-            .iter()
-            .copied()
-            .chain(
-                current_segments
-                    .iter()
-                    .copied()
-                    .filter(|segment| !shell_set.contains(segment)),
-            )
-            .collect::<Vec<_>>()
-            .join(&separator.to_string());
-        if merged != *current {
-            *current = merged;
-        }
-        added
+        login_path::merge(segments, platform)
     }
 }
 
@@ -153,27 +117,6 @@ fn expand_windows_env(value: &str) -> String {
                 .map_or_else(|| captures[0].to_owned(), |(_, value)| value)
         })
         .into_owned()
-}
-
-fn append_windows_segments(path: &Mutex<String>, segments: &[String]) {
-    let mut current = lock(path);
-    let mut existing: HashSet<String> = current
-        .split(';')
-        .map(|segment| segment.to_ascii_lowercase())
-        .collect();
-    let missing: Vec<&str> = segments
-        .iter()
-        .map(String::as_str)
-        .filter(|segment| existing.insert(segment.to_ascii_lowercase()))
-        .collect();
-    if !missing.is_empty() {
-        let mut values: Vec<&str> = current
-            .split(';')
-            .filter(|value| !value.is_empty())
-            .collect();
-        values.extend(missing);
-        *current = values.join(";");
-    }
 }
 
 async fn hydrate(host: Arc<dyn ExecutionHost>) -> ShellHydration {

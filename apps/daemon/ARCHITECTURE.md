@@ -65,6 +65,9 @@ the feature. Transport admits only methods listed in generated protocol policy.
 - Local-substitutable effects use narrow private filesystem, process, PTY, and path-dialect Seams.
   Local, WSL, and SSH are the production Adapters. Git is one Module built over those effects, so
   Git 2.25 fallback and host-scoped capability caching do not fork three times.
+- Local commands resolve and spawn against the local host's login-shell PATH, owned by
+  `hosts/login_path`, because service managers start the daemon with a minimal `PATH`. WSL and SSH
+  build their PATH inside their own shell and never read it.
 - Remote-owned Adapters are Chrome WebSocket, Chrome reverse calls, iOS encrypted WebSocket,
   and Native Messaging bootstrap.
 - True external Adapters are GitHub, agent CLIs, PostHog, and release feeds.

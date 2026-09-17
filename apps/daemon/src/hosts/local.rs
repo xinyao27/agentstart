@@ -1,6 +1,7 @@
 use async_trait::async_trait;
 
 use super::command;
+use super::login_path;
 use super::model::{
     ExecutionHost, HostCommand, HostCommandError, HostCommandOutput, HostKind, HostPlatform,
     failed_command,
@@ -58,7 +59,19 @@ impl ExecutionHost for LocalHost {
         None
     }
 
-    async fn exec(&self, command: HostCommand) -> Result<HostCommandOutput, HostCommandError> {
+    async fn exec(&self, mut command: HostCommand) -> Result<HostCommandOutput, HostCommandError> {
+        // Why: children such as npx resolve node through PATH, so local commands
+        // run against the login shell's PATH unless the caller pinned its own.
+        if !command
+            .env
+            .iter()
+            .any(|(name, _)| name.eq_ignore_ascii_case("PATH"))
+        {
+            let path = login_path::effective();
+            if !path.is_empty() {
+                command.env.push(("PATH".to_owned(), path));
+            }
+        }
         command::run(command).await
     }
 

@@ -7,6 +7,10 @@ export type ShellUiApi = {
     connectionId?: string | null
     runtimeEnvironmentId?: string | null
   }) => Promise<string | null>
+  saveImageBlobAsTempFile: (
+    blob: Blob,
+    args?: { connectionId?: string | null; runtimeEnvironmentId?: string | null }
+  ) => Promise<string>
   writeClipboardText: (text: string) => Promise<void>
   writeSelectionClipboardText: (text: string) => Promise<void>
   writeClipboardImage: (dataUrl: string) => Promise<void>
