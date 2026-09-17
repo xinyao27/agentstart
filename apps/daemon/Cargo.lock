@@ -20,7 +20,7 @@ dependencies = [
 
 [[package]]
 name = "agentstart-daemon"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "agentstart-protocol",
  "async-trait",
