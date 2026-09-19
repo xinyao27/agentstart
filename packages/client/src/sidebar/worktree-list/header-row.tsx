@@ -111,7 +111,12 @@ export function HeaderRow(props: {
       data-worktree-sticky-header=""
       data-index={props.index}
       className={cn(
-        'relative z-20 bg-[var(--worktree-sidebar-surface)]',
+        // Why: the sticky header occludes with the surface its panel sits on.
+        // Panels that sit on another plane declare the var on themselves; every
+        // other host falls back to the sidebar token. The fallback cannot live
+        // on `.worktree-sidebar-theme` — an unlayered declaration there would
+        // outrank the hosting panel's layered utility.
+        'relative z-20 bg-[var(--worktree-sidebar-surface,var(--sidebar))]',
         props.hasTopSpacing && 'pt-1'
       )}
     >

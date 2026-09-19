@@ -24,7 +24,10 @@ type WorkspaceShellLayoutProps = {
   activeView: TopLevelView
   activeWorktreeId: string | null
   creationLayoutActive: boolean
+  /** The user's preference from the titlebar toggle. */
+  navigationSidebarOpen: boolean
   shouldMountTerminalWorkbench: boolean
+  /** The in-page column is available because the browser side panel is closed. */
   showNavigationSidebar: boolean
   showWorkspaceToolPanel: boolean
   terminalWorkbenchVisible: boolean
@@ -36,6 +39,7 @@ export function WorkspaceShellLayout({
   activeView,
   activeWorktreeId,
   creationLayoutActive,
+  navigationSidebarOpen,
   shouldMountTerminalWorkbench,
   showNavigationSidebar,
   showWorkspaceToolPanel,
@@ -61,9 +65,14 @@ export function WorkspaceShellLayout({
   // while the row is there, and owns all four when the plane has the top to
   // itself.
   const headerVisible = workspaceChromeActive || creationLayoutActive || pageViewActive
+  // Why: the landing surface paints no titlebar, so with the column hidden there
+  // would be no visible control to bring it back — the toggle only decides the
+  // column where the titlebar that carries it is on screen.
+  const navigationSidebarVisible =
+    showNavigationSidebar && (!headerVisible || navigationSidebarOpen)
   // Why: the content area sheds its island treatment only when nothing sits
   // beside it — either side column is what its edge is drawn against.
-  const hasSideColumns = showNavigationSidebar || showWorkspaceToolPanel
+  const hasSideColumns = navigationSidebarVisible || showWorkspaceToolPanel
   return (
     <RecoverableRenderErrorBoundary
       boundaryId="app.workspace-shell"
@@ -141,7 +150,7 @@ export function WorkspaceShellLayout({
                   </div>
                 </div>
               </div>
-              {showNavigationSidebar ? <ExtensionNavigationColumn /> : null}
+              {navigationSidebarVisible ? <ExtensionNavigationColumn /> : null}
             </div>
           </div>
         </WorkspaceSharedHeaderProvider>

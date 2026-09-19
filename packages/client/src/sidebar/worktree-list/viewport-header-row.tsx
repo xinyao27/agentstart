@@ -90,7 +90,7 @@ export function ViewportHeaderRow(
         data-worktree-sticky-header=""
         data-index={props.index}
         className={cn(
-          'relative z-30 bg-[var(--worktree-sidebar-surface)]',
+          'relative z-30 bg-[var(--worktree-sidebar-surface,var(--sidebar))]',
           hasTopSpacing && 'pt-1'
         )}
       >

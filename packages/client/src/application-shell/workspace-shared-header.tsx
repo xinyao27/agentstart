@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from 'react
 import { TabSurfaceProvider } from '~renderer/tab-bar/tab-surfaces'
 
 import { AppScopeStrip } from './app-scope-strip'
+import { NavigationSidebarToggle } from './navigation-sidebar-toggle'
 
 type WorkspaceSharedHeaderContextValue = {
   target: HTMLDivElement | null
@@ -66,6 +67,10 @@ export function WorkspaceSharedHeaderSlot({
       ) : (
         <div ref={setTarget} className="relative flex min-w-0 flex-1 items-stretch" />
       )}
+      {/* Why: shell navigation, not a workspace action — the toggle sits after
+          whichever strip occupies the row so its position never moves between
+          the two cases. */}
+      <NavigationSidebarToggle />
     </div>
   )
 }

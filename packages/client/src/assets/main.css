@@ -276,10 +276,12 @@
   --sidebar-accent-foreground: var(--sidebar-foreground);
   --sidebar-border: color-mix(in srgb, var(--sidebar-foreground) 8%, transparent);
   --sidebar-ring: var(--ring);
-  /* Why: sticky list headers occlude with the surface the panel sits on —
-     chrome gray in the browser side panel; in the workbench the panel sits on
-     the big island, so panel.tsx overrides this to --background. */
-  --worktree-sidebar-surface: var(--sidebar);
+  /* Why: --worktree-sidebar-surface is deliberately not declared here. Sticky
+     list headers occlude with the surface the panel sits on — chrome gray in
+     the browser side panel, the content card's white in the workbench — so the
+     seated-on-a-card hosts set the var on their panel (panel.tsx,
+     panel-column.tsx) and the header rows fall back to --sidebar. A declaration
+     here would be unlayered and outrank those utilities in every host. */
 }
 
 /* Why: the big island — one rounded card floating on the chrome plane, which

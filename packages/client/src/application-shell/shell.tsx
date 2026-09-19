@@ -117,6 +117,7 @@ function App(): React.JSX.Element {
   const terminalWorkbenchVisible =
     activeView === 'terminal' && activeWorktreeId !== null && !creationLayoutActive
   const sidebarWidth = useAppStore((s) => s.sidebarWidth)
+  const sidebarOpen = useAppStore((s) => s.sidebarOpen)
   const extensionSidePanelOpen = useSyncExternalStore(
     subscribeSidePanelPresence,
     getSidePanelPresenceSnapshot,
@@ -257,7 +258,7 @@ function App(): React.JSX.Element {
   // already-fitted cols/rows.
   useLayoutEffect(() => {
     window.dispatchEvent(new CustomEvent(SYNC_FIT_PANES_EVENT))
-  }, [extensionSidePanelOpen])
+  }, [extensionSidePanelOpen, sidebarOpen])
 
   const showNavigationSidebar = !extensionSidePanelOpen
 
@@ -308,6 +309,7 @@ function App(): React.JSX.Element {
               activeView={activeView}
               activeWorktreeId={activeWorktreeId}
               creationLayoutActive={creationLayoutActive}
+              navigationSidebarOpen={sidebarOpen}
               shouldMountTerminalWorkbench={shouldMountTerminalWorkbench}
               showNavigationSidebar={showNavigationSidebar}
               showWorkspaceToolPanel={workspaceChromeActive && workspacePanelOpen}

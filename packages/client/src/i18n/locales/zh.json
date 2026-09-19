@@ -550,6 +550,12 @@
         "d3e8a1f4b2": "账户已切换",
         "e9b2c7d1a5": "重启此会话以使用 {{value0}}。"
       },
+      "applicationShell": {
+        "navigationSidebarToggle": {
+          "hide": "隐藏侧边栏",
+          "show": "显示侧边栏"
+        }
+      },
       "AppScopeStrip": {
         "label": "页面",
         "requiresWorkspace": "请先创建工作区"

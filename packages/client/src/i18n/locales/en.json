@@ -550,6 +550,12 @@
         "d3e8a1f4b2": "Account switched",
         "e9b2c7d1a5": "Restart this session to use {{value0}}."
       },
+      "applicationShell": {
+        "navigationSidebarToggle": {
+          "hide": "Hide sidebar",
+          "show": "Show sidebar"
+        }
+      },
       "AppScopeStrip": {
         "label": "Pages",
         "requiresWorkspace": "Create a workspace first"
