@@ -202,6 +202,8 @@ impl SettingsAuthority {
             "geminiCliOAuthEnabled",
             "minimaxGroupId",
             "minimaxUsageModels",
+            "opencodeSessionCookie",
+            "opencodeWorkspaceId",
         ]
         .into_iter()
         .filter_map(|key| {

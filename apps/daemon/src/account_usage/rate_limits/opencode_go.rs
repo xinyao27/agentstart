@@ -5,6 +5,7 @@ use std::time::Duration;
 
 const BASE_URL: &str = "https://opencode.ai";
 const SERVER_URL: &str = "https://opencode.ai/_server";
+const USAGE_URL: &str = "https://opencode.ai/zen/go/v1/usage";
 const WORKSPACES_SERVER_ID: &str =
     "def39973159c7f0483d8793a822b8dbb10d067e12c65455fcb4608459ba0234f";
 const RESPONSE_BYTE_LIMIT: usize = 10_000_000;
@@ -15,6 +16,9 @@ pub(super) async fn fetch(
     raw_cookie: &str,
     workspace_override: Option<&str>,
 ) -> Value {
+    if let Some(key) = open_code_api_key() {
+        return fetch_usage_api(client, &key).await;
+    }
     let normalized_cookie = normalize_cookie(raw_cookie);
     if normalized_cookie.is_empty() {
         return result("Session cookie not configured", "unavailable");
@@ -64,6 +68,93 @@ pub(super) async fn fetch(
         },
         "error",
     )
+}
+
+// Why: the opencode CLI stores the Go subscription API key in its auth file, so
+// usage works without the manual cookie. The API is preferred over the
+// dashboard scrape because it reports account-wide windows.
+fn open_code_api_key() -> Option<String> {
+    for path in super::open_code_auth_paths() {
+        let Ok(contents) = std::fs::read_to_string(&path) else {
+            continue;
+        };
+        let Ok(value) = serde_json::from_str::<Value>(&contents) else {
+            continue;
+        };
+        let Some(entry) = value.get("opencode-go").and_then(Value::as_object) else {
+            continue;
+        };
+        if entry.get("type").and_then(Value::as_str) != Some("api") {
+            continue;
+        }
+        return entry
+            .get("key")
+            .and_then(Value::as_str)
+            .filter(|key| !key.is_empty())
+            .map(str::to_owned);
+    }
+    None
+}
+
+async fn fetch_usage_api(client: &reqwest::Client, key: &str) -> Value {
+    let response = match client
+        .get(USAGE_URL)
+        .bearer_auth(key)
+        .header(ACCEPT, "application/json")
+        .timeout(REQUEST_TIMEOUT)
+        .send()
+        .await
+    {
+        Ok(response) => response,
+        Err(error) => return result(&error.to_string(), "error"),
+    };
+    if !response.status().is_success() {
+        return result(
+            &format!("Usage request failed ({})", response.status().as_u16()),
+            "error",
+        );
+    }
+    let payload = match response.json::<Value>().await {
+        Ok(payload) => payload,
+        Err(_) => return result("Usage response is invalid", "error"),
+    };
+    let Some(usage) = payload.get("usage") else {
+        return result("Usage response did not include plan windows", "error");
+    };
+    let session = api_window(usage.get("rolling"), 300);
+    let weekly = api_window(usage.get("weekly"), 10_080);
+    let monthly = api_window(usage.get("monthly"), 43_200);
+    if session.is_none() && weekly.is_none() && monthly.is_none() {
+        return result(
+            "No OpenCode Go subscription is active for this account",
+            "unavailable",
+        );
+    }
+    json!({
+        "provider": "opencode-go",
+        "session": session,
+        "weekly": weekly,
+        "monthly": monthly,
+        "updatedAt": super::now_ms_lossy(),
+        "error": null,
+        "status": "ok"
+    })
+}
+
+fn api_window(value: Option<&Value>, minutes: u64) -> Option<Value> {
+    let window = value?;
+    if window.get("status").and_then(Value::as_str) != Some("ok") {
+        return None;
+    }
+    let percent = window
+        .get("percent")
+        .and_then(Value::as_f64)?
+        .clamp(0.0, 100.0);
+    let resets = window
+        .get("resetsAt")
+        .and_then(Value::as_str)
+        .and_then(super::parse_timestamp);
+    Some(super::window(percent, minutes, resets))
 }
 
 async fn fetch_workspace_ids(

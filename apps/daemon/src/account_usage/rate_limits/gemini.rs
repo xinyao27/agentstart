@@ -253,7 +253,7 @@ async fn refresh_from_bundle(
 }
 
 fn read_open_code_auth() -> Result<Option<AuthJson>, String> {
-    for path in open_code_auth_paths() {
+    for path in super::open_code_auth_paths() {
         let Some(value) = read_json_if_present(&path)? else {
             continue;
         };
@@ -510,21 +510,6 @@ fn read_file_if_present(path: &Path, limit: u64) -> Result<Option<String>, Strin
     std::fs::read_to_string(path)
         .map(Some)
         .map_err(|error| error.to_string())
-}
-
-fn open_code_auth_paths() -> Vec<PathBuf> {
-    let mut paths = Vec::new();
-    if let Some(value) = std::env::var_os("APPDATA") {
-        paths.push(PathBuf::from(value).join("opencode/auth.json"));
-    }
-    if let Some(value) = std::env::var_os("XDG_DATA_HOME") {
-        paths.push(PathBuf::from(value).join("opencode/auth.json"));
-    }
-    if let Some(home) = crate::paths::resolve_local_home_path() {
-        paths.push(home.join(".local/share/opencode/auth.json"));
-        paths.push(home.join("Library/Application Support/opencode/auth.json"));
-    }
-    paths
 }
 
 fn gemini_credentials_path() -> Option<PathBuf> {

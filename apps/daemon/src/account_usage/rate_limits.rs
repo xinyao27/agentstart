@@ -1014,6 +1014,30 @@ fn grok_auth_path() -> Option<PathBuf> {
         .or_else(|| crate::paths::resolve_local_home_path().map(|path| path.join(".grok")))
         .map(|path| path.join("auth.json"))
 }
+fn open_code_auth_paths() -> Vec<PathBuf> {
+    let mut paths = Vec::new();
+    if let Some(value) = std::env::var_os("APPDATA") {
+        paths.push(PathBuf::from(value).join("opencode").join("auth.json"));
+    }
+    if let Some(value) = std::env::var_os("XDG_DATA_HOME") {
+        paths.push(PathBuf::from(value).join("opencode").join("auth.json"));
+    }
+    if let Some(home) = crate::paths::resolve_local_home_path() {
+        paths.push(
+            home.join(".local")
+                .join("share")
+                .join("opencode")
+                .join("auth.json"),
+        );
+        paths.push(
+            home.join("Library")
+                .join("Application Support")
+                .join("opencode")
+                .join("auth.json"),
+        );
+    }
+    paths
+}
 
 fn codex_window(value: &Value, fallback: u64) -> Option<Value> {
     let object = value.as_object()?;
