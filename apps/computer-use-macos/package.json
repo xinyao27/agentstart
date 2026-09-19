@@ -1,6 +1,6 @@
 {
   "name": "@agentstart/computer-use-macos",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "description": "Signed macOS helper for AgentStart computer use",
   "scripts": {
