@@ -107,6 +107,7 @@ struct Stream {
     exit_pending: Option<(i32, u64)>,
     forwarder: AbortHandle,
     handle: String,
+    hidden_drop_notified: bool,
     in_flight: VecDeque<SentOutput>,
     input_sequence: u64,
     last_ack_sequence: u64,

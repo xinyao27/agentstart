@@ -414,11 +414,17 @@ impl MultiplexSession<'_> {
         stream.delivery_interested = interested;
         stream.state_version = state_version;
         stream.snapshot.set_delivery_active(visible || interested);
+        if visible || interested {
+            // Why: the next hidden episode owes the client one fresh
+            // hidden-drop notice before it starts dropping chunks again.
+            stream.hidden_drop_notified = false;
+        }
         if !visible && !interested && stream.pending_bytes > 0 {
             stream.telemetry.note_hidden_drop();
             let sequence = stream.last_sent_sequence;
             stream.pending.clear();
             stream.pending_bytes = 0;
+            stream.hidden_drop_notified = true;
             self.send_json(
                 OP_MODEL_RESTORE,
                 frame.route_id,

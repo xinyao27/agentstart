@@ -138,8 +138,16 @@ export class RemoteRuntimePtySubscription {
             return
           }
           recordTerminalFreezeBreadcrumb('multiplex-stream-error')
+          if (error?.kind === 'protocol' && error.retryable) {
+            // Why: a frame that raced the stream's end (an ACK or credit for a
+            // route the host already dropped) is answered with a retryable
+            // unknown_stream, and fail() recovers by resubscribing through
+            // onTransportClose. Filing it as a pane error turns an ordinary
+            // stream teardown into a renderer crash.
+            return
+          }
           this.state.handleRemoteError(message)
-          if (error?.kind === 'protocol' && !error.retryable) {
+          if (error?.kind === 'protocol') {
             transportClosed = true
             this.state.markTransportDisconnected()
           }

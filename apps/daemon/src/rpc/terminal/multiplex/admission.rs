@@ -217,6 +217,7 @@ impl MultiplexSession<'_> {
                 .map(|exit_code| (exit_code, subscription.sequence)),
             forwarder: forwarder.abort_handle(),
             handle: record.terminal,
+            hidden_drop_notified: false,
             in_flight: VecDeque::new(),
             input_sequence: 0,
             last_ack_sequence: last_sequence,

@@ -43,48 +43,54 @@ impl MultiplexSession<'_> {
                 Ok(())
             }
             Ok(TerminalStreamEvent::Output(output)) => {
-                let Some(stream) = self.streams.get_mut(&route_id) else {
-                    return Ok(());
-                };
-                if !stream.delivery_visible && !stream.delivery_interested {
-                    stream.telemetry.note_hidden_drop();
-                    self.send_json(
-                        OP_MODEL_RESTORE,
-                        route_id,
-                        output.end_sequence,
-                        0,
-                        json!({
-                            "reason": "hidden-drop",
-                            "markerSeq": output.end_sequence.to_string(),
-                            "snapshotFollows": false
-                        }),
-                    )?;
+                if self.drop_hidden_output(route_id, output.end_sequence)? {
                     return Ok(());
                 }
-                let expected_sequence = stream
-                    .pending
-                    .back()
-                    .map_or(stream.last_sent_sequence, |pending| pending.end_sequence);
                 if output.end_sequence
                     != output
                         .start_sequence
                         .saturating_add(output.bytes.len() as u64)
                 {
-                    stream.telemetry.note_gap();
+                    self.note_stream_gap(route_id);
                     self.recover_stream(route_id, "provider-gap")?;
                     return Ok(());
                 }
+                let Some(expected_sequence) = self.stream_expected_sequence(route_id) else {
+                    return Ok(());
+                };
                 if output.end_sequence <= expected_sequence {
                     return Ok(());
                 }
                 if output.start_sequence > expected_sequence {
-                    stream.telemetry.note_gap();
+                    // Why: a provider gap only loses delivery, not data — the terminal's
+                    // own history still holds the bytes. Replaying that range keeps the
+                    // client's model continuous, where a recovery snapshot would clear
+                    // and repaint the whole pane.
+                    if !self.resync_stream_from_history(
+                        route_id,
+                        expected_sequence,
+                        output.start_sequence,
+                    ) {
+                        self.note_stream_gap(route_id);
+                        self.recover_stream(route_id, "provider-gap")?;
+                        return Ok(());
+                    }
+                }
+                let Some(expected_sequence) = self.stream_expected_sequence(route_id) else {
+                    return Ok(());
+                };
+                if output.start_sequence > expected_sequence {
+                    self.note_stream_gap(route_id);
                     self.recover_stream(route_id, "provider-gap")?;
                     return Ok(());
                 }
-                let offset = usize::try_from(expected_sequence - output.start_sequence)
-                    .unwrap_or(usize::MAX)
-                    .min(output.bytes.len());
+                let Some(stream) = self.streams.get_mut(&route_id) else {
+                    return Ok(());
+                };
+                let offset =
+                    usize::try_from(expected_sequence.saturating_sub(output.start_sequence))
+                        .unwrap_or(usize::MAX)
+                        .min(output.bytes.len());
                 let bytes = output.bytes[offset..].to_vec();
                 stream.pending_bytes = stream.pending_bytes.saturating_add(bytes.len());
                 stream.pending.push_back(PendingOutput {
@@ -135,6 +141,16 @@ impl MultiplexSession<'_> {
                 if let Some(stream) = self.streams.get_mut(&route_id) {
                     stream.telemetry.note_gap();
                 }
+                let is_hidden = self
+                    .streams
+                    .get(&route_id)
+                    .is_some_and(|stream| !stream.delivery_visible && !stream.delivery_interested);
+                if is_hidden {
+                    return Ok(());
+                }
+                if self.resync_stream_from_live_history(route_id) {
+                    return self.flush_stream(route_id);
+                }
                 self.recover_stream(route_id, "provider-gap")
             }
             Err(broadcast::error::RecvError::Closed) => {
@@ -142,6 +158,121 @@ impl MultiplexSession<'_> {
                 Ok(())
             }
         }
+    }
+
+    /// Drops one chunk of a stream the client is not watching.
+    ///
+    /// Why: a background terminal streams for as long as its agent works, so the
+    /// hidden-drop notice is sent once per hidden episode — a per-chunk notice
+    /// makes the client clear its model and publish a zero credit for every chunk
+    /// of every background agent, which is pure connection and CPU churn.
+    fn drop_hidden_output(
+        &mut self,
+        route_id: u32,
+        end_sequence: u64,
+    ) -> Result<bool, SessionError> {
+        let Some(stream) = self.streams.get_mut(&route_id) else {
+            return Ok(true);
+        };
+        if stream.delivery_visible || stream.delivery_interested {
+            return Ok(false);
+        }
+        stream.telemetry.note_hidden_drop();
+        if stream.hidden_drop_notified {
+            return Ok(true);
+        }
+        stream.hidden_drop_notified = true;
+        self.send_json(
+            OP_MODEL_RESTORE,
+            route_id,
+            end_sequence,
+            0,
+            json!({
+                "reason": "hidden-drop",
+                "markerSeq": end_sequence.to_string(),
+                "snapshotFollows": false
+            }),
+        )?;
+        Ok(true)
+    }
+
+    /// The sequence the next delivered chunk must continue from.
+    fn stream_expected_sequence(&self, route_id: u32) -> Option<u64> {
+        self.streams.get(&route_id).map(|stream| {
+            stream
+                .pending
+                .back()
+                .map_or(stream.last_sent_sequence, |pending| pending.end_sequence)
+        })
+    }
+
+    fn note_stream_gap(&mut self, route_id: u32) {
+        if let Some(stream) = self.streams.get_mut(&route_id) {
+            stream.telemetry.note_gap();
+        }
+    }
+
+    /// Repairs a lagged stream from the provider's retained history up to the
+    /// provider's current position, covering a skip that no later chunk announces.
+    fn resync_stream_from_live_history(&mut self, route_id: u32) -> bool {
+        let Some(expected_sequence) = self.stream_expected_sequence(route_id) else {
+            return false;
+        };
+        let live_sequence = self
+            .streams
+            .get(&route_id)
+            .and_then(|stream| self.authority.terminal_wire_byte_sequence(&stream.handle));
+        let Some(live_sequence) = live_sequence else {
+            return false;
+        };
+        if live_sequence <= expected_sequence {
+            return true;
+        }
+        self.resync_stream_from_history(route_id, expected_sequence, live_sequence)
+    }
+
+    /// Replays the terminal's retained output for a range the stream missed.
+    ///
+    /// Returns whether the history covered the whole `[from, to)` range; a
+    /// `false` means the caller must fall back to a recovery snapshot.
+    fn resync_stream_from_history(&mut self, route_id: u32, from: u64, to: u64) -> bool {
+        let Some(handle) = self
+            .streams
+            .get(&route_id)
+            .map(|stream| stream.handle.clone())
+        else {
+            return false;
+        };
+        let Some(history) = self.authority.terminal_output_between(&handle, from, to) else {
+            return false;
+        };
+        let covered = history
+            .first()
+            .is_some_and(|output| output.start_sequence == from)
+            && history
+                .last()
+                .is_some_and(|output| output.end_sequence >= to);
+        if !covered {
+            return false;
+        }
+        let Some(stream) = self.streams.get_mut(&route_id) else {
+            return false;
+        };
+        let added = history
+            .iter()
+            .map(|output| output.bytes.len())
+            .sum::<usize>();
+        if stream.pending_bytes.saturating_add(added) > MAX_PENDING_BYTES {
+            return false;
+        }
+        for output in history {
+            stream.pending_bytes = stream.pending_bytes.saturating_add(output.bytes.len());
+            stream.pending.push_back(PendingOutput {
+                bytes: output.bytes,
+                end_sequence: output.end_sequence,
+            });
+        }
+        true
     }
 
     pub(super) fn flush_stream(&mut self, route_id: u32) -> Result<(), SessionError> {

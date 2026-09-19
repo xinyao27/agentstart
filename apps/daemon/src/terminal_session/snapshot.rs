@@ -11,7 +11,9 @@ use serde_json::json;
 use tokio::sync::{mpsc, oneshot};
 
 use super::TerminalSessionAuthority;
-use super::model::{TerminalReadResult, TerminalScrollbackGrid, TerminalScrollbackHistory};
+use super::model::{
+    TerminalReadResult, TerminalScrollbackGrid, TerminalScrollbackHistory, TerminalStreamOutput,
+};
 use super::process::{ProcessEvent, TerminalClear, TerminalEvent};
 use super::read_handler::ReadHandler;
 use super::state::TerminalDisplayMode;
@@ -255,6 +257,15 @@ impl TerminalSessionAuthority {
 
     pub(crate) fn terminal_wire_byte_sequence(&self, handle: &str) -> Option<u64> {
         self.state.with(handle, |record| record.sequence)
+    }
+
+    pub(crate) fn terminal_output_between(
+        &self,
+        handle: &str,
+        from: u64,
+        to: u64,
+    ) -> Option<Vec<TerminalStreamOutput>> {
+        self.state.output_between(handle, from, to)
     }
 }
 

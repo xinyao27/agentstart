@@ -748,6 +748,37 @@ pub(super) struct TerminalScrollbackCapture {
 }
 
 impl TerminalState {
+    /// Clones the retained output in `[from, to)` so a stream that missed a
+    /// broadcast range can continue without a model reset.
+    ///
+    /// `None` names an unknown handle; an empty vec (or one whose ends do not
+    /// reach the requested bounds) means the ring has already trimmed the range
+    /// and the caller must fall back to a recovery snapshot.
+    pub(super) fn output_between(
+        &self,
+        handle: &str,
+        from: u64,
+        to: u64,
+    ) -> Option<Vec<TerminalStreamOutput>> {
+        self.with(handle, |record| {
+            if to <= from || record.sequence < from {
+                return Vec::new();
+            }
+            let oldest_sequence = record
+                .raw_output
+                .front()
+                .map_or(record.sequence, |output| output.start_sequence);
+            if oldest_sequence > from {
+                return Vec::new();
+            }
+            record
+                .raw_output
+                .iter()
+                .filter_map(|output| output_range(output, from, to))
+                .collect()
+        })
+    }
+
     pub(super) fn subscribe(
         &self,
         handle: &str,
@@ -779,16 +810,25 @@ impl TerminalState {
 }
 
 fn resume_output(output: &TerminalStreamOutput, sequence: u64) -> Option<TerminalStreamOutput> {
-    if output.end_sequence <= sequence {
+    output_range(output, sequence, output.end_sequence)
+}
+
+fn output_range(output: &TerminalStreamOutput, from: u64, to: u64) -> Option<TerminalStreamOutput> {
+    let start_sequence = output.start_sequence.max(from);
+    let end_sequence = output.end_sequence.min(to);
+    if end_sequence <= start_sequence {
         return None;
     }
-    let offset = usize::try_from(sequence.saturating_sub(output.start_sequence))
+    let offset = usize::try_from(start_sequence.saturating_sub(output.start_sequence))
         .unwrap_or(usize::MAX)
         .min(output.bytes.len());
+    let length = usize::try_from(end_sequence - start_sequence)
+        .unwrap_or(usize::MAX)
+        .min(output.bytes.len() - offset);
     Some(TerminalStreamOutput {
-        bytes: output.bytes[offset..].to_vec(),
-        end_sequence: output.end_sequence,
-        start_sequence: output.start_sequence.saturating_add(offset as u64),
+        bytes: output.bytes[offset..offset + length].to_vec(),
+        end_sequence,
+        start_sequence,
     })
 }
 

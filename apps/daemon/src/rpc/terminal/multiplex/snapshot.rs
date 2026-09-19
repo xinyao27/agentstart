@@ -237,6 +237,7 @@ impl MultiplexSession<'_> {
             .min(max_bytes.unwrap_or(usize::MAX));
         if reason == SnapshotReason::Reveal {
             stream.delivery_visible = true;
+            stream.hidden_drop_notified = false;
             stream.snapshot.set_delivery_active(true);
         }
         if let Some(superseded) = superseded {
@@ -383,6 +384,16 @@ impl MultiplexSession<'_> {
         route_id: u32,
         cause: &'static str,
     ) -> Result<(), SessionError> {
+        if self
+            .streams
+            .get(&route_id)
+            .is_some_and(|stream| stream.snapshot.is_active())
+        {
+            // Why: an in-flight snapshot already told the client to rebuild its
+            // model. Sending another restore per gap only makes the client clear
+            // the pane again before the snapshot it is waiting for arrives.
+            return Ok(());
+        }
         let delivery_active = self
             .streams
             .get(&route_id)
