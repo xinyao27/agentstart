@@ -5,16 +5,19 @@ import { translate } from '~renderer/i18n/i18n'
 import faviconImage from '~renderer/public/favicon.png?inline'
 import { openRuntimeTerminalClient } from '~renderer/runtime/terminal-protocol'
 import { useActiveWorktree } from '~renderer/store/selectors'
+import { useAppStore } from '~renderer/store/state'
 
 import { getExtensionBrowserCapabilities } from '../browser-capabilities'
 import { getExtensionHostNavigation } from '../navigation'
 import { terminalsQuery } from '../runtime/queries'
 import { confirmDangerousOperation } from '../security/passkey'
+import { resolveActiveTabTitle } from './active-tab-title'
 import { composeDocumentTitle } from './document-title'
 
 export function AgentPresence(): null {
   const terminals = useQuery(terminalsQuery)
   const worktreeName = useActiveWorktree()?.displayName ?? null
+  const tabTitle = useAppStore((state) => resolveActiveTabTitle(state))
   const projectId = new URLSearchParams(window.location.search).get('project')
   const presence = useAgentPresence(projectId)
   const phase = presence.phase
@@ -39,9 +42,20 @@ export function AgentPresence(): null {
       : []
   )
   useEffect(() => {
+    const previousTitle = document.title
+    document.title = composeDocumentTitle({
+      phase,
+      productName: translate('extension.productName', 'AgentStart'),
+      tabTitle,
+      worktreeName
+    })
+    return () => {
+      document.title = previousTitle
+    }
+  }, [phase, tabTitle, worktreeName])
+  useEffect(() => {
     const capabilities = getExtensionBrowserCapabilities()
     const navigation = getExtensionHostNavigation()
-    const previousTitle = document.title
     navigation.publishAgentAttention(waitingCount)
     const publishPresence = (): void => {
       void capabilities.publishAgentPresence({
@@ -54,11 +68,6 @@ export function AgentPresence(): null {
     }
     publishPresence()
     const heartbeat = window.setInterval(publishPresence, 15_000)
-    document.title = composeDocumentTitle({
-      phase,
-      productName: translate('extension.productName', 'AgentStart'),
-      worktreeName
-    })
     const existingFavicon = document.head.querySelector<HTMLLinkElement>('link[rel="icon"]')
     const favicon =
       phase === 'waiting-decision' ? (existingFavicon ?? createFavicon()) : existingFavicon
@@ -68,7 +77,6 @@ export function AgentPresence(): null {
     }
     return () => {
       window.clearInterval(heartbeat)
-      document.title = previousTitle
       if (!favicon || phase !== 'waiting-decision') {
         return
       }
@@ -78,7 +86,7 @@ export function AgentPresence(): null {
         favicon.setAttribute('href', previousFavicon)
       }
     }
-  }, [activeCount, activeProjectKey, activeTerminalKey, phase, waiting, waitingCount, worktreeName])
+  }, [activeCount, activeProjectKey, activeTerminalKey, phase, waiting, waitingCount])
   useEffect(() => {
     const capabilities = getExtensionBrowserCapabilities()
     void capabilities.consumePendingAgentApproval().then(async (terminal) => {
